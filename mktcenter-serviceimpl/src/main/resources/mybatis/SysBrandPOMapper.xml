@@ -1,0 +1,518 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bizvane.mktcenterserviceimpl.mappers.SysBrandPOMapper">
+  <resultMap id="BaseResultMap" type="com.bizvane.mktcenterservice.models.PO.SysBrandPO">
+    <id column="sys_brand_id" jdbcType="BIGINT" property="sysBrandId" />
+    <result column="sys_company_id" jdbcType="BIGINT" property="sysCompanyId" />
+    <result column="brand_code" jdbcType="VARCHAR" property="brandCode" />
+    <result column="brand_name" jdbcType="VARCHAR" property="brandName" />
+    <result column="brand_nick" jdbcType="VARCHAR" property="brandNick" />
+    <result column="brand_logo" jdbcType="VARCHAR" property="brandLogo" />
+    <result column="sms_verifying_info" jdbcType="BIGINT" property="smsVerifyingInfo" />
+    <result column="sms_market_info" jdbcType="BIGINT" property="smsMarketInfo" />
+    <result column="status" jdbcType="BIT" property="status" />
+    <result column="on_date" jdbcType="TIMESTAMP" property="onDate" />
+    <result column="off_date" jdbcType="TIMESTAMP" property="offDate" />
+    <result column="remark" jdbcType="VARCHAR" property="remark" />
+    <result column="create_user_id" jdbcType="BIGINT" property="createUserId" />
+    <result column="create_user_name" jdbcType="VARCHAR" property="createUserName" />
+    <result column="create_date" jdbcType="TIMESTAMP" property="createDate" />
+    <result column="modified_user_id" jdbcType="BIGINT" property="modifiedUserId" />
+    <result column="modified_user_name" jdbcType="VARCHAR" property="modifiedUserName" />
+    <result column="modified_date" jdbcType="TIMESTAMP" property="modifiedDate" />
+    <result column="valid" jdbcType="BIT" property="valid" />
+  </resultMap>
+  <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.bizvane.mktcenterservice.models.PO.SysBrandPO">
+    <result column="brand_info" jdbcType="LONGVARCHAR" property="brandInfo" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    sys_brand_id, sys_company_id, brand_code, brand_name, brand_nick, brand_logo, sms_verifying_info, 
+    sms_market_info, status, on_date, off_date, remark, create_user_id, create_user_name, 
+    create_date, modified_user_id, modified_user_name, modified_date, valid
+  </sql>
+  <sql id="Blob_Column_List">
+    brand_info
+  </sql>
+  <select id="selectByExampleWithBLOBs" parameterType="com.bizvane.mktcenterservice.models.PO.SysBrandPOExample" resultMap="ResultMapWithBLOBs">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from t_sys_brand
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByExample" parameterType="com.bizvane.mktcenterservice.models.PO.SysBrandPOExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from t_sys_brand
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="ResultMapWithBLOBs">
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from t_sys_brand
+    where sys_brand_id = #{sysBrandId,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from t_sys_brand
+    where sys_brand_id = #{sysBrandId,jdbcType=BIGINT}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.bizvane.mktcenterservice.models.PO.SysBrandPOExample">
+    delete from t_sys_brand
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.bizvane.mktcenterservice.models.PO.SysBrandPO">
+    <selectKey keyProperty="sysBrandId" order="AFTER" resultType="java.lang.Long">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into t_sys_brand (sys_company_id, brand_code, brand_name, 
+      brand_nick, brand_logo, sms_verifying_info, 
+      sms_market_info, status, on_date, 
+      off_date, remark, create_user_id, 
+      create_user_name, create_date, modified_user_id, 
+      modified_user_name, modified_date, valid, 
+      brand_info)
+    values (#{sysCompanyId,jdbcType=BIGINT}, #{brandCode,jdbcType=VARCHAR}, #{brandName,jdbcType=VARCHAR}, 
+      #{brandNick,jdbcType=VARCHAR}, #{brandLogo,jdbcType=VARCHAR}, #{smsVerifyingInfo,jdbcType=BIGINT}, 
+      #{smsMarketInfo,jdbcType=BIGINT}, #{status,jdbcType=BIT}, #{onDate,jdbcType=TIMESTAMP}, 
+      #{offDate,jdbcType=TIMESTAMP}, #{remark,jdbcType=VARCHAR}, #{createUserId,jdbcType=BIGINT}, 
+      #{createUserName,jdbcType=VARCHAR}, #{createDate,jdbcType=TIMESTAMP}, #{modifiedUserId,jdbcType=BIGINT}, 
+      #{modifiedUserName,jdbcType=VARCHAR}, #{modifiedDate,jdbcType=TIMESTAMP}, #{valid,jdbcType=BIT}, 
+      #{brandInfo,jdbcType=LONGVARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.bizvane.mktcenterservice.models.PO.SysBrandPO">
+    <selectKey keyProperty="sysBrandId" order="AFTER" resultType="java.lang.Long">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into t_sys_brand
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="sysCompanyId != null">
+        sys_company_id,
+      </if>
+      <if test="brandCode != null">
+        brand_code,
+      </if>
+      <if test="brandName != null">
+        brand_name,
+      </if>
+      <if test="brandNick != null">
+        brand_nick,
+      </if>
+      <if test="brandLogo != null">
+        brand_logo,
+      </if>
+      <if test="smsVerifyingInfo != null">
+        sms_verifying_info,
+      </if>
+      <if test="smsMarketInfo != null">
+        sms_market_info,
+      </if>
+      <if test="status != null">
+        status,
+      </if>
+      <if test="onDate != null">
+        on_date,
+      </if>
+      <if test="offDate != null">
+        off_date,
+      </if>
+      <if test="remark != null">
+        remark,
+      </if>
+      <if test="createUserId != null">
+        create_user_id,
+      </if>
+      <if test="createUserName != null">
+        create_user_name,
+      </if>
+      <if test="createDate != null">
+        create_date,
+      </if>
+      <if test="modifiedUserId != null">
+        modified_user_id,
+      </if>
+      <if test="modifiedUserName != null">
+        modified_user_name,
+      </if>
+      <if test="modifiedDate != null">
+        modified_date,
+      </if>
+      <if test="valid != null">
+        valid,
+      </if>
+      <if test="brandInfo != null">
+        brand_info,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="sysCompanyId != null">
+        #{sysCompanyId,jdbcType=BIGINT},
+      </if>
+      <if test="brandCode != null">
+        #{brandCode,jdbcType=VARCHAR},
+      </if>
+      <if test="brandName != null">
+        #{brandName,jdbcType=VARCHAR},
+      </if>
+      <if test="brandNick != null">
+        #{brandNick,jdbcType=VARCHAR},
+      </if>
+      <if test="brandLogo != null">
+        #{brandLogo,jdbcType=VARCHAR},
+      </if>
+      <if test="smsVerifyingInfo != null">
+        #{smsVerifyingInfo,jdbcType=BIGINT},
+      </if>
+      <if test="smsMarketInfo != null">
+        #{smsMarketInfo,jdbcType=BIGINT},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=BIT},
+      </if>
+      <if test="onDate != null">
+        #{onDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="offDate != null">
+        #{offDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="remark != null">
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="createUserId != null">
+        #{createUserId,jdbcType=BIGINT},
+      </if>
+      <if test="createUserName != null">
+        #{createUserName,jdbcType=VARCHAR},
+      </if>
+      <if test="createDate != null">
+        #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifiedUserId != null">
+        #{modifiedUserId,jdbcType=BIGINT},
+      </if>
+      <if test="modifiedUserName != null">
+        #{modifiedUserName,jdbcType=VARCHAR},
+      </if>
+      <if test="modifiedDate != null">
+        #{modifiedDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="valid != null">
+        #{valid,jdbcType=BIT},
+      </if>
+      <if test="brandInfo != null">
+        #{brandInfo,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.bizvane.mktcenterservice.models.PO.SysBrandPOExample" resultType="java.lang.Long">
+    select count(*) from t_sys_brand
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update t_sys_brand
+    <set>
+      <if test="record.sysBrandId != null">
+        sys_brand_id = #{record.sysBrandId,jdbcType=BIGINT},
+      </if>
+      <if test="record.sysCompanyId != null">
+        sys_company_id = #{record.sysCompanyId,jdbcType=BIGINT},
+      </if>
+      <if test="record.brandCode != null">
+        brand_code = #{record.brandCode,jdbcType=VARCHAR},
+      </if>
+      <if test="record.brandName != null">
+        brand_name = #{record.brandName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.brandNick != null">
+        brand_nick = #{record.brandNick,jdbcType=VARCHAR},
+      </if>
+      <if test="record.brandLogo != null">
+        brand_logo = #{record.brandLogo,jdbcType=VARCHAR},
+      </if>
+      <if test="record.smsVerifyingInfo != null">
+        sms_verifying_info = #{record.smsVerifyingInfo,jdbcType=BIGINT},
+      </if>
+      <if test="record.smsMarketInfo != null">
+        sms_market_info = #{record.smsMarketInfo,jdbcType=BIGINT},
+      </if>
+      <if test="record.status != null">
+        status = #{record.status,jdbcType=BIT},
+      </if>
+      <if test="record.onDate != null">
+        on_date = #{record.onDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.offDate != null">
+        off_date = #{record.offDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.remark != null">
+        remark = #{record.remark,jdbcType=VARCHAR},
+      </if>
+      <if test="record.createUserId != null">
+        create_user_id = #{record.createUserId,jdbcType=BIGINT},
+      </if>
+      <if test="record.createUserName != null">
+        create_user_name = #{record.createUserName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.createDate != null">
+        create_date = #{record.createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.modifiedUserId != null">
+        modified_user_id = #{record.modifiedUserId,jdbcType=BIGINT},
+      </if>
+      <if test="record.modifiedUserName != null">
+        modified_user_name = #{record.modifiedUserName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.modifiedDate != null">
+        modified_date = #{record.modifiedDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.valid != null">
+        valid = #{record.valid,jdbcType=BIT},
+      </if>
+      <if test="record.brandInfo != null">
+        brand_info = #{record.brandInfo,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExampleWithBLOBs" parameterType="map">
+    update t_sys_brand
+    set sys_brand_id = #{record.sysBrandId,jdbcType=BIGINT},
+      sys_company_id = #{record.sysCompanyId,jdbcType=BIGINT},
+      brand_code = #{record.brandCode,jdbcType=VARCHAR},
+      brand_name = #{record.brandName,jdbcType=VARCHAR},
+      brand_nick = #{record.brandNick,jdbcType=VARCHAR},
+      brand_logo = #{record.brandLogo,jdbcType=VARCHAR},
+      sms_verifying_info = #{record.smsVerifyingInfo,jdbcType=BIGINT},
+      sms_market_info = #{record.smsMarketInfo,jdbcType=BIGINT},
+      status = #{record.status,jdbcType=BIT},
+      on_date = #{record.onDate,jdbcType=TIMESTAMP},
+      off_date = #{record.offDate,jdbcType=TIMESTAMP},
+      remark = #{record.remark,jdbcType=VARCHAR},
+      create_user_id = #{record.createUserId,jdbcType=BIGINT},
+      create_user_name = #{record.createUserName,jdbcType=VARCHAR},
+      create_date = #{record.createDate,jdbcType=TIMESTAMP},
+      modified_user_id = #{record.modifiedUserId,jdbcType=BIGINT},
+      modified_user_name = #{record.modifiedUserName,jdbcType=VARCHAR},
+      modified_date = #{record.modifiedDate,jdbcType=TIMESTAMP},
+      valid = #{record.valid,jdbcType=BIT},
+      brand_info = #{record.brandInfo,jdbcType=LONGVARCHAR}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update t_sys_brand
+    set sys_brand_id = #{record.sysBrandId,jdbcType=BIGINT},
+      sys_company_id = #{record.sysCompanyId,jdbcType=BIGINT},
+      brand_code = #{record.brandCode,jdbcType=VARCHAR},
+      brand_name = #{record.brandName,jdbcType=VARCHAR},
+      brand_nick = #{record.brandNick,jdbcType=VARCHAR},
+      brand_logo = #{record.brandLogo,jdbcType=VARCHAR},
+      sms_verifying_info = #{record.smsVerifyingInfo,jdbcType=BIGINT},
+      sms_market_info = #{record.smsMarketInfo,jdbcType=BIGINT},
+      status = #{record.status,jdbcType=BIT},
+      on_date = #{record.onDate,jdbcType=TIMESTAMP},
+      off_date = #{record.offDate,jdbcType=TIMESTAMP},
+      remark = #{record.remark,jdbcType=VARCHAR},
+      create_user_id = #{record.createUserId,jdbcType=BIGINT},
+      create_user_name = #{record.createUserName,jdbcType=VARCHAR},
+      create_date = #{record.createDate,jdbcType=TIMESTAMP},
+      modified_user_id = #{record.modifiedUserId,jdbcType=BIGINT},
+      modified_user_name = #{record.modifiedUserName,jdbcType=VARCHAR},
+      modified_date = #{record.modifiedDate,jdbcType=TIMESTAMP},
+      valid = #{record.valid,jdbcType=BIT}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.bizvane.mktcenterservice.models.PO.SysBrandPO">
+    update t_sys_brand
+    <set>
+      <if test="sysCompanyId != null">
+        sys_company_id = #{sysCompanyId,jdbcType=BIGINT},
+      </if>
+      <if test="brandCode != null">
+        brand_code = #{brandCode,jdbcType=VARCHAR},
+      </if>
+      <if test="brandName != null">
+        brand_name = #{brandName,jdbcType=VARCHAR},
+      </if>
+      <if test="brandNick != null">
+        brand_nick = #{brandNick,jdbcType=VARCHAR},
+      </if>
+      <if test="brandLogo != null">
+        brand_logo = #{brandLogo,jdbcType=VARCHAR},
+      </if>
+      <if test="smsVerifyingInfo != null">
+        sms_verifying_info = #{smsVerifyingInfo,jdbcType=BIGINT},
+      </if>
+      <if test="smsMarketInfo != null">
+        sms_market_info = #{smsMarketInfo,jdbcType=BIGINT},
+      </if>
+      <if test="status != null">
+        status = #{status,jdbcType=BIT},
+      </if>
+      <if test="onDate != null">
+        on_date = #{onDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="offDate != null">
+        off_date = #{offDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="remark != null">
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="createUserId != null">
+        create_user_id = #{createUserId,jdbcType=BIGINT},
+      </if>
+      <if test="createUserName != null">
+        create_user_name = #{createUserName,jdbcType=VARCHAR},
+      </if>
+      <if test="createDate != null">
+        create_date = #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifiedUserId != null">
+        modified_user_id = #{modifiedUserId,jdbcType=BIGINT},
+      </if>
+      <if test="modifiedUserName != null">
+        modified_user_name = #{modifiedUserName,jdbcType=VARCHAR},
+      </if>
+      <if test="modifiedDate != null">
+        modified_date = #{modifiedDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="valid != null">
+        valid = #{valid,jdbcType=BIT},
+      </if>
+      <if test="brandInfo != null">
+        brand_info = #{brandInfo,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where sys_brand_id = #{sysBrandId,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.bizvane.mktcenterservice.models.PO.SysBrandPO">
+    update t_sys_brand
+    set sys_company_id = #{sysCompanyId,jdbcType=BIGINT},
+      brand_code = #{brandCode,jdbcType=VARCHAR},
+      brand_name = #{brandName,jdbcType=VARCHAR},
+      brand_nick = #{brandNick,jdbcType=VARCHAR},
+      brand_logo = #{brandLogo,jdbcType=VARCHAR},
+      sms_verifying_info = #{smsVerifyingInfo,jdbcType=BIGINT},
+      sms_market_info = #{smsMarketInfo,jdbcType=BIGINT},
+      status = #{status,jdbcType=BIT},
+      on_date = #{onDate,jdbcType=TIMESTAMP},
+      off_date = #{offDate,jdbcType=TIMESTAMP},
+      remark = #{remark,jdbcType=VARCHAR},
+      create_user_id = #{createUserId,jdbcType=BIGINT},
+      create_user_name = #{createUserName,jdbcType=VARCHAR},
+      create_date = #{createDate,jdbcType=TIMESTAMP},
+      modified_user_id = #{modifiedUserId,jdbcType=BIGINT},
+      modified_user_name = #{modifiedUserName,jdbcType=VARCHAR},
+      modified_date = #{modifiedDate,jdbcType=TIMESTAMP},
+      valid = #{valid,jdbcType=BIT},
+      brand_info = #{brandInfo,jdbcType=LONGVARCHAR}
+    where sys_brand_id = #{sysBrandId,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.bizvane.mktcenterservice.models.PO.SysBrandPO">
+    update t_sys_brand
+    set sys_company_id = #{sysCompanyId,jdbcType=BIGINT},
+      brand_code = #{brandCode,jdbcType=VARCHAR},
+      brand_name = #{brandName,jdbcType=VARCHAR},
+      brand_nick = #{brandNick,jdbcType=VARCHAR},
+      brand_logo = #{brandLogo,jdbcType=VARCHAR},
+      sms_verifying_info = #{smsVerifyingInfo,jdbcType=BIGINT},
+      sms_market_info = #{smsMarketInfo,jdbcType=BIGINT},
+      status = #{status,jdbcType=BIT},
+      on_date = #{onDate,jdbcType=TIMESTAMP},
+      off_date = #{offDate,jdbcType=TIMESTAMP},
+      remark = #{remark,jdbcType=VARCHAR},
+      create_user_id = #{createUserId,jdbcType=BIGINT},
+      create_user_name = #{createUserName,jdbcType=VARCHAR},
+      create_date = #{createDate,jdbcType=TIMESTAMP},
+      modified_user_id = #{modifiedUserId,jdbcType=BIGINT},
+      modified_user_name = #{modifiedUserName,jdbcType=VARCHAR},
+      modified_date = #{modifiedDate,jdbcType=TIMESTAMP},
+      valid = #{valid,jdbcType=BIT}
+    where sys_brand_id = #{sysBrandId,jdbcType=BIGINT}
+  </update>
+</mapper>
