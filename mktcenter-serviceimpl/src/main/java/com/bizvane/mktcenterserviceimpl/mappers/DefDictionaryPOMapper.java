@@ -6,25 +6,71 @@ import java.util.List;
 import org.apache.ibatis.annotations.Param;
 
 public interface DefDictionaryPOMapper {
-    long countByExample(DefDictionaryPOExample example);
 
-    int deleteByExample(DefDictionaryPOExample example);
+	/**
+	 * 只读. 
+	 * @mbg.generated  2018-07-04 11:13:59
+	 */
+	long countByExample(DefDictionaryPOExample example);
 
-    int deleteByPrimaryKey(Long defDictionaryId);
+	/**
+	 * 只读. 
+	 * @mbg.generated  2018-07-04 11:13:59
+	 */
+	int deleteByExample(DefDictionaryPOExample example);
 
-    int insert(DefDictionaryPO record);
+	/**
+	 * 只读. 
+	 * @mbg.generated  2018-07-04 11:13:59
+	 */
+	int deleteByPrimaryKey(Long mktActivityId);
 
-    int insertSelective(DefDictionaryPO record);
+	/**
+	 * 只读. 
+	 * @mbg.generated  2018-07-04 11:13:59
+	 */
+	int insert(DefDictionaryPO record);
 
-    List<DefDictionaryPO> selectByExample(DefDictionaryPOExample example);
+	/**
+	 * 只读. 
+	 * @mbg.generated  2018-07-04 11:13:59
+	 */
+	int insertSelective(DefDictionaryPO record);
 
-    DefDictionaryPO selectByPrimaryKey(Long defDictionaryId);
+	/**
+	 * 只读. 
+	 * @mbg.generated  2018-07-04 11:13:59
+	 */
+	List<DefDictionaryPO> selectByExample(DefDictionaryPOExample example);
 
-    int updateByExampleSelective(@Param("record") DefDictionaryPO record, @Param("example") DefDictionaryPOExample example);
+	/**
+	 * 只读. 
+	 * @mbg.generated  2018-07-04 11:13:59
+	 */
+	DefDictionaryPO selectByPrimaryKey(Long mktActivityId);
 
-    int updateByExample(@Param("record") DefDictionaryPO record, @Param("example") DefDictionaryPOExample example);
+	/**
+	 * 只读. 
+	 * @mbg.generated  2018-07-04 11:13:59
+	 */
+	int updateByExampleSelective(@Param("record") DefDictionaryPO record,
+			@Param("example") DefDictionaryPOExample example);
 
-    int updateByPrimaryKeySelective(DefDictionaryPO record);
+	/**
+	 * 只读. 
+	 * @mbg.generated  2018-07-04 11:13:59
+	 */
+	int updateByExample(@Param("record") DefDictionaryPO record, @Param("example") DefDictionaryPOExample example);
 
-    int updateByPrimaryKey(DefDictionaryPO record);
+	/**
+	 * 只读. 
+	 * @mbg.generated  2018-07-04 11:13:59
+	 */
+	int updateByPrimaryKeySelective(DefDictionaryPO record);
+
+	/**
+	 * 只读. 
+	 * @mbg.generated  2018-07-04 11:13:59
+	 */
+	int updateByPrimaryKey(DefDictionaryPO record);
 }

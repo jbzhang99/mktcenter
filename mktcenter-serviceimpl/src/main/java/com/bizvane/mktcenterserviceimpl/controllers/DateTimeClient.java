@@ -1,4 +1,4 @@
-package com.bizvane.centercontrolserviceimpl.controllers;
+package com.bizvane.mktcenterserviceimpl.controllers;
 
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;

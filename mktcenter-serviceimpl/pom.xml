@@ -19,10 +19,7 @@
 	</properties>
 
 	<dependencies>
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>centercontrol-service</artifactId>
-		</dependency>
+
 		<!--<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-security</artifactId>
@@ -90,7 +87,7 @@
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
-            <artifactId>centercontrol-service</artifactId>
+            <artifactId>mktcenter-service</artifactId>
             <version>0.0.1-SNAPSHOT</version>
         </dependency>
 		<dependency>
@@ -104,7 +101,24 @@
 			<artifactId>common-utils</artifactId>
 			<version>0.0.1.SNAPSHOT</version>
 		</dependency>
-    </dependencies>
+		<dependency>
+			<groupId>com.bizvane</groupId>
+			<artifactId>base-controller</artifactId>
+			<version>0.0.1.SNAPSHOT</version>
+		</dependency>
+		<!--generator核心包-->
+		<dependency>
+			<groupId>org.mybatis.generator</groupId>
+			<artifactId>mybatis-generator-core</artifactId>
+			<version>1.3.5</version>
+		</dependency>
+        <dependency>
+            <groupId>com.auth0</groupId>
+            <artifactId>java-jwt</artifactId>
+            <version>RELEASE</version>
+            <scope>compile</scope>
+        </dependency>
+	</dependencies>
 	<dependencyManagement>
 		<dependencies>
 			<dependency>
@@ -128,7 +142,7 @@
                 <artifactId>mybatis-generator-maven-plugin</artifactId>
                 <version>1.3.6</version>
                 <configuration>
-                    <configurationFile>src/main/resources/GeneratorMapper.xml</configurationFile>
+                    <configurationFile>src/main/resources/generatorConfig.xml</configurationFile>
                     <verbose>true</verbose>
                     <overwrite>true</overwrite>
                 </configuration>

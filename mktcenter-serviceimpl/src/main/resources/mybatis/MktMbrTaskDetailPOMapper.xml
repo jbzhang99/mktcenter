@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.bizvane.mktcenterserviceimpl.mappers.DefDictionaryPOMapper">
-  <resultMap id="BaseResultMap" type="com.bizvane.mktcenterservice.models.PO.DefDictionaryPO">
+<mapper namespace="com.bizvane.mktcenterserviceimpl.mappers.MktMbrTaskDetailPOMapper">
+  <resultMap id="BaseResultMap" type="com.bizvane.mktcenterservice.models.PO.MktMbrTaskDetailPO">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-04 11:13:59.
+      This element was generated on 2018-07-04 11:16:30.
     -->
     <id column="mkt_activity_id" jdbcType="BIGINT" property="mktActivityId" />
     <result column="activity_code" jdbcType="VARCHAR" property="activityCode" />
@@ -25,7 +25,7 @@
   <sql id="Example_Where_Clause">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-04 11:13:59.
+      This element was generated on 2018-07-04 11:16:30.
     -->
     <where>
       <foreach collection="oredCriteria" item="criteria" separator="or">
@@ -58,7 +58,7 @@
   <sql id="Update_By_Example_Where_Clause">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-04 11:13:59.
+      This element was generated on 2018-07-04 11:16:30.
     -->
     <where>
       <foreach collection="example.oredCriteria" item="criteria" separator="or">
@@ -91,16 +91,16 @@
   <sql id="Base_Column_List">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-04 11:13:59.
+      This element was generated on 2018-07-04 11:16:30.
     -->
     mkt_activity_id, activity_code, activity_name, sys_company_id, company_code, company_name, 
     activity_type, remark, create_user_id, create_user_name, create_date, modified_user_id, 
     modified_user_name, modified_date, valid
   </sql>
-  <select id="selectByExample" parameterType="com.bizvane.mktcenterservice.models.PO.DefDictionaryPOExample" resultMap="BaseResultMap">
+  <select id="selectByExample" parameterType="com.bizvane.mktcenterservice.models.PO.MktMbrTaskDetailPOExample" resultMap="BaseResultMap">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-04 11:13:59.
+      This element was generated on 2018-07-04 11:16:30.
     -->
     select
     <if test="distinct">
@@ -118,7 +118,7 @@
   <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-04 11:13:59.
+      This element was generated on 2018-07-04 11:16:30.
     -->
     select 
     <include refid="Base_Column_List" />
@@ -128,25 +128,25 @@
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-04 11:13:59.
+      This element was generated on 2018-07-04 11:16:30.
     -->
     delete from t_mkt_mbr_task_detail
     where mkt_activity_id = #{mktActivityId,jdbcType=BIGINT}
   </delete>
-  <delete id="deleteByExample" parameterType="com.bizvane.mktcenterservice.models.PO.DefDictionaryPOExample">
+  <delete id="deleteByExample" parameterType="com.bizvane.mktcenterservice.models.PO.MktMbrTaskDetailPOExample">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-04 11:13:59.
+      This element was generated on 2018-07-04 11:16:30.
     -->
     delete from t_mkt_mbr_task_detail
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insert" parameterType="com.bizvane.mktcenterservice.models.PO.DefDictionaryPO">
+  <insert id="insert" parameterType="com.bizvane.mktcenterservice.models.PO.MktMbrTaskDetailPO">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-04 11:13:59.
+      This element was generated on 2018-07-04 11:16:30.
     -->
     insert into t_mkt_mbr_task_detail (mkt_activity_id, activity_code, activity_name, 
       sys_company_id, company_code, company_name, 
@@ -161,10 +161,10 @@
       #{modifiedUserName,jdbcType=VARCHAR}, #{modifiedDate,jdbcType=TIMESTAMP}, #{valid,jdbcType=BIT}
       )
   </insert>
-  <insert id="insertSelective" parameterType="com.bizvane.mktcenterservice.models.PO.DefDictionaryPO">
+  <insert id="insertSelective" parameterType="com.bizvane.mktcenterservice.models.PO.MktMbrTaskDetailPO">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-04 11:13:59.
+      This element was generated on 2018-07-04 11:16:30.
     -->
     insert into t_mkt_mbr_task_detail
     <trim prefix="(" suffix=")" suffixOverrides=",">
@@ -262,10 +262,10 @@
       </if>
     </trim>
   </insert>
-  <select id="countByExample" parameterType="com.bizvane.mktcenterservice.models.PO.DefDictionaryPOExample" resultType="java.lang.Long">
+  <select id="countByExample" parameterType="com.bizvane.mktcenterservice.models.PO.MktMbrTaskDetailPOExample" resultType="java.lang.Long">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-04 11:13:59.
+      This element was generated on 2018-07-04 11:16:30.
     -->
     select count(*) from t_mkt_mbr_task_detail
     <if test="_parameter != null">
@@ -275,7 +275,7 @@
   <update id="updateByExampleSelective" parameterType="map">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-04 11:13:59.
+      This element was generated on 2018-07-04 11:16:30.
     -->
     update t_mkt_mbr_task_detail
     <set>
@@ -332,7 +332,7 @@
   <update id="updateByExample" parameterType="map">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-04 11:13:59.
+      This element was generated on 2018-07-04 11:16:30.
     -->
     update t_mkt_mbr_task_detail
     set mkt_activity_id = #{record.mktActivityId,jdbcType=BIGINT},
@@ -354,10 +354,10 @@
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
-  <update id="updateByPrimaryKeySelective" parameterType="com.bizvane.mktcenterservice.models.PO.DefDictionaryPO">
+  <update id="updateByPrimaryKeySelective" parameterType="com.bizvane.mktcenterservice.models.PO.MktMbrTaskDetailPO">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-04 11:13:59.
+      This element was generated on 2018-07-04 11:16:30.
     -->
     update t_mkt_mbr_task_detail
     <set>
@@ -406,10 +406,10 @@
     </set>
     where mkt_activity_id = #{mktActivityId,jdbcType=BIGINT}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.bizvane.mktcenterservice.models.PO.DefDictionaryPO">
+  <update id="updateByPrimaryKey" parameterType="com.bizvane.mktcenterservice.models.PO.MktMbrTaskDetailPO">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-04 11:13:59.
+      This element was generated on 2018-07-04 11:16:30.
     -->
     update t_mkt_mbr_task_detail
     set activity_code = #{activityCode,jdbcType=VARCHAR},
