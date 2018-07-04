@@ -4,7 +4,7 @@ server:
       context-path: /mktcenter
 spring:
   redis:
-      database: 0
+      database: 7
   profiles:
     active: basecontroller,commonutilslocal
   swagger:
@@ -43,4 +43,4 @@ mybatis:
 logging:
   config: classpath:logback-local.xml
   level:
-    com.bizvane.centerstageserviceimpl.mappers: debug
+    com.bizvane.mktcenterserviceimpl.mappers: debug
