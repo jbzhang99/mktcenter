@@ -1,23 +1,29 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.bizvane.mktcenterserviceimpl.mappers.MktActivityPOMapper">
-  <resultMap id="BaseResultMap" type="com.bizvane.mktcenterservice.models.PO.MktActivityPO">
+  <resultMap id="BaseResultMap" type="com.bizvane.mktcenterservice.models.po.MktActivityPO">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-04 11:16:30.
+      This element was generated on 2018-07-06 19:28:16.
     -->
     <id column="mkt_activity_id" jdbcType="BIGINT" property="mktActivityId" />
+    <result column="sys_brand_id" jdbcType="BIGINT" property="sysBrandId" />
     <result column="activity_code" jdbcType="VARCHAR" property="activityCode" />
     <result column="activity_type" jdbcType="INTEGER" property="activityType" />
     <result column="activity_name" jdbcType="VARCHAR" property="activityName" />
-    <result column="sys_company_id" jdbcType="BIGINT" property="sysCompanyId" />
-    <result column="company_code" jdbcType="VARCHAR" property="companyCode" />
-    <result column="company_name" jdbcType="VARCHAR" property="companyName" />
-    <result column="sys_brand_id" jdbcType="BIGINT" property="sysBrandId" />
     <result column="brand_code" jdbcType="VARCHAR" property="brandCode" />
     <result column="brand_name" jdbcType="VARCHAR" property="brandName" />
     <result column="start_time" jdbcType="TIMESTAMP" property="startTime" />
     <result column="end_time" jdbcType="TIMESTAMP" property="endTime" />
+    <result column="mbr_level_code" jdbcType="VARCHAR" property="mbrLevelCode" />
+    <result column="mbr_level_name" jdbcType="VARCHAR" property="mbrLevelName" />
+    <result column="mbr_low_level_code" jdbcType="VARCHAR" property="mbrLowLevelCode" />
+    <result column="mbr_low_level_name" jdbcType="VARCHAR" property="mbrLowLevelName" />
+    <result column="long_term" jdbcType="INTEGER" property="longTerm" />
+    <result column="coupon_per_member" jdbcType="INTEGER" property="couponPerMember" />
+    <result column="point" jdbcType="INTEGER" property="point" />
+    <result column="check_status" jdbcType="INTEGER" property="checkStatus" />
+    <result column="activity_status" jdbcType="INTEGER" property="activityStatus" />
     <result column="remark" jdbcType="VARCHAR" property="remark" />
     <result column="create_user_id" jdbcType="BIGINT" property="createUserId" />
     <result column="create_user_name" jdbcType="VARCHAR" property="createUserName" />
@@ -27,10 +33,20 @@
     <result column="modified_date" jdbcType="TIMESTAMP" property="modifiedDate" />
     <result column="valid" jdbcType="BIT" property="valid" />
   </resultMap>
+  <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.bizvane.mktcenterservice.models.po.MktActivityPOWithBLOBs">
+    <!--
+      WARNING - 只读 - @mbg.generated
+      This element was generated on 2018-07-06 19:28:16.
+    -->
+    <result column="activity_info" jdbcType="LONGVARCHAR" property="activityInfo" />
+    <result column="activity_list_img" jdbcType="LONGVARCHAR" property="activityListImg" />
+    <result column="activity_detail_img" jdbcType="LONGVARCHAR" property="activityDetailImg" />
+    <result column="store_scope" jdbcType="LONGVARCHAR" property="storeScope" />
+  </resultMap>
   <sql id="Example_Where_Clause">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-04 11:16:30.
+      This element was generated on 2018-07-06 19:28:16.
     -->
     <where>
       <foreach collection="oredCriteria" item="criteria" separator="or">
@@ -63,7 +79,7 @@
   <sql id="Update_By_Example_Where_Clause">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-04 11:16:30.
+      This element was generated on 2018-07-06 19:28:16.
     -->
     <where>
       <foreach collection="example.oredCriteria" item="criteria" separator="or">
@@ -96,17 +112,45 @@
   <sql id="Base_Column_List">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-04 11:16:30.
+      This element was generated on 2018-07-06 19:28:16.
     -->
-    mkt_activity_id, activity_code, activity_type, activity_name, sys_company_id, company_code, 
-    company_name, sys_brand_id, brand_code, brand_name, start_time, end_time, remark, 
-    create_user_id, create_user_name, create_date, modified_user_id, modified_user_name, 
+    mkt_activity_id, sys_brand_id, activity_code, activity_type, activity_name, brand_code, 
+    brand_name, start_time, end_time, mbr_level_code, mbr_level_name, mbr_low_level_code, 
+    mbr_low_level_name, long_term, coupon_per_member, point, check_status, activity_status, 
+    remark, create_user_id, create_user_name, create_date, modified_user_id, modified_user_name, 
     modified_date, valid
   </sql>
-  <select id="selectByExample" parameterType="com.bizvane.mktcenterservice.models.PO.MktActivityPOExample" resultMap="BaseResultMap">
+  <sql id="Blob_Column_List">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-04 11:16:30.
+      This element was generated on 2018-07-06 19:28:16.
+    -->
+    activity_info, activity_list_img, activity_detail_img, store_scope
+  </sql>
+  <select id="selectByExampleWithBLOBs" parameterType="com.bizvane.mktcenterservice.models.po.MktActivityPOExample" resultMap="ResultMapWithBLOBs">
+    <!--
+      WARNING - 只读 - @mbg.generated
+      This element was generated on 2018-07-06 19:28:16.
+    -->
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from t_mkt_activity
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByExample" parameterType="com.bizvane.mktcenterservice.models.po.MktActivityPOExample" resultMap="BaseResultMap">
+    <!--
+      WARNING - 只读 - @mbg.generated
+      This element was generated on 2018-07-06 19:28:16.
     -->
     select
     <if test="distinct">
@@ -121,67 +165,78 @@
       order by ${orderByClause}
     </if>
   </select>
-  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="ResultMapWithBLOBs">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-04 11:16:30.
+      This element was generated on 2018-07-06 19:28:16.
     -->
     select 
     <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
     from t_mkt_activity
     where mkt_activity_id = #{mktActivityId,jdbcType=BIGINT}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-04 11:16:30.
+      This element was generated on 2018-07-06 19:28:16.
     -->
     delete from t_mkt_activity
     where mkt_activity_id = #{mktActivityId,jdbcType=BIGINT}
   </delete>
-  <delete id="deleteByExample" parameterType="com.bizvane.mktcenterservice.models.PO.MktActivityPOExample">
+  <delete id="deleteByExample" parameterType="com.bizvane.mktcenterservice.models.po.MktActivityPOExample">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-04 11:16:30.
+      This element was generated on 2018-07-06 19:28:16.
     -->
     delete from t_mkt_activity
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insert" parameterType="com.bizvane.mktcenterservice.models.PO.MktActivityPO">
+  <insert id="insert" parameterType="com.bizvane.mktcenterservice.models.po.MktActivityPOWithBLOBs">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-04 11:16:30.
+      This element was generated on 2018-07-06 19:28:16.
     -->
     <selectKey keyProperty="mktActivityId" order="AFTER" resultType="java.lang.Long">
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into t_mkt_activity (activity_code, activity_type, activity_name, 
-      sys_company_id, company_code, company_name, 
-      sys_brand_id, brand_code, brand_name, 
-      start_time, end_time, remark, 
+    insert into t_mkt_activity (sys_brand_id, activity_code, activity_type, 
+      activity_name, brand_code, brand_name, 
+      start_time, end_time, mbr_level_code, 
+      mbr_level_name, mbr_low_level_code, mbr_low_level_name, 
+      long_term, coupon_per_member, point, 
+      check_status, activity_status, remark, 
       create_user_id, create_user_name, create_date, 
       modified_user_id, modified_user_name, modified_date, 
-      valid)
-    values (#{activityCode,jdbcType=VARCHAR}, #{activityType,jdbcType=INTEGER}, #{activityName,jdbcType=VARCHAR}, 
-      #{sysCompanyId,jdbcType=BIGINT}, #{companyCode,jdbcType=VARCHAR}, #{companyName,jdbcType=VARCHAR}, 
-      #{sysBrandId,jdbcType=BIGINT}, #{brandCode,jdbcType=VARCHAR}, #{brandName,jdbcType=VARCHAR}, 
-      #{startTime,jdbcType=TIMESTAMP}, #{endTime,jdbcType=TIMESTAMP}, #{remark,jdbcType=VARCHAR}, 
+      valid, activity_info, activity_list_img, 
+      activity_detail_img, store_scope)
+    values (#{sysBrandId,jdbcType=BIGINT}, #{activityCode,jdbcType=VARCHAR}, #{activityType,jdbcType=INTEGER}, 
+      #{activityName,jdbcType=VARCHAR}, #{brandCode,jdbcType=VARCHAR}, #{brandName,jdbcType=VARCHAR}, 
+      #{startTime,jdbcType=TIMESTAMP}, #{endTime,jdbcType=TIMESTAMP}, #{mbrLevelCode,jdbcType=VARCHAR}, 
+      #{mbrLevelName,jdbcType=VARCHAR}, #{mbrLowLevelCode,jdbcType=VARCHAR}, #{mbrLowLevelName,jdbcType=VARCHAR}, 
+      #{longTerm,jdbcType=INTEGER}, #{couponPerMember,jdbcType=INTEGER}, #{point,jdbcType=INTEGER}, 
+      #{checkStatus,jdbcType=INTEGER}, #{activityStatus,jdbcType=INTEGER}, #{remark,jdbcType=VARCHAR}, 
       #{createUserId,jdbcType=BIGINT}, #{createUserName,jdbcType=VARCHAR}, #{createDate,jdbcType=TIMESTAMP}, 
       #{modifiedUserId,jdbcType=BIGINT}, #{modifiedUserName,jdbcType=VARCHAR}, #{modifiedDate,jdbcType=TIMESTAMP}, 
-      #{valid,jdbcType=BIT})
+      #{valid,jdbcType=BIT}, #{activityInfo,jdbcType=LONGVARCHAR}, #{activityListImg,jdbcType=LONGVARCHAR}, 
+      #{activityDetailImg,jdbcType=LONGVARCHAR}, #{storeScope,jdbcType=LONGVARCHAR})
   </insert>
-  <insert id="insertSelective" parameterType="com.bizvane.mktcenterservice.models.PO.MktActivityPO">
+  <insert id="insertSelective" parameterType="com.bizvane.mktcenterservice.models.po.MktActivityPOWithBLOBs">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-04 11:16:30.
+      This element was generated on 2018-07-06 19:28:16.
     -->
     <selectKey keyProperty="mktActivityId" order="AFTER" resultType="java.lang.Long">
       SELECT LAST_INSERT_ID()
     </selectKey>
     insert into t_mkt_activity
     <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="sysBrandId != null">
+        sys_brand_id,
+      </if>
       <if test="activityCode != null">
         activity_code,
       </if>
@@ -190,18 +245,6 @@
       </if>
       <if test="activityName != null">
         activity_name,
-      </if>
-      <if test="sysCompanyId != null">
-        sys_company_id,
-      </if>
-      <if test="companyCode != null">
-        company_code,
-      </if>
-      <if test="companyName != null">
-        company_name,
-      </if>
-      <if test="sysBrandId != null">
-        sys_brand_id,
       </if>
       <if test="brandCode != null">
         brand_code,
@@ -214,6 +257,33 @@
       </if>
       <if test="endTime != null">
         end_time,
+      </if>
+      <if test="mbrLevelCode != null">
+        mbr_level_code,
+      </if>
+      <if test="mbrLevelName != null">
+        mbr_level_name,
+      </if>
+      <if test="mbrLowLevelCode != null">
+        mbr_low_level_code,
+      </if>
+      <if test="mbrLowLevelName != null">
+        mbr_low_level_name,
+      </if>
+      <if test="longTerm != null">
+        long_term,
+      </if>
+      <if test="couponPerMember != null">
+        coupon_per_member,
+      </if>
+      <if test="point != null">
+        point,
+      </if>
+      <if test="checkStatus != null">
+        check_status,
+      </if>
+      <if test="activityStatus != null">
+        activity_status,
       </if>
       <if test="remark != null">
         remark,
@@ -239,8 +309,23 @@
       <if test="valid != null">
         valid,
       </if>
+      <if test="activityInfo != null">
+        activity_info,
+      </if>
+      <if test="activityListImg != null">
+        activity_list_img,
+      </if>
+      <if test="activityDetailImg != null">
+        activity_detail_img,
+      </if>
+      <if test="storeScope != null">
+        store_scope,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="sysBrandId != null">
+        #{sysBrandId,jdbcType=BIGINT},
+      </if>
       <if test="activityCode != null">
         #{activityCode,jdbcType=VARCHAR},
       </if>
@@ -249,18 +334,6 @@
       </if>
       <if test="activityName != null">
         #{activityName,jdbcType=VARCHAR},
-      </if>
-      <if test="sysCompanyId != null">
-        #{sysCompanyId,jdbcType=BIGINT},
-      </if>
-      <if test="companyCode != null">
-        #{companyCode,jdbcType=VARCHAR},
-      </if>
-      <if test="companyName != null">
-        #{companyName,jdbcType=VARCHAR},
-      </if>
-      <if test="sysBrandId != null">
-        #{sysBrandId,jdbcType=BIGINT},
       </if>
       <if test="brandCode != null">
         #{brandCode,jdbcType=VARCHAR},
@@ -273,6 +346,33 @@
       </if>
       <if test="endTime != null">
         #{endTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="mbrLevelCode != null">
+        #{mbrLevelCode,jdbcType=VARCHAR},
+      </if>
+      <if test="mbrLevelName != null">
+        #{mbrLevelName,jdbcType=VARCHAR},
+      </if>
+      <if test="mbrLowLevelCode != null">
+        #{mbrLowLevelCode,jdbcType=VARCHAR},
+      </if>
+      <if test="mbrLowLevelName != null">
+        #{mbrLowLevelName,jdbcType=VARCHAR},
+      </if>
+      <if test="longTerm != null">
+        #{longTerm,jdbcType=INTEGER},
+      </if>
+      <if test="couponPerMember != null">
+        #{couponPerMember,jdbcType=INTEGER},
+      </if>
+      <if test="point != null">
+        #{point,jdbcType=INTEGER},
+      </if>
+      <if test="checkStatus != null">
+        #{checkStatus,jdbcType=INTEGER},
+      </if>
+      <if test="activityStatus != null">
+        #{activityStatus,jdbcType=INTEGER},
       </if>
       <if test="remark != null">
         #{remark,jdbcType=VARCHAR},
@@ -298,12 +398,24 @@
       <if test="valid != null">
         #{valid,jdbcType=BIT},
       </if>
+      <if test="activityInfo != null">
+        #{activityInfo,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="activityListImg != null">
+        #{activityListImg,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="activityDetailImg != null">
+        #{activityDetailImg,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="storeScope != null">
+        #{storeScope,jdbcType=LONGVARCHAR},
+      </if>
     </trim>
   </insert>
-  <select id="countByExample" parameterType="com.bizvane.mktcenterservice.models.PO.MktActivityPOExample" resultType="java.lang.Long">
+  <select id="countByExample" parameterType="com.bizvane.mktcenterservice.models.po.MktActivityPOExample" resultType="java.lang.Long">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-04 11:16:30.
+      This element was generated on 2018-07-06 19:28:16.
     -->
     select count(*) from t_mkt_activity
     <if test="_parameter != null">
@@ -313,12 +425,15 @@
   <update id="updateByExampleSelective" parameterType="map">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-04 11:16:30.
+      This element was generated on 2018-07-06 19:28:16.
     -->
     update t_mkt_activity
     <set>
       <if test="record.mktActivityId != null">
         mkt_activity_id = #{record.mktActivityId,jdbcType=BIGINT},
+      </if>
+      <if test="record.sysBrandId != null">
+        sys_brand_id = #{record.sysBrandId,jdbcType=BIGINT},
       </if>
       <if test="record.activityCode != null">
         activity_code = #{record.activityCode,jdbcType=VARCHAR},
@@ -328,18 +443,6 @@
       </if>
       <if test="record.activityName != null">
         activity_name = #{record.activityName,jdbcType=VARCHAR},
-      </if>
-      <if test="record.sysCompanyId != null">
-        sys_company_id = #{record.sysCompanyId,jdbcType=BIGINT},
-      </if>
-      <if test="record.companyCode != null">
-        company_code = #{record.companyCode,jdbcType=VARCHAR},
-      </if>
-      <if test="record.companyName != null">
-        company_name = #{record.companyName,jdbcType=VARCHAR},
-      </if>
-      <if test="record.sysBrandId != null">
-        sys_brand_id = #{record.sysBrandId,jdbcType=BIGINT},
       </if>
       <if test="record.brandCode != null">
         brand_code = #{record.brandCode,jdbcType=VARCHAR},
@@ -352,6 +455,33 @@
       </if>
       <if test="record.endTime != null">
         end_time = #{record.endTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.mbrLevelCode != null">
+        mbr_level_code = #{record.mbrLevelCode,jdbcType=VARCHAR},
+      </if>
+      <if test="record.mbrLevelName != null">
+        mbr_level_name = #{record.mbrLevelName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.mbrLowLevelCode != null">
+        mbr_low_level_code = #{record.mbrLowLevelCode,jdbcType=VARCHAR},
+      </if>
+      <if test="record.mbrLowLevelName != null">
+        mbr_low_level_name = #{record.mbrLowLevelName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.longTerm != null">
+        long_term = #{record.longTerm,jdbcType=INTEGER},
+      </if>
+      <if test="record.couponPerMember != null">
+        coupon_per_member = #{record.couponPerMember,jdbcType=INTEGER},
+      </if>
+      <if test="record.point != null">
+        point = #{record.point,jdbcType=INTEGER},
+      </if>
+      <if test="record.checkStatus != null">
+        check_status = #{record.checkStatus,jdbcType=INTEGER},
+      </if>
+      <if test="record.activityStatus != null">
+        activity_status = #{record.activityStatus,jdbcType=INTEGER},
       </if>
       <if test="record.remark != null">
         remark = #{record.remark,jdbcType=VARCHAR},
@@ -377,7 +507,59 @@
       <if test="record.valid != null">
         valid = #{record.valid,jdbcType=BIT},
       </if>
+      <if test="record.activityInfo != null">
+        activity_info = #{record.activityInfo,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="record.activityListImg != null">
+        activity_list_img = #{record.activityListImg,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="record.activityDetailImg != null">
+        activity_detail_img = #{record.activityDetailImg,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="record.storeScope != null">
+        store_scope = #{record.storeScope,jdbcType=LONGVARCHAR},
+      </if>
     </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExampleWithBLOBs" parameterType="map">
+    <!--
+      WARNING - 只读 - @mbg.generated
+      This element was generated on 2018-07-06 19:28:16.
+    -->
+    update t_mkt_activity
+    set mkt_activity_id = #{record.mktActivityId,jdbcType=BIGINT},
+      sys_brand_id = #{record.sysBrandId,jdbcType=BIGINT},
+      activity_code = #{record.activityCode,jdbcType=VARCHAR},
+      activity_type = #{record.activityType,jdbcType=INTEGER},
+      activity_name = #{record.activityName,jdbcType=VARCHAR},
+      brand_code = #{record.brandCode,jdbcType=VARCHAR},
+      brand_name = #{record.brandName,jdbcType=VARCHAR},
+      start_time = #{record.startTime,jdbcType=TIMESTAMP},
+      end_time = #{record.endTime,jdbcType=TIMESTAMP},
+      mbr_level_code = #{record.mbrLevelCode,jdbcType=VARCHAR},
+      mbr_level_name = #{record.mbrLevelName,jdbcType=VARCHAR},
+      mbr_low_level_code = #{record.mbrLowLevelCode,jdbcType=VARCHAR},
+      mbr_low_level_name = #{record.mbrLowLevelName,jdbcType=VARCHAR},
+      long_term = #{record.longTerm,jdbcType=INTEGER},
+      coupon_per_member = #{record.couponPerMember,jdbcType=INTEGER},
+      point = #{record.point,jdbcType=INTEGER},
+      check_status = #{record.checkStatus,jdbcType=INTEGER},
+      activity_status = #{record.activityStatus,jdbcType=INTEGER},
+      remark = #{record.remark,jdbcType=VARCHAR},
+      create_user_id = #{record.createUserId,jdbcType=BIGINT},
+      create_user_name = #{record.createUserName,jdbcType=VARCHAR},
+      create_date = #{record.createDate,jdbcType=TIMESTAMP},
+      modified_user_id = #{record.modifiedUserId,jdbcType=BIGINT},
+      modified_user_name = #{record.modifiedUserName,jdbcType=VARCHAR},
+      modified_date = #{record.modifiedDate,jdbcType=TIMESTAMP},
+      valid = #{record.valid,jdbcType=BIT},
+      activity_info = #{record.activityInfo,jdbcType=LONGVARCHAR},
+      activity_list_img = #{record.activityListImg,jdbcType=LONGVARCHAR},
+      activity_detail_img = #{record.activityDetailImg,jdbcType=LONGVARCHAR},
+      store_scope = #{record.storeScope,jdbcType=LONGVARCHAR}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -385,21 +567,27 @@
   <update id="updateByExample" parameterType="map">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-04 11:16:30.
+      This element was generated on 2018-07-06 19:28:16.
     -->
     update t_mkt_activity
     set mkt_activity_id = #{record.mktActivityId,jdbcType=BIGINT},
+      sys_brand_id = #{record.sysBrandId,jdbcType=BIGINT},
       activity_code = #{record.activityCode,jdbcType=VARCHAR},
       activity_type = #{record.activityType,jdbcType=INTEGER},
       activity_name = #{record.activityName,jdbcType=VARCHAR},
-      sys_company_id = #{record.sysCompanyId,jdbcType=BIGINT},
-      company_code = #{record.companyCode,jdbcType=VARCHAR},
-      company_name = #{record.companyName,jdbcType=VARCHAR},
-      sys_brand_id = #{record.sysBrandId,jdbcType=BIGINT},
       brand_code = #{record.brandCode,jdbcType=VARCHAR},
       brand_name = #{record.brandName,jdbcType=VARCHAR},
       start_time = #{record.startTime,jdbcType=TIMESTAMP},
       end_time = #{record.endTime,jdbcType=TIMESTAMP},
+      mbr_level_code = #{record.mbrLevelCode,jdbcType=VARCHAR},
+      mbr_level_name = #{record.mbrLevelName,jdbcType=VARCHAR},
+      mbr_low_level_code = #{record.mbrLowLevelCode,jdbcType=VARCHAR},
+      mbr_low_level_name = #{record.mbrLowLevelName,jdbcType=VARCHAR},
+      long_term = #{record.longTerm,jdbcType=INTEGER},
+      coupon_per_member = #{record.couponPerMember,jdbcType=INTEGER},
+      point = #{record.point,jdbcType=INTEGER},
+      check_status = #{record.checkStatus,jdbcType=INTEGER},
+      activity_status = #{record.activityStatus,jdbcType=INTEGER},
       remark = #{record.remark,jdbcType=VARCHAR},
       create_user_id = #{record.createUserId,jdbcType=BIGINT},
       create_user_name = #{record.createUserName,jdbcType=VARCHAR},
@@ -412,13 +600,16 @@
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
-  <update id="updateByPrimaryKeySelective" parameterType="com.bizvane.mktcenterservice.models.PO.MktActivityPO">
+  <update id="updateByPrimaryKeySelective" parameterType="com.bizvane.mktcenterservice.models.po.MktActivityPOWithBLOBs">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-04 11:16:30.
+      This element was generated on 2018-07-06 19:28:16.
     -->
     update t_mkt_activity
     <set>
+      <if test="sysBrandId != null">
+        sys_brand_id = #{sysBrandId,jdbcType=BIGINT},
+      </if>
       <if test="activityCode != null">
         activity_code = #{activityCode,jdbcType=VARCHAR},
       </if>
@@ -427,18 +618,6 @@
       </if>
       <if test="activityName != null">
         activity_name = #{activityName,jdbcType=VARCHAR},
-      </if>
-      <if test="sysCompanyId != null">
-        sys_company_id = #{sysCompanyId,jdbcType=BIGINT},
-      </if>
-      <if test="companyCode != null">
-        company_code = #{companyCode,jdbcType=VARCHAR},
-      </if>
-      <if test="companyName != null">
-        company_name = #{companyName,jdbcType=VARCHAR},
-      </if>
-      <if test="sysBrandId != null">
-        sys_brand_id = #{sysBrandId,jdbcType=BIGINT},
       </if>
       <if test="brandCode != null">
         brand_code = #{brandCode,jdbcType=VARCHAR},
@@ -451,6 +630,33 @@
       </if>
       <if test="endTime != null">
         end_time = #{endTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="mbrLevelCode != null">
+        mbr_level_code = #{mbrLevelCode,jdbcType=VARCHAR},
+      </if>
+      <if test="mbrLevelName != null">
+        mbr_level_name = #{mbrLevelName,jdbcType=VARCHAR},
+      </if>
+      <if test="mbrLowLevelCode != null">
+        mbr_low_level_code = #{mbrLowLevelCode,jdbcType=VARCHAR},
+      </if>
+      <if test="mbrLowLevelName != null">
+        mbr_low_level_name = #{mbrLowLevelName,jdbcType=VARCHAR},
+      </if>
+      <if test="longTerm != null">
+        long_term = #{longTerm,jdbcType=INTEGER},
+      </if>
+      <if test="couponPerMember != null">
+        coupon_per_member = #{couponPerMember,jdbcType=INTEGER},
+      </if>
+      <if test="point != null">
+        point = #{point,jdbcType=INTEGER},
+      </if>
+      <if test="checkStatus != null">
+        check_status = #{checkStatus,jdbcType=INTEGER},
+      </if>
+      <if test="activityStatus != null">
+        activity_status = #{activityStatus,jdbcType=INTEGER},
       </if>
       <if test="remark != null">
         remark = #{remark,jdbcType=VARCHAR},
@@ -476,26 +682,81 @@
       <if test="valid != null">
         valid = #{valid,jdbcType=BIT},
       </if>
+      <if test="activityInfo != null">
+        activity_info = #{activityInfo,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="activityListImg != null">
+        activity_list_img = #{activityListImg,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="activityDetailImg != null">
+        activity_detail_img = #{activityDetailImg,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="storeScope != null">
+        store_scope = #{storeScope,jdbcType=LONGVARCHAR},
+      </if>
     </set>
     where mkt_activity_id = #{mktActivityId,jdbcType=BIGINT}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.bizvane.mktcenterservice.models.PO.MktActivityPO">
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.bizvane.mktcenterservice.models.po.MktActivityPOWithBLOBs">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-04 11:16:30.
+      This element was generated on 2018-07-06 19:28:16.
     -->
     update t_mkt_activity
-    set activity_code = #{activityCode,jdbcType=VARCHAR},
+    set sys_brand_id = #{sysBrandId,jdbcType=BIGINT},
+      activity_code = #{activityCode,jdbcType=VARCHAR},
       activity_type = #{activityType,jdbcType=INTEGER},
       activity_name = #{activityName,jdbcType=VARCHAR},
-      sys_company_id = #{sysCompanyId,jdbcType=BIGINT},
-      company_code = #{companyCode,jdbcType=VARCHAR},
-      company_name = #{companyName,jdbcType=VARCHAR},
-      sys_brand_id = #{sysBrandId,jdbcType=BIGINT},
       brand_code = #{brandCode,jdbcType=VARCHAR},
       brand_name = #{brandName,jdbcType=VARCHAR},
       start_time = #{startTime,jdbcType=TIMESTAMP},
       end_time = #{endTime,jdbcType=TIMESTAMP},
+      mbr_level_code = #{mbrLevelCode,jdbcType=VARCHAR},
+      mbr_level_name = #{mbrLevelName,jdbcType=VARCHAR},
+      mbr_low_level_code = #{mbrLowLevelCode,jdbcType=VARCHAR},
+      mbr_low_level_name = #{mbrLowLevelName,jdbcType=VARCHAR},
+      long_term = #{longTerm,jdbcType=INTEGER},
+      coupon_per_member = #{couponPerMember,jdbcType=INTEGER},
+      point = #{point,jdbcType=INTEGER},
+      check_status = #{checkStatus,jdbcType=INTEGER},
+      activity_status = #{activityStatus,jdbcType=INTEGER},
+      remark = #{remark,jdbcType=VARCHAR},
+      create_user_id = #{createUserId,jdbcType=BIGINT},
+      create_user_name = #{createUserName,jdbcType=VARCHAR},
+      create_date = #{createDate,jdbcType=TIMESTAMP},
+      modified_user_id = #{modifiedUserId,jdbcType=BIGINT},
+      modified_user_name = #{modifiedUserName,jdbcType=VARCHAR},
+      modified_date = #{modifiedDate,jdbcType=TIMESTAMP},
+      valid = #{valid,jdbcType=BIT},
+      activity_info = #{activityInfo,jdbcType=LONGVARCHAR},
+      activity_list_img = #{activityListImg,jdbcType=LONGVARCHAR},
+      activity_detail_img = #{activityDetailImg,jdbcType=LONGVARCHAR},
+      store_scope = #{storeScope,jdbcType=LONGVARCHAR}
+    where mkt_activity_id = #{mktActivityId,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.bizvane.mktcenterservice.models.po.MktActivityPO">
+    <!--
+      WARNING - 只读 - @mbg.generated
+      This element was generated on 2018-07-06 19:28:16.
+    -->
+    update t_mkt_activity
+    set sys_brand_id = #{sysBrandId,jdbcType=BIGINT},
+      activity_code = #{activityCode,jdbcType=VARCHAR},
+      activity_type = #{activityType,jdbcType=INTEGER},
+      activity_name = #{activityName,jdbcType=VARCHAR},
+      brand_code = #{brandCode,jdbcType=VARCHAR},
+      brand_name = #{brandName,jdbcType=VARCHAR},
+      start_time = #{startTime,jdbcType=TIMESTAMP},
+      end_time = #{endTime,jdbcType=TIMESTAMP},
+      mbr_level_code = #{mbrLevelCode,jdbcType=VARCHAR},
+      mbr_level_name = #{mbrLevelName,jdbcType=VARCHAR},
+      mbr_low_level_code = #{mbrLowLevelCode,jdbcType=VARCHAR},
+      mbr_low_level_name = #{mbrLowLevelName,jdbcType=VARCHAR},
+      long_term = #{longTerm,jdbcType=INTEGER},
+      coupon_per_member = #{couponPerMember,jdbcType=INTEGER},
+      point = #{point,jdbcType=INTEGER},
+      check_status = #{checkStatus,jdbcType=INTEGER},
+      activity_status = #{activityStatus,jdbcType=INTEGER},
       remark = #{remark,jdbcType=VARCHAR},
       create_user_id = #{createUserId,jdbcType=BIGINT},
       create_user_name = #{createUserName,jdbcType=VARCHAR},

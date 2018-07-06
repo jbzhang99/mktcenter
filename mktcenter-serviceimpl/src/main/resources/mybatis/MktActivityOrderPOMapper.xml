@@ -1,17 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.bizvane.mktcenterserviceimpl.mappers.MktActivityMqLogPOMapper">
-  <resultMap id="BaseResultMap" type="com.bizvane.mktcenterservice.models.po.MktActivityMqLogPO">
+<mapper namespace="com.bizvane.mktcenterserviceimpl.mappers.MktActivityOrderPOMapper">
+  <resultMap id="BaseResultMap" type="com.bizvane.mktcenterservice.models.po.MktActivityOrderPO">
     <!--
       WARNING - 只读 - @mbg.generated
       This element was generated on 2018-07-06 19:28:16.
     -->
-    <id column="mkt_activity_mq_log_id" jdbcType="BIGINT" property="mktActivityMqLogId" />
-    <result column="mkt_activity_id" jdbcType="VARCHAR" property="mktActivityId" />
-    <result column="partition" jdbcType="INTEGER" property="partition" />
-    <result column="offset" jdbcType="INTEGER" property="offset" />
-    <result column="type" jdbcType="BIGINT" property="type" />
-    <result column="value" jdbcType="VARCHAR" property="value" />
+    <id column="mkt_activity_order_id" jdbcType="BIGINT" property="mktActivityOrderId" />
+    <result column="mkt_activity_id" jdbcType="BIGINT" property="mktActivityId" />
+    <result column="order_source" jdbcType="VARCHAR" property="orderSource" />
+    <result column="order_min_price" jdbcType="VARCHAR" property="orderMinPrice" />
+    <result column="discount" jdbcType="VARCHAR" property="discount" />
     <result column="remark" jdbcType="VARCHAR" property="remark" />
     <result column="create_user_id" jdbcType="BIGINT" property="createUserId" />
     <result column="create_user_name" jdbcType="VARCHAR" property="createUserName" />
@@ -92,11 +91,11 @@
       WARNING - 只读 - @mbg.generated
       This element was generated on 2018-07-06 19:28:16.
     -->
-    mkt_activity_mq_log_id, mkt_activity_id, partition, offset, type, value, remark, 
-    create_user_id, create_user_name, create_date, modified_user_id, modified_user_name, 
+    mkt_activity_order_id, mkt_activity_id, order_source, order_min_price, discount, 
+    remark, create_user_id, create_user_name, create_date, modified_user_id, modified_user_name, 
     modified_date, valid
   </sql>
-  <select id="selectByExample" parameterType="com.bizvane.mktcenterservice.models.po.MktActivityMqLogPOExample" resultMap="BaseResultMap">
+  <select id="selectByExample" parameterType="com.bizvane.mktcenterservice.models.po.MktActivityOrderPOExample" resultMap="BaseResultMap">
     <!--
       WARNING - 只读 - @mbg.generated
       This element was generated on 2018-07-06 19:28:16.
@@ -106,7 +105,7 @@
       distinct
     </if>
     <include refid="Base_Column_List" />
-    from t_mkt_activity_mq_log
+    from t_mkt_activity_order
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
@@ -121,70 +120,67 @@
     -->
     select 
     <include refid="Base_Column_List" />
-    from t_mkt_activity_mq_log
-    where mkt_activity_mq_log_id = #{mktActivityMqLogId,jdbcType=BIGINT}
+    from t_mkt_activity_order
+    where mkt_activity_order_id = #{mktActivityOrderId,jdbcType=BIGINT}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
     <!--
       WARNING - 只读 - @mbg.generated
       This element was generated on 2018-07-06 19:28:16.
     -->
-    delete from t_mkt_activity_mq_log
-    where mkt_activity_mq_log_id = #{mktActivityMqLogId,jdbcType=BIGINT}
+    delete from t_mkt_activity_order
+    where mkt_activity_order_id = #{mktActivityOrderId,jdbcType=BIGINT}
   </delete>
-  <delete id="deleteByExample" parameterType="com.bizvane.mktcenterservice.models.po.MktActivityMqLogPOExample">
+  <delete id="deleteByExample" parameterType="com.bizvane.mktcenterservice.models.po.MktActivityOrderPOExample">
     <!--
       WARNING - 只读 - @mbg.generated
       This element was generated on 2018-07-06 19:28:16.
     -->
-    delete from t_mkt_activity_mq_log
+    delete from t_mkt_activity_order
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insert" parameterType="com.bizvane.mktcenterservice.models.po.MktActivityMqLogPO">
+  <insert id="insert" parameterType="com.bizvane.mktcenterservice.models.po.MktActivityOrderPO">
     <!--
       WARNING - 只读 - @mbg.generated
       This element was generated on 2018-07-06 19:28:16.
     -->
-    <selectKey keyProperty="mktActivityMqLogId" order="AFTER" resultType="java.lang.Long">
+    <selectKey keyProperty="mktActivityOrderId" order="AFTER" resultType="java.lang.Long">
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into t_mkt_activity_mq_log (mkt_activity_id, partition, offset, 
-      type, value, remark, 
-      create_user_id, create_user_name, create_date, 
-      modified_user_id, modified_user_name, modified_date, 
-      valid)
-    values (#{mktActivityId,jdbcType=VARCHAR}, #{partition,jdbcType=INTEGER}, #{offset,jdbcType=INTEGER}, 
-      #{type,jdbcType=BIGINT}, #{value,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}, 
-      #{createUserId,jdbcType=BIGINT}, #{createUserName,jdbcType=VARCHAR}, #{createDate,jdbcType=TIMESTAMP}, 
-      #{modifiedUserId,jdbcType=BIGINT}, #{modifiedUserName,jdbcType=VARCHAR}, #{modifiedDate,jdbcType=TIMESTAMP}, 
-      #{valid,jdbcType=BIT})
+    insert into t_mkt_activity_order (mkt_activity_id, order_source, order_min_price, 
+      discount, remark, create_user_id, 
+      create_user_name, create_date, modified_user_id, 
+      modified_user_name, modified_date, valid
+      )
+    values (#{mktActivityId,jdbcType=BIGINT}, #{orderSource,jdbcType=VARCHAR}, #{orderMinPrice,jdbcType=VARCHAR}, 
+      #{discount,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}, #{createUserId,jdbcType=BIGINT}, 
+      #{createUserName,jdbcType=VARCHAR}, #{createDate,jdbcType=TIMESTAMP}, #{modifiedUserId,jdbcType=BIGINT}, 
+      #{modifiedUserName,jdbcType=VARCHAR}, #{modifiedDate,jdbcType=TIMESTAMP}, #{valid,jdbcType=BIT}
+      )
   </insert>
-  <insert id="insertSelective" parameterType="com.bizvane.mktcenterservice.models.po.MktActivityMqLogPO">
+  <insert id="insertSelective" parameterType="com.bizvane.mktcenterservice.models.po.MktActivityOrderPO">
     <!--
       WARNING - 只读 - @mbg.generated
       This element was generated on 2018-07-06 19:28:16.
     -->
-    <selectKey keyProperty="mktActivityMqLogId" order="AFTER" resultType="java.lang.Long">
+    <selectKey keyProperty="mktActivityOrderId" order="AFTER" resultType="java.lang.Long">
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into t_mkt_activity_mq_log
+    insert into t_mkt_activity_order
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="mktActivityId != null">
         mkt_activity_id,
       </if>
-      <if test="partition != null">
-        partition,
+      <if test="orderSource != null">
+        order_source,
       </if>
-      <if test="offset != null">
-        offset,
+      <if test="orderMinPrice != null">
+        order_min_price,
       </if>
-      <if test="type != null">
-        type,
-      </if>
-      <if test="value != null">
-        value,
+      <if test="discount != null">
+        discount,
       </if>
       <if test="remark != null">
         remark,
@@ -213,19 +209,16 @@
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="mktActivityId != null">
-        #{mktActivityId,jdbcType=VARCHAR},
+        #{mktActivityId,jdbcType=BIGINT},
       </if>
-      <if test="partition != null">
-        #{partition,jdbcType=INTEGER},
+      <if test="orderSource != null">
+        #{orderSource,jdbcType=VARCHAR},
       </if>
-      <if test="offset != null">
-        #{offset,jdbcType=INTEGER},
+      <if test="orderMinPrice != null">
+        #{orderMinPrice,jdbcType=VARCHAR},
       </if>
-      <if test="type != null">
-        #{type,jdbcType=BIGINT},
-      </if>
-      <if test="value != null">
-        #{value,jdbcType=VARCHAR},
+      <if test="discount != null">
+        #{discount,jdbcType=VARCHAR},
       </if>
       <if test="remark != null">
         #{remark,jdbcType=VARCHAR},
@@ -253,12 +246,12 @@
       </if>
     </trim>
   </insert>
-  <select id="countByExample" parameterType="com.bizvane.mktcenterservice.models.po.MktActivityMqLogPOExample" resultType="java.lang.Long">
+  <select id="countByExample" parameterType="com.bizvane.mktcenterservice.models.po.MktActivityOrderPOExample" resultType="java.lang.Long">
     <!--
       WARNING - 只读 - @mbg.generated
       This element was generated on 2018-07-06 19:28:16.
     -->
-    select count(*) from t_mkt_activity_mq_log
+    select count(*) from t_mkt_activity_order
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
@@ -268,25 +261,22 @@
       WARNING - 只读 - @mbg.generated
       This element was generated on 2018-07-06 19:28:16.
     -->
-    update t_mkt_activity_mq_log
+    update t_mkt_activity_order
     <set>
-      <if test="record.mktActivityMqLogId != null">
-        mkt_activity_mq_log_id = #{record.mktActivityMqLogId,jdbcType=BIGINT},
+      <if test="record.mktActivityOrderId != null">
+        mkt_activity_order_id = #{record.mktActivityOrderId,jdbcType=BIGINT},
       </if>
       <if test="record.mktActivityId != null">
-        mkt_activity_id = #{record.mktActivityId,jdbcType=VARCHAR},
+        mkt_activity_id = #{record.mktActivityId,jdbcType=BIGINT},
       </if>
-      <if test="record.partition != null">
-        partition = #{record.partition,jdbcType=INTEGER},
+      <if test="record.orderSource != null">
+        order_source = #{record.orderSource,jdbcType=VARCHAR},
       </if>
-      <if test="record.offset != null">
-        offset = #{record.offset,jdbcType=INTEGER},
+      <if test="record.orderMinPrice != null">
+        order_min_price = #{record.orderMinPrice,jdbcType=VARCHAR},
       </if>
-      <if test="record.type != null">
-        type = #{record.type,jdbcType=BIGINT},
-      </if>
-      <if test="record.value != null">
-        value = #{record.value,jdbcType=VARCHAR},
+      <if test="record.discount != null">
+        discount = #{record.discount,jdbcType=VARCHAR},
       </if>
       <if test="record.remark != null">
         remark = #{record.remark,jdbcType=VARCHAR},
@@ -322,13 +312,12 @@
       WARNING - 只读 - @mbg.generated
       This element was generated on 2018-07-06 19:28:16.
     -->
-    update t_mkt_activity_mq_log
-    set mkt_activity_mq_log_id = #{record.mktActivityMqLogId,jdbcType=BIGINT},
-      mkt_activity_id = #{record.mktActivityId,jdbcType=VARCHAR},
-      partition = #{record.partition,jdbcType=INTEGER},
-      offset = #{record.offset,jdbcType=INTEGER},
-      type = #{record.type,jdbcType=BIGINT},
-      value = #{record.value,jdbcType=VARCHAR},
+    update t_mkt_activity_order
+    set mkt_activity_order_id = #{record.mktActivityOrderId,jdbcType=BIGINT},
+      mkt_activity_id = #{record.mktActivityId,jdbcType=BIGINT},
+      order_source = #{record.orderSource,jdbcType=VARCHAR},
+      order_min_price = #{record.orderMinPrice,jdbcType=VARCHAR},
+      discount = #{record.discount,jdbcType=VARCHAR},
       remark = #{record.remark,jdbcType=VARCHAR},
       create_user_id = #{record.createUserId,jdbcType=BIGINT},
       create_user_name = #{record.createUserName,jdbcType=VARCHAR},
@@ -341,27 +330,24 @@
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
-  <update id="updateByPrimaryKeySelective" parameterType="com.bizvane.mktcenterservice.models.po.MktActivityMqLogPO">
+  <update id="updateByPrimaryKeySelective" parameterType="com.bizvane.mktcenterservice.models.po.MktActivityOrderPO">
     <!--
       WARNING - 只读 - @mbg.generated
       This element was generated on 2018-07-06 19:28:16.
     -->
-    update t_mkt_activity_mq_log
+    update t_mkt_activity_order
     <set>
       <if test="mktActivityId != null">
-        mkt_activity_id = #{mktActivityId,jdbcType=VARCHAR},
+        mkt_activity_id = #{mktActivityId,jdbcType=BIGINT},
       </if>
-      <if test="partition != null">
-        partition = #{partition,jdbcType=INTEGER},
+      <if test="orderSource != null">
+        order_source = #{orderSource,jdbcType=VARCHAR},
       </if>
-      <if test="offset != null">
-        offset = #{offset,jdbcType=INTEGER},
+      <if test="orderMinPrice != null">
+        order_min_price = #{orderMinPrice,jdbcType=VARCHAR},
       </if>
-      <if test="type != null">
-        type = #{type,jdbcType=BIGINT},
-      </if>
-      <if test="value != null">
-        value = #{value,jdbcType=VARCHAR},
+      <if test="discount != null">
+        discount = #{discount,jdbcType=VARCHAR},
       </if>
       <if test="remark != null">
         remark = #{remark,jdbcType=VARCHAR},
@@ -388,19 +374,18 @@
         valid = #{valid,jdbcType=BIT},
       </if>
     </set>
-    where mkt_activity_mq_log_id = #{mktActivityMqLogId,jdbcType=BIGINT}
+    where mkt_activity_order_id = #{mktActivityOrderId,jdbcType=BIGINT}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.bizvane.mktcenterservice.models.po.MktActivityMqLogPO">
+  <update id="updateByPrimaryKey" parameterType="com.bizvane.mktcenterservice.models.po.MktActivityOrderPO">
     <!--
       WARNING - 只读 - @mbg.generated
       This element was generated on 2018-07-06 19:28:16.
     -->
-    update t_mkt_activity_mq_log
-    set mkt_activity_id = #{mktActivityId,jdbcType=VARCHAR},
-      partition = #{partition,jdbcType=INTEGER},
-      offset = #{offset,jdbcType=INTEGER},
-      type = #{type,jdbcType=BIGINT},
-      value = #{value,jdbcType=VARCHAR},
+    update t_mkt_activity_order
+    set mkt_activity_id = #{mktActivityId,jdbcType=BIGINT},
+      order_source = #{orderSource,jdbcType=VARCHAR},
+      order_min_price = #{orderMinPrice,jdbcType=VARCHAR},
+      discount = #{discount,jdbcType=VARCHAR},
       remark = #{remark,jdbcType=VARCHAR},
       create_user_id = #{createUserId,jdbcType=BIGINT},
       create_user_name = #{createUserName,jdbcType=VARCHAR},
@@ -409,6 +394,6 @@
       modified_user_name = #{modifiedUserName,jdbcType=VARCHAR},
       modified_date = #{modifiedDate,jdbcType=TIMESTAMP},
       valid = #{valid,jdbcType=BIT}
-    where mkt_activity_mq_log_id = #{mktActivityMqLogId,jdbcType=BIGINT}
+    where mkt_activity_order_id = #{mktActivityOrderId,jdbcType=BIGINT}
   </update>
 </mapper>

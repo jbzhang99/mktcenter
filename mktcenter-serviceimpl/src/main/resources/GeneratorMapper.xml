@@ -27,7 +27,7 @@
         </javaTypeResolver>
 
         <!-- targetProject:生成PO类的位置 -->
-        <javaModelGenerator targetPackage="com.bizvane.mktcenterservice.models.PO" targetProject="mktcenter-service\src\main\java">
+        <javaModelGenerator targetPackage="com.bizvane.mktcenterservice.models.po" targetProject="mktcenter-service\src\main\java">
             <!-- enableSubPackages:是否让schema作为包的后缀 -->
             <property name="enableSubPackages" value="false" />
             <!-- 从数据库返回的值被清理前后的空格 -->
@@ -55,19 +55,38 @@
         <table tableName="t_mkt_activity" domainObjectName="MktActivityPO">
             <generatedKey column="mkt_activity_id" sqlStatement="MySql" identity="true"/>
         </table>
-        <table tableName="t_mkt_activity_detail" domainObjectName="MktActivityDetailPO">
-            <generatedKey column="mkt_activity_detail_id" sqlStatement="MySql" identity="true"/>
+        <table tableName="t_mkt_activity_coupon" domainObjectName="MktActivityCouponPO">
+            <generatedKey column="mkt_activity_coupon_id" sqlStatement="MySql" identity="true"/>
         </table>
         <table tableName="t_mkt_activity_mq_log" domainObjectName="MktActivityMqLogPO">
             <generatedKey column="mkt_activity_mq_log_id" sqlStatement="MySql" identity="true"/>
         </table>
 
-        <table tableName="t_mkt_mbr_task" domainObjectName="MktMbrTaskPO">
-            <generatedKey column="mkt_mbr_task_id" sqlStatement="MySql" identity="true"/>
+        <table tableName="t_mkt_activity_msg" domainObjectName="MktActivityMsgPO">
+            <generatedKey column="mkt_activity_msg_id" sqlStatement="MySql" identity="true"/>
         </table>
-        <table tableName="t_mkt_mbr_task_detail" domainObjectName="MktMbrTaskDetailPO">
-            <generatedKey column="mkt_mbr_task_detail_id" sqlStatement="MySql" identity="true"/>
+        <table tableName="t_mkt_activity_order" domainObjectName="MktActivityOrderPO">
+            <generatedKey column="mkt_activity_order_id" sqlStatement="MySql" identity="true"/>
         </table>
+        
+        <table tableName="t_mkt_activity_sign_in" domainObjectName="MktActivitySignInPO">
+            <generatedKey column="mkt_activity_sign_in_id" sqlStatement="MySql" identity="true"/>
+        </table>
+        <table tableName="t_mkt_activity_sign_in_record" domainObjectName="MktActivitySignInRecordPO">
+            <generatedKey column="mkt_activity_sign_in_record_id" sqlStatement="MySql" identity="true"/>
+        </table>
+        <table tableName="t_mkt_activity_sign_in_reward" domainObjectName="MktActivitySignInRewardPO">
+            <generatedKey column="mkt_activity_sign_in_reward_id" sqlStatement="MySql" identity="true"/>
+        </table>
+        <table tableName="t_mkt_task" domainObjectName="MktTaskPO">
+            <generatedKey column="mkt_task_id" sqlStatement="MySql" identity="true"/>
+        </table>
+        
+        <table tableName="t_mkt_task_coupon" domainObjectName="MktTaskCouponPO">
+            <generatedKey column="mkt_task_coupon_id" sqlStatement="MySql" identity="true"/>
+        </table>
+        
+      
 
 
     </context>

@@ -1,0 +1,611 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bizvane.mktcenterserviceimpl.mappers.MktTaskPOMapper">
+  <resultMap id="BaseResultMap" type="com.bizvane.mktcenterservice.models.po.MktTaskPO">
+    <!--
+      WARNING - 只读 - @mbg.generated
+      This element was generated on 2018-07-06 19:28:16.
+    -->
+    <id column="mkt_task_id" jdbcType="BIGINT" property="mktTaskId" />
+    <result column="task_code" jdbcType="VARCHAR" property="taskCode" />
+    <result column="task_type" jdbcType="INTEGER" property="taskType" />
+    <result column="task_name" jdbcType="VARCHAR" property="taskName" />
+    <result column="share_times" jdbcType="INTEGER" property="shareTimes" />
+    <result column="share_title" jdbcType="VARCHAR" property="shareTitle" />
+    <result column="invite_mbr_num" jdbcType="INTEGER" property="inviteMbrNum" />
+    <result column="point" jdbcType="INTEGER" property="point" />
+    <result column="check_status" jdbcType="INTEGER" property="checkStatus" />
+    <result column="task_status" jdbcType="INTEGER" property="taskStatus" />
+    <result column="remark" jdbcType="VARCHAR" property="remark" />
+    <result column="create_user_id" jdbcType="BIGINT" property="createUserId" />
+    <result column="create_user_name" jdbcType="VARCHAR" property="createUserName" />
+    <result column="create_date" jdbcType="TIMESTAMP" property="createDate" />
+    <result column="modified_user_id" jdbcType="BIGINT" property="modifiedUserId" />
+    <result column="modified_user_name" jdbcType="VARCHAR" property="modifiedUserName" />
+    <result column="modified_date" jdbcType="TIMESTAMP" property="modifiedDate" />
+    <result column="valid" jdbcType="BIT" property="valid" />
+  </resultMap>
+  <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.bizvane.mktcenterservice.models.po.MktTaskPOWithBLOBs">
+    <!--
+      WARNING - 只读 - @mbg.generated
+      This element was generated on 2018-07-06 19:28:16.
+    -->
+    <result column="share_content" jdbcType="LONGVARCHAR" property="shareContent" />
+    <result column="task_info" jdbcType="LONGVARCHAR" property="taskInfo" />
+    <result column="mbr_profile" jdbcType="LONGVARCHAR" property="mbrProfile" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <!--
+      WARNING - 只读 - @mbg.generated
+      This element was generated on 2018-07-06 19:28:16.
+    -->
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <!--
+      WARNING - 只读 - @mbg.generated
+      This element was generated on 2018-07-06 19:28:16.
+    -->
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    <!--
+      WARNING - 只读 - @mbg.generated
+      This element was generated on 2018-07-06 19:28:16.
+    -->
+    mkt_task_id, task_code, task_type, task_name, share_times, share_title, invite_mbr_num, 
+    point, check_status, task_status, remark, create_user_id, create_user_name, create_date, 
+    modified_user_id, modified_user_name, modified_date, valid
+  </sql>
+  <sql id="Blob_Column_List">
+    <!--
+      WARNING - 只读 - @mbg.generated
+      This element was generated on 2018-07-06 19:28:16.
+    -->
+    share_content, task_info, mbr_profile
+  </sql>
+  <select id="selectByExampleWithBLOBs" parameterType="com.bizvane.mktcenterservice.models.po.MktTaskPOExample" resultMap="ResultMapWithBLOBs">
+    <!--
+      WARNING - 只读 - @mbg.generated
+      This element was generated on 2018-07-06 19:28:16.
+    -->
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from t_mkt_task
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByExample" parameterType="com.bizvane.mktcenterservice.models.po.MktTaskPOExample" resultMap="BaseResultMap">
+    <!--
+      WARNING - 只读 - @mbg.generated
+      This element was generated on 2018-07-06 19:28:16.
+    -->
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from t_mkt_task
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="ResultMapWithBLOBs">
+    <!--
+      WARNING - 只读 - @mbg.generated
+      This element was generated on 2018-07-06 19:28:16.
+    -->
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from t_mkt_task
+    where mkt_task_id = #{mktTaskId,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    <!--
+      WARNING - 只读 - @mbg.generated
+      This element was generated on 2018-07-06 19:28:16.
+    -->
+    delete from t_mkt_task
+    where mkt_task_id = #{mktTaskId,jdbcType=BIGINT}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.bizvane.mktcenterservice.models.po.MktTaskPOExample">
+    <!--
+      WARNING - 只读 - @mbg.generated
+      This element was generated on 2018-07-06 19:28:16.
+    -->
+    delete from t_mkt_task
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.bizvane.mktcenterservice.models.po.MktTaskPOWithBLOBs">
+    <!--
+      WARNING - 只读 - @mbg.generated
+      This element was generated on 2018-07-06 19:28:16.
+    -->
+    <selectKey keyProperty="mktTaskId" order="AFTER" resultType="java.lang.Long">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into t_mkt_task (task_code, task_type, task_name, 
+      share_times, share_title, invite_mbr_num, 
+      point, check_status, task_status, 
+      remark, create_user_id, create_user_name, 
+      create_date, modified_user_id, modified_user_name, 
+      modified_date, valid, share_content, 
+      task_info, mbr_profile)
+    values (#{taskCode,jdbcType=VARCHAR}, #{taskType,jdbcType=INTEGER}, #{taskName,jdbcType=VARCHAR}, 
+      #{shareTimes,jdbcType=INTEGER}, #{shareTitle,jdbcType=VARCHAR}, #{inviteMbrNum,jdbcType=INTEGER}, 
+      #{point,jdbcType=INTEGER}, #{checkStatus,jdbcType=INTEGER}, #{taskStatus,jdbcType=INTEGER}, 
+      #{remark,jdbcType=VARCHAR}, #{createUserId,jdbcType=BIGINT}, #{createUserName,jdbcType=VARCHAR}, 
+      #{createDate,jdbcType=TIMESTAMP}, #{modifiedUserId,jdbcType=BIGINT}, #{modifiedUserName,jdbcType=VARCHAR}, 
+      #{modifiedDate,jdbcType=TIMESTAMP}, #{valid,jdbcType=BIT}, #{shareContent,jdbcType=LONGVARCHAR}, 
+      #{taskInfo,jdbcType=LONGVARCHAR}, #{mbrProfile,jdbcType=LONGVARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.bizvane.mktcenterservice.models.po.MktTaskPOWithBLOBs">
+    <!--
+      WARNING - 只读 - @mbg.generated
+      This element was generated on 2018-07-06 19:28:16.
+    -->
+    <selectKey keyProperty="mktTaskId" order="AFTER" resultType="java.lang.Long">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into t_mkt_task
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="taskCode != null">
+        task_code,
+      </if>
+      <if test="taskType != null">
+        task_type,
+      </if>
+      <if test="taskName != null">
+        task_name,
+      </if>
+      <if test="shareTimes != null">
+        share_times,
+      </if>
+      <if test="shareTitle != null">
+        share_title,
+      </if>
+      <if test="inviteMbrNum != null">
+        invite_mbr_num,
+      </if>
+      <if test="point != null">
+        point,
+      </if>
+      <if test="checkStatus != null">
+        check_status,
+      </if>
+      <if test="taskStatus != null">
+        task_status,
+      </if>
+      <if test="remark != null">
+        remark,
+      </if>
+      <if test="createUserId != null">
+        create_user_id,
+      </if>
+      <if test="createUserName != null">
+        create_user_name,
+      </if>
+      <if test="createDate != null">
+        create_date,
+      </if>
+      <if test="modifiedUserId != null">
+        modified_user_id,
+      </if>
+      <if test="modifiedUserName != null">
+        modified_user_name,
+      </if>
+      <if test="modifiedDate != null">
+        modified_date,
+      </if>
+      <if test="valid != null">
+        valid,
+      </if>
+      <if test="shareContent != null">
+        share_content,
+      </if>
+      <if test="taskInfo != null">
+        task_info,
+      </if>
+      <if test="mbrProfile != null">
+        mbr_profile,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="taskCode != null">
+        #{taskCode,jdbcType=VARCHAR},
+      </if>
+      <if test="taskType != null">
+        #{taskType,jdbcType=INTEGER},
+      </if>
+      <if test="taskName != null">
+        #{taskName,jdbcType=VARCHAR},
+      </if>
+      <if test="shareTimes != null">
+        #{shareTimes,jdbcType=INTEGER},
+      </if>
+      <if test="shareTitle != null">
+        #{shareTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="inviteMbrNum != null">
+        #{inviteMbrNum,jdbcType=INTEGER},
+      </if>
+      <if test="point != null">
+        #{point,jdbcType=INTEGER},
+      </if>
+      <if test="checkStatus != null">
+        #{checkStatus,jdbcType=INTEGER},
+      </if>
+      <if test="taskStatus != null">
+        #{taskStatus,jdbcType=INTEGER},
+      </if>
+      <if test="remark != null">
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="createUserId != null">
+        #{createUserId,jdbcType=BIGINT},
+      </if>
+      <if test="createUserName != null">
+        #{createUserName,jdbcType=VARCHAR},
+      </if>
+      <if test="createDate != null">
+        #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifiedUserId != null">
+        #{modifiedUserId,jdbcType=BIGINT},
+      </if>
+      <if test="modifiedUserName != null">
+        #{modifiedUserName,jdbcType=VARCHAR},
+      </if>
+      <if test="modifiedDate != null">
+        #{modifiedDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="valid != null">
+        #{valid,jdbcType=BIT},
+      </if>
+      <if test="shareContent != null">
+        #{shareContent,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="taskInfo != null">
+        #{taskInfo,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="mbrProfile != null">
+        #{mbrProfile,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.bizvane.mktcenterservice.models.po.MktTaskPOExample" resultType="java.lang.Long">
+    <!--
+      WARNING - 只读 - @mbg.generated
+      This element was generated on 2018-07-06 19:28:16.
+    -->
+    select count(*) from t_mkt_task
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    <!--
+      WARNING - 只读 - @mbg.generated
+      This element was generated on 2018-07-06 19:28:16.
+    -->
+    update t_mkt_task
+    <set>
+      <if test="record.mktTaskId != null">
+        mkt_task_id = #{record.mktTaskId,jdbcType=BIGINT},
+      </if>
+      <if test="record.taskCode != null">
+        task_code = #{record.taskCode,jdbcType=VARCHAR},
+      </if>
+      <if test="record.taskType != null">
+        task_type = #{record.taskType,jdbcType=INTEGER},
+      </if>
+      <if test="record.taskName != null">
+        task_name = #{record.taskName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.shareTimes != null">
+        share_times = #{record.shareTimes,jdbcType=INTEGER},
+      </if>
+      <if test="record.shareTitle != null">
+        share_title = #{record.shareTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="record.inviteMbrNum != null">
+        invite_mbr_num = #{record.inviteMbrNum,jdbcType=INTEGER},
+      </if>
+      <if test="record.point != null">
+        point = #{record.point,jdbcType=INTEGER},
+      </if>
+      <if test="record.checkStatus != null">
+        check_status = #{record.checkStatus,jdbcType=INTEGER},
+      </if>
+      <if test="record.taskStatus != null">
+        task_status = #{record.taskStatus,jdbcType=INTEGER},
+      </if>
+      <if test="record.remark != null">
+        remark = #{record.remark,jdbcType=VARCHAR},
+      </if>
+      <if test="record.createUserId != null">
+        create_user_id = #{record.createUserId,jdbcType=BIGINT},
+      </if>
+      <if test="record.createUserName != null">
+        create_user_name = #{record.createUserName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.createDate != null">
+        create_date = #{record.createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.modifiedUserId != null">
+        modified_user_id = #{record.modifiedUserId,jdbcType=BIGINT},
+      </if>
+      <if test="record.modifiedUserName != null">
+        modified_user_name = #{record.modifiedUserName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.modifiedDate != null">
+        modified_date = #{record.modifiedDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.valid != null">
+        valid = #{record.valid,jdbcType=BIT},
+      </if>
+      <if test="record.shareContent != null">
+        share_content = #{record.shareContent,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="record.taskInfo != null">
+        task_info = #{record.taskInfo,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="record.mbrProfile != null">
+        mbr_profile = #{record.mbrProfile,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExampleWithBLOBs" parameterType="map">
+    <!--
+      WARNING - 只读 - @mbg.generated
+      This element was generated on 2018-07-06 19:28:16.
+    -->
+    update t_mkt_task
+    set mkt_task_id = #{record.mktTaskId,jdbcType=BIGINT},
+      task_code = #{record.taskCode,jdbcType=VARCHAR},
+      task_type = #{record.taskType,jdbcType=INTEGER},
+      task_name = #{record.taskName,jdbcType=VARCHAR},
+      share_times = #{record.shareTimes,jdbcType=INTEGER},
+      share_title = #{record.shareTitle,jdbcType=VARCHAR},
+      invite_mbr_num = #{record.inviteMbrNum,jdbcType=INTEGER},
+      point = #{record.point,jdbcType=INTEGER},
+      check_status = #{record.checkStatus,jdbcType=INTEGER},
+      task_status = #{record.taskStatus,jdbcType=INTEGER},
+      remark = #{record.remark,jdbcType=VARCHAR},
+      create_user_id = #{record.createUserId,jdbcType=BIGINT},
+      create_user_name = #{record.createUserName,jdbcType=VARCHAR},
+      create_date = #{record.createDate,jdbcType=TIMESTAMP},
+      modified_user_id = #{record.modifiedUserId,jdbcType=BIGINT},
+      modified_user_name = #{record.modifiedUserName,jdbcType=VARCHAR},
+      modified_date = #{record.modifiedDate,jdbcType=TIMESTAMP},
+      valid = #{record.valid,jdbcType=BIT},
+      share_content = #{record.shareContent,jdbcType=LONGVARCHAR},
+      task_info = #{record.taskInfo,jdbcType=LONGVARCHAR},
+      mbr_profile = #{record.mbrProfile,jdbcType=LONGVARCHAR}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    <!--
+      WARNING - 只读 - @mbg.generated
+      This element was generated on 2018-07-06 19:28:16.
+    -->
+    update t_mkt_task
+    set mkt_task_id = #{record.mktTaskId,jdbcType=BIGINT},
+      task_code = #{record.taskCode,jdbcType=VARCHAR},
+      task_type = #{record.taskType,jdbcType=INTEGER},
+      task_name = #{record.taskName,jdbcType=VARCHAR},
+      share_times = #{record.shareTimes,jdbcType=INTEGER},
+      share_title = #{record.shareTitle,jdbcType=VARCHAR},
+      invite_mbr_num = #{record.inviteMbrNum,jdbcType=INTEGER},
+      point = #{record.point,jdbcType=INTEGER},
+      check_status = #{record.checkStatus,jdbcType=INTEGER},
+      task_status = #{record.taskStatus,jdbcType=INTEGER},
+      remark = #{record.remark,jdbcType=VARCHAR},
+      create_user_id = #{record.createUserId,jdbcType=BIGINT},
+      create_user_name = #{record.createUserName,jdbcType=VARCHAR},
+      create_date = #{record.createDate,jdbcType=TIMESTAMP},
+      modified_user_id = #{record.modifiedUserId,jdbcType=BIGINT},
+      modified_user_name = #{record.modifiedUserName,jdbcType=VARCHAR},
+      modified_date = #{record.modifiedDate,jdbcType=TIMESTAMP},
+      valid = #{record.valid,jdbcType=BIT}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.bizvane.mktcenterservice.models.po.MktTaskPOWithBLOBs">
+    <!--
+      WARNING - 只读 - @mbg.generated
+      This element was generated on 2018-07-06 19:28:16.
+    -->
+    update t_mkt_task
+    <set>
+      <if test="taskCode != null">
+        task_code = #{taskCode,jdbcType=VARCHAR},
+      </if>
+      <if test="taskType != null">
+        task_type = #{taskType,jdbcType=INTEGER},
+      </if>
+      <if test="taskName != null">
+        task_name = #{taskName,jdbcType=VARCHAR},
+      </if>
+      <if test="shareTimes != null">
+        share_times = #{shareTimes,jdbcType=INTEGER},
+      </if>
+      <if test="shareTitle != null">
+        share_title = #{shareTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="inviteMbrNum != null">
+        invite_mbr_num = #{inviteMbrNum,jdbcType=INTEGER},
+      </if>
+      <if test="point != null">
+        point = #{point,jdbcType=INTEGER},
+      </if>
+      <if test="checkStatus != null">
+        check_status = #{checkStatus,jdbcType=INTEGER},
+      </if>
+      <if test="taskStatus != null">
+        task_status = #{taskStatus,jdbcType=INTEGER},
+      </if>
+      <if test="remark != null">
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="createUserId != null">
+        create_user_id = #{createUserId,jdbcType=BIGINT},
+      </if>
+      <if test="createUserName != null">
+        create_user_name = #{createUserName,jdbcType=VARCHAR},
+      </if>
+      <if test="createDate != null">
+        create_date = #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifiedUserId != null">
+        modified_user_id = #{modifiedUserId,jdbcType=BIGINT},
+      </if>
+      <if test="modifiedUserName != null">
+        modified_user_name = #{modifiedUserName,jdbcType=VARCHAR},
+      </if>
+      <if test="modifiedDate != null">
+        modified_date = #{modifiedDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="valid != null">
+        valid = #{valid,jdbcType=BIT},
+      </if>
+      <if test="shareContent != null">
+        share_content = #{shareContent,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="taskInfo != null">
+        task_info = #{taskInfo,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="mbrProfile != null">
+        mbr_profile = #{mbrProfile,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where mkt_task_id = #{mktTaskId,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.bizvane.mktcenterservice.models.po.MktTaskPOWithBLOBs">
+    <!--
+      WARNING - 只读 - @mbg.generated
+      This element was generated on 2018-07-06 19:28:16.
+    -->
+    update t_mkt_task
+    set task_code = #{taskCode,jdbcType=VARCHAR},
+      task_type = #{taskType,jdbcType=INTEGER},
+      task_name = #{taskName,jdbcType=VARCHAR},
+      share_times = #{shareTimes,jdbcType=INTEGER},
+      share_title = #{shareTitle,jdbcType=VARCHAR},
+      invite_mbr_num = #{inviteMbrNum,jdbcType=INTEGER},
+      point = #{point,jdbcType=INTEGER},
+      check_status = #{checkStatus,jdbcType=INTEGER},
+      task_status = #{taskStatus,jdbcType=INTEGER},
+      remark = #{remark,jdbcType=VARCHAR},
+      create_user_id = #{createUserId,jdbcType=BIGINT},
+      create_user_name = #{createUserName,jdbcType=VARCHAR},
+      create_date = #{createDate,jdbcType=TIMESTAMP},
+      modified_user_id = #{modifiedUserId,jdbcType=BIGINT},
+      modified_user_name = #{modifiedUserName,jdbcType=VARCHAR},
+      modified_date = #{modifiedDate,jdbcType=TIMESTAMP},
+      valid = #{valid,jdbcType=BIT},
+      share_content = #{shareContent,jdbcType=LONGVARCHAR},
+      task_info = #{taskInfo,jdbcType=LONGVARCHAR},
+      mbr_profile = #{mbrProfile,jdbcType=LONGVARCHAR}
+    where mkt_task_id = #{mktTaskId,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.bizvane.mktcenterservice.models.po.MktTaskPO">
+    <!--
+      WARNING - 只读 - @mbg.generated
+      This element was generated on 2018-07-06 19:28:16.
+    -->
+    update t_mkt_task
+    set task_code = #{taskCode,jdbcType=VARCHAR},
+      task_type = #{taskType,jdbcType=INTEGER},
+      task_name = #{taskName,jdbcType=VARCHAR},
+      share_times = #{shareTimes,jdbcType=INTEGER},
+      share_title = #{shareTitle,jdbcType=VARCHAR},
+      invite_mbr_num = #{inviteMbrNum,jdbcType=INTEGER},
+      point = #{point,jdbcType=INTEGER},
+      check_status = #{checkStatus,jdbcType=INTEGER},
+      task_status = #{taskStatus,jdbcType=INTEGER},
+      remark = #{remark,jdbcType=VARCHAR},
+      create_user_id = #{createUserId,jdbcType=BIGINT},
+      create_user_name = #{createUserName,jdbcType=VARCHAR},
+      create_date = #{createDate,jdbcType=TIMESTAMP},
+      modified_user_id = #{modifiedUserId,jdbcType=BIGINT},
+      modified_user_name = #{modifiedUserName,jdbcType=VARCHAR},
+      modified_date = #{modifiedDate,jdbcType=TIMESTAMP},
+      valid = #{valid,jdbcType=BIT}
+    where mkt_task_id = #{mktTaskId,jdbcType=BIGINT}
+  </update>
+</mapper>
