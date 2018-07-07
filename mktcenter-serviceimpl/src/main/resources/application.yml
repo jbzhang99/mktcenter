@@ -1,5 +1,5 @@
 server:
-  port: 2001
+  port: 2007
   servlet:
       context-path: /mktcenter
 spring:
@@ -21,6 +21,9 @@ spring:
     username: bizvane_2018
     password: SF_bizvane20180613
     driver-class-name: com.mysql.jdbc.Driver
+  data:
+    mongodb:
+      database: "1"
 eureka:
   instance:
     metadata-map:
@@ -44,3 +47,10 @@ logging:
   config: classpath:logback-local.xml
   level:
     com.bizvane.mktcenterserviceimpl.mappers: debug
+
+# pagehelper
+pagehelper:
+  helperDialect: mysql
+  reasonable: true
+  supportMethodsArguments: true
+  params: count=countSql

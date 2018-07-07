@@ -26,12 +26,12 @@ public class Swagger2 {
 	@Bean
 	public Docket createRestApi() {
 		return new Docket(DocumentationType.SWAGGER_2).apiInfo(apiInfo()).enable(show).select()
-				.apis(RequestHandlerSelectors.basePackage("com.bizvane.centerstageservice")).paths(PathSelectors.any())
+				.apis(RequestHandlerSelectors.basePackage("com.bizvane.mktcenterservice")).paths(PathSelectors.any())
 				.build();
 	}
 
 	private ApiInfo apiInfo() {
 		return new ApiInfoBuilder().title("API接口文档").description("主要提供&#10; 1、查看API使用说明，&#10;2、Prod前测试使用，&#10;3、前端使用帮助")
-				.version("1.0").termsOfServiceUrl("http://localhost:2001/").build();
+				.version("1.0").termsOfServiceUrl("http://localhost:2007/").build();
 	}
 }

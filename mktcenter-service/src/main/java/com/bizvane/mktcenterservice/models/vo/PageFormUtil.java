@@ -1,4 +1,4 @@
-package com.bizvane.mktcenterservice.utils;
+package com.bizvane.mktcenterservice.models.vo;
 
 /**
  * @author chen.li
