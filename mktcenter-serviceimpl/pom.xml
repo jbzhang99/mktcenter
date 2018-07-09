@@ -118,6 +118,12 @@
             <version>RELEASE</version>
             <scope>compile</scope>
         </dependency>
+		<!-- xxl-job-core -->
+		<dependency>
+			<groupId>com.xuxueli</groupId>
+			<artifactId>xxl-job-core</artifactId>
+			<version>1.9.1</version>
+		</dependency>
 	</dependencies>
 	<dependencyManagement>
 		<dependencies>
