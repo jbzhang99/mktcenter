@@ -18,13 +18,5 @@ public class ActivityController {
     @Autowired
     private ActivityService activityService;
 
-    /**
-     * 获取所有活动列表
-     * @return
-     */
-    @RequestMapping("getAcvitityList")
-    public Result<MktActivityPO> getAcvitityList(){
-        System.out.println("hello world ");
-        return null;
-    }
+
 }

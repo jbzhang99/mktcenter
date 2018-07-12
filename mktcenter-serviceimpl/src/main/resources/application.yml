@@ -56,9 +56,6 @@ pagehelper:
   supportMethodsArguments: true
   params: count=countSql
 
-
-
-
 xxl:
   job:
     admin:
@@ -75,3 +72,12 @@ xxl:
       logretentiondays: -1
     ### xxl-job, access token
     accessToken:
+
+feign:
+  client:
+    centerstage:
+      name: centerstage
+      path: centerstage
+    coupon:
+      name: centerstage
+      path: centerstage

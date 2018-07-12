@@ -11,7 +11,7 @@ import org.springframework.context.annotation.Configuration;
 /**
  * xxl-job config
  *
- * @author xuxueli 2017-04-28
+ * @author chen.li 2018-7-12 11:53:18
  */
 @Configuration
 @ComponentScan(basePackages = "com.bizvane.mktcenterserviceimpl.service.jobhandler")
