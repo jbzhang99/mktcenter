@@ -1,19 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.bizvane.mktcenterserviceimpl.mappers.MktActivitySignInPOMapper">
-  <resultMap id="BaseResultMap" type="com.bizvane.mktcenterservice.models.po.MktActivitySignInPO">
+<mapper namespace="com.bizvane.mktcenterserviceimpl.mappers.MktActivityRegisterPOMapper">
+  <resultMap id="BaseResultMap" type="com.bizvane.mktcenterservice.models.po.MktActivityRegisterPO">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-06 19:28:16.
+      This element was generated on 2018-07-12 11:48:54.
     -->
-    <id column="mkt_activity_sign_in_id" jdbcType="BIGINT" property="mktActivitySignInId" />
-    <result column="sys_brand_id" jdbcType="BIGINT" property="sysBrandId" />
+    <id column="mkt_activity_resigter_id" jdbcType="BIGINT" property="mktActivityResigterId" />
     <result column="mkt_activity_id" jdbcType="BIGINT" property="mktActivityId" />
-    <result column="sign_type" jdbcType="INTEGER" property="signType" />
-    <result column="integral_type" jdbcType="VARCHAR" property="integralType" />
-    <result column="integral_basis" jdbcType="BIGINT" property="integralBasis" />
-    <result column="integral_addend" jdbcType="BIGINT" property="integralAddend" />
-    <result column="integral_max" jdbcType="BIGINT" property="integralMax" />
+    <result column="offline_card_status" jdbcType="INTEGER" property="offlineCardStatus" />
+    <result column="mbr_level_code" jdbcType="VARCHAR" property="mbrLevelCode" />
+    <result column="mbr_level_name" jdbcType="VARCHAR" property="mbrLevelName" />
     <result column="remark" jdbcType="VARCHAR" property="remark" />
     <result column="create_user_id" jdbcType="BIGINT" property="createUserId" />
     <result column="create_user_name" jdbcType="VARCHAR" property="createUserName" />
@@ -26,7 +23,7 @@
   <sql id="Example_Where_Clause">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-06 19:28:16.
+      This element was generated on 2018-07-12 11:48:54.
     -->
     <where>
       <foreach collection="oredCriteria" item="criteria" separator="or">
@@ -59,7 +56,7 @@
   <sql id="Update_By_Example_Where_Clause">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-06 19:28:16.
+      This element was generated on 2018-07-12 11:48:54.
     -->
     <where>
       <foreach collection="example.oredCriteria" item="criteria" separator="or">
@@ -92,23 +89,23 @@
   <sql id="Base_Column_List">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-06 19:28:16.
+      This element was generated on 2018-07-12 11:48:54.
     -->
-    mkt_activity_sign_in_id, sys_brand_id, mkt_activity_id, sign_type, integral_type, 
-    integral_basis, integral_addend, integral_max, remark, create_user_id, create_user_name, 
-    create_date, modified_user_id, modified_user_name, modified_date, valid
+    mkt_activity_resigter_id, mkt_activity_id, offline_card_status, mbr_level_code, mbr_level_name, 
+    remark, create_user_id, create_user_name, create_date, modified_user_id, modified_user_name, 
+    modified_date, valid
   </sql>
-  <select id="selectByExample" parameterType="com.bizvane.mktcenterservice.models.po.MktActivitySignInPOExample" resultMap="BaseResultMap">
+  <select id="selectByExample" parameterType="com.bizvane.mktcenterservice.models.po.MktActivityRegisterPOExample" resultMap="BaseResultMap">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-06 19:28:16.
+      This element was generated on 2018-07-12 11:48:54.
     -->
     select
     <if test="distinct">
       distinct
     </if>
     <include refid="Base_Column_List" />
-    from t_mkt_activity_sign_in
+    from t_mkt_activity_register
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
@@ -119,82 +116,68 @@
   <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-06 19:28:16.
+      This element was generated on 2018-07-12 11:48:54.
     -->
     select 
     <include refid="Base_Column_List" />
-    from t_mkt_activity_sign_in
-    where mkt_activity_sign_in_id = #{mktActivitySignInId,jdbcType=BIGINT}
+    from t_mkt_activity_register
+    where mkt_activity_resigter_id = #{mktActivityResigterId,jdbcType=BIGINT}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-06 19:28:16.
+      This element was generated on 2018-07-12 11:48:54.
     -->
-    delete from t_mkt_activity_sign_in
-    where mkt_activity_sign_in_id = #{mktActivitySignInId,jdbcType=BIGINT}
+    delete from t_mkt_activity_register
+    where mkt_activity_resigter_id = #{mktActivityResigterId,jdbcType=BIGINT}
   </delete>
-  <delete id="deleteByExample" parameterType="com.bizvane.mktcenterservice.models.po.MktActivitySignInPOExample">
+  <delete id="deleteByExample" parameterType="com.bizvane.mktcenterservice.models.po.MktActivityRegisterPOExample">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-06 19:28:16.
+      This element was generated on 2018-07-12 11:48:54.
     -->
-    delete from t_mkt_activity_sign_in
+    delete from t_mkt_activity_register
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insert" parameterType="com.bizvane.mktcenterservice.models.po.MktActivitySignInPO">
+  <insert id="insert" parameterType="com.bizvane.mktcenterservice.models.po.MktActivityRegisterPO">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-06 19:28:16.
+      This element was generated on 2018-07-12 11:48:54.
     -->
-    <selectKey keyProperty="mktActivitySignInId" order="AFTER" resultType="java.lang.Long">
-      SELECT LAST_INSERT_ID()
-    </selectKey>
-    insert into t_mkt_activity_sign_in (sys_brand_id, mkt_activity_id, sign_type, 
-      integral_type, integral_basis, integral_addend, 
-      integral_max, remark, create_user_id, 
-      create_user_name, create_date, modified_user_id, 
-      modified_user_name, modified_date, valid
-      )
-    values (#{sysBrandId,jdbcType=BIGINT}, #{mktActivityId,jdbcType=BIGINT}, #{signType,jdbcType=INTEGER}, 
-      #{integralType,jdbcType=VARCHAR}, #{integralBasis,jdbcType=BIGINT}, #{integralAddend,jdbcType=BIGINT}, 
-      #{integralMax,jdbcType=BIGINT}, #{remark,jdbcType=VARCHAR}, #{createUserId,jdbcType=BIGINT}, 
-      #{createUserName,jdbcType=VARCHAR}, #{createDate,jdbcType=TIMESTAMP}, #{modifiedUserId,jdbcType=BIGINT}, 
-      #{modifiedUserName,jdbcType=VARCHAR}, #{modifiedDate,jdbcType=TIMESTAMP}, #{valid,jdbcType=BIT}
-      )
+    insert into t_mkt_activity_register (mkt_activity_resigter_id, mkt_activity_id, 
+      offline_card_status, mbr_level_code, mbr_level_name, 
+      remark, create_user_id, create_user_name, 
+      create_date, modified_user_id, modified_user_name, 
+      modified_date, valid)
+    values (#{mktActivityResigterId,jdbcType=BIGINT}, #{mktActivityId,jdbcType=BIGINT}, 
+      #{offlineCardStatus,jdbcType=INTEGER}, #{mbrLevelCode,jdbcType=VARCHAR}, #{mbrLevelName,jdbcType=VARCHAR}, 
+      #{remark,jdbcType=VARCHAR}, #{createUserId,jdbcType=BIGINT}, #{createUserName,jdbcType=VARCHAR}, 
+      #{createDate,jdbcType=TIMESTAMP}, #{modifiedUserId,jdbcType=BIGINT}, #{modifiedUserName,jdbcType=VARCHAR}, 
+      #{modifiedDate,jdbcType=TIMESTAMP}, #{valid,jdbcType=BIT})
   </insert>
-  <insert id="insertSelective" parameterType="com.bizvane.mktcenterservice.models.po.MktActivitySignInPO">
+  <insert id="insertSelective" parameterType="com.bizvane.mktcenterservice.models.po.MktActivityRegisterPO">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-06 19:28:16.
+      This element was generated on 2018-07-12 11:48:54.
     -->
-    <selectKey keyProperty="mktActivitySignInId" order="AFTER" resultType="java.lang.Long">
-      SELECT LAST_INSERT_ID()
-    </selectKey>
-    insert into t_mkt_activity_sign_in
+    insert into t_mkt_activity_register
     <trim prefix="(" suffix=")" suffixOverrides=",">
-      <if test="sysBrandId != null">
-        sys_brand_id,
+      <if test="mktActivityResigterId != null">
+        mkt_activity_resigter_id,
       </if>
       <if test="mktActivityId != null">
         mkt_activity_id,
       </if>
-      <if test="signType != null">
-        sign_type,
+      <if test="offlineCardStatus != null">
+        offline_card_status,
       </if>
-      <if test="integralType != null">
-        integral_type,
+      <if test="mbrLevelCode != null">
+        mbr_level_code,
       </if>
-      <if test="integralBasis != null">
-        integral_basis,
-      </if>
-      <if test="integralAddend != null">
-        integral_addend,
-      </if>
-      <if test="integralMax != null">
-        integral_max,
+      <if test="mbrLevelName != null">
+        mbr_level_name,
       </if>
       <if test="remark != null">
         remark,
@@ -222,26 +205,20 @@
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
-      <if test="sysBrandId != null">
-        #{sysBrandId,jdbcType=BIGINT},
+      <if test="mktActivityResigterId != null">
+        #{mktActivityResigterId,jdbcType=BIGINT},
       </if>
       <if test="mktActivityId != null">
         #{mktActivityId,jdbcType=BIGINT},
       </if>
-      <if test="signType != null">
-        #{signType,jdbcType=INTEGER},
+      <if test="offlineCardStatus != null">
+        #{offlineCardStatus,jdbcType=INTEGER},
       </if>
-      <if test="integralType != null">
-        #{integralType,jdbcType=VARCHAR},
+      <if test="mbrLevelCode != null">
+        #{mbrLevelCode,jdbcType=VARCHAR},
       </if>
-      <if test="integralBasis != null">
-        #{integralBasis,jdbcType=BIGINT},
-      </if>
-      <if test="integralAddend != null">
-        #{integralAddend,jdbcType=BIGINT},
-      </if>
-      <if test="integralMax != null">
-        #{integralMax,jdbcType=BIGINT},
+      <if test="mbrLevelName != null">
+        #{mbrLevelName,jdbcType=VARCHAR},
       </if>
       <if test="remark != null">
         #{remark,jdbcType=VARCHAR},
@@ -269,12 +246,12 @@
       </if>
     </trim>
   </insert>
-  <select id="countByExample" parameterType="com.bizvane.mktcenterservice.models.po.MktActivitySignInPOExample" resultType="java.lang.Long">
+  <select id="countByExample" parameterType="com.bizvane.mktcenterservice.models.po.MktActivityRegisterPOExample" resultType="java.lang.Long">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-06 19:28:16.
+      This element was generated on 2018-07-12 11:48:54.
     -->
-    select count(*) from t_mkt_activity_sign_in
+    select count(*) from t_mkt_activity_register
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
@@ -282,33 +259,24 @@
   <update id="updateByExampleSelective" parameterType="map">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-06 19:28:16.
+      This element was generated on 2018-07-12 11:48:54.
     -->
-    update t_mkt_activity_sign_in
+    update t_mkt_activity_register
     <set>
-      <if test="record.mktActivitySignInId != null">
-        mkt_activity_sign_in_id = #{record.mktActivitySignInId,jdbcType=BIGINT},
-      </if>
-      <if test="record.sysBrandId != null">
-        sys_brand_id = #{record.sysBrandId,jdbcType=BIGINT},
+      <if test="record.mktActivityResigterId != null">
+        mkt_activity_resigter_id = #{record.mktActivityResigterId,jdbcType=BIGINT},
       </if>
       <if test="record.mktActivityId != null">
         mkt_activity_id = #{record.mktActivityId,jdbcType=BIGINT},
       </if>
-      <if test="record.signType != null">
-        sign_type = #{record.signType,jdbcType=INTEGER},
+      <if test="record.offlineCardStatus != null">
+        offline_card_status = #{record.offlineCardStatus,jdbcType=INTEGER},
       </if>
-      <if test="record.integralType != null">
-        integral_type = #{record.integralType,jdbcType=VARCHAR},
+      <if test="record.mbrLevelCode != null">
+        mbr_level_code = #{record.mbrLevelCode,jdbcType=VARCHAR},
       </if>
-      <if test="record.integralBasis != null">
-        integral_basis = #{record.integralBasis,jdbcType=BIGINT},
-      </if>
-      <if test="record.integralAddend != null">
-        integral_addend = #{record.integralAddend,jdbcType=BIGINT},
-      </if>
-      <if test="record.integralMax != null">
-        integral_max = #{record.integralMax,jdbcType=BIGINT},
+      <if test="record.mbrLevelName != null">
+        mbr_level_name = #{record.mbrLevelName,jdbcType=VARCHAR},
       </if>
       <if test="record.remark != null">
         remark = #{record.remark,jdbcType=VARCHAR},
@@ -342,17 +310,14 @@
   <update id="updateByExample" parameterType="map">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-06 19:28:16.
+      This element was generated on 2018-07-12 11:48:54.
     -->
-    update t_mkt_activity_sign_in
-    set mkt_activity_sign_in_id = #{record.mktActivitySignInId,jdbcType=BIGINT},
-      sys_brand_id = #{record.sysBrandId,jdbcType=BIGINT},
+    update t_mkt_activity_register
+    set mkt_activity_resigter_id = #{record.mktActivityResigterId,jdbcType=BIGINT},
       mkt_activity_id = #{record.mktActivityId,jdbcType=BIGINT},
-      sign_type = #{record.signType,jdbcType=INTEGER},
-      integral_type = #{record.integralType,jdbcType=VARCHAR},
-      integral_basis = #{record.integralBasis,jdbcType=BIGINT},
-      integral_addend = #{record.integralAddend,jdbcType=BIGINT},
-      integral_max = #{record.integralMax,jdbcType=BIGINT},
+      offline_card_status = #{record.offlineCardStatus,jdbcType=INTEGER},
+      mbr_level_code = #{record.mbrLevelCode,jdbcType=VARCHAR},
+      mbr_level_name = #{record.mbrLevelName,jdbcType=VARCHAR},
       remark = #{record.remark,jdbcType=VARCHAR},
       create_user_id = #{record.createUserId,jdbcType=BIGINT},
       create_user_name = #{record.createUserName,jdbcType=VARCHAR},
@@ -365,33 +330,24 @@
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
-  <update id="updateByPrimaryKeySelective" parameterType="com.bizvane.mktcenterservice.models.po.MktActivitySignInPO">
+  <update id="updateByPrimaryKeySelective" parameterType="com.bizvane.mktcenterservice.models.po.MktActivityRegisterPO">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-06 19:28:16.
+      This element was generated on 2018-07-12 11:48:54.
     -->
-    update t_mkt_activity_sign_in
+    update t_mkt_activity_register
     <set>
-      <if test="sysBrandId != null">
-        sys_brand_id = #{sysBrandId,jdbcType=BIGINT},
-      </if>
       <if test="mktActivityId != null">
         mkt_activity_id = #{mktActivityId,jdbcType=BIGINT},
       </if>
-      <if test="signType != null">
-        sign_type = #{signType,jdbcType=INTEGER},
+      <if test="offlineCardStatus != null">
+        offline_card_status = #{offlineCardStatus,jdbcType=INTEGER},
       </if>
-      <if test="integralType != null">
-        integral_type = #{integralType,jdbcType=VARCHAR},
+      <if test="mbrLevelCode != null">
+        mbr_level_code = #{mbrLevelCode,jdbcType=VARCHAR},
       </if>
-      <if test="integralBasis != null">
-        integral_basis = #{integralBasis,jdbcType=BIGINT},
-      </if>
-      <if test="integralAddend != null">
-        integral_addend = #{integralAddend,jdbcType=BIGINT},
-      </if>
-      <if test="integralMax != null">
-        integral_max = #{integralMax,jdbcType=BIGINT},
+      <if test="mbrLevelName != null">
+        mbr_level_name = #{mbrLevelName,jdbcType=VARCHAR},
       </if>
       <if test="remark != null">
         remark = #{remark,jdbcType=VARCHAR},
@@ -418,21 +374,18 @@
         valid = #{valid,jdbcType=BIT},
       </if>
     </set>
-    where mkt_activity_sign_in_id = #{mktActivitySignInId,jdbcType=BIGINT}
+    where mkt_activity_resigter_id = #{mktActivityResigterId,jdbcType=BIGINT}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.bizvane.mktcenterservice.models.po.MktActivitySignInPO">
+  <update id="updateByPrimaryKey" parameterType="com.bizvane.mktcenterservice.models.po.MktActivityRegisterPO">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-06 19:28:16.
+      This element was generated on 2018-07-12 11:48:54.
     -->
-    update t_mkt_activity_sign_in
-    set sys_brand_id = #{sysBrandId,jdbcType=BIGINT},
-      mkt_activity_id = #{mktActivityId,jdbcType=BIGINT},
-      sign_type = #{signType,jdbcType=INTEGER},
-      integral_type = #{integralType,jdbcType=VARCHAR},
-      integral_basis = #{integralBasis,jdbcType=BIGINT},
-      integral_addend = #{integralAddend,jdbcType=BIGINT},
-      integral_max = #{integralMax,jdbcType=BIGINT},
+    update t_mkt_activity_register
+    set mkt_activity_id = #{mktActivityId,jdbcType=BIGINT},
+      offline_card_status = #{offlineCardStatus,jdbcType=INTEGER},
+      mbr_level_code = #{mbrLevelCode,jdbcType=VARCHAR},
+      mbr_level_name = #{mbrLevelName,jdbcType=VARCHAR},
       remark = #{remark,jdbcType=VARCHAR},
       create_user_id = #{createUserId,jdbcType=BIGINT},
       create_user_name = #{createUserName,jdbcType=VARCHAR},
@@ -441,6 +394,6 @@
       modified_user_name = #{modifiedUserName,jdbcType=VARCHAR},
       modified_date = #{modifiedDate,jdbcType=TIMESTAMP},
       valid = #{valid,jdbcType=BIT}
-    where mkt_activity_sign_in_id = #{mktActivitySignInId,jdbcType=BIGINT}
+    where mkt_activity_resigter_id = #{mktActivityResigterId,jdbcType=BIGINT}
   </update>
 </mapper>

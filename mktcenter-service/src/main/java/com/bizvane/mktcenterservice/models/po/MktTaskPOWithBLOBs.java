@@ -3,76 +3,91 @@ package com.bizvane.mktcenterservice.models.po;
 import java.io.Serializable;
 
 public class MktTaskPOWithBLOBs extends MktTaskPO implements Serializable {
+    /**
+     * 只读.
+    任务描述. task_info
+     *
+     * @mbg.generated 2018-07-12 11:48:54
+     */
+    @io.swagger.annotations.ApiModelProperty(value = "任务描述",name = "taskInfo", required = false,example = "")
+    private String taskInfo;
 
-	/**
-	 * 只读. 分享内容. share_content
-	 * @mbg.generated  2018-07-06 19:28:16
-	 */
-	@io.swagger.annotations.ApiModelProperty(value = "分享内容", name = "shareContent", required = false, example = "")
-	private String shareContent;
-	/**
-	 * 只读. 任务描述. task_info
-	 * @mbg.generated  2018-07-06 19:28:16
-	 */
-	@io.swagger.annotations.ApiModelProperty(value = "任务描述", name = "taskInfo", required = false, example = "")
-	private String taskInfo;
-	/**
-	 * 只读. 会员需要完善的信息. mbr_profile
-	 * @mbg.generated  2018-07-06 19:28:16
-	 */
-	@io.swagger.annotations.ApiModelProperty(value = "会员需要完善的信息", name = "mbrProfile", required = false, example = "")
-	private String mbrProfile;
-	/**
-	 * 只读. 
-	 * @mbg.generated  2018-07-06 19:28:16
-	 */
-	private static final long serialVersionUID = 1L;
+    /**
+     * 只读.
+    任务列表图片，多张逗号分隔. task_list_img
+     *
+     * @mbg.generated 2018-07-12 11:48:54
+     */
+    @io.swagger.annotations.ApiModelProperty(value = "任务列表图片，多张逗号分隔",name = "taskListImg", required = false,example = "")
+    private String taskListImg;
 
-	/**
-	 * 只读. 
-	 * @mbg.generated  2018-07-06 19:28:16
-	 */
-	public String getShareContent() {
-		return shareContent;
-	}
+    /**
+     * 只读.
+    任务详情图片. task_detail_img
+     *
+     * @mbg.generated 2018-07-12 11:48:54
+     */
+    @io.swagger.annotations.ApiModelProperty(value = "任务详情图片",name = "taskDetailImg", required = false,example = "")
+    private String taskDetailImg;
 
-	/**
-	 * 只读. 
-	 * @mbg.generated  2018-07-06 19:28:16
-	 */
-	public void setShareContent(String shareContent) {
-		this.shareContent = shareContent == null ? null : shareContent.trim();
-	}
+    /**
+     * 只读. 
+     *
+     * @mbg.generated 2018-07-12 11:48:54
+     */
+    private static final long serialVersionUID = 1L;
 
-	/**
-	 * 只读. 
-	 * @mbg.generated  2018-07-06 19:28:16
-	 */
-	public String getTaskInfo() {
-		return taskInfo;
-	}
+    /**
+     * 只读. 
+     *
+     * @mbg.generated 2018-07-12 11:48:54
+     */
+    public String getTaskInfo() {
+        return taskInfo;
+    }
 
-	/**
-	 * 只读. 
-	 * @mbg.generated  2018-07-06 19:28:16
-	 */
-	public void setTaskInfo(String taskInfo) {
-		this.taskInfo = taskInfo == null ? null : taskInfo.trim();
-	}
+    /**
+     * 只读. 
+     *
+     * @mbg.generated 2018-07-12 11:48:54
+     */
+    public void setTaskInfo(String taskInfo) {
+        this.taskInfo = taskInfo == null ? null : taskInfo.trim();
+    }
 
-	/**
-	 * 只读. 
-	 * @mbg.generated  2018-07-06 19:28:16
-	 */
-	public String getMbrProfile() {
-		return mbrProfile;
-	}
+    /**
+     * 只读. 
+     *
+     * @mbg.generated 2018-07-12 11:48:54
+     */
+    public String getTaskListImg() {
+        return taskListImg;
+    }
 
-	/**
-	 * 只读. 
-	 * @mbg.generated  2018-07-06 19:28:16
-	 */
-	public void setMbrProfile(String mbrProfile) {
-		this.mbrProfile = mbrProfile == null ? null : mbrProfile.trim();
-	}
+    /**
+     * 只读. 
+     *
+     * @mbg.generated 2018-07-12 11:48:54
+     */
+    public void setTaskListImg(String taskListImg) {
+        this.taskListImg = taskListImg == null ? null : taskListImg.trim();
+    }
+
+    /**
+     * 只读. 
+     *
+     * @mbg.generated 2018-07-12 11:48:54
+     */
+    public String getTaskDetailImg() {
+        return taskDetailImg;
+    }
+
+    /**
+     * 只读. 
+     *
+     * @mbg.generated 2018-07-12 11:48:54
+     */
+    public void setTaskDetailImg(String taskDetailImg) {
+        this.taskDetailImg = taskDetailImg == null ? null : taskDetailImg.trim();
+    }
 }

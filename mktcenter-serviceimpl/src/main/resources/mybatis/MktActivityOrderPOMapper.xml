@@ -4,13 +4,17 @@
   <resultMap id="BaseResultMap" type="com.bizvane.mktcenterservice.models.po.MktActivityOrderPO">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-06 19:28:16.
+      This element was generated on 2018-07-12 11:48:54.
     -->
     <id column="mkt_activity_order_id" jdbcType="BIGINT" property="mktActivityOrderId" />
     <result column="mkt_activity_id" jdbcType="BIGINT" property="mktActivityId" />
-    <result column="order_source" jdbcType="VARCHAR" property="orderSource" />
+    <result column="mbr_level_code" jdbcType="VARCHAR" property="mbrLevelCode" />
+    <result column="mbr_level_name" jdbcType="VARCHAR" property="mbrLevelName" />
+    <result column="is_fans" jdbcType="INTEGER" property="isFans" />
+    <result column="order_source" jdbcType="INTEGER" property="orderSource" />
     <result column="order_min_price" jdbcType="VARCHAR" property="orderMinPrice" />
-    <result column="discount" jdbcType="VARCHAR" property="discount" />
+    <result column="is_commodity_limit" jdbcType="BIT" property="isCommodityLimit" />
+    <result column="is_store_limit" jdbcType="BIT" property="isStoreLimit" />
     <result column="remark" jdbcType="VARCHAR" property="remark" />
     <result column="create_user_id" jdbcType="BIGINT" property="createUserId" />
     <result column="create_user_name" jdbcType="VARCHAR" property="createUserName" />
@@ -20,10 +24,20 @@
     <result column="modified_date" jdbcType="TIMESTAMP" property="modifiedDate" />
     <result column="valid" jdbcType="BIT" property="valid" />
   </resultMap>
+  <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.bizvane.mktcenterservice.models.po.MktActivityOrderPOWithBLOBs">
+    <!--
+      WARNING - 只读 - @mbg.generated
+      This element was generated on 2018-07-12 11:48:54.
+    -->
+    <result column="commodity_whitelist" jdbcType="LONGVARCHAR" property="commodityWhitelist" />
+    <result column="commodity_blacklist" jdbcType="LONGVARCHAR" property="commodityBlacklist" />
+    <result column="store_whitelist" jdbcType="LONGVARCHAR" property="storeWhitelist" />
+    <result column="store_blacklist" jdbcType="LONGVARCHAR" property="storeBlacklist" />
+  </resultMap>
   <sql id="Example_Where_Clause">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-06 19:28:16.
+      This element was generated on 2018-07-12 11:48:54.
     -->
     <where>
       <foreach collection="oredCriteria" item="criteria" separator="or">
@@ -56,7 +70,7 @@
   <sql id="Update_By_Example_Where_Clause">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-06 19:28:16.
+      This element was generated on 2018-07-12 11:48:54.
     -->
     <where>
       <foreach collection="example.oredCriteria" item="criteria" separator="or">
@@ -89,16 +103,44 @@
   <sql id="Base_Column_List">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-06 19:28:16.
+      This element was generated on 2018-07-12 11:48:54.
     -->
-    mkt_activity_order_id, mkt_activity_id, order_source, order_min_price, discount, 
-    remark, create_user_id, create_user_name, create_date, modified_user_id, modified_user_name, 
-    modified_date, valid
+    mkt_activity_order_id, mkt_activity_id, mbr_level_code, mbr_level_name, is_fans, 
+    order_source, order_min_price, is_commodity_limit, is_store_limit, remark, create_user_id, 
+    create_user_name, create_date, modified_user_id, modified_user_name, modified_date, 
+    valid
   </sql>
+  <sql id="Blob_Column_List">
+    <!--
+      WARNING - 只读 - @mbg.generated
+      This element was generated on 2018-07-12 11:48:54.
+    -->
+    commodity_whitelist, commodity_blacklist, store_whitelist, store_blacklist
+  </sql>
+  <select id="selectByExampleWithBLOBs" parameterType="com.bizvane.mktcenterservice.models.po.MktActivityOrderPOExample" resultMap="ResultMapWithBLOBs">
+    <!--
+      WARNING - 只读 - @mbg.generated
+      This element was generated on 2018-07-12 11:48:54.
+    -->
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from t_mkt_activity_order
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
   <select id="selectByExample" parameterType="com.bizvane.mktcenterservice.models.po.MktActivityOrderPOExample" resultMap="BaseResultMap">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-06 19:28:16.
+      This element was generated on 2018-07-12 11:48:54.
     -->
     select
     <if test="distinct">
@@ -113,20 +155,22 @@
       order by ${orderByClause}
     </if>
   </select>
-  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="ResultMapWithBLOBs">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-06 19:28:16.
+      This element was generated on 2018-07-12 11:48:54.
     -->
     select 
     <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
     from t_mkt_activity_order
     where mkt_activity_order_id = #{mktActivityOrderId,jdbcType=BIGINT}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-06 19:28:16.
+      This element was generated on 2018-07-12 11:48:54.
     -->
     delete from t_mkt_activity_order
     where mkt_activity_order_id = #{mktActivityOrderId,jdbcType=BIGINT}
@@ -134,36 +178,40 @@
   <delete id="deleteByExample" parameterType="com.bizvane.mktcenterservice.models.po.MktActivityOrderPOExample">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-06 19:28:16.
+      This element was generated on 2018-07-12 11:48:54.
     -->
     delete from t_mkt_activity_order
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insert" parameterType="com.bizvane.mktcenterservice.models.po.MktActivityOrderPO">
+  <insert id="insert" parameterType="com.bizvane.mktcenterservice.models.po.MktActivityOrderPOWithBLOBs">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-06 19:28:16.
+      This element was generated on 2018-07-12 11:48:54.
     -->
     <selectKey keyProperty="mktActivityOrderId" order="AFTER" resultType="java.lang.Long">
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into t_mkt_activity_order (mkt_activity_id, order_source, order_min_price, 
-      discount, remark, create_user_id, 
-      create_user_name, create_date, modified_user_id, 
-      modified_user_name, modified_date, valid
-      )
-    values (#{mktActivityId,jdbcType=BIGINT}, #{orderSource,jdbcType=VARCHAR}, #{orderMinPrice,jdbcType=VARCHAR}, 
-      #{discount,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}, #{createUserId,jdbcType=BIGINT}, 
-      #{createUserName,jdbcType=VARCHAR}, #{createDate,jdbcType=TIMESTAMP}, #{modifiedUserId,jdbcType=BIGINT}, 
-      #{modifiedUserName,jdbcType=VARCHAR}, #{modifiedDate,jdbcType=TIMESTAMP}, #{valid,jdbcType=BIT}
-      )
+    insert into t_mkt_activity_order (mkt_activity_id, mbr_level_code, mbr_level_name, 
+      is_fans, order_source, order_min_price, 
+      is_commodity_limit, is_store_limit, remark, 
+      create_user_id, create_user_name, create_date, 
+      modified_user_id, modified_user_name, modified_date, 
+      valid, commodity_whitelist, commodity_blacklist, 
+      store_whitelist, store_blacklist)
+    values (#{mktActivityId,jdbcType=BIGINT}, #{mbrLevelCode,jdbcType=VARCHAR}, #{mbrLevelName,jdbcType=VARCHAR}, 
+      #{isFans,jdbcType=INTEGER}, #{orderSource,jdbcType=INTEGER}, #{orderMinPrice,jdbcType=VARCHAR}, 
+      #{isCommodityLimit,jdbcType=BIT}, #{isStoreLimit,jdbcType=BIT}, #{remark,jdbcType=VARCHAR}, 
+      #{createUserId,jdbcType=BIGINT}, #{createUserName,jdbcType=VARCHAR}, #{createDate,jdbcType=TIMESTAMP}, 
+      #{modifiedUserId,jdbcType=BIGINT}, #{modifiedUserName,jdbcType=VARCHAR}, #{modifiedDate,jdbcType=TIMESTAMP}, 
+      #{valid,jdbcType=BIT}, #{commodityWhitelist,jdbcType=LONGVARCHAR}, #{commodityBlacklist,jdbcType=LONGVARCHAR}, 
+      #{storeWhitelist,jdbcType=LONGVARCHAR}, #{storeBlacklist,jdbcType=LONGVARCHAR})
   </insert>
-  <insert id="insertSelective" parameterType="com.bizvane.mktcenterservice.models.po.MktActivityOrderPO">
+  <insert id="insertSelective" parameterType="com.bizvane.mktcenterservice.models.po.MktActivityOrderPOWithBLOBs">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-06 19:28:16.
+      This element was generated on 2018-07-12 11:48:54.
     -->
     <selectKey keyProperty="mktActivityOrderId" order="AFTER" resultType="java.lang.Long">
       SELECT LAST_INSERT_ID()
@@ -173,14 +221,26 @@
       <if test="mktActivityId != null">
         mkt_activity_id,
       </if>
+      <if test="mbrLevelCode != null">
+        mbr_level_code,
+      </if>
+      <if test="mbrLevelName != null">
+        mbr_level_name,
+      </if>
+      <if test="isFans != null">
+        is_fans,
+      </if>
       <if test="orderSource != null">
         order_source,
       </if>
       <if test="orderMinPrice != null">
         order_min_price,
       </if>
-      <if test="discount != null">
-        discount,
+      <if test="isCommodityLimit != null">
+        is_commodity_limit,
+      </if>
+      <if test="isStoreLimit != null">
+        is_store_limit,
       </if>
       <if test="remark != null">
         remark,
@@ -206,19 +266,43 @@
       <if test="valid != null">
         valid,
       </if>
+      <if test="commodityWhitelist != null">
+        commodity_whitelist,
+      </if>
+      <if test="commodityBlacklist != null">
+        commodity_blacklist,
+      </if>
+      <if test="storeWhitelist != null">
+        store_whitelist,
+      </if>
+      <if test="storeBlacklist != null">
+        store_blacklist,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="mktActivityId != null">
         #{mktActivityId,jdbcType=BIGINT},
       </if>
+      <if test="mbrLevelCode != null">
+        #{mbrLevelCode,jdbcType=VARCHAR},
+      </if>
+      <if test="mbrLevelName != null">
+        #{mbrLevelName,jdbcType=VARCHAR},
+      </if>
+      <if test="isFans != null">
+        #{isFans,jdbcType=INTEGER},
+      </if>
       <if test="orderSource != null">
-        #{orderSource,jdbcType=VARCHAR},
+        #{orderSource,jdbcType=INTEGER},
       </if>
       <if test="orderMinPrice != null">
         #{orderMinPrice,jdbcType=VARCHAR},
       </if>
-      <if test="discount != null">
-        #{discount,jdbcType=VARCHAR},
+      <if test="isCommodityLimit != null">
+        #{isCommodityLimit,jdbcType=BIT},
+      </if>
+      <if test="isStoreLimit != null">
+        #{isStoreLimit,jdbcType=BIT},
       </if>
       <if test="remark != null">
         #{remark,jdbcType=VARCHAR},
@@ -244,12 +328,24 @@
       <if test="valid != null">
         #{valid,jdbcType=BIT},
       </if>
+      <if test="commodityWhitelist != null">
+        #{commodityWhitelist,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="commodityBlacklist != null">
+        #{commodityBlacklist,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="storeWhitelist != null">
+        #{storeWhitelist,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="storeBlacklist != null">
+        #{storeBlacklist,jdbcType=LONGVARCHAR},
+      </if>
     </trim>
   </insert>
   <select id="countByExample" parameterType="com.bizvane.mktcenterservice.models.po.MktActivityOrderPOExample" resultType="java.lang.Long">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-06 19:28:16.
+      This element was generated on 2018-07-12 11:48:54.
     -->
     select count(*) from t_mkt_activity_order
     <if test="_parameter != null">
@@ -259,7 +355,7 @@
   <update id="updateByExampleSelective" parameterType="map">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-06 19:28:16.
+      This element was generated on 2018-07-12 11:48:54.
     -->
     update t_mkt_activity_order
     <set>
@@ -269,14 +365,26 @@
       <if test="record.mktActivityId != null">
         mkt_activity_id = #{record.mktActivityId,jdbcType=BIGINT},
       </if>
+      <if test="record.mbrLevelCode != null">
+        mbr_level_code = #{record.mbrLevelCode,jdbcType=VARCHAR},
+      </if>
+      <if test="record.mbrLevelName != null">
+        mbr_level_name = #{record.mbrLevelName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.isFans != null">
+        is_fans = #{record.isFans,jdbcType=INTEGER},
+      </if>
       <if test="record.orderSource != null">
-        order_source = #{record.orderSource,jdbcType=VARCHAR},
+        order_source = #{record.orderSource,jdbcType=INTEGER},
       </if>
       <if test="record.orderMinPrice != null">
         order_min_price = #{record.orderMinPrice,jdbcType=VARCHAR},
       </if>
-      <if test="record.discount != null">
-        discount = #{record.discount,jdbcType=VARCHAR},
+      <if test="record.isCommodityLimit != null">
+        is_commodity_limit = #{record.isCommodityLimit,jdbcType=BIT},
+      </if>
+      <if test="record.isStoreLimit != null">
+        is_store_limit = #{record.isStoreLimit,jdbcType=BIT},
       </if>
       <if test="record.remark != null">
         remark = #{record.remark,jdbcType=VARCHAR},
@@ -302,7 +410,50 @@
       <if test="record.valid != null">
         valid = #{record.valid,jdbcType=BIT},
       </if>
+      <if test="record.commodityWhitelist != null">
+        commodity_whitelist = #{record.commodityWhitelist,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="record.commodityBlacklist != null">
+        commodity_blacklist = #{record.commodityBlacklist,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="record.storeWhitelist != null">
+        store_whitelist = #{record.storeWhitelist,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="record.storeBlacklist != null">
+        store_blacklist = #{record.storeBlacklist,jdbcType=LONGVARCHAR},
+      </if>
     </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExampleWithBLOBs" parameterType="map">
+    <!--
+      WARNING - 只读 - @mbg.generated
+      This element was generated on 2018-07-12 11:48:54.
+    -->
+    update t_mkt_activity_order
+    set mkt_activity_order_id = #{record.mktActivityOrderId,jdbcType=BIGINT},
+      mkt_activity_id = #{record.mktActivityId,jdbcType=BIGINT},
+      mbr_level_code = #{record.mbrLevelCode,jdbcType=VARCHAR},
+      mbr_level_name = #{record.mbrLevelName,jdbcType=VARCHAR},
+      is_fans = #{record.isFans,jdbcType=INTEGER},
+      order_source = #{record.orderSource,jdbcType=INTEGER},
+      order_min_price = #{record.orderMinPrice,jdbcType=VARCHAR},
+      is_commodity_limit = #{record.isCommodityLimit,jdbcType=BIT},
+      is_store_limit = #{record.isStoreLimit,jdbcType=BIT},
+      remark = #{record.remark,jdbcType=VARCHAR},
+      create_user_id = #{record.createUserId,jdbcType=BIGINT},
+      create_user_name = #{record.createUserName,jdbcType=VARCHAR},
+      create_date = #{record.createDate,jdbcType=TIMESTAMP},
+      modified_user_id = #{record.modifiedUserId,jdbcType=BIGINT},
+      modified_user_name = #{record.modifiedUserName,jdbcType=VARCHAR},
+      modified_date = #{record.modifiedDate,jdbcType=TIMESTAMP},
+      valid = #{record.valid,jdbcType=BIT},
+      commodity_whitelist = #{record.commodityWhitelist,jdbcType=LONGVARCHAR},
+      commodity_blacklist = #{record.commodityBlacklist,jdbcType=LONGVARCHAR},
+      store_whitelist = #{record.storeWhitelist,jdbcType=LONGVARCHAR},
+      store_blacklist = #{record.storeBlacklist,jdbcType=LONGVARCHAR}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -310,14 +461,18 @@
   <update id="updateByExample" parameterType="map">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-06 19:28:16.
+      This element was generated on 2018-07-12 11:48:54.
     -->
     update t_mkt_activity_order
     set mkt_activity_order_id = #{record.mktActivityOrderId,jdbcType=BIGINT},
       mkt_activity_id = #{record.mktActivityId,jdbcType=BIGINT},
-      order_source = #{record.orderSource,jdbcType=VARCHAR},
+      mbr_level_code = #{record.mbrLevelCode,jdbcType=VARCHAR},
+      mbr_level_name = #{record.mbrLevelName,jdbcType=VARCHAR},
+      is_fans = #{record.isFans,jdbcType=INTEGER},
+      order_source = #{record.orderSource,jdbcType=INTEGER},
       order_min_price = #{record.orderMinPrice,jdbcType=VARCHAR},
-      discount = #{record.discount,jdbcType=VARCHAR},
+      is_commodity_limit = #{record.isCommodityLimit,jdbcType=BIT},
+      is_store_limit = #{record.isStoreLimit,jdbcType=BIT},
       remark = #{record.remark,jdbcType=VARCHAR},
       create_user_id = #{record.createUserId,jdbcType=BIGINT},
       create_user_name = #{record.createUserName,jdbcType=VARCHAR},
@@ -330,24 +485,36 @@
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
-  <update id="updateByPrimaryKeySelective" parameterType="com.bizvane.mktcenterservice.models.po.MktActivityOrderPO">
+  <update id="updateByPrimaryKeySelective" parameterType="com.bizvane.mktcenterservice.models.po.MktActivityOrderPOWithBLOBs">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-06 19:28:16.
+      This element was generated on 2018-07-12 11:48:54.
     -->
     update t_mkt_activity_order
     <set>
       <if test="mktActivityId != null">
         mkt_activity_id = #{mktActivityId,jdbcType=BIGINT},
       </if>
+      <if test="mbrLevelCode != null">
+        mbr_level_code = #{mbrLevelCode,jdbcType=VARCHAR},
+      </if>
+      <if test="mbrLevelName != null">
+        mbr_level_name = #{mbrLevelName,jdbcType=VARCHAR},
+      </if>
+      <if test="isFans != null">
+        is_fans = #{isFans,jdbcType=INTEGER},
+      </if>
       <if test="orderSource != null">
-        order_source = #{orderSource,jdbcType=VARCHAR},
+        order_source = #{orderSource,jdbcType=INTEGER},
       </if>
       <if test="orderMinPrice != null">
         order_min_price = #{orderMinPrice,jdbcType=VARCHAR},
       </if>
-      <if test="discount != null">
-        discount = #{discount,jdbcType=VARCHAR},
+      <if test="isCommodityLimit != null">
+        is_commodity_limit = #{isCommodityLimit,jdbcType=BIT},
+      </if>
+      <if test="isStoreLimit != null">
+        is_store_limit = #{isStoreLimit,jdbcType=BIT},
       </if>
       <if test="remark != null">
         remark = #{remark,jdbcType=VARCHAR},
@@ -373,19 +540,63 @@
       <if test="valid != null">
         valid = #{valid,jdbcType=BIT},
       </if>
+      <if test="commodityWhitelist != null">
+        commodity_whitelist = #{commodityWhitelist,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="commodityBlacklist != null">
+        commodity_blacklist = #{commodityBlacklist,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="storeWhitelist != null">
+        store_whitelist = #{storeWhitelist,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="storeBlacklist != null">
+        store_blacklist = #{storeBlacklist,jdbcType=LONGVARCHAR},
+      </if>
     </set>
+    where mkt_activity_order_id = #{mktActivityOrderId,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.bizvane.mktcenterservice.models.po.MktActivityOrderPOWithBLOBs">
+    <!--
+      WARNING - 只读 - @mbg.generated
+      This element was generated on 2018-07-12 11:48:54.
+    -->
+    update t_mkt_activity_order
+    set mkt_activity_id = #{mktActivityId,jdbcType=BIGINT},
+      mbr_level_code = #{mbrLevelCode,jdbcType=VARCHAR},
+      mbr_level_name = #{mbrLevelName,jdbcType=VARCHAR},
+      is_fans = #{isFans,jdbcType=INTEGER},
+      order_source = #{orderSource,jdbcType=INTEGER},
+      order_min_price = #{orderMinPrice,jdbcType=VARCHAR},
+      is_commodity_limit = #{isCommodityLimit,jdbcType=BIT},
+      is_store_limit = #{isStoreLimit,jdbcType=BIT},
+      remark = #{remark,jdbcType=VARCHAR},
+      create_user_id = #{createUserId,jdbcType=BIGINT},
+      create_user_name = #{createUserName,jdbcType=VARCHAR},
+      create_date = #{createDate,jdbcType=TIMESTAMP},
+      modified_user_id = #{modifiedUserId,jdbcType=BIGINT},
+      modified_user_name = #{modifiedUserName,jdbcType=VARCHAR},
+      modified_date = #{modifiedDate,jdbcType=TIMESTAMP},
+      valid = #{valid,jdbcType=BIT},
+      commodity_whitelist = #{commodityWhitelist,jdbcType=LONGVARCHAR},
+      commodity_blacklist = #{commodityBlacklist,jdbcType=LONGVARCHAR},
+      store_whitelist = #{storeWhitelist,jdbcType=LONGVARCHAR},
+      store_blacklist = #{storeBlacklist,jdbcType=LONGVARCHAR}
     where mkt_activity_order_id = #{mktActivityOrderId,jdbcType=BIGINT}
   </update>
   <update id="updateByPrimaryKey" parameterType="com.bizvane.mktcenterservice.models.po.MktActivityOrderPO">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-06 19:28:16.
+      This element was generated on 2018-07-12 11:48:54.
     -->
     update t_mkt_activity_order
     set mkt_activity_id = #{mktActivityId,jdbcType=BIGINT},
-      order_source = #{orderSource,jdbcType=VARCHAR},
+      mbr_level_code = #{mbrLevelCode,jdbcType=VARCHAR},
+      mbr_level_name = #{mbrLevelName,jdbcType=VARCHAR},
+      is_fans = #{isFans,jdbcType=INTEGER},
+      order_source = #{orderSource,jdbcType=INTEGER},
       order_min_price = #{orderMinPrice,jdbcType=VARCHAR},
-      discount = #{discount,jdbcType=VARCHAR},
+      is_commodity_limit = #{isCommodityLimit,jdbcType=BIT},
+      is_store_limit = #{isStoreLimit,jdbcType=BIT},
       remark = #{remark,jdbcType=VARCHAR},
       create_user_id = #{createUserId,jdbcType=BIGINT},
       create_user_name = #{createUserName,jdbcType=VARCHAR},

@@ -1,17 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.bizvane.mktcenterserviceimpl.mappers.MktActivitySignInRewardPOMapper">
-  <resultMap id="BaseResultMap" type="com.bizvane.mktcenterservice.models.po.MktActivitySignInRewardPO">
+<mapper namespace="com.bizvane.mktcenterserviceimpl.mappers.MktActivityUpgradePOMapper">
+  <resultMap id="BaseResultMap" type="com.bizvane.mktcenterservice.models.po.MktActivityUpgradePO">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-06 19:28:16.
+      This element was generated on 2018-07-12 11:48:54.
     -->
-    <id column="mkt_activity_sign_in_reward_id" jdbcType="BIGINT" property="mktActivitySignInRewardId" />
+    <id column="mkt_activity_upgrade_id" jdbcType="BIGINT" property="mktActivityUpgradeId" />
     <result column="mkt_activity_id" jdbcType="BIGINT" property="mktActivityId" />
-    <result column="mkt_activity_sign_in_id" jdbcType="BIGINT" property="mktActivitySignInId" />
-    <result column="mbr_code" jdbcType="VARCHAR" property="mbrCode" />
-    <result column="integral" jdbcType="INTEGER" property="integral" />
-    <result column="coupon_code" jdbcType="VARCHAR" property="couponCode" />
+    <result column="current_level_code" jdbcType="VARCHAR" property="currentLevelCode" />
+    <result column="current_level_name" jdbcType="VARCHAR" property="currentLevelName" />
+    <result column="target_level_code" jdbcType="VARCHAR" property="targetLevelCode" />
+    <result column="target_level_name" jdbcType="VARCHAR" property="targetLevelName" />
+    <result column="fans" jdbcType="INTEGER" property="fans" />
     <result column="remark" jdbcType="VARCHAR" property="remark" />
     <result column="create_user_id" jdbcType="BIGINT" property="createUserId" />
     <result column="create_user_name" jdbcType="VARCHAR" property="createUserName" />
@@ -24,7 +25,7 @@
   <sql id="Example_Where_Clause">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-06 19:28:16.
+      This element was generated on 2018-07-12 11:48:54.
     -->
     <where>
       <foreach collection="oredCriteria" item="criteria" separator="or">
@@ -57,7 +58,7 @@
   <sql id="Update_By_Example_Where_Clause">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-06 19:28:16.
+      This element was generated on 2018-07-12 11:48:54.
     -->
     <where>
       <foreach collection="example.oredCriteria" item="criteria" separator="or">
@@ -90,23 +91,23 @@
   <sql id="Base_Column_List">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-06 19:28:16.
+      This element was generated on 2018-07-12 11:48:54.
     -->
-    mkt_activity_sign_in_reward_id, mkt_activity_id, mkt_activity_sign_in_id, mbr_code, 
-    integral, coupon_code, remark, create_user_id, create_user_name, create_date, modified_user_id, 
-    modified_user_name, modified_date, valid
+    mkt_activity_upgrade_id, mkt_activity_id, current_level_code, current_level_name, 
+    target_level_code, target_level_name, fans, remark, create_user_id, create_user_name, 
+    create_date, modified_user_id, modified_user_name, modified_date, valid
   </sql>
-  <select id="selectByExample" parameterType="com.bizvane.mktcenterservice.models.po.MktActivitySignInRewardPOExample" resultMap="BaseResultMap">
+  <select id="selectByExample" parameterType="com.bizvane.mktcenterservice.models.po.MktActivityUpgradePOExample" resultMap="BaseResultMap">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-06 19:28:16.
+      This element was generated on 2018-07-12 11:48:54.
     -->
     select
     <if test="distinct">
       distinct
     </if>
     <include refid="Base_Column_List" />
-    from t_mkt_activity_sign_in_reward
+    from t_mkt_activity_upgrade
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
@@ -117,74 +118,77 @@
   <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-06 19:28:16.
+      This element was generated on 2018-07-12 11:48:54.
     -->
     select 
     <include refid="Base_Column_List" />
-    from t_mkt_activity_sign_in_reward
-    where mkt_activity_sign_in_reward_id = #{mktActivitySignInRewardId,jdbcType=BIGINT}
+    from t_mkt_activity_upgrade
+    where mkt_activity_upgrade_id = #{mktActivityUpgradeId,jdbcType=BIGINT}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-06 19:28:16.
+      This element was generated on 2018-07-12 11:48:54.
     -->
-    delete from t_mkt_activity_sign_in_reward
-    where mkt_activity_sign_in_reward_id = #{mktActivitySignInRewardId,jdbcType=BIGINT}
+    delete from t_mkt_activity_upgrade
+    where mkt_activity_upgrade_id = #{mktActivityUpgradeId,jdbcType=BIGINT}
   </delete>
-  <delete id="deleteByExample" parameterType="com.bizvane.mktcenterservice.models.po.MktActivitySignInRewardPOExample">
+  <delete id="deleteByExample" parameterType="com.bizvane.mktcenterservice.models.po.MktActivityUpgradePOExample">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-06 19:28:16.
+      This element was generated on 2018-07-12 11:48:54.
     -->
-    delete from t_mkt_activity_sign_in_reward
+    delete from t_mkt_activity_upgrade
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insert" parameterType="com.bizvane.mktcenterservice.models.po.MktActivitySignInRewardPO">
+  <insert id="insert" parameterType="com.bizvane.mktcenterservice.models.po.MktActivityUpgradePO">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-06 19:28:16.
+      This element was generated on 2018-07-12 11:48:54.
     -->
-    <selectKey keyProperty="mktActivitySignInRewardId" order="AFTER" resultType="java.lang.Long">
+    <selectKey keyProperty="mktActivityUpgradeId" order="AFTER" resultType="java.lang.Long">
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into t_mkt_activity_sign_in_reward (mkt_activity_id, mkt_activity_sign_in_id, 
-      mbr_code, integral, coupon_code, 
+    insert into t_mkt_activity_upgrade (mkt_activity_id, current_level_code, current_level_name, 
+      target_level_code, target_level_name, fans, 
       remark, create_user_id, create_user_name, 
       create_date, modified_user_id, modified_user_name, 
       modified_date, valid)
-    values (#{mktActivityId,jdbcType=BIGINT}, #{mktActivitySignInId,jdbcType=BIGINT}, 
-      #{mbrCode,jdbcType=VARCHAR}, #{integral,jdbcType=INTEGER}, #{couponCode,jdbcType=VARCHAR}, 
+    values (#{mktActivityId,jdbcType=BIGINT}, #{currentLevelCode,jdbcType=VARCHAR}, #{currentLevelName,jdbcType=VARCHAR}, 
+      #{targetLevelCode,jdbcType=VARCHAR}, #{targetLevelName,jdbcType=VARCHAR}, #{fans,jdbcType=INTEGER}, 
       #{remark,jdbcType=VARCHAR}, #{createUserId,jdbcType=BIGINT}, #{createUserName,jdbcType=VARCHAR}, 
       #{createDate,jdbcType=TIMESTAMP}, #{modifiedUserId,jdbcType=BIGINT}, #{modifiedUserName,jdbcType=VARCHAR}, 
       #{modifiedDate,jdbcType=TIMESTAMP}, #{valid,jdbcType=BIT})
   </insert>
-  <insert id="insertSelective" parameterType="com.bizvane.mktcenterservice.models.po.MktActivitySignInRewardPO">
+  <insert id="insertSelective" parameterType="com.bizvane.mktcenterservice.models.po.MktActivityUpgradePO">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-06 19:28:16.
+      This element was generated on 2018-07-12 11:48:54.
     -->
-    <selectKey keyProperty="mktActivitySignInRewardId" order="AFTER" resultType="java.lang.Long">
+    <selectKey keyProperty="mktActivityUpgradeId" order="AFTER" resultType="java.lang.Long">
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into t_mkt_activity_sign_in_reward
+    insert into t_mkt_activity_upgrade
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="mktActivityId != null">
         mkt_activity_id,
       </if>
-      <if test="mktActivitySignInId != null">
-        mkt_activity_sign_in_id,
+      <if test="currentLevelCode != null">
+        current_level_code,
       </if>
-      <if test="mbrCode != null">
-        mbr_code,
+      <if test="currentLevelName != null">
+        current_level_name,
       </if>
-      <if test="integral != null">
-        integral,
+      <if test="targetLevelCode != null">
+        target_level_code,
       </if>
-      <if test="couponCode != null">
-        coupon_code,
+      <if test="targetLevelName != null">
+        target_level_name,
+      </if>
+      <if test="fans != null">
+        fans,
       </if>
       <if test="remark != null">
         remark,
@@ -215,17 +219,20 @@
       <if test="mktActivityId != null">
         #{mktActivityId,jdbcType=BIGINT},
       </if>
-      <if test="mktActivitySignInId != null">
-        #{mktActivitySignInId,jdbcType=BIGINT},
+      <if test="currentLevelCode != null">
+        #{currentLevelCode,jdbcType=VARCHAR},
       </if>
-      <if test="mbrCode != null">
-        #{mbrCode,jdbcType=VARCHAR},
+      <if test="currentLevelName != null">
+        #{currentLevelName,jdbcType=VARCHAR},
       </if>
-      <if test="integral != null">
-        #{integral,jdbcType=INTEGER},
+      <if test="targetLevelCode != null">
+        #{targetLevelCode,jdbcType=VARCHAR},
       </if>
-      <if test="couponCode != null">
-        #{couponCode,jdbcType=VARCHAR},
+      <if test="targetLevelName != null">
+        #{targetLevelName,jdbcType=VARCHAR},
+      </if>
+      <if test="fans != null">
+        #{fans,jdbcType=INTEGER},
       </if>
       <if test="remark != null">
         #{remark,jdbcType=VARCHAR},
@@ -253,12 +260,12 @@
       </if>
     </trim>
   </insert>
-  <select id="countByExample" parameterType="com.bizvane.mktcenterservice.models.po.MktActivitySignInRewardPOExample" resultType="java.lang.Long">
+  <select id="countByExample" parameterType="com.bizvane.mktcenterservice.models.po.MktActivityUpgradePOExample" resultType="java.lang.Long">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-06 19:28:16.
+      This element was generated on 2018-07-12 11:48:54.
     -->
-    select count(*) from t_mkt_activity_sign_in_reward
+    select count(*) from t_mkt_activity_upgrade
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
@@ -266,27 +273,30 @@
   <update id="updateByExampleSelective" parameterType="map">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-06 19:28:16.
+      This element was generated on 2018-07-12 11:48:54.
     -->
-    update t_mkt_activity_sign_in_reward
+    update t_mkt_activity_upgrade
     <set>
-      <if test="record.mktActivitySignInRewardId != null">
-        mkt_activity_sign_in_reward_id = #{record.mktActivitySignInRewardId,jdbcType=BIGINT},
+      <if test="record.mktActivityUpgradeId != null">
+        mkt_activity_upgrade_id = #{record.mktActivityUpgradeId,jdbcType=BIGINT},
       </if>
       <if test="record.mktActivityId != null">
         mkt_activity_id = #{record.mktActivityId,jdbcType=BIGINT},
       </if>
-      <if test="record.mktActivitySignInId != null">
-        mkt_activity_sign_in_id = #{record.mktActivitySignInId,jdbcType=BIGINT},
+      <if test="record.currentLevelCode != null">
+        current_level_code = #{record.currentLevelCode,jdbcType=VARCHAR},
       </if>
-      <if test="record.mbrCode != null">
-        mbr_code = #{record.mbrCode,jdbcType=VARCHAR},
+      <if test="record.currentLevelName != null">
+        current_level_name = #{record.currentLevelName,jdbcType=VARCHAR},
       </if>
-      <if test="record.integral != null">
-        integral = #{record.integral,jdbcType=INTEGER},
+      <if test="record.targetLevelCode != null">
+        target_level_code = #{record.targetLevelCode,jdbcType=VARCHAR},
       </if>
-      <if test="record.couponCode != null">
-        coupon_code = #{record.couponCode,jdbcType=VARCHAR},
+      <if test="record.targetLevelName != null">
+        target_level_name = #{record.targetLevelName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.fans != null">
+        fans = #{record.fans,jdbcType=INTEGER},
       </if>
       <if test="record.remark != null">
         remark = #{record.remark,jdbcType=VARCHAR},
@@ -320,15 +330,16 @@
   <update id="updateByExample" parameterType="map">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-06 19:28:16.
+      This element was generated on 2018-07-12 11:48:54.
     -->
-    update t_mkt_activity_sign_in_reward
-    set mkt_activity_sign_in_reward_id = #{record.mktActivitySignInRewardId,jdbcType=BIGINT},
+    update t_mkt_activity_upgrade
+    set mkt_activity_upgrade_id = #{record.mktActivityUpgradeId,jdbcType=BIGINT},
       mkt_activity_id = #{record.mktActivityId,jdbcType=BIGINT},
-      mkt_activity_sign_in_id = #{record.mktActivitySignInId,jdbcType=BIGINT},
-      mbr_code = #{record.mbrCode,jdbcType=VARCHAR},
-      integral = #{record.integral,jdbcType=INTEGER},
-      coupon_code = #{record.couponCode,jdbcType=VARCHAR},
+      current_level_code = #{record.currentLevelCode,jdbcType=VARCHAR},
+      current_level_name = #{record.currentLevelName,jdbcType=VARCHAR},
+      target_level_code = #{record.targetLevelCode,jdbcType=VARCHAR},
+      target_level_name = #{record.targetLevelName,jdbcType=VARCHAR},
+      fans = #{record.fans,jdbcType=INTEGER},
       remark = #{record.remark,jdbcType=VARCHAR},
       create_user_id = #{record.createUserId,jdbcType=BIGINT},
       create_user_name = #{record.createUserName,jdbcType=VARCHAR},
@@ -341,27 +352,30 @@
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
-  <update id="updateByPrimaryKeySelective" parameterType="com.bizvane.mktcenterservice.models.po.MktActivitySignInRewardPO">
+  <update id="updateByPrimaryKeySelective" parameterType="com.bizvane.mktcenterservice.models.po.MktActivityUpgradePO">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-06 19:28:16.
+      This element was generated on 2018-07-12 11:48:54.
     -->
-    update t_mkt_activity_sign_in_reward
+    update t_mkt_activity_upgrade
     <set>
       <if test="mktActivityId != null">
         mkt_activity_id = #{mktActivityId,jdbcType=BIGINT},
       </if>
-      <if test="mktActivitySignInId != null">
-        mkt_activity_sign_in_id = #{mktActivitySignInId,jdbcType=BIGINT},
+      <if test="currentLevelCode != null">
+        current_level_code = #{currentLevelCode,jdbcType=VARCHAR},
       </if>
-      <if test="mbrCode != null">
-        mbr_code = #{mbrCode,jdbcType=VARCHAR},
+      <if test="currentLevelName != null">
+        current_level_name = #{currentLevelName,jdbcType=VARCHAR},
       </if>
-      <if test="integral != null">
-        integral = #{integral,jdbcType=INTEGER},
+      <if test="targetLevelCode != null">
+        target_level_code = #{targetLevelCode,jdbcType=VARCHAR},
       </if>
-      <if test="couponCode != null">
-        coupon_code = #{couponCode,jdbcType=VARCHAR},
+      <if test="targetLevelName != null">
+        target_level_name = #{targetLevelName,jdbcType=VARCHAR},
+      </if>
+      <if test="fans != null">
+        fans = #{fans,jdbcType=INTEGER},
       </if>
       <if test="remark != null">
         remark = #{remark,jdbcType=VARCHAR},
@@ -388,19 +402,20 @@
         valid = #{valid,jdbcType=BIT},
       </if>
     </set>
-    where mkt_activity_sign_in_reward_id = #{mktActivitySignInRewardId,jdbcType=BIGINT}
+    where mkt_activity_upgrade_id = #{mktActivityUpgradeId,jdbcType=BIGINT}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.bizvane.mktcenterservice.models.po.MktActivitySignInRewardPO">
+  <update id="updateByPrimaryKey" parameterType="com.bizvane.mktcenterservice.models.po.MktActivityUpgradePO">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-06 19:28:16.
+      This element was generated on 2018-07-12 11:48:54.
     -->
-    update t_mkt_activity_sign_in_reward
+    update t_mkt_activity_upgrade
     set mkt_activity_id = #{mktActivityId,jdbcType=BIGINT},
-      mkt_activity_sign_in_id = #{mktActivitySignInId,jdbcType=BIGINT},
-      mbr_code = #{mbrCode,jdbcType=VARCHAR},
-      integral = #{integral,jdbcType=INTEGER},
-      coupon_code = #{couponCode,jdbcType=VARCHAR},
+      current_level_code = #{currentLevelCode,jdbcType=VARCHAR},
+      current_level_name = #{currentLevelName,jdbcType=VARCHAR},
+      target_level_code = #{targetLevelCode,jdbcType=VARCHAR},
+      target_level_name = #{targetLevelName,jdbcType=VARCHAR},
+      fans = #{fans,jdbcType=INTEGER},
       remark = #{remark,jdbcType=VARCHAR},
       create_user_id = #{createUserId,jdbcType=BIGINT},
       create_user_name = #{createUserName,jdbcType=VARCHAR},
@@ -409,6 +424,6 @@
       modified_user_name = #{modifiedUserName,jdbcType=VARCHAR},
       modified_date = #{modifiedDate,jdbcType=TIMESTAMP},
       valid = #{valid,jdbcType=BIT}
-    where mkt_activity_sign_in_reward_id = #{mktActivitySignInRewardId,jdbcType=BIGINT}
+    where mkt_activity_upgrade_id = #{mktActivityUpgradeId,jdbcType=BIGINT}
   </update>
 </mapper>

@@ -4,16 +4,17 @@
   <resultMap id="BaseResultMap" type="com.bizvane.mktcenterservice.models.po.MktTaskPO">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-06 19:28:16.
+      This element was generated on 2018-07-12 11:48:54.
     -->
     <id column="mkt_task_id" jdbcType="BIGINT" property="mktTaskId" />
+    <result column="sys_company_id" jdbcType="BIGINT" property="sysCompanyId" />
+    <result column="sys_brand_id" jdbcType="BIGINT" property="sysBrandId" />
     <result column="task_code" jdbcType="VARCHAR" property="taskCode" />
     <result column="task_type" jdbcType="INTEGER" property="taskType" />
     <result column="task_name" jdbcType="VARCHAR" property="taskName" />
-    <result column="share_times" jdbcType="INTEGER" property="shareTimes" />
-    <result column="share_title" jdbcType="VARCHAR" property="shareTitle" />
-    <result column="invite_mbr_num" jdbcType="INTEGER" property="inviteMbrNum" />
-    <result column="point" jdbcType="INTEGER" property="point" />
+    <result column="start_time" jdbcType="TIMESTAMP" property="startTime" />
+    <result column="end_time" jdbcType="TIMESTAMP" property="endTime" />
+    <result column="points" jdbcType="INTEGER" property="points" />
     <result column="check_status" jdbcType="INTEGER" property="checkStatus" />
     <result column="task_status" jdbcType="INTEGER" property="taskStatus" />
     <result column="remark" jdbcType="VARCHAR" property="remark" />
@@ -28,16 +29,16 @@
   <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.bizvane.mktcenterservice.models.po.MktTaskPOWithBLOBs">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-06 19:28:16.
+      This element was generated on 2018-07-12 11:48:54.
     -->
-    <result column="share_content" jdbcType="LONGVARCHAR" property="shareContent" />
     <result column="task_info" jdbcType="LONGVARCHAR" property="taskInfo" />
-    <result column="mbr_profile" jdbcType="LONGVARCHAR" property="mbrProfile" />
+    <result column="task_list_img" jdbcType="LONGVARCHAR" property="taskListImg" />
+    <result column="task_detail_img" jdbcType="LONGVARCHAR" property="taskDetailImg" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-06 19:28:16.
+      This element was generated on 2018-07-12 11:48:54.
     -->
     <where>
       <foreach collection="oredCriteria" item="criteria" separator="or">
@@ -70,7 +71,7 @@
   <sql id="Update_By_Example_Where_Clause">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-06 19:28:16.
+      This element was generated on 2018-07-12 11:48:54.
     -->
     <where>
       <foreach collection="example.oredCriteria" item="criteria" separator="or">
@@ -103,23 +104,23 @@
   <sql id="Base_Column_List">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-06 19:28:16.
+      This element was generated on 2018-07-12 11:48:54.
     -->
-    mkt_task_id, task_code, task_type, task_name, share_times, share_title, invite_mbr_num, 
-    point, check_status, task_status, remark, create_user_id, create_user_name, create_date, 
-    modified_user_id, modified_user_name, modified_date, valid
+    mkt_task_id, sys_company_id, sys_brand_id, task_code, task_type, task_name, start_time, 
+    end_time, points, check_status, task_status, remark, create_user_id, create_user_name, 
+    create_date, modified_user_id, modified_user_name, modified_date, valid
   </sql>
   <sql id="Blob_Column_List">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-06 19:28:16.
+      This element was generated on 2018-07-12 11:48:54.
     -->
-    share_content, task_info, mbr_profile
+    task_info, task_list_img, task_detail_img
   </sql>
   <select id="selectByExampleWithBLOBs" parameterType="com.bizvane.mktcenterservice.models.po.MktTaskPOExample" resultMap="ResultMapWithBLOBs">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-06 19:28:16.
+      This element was generated on 2018-07-12 11:48:54.
     -->
     select
     <if test="distinct">
@@ -139,7 +140,7 @@
   <select id="selectByExample" parameterType="com.bizvane.mktcenterservice.models.po.MktTaskPOExample" resultMap="BaseResultMap">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-06 19:28:16.
+      This element was generated on 2018-07-12 11:48:54.
     -->
     select
     <if test="distinct">
@@ -157,7 +158,7 @@
   <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="ResultMapWithBLOBs">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-06 19:28:16.
+      This element was generated on 2018-07-12 11:48:54.
     -->
     select 
     <include refid="Base_Column_List" />
@@ -169,7 +170,7 @@
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-06 19:28:16.
+      This element was generated on 2018-07-12 11:48:54.
     -->
     delete from t_mkt_task
     where mkt_task_id = #{mktTaskId,jdbcType=BIGINT}
@@ -177,7 +178,7 @@
   <delete id="deleteByExample" parameterType="com.bizvane.mktcenterservice.models.po.MktTaskPOExample">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-06 19:28:16.
+      This element was generated on 2018-07-12 11:48:54.
     -->
     delete from t_mkt_task
     <if test="_parameter != null">
@@ -187,36 +188,44 @@
   <insert id="insert" parameterType="com.bizvane.mktcenterservice.models.po.MktTaskPOWithBLOBs">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-06 19:28:16.
+      This element was generated on 2018-07-12 11:48:54.
     -->
     <selectKey keyProperty="mktTaskId" order="AFTER" resultType="java.lang.Long">
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into t_mkt_task (task_code, task_type, task_name, 
-      share_times, share_title, invite_mbr_num, 
-      point, check_status, task_status, 
-      remark, create_user_id, create_user_name, 
-      create_date, modified_user_id, modified_user_name, 
-      modified_date, valid, share_content, 
-      task_info, mbr_profile)
-    values (#{taskCode,jdbcType=VARCHAR}, #{taskType,jdbcType=INTEGER}, #{taskName,jdbcType=VARCHAR}, 
-      #{shareTimes,jdbcType=INTEGER}, #{shareTitle,jdbcType=VARCHAR}, #{inviteMbrNum,jdbcType=INTEGER}, 
-      #{point,jdbcType=INTEGER}, #{checkStatus,jdbcType=INTEGER}, #{taskStatus,jdbcType=INTEGER}, 
-      #{remark,jdbcType=VARCHAR}, #{createUserId,jdbcType=BIGINT}, #{createUserName,jdbcType=VARCHAR}, 
-      #{createDate,jdbcType=TIMESTAMP}, #{modifiedUserId,jdbcType=BIGINT}, #{modifiedUserName,jdbcType=VARCHAR}, 
-      #{modifiedDate,jdbcType=TIMESTAMP}, #{valid,jdbcType=BIT}, #{shareContent,jdbcType=LONGVARCHAR}, 
-      #{taskInfo,jdbcType=LONGVARCHAR}, #{mbrProfile,jdbcType=LONGVARCHAR})
+    insert into t_mkt_task (sys_company_id, sys_brand_id, task_code, 
+      task_type, task_name, start_time, 
+      end_time, points, check_status, 
+      task_status, remark, create_user_id, 
+      create_user_name, create_date, modified_user_id, 
+      modified_user_name, modified_date, valid, 
+      task_info, task_list_img, task_detail_img
+      )
+    values (#{sysCompanyId,jdbcType=BIGINT}, #{sysBrandId,jdbcType=BIGINT}, #{taskCode,jdbcType=VARCHAR}, 
+      #{taskType,jdbcType=INTEGER}, #{taskName,jdbcType=VARCHAR}, #{startTime,jdbcType=TIMESTAMP}, 
+      #{endTime,jdbcType=TIMESTAMP}, #{points,jdbcType=INTEGER}, #{checkStatus,jdbcType=INTEGER}, 
+      #{taskStatus,jdbcType=INTEGER}, #{remark,jdbcType=VARCHAR}, #{createUserId,jdbcType=BIGINT}, 
+      #{createUserName,jdbcType=VARCHAR}, #{createDate,jdbcType=TIMESTAMP}, #{modifiedUserId,jdbcType=BIGINT}, 
+      #{modifiedUserName,jdbcType=VARCHAR}, #{modifiedDate,jdbcType=TIMESTAMP}, #{valid,jdbcType=BIT}, 
+      #{taskInfo,jdbcType=LONGVARCHAR}, #{taskListImg,jdbcType=LONGVARCHAR}, #{taskDetailImg,jdbcType=LONGVARCHAR}
+      )
   </insert>
   <insert id="insertSelective" parameterType="com.bizvane.mktcenterservice.models.po.MktTaskPOWithBLOBs">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-06 19:28:16.
+      This element was generated on 2018-07-12 11:48:54.
     -->
     <selectKey keyProperty="mktTaskId" order="AFTER" resultType="java.lang.Long">
       SELECT LAST_INSERT_ID()
     </selectKey>
     insert into t_mkt_task
     <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="sysCompanyId != null">
+        sys_company_id,
+      </if>
+      <if test="sysBrandId != null">
+        sys_brand_id,
+      </if>
       <if test="taskCode != null">
         task_code,
       </if>
@@ -226,17 +235,14 @@
       <if test="taskName != null">
         task_name,
       </if>
-      <if test="shareTimes != null">
-        share_times,
+      <if test="startTime != null">
+        start_time,
       </if>
-      <if test="shareTitle != null">
-        share_title,
+      <if test="endTime != null">
+        end_time,
       </if>
-      <if test="inviteMbrNum != null">
-        invite_mbr_num,
-      </if>
-      <if test="point != null">
-        point,
+      <if test="points != null">
+        points,
       </if>
       <if test="checkStatus != null">
         check_status,
@@ -268,17 +274,23 @@
       <if test="valid != null">
         valid,
       </if>
-      <if test="shareContent != null">
-        share_content,
-      </if>
       <if test="taskInfo != null">
         task_info,
       </if>
-      <if test="mbrProfile != null">
-        mbr_profile,
+      <if test="taskListImg != null">
+        task_list_img,
+      </if>
+      <if test="taskDetailImg != null">
+        task_detail_img,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="sysCompanyId != null">
+        #{sysCompanyId,jdbcType=BIGINT},
+      </if>
+      <if test="sysBrandId != null">
+        #{sysBrandId,jdbcType=BIGINT},
+      </if>
       <if test="taskCode != null">
         #{taskCode,jdbcType=VARCHAR},
       </if>
@@ -288,17 +300,14 @@
       <if test="taskName != null">
         #{taskName,jdbcType=VARCHAR},
       </if>
-      <if test="shareTimes != null">
-        #{shareTimes,jdbcType=INTEGER},
+      <if test="startTime != null">
+        #{startTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="shareTitle != null">
-        #{shareTitle,jdbcType=VARCHAR},
+      <if test="endTime != null">
+        #{endTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="inviteMbrNum != null">
-        #{inviteMbrNum,jdbcType=INTEGER},
-      </if>
-      <if test="point != null">
-        #{point,jdbcType=INTEGER},
+      <if test="points != null">
+        #{points,jdbcType=INTEGER},
       </if>
       <if test="checkStatus != null">
         #{checkStatus,jdbcType=INTEGER},
@@ -330,21 +339,21 @@
       <if test="valid != null">
         #{valid,jdbcType=BIT},
       </if>
-      <if test="shareContent != null">
-        #{shareContent,jdbcType=LONGVARCHAR},
-      </if>
       <if test="taskInfo != null">
         #{taskInfo,jdbcType=LONGVARCHAR},
       </if>
-      <if test="mbrProfile != null">
-        #{mbrProfile,jdbcType=LONGVARCHAR},
+      <if test="taskListImg != null">
+        #{taskListImg,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="taskDetailImg != null">
+        #{taskDetailImg,jdbcType=LONGVARCHAR},
       </if>
     </trim>
   </insert>
   <select id="countByExample" parameterType="com.bizvane.mktcenterservice.models.po.MktTaskPOExample" resultType="java.lang.Long">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-06 19:28:16.
+      This element was generated on 2018-07-12 11:48:54.
     -->
     select count(*) from t_mkt_task
     <if test="_parameter != null">
@@ -354,12 +363,18 @@
   <update id="updateByExampleSelective" parameterType="map">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-06 19:28:16.
+      This element was generated on 2018-07-12 11:48:54.
     -->
     update t_mkt_task
     <set>
       <if test="record.mktTaskId != null">
         mkt_task_id = #{record.mktTaskId,jdbcType=BIGINT},
+      </if>
+      <if test="record.sysCompanyId != null">
+        sys_company_id = #{record.sysCompanyId,jdbcType=BIGINT},
+      </if>
+      <if test="record.sysBrandId != null">
+        sys_brand_id = #{record.sysBrandId,jdbcType=BIGINT},
       </if>
       <if test="record.taskCode != null">
         task_code = #{record.taskCode,jdbcType=VARCHAR},
@@ -370,17 +385,14 @@
       <if test="record.taskName != null">
         task_name = #{record.taskName,jdbcType=VARCHAR},
       </if>
-      <if test="record.shareTimes != null">
-        share_times = #{record.shareTimes,jdbcType=INTEGER},
+      <if test="record.startTime != null">
+        start_time = #{record.startTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="record.shareTitle != null">
-        share_title = #{record.shareTitle,jdbcType=VARCHAR},
+      <if test="record.endTime != null">
+        end_time = #{record.endTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="record.inviteMbrNum != null">
-        invite_mbr_num = #{record.inviteMbrNum,jdbcType=INTEGER},
-      </if>
-      <if test="record.point != null">
-        point = #{record.point,jdbcType=INTEGER},
+      <if test="record.points != null">
+        points = #{record.points,jdbcType=INTEGER},
       </if>
       <if test="record.checkStatus != null">
         check_status = #{record.checkStatus,jdbcType=INTEGER},
@@ -412,14 +424,14 @@
       <if test="record.valid != null">
         valid = #{record.valid,jdbcType=BIT},
       </if>
-      <if test="record.shareContent != null">
-        share_content = #{record.shareContent,jdbcType=LONGVARCHAR},
-      </if>
       <if test="record.taskInfo != null">
         task_info = #{record.taskInfo,jdbcType=LONGVARCHAR},
       </if>
-      <if test="record.mbrProfile != null">
-        mbr_profile = #{record.mbrProfile,jdbcType=LONGVARCHAR},
+      <if test="record.taskListImg != null">
+        task_list_img = #{record.taskListImg,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="record.taskDetailImg != null">
+        task_detail_img = #{record.taskDetailImg,jdbcType=LONGVARCHAR},
       </if>
     </set>
     <if test="_parameter != null">
@@ -429,17 +441,18 @@
   <update id="updateByExampleWithBLOBs" parameterType="map">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-06 19:28:16.
+      This element was generated on 2018-07-12 11:48:54.
     -->
     update t_mkt_task
     set mkt_task_id = #{record.mktTaskId,jdbcType=BIGINT},
+      sys_company_id = #{record.sysCompanyId,jdbcType=BIGINT},
+      sys_brand_id = #{record.sysBrandId,jdbcType=BIGINT},
       task_code = #{record.taskCode,jdbcType=VARCHAR},
       task_type = #{record.taskType,jdbcType=INTEGER},
       task_name = #{record.taskName,jdbcType=VARCHAR},
-      share_times = #{record.shareTimes,jdbcType=INTEGER},
-      share_title = #{record.shareTitle,jdbcType=VARCHAR},
-      invite_mbr_num = #{record.inviteMbrNum,jdbcType=INTEGER},
-      point = #{record.point,jdbcType=INTEGER},
+      start_time = #{record.startTime,jdbcType=TIMESTAMP},
+      end_time = #{record.endTime,jdbcType=TIMESTAMP},
+      points = #{record.points,jdbcType=INTEGER},
       check_status = #{record.checkStatus,jdbcType=INTEGER},
       task_status = #{record.taskStatus,jdbcType=INTEGER},
       remark = #{record.remark,jdbcType=VARCHAR},
@@ -450,9 +463,9 @@
       modified_user_name = #{record.modifiedUserName,jdbcType=VARCHAR},
       modified_date = #{record.modifiedDate,jdbcType=TIMESTAMP},
       valid = #{record.valid,jdbcType=BIT},
-      share_content = #{record.shareContent,jdbcType=LONGVARCHAR},
       task_info = #{record.taskInfo,jdbcType=LONGVARCHAR},
-      mbr_profile = #{record.mbrProfile,jdbcType=LONGVARCHAR}
+      task_list_img = #{record.taskListImg,jdbcType=LONGVARCHAR},
+      task_detail_img = #{record.taskDetailImg,jdbcType=LONGVARCHAR}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -460,17 +473,18 @@
   <update id="updateByExample" parameterType="map">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-06 19:28:16.
+      This element was generated on 2018-07-12 11:48:54.
     -->
     update t_mkt_task
     set mkt_task_id = #{record.mktTaskId,jdbcType=BIGINT},
+      sys_company_id = #{record.sysCompanyId,jdbcType=BIGINT},
+      sys_brand_id = #{record.sysBrandId,jdbcType=BIGINT},
       task_code = #{record.taskCode,jdbcType=VARCHAR},
       task_type = #{record.taskType,jdbcType=INTEGER},
       task_name = #{record.taskName,jdbcType=VARCHAR},
-      share_times = #{record.shareTimes,jdbcType=INTEGER},
-      share_title = #{record.shareTitle,jdbcType=VARCHAR},
-      invite_mbr_num = #{record.inviteMbrNum,jdbcType=INTEGER},
-      point = #{record.point,jdbcType=INTEGER},
+      start_time = #{record.startTime,jdbcType=TIMESTAMP},
+      end_time = #{record.endTime,jdbcType=TIMESTAMP},
+      points = #{record.points,jdbcType=INTEGER},
       check_status = #{record.checkStatus,jdbcType=INTEGER},
       task_status = #{record.taskStatus,jdbcType=INTEGER},
       remark = #{record.remark,jdbcType=VARCHAR},
@@ -488,10 +502,16 @@
   <update id="updateByPrimaryKeySelective" parameterType="com.bizvane.mktcenterservice.models.po.MktTaskPOWithBLOBs">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-06 19:28:16.
+      This element was generated on 2018-07-12 11:48:54.
     -->
     update t_mkt_task
     <set>
+      <if test="sysCompanyId != null">
+        sys_company_id = #{sysCompanyId,jdbcType=BIGINT},
+      </if>
+      <if test="sysBrandId != null">
+        sys_brand_id = #{sysBrandId,jdbcType=BIGINT},
+      </if>
       <if test="taskCode != null">
         task_code = #{taskCode,jdbcType=VARCHAR},
       </if>
@@ -501,17 +521,14 @@
       <if test="taskName != null">
         task_name = #{taskName,jdbcType=VARCHAR},
       </if>
-      <if test="shareTimes != null">
-        share_times = #{shareTimes,jdbcType=INTEGER},
+      <if test="startTime != null">
+        start_time = #{startTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="shareTitle != null">
-        share_title = #{shareTitle,jdbcType=VARCHAR},
+      <if test="endTime != null">
+        end_time = #{endTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="inviteMbrNum != null">
-        invite_mbr_num = #{inviteMbrNum,jdbcType=INTEGER},
-      </if>
-      <if test="point != null">
-        point = #{point,jdbcType=INTEGER},
+      <if test="points != null">
+        points = #{points,jdbcType=INTEGER},
       </if>
       <if test="checkStatus != null">
         check_status = #{checkStatus,jdbcType=INTEGER},
@@ -543,14 +560,14 @@
       <if test="valid != null">
         valid = #{valid,jdbcType=BIT},
       </if>
-      <if test="shareContent != null">
-        share_content = #{shareContent,jdbcType=LONGVARCHAR},
-      </if>
       <if test="taskInfo != null">
         task_info = #{taskInfo,jdbcType=LONGVARCHAR},
       </if>
-      <if test="mbrProfile != null">
-        mbr_profile = #{mbrProfile,jdbcType=LONGVARCHAR},
+      <if test="taskListImg != null">
+        task_list_img = #{taskListImg,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="taskDetailImg != null">
+        task_detail_img = #{taskDetailImg,jdbcType=LONGVARCHAR},
       </if>
     </set>
     where mkt_task_id = #{mktTaskId,jdbcType=BIGINT}
@@ -558,16 +575,17 @@
   <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.bizvane.mktcenterservice.models.po.MktTaskPOWithBLOBs">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-06 19:28:16.
+      This element was generated on 2018-07-12 11:48:54.
     -->
     update t_mkt_task
-    set task_code = #{taskCode,jdbcType=VARCHAR},
+    set sys_company_id = #{sysCompanyId,jdbcType=BIGINT},
+      sys_brand_id = #{sysBrandId,jdbcType=BIGINT},
+      task_code = #{taskCode,jdbcType=VARCHAR},
       task_type = #{taskType,jdbcType=INTEGER},
       task_name = #{taskName,jdbcType=VARCHAR},
-      share_times = #{shareTimes,jdbcType=INTEGER},
-      share_title = #{shareTitle,jdbcType=VARCHAR},
-      invite_mbr_num = #{inviteMbrNum,jdbcType=INTEGER},
-      point = #{point,jdbcType=INTEGER},
+      start_time = #{startTime,jdbcType=TIMESTAMP},
+      end_time = #{endTime,jdbcType=TIMESTAMP},
+      points = #{points,jdbcType=INTEGER},
       check_status = #{checkStatus,jdbcType=INTEGER},
       task_status = #{taskStatus,jdbcType=INTEGER},
       remark = #{remark,jdbcType=VARCHAR},
@@ -578,24 +596,25 @@
       modified_user_name = #{modifiedUserName,jdbcType=VARCHAR},
       modified_date = #{modifiedDate,jdbcType=TIMESTAMP},
       valid = #{valid,jdbcType=BIT},
-      share_content = #{shareContent,jdbcType=LONGVARCHAR},
       task_info = #{taskInfo,jdbcType=LONGVARCHAR},
-      mbr_profile = #{mbrProfile,jdbcType=LONGVARCHAR}
+      task_list_img = #{taskListImg,jdbcType=LONGVARCHAR},
+      task_detail_img = #{taskDetailImg,jdbcType=LONGVARCHAR}
     where mkt_task_id = #{mktTaskId,jdbcType=BIGINT}
   </update>
   <update id="updateByPrimaryKey" parameterType="com.bizvane.mktcenterservice.models.po.MktTaskPO">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-06 19:28:16.
+      This element was generated on 2018-07-12 11:48:54.
     -->
     update t_mkt_task
-    set task_code = #{taskCode,jdbcType=VARCHAR},
+    set sys_company_id = #{sysCompanyId,jdbcType=BIGINT},
+      sys_brand_id = #{sysBrandId,jdbcType=BIGINT},
+      task_code = #{taskCode,jdbcType=VARCHAR},
       task_type = #{taskType,jdbcType=INTEGER},
       task_name = #{taskName,jdbcType=VARCHAR},
-      share_times = #{shareTimes,jdbcType=INTEGER},
-      share_title = #{shareTitle,jdbcType=VARCHAR},
-      invite_mbr_num = #{inviteMbrNum,jdbcType=INTEGER},
-      point = #{point,jdbcType=INTEGER},
+      start_time = #{startTime,jdbcType=TIMESTAMP},
+      end_time = #{endTime,jdbcType=TIMESTAMP},
+      points = #{points,jdbcType=INTEGER},
       check_status = #{checkStatus,jdbcType=INTEGER},
       task_status = #{taskStatus,jdbcType=INTEGER},
       remark = #{remark,jdbcType=VARCHAR},
