@@ -34,20 +34,19 @@ eureka:
   client:
     service-url:
       defaultZone: http://47.97.50.134:8761/eureka/
-#management:
-#  endpoints:
-#    web.exposure.include: "*"
-#  endpoint:
-#    health:
-#      show-details: ALWAYS
+management:
+  endpoints:
+    web.exposure.include: "*"
+  endpoint:
+    health:
+      show-details: ALWAYS
 mybatis:
   config-location: classpath:mybatis-config.xml
   mapper-locations: classpath:mybatis/*Mapper.xml
 logging:
-  config: classpath:logback.xml
-#  level:
-#    com.bizvane.mktcenterserviceimpl.mappers: debug
-#    com.bizvane.mktcenterserviceimpl: debug
+  config: classpath:logback-local.xml
+  level:
+    com.bizvane.mktcenterserviceimpl.mappers: debug
 
 # pagehelper
 pagehelper:
@@ -60,7 +59,7 @@ xxl:
   job:
     admin:
       ### xxl-job admin address list, such as "http://address" or "http://address01,http://address02"
-      addresses: http://192.168.102.201:8099
+      addresses: http://localhost:8080
     ### xxl-job executor address
     executor:
       appname: mktcenter

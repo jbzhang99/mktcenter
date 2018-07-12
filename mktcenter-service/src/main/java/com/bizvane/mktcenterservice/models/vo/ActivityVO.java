@@ -1,5 +1,7 @@
 package com.bizvane.mktcenterservice.models.vo;
 
+import com.bizvane.mktcenterservice.models.po.MktActivityPO;
+
 /**
  * @author chen.li
  * @date on 2018/7/6 20:07

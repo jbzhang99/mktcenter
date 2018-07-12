@@ -1,5 +1,8 @@
 package com.bizvane.mktcenterserviceimpl.service.jobhandler;
 
+import com.bizvane.mktcenterservice.models.po.MktActivityPO;
+import com.bizvane.mktcenterservice.models.po.MktActivityPOExample;
+import com.bizvane.mktcenterserviceimpl.mappers.MktActivityPOMapper;
 import com.xxl.job.core.biz.model.ReturnT;
 import com.xxl.job.core.handler.IJobHandler;
 import com.xxl.job.core.handler.annotation.JobHandler;

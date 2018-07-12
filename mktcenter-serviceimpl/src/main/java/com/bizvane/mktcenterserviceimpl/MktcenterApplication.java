@@ -22,7 +22,7 @@ public class MktcenterApplication {
 	// @Value("${swagger.show}")
 	// private boolean swaggerShow;
 
-	@LoadBalanced
+//	@LoadBalanced
 	@Bean
 	RestTemplate restTemplate(RestTemplateBuilder restTemplateBuilder) {
 		return restTemplateBuilder.build();
