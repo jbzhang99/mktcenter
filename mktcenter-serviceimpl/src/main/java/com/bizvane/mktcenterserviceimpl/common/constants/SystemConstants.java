@@ -7,4 +7,9 @@ package com.bizvane.mktcenterserviceimpl.common.constants;
  * @Copyright (c) 2018 上海商帆信息科技有限公司-版权所有
  */
 public class SystemConstants {
+
+    public static int SUCCESS_CODE = 0;
+    public static String SUCCESS_MESSAGE = "操作成功";
+    public static int ERROR_CODE = -1;
+    public static String ERROR_MSG_PARAM_EMPTY ="参数为空";
 }

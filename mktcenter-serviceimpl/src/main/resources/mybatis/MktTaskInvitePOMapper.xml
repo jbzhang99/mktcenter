@@ -4,12 +4,11 @@
   <resultMap id="BaseResultMap" type="com.bizvane.mktcenterservice.models.po.MktTaskInvitePO">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-12 11:48:54.
+      This element was generated on 2018-07-13 10:42:22.
     -->
     <id column="mkt_task_profile_id" jdbcType="BIGINT" property="mktTaskProfileId" />
     <result column="mkt_task_id" jdbcType="BIGINT" property="mktTaskId" />
-    <result column="mbr_level_code" jdbcType="VARCHAR" property="mbrLevelCode" />
-    <result column="mbr_level_name" jdbcType="VARCHAR" property="mbrLevelName" />
+    <result column="invite_num" jdbcType="INTEGER" property="inviteNum" />
     <result column="remark" jdbcType="VARCHAR" property="remark" />
     <result column="create_user_id" jdbcType="BIGINT" property="createUserId" />
     <result column="create_user_name" jdbcType="VARCHAR" property="createUserName" />
@@ -19,17 +18,10 @@
     <result column="modified_date" jdbcType="TIMESTAMP" property="modifiedDate" />
     <result column="valid" jdbcType="BIT" property="valid" />
   </resultMap>
-  <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.bizvane.mktcenterservice.models.po.MktTaskInvitePO">
-    <!--
-      WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-12 11:48:54.
-    -->
-    <result column="property_code" jdbcType="LONGVARCHAR" property="propertyCode" />
-  </resultMap>
   <sql id="Example_Where_Clause">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-12 11:48:54.
+      This element was generated on 2018-07-13 10:42:22.
     -->
     <where>
       <foreach collection="oredCriteria" item="criteria" separator="or">
@@ -62,7 +54,7 @@
   <sql id="Update_By_Example_Where_Clause">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-12 11:48:54.
+      This element was generated on 2018-07-13 10:42:22.
     -->
     <where>
       <foreach collection="example.oredCriteria" item="criteria" separator="or">
@@ -95,43 +87,15 @@
   <sql id="Base_Column_List">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-12 11:48:54.
+      This element was generated on 2018-07-13 10:42:22.
     -->
-    mkt_task_profile_id, mkt_task_id, mbr_level_code, mbr_level_name, remark, create_user_id, 
-    create_user_name, create_date, modified_user_id, modified_user_name, modified_date, 
-    valid
+    mkt_task_profile_id, mkt_task_id, invite_num, remark, create_user_id, create_user_name, 
+    create_date, modified_user_id, modified_user_name, modified_date, valid
   </sql>
-  <sql id="Blob_Column_List">
-    <!--
-      WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-12 11:48:54.
-    -->
-    property_code
-  </sql>
-  <select id="selectByExampleWithBLOBs" parameterType="com.bizvane.mktcenterservice.models.po.MktTaskInvitePOExample" resultMap="ResultMapWithBLOBs">
-    <!--
-      WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-12 11:48:54.
-    -->
-    select
-    <if test="distinct">
-      distinct
-    </if>
-    <include refid="Base_Column_List" />
-    ,
-    <include refid="Blob_Column_List" />
-    from t_mkt_task_invite
-    <if test="_parameter != null">
-      <include refid="Example_Where_Clause" />
-    </if>
-    <if test="orderByClause != null">
-      order by ${orderByClause}
-    </if>
-  </select>
   <select id="selectByExample" parameterType="com.bizvane.mktcenterservice.models.po.MktTaskInvitePOExample" resultMap="BaseResultMap">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-12 11:48:54.
+      This element was generated on 2018-07-13 10:42:22.
     -->
     select
     <if test="distinct">
@@ -146,22 +110,20 @@
       order by ${orderByClause}
     </if>
   </select>
-  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="ResultMapWithBLOBs">
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-12 11:48:54.
+      This element was generated on 2018-07-13 10:42:22.
     -->
     select 
     <include refid="Base_Column_List" />
-    ,
-    <include refid="Blob_Column_List" />
     from t_mkt_task_invite
     where mkt_task_profile_id = #{mktTaskProfileId,jdbcType=BIGINT}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-12 11:48:54.
+      This element was generated on 2018-07-13 10:42:22.
     -->
     delete from t_mkt_task_invite
     where mkt_task_profile_id = #{mktTaskProfileId,jdbcType=BIGINT}
@@ -169,7 +131,7 @@
   <delete id="deleteByExample" parameterType="com.bizvane.mktcenterservice.models.po.MktTaskInvitePOExample">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-12 11:48:54.
+      This element was generated on 2018-07-13 10:42:22.
     -->
     delete from t_mkt_task_invite
     <if test="_parameter != null">
@@ -179,23 +141,21 @@
   <insert id="insert" parameterType="com.bizvane.mktcenterservice.models.po.MktTaskInvitePO">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-12 11:48:54.
+      This element was generated on 2018-07-13 10:42:22.
     -->
-    insert into t_mkt_task_invite (mkt_task_profile_id, mkt_task_id, mbr_level_code, 
-      mbr_level_name, remark, create_user_id, 
-      create_user_name, create_date, modified_user_id, 
-      modified_user_name, modified_date, valid, 
-      property_code)
-    values (#{mktTaskProfileId,jdbcType=BIGINT}, #{mktTaskId,jdbcType=BIGINT}, #{mbrLevelCode,jdbcType=VARCHAR}, 
-      #{mbrLevelName,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}, #{createUserId,jdbcType=BIGINT}, 
-      #{createUserName,jdbcType=VARCHAR}, #{createDate,jdbcType=TIMESTAMP}, #{modifiedUserId,jdbcType=BIGINT}, 
-      #{modifiedUserName,jdbcType=VARCHAR}, #{modifiedDate,jdbcType=TIMESTAMP}, #{valid,jdbcType=BIT}, 
-      #{propertyCode,jdbcType=LONGVARCHAR})
+    insert into t_mkt_task_invite (mkt_task_profile_id, mkt_task_id, invite_num, 
+      remark, create_user_id, create_user_name, 
+      create_date, modified_user_id, modified_user_name, 
+      modified_date, valid)
+    values (#{mktTaskProfileId,jdbcType=BIGINT}, #{mktTaskId,jdbcType=BIGINT}, #{inviteNum,jdbcType=INTEGER}, 
+      #{remark,jdbcType=VARCHAR}, #{createUserId,jdbcType=BIGINT}, #{createUserName,jdbcType=VARCHAR}, 
+      #{createDate,jdbcType=TIMESTAMP}, #{modifiedUserId,jdbcType=BIGINT}, #{modifiedUserName,jdbcType=VARCHAR}, 
+      #{modifiedDate,jdbcType=TIMESTAMP}, #{valid,jdbcType=BIT})
   </insert>
   <insert id="insertSelective" parameterType="com.bizvane.mktcenterservice.models.po.MktTaskInvitePO">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-12 11:48:54.
+      This element was generated on 2018-07-13 10:42:22.
     -->
     insert into t_mkt_task_invite
     <trim prefix="(" suffix=")" suffixOverrides=",">
@@ -205,11 +165,8 @@
       <if test="mktTaskId != null">
         mkt_task_id,
       </if>
-      <if test="mbrLevelCode != null">
-        mbr_level_code,
-      </if>
-      <if test="mbrLevelName != null">
-        mbr_level_name,
+      <if test="inviteNum != null">
+        invite_num,
       </if>
       <if test="remark != null">
         remark,
@@ -235,9 +192,6 @@
       <if test="valid != null">
         valid,
       </if>
-      <if test="propertyCode != null">
-        property_code,
-      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="mktTaskProfileId != null">
@@ -246,11 +200,8 @@
       <if test="mktTaskId != null">
         #{mktTaskId,jdbcType=BIGINT},
       </if>
-      <if test="mbrLevelCode != null">
-        #{mbrLevelCode,jdbcType=VARCHAR},
-      </if>
-      <if test="mbrLevelName != null">
-        #{mbrLevelName,jdbcType=VARCHAR},
+      <if test="inviteNum != null">
+        #{inviteNum,jdbcType=INTEGER},
       </if>
       <if test="remark != null">
         #{remark,jdbcType=VARCHAR},
@@ -276,15 +227,12 @@
       <if test="valid != null">
         #{valid,jdbcType=BIT},
       </if>
-      <if test="propertyCode != null">
-        #{propertyCode,jdbcType=LONGVARCHAR},
-      </if>
     </trim>
   </insert>
   <select id="countByExample" parameterType="com.bizvane.mktcenterservice.models.po.MktTaskInvitePOExample" resultType="java.lang.Long">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-12 11:48:54.
+      This element was generated on 2018-07-13 10:42:22.
     -->
     select count(*) from t_mkt_task_invite
     <if test="_parameter != null">
@@ -294,7 +242,7 @@
   <update id="updateByExampleSelective" parameterType="map">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-12 11:48:54.
+      This element was generated on 2018-07-13 10:42:22.
     -->
     update t_mkt_task_invite
     <set>
@@ -304,11 +252,8 @@
       <if test="record.mktTaskId != null">
         mkt_task_id = #{record.mktTaskId,jdbcType=BIGINT},
       </if>
-      <if test="record.mbrLevelCode != null">
-        mbr_level_code = #{record.mbrLevelCode,jdbcType=VARCHAR},
-      </if>
-      <if test="record.mbrLevelName != null">
-        mbr_level_name = #{record.mbrLevelName,jdbcType=VARCHAR},
+      <if test="record.inviteNum != null">
+        invite_num = #{record.inviteNum,jdbcType=INTEGER},
       </if>
       <if test="record.remark != null">
         remark = #{record.remark,jdbcType=VARCHAR},
@@ -334,33 +279,7 @@
       <if test="record.valid != null">
         valid = #{record.valid,jdbcType=BIT},
       </if>
-      <if test="record.propertyCode != null">
-        property_code = #{record.propertyCode,jdbcType=LONGVARCHAR},
-      </if>
     </set>
-    <if test="_parameter != null">
-      <include refid="Update_By_Example_Where_Clause" />
-    </if>
-  </update>
-  <update id="updateByExampleWithBLOBs" parameterType="map">
-    <!--
-      WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-12 11:48:54.
-    -->
-    update t_mkt_task_invite
-    set mkt_task_profile_id = #{record.mktTaskProfileId,jdbcType=BIGINT},
-      mkt_task_id = #{record.mktTaskId,jdbcType=BIGINT},
-      mbr_level_code = #{record.mbrLevelCode,jdbcType=VARCHAR},
-      mbr_level_name = #{record.mbrLevelName,jdbcType=VARCHAR},
-      remark = #{record.remark,jdbcType=VARCHAR},
-      create_user_id = #{record.createUserId,jdbcType=BIGINT},
-      create_user_name = #{record.createUserName,jdbcType=VARCHAR},
-      create_date = #{record.createDate,jdbcType=TIMESTAMP},
-      modified_user_id = #{record.modifiedUserId,jdbcType=BIGINT},
-      modified_user_name = #{record.modifiedUserName,jdbcType=VARCHAR},
-      modified_date = #{record.modifiedDate,jdbcType=TIMESTAMP},
-      valid = #{record.valid,jdbcType=BIT},
-      property_code = #{record.propertyCode,jdbcType=LONGVARCHAR}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -368,13 +287,12 @@
   <update id="updateByExample" parameterType="map">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-12 11:48:54.
+      This element was generated on 2018-07-13 10:42:22.
     -->
     update t_mkt_task_invite
     set mkt_task_profile_id = #{record.mktTaskProfileId,jdbcType=BIGINT},
       mkt_task_id = #{record.mktTaskId,jdbcType=BIGINT},
-      mbr_level_code = #{record.mbrLevelCode,jdbcType=VARCHAR},
-      mbr_level_name = #{record.mbrLevelName,jdbcType=VARCHAR},
+      invite_num = #{record.inviteNum,jdbcType=INTEGER},
       remark = #{record.remark,jdbcType=VARCHAR},
       create_user_id = #{record.createUserId,jdbcType=BIGINT},
       create_user_name = #{record.createUserName,jdbcType=VARCHAR},
@@ -390,18 +308,15 @@
   <update id="updateByPrimaryKeySelective" parameterType="com.bizvane.mktcenterservice.models.po.MktTaskInvitePO">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-12 11:48:54.
+      This element was generated on 2018-07-13 10:42:22.
     -->
     update t_mkt_task_invite
     <set>
       <if test="mktTaskId != null">
         mkt_task_id = #{mktTaskId,jdbcType=BIGINT},
       </if>
-      <if test="mbrLevelCode != null">
-        mbr_level_code = #{mbrLevelCode,jdbcType=VARCHAR},
-      </if>
-      <if test="mbrLevelName != null">
-        mbr_level_name = #{mbrLevelName,jdbcType=VARCHAR},
+      <if test="inviteNum != null">
+        invite_num = #{inviteNum,jdbcType=INTEGER},
       </if>
       <if test="remark != null">
         remark = #{remark,jdbcType=VARCHAR},
@@ -427,41 +342,17 @@
       <if test="valid != null">
         valid = #{valid,jdbcType=BIT},
       </if>
-      <if test="propertyCode != null">
-        property_code = #{propertyCode,jdbcType=LONGVARCHAR},
-      </if>
     </set>
-    where mkt_task_profile_id = #{mktTaskProfileId,jdbcType=BIGINT}
-  </update>
-  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.bizvane.mktcenterservice.models.po.MktTaskInvitePO">
-    <!--
-      WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-12 11:48:54.
-    -->
-    update t_mkt_task_invite
-    set mkt_task_id = #{mktTaskId,jdbcType=BIGINT},
-      mbr_level_code = #{mbrLevelCode,jdbcType=VARCHAR},
-      mbr_level_name = #{mbrLevelName,jdbcType=VARCHAR},
-      remark = #{remark,jdbcType=VARCHAR},
-      create_user_id = #{createUserId,jdbcType=BIGINT},
-      create_user_name = #{createUserName,jdbcType=VARCHAR},
-      create_date = #{createDate,jdbcType=TIMESTAMP},
-      modified_user_id = #{modifiedUserId,jdbcType=BIGINT},
-      modified_user_name = #{modifiedUserName,jdbcType=VARCHAR},
-      modified_date = #{modifiedDate,jdbcType=TIMESTAMP},
-      valid = #{valid,jdbcType=BIT},
-      property_code = #{propertyCode,jdbcType=LONGVARCHAR}
     where mkt_task_profile_id = #{mktTaskProfileId,jdbcType=BIGINT}
   </update>
   <update id="updateByPrimaryKey" parameterType="com.bizvane.mktcenterservice.models.po.MktTaskInvitePO">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-12 11:48:54.
+      This element was generated on 2018-07-13 10:42:22.
     -->
     update t_mkt_task_invite
     set mkt_task_id = #{mktTaskId,jdbcType=BIGINT},
-      mbr_level_code = #{mbrLevelCode,jdbcType=VARCHAR},
-      mbr_level_name = #{mbrLevelName,jdbcType=VARCHAR},
+      invite_num = #{inviteNum,jdbcType=INTEGER},
       remark = #{remark,jdbcType=VARCHAR},
       create_user_id = #{createUserId,jdbcType=BIGINT},
       create_user_name = #{createUserName,jdbcType=VARCHAR},

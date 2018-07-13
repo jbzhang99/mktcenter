@@ -4,13 +4,14 @@
   <resultMap id="BaseResultMap" type="com.bizvane.mktcenterservice.models.po.MktActivityBirthdayPO">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-12 11:48:54.
+      This element was generated on 2018-07-13 10:42:22.
     -->
     <id column="mkt_activity_birthday_id" jdbcType="BIGINT" property="mktActivityBirthdayId" />
     <result column="mkt_activity_id" jdbcType="BIGINT" property="mktActivityId" />
     <result column="mbr_level_code" jdbcType="VARCHAR" property="mbrLevelCode" />
     <result column="mbr_level_name" jdbcType="VARCHAR" property="mbrLevelName" />
-    <result column="fans" jdbcType="INTEGER" property="fans" />
+    <result column="member_type" jdbcType="INTEGER" property="memberType" />
+    <result column="days_ahead" jdbcType="INTEGER" property="daysAhead" />
     <result column="remark" jdbcType="VARCHAR" property="remark" />
     <result column="create_user_id" jdbcType="BIGINT" property="createUserId" />
     <result column="create_user_name" jdbcType="VARCHAR" property="createUserName" />
@@ -23,7 +24,7 @@
   <sql id="Example_Where_Clause">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-12 11:48:54.
+      This element was generated on 2018-07-13 10:42:22.
     -->
     <where>
       <foreach collection="oredCriteria" item="criteria" separator="or">
@@ -56,7 +57,7 @@
   <sql id="Update_By_Example_Where_Clause">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-12 11:48:54.
+      This element was generated on 2018-07-13 10:42:22.
     -->
     <where>
       <foreach collection="example.oredCriteria" item="criteria" separator="or">
@@ -89,16 +90,16 @@
   <sql id="Base_Column_List">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-12 11:48:54.
+      This element was generated on 2018-07-13 10:42:22.
     -->
-    mkt_activity_birthday_id, mkt_activity_id, mbr_level_code, mbr_level_name, fans, 
-    remark, create_user_id, create_user_name, create_date, modified_user_id, modified_user_name, 
-    modified_date, valid
+    mkt_activity_birthday_id, mkt_activity_id, mbr_level_code, mbr_level_name, member_type, 
+    days_ahead, remark, create_user_id, create_user_name, create_date, modified_user_id, 
+    modified_user_name, modified_date, valid
   </sql>
   <select id="selectByExample" parameterType="com.bizvane.mktcenterservice.models.po.MktActivityBirthdayPOExample" resultMap="BaseResultMap">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-12 11:48:54.
+      This element was generated on 2018-07-13 10:42:22.
     -->
     select
     <if test="distinct">
@@ -116,7 +117,7 @@
   <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-12 11:48:54.
+      This element was generated on 2018-07-13 10:42:22.
     -->
     select 
     <include refid="Base_Column_List" />
@@ -126,7 +127,7 @@
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-12 11:48:54.
+      This element was generated on 2018-07-13 10:42:22.
     -->
     delete from t_mkt_activity_birthday
     where mkt_activity_birthday_id = #{mktActivityBirthdayId,jdbcType=BIGINT}
@@ -134,7 +135,7 @@
   <delete id="deleteByExample" parameterType="com.bizvane.mktcenterservice.models.po.MktActivityBirthdayPOExample">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-12 11:48:54.
+      This element was generated on 2018-07-13 10:42:22.
     -->
     delete from t_mkt_activity_birthday
     <if test="_parameter != null">
@@ -144,26 +145,26 @@
   <insert id="insert" parameterType="com.bizvane.mktcenterservice.models.po.MktActivityBirthdayPO">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-12 11:48:54.
+      This element was generated on 2018-07-13 10:42:22.
     -->
     <selectKey keyProperty="mktActivityBirthdayId" order="AFTER" resultType="java.lang.Long">
       SELECT LAST_INSERT_ID()
     </selectKey>
     insert into t_mkt_activity_birthday (mkt_activity_id, mbr_level_code, mbr_level_name, 
-      fans, remark, create_user_id, 
-      create_user_name, create_date, modified_user_id, 
-      modified_user_name, modified_date, valid
-      )
+      member_type, days_ahead, remark, 
+      create_user_id, create_user_name, create_date, 
+      modified_user_id, modified_user_name, modified_date, 
+      valid)
     values (#{mktActivityId,jdbcType=BIGINT}, #{mbrLevelCode,jdbcType=VARCHAR}, #{mbrLevelName,jdbcType=VARCHAR}, 
-      #{fans,jdbcType=INTEGER}, #{remark,jdbcType=VARCHAR}, #{createUserId,jdbcType=BIGINT}, 
-      #{createUserName,jdbcType=VARCHAR}, #{createDate,jdbcType=TIMESTAMP}, #{modifiedUserId,jdbcType=BIGINT}, 
-      #{modifiedUserName,jdbcType=VARCHAR}, #{modifiedDate,jdbcType=TIMESTAMP}, #{valid,jdbcType=BIT}
-      )
+      #{memberType,jdbcType=INTEGER}, #{daysAhead,jdbcType=INTEGER}, #{remark,jdbcType=VARCHAR}, 
+      #{createUserId,jdbcType=BIGINT}, #{createUserName,jdbcType=VARCHAR}, #{createDate,jdbcType=TIMESTAMP}, 
+      #{modifiedUserId,jdbcType=BIGINT}, #{modifiedUserName,jdbcType=VARCHAR}, #{modifiedDate,jdbcType=TIMESTAMP}, 
+      #{valid,jdbcType=BIT})
   </insert>
   <insert id="insertSelective" parameterType="com.bizvane.mktcenterservice.models.po.MktActivityBirthdayPO">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-12 11:48:54.
+      This element was generated on 2018-07-13 10:42:22.
     -->
     <selectKey keyProperty="mktActivityBirthdayId" order="AFTER" resultType="java.lang.Long">
       SELECT LAST_INSERT_ID()
@@ -179,8 +180,11 @@
       <if test="mbrLevelName != null">
         mbr_level_name,
       </if>
-      <if test="fans != null">
-        fans,
+      <if test="memberType != null">
+        member_type,
+      </if>
+      <if test="daysAhead != null">
+        days_ahead,
       </if>
       <if test="remark != null">
         remark,
@@ -217,8 +221,11 @@
       <if test="mbrLevelName != null">
         #{mbrLevelName,jdbcType=VARCHAR},
       </if>
-      <if test="fans != null">
-        #{fans,jdbcType=INTEGER},
+      <if test="memberType != null">
+        #{memberType,jdbcType=INTEGER},
+      </if>
+      <if test="daysAhead != null">
+        #{daysAhead,jdbcType=INTEGER},
       </if>
       <if test="remark != null">
         #{remark,jdbcType=VARCHAR},
@@ -249,7 +256,7 @@
   <select id="countByExample" parameterType="com.bizvane.mktcenterservice.models.po.MktActivityBirthdayPOExample" resultType="java.lang.Long">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-12 11:48:54.
+      This element was generated on 2018-07-13 10:42:22.
     -->
     select count(*) from t_mkt_activity_birthday
     <if test="_parameter != null">
@@ -259,7 +266,7 @@
   <update id="updateByExampleSelective" parameterType="map">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-12 11:48:54.
+      This element was generated on 2018-07-13 10:42:22.
     -->
     update t_mkt_activity_birthday
     <set>
@@ -275,8 +282,11 @@
       <if test="record.mbrLevelName != null">
         mbr_level_name = #{record.mbrLevelName,jdbcType=VARCHAR},
       </if>
-      <if test="record.fans != null">
-        fans = #{record.fans,jdbcType=INTEGER},
+      <if test="record.memberType != null">
+        member_type = #{record.memberType,jdbcType=INTEGER},
+      </if>
+      <if test="record.daysAhead != null">
+        days_ahead = #{record.daysAhead,jdbcType=INTEGER},
       </if>
       <if test="record.remark != null">
         remark = #{record.remark,jdbcType=VARCHAR},
@@ -310,14 +320,15 @@
   <update id="updateByExample" parameterType="map">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-12 11:48:54.
+      This element was generated on 2018-07-13 10:42:22.
     -->
     update t_mkt_activity_birthday
     set mkt_activity_birthday_id = #{record.mktActivityBirthdayId,jdbcType=BIGINT},
       mkt_activity_id = #{record.mktActivityId,jdbcType=BIGINT},
       mbr_level_code = #{record.mbrLevelCode,jdbcType=VARCHAR},
       mbr_level_name = #{record.mbrLevelName,jdbcType=VARCHAR},
-      fans = #{record.fans,jdbcType=INTEGER},
+      member_type = #{record.memberType,jdbcType=INTEGER},
+      days_ahead = #{record.daysAhead,jdbcType=INTEGER},
       remark = #{record.remark,jdbcType=VARCHAR},
       create_user_id = #{record.createUserId,jdbcType=BIGINT},
       create_user_name = #{record.createUserName,jdbcType=VARCHAR},
@@ -333,7 +344,7 @@
   <update id="updateByPrimaryKeySelective" parameterType="com.bizvane.mktcenterservice.models.po.MktActivityBirthdayPO">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-12 11:48:54.
+      This element was generated on 2018-07-13 10:42:22.
     -->
     update t_mkt_activity_birthday
     <set>
@@ -346,8 +357,11 @@
       <if test="mbrLevelName != null">
         mbr_level_name = #{mbrLevelName,jdbcType=VARCHAR},
       </if>
-      <if test="fans != null">
-        fans = #{fans,jdbcType=INTEGER},
+      <if test="memberType != null">
+        member_type = #{memberType,jdbcType=INTEGER},
+      </if>
+      <if test="daysAhead != null">
+        days_ahead = #{daysAhead,jdbcType=INTEGER},
       </if>
       <if test="remark != null">
         remark = #{remark,jdbcType=VARCHAR},
@@ -379,13 +393,14 @@
   <update id="updateByPrimaryKey" parameterType="com.bizvane.mktcenterservice.models.po.MktActivityBirthdayPO">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-12 11:48:54.
+      This element was generated on 2018-07-13 10:42:22.
     -->
     update t_mkt_activity_birthday
     set mkt_activity_id = #{mktActivityId,jdbcType=BIGINT},
       mbr_level_code = #{mbrLevelCode,jdbcType=VARCHAR},
       mbr_level_name = #{mbrLevelName,jdbcType=VARCHAR},
-      fans = #{fans,jdbcType=INTEGER},
+      member_type = #{memberType,jdbcType=INTEGER},
+      days_ahead = #{daysAhead,jdbcType=INTEGER},
       remark = #{remark,jdbcType=VARCHAR},
       create_user_id = #{createUserId,jdbcType=BIGINT},
       create_user_name = #{createUserName,jdbcType=VARCHAR},

@@ -4,15 +4,13 @@
   <resultMap id="BaseResultMap" type="com.bizvane.mktcenterservice.models.po.MktActivityUpgradePO">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-12 11:48:54.
+      This element was generated on 2018-07-13 11:45:27.
     -->
     <id column="mkt_activity_upgrade_id" jdbcType="BIGINT" property="mktActivityUpgradeId" />
     <result column="mkt_activity_id" jdbcType="BIGINT" property="mktActivityId" />
-    <result column="current_level_code" jdbcType="VARCHAR" property="currentLevelCode" />
-    <result column="current_level_name" jdbcType="VARCHAR" property="currentLevelName" />
-    <result column="target_level_code" jdbcType="VARCHAR" property="targetLevelCode" />
-    <result column="target_level_name" jdbcType="VARCHAR" property="targetLevelName" />
-    <result column="fans" jdbcType="INTEGER" property="fans" />
+    <result column="mbr_level_code" jdbcType="VARCHAR" property="mbrLevelCode" />
+    <result column="mbr_level_name" jdbcType="VARCHAR" property="mbrLevelName" />
+    <result column="member_type" jdbcType="INTEGER" property="memberType" />
     <result column="remark" jdbcType="VARCHAR" property="remark" />
     <result column="create_user_id" jdbcType="BIGINT" property="createUserId" />
     <result column="create_user_name" jdbcType="VARCHAR" property="createUserName" />
@@ -25,7 +23,7 @@
   <sql id="Example_Where_Clause">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-12 11:48:54.
+      This element was generated on 2018-07-13 11:45:27.
     -->
     <where>
       <foreach collection="oredCriteria" item="criteria" separator="or">
@@ -58,7 +56,7 @@
   <sql id="Update_By_Example_Where_Clause">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-12 11:48:54.
+      This element was generated on 2018-07-13 11:45:27.
     -->
     <where>
       <foreach collection="example.oredCriteria" item="criteria" separator="or">
@@ -91,16 +89,16 @@
   <sql id="Base_Column_List">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-12 11:48:54.
+      This element was generated on 2018-07-13 11:45:27.
     -->
-    mkt_activity_upgrade_id, mkt_activity_id, current_level_code, current_level_name, 
-    target_level_code, target_level_name, fans, remark, create_user_id, create_user_name, 
-    create_date, modified_user_id, modified_user_name, modified_date, valid
+    mkt_activity_upgrade_id, mkt_activity_id, mbr_level_code, mbr_level_name, member_type, 
+    remark, create_user_id, create_user_name, create_date, modified_user_id, modified_user_name, 
+    modified_date, valid
   </sql>
   <select id="selectByExample" parameterType="com.bizvane.mktcenterservice.models.po.MktActivityUpgradePOExample" resultMap="BaseResultMap">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-12 11:48:54.
+      This element was generated on 2018-07-13 11:45:27.
     -->
     select
     <if test="distinct">
@@ -118,7 +116,7 @@
   <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-12 11:48:54.
+      This element was generated on 2018-07-13 11:45:27.
     -->
     select 
     <include refid="Base_Column_List" />
@@ -128,7 +126,7 @@
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-12 11:48:54.
+      This element was generated on 2018-07-13 11:45:27.
     -->
     delete from t_mkt_activity_upgrade
     where mkt_activity_upgrade_id = #{mktActivityUpgradeId,jdbcType=BIGINT}
@@ -136,7 +134,7 @@
   <delete id="deleteByExample" parameterType="com.bizvane.mktcenterservice.models.po.MktActivityUpgradePOExample">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-12 11:48:54.
+      This element was generated on 2018-07-13 11:45:27.
     -->
     delete from t_mkt_activity_upgrade
     <if test="_parameter != null">
@@ -146,26 +144,26 @@
   <insert id="insert" parameterType="com.bizvane.mktcenterservice.models.po.MktActivityUpgradePO">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-12 11:48:54.
+      This element was generated on 2018-07-13 11:45:27.
     -->
     <selectKey keyProperty="mktActivityUpgradeId" order="AFTER" resultType="java.lang.Long">
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into t_mkt_activity_upgrade (mkt_activity_id, current_level_code, current_level_name, 
-      target_level_code, target_level_name, fans, 
-      remark, create_user_id, create_user_name, 
-      create_date, modified_user_id, modified_user_name, 
-      modified_date, valid)
-    values (#{mktActivityId,jdbcType=BIGINT}, #{currentLevelCode,jdbcType=VARCHAR}, #{currentLevelName,jdbcType=VARCHAR}, 
-      #{targetLevelCode,jdbcType=VARCHAR}, #{targetLevelName,jdbcType=VARCHAR}, #{fans,jdbcType=INTEGER}, 
-      #{remark,jdbcType=VARCHAR}, #{createUserId,jdbcType=BIGINT}, #{createUserName,jdbcType=VARCHAR}, 
-      #{createDate,jdbcType=TIMESTAMP}, #{modifiedUserId,jdbcType=BIGINT}, #{modifiedUserName,jdbcType=VARCHAR}, 
-      #{modifiedDate,jdbcType=TIMESTAMP}, #{valid,jdbcType=BIT})
+    insert into t_mkt_activity_upgrade (mkt_activity_id, mbr_level_code, mbr_level_name, 
+      member_type, remark, create_user_id, 
+      create_user_name, create_date, modified_user_id, 
+      modified_user_name, modified_date, valid
+      )
+    values (#{mktActivityId,jdbcType=BIGINT}, #{mbrLevelCode,jdbcType=VARCHAR}, #{mbrLevelName,jdbcType=VARCHAR}, 
+      #{memberType,jdbcType=INTEGER}, #{remark,jdbcType=VARCHAR}, #{createUserId,jdbcType=BIGINT}, 
+      #{createUserName,jdbcType=VARCHAR}, #{createDate,jdbcType=TIMESTAMP}, #{modifiedUserId,jdbcType=BIGINT}, 
+      #{modifiedUserName,jdbcType=VARCHAR}, #{modifiedDate,jdbcType=TIMESTAMP}, #{valid,jdbcType=BIT}
+      )
   </insert>
   <insert id="insertSelective" parameterType="com.bizvane.mktcenterservice.models.po.MktActivityUpgradePO">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-12 11:48:54.
+      This element was generated on 2018-07-13 11:45:27.
     -->
     <selectKey keyProperty="mktActivityUpgradeId" order="AFTER" resultType="java.lang.Long">
       SELECT LAST_INSERT_ID()
@@ -175,20 +173,14 @@
       <if test="mktActivityId != null">
         mkt_activity_id,
       </if>
-      <if test="currentLevelCode != null">
-        current_level_code,
+      <if test="mbrLevelCode != null">
+        mbr_level_code,
       </if>
-      <if test="currentLevelName != null">
-        current_level_name,
+      <if test="mbrLevelName != null">
+        mbr_level_name,
       </if>
-      <if test="targetLevelCode != null">
-        target_level_code,
-      </if>
-      <if test="targetLevelName != null">
-        target_level_name,
-      </if>
-      <if test="fans != null">
-        fans,
+      <if test="memberType != null">
+        member_type,
       </if>
       <if test="remark != null">
         remark,
@@ -219,20 +211,14 @@
       <if test="mktActivityId != null">
         #{mktActivityId,jdbcType=BIGINT},
       </if>
-      <if test="currentLevelCode != null">
-        #{currentLevelCode,jdbcType=VARCHAR},
+      <if test="mbrLevelCode != null">
+        #{mbrLevelCode,jdbcType=VARCHAR},
       </if>
-      <if test="currentLevelName != null">
-        #{currentLevelName,jdbcType=VARCHAR},
+      <if test="mbrLevelName != null">
+        #{mbrLevelName,jdbcType=VARCHAR},
       </if>
-      <if test="targetLevelCode != null">
-        #{targetLevelCode,jdbcType=VARCHAR},
-      </if>
-      <if test="targetLevelName != null">
-        #{targetLevelName,jdbcType=VARCHAR},
-      </if>
-      <if test="fans != null">
-        #{fans,jdbcType=INTEGER},
+      <if test="memberType != null">
+        #{memberType,jdbcType=INTEGER},
       </if>
       <if test="remark != null">
         #{remark,jdbcType=VARCHAR},
@@ -263,7 +249,7 @@
   <select id="countByExample" parameterType="com.bizvane.mktcenterservice.models.po.MktActivityUpgradePOExample" resultType="java.lang.Long">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-12 11:48:54.
+      This element was generated on 2018-07-13 11:45:27.
     -->
     select count(*) from t_mkt_activity_upgrade
     <if test="_parameter != null">
@@ -273,7 +259,7 @@
   <update id="updateByExampleSelective" parameterType="map">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-12 11:48:54.
+      This element was generated on 2018-07-13 11:45:27.
     -->
     update t_mkt_activity_upgrade
     <set>
@@ -283,20 +269,14 @@
       <if test="record.mktActivityId != null">
         mkt_activity_id = #{record.mktActivityId,jdbcType=BIGINT},
       </if>
-      <if test="record.currentLevelCode != null">
-        current_level_code = #{record.currentLevelCode,jdbcType=VARCHAR},
+      <if test="record.mbrLevelCode != null">
+        mbr_level_code = #{record.mbrLevelCode,jdbcType=VARCHAR},
       </if>
-      <if test="record.currentLevelName != null">
-        current_level_name = #{record.currentLevelName,jdbcType=VARCHAR},
+      <if test="record.mbrLevelName != null">
+        mbr_level_name = #{record.mbrLevelName,jdbcType=VARCHAR},
       </if>
-      <if test="record.targetLevelCode != null">
-        target_level_code = #{record.targetLevelCode,jdbcType=VARCHAR},
-      </if>
-      <if test="record.targetLevelName != null">
-        target_level_name = #{record.targetLevelName,jdbcType=VARCHAR},
-      </if>
-      <if test="record.fans != null">
-        fans = #{record.fans,jdbcType=INTEGER},
+      <if test="record.memberType != null">
+        member_type = #{record.memberType,jdbcType=INTEGER},
       </if>
       <if test="record.remark != null">
         remark = #{record.remark,jdbcType=VARCHAR},
@@ -330,16 +310,14 @@
   <update id="updateByExample" parameterType="map">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-12 11:48:54.
+      This element was generated on 2018-07-13 11:45:27.
     -->
     update t_mkt_activity_upgrade
     set mkt_activity_upgrade_id = #{record.mktActivityUpgradeId,jdbcType=BIGINT},
       mkt_activity_id = #{record.mktActivityId,jdbcType=BIGINT},
-      current_level_code = #{record.currentLevelCode,jdbcType=VARCHAR},
-      current_level_name = #{record.currentLevelName,jdbcType=VARCHAR},
-      target_level_code = #{record.targetLevelCode,jdbcType=VARCHAR},
-      target_level_name = #{record.targetLevelName,jdbcType=VARCHAR},
-      fans = #{record.fans,jdbcType=INTEGER},
+      mbr_level_code = #{record.mbrLevelCode,jdbcType=VARCHAR},
+      mbr_level_name = #{record.mbrLevelName,jdbcType=VARCHAR},
+      member_type = #{record.memberType,jdbcType=INTEGER},
       remark = #{record.remark,jdbcType=VARCHAR},
       create_user_id = #{record.createUserId,jdbcType=BIGINT},
       create_user_name = #{record.createUserName,jdbcType=VARCHAR},
@@ -355,27 +333,21 @@
   <update id="updateByPrimaryKeySelective" parameterType="com.bizvane.mktcenterservice.models.po.MktActivityUpgradePO">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-12 11:48:54.
+      This element was generated on 2018-07-13 11:45:27.
     -->
     update t_mkt_activity_upgrade
     <set>
       <if test="mktActivityId != null">
         mkt_activity_id = #{mktActivityId,jdbcType=BIGINT},
       </if>
-      <if test="currentLevelCode != null">
-        current_level_code = #{currentLevelCode,jdbcType=VARCHAR},
+      <if test="mbrLevelCode != null">
+        mbr_level_code = #{mbrLevelCode,jdbcType=VARCHAR},
       </if>
-      <if test="currentLevelName != null">
-        current_level_name = #{currentLevelName,jdbcType=VARCHAR},
+      <if test="mbrLevelName != null">
+        mbr_level_name = #{mbrLevelName,jdbcType=VARCHAR},
       </if>
-      <if test="targetLevelCode != null">
-        target_level_code = #{targetLevelCode,jdbcType=VARCHAR},
-      </if>
-      <if test="targetLevelName != null">
-        target_level_name = #{targetLevelName,jdbcType=VARCHAR},
-      </if>
-      <if test="fans != null">
-        fans = #{fans,jdbcType=INTEGER},
+      <if test="memberType != null">
+        member_type = #{memberType,jdbcType=INTEGER},
       </if>
       <if test="remark != null">
         remark = #{remark,jdbcType=VARCHAR},
@@ -407,15 +379,13 @@
   <update id="updateByPrimaryKey" parameterType="com.bizvane.mktcenterservice.models.po.MktActivityUpgradePO">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-12 11:48:54.
+      This element was generated on 2018-07-13 11:45:27.
     -->
     update t_mkt_activity_upgrade
     set mkt_activity_id = #{mktActivityId,jdbcType=BIGINT},
-      current_level_code = #{currentLevelCode,jdbcType=VARCHAR},
-      current_level_name = #{currentLevelName,jdbcType=VARCHAR},
-      target_level_code = #{targetLevelCode,jdbcType=VARCHAR},
-      target_level_name = #{targetLevelName,jdbcType=VARCHAR},
-      fans = #{fans,jdbcType=INTEGER},
+      mbr_level_code = #{mbrLevelCode,jdbcType=VARCHAR},
+      mbr_level_name = #{mbrLevelName,jdbcType=VARCHAR},
+      member_type = #{memberType,jdbcType=INTEGER},
       remark = #{remark,jdbcType=VARCHAR},
       create_user_id = #{createUserId,jdbcType=BIGINT},
       create_user_name = #{createUserName,jdbcType=VARCHAR},

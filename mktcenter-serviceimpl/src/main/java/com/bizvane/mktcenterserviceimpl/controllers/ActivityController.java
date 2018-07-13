@@ -1,10 +1,18 @@
 package com.bizvane.mktcenterserviceimpl.controllers;
 
 import com.bizvane.mktcenterservice.interfaces.ActivityService;
+import com.bizvane.mktcenterservice.models.vo.ActivityVO;
+import com.bizvane.mktcenterserviceimpl.common.constants.ActivityConstants;
+import com.bizvane.mktcenterserviceimpl.common.constants.SystemConstants;
+import com.bizvane.mktcenterserviceimpl.common.enums.ActivityTypeEnum;
+import com.bizvane.mktcenterserviceimpl.common.utils.ActivityParamCheckUtil;
+import com.bizvane.utils.constants.SysConstants;
 import com.bizvane.utils.jobutils.JobClient;
 import com.bizvane.utils.jobutils.XxlJobInfo;
+import com.bizvane.utils.responseinfo.ResponseData;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -24,21 +32,95 @@ public class ActivityController {
     @Autowired
     private JobClient jobClient;
 
-    @RequestMapping("addActivity")
-    public String addActivity(){
-        XxlJobInfo xxlJobInfo = new XxlJobInfo();
-        xxlJobInfo.setJobGroup(4);
-        xxlJobInfo.setExecutorRouteStrategy("FIRST");
-        xxlJobInfo.setJobCron("0/5 * * * * ?");
-        xxlJobInfo.setGlueType("BEAN");
-        xxlJobInfo.setExecutorHandler("activity");
-        xxlJobInfo.setJobDesc("活动任务创建");
-        xxlJobInfo.setExecutorBlockStrategy("SERIAL_EXECUTION");
-        xxlJobInfo.setExecutorFailStrategy("NULL");
-        xxlJobInfo.setAuthor("lichen");
-        ResponseEntity<String> stringResponseEntity = jobClient.addJob(xxlJobInfo);
-        System.out.println(stringResponseEntity);
+    /**
+     * 查询活动列表
+     * @return
+     */
+    @RequestMapping("getActivityList")
+    public ResponseData<ActivityVO> getActivityList(ActivityVO vo){
+        //参数校验
+        ResponseData responseData = ActivityParamCheckUtil.checkParam(vo);
+        //参数校验不通过
+        if(SystemConstants.ERROR_CODE==responseData.getCode()){
+            return responseData;
+        }
+        //参数校验通过，获取操作人信息
+
+        //新增活动
+
+        //判断活动开始时间，是否需要添加job调度
+
+        //返回
+
         return null;
     }
 
+    /**
+     * 创建活动
+     * @return
+     */
+    @RequestMapping("addActivity")
+    public ResponseData<Integer> addActivity(ActivityVO vo){
+        //参数校验
+        ResponseData responseData = ActivityParamCheckUtil.checkParam(vo);
+        //参数校验不通过
+        if(SystemConstants.ERROR_CODE==responseData.getCode()){
+            return responseData;
+        }
+        //参数校验通过，获取操作人信息
+
+        //新增活动
+
+        //判断活动开始时间，是否需要添加job调度
+
+        //返回
+
+        return null;
+    }
+
+    /**
+     * 修改活动
+     * @param vo
+     * @return
+     */
+    public ResponseData<Integer> updateActivity(ActivityVO vo){
+        //参数校验
+        ResponseData responseData = ActivityParamCheckUtil.checkParam(vo);
+        //参数校验不通过
+        if(SystemConstants.ERROR_CODE==responseData.getCode()){
+            return responseData;
+        }
+        //参数校验通过，获取操作人信息
+
+        //更新活动
+
+        //判断活动开始时间，是否需要修改job调度
+
+        //返回
+
+        return null;
+    }
+
+    /**
+     * 删除活动
+     * @param vo
+     * @return
+     */
+    public ResponseData<Integer> deleteActivity(ActivityVO vo){
+        //参数校验
+        ResponseData responseData = ActivityParamCheckUtil.checkParam(vo);
+        //参数校验不通过
+        if(SystemConstants.ERROR_CODE==responseData.getCode()){
+            return responseData;
+        }
+        //参数校验通过，获取操作人信息
+
+        //删除活动
+
+        //修改job调度
+
+        //返回
+
+        return null;
+    }
 }

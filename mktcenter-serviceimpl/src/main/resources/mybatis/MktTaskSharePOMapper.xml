@@ -4,12 +4,10 @@
   <resultMap id="BaseResultMap" type="com.bizvane.mktcenterservice.models.po.MktTaskSharePO">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-12 11:48:54.
+      This element was generated on 2018-07-13 10:42:22.
     -->
     <id column="mkt_task_profile_id" jdbcType="BIGINT" property="mktTaskProfileId" />
     <result column="mkt_task_id" jdbcType="BIGINT" property="mktTaskId" />
-    <result column="mbr_level_code" jdbcType="VARCHAR" property="mbrLevelCode" />
-    <result column="mbr_level_name" jdbcType="VARCHAR" property="mbrLevelName" />
     <result column="share_times" jdbcType="INTEGER" property="shareTimes" />
     <result column="share_url_type" jdbcType="INTEGER" property="shareUrlType" />
     <result column="remark" jdbcType="VARCHAR" property="remark" />
@@ -24,14 +22,14 @@
   <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.bizvane.mktcenterservice.models.po.MktTaskSharePO">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-12 11:48:54.
+      This element was generated on 2018-07-13 10:42:22.
     -->
     <result column="share_url" jdbcType="LONGVARCHAR" property="shareUrl" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-12 11:48:54.
+      This element was generated on 2018-07-13 10:42:22.
     -->
     <where>
       <foreach collection="oredCriteria" item="criteria" separator="or">
@@ -64,7 +62,7 @@
   <sql id="Update_By_Example_Where_Clause">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-12 11:48:54.
+      This element was generated on 2018-07-13 10:42:22.
     -->
     <where>
       <foreach collection="example.oredCriteria" item="criteria" separator="or">
@@ -97,23 +95,23 @@
   <sql id="Base_Column_List">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-12 11:48:54.
+      This element was generated on 2018-07-13 10:42:22.
     -->
-    mkt_task_profile_id, mkt_task_id, mbr_level_code, mbr_level_name, share_times, share_url_type, 
-    remark, create_user_id, create_user_name, create_date, modified_user_id, modified_user_name, 
-    modified_date, valid
+    mkt_task_profile_id, mkt_task_id, share_times, share_url_type, remark, create_user_id, 
+    create_user_name, create_date, modified_user_id, modified_user_name, modified_date, 
+    valid
   </sql>
   <sql id="Blob_Column_List">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-12 11:48:54.
+      This element was generated on 2018-07-13 10:42:22.
     -->
     share_url
   </sql>
   <select id="selectByExampleWithBLOBs" parameterType="com.bizvane.mktcenterservice.models.po.MktTaskSharePOExample" resultMap="ResultMapWithBLOBs">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-12 11:48:54.
+      This element was generated on 2018-07-13 10:42:22.
     -->
     select
     <if test="distinct">
@@ -133,7 +131,7 @@
   <select id="selectByExample" parameterType="com.bizvane.mktcenterservice.models.po.MktTaskSharePOExample" resultMap="BaseResultMap">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-12 11:48:54.
+      This element was generated on 2018-07-13 10:42:22.
     -->
     select
     <if test="distinct">
@@ -151,7 +149,7 @@
   <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="ResultMapWithBLOBs">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-12 11:48:54.
+      This element was generated on 2018-07-13 10:42:22.
     -->
     select 
     <include refid="Base_Column_List" />
@@ -163,7 +161,7 @@
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-12 11:48:54.
+      This element was generated on 2018-07-13 10:42:22.
     -->
     delete from t_mkt_task_share
     where mkt_task_profile_id = #{mktTaskProfileId,jdbcType=BIGINT}
@@ -171,7 +169,7 @@
   <delete id="deleteByExample" parameterType="com.bizvane.mktcenterservice.models.po.MktTaskSharePOExample">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-12 11:48:54.
+      This element was generated on 2018-07-13 10:42:22.
     -->
     delete from t_mkt_task_share
     <if test="_parameter != null">
@@ -181,25 +179,23 @@
   <insert id="insert" parameterType="com.bizvane.mktcenterservice.models.po.MktTaskSharePO">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-12 11:48:54.
+      This element was generated on 2018-07-13 10:42:22.
     -->
-    insert into t_mkt_task_share (mkt_task_profile_id, mkt_task_id, mbr_level_code, 
-      mbr_level_name, share_times, share_url_type, 
-      remark, create_user_id, create_user_name, 
-      create_date, modified_user_id, modified_user_name, 
-      modified_date, valid, share_url
-      )
-    values (#{mktTaskProfileId,jdbcType=BIGINT}, #{mktTaskId,jdbcType=BIGINT}, #{mbrLevelCode,jdbcType=VARCHAR}, 
-      #{mbrLevelName,jdbcType=VARCHAR}, #{shareTimes,jdbcType=INTEGER}, #{shareUrlType,jdbcType=INTEGER}, 
-      #{remark,jdbcType=VARCHAR}, #{createUserId,jdbcType=BIGINT}, #{createUserName,jdbcType=VARCHAR}, 
-      #{createDate,jdbcType=TIMESTAMP}, #{modifiedUserId,jdbcType=BIGINT}, #{modifiedUserName,jdbcType=VARCHAR}, 
-      #{modifiedDate,jdbcType=TIMESTAMP}, #{valid,jdbcType=BIT}, #{shareUrl,jdbcType=LONGVARCHAR}
-      )
+    insert into t_mkt_task_share (mkt_task_profile_id, mkt_task_id, share_times, 
+      share_url_type, remark, create_user_id, 
+      create_user_name, create_date, modified_user_id, 
+      modified_user_name, modified_date, valid, 
+      share_url)
+    values (#{mktTaskProfileId,jdbcType=BIGINT}, #{mktTaskId,jdbcType=BIGINT}, #{shareTimes,jdbcType=INTEGER}, 
+      #{shareUrlType,jdbcType=INTEGER}, #{remark,jdbcType=VARCHAR}, #{createUserId,jdbcType=BIGINT}, 
+      #{createUserName,jdbcType=VARCHAR}, #{createDate,jdbcType=TIMESTAMP}, #{modifiedUserId,jdbcType=BIGINT}, 
+      #{modifiedUserName,jdbcType=VARCHAR}, #{modifiedDate,jdbcType=TIMESTAMP}, #{valid,jdbcType=BIT}, 
+      #{shareUrl,jdbcType=LONGVARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.bizvane.mktcenterservice.models.po.MktTaskSharePO">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-12 11:48:54.
+      This element was generated on 2018-07-13 10:42:22.
     -->
     insert into t_mkt_task_share
     <trim prefix="(" suffix=")" suffixOverrides=",">
@@ -208,12 +204,6 @@
       </if>
       <if test="mktTaskId != null">
         mkt_task_id,
-      </if>
-      <if test="mbrLevelCode != null">
-        mbr_level_code,
-      </if>
-      <if test="mbrLevelName != null">
-        mbr_level_name,
       </if>
       <if test="shareTimes != null">
         share_times,
@@ -256,12 +246,6 @@
       <if test="mktTaskId != null">
         #{mktTaskId,jdbcType=BIGINT},
       </if>
-      <if test="mbrLevelCode != null">
-        #{mbrLevelCode,jdbcType=VARCHAR},
-      </if>
-      <if test="mbrLevelName != null">
-        #{mbrLevelName,jdbcType=VARCHAR},
-      </if>
       <if test="shareTimes != null">
         #{shareTimes,jdbcType=INTEGER},
       </if>
@@ -300,7 +284,7 @@
   <select id="countByExample" parameterType="com.bizvane.mktcenterservice.models.po.MktTaskSharePOExample" resultType="java.lang.Long">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-12 11:48:54.
+      This element was generated on 2018-07-13 10:42:22.
     -->
     select count(*) from t_mkt_task_share
     <if test="_parameter != null">
@@ -310,7 +294,7 @@
   <update id="updateByExampleSelective" parameterType="map">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-12 11:48:54.
+      This element was generated on 2018-07-13 10:42:22.
     -->
     update t_mkt_task_share
     <set>
@@ -319,12 +303,6 @@
       </if>
       <if test="record.mktTaskId != null">
         mkt_task_id = #{record.mktTaskId,jdbcType=BIGINT},
-      </if>
-      <if test="record.mbrLevelCode != null">
-        mbr_level_code = #{record.mbrLevelCode,jdbcType=VARCHAR},
-      </if>
-      <if test="record.mbrLevelName != null">
-        mbr_level_name = #{record.mbrLevelName,jdbcType=VARCHAR},
       </if>
       <if test="record.shareTimes != null">
         share_times = #{record.shareTimes,jdbcType=INTEGER},
@@ -367,13 +345,11 @@
   <update id="updateByExampleWithBLOBs" parameterType="map">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-12 11:48:54.
+      This element was generated on 2018-07-13 10:42:22.
     -->
     update t_mkt_task_share
     set mkt_task_profile_id = #{record.mktTaskProfileId,jdbcType=BIGINT},
       mkt_task_id = #{record.mktTaskId,jdbcType=BIGINT},
-      mbr_level_code = #{record.mbrLevelCode,jdbcType=VARCHAR},
-      mbr_level_name = #{record.mbrLevelName,jdbcType=VARCHAR},
       share_times = #{record.shareTimes,jdbcType=INTEGER},
       share_url_type = #{record.shareUrlType,jdbcType=INTEGER},
       remark = #{record.remark,jdbcType=VARCHAR},
@@ -392,13 +368,11 @@
   <update id="updateByExample" parameterType="map">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-12 11:48:54.
+      This element was generated on 2018-07-13 10:42:22.
     -->
     update t_mkt_task_share
     set mkt_task_profile_id = #{record.mktTaskProfileId,jdbcType=BIGINT},
       mkt_task_id = #{record.mktTaskId,jdbcType=BIGINT},
-      mbr_level_code = #{record.mbrLevelCode,jdbcType=VARCHAR},
-      mbr_level_name = #{record.mbrLevelName,jdbcType=VARCHAR},
       share_times = #{record.shareTimes,jdbcType=INTEGER},
       share_url_type = #{record.shareUrlType,jdbcType=INTEGER},
       remark = #{record.remark,jdbcType=VARCHAR},
@@ -416,18 +390,12 @@
   <update id="updateByPrimaryKeySelective" parameterType="com.bizvane.mktcenterservice.models.po.MktTaskSharePO">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-12 11:48:54.
+      This element was generated on 2018-07-13 10:42:22.
     -->
     update t_mkt_task_share
     <set>
       <if test="mktTaskId != null">
         mkt_task_id = #{mktTaskId,jdbcType=BIGINT},
-      </if>
-      <if test="mbrLevelCode != null">
-        mbr_level_code = #{mbrLevelCode,jdbcType=VARCHAR},
-      </if>
-      <if test="mbrLevelName != null">
-        mbr_level_name = #{mbrLevelName,jdbcType=VARCHAR},
       </if>
       <if test="shareTimes != null">
         share_times = #{shareTimes,jdbcType=INTEGER},
@@ -468,12 +436,10 @@
   <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.bizvane.mktcenterservice.models.po.MktTaskSharePO">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-12 11:48:54.
+      This element was generated on 2018-07-13 10:42:22.
     -->
     update t_mkt_task_share
     set mkt_task_id = #{mktTaskId,jdbcType=BIGINT},
-      mbr_level_code = #{mbrLevelCode,jdbcType=VARCHAR},
-      mbr_level_name = #{mbrLevelName,jdbcType=VARCHAR},
       share_times = #{shareTimes,jdbcType=INTEGER},
       share_url_type = #{shareUrlType,jdbcType=INTEGER},
       remark = #{remark,jdbcType=VARCHAR},
@@ -490,12 +456,10 @@
   <update id="updateByPrimaryKey" parameterType="com.bizvane.mktcenterservice.models.po.MktTaskSharePO">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-12 11:48:54.
+      This element was generated on 2018-07-13 10:42:22.
     -->
     update t_mkt_task_share
     set mkt_task_id = #{mktTaskId,jdbcType=BIGINT},
-      mbr_level_code = #{mbrLevelCode,jdbcType=VARCHAR},
-      mbr_level_name = #{mbrLevelName,jdbcType=VARCHAR},
       share_times = #{shareTimes,jdbcType=INTEGER},
       share_url_type = #{shareUrlType,jdbcType=INTEGER},
       remark = #{remark,jdbcType=VARCHAR},
