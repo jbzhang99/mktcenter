@@ -3,6 +3,8 @@ package com.bizvane.mktcenterserviceimpl.mappers;
 import com.bizvane.mktcenterservice.models.po.MktActivityBirthdayPO;
 import com.bizvane.mktcenterservice.models.po.MktActivityBirthdayPOExample;
 import java.util.List;
+
+import com.bizvane.mktcenterservice.models.vo.ActivityVO;
 import org.apache.ibatis.annotations.Param;
 
 public interface MktActivityBirthdayPOMapper {
@@ -74,4 +76,6 @@ public interface MktActivityBirthdayPOMapper {
 	 * @mbg.generated  2018-07-13 10:42:22
 	 */
 	int updateByPrimaryKey(MktActivityBirthdayPO record);
+
+	List<ActivityVO> getActivityList(ActivityVO vo);
 }

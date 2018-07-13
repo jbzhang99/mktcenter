@@ -1,5 +1,7 @@
 package com.bizvane.mktcenterservice.models.po;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import java.io.Serializable;
 import java.util.Date;
 
@@ -46,12 +48,14 @@ public class MktActivityPO implements Serializable {
 	 * @mbg.generated  2018-07-13 10:42:22
 	 */
 	@io.swagger.annotations.ApiModelProperty(value = "活动开始时间", name = "startTime", required = false, example = "")
+	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", locale = "zh", timezone = "GMT+8")
 	private Date startTime;
 	/**
 	 * 只读. 活动结束时间. end_time
 	 * @mbg.generated  2018-07-13 10:42:22
 	 */
 	@io.swagger.annotations.ApiModelProperty(value = "活动结束时间", name = "endTime", required = false, example = "")
+	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", locale = "zh", timezone = "GMT+8")
 	private Date endTime;
 	/**
 	 * 只读. 是否长期：1是，0否. long_term
@@ -100,6 +104,7 @@ public class MktActivityPO implements Serializable {
 	 * @mbg.generated  2018-07-13 10:42:22
 	 */
 	@io.swagger.annotations.ApiModelProperty(value = "创建日期", name = "createDate", required = false, example = "")
+	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", locale = "zh", timezone = "GMT+8")
 	private Date createDate;
 	/**
 	 * 只读. 修改人id. modified_user_id
@@ -118,6 +123,7 @@ public class MktActivityPO implements Serializable {
 	 * @mbg.generated  2018-07-13 10:42:22
 	 */
 	@io.swagger.annotations.ApiModelProperty(value = "修改时间", name = "modifiedDate", required = false, example = "")
+	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", locale = "zh", timezone = "GMT+8")
 	private Date modifiedDate;
 	/**
 	 * 只读. 数据有效性：1=有效；0=无效. valid

@@ -4,6 +4,8 @@ import com.bizvane.mktcenterservice.models.po.MktActivityOrderPO;
 import com.bizvane.mktcenterservice.models.po.MktActivityOrderPOExample;
 import com.bizvane.mktcenterservice.models.po.MktActivityOrderPOWithBLOBs;
 import java.util.List;
+
+import com.bizvane.mktcenterservice.models.vo.ActivityVO;
 import org.apache.ibatis.annotations.Param;
 
 public interface MktActivityOrderPOMapper {
@@ -94,4 +96,6 @@ public interface MktActivityOrderPOMapper {
 	 * @mbg.generated  2018-07-13 10:42:22
 	 */
 	int updateByPrimaryKey(MktActivityOrderPO record);
+
+	List<ActivityVO> getActivityList(ActivityVO vo);
 }

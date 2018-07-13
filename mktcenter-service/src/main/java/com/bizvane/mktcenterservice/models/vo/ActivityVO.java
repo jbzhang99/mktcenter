@@ -52,6 +52,81 @@ public class ActivityVO extends MktActivityPO {
     @io.swagger.annotations.ApiModelProperty(value = "提前多少日进行", name = "daysAhead", required = false, example = "")
     private Integer daysAhead;
 
+    /**
+     * 只读. 订单最低金额. order_min_price
+     * @mbg.generated  2018-07-13 10:42:22
+     */
+    @io.swagger.annotations.ApiModelProperty(value = "订单最低金额", name = "orderMinPrice", required = false, example = "")
+    private String orderMinPrice;
+    /**
+     * 只读. 是否限制商品，0否，1是. is_commodity_limit
+     * @mbg.generated  2018-07-13 10:42:22
+     */
+    @io.swagger.annotations.ApiModelProperty(value = "是否限制商品，0否，1是", name = "isCommodityLimit", required = false, example = "")
+    private Boolean isCommodityLimit;
+    /**
+     * 只读. 是否限制门店，0否，1是. is_store_limit
+     * @mbg.generated  2018-07-13 10:42:22
+     */
+    @io.swagger.annotations.ApiModelProperty(value = "是否限制门店，0否，1是", name = "isStoreLimit", required = false, example = "")
+    private Boolean isStoreLimit;
+
+    /**
+     * 只读. 商品白名单. commodity_whitelist
+     * @mbg.generated  2018-07-13 10:42:22
+     */
+    @io.swagger.annotations.ApiModelProperty(value = "商品白名单", name = "commodityWhitelist", required = false, example = "")
+    private String commodityWhitelist;
+    /**
+     * 只读. 商品黑名单. commodity_blacklist
+     * @mbg.generated  2018-07-13 10:42:22
+     */
+    @io.swagger.annotations.ApiModelProperty(value = "商品黑名单", name = "commodityBlacklist", required = false, example = "")
+    private String commodityBlacklist;
+    /**
+     * 只读. 门店白名单. store_whitelist
+     * @mbg.generated  2018-07-13 10:42:22
+     */
+    @io.swagger.annotations.ApiModelProperty(value = "门店白名单", name = "storeWhitelist", required = false, example = "")
+    private String storeWhitelist;
+    /**
+     * 只读. 门店黑名单. store_blacklist
+     * @mbg.generated  2018-07-13 10:42:22
+     */
+    @io.swagger.annotations.ApiModelProperty(value = "门店黑名单", name = "storeBlacklist", required = false, example = "")
+    private String storeBlacklist;
+
+    /**
+     * 只读. 签到方式：1连续签到，2累计签到，3单日签到. sign_type
+     * @mbg.generated  2018-07-13 10:42:22
+     */
+    @io.swagger.annotations.ApiModelProperty(value = "签到方式：1连续签到，2累计签到，3单日签到", name = "signType", required = false, example = "")
+    private Integer signType;
+    /**
+     * 只读. 积分方式. integral_type
+     * @mbg.generated  2018-07-13 10:42:22
+     */
+    @io.swagger.annotations.ApiModelProperty(value = "积分方式", name = "integralType", required = false, example = "")
+    private String integralType;
+    /**
+     * 只读. 赠送积分基数. integral_basis
+     * @mbg.generated  2018-07-13 10:42:22
+     */
+    @io.swagger.annotations.ApiModelProperty(value = "赠送积分基数", name = "integralBasis", required = false, example = "")
+    private Long integralBasis;
+    /**
+     * 只读. 每次增加的数值. integral_addend
+     * @mbg.generated  2018-07-13 10:42:22
+     */
+    @io.swagger.annotations.ApiModelProperty(value = "每次增加的数值", name = "integralAddend", required = false, example = "")
+    private Long integralAddend;
+    /**
+     * 只读. 增加后的最高积分上限. integral_max
+     * @mbg.generated  2018-07-13 10:42:22
+     */
+    @io.swagger.annotations.ApiModelProperty(value = "增加后的最高积分上限", name = "integralMax", required = false, example = "")
+    private Long integralMax;
+
     public String getActivityInfo() {
         return activityInfo;
     }
@@ -98,5 +173,101 @@ public class ActivityVO extends MktActivityPO {
 
     public void setDaysAhead(Integer daysAhead) {
         this.daysAhead = daysAhead;
+    }
+
+    public String getOrderMinPrice() {
+        return orderMinPrice;
+    }
+
+    public void setOrderMinPrice(String orderMinPrice) {
+        this.orderMinPrice = orderMinPrice;
+    }
+
+    public Boolean getCommodityLimit() {
+        return isCommodityLimit;
+    }
+
+    public void setCommodityLimit(Boolean commodityLimit) {
+        isCommodityLimit = commodityLimit;
+    }
+
+    public Boolean getStoreLimit() {
+        return isStoreLimit;
+    }
+
+    public void setStoreLimit(Boolean storeLimit) {
+        isStoreLimit = storeLimit;
+    }
+
+    public String getCommodityWhitelist() {
+        return commodityWhitelist;
+    }
+
+    public void setCommodityWhitelist(String commodityWhitelist) {
+        this.commodityWhitelist = commodityWhitelist;
+    }
+
+    public String getCommodityBlacklist() {
+        return commodityBlacklist;
+    }
+
+    public void setCommodityBlacklist(String commodityBlacklist) {
+        this.commodityBlacklist = commodityBlacklist;
+    }
+
+    public String getStoreWhitelist() {
+        return storeWhitelist;
+    }
+
+    public void setStoreWhitelist(String storeWhitelist) {
+        this.storeWhitelist = storeWhitelist;
+    }
+
+    public String getStoreBlacklist() {
+        return storeBlacklist;
+    }
+
+    public void setStoreBlacklist(String storeBlacklist) {
+        this.storeBlacklist = storeBlacklist;
+    }
+
+    public Integer getSignType() {
+        return signType;
+    }
+
+    public void setSignType(Integer signType) {
+        this.signType = signType;
+    }
+
+    public String getIntegralType() {
+        return integralType;
+    }
+
+    public void setIntegralType(String integralType) {
+        this.integralType = integralType;
+    }
+
+    public Long getIntegralBasis() {
+        return integralBasis;
+    }
+
+    public void setIntegralBasis(Long integralBasis) {
+        this.integralBasis = integralBasis;
+    }
+
+    public Long getIntegralAddend() {
+        return integralAddend;
+    }
+
+    public void setIntegralAddend(Long integralAddend) {
+        this.integralAddend = integralAddend;
+    }
+
+    public Long getIntegralMax() {
+        return integralMax;
+    }
+
+    public void setIntegralMax(Long integralMax) {
+        this.integralMax = integralMax;
     }
 }

@@ -10,11 +10,15 @@ import com.bizvane.utils.constants.SysConstants;
 import com.bizvane.utils.jobutils.JobClient;
 import com.bizvane.utils.jobutils.XxlJobInfo;
 import com.bizvane.utils.responseinfo.ResponseData;
+import com.bizvane.utils.tokens.SysAccountPO;
+import com.bizvane.utils.tokens.TokenUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import javax.servlet.http.HttpServletRequest;
 
 /**
  * @author chen.li
@@ -102,25 +106,17 @@ public class ActivityController {
     }
 
     /**
-     * 删除活动
-     * @param vo
+     * 禁用活动
+     * @param mktActivityId
      * @return
      */
-    public ResponseData<Integer> deleteActivity(ActivityVO vo){
-        //参数校验
-        ResponseData responseData = ActivityParamCheckUtil.checkParam(vo);
-        //参数校验不通过
-        if(SystemConstants.ERROR_CODE==responseData.getCode()){
-            return responseData;
-        }
-        //参数校验通过，获取操作人信息
-
-        //删除活动
-
-        //修改job调度
-
-        //返回
-
-        return null;
+    @RequestMapping("stopActivityById")
+    public ResponseData<Integer> stopActivityById(Long mktActivityId, HttpServletRequest request){
+        //获取操作人信息
+        SysAccountPO stageUser =new SysAccountPO();
+//        SysAccountPO stageUser = TokenUtils.getStageUser(request);
+        //禁用活动
+        ResponseData<Integer> integerResponseData = activityService.stopActivityById(mktActivityId, stageUser);
+        return integerResponseData;
     }
 }

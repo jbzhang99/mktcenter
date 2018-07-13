@@ -3,7 +3,7 @@ package com.bizvane.mktcenterserviceimpl.common.enums;
 /**
  * @author chen.li
  * @date on 2018/7/13 11:05
- * @description
+ * @description 活动类型枚举类
  * @Copyright (c) 2018 上海商帆信息科技有限公司-版权所有
  */
 public enum ActivityTypeEnum {

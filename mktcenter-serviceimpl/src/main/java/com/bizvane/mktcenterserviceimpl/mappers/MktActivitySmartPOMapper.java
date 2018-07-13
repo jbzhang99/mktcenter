@@ -3,6 +3,8 @@ package com.bizvane.mktcenterserviceimpl.mappers;
 import com.bizvane.mktcenterservice.models.po.MktActivitySmartPO;
 import com.bizvane.mktcenterservice.models.po.MktActivitySmartPOExample;
 import java.util.List;
+
+import com.bizvane.mktcenterservice.models.vo.ActivityVO;
 import org.apache.ibatis.annotations.Param;
 
 public interface MktActivitySmartPOMapper {
@@ -93,4 +95,7 @@ public interface MktActivitySmartPOMapper {
 	 * @mbg.generated  2018-07-13 10:42:22
 	 */
 	int updateByPrimaryKey(MktActivitySmartPO record);
+
+	List<ActivityVO> getActivityList(ActivityVO vo);
+
 }

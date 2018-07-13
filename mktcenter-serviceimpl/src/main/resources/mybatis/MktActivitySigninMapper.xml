@@ -428,4 +428,45 @@
       valid = #{valid,jdbcType=BIT}
     where mkt_activity_sign_in_id = #{mktActivitySignInId,jdbcType=BIGINT}
   </update>
+
+  <select id="getActivityList" parameterType="com.bizvane.mktcenterservice.models.vo.ActivityVO" resultType="com.bizvane.mktcenterservice.models.vo.ActivityVO">
+    SELECT
+    tma.mkt_activity_id,
+    tma.sys_company_id,
+    tma.sys_brand_id,
+    tma.activity_code,
+    tma.activity_type,
+    tma.activity_name,
+    tma.start_time,
+    tma.end_time,
+    tma.long_term,
+    tma.points,
+    tma.check_status,
+    tma.activity_status,
+    tma.remark,
+    tma.create_user_id,
+    tma.create_user_name,
+    tma.create_date,
+    tma.modified_user_id,
+    tma.modified_user_name,
+    tma.modified_date,
+    tma.valid,
+
+    tmas.mkt_activity_sign_in_id,
+    tmas.mkt_activity_id,
+    tmas.sign_type,
+    tmas.integral_type,
+    tmas.integral_basis,
+    tmas.integral_addend,
+    tmas.integral_max
+    FROM
+    `t_mkt_activity` tma
+    INNER JOIN t_mkt_activity_signin tmas ON tma.mkt_activity_id = tmas.mkt_activity_id
+    and tma.valid=1
+    and tmar.valid=1
+    <if test="activityStatus != null and activityStatus!=0">
+      AND tma.activity_status = #{activityStatus}
+    </if>
+
+  </select>
 </mapper>
