@@ -33,78 +33,6 @@ public class ActivityController {
     @Autowired
     private ActivityService activityService;
 
-    @Autowired
-    private JobClient jobClient;
-
-    /**
-     * 查询活动列表
-     * @return
-     */
-    @RequestMapping("getActivityList")
-    public ResponseData<ActivityVO> getActivityList(ActivityVO vo){
-        //参数校验
-        ResponseData responseData = ActivityParamCheckUtil.checkParam(vo);
-        //参数校验不通过
-        if(SystemConstants.ERROR_CODE==responseData.getCode()){
-            return responseData;
-        }
-        //参数校验通过，获取操作人信息
-
-        //新增活动
-
-        //判断活动开始时间，是否需要添加job调度
-
-        //返回
-
-        return null;
-    }
-
-    /**
-     * 创建活动
-     * @return
-     */
-    @RequestMapping("addActivity")
-    public ResponseData<Integer> addActivity(ActivityVO vo){
-        //参数校验
-        ResponseData responseData = ActivityParamCheckUtil.checkParam(vo);
-        //参数校验不通过
-        if(SystemConstants.ERROR_CODE==responseData.getCode()){
-            return responseData;
-        }
-        //参数校验通过，获取操作人信息
-
-        //新增活动
-
-        //判断活动开始时间，是否需要添加job调度
-
-        //返回
-
-        return null;
-    }
-
-    /**
-     * 修改活动
-     * @param vo
-     * @return
-     */
-    public ResponseData<Integer> updateActivity(ActivityVO vo){
-        //参数校验
-        ResponseData responseData = ActivityParamCheckUtil.checkParam(vo);
-        //参数校验不通过
-        if(SystemConstants.ERROR_CODE==responseData.getCode()){
-            return responseData;
-        }
-        //参数校验通过，获取操作人信息
-
-        //更新活动
-
-        //判断活动开始时间，是否需要修改job调度
-
-        //返回
-
-        return null;
-    }
-
     /**
      * 禁用活动
      * @param mktActivityId
@@ -117,6 +45,22 @@ public class ActivityController {
 //        SysAccountPO stageUser = TokenUtils.getStageUser(request);
         //禁用活动
         ResponseData<Integer> integerResponseData = activityService.stopActivityById(mktActivityId, stageUser);
+        return integerResponseData;
+    }
+
+    /**
+     * 活动审核
+     * @param mktActivityId
+     * @param request
+     * @return
+     */
+    @RequestMapping("checkActivityById")
+    public ResponseData<Integer> checkActivityById(Long mktActivityId, HttpServletRequest request){
+        //获取操作人信息
+        SysAccountPO stageUser =new SysAccountPO();
+//        SysAccountPO stageUser = TokenUtils.getStageUser(request);
+        //审核活动
+        ResponseData<Integer> integerResponseData = activityService.checkActivityById(mktActivityId, stageUser);
         return integerResponseData;
     }
 }

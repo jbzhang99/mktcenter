@@ -17,4 +17,12 @@ public interface ActivityService {
      * @return
      */
     public ResponseData<Integer> stopActivityById(Long mktActivityId, SysAccountPO sysAccountPO);
+
+    /**
+     * 活动审核
+     * @param mktActivityId
+     * @return
+     */
+    public ResponseData<Integer> checkActivityById(Long mktActivityId, SysAccountPO sysAccountPO);
+
 }

@@ -3,6 +3,7 @@ package com.bizvane.mktcenterserviceimpl.service.impl;
 import com.bizvane.mktcenterservice.interfaces.ActivityService;
 import com.bizvane.mktcenterservice.models.po.MktActivityPOWithBLOBs;
 import com.bizvane.mktcenterserviceimpl.common.enums.ActivityStatusEnum;
+import com.bizvane.mktcenterserviceimpl.common.enums.CheckStatusEnum;
 import com.bizvane.mktcenterserviceimpl.mappers.MktActivityPOMapper;
 import com.bizvane.utils.responseinfo.ResponseData;
 import com.bizvane.utils.tokens.SysAccountPO;
@@ -34,6 +35,25 @@ public class ActivityServiceImpl implements ActivityService {
         MktActivityPOWithBLOBs mktActivityPOWithBLOBs = new MktActivityPOWithBLOBs();
         mktActivityPOWithBLOBs.setMktActivityId(mktActivityId);
         mktActivityPOWithBLOBs.setActivityStatus(ActivityStatusEnum.ACTIVITY_STATUS_DISABLED.getCode());
+        mktActivityPOWithBLOBs.setModifiedUserId(sysAccountPO.getSysAccountId());
+        mktActivityPOWithBLOBs.setModifiedDate(new Date());
+        mktActivityPOWithBLOBs.setModifiedUserName(sysAccountPO.getName());
+        int i = mktActivityPOMapper.updateByPrimaryKeySelective(mktActivityPOWithBLOBs);
+        return responseData;
+    }
+
+    /**
+     * 活动审核
+     * @param mktActivityId
+     * @param sysAccountPO
+     * @return
+     */
+    @Override
+    public ResponseData<Integer> checkActivityById(Long mktActivityId, SysAccountPO sysAccountPO) {
+        ResponseData responseData = new ResponseData();
+        MktActivityPOWithBLOBs mktActivityPOWithBLOBs = new MktActivityPOWithBLOBs();
+        mktActivityPOWithBLOBs.setMktActivityId(mktActivityId);
+        mktActivityPOWithBLOBs.setCheckStatus(CheckStatusEnum.CHECK_STATUS_APPROVED.getCode());
         mktActivityPOWithBLOBs.setModifiedUserId(sysAccountPO.getSysAccountId());
         mktActivityPOWithBLOBs.setModifiedDate(new Date());
         mktActivityPOWithBLOBs.setModifiedUserName(sysAccountPO.getName());
