@@ -5,13 +5,18 @@ import com.bizvane.mktcenterservice.models.bo.ActivityBO;
 import com.bizvane.mktcenterservice.models.po.*;
 import com.bizvane.mktcenterservice.models.vo.ActivityVO;
 import com.bizvane.mktcenterservice.models.vo.MessageVO;
+import com.bizvane.mktcenterserviceimpl.common.constants.ActivityConstants;
+import com.bizvane.mktcenterserviceimpl.common.constants.JobHandlerConstants;
 import com.bizvane.mktcenterserviceimpl.common.enums.ActivityStatusEnum;
 import com.bizvane.mktcenterserviceimpl.common.enums.BusinessTypeEnum;
+import com.bizvane.mktcenterserviceimpl.common.job.XxlJobConfig;
+import com.bizvane.mktcenterserviceimpl.common.utils.DateUtil;
 import com.bizvane.mktcenterserviceimpl.mappers.MktActivityPOMapper;
 import com.bizvane.mktcenterserviceimpl.mappers.MktActivityRegisterPOMapper;
 import com.bizvane.mktcenterserviceimpl.mappers.MktCouponPOMapper;
 import com.bizvane.mktcenterserviceimpl.mappers.MktMessagePOMapper;
 import com.bizvane.utils.commonutils.PageForm;
+import com.bizvane.utils.enumutils.JobEnum;
 import com.bizvane.utils.jobutils.JobClient;
 import com.bizvane.utils.jobutils.XxlJobInfo;
 import com.bizvane.utils.responseinfo.ResponseData;
@@ -20,6 +25,7 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
@@ -46,6 +52,9 @@ public class ActivityRegisterServiceImpl implements ActivityRegisterService {
 
     @Autowired
     private MktMessagePOMapper mktMessagePOMapper;
+
+    @Autowired
+    private  XxlJobConfig xxlJobConfig;
 
     @Autowired
     private JobClient jobClient;
@@ -89,6 +98,15 @@ public class ActivityRegisterServiceImpl implements ActivityRegisterService {
             //活动状态设置为待执行
             mktActivityPOWithBLOBs.setActivityStatus(ActivityStatusEnum.ACTIVITY_STATUS_PENDING.getCode());
             XxlJobInfo xxlJobInfo = new XxlJobInfo();
+            xxlJobInfo.setAppName(xxlJobConfig.getAppName());
+            xxlJobInfo.setExecutorRouteStrategy(JobEnum.EXECUTOR_ROUTE_STRATEGY_FIRST.getValue());
+            xxlJobInfo.setJobCron(DateUtil.getCronExpression(activityVO.getStartTime()));
+            xxlJobInfo.setGlueType(JobEnum.GLUE_TYPE_BEAN.getValue());
+            xxlJobInfo.setExecutorHandler(JobHandlerConstants.activity);
+            xxlJobInfo.setJobDesc(activityVO.getActivityInfo());
+            xxlJobInfo.setExecutorBlockStrategy(JobEnum.EXECUTOR_BLOCK_SERIAL_EXECUTION.getValue());
+            xxlJobInfo.setExecutorFailStrategy(JobEnum.EXECUTOR_FAIL_STRATEGY_NULL.getValue());
+            xxlJobInfo.setAuthor(stageUser.getName());
             jobClient.addJob(xxlJobInfo);
         }else{
             //活动状态设置为执行中

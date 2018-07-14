@@ -39,6 +39,13 @@ public class XxlJobConfig {
     @Value("${xxl.job.executor.logretentiondays}")
     private int logRetentionDays;
 
+    public String getAppName() {
+        return appName;
+    }
+
+    public void setAppName(String appName) {
+        this.appName = appName;
+    }
 
     @Bean(initMethod = "start", destroyMethod = "destroy")
     public XxlJobExecutor xxlJobExecutor() {
