@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.bizvane.mktcenterserviceimpl.mappers.MktTaskCouponPOMapper">
-  <resultMap id="BaseResultMap" type="com.bizvane.mktcenterservice.models.po.MktTaskCouponPO">
+<mapper namespace="com.bizvane.mktcenterserviceimpl.mappers.MktCouponPOMapper">
+  <resultMap id="BaseResultMap" type="com.bizvane.mktcenterservice.models.po.MktCouponPO">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-13 10:42:22.
+      This element was generated on 2018-07-14 13:34:37.
     -->
-    <id column="mkt_task_coupon_id" jdbcType="BIGINT" property="mktTaskCouponId" />
-    <result column="mkt_task_id" jdbcType="BIGINT" property="mktTaskId" />
+    <id column="mkt_coupon_id" jdbcType="BIGINT" property="mktCouponId" />
+    <result column="biz_type" jdbcType="INTEGER" property="bizType" />
+    <result column="biz_id" jdbcType="BIGINT" property="bizId" />
     <result column="coupon_code" jdbcType="VARCHAR" property="couponCode" />
     <result column="coupon_name" jdbcType="VARCHAR" property="couponName" />
     <result column="remark" jdbcType="VARCHAR" property="remark" />
@@ -22,7 +23,7 @@
   <sql id="Example_Where_Clause">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-13 10:42:22.
+      This element was generated on 2018-07-14 13:34:37.
     -->
     <where>
       <foreach collection="oredCriteria" item="criteria" separator="or">
@@ -55,7 +56,7 @@
   <sql id="Update_By_Example_Where_Clause">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-13 10:42:22.
+      This element was generated on 2018-07-14 13:34:37.
     -->
     <where>
       <foreach collection="example.oredCriteria" item="criteria" separator="or">
@@ -88,23 +89,23 @@
   <sql id="Base_Column_List">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-13 10:42:22.
+      This element was generated on 2018-07-14 13:34:37.
     -->
-    mkt_task_coupon_id, mkt_task_id, coupon_code, coupon_name, remark, create_user_id, 
+    mkt_coupon_id, biz_type, biz_id, coupon_code, coupon_name, remark, create_user_id, 
     create_user_name, create_date, modified_user_id, modified_user_name, modified_date, 
     valid
   </sql>
-  <select id="selectByExample" parameterType="com.bizvane.mktcenterservice.models.po.MktTaskCouponPOExample" resultMap="BaseResultMap">
+  <select id="selectByExample" parameterType="com.bizvane.mktcenterservice.models.po.MktCouponPOExample" resultMap="BaseResultMap">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-13 10:42:22.
+      This element was generated on 2018-07-14 13:34:37.
     -->
     select
     <if test="distinct">
       distinct
     </if>
     <include refid="Base_Column_List" />
-    from t_mkt_task_coupon
+    from t_mkt_coupon
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
@@ -115,60 +116,65 @@
   <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-13 10:42:22.
+      This element was generated on 2018-07-14 13:34:37.
     -->
     select 
     <include refid="Base_Column_List" />
-    from t_mkt_task_coupon
-    where mkt_task_coupon_id = #{mktTaskCouponId,jdbcType=BIGINT}
+    from t_mkt_coupon
+    where mkt_coupon_id = #{mktCouponId,jdbcType=BIGINT}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-13 10:42:22.
+      This element was generated on 2018-07-14 13:34:37.
     -->
-    delete from t_mkt_task_coupon
-    where mkt_task_coupon_id = #{mktTaskCouponId,jdbcType=BIGINT}
+    delete from t_mkt_coupon
+    where mkt_coupon_id = #{mktCouponId,jdbcType=BIGINT}
   </delete>
-  <delete id="deleteByExample" parameterType="com.bizvane.mktcenterservice.models.po.MktTaskCouponPOExample">
+  <delete id="deleteByExample" parameterType="com.bizvane.mktcenterservice.models.po.MktCouponPOExample">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-13 10:42:22.
+      This element was generated on 2018-07-14 13:34:37.
     -->
-    delete from t_mkt_task_coupon
+    delete from t_mkt_coupon
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insert" parameterType="com.bizvane.mktcenterservice.models.po.MktTaskCouponPO">
+  <insert id="insert" parameterType="com.bizvane.mktcenterservice.models.po.MktCouponPO">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-13 10:42:22.
+      This element was generated on 2018-07-14 13:34:37.
     -->
-    <selectKey keyProperty="mktTaskCouponId" order="AFTER" resultType="java.lang.Long">
+    <selectKey keyProperty="mktCouponId" order="AFTER" resultType="java.lang.Long">
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into t_mkt_task_coupon (mkt_task_id, coupon_code, coupon_name, 
-      remark, create_user_id, create_user_name, 
-      create_date, modified_user_id, modified_user_name, 
-      modified_date, valid)
-    values (#{mktTaskId,jdbcType=BIGINT}, #{couponCode,jdbcType=VARCHAR}, #{couponName,jdbcType=VARCHAR}, 
-      #{remark,jdbcType=VARCHAR}, #{createUserId,jdbcType=BIGINT}, #{createUserName,jdbcType=VARCHAR}, 
-      #{createDate,jdbcType=TIMESTAMP}, #{modifiedUserId,jdbcType=BIGINT}, #{modifiedUserName,jdbcType=VARCHAR}, 
-      #{modifiedDate,jdbcType=TIMESTAMP}, #{valid,jdbcType=BIT})
+    insert into t_mkt_coupon (biz_type, biz_id, coupon_code, 
+      coupon_name, remark, create_user_id, 
+      create_user_name, create_date, modified_user_id, 
+      modified_user_name, modified_date, valid
+      )
+    values (#{bizType,jdbcType=INTEGER}, #{bizId,jdbcType=BIGINT}, #{couponCode,jdbcType=VARCHAR}, 
+      #{couponName,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}, #{createUserId,jdbcType=BIGINT}, 
+      #{createUserName,jdbcType=VARCHAR}, #{createDate,jdbcType=TIMESTAMP}, #{modifiedUserId,jdbcType=BIGINT}, 
+      #{modifiedUserName,jdbcType=VARCHAR}, #{modifiedDate,jdbcType=TIMESTAMP}, #{valid,jdbcType=BIT}
+      )
   </insert>
-  <insert id="insertSelective" parameterType="com.bizvane.mktcenterservice.models.po.MktTaskCouponPO">
+  <insert id="insertSelective" parameterType="com.bizvane.mktcenterservice.models.po.MktCouponPO">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-13 10:42:22.
+      This element was generated on 2018-07-14 13:34:37.
     -->
-    <selectKey keyProperty="mktTaskCouponId" order="AFTER" resultType="java.lang.Long">
+    <selectKey keyProperty="mktCouponId" order="AFTER" resultType="java.lang.Long">
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into t_mkt_task_coupon
+    insert into t_mkt_coupon
     <trim prefix="(" suffix=")" suffixOverrides=",">
-      <if test="mktTaskId != null">
-        mkt_task_id,
+      <if test="bizType != null">
+        biz_type,
+      </if>
+      <if test="bizId != null">
+        biz_id,
       </if>
       <if test="couponCode != null">
         coupon_code,
@@ -202,8 +208,11 @@
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
-      <if test="mktTaskId != null">
-        #{mktTaskId,jdbcType=BIGINT},
+      <if test="bizType != null">
+        #{bizType,jdbcType=INTEGER},
+      </if>
+      <if test="bizId != null">
+        #{bizId,jdbcType=BIGINT},
       </if>
       <if test="couponCode != null">
         #{couponCode,jdbcType=VARCHAR},
@@ -237,12 +246,12 @@
       </if>
     </trim>
   </insert>
-  <select id="countByExample" parameterType="com.bizvane.mktcenterservice.models.po.MktTaskCouponPOExample" resultType="java.lang.Long">
+  <select id="countByExample" parameterType="com.bizvane.mktcenterservice.models.po.MktCouponPOExample" resultType="java.lang.Long">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-13 10:42:22.
+      This element was generated on 2018-07-14 13:34:37.
     -->
-    select count(*) from t_mkt_task_coupon
+    select count(*) from t_mkt_coupon
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
@@ -250,15 +259,18 @@
   <update id="updateByExampleSelective" parameterType="map">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-13 10:42:22.
+      This element was generated on 2018-07-14 13:34:37.
     -->
-    update t_mkt_task_coupon
+    update t_mkt_coupon
     <set>
-      <if test="record.mktTaskCouponId != null">
-        mkt_task_coupon_id = #{record.mktTaskCouponId,jdbcType=BIGINT},
+      <if test="record.mktCouponId != null">
+        mkt_coupon_id = #{record.mktCouponId,jdbcType=BIGINT},
       </if>
-      <if test="record.mktTaskId != null">
-        mkt_task_id = #{record.mktTaskId,jdbcType=BIGINT},
+      <if test="record.bizType != null">
+        biz_type = #{record.bizType,jdbcType=INTEGER},
+      </if>
+      <if test="record.bizId != null">
+        biz_id = #{record.bizId,jdbcType=BIGINT},
       </if>
       <if test="record.couponCode != null">
         coupon_code = #{record.couponCode,jdbcType=VARCHAR},
@@ -298,11 +310,12 @@
   <update id="updateByExample" parameterType="map">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-13 10:42:22.
+      This element was generated on 2018-07-14 13:34:37.
     -->
-    update t_mkt_task_coupon
-    set mkt_task_coupon_id = #{record.mktTaskCouponId,jdbcType=BIGINT},
-      mkt_task_id = #{record.mktTaskId,jdbcType=BIGINT},
+    update t_mkt_coupon
+    set mkt_coupon_id = #{record.mktCouponId,jdbcType=BIGINT},
+      biz_type = #{record.bizType,jdbcType=INTEGER},
+      biz_id = #{record.bizId,jdbcType=BIGINT},
       coupon_code = #{record.couponCode,jdbcType=VARCHAR},
       coupon_name = #{record.couponName,jdbcType=VARCHAR},
       remark = #{record.remark,jdbcType=VARCHAR},
@@ -317,15 +330,18 @@
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
-  <update id="updateByPrimaryKeySelective" parameterType="com.bizvane.mktcenterservice.models.po.MktTaskCouponPO">
+  <update id="updateByPrimaryKeySelective" parameterType="com.bizvane.mktcenterservice.models.po.MktCouponPO">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-13 10:42:22.
+      This element was generated on 2018-07-14 13:34:37.
     -->
-    update t_mkt_task_coupon
+    update t_mkt_coupon
     <set>
-      <if test="mktTaskId != null">
-        mkt_task_id = #{mktTaskId,jdbcType=BIGINT},
+      <if test="bizType != null">
+        biz_type = #{bizType,jdbcType=INTEGER},
+      </if>
+      <if test="bizId != null">
+        biz_id = #{bizId,jdbcType=BIGINT},
       </if>
       <if test="couponCode != null">
         coupon_code = #{couponCode,jdbcType=VARCHAR},
@@ -358,15 +374,16 @@
         valid = #{valid,jdbcType=BIT},
       </if>
     </set>
-    where mkt_task_coupon_id = #{mktTaskCouponId,jdbcType=BIGINT}
+    where mkt_coupon_id = #{mktCouponId,jdbcType=BIGINT}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.bizvane.mktcenterservice.models.po.MktTaskCouponPO">
+  <update id="updateByPrimaryKey" parameterType="com.bizvane.mktcenterservice.models.po.MktCouponPO">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-13 10:42:22.
+      This element was generated on 2018-07-14 13:34:37.
     -->
-    update t_mkt_task_coupon
-    set mkt_task_id = #{mktTaskId,jdbcType=BIGINT},
+    update t_mkt_coupon
+    set biz_type = #{bizType,jdbcType=INTEGER},
+      biz_id = #{bizId,jdbcType=BIGINT},
       coupon_code = #{couponCode,jdbcType=VARCHAR},
       coupon_name = #{couponName,jdbcType=VARCHAR},
       remark = #{remark,jdbcType=VARCHAR},
@@ -377,6 +394,6 @@
       modified_user_name = #{modifiedUserName,jdbcType=VARCHAR},
       modified_date = #{modifiedDate,jdbcType=TIMESTAMP},
       valid = #{valid,jdbcType=BIT}
-    where mkt_task_coupon_id = #{mktTaskCouponId,jdbcType=BIGINT}
+    where mkt_coupon_id = #{mktCouponId,jdbcType=BIGINT}
   </update>
 </mapper>

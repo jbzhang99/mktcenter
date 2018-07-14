@@ -6,31 +6,31 @@ public class MktActivityPOWithBLOBs extends MktActivityPO implements Serializabl
 
 	/**
 	 * 只读. 活动描述、简介. activity_info
-	 * @mbg.generated  2018-07-13 10:42:22
+	 * @mbg.generated  2018-07-14 13:26:02
 	 */
 	@io.swagger.annotations.ApiModelProperty(value = "活动描述、简介", name = "activityInfo", required = false, example = "")
 	private String activityInfo;
 	/**
 	 * 只读. 活动列表图片，多张逗号分隔. activity_list_img
-	 * @mbg.generated  2018-07-13 10:42:22
+	 * @mbg.generated  2018-07-14 13:26:02
 	 */
 	@io.swagger.annotations.ApiModelProperty(value = "活动列表图片，多张逗号分隔", name = "activityListImg", required = false, example = "")
 	private String activityListImg;
 	/**
 	 * 只读. 活动详情图片. activity_detail_img
-	 * @mbg.generated  2018-07-13 10:42:22
+	 * @mbg.generated  2018-07-14 13:26:02
 	 */
 	@io.swagger.annotations.ApiModelProperty(value = "活动详情图片", name = "activityDetailImg", required = false, example = "")
 	private String activityDetailImg;
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-07-13 10:42:22
+	 * @mbg.generated  2018-07-14 13:26:02
 	 */
 	private static final long serialVersionUID = 1L;
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-07-13 10:42:22
+	 * @mbg.generated  2018-07-14 13:26:02
 	 */
 	public String getActivityInfo() {
 		return activityInfo;
@@ -38,7 +38,7 @@ public class MktActivityPOWithBLOBs extends MktActivityPO implements Serializabl
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-07-13 10:42:22
+	 * @mbg.generated  2018-07-14 13:26:02
 	 */
 	public void setActivityInfo(String activityInfo) {
 		this.activityInfo = activityInfo == null ? null : activityInfo.trim();
@@ -46,7 +46,7 @@ public class MktActivityPOWithBLOBs extends MktActivityPO implements Serializabl
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-07-13 10:42:22
+	 * @mbg.generated  2018-07-14 13:26:02
 	 */
 	public String getActivityListImg() {
 		return activityListImg;
@@ -54,7 +54,7 @@ public class MktActivityPOWithBLOBs extends MktActivityPO implements Serializabl
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-07-13 10:42:22
+	 * @mbg.generated  2018-07-14 13:26:02
 	 */
 	public void setActivityListImg(String activityListImg) {
 		this.activityListImg = activityListImg == null ? null : activityListImg.trim();
@@ -62,7 +62,7 @@ public class MktActivityPOWithBLOBs extends MktActivityPO implements Serializabl
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-07-13 10:42:22
+	 * @mbg.generated  2018-07-14 13:26:02
 	 */
 	public String getActivityDetailImg() {
 		return activityDetailImg;
@@ -70,7 +70,7 @@ public class MktActivityPOWithBLOBs extends MktActivityPO implements Serializabl
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-07-13 10:42:22
+	 * @mbg.generated  2018-07-14 13:26:02
 	 */
 	public void setActivityDetailImg(String activityDetailImg) {
 		this.activityDetailImg = activityDetailImg == null ? null : activityDetailImg.trim();

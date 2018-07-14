@@ -5,39 +5,39 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class MktActivityMsgPOExample implements Serializable {
+public class MktCouponPOExample implements Serializable {
     /**
 	 * 只读. 
-	 * @mbg.generated  2018-07-13 10:42:22
+	 * @mbg.generated  2018-07-14 13:34:37
 	 */
 	protected String orderByClause;
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-07-13 10:42:22
+	 * @mbg.generated  2018-07-14 13:34:37
 	 */
 	protected boolean distinct;
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-07-13 10:42:22
+	 * @mbg.generated  2018-07-14 13:34:37
 	 */
 	protected List<Criteria> oredCriteria;
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-07-13 10:42:22
+	 * @mbg.generated  2018-07-14 13:34:37
 	 */
 	private static final long serialVersionUID = 1L;
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-07-13 10:42:22
+	 * @mbg.generated  2018-07-14 13:34:37
 	 */
-	public MktActivityMsgPOExample() {
+	public MktCouponPOExample() {
 		oredCriteria = new ArrayList<Criteria>();
 	}
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-07-13 10:42:22
+	 * @mbg.generated  2018-07-14 13:34:37
 	 */
 	public void setOrderByClause(String orderByClause) {
 		this.orderByClause = orderByClause;
@@ -45,7 +45,7 @@ public class MktActivityMsgPOExample implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-07-13 10:42:22
+	 * @mbg.generated  2018-07-14 13:34:37
 	 */
 	public String getOrderByClause() {
 		return orderByClause;
@@ -53,7 +53,7 @@ public class MktActivityMsgPOExample implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-07-13 10:42:22
+	 * @mbg.generated  2018-07-14 13:34:37
 	 */
 	public void setDistinct(boolean distinct) {
 		this.distinct = distinct;
@@ -61,7 +61,7 @@ public class MktActivityMsgPOExample implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-07-13 10:42:22
+	 * @mbg.generated  2018-07-14 13:34:37
 	 */
 	public boolean isDistinct() {
 		return distinct;
@@ -69,7 +69,7 @@ public class MktActivityMsgPOExample implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-07-13 10:42:22
+	 * @mbg.generated  2018-07-14 13:34:37
 	 */
 	public List<Criteria> getOredCriteria() {
 		return oredCriteria;
@@ -77,7 +77,7 @@ public class MktActivityMsgPOExample implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-07-13 10:42:22
+	 * @mbg.generated  2018-07-14 13:34:37
 	 */
 	public void or(Criteria criteria) {
 		oredCriteria.add(criteria);
@@ -85,7 +85,7 @@ public class MktActivityMsgPOExample implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-07-13 10:42:22
+	 * @mbg.generated  2018-07-14 13:34:37
 	 */
 	public Criteria or() {
 		Criteria criteria = createCriteriaInternal();
@@ -95,7 +95,7 @@ public class MktActivityMsgPOExample implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-07-13 10:42:22
+	 * @mbg.generated  2018-07-14 13:34:37
 	 */
 	public Criteria createCriteria() {
 		Criteria criteria = createCriteriaInternal();
@@ -107,7 +107,7 @@ public class MktActivityMsgPOExample implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-07-13 10:42:22
+	 * @mbg.generated  2018-07-14 13:34:37
 	 */
 	protected Criteria createCriteriaInternal() {
 		Criteria criteria = new Criteria();
@@ -116,7 +116,7 @@ public class MktActivityMsgPOExample implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-07-13 10:42:22
+	 * @mbg.generated  2018-07-14 13:34:37
 	 */
 	public void clear() {
 		oredCriteria.clear();
@@ -125,8 +125,8 @@ public class MktActivityMsgPOExample implements Serializable {
 	}
 
 	/**
-	 * 只读. t_mkt_activity_msg
-	 * @mbg.generated  2018-07-13 10:42:22
+	 * 只读. t_mkt_coupon
+	 * @mbg.generated  2018-07-14 13:34:37
 	 */
 	protected abstract static class GeneratedCriteria implements Serializable {
 		protected List<Criterion> criteria;
@@ -169,393 +169,323 @@ public class MktActivityMsgPOExample implements Serializable {
 			criteria.add(new Criterion(condition, value1, value2));
 		}
 
-		public Criteria andMktActivityMsgIdIsNull() {
-			addCriterion("mkt_activity_msg_id is null");
+		public Criteria andMktCouponIdIsNull() {
+			addCriterion("mkt_coupon_id is null");
 			return (Criteria) this;
 		}
 
-		public Criteria andMktActivityMsgIdIsNotNull() {
-			addCriterion("mkt_activity_msg_id is not null");
+		public Criteria andMktCouponIdIsNotNull() {
+			addCriterion("mkt_coupon_id is not null");
 			return (Criteria) this;
 		}
 
-		public Criteria andMktActivityMsgIdEqualTo(Long value) {
-			addCriterion("mkt_activity_msg_id =", value, "mktActivityMsgId");
+		public Criteria andMktCouponIdEqualTo(Long value) {
+			addCriterion("mkt_coupon_id =", value, "mktCouponId");
 			return (Criteria) this;
 		}
 
-		public Criteria andMktActivityMsgIdNotEqualTo(Long value) {
-			addCriterion("mkt_activity_msg_id <>", value, "mktActivityMsgId");
+		public Criteria andMktCouponIdNotEqualTo(Long value) {
+			addCriterion("mkt_coupon_id <>", value, "mktCouponId");
 			return (Criteria) this;
 		}
 
-		public Criteria andMktActivityMsgIdGreaterThan(Long value) {
-			addCriterion("mkt_activity_msg_id >", value, "mktActivityMsgId");
+		public Criteria andMktCouponIdGreaterThan(Long value) {
+			addCriterion("mkt_coupon_id >", value, "mktCouponId");
 			return (Criteria) this;
 		}
 
-		public Criteria andMktActivityMsgIdGreaterThanOrEqualTo(Long value) {
-			addCriterion("mkt_activity_msg_id >=", value, "mktActivityMsgId");
+		public Criteria andMktCouponIdGreaterThanOrEqualTo(Long value) {
+			addCriterion("mkt_coupon_id >=", value, "mktCouponId");
 			return (Criteria) this;
 		}
 
-		public Criteria andMktActivityMsgIdLessThan(Long value) {
-			addCriterion("mkt_activity_msg_id <", value, "mktActivityMsgId");
+		public Criteria andMktCouponIdLessThan(Long value) {
+			addCriterion("mkt_coupon_id <", value, "mktCouponId");
 			return (Criteria) this;
 		}
 
-		public Criteria andMktActivityMsgIdLessThanOrEqualTo(Long value) {
-			addCriterion("mkt_activity_msg_id <=", value, "mktActivityMsgId");
+		public Criteria andMktCouponIdLessThanOrEqualTo(Long value) {
+			addCriterion("mkt_coupon_id <=", value, "mktCouponId");
 			return (Criteria) this;
 		}
 
-		public Criteria andMktActivityMsgIdIn(List<Long> values) {
-			addCriterion("mkt_activity_msg_id in", values, "mktActivityMsgId");
+		public Criteria andMktCouponIdIn(List<Long> values) {
+			addCriterion("mkt_coupon_id in", values, "mktCouponId");
 			return (Criteria) this;
 		}
 
-		public Criteria andMktActivityMsgIdNotIn(List<Long> values) {
-			addCriterion("mkt_activity_msg_id not in", values, "mktActivityMsgId");
+		public Criteria andMktCouponIdNotIn(List<Long> values) {
+			addCriterion("mkt_coupon_id not in", values, "mktCouponId");
 			return (Criteria) this;
 		}
 
-		public Criteria andMktActivityMsgIdBetween(Long value1, Long value2) {
-			addCriterion("mkt_activity_msg_id between", value1, value2, "mktActivityMsgId");
+		public Criteria andMktCouponIdBetween(Long value1, Long value2) {
+			addCriterion("mkt_coupon_id between", value1, value2, "mktCouponId");
 			return (Criteria) this;
 		}
 
-		public Criteria andMktActivityMsgIdNotBetween(Long value1, Long value2) {
-			addCriterion("mkt_activity_msg_id not between", value1, value2, "mktActivityMsgId");
+		public Criteria andMktCouponIdNotBetween(Long value1, Long value2) {
+			addCriterion("mkt_coupon_id not between", value1, value2, "mktCouponId");
 			return (Criteria) this;
 		}
 
-		public Criteria andMktActivityIdIsNull() {
-			addCriterion("mkt_activity_id is null");
+		public Criteria andBizTypeIsNull() {
+			addCriterion("biz_type is null");
 			return (Criteria) this;
 		}
 
-		public Criteria andMktActivityIdIsNotNull() {
-			addCriterion("mkt_activity_id is not null");
+		public Criteria andBizTypeIsNotNull() {
+			addCriterion("biz_type is not null");
 			return (Criteria) this;
 		}
 
-		public Criteria andMktActivityIdEqualTo(Long value) {
-			addCriterion("mkt_activity_id =", value, "mktActivityId");
+		public Criteria andBizTypeEqualTo(Integer value) {
+			addCriterion("biz_type =", value, "bizType");
 			return (Criteria) this;
 		}
 
-		public Criteria andMktActivityIdNotEqualTo(Long value) {
-			addCriterion("mkt_activity_id <>", value, "mktActivityId");
+		public Criteria andBizTypeNotEqualTo(Integer value) {
+			addCriterion("biz_type <>", value, "bizType");
 			return (Criteria) this;
 		}
 
-		public Criteria andMktActivityIdGreaterThan(Long value) {
-			addCriterion("mkt_activity_id >", value, "mktActivityId");
+		public Criteria andBizTypeGreaterThan(Integer value) {
+			addCriterion("biz_type >", value, "bizType");
 			return (Criteria) this;
 		}
 
-		public Criteria andMktActivityIdGreaterThanOrEqualTo(Long value) {
-			addCriterion("mkt_activity_id >=", value, "mktActivityId");
+		public Criteria andBizTypeGreaterThanOrEqualTo(Integer value) {
+			addCriterion("biz_type >=", value, "bizType");
 			return (Criteria) this;
 		}
 
-		public Criteria andMktActivityIdLessThan(Long value) {
-			addCriterion("mkt_activity_id <", value, "mktActivityId");
+		public Criteria andBizTypeLessThan(Integer value) {
+			addCriterion("biz_type <", value, "bizType");
 			return (Criteria) this;
 		}
 
-		public Criteria andMktActivityIdLessThanOrEqualTo(Long value) {
-			addCriterion("mkt_activity_id <=", value, "mktActivityId");
+		public Criteria andBizTypeLessThanOrEqualTo(Integer value) {
+			addCriterion("biz_type <=", value, "bizType");
 			return (Criteria) this;
 		}
 
-		public Criteria andMktActivityIdIn(List<Long> values) {
-			addCriterion("mkt_activity_id in", values, "mktActivityId");
+		public Criteria andBizTypeIn(List<Integer> values) {
+			addCriterion("biz_type in", values, "bizType");
 			return (Criteria) this;
 		}
 
-		public Criteria andMktActivityIdNotIn(List<Long> values) {
-			addCriterion("mkt_activity_id not in", values, "mktActivityId");
+		public Criteria andBizTypeNotIn(List<Integer> values) {
+			addCriterion("biz_type not in", values, "bizType");
 			return (Criteria) this;
 		}
 
-		public Criteria andMktActivityIdBetween(Long value1, Long value2) {
-			addCriterion("mkt_activity_id between", value1, value2, "mktActivityId");
+		public Criteria andBizTypeBetween(Integer value1, Integer value2) {
+			addCriterion("biz_type between", value1, value2, "bizType");
 			return (Criteria) this;
 		}
 
-		public Criteria andMktActivityIdNotBetween(Long value1, Long value2) {
-			addCriterion("mkt_activity_id not between", value1, value2, "mktActivityId");
+		public Criteria andBizTypeNotBetween(Integer value1, Integer value2) {
+			addCriterion("biz_type not between", value1, value2, "bizType");
 			return (Criteria) this;
 		}
 
-		public Criteria andWxMsgIdIsNull() {
-			addCriterion("wx_msg_id is null");
+		public Criteria andBizIdIsNull() {
+			addCriterion("biz_id is null");
 			return (Criteria) this;
 		}
 
-		public Criteria andWxMsgIdIsNotNull() {
-			addCriterion("wx_msg_id is not null");
+		public Criteria andBizIdIsNotNull() {
+			addCriterion("biz_id is not null");
 			return (Criteria) this;
 		}
 
-		public Criteria andWxMsgIdEqualTo(String value) {
-			addCriterion("wx_msg_id =", value, "wxMsgId");
+		public Criteria andBizIdEqualTo(Long value) {
+			addCriterion("biz_id =", value, "bizId");
 			return (Criteria) this;
 		}
 
-		public Criteria andWxMsgIdNotEqualTo(String value) {
-			addCriterion("wx_msg_id <>", value, "wxMsgId");
+		public Criteria andBizIdNotEqualTo(Long value) {
+			addCriterion("biz_id <>", value, "bizId");
 			return (Criteria) this;
 		}
 
-		public Criteria andWxMsgIdGreaterThan(String value) {
-			addCriterion("wx_msg_id >", value, "wxMsgId");
+		public Criteria andBizIdGreaterThan(Long value) {
+			addCriterion("biz_id >", value, "bizId");
 			return (Criteria) this;
 		}
 
-		public Criteria andWxMsgIdGreaterThanOrEqualTo(String value) {
-			addCriterion("wx_msg_id >=", value, "wxMsgId");
+		public Criteria andBizIdGreaterThanOrEqualTo(Long value) {
+			addCriterion("biz_id >=", value, "bizId");
 			return (Criteria) this;
 		}
 
-		public Criteria andWxMsgIdLessThan(String value) {
-			addCriterion("wx_msg_id <", value, "wxMsgId");
+		public Criteria andBizIdLessThan(Long value) {
+			addCriterion("biz_id <", value, "bizId");
 			return (Criteria) this;
 		}
 
-		public Criteria andWxMsgIdLessThanOrEqualTo(String value) {
-			addCriterion("wx_msg_id <=", value, "wxMsgId");
+		public Criteria andBizIdLessThanOrEqualTo(Long value) {
+			addCriterion("biz_id <=", value, "bizId");
 			return (Criteria) this;
 		}
 
-		public Criteria andWxMsgIdLike(String value) {
-			addCriterion("wx_msg_id like", value, "wxMsgId");
+		public Criteria andBizIdIn(List<Long> values) {
+			addCriterion("biz_id in", values, "bizId");
 			return (Criteria) this;
 		}
 
-		public Criteria andWxMsgIdNotLike(String value) {
-			addCriterion("wx_msg_id not like", value, "wxMsgId");
+		public Criteria andBizIdNotIn(List<Long> values) {
+			addCriterion("biz_id not in", values, "bizId");
 			return (Criteria) this;
 		}
 
-		public Criteria andWxMsgIdIn(List<String> values) {
-			addCriterion("wx_msg_id in", values, "wxMsgId");
+		public Criteria andBizIdBetween(Long value1, Long value2) {
+			addCriterion("biz_id between", value1, value2, "bizId");
 			return (Criteria) this;
 		}
 
-		public Criteria andWxMsgIdNotIn(List<String> values) {
-			addCriterion("wx_msg_id not in", values, "wxMsgId");
+		public Criteria andBizIdNotBetween(Long value1, Long value2) {
+			addCriterion("biz_id not between", value1, value2, "bizId");
 			return (Criteria) this;
 		}
 
-		public Criteria andWxMsgIdBetween(String value1, String value2) {
-			addCriterion("wx_msg_id between", value1, value2, "wxMsgId");
+		public Criteria andCouponCodeIsNull() {
+			addCriterion("coupon_code is null");
 			return (Criteria) this;
 		}
 
-		public Criteria andWxMsgIdNotBetween(String value1, String value2) {
-			addCriterion("wx_msg_id not between", value1, value2, "wxMsgId");
+		public Criteria andCouponCodeIsNotNull() {
+			addCriterion("coupon_code is not null");
 			return (Criteria) this;
 		}
 
-		public Criteria andMsgTypeIsNull() {
-			addCriterion("msg_type is null");
+		public Criteria andCouponCodeEqualTo(String value) {
+			addCriterion("coupon_code =", value, "couponCode");
 			return (Criteria) this;
 		}
 
-		public Criteria andMsgTypeIsNotNull() {
-			addCriterion("msg_type is not null");
+		public Criteria andCouponCodeNotEqualTo(String value) {
+			addCriterion("coupon_code <>", value, "couponCode");
 			return (Criteria) this;
 		}
 
-		public Criteria andMsgTypeEqualTo(String value) {
-			addCriterion("msg_type =", value, "msgType");
+		public Criteria andCouponCodeGreaterThan(String value) {
+			addCriterion("coupon_code >", value, "couponCode");
 			return (Criteria) this;
 		}
 
-		public Criteria andMsgTypeNotEqualTo(String value) {
-			addCriterion("msg_type <>", value, "msgType");
+		public Criteria andCouponCodeGreaterThanOrEqualTo(String value) {
+			addCriterion("coupon_code >=", value, "couponCode");
 			return (Criteria) this;
 		}
 
-		public Criteria andMsgTypeGreaterThan(String value) {
-			addCriterion("msg_type >", value, "msgType");
+		public Criteria andCouponCodeLessThan(String value) {
+			addCriterion("coupon_code <", value, "couponCode");
 			return (Criteria) this;
 		}
 
-		public Criteria andMsgTypeGreaterThanOrEqualTo(String value) {
-			addCriterion("msg_type >=", value, "msgType");
+		public Criteria andCouponCodeLessThanOrEqualTo(String value) {
+			addCriterion("coupon_code <=", value, "couponCode");
 			return (Criteria) this;
 		}
 
-		public Criteria andMsgTypeLessThan(String value) {
-			addCriterion("msg_type <", value, "msgType");
+		public Criteria andCouponCodeLike(String value) {
+			addCriterion("coupon_code like", value, "couponCode");
 			return (Criteria) this;
 		}
 
-		public Criteria andMsgTypeLessThanOrEqualTo(String value) {
-			addCriterion("msg_type <=", value, "msgType");
+		public Criteria andCouponCodeNotLike(String value) {
+			addCriterion("coupon_code not like", value, "couponCode");
 			return (Criteria) this;
 		}
 
-		public Criteria andMsgTypeLike(String value) {
-			addCriterion("msg_type like", value, "msgType");
+		public Criteria andCouponCodeIn(List<String> values) {
+			addCriterion("coupon_code in", values, "couponCode");
 			return (Criteria) this;
 		}
 
-		public Criteria andMsgTypeNotLike(String value) {
-			addCriterion("msg_type not like", value, "msgType");
+		public Criteria andCouponCodeNotIn(List<String> values) {
+			addCriterion("coupon_code not in", values, "couponCode");
 			return (Criteria) this;
 		}
 
-		public Criteria andMsgTypeIn(List<String> values) {
-			addCriterion("msg_type in", values, "msgType");
+		public Criteria andCouponCodeBetween(String value1, String value2) {
+			addCriterion("coupon_code between", value1, value2, "couponCode");
 			return (Criteria) this;
 		}
 
-		public Criteria andMsgTypeNotIn(List<String> values) {
-			addCriterion("msg_type not in", values, "msgType");
+		public Criteria andCouponCodeNotBetween(String value1, String value2) {
+			addCriterion("coupon_code not between", value1, value2, "couponCode");
 			return (Criteria) this;
 		}
 
-		public Criteria andMsgTypeBetween(String value1, String value2) {
-			addCriterion("msg_type between", value1, value2, "msgType");
+		public Criteria andCouponNameIsNull() {
+			addCriterion("coupon_name is null");
 			return (Criteria) this;
 		}
 
-		public Criteria andMsgTypeNotBetween(String value1, String value2) {
-			addCriterion("msg_type not between", value1, value2, "msgType");
+		public Criteria andCouponNameIsNotNull() {
+			addCriterion("coupon_name is not null");
 			return (Criteria) this;
 		}
 
-		public Criteria andTemplateMsgIdIsNull() {
-			addCriterion("template_msg_id is null");
+		public Criteria andCouponNameEqualTo(String value) {
+			addCriterion("coupon_name =", value, "couponName");
 			return (Criteria) this;
 		}
 
-		public Criteria andTemplateMsgIdIsNotNull() {
-			addCriterion("template_msg_id is not null");
+		public Criteria andCouponNameNotEqualTo(String value) {
+			addCriterion("coupon_name <>", value, "couponName");
 			return (Criteria) this;
 		}
 
-		public Criteria andTemplateMsgIdEqualTo(String value) {
-			addCriterion("template_msg_id =", value, "templateMsgId");
+		public Criteria andCouponNameGreaterThan(String value) {
+			addCriterion("coupon_name >", value, "couponName");
 			return (Criteria) this;
 		}
 
-		public Criteria andTemplateMsgIdNotEqualTo(String value) {
-			addCriterion("template_msg_id <>", value, "templateMsgId");
+		public Criteria andCouponNameGreaterThanOrEqualTo(String value) {
+			addCriterion("coupon_name >=", value, "couponName");
 			return (Criteria) this;
 		}
 
-		public Criteria andTemplateMsgIdGreaterThan(String value) {
-			addCriterion("template_msg_id >", value, "templateMsgId");
+		public Criteria andCouponNameLessThan(String value) {
+			addCriterion("coupon_name <", value, "couponName");
 			return (Criteria) this;
 		}
 
-		public Criteria andTemplateMsgIdGreaterThanOrEqualTo(String value) {
-			addCriterion("template_msg_id >=", value, "templateMsgId");
+		public Criteria andCouponNameLessThanOrEqualTo(String value) {
+			addCriterion("coupon_name <=", value, "couponName");
 			return (Criteria) this;
 		}
 
-		public Criteria andTemplateMsgIdLessThan(String value) {
-			addCriterion("template_msg_id <", value, "templateMsgId");
+		public Criteria andCouponNameLike(String value) {
+			addCriterion("coupon_name like", value, "couponName");
 			return (Criteria) this;
 		}
 
-		public Criteria andTemplateMsgIdLessThanOrEqualTo(String value) {
-			addCriterion("template_msg_id <=", value, "templateMsgId");
+		public Criteria andCouponNameNotLike(String value) {
+			addCriterion("coupon_name not like", value, "couponName");
 			return (Criteria) this;
 		}
 
-		public Criteria andTemplateMsgIdLike(String value) {
-			addCriterion("template_msg_id like", value, "templateMsgId");
+		public Criteria andCouponNameIn(List<String> values) {
+			addCriterion("coupon_name in", values, "couponName");
 			return (Criteria) this;
 		}
 
-		public Criteria andTemplateMsgIdNotLike(String value) {
-			addCriterion("template_msg_id not like", value, "templateMsgId");
+		public Criteria andCouponNameNotIn(List<String> values) {
+			addCriterion("coupon_name not in", values, "couponName");
 			return (Criteria) this;
 		}
 
-		public Criteria andTemplateMsgIdIn(List<String> values) {
-			addCriterion("template_msg_id in", values, "templateMsgId");
+		public Criteria andCouponNameBetween(String value1, String value2) {
+			addCriterion("coupon_name between", value1, value2, "couponName");
 			return (Criteria) this;
 		}
 
-		public Criteria andTemplateMsgIdNotIn(List<String> values) {
-			addCriterion("template_msg_id not in", values, "templateMsgId");
-			return (Criteria) this;
-		}
-
-		public Criteria andTemplateMsgIdBetween(String value1, String value2) {
-			addCriterion("template_msg_id between", value1, value2, "templateMsgId");
-			return (Criteria) this;
-		}
-
-		public Criteria andTemplateMsgIdNotBetween(String value1, String value2) {
-			addCriterion("template_msg_id not between", value1, value2, "templateMsgId");
-			return (Criteria) this;
-		}
-
-		public Criteria andSendTimeIsNull() {
-			addCriterion("send_time is null");
-			return (Criteria) this;
-		}
-
-		public Criteria andSendTimeIsNotNull() {
-			addCriterion("send_time is not null");
-			return (Criteria) this;
-		}
-
-		public Criteria andSendTimeEqualTo(Date value) {
-			addCriterion("send_time =", value, "sendTime");
-			return (Criteria) this;
-		}
-
-		public Criteria andSendTimeNotEqualTo(Date value) {
-			addCriterion("send_time <>", value, "sendTime");
-			return (Criteria) this;
-		}
-
-		public Criteria andSendTimeGreaterThan(Date value) {
-			addCriterion("send_time >", value, "sendTime");
-			return (Criteria) this;
-		}
-
-		public Criteria andSendTimeGreaterThanOrEqualTo(Date value) {
-			addCriterion("send_time >=", value, "sendTime");
-			return (Criteria) this;
-		}
-
-		public Criteria andSendTimeLessThan(Date value) {
-			addCriterion("send_time <", value, "sendTime");
-			return (Criteria) this;
-		}
-
-		public Criteria andSendTimeLessThanOrEqualTo(Date value) {
-			addCriterion("send_time <=", value, "sendTime");
-			return (Criteria) this;
-		}
-
-		public Criteria andSendTimeIn(List<Date> values) {
-			addCriterion("send_time in", values, "sendTime");
-			return (Criteria) this;
-		}
-
-		public Criteria andSendTimeNotIn(List<Date> values) {
-			addCriterion("send_time not in", values, "sendTime");
-			return (Criteria) this;
-		}
-
-		public Criteria andSendTimeBetween(Date value1, Date value2) {
-			addCriterion("send_time between", value1, value2, "sendTime");
-			return (Criteria) this;
-		}
-
-		public Criteria andSendTimeNotBetween(Date value1, Date value2) {
-			addCriterion("send_time not between", value1, value2, "sendTime");
+		public Criteria andCouponNameNotBetween(String value1, String value2) {
+			addCriterion("coupon_name not between", value1, value2, "couponName");
 			return (Criteria) this;
 		}
 
@@ -1071,8 +1001,8 @@ public class MktActivityMsgPOExample implements Serializable {
 	}
 
 	/**
-	 * 只读. t_mkt_activity_msg
-	 * @mbg.generated  2018-07-13 10:42:22
+	 * 只读. t_mkt_coupon
+	 * @mbg.generated  2018-07-14 13:34:37
 	 */
 	public static class Criterion implements Serializable {
 		private String condition;
@@ -1155,9 +1085,9 @@ public class MktActivityMsgPOExample implements Serializable {
 
 	/**9
      * This class was generated by MyBatis Generator.
-     * This class corresponds to the database table t_mkt_activity_msg
+     * This class corresponds to the database table t_mkt_coupon
      *
-     * @mbg.generated do_not_delete_during_merge 2018-07-12 11:48:54
+     * @mbg.generated do_not_delete_during_merge 2018-07-14 13:25:51
      */
     public static class Criteria extends GeneratedCriteria implements Serializable {
 

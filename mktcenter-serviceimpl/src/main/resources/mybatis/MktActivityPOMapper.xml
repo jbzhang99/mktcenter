@@ -4,7 +4,7 @@
   <resultMap id="BaseResultMap" type="com.bizvane.mktcenterservice.models.po.MktActivityPO">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-13 10:42:22.
+      This element was generated on 2018-07-14 13:26:02.
     -->
     <id column="mkt_activity_id" jdbcType="BIGINT" property="mktActivityId" />
     <result column="sys_company_id" jdbcType="BIGINT" property="sysCompanyId" />
@@ -30,7 +30,7 @@
   <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.bizvane.mktcenterservice.models.po.MktActivityPOWithBLOBs">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-13 10:42:22.
+      This element was generated on 2018-07-14 13:26:02.
     -->
     <result column="activity_info" jdbcType="LONGVARCHAR" property="activityInfo" />
     <result column="activity_list_img" jdbcType="LONGVARCHAR" property="activityListImg" />
@@ -39,7 +39,7 @@
   <sql id="Example_Where_Clause">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-13 10:42:22.
+      This element was generated on 2018-07-14 13:26:02.
     -->
     <where>
       <foreach collection="oredCriteria" item="criteria" separator="or">
@@ -72,7 +72,7 @@
   <sql id="Update_By_Example_Where_Clause">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-13 10:42:22.
+      This element was generated on 2018-07-14 13:26:02.
     -->
     <where>
       <foreach collection="example.oredCriteria" item="criteria" separator="or">
@@ -105,7 +105,7 @@
   <sql id="Base_Column_List">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-13 10:42:22.
+      This element was generated on 2018-07-14 13:26:02.
     -->
     mkt_activity_id, sys_company_id, sys_brand_id, activity_code, activity_type, activity_name, 
     start_time, end_time, long_term, points, check_status, activity_status, remark, create_user_id, 
@@ -115,14 +115,14 @@
   <sql id="Blob_Column_List">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-13 10:42:22.
+      This element was generated on 2018-07-14 13:26:02.
     -->
     activity_info, activity_list_img, activity_detail_img
   </sql>
   <select id="selectByExampleWithBLOBs" parameterType="com.bizvane.mktcenterservice.models.po.MktActivityPOExample" resultMap="ResultMapWithBLOBs">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-13 10:42:22.
+      This element was generated on 2018-07-14 13:26:02.
     -->
     select
     <if test="distinct">
@@ -142,7 +142,7 @@
   <select id="selectByExample" parameterType="com.bizvane.mktcenterservice.models.po.MktActivityPOExample" resultMap="BaseResultMap">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-13 10:42:22.
+      This element was generated on 2018-07-14 13:26:02.
     -->
     select
     <if test="distinct">
@@ -160,7 +160,7 @@
   <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="ResultMapWithBLOBs">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-13 10:42:22.
+      This element was generated on 2018-07-14 13:26:02.
     -->
     select 
     <include refid="Base_Column_List" />
@@ -172,7 +172,7 @@
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-13 10:42:22.
+      This element was generated on 2018-07-14 13:26:02.
     -->
     delete from t_mkt_activity
     where mkt_activity_id = #{mktActivityId,jdbcType=BIGINT}
@@ -180,7 +180,7 @@
   <delete id="deleteByExample" parameterType="com.bizvane.mktcenterservice.models.po.MktActivityPOExample">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-13 10:42:22.
+      This element was generated on 2018-07-14 13:26:02.
     -->
     delete from t_mkt_activity
     <if test="_parameter != null">
@@ -190,7 +190,7 @@
   <insert id="insert" parameterType="com.bizvane.mktcenterservice.models.po.MktActivityPOWithBLOBs">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-13 10:42:22.
+      This element was generated on 2018-07-14 13:26:02.
     -->
     <selectKey keyProperty="mktActivityId" order="AFTER" resultType="java.lang.Long">
       SELECT LAST_INSERT_ID()
@@ -215,7 +215,7 @@
   <insert id="insertSelective" parameterType="com.bizvane.mktcenterservice.models.po.MktActivityPOWithBLOBs">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-13 10:42:22.
+      This element was generated on 2018-07-14 13:26:02.
     -->
     <selectKey keyProperty="mktActivityId" order="AFTER" resultType="java.lang.Long">
       SELECT LAST_INSERT_ID()
@@ -361,7 +361,7 @@
   <select id="countByExample" parameterType="com.bizvane.mktcenterservice.models.po.MktActivityPOExample" resultType="java.lang.Long">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-13 10:42:22.
+      This element was generated on 2018-07-14 13:26:02.
     -->
     select count(*) from t_mkt_activity
     <if test="_parameter != null">
@@ -371,7 +371,7 @@
   <update id="updateByExampleSelective" parameterType="map">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-13 10:42:22.
+      This element was generated on 2018-07-14 13:26:02.
     -->
     update t_mkt_activity
     <set>
@@ -452,7 +452,7 @@
   <update id="updateByExampleWithBLOBs" parameterType="map">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-13 10:42:22.
+      This element was generated on 2018-07-14 13:26:02.
     -->
     update t_mkt_activity
     set mkt_activity_id = #{record.mktActivityId,jdbcType=BIGINT},
@@ -485,7 +485,7 @@
   <update id="updateByExample" parameterType="map">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-13 10:42:22.
+      This element was generated on 2018-07-14 13:26:02.
     -->
     update t_mkt_activity
     set mkt_activity_id = #{record.mktActivityId,jdbcType=BIGINT},
@@ -515,7 +515,7 @@
   <update id="updateByPrimaryKeySelective" parameterType="com.bizvane.mktcenterservice.models.po.MktActivityPOWithBLOBs">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-13 10:42:22.
+      This element was generated on 2018-07-14 13:26:02.
     -->
     update t_mkt_activity
     <set>
@@ -591,7 +591,7 @@
   <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.bizvane.mktcenterservice.models.po.MktActivityPOWithBLOBs">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-13 10:42:22.
+      This element was generated on 2018-07-14 13:26:02.
     -->
     update t_mkt_activity
     set sys_company_id = #{sysCompanyId,jdbcType=BIGINT},
@@ -621,7 +621,7 @@
   <update id="updateByPrimaryKey" parameterType="com.bizvane.mktcenterservice.models.po.MktActivityPO">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-13 10:42:22.
+      This element was generated on 2018-07-14 13:26:02.
     -->
     update t_mkt_activity
     set sys_company_id = #{sysCompanyId,jdbcType=BIGINT},

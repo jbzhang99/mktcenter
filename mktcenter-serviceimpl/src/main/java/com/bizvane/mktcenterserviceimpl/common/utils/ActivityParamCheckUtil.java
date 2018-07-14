@@ -1,5 +1,6 @@
 package com.bizvane.mktcenterserviceimpl.common.utils;
 
+import com.bizvane.mktcenterservice.models.bo.ActivityBO;
 import com.bizvane.mktcenterservice.models.vo.ActivityVO;
 import com.bizvane.mktcenterserviceimpl.common.constants.ActivityConstants;
 import com.bizvane.mktcenterserviceimpl.common.constants.SystemConstants;
@@ -18,18 +19,19 @@ public class ActivityParamCheckUtil {
 
     /**
      * 参数校验
-     * @param vo
+     * @param bo
      * @return
      */
-    public static ResponseData checkParam(ActivityVO vo){
+    public static ResponseData checkParam(ActivityBO bo){
         ResponseData responseData = new ResponseData();
         responseData.setCode(SystemConstants.ERROR_CODE);
 
         //活动主体
-        if(vo ==null){
+        if(bo ==null || bo.getActivityVO()==null){
             responseData.setMessage(SystemConstants.ERROR_MSG_PARAM_EMPTY);
             return responseData;
         }
+        ActivityVO vo = bo.getActivityVO();
         if(StringUtils.isEmpty(vo.getActivityName())){
             responseData.setMessage(ActivityConstants.ERROR_MSG_ACTIVITY_NAME_EMPTY);
             return responseData;

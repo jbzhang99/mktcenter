@@ -1,18 +1,29 @@
 package com.bizvane.mktcenterserviceimpl.service.impl;
 
 import com.bizvane.mktcenterservice.interfaces.ActivityRegisterService;
-import com.bizvane.mktcenterservice.models.po.MktActivityRegisterPO;
-import com.bizvane.mktcenterservice.models.po.MktActivityRegisterPOExample;
+import com.bizvane.mktcenterservice.models.bo.ActivityBO;
+import com.bizvane.mktcenterservice.models.po.*;
 import com.bizvane.mktcenterservice.models.vo.ActivityVO;
+import com.bizvane.mktcenterservice.models.vo.MessageVO;
+import com.bizvane.mktcenterserviceimpl.common.enums.ActivityStatusEnum;
+import com.bizvane.mktcenterserviceimpl.common.enums.BusinessTypeEnum;
+import com.bizvane.mktcenterserviceimpl.mappers.MktActivityPOMapper;
 import com.bizvane.mktcenterserviceimpl.mappers.MktActivityRegisterPOMapper;
+import com.bizvane.mktcenterserviceimpl.mappers.MktCouponPOMapper;
+import com.bizvane.mktcenterserviceimpl.mappers.MktMessagePOMapper;
 import com.bizvane.utils.commonutils.PageForm;
+import com.bizvane.utils.jobutils.JobClient;
+import com.bizvane.utils.jobutils.XxlJobInfo;
 import com.bizvane.utils.responseinfo.ResponseData;
-import com.github.pagehelper.Page;
+import com.bizvane.utils.tokens.SysAccountPO;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -26,6 +37,18 @@ public class ActivityRegisterServiceImpl implements ActivityRegisterService {
 
     @Autowired
     private MktActivityRegisterPOMapper mktActivityRegisterPOMapper;
+
+    @Autowired
+    private MktActivityPOMapper mktActivityPOMapper;
+
+    @Autowired
+    private MktCouponPOMapper mktCouponPOMapper;
+
+    @Autowired
+    private MktMessagePOMapper mktMessagePOMapper;
+
+    @Autowired
+    private JobClient jobClient;
 
     /**
      * 查询活动列表
@@ -43,8 +66,77 @@ public class ActivityRegisterServiceImpl implements ActivityRegisterService {
         return responseData;
     }
 
+    /**
+     * 创建活动
+     * @param bo
+     * @return
+     */
     @Override
-    public ResponseData<Integer> addActivity(ActivityVO vo) {
-        return null;
+    public ResponseData<Integer> addActivity(ActivityBO bo,SysAccountPO stageUser) {
+        //返回对象
+        ResponseData responseData = new ResponseData();
+
+        ActivityVO activityVO = bo.getActivityVO();
+
+        MktActivityPOWithBLOBs mktActivityPOWithBLOBs = new MktActivityPOWithBLOBs();
+        BeanUtils.copyProperties(activityVO,mktActivityPOWithBLOBs);
+
+        //查询审核配置，是否需要审核
+
+
+        //如果活动时间在当前时间之后，启用job调度
+        if(new Date().before(activityVO.getStartTime())){
+            //活动状态设置为待执行
+            mktActivityPOWithBLOBs.setActivityStatus(ActivityStatusEnum.ACTIVITY_STATUS_PENDING.getCode());
+            XxlJobInfo xxlJobInfo = new XxlJobInfo();
+            jobClient.addJob(xxlJobInfo);
+        }else{
+            //活动状态设置为执行中
+            mktActivityPOWithBLOBs.setActivityStatus(ActivityStatusEnum.ACTIVITY_STATUS_EXECUTING.getCode());
+        }
+
+        //新增活动主表
+        mktActivityPOWithBLOBs.setCreateDate(new Date());
+        mktActivityPOWithBLOBs.setCreateUserId(stageUser.getSysAccountId());
+        mktActivityPOWithBLOBs.setCreateUserName(stageUser.getName());
+        mktActivityPOMapper.insertSelective(mktActivityPOWithBLOBs);
+
+        //获取新增后数据id
+        Long mktActivityId = mktActivityPOWithBLOBs.getMktActivityId();
+
+        //新增开卡活动表
+        MktActivityRegisterPO mktActivityRegisterPO = new MktActivityRegisterPO();
+        BeanUtils.copyProperties(mktActivityPOWithBLOBs,mktActivityRegisterPO);
+        mktActivityRegisterPO.setMktActivityId(mktActivityId);
+        mktActivityRegisterPOMapper.insertSelective(mktActivityRegisterPO);
+
+        //新增券奖励
+        List<String> couponCodeList = bo.getCouponCodeList();
+        if(!CollectionUtils.isEmpty(couponCodeList)){
+            for(String couponCode : couponCodeList){
+                MktCouponPO mktCouponPO = new MktCouponPO();
+                BeanUtils.copyProperties(mktActivityPOWithBLOBs,mktCouponPO);
+                mktCouponPO.setBizType(BusinessTypeEnum.ACTIVITY_TYPE_ACTIVITY.getCode());
+                mktCouponPO.setBizId(mktActivityId);
+                mktCouponPO.setCouponCode(couponCode);
+                mktCouponPOMapper.insertSelective(mktCouponPO);
+            }
+        }
+
+        //新增活动消息
+        List<MessageVO> messageVOList = bo.getMessageVOList();
+        if(!CollectionUtils.isEmpty(messageVOList)){
+            for(MessageVO messageVO : messageVOList){
+                MktMessagePO mktMessagePO = new MktMessagePO();
+                BeanUtils.copyProperties(mktActivityPOWithBLOBs,mktMessagePO);
+                BeanUtils.copyProperties(messageVO,mktMessagePO);
+                mktMessagePO.setBizType(BusinessTypeEnum.ACTIVITY_TYPE_ACTIVITY.getCode());
+                mktMessagePO.setBizId(mktActivityId);
+                mktMessagePOMapper.insertSelective(mktMessagePO);
+            }
+        }
+
+        //结束
+        return responseData;
     }
 }

@@ -4,7 +4,7 @@
   <resultMap id="BaseResultMap" type="com.bizvane.mktcenterservice.models.po.MktTaskInvitePO">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-13 10:42:22.
+      This element was generated on 2018-07-14 13:26:02.
     -->
     <id column="mkt_task_profile_id" jdbcType="BIGINT" property="mktTaskProfileId" />
     <result column="mkt_task_id" jdbcType="BIGINT" property="mktTaskId" />
@@ -21,7 +21,7 @@
   <sql id="Example_Where_Clause">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-13 10:42:22.
+      This element was generated on 2018-07-14 13:26:02.
     -->
     <where>
       <foreach collection="oredCriteria" item="criteria" separator="or">
@@ -54,7 +54,7 @@
   <sql id="Update_By_Example_Where_Clause">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-13 10:42:22.
+      This element was generated on 2018-07-14 13:26:02.
     -->
     <where>
       <foreach collection="example.oredCriteria" item="criteria" separator="or">
@@ -87,7 +87,7 @@
   <sql id="Base_Column_List">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-13 10:42:22.
+      This element was generated on 2018-07-14 13:26:02.
     -->
     mkt_task_profile_id, mkt_task_id, invite_num, remark, create_user_id, create_user_name, 
     create_date, modified_user_id, modified_user_name, modified_date, valid
@@ -95,7 +95,7 @@
   <select id="selectByExample" parameterType="com.bizvane.mktcenterservice.models.po.MktTaskInvitePOExample" resultMap="BaseResultMap">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-13 10:42:22.
+      This element was generated on 2018-07-14 13:26:02.
     -->
     select
     <if test="distinct">
@@ -113,7 +113,7 @@
   <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-13 10:42:22.
+      This element was generated on 2018-07-14 13:26:02.
     -->
     select 
     <include refid="Base_Column_List" />
@@ -123,7 +123,7 @@
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-13 10:42:22.
+      This element was generated on 2018-07-14 13:26:02.
     -->
     delete from t_mkt_task_invite
     where mkt_task_profile_id = #{mktTaskProfileId,jdbcType=BIGINT}
@@ -131,7 +131,7 @@
   <delete id="deleteByExample" parameterType="com.bizvane.mktcenterservice.models.po.MktTaskInvitePOExample">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-13 10:42:22.
+      This element was generated on 2018-07-14 13:26:02.
     -->
     delete from t_mkt_task_invite
     <if test="_parameter != null">
@@ -141,7 +141,7 @@
   <insert id="insert" parameterType="com.bizvane.mktcenterservice.models.po.MktTaskInvitePO">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-13 10:42:22.
+      This element was generated on 2018-07-14 13:26:02.
     -->
     insert into t_mkt_task_invite (mkt_task_profile_id, mkt_task_id, invite_num, 
       remark, create_user_id, create_user_name, 
@@ -155,7 +155,7 @@
   <insert id="insertSelective" parameterType="com.bizvane.mktcenterservice.models.po.MktTaskInvitePO">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-13 10:42:22.
+      This element was generated on 2018-07-14 13:26:02.
     -->
     insert into t_mkt_task_invite
     <trim prefix="(" suffix=")" suffixOverrides=",">
@@ -232,7 +232,7 @@
   <select id="countByExample" parameterType="com.bizvane.mktcenterservice.models.po.MktTaskInvitePOExample" resultType="java.lang.Long">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-13 10:42:22.
+      This element was generated on 2018-07-14 13:26:02.
     -->
     select count(*) from t_mkt_task_invite
     <if test="_parameter != null">
@@ -242,7 +242,7 @@
   <update id="updateByExampleSelective" parameterType="map">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-13 10:42:22.
+      This element was generated on 2018-07-14 13:26:02.
     -->
     update t_mkt_task_invite
     <set>
@@ -287,7 +287,7 @@
   <update id="updateByExample" parameterType="map">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-13 10:42:22.
+      This element was generated on 2018-07-14 13:26:02.
     -->
     update t_mkt_task_invite
     set mkt_task_profile_id = #{record.mktTaskProfileId,jdbcType=BIGINT},
@@ -308,7 +308,7 @@
   <update id="updateByPrimaryKeySelective" parameterType="com.bizvane.mktcenterservice.models.po.MktTaskInvitePO">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-13 10:42:22.
+      This element was generated on 2018-07-14 13:26:02.
     -->
     update t_mkt_task_invite
     <set>
@@ -348,7 +348,7 @@
   <update id="updateByPrimaryKey" parameterType="com.bizvane.mktcenterservice.models.po.MktTaskInvitePO">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-13 10:42:22.
+      This element was generated on 2018-07-14 13:26:02.
     -->
     update t_mkt_task_invite
     set mkt_task_id = #{mktTaskId,jdbcType=BIGINT},

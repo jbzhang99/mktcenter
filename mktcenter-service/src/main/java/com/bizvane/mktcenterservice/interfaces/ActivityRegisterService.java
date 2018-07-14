@@ -1,8 +1,10 @@
 package com.bizvane.mktcenterservice.interfaces;
 
+import com.bizvane.mktcenterservice.models.bo.ActivityBO;
 import com.bizvane.mktcenterservice.models.vo.ActivityVO;
 import com.bizvane.utils.commonutils.PageForm;
 import com.bizvane.utils.responseinfo.ResponseData;
+import com.bizvane.utils.tokens.SysAccountPO;
 
 /**
  * @author chen.li
@@ -21,8 +23,8 @@ public interface ActivityRegisterService {
 
     /**
      * 新增开卡活动
-     * @param vo
+     * @param bo
      * @return
      */
-    public ResponseData<Integer> addActivity(ActivityVO vo);
+    public ResponseData<Integer> addActivity(ActivityBO bo,SysAccountPO stageUser);
 }

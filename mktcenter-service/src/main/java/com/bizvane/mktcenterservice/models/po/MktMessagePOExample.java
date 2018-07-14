@@ -5,39 +5,39 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class MktTaskMsgPOExample implements Serializable {
+public class MktMessagePOExample implements Serializable {
     /**
 	 * 只读. 
-	 * @mbg.generated  2018-07-13 10:42:22
+	 * @mbg.generated  2018-07-14 13:34:37
 	 */
 	protected String orderByClause;
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-07-13 10:42:22
+	 * @mbg.generated  2018-07-14 13:34:37
 	 */
 	protected boolean distinct;
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-07-13 10:42:22
+	 * @mbg.generated  2018-07-14 13:34:37
 	 */
 	protected List<Criteria> oredCriteria;
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-07-13 10:42:22
+	 * @mbg.generated  2018-07-14 13:34:37
 	 */
 	private static final long serialVersionUID = 1L;
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-07-13 10:42:22
+	 * @mbg.generated  2018-07-14 13:34:37
 	 */
-	public MktTaskMsgPOExample() {
+	public MktMessagePOExample() {
 		oredCriteria = new ArrayList<Criteria>();
 	}
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-07-13 10:42:22
+	 * @mbg.generated  2018-07-14 13:34:37
 	 */
 	public void setOrderByClause(String orderByClause) {
 		this.orderByClause = orderByClause;
@@ -45,7 +45,7 @@ public class MktTaskMsgPOExample implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-07-13 10:42:22
+	 * @mbg.generated  2018-07-14 13:34:37
 	 */
 	public String getOrderByClause() {
 		return orderByClause;
@@ -53,7 +53,7 @@ public class MktTaskMsgPOExample implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-07-13 10:42:22
+	 * @mbg.generated  2018-07-14 13:34:37
 	 */
 	public void setDistinct(boolean distinct) {
 		this.distinct = distinct;
@@ -61,7 +61,7 @@ public class MktTaskMsgPOExample implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-07-13 10:42:22
+	 * @mbg.generated  2018-07-14 13:34:37
 	 */
 	public boolean isDistinct() {
 		return distinct;
@@ -69,7 +69,7 @@ public class MktTaskMsgPOExample implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-07-13 10:42:22
+	 * @mbg.generated  2018-07-14 13:34:37
 	 */
 	public List<Criteria> getOredCriteria() {
 		return oredCriteria;
@@ -77,7 +77,7 @@ public class MktTaskMsgPOExample implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-07-13 10:42:22
+	 * @mbg.generated  2018-07-14 13:34:37
 	 */
 	public void or(Criteria criteria) {
 		oredCriteria.add(criteria);
@@ -85,7 +85,7 @@ public class MktTaskMsgPOExample implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-07-13 10:42:22
+	 * @mbg.generated  2018-07-14 13:34:37
 	 */
 	public Criteria or() {
 		Criteria criteria = createCriteriaInternal();
@@ -95,7 +95,7 @@ public class MktTaskMsgPOExample implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-07-13 10:42:22
+	 * @mbg.generated  2018-07-14 13:34:37
 	 */
 	public Criteria createCriteria() {
 		Criteria criteria = createCriteriaInternal();
@@ -107,7 +107,7 @@ public class MktTaskMsgPOExample implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-07-13 10:42:22
+	 * @mbg.generated  2018-07-14 13:34:37
 	 */
 	protected Criteria createCriteriaInternal() {
 		Criteria criteria = new Criteria();
@@ -116,7 +116,7 @@ public class MktTaskMsgPOExample implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-07-13 10:42:22
+	 * @mbg.generated  2018-07-14 13:34:37
 	 */
 	public void clear() {
 		oredCriteria.clear();
@@ -125,8 +125,8 @@ public class MktTaskMsgPOExample implements Serializable {
 	}
 
 	/**
-	 * 只读. t_mkt_task_msg
-	 * @mbg.generated  2018-07-13 10:42:22
+	 * 只读. t_mkt_message
+	 * @mbg.generated  2018-07-14 13:34:37
 	 */
 	protected abstract static class GeneratedCriteria implements Serializable {
 		protected List<Criterion> criteria;
@@ -169,193 +169,183 @@ public class MktTaskMsgPOExample implements Serializable {
 			criteria.add(new Criterion(condition, value1, value2));
 		}
 
-		public Criteria andMktTaskMsgIdIsNull() {
-			addCriterion("mkt_task_msg_id is null");
+		public Criteria andMktMsgIdIsNull() {
+			addCriterion("mkt_msg_id is null");
 			return (Criteria) this;
 		}
 
-		public Criteria andMktTaskMsgIdIsNotNull() {
-			addCriterion("mkt_task_msg_id is not null");
+		public Criteria andMktMsgIdIsNotNull() {
+			addCriterion("mkt_msg_id is not null");
 			return (Criteria) this;
 		}
 
-		public Criteria andMktTaskMsgIdEqualTo(Long value) {
-			addCriterion("mkt_task_msg_id =", value, "mktTaskMsgId");
+		public Criteria andMktMsgIdEqualTo(Long value) {
+			addCriterion("mkt_msg_id =", value, "mktMsgId");
 			return (Criteria) this;
 		}
 
-		public Criteria andMktTaskMsgIdNotEqualTo(Long value) {
-			addCriterion("mkt_task_msg_id <>", value, "mktTaskMsgId");
+		public Criteria andMktMsgIdNotEqualTo(Long value) {
+			addCriterion("mkt_msg_id <>", value, "mktMsgId");
 			return (Criteria) this;
 		}
 
-		public Criteria andMktTaskMsgIdGreaterThan(Long value) {
-			addCriterion("mkt_task_msg_id >", value, "mktTaskMsgId");
+		public Criteria andMktMsgIdGreaterThan(Long value) {
+			addCriterion("mkt_msg_id >", value, "mktMsgId");
 			return (Criteria) this;
 		}
 
-		public Criteria andMktTaskMsgIdGreaterThanOrEqualTo(Long value) {
-			addCriterion("mkt_task_msg_id >=", value, "mktTaskMsgId");
+		public Criteria andMktMsgIdGreaterThanOrEqualTo(Long value) {
+			addCriterion("mkt_msg_id >=", value, "mktMsgId");
 			return (Criteria) this;
 		}
 
-		public Criteria andMktTaskMsgIdLessThan(Long value) {
-			addCriterion("mkt_task_msg_id <", value, "mktTaskMsgId");
+		public Criteria andMktMsgIdLessThan(Long value) {
+			addCriterion("mkt_msg_id <", value, "mktMsgId");
 			return (Criteria) this;
 		}
 
-		public Criteria andMktTaskMsgIdLessThanOrEqualTo(Long value) {
-			addCriterion("mkt_task_msg_id <=", value, "mktTaskMsgId");
+		public Criteria andMktMsgIdLessThanOrEqualTo(Long value) {
+			addCriterion("mkt_msg_id <=", value, "mktMsgId");
 			return (Criteria) this;
 		}
 
-		public Criteria andMktTaskMsgIdIn(List<Long> values) {
-			addCriterion("mkt_task_msg_id in", values, "mktTaskMsgId");
+		public Criteria andMktMsgIdIn(List<Long> values) {
+			addCriterion("mkt_msg_id in", values, "mktMsgId");
 			return (Criteria) this;
 		}
 
-		public Criteria andMktTaskMsgIdNotIn(List<Long> values) {
-			addCriterion("mkt_task_msg_id not in", values, "mktTaskMsgId");
+		public Criteria andMktMsgIdNotIn(List<Long> values) {
+			addCriterion("mkt_msg_id not in", values, "mktMsgId");
 			return (Criteria) this;
 		}
 
-		public Criteria andMktTaskMsgIdBetween(Long value1, Long value2) {
-			addCriterion("mkt_task_msg_id between", value1, value2, "mktTaskMsgId");
+		public Criteria andMktMsgIdBetween(Long value1, Long value2) {
+			addCriterion("mkt_msg_id between", value1, value2, "mktMsgId");
 			return (Criteria) this;
 		}
 
-		public Criteria andMktTaskMsgIdNotBetween(Long value1, Long value2) {
-			addCriterion("mkt_task_msg_id not between", value1, value2, "mktTaskMsgId");
+		public Criteria andMktMsgIdNotBetween(Long value1, Long value2) {
+			addCriterion("mkt_msg_id not between", value1, value2, "mktMsgId");
 			return (Criteria) this;
 		}
 
-		public Criteria andMktTaskIdIsNull() {
-			addCriterion("mkt_task_id is null");
+		public Criteria andBizTypeIsNull() {
+			addCriterion("biz_type is null");
 			return (Criteria) this;
 		}
 
-		public Criteria andMktTaskIdIsNotNull() {
-			addCriterion("mkt_task_id is not null");
+		public Criteria andBizTypeIsNotNull() {
+			addCriterion("biz_type is not null");
 			return (Criteria) this;
 		}
 
-		public Criteria andMktTaskIdEqualTo(Long value) {
-			addCriterion("mkt_task_id =", value, "mktTaskId");
+		public Criteria andBizTypeEqualTo(Integer value) {
+			addCriterion("biz_type =", value, "bizType");
 			return (Criteria) this;
 		}
 
-		public Criteria andMktTaskIdNotEqualTo(Long value) {
-			addCriterion("mkt_task_id <>", value, "mktTaskId");
+		public Criteria andBizTypeNotEqualTo(Integer value) {
+			addCriterion("biz_type <>", value, "bizType");
 			return (Criteria) this;
 		}
 
-		public Criteria andMktTaskIdGreaterThan(Long value) {
-			addCriterion("mkt_task_id >", value, "mktTaskId");
+		public Criteria andBizTypeGreaterThan(Integer value) {
+			addCriterion("biz_type >", value, "bizType");
 			return (Criteria) this;
 		}
 
-		public Criteria andMktTaskIdGreaterThanOrEqualTo(Long value) {
-			addCriterion("mkt_task_id >=", value, "mktTaskId");
+		public Criteria andBizTypeGreaterThanOrEqualTo(Integer value) {
+			addCriterion("biz_type >=", value, "bizType");
 			return (Criteria) this;
 		}
 
-		public Criteria andMktTaskIdLessThan(Long value) {
-			addCriterion("mkt_task_id <", value, "mktTaskId");
+		public Criteria andBizTypeLessThan(Integer value) {
+			addCriterion("biz_type <", value, "bizType");
 			return (Criteria) this;
 		}
 
-		public Criteria andMktTaskIdLessThanOrEqualTo(Long value) {
-			addCriterion("mkt_task_id <=", value, "mktTaskId");
+		public Criteria andBizTypeLessThanOrEqualTo(Integer value) {
+			addCriterion("biz_type <=", value, "bizType");
 			return (Criteria) this;
 		}
 
-		public Criteria andMktTaskIdIn(List<Long> values) {
-			addCriterion("mkt_task_id in", values, "mktTaskId");
+		public Criteria andBizTypeIn(List<Integer> values) {
+			addCriterion("biz_type in", values, "bizType");
 			return (Criteria) this;
 		}
 
-		public Criteria andMktTaskIdNotIn(List<Long> values) {
-			addCriterion("mkt_task_id not in", values, "mktTaskId");
+		public Criteria andBizTypeNotIn(List<Integer> values) {
+			addCriterion("biz_type not in", values, "bizType");
 			return (Criteria) this;
 		}
 
-		public Criteria andMktTaskIdBetween(Long value1, Long value2) {
-			addCriterion("mkt_task_id between", value1, value2, "mktTaskId");
+		public Criteria andBizTypeBetween(Integer value1, Integer value2) {
+			addCriterion("biz_type between", value1, value2, "bizType");
 			return (Criteria) this;
 		}
 
-		public Criteria andMktTaskIdNotBetween(Long value1, Long value2) {
-			addCriterion("mkt_task_id not between", value1, value2, "mktTaskId");
+		public Criteria andBizTypeNotBetween(Integer value1, Integer value2) {
+			addCriterion("biz_type not between", value1, value2, "bizType");
 			return (Criteria) this;
 		}
 
-		public Criteria andWxMsgIdIsNull() {
-			addCriterion("wx_msg_id is null");
+		public Criteria andBizIdIsNull() {
+			addCriterion("biz_id is null");
 			return (Criteria) this;
 		}
 
-		public Criteria andWxMsgIdIsNotNull() {
-			addCriterion("wx_msg_id is not null");
+		public Criteria andBizIdIsNotNull() {
+			addCriterion("biz_id is not null");
 			return (Criteria) this;
 		}
 
-		public Criteria andWxMsgIdEqualTo(String value) {
-			addCriterion("wx_msg_id =", value, "wxMsgId");
+		public Criteria andBizIdEqualTo(Long value) {
+			addCriterion("biz_id =", value, "bizId");
 			return (Criteria) this;
 		}
 
-		public Criteria andWxMsgIdNotEqualTo(String value) {
-			addCriterion("wx_msg_id <>", value, "wxMsgId");
+		public Criteria andBizIdNotEqualTo(Long value) {
+			addCriterion("biz_id <>", value, "bizId");
 			return (Criteria) this;
 		}
 
-		public Criteria andWxMsgIdGreaterThan(String value) {
-			addCriterion("wx_msg_id >", value, "wxMsgId");
+		public Criteria andBizIdGreaterThan(Long value) {
+			addCriterion("biz_id >", value, "bizId");
 			return (Criteria) this;
 		}
 
-		public Criteria andWxMsgIdGreaterThanOrEqualTo(String value) {
-			addCriterion("wx_msg_id >=", value, "wxMsgId");
+		public Criteria andBizIdGreaterThanOrEqualTo(Long value) {
+			addCriterion("biz_id >=", value, "bizId");
 			return (Criteria) this;
 		}
 
-		public Criteria andWxMsgIdLessThan(String value) {
-			addCriterion("wx_msg_id <", value, "wxMsgId");
+		public Criteria andBizIdLessThan(Long value) {
+			addCriterion("biz_id <", value, "bizId");
 			return (Criteria) this;
 		}
 
-		public Criteria andWxMsgIdLessThanOrEqualTo(String value) {
-			addCriterion("wx_msg_id <=", value, "wxMsgId");
+		public Criteria andBizIdLessThanOrEqualTo(Long value) {
+			addCriterion("biz_id <=", value, "bizId");
 			return (Criteria) this;
 		}
 
-		public Criteria andWxMsgIdLike(String value) {
-			addCriterion("wx_msg_id like", value, "wxMsgId");
+		public Criteria andBizIdIn(List<Long> values) {
+			addCriterion("biz_id in", values, "bizId");
 			return (Criteria) this;
 		}
 
-		public Criteria andWxMsgIdNotLike(String value) {
-			addCriterion("wx_msg_id not like", value, "wxMsgId");
+		public Criteria andBizIdNotIn(List<Long> values) {
+			addCriterion("biz_id not in", values, "bizId");
 			return (Criteria) this;
 		}
 
-		public Criteria andWxMsgIdIn(List<String> values) {
-			addCriterion("wx_msg_id in", values, "wxMsgId");
+		public Criteria andBizIdBetween(Long value1, Long value2) {
+			addCriterion("biz_id between", value1, value2, "bizId");
 			return (Criteria) this;
 		}
 
-		public Criteria andWxMsgIdNotIn(List<String> values) {
-			addCriterion("wx_msg_id not in", values, "wxMsgId");
-			return (Criteria) this;
-		}
-
-		public Criteria andWxMsgIdBetween(String value1, String value2) {
-			addCriterion("wx_msg_id between", value1, value2, "wxMsgId");
-			return (Criteria) this;
-		}
-
-		public Criteria andWxMsgIdNotBetween(String value1, String value2) {
-			addCriterion("wx_msg_id not between", value1, value2, "wxMsgId");
+		public Criteria andBizIdNotBetween(Long value1, Long value2) {
+			addCriterion("biz_id not between", value1, value2, "bizId");
 			return (Criteria) this;
 		}
 
@@ -426,6 +416,76 @@ public class MktTaskMsgPOExample implements Serializable {
 
 		public Criteria andMsgTypeNotBetween(String value1, String value2) {
 			addCriterion("msg_type not between", value1, value2, "msgType");
+			return (Criteria) this;
+		}
+
+		public Criteria andMsgCodeIsNull() {
+			addCriterion("msg_code is null");
+			return (Criteria) this;
+		}
+
+		public Criteria andMsgCodeIsNotNull() {
+			addCriterion("msg_code is not null");
+			return (Criteria) this;
+		}
+
+		public Criteria andMsgCodeEqualTo(String value) {
+			addCriterion("msg_code =", value, "msgCode");
+			return (Criteria) this;
+		}
+
+		public Criteria andMsgCodeNotEqualTo(String value) {
+			addCriterion("msg_code <>", value, "msgCode");
+			return (Criteria) this;
+		}
+
+		public Criteria andMsgCodeGreaterThan(String value) {
+			addCriterion("msg_code >", value, "msgCode");
+			return (Criteria) this;
+		}
+
+		public Criteria andMsgCodeGreaterThanOrEqualTo(String value) {
+			addCriterion("msg_code >=", value, "msgCode");
+			return (Criteria) this;
+		}
+
+		public Criteria andMsgCodeLessThan(String value) {
+			addCriterion("msg_code <", value, "msgCode");
+			return (Criteria) this;
+		}
+
+		public Criteria andMsgCodeLessThanOrEqualTo(String value) {
+			addCriterion("msg_code <=", value, "msgCode");
+			return (Criteria) this;
+		}
+
+		public Criteria andMsgCodeLike(String value) {
+			addCriterion("msg_code like", value, "msgCode");
+			return (Criteria) this;
+		}
+
+		public Criteria andMsgCodeNotLike(String value) {
+			addCriterion("msg_code not like", value, "msgCode");
+			return (Criteria) this;
+		}
+
+		public Criteria andMsgCodeIn(List<String> values) {
+			addCriterion("msg_code in", values, "msgCode");
+			return (Criteria) this;
+		}
+
+		public Criteria andMsgCodeNotIn(List<String> values) {
+			addCriterion("msg_code not in", values, "msgCode");
+			return (Criteria) this;
+		}
+
+		public Criteria andMsgCodeBetween(String value1, String value2) {
+			addCriterion("msg_code between", value1, value2, "msgCode");
+			return (Criteria) this;
+		}
+
+		public Criteria andMsgCodeNotBetween(String value1, String value2) {
+			addCriterion("msg_code not between", value1, value2, "msgCode");
 			return (Criteria) this;
 		}
 
@@ -1071,8 +1131,8 @@ public class MktTaskMsgPOExample implements Serializable {
 	}
 
 	/**
-	 * 只读. t_mkt_task_msg
-	 * @mbg.generated  2018-07-13 10:42:22
+	 * 只读. t_mkt_message
+	 * @mbg.generated  2018-07-14 13:34:37
 	 */
 	public static class Criterion implements Serializable {
 		private String condition;
@@ -1155,9 +1215,9 @@ public class MktTaskMsgPOExample implements Serializable {
 
 	/**9
      * This class was generated by MyBatis Generator.
-     * This class corresponds to the database table t_mkt_task_msg
+     * This class corresponds to the database table t_mkt_message
      *
-     * @mbg.generated do_not_delete_during_merge 2018-07-12 11:48:54
+     * @mbg.generated do_not_delete_during_merge 2018-07-14 13:25:51
      */
     public static class Criteria extends GeneratedCriteria implements Serializable {
 

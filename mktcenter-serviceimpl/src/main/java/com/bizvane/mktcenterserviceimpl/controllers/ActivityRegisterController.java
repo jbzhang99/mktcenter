@@ -1,6 +1,7 @@
 package com.bizvane.mktcenterserviceimpl.controllers;
 
 import com.bizvane.mktcenterservice.interfaces.ActivityRegisterService;
+import com.bizvane.mktcenterservice.models.bo.ActivityBO;
 import com.bizvane.mktcenterservice.models.vo.ActivityVO;
 import com.bizvane.mktcenterserviceimpl.common.constants.SystemConstants;
 import com.bizvane.mktcenterserviceimpl.common.utils.ActivityParamCheckUtil;
@@ -9,6 +10,7 @@ import com.bizvane.utils.responseinfo.ResponseData;
 import com.bizvane.utils.tokens.SysAccountPO;
 import com.bizvane.utils.tokens.TokenUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -42,32 +44,32 @@ public class ActivityRegisterController {
      * @return
      */
     @RequestMapping("addActivity")
-    public ResponseData<Integer> addActivity(ActivityVO vo,HttpServletRequest request){
+    public ResponseData<Integer> addActivity(@RequestBody ActivityBO bo, HttpServletRequest request){
         //参数校验
-        ResponseData responseData = ActivityParamCheckUtil.checkParam(vo);
+        ResponseData responseData = ActivityParamCheckUtil.checkParam(bo);
         //参数校验不通过
         if(SystemConstants.ERROR_CODE==responseData.getCode()){
             return responseData;
         }
         //参数校验通过，获取操作人信息
-        SysAccountPO stageUser = TokenUtils.getStageUser(request);
-        //新增活动
+//        SysAccountPO stageUser = TokenUtils.getStageUser(request);
+        SysAccountPO stageUser = new SysAccountPO();
 
-        //判断活动开始时间，是否需要添加job调度
+        //新增活动
+        ResponseData<Integer> integerResponseData = activityRegisterService.addActivity(bo, stageUser);
 
         //返回
-
-        return null;
+        return integerResponseData;
     }
 
     /**
      * 修改活动
-     * @param vo
+     * @param bo
      * @return
      */
-    public ResponseData<Integer> updateActivity(ActivityVO vo){
+    public ResponseData<Integer> updateActivity(@RequestBody ActivityBO bo){
         //参数校验
-        ResponseData responseData = ActivityParamCheckUtil.checkParam(vo);
+        ResponseData responseData = ActivityParamCheckUtil.checkParam(bo);
         //参数校验不通过
         if(SystemConstants.ERROR_CODE==responseData.getCode()){
             return responseData;
@@ -77,29 +79,6 @@ public class ActivityRegisterController {
         //更新活动
 
         //判断活动开始时间，是否需要修改job调度
-
-        //返回
-
-        return null;
-    }
-
-    /**
-     * 停用活动
-     * @param vo
-     * @return
-     */
-    public ResponseData<Integer> stopActivityRegisterById(ActivityVO vo){
-        //参数校验
-        ResponseData responseData = ActivityParamCheckUtil.checkParam(vo);
-        //参数校验不通过
-        if(SystemConstants.ERROR_CODE==responseData.getCode()){
-            return responseData;
-        }
-        //参数校验通过，获取操作人信息
-
-        //删除活动
-
-        //修改job调度
 
         //返回
 
