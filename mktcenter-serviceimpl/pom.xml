@@ -175,6 +175,10 @@
 			<id>julu</id>
 			<name>julu</name>
 			<url>http://repo.bizvane.com/nexus/content/groups/julu</url>
+			<snapshots>
+				<enabled>true</enabled>
+				<updatePolicy>always</updatePolicy>
+			</snapshots>
 		</repository>
 	</repositories>
 
