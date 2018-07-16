@@ -49,11 +49,16 @@ public class Test {
         System.out.println(mktMessagePO.toString());
     }
 
-    public static void main(String[] args) throws Exception{
+    public void test3() throws Exception{
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-      Date date1 = new Date();
-      Date date2 = format.parse("2018-07-15 13:15:11");
+        Date date1 = new Date();
+        Date date2 = format.parse("2018-07-15 13:15:11");
 
-      System.out.println(date2.before(date1));
+        System.out.println(date2.before(date1));
+    }
+
+    public static void main(String[] args) {
+        Long l = 25L;
+        System.out.println(l.toString());
     }
 }

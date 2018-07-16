@@ -93,23 +93,11 @@ public class ActivityRegisterServiceImpl implements ActivityRegisterService {
         //查询审核配置，是否需要审核
 
 
-        //如果活动时间在当前时间之后，启用job调度
+        //如果活动时间在当前时间之后，需要启用job调度
         if(new Date().before(activityVO.getStartTime())){
             //活动状态设置为待执行
             mktActivityPOWithBLOBs.setActivityStatus(ActivityStatusEnum.ACTIVITY_STATUS_PENDING.getCode());
-            XxlJobInfo xxlJobInfo = new XxlJobInfo();
-            xxlJobInfo.setAppName(xxlJobConfig.getAppName());
-            xxlJobInfo.setExecutorRouteStrategy(JobEnum.EXECUTOR_ROUTE_STRATEGY_FIRST.getValue());
-            xxlJobInfo.setJobCron(DateUtil.getCronExpression(activityVO.getStartTime()));
-            xxlJobInfo.setGlueType(JobEnum.GLUE_TYPE_BEAN.getValue());
-            xxlJobInfo.setExecutorHandler(JobHandlerConstants.activity);
-            xxlJobInfo.setJobDesc(activityVO.getActivityInfo());
-            xxlJobInfo.setExecutorBlockStrategy(JobEnum.EXECUTOR_BLOCK_SERIAL_EXECUTION.getValue());
-            xxlJobInfo.setExecutorFailStrategy(JobEnum.EXECUTOR_FAIL_STRATEGY_NULL.getValue());
-            xxlJobInfo.setAuthor(stageUser.getName());
-            jobClient.addJob(xxlJobInfo);
         }else{
-            //活动状态设置为执行中
             mktActivityPOWithBLOBs.setActivityStatus(ActivityStatusEnum.ACTIVITY_STATUS_EXECUTING.getCode());
         }
 
@@ -121,6 +109,36 @@ public class ActivityRegisterServiceImpl implements ActivityRegisterService {
 
         //获取新增后数据id
         Long mktActivityId = mktActivityPOWithBLOBs.getMktActivityId();
+
+        //根据上面的状态添加调度，参数是活动id
+        if(ActivityStatusEnum.ACTIVITY_STATUS_PENDING.getCode() == mktActivityPOWithBLOBs.getActivityStatus()){
+            //活动状态设置为待执行
+            mktActivityPOWithBLOBs.setActivityStatus(ActivityStatusEnum.ACTIVITY_STATUS_PENDING.getCode());
+            //构建job对象
+            XxlJobInfo xxlJobInfo = new XxlJobInfo();
+            //设置appName
+            xxlJobInfo.setAppName(xxlJobConfig.getAppName());
+            //设置路由策略
+            xxlJobInfo.setExecutorRouteStrategy(JobEnum.EXECUTOR_ROUTE_STRATEGY_FIRST.getValue());
+            //设置job定时器
+            xxlJobInfo.setJobCron(DateUtil.getCronExpression(activityVO.getStartTime()));
+            //设置运行模式
+            xxlJobInfo.setGlueType(JobEnum.GLUE_TYPE_BEAN.getValue());
+            //设置job处理器
+            xxlJobInfo.setExecutorHandler(JobHandlerConstants.activity);
+            //设置job描述
+            xxlJobInfo.setJobDesc(activityVO.getActivityInfo());
+            //设置执行参数
+            xxlJobInfo.setExecutorParam(mktActivityId.toString());
+            //设置阻塞处理策略
+            xxlJobInfo.setExecutorBlockStrategy(JobEnum.EXECUTOR_BLOCK_SERIAL_EXECUTION.getValue());
+            //设置失败处理策略
+            xxlJobInfo.setExecutorFailStrategy(JobEnum.EXECUTOR_FAIL_STRATEGY_NULL.getValue());
+            //设置负责人
+            xxlJobInfo.setAuthor(stageUser.getName());
+            //添加job
+            jobClient.addJob(xxlJobInfo);
+        }
 
         //新增开卡活动表
         MktActivityRegisterPO mktActivityRegisterPO = new MktActivityRegisterPO();
@@ -156,5 +174,15 @@ public class ActivityRegisterServiceImpl implements ActivityRegisterService {
 
         //结束
         return responseData;
+    }
+
+    /**
+     * 执行活动
+     * @param mktActivityId
+     * @return
+     */
+    @Override
+    public ResponseData<Integer> executeActivity(Long mktActivityId) {
+        return null;
     }
 }
