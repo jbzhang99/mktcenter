@@ -1,8 +1,10 @@
 package com.bizvane.mktcenterservice.interfaces;
 
+import com.bizvane.mktcenterservice.models.bo.ActivityBO;
 import com.bizvane.mktcenterservice.models.vo.ActivityVO;
 import com.bizvane.utils.commonutils.PageForm;
 import com.bizvane.utils.responseinfo.ResponseData;
+import com.bizvane.utils.tokens.SysAccountPO;
 
 /**
  * @author chen.li
@@ -17,5 +19,11 @@ public interface ActivityUpgradeService {
      * @param vo
      * @return
      */
-    public ResponseData<ActivityVO> getActivityList(ActivityVO vo, PageForm pageForm);
+    public ResponseData<ActivityVO> getActivityUpgradeList(ActivityVO vo, PageForm pageForm);
+    /**
+     * 新增会员升级活动
+     * @param bo
+     * @return
+     */
+    public ResponseData<Integer> addActivityUpgrade(ActivityBO bo, SysAccountPO stageUser);
 }

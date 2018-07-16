@@ -77,6 +77,11 @@ public interface MktActivityUpgradePOMapper {
 	 */
 	int updateByPrimaryKey(MktActivityUpgradePO record);
 
-	List<ActivityVO> getActivityList(ActivityVO vo);
+	/**
+	 * 分页查询会员升级活动列表
+	 * @param vo
+	 * @return
+	 */
+	List<ActivityVO> getActivityUpgradeList(ActivityVO vo);
 
 }
