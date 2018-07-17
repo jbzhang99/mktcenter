@@ -412,7 +412,7 @@
     where mkt_activity_birthday_id = #{mktActivityBirthdayId,jdbcType=BIGINT}
   </update>
 
-  <select id="getActivityList" parameterType="com.bizvane.mktcenterservice.models.vo.ActivityVO" resultType="com.bizvane.mktcenterservice.models.vo.ActivityVO">
+  <select id="getActivityBirthdayList" parameterType="com.bizvane.mktcenterservice.models.vo.ActivityVO" resultType="com.bizvane.mktcenterservice.models.vo.ActivityVO">
     SELECT
     tma.mkt_activity_id,
     tma.sys_company_id,

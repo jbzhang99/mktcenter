@@ -77,5 +77,5 @@ public interface MktActivityBirthdayPOMapper {
 	 */
 	int updateByPrimaryKey(MktActivityBirthdayPO record);
 
-	List<ActivityVO> getActivityList(ActivityVO vo);
+	List<ActivityVO> getActivityBirthdayList(ActivityVO vo);
 }
