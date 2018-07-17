@@ -18,7 +18,7 @@
 
         <!--数据库连接的信息：驱动类、连接地址、用户名、密码 -->
         <jdbcConnection driverClass="com.mysql.jdbc.Driver"
-                        connectionURL="jdbc:mysql://bizvane-2018.mysql.polardb.rds.aliyuncs.com:3306/bizvane-mktcenter" userId="bizvane_2018" password="SF_bizvane20180613">
+                        connectionURL="jdbc:mysql://bizvane-2018.mysql.polardb.rds.aliyuncs.com:3306/bizvane3" userId="bizvane_2018" password="SF_bizvane20180613">
         </jdbcConnection>
         <!-- 默认false，把JDBC DECIMAL 和 NUMERIC 类型解析为 Integer，为 true时把JDBC DECIMAL 和
             NUMERIC 类型解析为java.math.BigDecimal -->
@@ -81,13 +81,13 @@
         <!--<table tableName="t_mkt_activity_upgrade" domainObjectName="MktActivityUpgradePO">-->
             <!--<generatedKey column="mkt_activity_upgrade_id" sqlStatement="MySql" identity="true"/>-->
         <!--</table>-->
-        <table tableName="t_mkt_coupon" domainObjectName="MktCouponPO">
-            <generatedKey column="mkt_coupon_id" sqlStatement="MySql" identity="true"/>
-        </table>
+        <!--<table tableName="t_mkt_coupon" domainObjectName="MktCouponPO">-->
+            <!--<generatedKey column="mkt_coupon_id" sqlStatement="MySql" identity="true"/>-->
+        <!--</table>-->
 
-        <table tableName="t_mkt_message" domainObjectName="MktMessagePO">
-            <generatedKey column="mkt_msg_id" sqlStatement="MySql" identity="true"/>
-        </table>
+        <!--<table tableName="t_mkt_message" domainObjectName="MktMessagePO">-->
+            <!--<generatedKey column="mkt_msg_id" sqlStatement="MySql" identity="true"/>-->
+        <!--</table>-->
         <!--<table tableName="t_mkt_task" domainObjectName="MktTaskPO">-->
             <!--<generatedKey column="mkt_task_id" sqlStatement="MySql" identity="true"/>-->
         <!--</table>-->
@@ -107,5 +107,13 @@
         <!--<table tableName="t_mkt_task_share" domainObjectName="MktTaskSharePO">-->
             <!--<generatedKey column="mkt_task_share_id" sqlStatement="MySql" identity="true"/>-->
         <!--</table>-->
+
+        <table tableName="t_rocket_log" domainObjectName="RocketLogPO">
+            <generatedKey column="rocket_log_id" sqlStatement="MySql" identity="true"/>
+        </table>
+
+        <table tableName="t_rocket_config" domainObjectName="RocketConfigPO">
+            <generatedKey column="rocket_config_id" sqlStatement="MySql" identity="true"/>
+        </table>
     </context>
 </generatorConfiguration>

@@ -1,6 +1,7 @@
 package com.bizvane.mktcenterserviceimpl.service.impl;
 
 import com.bizvane.mktcenterservice.interfaces.TaskProfileService;
+import org.springframework.stereotype.Service;
 
 /**
  * @author chen.li
@@ -8,5 +9,6 @@ import com.bizvane.mktcenterservice.interfaces.TaskProfileService;
  * @description
  * @Copyright (c) 2018 上海商帆信息科技有限公司-版权所有
  */
+@Service
 public class TaskProfileServiceImpl implements TaskProfileService {
 }

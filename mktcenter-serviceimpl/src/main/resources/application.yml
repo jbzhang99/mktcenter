@@ -23,7 +23,7 @@ spring:
     driver-class-name: com.mysql.jdbc.Driver
   data:
     mongodb:
-      database: "1"
+      database: "7"
 eureka:
   instance:
     metadata-map:
@@ -80,3 +80,8 @@ feign:
     coupon:
       name: centerstage
       path: centerstage
+
+rocketmq:
+  onsaddr: http://onsaddr-internet.aliyun.com/rocketmq/nsaddr4client-internet
+  accessKey: LTAIpoqUHsXq6q7r
+  secretKey: 0ZJ7bfxXJLT8TpOKvZU3i4YWuhvJzs

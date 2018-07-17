@@ -21,10 +21,34 @@
 
 	<dependencies>
 
-		<!--<dependency>
+		<dependency>
+			<groupId>net.logstash.logback</groupId>
+			<artifactId>logstash-logback-encoder</artifactId>
+			<version>5.1</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.bizvane</groupId>
+			<artifactId>common-utils</artifactId>
+			<version>0.0.1.SNAPSHOT</version>
+		</dependency>
+		<dependency>
+			<groupId>com.bizvane</groupId>
+			<artifactId>base-controller</artifactId>
+			<version>0.0.1.SNAPSHOT</version>
+		</dependency>
+
+		<dependency>
 			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-security</artifactId>
-		</dependency>-->
+			<artifactId>mktcenter-service</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.projectlombok</groupId>
+			<artifactId>lombok</artifactId>
+		</dependency>
+
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
@@ -34,11 +58,6 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
-		</dependency>
-
-		<dependency>
-			<groupId>org.projectlombok</groupId>
-			<artifactId>lombok</artifactId>
 		</dependency>
 
 		<dependency>
@@ -56,7 +75,6 @@
             <version>${netflix-version}</version>
             <type>pom</type>
 		</dependency>
-
 
         <dependency>
             <groupId>mysql</groupId>
@@ -77,23 +95,19 @@
 			<artifactId>springfox-swagger2</artifactId>
 			<version>2.7.0</version>
 		</dependency>
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-data-redis</artifactId>
-		</dependency>
+
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-context</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-data-redis</artifactId>
 		</dependency>
         <dependency>
             <groupId>com.github.pagehelper</groupId>
             <artifactId>pagehelper-spring-boot-starter</artifactId>
             <version>1.2.5</version>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>mktcenter-service</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
         </dependency>
 		<dependency>
 			<groupId>org.springframework.cloud</groupId>
@@ -101,16 +115,14 @@
 			<version>${netflix-version}</version>
 			<type>pom</type>
 		</dependency>
+
+		<!-- 阿里云开放service，目前仅用于rocketMQ -->
 		<dependency>
-			<groupId>com.bizvane</groupId>
-			<artifactId>common-utils</artifactId>
-			<version>0.0.1.SNAPSHOT</version>
+			<groupId>com.aliyun.openservices</groupId>
+			<artifactId>ons-client</artifactId>
+			<version>1.7.7.Final</version>
 		</dependency>
-		<dependency>
-			<groupId>com.bizvane</groupId>
-			<artifactId>base-controller</artifactId>
-			<version>0.0.1.SNAPSHOT</version>
-		</dependency>
+
 		<!--generator核心包-->
 		<dependency>
 			<groupId>org.mybatis.generator</groupId>
@@ -132,31 +144,36 @@
 		</dependency>
 
 		<!--券模块依赖-->
-		<dependency>
-			<groupId>com.bizvane</groupId>
-			<artifactId>coupon-facade</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
-		</dependency>
+		<!--<dependency>-->
+			<!--<groupId>com.bizvane</groupId>-->
+			<!--<artifactId>coupon-facade</artifactId>-->
+			<!--<version>0.0.1-SNAPSHOT</version>-->
+		<!--</dependency>-->
 
-		<!--中台模块依赖-->
-		<dependency>
-			<groupId>com.bizvane</groupId>
-			<artifactId>centerstage-service</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
-		</dependency>
+		<!--&lt;!&ndash;中台模块依赖&ndash;&gt;-->
+		<!--<dependency>-->
+			<!--<groupId>com.bizvane</groupId>-->
+			<!--<artifactId>centerstage-service</artifactId>-->
+			<!--<version>0.0.1-SNAPSHOT</version>-->
+		<!--</dependency>-->
 
-		<!--中控模块依赖-->
-		<dependency>
-			<groupId>com.bizvane</groupId>
-			<artifactId>centercontrol-service</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
-		</dependency>
+		<!--&lt;!&ndash;中控模块依赖&ndash;&gt;-->
+		<!--<dependency>-->
+			<!--<groupId>com.bizvane</groupId>-->
+			<!--<artifactId>centercontrol-service</artifactId>-->
+			<!--<version>0.0.1-SNAPSHOT</version>-->
+		<!--</dependency>-->
 
 		<!--会员模块依赖-->
+		<!--<dependency>-->
+			<!--<groupId>com.bizvane</groupId>-->
+			<!--<artifactId>members-facade</artifactId>-->
+			<!--<version>0.0.1-SNAPSHOT</version>-->
+		<!--</dependency>-->
+		<!-- spring-boot-starter-data-mongodb -->
 		<dependency>
-			<groupId>com.bizvane</groupId>
-			<artifactId>members-facade</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-data-mongodb</artifactId>
 		</dependency>
 
 	</dependencies>
