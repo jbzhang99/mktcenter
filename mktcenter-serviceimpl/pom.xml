@@ -131,9 +131,31 @@
 			<version>1.9.1</version>
 		</dependency>
 
+		<!--券模块依赖-->
 		<dependency>
 			<groupId>com.bizvane</groupId>
 			<artifactId>coupon-facade</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+		</dependency>
+
+		<!--中台模块依赖-->
+		<dependency>
+			<groupId>com.bizvane</groupId>
+			<artifactId>centerstage-service</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+		</dependency>
+
+		<!--中控模块依赖-->
+		<dependency>
+			<groupId>com.bizvane</groupId>
+			<artifactId>centercontrol-service</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+		</dependency>
+
+		<!--会员模块依赖-->
+		<dependency>
+			<groupId>com.bizvane</groupId>
+			<artifactId>members-facade</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
 
