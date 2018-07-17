@@ -8,28 +8,28 @@ import java.util.List;
 public class MktMessagePOExample implements Serializable {
     /**
 	 * 只读. 
-	 * @mbg.generated  2018-07-14 13:34:37
+	 * @mbg.generated  2018-07-16 14:33:24
 	 */
 	protected String orderByClause;
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-07-14 13:34:37
+	 * @mbg.generated  2018-07-16 14:33:24
 	 */
 	protected boolean distinct;
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-07-14 13:34:37
+	 * @mbg.generated  2018-07-16 14:33:24
 	 */
 	protected List<Criteria> oredCriteria;
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-07-14 13:34:37
+	 * @mbg.generated  2018-07-16 14:33:24
 	 */
 	private static final long serialVersionUID = 1L;
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-07-14 13:34:37
+	 * @mbg.generated  2018-07-16 14:33:24
 	 */
 	public MktMessagePOExample() {
 		oredCriteria = new ArrayList<Criteria>();
@@ -37,7 +37,7 @@ public class MktMessagePOExample implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-07-14 13:34:37
+	 * @mbg.generated  2018-07-16 14:33:24
 	 */
 	public void setOrderByClause(String orderByClause) {
 		this.orderByClause = orderByClause;
@@ -45,7 +45,7 @@ public class MktMessagePOExample implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-07-14 13:34:37
+	 * @mbg.generated  2018-07-16 14:33:24
 	 */
 	public String getOrderByClause() {
 		return orderByClause;
@@ -53,7 +53,7 @@ public class MktMessagePOExample implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-07-14 13:34:37
+	 * @mbg.generated  2018-07-16 14:33:24
 	 */
 	public void setDistinct(boolean distinct) {
 		this.distinct = distinct;
@@ -61,7 +61,7 @@ public class MktMessagePOExample implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-07-14 13:34:37
+	 * @mbg.generated  2018-07-16 14:33:24
 	 */
 	public boolean isDistinct() {
 		return distinct;
@@ -69,7 +69,7 @@ public class MktMessagePOExample implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-07-14 13:34:37
+	 * @mbg.generated  2018-07-16 14:33:24
 	 */
 	public List<Criteria> getOredCriteria() {
 		return oredCriteria;
@@ -77,7 +77,7 @@ public class MktMessagePOExample implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-07-14 13:34:37
+	 * @mbg.generated  2018-07-16 14:33:24
 	 */
 	public void or(Criteria criteria) {
 		oredCriteria.add(criteria);
@@ -85,7 +85,7 @@ public class MktMessagePOExample implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-07-14 13:34:37
+	 * @mbg.generated  2018-07-16 14:33:24
 	 */
 	public Criteria or() {
 		Criteria criteria = createCriteriaInternal();
@@ -95,7 +95,7 @@ public class MktMessagePOExample implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-07-14 13:34:37
+	 * @mbg.generated  2018-07-16 14:33:24
 	 */
 	public Criteria createCriteria() {
 		Criteria criteria = createCriteriaInternal();
@@ -107,7 +107,7 @@ public class MktMessagePOExample implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-07-14 13:34:37
+	 * @mbg.generated  2018-07-16 14:33:24
 	 */
 	protected Criteria createCriteriaInternal() {
 		Criteria criteria = new Criteria();
@@ -116,7 +116,7 @@ public class MktMessagePOExample implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-07-14 13:34:37
+	 * @mbg.generated  2018-07-16 14:33:24
 	 */
 	public void clear() {
 		oredCriteria.clear();
@@ -126,7 +126,7 @@ public class MktMessagePOExample implements Serializable {
 
 	/**
 	 * 只读. t_mkt_message
-	 * @mbg.generated  2018-07-14 13:34:37
+	 * @mbg.generated  2018-07-16 14:33:24
 	 */
 	protected abstract static class GeneratedCriteria implements Serializable {
 		protected List<Criterion> criteria;
@@ -1132,7 +1132,7 @@ public class MktMessagePOExample implements Serializable {
 
 	/**
 	 * 只读. t_mkt_message
-	 * @mbg.generated  2018-07-14 13:34:37
+	 * @mbg.generated  2018-07-16 14:33:24
 	 */
 	public static class Criterion implements Serializable {
 		private String condition;

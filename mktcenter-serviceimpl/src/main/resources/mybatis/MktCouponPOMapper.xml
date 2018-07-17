@@ -4,7 +4,7 @@
   <resultMap id="BaseResultMap" type="com.bizvane.mktcenterservice.models.po.MktCouponPO">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-14 13:34:37.
+      This element was generated on 2018-07-16 14:33:24.
     -->
     <id column="mkt_coupon_id" jdbcType="BIGINT" property="mktCouponId" />
     <result column="biz_type" jdbcType="INTEGER" property="bizType" />
@@ -23,7 +23,7 @@
   <sql id="Example_Where_Clause">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-14 13:34:37.
+      This element was generated on 2018-07-16 14:33:24.
     -->
     <where>
       <foreach collection="oredCriteria" item="criteria" separator="or">
@@ -56,7 +56,7 @@
   <sql id="Update_By_Example_Where_Clause">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-14 13:34:37.
+      This element was generated on 2018-07-16 14:33:24.
     -->
     <where>
       <foreach collection="example.oredCriteria" item="criteria" separator="or">
@@ -89,7 +89,7 @@
   <sql id="Base_Column_List">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-14 13:34:37.
+      This element was generated on 2018-07-16 14:33:24.
     -->
     mkt_coupon_id, biz_type, biz_id, coupon_code, coupon_name, remark, create_user_id, 
     create_user_name, create_date, modified_user_id, modified_user_name, modified_date, 
@@ -98,7 +98,7 @@
   <select id="selectByExample" parameterType="com.bizvane.mktcenterservice.models.po.MktCouponPOExample" resultMap="BaseResultMap">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-14 13:34:37.
+      This element was generated on 2018-07-16 14:33:24.
     -->
     select
     <if test="distinct">
@@ -116,7 +116,7 @@
   <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-14 13:34:37.
+      This element was generated on 2018-07-16 14:33:24.
     -->
     select 
     <include refid="Base_Column_List" />
@@ -126,7 +126,7 @@
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-14 13:34:37.
+      This element was generated on 2018-07-16 14:33:24.
     -->
     delete from t_mkt_coupon
     where mkt_coupon_id = #{mktCouponId,jdbcType=BIGINT}
@@ -134,7 +134,7 @@
   <delete id="deleteByExample" parameterType="com.bizvane.mktcenterservice.models.po.MktCouponPOExample">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-14 13:34:37.
+      This element was generated on 2018-07-16 14:33:24.
     -->
     delete from t_mkt_coupon
     <if test="_parameter != null">
@@ -144,7 +144,7 @@
   <insert id="insert" parameterType="com.bizvane.mktcenterservice.models.po.MktCouponPO">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-14 13:34:37.
+      This element was generated on 2018-07-16 14:33:24.
     -->
     <selectKey keyProperty="mktCouponId" order="AFTER" resultType="java.lang.Long">
       SELECT LAST_INSERT_ID()
@@ -163,7 +163,7 @@
   <insert id="insertSelective" parameterType="com.bizvane.mktcenterservice.models.po.MktCouponPO">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-14 13:34:37.
+      This element was generated on 2018-07-16 14:33:24.
     -->
     <selectKey keyProperty="mktCouponId" order="AFTER" resultType="java.lang.Long">
       SELECT LAST_INSERT_ID()
@@ -249,7 +249,7 @@
   <select id="countByExample" parameterType="com.bizvane.mktcenterservice.models.po.MktCouponPOExample" resultType="java.lang.Long">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-14 13:34:37.
+      This element was generated on 2018-07-16 14:33:24.
     -->
     select count(*) from t_mkt_coupon
     <if test="_parameter != null">
@@ -259,7 +259,7 @@
   <update id="updateByExampleSelective" parameterType="map">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-14 13:34:37.
+      This element was generated on 2018-07-16 14:33:24.
     -->
     update t_mkt_coupon
     <set>
@@ -310,7 +310,7 @@
   <update id="updateByExample" parameterType="map">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-14 13:34:37.
+      This element was generated on 2018-07-16 14:33:24.
     -->
     update t_mkt_coupon
     set mkt_coupon_id = #{record.mktCouponId,jdbcType=BIGINT},
@@ -333,7 +333,7 @@
   <update id="updateByPrimaryKeySelective" parameterType="com.bizvane.mktcenterservice.models.po.MktCouponPO">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-14 13:34:37.
+      This element was generated on 2018-07-16 14:33:24.
     -->
     update t_mkt_coupon
     <set>
@@ -379,7 +379,7 @@
   <update id="updateByPrimaryKey" parameterType="com.bizvane.mktcenterservice.models.po.MktCouponPO">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-14 13:34:37.
+      This element was generated on 2018-07-16 14:33:24.
     -->
     update t_mkt_coupon
     set biz_type = #{bizType,jdbcType=INTEGER},
