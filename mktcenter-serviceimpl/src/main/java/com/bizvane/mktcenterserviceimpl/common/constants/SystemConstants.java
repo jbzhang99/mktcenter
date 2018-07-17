@@ -12,4 +12,6 @@ public class SystemConstants {
     public static String SUCCESS_MESSAGE = "操作成功";
     public static int ERROR_CODE = -1;
     public static String ERROR_MSG_PARAM_EMPTY ="参数为空";
+
+    public static final String CHARSET = "UTF-8";
 }

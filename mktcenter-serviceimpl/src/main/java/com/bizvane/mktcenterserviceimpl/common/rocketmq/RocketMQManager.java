@@ -9,8 +9,11 @@ import com.bizvane.mktcenterserviceimpl.mappers.RocketConfigPOMapper;
 import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Service;
+import org.springframework.boot.ApplicationArguments;
+import org.springframework.boot.ApplicationRunner;
+import org.springframework.stereotype.Component;
 
+import javax.annotation.PostConstruct;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -21,8 +24,8 @@ import java.util.Properties;
  * @author 董争光
  * 2018年5月21日下午2:01:31
  */
-@Service
-public class RocketMQManager {
+@Component
+public class RocketMQManager implements ApplicationRunner {
 
   @Value("${rocketmq.onsaddr}")
   private String onsaddr;
@@ -32,11 +35,19 @@ public class RocketMQManager {
   
   @Value("${rocketmq.secretKey}")
   private String secretKey;
+
+  @Value("${spring.application.name}")
+  private String modelName;
   
   @Autowired
   private RocketConfigPOMapper rocketConfigPOMapper;
   
   private static Map<String, Producer> producerMap = new HashMap<>();
+
+  @Override
+  public void run(ApplicationArguments args) throws Exception {
+    initMQ();
+  }
 
   /**
    * 初始化rocketMQ
@@ -44,7 +55,7 @@ public class RocketMQManager {
   public void initMQ() {
     
     RocketConfigPOExample example = new RocketConfigPOExample();
-    example.createCriteria().andModelNameEqualTo("message").andValidEqualTo(Boolean.TRUE);
+    example.createCriteria().andModelNameEqualTo(modelName).andValidEqualTo(Boolean.TRUE);
     
     List<RocketConfigPO> rocketConfigPOList = rocketConfigPOMapper.selectByExample(example);
     
@@ -86,5 +97,6 @@ public class RocketMQManager {
   public static Producer getProducer(String businessType) {
     return producerMap.get(businessType);
   }
+
 
 }

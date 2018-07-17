@@ -5,22 +5,29 @@
 
 package com.bizvane.mktcenterserviceimpl.common.utils;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationContextAware;
+import org.springframework.stereotype.Component;
 
 /**
  * spring容器上下文管理类
  * @author 董争光
  * 2018年5月28日上午10:20:14
  */
-public final class SpringContextUtil {
+@Component
+public final class SpringContextUtil implements ApplicationContextAware {
 
     private static ApplicationContext context;
 
     public SpringContextUtil() {
     }
 
-    public static void setApplicationContext(ApplicationContext applicationContext) {
-      context = applicationContext;
+    public void setApplicationContext(ApplicationContext applicationContext) {
+
+        if(context == null) {
+            context = applicationContext;;
+        }
     }
 
     public static ApplicationContext getApplicationContext() {
@@ -39,7 +46,7 @@ public final class SpringContextUtil {
     }
 
     public static void cleanApplicationContext() {
-      context = null;
+        context = null;
     }
 
     private static void checkApplicationContext() {

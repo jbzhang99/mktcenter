@@ -39,7 +39,7 @@ public class RocketConstants {
   public static final String ROCKET_CONFIG_ROLE_TYPE_PRODUCER = "producer";
   public static final String ROCKET_CONFIG_ROLE_TYPE_CONSUMER = "consumer";
   
-  public static final String ROCKET_CONFIG_BUSINESS_TYPE_WECHAT_SIMPLE_MESSAGE = "wechatSimpleMessage";
+  public static final String ROCKET_CONFIG_BUSINESS_TYPE_REGISTER_SIMPLE_MESSAGE = "memberRegisterListener";
   
   public static final String ROCKET_TOPIC_SIMPLE_MESSAGE = "public_bizvane_message";
   

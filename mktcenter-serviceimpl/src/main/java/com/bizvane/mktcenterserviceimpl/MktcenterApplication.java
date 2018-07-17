@@ -30,7 +30,6 @@ public class MktcenterApplication {
 	}
 
 	public static void main(String[] args) {
-		ApplicationContext applicationContext = SpringApplication.run(MktcenterApplication.class, args);
-		SpringContextUtil.setApplicationContext(applicationContext);
+		SpringApplication.run(MktcenterApplication.class, args);
 	}
 }
