@@ -1,8 +1,10 @@
 package com.bizvane.mktcenterservice.interfaces;
 
+import com.bizvane.mktcenterservice.models.bo.ActivityBO;
 import com.bizvane.mktcenterservice.models.vo.ActivityVO;
 import com.bizvane.utils.commonutils.PageForm;
 import com.bizvane.utils.responseinfo.ResponseData;
+import com.bizvane.utils.tokens.SysAccountPO;
 
 /**
  * @author chen.li
@@ -16,5 +18,11 @@ public interface ActivityOrderService {
      * @param vo
      * @return
      */
-    public ResponseData<ActivityVO> getActivityList(ActivityVO vo, PageForm pageForm);
+    public ResponseData<ActivityVO> getActivityOrderList(ActivityVO vo, PageForm pageForm);
+    /**
+     * 新增会员消费活动
+     * @param bo
+     * @return
+     */
+    public ResponseData<Integer> addActivityOrder(ActivityBO bo, SysAccountPO stageUser);
 }

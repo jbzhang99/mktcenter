@@ -76,6 +76,6 @@ public interface MktActivitySigninMapper {
 	 */
 	int updateByPrimaryKey(MktActivitySignin record);
 
-	List<ActivityVO> getActivityList(ActivityVO vo);
+	List<ActivityVO> getActivitySigninList(ActivityVO vo);
 
 }

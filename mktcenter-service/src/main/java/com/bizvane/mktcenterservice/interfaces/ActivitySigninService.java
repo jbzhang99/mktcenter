@@ -1,8 +1,10 @@
 package com.bizvane.mktcenterservice.interfaces;
 
+import com.bizvane.mktcenterservice.models.bo.ActivityBO;
 import com.bizvane.mktcenterservice.models.vo.ActivityVO;
 import com.bizvane.utils.commonutils.PageForm;
 import com.bizvane.utils.responseinfo.ResponseData;
+import com.bizvane.utils.tokens.SysAccountPO;
 
 /**
  * @author chen.li
@@ -17,5 +19,11 @@ public interface ActivitySigninService {
      * @param vo
      * @return
      */
-    public ResponseData<ActivityVO> getActivityList(ActivityVO vo, PageForm pageForm);
+    public ResponseData<ActivityVO> getActivitySigninList(ActivityVO vo, PageForm pageForm);
+    /**
+     * 新增会员签到活动
+     * @param bo
+     * @return
+     */
+    public ResponseData<Integer> addActivitySignin(ActivityBO bo, SysAccountPO stageUser);
 }

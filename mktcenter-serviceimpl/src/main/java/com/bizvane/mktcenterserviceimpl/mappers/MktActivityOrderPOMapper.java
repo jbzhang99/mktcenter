@@ -97,5 +97,5 @@ public interface MktActivityOrderPOMapper {
 	 */
 	int updateByPrimaryKey(MktActivityOrderPO record);
 
-	List<ActivityVO> getActivityList(ActivityVO vo);
+	List<ActivityVO> getActivityOrderList(ActivityVO vo);
 }

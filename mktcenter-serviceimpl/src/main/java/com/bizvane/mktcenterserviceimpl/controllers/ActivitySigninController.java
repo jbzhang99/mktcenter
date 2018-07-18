@@ -1,12 +1,21 @@
 package com.bizvane.mktcenterserviceimpl.controllers;
 
 import com.bizvane.mktcenterservice.interfaces.ActivityRegisterService;
+import com.bizvane.mktcenterservice.interfaces.ActivitySigninService;
+import com.bizvane.mktcenterservice.models.bo.ActivityBO;
 import com.bizvane.mktcenterservice.models.vo.ActivityVO;
+import com.bizvane.mktcenterservice.models.vo.MessageVO;
+import com.bizvane.mktcenterserviceimpl.common.constants.SystemConstants;
+import com.bizvane.mktcenterserviceimpl.common.utils.ActivityParamCheckUtil;
 import com.bizvane.utils.commonutils.PageForm;
 import com.bizvane.utils.responseinfo.ResponseData;
+import com.bizvane.utils.tokens.SysAccountPO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 /**
  * @author chen.li
@@ -19,15 +28,42 @@ import org.springframework.web.bind.annotation.RestController;
 public class ActivitySigninController {
 
     @Autowired
-    private ActivityRegisterService activityRegisterService;
+    private ActivitySigninService activitySigninService;
 
     /**
      * 查询活动列表
      * @return
      */
-    @RequestMapping("getActivityList")
-    public ResponseData<ActivityVO> getActivityList(ActivityVO vo, PageForm pageForm){
-        ResponseData<ActivityVO> activityRegisterList = activityRegisterService.getActivityList(vo, pageForm);
-        return activityRegisterList;
+    @RequestMapping("getActivitySigninList")
+    public ResponseData<ActivityVO> getActivitySigninList(ActivityVO vo, PageForm pageForm){
+        ResponseData<ActivityVO> activitySigninList = activitySigninService.getActivitySigninList(vo, pageForm);
+        return activitySigninList;
+    }
+
+    /**
+     * 创建活动
+     * @return
+     */
+    @RequestMapping("addActivitySignin.do")
+    public ResponseData<Integer> addActivitySignin(ActivityVO activityVO, List<String> couponCodeList, List<MessageVO> messageVOList, HttpServletRequest request) {
+        ActivityBO bo = new ActivityBO();
+        bo.setActivityVO(activityVO);
+        bo.setCouponCodeList(couponCodeList);
+        bo.setMessageVOList(messageVOList);
+        //参数校验
+        ResponseData responseData = ActivityParamCheckUtil.checkParam(bo);
+        //参数校验不通过
+        if (SystemConstants.ERROR_CODE == responseData.getCode()) {
+            return responseData;
+        }
+        //参数校验通过，获取操作人信息
+//        SysAccountPO stageUser = TokenUtils.getStageUser(request);
+        SysAccountPO stageUser = new SysAccountPO();
+
+        //新增活动
+        ResponseData<Integer> integerResponseData = activitySigninService.addActivitySignin(bo, stageUser);
+
+        //返回
+        return integerResponseData;
     }
 }

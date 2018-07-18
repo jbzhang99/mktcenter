@@ -429,7 +429,7 @@
     where mkt_activity_sign_in_id = #{mktActivitySignInId,jdbcType=BIGINT}
   </update>
 
-  <select id="getActivityList" parameterType="com.bizvane.mktcenterservice.models.vo.ActivityVO" resultType="com.bizvane.mktcenterservice.models.vo.ActivityVO">
+  <select id="getActivitySigninList" parameterType="com.bizvane.mktcenterservice.models.vo.ActivityVO" resultType="com.bizvane.mktcenterservice.models.vo.ActivityVO">
     SELECT
     tma.mkt_activity_id,
     tma.sys_company_id,
@@ -463,7 +463,7 @@
     `t_mkt_activity` tma
     INNER JOIN t_mkt_activity_signin tmas ON tma.mkt_activity_id = tmas.mkt_activity_id
     and tma.valid=1
-    and tmar.valid=1
+    and tmas.valid=1
     <if test="activityStatus != null and activityStatus!=0">
       AND tma.activity_status = #{activityStatus}
     </if>
