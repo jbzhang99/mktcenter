@@ -10,4 +10,5 @@ public class JobHandlerConstants {
 
     public static String activity = "activity";
     public static String task = "task";
+    public static String endActivity = "endActivity";
 }

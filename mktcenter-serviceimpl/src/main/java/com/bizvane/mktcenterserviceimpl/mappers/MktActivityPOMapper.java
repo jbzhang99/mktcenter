@@ -93,4 +93,11 @@ public interface MktActivityPOMapper {
 	 * @mbg.generated  2018-07-14 13:26:02
 	 */
 	int updateByPrimaryKey(MktActivityPO record);
+
+	/**
+	 * 更新活动执行状态
+	 * @param mktActivityId
+	 * @return
+	 */
+	int updateActivityStatus(Long mktActivityId);
 }
