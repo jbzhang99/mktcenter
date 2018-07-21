@@ -131,7 +131,7 @@ public class ActivityRegisterServiceImpl implements ActivityRegisterService {
             po.setCreateUserName(stageUser.getName());
             sysCheckConfigServiceRpc.addCheckConfig(po);
             //getStartTime 开始时间>当前时间增加job
-            if(new Date().before(activityVO.getStartTime())){
+            if(null != activityVO.getStartTime() && new Date().before(activityVO.getStartTime())){
                 //创建任务调度任务开始时间
                 jobUtil.addJob(stageUser,activityVO,mktActivityPOWithBLOBs,mktActivityId);
                 //创建任务调度任务结束时间

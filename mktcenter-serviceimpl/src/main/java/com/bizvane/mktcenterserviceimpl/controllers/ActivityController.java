@@ -1,6 +1,7 @@
 package com.bizvane.mktcenterserviceimpl.controllers;
 
 import com.bizvane.mktcenterservice.interfaces.ActivityService;
+import com.bizvane.mktcenterservice.models.po.MktActivityPOWithBLOBs;
 import com.bizvane.mktcenterservice.models.vo.ActivityVO;
 import com.bizvane.mktcenterserviceimpl.common.constants.ActivityConstants;
 import com.bizvane.mktcenterserviceimpl.common.constants.SystemConstants;
@@ -50,17 +51,17 @@ public class ActivityController {
 
     /**
      * 活动审核
-     * @param mktActivityId
+     * @param
      * @param request
      * @return
      */
     @RequestMapping("checkActivityById")
-    public ResponseData<Integer> checkActivityById(Long mktActivityId, HttpServletRequest request){
+    public ResponseData<Integer> checkActivityById(MktActivityPOWithBLOBs bs, HttpServletRequest request){
         //获取操作人信息
         SysAccountPO stageUser =new SysAccountPO();
 //        SysAccountPO stageUser = TokenUtils.getStageUser(request);
         //审核活动
-        ResponseData<Integer> integerResponseData = activityService.checkActivityById(mktActivityId, stageUser);
+        ResponseData<Integer> integerResponseData = activityService.checkActivityById(bs, stageUser);
         return integerResponseData;
     }
 }
