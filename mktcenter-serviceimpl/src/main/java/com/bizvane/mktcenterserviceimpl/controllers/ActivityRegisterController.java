@@ -101,4 +101,12 @@ public class ActivityRegisterController {
     public ResponseData<Integer> executeActivity(ActivityVO vo){
         return activityRegisterService.executeActivity(vo);
     }
+    /**
+     * 查询活动详情
+     * @param mktActivityId
+     * @return
+     */
+    public ResponseData<List<ActivityVO>> selectActivityRegisterById(Long mktActivityId){
+        return activityRegisterService.selectActivityRegisterById(mktActivityId);
+    }
 }

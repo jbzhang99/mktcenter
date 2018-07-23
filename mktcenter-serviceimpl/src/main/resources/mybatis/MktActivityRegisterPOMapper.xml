@@ -430,6 +430,10 @@
     INNER JOIN t_mkt_activity_register tmar ON tma.mkt_activity_id = tmar.mkt_activity_id
     and tma.valid=1
     and tmar.valid=1
+    <!--活动主表ID -->
+    <if test="mktActivityId != null and mktActivityId!= '' ">
+      AND tma.mkt_activity_id = #{mktActivityId}
+    </if>
     <if test="activityStatus != null and activityStatus!=0">
       AND tma.activity_status = #{activityStatus}
     </if>

@@ -343,4 +343,21 @@ public class ActivityRegisterServiceImpl implements ActivityRegisterService {
         }
         return responseData;
     }
+
+    /**
+     *  查询活动详情
+     * @param mktActivityId
+     * @return
+     */
+    @Override
+    public ResponseData<List<ActivityVO>> selectActivityRegisterById(Long mktActivityId) {
+        ResponseData responseData = new ResponseData();
+        ActivityVO vo= new ActivityVO();
+        vo.setMktActivityId(mktActivityId);
+        List<ActivityVO> registerList = mktActivityRegisterPOMapper.getActivityList(vo);
+        responseData.setData(registerList);
+        responseData.setCode(SysResponseEnum.SUCCESS.getCode());
+        responseData.setMessage(SysResponseEnum.SUCCESS.getMessage());
+        return responseData;
+    }
 }

@@ -6,6 +6,8 @@ import com.bizvane.utils.commonutils.PageForm;
 import com.bizvane.utils.responseinfo.ResponseData;
 import com.bizvane.utils.tokens.SysAccountPO;
 
+import java.util.List;
+
 /**
  * @author chen.li
  * @date on 2018/7/13 14:47
@@ -40,4 +42,11 @@ public interface ActivityRegisterService {
      * @return
      */
     public ResponseData<Integer> updateActivityRegister(ActivityBO bo,SysAccountPO stageUser);
+
+    /**
+     * 查询活动详情
+     * @param mktActivityId
+     * @return
+     */
+    public ResponseData<List<ActivityVO>> selectActivityRegisterById(Long mktActivityId);
 }
