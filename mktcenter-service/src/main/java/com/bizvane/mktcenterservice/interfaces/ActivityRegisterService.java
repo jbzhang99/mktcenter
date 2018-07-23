@@ -30,8 +30,14 @@ public interface ActivityRegisterService {
 
     /**
      * 执行活动
-     * @param mktActivityId
+     * @param
      * @return
      */
-    public ResponseData<Integer> executeActivity(Long mktActivityId);
+    public ResponseData<Integer> executeActivity(ActivityVO vo);
+
+    /**
+     * 修改活动
+     * @return
+     */
+    public ResponseData<Integer> updateActivityRegister(ActivityBO bo,SysAccountPO stageUser);
 }

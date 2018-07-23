@@ -209,11 +209,138 @@ public class ActivityRegisterServiceImpl implements ActivityRegisterService {
 
     /**
      * 执行活动
-     * @param mktActivityId
+     * @param vo
      * @return
      */
     @Override
-    public ResponseData<Integer> executeActivity(Long mktActivityId) {
+    public ResponseData<Integer> executeActivity(ActivityVO vo) {
+        //返回对象
+        ResponseData responseData = new ResponseData();
+        //查询品牌下所有执行中的活动
+        vo.setActivityStatus(ActivityStatusEnum.ACTIVITY_STATUS_EXECUTING.getCode());
+        List<ActivityVO> RegisterList = mktActivityRegisterPOMapper.getActivityList(vo);
+        for (ActivityVO activityVO:RegisterList) {
+            //赠送活动奖励
+            //增加积分奖励新增接口 增加卷奖励接口
+        }
         return null;
+    }
+
+    /**
+     * 修改活动
+     * @param bo
+     * @param stageUser
+     * @return
+     */
+    @Override
+    public ResponseData<Integer> updateActivityRegister(ActivityBO bo, SysAccountPO stageUser) {
+        //返回对象
+        ResponseData responseData = new ResponseData();
+        //得到大实体类
+        ActivityVO activityVO = bo.getActivityVO();
+        if(activityVO.getActivityStatus()==ActivityStatusEnum.ACTIVITY_STATUS_EXECUTING.getCode()){
+            responseData.setCode(SysResponseEnum.FAILED.getCode());
+            responseData.setMessage("执行中的活动不能修改!");
+            return responseData;
+        }
+        MktActivityPOWithBLOBs mktActivityPOWithBLOBs = new MktActivityPOWithBLOBs();
+        BeanUtils.copyProperties(activityVO,mktActivityPOWithBLOBs);
+
+        //查询审核配置，是否需要审核然后判断TODO
+
+        if(1==1){
+            //查询结果如果需要审核审核状态为待审核
+            mktActivityPOWithBLOBs.setCheckStatus(CheckStatusEnum.CHECK_STATUS_PENDING.getCode());
+            //活动状态设置为待执行
+            mktActivityPOWithBLOBs.setActivityStatus(ActivityStatusEnum.ACTIVITY_STATUS_PENDING.getCode());
+            //修改活动主表
+            mktActivityPOWithBLOBs.setModifiedDate(new Date());
+            mktActivityPOWithBLOBs.setModifiedUserId(stageUser.getSysAccountId());
+            mktActivityPOWithBLOBs.setModifiedUserName(stageUser.getName());
+            mktActivityPOMapper.updateByPrimaryKeySelective(mktActivityPOWithBLOBs);
+            //获取活动数据id
+            Long mktActivityId = mktActivityPOWithBLOBs.getMktActivityId();
+
+            //如果是待审核数据则需要增加一条审核数据
+            SysCheckConfigPo po = new SysCheckConfigPo();
+            po.setSysBrandId(mktActivityPOWithBLOBs.getSysBrandId());
+            po.setFunctionCode(mktActivityPOWithBLOBs.getActivityCode());
+            po.setFunctionName(mktActivityPOWithBLOBs.getActivityName());
+            po.setCreateDate(new Date());
+            po.setCreateUserId(stageUser.getSysAccountId());
+            po.setCreateUserName(stageUser.getName());
+            sysCheckConfigServiceRpc.addCheckConfig(po);
+            //getStartTime 开始时间>当前时间增加job
+            if(null != activityVO.getStartTime() && new Date().before(activityVO.getStartTime())){
+                //创建任务调度任务开始时间
+                jobUtil.addJob(stageUser,activityVO,mktActivityPOWithBLOBs,mktActivityId);
+                //创建任务调度任务结束时间
+                jobUtil.addJobEndTime(stageUser,activityVO,mktActivityPOWithBLOBs,mktActivityId);
+            }
+        }else{
+            //查询结果如果不需要审核审核状态为已审核
+            mktActivityPOWithBLOBs.setCheckStatus(CheckStatusEnum.CHECK_STATUS_APPROVED.getCode());
+            //getStartTime 开始时间>当前时间增加job
+            if(null !=activityVO.getStartTime() && new Date().before(activityVO.getStartTime())){
+                //活动状态设置为待执行
+                mktActivityPOWithBLOBs.setActivityStatus(ActivityStatusEnum.ACTIVITY_STATUS_PENDING.getCode());
+                //修改活动主表
+                mktActivityPOWithBLOBs.setModifiedDate(new Date());
+                mktActivityPOWithBLOBs.setModifiedUserId(stageUser.getSysAccountId());
+                mktActivityPOWithBLOBs.setModifiedUserName(stageUser.getName());
+                mktActivityPOMapper.updateByPrimaryKeySelective(mktActivityPOWithBLOBs);
+                //获取新增后数据id
+                Long mktActivityId = mktActivityPOWithBLOBs.getMktActivityId();
+                //创建任务调度任务开始时间
+                jobUtil.addJob(stageUser,activityVO,mktActivityPOWithBLOBs,mktActivityId);
+                //创建任务调度任务结束时间
+                jobUtil.addJobEndTime(stageUser,activityVO,mktActivityPOWithBLOBs,mktActivityId);
+            }else{
+                //活动状态设置为执行中
+                mktActivityPOWithBLOBs.setActivityStatus(ActivityStatusEnum.ACTIVITY_STATUS_EXECUTING.getCode());
+                //新增活动主表
+                mktActivityPOWithBLOBs.setCreateDate(new Date());
+                mktActivityPOWithBLOBs.setCreateUserId(stageUser.getSysAccountId());
+                mktActivityPOWithBLOBs.setCreateUserName(stageUser.getName());
+                mktActivityPOMapper.insertSelective(mktActivityPOWithBLOBs);
+                //发送模板消息和短信消息TODO
+
+            }
+        }
+        //获取活动数据id
+        Long mktActivityId = mktActivityPOWithBLOBs.getMktActivityId();
+
+        //修改开卡活动表
+        MktActivityRegisterPO mktActivityRegisterPO = new MktActivityRegisterPO();
+        BeanUtils.copyProperties(mktActivityPOWithBLOBs,mktActivityRegisterPO);
+        mktActivityRegisterPO.setMktActivityId(mktActivityId);
+        mktActivityRegisterPOMapper.updateByPrimaryKeySelective(mktActivityRegisterPO);
+
+        //修改券奖励
+        List<String> couponCodeList = bo.getCouponCodeList();
+        if(!CollectionUtils.isEmpty(couponCodeList)){
+            for(String couponCode : couponCodeList){
+                MktCouponPO mktCouponPO = new MktCouponPO();
+                BeanUtils.copyProperties(mktActivityPOWithBLOBs,mktCouponPO);
+                mktCouponPO.setBizType(BusinessTypeEnum.ACTIVITY_TYPE_ACTIVITY.getCode());
+                mktCouponPO.setBizId(mktActivityId);
+                mktCouponPO.setCouponCode(couponCode);
+                mktCouponPOMapper.updateByPrimaryKeySelective(mktCouponPO);
+            }
+        }
+
+        //修改活动消息
+        List<MessageVO> messageVOList = bo.getMessageVOList();
+        if(!CollectionUtils.isEmpty(messageVOList)){
+            for(MessageVO messageVO : messageVOList){
+                MktMessagePO mktMessagePO = new MktMessagePO();
+                BeanUtils.copyProperties(mktActivityPOWithBLOBs,mktMessagePO);
+                BeanUtils.copyProperties(messageVO,mktMessagePO);
+                mktMessagePO.setBizType(BusinessTypeEnum.ACTIVITY_TYPE_ACTIVITY.getCode());
+                mktMessagePO.setBizId(mktActivityId);
+                mktMessagePOMapper.updateByPrimaryKeySelective(mktMessagePO);
+            }
+        }
+        return responseData;
     }
 }

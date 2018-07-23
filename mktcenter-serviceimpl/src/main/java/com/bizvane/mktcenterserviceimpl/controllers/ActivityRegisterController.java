@@ -3,6 +3,7 @@ package com.bizvane.mktcenterserviceimpl.controllers;
 import com.bizvane.mktcenterservice.interfaces.ActivityRegisterService;
 import com.bizvane.mktcenterservice.models.bo.ActivityBO;
 import com.bizvane.mktcenterservice.models.vo.ActivityVO;
+import com.bizvane.mktcenterservice.models.vo.MessageVO;
 import com.bizvane.mktcenterserviceimpl.common.constants.SystemConstants;
 import com.bizvane.mktcenterserviceimpl.common.utils.ActivityParamCheckUtil;
 import com.bizvane.utils.commonutils.PageForm;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 /**
  * @author chen.li
@@ -44,7 +46,11 @@ public class ActivityRegisterController {
      * @return
      */
     @RequestMapping("addActivity")
-    public ResponseData<Integer> addActivity(@RequestBody ActivityBO bo, HttpServletRequest request){
+    public ResponseData<Integer> addActivity(ActivityVO activityVO, List<String> couponCodeList, List<MessageVO> messageVOList, HttpServletRequest request){
+        ActivityBO bo = new ActivityBO();
+        bo.setActivityVO(activityVO);
+        bo.setCouponCodeList(couponCodeList);
+        bo.setMessageVOList(messageVOList);
         //参数校验
         ResponseData responseData = ActivityParamCheckUtil.checkParam(bo);
         //参数校验不通过
@@ -64,10 +70,14 @@ public class ActivityRegisterController {
 
     /**
      * 修改活动
-     * @param bo
+     * @param
      * @return
      */
-    public ResponseData<Integer> updateActivity(@RequestBody ActivityBO bo){
+    public ResponseData<Integer> updateActivityRegister(ActivityVO activityVO, List<String> couponCodeList, List<MessageVO> messageVOList, HttpServletRequest request){
+        ActivityBO bo = new ActivityBO();
+        bo.setActivityVO(activityVO);
+        bo.setCouponCodeList(couponCodeList);
+        bo.setMessageVOList(messageVOList);
         //参数校验
         ResponseData responseData = ActivityParamCheckUtil.checkParam(bo);
         //参数校验不通过
@@ -75,13 +85,20 @@ public class ActivityRegisterController {
             return responseData;
         }
         //参数校验通过，获取操作人信息
-
+        SysAccountPO stageUser = new SysAccountPO();
         //更新活动
-
-        //判断活动开始时间，是否需要修改job调度
+        ResponseData<Integer> registerData = activityRegisterService.updateActivityRegister(bo,stageUser);
 
         //返回
 
-        return null;
+        return registerData;
+    }
+    /**
+     * 执行活动
+     * @param
+     * @return
+     */
+    public ResponseData<Integer> executeActivity(ActivityVO vo){
+        return activityRegisterService.executeActivity(vo);
     }
 }

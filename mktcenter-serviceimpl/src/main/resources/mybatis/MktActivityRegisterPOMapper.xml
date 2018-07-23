@@ -441,5 +441,9 @@
     <if test="mbrLevelCode != null and mbrLevelCode!= ''">
       AND tmar.mbr_level_code = #{mbrLevelCode}
     </if>
+    <!--所属品牌id -->
+    <if test="sysBrandId != null and sysBrandId!= ''">
+      AND tma.sys_brand_id = #{sysBrandId}
+    </if>
   </select>
 </mapper>
