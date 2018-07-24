@@ -65,4 +65,49 @@ public class ActivityUpgradeController {
         //返回
         return integerResponseData;
     }
+
+    /**
+     * 修改活动
+     * @return
+     */
+    @RequestMapping("updateActivityUpgrade.do")
+    public ResponseData<Integer> updateActivityUpgrade(ActivityVO activityVO, List<String> couponCodeList, List<MessageVO> messageVOList, HttpServletRequest request){
+        ActivityBO bo = new ActivityBO();
+        bo.setActivityVO(activityVO);
+        bo.setCouponCodeList(couponCodeList);
+        bo.setMessageVOList(messageVOList);
+        //参数校验
+        ResponseData responseData = ActivityParamCheckUtil.checkParam(bo);
+        //参数校验不通过
+        if(SystemConstants.ERROR_CODE==responseData.getCode()){
+            return responseData;
+        }
+        //参数校验通过，获取操作人信息
+        SysAccountPO stageUser = new SysAccountPO();
+        //更新活动
+        ResponseData<Integer> upgradeData = activityUpgradeService.updateActivityUpgrade(bo,stageUser);
+
+        //返回
+
+        return upgradeData;
+    }
+
+    /**
+     * 查询活动详情
+     * @param mktActivityId
+     * @return
+     */
+    @RequestMapping("selectActivityUpgradesById")
+    public ResponseData<List<ActivityVO>> selectActivityUpgradesById(Long mktActivityId){
+        return activityUpgradeService.selectActivityUpgradesById(mktActivityId);
+    }
+    /**
+     * 执行活动
+     * @param vo
+     * @return
+     */
+    @RequestMapping("executeUpgrades")
+    public ResponseData<Integer> executeUpgrades(ActivityVO vo){
+        return activityUpgradeService.executeUpgrades(vo);
+    }
 }

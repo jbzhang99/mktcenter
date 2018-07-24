@@ -99,8 +99,8 @@ public class ActivityRegisterServiceImpl implements ActivityRegisterService {
         ActivityVO vo = new ActivityVO();
         vo.setMbrLevelCode(bo.getActivityVO().getMbrLevelCode());
         vo.setLongTerm(bo.getActivityVO().getLongTerm());
-        List<ActivityVO> RegisterList = mktActivityRegisterPOMapper.getActivityList(vo);
-        if(!CollectionUtils.isEmpty(RegisterList)){
+        List<ActivityVO> registerList = mktActivityRegisterPOMapper.getActivityList(vo);
+        if(!CollectionUtils.isEmpty(registerList)){
             responseData.setCode(SysResponseEnum.FAILED.getCode());
             responseData.setMessage("已存在同一类型的长期活动!");
             return responseData;

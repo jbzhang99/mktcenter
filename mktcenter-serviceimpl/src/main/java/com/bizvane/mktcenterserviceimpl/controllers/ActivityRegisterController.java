@@ -45,7 +45,7 @@ public class ActivityRegisterController {
      * 创建活动
      * @return
      */
-    @RequestMapping("addActivity")
+    @RequestMapping("addActivity.do")
     public ResponseData<Integer> addActivity(ActivityVO activityVO, List<String> couponCodeList, List<MessageVO> messageVOList, HttpServletRequest request){
         ActivityBO bo = new ActivityBO();
         bo.setActivityVO(activityVO);
@@ -73,6 +73,7 @@ public class ActivityRegisterController {
      * @param
      * @return
      */
+    @RequestMapping("updateActivityRegister.do")
     public ResponseData<Integer> updateActivityRegister(ActivityVO activityVO, List<String> couponCodeList, List<MessageVO> messageVOList, HttpServletRequest request){
         ActivityBO bo = new ActivityBO();
         bo.setActivityVO(activityVO);
@@ -98,6 +99,7 @@ public class ActivityRegisterController {
      * @param
      * @return
      */
+    @RequestMapping("executeActivity")
     public ResponseData<Integer> executeActivity(ActivityVO vo){
         return activityRegisterService.executeActivity(vo);
     }
@@ -106,6 +108,7 @@ public class ActivityRegisterController {
      * @param mktActivityId
      * @return
      */
+    @RequestMapping("selectActivityRegisterById")
     public ResponseData<List<ActivityVO>> selectActivityRegisterById(Long mktActivityId){
         return activityRegisterService.selectActivityRegisterById(mktActivityId);
     }

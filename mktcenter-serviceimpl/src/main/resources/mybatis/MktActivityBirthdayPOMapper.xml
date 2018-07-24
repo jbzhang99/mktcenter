@@ -446,8 +446,24 @@
     INNER JOIN t_mkt_activity_birthday tmab ON tma.mkt_activity_id = tmab.mkt_activity_id
     and tma.valid=1
     and tmab.valid=1
+    <!--活动主表ID -->
+    <if test="mktActivityId != null and mktActivityId!= '' ">
+      AND tma.mkt_activity_id = #{mktActivityId}
+    </if>
     <if test="activityStatus != null and activityStatus!=0">
       AND tma.activity_status = #{activityStatus}
+    </if>
+    <!--是否是长期活动 -->
+    <if test="longTerm != null and longTerm!= '' ">
+      AND tma.long_term = #{longTerm}
+    </if>
+    <!--开卡时等级编号 -->
+    <if test="mbrLevelCode != null and mbrLevelCode!= ''">
+      AND tmab.mbr_level_code = #{mbrLevelCode}
+    </if>
+    <!--所属品牌id -->
+    <if test="sysBrandId != null and sysBrandId!= ''">
+      AND tma.sys_brand_id = #{sysBrandId}
     </if>
 
   </select>
