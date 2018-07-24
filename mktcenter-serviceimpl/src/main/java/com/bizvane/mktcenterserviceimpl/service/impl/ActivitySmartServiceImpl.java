@@ -8,6 +8,7 @@ import com.bizvane.utils.responseinfo.ResponseData;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
@@ -17,6 +18,7 @@ import java.util.List;
  * @description
  * @Copyright (c) 2018 上海商帆信息科技有限公司-版权所有
  */
+@Service
 public class ActivitySmartServiceImpl implements ActivitySmartService {
 
     @Autowired

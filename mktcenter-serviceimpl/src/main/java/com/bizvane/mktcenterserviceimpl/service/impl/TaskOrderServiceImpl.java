@@ -7,6 +7,7 @@ import com.bizvane.mktcenterservice.models.vo.TaskVO;
 import com.bizvane.utils.commonutils.PageForm;
 import com.bizvane.utils.responseinfo.ResponseData;
 import com.bizvane.utils.tokens.SysAccountPO;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
@@ -16,6 +17,7 @@ import java.util.List;
  * @description
  * @Copyright (c) 2018 上海商帆信息科技有限公司-版权所有
  */
+@Service
 public class TaskOrderServiceImpl implements TaskOrderService {
 
     @Override
