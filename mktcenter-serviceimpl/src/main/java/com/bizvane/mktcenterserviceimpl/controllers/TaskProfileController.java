@@ -1,5 +1,7 @@
 package com.bizvane.mktcenterserviceimpl.controllers;
 
+import com.bizvane.members.facade.models.MbrLevelModel;
+import com.bizvane.members.facade.service.api.MemberLevelApiService;
 import com.bizvane.mktcenterservice.interfaces.TaskProfileService;
 import com.bizvane.mktcenterservice.models.bo.TaskBO;
 import com.bizvane.mktcenterservice.models.vo.MessageVO;
@@ -29,6 +31,9 @@ public class TaskProfileController {
     @Autowired
     private TaskProfileService taskProfileService;
 
+    @Autowired
+    private MemberLevelApiService memberLevelApiService;
+
     /**
      * 查询任务列表
      * @return
@@ -37,6 +42,12 @@ public class TaskProfileController {
     public ResponseData<TaskVO> getTaskList(TaskVO vo, PageForm pageForm){
         ResponseData<TaskVO> taskVOResponseData = taskProfileService.getTaskList(vo, pageForm);
         return taskVOResponseData;
+    }
+
+    @RequestMapping("test")
+    public String test(){
+        List<MbrLevelModel> mbrLevelModels = memberLevelApiService.queryLevelList(1L);
+        return null;
     }
 
     /**

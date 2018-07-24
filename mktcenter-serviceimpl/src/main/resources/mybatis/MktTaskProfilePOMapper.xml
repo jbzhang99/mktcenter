@@ -435,4 +435,50 @@
       valid = #{valid,jdbcType=BIT}
     where mkt_task_profile_id = #{mktTaskProfileId,jdbcType=BIGINT}
   </update>
+
+  <select id="getTaskList" parameterType="com.bizvane.mktcenterservice.models.vo.TaskVO" resultType="com.bizvane.mktcenterservice.models.vo.TaskVO">
+    SELECT
+    tmt.mkt_activity_id,
+    tmt.sys_company_id,
+    tmt.sys_brand_id,
+    tmt.activity_code,
+    tmt.activity_type,
+    tmt.activity_name,
+    tmt.start_time,
+    tmt.end_time,
+    tmt.long_term,
+    tmt.points,
+    tmt.check_status,
+    tmt.activity_status,
+    tmt.remark,
+    tmt.create_user_id,
+    tmt.create_user_name,
+    tmt.create_date,
+    tmt.modified_user_id,
+    tmt.modified_user_name,
+    tmt.modified_date,
+    tmt.valid,
+
+    tmtp.mkt_activity_resigter_id,
+    tmtp.mkt_activity_id,
+    tmtp.offline_card_status,
+    tmtp.mbr_level_code,
+    tmtp.mbr_level_name
+    FROM
+    `t_mkt_task` tmt
+    INNER JOIN t_mkt_task_profile tmtp ON tmt.mkt_task_id = tmtp.mkt_task_id
+    and tmt.valid=1
+    and tmtp.valid=1
+    <!--任务主表ID -->
+    <if test="mktTaskId != null and mktTaskId!= '' ">
+      AND tmt.mkt_task_id = #{mktTaskId}
+    </if>
+    <if test="taskStatus != null and taskStatus!=0">
+      AND tmt.activity_status = #{taskStatus}
+    </if>
+    <!--所属品牌id -->
+    <if test="sysBrandId != null and sysBrandId!= ''">
+      AND tmt.sys_brand_id = #{sysBrandId}
+    </if>
+  </select>
 </mapper>
