@@ -96,7 +96,7 @@ public class ActivityRegisterServiceImpl implements ActivityRegisterService {
         ResponseData responseData = new ResponseData();
         //得到大实体类
         ActivityVO activityVO = bo.getActivityVO();
-        //暂时用uuid生成活动编号
+        //暂时用uuid生成活动编号9
         String activityCode = "AC"+ UUID.randomUUID().toString().replaceAll("-", "");
         activityVO.setActivityCode(activityCode);
         MktActivityPOWithBLOBs mktActivityPOWithBLOBs = new MktActivityPOWithBLOBs();
