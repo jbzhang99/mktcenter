@@ -12,87 +12,87 @@ public interface MktTaskProfilePOMapper {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-07-14 13:26:02
+	 * @mbg.generated  2018-07-25 16:02:16
 	 */
 	long countByExample(MktTaskProfilePOExample example);
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-07-14 13:26:02
+	 * @mbg.generated  2018-07-25 16:02:16
 	 */
 	int deleteByExample(MktTaskProfilePOExample example);
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-07-14 13:26:02
+	 * @mbg.generated  2018-07-25 16:02:16
 	 */
 	int deleteByPrimaryKey(Long mktTaskProfileId);
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-07-14 13:26:02
+	 * @mbg.generated  2018-07-25 16:02:16
 	 */
 	int insert(MktTaskProfilePO record);
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-07-14 13:26:02
+	 * @mbg.generated  2018-07-25 16:02:16
 	 */
 	int insertSelective(MktTaskProfilePO record);
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-07-14 13:26:02
+	 * @mbg.generated  2018-07-25 16:02:16
 	 */
 	List<MktTaskProfilePO> selectByExampleWithBLOBs(MktTaskProfilePOExample example);
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-07-14 13:26:02
+	 * @mbg.generated  2018-07-25 16:02:16
 	 */
 	List<MktTaskProfilePO> selectByExample(MktTaskProfilePOExample example);
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-07-14 13:26:02
+	 * @mbg.generated  2018-07-25 16:02:16
 	 */
 	MktTaskProfilePO selectByPrimaryKey(Long mktTaskProfileId);
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-07-14 13:26:02
+	 * @mbg.generated  2018-07-25 16:02:16
 	 */
 	int updateByExampleSelective(@Param("record") MktTaskProfilePO record,
 			@Param("example") MktTaskProfilePOExample example);
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-07-14 13:26:02
+	 * @mbg.generated  2018-07-25 16:02:16
 	 */
 	int updateByExampleWithBLOBs(@Param("record") MktTaskProfilePO record,
 			@Param("example") MktTaskProfilePOExample example);
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-07-14 13:26:02
+	 * @mbg.generated  2018-07-25 16:02:16
 	 */
 	int updateByExample(@Param("record") MktTaskProfilePO record, @Param("example") MktTaskProfilePOExample example);
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-07-14 13:26:02
+	 * @mbg.generated  2018-07-25 16:02:16
 	 */
 	int updateByPrimaryKeySelective(MktTaskProfilePO record);
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-07-14 13:26:02
+	 * @mbg.generated  2018-07-25 16:02:16
 	 */
 	int updateByPrimaryKeyWithBLOBs(MktTaskProfilePO record);
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-07-14 13:26:02
+	 * @mbg.generated  2018-07-25 16:02:16
 	 */
 	int updateByPrimaryKey(MktTaskProfilePO record);
 

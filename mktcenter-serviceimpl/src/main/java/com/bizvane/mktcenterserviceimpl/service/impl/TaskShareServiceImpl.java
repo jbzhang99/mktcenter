@@ -4,9 +4,14 @@ import com.bizvane.mktcenterservice.interfaces.TaskShareService;
 import com.bizvane.mktcenterservice.models.bo.TaskBO;
 import com.bizvane.mktcenterservice.models.vo.ActivityVO;
 import com.bizvane.mktcenterservice.models.vo.TaskVO;
+import com.bizvane.mktcenterserviceimpl.mappers.MktTaskOrderPOMapper;
+import com.bizvane.mktcenterserviceimpl.mappers.MktTaskSharePOMapper;
 import com.bizvane.utils.commonutils.PageForm;
 import com.bizvane.utils.responseinfo.ResponseData;
 import com.bizvane.utils.tokens.SysAccountPO;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -20,9 +25,23 @@ import java.util.List;
 @Service
 public class TaskShareServiceImpl implements TaskShareService {
 
+    @Autowired
+    private MktTaskSharePOMapper mktTaskSharePOMapper;
+
+    /**
+     * 获取任务列表
+     * @param vo
+     * @param pageForm
+     * @return
+     */
     @Override
     public ResponseData<TaskVO> getTaskList(TaskVO vo, PageForm pageForm) {
-        return null;
+        ResponseData responseData = new ResponseData();
+        PageHelper.startPage(pageForm.getPageNumber(),pageForm.getPageSize());
+        List<TaskVO> activityRegisterList = mktTaskSharePOMapper.getTaskList(vo);
+        PageInfo<TaskVO> pageInfo = new PageInfo<>(activityRegisterList);
+        responseData.setData(pageInfo);
+        return responseData;
     }
 
     @Override

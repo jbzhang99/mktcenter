@@ -9,28 +9,28 @@ import java.util.List;
 public class MktTaskOrderPOExample implements Serializable {
     /**
 	 * 只读. 
-	 * @mbg.generated  2018-07-14 13:26:02
+	 * @mbg.generated  2018-07-25 16:02:16
 	 */
 	protected String orderByClause;
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-07-14 13:26:02
+	 * @mbg.generated  2018-07-25 16:02:16
 	 */
 	protected boolean distinct;
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-07-14 13:26:02
+	 * @mbg.generated  2018-07-25 16:02:16
 	 */
 	protected List<Criteria> oredCriteria;
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-07-14 13:26:02
+	 * @mbg.generated  2018-07-25 16:02:16
 	 */
 	private static final long serialVersionUID = 1L;
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-07-14 13:26:02
+	 * @mbg.generated  2018-07-25 16:02:16
 	 */
 	public MktTaskOrderPOExample() {
 		oredCriteria = new ArrayList<Criteria>();
@@ -38,7 +38,7 @@ public class MktTaskOrderPOExample implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-07-14 13:26:02
+	 * @mbg.generated  2018-07-25 16:02:16
 	 */
 	public void setOrderByClause(String orderByClause) {
 		this.orderByClause = orderByClause;
@@ -46,7 +46,7 @@ public class MktTaskOrderPOExample implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-07-14 13:26:02
+	 * @mbg.generated  2018-07-25 16:02:16
 	 */
 	public String getOrderByClause() {
 		return orderByClause;
@@ -54,7 +54,7 @@ public class MktTaskOrderPOExample implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-07-14 13:26:02
+	 * @mbg.generated  2018-07-25 16:02:16
 	 */
 	public void setDistinct(boolean distinct) {
 		this.distinct = distinct;
@@ -62,7 +62,7 @@ public class MktTaskOrderPOExample implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-07-14 13:26:02
+	 * @mbg.generated  2018-07-25 16:02:16
 	 */
 	public boolean isDistinct() {
 		return distinct;
@@ -70,7 +70,7 @@ public class MktTaskOrderPOExample implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-07-14 13:26:02
+	 * @mbg.generated  2018-07-25 16:02:16
 	 */
 	public List<Criteria> getOredCriteria() {
 		return oredCriteria;
@@ -78,7 +78,7 @@ public class MktTaskOrderPOExample implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-07-14 13:26:02
+	 * @mbg.generated  2018-07-25 16:02:16
 	 */
 	public void or(Criteria criteria) {
 		oredCriteria.add(criteria);
@@ -86,7 +86,7 @@ public class MktTaskOrderPOExample implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-07-14 13:26:02
+	 * @mbg.generated  2018-07-25 16:02:16
 	 */
 	public Criteria or() {
 		Criteria criteria = createCriteriaInternal();
@@ -96,7 +96,7 @@ public class MktTaskOrderPOExample implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-07-14 13:26:02
+	 * @mbg.generated  2018-07-25 16:02:16
 	 */
 	public Criteria createCriteria() {
 		Criteria criteria = createCriteriaInternal();
@@ -108,7 +108,7 @@ public class MktTaskOrderPOExample implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-07-14 13:26:02
+	 * @mbg.generated  2018-07-25 16:02:16
 	 */
 	protected Criteria createCriteriaInternal() {
 		Criteria criteria = new Criteria();
@@ -117,7 +117,7 @@ public class MktTaskOrderPOExample implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-07-14 13:26:02
+	 * @mbg.generated  2018-07-25 16:02:16
 	 */
 	public void clear() {
 		oredCriteria.clear();
@@ -127,7 +127,7 @@ public class MktTaskOrderPOExample implements Serializable {
 
 	/**
 	 * 只读. t_mkt_task_order
-	 * @mbg.generated  2018-07-14 13:26:02
+	 * @mbg.generated  2018-07-25 16:02:16
 	 */
 	protected abstract static class GeneratedCriteria implements Serializable {
 		protected List<Criterion> criteria;
@@ -170,63 +170,63 @@ public class MktTaskOrderPOExample implements Serializable {
 			criteria.add(new Criterion(condition, value1, value2));
 		}
 
-		public Criteria andMktTaskProfileIdIsNull() {
-			addCriterion("mkt_task_profile_id is null");
+		public Criteria andMktTaskOrderIdIsNull() {
+			addCriterion("mkt_task_order_id is null");
 			return (Criteria) this;
 		}
 
-		public Criteria andMktTaskProfileIdIsNotNull() {
-			addCriterion("mkt_task_profile_id is not null");
+		public Criteria andMktTaskOrderIdIsNotNull() {
+			addCriterion("mkt_task_order_id is not null");
 			return (Criteria) this;
 		}
 
-		public Criteria andMktTaskProfileIdEqualTo(Long value) {
-			addCriterion("mkt_task_profile_id =", value, "mktTaskProfileId");
+		public Criteria andMktTaskOrderIdEqualTo(Long value) {
+			addCriterion("mkt_task_order_id =", value, "mktTaskOrderId");
 			return (Criteria) this;
 		}
 
-		public Criteria andMktTaskProfileIdNotEqualTo(Long value) {
-			addCriterion("mkt_task_profile_id <>", value, "mktTaskProfileId");
+		public Criteria andMktTaskOrderIdNotEqualTo(Long value) {
+			addCriterion("mkt_task_order_id <>", value, "mktTaskOrderId");
 			return (Criteria) this;
 		}
 
-		public Criteria andMktTaskProfileIdGreaterThan(Long value) {
-			addCriterion("mkt_task_profile_id >", value, "mktTaskProfileId");
+		public Criteria andMktTaskOrderIdGreaterThan(Long value) {
+			addCriterion("mkt_task_order_id >", value, "mktTaskOrderId");
 			return (Criteria) this;
 		}
 
-		public Criteria andMktTaskProfileIdGreaterThanOrEqualTo(Long value) {
-			addCriterion("mkt_task_profile_id >=", value, "mktTaskProfileId");
+		public Criteria andMktTaskOrderIdGreaterThanOrEqualTo(Long value) {
+			addCriterion("mkt_task_order_id >=", value, "mktTaskOrderId");
 			return (Criteria) this;
 		}
 
-		public Criteria andMktTaskProfileIdLessThan(Long value) {
-			addCriterion("mkt_task_profile_id <", value, "mktTaskProfileId");
+		public Criteria andMktTaskOrderIdLessThan(Long value) {
+			addCriterion("mkt_task_order_id <", value, "mktTaskOrderId");
 			return (Criteria) this;
 		}
 
-		public Criteria andMktTaskProfileIdLessThanOrEqualTo(Long value) {
-			addCriterion("mkt_task_profile_id <=", value, "mktTaskProfileId");
+		public Criteria andMktTaskOrderIdLessThanOrEqualTo(Long value) {
+			addCriterion("mkt_task_order_id <=", value, "mktTaskOrderId");
 			return (Criteria) this;
 		}
 
-		public Criteria andMktTaskProfileIdIn(List<Long> values) {
-			addCriterion("mkt_task_profile_id in", values, "mktTaskProfileId");
+		public Criteria andMktTaskOrderIdIn(List<Long> values) {
+			addCriterion("mkt_task_order_id in", values, "mktTaskOrderId");
 			return (Criteria) this;
 		}
 
-		public Criteria andMktTaskProfileIdNotIn(List<Long> values) {
-			addCriterion("mkt_task_profile_id not in", values, "mktTaskProfileId");
+		public Criteria andMktTaskOrderIdNotIn(List<Long> values) {
+			addCriterion("mkt_task_order_id not in", values, "mktTaskOrderId");
 			return (Criteria) this;
 		}
 
-		public Criteria andMktTaskProfileIdBetween(Long value1, Long value2) {
-			addCriterion("mkt_task_profile_id between", value1, value2, "mktTaskProfileId");
+		public Criteria andMktTaskOrderIdBetween(Long value1, Long value2) {
+			addCriterion("mkt_task_order_id between", value1, value2, "mktTaskOrderId");
 			return (Criteria) this;
 		}
 
-		public Criteria andMktTaskProfileIdNotBetween(Long value1, Long value2) {
-			addCriterion("mkt_task_profile_id not between", value1, value2, "mktTaskProfileId");
+		public Criteria andMktTaskOrderIdNotBetween(Long value1, Long value2) {
+			addCriterion("mkt_task_order_id not between", value1, value2, "mktTaskOrderId");
 			return (Criteria) this;
 		}
 
@@ -983,7 +983,7 @@ public class MktTaskOrderPOExample implements Serializable {
 
 	/**
 	 * 只读. t_mkt_task_order
-	 * @mbg.generated  2018-07-14 13:26:02
+	 * @mbg.generated  2018-07-25 16:02:16
 	 */
 	public static class Criterion implements Serializable {
 		private String condition;

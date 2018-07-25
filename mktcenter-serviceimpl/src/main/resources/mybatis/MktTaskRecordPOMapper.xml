@@ -4,7 +4,7 @@
   <resultMap id="BaseResultMap" type="com.bizvane.mktcenterservice.models.po.MktTaskRecordPO">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-14 13:26:02.
+      This element was generated on 2018-07-25 16:02:16.
     -->
     <id column="mkt_task_record_id" jdbcType="BIGINT" property="mktTaskRecordId" />
     <result column="task_type" jdbcType="INTEGER" property="taskType" />
@@ -24,7 +24,7 @@
   <sql id="Example_Where_Clause">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-14 13:26:02.
+      This element was generated on 2018-07-25 16:02:16.
     -->
     <where>
       <foreach collection="oredCriteria" item="criteria" separator="or">
@@ -57,7 +57,7 @@
   <sql id="Update_By_Example_Where_Clause">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-14 13:26:02.
+      This element was generated on 2018-07-25 16:02:16.
     -->
     <where>
       <foreach collection="example.oredCriteria" item="criteria" separator="or">
@@ -90,7 +90,7 @@
   <sql id="Base_Column_List">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-14 13:26:02.
+      This element was generated on 2018-07-25 16:02:16.
     -->
     mkt_task_record_id, task_type, task_id, member_code, share_times, consume_amount, 
     remark, create_user_id, create_user_name, create_date, modified_user_id, modified_user_name, 
@@ -99,7 +99,7 @@
   <select id="selectByExample" parameterType="com.bizvane.mktcenterservice.models.po.MktTaskRecordPOExample" resultMap="BaseResultMap">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-14 13:26:02.
+      This element was generated on 2018-07-25 16:02:16.
     -->
     select
     <if test="distinct">
@@ -117,7 +117,7 @@
   <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-14 13:26:02.
+      This element was generated on 2018-07-25 16:02:16.
     -->
     select 
     <include refid="Base_Column_List" />
@@ -127,7 +127,7 @@
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-14 13:26:02.
+      This element was generated on 2018-07-25 16:02:16.
     -->
     delete from t_mkt_task_record
     where mkt_task_record_id = #{mktTaskRecordId,jdbcType=BIGINT}
@@ -135,7 +135,7 @@
   <delete id="deleteByExample" parameterType="com.bizvane.mktcenterservice.models.po.MktTaskRecordPOExample">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-14 13:26:02.
+      This element was generated on 2018-07-25 16:02:16.
     -->
     delete from t_mkt_task_record
     <if test="_parameter != null">
@@ -145,7 +145,7 @@
   <insert id="insert" parameterType="com.bizvane.mktcenterservice.models.po.MktTaskRecordPO">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-14 13:26:02.
+      This element was generated on 2018-07-25 16:02:16.
     -->
     <selectKey keyProperty="mktTaskRecordId" order="AFTER" resultType="java.lang.Long">
       SELECT LAST_INSERT_ID()
@@ -164,7 +164,7 @@
   <insert id="insertSelective" parameterType="com.bizvane.mktcenterservice.models.po.MktTaskRecordPO">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-14 13:26:02.
+      This element was generated on 2018-07-25 16:02:16.
     -->
     <selectKey keyProperty="mktTaskRecordId" order="AFTER" resultType="java.lang.Long">
       SELECT LAST_INSERT_ID()
@@ -256,7 +256,7 @@
   <select id="countByExample" parameterType="com.bizvane.mktcenterservice.models.po.MktTaskRecordPOExample" resultType="java.lang.Long">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-14 13:26:02.
+      This element was generated on 2018-07-25 16:02:16.
     -->
     select count(*) from t_mkt_task_record
     <if test="_parameter != null">
@@ -266,7 +266,7 @@
   <update id="updateByExampleSelective" parameterType="map">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-14 13:26:02.
+      This element was generated on 2018-07-25 16:02:16.
     -->
     update t_mkt_task_record
     <set>
@@ -320,7 +320,7 @@
   <update id="updateByExample" parameterType="map">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-14 13:26:02.
+      This element was generated on 2018-07-25 16:02:16.
     -->
     update t_mkt_task_record
     set mkt_task_record_id = #{record.mktTaskRecordId,jdbcType=BIGINT},
@@ -344,7 +344,7 @@
   <update id="updateByPrimaryKeySelective" parameterType="com.bizvane.mktcenterservice.models.po.MktTaskRecordPO">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-14 13:26:02.
+      This element was generated on 2018-07-25 16:02:16.
     -->
     update t_mkt_task_record
     <set>
@@ -393,7 +393,7 @@
   <update id="updateByPrimaryKey" parameterType="com.bizvane.mktcenterservice.models.po.MktTaskRecordPO">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-14 13:26:02.
+      This element was generated on 2018-07-25 16:02:16.
     -->
     update t_mkt_task_record
     set task_type = #{taskType,jdbcType=INTEGER},

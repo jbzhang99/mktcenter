@@ -8,28 +8,28 @@ import java.util.List;
 public class MktTaskInvitePOExample implements Serializable {
     /**
 	 * 只读. 
-	 * @mbg.generated  2018-07-14 13:26:02
+	 * @mbg.generated  2018-07-25 16:02:16
 	 */
 	protected String orderByClause;
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-07-14 13:26:02
+	 * @mbg.generated  2018-07-25 16:02:16
 	 */
 	protected boolean distinct;
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-07-14 13:26:02
+	 * @mbg.generated  2018-07-25 16:02:16
 	 */
 	protected List<Criteria> oredCriteria;
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-07-14 13:26:02
+	 * @mbg.generated  2018-07-25 16:02:16
 	 */
 	private static final long serialVersionUID = 1L;
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-07-14 13:26:02
+	 * @mbg.generated  2018-07-25 16:02:16
 	 */
 	public MktTaskInvitePOExample() {
 		oredCriteria = new ArrayList<Criteria>();
@@ -37,7 +37,7 @@ public class MktTaskInvitePOExample implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-07-14 13:26:02
+	 * @mbg.generated  2018-07-25 16:02:16
 	 */
 	public void setOrderByClause(String orderByClause) {
 		this.orderByClause = orderByClause;
@@ -45,7 +45,7 @@ public class MktTaskInvitePOExample implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-07-14 13:26:02
+	 * @mbg.generated  2018-07-25 16:02:16
 	 */
 	public String getOrderByClause() {
 		return orderByClause;
@@ -53,7 +53,7 @@ public class MktTaskInvitePOExample implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-07-14 13:26:02
+	 * @mbg.generated  2018-07-25 16:02:16
 	 */
 	public void setDistinct(boolean distinct) {
 		this.distinct = distinct;
@@ -61,7 +61,7 @@ public class MktTaskInvitePOExample implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-07-14 13:26:02
+	 * @mbg.generated  2018-07-25 16:02:16
 	 */
 	public boolean isDistinct() {
 		return distinct;
@@ -69,7 +69,7 @@ public class MktTaskInvitePOExample implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-07-14 13:26:02
+	 * @mbg.generated  2018-07-25 16:02:16
 	 */
 	public List<Criteria> getOredCriteria() {
 		return oredCriteria;
@@ -77,7 +77,7 @@ public class MktTaskInvitePOExample implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-07-14 13:26:02
+	 * @mbg.generated  2018-07-25 16:02:16
 	 */
 	public void or(Criteria criteria) {
 		oredCriteria.add(criteria);
@@ -85,7 +85,7 @@ public class MktTaskInvitePOExample implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-07-14 13:26:02
+	 * @mbg.generated  2018-07-25 16:02:16
 	 */
 	public Criteria or() {
 		Criteria criteria = createCriteriaInternal();
@@ -95,7 +95,7 @@ public class MktTaskInvitePOExample implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-07-14 13:26:02
+	 * @mbg.generated  2018-07-25 16:02:16
 	 */
 	public Criteria createCriteria() {
 		Criteria criteria = createCriteriaInternal();
@@ -107,7 +107,7 @@ public class MktTaskInvitePOExample implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-07-14 13:26:02
+	 * @mbg.generated  2018-07-25 16:02:16
 	 */
 	protected Criteria createCriteriaInternal() {
 		Criteria criteria = new Criteria();
@@ -116,7 +116,7 @@ public class MktTaskInvitePOExample implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-07-14 13:26:02
+	 * @mbg.generated  2018-07-25 16:02:16
 	 */
 	public void clear() {
 		oredCriteria.clear();
@@ -126,7 +126,7 @@ public class MktTaskInvitePOExample implements Serializable {
 
 	/**
 	 * 只读. t_mkt_task_invite
-	 * @mbg.generated  2018-07-14 13:26:02
+	 * @mbg.generated  2018-07-25 16:02:16
 	 */
 	protected abstract static class GeneratedCriteria implements Serializable {
 		protected List<Criterion> criteria;
@@ -169,63 +169,63 @@ public class MktTaskInvitePOExample implements Serializable {
 			criteria.add(new Criterion(condition, value1, value2));
 		}
 
-		public Criteria andMktTaskProfileIdIsNull() {
-			addCriterion("mkt_task_profile_id is null");
+		public Criteria andMktTaskInviteIdIsNull() {
+			addCriterion("mkt_task_invite_id is null");
 			return (Criteria) this;
 		}
 
-		public Criteria andMktTaskProfileIdIsNotNull() {
-			addCriterion("mkt_task_profile_id is not null");
+		public Criteria andMktTaskInviteIdIsNotNull() {
+			addCriterion("mkt_task_invite_id is not null");
 			return (Criteria) this;
 		}
 
-		public Criteria andMktTaskProfileIdEqualTo(Long value) {
-			addCriterion("mkt_task_profile_id =", value, "mktTaskProfileId");
+		public Criteria andMktTaskInviteIdEqualTo(Long value) {
+			addCriterion("mkt_task_invite_id =", value, "mktTaskInviteId");
 			return (Criteria) this;
 		}
 
-		public Criteria andMktTaskProfileIdNotEqualTo(Long value) {
-			addCriterion("mkt_task_profile_id <>", value, "mktTaskProfileId");
+		public Criteria andMktTaskInviteIdNotEqualTo(Long value) {
+			addCriterion("mkt_task_invite_id <>", value, "mktTaskInviteId");
 			return (Criteria) this;
 		}
 
-		public Criteria andMktTaskProfileIdGreaterThan(Long value) {
-			addCriterion("mkt_task_profile_id >", value, "mktTaskProfileId");
+		public Criteria andMktTaskInviteIdGreaterThan(Long value) {
+			addCriterion("mkt_task_invite_id >", value, "mktTaskInviteId");
 			return (Criteria) this;
 		}
 
-		public Criteria andMktTaskProfileIdGreaterThanOrEqualTo(Long value) {
-			addCriterion("mkt_task_profile_id >=", value, "mktTaskProfileId");
+		public Criteria andMktTaskInviteIdGreaterThanOrEqualTo(Long value) {
+			addCriterion("mkt_task_invite_id >=", value, "mktTaskInviteId");
 			return (Criteria) this;
 		}
 
-		public Criteria andMktTaskProfileIdLessThan(Long value) {
-			addCriterion("mkt_task_profile_id <", value, "mktTaskProfileId");
+		public Criteria andMktTaskInviteIdLessThan(Long value) {
+			addCriterion("mkt_task_invite_id <", value, "mktTaskInviteId");
 			return (Criteria) this;
 		}
 
-		public Criteria andMktTaskProfileIdLessThanOrEqualTo(Long value) {
-			addCriterion("mkt_task_profile_id <=", value, "mktTaskProfileId");
+		public Criteria andMktTaskInviteIdLessThanOrEqualTo(Long value) {
+			addCriterion("mkt_task_invite_id <=", value, "mktTaskInviteId");
 			return (Criteria) this;
 		}
 
-		public Criteria andMktTaskProfileIdIn(List<Long> values) {
-			addCriterion("mkt_task_profile_id in", values, "mktTaskProfileId");
+		public Criteria andMktTaskInviteIdIn(List<Long> values) {
+			addCriterion("mkt_task_invite_id in", values, "mktTaskInviteId");
 			return (Criteria) this;
 		}
 
-		public Criteria andMktTaskProfileIdNotIn(List<Long> values) {
-			addCriterion("mkt_task_profile_id not in", values, "mktTaskProfileId");
+		public Criteria andMktTaskInviteIdNotIn(List<Long> values) {
+			addCriterion("mkt_task_invite_id not in", values, "mktTaskInviteId");
 			return (Criteria) this;
 		}
 
-		public Criteria andMktTaskProfileIdBetween(Long value1, Long value2) {
-			addCriterion("mkt_task_profile_id between", value1, value2, "mktTaskProfileId");
+		public Criteria andMktTaskInviteIdBetween(Long value1, Long value2) {
+			addCriterion("mkt_task_invite_id between", value1, value2, "mktTaskInviteId");
 			return (Criteria) this;
 		}
 
-		public Criteria andMktTaskProfileIdNotBetween(Long value1, Long value2) {
-			addCriterion("mkt_task_profile_id not between", value1, value2, "mktTaskProfileId");
+		public Criteria andMktTaskInviteIdNotBetween(Long value1, Long value2) {
+			addCriterion("mkt_task_invite_id not between", value1, value2, "mktTaskInviteId");
 			return (Criteria) this;
 		}
 
@@ -862,7 +862,7 @@ public class MktTaskInvitePOExample implements Serializable {
 
 	/**
 	 * 只读. t_mkt_task_invite
-	 * @mbg.generated  2018-07-14 13:26:02
+	 * @mbg.generated  2018-07-25 16:02:16
 	 */
 	public static class Criterion implements Serializable {
 		private String condition;
