@@ -1,5 +1,8 @@
 package com.bizvane.mktcenterserviceimpl.service.impl;
 
+import com.bizvane.centerstageservice.models.po.SysCheckConfigPo;
+import com.bizvane.centerstageservice.models.vo.SysCheckConfigVo;
+import com.bizvane.centerstageservice.rpc.SysCheckConfigServiceRpc;
 import com.bizvane.mktcenterservice.interfaces.ActivitySigninService;
 import com.bizvane.mktcenterservice.models.bo.ActivityBO;
 import com.bizvane.mktcenterservice.models.po.MktActivityOrderPOWithBLOBs;
@@ -11,6 +14,7 @@ import com.bizvane.mktcenterservice.models.vo.MessageVO;
 import com.bizvane.mktcenterserviceimpl.common.constants.JobHandlerConstants;
 import com.bizvane.mktcenterserviceimpl.common.enums.ActivityStatusEnum;
 import com.bizvane.mktcenterserviceimpl.common.enums.BusinessTypeEnum;
+import com.bizvane.mktcenterserviceimpl.common.enums.CheckStatusEnum;
 import com.bizvane.mktcenterserviceimpl.common.job.XxlJobConfig;
 import com.bizvane.mktcenterserviceimpl.common.utils.DateUtil;
 import com.bizvane.mktcenterserviceimpl.mappers.MktActivityPOMapper;
@@ -18,6 +22,7 @@ import com.bizvane.mktcenterserviceimpl.mappers.MktActivitySigninMapper;
 import com.bizvane.mktcenterserviceimpl.mappers.MktMessagePOMapper;
 import com.bizvane.utils.commonutils.PageForm;
 import com.bizvane.utils.enumutils.JobEnum;
+import com.bizvane.utils.enumutils.SysResponseEnum;
 import com.bizvane.utils.jobutils.JobClient;
 import com.bizvane.utils.jobutils.XxlJobInfo;
 import com.bizvane.utils.responseinfo.ResponseData;
@@ -31,6 +36,7 @@ import org.springframework.util.CollectionUtils;
 
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 /**
  * @author chen.li
@@ -46,11 +52,9 @@ public class ActivitySigninServiceImpl implements ActivitySigninService {
     @Autowired
     private MktActivityPOMapper mktActivityPOMapper;
     @Autowired
-    private XxlJobConfig xxlJobConfig;
-    @Autowired
-    private JobClient jobClient;
-    @Autowired
     private MktMessagePOMapper mktMessagePOMapper;
+    @Autowired
+    private SysCheckConfigServiceRpc sysCheckConfigServiceRpc;
     /**
      * 查询签到活动列表
      * @param vo
@@ -77,21 +81,59 @@ public class ActivitySigninServiceImpl implements ActivitySigninService {
     public ResponseData<Integer> addActivitySignin(ActivityBO bo, SysAccountPO stageUser) {
         //返回对象
         ResponseData responseData = new ResponseData();
-
+        //得到大实体类
         ActivityVO activityVO = bo.getActivityVO();
-
+        //暂时用uuid生成活动编号9
+        String activityCode = "AC"+ UUID.randomUUID().toString().replaceAll("-", "");
+        activityVO.setActivityCode(activityCode);
         MktActivityPOWithBLOBs mktActivityPOWithBLOBs = new MktActivityPOWithBLOBs();
         BeanUtils.copyProperties(activityVO,mktActivityPOWithBLOBs);
+        //查询看是否已存在签到活动
+        ActivityVO vo= new ActivityVO();
+        List<ActivityVO> activitySigninList = mktActivitySigninMapper.getActivitySigninList(vo);
+        if(!CollectionUtils.isEmpty(activitySigninList)){
+            responseData.setCode(SysResponseEnum.FAILED.getCode());
+            responseData.setMessage("已存在签到活动!");
+            return responseData;
+        }
+        //查询审核配置，是否需要审核然后判断
+        SysCheckConfigVo so = new SysCheckConfigVo();
+        so.setSysBrandId(activityVO.getSysBrandId());
+        ResponseData<List<SysCheckConfigVo>> sysCheckConfigVo =sysCheckConfigServiceRpc.getCheckConfigListAll(so);
+        List<SysCheckConfigVo> sysCheckConfigVoList = sysCheckConfigVo.getData();
+        //判断是否有审核配置
+        int i = 0;
+        if(!CollectionUtils.isEmpty(sysCheckConfigVoList)){
+            for (SysCheckConfigVo sysCheckConfig:sysCheckConfigVoList) {
+                //判断是否需要审核  暂时先写这三个审核类型 后期确定下来写成枚举类
+                if(sysCheckConfig.getFunctionCode().equals("C0001") || sysCheckConfig.getFunctionCode().equals("C0002") || sysCheckConfig.getFunctionCode().equals("C0003")){
+                    i+=1;
+                }
+            }
+        }
 
-        //查询审核配置，是否需要审核
-
-
-        //如果活动时间在当前时间之后，需要启用job调度
-        if(new Date().before(activityVO.getStartTime())){
+        if(i>0){
+            //查询结果如果需要审核审核状态为待审核
+            mktActivityPOWithBLOBs.setCheckStatus(CheckStatusEnum.CHECK_STATUS_PENDING.getCode());
             //活动状态设置为待执行
             mktActivityPOWithBLOBs.setActivityStatus(ActivityStatusEnum.ACTIVITY_STATUS_PENDING.getCode());
+
+            //如果是待审核数据则需要增加一条审核数据
+            SysCheckConfigPo po = new SysCheckConfigPo();
+            po.setSysBrandId(mktActivityPOWithBLOBs.getSysBrandId());
+            po.setFunctionCode(mktActivityPOWithBLOBs.getActivityCode());
+            po.setFunctionName(mktActivityPOWithBLOBs.getActivityName());
+            po.setCreateDate(new Date());
+            po.setCreateUserId(stageUser.getSysAccountId());
+            po.setCreateUserName(stageUser.getName());
+            sysCheckConfigServiceRpc.addCheckConfig(po);
         }else{
+            //查询结果如果不需要审核审核状态为已审核
+            mktActivityPOWithBLOBs.setCheckStatus(CheckStatusEnum.CHECK_STATUS_APPROVED.getCode());
+            //活动状态设置为执行中
             mktActivityPOWithBLOBs.setActivityStatus(ActivityStatusEnum.ACTIVITY_STATUS_EXECUTING.getCode());
+            //发送模板消息和短信消息TODO
+
         }
 
         //新增活动主表
@@ -103,55 +145,29 @@ public class ActivitySigninServiceImpl implements ActivitySigninService {
         //获取新增后数据id
         Long mktActivityId = mktActivityPOWithBLOBs.getMktActivityId();
 
-        //根据上面的状态添加调度，参数是活动id
-        if(ActivityStatusEnum.ACTIVITY_STATUS_PENDING.getCode() == mktActivityPOWithBLOBs.getActivityStatus()){
-            //活动状态设置为待执行
-            mktActivityPOWithBLOBs.setActivityStatus(ActivityStatusEnum.ACTIVITY_STATUS_PENDING.getCode());
-            //构建job对象
-            XxlJobInfo xxlJobInfo = new XxlJobInfo();
-            //设置appName
-            xxlJobInfo.setAppName(xxlJobConfig.getAppName());
-            //设置路由策略
-            xxlJobInfo.setExecutorRouteStrategy(JobEnum.EXECUTOR_ROUTE_STRATEGY_FIRST.getValue());
-            //设置job定时器
-            xxlJobInfo.setJobCron(DateUtil.getCronExpression(activityVO.getStartTime()));
-            //设置运行模式
-            xxlJobInfo.setGlueType(JobEnum.GLUE_TYPE_BEAN.getValue());
-            //设置job处理器
-            xxlJobInfo.setExecutorHandler(JobHandlerConstants.activity);
-            //设置job描述
-            xxlJobInfo.setJobDesc(activityVO.getActivityInfo());
-            //设置执行参数
-            xxlJobInfo.setExecutorParam(mktActivityId.toString());
-            //设置阻塞处理策略
-            xxlJobInfo.setExecutorBlockStrategy(JobEnum.EXECUTOR_BLOCK_SERIAL_EXECUTION.getValue());
-            //设置失败处理策略
-            xxlJobInfo.setExecutorFailStrategy(JobEnum.EXECUTOR_FAIL_STRATEGY_NULL.getValue());
-            //设置负责人
-            xxlJobInfo.setAuthor(stageUser.getName());
-            //添加job
-            jobClient.addJob(xxlJobInfo);
-        }
-
         //新增会员签到活动表
         MktActivitySignin mktActivitySignin = new MktActivitySignin();
         BeanUtils.copyProperties(mktActivityPOWithBLOBs,mktActivitySignin);
         mktActivitySignin.setMktActivityId(mktActivityId);
         mktActivitySigninMapper.insertSelective(mktActivitySignin);
-        //TODO
 
-        //新增活动消息
-        List<MessageVO> messageVOList = bo.getMessageVOList();
-        if(!CollectionUtils.isEmpty(messageVOList)){
-            for(MessageVO messageVO : messageVOList){
-                MktMessagePO mktMessagePO = new MktMessagePO();
-                BeanUtils.copyProperties(mktActivityPOWithBLOBs,mktMessagePO);
-                BeanUtils.copyProperties(messageVO,mktMessagePO);
-                mktMessagePO.setBizType(BusinessTypeEnum.ACTIVITY_TYPE_ACTIVITY.getCode());
-                mktMessagePO.setBizId(mktActivityId);
-                mktMessagePOMapper.insertSelective(mktMessagePO);
-            }
-        }
+        return responseData;
+    }
+
+    /**
+     * 查看活动详情
+     * @param mktActivityId
+     * @return
+     */
+    @Override
+    public ResponseData<List<ActivityVO>> selectActivitySigninById(Long mktActivityId) {
+        ResponseData responseData = new ResponseData();
+        ActivityVO vo= new ActivityVO();
+        vo.setMktActivityId(mktActivityId);
+        List<ActivityVO> signinList = mktActivitySigninMapper.getActivitySigninList(vo);
+        responseData.setData(signinList);
+        responseData.setCode(SysResponseEnum.SUCCESS.getCode());
+        responseData.setMessage(SysResponseEnum.SUCCESS.getMessage());
         return responseData;
     }
 }

@@ -66,4 +66,35 @@ public class ActivityOrderController {
         //返回
         return integerResponseData;
     }
+
+    /**
+     * 查询活动详情
+     * @param mktActivityId
+     * @return
+     */
+    @RequestMapping("selectActivityOrderById")
+    public ResponseData<List<ActivityVO>> selectActivityOrderById(Long mktActivityId){
+        return activityOrderService.selectActivityOrderById(mktActivityId);
+    }
+    /**
+     * 修改活动
+     * @return
+     */
+    public ResponseData<Integer> updateActivityOrder(ActivityVO activityVO, List<String> couponCodeList, List<MessageVO> messageVOList, HttpServletRequest request){
+        ActivityBO bo = new ActivityBO();
+        bo.setActivityVO(activityVO);
+        bo.setCouponCodeList(couponCodeList);
+        bo.setMessageVOList(messageVOList);
+        //参数校验
+        ResponseData responseData = ActivityParamCheckUtil.checkParam(bo);
+        //参数校验不通过
+        if(SystemConstants.ERROR_CODE==responseData.getCode()){
+            return responseData;
+        }
+        //参数校验通过，获取操作人信息
+        SysAccountPO stageUser = new SysAccountPO();
+        //更新活动
+        ResponseData<Integer> order = activityOrderService.updateActivityOrder(bo,stageUser);
+        return order;
+    }
 }

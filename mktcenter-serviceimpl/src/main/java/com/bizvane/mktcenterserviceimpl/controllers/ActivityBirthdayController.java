@@ -65,4 +65,12 @@ public class ActivityBirthdayController {
         //返回
         return integerResponseData;
     }
+    /**
+     * 查询活动详情
+     * @param mktActivityId
+     * @return
+     */
+    public ResponseData<List<ActivityVO>> selectActivityBirthdayById(Long mktActivityId){
+        return activityBirthdayService.selectActivityBirthdayById(mktActivityId);
+    }
 }

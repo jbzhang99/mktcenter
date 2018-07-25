@@ -6,6 +6,8 @@ import com.bizvane.utils.commonutils.PageForm;
 import com.bizvane.utils.responseinfo.ResponseData;
 import com.bizvane.utils.tokens.SysAccountPO;
 
+import java.util.List;
+
 /**
  * @author chen.li
  * @date on 2018/7/13 18:44
@@ -26,4 +28,10 @@ public interface ActivitySigninService {
      * @return
      */
     public ResponseData<Integer> addActivitySignin(ActivityBO bo, SysAccountPO stageUser);
+    /**
+     * 查询活动详情
+     * @param mktActivityId
+     * @return
+     */
+    public ResponseData<List<ActivityVO>> selectActivitySigninById(Long mktActivityId);
 }

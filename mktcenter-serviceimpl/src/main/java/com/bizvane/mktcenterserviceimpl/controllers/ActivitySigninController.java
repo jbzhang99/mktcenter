@@ -66,4 +66,13 @@ public class ActivitySigninController {
         //返回
         return integerResponseData;
     }
+    /**
+     * 查询活动详情
+     * @param mktActivityId
+     * @return
+     */
+    @RequestMapping("selectActivitySigninById")
+    public ResponseData<List<ActivityVO>> selectActivitySigninById(Long mktActivityId){
+        return activitySigninService.selectActivitySigninById(mktActivityId);
+    }
 }

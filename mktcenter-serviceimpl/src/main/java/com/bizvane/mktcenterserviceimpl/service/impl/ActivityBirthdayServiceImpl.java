@@ -206,4 +206,21 @@ public class ActivityBirthdayServiceImpl implements ActivityBirthdayService {
         }
         return responseData;
     }
+
+    /**
+     * 查询生日活动详情
+     * @param mktActivityId
+     * @return
+     */
+    @Override
+    public ResponseData<List<ActivityVO>> selectActivityBirthdayById(Long mktActivityId) {
+        ResponseData responseData = new ResponseData();
+        ActivityVO vo= new ActivityVO();
+        vo.setMktActivityId(mktActivityId);
+        List<ActivityVO> registerList = mktActivityBirthdayPOMapper.getActivityBirthdayList(vo);
+        responseData.setData(registerList);
+        responseData.setCode(SysResponseEnum.SUCCESS.getCode());
+        responseData.setMessage(SysResponseEnum.SUCCESS.getMessage());
+        return responseData;
+    }
 }

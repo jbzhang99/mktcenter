@@ -6,6 +6,8 @@ import com.bizvane.utils.commonutils.PageForm;
 import com.bizvane.utils.responseinfo.ResponseData;
 import com.bizvane.utils.tokens.SysAccountPO;
 
+import java.util.List;
+
 /**
  * @author chen.li
  * @date on 2018/7/13 18:42
@@ -25,4 +27,15 @@ public interface ActivityOrderService {
      * @return
      */
     public ResponseData<Integer> addActivityOrder(ActivityBO bo, SysAccountPO stageUser);
+    /**
+     * 查询活动详情
+     * @param mktActivityId
+     * @return
+     */
+    public ResponseData<List<ActivityVO>> selectActivityOrderById(Long mktActivityId);
+    /**
+     * 修改活动
+     * @return
+     */
+    public ResponseData<Integer> updateActivityOrder(ActivityBO bo,SysAccountPO stageUser);
 }
