@@ -30,7 +30,7 @@ public class ActivityJobHandler extends IJobHandler {
         ReturnT returnT = new ReturnT();
         System.out.println("开始执行活动");
         //把活动状态改成执行中
-        int sum = mktActivityPOMapper.updateActivityStatus(Long.parseLong("param"));
+        int sum = mktActivityPOMapper.updateActivityStatus(param);
         //查询消息集合
         MktMessagePOExample example = new MktMessagePOExample();
         example.createCriteria().andBizIdEqualTo(Long.parseLong("param"));

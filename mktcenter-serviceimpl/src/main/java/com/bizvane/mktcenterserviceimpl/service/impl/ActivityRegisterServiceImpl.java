@@ -1,7 +1,10 @@
 package com.bizvane.mktcenterserviceimpl.service.impl;
 
 import com.bizvane.centerstageservice.models.po.SysCheckConfigPo;
+import com.bizvane.centerstageservice.models.vo.SysCheckConfigVo;
 import com.bizvane.centerstageservice.rpc.SysCheckConfigServiceRpc;
+import com.bizvane.members.facade.models.IntegralRecordModel;
+import com.bizvane.members.facade.service.api.IntegralRecordApiService;
 import com.bizvane.mktcenterservice.interfaces.ActivityRegisterService;
 import com.bizvane.mktcenterservice.models.bo.ActivityBO;
 import com.bizvane.mktcenterservice.models.po.*;
@@ -63,6 +66,8 @@ public class ActivityRegisterServiceImpl implements ActivityRegisterService {
     private JobUtil jobUtil;
     @Autowired
     private SysCheckConfigServiceRpc sysCheckConfigServiceRpc;
+    @Autowired
+    private IntegralRecordApiService integralRecordApiService;
     /**
      * 查询活动列表
      * @param vo
@@ -92,34 +97,45 @@ public class ActivityRegisterServiceImpl implements ActivityRegisterService {
         //得到大实体类
         ActivityVO activityVO = bo.getActivityVO();
         //暂时用uuid生成活动编号
-        activityVO.setActivityCode("AC"+ UUID.randomUUID().toString().replaceAll("-", ""));
+        String activityCode = "AC"+ UUID.randomUUID().toString().replaceAll("-", "");
+        activityVO.setActivityCode(activityCode);
         MktActivityPOWithBLOBs mktActivityPOWithBLOBs = new MktActivityPOWithBLOBs();
         BeanUtils.copyProperties(activityVO,mktActivityPOWithBLOBs);
+
         //查询判断长期活动同一会员等级是否有重复
-        ActivityVO vo = new ActivityVO();
-        vo.setMbrLevelCode(bo.getActivityVO().getMbrLevelCode());
-        vo.setLongTerm(bo.getActivityVO().getLongTerm());
-        List<ActivityVO> registerList = mktActivityRegisterPOMapper.getActivityList(vo);
-        if(!CollectionUtils.isEmpty(registerList)){
-            responseData.setCode(SysResponseEnum.FAILED.getCode());
-            responseData.setMessage("已存在同一类型的长期活动!");
-            return responseData;
-
+        if(1 == bo.getActivityVO().getLongTerm()){
+            ActivityVO vo = new ActivityVO();
+            vo.setMbrLevelCode(bo.getActivityVO().getMbrLevelCode());
+            vo.setLongTerm(bo.getActivityVO().getLongTerm());
+            List<ActivityVO> registerList = mktActivityRegisterPOMapper.getActivityList(vo);
+            if(!CollectionUtils.isEmpty(registerList)){
+                responseData.setCode(SysResponseEnum.FAILED.getCode());
+                responseData.setMessage("已存在同一类型的长期活动!");
+                return responseData;
+            }
         }
-        //查询审核配置，是否需要审核然后判断TODO
 
-        if(1==1){
+        //查询审核配置，是否需要审核然后判断
+        SysCheckConfigVo so = new SysCheckConfigVo();
+        so.setSysBrandId(activityVO.getSysBrandId());
+        ResponseData<List<SysCheckConfigVo>> sysCheckConfigVo =sysCheckConfigServiceRpc.getCheckConfigListAll(so);
+        List<SysCheckConfigVo> sysCheckConfigVoList = sysCheckConfigVo.getData();
+        //判断是否有审核配置
+        int i = 0;
+        if(!CollectionUtils.isEmpty(sysCheckConfigVoList)){
+            for (SysCheckConfigVo sysCheckConfig:sysCheckConfigVoList) {
+                //判断是否需要审核  暂时先写这三个审核类型 后期确定下来写成枚举类
+                if(sysCheckConfig.getFunctionCode().equals("C0001") || sysCheckConfig.getFunctionCode().equals("C0002") || sysCheckConfig.getFunctionCode().equals("C0003")){
+                    i+=1;
+                }
+            }
+        }
+
+        if(i>0){
             //查询结果如果需要审核审核状态为待审核
             mktActivityPOWithBLOBs.setCheckStatus(CheckStatusEnum.CHECK_STATUS_PENDING.getCode());
             //活动状态设置为待执行
             mktActivityPOWithBLOBs.setActivityStatus(ActivityStatusEnum.ACTIVITY_STATUS_PENDING.getCode());
-            //新增活动主表
-            mktActivityPOWithBLOBs.setCreateDate(new Date());
-            mktActivityPOWithBLOBs.setCreateUserId(stageUser.getSysAccountId());
-            mktActivityPOWithBLOBs.setCreateUserName(stageUser.getName());
-            mktActivityPOMapper.insertSelective(mktActivityPOWithBLOBs);
-            //获取新增后数据id
-            Long mktActivityId = mktActivityPOWithBLOBs.getMktActivityId();
 
             //如果是待审核数据则需要增加一条审核数据
             SysCheckConfigPo po = new SysCheckConfigPo();
@@ -131,42 +147,35 @@ public class ActivityRegisterServiceImpl implements ActivityRegisterService {
             po.setCreateUserName(stageUser.getName());
             sysCheckConfigServiceRpc.addCheckConfig(po);
             //getStartTime 开始时间>当前时间增加job
-            if(null != activityVO.getStartTime() && new Date().before(activityVO.getStartTime())){
+            if(1 != bo.getActivityVO().getLongTerm() && new Date().before(activityVO.getStartTime())){
                 //创建任务调度任务开始时间
-                jobUtil.addJob(stageUser,activityVO,mktActivityPOWithBLOBs,mktActivityId);
+                jobUtil.addJob(stageUser,activityVO,mktActivityPOWithBLOBs,activityCode);
                 //创建任务调度任务结束时间
-                jobUtil.addJobEndTime(stageUser,activityVO,mktActivityPOWithBLOBs,mktActivityId);
+                jobUtil.addJobEndTime(stageUser,activityVO,mktActivityPOWithBLOBs,activityCode);
             }
         }else{
             //查询结果如果不需要审核审核状态为已审核
             mktActivityPOWithBLOBs.setCheckStatus(CheckStatusEnum.CHECK_STATUS_APPROVED.getCode());
             //getStartTime 开始时间>当前时间增加job
-            if(null !=activityVO.getStartTime() && new Date().before(activityVO.getStartTime())){
+            if(1!= bo.getActivityVO().getLongTerm() && new Date().before(activityVO.getStartTime())){
                 //活动状态设置为待执行
                 mktActivityPOWithBLOBs.setActivityStatus(ActivityStatusEnum.ACTIVITY_STATUS_PENDING.getCode());
-                //新增活动主表
-                mktActivityPOWithBLOBs.setCreateDate(new Date());
-                mktActivityPOWithBLOBs.setCreateUserId(stageUser.getSysAccountId());
-                mktActivityPOWithBLOBs.setCreateUserName(stageUser.getName());
-                mktActivityPOMapper.insertSelective(mktActivityPOWithBLOBs);
-                //获取新增后数据id
-                Long mktActivityId = mktActivityPOWithBLOBs.getMktActivityId();
                 //创建任务调度任务开始时间
-                jobUtil.addJob(stageUser,activityVO,mktActivityPOWithBLOBs,mktActivityId);
+                jobUtil.addJob(stageUser,activityVO,mktActivityPOWithBLOBs,activityCode);
                 //创建任务调度任务结束时间
-                jobUtil.addJobEndTime(stageUser,activityVO,mktActivityPOWithBLOBs,mktActivityId);
+                jobUtil.addJobEndTime(stageUser,activityVO,mktActivityPOWithBLOBs,activityCode);
             }else{
                 //活动状态设置为执行中
                 mktActivityPOWithBLOBs.setActivityStatus(ActivityStatusEnum.ACTIVITY_STATUS_EXECUTING.getCode());
-                //新增活动主表
-                mktActivityPOWithBLOBs.setCreateDate(new Date());
-                mktActivityPOWithBLOBs.setCreateUserId(stageUser.getSysAccountId());
-                mktActivityPOWithBLOBs.setCreateUserName(stageUser.getName());
-                mktActivityPOMapper.insertSelective(mktActivityPOWithBLOBs);
                 //发送模板消息和短信消息TODO
 
             }
         }
+        //新增活动主表
+        mktActivityPOWithBLOBs.setCreateDate(new Date());
+        mktActivityPOWithBLOBs.setCreateUserId(stageUser.getSysAccountId());
+        mktActivityPOWithBLOBs.setCreateUserName(stageUser.getName());
+        mktActivityPOMapper.insertSelective(mktActivityPOWithBLOBs);
         //获取新增后数据id
         Long mktActivityId = mktActivityPOWithBLOBs.getMktActivityId();
 
@@ -220,8 +229,10 @@ public class ActivityRegisterServiceImpl implements ActivityRegisterService {
         vo.setActivityStatus(ActivityStatusEnum.ACTIVITY_STATUS_EXECUTING.getCode());
         List<ActivityVO> RegisterList = mktActivityRegisterPOMapper.getActivityList(vo);
         for (ActivityVO activityVO:RegisterList) {
-            //赠送活动奖励
-            //增加积分奖励新增接口 增加卷奖励接口
+            //增加积分奖励新增接口TODO不全
+            IntegralRecordModel var1 = new IntegralRecordModel();
+            integralRecordApiService.updateMemberIntegral(var1);
+            // 增加卷奖励接口
         }
         return null;
     }
@@ -238,28 +249,34 @@ public class ActivityRegisterServiceImpl implements ActivityRegisterService {
         ResponseData responseData = new ResponseData();
         //得到大实体类
         ActivityVO activityVO = bo.getActivityVO();
-        if(activityVO.getActivityStatus()==ActivityStatusEnum.ACTIVITY_STATUS_EXECUTING.getCode()){
+        if(activityVO.getCheckStatus()!=CheckStatusEnum.CHECK_STATUS_PENDING.getCode()){
             responseData.setCode(SysResponseEnum.FAILED.getCode());
-            responseData.setMessage("执行中的活动不能修改!");
+            responseData.setMessage("待审核任务才能修改!");
             return responseData;
         }
         MktActivityPOWithBLOBs mktActivityPOWithBLOBs = new MktActivityPOWithBLOBs();
         BeanUtils.copyProperties(activityVO,mktActivityPOWithBLOBs);
 
-        //查询审核配置，是否需要审核然后判断TODO
-
-        if(1==1){
+        //查询审核配置，是否需要审核然后判断
+        SysCheckConfigVo so = new SysCheckConfigVo();
+        so.setSysBrandId(activityVO.getSysBrandId());
+        ResponseData<List<SysCheckConfigVo>> sysCheckConfigVo =sysCheckConfigServiceRpc.getCheckConfigListAll(so);
+        List<SysCheckConfigVo> sysCheckConfigVoList = sysCheckConfigVo.getData();
+        //判断是否有审核配置
+        int i = 0;
+        if(!CollectionUtils.isEmpty(sysCheckConfigVoList)){
+            for (SysCheckConfigVo sysCheckConfig:sysCheckConfigVoList) {
+                //判断是否需要审核  暂时先写这三个审核类型 后期确定下来写成枚举类
+                if(sysCheckConfig.getFunctionCode().equals("C0001") || sysCheckConfig.getFunctionCode().equals("C0002") || sysCheckConfig.getFunctionCode().equals("C0003")){
+                    i+=1;
+                }
+            }
+        }
+        if(i>0){
             //查询结果如果需要审核审核状态为待审核
             mktActivityPOWithBLOBs.setCheckStatus(CheckStatusEnum.CHECK_STATUS_PENDING.getCode());
             //活动状态设置为待执行
             mktActivityPOWithBLOBs.setActivityStatus(ActivityStatusEnum.ACTIVITY_STATUS_PENDING.getCode());
-            //修改活动主表
-            mktActivityPOWithBLOBs.setModifiedDate(new Date());
-            mktActivityPOWithBLOBs.setModifiedUserId(stageUser.getSysAccountId());
-            mktActivityPOWithBLOBs.setModifiedUserName(stageUser.getName());
-            mktActivityPOMapper.updateByPrimaryKeySelective(mktActivityPOWithBLOBs);
-            //获取活动数据id
-            Long mktActivityId = mktActivityPOWithBLOBs.getMktActivityId();
 
             //如果是待审核数据则需要增加一条审核数据
             SysCheckConfigPo po = new SysCheckConfigPo();
@@ -271,42 +288,35 @@ public class ActivityRegisterServiceImpl implements ActivityRegisterService {
             po.setCreateUserName(stageUser.getName());
             sysCheckConfigServiceRpc.addCheckConfig(po);
             //getStartTime 开始时间>当前时间增加job
-            if(null != activityVO.getStartTime() && new Date().before(activityVO.getStartTime())){
+            if(1 != bo.getActivityVO().getLongTerm() && new Date().before(activityVO.getStartTime())){
                 //创建任务调度任务开始时间
-                jobUtil.addJob(stageUser,activityVO,mktActivityPOWithBLOBs,mktActivityId);
+                jobUtil.addJob(stageUser,activityVO,mktActivityPOWithBLOBs,mktActivityPOWithBLOBs.getActivityCode());
                 //创建任务调度任务结束时间
-                jobUtil.addJobEndTime(stageUser,activityVO,mktActivityPOWithBLOBs,mktActivityId);
+                jobUtil.addJobEndTime(stageUser,activityVO,mktActivityPOWithBLOBs,mktActivityPOWithBLOBs.getActivityCode());
             }
         }else{
             //查询结果如果不需要审核审核状态为已审核
             mktActivityPOWithBLOBs.setCheckStatus(CheckStatusEnum.CHECK_STATUS_APPROVED.getCode());
             //getStartTime 开始时间>当前时间增加job
-            if(null !=activityVO.getStartTime() && new Date().before(activityVO.getStartTime())){
+            if(1 != bo.getActivityVO().getLongTerm() && new Date().before(activityVO.getStartTime())){
                 //活动状态设置为待执行
                 mktActivityPOWithBLOBs.setActivityStatus(ActivityStatusEnum.ACTIVITY_STATUS_PENDING.getCode());
-                //修改活动主表
-                mktActivityPOWithBLOBs.setModifiedDate(new Date());
-                mktActivityPOWithBLOBs.setModifiedUserId(stageUser.getSysAccountId());
-                mktActivityPOWithBLOBs.setModifiedUserName(stageUser.getName());
-                mktActivityPOMapper.updateByPrimaryKeySelective(mktActivityPOWithBLOBs);
-                //获取新增后数据id
-                Long mktActivityId = mktActivityPOWithBLOBs.getMktActivityId();
                 //创建任务调度任务开始时间
-                jobUtil.addJob(stageUser,activityVO,mktActivityPOWithBLOBs,mktActivityId);
+                jobUtil.addJob(stageUser,activityVO,mktActivityPOWithBLOBs,mktActivityPOWithBLOBs.getActivityCode());
                 //创建任务调度任务结束时间
-                jobUtil.addJobEndTime(stageUser,activityVO,mktActivityPOWithBLOBs,mktActivityId);
+                jobUtil.addJobEndTime(stageUser,activityVO,mktActivityPOWithBLOBs,mktActivityPOWithBLOBs.getActivityCode());
             }else{
                 //活动状态设置为执行中
                 mktActivityPOWithBLOBs.setActivityStatus(ActivityStatusEnum.ACTIVITY_STATUS_EXECUTING.getCode());
-                //新增活动主表
-                mktActivityPOWithBLOBs.setCreateDate(new Date());
-                mktActivityPOWithBLOBs.setCreateUserId(stageUser.getSysAccountId());
-                mktActivityPOWithBLOBs.setCreateUserName(stageUser.getName());
-                mktActivityPOMapper.insertSelective(mktActivityPOWithBLOBs);
                 //发送模板消息和短信消息TODO
 
             }
         }
+        //修改活动主表
+        mktActivityPOWithBLOBs.setModifiedDate(new Date());
+        mktActivityPOWithBLOBs.setModifiedUserId(stageUser.getSysAccountId());
+        mktActivityPOWithBLOBs.setModifiedUserName(stageUser.getName());
+        mktActivityPOMapper.updateByPrimaryKeySelective(mktActivityPOWithBLOBs);
         //获取活动数据id
         Long mktActivityId = mktActivityPOWithBLOBs.getMktActivityId();
 

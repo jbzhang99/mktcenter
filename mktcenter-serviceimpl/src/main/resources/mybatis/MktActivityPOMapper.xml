@@ -647,11 +647,11 @@
   </update>
 
   <!-- 更新活动状态为执行中-->
-  <update id="updateActivityStatus" parameterType="java.lang.Long">
+  <update id="updateActivityStatus" parameterType="java.lang.String">
     update t_mkt_activity
     set
     activity_status = 2,
-    where mkt_activity_id = #{mktActivityId,jdbcType=BIGINT}
+    where activity_code = #{activityCode}
     AND check_status = 3  AND valid = 1
   </update>
 </mapper>

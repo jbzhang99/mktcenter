@@ -96,8 +96,8 @@ public interface MktActivityPOMapper {
 
 	/**
 	 * 更新活动执行状态
-	 * @param mktActivityId
+	 * @param activityCode
 	 * @return
 	 */
-	int updateActivityStatus(Long mktActivityId);
+	int updateActivityStatus(String  activityCode);
 }

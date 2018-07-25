@@ -28,9 +28,9 @@ public class JobUtil {
      * @param stageUser
      * @param activityVO
      * @param mktActivityPOWithBLOBs
-     * @param mktActivityId
+     * @param activityCode
      */
-    public  void addJob(SysAccountPO stageUser, ActivityVO activityVO, MktActivityPOWithBLOBs mktActivityPOWithBLOBs, Long mktActivityId) {
+    public  void addJob(SysAccountPO stageUser, ActivityVO activityVO, MktActivityPOWithBLOBs mktActivityPOWithBLOBs, String activityCode) {
         //活动状态设置为待执行
         mktActivityPOWithBLOBs.setActivityStatus(ActivityStatusEnum.ACTIVITY_STATUS_PENDING.getCode());
         //构建job对象
@@ -48,7 +48,7 @@ public class JobUtil {
         //设置job描述
         xxlJobInfo.setJobDesc(activityVO.getActivityInfo());
         //设置执行参数
-        xxlJobInfo.setExecutorParam(mktActivityId.toString());
+        xxlJobInfo.setExecutorParam(activityCode);
         //设置阻塞处理策略
         xxlJobInfo.setExecutorBlockStrategy(JobEnum.EXECUTOR_BLOCK_SERIAL_EXECUTION.getValue());
         //设置失败处理策略
@@ -58,7 +58,7 @@ public class JobUtil {
         //添加job
         jobClient.addJob(xxlJobInfo);
     }
-    public  void addJobEndTime(SysAccountPO stageUser, ActivityVO activityVO, MktActivityPOWithBLOBs mktActivityPOWithBLOBs, Long mktActivityId) {
+    public  void addJobEndTime(SysAccountPO stageUser, ActivityVO activityVO, MktActivityPOWithBLOBs mktActivityPOWithBLOBs, String activityCode) {
         //活动状态设置为待执行
         mktActivityPOWithBLOBs.setActivityStatus(ActivityStatusEnum.ACTIVITY_STATUS_PENDING.getCode());
         //构建job对象
@@ -76,7 +76,7 @@ public class JobUtil {
         //设置job描述
         xxlJobInfo.setJobDesc(activityVO.getActivityInfo());
         //设置执行参数
-        xxlJobInfo.setExecutorParam(mktActivityId.toString());
+        xxlJobInfo.setExecutorParam(activityCode);
         //设置阻塞处理策略
         xxlJobInfo.setExecutorBlockStrategy(JobEnum.EXECUTOR_BLOCK_SERIAL_EXECUTION.getValue());
         //设置失败处理策略

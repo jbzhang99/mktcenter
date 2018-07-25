@@ -64,7 +64,7 @@ public class ActivityServiceImpl implements ActivityService {
         //判断是审核通过还是审核驳回
         if(bs.getCheckStatus()==CheckStatusEnum.CHECK_STATUS_APPROVED.getCode()){
             //活动开始时间<当前时间<活动结束时间  或者长期活动 也就是StartTime=null
-            if(null==mktActivityPOWithBLOBs.getStartTime() ||(new Date().after(mktActivityPOWithBLOBs.getStartTime()) && new Date().before(mktActivityPOWithBLOBs.getEndTime()))){
+            if(1== mktActivityPOWithBLOBs.getLongTerm() ||(new Date().after(mktActivityPOWithBLOBs.getStartTime()) && new Date().before(mktActivityPOWithBLOBs.getEndTime()))){
                 //将活动状态变更为执行中 并且发送消息
                 bs.setActivityStatus(ActivityStatusEnum.ACTIVITY_STATUS_EXECUTING.getCode());
                 int i = mktActivityPOMapper.updateByPrimaryKeySelective(bs);
