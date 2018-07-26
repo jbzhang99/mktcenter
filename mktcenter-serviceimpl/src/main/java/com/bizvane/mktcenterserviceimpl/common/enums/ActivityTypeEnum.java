@@ -8,7 +8,8 @@ package com.bizvane.mktcenterserviceimpl.common.enums;
  */
 public enum ActivityTypeEnum {
 
-    ACTIVITY_TYPE_REGISGER(1,"开卡互动"),
+    ACTIVITY_TYPE_ALL(0,"全部"),
+    ACTIVITY_TYPE_REGISGER(1,"开卡活动"),
     ACTIVITY_TYPE_UPGRADE(2,"升级活动"),
     ACTIVITY_TYPE_QRCODE(3,"扫码领券活动"),
     ACTIVITY_TYPE_MANUAL(4,"手动领券活动"),
