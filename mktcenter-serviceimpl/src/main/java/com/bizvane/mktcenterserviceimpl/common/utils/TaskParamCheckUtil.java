@@ -6,14 +6,16 @@ import com.bizvane.mktcenterservice.models.vo.ActivityVO;
 import com.bizvane.mktcenterservice.models.vo.TaskVO;
 import com.bizvane.mktcenterserviceimpl.common.constants.ActivityConstants;
 import com.bizvane.mktcenterserviceimpl.common.constants.SystemConstants;
+import com.bizvane.mktcenterserviceimpl.common.constants.TaskConstants;
 import com.bizvane.mktcenterserviceimpl.common.enums.ActivityTypeEnum;
+import com.bizvane.mktcenterserviceimpl.common.enums.TaskTypeEnum;
 import com.bizvane.utils.responseinfo.ResponseData;
 import org.springframework.util.StringUtils;
 
 /**
  * @author chen.li
  * @date on 2018/7/24 11:18
- * @description
+ * @description 任务参数校验工具类
  * @Copyright (c) 2018 上海商帆信息科技有限公司-版权所有
  */
 public class TaskParamCheckUtil {
@@ -26,63 +28,59 @@ public class TaskParamCheckUtil {
         ResponseData responseData = new ResponseData();
         responseData.setCode(SystemConstants.ERROR_CODE);
 
-        //活动主体
+        //任务主体参数校验
         if(bo ==null || bo.getTaskVO()==null){
             responseData.setMessage(SystemConstants.ERROR_MSG_PARAM_EMPTY);
             return responseData;
         }
         TaskVO vo = bo.getTaskVO();
+        //任务名称为空
         if(StringUtils.isEmpty(vo.getTaskName())){
-            responseData.setMessage(ActivityConstants.ERROR_MSG_ACTIVITY_NAME_EMPTY);
+            responseData.setMessage(TaskConstants.ERROR_MSG_TASK_NAME_EMPTY);
             return responseData;
         }
-
+        //任务开始时间，结束时间校验
         if(vo.getStartTime()==null || vo.getEndTime()==null){
-            responseData.setMessage(ActivityConstants.ERROR_MSG_ACTIVITY_DATE_EMPTY);
+            responseData.setMessage(TaskConstants.ERROR_MSG_TASK_DATE_EMPTY);
             return responseData;
         }
+        //任务描述校验
         if(StringUtils.isEmpty(vo.getTaskInfo())){
-            responseData.setMessage(ActivityConstants.ERROR_MSG_ACTIVITY_INFO_EMPTY);
+            responseData.setMessage(TaskConstants.ERROR_MSG_TASK_INFO_EMPTY);
             return responseData;
         }
+        //任务类型
         if(vo.getTaskType()==null){
-            responseData.setMessage(ActivityConstants.ERROR_MSG_ACTIVITY_TYPE_EMPTY);
+            responseData.setMessage(TaskConstants.ERROR_MSG_TASK_TYPE_EMPTY);
             return responseData;
         }
 
         //各类型活动参数校验
-        ActivityTypeEnum activityTypeEnum = ActivityTypeEnum.getActivityTypeEnumByCode(vo.getTaskType());
+        TaskTypeEnum activityTypeEnum = TaskTypeEnum.getTaskTypeEnumByCode(vo.getTaskType());
         //防止前端传来活动类型与枚举类型不匹配产生的空指针
         if(activityTypeEnum==null){
-            responseData.setMessage(ActivityConstants.ERROR_MSG_ACTIVITY_TYPE_NOT_EXISTS);
+            responseData.setMessage(TaskConstants.ERROR_MSG_TASK_TYPE_NOT_EXISTS);
             return responseData;
         }
         switch (activityTypeEnum){
-            case ACTIVITY_TYPE_REGISGER:
-                responseData = checkRegisterActivityParam(vo);
+            case TASK_TYPE_PROFILE:
+                responseData = checkProfileTaskParam(vo);
                 break;
-            case ACTIVITY_TYPE_UPGRADE:
-                responseData = checkCommonActivityParam(vo);
+            case TASK_TYPE_SHARE:
+                responseData = checkCommonTaskParam(vo);
                 break;
-            case ACTIVITY_TYPE_QRCODE:
-                responseData = checkCommonActivityParam(vo);
+            case TASK_TYPE_INVITE:
+                responseData = checkCommonTaskParam(vo);
                 break;
-            case ACTIVITY_TYPE_MANUAL:
-                responseData = checkCommonActivityParam(vo);
+            case TASK_TYPE_CONSUME_TIMES:
+                responseData = checkCommonTaskParam(vo);
                 break;
-            case ACTIVITY_TYPE_ORDER:
-                responseData = checkCommonActivityParam(vo);
+            case TASK_TYPE_CONSUME_AMOUNT:
+                responseData = checkCommonTaskParam(vo);
                 break;
-            case ACTIVITY_TYPE_SIGNIN:
-                responseData = checkCommonActivityParam(vo);
+            default:
+                responseData.setCode(SystemConstants.SUCCESS_CODE);
                 break;
-            case ACTIVITY_TYPE_BIRTHDAY:
-                responseData = checkBirthdayActivityParam(vo);
-                break;
-            case ACTIVITY_TYPE_SMART:
-                responseData = checkCommonActivityParam(vo);
-                break;
-            default:break;
         }
 
         if(responseData.getCode()==SystemConstants.ERROR_CODE){
@@ -95,78 +93,15 @@ public class TaskParamCheckUtil {
     }
 
     //通用活动参数校验
-    public static ResponseData checkCommonActivityParam(TaskVO vo){
-        ResponseData responseData = new ResponseData();
-//        if(StringUtils.isEmpty(vo.getMbrLevelCode())){
-//            responseData.setMessage(ActivityConstants.ERROR_MSG_MBR_LEVEL_CODE_EMPTY);
-//            return responseData;
-//        }
-//        if(StringUtils.isEmpty(vo.getMbrLevelName())){
-//            responseData.setMessage(ActivityConstants.ERROR_MSG_MBR_LEVEL_NAME_EMPTY);
-//            return responseData;
-//        }
-//        if(vo.getMemberType()==null){
-//            responseData.setMessage(ActivityConstants.ERROR_MSG_MEMBER_TYPE_EMPTY);
-//            return responseData;
-//        }
-        return responseData;
-    }
-
-    //开卡活动参数校验
-    public static ResponseData checkRegisterActivityParam(TaskVO vo){
-        ResponseData responseData = new ResponseData();
-//        if(vo.getOfflineCardStatus()==null){
-//            responseData.setMessage(ActivityConstants.ERROR_MSG_OFFLINE_CARD_STATUS_EMPTY);
-//            return responseData;
-//        }
-//        if(StringUtils.isEmpty(vo.getMbrLevelCode())){
-//            responseData.setMessage(ActivityConstants.ERROR_MSG_MBR_LEVEL_CODE_EMPTY);
-//            return responseData;
-//        }
-//        if(StringUtils.isEmpty(vo.getMbrLevelName())){
-//            responseData.setMessage(ActivityConstants.ERROR_MSG_MBR_LEVEL_NAME_EMPTY);
-//            return responseData;
-//        }
-        return responseData;
-    }
-
-    //升级活动参数校验
-    public static ResponseData checkUpgradeActivityParam(TaskVO vo){
+    public static ResponseData checkCommonTaskParam(TaskVO vo){
         ResponseData responseData = new ResponseData();
         return responseData;
     }
 
-    //生日活动参数校验
-    public static ResponseData checkBirthdayActivityParam(TaskVO vo){
-        ResponseData responseData = new ResponseData();
-//        if(StringUtils.isEmpty(vo.getMbrLevelCode())){
-//            responseData.setMessage(ActivityConstants.ERROR_MSG_MBR_LEVEL_CODE_EMPTY);
-//            return responseData;
-//        }
-//        if(StringUtils.isEmpty(vo.getMbrLevelName())){
-//            responseData.setMessage(ActivityConstants.ERROR_MSG_MBR_LEVEL_NAME_EMPTY);
-//            return responseData;
-//        }
-//        if(vo.getMemberType()==null){
-//            responseData.setMessage(ActivityConstants.ERROR_MSG_MEMBER_TYPE_EMPTY);
-//            return responseData;
-//        }
-//        if(vo.getDaysAhead()==null){
-//            responseData.setMessage(ActivityConstants.ERROR_MSG_DAYS_AHEAD);
-//            return responseData;
-//        }
-        return responseData;
-    }
-
-    //消费活动参数校验
-    public static ResponseData checkOrderActivityParam(TaskVO vo){
+    //完善资料任务参数校验
+    public static ResponseData checkProfileTaskParam(TaskVO vo){
         ResponseData responseData = new ResponseData();
         return responseData;
     }
 
-    //签到活动参数校验
-    public static ResponseData checkSigninActivityParam(TaskVO vo){
-        ResponseData responseData = new ResponseData();
-        return responseData;
-    }
 }

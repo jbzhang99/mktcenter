@@ -1,6 +1,5 @@
 package com.bizvane.mktcenterserviceimpl.controllers;
 
-import com.bizvane.members.facade.models.MbrLevelModel;
 import com.bizvane.members.facade.service.api.MemberLevelApiService;
 import com.bizvane.mktcenterservice.interfaces.TaskProfileService;
 import com.bizvane.mktcenterservice.models.bo.TaskBO;
@@ -44,12 +43,6 @@ public class TaskProfileController {
         return taskVOResponseData;
     }
 
-    @RequestMapping("test")
-    public String test(){
-        List<MbrLevelModel> mbrLevelModels = memberLevelApiService.queryLevelList(1L);
-        return null;
-    }
-
     /**
      * 创建任务
      * @return
@@ -60,17 +53,12 @@ public class TaskProfileController {
         bo.setTaskVO(vo);
         bo.setCouponCodeList(couponCodeList);
         bo.setMessageVOList(messageVOList);
-        //参数校验
-        ResponseData responseData = TaskParamCheckUtil.checkParam(bo);
-        //参数校验不通过
-        if(SystemConstants.ERROR_CODE==responseData.getCode()){
-            return responseData;
-        }
-        //参数校验通过，获取操作人信息
+
+        //获取操作人信息
 //        SysAccountPO stageUser = TokenUtils.getStageUser(request);
         SysAccountPO stageUser = new SysAccountPO();
 
-        //新增活动
+        //新增任务
         ResponseData<Integer> integerResponseData = taskProfileService.addTask(bo, stageUser);
 
         //返回

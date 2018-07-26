@@ -18,7 +18,7 @@ import java.util.List;
 /**
  * @author chen.li
  * @date on 2018/7/16 14:13
- * @description
+ * @description 完善资料任务
  * @Copyright (c) 2018 上海商帆信息科技有限公司-版权所有
  */
 @Service
@@ -43,8 +43,16 @@ public class TaskProfileServiceImpl implements TaskProfileService {
         return responseData;
     }
 
+    /**
+     * 新建完善资料任务
+     * @param bo
+     * @param stageUser
+     * @return
+     */
     @Override
     public ResponseData<Integer> addTask(TaskBO bo, SysAccountPO stageUser) {
+        TaskVO taskVO = bo.getTaskVO();
+
         return null;
     }
 

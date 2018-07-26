@@ -3,6 +3,7 @@ package com.bizvane.mktcenterserviceimpl.service.impl;
 import com.bizvane.mktcenterservice.interfaces.TaskService;
 import com.bizvane.mktcenterservice.models.po.MktTaskPO;
 import com.bizvane.mktcenterservice.models.po.MktTaskPOWithBLOBs;
+import com.bizvane.mktcenterserviceimpl.common.constants.ResponseConstants;
 import com.bizvane.mktcenterserviceimpl.common.enums.CheckStatusEnum;
 import com.bizvane.mktcenterserviceimpl.common.enums.TaskStatusEnum;
 import com.bizvane.mktcenterserviceimpl.mappers.MktTaskPOMapper;
@@ -41,6 +42,7 @@ public class TaskServiceImpl implements TaskService {
         mktTaskPOWithBLOBs.setModifiedUserId(sysAccountPO.getSysAccountId());
         mktTaskPOWithBLOBs.setModifiedUserName(sysAccountPO.getName());
         mktTaskPOMapper.updateByPrimaryKeySelective(mktTaskPOWithBLOBs);
+        responseData.setData(ResponseConstants.SUCCESS_MSG);
         return responseData;
     }
 

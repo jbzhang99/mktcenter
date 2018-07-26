@@ -12,6 +12,8 @@ public class TaskConstants {
     public static String ERROR_MSG_TASK_NAME_EMPTY ="任务名称为空";
     public static String ERROR_MSG_TASK_DATE_EMPTY ="活动起止日期为空";
     public static String ERROR_MSG_TASK_INFO_EMPTY ="任务说明为空";
+    public static String ERROR_MSG_TASK_TYPE_EMPTY ="任务类型为空";
+    public static String ERROR_MSG_TASK_TYPE_NOT_EXISTS ="任务类型不存在";
 
     //分享任务
     public static String ERROR_MSG_SHARE_TIMES_EMPTY ="分享次数为空";
