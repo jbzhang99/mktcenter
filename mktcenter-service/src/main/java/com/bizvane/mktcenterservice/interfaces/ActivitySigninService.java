@@ -1,6 +1,7 @@
 package com.bizvane.mktcenterservice.interfaces;
 
 import com.bizvane.mktcenterservice.models.bo.ActivityBO;
+import com.bizvane.mktcenterservice.models.po.MktActivityPOWithBLOBs;
 import com.bizvane.mktcenterservice.models.vo.ActivityVO;
 import com.bizvane.utils.commonutils.PageForm;
 import com.bizvane.utils.responseinfo.ResponseData;
@@ -34,4 +35,16 @@ public interface ActivitySigninService {
      * @return
      */
     public ResponseData<List<ActivityVO>> selectActivitySigninById(Long mktActivityId);
+    /**
+     * 执行活动
+     * @param
+     * @return
+     */
+    public ResponseData<Integer> executeActivitySignin(ActivityVO vo);
+    /**
+     * 活动审核
+     * @param
+     * @return
+     */
+    public ResponseData<Integer> checkActivitySignin(MktActivityPOWithBLOBs bs, SysAccountPO sysAccountPO);
 }

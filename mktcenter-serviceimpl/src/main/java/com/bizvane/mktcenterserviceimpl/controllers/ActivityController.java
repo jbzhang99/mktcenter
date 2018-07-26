@@ -1,6 +1,6 @@
 package com.bizvane.mktcenterserviceimpl.controllers;
 
-import com.bizvane.mktcenterservice.interfaces.ActivityService;
+import com.bizvane.mktcenterservice.interfaces.*;
 import com.bizvane.mktcenterservice.models.po.MktActivityPOWithBLOBs;
 import com.bizvane.mktcenterservice.models.vo.ActivityVO;
 import com.bizvane.mktcenterserviceimpl.common.constants.ActivityConstants;
@@ -33,6 +33,14 @@ public class ActivityController {
 
     @Autowired
     private ActivityService activityService;
+    @Autowired
+    private ActivityUpgradeService activityUpgradeService;
+    @Autowired
+    private ActivityOrderService activityOrderService;
+    @Autowired
+    private ActivitySigninService activitySigninService;
+    @Autowired
+    private ActivityBirthdayService activityBirthdayService;
 
     /**
      * 禁用活动
@@ -57,11 +65,31 @@ public class ActivityController {
      */
     @RequestMapping("checkActivityById")
     public ResponseData<Integer> checkActivityById(MktActivityPOWithBLOBs bs, HttpServletRequest request){
+        ResponseData responseData = new ResponseData();
         //获取操作人信息
         SysAccountPO stageUser =new SysAccountPO();
 //        SysAccountPO stageUser = TokenUtils.getStageUser(request);
-        //审核活动
-        ResponseData<Integer> integerResponseData = activityService.checkActivityById(bs, stageUser);
-        return integerResponseData;
+        //开卡活动审核
+        if(bs.getActivityType()==ActivityTypeEnum.ACTIVITY_TYPE_REGISGER.getCode()){
+            ResponseData<Integer> integerResponseData = activityService.checkActivityById(bs, stageUser);
+        }
+        //会员升级活动审核
+        if(bs.getActivityType()==ActivityTypeEnum.ACTIVITY_TYPE_UPGRADE.getCode()){
+            ResponseData<Integer> integerResponseData = activityUpgradeService.checkActivityUpgrades(bs,stageUser);
+        }
+        //会员生日活动
+        if(bs.getActivityType()==ActivityTypeEnum.ACTIVITY_TYPE_BIRTHDAY.getCode()){
+            ResponseData<Integer> integerResponseData = activityBirthdayService.checkActivityBirthday(bs,stageUser);
+        }
+        //会员消费活动审核
+        if(bs.getActivityType()==ActivityTypeEnum.ACTIVITY_TYPE_ORDER.getCode()){
+            ResponseData<Integer> integerResponseData =activityOrderService.checkActivityOrder(bs,stageUser);
+        }
+        //会员签到活动审核
+        if(bs.getActivityType()==ActivityTypeEnum.ACTIVITY_TYPE_SIGNIN.getCode()){
+            ResponseData<Integer> integerResponseData = activitySigninService.checkActivitySignin(bs,stageUser);
+
+        }
+        return responseData;
     }
 }

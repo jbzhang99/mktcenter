@@ -75,4 +75,13 @@ public class ActivitySigninController {
     public ResponseData<List<ActivityVO>> selectActivitySigninById(Long mktActivityId){
         return activitySigninService.selectActivitySigninById(mktActivityId);
     }
+    /**
+     * 执行活动
+     * @param
+     * @return
+     */
+    @RequestMapping("executeActivitySignin")
+    public ResponseData<Integer> executeActivitySignin(ActivityVO vo){
+        return activitySigninService.executeActivitySignin(vo);
+    }
 }

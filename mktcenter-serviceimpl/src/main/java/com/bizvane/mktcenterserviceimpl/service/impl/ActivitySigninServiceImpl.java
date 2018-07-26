@@ -3,12 +3,11 @@ package com.bizvane.mktcenterserviceimpl.service.impl;
 import com.bizvane.centerstageservice.models.po.SysCheckConfigPo;
 import com.bizvane.centerstageservice.models.vo.SysCheckConfigVo;
 import com.bizvane.centerstageservice.rpc.SysCheckConfigServiceRpc;
+import com.bizvane.members.facade.models.IntegralRecordModel;
+import com.bizvane.members.facade.service.api.IntegralRecordApiService;
 import com.bizvane.mktcenterservice.interfaces.ActivitySigninService;
 import com.bizvane.mktcenterservice.models.bo.ActivityBO;
-import com.bizvane.mktcenterservice.models.po.MktActivityOrderPOWithBLOBs;
-import com.bizvane.mktcenterservice.models.po.MktActivityPOWithBLOBs;
-import com.bizvane.mktcenterservice.models.po.MktActivitySignin;
-import com.bizvane.mktcenterservice.models.po.MktMessagePO;
+import com.bizvane.mktcenterservice.models.po.*;
 import com.bizvane.mktcenterservice.models.vo.ActivityVO;
 import com.bizvane.mktcenterservice.models.vo.MessageVO;
 import com.bizvane.mktcenterserviceimpl.common.constants.JobHandlerConstants;
@@ -55,6 +54,8 @@ public class ActivitySigninServiceImpl implements ActivitySigninService {
     private MktMessagePOMapper mktMessagePOMapper;
     @Autowired
     private SysCheckConfigServiceRpc sysCheckConfigServiceRpc;
+    @Autowired
+    private IntegralRecordApiService integralRecordApiService;
     /**
      * 查询签到活动列表
      * @param vo
@@ -168,6 +169,51 @@ public class ActivitySigninServiceImpl implements ActivitySigninService {
         responseData.setData(signinList);
         responseData.setCode(SysResponseEnum.SUCCESS.getCode());
         responseData.setMessage(SysResponseEnum.SUCCESS.getMessage());
+        return responseData;
+    }
+
+    /**
+     * 执行活动
+     * @param vo
+     * @return
+     */
+    @Override
+    public ResponseData<Integer> executeActivitySignin(ActivityVO vo) {
+        //返回对象
+        ResponseData responseData = new ResponseData();
+        //查询品牌下所有执行中的活动
+        vo.setActivityStatus(ActivityStatusEnum.ACTIVITY_STATUS_EXECUTING.getCode());
+        List<ActivityVO> signinList = mktActivitySigninMapper.getActivitySigninList(vo);
+        for (ActivityVO activityVO:signinList) {
+            //增加积分奖励新增接口TODO不全
+            IntegralRecordModel var1 = new IntegralRecordModel();
+            integralRecordApiService.updateMemberIntegral(var1);
+            // 增加卷奖励接口
+        }
+        return null;
+    }
+
+    /**
+     * 审核会员签到活动
+     * @param bs
+     * @param sysAccountPO
+     * @return
+     */
+    @Override
+    public ResponseData<Integer> checkActivitySignin(MktActivityPOWithBLOBs bs, SysAccountPO sysAccountPO) {
+        ResponseData responseData = new ResponseData();
+        bs.setModifiedUserId(sysAccountPO.getSysAccountId());
+        bs.setModifiedDate(new Date());
+        bs.setModifiedUserName(sysAccountPO.getName());
+        //判断是审核通过还是审核驳回
+        if(bs.getCheckStatus()==CheckStatusEnum.CHECK_STATUS_APPROVED.getCode()){
+                //将活动状态变更为执行中 ）
+                bs.setActivityStatus(ActivityStatusEnum.ACTIVITY_STATUS_EXECUTING.getCode());
+                int i = mktActivityPOMapper.updateByPrimaryKeySelective(bs);
+        }else{
+            bs.setActivityStatus(ActivityStatusEnum.ACTIVITY_STATUS_FINISHED.getCode());
+            int i = mktActivityPOMapper.updateByPrimaryKeySelective(bs);
+        }
         return responseData;
     }
 }

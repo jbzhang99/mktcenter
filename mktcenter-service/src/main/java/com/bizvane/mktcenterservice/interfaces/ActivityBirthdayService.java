@@ -1,6 +1,7 @@
 package com.bizvane.mktcenterservice.interfaces;
 
 import com.bizvane.mktcenterservice.models.bo.ActivityBO;
+import com.bizvane.mktcenterservice.models.po.MktActivityPOWithBLOBs;
 import com.bizvane.mktcenterservice.models.vo.ActivityVO;
 import com.bizvane.utils.commonutils.PageForm;
 import com.bizvane.utils.responseinfo.ResponseData;
@@ -34,4 +35,10 @@ public interface ActivityBirthdayService {
      * @return
      */
     public ResponseData<List<ActivityVO>> selectActivityBirthdayById(Long mktActivityId);
+    /**
+     * 活动审核
+     * @param
+     * @return
+     */
+    public ResponseData<Integer> checkActivityBirthday(MktActivityPOWithBLOBs bs, SysAccountPO sysAccountPO);
 }
