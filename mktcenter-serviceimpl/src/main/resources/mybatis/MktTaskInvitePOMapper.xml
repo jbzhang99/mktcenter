@@ -400,7 +400,7 @@
       AND tmt.mkt_task_id = #{mktTaskId}
     </if>
     <if test="taskStatus != null and taskStatus!=0">
-      AND tmt.activity_status = #{taskStatus}
+      AND tmt.task_status = #{taskStatus}
     </if>
     <!--所属品牌id -->
     <if test="sysBrandId != null and sysBrandId!= ''">
