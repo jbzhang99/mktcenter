@@ -3,7 +3,9 @@ package com.bizvane.mktcenterserviceimpl.service.impl;
 import com.bizvane.centerstageservice.models.po.SysCheckConfigPo;
 import com.bizvane.centerstageservice.models.vo.SysCheckConfigVo;
 import com.bizvane.centerstageservice.rpc.SysCheckConfigServiceRpc;
+import com.bizvane.members.facade.enums.IntegralRecordTypeEnum;
 import com.bizvane.members.facade.models.IntegralRecordModel;
+import com.bizvane.members.facade.models.MemberInfoModel;
 import com.bizvane.members.facade.service.api.IntegralRecordApiService;
 import com.bizvane.mktcenterservice.interfaces.ActivityRegisterService;
 import com.bizvane.mktcenterservice.models.bo.ActivityBO;
@@ -11,6 +13,7 @@ import com.bizvane.mktcenterservice.models.po.*;
 import com.bizvane.mktcenterservice.models.vo.ActivityVO;
 import com.bizvane.mktcenterservice.models.vo.MessageVO;
 import com.bizvane.mktcenterserviceimpl.common.enums.ActivityStatusEnum;
+import com.bizvane.mktcenterserviceimpl.common.enums.ActivityTypeEnum;
 import com.bizvane.mktcenterserviceimpl.common.enums.BusinessTypeEnum;
 import com.bizvane.mktcenterserviceimpl.common.enums.CheckStatusEnum;
 import com.bizvane.mktcenterserviceimpl.common.job.XxlJobConfig;
@@ -99,6 +102,8 @@ public class ActivityRegisterServiceImpl implements ActivityRegisterService {
         //暂时用uuid生成活动编号9
         String activityCode = "AC"+ UUID.randomUUID().toString().replaceAll("-", "");
         activityVO.setActivityCode(activityCode);
+        //增加活动类型是开卡活动
+        activityVO.setActivityType(ActivityTypeEnum.ACTIVITY_TYPE_REGISGER.getCode());
         MktActivityPOWithBLOBs mktActivityPOWithBLOBs = new MktActivityPOWithBLOBs();
         BeanUtils.copyProperties(activityVO,mktActivityPOWithBLOBs);
 
@@ -167,7 +172,7 @@ public class ActivityRegisterServiceImpl implements ActivityRegisterService {
             }else{
                 //活动状态设置为执行中
                 mktActivityPOWithBLOBs.setActivityStatus(ActivityStatusEnum.ACTIVITY_STATUS_EXECUTING.getCode());
-                //发送模板消息和短信消息TODO
+                //发送模板消息和短信消息TODO（微信模板：所有未开卡的粉丝  短信：所有非粉丝会员）
 
             }
         }
@@ -222,17 +227,23 @@ public class ActivityRegisterServiceImpl implements ActivityRegisterService {
      * @return
      */
     @Override
-    public ResponseData<Integer> executeActivity(ActivityVO vo) {
+    public ResponseData<Integer> executeActivity(MemberInfoModel vo) {
         //返回对象
         ResponseData responseData = new ResponseData();
         //查询品牌下所有执行中的活动
-        vo.setActivityStatus(ActivityStatusEnum.ACTIVITY_STATUS_EXECUTING.getCode());
-        List<ActivityVO> RegisterList = mktActivityRegisterPOMapper.getActivityList(vo);
+        ActivityVO activity = new ActivityVO();
+        activity.setActivityStatus(ActivityStatusEnum.ACTIVITY_STATUS_EXECUTING.getCode());
+        activity.setSysBrandId(vo.getBrandId());
+        List<ActivityVO> RegisterList = mktActivityRegisterPOMapper.getActivityList(activity);
         for (ActivityVO activityVO:RegisterList) {
-            //增加积分奖励新增接口TODO不全
+            //增加积分奖励新增接口
             IntegralRecordModel var1 = new IntegralRecordModel();
+            var1.setMemberCode(vo.getMemberCode());
+            var1.setChangeBills(activityVO.getActivityCode());
+            var1.setChangeIntegral(activityVO.getPoints());
+            var1.setChangeWay(IntegralRecordTypeEnum.INCOME.getCode());
             integralRecordApiService.updateMemberIntegral(var1);
-            // 增加卷奖励接口
+            // 增加卷奖励接口TODO
         }
         return null;
     }
@@ -249,9 +260,9 @@ public class ActivityRegisterServiceImpl implements ActivityRegisterService {
         ResponseData responseData = new ResponseData();
         //得到大实体类
         ActivityVO activityVO = bo.getActivityVO();
-        if(activityVO.getCheckStatus()!=CheckStatusEnum.CHECK_STATUS_PENDING.getCode()){
+        if(activityVO.getCheckStatus()!=CheckStatusEnum.CHECK_STATUS_PENDING.getCode()||activityVO.getCheckStatus()!=CheckStatusEnum.CHECK_STATUS_REJECTED.getCode()){
             responseData.setCode(SysResponseEnum.FAILED.getCode());
-            responseData.setMessage("待审核任务才能修改!");
+            responseData.setMessage("该任务不能修改!");
             return responseData;
         }
         MktActivityPOWithBLOBs mktActivityPOWithBLOBs = new MktActivityPOWithBLOBs();
@@ -277,16 +288,19 @@ public class ActivityRegisterServiceImpl implements ActivityRegisterService {
             mktActivityPOWithBLOBs.setCheckStatus(CheckStatusEnum.CHECK_STATUS_PENDING.getCode());
             //活动状态设置为待执行
             mktActivityPOWithBLOBs.setActivityStatus(ActivityStatusEnum.ACTIVITY_STATUS_PENDING.getCode());
+            //已驳回的可以新建审核
+            if(activityVO.getCheckStatus() == CheckStatusEnum.CHECK_STATUS_REJECTED.getCode()){
+                //如果是待审核数据则需要增加一条审核数据
+                SysCheckConfigPo po = new SysCheckConfigPo();
+                po.setSysBrandId(mktActivityPOWithBLOBs.getSysBrandId());
+                po.setFunctionCode(mktActivityPOWithBLOBs.getActivityCode());
+                po.setFunctionName(mktActivityPOWithBLOBs.getActivityName());
+                po.setCreateDate(new Date());
+                po.setCreateUserId(stageUser.getSysAccountId());
+                po.setCreateUserName(stageUser.getName());
+                sysCheckConfigServiceRpc.addCheckConfig(po);
+            }
 
-            //如果是待审核数据则需要增加一条审核数据
-            SysCheckConfigPo po = new SysCheckConfigPo();
-            po.setSysBrandId(mktActivityPOWithBLOBs.getSysBrandId());
-            po.setFunctionCode(mktActivityPOWithBLOBs.getActivityCode());
-            po.setFunctionName(mktActivityPOWithBLOBs.getActivityName());
-            po.setCreateDate(new Date());
-            po.setCreateUserId(stageUser.getSysAccountId());
-            po.setCreateUserName(stageUser.getName());
-            sysCheckConfigServiceRpc.addCheckConfig(po);
             //getStartTime 开始时间>当前时间增加job
             if(1 != bo.getActivityVO().getLongTerm() && new Date().before(activityVO.getStartTime())){
                 //创建任务调度任务开始时间

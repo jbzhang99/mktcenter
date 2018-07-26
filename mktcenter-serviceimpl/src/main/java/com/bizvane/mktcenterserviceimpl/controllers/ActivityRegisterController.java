@@ -1,5 +1,7 @@
 package com.bizvane.mktcenterserviceimpl.controllers;
 
+import com.bizvane.members.facade.models.IntegralRecordModel;
+import com.bizvane.members.facade.models.MemberInfoModel;
 import com.bizvane.mktcenterservice.interfaces.ActivityRegisterService;
 import com.bizvane.mktcenterservice.models.bo.ActivityBO;
 import com.bizvane.mktcenterservice.models.vo.ActivityVO;
@@ -100,7 +102,7 @@ public class ActivityRegisterController {
      * @return
      */
     @RequestMapping("executeActivity")
-    public ResponseData<Integer> executeActivity(ActivityVO vo){
+    public ResponseData<Integer> executeActivity(MemberInfoModel vo){
         return activityRegisterService.executeActivity(vo);
     }
     /**

@@ -1,5 +1,7 @@
 package com.bizvane.mktcenterservice.interfaces;
 
+import com.bizvane.members.facade.models.IntegralRecordModel;
+import com.bizvane.members.facade.models.MemberInfoModel;
 import com.bizvane.mktcenterservice.models.bo.ActivityBO;
 import com.bizvane.mktcenterservice.models.vo.ActivityVO;
 import com.bizvane.utils.commonutils.PageForm;
@@ -35,7 +37,7 @@ public interface ActivityRegisterService {
      * @param
      * @return
      */
-    public ResponseData<Integer> executeActivity(ActivityVO vo);
+    public ResponseData<Integer> executeActivity(MemberInfoModel vo);
 
     /**
      * 修改活动
