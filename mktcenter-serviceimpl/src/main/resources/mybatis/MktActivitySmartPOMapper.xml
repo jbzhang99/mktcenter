@@ -468,7 +468,7 @@
     `t_mkt_activity` tma
     INNER JOIN t_mkt_activity_smart tmas ON tma.mkt_activity_id = tmas.mkt_activity_id
     and tma.valid=1
-    and tmar.valid=1
+    and tmas.valid=1
     <if test="activityStatus != null and activityStatus!=0">
       AND tma.activity_status = #{activityStatus}
     </if>
