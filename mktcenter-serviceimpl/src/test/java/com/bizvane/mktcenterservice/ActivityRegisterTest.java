@@ -2,6 +2,7 @@ package com.bizvane.mktcenterservice;
 
 import com.bizvane.mktcenterservice.interfaces.ActivityUpgradeService;
 import com.bizvane.mktcenterservice.models.bo.ActivityBO;
+import com.bizvane.mktcenterservice.models.po.MktCouponPO;
 import com.bizvane.mktcenterservice.models.vo.ActivityVO;
 import com.bizvane.mktcenterservice.models.vo.MessageVO;
 import com.bizvane.mktcenterserviceimpl.MktcenterApplication;
@@ -53,7 +54,7 @@ public class ActivityRegisterTest {
         activityVO.setMbrLevelCode("AC999999");
         activityVO.setMbrLevelName("铂金会员");
         activityVO.setMemberType(1);
-        List<String> couponCodeList = null;
+        List<MktCouponPO> couponCodeList = null;
        // couponCodeList.add("1");
         List<MessageVO> messageVOList = new ArrayList<>();
         ActivityBO s= new ActivityBO();
