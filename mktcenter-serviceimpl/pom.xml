@@ -5,7 +5,7 @@
 		<groupId>com.bizvane</groupId>
 		<artifactId>mktcenter-parent</artifactId>
 		<version>0.0.1-SNAPSHOT</version>
-		<relativePath/> <!-- lookup parent from repositories -->
+		<!--<relativePath/> &lt;!&ndash; lookup parent from repositories &ndash;&gt;-->
 	</parent>
     <version>0.0.1-SNAPSHOT</version>
 	<modelVersion>4.0.0</modelVersion>
@@ -39,7 +39,7 @@
 		</dependency>
 
 		<dependency>
-			<groupId>org.springframework.boot</groupId>
+			<groupId>com.bizvane</groupId>
 			<artifactId>mktcenter-service</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
