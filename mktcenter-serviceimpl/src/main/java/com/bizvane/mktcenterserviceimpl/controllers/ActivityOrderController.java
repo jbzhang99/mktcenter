@@ -3,6 +3,7 @@ package com.bizvane.mktcenterserviceimpl.controllers;
 import com.bizvane.mktcenterservice.interfaces.ActivityOrderService;
 import com.bizvane.mktcenterservice.interfaces.ActivityRegisterService;
 import com.bizvane.mktcenterservice.models.bo.ActivityBO;
+import com.bizvane.mktcenterservice.models.po.MktCouponPO;
 import com.bizvane.mktcenterservice.models.vo.ActivityVO;
 import com.bizvane.mktcenterservice.models.vo.MessageVO;
 import com.bizvane.mktcenterserviceimpl.common.constants.SystemConstants;
@@ -45,7 +46,7 @@ public class ActivityOrderController {
      * @return
      */
     @RequestMapping("addActivityOrder.do")
-    public ResponseData<Integer> addActivityOrder(ActivityVO activityVO, List<String> couponCodeList, List<MessageVO> messageVOList, HttpServletRequest request){
+    public ResponseData<Integer> addActivityOrder(ActivityVO activityVO, List<MktCouponPO> couponCodeList, List<MessageVO> messageVOList, HttpServletRequest request){
         ActivityBO bo = new ActivityBO();
         bo.setActivityVO(activityVO);
         bo.setCouponCodeList(couponCodeList);
@@ -80,7 +81,7 @@ public class ActivityOrderController {
      * 修改活动
      * @return
      */
-    public ResponseData<Integer> updateActivityOrder(ActivityVO activityVO, List<String> couponCodeList, List<MessageVO> messageVOList, HttpServletRequest request){
+    public ResponseData<Integer> updateActivityOrder(ActivityVO activityVO, List<MktCouponPO> couponCodeList, List<MessageVO> messageVOList, HttpServletRequest request){
         ActivityBO bo = new ActivityBO();
         bo.setActivityVO(activityVO);
         bo.setCouponCodeList(couponCodeList);

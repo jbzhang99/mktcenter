@@ -8,28 +8,28 @@ import java.util.List;
 public class MktActivitySmartPOExample implements Serializable {
     /**
 	 * 只读. 
-	 * @mbg.generated  2018-07-14 13:26:02
+	 * @mbg.generated  2018-07-27 15:31:38
 	 */
 	protected String orderByClause;
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-07-14 13:26:02
+	 * @mbg.generated  2018-07-27 15:31:38
 	 */
 	protected boolean distinct;
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-07-14 13:26:02
+	 * @mbg.generated  2018-07-27 15:31:38
 	 */
 	protected List<Criteria> oredCriteria;
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-07-14 13:26:02
+	 * @mbg.generated  2018-07-27 15:31:38
 	 */
 	private static final long serialVersionUID = 1L;
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-07-14 13:26:02
+	 * @mbg.generated  2018-07-27 15:31:38
 	 */
 	public MktActivitySmartPOExample() {
 		oredCriteria = new ArrayList<Criteria>();
@@ -37,7 +37,7 @@ public class MktActivitySmartPOExample implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-07-14 13:26:02
+	 * @mbg.generated  2018-07-27 15:31:38
 	 */
 	public void setOrderByClause(String orderByClause) {
 		this.orderByClause = orderByClause;
@@ -45,7 +45,7 @@ public class MktActivitySmartPOExample implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-07-14 13:26:02
+	 * @mbg.generated  2018-07-27 15:31:38
 	 */
 	public String getOrderByClause() {
 		return orderByClause;
@@ -53,7 +53,7 @@ public class MktActivitySmartPOExample implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-07-14 13:26:02
+	 * @mbg.generated  2018-07-27 15:31:38
 	 */
 	public void setDistinct(boolean distinct) {
 		this.distinct = distinct;
@@ -61,7 +61,7 @@ public class MktActivitySmartPOExample implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-07-14 13:26:02
+	 * @mbg.generated  2018-07-27 15:31:38
 	 */
 	public boolean isDistinct() {
 		return distinct;
@@ -69,7 +69,7 @@ public class MktActivitySmartPOExample implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-07-14 13:26:02
+	 * @mbg.generated  2018-07-27 15:31:38
 	 */
 	public List<Criteria> getOredCriteria() {
 		return oredCriteria;
@@ -77,7 +77,7 @@ public class MktActivitySmartPOExample implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-07-14 13:26:02
+	 * @mbg.generated  2018-07-27 15:31:38
 	 */
 	public void or(Criteria criteria) {
 		oredCriteria.add(criteria);
@@ -85,7 +85,7 @@ public class MktActivitySmartPOExample implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-07-14 13:26:02
+	 * @mbg.generated  2018-07-27 15:31:38
 	 */
 	public Criteria or() {
 		Criteria criteria = createCriteriaInternal();
@@ -95,7 +95,7 @@ public class MktActivitySmartPOExample implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-07-14 13:26:02
+	 * @mbg.generated  2018-07-27 15:31:38
 	 */
 	public Criteria createCriteria() {
 		Criteria criteria = createCriteriaInternal();
@@ -107,7 +107,7 @@ public class MktActivitySmartPOExample implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-07-14 13:26:02
+	 * @mbg.generated  2018-07-27 15:31:38
 	 */
 	protected Criteria createCriteriaInternal() {
 		Criteria criteria = new Criteria();
@@ -116,7 +116,7 @@ public class MktActivitySmartPOExample implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-07-14 13:26:02
+	 * @mbg.generated  2018-07-27 15:31:38
 	 */
 	public void clear() {
 		oredCriteria.clear();
@@ -126,7 +126,7 @@ public class MktActivitySmartPOExample implements Serializable {
 
 	/**
 	 * 只读. t_mkt_activity_smart
-	 * @mbg.generated  2018-07-14 13:26:02
+	 * @mbg.generated  2018-07-27 15:31:38
 	 */
 	protected abstract static class GeneratedCriteria implements Serializable {
 		protected List<Criterion> criteria;
@@ -286,6 +286,316 @@ public class MktActivitySmartPOExample implements Serializable {
 
 		public Criteria andMktActivityIdNotBetween(Long value1, Long value2) {
 			addCriterion("mkt_activity_id not between", value1, value2, "mktActivityId");
+			return (Criteria) this;
+		}
+
+		public Criteria andMtkTypeIsNull() {
+			addCriterion("mtk_type is null");
+			return (Criteria) this;
+		}
+
+		public Criteria andMtkTypeIsNotNull() {
+			addCriterion("mtk_type is not null");
+			return (Criteria) this;
+		}
+
+		public Criteria andMtkTypeEqualTo(Integer value) {
+			addCriterion("mtk_type =", value, "mtkType");
+			return (Criteria) this;
+		}
+
+		public Criteria andMtkTypeNotEqualTo(Integer value) {
+			addCriterion("mtk_type <>", value, "mtkType");
+			return (Criteria) this;
+		}
+
+		public Criteria andMtkTypeGreaterThan(Integer value) {
+			addCriterion("mtk_type >", value, "mtkType");
+			return (Criteria) this;
+		}
+
+		public Criteria andMtkTypeGreaterThanOrEqualTo(Integer value) {
+			addCriterion("mtk_type >=", value, "mtkType");
+			return (Criteria) this;
+		}
+
+		public Criteria andMtkTypeLessThan(Integer value) {
+			addCriterion("mtk_type <", value, "mtkType");
+			return (Criteria) this;
+		}
+
+		public Criteria andMtkTypeLessThanOrEqualTo(Integer value) {
+			addCriterion("mtk_type <=", value, "mtkType");
+			return (Criteria) this;
+		}
+
+		public Criteria andMtkTypeIn(List<Integer> values) {
+			addCriterion("mtk_type in", values, "mtkType");
+			return (Criteria) this;
+		}
+
+		public Criteria andMtkTypeNotIn(List<Integer> values) {
+			addCriterion("mtk_type not in", values, "mtkType");
+			return (Criteria) this;
+		}
+
+		public Criteria andMtkTypeBetween(Integer value1, Integer value2) {
+			addCriterion("mtk_type between", value1, value2, "mtkType");
+			return (Criteria) this;
+		}
+
+		public Criteria andMtkTypeNotBetween(Integer value1, Integer value2) {
+			addCriterion("mtk_type not between", value1, value2, "mtkType");
+			return (Criteria) this;
+		}
+
+		public Criteria andMemberGroupIdIsNull() {
+			addCriterion("member_group_id is null");
+			return (Criteria) this;
+		}
+
+		public Criteria andMemberGroupIdIsNotNull() {
+			addCriterion("member_group_id is not null");
+			return (Criteria) this;
+		}
+
+		public Criteria andMemberGroupIdEqualTo(Long value) {
+			addCriterion("member_group_id =", value, "memberGroupId");
+			return (Criteria) this;
+		}
+
+		public Criteria andMemberGroupIdNotEqualTo(Long value) {
+			addCriterion("member_group_id <>", value, "memberGroupId");
+			return (Criteria) this;
+		}
+
+		public Criteria andMemberGroupIdGreaterThan(Long value) {
+			addCriterion("member_group_id >", value, "memberGroupId");
+			return (Criteria) this;
+		}
+
+		public Criteria andMemberGroupIdGreaterThanOrEqualTo(Long value) {
+			addCriterion("member_group_id >=", value, "memberGroupId");
+			return (Criteria) this;
+		}
+
+		public Criteria andMemberGroupIdLessThan(Long value) {
+			addCriterion("member_group_id <", value, "memberGroupId");
+			return (Criteria) this;
+		}
+
+		public Criteria andMemberGroupIdLessThanOrEqualTo(Long value) {
+			addCriterion("member_group_id <=", value, "memberGroupId");
+			return (Criteria) this;
+		}
+
+		public Criteria andMemberGroupIdIn(List<Long> values) {
+			addCriterion("member_group_id in", values, "memberGroupId");
+			return (Criteria) this;
+		}
+
+		public Criteria andMemberGroupIdNotIn(List<Long> values) {
+			addCriterion("member_group_id not in", values, "memberGroupId");
+			return (Criteria) this;
+		}
+
+		public Criteria andMemberGroupIdBetween(Long value1, Long value2) {
+			addCriterion("member_group_id between", value1, value2, "memberGroupId");
+			return (Criteria) this;
+		}
+
+		public Criteria andMemberGroupIdNotBetween(Long value1, Long value2) {
+			addCriterion("member_group_id not between", value1, value2, "memberGroupId");
+			return (Criteria) this;
+		}
+
+		public Criteria andMemberGroupCodeIsNull() {
+			addCriterion("member_group_code is null");
+			return (Criteria) this;
+		}
+
+		public Criteria andMemberGroupCodeIsNotNull() {
+			addCriterion("member_group_code is not null");
+			return (Criteria) this;
+		}
+
+		public Criteria andMemberGroupCodeEqualTo(String value) {
+			addCriterion("member_group_code =", value, "memberGroupCode");
+			return (Criteria) this;
+		}
+
+		public Criteria andMemberGroupCodeNotEqualTo(String value) {
+			addCriterion("member_group_code <>", value, "memberGroupCode");
+			return (Criteria) this;
+		}
+
+		public Criteria andMemberGroupCodeGreaterThan(String value) {
+			addCriterion("member_group_code >", value, "memberGroupCode");
+			return (Criteria) this;
+		}
+
+		public Criteria andMemberGroupCodeGreaterThanOrEqualTo(String value) {
+			addCriterion("member_group_code >=", value, "memberGroupCode");
+			return (Criteria) this;
+		}
+
+		public Criteria andMemberGroupCodeLessThan(String value) {
+			addCriterion("member_group_code <", value, "memberGroupCode");
+			return (Criteria) this;
+		}
+
+		public Criteria andMemberGroupCodeLessThanOrEqualTo(String value) {
+			addCriterion("member_group_code <=", value, "memberGroupCode");
+			return (Criteria) this;
+		}
+
+		public Criteria andMemberGroupCodeLike(String value) {
+			addCriterion("member_group_code like", value, "memberGroupCode");
+			return (Criteria) this;
+		}
+
+		public Criteria andMemberGroupCodeNotLike(String value) {
+			addCriterion("member_group_code not like", value, "memberGroupCode");
+			return (Criteria) this;
+		}
+
+		public Criteria andMemberGroupCodeIn(List<String> values) {
+			addCriterion("member_group_code in", values, "memberGroupCode");
+			return (Criteria) this;
+		}
+
+		public Criteria andMemberGroupCodeNotIn(List<String> values) {
+			addCriterion("member_group_code not in", values, "memberGroupCode");
+			return (Criteria) this;
+		}
+
+		public Criteria andMemberGroupCodeBetween(String value1, String value2) {
+			addCriterion("member_group_code between", value1, value2, "memberGroupCode");
+			return (Criteria) this;
+		}
+
+		public Criteria andMemberGroupCodeNotBetween(String value1, String value2) {
+			addCriterion("member_group_code not between", value1, value2, "memberGroupCode");
+			return (Criteria) this;
+		}
+
+		public Criteria andTargetMbrCountIsNull() {
+			addCriterion("target_mbr_count is null");
+			return (Criteria) this;
+		}
+
+		public Criteria andTargetMbrCountIsNotNull() {
+			addCriterion("target_mbr_count is not null");
+			return (Criteria) this;
+		}
+
+		public Criteria andTargetMbrCountEqualTo(Integer value) {
+			addCriterion("target_mbr_count =", value, "targetMbrCount");
+			return (Criteria) this;
+		}
+
+		public Criteria andTargetMbrCountNotEqualTo(Integer value) {
+			addCriterion("target_mbr_count <>", value, "targetMbrCount");
+			return (Criteria) this;
+		}
+
+		public Criteria andTargetMbrCountGreaterThan(Integer value) {
+			addCriterion("target_mbr_count >", value, "targetMbrCount");
+			return (Criteria) this;
+		}
+
+		public Criteria andTargetMbrCountGreaterThanOrEqualTo(Integer value) {
+			addCriterion("target_mbr_count >=", value, "targetMbrCount");
+			return (Criteria) this;
+		}
+
+		public Criteria andTargetMbrCountLessThan(Integer value) {
+			addCriterion("target_mbr_count <", value, "targetMbrCount");
+			return (Criteria) this;
+		}
+
+		public Criteria andTargetMbrCountLessThanOrEqualTo(Integer value) {
+			addCriterion("target_mbr_count <=", value, "targetMbrCount");
+			return (Criteria) this;
+		}
+
+		public Criteria andTargetMbrCountIn(List<Integer> values) {
+			addCriterion("target_mbr_count in", values, "targetMbrCount");
+			return (Criteria) this;
+		}
+
+		public Criteria andTargetMbrCountNotIn(List<Integer> values) {
+			addCriterion("target_mbr_count not in", values, "targetMbrCount");
+			return (Criteria) this;
+		}
+
+		public Criteria andTargetMbrCountBetween(Integer value1, Integer value2) {
+			addCriterion("target_mbr_count between", value1, value2, "targetMbrCount");
+			return (Criteria) this;
+		}
+
+		public Criteria andTargetMbrCountNotBetween(Integer value1, Integer value2) {
+			addCriterion("target_mbr_count not between", value1, value2, "targetMbrCount");
+			return (Criteria) this;
+		}
+
+		public Criteria andTargetMbrCountTimeIsNull() {
+			addCriterion("target_mbr_count_time is null");
+			return (Criteria) this;
+		}
+
+		public Criteria andTargetMbrCountTimeIsNotNull() {
+			addCriterion("target_mbr_count_time is not null");
+			return (Criteria) this;
+		}
+
+		public Criteria andTargetMbrCountTimeEqualTo(Date value) {
+			addCriterion("target_mbr_count_time =", value, "targetMbrCountTime");
+			return (Criteria) this;
+		}
+
+		public Criteria andTargetMbrCountTimeNotEqualTo(Date value) {
+			addCriterion("target_mbr_count_time <>", value, "targetMbrCountTime");
+			return (Criteria) this;
+		}
+
+		public Criteria andTargetMbrCountTimeGreaterThan(Date value) {
+			addCriterion("target_mbr_count_time >", value, "targetMbrCountTime");
+			return (Criteria) this;
+		}
+
+		public Criteria andTargetMbrCountTimeGreaterThanOrEqualTo(Date value) {
+			addCriterion("target_mbr_count_time >=", value, "targetMbrCountTime");
+			return (Criteria) this;
+		}
+
+		public Criteria andTargetMbrCountTimeLessThan(Date value) {
+			addCriterion("target_mbr_count_time <", value, "targetMbrCountTime");
+			return (Criteria) this;
+		}
+
+		public Criteria andTargetMbrCountTimeLessThanOrEqualTo(Date value) {
+			addCriterion("target_mbr_count_time <=", value, "targetMbrCountTime");
+			return (Criteria) this;
+		}
+
+		public Criteria andTargetMbrCountTimeIn(List<Date> values) {
+			addCriterion("target_mbr_count_time in", values, "targetMbrCountTime");
+			return (Criteria) this;
+		}
+
+		public Criteria andTargetMbrCountTimeNotIn(List<Date> values) {
+			addCriterion("target_mbr_count_time not in", values, "targetMbrCountTime");
+			return (Criteria) this;
+		}
+
+		public Criteria andTargetMbrCountTimeBetween(Date value1, Date value2) {
+			addCriterion("target_mbr_count_time between", value1, value2, "targetMbrCountTime");
+			return (Criteria) this;
+		}
+
+		public Criteria andTargetMbrCountTimeNotBetween(Date value1, Date value2) {
+			addCriterion("target_mbr_count_time not between", value1, value2, "targetMbrCountTime");
 			return (Criteria) this;
 		}
 
@@ -802,7 +1112,7 @@ public class MktActivitySmartPOExample implements Serializable {
 
 	/**
 	 * 只读. t_mkt_activity_smart
-	 * @mbg.generated  2018-07-14 13:26:02
+	 * @mbg.generated  2018-07-27 15:31:38
 	 */
 	public static class Criterion implements Serializable {
 		private String condition;

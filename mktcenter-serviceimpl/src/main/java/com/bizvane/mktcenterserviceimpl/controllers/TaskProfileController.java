@@ -3,6 +3,7 @@ package com.bizvane.mktcenterserviceimpl.controllers;
 import com.bizvane.members.facade.service.api.MemberLevelApiService;
 import com.bizvane.mktcenterservice.interfaces.TaskProfileService;
 import com.bizvane.mktcenterservice.models.bo.TaskBO;
+import com.bizvane.mktcenterservice.models.po.MktCouponPO;
 import com.bizvane.mktcenterservice.models.vo.MessageVO;
 import com.bizvane.mktcenterservice.models.vo.TaskVO;
 import com.bizvane.mktcenterserviceimpl.common.constants.SystemConstants;
@@ -48,10 +49,10 @@ public class TaskProfileController {
      * @return
      */
     @RequestMapping("addTask")
-    public ResponseData<Integer> addTask(TaskVO vo, List<String> couponCodeList, List<MessageVO> messageVOList, HttpServletRequest request){
+    public ResponseData<Integer> addTask(TaskVO vo, List<MktCouponPO> couponCodeList, List<MessageVO> messageVOList, HttpServletRequest request){
         TaskBO bo = new TaskBO();
         bo.setTaskVO(vo);
-        bo.setCouponCodeList(couponCodeList);
+        bo.setMktCouponPOList(couponCodeList);
         bo.setMessageVOList(messageVOList);
 
         //获取操作人信息
@@ -70,10 +71,10 @@ public class TaskProfileController {
      * @param
      * @return
      */
-    public ResponseData<Integer> updateTask(TaskVO vo, List<String> couponCodeList, List<MessageVO> messageVOList, HttpServletRequest request){
+    public ResponseData<Integer> updateTask(TaskVO vo, List<MktCouponPO> couponCodeList, List<MessageVO> messageVOList, HttpServletRequest request){
         TaskBO bo = new TaskBO();
         bo.setTaskVO(vo);
-        bo.setCouponCodeList(couponCodeList);
+        bo.setMktCouponPOList(couponCodeList);
         bo.setMessageVOList(messageVOList);
         //参数校验
         ResponseData responseData = TaskParamCheckUtil.checkParam(bo);

@@ -75,15 +75,15 @@
         <!--<table tableName="t_mkt_activity_signin" domainObjectName="MktActivitySignin">-->
             <!--<generatedKey column="mkt_activity_signin_id" sqlStatement="MySql" identity="true"/>-->
         <!--</table>-->
-        <!--<table tableName="t_mkt_activity_smart" domainObjectName="MktActivitySmartPO">-->
-            <!--<generatedKey column="mkt_activity_smart_id" sqlStatement="MySql" identity="true"/>-->
-        <!--</table>-->
+        <table tableName="t_mkt_activity_smart" domainObjectName="MktActivitySmartPO">
+            <generatedKey column="mkt_activity_smart_id" sqlStatement="MySql" identity="true"/>
+        </table>
         <!--<table tableName="t_mkt_activity_upgrade" domainObjectName="MktActivityUpgradePO">-->
             <!--<generatedKey column="mkt_activity_upgrade_id" sqlStatement="MySql" identity="true"/>-->
         <!--</table>-->
-        <table tableName="t_mkt_coupon" domainObjectName="MktCouponPO">
-            <generatedKey column="mkt_coupon_id" sqlStatement="MySql" identity="true"/>
-        </table>
+        <!--<table tableName="t_mkt_coupon" domainObjectName="MktCouponPO">-->
+            <!--<generatedKey column="mkt_coupon_id" sqlStatement="MySql" identity="true"/>-->
+        <!--</table>-->
 
         <!--<table tableName="t_mkt_message" domainObjectName="MktMessagePO">-->
             <!--<generatedKey column="mkt_msg_id" sqlStatement="MySql" identity="true"/>-->
