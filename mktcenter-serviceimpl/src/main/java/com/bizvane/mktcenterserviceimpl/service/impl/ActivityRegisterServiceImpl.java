@@ -2,6 +2,8 @@ package com.bizvane.mktcenterserviceimpl.service.impl;
 import com.bizvane.centerstageservice.models.po.SysCheckConfigPo;
 import com.bizvane.centerstageservice.models.vo.SysCheckConfigVo;
 import com.bizvane.centerstageservice.rpc.SysCheckConfigServiceRpc;
+import com.bizvane.couponfacade.interfaces.SendCouponServiceFeign;
+import com.bizvane.couponfacade.models.vo.SendCouponSimpleRequestVO;
 import com.bizvane.members.facade.enums.IntegralRecordTypeEnum;
 import com.bizvane.members.facade.models.IntegralRecordModel;
 import com.bizvane.members.facade.models.MemberInfoModel;
@@ -60,16 +62,13 @@ public class ActivityRegisterServiceImpl implements ActivityRegisterService {
     private MktMessagePOMapper mktMessagePOMapper;
 
     @Autowired
-    private  XxlJobConfig xxlJobConfig;
-
-    @Autowired
-    private JobClient jobClient;
-    @Autowired
     private JobUtil jobUtil;
     @Autowired
     private SysCheckConfigServiceRpc sysCheckConfigServiceRpc;
     @Autowired
     private IntegralRecordApiService integralRecordApiService;
+    @Autowired
+    private SendCouponServiceFeign sendCouponServiceFeign;
     /**
      * 查询活动列表
      * @param vo
@@ -190,14 +189,17 @@ public class ActivityRegisterServiceImpl implements ActivityRegisterService {
         mktActivityRegisterPOMapper.insertSelective(mktActivityRegisterPO);
 
         //新增券奖励
-        List<String> couponCodeList = bo.getCouponCodeList();
+        List<MktCouponPO> couponCodeList = bo.getCouponCodeList();
         if(!CollectionUtils.isEmpty(couponCodeList)){
-            for(String couponCode : couponCodeList){
+            for(MktCouponPO couponCode : couponCodeList){
                 MktCouponPO mktCouponPO = new MktCouponPO();
                 BeanUtils.copyProperties(mktActivityPOWithBLOBs,mktCouponPO);
                 mktCouponPO.setBizType(BusinessTypeEnum.ACTIVITY_TYPE_ACTIVITY.getCode());
                 mktCouponPO.setBizId(mktActivityId);
-                mktCouponPO.setCouponCode(couponCode);
+                mktCouponPO.setCouponCode(couponCode.getCouponCode());
+                mktCouponPO.setCouponName(couponCode.getCouponName());
+                mktCouponPO.setCouponId(couponCode.getCouponId());
+                mktCouponPO.setBizId(couponCode.getBizId());
                 mktCouponPOMapper.insertSelective(mktCouponPO);
             }
         }
@@ -243,7 +245,13 @@ public class ActivityRegisterServiceImpl implements ActivityRegisterService {
             var1.setChangeIntegral(activityVO.getPoints());
             var1.setChangeWay(IntegralRecordTypeEnum.INCOME.getCode());
             integralRecordApiService.updateMemberIntegral(var1);
-            // 增加卷奖励接口TODO
+            // 增加卷奖励接口
+            SendCouponSimpleRequestVO va = new SendCouponSimpleRequestVO();
+            va.setMemberCode(vo.getMemberCode());
+           /* va.setCouponDefinitionId();
+            va.setSendBussienId();
+            va.setSendType();*/
+            sendCouponServiceFeign.simple(va);
         }
         return null;
     }
@@ -341,17 +349,22 @@ public class ActivityRegisterServiceImpl implements ActivityRegisterService {
         mktActivityRegisterPOMapper.updateByPrimaryKeySelective(mktActivityRegisterPO);
 
         //修改券奖励
-        List<String> couponCodeList = bo.getCouponCodeList();
+        List<MktCouponPO> couponCodeList = bo.getCouponCodeList();
         if(!CollectionUtils.isEmpty(couponCodeList)){
-            for(String couponCode : couponCodeList){
+            for(MktCouponPO couponCode : couponCodeList){
                 MktCouponPO mktCouponPO = new MktCouponPO();
                 BeanUtils.copyProperties(mktActivityPOWithBLOBs,mktCouponPO);
                 mktCouponPO.setBizType(BusinessTypeEnum.ACTIVITY_TYPE_ACTIVITY.getCode());
                 mktCouponPO.setBizId(mktActivityId);
-                mktCouponPO.setCouponCode(couponCode);
+                mktCouponPO.setCouponCode(couponCode.getCouponCode());
+                mktCouponPO.setCouponName(couponCode.getCouponName());
+                mktCouponPO.setCouponId(couponCode.getCouponId());
+                mktCouponPO.setBizId(couponCode.getBizId());
                 mktCouponPOMapper.updateByPrimaryKeySelective(mktCouponPO);
             }
         }
+
+
 
         //修改活动消息
         List<MessageVO> messageVOList = bo.getMessageVOList();

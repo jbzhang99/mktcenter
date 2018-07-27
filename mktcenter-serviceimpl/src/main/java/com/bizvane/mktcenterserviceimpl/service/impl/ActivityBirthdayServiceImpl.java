@@ -10,6 +10,7 @@ import com.bizvane.mktcenterservice.models.vo.ActivityVO;
 import com.bizvane.mktcenterservice.models.vo.MessageVO;
 import com.bizvane.mktcenterserviceimpl.common.constants.JobHandlerConstants;
 import com.bizvane.mktcenterserviceimpl.common.enums.ActivityStatusEnum;
+import com.bizvane.mktcenterserviceimpl.common.enums.ActivityTypeEnum;
 import com.bizvane.mktcenterserviceimpl.common.enums.BusinessTypeEnum;
 import com.bizvane.mktcenterserviceimpl.common.enums.CheckStatusEnum;
 import com.bizvane.mktcenterserviceimpl.common.job.XxlJobConfig;
@@ -89,6 +90,8 @@ public class ActivityBirthdayServiceImpl implements ActivityBirthdayService {
         //暂时用uuid生成活动编号9
         String activityCode = "AC"+ UUID.randomUUID().toString().replaceAll("-", "");
         activityVO.setActivityCode(activityCode);
+        //增加活动类型是消费活动
+        activityVO.setActivityType(ActivityTypeEnum.ACTIVITY_TYPE_BIRTHDAY.getCode());
         MktActivityPOWithBLOBs mktActivityPOWithBLOBs = new MktActivityPOWithBLOBs();
         BeanUtils.copyProperties(activityVO,mktActivityPOWithBLOBs);
 
@@ -177,14 +180,17 @@ public class ActivityBirthdayServiceImpl implements ActivityBirthdayService {
         mktActivityBirthdayPOMapper.insertSelective(mktActivityBirthdayPO);
 
         //新增券奖励
-        List<String> couponCodeList = bo.getCouponCodeList();
+        List<MktCouponPO> couponCodeList = bo.getCouponCodeList();
         if(!CollectionUtils.isEmpty(couponCodeList)){
-            for(String couponCode : couponCodeList){
+            for(MktCouponPO couponCode : couponCodeList){
                 MktCouponPO mktCouponPO = new MktCouponPO();
                 BeanUtils.copyProperties(mktActivityPOWithBLOBs,mktCouponPO);
                 mktCouponPO.setBizType(BusinessTypeEnum.ACTIVITY_TYPE_ACTIVITY.getCode());
                 mktCouponPO.setBizId(mktActivityId);
-                mktCouponPO.setCouponCode(couponCode);
+                mktCouponPO.setCouponCode(couponCode.getCouponCode());
+                mktCouponPO.setCouponName(couponCode.getCouponName());
+                mktCouponPO.setCouponId(couponCode.getCouponId());
+                mktCouponPO.setBizId(couponCode.getBizId());
                 mktCouponPOMapper.insertSelective(mktCouponPO);
             }
         }
