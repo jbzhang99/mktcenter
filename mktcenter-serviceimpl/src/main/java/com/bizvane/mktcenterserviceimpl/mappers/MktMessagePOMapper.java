@@ -9,85 +9,85 @@ public interface MktMessagePOMapper {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-07-16 14:33:24
+	 * @mbg.generated  2018-07-27 19:30:17
 	 */
 	long countByExample(MktMessagePOExample example);
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-07-16 14:33:24
+	 * @mbg.generated  2018-07-27 19:30:17
 	 */
 	int deleteByExample(MktMessagePOExample example);
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-07-16 14:33:24
+	 * @mbg.generated  2018-07-27 19:30:17
 	 */
 	int deleteByPrimaryKey(Long mktMsgId);
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-07-16 14:33:24
+	 * @mbg.generated  2018-07-27 19:30:17
 	 */
 	int insert(MktMessagePO record);
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-07-16 14:33:24
+	 * @mbg.generated  2018-07-27 19:30:17
 	 */
 	int insertSelective(MktMessagePO record);
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-07-16 14:33:24
+	 * @mbg.generated  2018-07-27 19:30:17
 	 */
 	List<MktMessagePO> selectByExampleWithBLOBs(MktMessagePOExample example);
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-07-16 14:33:24
+	 * @mbg.generated  2018-07-27 19:30:17
 	 */
 	List<MktMessagePO> selectByExample(MktMessagePOExample example);
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-07-16 14:33:24
+	 * @mbg.generated  2018-07-27 19:30:17
 	 */
 	MktMessagePO selectByPrimaryKey(Long mktMsgId);
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-07-16 14:33:24
+	 * @mbg.generated  2018-07-27 19:30:17
 	 */
 	int updateByExampleSelective(@Param("record") MktMessagePO record, @Param("example") MktMessagePOExample example);
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-07-16 14:33:24
+	 * @mbg.generated  2018-07-27 19:30:17
 	 */
 	int updateByExampleWithBLOBs(@Param("record") MktMessagePO record, @Param("example") MktMessagePOExample example);
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-07-16 14:33:24
+	 * @mbg.generated  2018-07-27 19:30:17
 	 */
 	int updateByExample(@Param("record") MktMessagePO record, @Param("example") MktMessagePOExample example);
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-07-16 14:33:24
+	 * @mbg.generated  2018-07-27 19:30:17
 	 */
 	int updateByPrimaryKeySelective(MktMessagePO record);
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-07-16 14:33:24
+	 * @mbg.generated  2018-07-27 19:30:17
 	 */
 	int updateByPrimaryKeyWithBLOBs(MktMessagePO record);
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-07-16 14:33:24
+	 * @mbg.generated  2018-07-27 19:30:17
 	 */
 	int updateByPrimaryKey(MktMessagePO record);
 }
