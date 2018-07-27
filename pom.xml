@@ -5,7 +5,7 @@
     <groupId>com.bizvane</groupId>
     <artifactId>mktcenter-parent</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>bizvane centercontrol platform</name>
+    <name>bizvane mktcenter-parent</name>
     <packaging>pom</packaging>
     <parent>
         <groupId>org.springframework.boot</groupId>
