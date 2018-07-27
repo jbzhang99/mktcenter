@@ -2,6 +2,8 @@ package com.bizvane.mktcenterserviceimpl.service.impl;
 import com.bizvane.centerstageservice.models.po.SysCheckConfigPo;
 import com.bizvane.centerstageservice.models.vo.SysCheckConfigVo;
 import com.bizvane.centerstageservice.rpc.SysCheckConfigServiceRpc;
+import com.bizvane.couponfacade.interfaces.SendCouponServiceFeign;
+import com.bizvane.couponfacade.models.vo.SendCouponSimpleRequestVO;
 import com.bizvane.members.facade.enums.IntegralRecordTypeEnum;
 import com.bizvane.members.facade.models.IntegralRecordModel;
 import com.bizvane.members.facade.models.MemberInfoModel;
@@ -11,13 +13,10 @@ import com.bizvane.mktcenterservice.models.bo.ActivityBO;
 import com.bizvane.mktcenterservice.models.po.*;
 import com.bizvane.mktcenterservice.models.vo.ActivityVO;
 import com.bizvane.mktcenterservice.models.vo.MessageVO;
-import com.bizvane.mktcenterserviceimpl.common.constants.JobHandlerConstants;
 import com.bizvane.mktcenterserviceimpl.common.enums.ActivityStatusEnum;
 import com.bizvane.mktcenterserviceimpl.common.enums.ActivityTypeEnum;
 import com.bizvane.mktcenterserviceimpl.common.enums.BusinessTypeEnum;
 import com.bizvane.mktcenterserviceimpl.common.enums.CheckStatusEnum;
-import com.bizvane.mktcenterserviceimpl.common.job.XxlJobConfig;
-import com.bizvane.mktcenterserviceimpl.common.utils.DateUtil;
 import com.bizvane.mktcenterserviceimpl.common.utils.JobUtil;
 import com.bizvane.mktcenterserviceimpl.mappers.MktActivityPOMapper;
 import com.bizvane.mktcenterserviceimpl.mappers.MktActivityUpgradePOMapper;
@@ -60,6 +59,8 @@ public class ActivityUpgradeServiceImpl implements ActivityUpgradeService {
     private SysCheckConfigServiceRpc sysCheckConfigServiceRpc;
     @Autowired
     private IntegralRecordApiService integralRecordApiService;
+    @Autowired
+    private SendCouponServiceFeign sendCouponServiceFeign;
     /**
      * 查询升级活动列表
      * @param vo
@@ -309,6 +310,12 @@ public class ActivityUpgradeServiceImpl implements ActivityUpgradeService {
         BeanUtils.copyProperties(mktActivityPOWithBLOBs,mktActivityUpgradePO);
         mktActivityUpgradePO.setMktActivityId(mktActivityId);
         mktActivityUpgradePOMapper.updateByPrimaryKeySelective(mktActivityUpgradePO);
+        //先删除在新增
+        MktCouponPO record = new MktCouponPO();
+        record.setValid(false);
+        MktCouponPOExample example = new MktCouponPOExample();
+        example.createCriteria().andBizIdEqualTo(mktActivityId);
+        mktCouponPOMapper.updateByExampleSelective(record,example);
         //修改券奖励
         List<MktCouponPO> couponCodeList = bo.getCouponCodeList();
         if(!CollectionUtils.isEmpty(couponCodeList)){
@@ -321,11 +328,17 @@ public class ActivityUpgradeServiceImpl implements ActivityUpgradeService {
                 mktCouponPO.setCouponName(couponCode.getCouponName());
                 mktCouponPO.setCouponId(couponCode.getCouponId());
                 mktCouponPO.setBizId(couponCode.getBizId());
-                mktCouponPOMapper.updateByPrimaryKeySelective(mktCouponPO);
+                mktCouponPOMapper.insertSelective(mktCouponPO);
             }
         }
 
 
+        //先删除在新增
+        MktMessagePO message = new MktMessagePO();
+        message.setValid(false);
+        MktMessagePOExample exam = new MktMessagePOExample();
+        exam.createCriteria().andBizIdEqualTo(mktActivityId);
+        mktMessagePOMapper.updateByExampleSelective(message,exam);
         //修改活动消息
         List<MessageVO> messageVOList = bo.getMessageVOList();
         if(!CollectionUtils.isEmpty(messageVOList)){
@@ -335,7 +348,7 @@ public class ActivityUpgradeServiceImpl implements ActivityUpgradeService {
                 BeanUtils.copyProperties(messageVO,mktMessagePO);
                 mktMessagePO.setBizType(BusinessTypeEnum.ACTIVITY_TYPE_ACTIVITY.getCode());
                 mktMessagePO.setBizId(mktActivityId);
-                mktMessagePOMapper.updateByPrimaryKeySelective(mktMessagePO);
+                mktMessagePOMapper.insertSelective(mktMessagePO);
             }
         }
         return responseData;
@@ -381,7 +394,19 @@ public class ActivityUpgradeServiceImpl implements ActivityUpgradeService {
             var1.setChangeIntegral(activityVO.getPoints());
             var1.setChangeWay(IntegralRecordTypeEnum.INCOME.getCode());
             integralRecordApiService.updateMemberIntegral(var1);
-            // 增加卷奖励接口TODO
+            // 增加卷奖励接口
+            MktCouponPOExample example = new  MktCouponPOExample();
+            example.createCriteria().andBizIdEqualTo(activityVO.getMktActivityId());
+            example.createCriteria().andValidEqualTo(true);
+            List<MktCouponPO> mktCouponPOs= mktCouponPOMapper.selectByExample(example);
+            for (MktCouponPO mktCouponPO:mktCouponPOs) {
+                SendCouponSimpleRequestVO va = new SendCouponSimpleRequestVO();
+                va.setMemberCode(vo.getMemberCode());
+                va.setCouponDefinitionId(mktCouponPO.getCouponId());
+                va.setSendBussienId(mktCouponPO.getBizId());
+                va.setSendType("10");
+                sendCouponServiceFeign.simple(va);
+            }
         }
         return responseData;
     }

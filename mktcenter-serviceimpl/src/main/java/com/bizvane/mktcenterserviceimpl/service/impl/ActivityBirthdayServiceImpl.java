@@ -100,6 +100,7 @@ public class ActivityBirthdayServiceImpl implements ActivityBirthdayService {
             ActivityVO vo = new ActivityVO();
             vo.setMbrLevelCode(bo.getActivityVO().getMbrLevelCode());
             vo.setLongTerm(bo.getActivityVO().getLongTerm());
+            vo.setSysBrandId(activityVO.getSysBrandId());
             List<ActivityVO> registerList = mktActivityBirthdayPOMapper.getActivityBirthdayList(vo);
             if(!CollectionUtils.isEmpty(registerList)){
                 responseData.setCode(SysResponseEnum.FAILED.getCode());

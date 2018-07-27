@@ -110,6 +110,7 @@ public class ActivityRegisterServiceImpl implements ActivityRegisterService {
             ActivityVO vo = new ActivityVO();
             vo.setMbrLevelCode(bo.getActivityVO().getMbrLevelCode());
             vo.setLongTerm(bo.getActivityVO().getLongTerm());
+            vo.setSysBrandId(activityVO.getSysBrandId());
             List<ActivityVO> registerList = mktActivityRegisterPOMapper.getActivityList(vo);
             if(!CollectionUtils.isEmpty(registerList)){
                 responseData.setCode(SysResponseEnum.FAILED.getCode());
@@ -199,7 +200,6 @@ public class ActivityRegisterServiceImpl implements ActivityRegisterService {
                 mktCouponPO.setCouponCode(couponCode.getCouponCode());
                 mktCouponPO.setCouponName(couponCode.getCouponName());
                 mktCouponPO.setCouponId(couponCode.getCouponId());
-                mktCouponPO.setBizId(couponCode.getBizId());
                 mktCouponPOMapper.insertSelective(mktCouponPO);
             }
         }
@@ -245,15 +245,23 @@ public class ActivityRegisterServiceImpl implements ActivityRegisterService {
             var1.setChangeIntegral(activityVO.getPoints());
             var1.setChangeWay(IntegralRecordTypeEnum.INCOME.getCode());
             integralRecordApiService.updateMemberIntegral(var1);
+
             // 增加卷奖励接口
-            SendCouponSimpleRequestVO va = new SendCouponSimpleRequestVO();
-            va.setMemberCode(vo.getMemberCode());
-           /* va.setCouponDefinitionId();
-            va.setSendBussienId();
-            va.setSendType();*/
-            sendCouponServiceFeign.simple(va);
+            MktCouponPOExample example = new  MktCouponPOExample();
+            example.createCriteria().andBizIdEqualTo(activityVO.getMktActivityId());
+            example.createCriteria().andValidEqualTo(true);
+            List<MktCouponPO> mktCouponPOs= mktCouponPOMapper.selectByExample(example);
+            for (MktCouponPO mktCouponPO:mktCouponPOs) {
+                SendCouponSimpleRequestVO va = new SendCouponSimpleRequestVO();
+                va.setMemberCode(vo.getMemberCode());
+                va.setCouponDefinitionId(mktCouponPO.getCouponId());
+                va.setSendBussienId(mktCouponPO.getBizId());
+                va.setSendType("10");
+                sendCouponServiceFeign.simple(va);
+            }
+
         }
-        return null;
+        return responseData;
     }
 
     /**
@@ -348,6 +356,13 @@ public class ActivityRegisterServiceImpl implements ActivityRegisterService {
         mktActivityRegisterPO.setMktActivityId(mktActivityId);
         mktActivityRegisterPOMapper.updateByPrimaryKeySelective(mktActivityRegisterPO);
 
+
+        //先删除在新增
+        MktCouponPO record = new MktCouponPO();
+        record.setValid(false);
+        MktCouponPOExample example = new MktCouponPOExample();
+        example.createCriteria().andBizIdEqualTo(mktActivityId);
+        mktCouponPOMapper.updateByExampleSelective(record,example);
         //修改券奖励
         List<MktCouponPO> couponCodeList = bo.getCouponCodeList();
         if(!CollectionUtils.isEmpty(couponCodeList)){
@@ -360,12 +375,17 @@ public class ActivityRegisterServiceImpl implements ActivityRegisterService {
                 mktCouponPO.setCouponName(couponCode.getCouponName());
                 mktCouponPO.setCouponId(couponCode.getCouponId());
                 mktCouponPO.setBizId(couponCode.getBizId());
-                mktCouponPOMapper.updateByPrimaryKeySelective(mktCouponPO);
+                mktCouponPOMapper.insertSelective(mktCouponPO);
             }
         }
 
 
-
+        //先删除在新增
+        MktMessagePO message = new MktMessagePO();
+        message.setValid(false);
+        MktMessagePOExample exam = new MktMessagePOExample();
+        exam.createCriteria().andBizIdEqualTo(mktActivityId);
+        mktMessagePOMapper.updateByExampleSelective(message,exam);
         //修改活动消息
         List<MessageVO> messageVOList = bo.getMessageVOList();
         if(!CollectionUtils.isEmpty(messageVOList)){
@@ -375,7 +395,7 @@ public class ActivityRegisterServiceImpl implements ActivityRegisterService {
                 BeanUtils.copyProperties(messageVO,mktMessagePO);
                 mktMessagePO.setBizType(BusinessTypeEnum.ACTIVITY_TYPE_ACTIVITY.getCode());
                 mktMessagePO.setBizId(mktActivityId);
-                mktMessagePOMapper.updateByPrimaryKeySelective(mktMessagePO);
+                mktMessagePOMapper.insertSelective(mktMessagePO);
             }
         }
         return responseData;

@@ -315,6 +315,12 @@ public class ActivityOrderServiceImpl implements ActivityOrderService {
         mktActivityOrderPOWithBLOBs.setMktActivityId(mktActivityId);
         mktActivityOrderPOMapper.updateByPrimaryKeySelective(mktActivityOrderPOWithBLOBs);
 
+        //先删除在新增
+        MktCouponPO record = new MktCouponPO();
+        record.setValid(false);
+        MktCouponPOExample example = new MktCouponPOExample();
+        example.createCriteria().andBizIdEqualTo(mktActivityId);
+        mktCouponPOMapper.updateByExampleSelective(record,example);
         //修改券奖励
         List<MktCouponPO> couponCodeList = bo.getCouponCodeList();
         if(!CollectionUtils.isEmpty(couponCodeList)){
@@ -327,11 +333,17 @@ public class ActivityOrderServiceImpl implements ActivityOrderService {
                 mktCouponPO.setCouponName(couponCode.getCouponName());
                 mktCouponPO.setCouponId(couponCode.getCouponId());
                 mktCouponPO.setBizId(couponCode.getBizId());
-                mktCouponPOMapper.updateByPrimaryKeySelective(mktCouponPO);
+                mktCouponPOMapper.insertSelective(mktCouponPO);
             }
         }
 
 
+        //先删除在新增
+        MktMessagePO message = new MktMessagePO();
+        message.setValid(false);
+        MktMessagePOExample exam = new MktMessagePOExample();
+        exam.createCriteria().andBizIdEqualTo(mktActivityId);
+        mktMessagePOMapper.updateByExampleSelective(message,exam);
         //修改活动消息
         List<MessageVO> messageVOList = bo.getMessageVOList();
         if(!CollectionUtils.isEmpty(messageVOList)){
@@ -341,7 +353,7 @@ public class ActivityOrderServiceImpl implements ActivityOrderService {
                 BeanUtils.copyProperties(messageVO,mktMessagePO);
                 mktMessagePO.setBizType(BusinessTypeEnum.ACTIVITY_TYPE_ACTIVITY.getCode());
                 mktMessagePO.setBizId(mktActivityId);
-                mktMessagePOMapper.updateByPrimaryKeySelective(mktMessagePO);
+                mktMessagePOMapper.insertSelective(mktMessagePO);
             }
         }
         return responseData;

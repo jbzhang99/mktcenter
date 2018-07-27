@@ -647,10 +647,10 @@
   </update>
 
   <!-- 更新活动状态为执行中-->
-  <update id="updateActivityStatus" parameterType="java.lang.String">
+  <update id="updateActivityStatus" parameterType="com.bizvane.mktcenterservice.models.po.MktActivityPO">
     update t_mkt_activity
     set
-    activity_status = 2,
+    activity_status = #{activityStatus}
     where activity_code = #{activityCode}
     AND check_status = 3  AND valid = 1
   </update>
