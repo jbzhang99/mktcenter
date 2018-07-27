@@ -88,3 +88,8 @@ rocketmq:
   onsaddr: http://onsaddr-internet.aliyun.com/rocketmq/nsaddr4client-internet
   accessKey: LTAIpoqUHsXq6q7r
   secretKey: 0ZJ7bfxXJLT8TpOKvZU3i4YWuhvJzs
+
+threadPool:
+  corePoolSize: 16
+  maximumPoolSize: 64
+  keepAliveTime: 60
