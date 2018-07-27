@@ -3,7 +3,9 @@ package com.bizvane.mktcenterserviceimpl.service.impl;
 import com.bizvane.centerstageservice.models.po.SysCheckConfigPo;
 import com.bizvane.centerstageservice.models.vo.SysCheckConfigVo;
 import com.bizvane.centerstageservice.rpc.SysCheckConfigServiceRpc;
+import com.bizvane.members.facade.enums.IntegralRecordTypeEnum;
 import com.bizvane.members.facade.models.IntegralRecordModel;
+import com.bizvane.members.facade.models.MemberInfoModel;
 import com.bizvane.members.facade.service.api.IntegralRecordApiService;
 import com.bizvane.mktcenterservice.interfaces.ActivitySigninService;
 import com.bizvane.mktcenterservice.models.bo.ActivityBO;
@@ -12,6 +14,7 @@ import com.bizvane.mktcenterservice.models.vo.ActivityVO;
 import com.bizvane.mktcenterservice.models.vo.MessageVO;
 import com.bizvane.mktcenterserviceimpl.common.constants.JobHandlerConstants;
 import com.bizvane.mktcenterserviceimpl.common.enums.ActivityStatusEnum;
+import com.bizvane.mktcenterserviceimpl.common.enums.ActivityTypeEnum;
 import com.bizvane.mktcenterserviceimpl.common.enums.BusinessTypeEnum;
 import com.bizvane.mktcenterserviceimpl.common.enums.CheckStatusEnum;
 import com.bizvane.mktcenterserviceimpl.common.job.XxlJobConfig;
@@ -87,6 +90,8 @@ public class ActivitySigninServiceImpl implements ActivitySigninService {
         //暂时用uuid生成活动编号9
         String activityCode = "AC"+ UUID.randomUUID().toString().replaceAll("-", "");
         activityVO.setActivityCode(activityCode);
+        //增加活动类型是签到活动
+        activityVO.setActivityType(ActivityTypeEnum.ACTIVITY_TYPE_SIGNIN.getCode());
         MktActivityPOWithBLOBs mktActivityPOWithBLOBs = new MktActivityPOWithBLOBs();
         BeanUtils.copyProperties(activityVO,mktActivityPOWithBLOBs);
         //查询看是否已存在签到活动
@@ -178,15 +183,22 @@ public class ActivitySigninServiceImpl implements ActivitySigninService {
      * @return
      */
     @Override
-    public ResponseData<Integer> executeActivitySignin(ActivityVO vo) {
+    public ResponseData<Integer> executeActivitySignin(MemberInfoModel vo) {
         //返回对象
         ResponseData responseData = new ResponseData();
         //查询品牌下所有执行中的活动
-        vo.setActivityStatus(ActivityStatusEnum.ACTIVITY_STATUS_EXECUTING.getCode());
-        List<ActivityVO> signinList = mktActivitySigninMapper.getActivitySigninList(vo);
+        ActivityVO activity = new ActivityVO();
+        activity.setActivityStatus(ActivityStatusEnum.ACTIVITY_STATUS_EXECUTING.getCode());
+        activity.setSysBrandId(vo.getBrandId());
+        activity.setActivityType(ActivityTypeEnum.ACTIVITY_TYPE_REGISGER.getCode());
+        List<ActivityVO> signinList = mktActivitySigninMapper.getActivitySigninList(activity);
         for (ActivityVO activityVO:signinList) {
-            //增加积分奖励新增接口TODO不全
+            //增加积分奖励新增接口
             IntegralRecordModel var1 = new IntegralRecordModel();
+            var1.setMemberCode(vo.getMemberCode());
+            var1.setChangeBills(activityVO.getActivityCode());
+            var1.setChangeIntegral(activityVO.getPoints());
+            var1.setChangeWay(IntegralRecordTypeEnum.INCOME.getCode());
             integralRecordApiService.updateMemberIntegral(var1);
             // 增加卷奖励接口
         }

@@ -10,6 +10,7 @@ import com.bizvane.mktcenterservice.models.vo.ActivityVO;
 import com.bizvane.mktcenterservice.models.vo.MessageVO;
 import com.bizvane.mktcenterserviceimpl.common.constants.JobHandlerConstants;
 import com.bizvane.mktcenterserviceimpl.common.enums.ActivityStatusEnum;
+import com.bizvane.mktcenterserviceimpl.common.enums.ActivityTypeEnum;
 import com.bizvane.mktcenterserviceimpl.common.enums.BusinessTypeEnum;
 import com.bizvane.mktcenterserviceimpl.common.enums.CheckStatusEnum;
 import com.bizvane.mktcenterserviceimpl.common.job.XxlJobConfig;
@@ -93,6 +94,8 @@ public class ActivityOrderServiceImpl implements ActivityOrderService {
         //暂时用uuid生成活动编号9
         String activityCode = "AC"+ UUID.randomUUID().toString().replaceAll("-", "");
         activityVO.setActivityCode(activityCode);
+        //增加活动类型是消费活动
+        activityVO.setActivityType(ActivityTypeEnum.ACTIVITY_TYPE_ORDER.getCode());
         MktActivityPOWithBLOBs mktActivityPOWithBLOBs = new MktActivityPOWithBLOBs();
         BeanUtils.copyProperties(activityVO,mktActivityPOWithBLOBs);
 
@@ -226,9 +229,9 @@ public class ActivityOrderServiceImpl implements ActivityOrderService {
         ResponseData responseData = new ResponseData();
         //得到大实体类
         ActivityVO activityVO = bo.getActivityVO();
-        if(activityVO.getCheckStatus()!=CheckStatusEnum.CHECK_STATUS_PENDING.getCode()){
+        if(activityVO.getCheckStatus()!=CheckStatusEnum.CHECK_STATUS_PENDING.getCode()||activityVO.getCheckStatus()!=CheckStatusEnum.CHECK_STATUS_REJECTED.getCode()){
             responseData.setCode(SysResponseEnum.FAILED.getCode());
-            responseData.setMessage("待审核任务才能修改!");
+            responseData.setMessage("该任务不能修改!");
             return responseData;
         }
         MktActivityPOWithBLOBs mktActivityPOWithBLOBs = new MktActivityPOWithBLOBs();
@@ -256,14 +259,18 @@ public class ActivityOrderServiceImpl implements ActivityOrderService {
             mktActivityPOWithBLOBs.setActivityStatus(ActivityStatusEnum.ACTIVITY_STATUS_PENDING.getCode());
 
             //如果是待审核数据则需要增加一条审核数据
-            SysCheckConfigPo po = new SysCheckConfigPo();
-            po.setSysBrandId(mktActivityPOWithBLOBs.getSysBrandId());
-            po.setFunctionCode(mktActivityPOWithBLOBs.getActivityCode());
-            po.setFunctionName(mktActivityPOWithBLOBs.getActivityName());
-            po.setCreateDate(new Date());
-            po.setCreateUserId(stageUser.getSysAccountId());
-            po.setCreateUserName(stageUser.getName());
-            sysCheckConfigServiceRpc.addCheckConfig(po);
+            //已驳回的可以新建审核
+            if(activityVO.getCheckStatus() == CheckStatusEnum.CHECK_STATUS_REJECTED.getCode()){
+                SysCheckConfigPo po = new SysCheckConfigPo();
+                po.setSysBrandId(mktActivityPOWithBLOBs.getSysBrandId());
+                po.setFunctionCode(mktActivityPOWithBLOBs.getActivityCode());
+                po.setFunctionName(mktActivityPOWithBLOBs.getActivityName());
+                po.setCreateDate(new Date());
+                po.setCreateUserId(stageUser.getSysAccountId());
+                po.setCreateUserName(stageUser.getName());
+                sysCheckConfigServiceRpc.addCheckConfig(po);
+            }
+
             //getStartTime 开始时间>当前时间增加job
             if( new Date().before(activityVO.getStartTime())){
                 //创建任务调度任务开始时间

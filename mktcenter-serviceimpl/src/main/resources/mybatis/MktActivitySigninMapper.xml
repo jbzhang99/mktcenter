@@ -480,6 +480,9 @@
     <if test="sysBrandId != null and sysBrandId!= ''">
       AND tma.sys_brand_id = #{sysBrandId}
     </if>
-
+    <!--活动类型-->
+    <if test="activityType != null and activityType!= ''">
+      AND tma.activity_type = #{activityType}
+    </if>
   </select>
 </mapper>

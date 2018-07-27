@@ -1,5 +1,6 @@
 package com.bizvane.mktcenterservice.interfaces;
 
+import com.bizvane.members.facade.models.MemberInfoModel;
 import com.bizvane.mktcenterservice.models.bo.ActivityBO;
 import com.bizvane.mktcenterservice.models.po.MktActivityPOWithBLOBs;
 import com.bizvane.mktcenterservice.models.vo.ActivityVO;
@@ -40,7 +41,7 @@ public interface ActivitySigninService {
      * @param
      * @return
      */
-    public ResponseData<Integer> executeActivitySignin(ActivityVO vo);
+    public ResponseData<Integer> executeActivitySignin(MemberInfoModel vo);
     /**
      * 活动审核
      * @param

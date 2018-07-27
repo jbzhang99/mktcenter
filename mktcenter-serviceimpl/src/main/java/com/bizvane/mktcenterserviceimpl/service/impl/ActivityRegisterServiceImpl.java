@@ -1,5 +1,4 @@
 package com.bizvane.mktcenterserviceimpl.service.impl;
-
 import com.bizvane.centerstageservice.models.po.SysCheckConfigPo;
 import com.bizvane.centerstageservice.models.vo.SysCheckConfigVo;
 import com.bizvane.centerstageservice.rpc.SysCheckConfigServiceRpc;
@@ -234,6 +233,7 @@ public class ActivityRegisterServiceImpl implements ActivityRegisterService {
         ActivityVO activity = new ActivityVO();
         activity.setActivityStatus(ActivityStatusEnum.ACTIVITY_STATUS_EXECUTING.getCode());
         activity.setSysBrandId(vo.getBrandId());
+        activity.setActivityType(ActivityTypeEnum.ACTIVITY_TYPE_REGISGER.getCode());
         List<ActivityVO> RegisterList = mktActivityRegisterPOMapper.getActivityList(activity);
         for (ActivityVO activityVO:RegisterList) {
             //增加积分奖励新增接口

@@ -1,4 +1,5 @@
 package com.bizvane.mktcenterserviceimpl.controllers;
+import com.bizvane.members.facade.models.MemberInfoModel;
 import com.bizvane.mktcenterservice.interfaces.ActivityUpgradeService;
 import com.bizvane.mktcenterservice.models.bo.ActivityBO;
 import com.bizvane.mktcenterservice.models.vo.ActivityUpgradeVO;
@@ -107,7 +108,7 @@ public class ActivityUpgradeController {
      * @return
      */
     @RequestMapping("executeUpgrades")
-    public ResponseData<Integer> executeUpgrades(ActivityVO vo){
+    public ResponseData<Integer> executeUpgrades(MemberInfoModel vo){
         return activityUpgradeService.executeUpgrades(vo);
     }
 }

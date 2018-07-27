@@ -1,5 +1,6 @@
 package com.bizvane.mktcenterservice.interfaces;
 
+import com.bizvane.members.facade.models.MemberInfoModel;
 import com.bizvane.mktcenterservice.models.bo.ActivityBO;
 import com.bizvane.mktcenterservice.models.po.MktActivityPOWithBLOBs;
 import com.bizvane.mktcenterservice.models.vo.ActivityVO;
@@ -47,7 +48,7 @@ public interface ActivityUpgradeService {
      * @param vo
      * @return
      */
-    public ResponseData<Integer> executeUpgrades(ActivityVO vo);
+    public ResponseData<Integer> executeUpgrades(MemberInfoModel vo);
     /**
      * 活动审核
      * @param
