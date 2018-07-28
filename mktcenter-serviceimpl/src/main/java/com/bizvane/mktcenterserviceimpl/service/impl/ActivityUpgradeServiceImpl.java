@@ -385,6 +385,8 @@ public class ActivityUpgradeServiceImpl implements ActivityUpgradeService {
         activity.setActivityStatus(ActivityStatusEnum.ACTIVITY_STATUS_EXECUTING.getCode());
         activity.setSysBrandId(vo.getBrandId());
         activity.setActivityType(ActivityTypeEnum.ACTIVITY_TYPE_UPGRADE.getCode());
+        //查询会员等级相应的活动
+        activity.setMbrLevelCode(vo.getLevelId().toString());
         List<ActivityVO> upgradeList = mktActivityUpgradePOMapper.getActivityUpgradeList(activity);
         for (ActivityVO activityVO:upgradeList) {
             ////增加积分奖励新增接口

@@ -17,7 +17,6 @@ import com.bizvane.mktcenterserviceimpl.common.enums.ActivityStatusEnum;
 import com.bizvane.mktcenterserviceimpl.common.enums.ActivityTypeEnum;
 import com.bizvane.mktcenterserviceimpl.common.enums.BusinessTypeEnum;
 import com.bizvane.mktcenterserviceimpl.common.enums.CheckStatusEnum;
-import com.bizvane.mktcenterserviceimpl.common.job.XxlJobConfig;
 import com.bizvane.mktcenterserviceimpl.common.utils.JobUtil;
 import com.bizvane.mktcenterserviceimpl.mappers.MktActivityPOMapper;
 import com.bizvane.mktcenterserviceimpl.mappers.MktActivityRegisterPOMapper;
@@ -25,7 +24,6 @@ import com.bizvane.mktcenterserviceimpl.mappers.MktCouponPOMapper;
 import com.bizvane.mktcenterserviceimpl.mappers.MktMessagePOMapper;
 import com.bizvane.utils.commonutils.PageForm;
 import com.bizvane.utils.enumutils.SysResponseEnum;
-import com.bizvane.utils.jobutils.JobClient;
 import com.bizvane.utils.responseinfo.ResponseData;
 import com.bizvane.utils.tokens.SysAccountPO;
 import com.github.pagehelper.PageHelper;
@@ -236,29 +234,34 @@ public class ActivityRegisterServiceImpl implements ActivityRegisterService {
         activity.setActivityStatus(ActivityStatusEnum.ACTIVITY_STATUS_EXECUTING.getCode());
         activity.setSysBrandId(vo.getBrandId());
         activity.setActivityType(ActivityTypeEnum.ACTIVITY_TYPE_REGISGER.getCode());
+
         List<ActivityVO> RegisterList = mktActivityRegisterPOMapper.getActivityList(activity);
         for (ActivityVO activityVO:RegisterList) {
-            //增加积分奖励新增接口
-            IntegralRecordModel var1 = new IntegralRecordModel();
-            var1.setMemberCode(vo.getMemberCode());
-            var1.setChangeBills(activityVO.getActivityCode());
-            var1.setChangeIntegral(activityVO.getPoints());
-            var1.setChangeWay(IntegralRecordTypeEnum.INCOME.getCode());
-            integralRecordApiService.updateMemberIntegral(var1);
+            //判断开卡会员适合哪个活动根据开卡会员等级判断
+            if(activityVO.getMbrLevelCode().equals(vo.getLevelId().toString()) || activityVO.getMbrLevelCode().equals("0")){
+                //增加积分奖励新增接口
+                IntegralRecordModel var1 = new IntegralRecordModel();
+                var1.setMemberCode(vo.getMemberCode());
+                var1.setChangeBills(activityVO.getActivityCode());
+                var1.setChangeIntegral(activityVO.getPoints());
+                var1.setChangeWay(IntegralRecordTypeEnum.INCOME.getCode());
+                integralRecordApiService.updateMemberIntegral(var1);
 
-            // 增加卷奖励接口
-            MktCouponPOExample example = new  MktCouponPOExample();
-            example.createCriteria().andBizIdEqualTo(activityVO.getMktActivityId());
-            example.createCriteria().andValidEqualTo(true);
-            List<MktCouponPO> mktCouponPOs= mktCouponPOMapper.selectByExample(example);
-            for (MktCouponPO mktCouponPO:mktCouponPOs) {
-                SendCouponSimpleRequestVO va = new SendCouponSimpleRequestVO();
-                va.setMemberCode(vo.getMemberCode());
-                va.setCouponDefinitionId(mktCouponPO.getCouponId());
-                va.setSendBussienId(mktCouponPO.getBizId());
-                va.setSendType("10");
-                sendCouponServiceFeign.simple(va);
+                // 增加卷奖励接口
+                MktCouponPOExample example = new  MktCouponPOExample();
+                example.createCriteria().andBizIdEqualTo(activityVO.getMktActivityId());
+                example.createCriteria().andValidEqualTo(true);
+                List<MktCouponPO> mktCouponPOs= mktCouponPOMapper.selectByExample(example);
+                for (MktCouponPO mktCouponPO:mktCouponPOs) {
+                    SendCouponSimpleRequestVO va = new SendCouponSimpleRequestVO();
+                    va.setMemberCode(vo.getMemberCode());
+                    va.setCouponDefinitionId(mktCouponPO.getCouponId());
+                    va.setSendBussienId(mktCouponPO.getBizId());
+                    va.setSendType("10");
+                    sendCouponServiceFeign.simple(va);
+                }
             }
+
 
         }
         return responseData;
