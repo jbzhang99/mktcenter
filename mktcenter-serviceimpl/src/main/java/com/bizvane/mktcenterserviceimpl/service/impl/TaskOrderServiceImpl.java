@@ -26,39 +26,46 @@ public class TaskOrderServiceImpl implements TaskOrderService {
     @Autowired
     private MktTaskOrderPOMapper mktTaskOrderPOMapper;
 
+
     /**
-     * 获取任务列表
-     * @param vo
-     * @param pageForm
+     * 查询任务
      * @return
      */
     @Override
-    public ResponseData<TaskVO> getTaskList(TaskVO vo, PageForm pageForm) {
-        ResponseData responseData = new ResponseData();
-        PageHelper.startPage(pageForm.getPageNumber(),pageForm.getPageSize());
-        List<TaskVO> activityRegisterList = mktTaskOrderPOMapper.getTaskList(vo);
-        PageInfo<TaskVO> pageInfo = new PageInfo<>(activityRegisterList);
-        responseData.setData(pageInfo);
-        return responseData;
+    public List<TaskVO> selectTask(TaskVO vo) {
+        return mktTaskOrderPOMapper.getTaskList(vo);
     }
-
+    /**
+     * 创建任务
+     * @param bo
+     * @param stageUser
+     * @return
+     */
     @Override
     public ResponseData<Integer> addTask(TaskBO bo, SysAccountPO stageUser) {
         return null;
     }
 
+    /**
+     * 执行任务
+     * @param vo
+     * @return
+     */
     @Override
     public ResponseData<Integer> executeTask(TaskVO vo) {
         return null;
     }
 
+    /**
+     * 更新任务
+     * @param bo
+     * @param stageUser
+     * @return
+     */
     @Override
     public ResponseData<Integer> updateTask(TaskBO bo, SysAccountPO stageUser) {
         return null;
     }
 
-    @Override
-    public ResponseData<List<TaskVO>> selectTaskById(Long mktTaskId) {
-        return null;
-    }
+
 }
