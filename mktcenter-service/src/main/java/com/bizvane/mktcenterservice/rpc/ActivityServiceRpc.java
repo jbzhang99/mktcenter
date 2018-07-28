@@ -7,8 +7,6 @@ import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import javax.servlet.http.HttpServletRequest;
-
 /**
  * Created by agan on 2018/7/27.
  */
@@ -28,6 +26,6 @@ public interface ActivityServiceRpc {
      * @param vo
      * @return
      */
-    @RequestMapping("updateActivityStatusById")
-    public ResponseData<Integer> stopActivityById(@RequestBody ActivityVO vo);
+    @RequestMapping("updateActivityById")
+    public ResponseData<Integer> updateActivityById(@RequestBody ActivityVO vo);
 }
