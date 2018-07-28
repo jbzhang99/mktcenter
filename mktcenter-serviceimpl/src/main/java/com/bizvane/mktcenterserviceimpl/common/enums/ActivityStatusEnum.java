@@ -11,8 +11,7 @@ public enum ActivityStatusEnum {
     ACTIVITY_STATUS_ALL(0,"全部"),
     ACTIVITY_STATUS_PENDING(1,"待执行"),
     ACTIVITY_STATUS_EXECUTING(2,"执行中"),
-    ACTIVITY_STATUS_DISABLED(3,"已禁用"),
-    ACTIVITY_STATUS_FINISHED(4,"已结束");
+    ACTIVITY_STATUS_FINISHED(3,"已结束");
 
     private int code;
     private String message;

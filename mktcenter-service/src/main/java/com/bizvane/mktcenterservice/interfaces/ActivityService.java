@@ -1,6 +1,7 @@
 package com.bizvane.mktcenterservice.interfaces;
 
 import com.bizvane.mktcenterservice.models.po.MktActivityPOWithBLOBs;
+import com.bizvane.mktcenterservice.models.vo.ActivityVO;
 import com.bizvane.utils.responseinfo.ResponseData;
 import com.bizvane.utils.tokens.SysAccountPO;
 
@@ -14,10 +15,10 @@ public interface ActivityService {
 
     /**
      * 禁用/停止活动
-     * @param mktActivityId
+     * @param vo
      * @return
      */
-    public ResponseData<Integer> stopActivityById(Long mktActivityId, SysAccountPO sysAccountPO);
+    public ResponseData<Integer> updateActivityById(ActivityVO vo, SysAccountPO sysAccountPO);
 
     /**
      * 活动审核
