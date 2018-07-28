@@ -16,11 +16,10 @@ import java.util.List;
  */
 public interface TaskOrderService {
     /**
-     * 查询任务列表
-     * @param vo
+     * 查询任务
      * @return
      */
-    public ResponseData<TaskVO> getTaskList(TaskVO vo, PageForm pageForm);
+    public List<TaskVO> selectTask(TaskVO vo);
 
     /**
      * 新增任务
@@ -42,10 +41,5 @@ public interface TaskOrderService {
      */
     public ResponseData<Integer> updateTask(TaskBO bo,SysAccountPO stageUser);
 
-    /**
-     * 查询任务详情
-     * @param mktTaskId
-     * @return
-     */
-    public ResponseData<List<TaskVO>> selectTaskById(Long mktTaskId);
+
 }
