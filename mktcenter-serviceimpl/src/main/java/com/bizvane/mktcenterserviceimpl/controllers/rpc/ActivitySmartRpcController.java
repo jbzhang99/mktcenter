@@ -25,24 +25,24 @@ public class ActivitySmartRpcController {
     @io.swagger.annotations.ApiModelProperty(value = "ActivitySmartVO",name = "通过id获取活动", required = false,example = "")
     public ResponseData<ActivitySmartVO> getActivityById(Long mktActivityId){
         return new ResponseData<>();
-    };
+    }
 
     @RequestMapping("getActivityList")
     @io.swagger.annotations.ApiModelProperty(value = "ActivitySmartVO",name = "查询智能营销活动列表", required = false,example = "")
     public ResponseData<PageInfo<ActivitySmartVO>> getActivityList(ActivitySmartVO vo){
         return new ResponseData<>();
-    };
+    }
 
     @RequestMapping("addActivity")
     @io.swagger.annotations.ApiModelProperty(value = "ActivitySmartVO",name = "添加智能营销活动", required = false,example = "")
     public ResponseData<Integer> addActivity(ActivitySmartVO vo){
         return new ResponseData<>();
-    };
+    }
 
     @RequestMapping("updateActivity")
     @io.swagger.annotations.ApiModelProperty(value = "ActivitySmartVO",name = "更新智能营销活动", required = false,example = "")
     public ResponseData<Integer> updateActivity(ActivitySmartVO vo){
         return new ResponseData<>();
-    };
+    }
 
 }

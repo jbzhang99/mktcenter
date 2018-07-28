@@ -1,7 +1,7 @@
 package com.bizvane.mktcenterserviceimpl.service.impl;
 
 import com.bizvane.mktcenterservice.interfaces.ActivitySmartService;
-import com.bizvane.mktcenterservice.models.vo.ActivityVO;
+import com.bizvane.mktcenterservice.models.vo.ActivitySmartVO;
 import com.bizvane.mktcenterservice.models.vo.PageForm;
 import com.bizvane.mktcenterserviceimpl.mappers.MktActivitySmartPOMapper;
 import com.bizvane.utils.responseinfo.ResponseData;
@@ -31,11 +31,11 @@ public class ActivitySmartServiceImpl implements ActivitySmartService {
      * @return
      */
     @Override
-    public ResponseData<ActivityVO> getActivityList(ActivityVO vo, PageForm pageForm) {
+    public ResponseData<PageInfo<ActivitySmartVO>> getActivityList(ActivitySmartVO vo, PageForm pageForm) {
         ResponseData responseData = new ResponseData();
         PageHelper.startPage(pageForm.getPageNumber(),pageForm.getPageSize());
-        List<ActivityVO> activityRegisterList = mktActivitySmartPOMapper.getActivityList(vo);
-        PageInfo<ActivityVO> pageInfo = new PageInfo<>(activityRegisterList);
+        List<ActivitySmartVO> activityRegisterList = mktActivitySmartPOMapper.getActivityList(vo);
+        PageInfo<ActivitySmartVO> pageInfo = new PageInfo<>(activityRegisterList);
         responseData.setData(pageInfo);
         return responseData;
     }

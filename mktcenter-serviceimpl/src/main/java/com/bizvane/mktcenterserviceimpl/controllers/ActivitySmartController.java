@@ -1,9 +1,10 @@
 package com.bizvane.mktcenterserviceimpl.controllers;
 
 import com.bizvane.mktcenterservice.interfaces.ActivitySmartService;
-import com.bizvane.mktcenterservice.models.vo.ActivityVO;
+import com.bizvane.mktcenterservice.models.vo.ActivitySmartVO;
 import com.bizvane.mktcenterservice.models.vo.PageForm;
 import com.bizvane.utils.responseinfo.ResponseData;
+import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -26,8 +27,8 @@ public class ActivitySmartController {
      * @return
      */
     @RequestMapping("getActivityList")
-    public ResponseData<ActivityVO> getActivityList(ActivityVO vo, PageForm pageForm){
-        ResponseData<ActivityVO> activityRegisterList = activitySmartService.getActivityList(vo, pageForm);
+    public ResponseData<PageInfo<ActivitySmartVO>> getActivityList(ActivitySmartVO vo, PageForm pageForm){
+        ResponseData<PageInfo<ActivitySmartVO>> activityRegisterList = activitySmartService.getActivityList(vo, pageForm);
         return activityRegisterList;
     }
 }
