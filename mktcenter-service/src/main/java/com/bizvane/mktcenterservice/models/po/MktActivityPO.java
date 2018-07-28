@@ -79,7 +79,7 @@ public class MktActivityPO implements Serializable {
 	 * 只读. 活动状态：0全部，1待执行，2执行中，3，已禁用4已结束. activity_status
 	 * @mbg.generated  2018-07-14 13:26:02
 	 */
-	@io.swagger.annotations.ApiModelProperty(value = "活动状态：0全部，1待执行，2执行中，3，已禁用4已结束", name = "activityStatus", required = false, example = "")
+	@io.swagger.annotations.ApiModelProperty(value = "活动状态：0全部，1待执行，2执行中，3已结束", name = "activityStatus", required = false, example = "")
 	private Integer activityStatus;
 	/**
 	 * 只读. 备注. remark

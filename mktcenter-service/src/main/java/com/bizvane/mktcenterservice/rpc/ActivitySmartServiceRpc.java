@@ -1,6 +1,6 @@
 package com.bizvane.mktcenterservice.rpc;
 
-import com.bizvane.mktcenterservice.models.vo.ActivityVO;
+import com.bizvane.mktcenterservice.models.vo.ActivitySmartVO;
 import com.bizvane.utils.responseinfo.ResponseData;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -15,13 +15,16 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("${feign.client.mktcenter.path}/activitySmartRpc")
 public interface ActivitySmartServiceRpc {
 
-    @RequestMapping("getActivity")
-    public ResponseData<Integer> getActivity(ActivityVO vo);
+    @RequestMapping("getActivityById")
+    public ResponseData<Integer> getActivityById(ActivitySmartVO vo);
+
+    @RequestMapping("getActivityList")
+    public ResponseData<Integer> getActivityList(ActivitySmartVO vo);
 
     @RequestMapping("addActivity")
-    public ResponseData<Integer> addActivity(ActivityVO vo);
+    public ResponseData<Integer> addActivity(ActivitySmartVO vo);
 
     @RequestMapping("updateActivity")
-    public ResponseData<Integer> updateActivity(ActivityVO vo);
+    public ResponseData<Integer> updateActivity(ActivitySmartVO vo);
 
 }
