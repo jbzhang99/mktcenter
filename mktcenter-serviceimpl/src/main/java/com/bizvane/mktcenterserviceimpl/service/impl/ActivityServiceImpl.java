@@ -4,6 +4,7 @@ import com.bizvane.mktcenterservice.interfaces.ActivityService;
 import com.bizvane.mktcenterservice.models.po.MktActivityPOWithBLOBs;
 import com.bizvane.mktcenterservice.models.po.MktMessagePO;
 import com.bizvane.mktcenterservice.models.po.MktMessagePOExample;
+import com.bizvane.mktcenterservice.models.vo.ActivityVO;
 import com.bizvane.mktcenterserviceimpl.common.enums.ActivityStatusEnum;
 import com.bizvane.mktcenterserviceimpl.common.enums.CheckStatusEnum;
 import com.bizvane.mktcenterserviceimpl.mappers.MktActivityPOMapper;
@@ -29,17 +30,18 @@ public class ActivityServiceImpl implements ActivityService {
     private MktActivityPOMapper mktActivityPOMapper;
     @Autowired
     private MktMessagePOMapper mktMessagePOMapper;
+
     /**
-     * 禁用/停止活动
-     * @param mktActivityId
+     * 禁用/启用活动
+     * @param vo
      * @return
      */
     @Override
-    public ResponseData<Integer> stopActivityById(Long mktActivityId, SysAccountPO sysAccountPO) {
+    public ResponseData<Integer> updateActivityById(ActivityVO vo, SysAccountPO sysAccountPO) {
         ResponseData responseData = new ResponseData();
         MktActivityPOWithBLOBs mktActivityPOWithBLOBs = new MktActivityPOWithBLOBs();
-        mktActivityPOWithBLOBs.setMktActivityId(mktActivityId);
-        mktActivityPOWithBLOBs.setActivityStatus(ActivityStatusEnum.ACTIVITY_STATUS_DISABLED.getCode());
+        mktActivityPOWithBLOBs.setMktActivityId(vo.getMktActivityId());
+        mktActivityPOWithBLOBs.setValid(vo.getValid());
         mktActivityPOWithBLOBs.setModifiedUserId(sysAccountPO.getSysAccountId());
         mktActivityPOWithBLOBs.setModifiedDate(new Date());
         mktActivityPOWithBLOBs.setModifiedUserName(sysAccountPO.getName());

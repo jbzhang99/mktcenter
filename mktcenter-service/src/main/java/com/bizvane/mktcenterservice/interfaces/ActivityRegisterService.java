@@ -1,10 +1,9 @@
 package com.bizvane.mktcenterservice.interfaces;
 
-import com.bizvane.members.facade.models.IntegralRecordModel;
 import com.bizvane.members.facade.models.MemberInfoModel;
 import com.bizvane.mktcenterservice.models.bo.ActivityBO;
 import com.bizvane.mktcenterservice.models.vo.ActivityVO;
-import com.bizvane.utils.commonutils.PageForm;
+import com.bizvane.mktcenterservice.models.vo.PageForm;
 import com.bizvane.utils.responseinfo.ResponseData;
 import com.bizvane.utils.tokens.SysAccountPO;
 

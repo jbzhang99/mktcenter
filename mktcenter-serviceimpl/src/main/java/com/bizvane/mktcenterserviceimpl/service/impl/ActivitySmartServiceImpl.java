@@ -2,8 +2,8 @@ package com.bizvane.mktcenterserviceimpl.service.impl;
 
 import com.bizvane.mktcenterservice.interfaces.ActivitySmartService;
 import com.bizvane.mktcenterservice.models.vo.ActivityVO;
+import com.bizvane.mktcenterservice.models.vo.PageForm;
 import com.bizvane.mktcenterserviceimpl.mappers.MktActivitySmartPOMapper;
-import com.bizvane.utils.commonutils.PageForm;
 import com.bizvane.utils.responseinfo.ResponseData;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;

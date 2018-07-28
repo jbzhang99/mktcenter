@@ -4,12 +4,14 @@ import com.bizvane.mktcenterservice.interfaces.TaskOrderService;
 import com.bizvane.mktcenterservice.models.bo.TaskBO;
 import com.bizvane.mktcenterservice.models.po.MktCouponPO;
 import com.bizvane.mktcenterservice.models.vo.MessageVO;
+import com.bizvane.mktcenterservice.models.vo.PageForm;
 import com.bizvane.mktcenterservice.models.vo.TaskVO;
 import com.bizvane.mktcenterserviceimpl.common.constants.SystemConstants;
 import com.bizvane.mktcenterserviceimpl.common.utils.TaskParamCheckUtil;
-import com.bizvane.utils.commonutils.PageForm;
 import com.bizvane.utils.responseinfo.ResponseData;
 import com.bizvane.utils.tokens.SysAccountPO;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -31,13 +33,17 @@ public class TaskOrderController {
     private TaskOrderService taskOrderService;
 
     /**
-     * 查询任务列表
+     * 查询任务列表并分页
      * @return
      */
     @RequestMapping("getTaskList")
     public ResponseData<TaskVO> getTaskList(TaskVO vo, PageForm pageForm){
-        ResponseData<TaskVO> taskVOResponseData = taskOrderService.getTaskList(vo, pageForm);
-        return taskVOResponseData;
+        ResponseData responseData = new ResponseData();
+        PageHelper.startPage(pageForm.getPageNumber(),pageForm.getPageSize());
+        List<TaskVO> activityRegisterList = taskOrderService.selectTask(vo);
+        PageInfo<TaskVO> pageInfo = new PageInfo<>(activityRegisterList);
+        responseData.setData(pageInfo);
+        return responseData;
     }
 
     /**
@@ -108,7 +114,7 @@ public class TaskOrderController {
      * @param mktActivityId
      * @return
      */
-    public ResponseData<List<TaskVO>> selectTaskById(Long mktActivityId){
+ /*   public ResponseData<List<TaskVO>> selectTaskById(Long mktActivityId){
         return taskOrderService.selectTaskById(mktActivityId);
-    }
+    }*/
 }

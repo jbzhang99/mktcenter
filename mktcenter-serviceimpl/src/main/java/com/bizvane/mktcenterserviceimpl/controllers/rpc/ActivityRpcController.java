@@ -1,4 +1,4 @@
-package com.bizvane.mktcenterserviceimpl.controllers;
+package com.bizvane.mktcenterserviceimpl.controllers.rpc;
 
 import com.bizvane.mktcenterservice.interfaces.*;
 import com.bizvane.mktcenterservice.models.po.MktActivityPOWithBLOBs;
@@ -7,6 +7,7 @@ import com.bizvane.mktcenterserviceimpl.common.enums.ActivityTypeEnum;
 import com.bizvane.utils.responseinfo.ResponseData;
 import com.bizvane.utils.tokens.SysAccountPO;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -14,13 +15,13 @@ import javax.servlet.http.HttpServletRequest;
 
 /**
  * @author chen.li
- * @date on 2018/7/6 15:12
- * @description 营销活动
+ * @date on 2018/7/28 9:56
+ * @description  活动主体，对外提供
  * @Copyright (c) 2018 上海商帆信息科技有限公司-版权所有
  */
 @RestController
-@RequestMapping("activity")
-public class ActivityController {
+@RequestMapping("activityRpc")
+public class ActivityRpcController {
 
     @Autowired
     private ActivityService activityService;
@@ -38,8 +39,8 @@ public class ActivityController {
      * @param vo
      * @return
      */
-    @RequestMapping("stopActivityById")
-    public ResponseData<Integer> stopActivityById(ActivityVO vo, HttpServletRequest request){
+    @RequestMapping("updateActivityById")
+    public ResponseData<Integer> updateActivityById(@RequestBody ActivityVO vo, HttpServletRequest request){
         //获取操作人信息
         SysAccountPO stageUser =new SysAccountPO();
 //        SysAccountPO stageUser = TokenUtils.getStageUser(request);
@@ -55,7 +56,7 @@ public class ActivityController {
      * @return
      */
     @RequestMapping("checkActivityById")
-    public ResponseData<Integer> checkActivityById(MktActivityPOWithBLOBs bs, HttpServletRequest request){
+    public ResponseData<Integer> checkActivityById(@RequestBody MktActivityPOWithBLOBs bs, HttpServletRequest request){
         ResponseData responseData = new ResponseData();
         //获取操作人信息
         SysAccountPO stageUser =new SysAccountPO();
