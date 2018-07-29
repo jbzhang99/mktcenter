@@ -4,361 +4,318 @@ import java.io.Serializable;
 import java.util.Date;
 
 public class MktActivityManualPO implements Serializable {
-    /**
-     * åªè¯».
-    pkid. mkt_activity_manual_id
-     *
-     * @mbg.generated 2018-07-19 16:07:25
-     */
-    @io.swagger.annotations.ApiModelProperty(value = "pkid",name = "mktActivityManualId", required = false,example = "")
-    private Long mktActivityManualId;
 
-    /**
-     * åªè¯».
-    å…³è”æ´»åŠ¨id. mkt_activity_id
-     *
-     * @mbg.generated 2018-07-19 16:07:25
-     */
-    @io.swagger.annotations.ApiModelProperty(value = "å…³è”æ´»åŠ¨id",name = "mktActivityId", required = false,example = "")
-    private Long mktActivityId;
+	/**
+	 * Ö»¶Á. pkid. mkt_activity_manual_id
+	 * @mbg.generated  2018-07-29 11:43:54
+	 */
+	@io.swagger.annotations.ApiModelProperty(value = "pkid", name = "mktActivityManualId", required = false, example = "")
+	private Long mktActivityManualId;
+	/**
+	 * Ö»¶Á. ¹ØÁª»î¶¯id. mkt_activity_id
+	 * @mbg.generated  2018-07-29 11:43:54
+	 */
+	@io.swagger.annotations.ApiModelProperty(value = "¹ØÁª»î¶¯id", name = "mktActivityId", required = false, example = "")
+	private Long mktActivityId;
+	/**
+	 * Ö»¶Á. ÁìÈ¡·½Ê½£º1É¨ÂëÁìÈ¯£¬2ÊÖ¶¯ÁìÈ¯. receive_type
+	 * @mbg.generated  2018-07-29 11:43:54
+	 */
+	@io.swagger.annotations.ApiModelProperty(value = "ÁìÈ¡·½Ê½£º1É¨ÂëÁìÈ¯£¬2ÊÖ¶¯ÁìÈ¯", name = "receiveType", required = false, example = "")
+	private Integer receiveType;
+	/**
+	 * Ö»¶Á. Ã¿ÈËÃ¿ÈÕ×î¶àÁìÈ¡¶àÉÙÕÅ. per_person_per_day_max
+	 * @mbg.generated  2018-07-29 11:43:54
+	 */
+	@io.swagger.annotations.ApiModelProperty(value = "Ã¿ÈËÃ¿ÈÕ×î¶àÁìÈ¡¶àÉÙÕÅ", name = "perPersonPerDayMax", required = false, example = "")
+	private Integer perPersonPerDayMax;
+	/**
+	 * Ö»¶Á. Ã¿ÈË×î¶àÁìÈ¡. per_person_max
+	 * @mbg.generated  2018-07-29 11:43:54
+	 */
+	@io.swagger.annotations.ApiModelProperty(value = "Ã¿ÈË×î¶àÁìÈ¡", name = "perPersonMax", required = false, example = "")
+	private Integer perPersonMax;
+	/**
+	 * Ö»¶Á. ±¸×¢. remark
+	 * @mbg.generated  2018-07-29 11:43:54
+	 */
+	@io.swagger.annotations.ApiModelProperty(value = "±¸×¢", name = "remark", required = false, example = "")
+	private String remark;
+	/**
+	 * Ö»¶Á. ´´½¨ÈËid. create_user_id
+	 * @mbg.generated  2018-07-29 11:43:54
+	 */
+	@io.swagger.annotations.ApiModelProperty(value = "´´½¨ÈËid", name = "createUserId", required = false, example = "")
+	private Long createUserId;
+	/**
+	 * Ö»¶Á. ´´½¨ÈË. create_user_name
+	 * @mbg.generated  2018-07-29 11:43:54
+	 */
+	@io.swagger.annotations.ApiModelProperty(value = "´´½¨ÈË", name = "createUserName", required = false, example = "")
+	private String createUserName;
+	/**
+	 * Ö»¶Á. ´´½¨ÈÕÆÚ. create_date
+	 * @mbg.generated  2018-07-29 11:43:54
+	 */
+	@io.swagger.annotations.ApiModelProperty(value = "´´½¨ÈÕÆÚ", name = "createDate", required = false, example = "")
+	private Date createDate;
+	/**
+	 * Ö»¶Á. ĞŞ¸ÄÈËid. modified_user_id
+	 * @mbg.generated  2018-07-29 11:43:54
+	 */
+	@io.swagger.annotations.ApiModelProperty(value = "ĞŞ¸ÄÈËid", name = "modifiedUserId", required = false, example = "")
+	private Long modifiedUserId;
+	/**
+	 * Ö»¶Á. ĞŞ¸ÄÈË. modified_user_name
+	 * @mbg.generated  2018-07-29 11:43:54
+	 */
+	@io.swagger.annotations.ApiModelProperty(value = "ĞŞ¸ÄÈË", name = "modifiedUserName", required = false, example = "")
+	private String modifiedUserName;
+	/**
+	 * Ö»¶Á. ĞŞ¸ÄÊ±¼ä. modified_date
+	 * @mbg.generated  2018-07-29 11:43:54
+	 */
+	@io.swagger.annotations.ApiModelProperty(value = "ĞŞ¸ÄÊ±¼ä", name = "modifiedDate", required = false, example = "")
+	private Date modifiedDate;
+	/**
+	 * Ö»¶Á. Êı¾İÓĞĞ§ĞÔ£º1=ÓĞĞ§£»0=ÎŞĞ§. valid
+	 * @mbg.generated  2018-07-29 11:43:54
+	 */
+	@io.swagger.annotations.ApiModelProperty(value = "Êı¾İÓĞĞ§ĞÔ£º1=ÓĞĞ§£»0=ÎŞĞ§", name = "valid", required = false, example = "")
+	private Boolean valid;
+	/**
+	 * Ö»¶Á. ¶şÎ¬ÂëµØÖ·. qrcode
+	 * @mbg.generated  2018-07-29 11:43:54
+	 */
+	@io.swagger.annotations.ApiModelProperty(value = "¶şÎ¬ÂëµØÖ·", name = "qrcode", required = false, example = "")
+	private String qrcode;
+	/**
+	 * Ö»¶Á. 
+	 * @mbg.generated  2018-07-29 11:43:54
+	 */
+	private static final long serialVersionUID = 1L;
 
-    /**
-     * åªè¯».
-    é¢†å–æ–¹å¼ï¼š1æ‰«ç é¢†åˆ¸ï¼Œ2æ‰‹åŠ¨é¢†åˆ¸. receive_type
-     *
-     * @mbg.generated 2018-07-19 16:07:25
-     */
-    @io.swagger.annotations.ApiModelProperty(value = "é¢†å–æ–¹å¼ï¼š1æ‰«ç é¢†åˆ¸ï¼Œ2æ‰‹åŠ¨é¢†åˆ¸",name = "receiveType", required = false,example = "")
-    private Integer receiveType;
+	/**
+	 * Ö»¶Á. 
+	 * @mbg.generated  2018-07-29 11:43:54
+	 */
+	public Long getMktActivityManualId() {
+		return mktActivityManualId;
+	}
 
-    /**
-     * åªè¯».
-    æ¯äººæ¯æ—¥æœ€å¤šé¢†å–å¤šå°‘å¼ . per_person_per_day_max
-     *
-     * @mbg.generated 2018-07-19 16:07:25
-     */
-    @io.swagger.annotations.ApiModelProperty(value = "æ¯äººæ¯æ—¥æœ€å¤šé¢†å–å¤šå°‘å¼ ",name = "perPersonPerDayMax", required = false,example = "")
-    private Integer perPersonPerDayMax;
+	/**
+	 * Ö»¶Á. 
+	 * @mbg.generated  2018-07-29 11:43:54
+	 */
+	public void setMktActivityManualId(Long mktActivityManualId) {
+		this.mktActivityManualId = mktActivityManualId;
+	}
 
-    /**
-     * åªè¯».
-    æ¯äººæœ€å¤šé¢†å–. per_person_max
-     *
-     * @mbg.generated 2018-07-19 16:07:25
-     */
-    @io.swagger.annotations.ApiModelProperty(value = "æ¯äººæœ€å¤šé¢†å–",name = "perPersonMax", required = false,example = "")
-    private Integer perPersonMax;
+	/**
+	 * Ö»¶Á. 
+	 * @mbg.generated  2018-07-29 11:43:54
+	 */
+	public Long getMktActivityId() {
+		return mktActivityId;
+	}
 
-    /**
-     * åªè¯».
-    å¤‡æ³¨. remark
-     *
-     * @mbg.generated 2018-07-19 16:07:25
-     */
-    @io.swagger.annotations.ApiModelProperty(value = "å¤‡æ³¨",name = "remark", required = false,example = "")
-    private String remark;
+	/**
+	 * Ö»¶Á. 
+	 * @mbg.generated  2018-07-29 11:43:54
+	 */
+	public void setMktActivityId(Long mktActivityId) {
+		this.mktActivityId = mktActivityId;
+	}
 
-    /**
-     * åªè¯».
-    åˆ›å»ºäººid. create_user_id
-     *
-     * @mbg.generated 2018-07-19 16:07:25
-     */
-    @io.swagger.annotations.ApiModelProperty(value = "åˆ›å»ºäººid",name = "createUserId", required = false,example = "")
-    private Long createUserId;
+	/**
+	 * Ö»¶Á. 
+	 * @mbg.generated  2018-07-29 11:43:54
+	 */
+	public Integer getReceiveType() {
+		return receiveType;
+	}
 
-    /**
-     * åªè¯».
-    åˆ›å»ºäºº. create_user_name
-     *
-     * @mbg.generated 2018-07-19 16:07:25
-     */
-    @io.swagger.annotations.ApiModelProperty(value = "åˆ›å»ºäºº",name = "createUserName", required = false,example = "")
-    private String createUserName;
+	/**
+	 * Ö»¶Á. 
+	 * @mbg.generated  2018-07-29 11:43:54
+	 */
+	public void setReceiveType(Integer receiveType) {
+		this.receiveType = receiveType;
+	}
 
-    /**
-     * åªè¯».
-    åˆ›å»ºæ—¥æœŸ. create_date
-     *
-     * @mbg.generated 2018-07-19 16:07:25
-     */
-    @io.swagger.annotations.ApiModelProperty(value = "åˆ›å»ºæ—¥æœŸ",name = "createDate", required = false,example = "")
-    private Date createDate;
+	/**
+	 * Ö»¶Á. 
+	 * @mbg.generated  2018-07-29 11:43:54
+	 */
+	public Integer getPerPersonPerDayMax() {
+		return perPersonPerDayMax;
+	}
 
-    /**
-     * åªè¯».
-    ä¿®æ”¹äººid. modified_user_id
-     *
-     * @mbg.generated 2018-07-19 16:07:25
-     */
-    @io.swagger.annotations.ApiModelProperty(value = "ä¿®æ”¹äººid",name = "modifiedUserId", required = false,example = "")
-    private Long modifiedUserId;
+	/**
+	 * Ö»¶Á. 
+	 * @mbg.generated  2018-07-29 11:43:54
+	 */
+	public void setPerPersonPerDayMax(Integer perPersonPerDayMax) {
+		this.perPersonPerDayMax = perPersonPerDayMax;
+	}
 
-    /**
-     * åªè¯».
-    ä¿®æ”¹äºº. modified_user_name
-     *
-     * @mbg.generated 2018-07-19 16:07:25
-     */
-    @io.swagger.annotations.ApiModelProperty(value = "ä¿®æ”¹äºº",name = "modifiedUserName", required = false,example = "")
-    private String modifiedUserName;
+	/**
+	 * Ö»¶Á. 
+	 * @mbg.generated  2018-07-29 11:43:54
+	 */
+	public Integer getPerPersonMax() {
+		return perPersonMax;
+	}
 
-    /**
-     * åªè¯».
-    ä¿®æ”¹æ—¶é—´. modified_date
-     *
-     * @mbg.generated 2018-07-19 16:07:25
-     */
-    @io.swagger.annotations.ApiModelProperty(value = "ä¿®æ”¹æ—¶é—´",name = "modifiedDate", required = false,example = "")
-    private Date modifiedDate;
+	/**
+	 * Ö»¶Á. 
+	 * @mbg.generated  2018-07-29 11:43:54
+	 */
+	public void setPerPersonMax(Integer perPersonMax) {
+		this.perPersonMax = perPersonMax;
+	}
 
-    /**
-     * åªè¯».
-    æ•°æ®æœ‰æ•ˆæ€§ï¼š1=æœ‰æ•ˆï¼›0=æ— æ•ˆ. valid
-     *
-     * @mbg.generated 2018-07-19 16:07:25
-     */
-    @io.swagger.annotations.ApiModelProperty(value = "æ•°æ®æœ‰æ•ˆæ€§ï¼š1=æœ‰æ•ˆï¼›0=æ— æ•ˆ",name = "valid", required = false,example = "")
-    private Boolean valid;
+	/**
+	 * Ö»¶Á. 
+	 * @mbg.generated  2018-07-29 11:43:54
+	 */
+	public String getRemark() {
+		return remark;
+	}
 
-    /**
-     * åªè¯». 
-     *
-     * @mbg.generated 2018-07-19 16:07:25
-     */
-    private static final long serialVersionUID = 1L;
+	/**
+	 * Ö»¶Á. 
+	 * @mbg.generated  2018-07-29 11:43:54
+	 */
+	public void setRemark(String remark) {
+		this.remark = remark == null ? null : remark.trim();
+	}
 
-    /**
-     * åªè¯». 
-     *
-     * @mbg.generated 2018-07-19 16:07:25
-     */
-    public Long getMktActivityManualId() {
-        return mktActivityManualId;
-    }
+	/**
+	 * Ö»¶Á. 
+	 * @mbg.generated  2018-07-29 11:43:54
+	 */
+	public Long getCreateUserId() {
+		return createUserId;
+	}
 
-    /**
-     * åªè¯». 
-     *
-     * @mbg.generated 2018-07-19 16:07:25
-     */
-    public void setMktActivityManualId(Long mktActivityManualId) {
-        this.mktActivityManualId = mktActivityManualId;
-    }
+	/**
+	 * Ö»¶Á. 
+	 * @mbg.generated  2018-07-29 11:43:54
+	 */
+	public void setCreateUserId(Long createUserId) {
+		this.createUserId = createUserId;
+	}
 
-    /**
-     * åªè¯». 
-     *
-     * @mbg.generated 2018-07-19 16:07:25
-     */
-    public Long getMktActivityId() {
-        return mktActivityId;
-    }
+	/**
+	 * Ö»¶Á. 
+	 * @mbg.generated  2018-07-29 11:43:54
+	 */
+	public String getCreateUserName() {
+		return createUserName;
+	}
 
-    /**
-     * åªè¯». 
-     *
-     * @mbg.generated 2018-07-19 16:07:25
-     */
-    public void setMktActivityId(Long mktActivityId) {
-        this.mktActivityId = mktActivityId;
-    }
+	/**
+	 * Ö»¶Á. 
+	 * @mbg.generated  2018-07-29 11:43:54
+	 */
+	public void setCreateUserName(String createUserName) {
+		this.createUserName = createUserName == null ? null : createUserName.trim();
+	}
 
-    /**
-     * åªè¯». 
-     *
-     * @mbg.generated 2018-07-19 16:07:25
-     */
-    public Integer getReceiveType() {
-        return receiveType;
-    }
+	/**
+	 * Ö»¶Á. 
+	 * @mbg.generated  2018-07-29 11:43:54
+	 */
+	public Date getCreateDate() {
+		return createDate;
+	}
 
-    /**
-     * åªè¯». 
-     *
-     * @mbg.generated 2018-07-19 16:07:25
-     */
-    public void setReceiveType(Integer receiveType) {
-        this.receiveType = receiveType;
-    }
+	/**
+	 * Ö»¶Á. 
+	 * @mbg.generated  2018-07-29 11:43:54
+	 */
+	public void setCreateDate(Date createDate) {
+		this.createDate = createDate;
+	}
 
-    /**
-     * åªè¯». 
-     *
-     * @mbg.generated 2018-07-19 16:07:25
-     */
-    public Integer getPerPersonPerDayMax() {
-        return perPersonPerDayMax;
-    }
+	/**
+	 * Ö»¶Á. 
+	 * @mbg.generated  2018-07-29 11:43:54
+	 */
+	public Long getModifiedUserId() {
+		return modifiedUserId;
+	}
 
-    /**
-     * åªè¯». 
-     *
-     * @mbg.generated 2018-07-19 16:07:25
-     */
-    public void setPerPersonPerDayMax(Integer perPersonPerDayMax) {
-        this.perPersonPerDayMax = perPersonPerDayMax;
-    }
+	/**
+	 * Ö»¶Á. 
+	 * @mbg.generated  2018-07-29 11:43:54
+	 */
+	public void setModifiedUserId(Long modifiedUserId) {
+		this.modifiedUserId = modifiedUserId;
+	}
 
-    /**
-     * åªè¯». 
-     *
-     * @mbg.generated 2018-07-19 16:07:25
-     */
-    public Integer getPerPersonMax() {
-        return perPersonMax;
-    }
+	/**
+	 * Ö»¶Á. 
+	 * @mbg.generated  2018-07-29 11:43:54
+	 */
+	public String getModifiedUserName() {
+		return modifiedUserName;
+	}
 
-    /**
-     * åªè¯». 
-     *
-     * @mbg.generated 2018-07-19 16:07:25
-     */
-    public void setPerPersonMax(Integer perPersonMax) {
-        this.perPersonMax = perPersonMax;
-    }
+	/**
+	 * Ö»¶Á. 
+	 * @mbg.generated  2018-07-29 11:43:54
+	 */
+	public void setModifiedUserName(String modifiedUserName) {
+		this.modifiedUserName = modifiedUserName == null ? null : modifiedUserName.trim();
+	}
 
-    /**
-     * åªè¯». 
-     *
-     * @mbg.generated 2018-07-19 16:07:25
-     */
-    public String getRemark() {
-        return remark;
-    }
+	/**
+	 * Ö»¶Á. 
+	 * @mbg.generated  2018-07-29 11:43:54
+	 */
+	public Date getModifiedDate() {
+		return modifiedDate;
+	}
 
-    /**
-     * åªè¯». 
-     *
-     * @mbg.generated 2018-07-19 16:07:25
-     */
-    public void setRemark(String remark) {
-        this.remark = remark == null ? null : remark.trim();
-    }
+	/**
+	 * Ö»¶Á. 
+	 * @mbg.generated  2018-07-29 11:43:54
+	 */
+	public void setModifiedDate(Date modifiedDate) {
+		this.modifiedDate = modifiedDate;
+	}
 
-    /**
-     * åªè¯». 
-     *
-     * @mbg.generated 2018-07-19 16:07:25
-     */
-    public Long getCreateUserId() {
-        return createUserId;
-    }
+	/**
+	 * Ö»¶Á. 
+	 * @mbg.generated  2018-07-29 11:43:54
+	 */
+	public Boolean getValid() {
+		return valid;
+	}
 
-    /**
-     * åªè¯». 
-     *
-     * @mbg.generated 2018-07-19 16:07:25
-     */
-    public void setCreateUserId(Long createUserId) {
-        this.createUserId = createUserId;
-    }
+	/**
+	 * Ö»¶Á. 
+	 * @mbg.generated  2018-07-29 11:43:54
+	 */
+	public void setValid(Boolean valid) {
+		this.valid = valid;
+	}
 
-    /**
-     * åªè¯». 
-     *
-     * @mbg.generated 2018-07-19 16:07:25
-     */
-    public String getCreateUserName() {
-        return createUserName;
-    }
+	/**
+	 * Ö»¶Á. 
+	 * @mbg.generated  2018-07-29 11:43:54
+	 */
+	public String getQrcode() {
+		return qrcode;
+	}
 
-    /**
-     * åªè¯». 
-     *
-     * @mbg.generated 2018-07-19 16:07:25
-     */
-    public void setCreateUserName(String createUserName) {
-        this.createUserName = createUserName == null ? null : createUserName.trim();
-    }
-
-    /**
-     * åªè¯». 
-     *
-     * @mbg.generated 2018-07-19 16:07:25
-     */
-    public Date getCreateDate() {
-        return createDate;
-    }
-
-    /**
-     * åªè¯». 
-     *
-     * @mbg.generated 2018-07-19 16:07:25
-     */
-    public void setCreateDate(Date createDate) {
-        this.createDate = createDate;
-    }
-
-    /**
-     * åªè¯». 
-     *
-     * @mbg.generated 2018-07-19 16:07:25
-     */
-    public Long getModifiedUserId() {
-        return modifiedUserId;
-    }
-
-    /**
-     * åªè¯». 
-     *
-     * @mbg.generated 2018-07-19 16:07:25
-     */
-    public void setModifiedUserId(Long modifiedUserId) {
-        this.modifiedUserId = modifiedUserId;
-    }
-
-    /**
-     * åªè¯». 
-     *
-     * @mbg.generated 2018-07-19 16:07:25
-     */
-    public String getModifiedUserName() {
-        return modifiedUserName;
-    }
-
-    /**
-     * åªè¯». 
-     *
-     * @mbg.generated 2018-07-19 16:07:25
-     */
-    public void setModifiedUserName(String modifiedUserName) {
-        this.modifiedUserName = modifiedUserName == null ? null : modifiedUserName.trim();
-    }
-
-    /**
-     * åªè¯». 
-     *
-     * @mbg.generated 2018-07-19 16:07:25
-     */
-    public Date getModifiedDate() {
-        return modifiedDate;
-    }
-
-    /**
-     * åªè¯». 
-     *
-     * @mbg.generated 2018-07-19 16:07:25
-     */
-    public void setModifiedDate(Date modifiedDate) {
-        this.modifiedDate = modifiedDate;
-    }
-
-    /**
-     * åªè¯». 
-     *
-     * @mbg.generated 2018-07-19 16:07:25
-     */
-    public Boolean getValid() {
-        return valid;
-    }
-
-    /**
-     * åªè¯». 
-     *
-     * @mbg.generated 2018-07-19 16:07:25
-     */
-    public void setValid(Boolean valid) {
-        this.valid = valid;
-    }
+	/**
+	 * Ö»¶Á. 
+	 * @mbg.generated  2018-07-29 11:43:54
+	 */
+	public void setQrcode(String qrcode) {
+		this.qrcode = qrcode == null ? null : qrcode.trim();
+	}
 }

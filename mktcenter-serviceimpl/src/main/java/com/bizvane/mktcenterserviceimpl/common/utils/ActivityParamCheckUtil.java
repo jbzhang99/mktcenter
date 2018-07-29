@@ -1,6 +1,7 @@
 package com.bizvane.mktcenterserviceimpl.common.utils;
 
 import com.bizvane.mktcenterservice.models.bo.ActivityBO;
+import com.bizvane.mktcenterservice.models.vo.ActivityManualVO;
 import com.bizvane.mktcenterservice.models.vo.ActivityVO;
 import com.bizvane.mktcenterserviceimpl.common.constants.ActivityConstants;
 import com.bizvane.mktcenterserviceimpl.common.constants.SystemConstants;
@@ -173,4 +174,36 @@ public class ActivityParamCheckUtil {
         return responseData;
     }
 
+    public static  ResponseData checkManualParam (ActivityVO vo,ActivityManualVO activityManualVO,Long couponId){
+        ResponseData responseData = new ResponseData();
+        if(StringUtils.isEmpty(vo.getActivityName())){
+            responseData.setCode(SystemConstants.ERROR_CODE);
+            responseData.setMessage(ActivityConstants.ERROR_MSG_ACTIVITY_NAME_EMPTY);
+            return responseData;
+        }
+        if(StringUtils.isEmpty(vo.getCreateDateStart())||StringUtils.isEmpty(vo.getCreateDateEnd())){
+            responseData.setCode(SystemConstants.ERROR_CODE);
+            responseData.setMessage(ActivityConstants.ERROR_MSG_ACTIVITY_DATE_EMPTY);
+            return responseData;
+        }
+        if(SystemConstants.ERROR_CODE==(responseData.getCode())){
+            return responseData;
+        }
+        if(activityManualVO==null){
+            responseData.setCode(SystemConstants.ERROR_CODE);
+            responseData.setMessage("领取方式为空");
+            return responseData;
+        }
+        if(StringUtils.isEmpty(String.valueOf(activityManualVO.getReceiveType()))||activityManualVO.getReceiveType()!=2||activityManualVO.getReceiveType()!=1){
+            responseData.setCode(SystemConstants.ERROR_CODE);
+            responseData.setMessage("领取方式有误");
+            return responseData;
+        }
+        if(StringUtils.isEmpty(String.valueOf(couponId))|| 0==couponId){
+            responseData.setCode(SystemConstants.ERROR_CODE);
+            responseData.setMessage("券定义id为空");
+            return responseData;
+        }
+      return responseData;
+    }
 }

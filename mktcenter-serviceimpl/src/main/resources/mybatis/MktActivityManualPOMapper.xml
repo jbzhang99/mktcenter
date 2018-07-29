@@ -4,7 +4,7 @@
   <resultMap id="BaseResultMap" type="com.bizvane.mktcenterservice.models.po.MktActivityManualPO">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-19 16:07:25.
+      This element was generated on 2018-07-29 11:43:54.
     -->
     <id column="mkt_activity_manual_id" jdbcType="BIGINT" property="mktActivityManualId" />
     <result column="mkt_activity_id" jdbcType="BIGINT" property="mktActivityId" />
@@ -20,10 +20,17 @@
     <result column="modified_date" jdbcType="TIMESTAMP" property="modifiedDate" />
     <result column="valid" jdbcType="BIT" property="valid" />
   </resultMap>
+  <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.bizvane.mktcenterservice.models.po.MktActivityManualPO">
+    <!--
+      WARNING - 只读 - @mbg.generated
+      This element was generated on 2018-07-29 11:43:54.
+    -->
+    <result column="qrcode" jdbcType="LONGVARCHAR" property="qrcode" />
+  </resultMap>
   <sql id="Example_Where_Clause">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-19 16:07:25.
+      This element was generated on 2018-07-29 11:43:54.
     -->
     <where>
       <foreach collection="oredCriteria" item="criteria" separator="or">
@@ -56,7 +63,7 @@
   <sql id="Update_By_Example_Where_Clause">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-19 16:07:25.
+      This element was generated on 2018-07-29 11:43:54.
     -->
     <where>
       <foreach collection="example.oredCriteria" item="criteria" separator="or">
@@ -89,16 +96,43 @@
   <sql id="Base_Column_List">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-19 16:07:25.
+      This element was generated on 2018-07-29 11:43:54.
     -->
     mkt_activity_manual_id, mkt_activity_id, receive_type, per_person_per_day_max, per_person_max, 
     remark, create_user_id, create_user_name, create_date, modified_user_id, modified_user_name, 
     modified_date, valid
   </sql>
+  <sql id="Blob_Column_List">
+    <!--
+      WARNING - 只读 - @mbg.generated
+      This element was generated on 2018-07-29 11:43:54.
+    -->
+    qrcode
+  </sql>
+  <select id="selectByExampleWithBLOBs" parameterType="com.bizvane.mktcenterservice.models.po.MktActivityManualPOExample" resultMap="ResultMapWithBLOBs">
+    <!--
+      WARNING - 只读 - @mbg.generated
+      This element was generated on 2018-07-29 11:43:54.
+    -->
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from t_mkt_activity_manual
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
   <select id="selectByExample" parameterType="com.bizvane.mktcenterservice.models.po.MktActivityManualPOExample" resultMap="BaseResultMap">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-19 16:07:25.
+      This element was generated on 2018-07-29 11:43:54.
     -->
     select
     <if test="distinct">
@@ -113,20 +147,22 @@
       order by ${orderByClause}
     </if>
   </select>
-  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="ResultMapWithBLOBs">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-19 16:07:25.
+      This element was generated on 2018-07-29 11:43:54.
     -->
     select 
     <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
     from t_mkt_activity_manual
     where mkt_activity_manual_id = #{mktActivityManualId,jdbcType=BIGINT}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-19 16:07:25.
+      This element was generated on 2018-07-29 11:43:54.
     -->
     delete from t_mkt_activity_manual
     where mkt_activity_manual_id = #{mktActivityManualId,jdbcType=BIGINT}
@@ -134,7 +170,7 @@
   <delete id="deleteByExample" parameterType="com.bizvane.mktcenterservice.models.po.MktActivityManualPOExample">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-19 16:07:25.
+      This element was generated on 2018-07-29 11:43:54.
     -->
     delete from t_mkt_activity_manual
     <if test="_parameter != null">
@@ -144,7 +180,7 @@
   <insert id="insert" parameterType="com.bizvane.mktcenterservice.models.po.MktActivityManualPO">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-19 16:07:25.
+      This element was generated on 2018-07-29 11:43:54.
     -->
     <selectKey keyProperty="mktActivityManualId" order="AFTER" resultType="java.lang.Long">
       SELECT LAST_INSERT_ID()
@@ -152,18 +188,18 @@
     insert into t_mkt_activity_manual (mkt_activity_id, receive_type, per_person_per_day_max, 
       per_person_max, remark, create_user_id, 
       create_user_name, create_date, modified_user_id, 
-      modified_user_name, modified_date, valid
-      )
+      modified_user_name, modified_date, valid, 
+      qrcode)
     values (#{mktActivityId,jdbcType=BIGINT}, #{receiveType,jdbcType=INTEGER}, #{perPersonPerDayMax,jdbcType=INTEGER}, 
       #{perPersonMax,jdbcType=INTEGER}, #{remark,jdbcType=VARCHAR}, #{createUserId,jdbcType=BIGINT}, 
       #{createUserName,jdbcType=VARCHAR}, #{createDate,jdbcType=TIMESTAMP}, #{modifiedUserId,jdbcType=BIGINT}, 
-      #{modifiedUserName,jdbcType=VARCHAR}, #{modifiedDate,jdbcType=TIMESTAMP}, #{valid,jdbcType=BIT}
-      )
+      #{modifiedUserName,jdbcType=VARCHAR}, #{modifiedDate,jdbcType=TIMESTAMP}, #{valid,jdbcType=BIT}, 
+      #{qrcode,jdbcType=LONGVARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.bizvane.mktcenterservice.models.po.MktActivityManualPO">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-19 16:07:25.
+      This element was generated on 2018-07-29 11:43:54.
     -->
     <selectKey keyProperty="mktActivityManualId" order="AFTER" resultType="java.lang.Long">
       SELECT LAST_INSERT_ID()
@@ -206,6 +242,9 @@
       <if test="valid != null">
         valid,
       </if>
+      <if test="qrcode != null">
+        qrcode,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="mktActivityId != null">
@@ -244,12 +283,15 @@
       <if test="valid != null">
         #{valid,jdbcType=BIT},
       </if>
+      <if test="qrcode != null">
+        #{qrcode,jdbcType=LONGVARCHAR},
+      </if>
     </trim>
   </insert>
   <select id="countByExample" parameterType="com.bizvane.mktcenterservice.models.po.MktActivityManualPOExample" resultType="java.lang.Long">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-19 16:07:25.
+      This element was generated on 2018-07-29 11:43:54.
     -->
     select count(*) from t_mkt_activity_manual
     <if test="_parameter != null">
@@ -259,7 +301,7 @@
   <update id="updateByExampleSelective" parameterType="map">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-19 16:07:25.
+      This element was generated on 2018-07-29 11:43:54.
     -->
     update t_mkt_activity_manual
     <set>
@@ -302,7 +344,34 @@
       <if test="record.valid != null">
         valid = #{record.valid,jdbcType=BIT},
       </if>
+      <if test="record.qrcode != null">
+        qrcode = #{record.qrcode,jdbcType=LONGVARCHAR},
+      </if>
     </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExampleWithBLOBs" parameterType="map">
+    <!--
+      WARNING - 只读 - @mbg.generated
+      This element was generated on 2018-07-29 11:43:54.
+    -->
+    update t_mkt_activity_manual
+    set mkt_activity_manual_id = #{record.mktActivityManualId,jdbcType=BIGINT},
+      mkt_activity_id = #{record.mktActivityId,jdbcType=BIGINT},
+      receive_type = #{record.receiveType,jdbcType=INTEGER},
+      per_person_per_day_max = #{record.perPersonPerDayMax,jdbcType=INTEGER},
+      per_person_max = #{record.perPersonMax,jdbcType=INTEGER},
+      remark = #{record.remark,jdbcType=VARCHAR},
+      create_user_id = #{record.createUserId,jdbcType=BIGINT},
+      create_user_name = #{record.createUserName,jdbcType=VARCHAR},
+      create_date = #{record.createDate,jdbcType=TIMESTAMP},
+      modified_user_id = #{record.modifiedUserId,jdbcType=BIGINT},
+      modified_user_name = #{record.modifiedUserName,jdbcType=VARCHAR},
+      modified_date = #{record.modifiedDate,jdbcType=TIMESTAMP},
+      valid = #{record.valid,jdbcType=BIT},
+      qrcode = #{record.qrcode,jdbcType=LONGVARCHAR}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -310,7 +379,7 @@
   <update id="updateByExample" parameterType="map">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-19 16:07:25.
+      This element was generated on 2018-07-29 11:43:54.
     -->
     update t_mkt_activity_manual
     set mkt_activity_manual_id = #{record.mktActivityManualId,jdbcType=BIGINT},
@@ -333,7 +402,7 @@
   <update id="updateByPrimaryKeySelective" parameterType="com.bizvane.mktcenterservice.models.po.MktActivityManualPO">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-19 16:07:25.
+      This element was generated on 2018-07-29 11:43:54.
     -->
     update t_mkt_activity_manual
     <set>
@@ -373,13 +442,37 @@
       <if test="valid != null">
         valid = #{valid,jdbcType=BIT},
       </if>
+      <if test="qrcode != null">
+        qrcode = #{qrcode,jdbcType=LONGVARCHAR},
+      </if>
     </set>
+    where mkt_activity_manual_id = #{mktActivityManualId,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.bizvane.mktcenterservice.models.po.MktActivityManualPO">
+    <!--
+      WARNING - 只读 - @mbg.generated
+      This element was generated on 2018-07-29 11:43:54.
+    -->
+    update t_mkt_activity_manual
+    set mkt_activity_id = #{mktActivityId,jdbcType=BIGINT},
+      receive_type = #{receiveType,jdbcType=INTEGER},
+      per_person_per_day_max = #{perPersonPerDayMax,jdbcType=INTEGER},
+      per_person_max = #{perPersonMax,jdbcType=INTEGER},
+      remark = #{remark,jdbcType=VARCHAR},
+      create_user_id = #{createUserId,jdbcType=BIGINT},
+      create_user_name = #{createUserName,jdbcType=VARCHAR},
+      create_date = #{createDate,jdbcType=TIMESTAMP},
+      modified_user_id = #{modifiedUserId,jdbcType=BIGINT},
+      modified_user_name = #{modifiedUserName,jdbcType=VARCHAR},
+      modified_date = #{modifiedDate,jdbcType=TIMESTAMP},
+      valid = #{valid,jdbcType=BIT},
+      qrcode = #{qrcode,jdbcType=LONGVARCHAR}
     where mkt_activity_manual_id = #{mktActivityManualId,jdbcType=BIGINT}
   </update>
   <update id="updateByPrimaryKey" parameterType="com.bizvane.mktcenterservice.models.po.MktActivityManualPO">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-19 16:07:25.
+      This element was generated on 2018-07-29 11:43:54.
     -->
     update t_mkt_activity_manual
     set mkt_activity_id = #{mktActivityId,jdbcType=BIGINT},
@@ -396,4 +489,110 @@
       valid = #{valid,jdbcType=BIT}
     where mkt_activity_manual_id = #{mktActivityManualId,jdbcType=BIGINT}
   </update>
+ <!--查询领券活动列表-->
+   <select id="getActivityManualList" parameterType="com.bizvane.mktcenterservice.models.vo.ActivityVO" resultType="com.bizvane.mktcenterservice.models.vo.ActivityVO">
+    select
+     tma.mkt_activity_id,
+     tma.sys_company_id,
+     tma.sys_brand_id,
+     tma.activity_code,
+     tma.activity_type,
+     tma.activity_name,
+     tma.start_time,
+     tma.end_time,
+     tma.long_term,
+     tma.points,
+     tma.check_status,
+     tma.activity_status,
+     tma.remark,
+     tma.create_user_id,
+     tma.create_user_name,
+     tma.create_date,
+     tma.modified_user_id,
+     tma.modified_user_name,
+     tma.modified_date,
+     tma.valid,
+
+     tmm.receive_type,
+     tmm.per_person_per_day_max,
+     tmm.per_person_max,
+     tmm.remark,
+     tmm.create_user_name,
+     tmm.create_date,
+     tmm.modified_user_name,
+     tmm.modified_date,
+     tmm.valid
+    from t_mkt_activity tma
+    left join t_mkt_activity_manual tmm
+    on tma.mkt_activity_id = tmm.mkt_activity_id
+    where tmm.valid=1 and tma.valid=1
+     <if test="receiveType != null and receiveType != '' ">
+       AND tmm.receive_type = #{receiveType}
+     </if>
+     <if test="activityStatus != null and activityStatus!= '' ">
+       AND tma.activity_status = #{activityStatus}
+     </if>
+
+     <if test="createDateStart != null and createDateStart!= '' ">
+       AND <![CDATA[ tma.create_date >=#{createDateStart}]]>
+     </if>
+     <if test="createDateEnd != null and createDateEnd!= '' ">
+       AND  <![CDATA[ tma.create_date < = #{createDateEnd}]]>
+     </if>
+
+     <if test="startTime != null and startTime != '' ">
+     <!-- AND &lt;![CDATA[t.start_time &gt;= to_date(#{startTime},'yyyy-mm-dd')]]&gt;-->
+      and <![CDATA[ tma.start_time >=#{startTime}]]>
+     </if>
+
+     <if test="endTime != null and endTime != '' ">
+       <!-- AND &lt;![CDATA[t.end_time &gt;= to_date(#{startTime},'yyyy-mm-dd')]]&gt;-->
+       and <![CDATA[ tma.end_time >=#{endTime}]]>
+     </if>
+   </select>
+  <!--活动效果分析-->
+  <select id="getActivityList" parameterType="com.bizvane.mktcenterservice.models.vo.ActivityVO" resultType="com.bizvane.mktcenterservice.models.vo.ActivityVO">
+    SELECT
+    tma.mkt_activity_id,
+    tma.sys_company_id,
+    tma.sys_brand_id,
+    tma.activity_code,
+    tma.activity_type,
+    tma.activity_name,
+    tma.start_time,
+    tma.end_time,
+    tma.long_term,
+    tma.points,
+    tma.check_status,
+    tma.activity_status,
+    tma.remark,
+    tma.create_user_id,
+    tma.create_user_name,
+    tma.create_date,
+    tma.modified_user_id,
+    tma.modified_user_name,
+    tma.modified_date,
+    tma.valid,
+
+    tmm.receive_type,
+    tmm.per_person_per_day_max,
+    tmm.per_person_max,
+    tmm.remark,
+    tmm.create_user_name,
+    tmm.create_date,
+    tmm.modified_user_name,
+    tmm.modified_date,
+    tmm.valid
+    FROM
+    `t_mkt_activity` tma
+    INNER JOIN t_mkt_activity_manual tmm ON tma.mkt_activity_id = tmm.mkt_activity_id
+    and tma.valid=1
+    and tmmm.valid=1
+    <!--活动主表ID -->
+    <if test="mktActivityId != null and mktActivityId!= '' ">
+      AND tma.mkt_activity_id = #{mktActivityId}
+    </if>
+
+
+  </select>
 </mapper>
