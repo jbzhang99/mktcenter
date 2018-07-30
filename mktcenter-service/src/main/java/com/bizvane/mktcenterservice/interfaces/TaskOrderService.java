@@ -28,7 +28,7 @@ public interface TaskOrderService {
      * @param bo
      * @return
      */
-    public ResponseData<Integer> addTask(TaskConsumeVO bo, SysAccountPO stageUser);
+    public ResponseData<Integer> addTask(TaskConsumeVO vo, SysAccountPO stageUser);
 
     /**
      * 修改任务
