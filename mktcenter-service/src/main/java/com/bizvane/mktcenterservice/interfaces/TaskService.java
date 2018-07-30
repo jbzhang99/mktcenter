@@ -1,8 +1,11 @@
 package com.bizvane.mktcenterservice.interfaces;
 
 import com.bizvane.mktcenterservice.models.po.MktTaskPOWithBLOBs;
+import com.bizvane.mktcenterservice.models.vo.TaskVO;
 import com.bizvane.utils.responseinfo.ResponseData;
 import com.bizvane.utils.tokens.SysAccountPO;
+
+import java.util.List;
 
 /**
  * @author chen.li
@@ -11,6 +14,12 @@ import com.bizvane.utils.tokens.SysAccountPO;
  * @Copyright (c) 2018 上海商帆信息科技有限公司-版权所有
  */
 public interface TaskService {
+    /**
+     * 根据任务类型查询任务列表
+     * @param vo
+     * @return
+     */
+    public List<MktTaskPOWithBLOBs> getTaskByTaskType(TaskVO vo);
 
     /**
      * 新增

@@ -6,11 +6,13 @@ import com.bizvane.mktcenterserviceimpl.common.utils.TimeUtils;
 import com.bizvane.mktcenterserviceimpl.mappers.MktMessagePOMapper;
 import com.bizvane.utils.tokens.SysAccountPO;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 /**
  * @Author: lijunwei
  * @Time: 2018/7/30 11:25
  */
+@Service
 public class TaskMessageServiceImpl implements TaskMessageService {
     @Autowired
     private MktMessagePOMapper mktMessagePOMapper;

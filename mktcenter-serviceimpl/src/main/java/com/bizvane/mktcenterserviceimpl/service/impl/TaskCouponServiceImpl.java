@@ -6,11 +6,13 @@ import com.bizvane.mktcenterserviceimpl.common.utils.TimeUtils;
 import com.bizvane.mktcenterserviceimpl.mappers.MktCouponPOMapper;
 import com.bizvane.utils.tokens.SysAccountPO;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 /**
  * @Author: lijunwei
  * @Time: 2018/7/30 11:38
  */
+@Service
 public class TaskCouponServiceImpl implements TaskCouponService {
 
     @Autowired

@@ -2,7 +2,9 @@ package com.bizvane.mktcenterserviceimpl.service.impl;
 
 import com.bizvane.mktcenterservice.interfaces.TaskService;
 import com.bizvane.mktcenterservice.models.po.MktTaskPO;
+import com.bizvane.mktcenterservice.models.po.MktTaskPOExample;
 import com.bizvane.mktcenterservice.models.po.MktTaskPOWithBLOBs;
+import com.bizvane.mktcenterservice.models.vo.TaskVO;
 import com.bizvane.mktcenterserviceimpl.common.constants.ResponseConstants;
 import com.bizvane.mktcenterserviceimpl.common.enums.CheckStatusEnum;
 import com.bizvane.mktcenterserviceimpl.common.enums.TaskStatusEnum;
@@ -14,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * @author chen.li
@@ -26,6 +29,19 @@ public class TaskServiceImpl implements TaskService {
 
     @Autowired
     private MktTaskPOMapper mktTaskPOMapper;
+
+    /**
+     * 根据任务类型查询任务
+     */
+    @Override
+    public   List<MktTaskPOWithBLOBs>  getTaskByTaskType(TaskVO vo){
+        //1完善资料，2分享任务，3邀请注册，4累计消费次数，5累计消费金额',
+        MktTaskPOExample mktTaskPOExample = new MktTaskPOExample();
+        mktTaskPOExample.createCriteria().andTaskTypeEqualTo(vo.getTaskType());
+        List<MktTaskPOWithBLOBs> lists = mktTaskPOMapper.selectByExampleWithBLOBs(mktTaskPOExample);
+        return lists;
+
+    }
 
     /**
      * 新增任务
