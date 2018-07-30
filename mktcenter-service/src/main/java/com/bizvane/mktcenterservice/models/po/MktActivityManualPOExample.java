@@ -7,85 +7,85 @@ import java.util.List;
 
 public class MktActivityManualPOExample implements Serializable {
     /**
-	 * 只读. 
-	 * @mbg.generated  2018-07-29 11:43:54
+	 * 鍙. 
+	 * @mbg.generated  2018-07-30 08:29:50
 	 */
 	protected String orderByClause;
 	/**
-	 * 只读. 
-	 * @mbg.generated  2018-07-29 11:43:54
+	 * 鍙. 
+	 * @mbg.generated  2018-07-30 08:29:50
 	 */
 	protected boolean distinct;
 	/**
-	 * 只读. 
-	 * @mbg.generated  2018-07-29 11:43:54
+	 * 鍙. 
+	 * @mbg.generated  2018-07-30 08:29:50
 	 */
 	protected List<Criteria> oredCriteria;
 	/**
-	 * 只读. 
-	 * @mbg.generated  2018-07-29 11:43:54
+	 * 鍙. 
+	 * @mbg.generated  2018-07-30 08:29:50
 	 */
 	private static final long serialVersionUID = 1L;
 
 	/**
-	 * 只读. 
-	 * @mbg.generated  2018-07-29 11:43:54
+	 * 鍙. 
+	 * @mbg.generated  2018-07-30 08:29:50
 	 */
 	public MktActivityManualPOExample() {
 		oredCriteria = new ArrayList<Criteria>();
 	}
 
 	/**
-	 * 只读. 
-	 * @mbg.generated  2018-07-29 11:43:54
+	 * 鍙. 
+	 * @mbg.generated  2018-07-30 08:29:50
 	 */
 	public void setOrderByClause(String orderByClause) {
 		this.orderByClause = orderByClause;
 	}
 
 	/**
-	 * 只读. 
-	 * @mbg.generated  2018-07-29 11:43:54
+	 * 鍙. 
+	 * @mbg.generated  2018-07-30 08:29:50
 	 */
 	public String getOrderByClause() {
 		return orderByClause;
 	}
 
 	/**
-	 * 只读. 
-	 * @mbg.generated  2018-07-29 11:43:54
+	 * 鍙. 
+	 * @mbg.generated  2018-07-30 08:29:50
 	 */
 	public void setDistinct(boolean distinct) {
 		this.distinct = distinct;
 	}
 
 	/**
-	 * 只读. 
-	 * @mbg.generated  2018-07-29 11:43:54
+	 * 鍙. 
+	 * @mbg.generated  2018-07-30 08:29:50
 	 */
 	public boolean isDistinct() {
 		return distinct;
 	}
 
 	/**
-	 * 只读. 
-	 * @mbg.generated  2018-07-29 11:43:54
+	 * 鍙. 
+	 * @mbg.generated  2018-07-30 08:29:50
 	 */
 	public List<Criteria> getOredCriteria() {
 		return oredCriteria;
 	}
 
 	/**
-	 * 只读. 
-	 * @mbg.generated  2018-07-29 11:43:54
+	 * 鍙. 
+	 * @mbg.generated  2018-07-30 08:29:50
 	 */
 	public void or(Criteria criteria) {
 		oredCriteria.add(criteria);
 	}
 
 	/**
-	 * 只读. 
-	 * @mbg.generated  2018-07-29 11:43:54
+	 * 鍙. 
+	 * @mbg.generated  2018-07-30 08:29:50
 	 */
 	public Criteria or() {
 		Criteria criteria = createCriteriaInternal();
@@ -94,8 +94,8 @@ public class MktActivityManualPOExample implements Serializable {
 	}
 
 	/**
-	 * 只读. 
-	 * @mbg.generated  2018-07-29 11:43:54
+	 * 鍙. 
+	 * @mbg.generated  2018-07-30 08:29:50
 	 */
 	public Criteria createCriteria() {
 		Criteria criteria = createCriteriaInternal();
@@ -106,8 +106,8 @@ public class MktActivityManualPOExample implements Serializable {
 	}
 
 	/**
-	 * 只读. 
-	 * @mbg.generated  2018-07-29 11:43:54
+	 * 鍙. 
+	 * @mbg.generated  2018-07-30 08:29:50
 	 */
 	protected Criteria createCriteriaInternal() {
 		Criteria criteria = new Criteria();
@@ -115,8 +115,8 @@ public class MktActivityManualPOExample implements Serializable {
 	}
 
 	/**
-	 * 只读. 
-	 * @mbg.generated  2018-07-29 11:43:54
+	 * 鍙. 
+	 * @mbg.generated  2018-07-30 08:29:50
 	 */
 	public void clear() {
 		oredCriteria.clear();
@@ -125,8 +125,8 @@ public class MktActivityManualPOExample implements Serializable {
 	}
 
 	/**
-	 * 只读. t_mkt_activity_manual
-	 * @mbg.generated  2018-07-29 11:43:54
+	 * 鍙. t_mkt_activity_manual
+	 * @mbg.generated  2018-07-30 08:29:50
 	 */
 	protected abstract static class GeneratedCriteria implements Serializable {
 		protected List<Criterion> criteria;
@@ -981,8 +981,8 @@ public class MktActivityManualPOExample implements Serializable {
 	}
 
 	/**
-	 * 只读. t_mkt_activity_manual
-	 * @mbg.generated  2018-07-29 11:43:54
+	 * 鍙. t_mkt_activity_manual
+	 * @mbg.generated  2018-07-30 08:29:50
 	 */
 	public static class Criterion implements Serializable {
 		private String condition;

@@ -4,7 +4,7 @@
   <resultMap id="BaseResultMap" type="com.bizvane.mktcenterservice.models.po.MktActivityManualPO">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-29 11:43:54.
+      This element was generated on 2018-07-30 08:29:50.
     -->
     <id column="mkt_activity_manual_id" jdbcType="BIGINT" property="mktActivityManualId" />
     <result column="mkt_activity_id" jdbcType="BIGINT" property="mktActivityId" />
@@ -23,14 +23,14 @@
   <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.bizvane.mktcenterservice.models.po.MktActivityManualPO">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-29 11:43:54.
+      This element was generated on 2018-07-30 08:29:50.
     -->
     <result column="qrcode" jdbcType="LONGVARCHAR" property="qrcode" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-29 11:43:54.
+      This element was generated on 2018-07-30 08:29:50.
     -->
     <where>
       <foreach collection="oredCriteria" item="criteria" separator="or">
@@ -63,7 +63,7 @@
   <sql id="Update_By_Example_Where_Clause">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-29 11:43:54.
+      This element was generated on 2018-07-30 08:29:50.
     -->
     <where>
       <foreach collection="example.oredCriteria" item="criteria" separator="or">
@@ -96,7 +96,7 @@
   <sql id="Base_Column_List">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-29 11:43:54.
+      This element was generated on 2018-07-30 08:29:50.
     -->
     mkt_activity_manual_id, mkt_activity_id, receive_type, per_person_per_day_max, per_person_max, 
     remark, create_user_id, create_user_name, create_date, modified_user_id, modified_user_name, 
@@ -105,14 +105,14 @@
   <sql id="Blob_Column_List">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-29 11:43:54.
+      This element was generated on 2018-07-30 08:29:50.
     -->
     qrcode
   </sql>
   <select id="selectByExampleWithBLOBs" parameterType="com.bizvane.mktcenterservice.models.po.MktActivityManualPOExample" resultMap="ResultMapWithBLOBs">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-29 11:43:54.
+      This element was generated on 2018-07-30 08:29:50.
     -->
     select
     <if test="distinct">
@@ -132,7 +132,7 @@
   <select id="selectByExample" parameterType="com.bizvane.mktcenterservice.models.po.MktActivityManualPOExample" resultMap="BaseResultMap">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-29 11:43:54.
+      This element was generated on 2018-07-30 08:29:50.
     -->
     select
     <if test="distinct">
@@ -150,7 +150,7 @@
   <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="ResultMapWithBLOBs">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-29 11:43:54.
+      This element was generated on 2018-07-30 08:29:50.
     -->
     select 
     <include refid="Base_Column_List" />
@@ -162,7 +162,7 @@
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-29 11:43:54.
+      This element was generated on 2018-07-30 08:29:50.
     -->
     delete from t_mkt_activity_manual
     where mkt_activity_manual_id = #{mktActivityManualId,jdbcType=BIGINT}
@@ -170,7 +170,7 @@
   <delete id="deleteByExample" parameterType="com.bizvane.mktcenterservice.models.po.MktActivityManualPOExample">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-29 11:43:54.
+      This element was generated on 2018-07-30 08:29:50.
     -->
     delete from t_mkt_activity_manual
     <if test="_parameter != null">
@@ -180,7 +180,7 @@
   <insert id="insert" parameterType="com.bizvane.mktcenterservice.models.po.MktActivityManualPO">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-29 11:43:54.
+      This element was generated on 2018-07-30 08:29:50.
     -->
     <selectKey keyProperty="mktActivityManualId" order="AFTER" resultType="java.lang.Long">
       SELECT LAST_INSERT_ID()
@@ -199,7 +199,7 @@
   <insert id="insertSelective" parameterType="com.bizvane.mktcenterservice.models.po.MktActivityManualPO">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-29 11:43:54.
+      This element was generated on 2018-07-30 08:29:50.
     -->
     <selectKey keyProperty="mktActivityManualId" order="AFTER" resultType="java.lang.Long">
       SELECT LAST_INSERT_ID()
@@ -291,7 +291,7 @@
   <select id="countByExample" parameterType="com.bizvane.mktcenterservice.models.po.MktActivityManualPOExample" resultType="java.lang.Long">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-29 11:43:54.
+      This element was generated on 2018-07-30 08:29:50.
     -->
     select count(*) from t_mkt_activity_manual
     <if test="_parameter != null">
@@ -301,7 +301,7 @@
   <update id="updateByExampleSelective" parameterType="map">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-29 11:43:54.
+      This element was generated on 2018-07-30 08:29:50.
     -->
     update t_mkt_activity_manual
     <set>
@@ -355,7 +355,7 @@
   <update id="updateByExampleWithBLOBs" parameterType="map">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-29 11:43:54.
+      This element was generated on 2018-07-30 08:29:50.
     -->
     update t_mkt_activity_manual
     set mkt_activity_manual_id = #{record.mktActivityManualId,jdbcType=BIGINT},
@@ -379,7 +379,7 @@
   <update id="updateByExample" parameterType="map">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-29 11:43:54.
+      This element was generated on 2018-07-30 08:29:50.
     -->
     update t_mkt_activity_manual
     set mkt_activity_manual_id = #{record.mktActivityManualId,jdbcType=BIGINT},
@@ -402,7 +402,7 @@
   <update id="updateByPrimaryKeySelective" parameterType="com.bizvane.mktcenterservice.models.po.MktActivityManualPO">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-29 11:43:54.
+      This element was generated on 2018-07-30 08:29:50.
     -->
     update t_mkt_activity_manual
     <set>
@@ -451,7 +451,7 @@
   <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.bizvane.mktcenterservice.models.po.MktActivityManualPO">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-29 11:43:54.
+      This element was generated on 2018-07-30 08:29:50.
     -->
     update t_mkt_activity_manual
     set mkt_activity_id = #{mktActivityId,jdbcType=BIGINT},
@@ -472,7 +472,7 @@
   <update id="updateByPrimaryKey" parameterType="com.bizvane.mktcenterservice.models.po.MktActivityManualPO">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-29 11:43:54.
+      This element was generated on 2018-07-30 08:29:50.
     -->
     update t_mkt_activity_manual
     set mkt_activity_id = #{mktActivityId,jdbcType=BIGINT},
@@ -541,12 +541,12 @@
      </if>
 
      <if test="startTime != null and startTime != '' ">
-     <!-- AND &lt;![CDATA[t.start_time &gt;= to_date(#{startTime},'yyyy-mm-dd')]]&gt;-->
+     <!-- AND &amp;lt;![CDATA[t.start_time &amp;gt;= to_date(#{startTime},'yyyy-mm-dd')]]&amp;gt;-->
       and <![CDATA[ tma.start_time >=#{startTime}]]>
      </if>
 
      <if test="endTime != null and endTime != '' ">
-       <!-- AND &lt;![CDATA[t.end_time &gt;= to_date(#{startTime},'yyyy-mm-dd')]]&gt;-->
+       <!-- AND &amp;lt;![CDATA[t.end_time &amp;gt;= to_date(#{startTime},'yyyy-mm-dd')]]&amp;gt;-->
        and <![CDATA[ tma.end_time >=#{endTime}]]>
      </if>
    </select>
