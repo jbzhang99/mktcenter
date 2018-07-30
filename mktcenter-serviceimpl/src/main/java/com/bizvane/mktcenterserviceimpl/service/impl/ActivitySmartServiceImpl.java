@@ -1,8 +1,12 @@
 package com.bizvane.mktcenterserviceimpl.service.impl;
 
 import com.bizvane.mktcenterservice.interfaces.ActivitySmartService;
+import com.bizvane.mktcenterservice.models.po.MktActivitySmartPO;
+import com.bizvane.mktcenterservice.models.po.MktActivitySmartPOExample;
 import com.bizvane.mktcenterservice.models.vo.ActivitySmartVO;
 import com.bizvane.mktcenterservice.models.vo.PageForm;
+import com.bizvane.mktcenterserviceimpl.common.constants.ResponseConstants;
+import com.bizvane.mktcenterserviceimpl.common.enums.MktTypeEnum;
 import com.bizvane.mktcenterserviceimpl.mappers.MktActivitySmartPOMapper;
 import com.bizvane.utils.responseinfo.ResponseData;
 import com.github.pagehelper.PageHelper;
@@ -27,7 +31,6 @@ public class ActivitySmartServiceImpl implements ActivitySmartService {
     /**
      * 查询智能营销活动列表
      * @param vo
-     * @param pageForm
      * @return
      */
     @Override
@@ -45,11 +48,29 @@ public class ActivitySmartServiceImpl implements ActivitySmartService {
      * @return
      */
     @Override
-    public ResponseData<PageInfo<ActivitySmartVO>> getActivityHistoryList(ActivitySmartVO vo, PageForm pageForm) {
+    public ResponseData<PageInfo<MktActivitySmartPO>> getActivityHistoryList(ActivitySmartVO vo, PageForm pageForm) {
         ResponseData responseData = new ResponseData();
+        //活动id不能为空
+        if(vo.getMktActivityId()==null){
+            responseData.setCode(ResponseConstants.ERROR);
+            responseData.setMessage(ResponseConstants.ERROR_MSG);
+            return responseData;
+        }
         PageHelper.startPage(pageForm.getPageNumber(),pageForm.getPageSize());
-        List<ActivitySmartVO> activityRegisterList = mktActivitySmartPOMapper.getActivityList(vo);
-        PageInfo<ActivitySmartVO> pageInfo = new PageInfo<>(activityRegisterList);
+        MktActivitySmartPOExample example = new MktActivitySmartPOExample();
+        MktActivitySmartPOExample.Criteria criteria = example.createCriteria();
+        criteria.andMktActivityIdEqualTo(vo.getMktActivityId()).andValidEqualTo(Boolean.TRUE);
+        if(vo.getCreateDateStart()!=null){
+            criteria.andCreateDateGreaterThanOrEqualTo(vo.getCreateDateStart());
+        }
+        if(vo.getCreateDateEnd()!= null){
+            criteria.andCreateDateLessThanOrEqualTo(vo.getCreateDateEnd());
+        }
+        if(vo.getMktType()!=null && vo.getMktType().intValue()!=MktTypeEnum.TASK_STATUS_ALL.getCode()){
+            criteria.andMktTypeEqualTo(vo.getMktType());
+        }
+        List<MktActivitySmartPO> mktActivitySmartPOS = mktActivitySmartPOMapper.selectByExampleWithBLOBs(example);
+        PageInfo<MktActivitySmartPO> pageInfo = new PageInfo<>(mktActivitySmartPOS);
         responseData.setData(pageInfo);
         return responseData;
     }
