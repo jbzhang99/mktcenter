@@ -61,6 +61,7 @@ public class TaskServiceImpl implements TaskService {
         mktTaskPOExample.setOrderByClause("create_date desc");
 
         List<MktTaskPOWithBLOBs> lists = mktTaskPOMapper.selectByExampleWithBLOBs(mktTaskPOExample);
+
         if (CollectionUtils.isNotEmpty(lists)){
             PageInfo<MktTaskPOWithBLOBs> pageInfo = new PageInfo<MktTaskPOWithBLOBs>();
             result.setData(pageInfo);
