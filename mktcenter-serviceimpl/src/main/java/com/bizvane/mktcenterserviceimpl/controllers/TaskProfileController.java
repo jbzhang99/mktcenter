@@ -1,5 +1,8 @@
 package com.bizvane.mktcenterserviceimpl.controllers;
 
+import com.bizvane.members.facade.models.ExtendPropertyModel;
+import com.bizvane.members.facade.service.api.ExtendPropertyApiService;
+import com.bizvane.members.facade.service.api.MemberInfoApiService;
 import com.bizvane.members.facade.service.api.MemberLevelApiService;
 import com.bizvane.mktcenterservice.interfaces.TaskProfileService;
 import com.bizvane.mktcenterservice.models.bo.TaskBO;
@@ -34,15 +37,13 @@ public class TaskProfileController {
     @Autowired
     private MemberLevelApiService memberLevelApiService;
 
-    /**
-     * 查询任务列表
-     * @return
-     */
-    @RequestMapping("getTaskList")
-    public ResponseData<TaskVO> getTaskList(TaskVO vo, PageForm pageForm){
-        ResponseData<TaskVO> taskVOResponseData = taskProfileService.getTaskList(vo, pageForm);
-        return taskVOResponseData;
-    }
+    @Autowired
+    private MemberInfoApiService memberInfoApiService;
+
+    @Autowired
+    private ExtendPropertyApiService extendPropertyApiService;
+
+
 
     /**
      * 创建任务
@@ -104,10 +105,29 @@ public class TaskProfileController {
 
     /**
      * 查询任务详情
-     * @param mktActivityId
+     * @param mktTaskId
      * @return
      */
-    public ResponseData<List<TaskVO>> selectTaskById(Long mktActivityId){
-        return taskProfileService.selectTaskById(mktActivityId);
+    public ResponseData<List<TaskVO>> selectTaskById(Long mktTaskId){
+        return taskProfileService.selectTaskById(mktTaskId);
     }
+
+
+    /**
+     * 查询商家自定义扩展信息
+     * @param
+     * @return
+     */
+    //前端传回的是品牌id还是ExtendPropertyModel？？？？
+    @RequestMapping("getExtendProperty")
+    public ResponseData getExtendProperty(Long brandid){
+
+        ExtendPropertyModel extendPropertyModel = new ExtendPropertyModel();
+        extendPropertyModel.setBrandId(brandid);
+        return extendPropertyApiService.getExtendProperty(extendPropertyModel);
+
+    }
+
+
 }
+

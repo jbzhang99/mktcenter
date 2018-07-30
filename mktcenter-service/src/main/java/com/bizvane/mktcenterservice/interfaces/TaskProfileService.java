@@ -16,28 +16,25 @@ import java.util.List;
  */
 public interface TaskProfileService {
     /**
-     * 查询任务列表
-     * @param vo
-     * @return
-     */
-    public ResponseData<TaskVO> getTaskList(TaskVO vo, PageForm pageForm);
-
-    /**
-     * 新增任务
+     * 添加完善资料任务
      * @param bo
+     * @param stageUser
      * @return
      */
+
     public ResponseData<Integer> addTask(TaskBO bo, SysAccountPO stageUser);
 
     /**
-     * 执行任务
-     * @param
+     *执行任务
+     * @param vo
      * @return
      */
     public ResponseData<Integer> executeTask(TaskVO vo);
 
     /**
      * 修改任务
+     * @param bo
+     * @param stageUser
      * @return
      */
     public ResponseData<Integer> updateTask(TaskBO bo,SysAccountPO stageUser);
