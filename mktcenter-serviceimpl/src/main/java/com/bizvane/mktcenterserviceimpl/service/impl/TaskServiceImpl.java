@@ -6,6 +6,7 @@ import com.bizvane.mktcenterservice.models.po.MktTaskPOWithBLOBs;
 import com.bizvane.mktcenterserviceimpl.common.constants.ResponseConstants;
 import com.bizvane.mktcenterserviceimpl.common.enums.CheckStatusEnum;
 import com.bizvane.mktcenterserviceimpl.common.enums.TaskStatusEnum;
+import com.bizvane.mktcenterserviceimpl.common.utils.TimeUtils;
 import com.bizvane.mktcenterserviceimpl.mappers.MktTaskPOMapper;
 import com.bizvane.utils.responseinfo.ResponseData;
 import com.bizvane.utils.tokens.SysAccountPO;
@@ -25,6 +26,16 @@ public class TaskServiceImpl implements TaskService {
 
     @Autowired
     private MktTaskPOMapper mktTaskPOMapper;
+
+    @Override
+    public Long addTask(MktTaskPOWithBLOBs task, SysAccountPO stageUser) {
+        task.setCreateDate(TimeUtils.getNowTime());
+        task.setCreateUserId(stageUser.getSysAccountId());
+        task.setCreateUserName(stageUser.getName());
+
+        mktTaskPOMapper.insertSelective(task);
+        return task.getMktTaskId();
+    }
 
     /**
      * 禁用/停用任务

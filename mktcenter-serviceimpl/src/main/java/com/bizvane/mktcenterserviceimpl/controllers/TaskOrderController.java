@@ -51,17 +51,24 @@ public class TaskOrderController {
      * @return
      */
     @RequestMapping("addTask")
-    public ResponseData<Integer> addTask(TaskVO vo, List<MktCouponPO> couponCodeList, List<MessageVO> messageVOList, HttpServletRequest request){
-        TaskBO bo = new TaskBO();
-        bo.setTaskVO(vo);
-        bo.setMktCouponPOList(couponCodeList);
-        bo.setMessageVOList(messageVOList);
+    public ResponseData<Integer> addTask(TaskBO bo, HttpServletRequest request){
+
+        //任务主表新增
+
+        //任务消费表新增
+
+        //新增奖励新增
+
+        //新增消息新增
+
+
+
         //参数校验
-        ResponseData responseData = TaskParamCheckUtil.checkParam(bo);
+      //  ResponseData responseData = TaskParamCheckUtil.checkParam(bo);
         //参数校验不通过
-        if(SystemConstants.ERROR_CODE==responseData.getCode()){
+     /*   if(SystemConstants.ERROR_CODE==responseData.getCode()){
             return responseData;
-        }
+        }*/
         //参数校验通过，获取操作人信息
 //        SysAccountPO stageUser = TokenUtils.getStageUser(request);
         SysAccountPO stageUser = new SysAccountPO();
