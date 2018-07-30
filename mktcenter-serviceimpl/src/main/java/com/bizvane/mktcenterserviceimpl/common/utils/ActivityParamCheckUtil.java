@@ -2,12 +2,12 @@ package com.bizvane.mktcenterserviceimpl.common.utils;
 
 import com.bizvane.mktcenterservice.models.bo.ActivityBO;
 import com.bizvane.mktcenterservice.models.vo.ActivityManualVO;
+import com.bizvane.mktcenterservice.models.vo.ActivitySmartVO;
 import com.bizvane.mktcenterservice.models.vo.ActivityVO;
 import com.bizvane.mktcenterserviceimpl.common.constants.ActivityConstants;
 import com.bizvane.mktcenterserviceimpl.common.constants.SystemConstants;
 import com.bizvane.mktcenterserviceimpl.common.enums.ActivityTypeEnum;
 import com.bizvane.utils.responseinfo.ResponseData;
-import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
 /**
@@ -205,5 +205,11 @@ public class ActivityParamCheckUtil {
             return responseData;
         }
       return responseData;
+    }
+
+    //智能营销活动参数校验
+    public static ResponseData checkSmartActivityParam(ActivitySmartVO vo){
+        ResponseData responseData = new ResponseData();
+        return responseData;
     }
 }

@@ -3,11 +3,15 @@ package com.bizvane.mktcenterserviceimpl.controllers;
 import com.bizvane.mktcenterservice.interfaces.ActivitySmartService;
 import com.bizvane.mktcenterservice.models.vo.ActivitySmartVO;
 import com.bizvane.mktcenterservice.models.vo.PageForm;
+import com.bizvane.mktcenterserviceimpl.common.utils.ActivityParamCheckUtil;
 import com.bizvane.utils.responseinfo.ResponseData;
+import com.bizvane.utils.tokens.SysAccountPO;
 import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import javax.servlet.http.HttpServletRequest;
 
 /**
  * @author chen.li
@@ -30,5 +34,65 @@ public class ActivitySmartController {
     public ResponseData<PageInfo<ActivitySmartVO>> getActivityList(ActivitySmartVO vo, PageForm pageForm){
         ResponseData<PageInfo<ActivitySmartVO>> activityRegisterList = activitySmartService.getActivityList(vo, pageForm);
         return activityRegisterList;
+    }
+
+    /**
+     * 对某个智能营销组创建任务
+     * 任务类型：1优惠券营销
+     * @return
+     */
+    @RequestMapping("addCouponActivity")
+    public ResponseData<Integer> addCouponActivity(ActivitySmartVO vo, HttpServletRequest request){
+        //参数校验
+        ResponseData responseData = ActivityParamCheckUtil.checkSmartActivityParam(vo);
+        //参数校验通过，获取操作人信息
+//        SysAccountPO stageUser = TokenUtils.getStageUser(request);
+        SysAccountPO stageUser = new SysAccountPO();
+        return new ResponseData<>();
+    }
+
+    /**
+     * 对某个智能营销组创建任务
+     * 任务类型：2积分营销
+     * @return
+     */
+    @RequestMapping("addIntegralActivity")
+    public ResponseData<Integer> addIntegralActivity(ActivitySmartVO vo, HttpServletRequest request){
+        //参数校验
+        ResponseData responseData = ActivityParamCheckUtil.checkSmartActivityParam(vo);
+        //参数校验通过，获取操作人信息
+//        SysAccountPO stageUser = TokenUtils.getStageUser(request);
+        SysAccountPO stageUser = new SysAccountPO();
+        return new ResponseData<>();
+    }
+
+    /**
+     * 对某个智能营销组创建任务
+     * 任务类型：3短信营销
+     * @return
+     */
+    @RequestMapping("addSmsActivity")
+    public ResponseData<Integer> addSmsActivity(ActivitySmartVO vo, HttpServletRequest request){
+        //参数校验
+        ResponseData responseData = ActivityParamCheckUtil.checkSmartActivityParam(vo);
+        //参数校验通过，获取操作人信息
+//        SysAccountPO stageUser = TokenUtils.getStageUser(request);
+        SysAccountPO stageUser = new SysAccountPO();
+        return new ResponseData<>();
+    }
+
+    /**
+     * 对某个智能营销组创建任务
+     * 任务类型：4微信模板消息营销
+     * @return
+     */
+    @RequestMapping("addTemplateMsgActivity")
+    public ResponseData<Integer> addTemplateMsgActivity(ActivitySmartVO vo, HttpServletRequest request){
+        //参数校验
+        ResponseData responseData = ActivityParamCheckUtil.checkSmartActivityParam(vo);
+        //参数校验通过，获取操作人信息
+//        SysAccountPO stageUser = TokenUtils.getStageUser(request);
+        SysAccountPO stageUser = new SysAccountPO();
+        return new ResponseData<>();
     }
 }

@@ -19,4 +19,5 @@ public interface ActivitySmartService {
      * @return
      */
     public ResponseData<PageInfo<ActivitySmartVO>> getActivityList(ActivitySmartVO vo, PageForm pageForm);
+
 }
