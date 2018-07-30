@@ -8,11 +8,11 @@ import java.util.Date;
  * @Time: 2018/7/28 15:52
  */
 public class CodeUtil {
-    private  final  static String  TASK_PREFIX="T";
-    private  final  static String  ACTIVITY_PREFIX="A";
+    private  final  static String  TASK_PREFIX="TC";
+    private  final  static String  ACTIVITY_PREFIX="AC";
     private  final  static SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmssSSS");
 
-    public static String  getTaskCode(){
+    public static synchronized  String  getTaskCode(){
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append(TASK_PREFIX);
         getRaCodedom(stringBuilder);
@@ -26,7 +26,7 @@ public class CodeUtil {
         return stringBuilder.toString();
     }
 
-    private static StringBuilder getRaCodedom(StringBuilder stringBuilder) {
+    private static synchronized  StringBuilder getRaCodedom(StringBuilder stringBuilder) {
         stringBuilder.append(sdf.format(new Date()));
         stringBuilder.append(Math.round(Math.random() * 9));
         return stringBuilder;

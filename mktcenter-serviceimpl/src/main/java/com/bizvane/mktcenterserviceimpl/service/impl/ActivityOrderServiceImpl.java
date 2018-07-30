@@ -3,8 +3,14 @@ package com.bizvane.mktcenterserviceimpl.service.impl;
 import com.bizvane.centerstageservice.models.po.SysCheckConfigPo;
 import com.bizvane.centerstageservice.models.vo.SysCheckConfigVo;
 import com.bizvane.centerstageservice.rpc.SysCheckConfigServiceRpc;
+import com.bizvane.couponfacade.interfaces.SendCouponServiceFeign;
+import com.bizvane.couponfacade.models.vo.SendCouponSimpleRequestVO;
+import com.bizvane.members.facade.enums.IntegralRecordTypeEnum;
+import com.bizvane.members.facade.models.IntegralRecordModel;
+import com.bizvane.members.facade.service.api.IntegralRecordApiService;
 import com.bizvane.mktcenterservice.interfaces.ActivityOrderService;
 import com.bizvane.mktcenterservice.models.bo.ActivityBO;
+import com.bizvane.mktcenterservice.models.bo.OrderModelBo;
 import com.bizvane.mktcenterservice.models.po.*;
 import com.bizvane.mktcenterservice.models.vo.ActivityVO;
 import com.bizvane.mktcenterservice.models.vo.MessageVO;
@@ -59,6 +65,10 @@ public class ActivityOrderServiceImpl implements ActivityOrderService {
     private SysCheckConfigServiceRpc sysCheckConfigServiceRpc;
     @Autowired
     private JobUtil jobUtil;
+    @Autowired
+    private IntegralRecordApiService integralRecordApiService;
+    @Autowired
+    private SendCouponServiceFeign sendCouponServiceFeign;
     /**
      * 查询消费活动列表
      * @param vo
@@ -394,6 +404,47 @@ public class ActivityOrderServiceImpl implements ActivityOrderService {
             int i = mktActivityPOMapper.updateByPrimaryKeySelective(bs);
         }
 
+        return responseData;
+    }
+
+    /**
+     * 执行活动
+     * @param vo
+     * @return
+     */
+    @Override
+    public ResponseData<Integer> executeOrder(OrderModelBo vo) {
+        //返回对象
+        ResponseData responseData = new ResponseData();
+        //查询品牌下所有执行中的活动
+        ActivityVO activity = new ActivityVO();
+        activity.setActivityStatus(ActivityStatusEnum.ACTIVITY_STATUS_EXECUTING.getCode());
+        activity.setSysBrandId(vo.getBrandId().longValue());
+        activity.setActivityType(ActivityTypeEnum.ACTIVITY_TYPE_REGISGER.getCode());
+        List<ActivityVO> OrderList = mktActivityOrderPOMapper.getActivityOrderList(activity);
+        for (ActivityVO activityVO:OrderList) {
+            //增加积分奖励新增接口
+            IntegralRecordModel var1 = new IntegralRecordModel();
+            var1.setMemberCode(vo.getMemberCode().toString());
+            var1.setChangeBills(activityVO.getActivityCode());
+            var1.setChangeIntegral(activityVO.getPoints());
+            var1.setChangeWay(IntegralRecordTypeEnum.INCOME.getCode());
+            integralRecordApiService.updateMemberIntegral(var1);
+
+            // 增加卷奖励接口
+            MktCouponPOExample example = new  MktCouponPOExample();
+            example.createCriteria().andBizIdEqualTo(activityVO.getMktActivityId());
+            example.createCriteria().andValidEqualTo(true);
+            List<MktCouponPO> mktCouponPOs= mktCouponPOMapper.selectByExample(example);
+            for (MktCouponPO mktCouponPO:mktCouponPOs) {
+                SendCouponSimpleRequestVO va = new SendCouponSimpleRequestVO();
+                va.setMemberCode(vo.getMemberCode().toString());
+                va.setCouponDefinitionId(mktCouponPO.getCouponId());
+                va.setSendBussienId(mktCouponPO.getBizId());
+                va.setSendType("10");
+                sendCouponServiceFeign.simple(va);
+            }
+        }
         return responseData;
     }
 }

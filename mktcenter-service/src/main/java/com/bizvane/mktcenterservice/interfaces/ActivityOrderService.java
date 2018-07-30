@@ -1,6 +1,8 @@
 package com.bizvane.mktcenterservice.interfaces;
 
+import com.bizvane.members.facade.models.MemberInfoModel;
 import com.bizvane.mktcenterservice.models.bo.ActivityBO;
+import com.bizvane.mktcenterservice.models.bo.OrderModelBo;
 import com.bizvane.mktcenterservice.models.po.MktActivityPOWithBLOBs;
 import com.bizvane.mktcenterservice.models.vo.ActivityVO;
 import com.bizvane.mktcenterservice.models.vo.PageForm;
@@ -45,4 +47,10 @@ public interface ActivityOrderService {
      * @return
      */
     public ResponseData<Integer> checkActivityOrder(MktActivityPOWithBLOBs bs, SysAccountPO sysAccountPO);
+    /**
+     * 执行活动
+     * @param
+     * @return
+     */
+    public ResponseData<Integer> executeOrder(OrderModelBo vo);
 }

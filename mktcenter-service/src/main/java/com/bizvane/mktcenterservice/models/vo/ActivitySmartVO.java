@@ -1,6 +1,7 @@
 package com.bizvane.mktcenterservice.models.vo;
 
 import com.bizvane.mktcenterservice.models.po.MktActivityPO;
+import com.fasterxml.jackson.annotation.JsonFormat;
 
 import java.util.Date;
 
@@ -39,6 +40,7 @@ public class ActivitySmartVO extends MktActivityPO {
      * 只读. 预计目标会员数量的统计时间. target_mbr_count_time
      * @mbg.generated  2018-07-27 20:48:29
      */
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", locale = "zh", timezone = "GMT+8")
     @io.swagger.annotations.ApiModelProperty(value = "预计目标会员数量的统计时间", name = "targetMbrCountTime", required = false, example = "")
     private Date targetMbrCountTime;
     /**

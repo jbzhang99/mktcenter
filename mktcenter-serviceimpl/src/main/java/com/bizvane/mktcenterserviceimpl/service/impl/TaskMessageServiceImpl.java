@@ -1,0 +1,38 @@
+package com.bizvane.mktcenterserviceimpl.service.impl;
+
+import com.bizvane.mktcenterservice.interfaces.TaskMessageService;
+import com.bizvane.mktcenterservice.models.po.MktMessagePO;
+import com.bizvane.mktcenterserviceimpl.common.utils.TimeUtils;
+import com.bizvane.mktcenterserviceimpl.mappers.MktMessagePOMapper;
+import com.bizvane.utils.tokens.SysAccountPO;
+import org.springframework.beans.factory.annotation.Autowired;
+
+/**
+ * @Author: lijunwei
+ * @Time: 2018/7/30 11:25
+ */
+public class TaskMessageServiceImpl implements TaskMessageService {
+    @Autowired
+    private MktMessagePOMapper mktMessagePOMapper;
+
+
+    @Override
+    public int addTaskMessage(MktMessagePO po, SysAccountPO stageUser) {
+        po.setCreateDate(TimeUtils.getNowTime());
+        po.setCreateUserId(stageUser.getSysAccountId());
+        po.setCreateUserName(stageUser.getName());
+
+        return  mktMessagePOMapper.insertSelective(po);
+
+    }
+
+    @Override
+    public int updateTaskMessage(MktMessagePO po, SysAccountPO stageUser) {
+        po.setModifiedDate(TimeUtils.getNowTime());
+        po.setModifiedUserId(stageUser.getSysAccountId());
+        po.setCreateUserName(stageUser.getName());
+
+       return mktMessagePOMapper.updateByPrimaryKeySelective(po);
+
+    }
+}

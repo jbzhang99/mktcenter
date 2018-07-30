@@ -2,100 +2,100 @@ package com.bizvane.mktcenterserviceimpl.mappers;
 
 import com.bizvane.mktcenterservice.models.po.MktActivitySmartPO;
 import com.bizvane.mktcenterservice.models.po.MktActivitySmartPOExample;
-import java.util.List;
-
-import com.bizvane.mktcenterservice.models.vo.ActivityVO;
+import com.bizvane.mktcenterservice.models.vo.ActivitySmartVO;
 import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 public interface MktActivitySmartPOMapper {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-07-27 20:48:29
+	 * @mbg.generated  2018-07-28 17:44:16
 	 */
 	long countByExample(MktActivitySmartPOExample example);
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-07-27 20:48:29
+	 * @mbg.generated  2018-07-28 17:44:16
 	 */
 	int deleteByExample(MktActivitySmartPOExample example);
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-07-27 20:48:29
+	 * @mbg.generated  2018-07-28 17:44:16
 	 */
-	int deleteByPrimaryKey(Long mktActivityBirthdayId);
+	int deleteByPrimaryKey(Long mktActivitySmartId);
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-07-27 20:48:29
+	 * @mbg.generated  2018-07-28 17:44:16
 	 */
 	int insert(MktActivitySmartPO record);
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-07-27 20:48:29
+	 * @mbg.generated  2018-07-28 17:44:16
 	 */
 	int insertSelective(MktActivitySmartPO record);
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-07-27 20:48:29
+	 * @mbg.generated  2018-07-28 17:44:16
 	 */
 	List<MktActivitySmartPO> selectByExampleWithBLOBs(MktActivitySmartPOExample example);
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-07-27 20:48:29
+	 * @mbg.generated  2018-07-28 17:44:16
 	 */
 	List<MktActivitySmartPO> selectByExample(MktActivitySmartPOExample example);
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-07-27 20:48:29
+	 * @mbg.generated  2018-07-28 17:44:16
 	 */
-	MktActivitySmartPO selectByPrimaryKey(Long mktActivityBirthdayId);
+	MktActivitySmartPO selectByPrimaryKey(Long mktActivitySmartId);
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-07-27 20:48:29
+	 * @mbg.generated  2018-07-28 17:44:16
 	 */
 	int updateByExampleSelective(@Param("record") MktActivitySmartPO record,
 			@Param("example") MktActivitySmartPOExample example);
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-07-27 20:48:29
+	 * @mbg.generated  2018-07-28 17:44:16
 	 */
 	int updateByExampleWithBLOBs(@Param("record") MktActivitySmartPO record,
 			@Param("example") MktActivitySmartPOExample example);
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-07-27 20:48:29
+	 * @mbg.generated  2018-07-28 17:44:16
 	 */
 	int updateByExample(@Param("record") MktActivitySmartPO record,
 			@Param("example") MktActivitySmartPOExample example);
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-07-27 20:48:29
+	 * @mbg.generated  2018-07-28 17:44:16
 	 */
 	int updateByPrimaryKeySelective(MktActivitySmartPO record);
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-07-27 20:48:29
+	 * @mbg.generated  2018-07-28 17:44:16
 	 */
 	int updateByPrimaryKeyWithBLOBs(MktActivitySmartPO record);
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-07-27 20:48:29
+	 * @mbg.generated  2018-07-28 17:44:16
 	 */
 	int updateByPrimaryKey(MktActivitySmartPO record);
 
-	List<ActivityVO> getActivityList(ActivityVO vo);
+	List<ActivitySmartVO> getActivityList(ActivitySmartVO vo);
 
 }

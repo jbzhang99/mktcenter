@@ -39,8 +39,8 @@ public class ActivityRpcController {
      * @param vo
      * @return
      */
-    @RequestMapping("updateActivityStatusById")
-    public ResponseData<Integer> updateActivityStatusById(@RequestBody ActivityVO vo, HttpServletRequest request){
+    @RequestMapping("updateActivityById")
+    public ResponseData<Integer> updateActivityById(@RequestBody ActivityVO vo, HttpServletRequest request){
         //获取操作人信息
         SysAccountPO stageUser =new SysAccountPO();
 //        SysAccountPO stageUser = TokenUtils.getStageUser(request);

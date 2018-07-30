@@ -1,5 +1,6 @@
 package com.bizvane.mktcenterservice.interfaces;
 
+import com.bizvane.mktcenterservice.models.po.MktTaskPOWithBLOBs;
 import com.bizvane.utils.responseinfo.ResponseData;
 import com.bizvane.utils.tokens.SysAccountPO;
 
@@ -10,6 +11,11 @@ import com.bizvane.utils.tokens.SysAccountPO;
  * @Copyright (c) 2018 上海商帆信息科技有限公司-版权所有
  */
 public interface TaskService {
+    /**
+     * 新增
+     */
+    public  Long  addTask(MktTaskPOWithBLOBs task,SysAccountPO sysAccountPO);
+
     /**
      * 禁用/停止任务
      * @param mktTaskId

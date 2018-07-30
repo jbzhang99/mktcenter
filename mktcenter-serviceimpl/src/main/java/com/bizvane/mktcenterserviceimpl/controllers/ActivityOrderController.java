@@ -2,6 +2,7 @@ package com.bizvane.mktcenterserviceimpl.controllers;
 
 import com.bizvane.mktcenterservice.interfaces.ActivityOrderService;
 import com.bizvane.mktcenterservice.models.bo.ActivityBO;
+import com.bizvane.mktcenterservice.models.bo.OrderModelBo;
 import com.bizvane.mktcenterservice.models.po.MktCouponPO;
 import com.bizvane.mktcenterservice.models.vo.ActivityVO;
 import com.bizvane.mktcenterservice.models.vo.MessageVO;
@@ -96,5 +97,14 @@ public class ActivityOrderController {
         //更新活动
         ResponseData<Integer> order = activityOrderService.updateActivityOrder(bo,stageUser);
         return order;
+    }
+    /**
+     * 执行活动
+     * @param
+     * @return
+     */
+    @RequestMapping("executeOrder")
+    public ResponseData<Integer> executeOrder(OrderModelBo vo){
+        return activityOrderService.executeOrder(vo);
     }
 }

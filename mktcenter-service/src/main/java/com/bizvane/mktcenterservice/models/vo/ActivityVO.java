@@ -2,6 +2,9 @@ package com.bizvane.mktcenterservice.models.vo;
 
 import com.bizvane.mktcenterservice.models.po.MktActivityPO;
 import com.bizvane.mktcenterservice.models.po.MktActivityRegisterPO;
+import com.fasterxml.jackson.annotation.JsonFormat;
+
+import java.util.Date;
 
 /**
  * @author chen.li
@@ -126,7 +129,40 @@ public class ActivityVO extends MktActivityPO {
      */
     @io.swagger.annotations.ApiModelProperty(value = "增加后的最高积分上限", name = "integralMax", required = false, example = "")
     private Long integralMax;
+    /**
+     * 创建时间开始
+     */
+   	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", locale = "zh", timezone = "GMT+8")
+    @io.swagger.annotations.ApiModelProperty(value = "创建日期", name = "createDateStart", required = false, example = "")
+    private Date createDateStart;
+    /**
+     * 创建时间结束
+     */
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", locale = "zh", timezone = "GMT+8")
+    @io.swagger.annotations.ApiModelProperty(value = "创建日期", name = "createDateEnd", required = false, example = "")
+    private Date createDateEnd;
 
+    /**
+     * 只读.
+     领取方式：1扫码领券，2手动领券. receive_type
+     *
+     * @mbg.generated 2018-07-19 16:07:25
+     */
+    @io.swagger.annotations.ApiModelProperty(value = "领取方式：1扫码领券，2手动领券",name = "receiveType", required = false,example = "")
+    private Integer receiveType;
+
+    @io.swagger.annotations.ApiModelProperty(value = "��ά���ַ", name = "qrcode", required = false, example = "")
+    private String qrcode;
+
+    @io.swagger.annotations.ApiModelProperty(value = "ÿ��ÿ�������ȡ������", name = "perPersonPerDayMax", required = false, example = "")
+    private Integer perPersonPerDayMax;
+
+    @io.swagger.annotations.ApiModelProperty(value = "ÿ�������ȡ", name = "perPersonMax", required = false, example = "")
+    private Integer perPersonMax;
+
+    private String couponCode;
+
+    private String couponName;
     public String getActivityInfo() {
         return activityInfo;
     }
@@ -269,5 +305,69 @@ public class ActivityVO extends MktActivityPO {
 
     public void setIntegralMax(Long integralMax) {
         this.integralMax = integralMax;
+    }
+
+    public Date getCreateDateStart() {
+        return createDateStart;
+    }
+
+    public Date getCreateDateEnd() {
+        return createDateEnd;
+    }
+
+    public Integer getReceiveType() {
+        return receiveType;
+    }
+
+    public void setCreateDateStart(Date createDateStart) {
+        this.createDateStart = createDateStart;
+    }
+
+    public void setCreateDateEnd(Date createDateEnd) {
+        this.createDateEnd = createDateEnd;
+    }
+
+    public void setReceiveType(Integer receiveType) {
+        this.receiveType = receiveType;
+    }
+
+    public String getQrcode() {
+        return qrcode;
+    }
+
+    public void setQrcode(String qrcode) {
+        this.qrcode = qrcode;
+    }
+
+    public Integer getPerPersonPerDayMax() {
+        return perPersonPerDayMax;
+    }
+
+    public void setPerPersonPerDayMax(Integer perPersonPerDayMax) {
+        this.perPersonPerDayMax = perPersonPerDayMax;
+    }
+
+    public Integer getPerPersonMax() {
+        return perPersonMax;
+    }
+
+    public void setPerPersonMax(Integer perPersonMax) {
+        this.perPersonMax = perPersonMax;
+    }
+
+    public String getCouponCode() {
+        return couponCode;
+    }
+
+    public void setCouponCode(String couponCode) {
+        this.couponCode = couponCode;
+    }
+
+    public String getCouponName() {
+        return couponName;
+    }
+
+    public void setCouponName(String couponName) {
+        this.couponName = couponName;
     }
 }

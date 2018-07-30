@@ -2,6 +2,7 @@ package com.bizvane.mktcenterserviceimpl.controllers.rpc;
 
 import com.bizvane.mktcenterservice.interfaces.ActivityService;
 import com.bizvane.mktcenterservice.models.vo.ActivitySmartVO;
+import com.bizvane.utils.responseinfo.PageInfo;
 import com.bizvane.utils.responseinfo.ResponseData;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,23 +22,27 @@ public class ActivitySmartRpcController {
     private ActivityService activityService;
 
     @RequestMapping("getActivityById")
-    public ResponseData<Integer> getActivityById(ActivitySmartVO vo){
-        return null;
+    @io.swagger.annotations.ApiModelProperty(value = "ActivitySmartVO",name = "通过id获取活动", required = false,example = "")
+    public ResponseData<ActivitySmartVO> getActivityById(Long mktActivityId){
+        return new ResponseData<>();
     }
 
     @RequestMapping("getActivityList")
-    public ResponseData<Integer> getActivityList(ActivitySmartVO vo){
-        return null;
+    @io.swagger.annotations.ApiModelProperty(value = "ActivitySmartVO",name = "查询智能营销活动列表", required = false,example = "")
+    public ResponseData<PageInfo<ActivitySmartVO>> getActivityList(ActivitySmartVO vo){
+        return new ResponseData<>();
     }
 
     @RequestMapping("addActivity")
+    @io.swagger.annotations.ApiModelProperty(value = "ActivitySmartVO",name = "添加智能营销活动", required = false,example = "")
     public ResponseData<Integer> addActivity(ActivitySmartVO vo){
-        return null;
+        return new ResponseData<>();
     }
 
     @RequestMapping("updateActivity")
+    @io.swagger.annotations.ApiModelProperty(value = "ActivitySmartVO",name = "更新智能营销活动", required = false,example = "")
     public ResponseData<Integer> updateActivity(ActivitySmartVO vo){
-        return null;
+        return new ResponseData<>();
     }
 
 }

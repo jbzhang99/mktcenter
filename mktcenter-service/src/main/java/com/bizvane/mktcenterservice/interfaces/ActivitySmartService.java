@@ -1,8 +1,9 @@
 package com.bizvane.mktcenterservice.interfaces;
 
-import com.bizvane.mktcenterservice.models.vo.ActivityVO;
+import com.bizvane.mktcenterservice.models.vo.ActivitySmartVO;
 import com.bizvane.mktcenterservice.models.vo.PageForm;
 import com.bizvane.utils.responseinfo.ResponseData;
+import com.github.pagehelper.PageInfo;
 
 /**
  * @author chen.li
@@ -17,5 +18,14 @@ public interface ActivitySmartService {
      * @param vo
      * @return
      */
-    public ResponseData<ActivityVO> getActivityList(ActivityVO vo, PageForm pageForm);
+    public ResponseData<ActivitySmartVO> getActivityList(ActivitySmartVO vo);
+
+    /**
+     * 查询历史营销活动列表
+     * @param vo
+     * @param pageForm
+     * @return
+     */
+    public ResponseData<PageInfo<ActivitySmartVO>> getActivityHistoryList(ActivitySmartVO vo, PageForm pageForm);
+
 }

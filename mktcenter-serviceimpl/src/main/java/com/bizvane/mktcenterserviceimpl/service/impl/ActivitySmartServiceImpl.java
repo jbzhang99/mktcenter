@@ -1,7 +1,7 @@
 package com.bizvane.mktcenterserviceimpl.service.impl;
 
 import com.bizvane.mktcenterservice.interfaces.ActivitySmartService;
-import com.bizvane.mktcenterservice.models.vo.ActivityVO;
+import com.bizvane.mktcenterservice.models.vo.ActivitySmartVO;
 import com.bizvane.mktcenterservice.models.vo.PageForm;
 import com.bizvane.mktcenterserviceimpl.mappers.MktActivitySmartPOMapper;
 import com.bizvane.utils.responseinfo.ResponseData;
@@ -31,11 +31,25 @@ public class ActivitySmartServiceImpl implements ActivitySmartService {
      * @return
      */
     @Override
-    public ResponseData<ActivityVO> getActivityList(ActivityVO vo, PageForm pageForm) {
+    public ResponseData<ActivitySmartVO> getActivityList(ActivitySmartVO vo) {
+        ResponseData responseData = new ResponseData();
+        List<ActivitySmartVO> activityRegisterList = mktActivitySmartPOMapper.getActivityList(vo);
+        responseData.setData(activityRegisterList);
+        return responseData;
+    }
+
+    /**
+     * 查询历史营销活动列表
+     * @param vo
+     * @param pageForm
+     * @return
+     */
+    @Override
+    public ResponseData<PageInfo<ActivitySmartVO>> getActivityHistoryList(ActivitySmartVO vo, PageForm pageForm) {
         ResponseData responseData = new ResponseData();
         PageHelper.startPage(pageForm.getPageNumber(),pageForm.getPageSize());
-        List<ActivityVO> activityRegisterList = mktActivitySmartPOMapper.getActivityList(vo);
-        PageInfo<ActivityVO> pageInfo = new PageInfo<>(activityRegisterList);
+        List<ActivitySmartVO> activityRegisterList = mktActivitySmartPOMapper.getActivityList(vo);
+        PageInfo<ActivitySmartVO> pageInfo = new PageInfo<>(activityRegisterList);
         responseData.setData(pageInfo);
         return responseData;
     }
