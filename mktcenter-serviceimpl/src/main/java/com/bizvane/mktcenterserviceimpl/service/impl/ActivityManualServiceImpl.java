@@ -8,12 +8,10 @@ import com.bizvane.mktcenterservice.models.bo.ActivityBO;
 import com.bizvane.mktcenterservice.models.po.MktActivityManualPO;
 import com.bizvane.mktcenterservice.models.po.MktActivityPOWithBLOBs;
 import com.bizvane.mktcenterservice.models.po.MktCouponPO;
-import com.bizvane.mktcenterservice.models.vo.ActivityManualVO;
 import com.bizvane.mktcenterservice.models.vo.ActivityVO;
 import com.bizvane.mktcenterservice.models.vo.PageForm;
 import com.bizvane.mktcenterserviceimpl.common.constants.SystemConstants;
 import com.bizvane.mktcenterserviceimpl.common.enums.ActivityStatusEnum;
-import com.bizvane.mktcenterserviceimpl.common.enums.ActivityTypeEnum;
 import com.bizvane.mktcenterserviceimpl.common.enums.CheckStatusEnum;
 import com.bizvane.mktcenterserviceimpl.common.utils.JobUtil;
 import com.bizvane.mktcenterserviceimpl.mappers.MktActivityManualPOMapper;
@@ -36,7 +34,7 @@ import java.util.UUID;
 @Service
 public class ActivityManualServiceImpl implements ActivityManualService {
 
-   // @Resource
+
     @Autowired
     private MktActivityManualPOMapper mktActivityManualPOMapper;
     @Autowired
@@ -60,27 +58,27 @@ public class ActivityManualServiceImpl implements ActivityManualService {
         return responseData;
     }
 
+    /**
+     * 创建活动
+     * @param couponId
+     * @param activityVO
+     * @param stageUser
+     * @return
+     */
     @Override
     @Transactional
-    public ResponseData<Integer> addActivityManual(Long couponId, ActivityVO activityVO, ActivityManualVO activityManualVO,SysAccountPO stageUser) {
+    public ResponseData<Integer> addActivityManual(Long couponId, ActivityVO activityVO,SysAccountPO stageUser) {
         ResponseData responseData = new ResponseData();
         //对象转换
 
-        activityManualVO.setCreateUserName(stageUser.getName());
-        activityManualVO.setCreateUserId(stageUser.getSysAccountId());
-        activityManualVO.setCreateDate(new Date());
+        activityVO.setCreateUserName(stageUser.getName());
+        activityVO.setCreateUserId(stageUser.getSysAccountId());
+        activityVO.setCreateDate(new Date());
 
         //活动编号
         String activityCode = "AC"+ UUID.randomUUID().toString().replaceAll("-", "");
         activityVO.setActivityCode(activityCode);
         //活动类型
-       if(1==activityManualVO.getReceiveType()){
-           activityVO.setActivityType(ActivityTypeEnum.ACTIVITY_TYPE_QRCODE.getCode());
-       }
-        if(2==activityManualVO.getReceiveType()){
-            activityVO.setActivityType(ActivityTypeEnum.ACTIVITY_TYPE_MANUAL.getCode());
-        }
-
         MktActivityPOWithBLOBs mktActivityPOWithBLOBs = new MktActivityPOWithBLOBs();
         BeanUtils.copyProperties(activityVO,mktActivityPOWithBLOBs);
 
@@ -136,24 +134,20 @@ public class ActivityManualServiceImpl implements ActivityManualService {
             }else{
                 //活动状态设置为执行中
                 mktActivityPOWithBLOBs.setActivityStatus(ActivityStatusEnum.ACTIVITY_STATUS_EXECUTING.getCode());
-                //发送模板消息和短信消息TODO（微信模板：所有未开卡的粉丝  短信：所有非粉丝会员）
-
             }
         }
 
         //新增活动主表
-        mktActivityPOWithBLOBs.setCreateDate(new Date());
-        mktActivityPOWithBLOBs.setCreateUserId(stageUser.getSysAccountId());
-        mktActivityPOWithBLOBs.setCreateUserName(stageUser.getName());
         mktActivityPOMapper.insertSelective(mktActivityPOWithBLOBs);
        //返回主表的id
         Long mktActivityId = mktActivityPOWithBLOBs.getMktActivityId();
         //新增明细表
         MktActivityManualPO mktActivityManualPO = new MktActivityManualPO();
-        BeanUtils.copyProperties(mktActivityManualPO,activityManualVO);
+        BeanUtils.copyProperties(activityVO,mktActivityManualPO);
         mktActivityManualPO.setMktActivityId(mktActivityId);
+        // todo 券二维码
         mktActivityManualPOMapper.insertSelective(mktActivityManualPO);
-        //修改券表,和活动绑定
+        //新增券表,和活动绑定
         MktCouponPO mktCouponPO = new MktCouponPO();
         mktCouponPO.setCouponId(couponId);
         mktCouponPO.setBizId(mktActivityId);//活动id
@@ -162,7 +156,9 @@ public class ActivityManualServiceImpl implements ActivityManualService {
         mktCouponPO.setModifiedUserId(stageUser.getSysAccountId());
         mktCouponPO.setModifiedUserName(stageUser.getName());
         mktCouponPO.setModifiedDate(new Date());
-        mktCouponPOMapper.updateByPrimaryKeySelective(mktCouponPO);
+        mktCouponPO.setCouponName(activityVO.getCouponName());
+        mktCouponPO.setCouponCode(activityVO.getCouponCode());
+        mktCouponPOMapper.insertSelective(mktCouponPO);
         responseData.setCode(SystemConstants.SUCCESS_CODE);
         responseData.setMessage(SystemConstants.SUCCESS_MESSAGE);
         return responseData;
@@ -197,11 +193,11 @@ public class ActivityManualServiceImpl implements ActivityManualService {
 
 
     @Override
-    public ResponseData<List<ActivityVO>>selectActivityManualById(Long mktActivityId){
+    public ResponseData<ActivityVO>selectActivityManualById(Long mktActivityId){
         ResponseData responseData = new ResponseData();
         ActivityVO vo = new ActivityVO();
         vo.setMktActivityId(mktActivityId);
-        List<ActivityVO> activityManualList = mktActivityManualPOMapper.getActivityList(vo);
+        ActivityVO activityManualList = mktActivityManualPOMapper.getActivityList(vo);
         responseData.setData(activityManualList);
         responseData.setCode(SysResponseEnum.SUCCESS.getCode());
         responseData.setMessage(SysResponseEnum.SUCCESS.getMessage());

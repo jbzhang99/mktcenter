@@ -10,88 +10,88 @@ import org.apache.ibatis.annotations.Param;
 
 public interface MktActivityManualPOMapper {
     /**
-	 * Ö»¶Á. 
+	 * Ö»ï¿½ï¿½. 
 	 * @mbg.generated  2018-07-29 11:43:54
 	 */
 	long countByExample(MktActivityManualPOExample example);
 
 	/**
-	 * Ö»¶Á. 
+	 * Ö»ï¿½ï¿½. 
 	 * @mbg.generated  2018-07-29 11:43:54
 	 */
 	int deleteByExample(MktActivityManualPOExample example);
 
 	/**
-	 * Ö»¶Á. 
+	 * Ö»ï¿½ï¿½. 
 	 * @mbg.generated  2018-07-29 11:43:54
 	 */
 	int deleteByPrimaryKey(Long mktActivityManualId);
 
 	/**
-	 * Ö»¶Á. 
+	 * Ö»ï¿½ï¿½. 
 	 * @mbg.generated  2018-07-29 11:43:54
 	 */
 	int insert(MktActivityManualPO record);
 
 	/**
-	 * Ö»¶Á. 
+	 * Ö»ï¿½ï¿½. 
 	 * @mbg.generated  2018-07-29 11:43:54
 	 */
 	int insertSelective(MktActivityManualPO record);
 
 	/**
-	 * Ö»¶Á. 
+	 * Ö»ï¿½ï¿½. 
 	 * @mbg.generated  2018-07-29 11:43:54
 	 */
 	List<MktActivityManualPO> selectByExampleWithBLOBs(MktActivityManualPOExample example);
 
 	/**
-	 * Ö»¶Á. 
+	 * Ö»ï¿½ï¿½. 
 	 * @mbg.generated  2018-07-29 11:43:54
 	 */
 	List<MktActivityManualPO> selectByExample(MktActivityManualPOExample example);
 
 	/**
-	 * Ö»¶Á. 
+	 * Ö»ï¿½ï¿½. 
 	 * @mbg.generated  2018-07-29 11:43:54
 	 */
 	MktActivityManualPO selectByPrimaryKey(Long mktActivityManualId);
 
 	/**
-	 * Ö»¶Á. 
+	 * Ö»ï¿½ï¿½. 
 	 * @mbg.generated  2018-07-29 11:43:54
 	 */
 	int updateByExampleSelective(@Param("record") MktActivityManualPO record,
 			@Param("example") MktActivityManualPOExample example);
 
 	/**
-	 * Ö»¶Á. 
+	 * Ö»ï¿½ï¿½. 
 	 * @mbg.generated  2018-07-29 11:43:54
 	 */
 	int updateByExampleWithBLOBs(@Param("record") MktActivityManualPO record,
 			@Param("example") MktActivityManualPOExample example);
 
 	/**
-	 * Ö»¶Á. 
+	 * Ö»ï¿½ï¿½. 
 	 * @mbg.generated  2018-07-29 11:43:54
 	 */
 	int updateByExample(@Param("record") MktActivityManualPO record,
 			@Param("example") MktActivityManualPOExample example);
 
 	/**
-	 * Ö»¶Á. 
+	 * Ö»ï¿½ï¿½. 
 	 * @mbg.generated  2018-07-29 11:43:54
 	 */
 	int updateByPrimaryKeySelective(MktActivityManualPO record);
 
 	/**
-	 * Ö»¶Á. 
+	 * Ö»ï¿½ï¿½. 
 	 * @mbg.generated  2018-07-29 11:43:54
 	 */
 	int updateByPrimaryKeyWithBLOBs(MktActivityManualPO record);
 
 	/**
-	 * Ö»¶Á. 
+	 * Ö»ï¿½ï¿½. 
 	 * @mbg.generated  2018-07-29 11:43:54
 	 */
 	int updateByPrimaryKey(MktActivityManualPO record);
@@ -104,6 +104,6 @@ public interface MktActivityManualPOMapper {
 
     List<ActivityVO> getActivityManualEffect(ActivityVO vo);
 
-    List<ActivityVO> getActivityList(ActivityVO vo);
+    ActivityVO getActivityList(ActivityVO vo);
 
 }

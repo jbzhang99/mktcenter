@@ -174,7 +174,7 @@ public class ActivityParamCheckUtil {
         return responseData;
     }
 
-    public static  ResponseData checkManualParam (ActivityVO vo,ActivityManualVO activityManualVO,Long couponId){
+    public static  ResponseData checkManualParam (ActivityVO vo,Long couponId){
         ResponseData responseData = new ResponseData();
         if(StringUtils.isEmpty(vo.getActivityName())){
             responseData.setCode(SystemConstants.ERROR_CODE);
@@ -189,17 +189,17 @@ public class ActivityParamCheckUtil {
         if(SystemConstants.ERROR_CODE==(responseData.getCode())){
             return responseData;
         }
-        if(activityManualVO==null){
+        if(vo==null){
             responseData.setCode(SystemConstants.ERROR_CODE);
             responseData.setMessage("领取方式为空");
             return responseData;
         }
-        if(StringUtils.isEmpty(String.valueOf(activityManualVO.getReceiveType()))||activityManualVO.getReceiveType()!=2||activityManualVO.getReceiveType()!=1){
+        if(StringUtils.isEmpty(String.valueOf(vo.getReceiveType()))||vo.getReceiveType()!=2||vo.getReceiveType()!=1){
             responseData.setCode(SystemConstants.ERROR_CODE);
             responseData.setMessage("领取方式有误");
             return responseData;
         }
-        if(StringUtils.isEmpty(String.valueOf(couponId))|| 0==couponId){
+        if(null==couponId){
             responseData.setCode(SystemConstants.ERROR_CODE);
             responseData.setMessage("券定义id为空");
             return responseData;
