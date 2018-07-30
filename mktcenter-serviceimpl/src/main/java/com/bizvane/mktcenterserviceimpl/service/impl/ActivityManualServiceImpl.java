@@ -193,11 +193,11 @@ public class ActivityManualServiceImpl implements ActivityManualService {
 
 
     @Override
-    public ResponseData<ActivityVO>selectActivityManualById(Long mktActivityId){
+    public ResponseData<ActivityVO> selectActivityManualById(Long mktActivityId){
         ResponseData responseData = new ResponseData();
         ActivityVO vo = new ActivityVO();
         vo.setMktActivityId(mktActivityId);
-        ActivityVO activityManualList = mktActivityManualPOMapper.getActivityList(vo);
+        List<ActivityVO> activityManualList = mktActivityManualPOMapper.getActivityList(vo);
         responseData.setData(activityManualList);
         responseData.setCode(SysResponseEnum.SUCCESS.getCode());
         responseData.setMessage(SysResponseEnum.SUCCESS.getMessage());

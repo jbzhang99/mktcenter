@@ -31,7 +31,21 @@ public class ActivitySmartServiceImpl implements ActivitySmartService {
      * @return
      */
     @Override
-    public ResponseData<PageInfo<ActivitySmartVO>> getActivityList(ActivitySmartVO vo, PageForm pageForm) {
+    public ResponseData<ActivitySmartVO> getActivityList(ActivitySmartVO vo) {
+        ResponseData responseData = new ResponseData();
+        List<ActivitySmartVO> activityRegisterList = mktActivitySmartPOMapper.getActivityList(vo);
+        responseData.setData(activityRegisterList);
+        return responseData;
+    }
+
+    /**
+     * 查询历史营销活动列表
+     * @param vo
+     * @param pageForm
+     * @return
+     */
+    @Override
+    public ResponseData<PageInfo<ActivitySmartVO>> getActivityHistoryList(ActivitySmartVO vo, PageForm pageForm) {
         ResponseData responseData = new ResponseData();
         PageHelper.startPage(pageForm.getPageNumber(),pageForm.getPageSize());
         List<ActivitySmartVO> activityRegisterList = mktActivitySmartPOMapper.getActivityList(vo);

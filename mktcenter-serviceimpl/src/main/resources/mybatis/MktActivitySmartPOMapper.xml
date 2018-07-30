@@ -565,7 +565,7 @@
       AND tma.sys_brand_id = #{sysBrandId}
     </if>
     <if test="mktType != null and mktType!=0L">
-      AND tma.mkt_type = #{mktType}
+      AND tmas.mkt_type = #{mktType}
     </if>
     <if test="createDate != null">
       AND tma.create_date = #{createDate}

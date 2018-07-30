@@ -27,13 +27,21 @@ public class ActivitySmartController {
     private ActivitySmartService activitySmartService;
 
     /**
-     * 查询活动列表
+     * 查询智能营销活动列表(方块)
      * @return
      */
     @RequestMapping("getActivityList")
-    public ResponseData<PageInfo<ActivitySmartVO>> getActivityList(ActivitySmartVO vo, PageForm pageForm){
-        ResponseData<PageInfo<ActivitySmartVO>> activityRegisterList = activitySmartService.getActivityList(vo, pageForm);
-        return activityRegisterList;
+    public ResponseData<ActivitySmartVO> getActivityList(ActivitySmartVO vo){
+        return activitySmartService.getActivityList(vo);
+    }
+
+    /**
+     * 查询历史营销活动列表
+     * @return
+     */
+    @RequestMapping("getActivityHistoryList")
+    public ResponseData<PageInfo<ActivitySmartVO>> getActivityHistoryList(ActivitySmartVO vo, PageForm pageForm){
+        return activitySmartService.getActivityHistoryList(vo, pageForm);
     }
 
     /**

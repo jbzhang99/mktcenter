@@ -18,6 +18,14 @@ public interface ActivitySmartService {
      * @param vo
      * @return
      */
-    public ResponseData<PageInfo<ActivitySmartVO>> getActivityList(ActivitySmartVO vo, PageForm pageForm);
+    public ResponseData<ActivitySmartVO> getActivityList(ActivitySmartVO vo);
+
+    /**
+     * 查询历史营销活动列表
+     * @param vo
+     * @param pageForm
+     * @return
+     */
+    public ResponseData<PageInfo<ActivitySmartVO>> getActivityHistoryList(ActivitySmartVO vo, PageForm pageForm);
 
 }
