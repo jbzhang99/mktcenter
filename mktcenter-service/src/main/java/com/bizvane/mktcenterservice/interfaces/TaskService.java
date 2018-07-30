@@ -1,9 +1,11 @@
 package com.bizvane.mktcenterservice.interfaces;
 
 import com.bizvane.mktcenterservice.models.po.MktTaskPOWithBLOBs;
+import com.bizvane.mktcenterservice.models.vo.PageForm;
 import com.bizvane.mktcenterservice.models.vo.TaskVO;
 import com.bizvane.utils.responseinfo.ResponseData;
 import com.bizvane.utils.tokens.SysAccountPO;
+import com.github.pagehelper.PageInfo;
 
 import java.util.List;
 
@@ -19,7 +21,7 @@ public interface TaskService {
      * @param vo
      * @return
      */
-    public List<MktTaskPOWithBLOBs> getTaskByTaskType(TaskVO vo);
+    public ResponseData<PageInfo<MktTaskPOWithBLOBs>> getTaskByTaskType(TaskVO vo, PageForm pageForm);
 
     /**
      * 新增

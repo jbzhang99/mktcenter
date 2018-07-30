@@ -4,14 +4,19 @@ import com.bizvane.mktcenterservice.interfaces.TaskService;
 import com.bizvane.mktcenterservice.models.po.MktTaskPO;
 import com.bizvane.mktcenterservice.models.po.MktTaskPOExample;
 import com.bizvane.mktcenterservice.models.po.MktTaskPOWithBLOBs;
+import com.bizvane.mktcenterservice.models.vo.PageForm;
 import com.bizvane.mktcenterservice.models.vo.TaskVO;
 import com.bizvane.mktcenterserviceimpl.common.constants.ResponseConstants;
 import com.bizvane.mktcenterserviceimpl.common.enums.CheckStatusEnum;
 import com.bizvane.mktcenterserviceimpl.common.enums.TaskStatusEnum;
 import com.bizvane.mktcenterserviceimpl.common.utils.TimeUtils;
 import com.bizvane.mktcenterserviceimpl.mappers.MktTaskPOMapper;
+import com.bizvane.utils.enumutils.SysResponseEnum;
 import com.bizvane.utils.responseinfo.ResponseData;
 import com.bizvane.utils.tokens.SysAccountPO;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
+import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -34,12 +39,24 @@ public class TaskServiceImpl implements TaskService {
      * 根据任务类型查询任务
      */
     @Override
-    public   List<MktTaskPOWithBLOBs>  getTaskByTaskType(TaskVO vo){
+    public   ResponseData<PageInfo<MktTaskPOWithBLOBs>>  getTaskByTaskType(TaskVO vo,PageForm pageForm){
+        ResponseData<PageInfo<MktTaskPOWithBLOBs>> result = new ResponseData<PageInfo<MktTaskPOWithBLOBs>>(SysResponseEnum.FAILED.getCode(),SysResponseEnum.FAILED.getMessage(),null);
         //1完善资料，2分享任务，3邀请注册，4累计消费次数，5累计消费金额',
+        PageHelper.startPage(pageForm.getPageNumber(),pageForm.getPageSize());
+
         MktTaskPOExample mktTaskPOExample = new MktTaskPOExample();
         mktTaskPOExample.createCriteria().andTaskTypeEqualTo(vo.getTaskType());
+        mktTaskPOExample.setOrderByClause("create_date desc");
+
         List<MktTaskPOWithBLOBs> lists = mktTaskPOMapper.selectByExampleWithBLOBs(mktTaskPOExample);
-        return lists;
+        if (CollectionUtils.isNotEmpty(lists)){
+            PageInfo<MktTaskPOWithBLOBs> pageInfo = new PageInfo<MktTaskPOWithBLOBs>();
+            result.setData(pageInfo);
+            result.setCode(SysResponseEnum.SUCCESS.getCode());
+            result.setMessage(SysResponseEnum.SUCCESS.getMessage());
+        }
+
+        return result;
 
     }
 
