@@ -1,5 +1,6 @@
 package com.bizvane.mktcenterservice.interfaces;
 
+import com.bizvane.mktcenterservice.models.po.MktActivitySmartPO;
 import com.bizvane.mktcenterservice.models.vo.ActivitySmartVO;
 import com.bizvane.mktcenterservice.models.vo.PageForm;
 import com.bizvane.utils.responseinfo.ResponseData;
@@ -26,6 +27,6 @@ public interface ActivitySmartService {
      * @param pageForm
      * @return
      */
-    public ResponseData<PageInfo<ActivitySmartVO>> getActivityHistoryList(ActivitySmartVO vo, PageForm pageForm);
+    public ResponseData<PageInfo<MktActivitySmartPO>> getActivityHistoryList(ActivitySmartVO vo, PageForm pageForm);
 
 }

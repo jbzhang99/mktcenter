@@ -50,6 +50,23 @@ public class ActivitySmartVO extends MktActivityPO {
     @io.swagger.annotations.ApiModelProperty(value = "目标会员在会员模块中的搜索条件", name = "targetMbr", required = false, example = "")
     private String targetMbr;
 
+    /**
+     * 创建时间开始
+     */
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", locale = "zh", timezone = "GMT+8")
+    private Date createDateStart;
+
+    /**
+     * 创建时间结束
+     */
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", locale = "zh", timezone = "GMT+8")
+    private Date createDateEnd;
+
+    /**
+     * 活动描述
+     */
+    private String activityInfo;
+
     public Integer getMktType() {
         return mktType;
     }
@@ -96,5 +113,29 @@ public class ActivitySmartVO extends MktActivityPO {
 
     public void setTargetMbr(String targetMbr) {
         this.targetMbr = targetMbr;
+    }
+
+    public Date getCreateDateStart() {
+        return createDateStart;
+    }
+
+    public void setCreateDateStart(Date createDateStart) {
+        this.createDateStart = createDateStart;
+    }
+
+    public Date getCreateDateEnd() {
+        return createDateEnd;
+    }
+
+    public void setCreateDateEnd(Date createDateEnd) {
+        this.createDateEnd = createDateEnd;
+    }
+
+    public String getActivityInfo() {
+        return activityInfo;
+    }
+
+    public void setActivityInfo(String activityInfo) {
+        this.activityInfo = activityInfo;
     }
 }

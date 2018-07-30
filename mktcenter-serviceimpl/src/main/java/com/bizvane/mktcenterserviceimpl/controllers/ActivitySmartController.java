@@ -1,6 +1,7 @@
 package com.bizvane.mktcenterserviceimpl.controllers;
 
 import com.bizvane.mktcenterservice.interfaces.ActivitySmartService;
+import com.bizvane.mktcenterservice.models.po.MktActivitySmartPO;
 import com.bizvane.mktcenterservice.models.vo.ActivitySmartVO;
 import com.bizvane.mktcenterservice.models.vo.PageForm;
 import com.bizvane.mktcenterserviceimpl.common.utils.ActivityParamCheckUtil;
@@ -40,7 +41,7 @@ public class ActivitySmartController {
      * @return
      */
     @RequestMapping("getActivityHistoryList")
-    public ResponseData<PageInfo<ActivitySmartVO>> getActivityHistoryList(ActivitySmartVO vo, PageForm pageForm){
+    public ResponseData<PageInfo<MktActivitySmartPO>> getActivityHistoryList(ActivitySmartVO vo, PageForm pageForm){
         return activitySmartService.getActivityHistoryList(vo, pageForm);
     }
 
