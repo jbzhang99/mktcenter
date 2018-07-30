@@ -1,6 +1,7 @@
 package com.bizvane.mktcenterservice.interfaces;
 
 import com.bizvane.mktcenterservice.models.bo.TaskBO;
+import com.bizvane.mktcenterservice.models.po.MktTaskOrderPO;
 import com.bizvane.mktcenterservice.models.vo.PageForm;
 import com.bizvane.mktcenterservice.models.vo.TaskVO;
 import com.bizvane.utils.responseinfo.ResponseData;
@@ -29,6 +30,14 @@ public interface TaskOrderService {
     public ResponseData<Integer> addTask(TaskBO bo, SysAccountPO stageUser);
 
     /**
+     * 修改任务
+     * @param po
+     * @param stageUser
+     * @return
+     */
+    public ResponseData<Integer> updateTask(MktTaskOrderPO po,SysAccountPO stageUser);
+
+    /**
      * 执行任务
      * @param
      * @return
@@ -36,10 +45,10 @@ public interface TaskOrderService {
     public ResponseData<Integer> executeTask(TaskVO vo);
 
     /**
-     * 修改任务
+     * 修改消费任务
      * @return
      */
-    public ResponseData<Integer> updateTask(TaskBO bo,SysAccountPO stageUser);
+    public Integer updateOrderTask(MktTaskOrderPO po, SysAccountPO stageUser);
 
 
 }

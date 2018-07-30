@@ -17,7 +17,7 @@ public class TaskMessageServiceImpl implements TaskMessageService {
 
 
     @Override
-    public int addTaskMessage(MktMessagePO po, SysAccountPO stageUser) {
+    public Integer addTaskMessage(MktMessagePO po, SysAccountPO stageUser) {
         po.setCreateDate(TimeUtils.getNowTime());
         po.setCreateUserId(stageUser.getSysAccountId());
         po.setCreateUserName(stageUser.getName());
@@ -27,7 +27,7 @@ public class TaskMessageServiceImpl implements TaskMessageService {
     }
 
     @Override
-    public int updateTaskMessage(MktMessagePO po, SysAccountPO stageUser) {
+    public Integer updateTaskMessage(MktMessagePO po, SysAccountPO stageUser) {
         po.setModifiedDate(TimeUtils.getNowTime());
         po.setModifiedUserId(stageUser.getSysAccountId());
         po.setCreateUserName(stageUser.getName());

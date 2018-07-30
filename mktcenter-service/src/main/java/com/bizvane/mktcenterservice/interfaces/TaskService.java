@@ -11,10 +11,19 @@ import com.bizvane.utils.tokens.SysAccountPO;
  * @Copyright (c) 2018 上海商帆信息科技有限公司-版权所有
  */
 public interface TaskService {
+
     /**
      * 新增
      */
     public  Long  addTask(MktTaskPOWithBLOBs task,SysAccountPO sysAccountPO);
+
+    /**
+     * 修改
+     * @param task
+     * @param stageUser
+     * @return
+     */
+    public  Integer   updateTask(MktTaskPOWithBLOBs task, SysAccountPO stageUser);
 
     /**
      * 禁用/停止任务

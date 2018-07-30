@@ -18,7 +18,7 @@ public class TaskCouponServiceImpl implements TaskCouponService {
 
 
     @Override
-    public int addTaskCoupon(MktCouponPO po,SysAccountPO stageUser) {
+    public Integer addTaskCoupon(MktCouponPO po,SysAccountPO stageUser) {
 
         po.setCreateDate(TimeUtils.getNowTime());
         po.setCreateUserId(stageUser.getSysAccountId());
@@ -28,10 +28,11 @@ public class TaskCouponServiceImpl implements TaskCouponService {
     }
 
     @Override
-    public int updateTaskCoupon(MktCouponPO po,SysAccountPO stageUser) {
+    public Integer updateTaskCoupon(MktCouponPO po,SysAccountPO stageUser) {
         po.setModifiedDate(TimeUtils.getNowTime());
         po.setModifiedUserId(stageUser.getCtrlAccountId());
         po.setModifiedUserName(stageUser.getName());
+
         return mktCouponPOMapper.updateByPrimaryKeySelective(po);
     }
 }

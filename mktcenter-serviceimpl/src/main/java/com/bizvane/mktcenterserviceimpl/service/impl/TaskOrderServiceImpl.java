@@ -96,6 +96,24 @@ public class TaskOrderServiceImpl implements TaskOrderService {
     }
 
     /**
+     * 更新任务
+     */
+    @Override
+    public ResponseData<Integer> updateTask(MktTaskOrderPO po,SysAccountPO stageUser) {
+        return null;
+    }
+    /**
+     * 新增消费任务
+     */
+    public Integer  insertOrderTask(MktTaskOrderPO po,SysAccountPO stageUser){
+
+        po.setCreateDate(TimeUtils.getNowTime());
+        po.setCreateUserId(stageUser.getSysAccountId());
+        po.setCreateUserName(stageUser.getName());
+
+        return  mktTaskOrderPOMapper.insertSelective(po);
+    }
+    /**
      * 执行任务
      * @param vo
      * @return
@@ -106,14 +124,18 @@ public class TaskOrderServiceImpl implements TaskOrderService {
     }
 
     /**
-     * 更新任务
-     * @param bo
+     * 更新消费任务
      * @param stageUser
      * @return
      */
     @Override
-    public ResponseData<Integer> updateTask(TaskBO bo, SysAccountPO stageUser) {
-        return null;
+    public Integer updateOrderTask(MktTaskOrderPO po,SysAccountPO stageUser) {
+        po.setModifiedDate(TimeUtils.getNowTime());
+        po.setModifiedUserId(stageUser.getSysAccountId());
+        po.setCreateUserName(stageUser.getName());
+
+        return  mktTaskOrderPOMapper.updateByPrimaryKeySelective(po);
+
     }
 
 

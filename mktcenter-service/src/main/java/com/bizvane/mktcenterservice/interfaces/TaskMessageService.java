@@ -14,7 +14,7 @@ public interface TaskMessageService {
      * @param stageUser
      * @return
      */
-    public  int  addTaskMessage(MktMessagePO po,SysAccountPO stageUser);
+    public  Integer  addTaskMessage(MktMessagePO po,SysAccountPO stageUser);
 
     /**
      * 修改
@@ -22,7 +22,7 @@ public interface TaskMessageService {
      * @param stageUser
      * @return
      */
-    public  int  updateTaskMessage(MktMessagePO po,SysAccountPO stageUser);
+    public  Integer  updateTaskMessage(MktMessagePO po,SysAccountPO stageUser);
 
 
 }

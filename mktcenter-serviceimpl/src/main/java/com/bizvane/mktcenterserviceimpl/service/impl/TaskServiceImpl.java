@@ -27,6 +27,12 @@ public class TaskServiceImpl implements TaskService {
     @Autowired
     private MktTaskPOMapper mktTaskPOMapper;
 
+    /**
+     * 新增任务
+     * @param task
+     * @param stageUser
+     * @return
+     */
     @Override
     public Long addTask(MktTaskPOWithBLOBs task, SysAccountPO stageUser) {
         task.setCreateDate(TimeUtils.getNowTime());
@@ -35,6 +41,18 @@ public class TaskServiceImpl implements TaskService {
 
         mktTaskPOMapper.insertSelective(task);
         return task.getMktTaskId();
+    }
+
+    /**
+     * 修改任务
+     */
+    @Override
+    public  Integer   updateTask(MktTaskPOWithBLOBs task, SysAccountPO stageUser){
+        task.setModifiedDate(TimeUtils.getNowTime());
+        task.setModifiedUserId(stageUser.getCtrlAccountId());
+        task.setModifiedUserName(stageUser.getName());
+
+        return mktTaskPOMapper.updateByPrimaryKeySelective(task);
     }
 
     /**

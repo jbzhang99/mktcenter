@@ -12,10 +12,10 @@ public interface TaskCouponService {
      * 新增
      * @return
      */
-    public  int   addTaskCoupon(MktCouponPO po, SysAccountPO stageUser);
+    public  Integer   addTaskCoupon(MktCouponPO po, SysAccountPO stageUser);
     /**
      * 修改
      * @return
      */
-    public  int   updateTaskCoupon(MktCouponPO po,SysAccountPO stageUser);
+    public  Integer   updateTaskCoupon(MktCouponPO po,SysAccountPO stageUser);
 }
