@@ -21,6 +21,12 @@ import java.util.List;
  */
 public interface TaskOrderService {
     /**
+     * 任务的审核
+     * @param vo
+     * @return
+     */
+    public  Integer  checkOrderTask(TaskVO vo);
+    /**
      * 查询任务详情
      */
     public  List<TaskDetailBO> getOrderTaskDetails(Long mktTaskId);

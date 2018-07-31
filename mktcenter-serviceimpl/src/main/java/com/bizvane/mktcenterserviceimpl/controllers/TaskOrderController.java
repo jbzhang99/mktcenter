@@ -39,6 +39,19 @@ public class TaskOrderController {
     private TaskOrderService taskOrderService;
 
     /**
+     * 任务审核
+     */
+    @RequestMapping("checkOrderTask")
+    public  ResponseData<Integer>  checkOrderTask(TaskVO vo){
+        ResponseData<Integer> result = new ResponseData<Integer>(SysResponseEnum.FAILED.getCode(),SysResponseEnum.FAILED.getMessage(),null);
+        Integer data = taskOrderService.checkOrderTask(vo);
+        if (data>0){
+            result.setCode(SysResponseEnum.SUCCESS.getCode());
+            result.setMessage(SysResponseEnum.SUCCESS.getMessage());
+        }
+        return result;
+    }
+    /**
      * 查询消费任务详情
      */
     @RequestMapping("getOrderTaskDetails")
