@@ -56,8 +56,8 @@ public class TaskOrderServiceImpl implements TaskOrderService {
         return mktTaskOrderPOMapper.getOrderTaskDetails(mktTaskId);
     }
 
-    /**s
-     * 查询任务
+    /**
+     * 查询任务详情
      * @return
      */
     @Override
