@@ -73,4 +73,30 @@ public class ActivityBirthdayController {
     public ResponseData<List<ActivityVO>> selectActivityBirthdayById(Long mktActivityId){
         return activityBirthdayService.selectActivityBirthdayById(mktActivityId);
     }
+    /**
+     * 修改活动
+     * @param
+     * @return
+     */
+    @RequestMapping("updateActivityBirthday")
+    public ResponseData<Integer> updateActivityBirthday(ActivityVO activityVO, List<MktCouponPO> couponCodeList, List<MessageVO> messageVOList, HttpServletRequest request){
+        ActivityBO bo = new ActivityBO();
+        bo.setActivityVO(activityVO);
+        bo.setCouponCodeList(couponCodeList);
+        bo.setMessageVOList(messageVOList);
+        //参数校验
+        ResponseData responseData = ActivityParamCheckUtil.checkParam(bo);
+        //参数校验不通过
+        if(SystemConstants.ERROR_CODE==responseData.getCode()){
+            return responseData;
+        }
+        //参数校验通过，获取操作人信息
+        SysAccountPO stageUser = new SysAccountPO();
+        //更新活动
+        ResponseData<Integer> registerData = activityBirthdayService.updateActivityBirthday(bo,stageUser);
+
+        //返回
+
+        return registerData;
+    }
 }
