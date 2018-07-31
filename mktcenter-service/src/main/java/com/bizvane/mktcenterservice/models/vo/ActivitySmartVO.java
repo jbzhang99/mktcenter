@@ -85,7 +85,7 @@ public class ActivitySmartVO extends MktActivityPO {
     /**
      * 状态： 1启用，0禁用
      */
-    private Integer status;
+    private Boolean status;
 
     public Integer getMktType() {
         return mktType;
@@ -183,11 +183,11 @@ public class ActivitySmartVO extends MktActivityPO {
         this.pageSize = pageSize;
     }
 
-    public Integer getStatus() {
+    public Boolean getStatus() {
         return status;
     }
 
-    public void setStatus(Integer status) {
+    public void setStatus(Boolean status) {
         this.status = status;
     }
 
