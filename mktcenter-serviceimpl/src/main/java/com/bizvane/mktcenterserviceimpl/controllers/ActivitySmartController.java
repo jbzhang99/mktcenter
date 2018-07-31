@@ -34,8 +34,8 @@ public class ActivitySmartController {
      * 查询智能营销活动列表(方块)
      * @return
      */
-    @RequestMapping("getActivityList")
-    public ResponseData<PageInfo<MktActivitySmartPO>> getActivityList(ActivitySmartVO vo,PageForm pageForm){
+    @RequestMapping("getSmartActivityList")
+    public ResponseData<PageInfo<MktActivitySmartPO>> getSmartActivityList(ActivitySmartVO vo,PageForm pageForm){
         return activitySmartService.getSmartActivityList(vo,pageForm);
     }
 

@@ -37,6 +37,7 @@ public class ActivityConstants {
     public static String SMART_ACTIVITY_TASK_NAME_EMPTY = "智能营销名称为空";
     public static String SMART_ACTIVITY_TARGET_MEMBER_EMPTY = "智能营销会员条件为空";
     public static String SMART_ACTIVITY_COPY = "-副本";
+    public static String SMART_ACTIVITY_ID_EMPTY = "活动id为空";
 
 
 }

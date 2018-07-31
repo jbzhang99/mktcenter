@@ -99,7 +99,7 @@ public class ActivitySmartServiceImpl implements ActivitySmartService {
         //活动id不能为空
         if(vo.getMktActivityId()==null){
             responseData.setCode(ResponseConstants.ERROR);
-            responseData.setMessage(ResponseConstants.ERROR_MSG);
+            responseData.setMessage(ActivityConstants.SMART_ACTIVITY_ID_EMPTY);
             return responseData;
         }
         PageHelper.startPage(pageForm.getPageNumber(),pageForm.getPageSize());
