@@ -8,6 +8,7 @@ import com.bizvane.mktcenterservice.models.vo.PageForm;
 import com.bizvane.utils.responseinfo.ResponseData;
 import com.bizvane.utils.tokens.SysAccountPO;
 import com.github.pagehelper.PageInfo;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpServletRequest;
@@ -63,6 +64,13 @@ public interface ActivitySmartService {
      * @return
      */
     public ResponseData<Integer> deleteSmartActivity(ActivitySmartVO vo);
+
+    /**
+     * 复制智能营销分组
+     * @param vo
+     * @return
+     */
+    public ResponseData<Integer> copySmartActivity(ActivitySmartVO vo);
 
     /**
      * 对某个智能营销组创建任务

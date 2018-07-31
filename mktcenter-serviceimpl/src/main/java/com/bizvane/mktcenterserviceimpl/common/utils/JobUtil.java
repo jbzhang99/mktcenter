@@ -5,6 +5,7 @@ import com.bizvane.mktcenterservice.models.po.MktTaskPOWithBLOBs;
 import com.bizvane.mktcenterservice.models.vo.ActivityVO;
 import com.bizvane.mktcenterserviceimpl.common.constants.JobHandlerConstants;
 import com.bizvane.mktcenterserviceimpl.common.enums.ActivityStatusEnum;
+import com.bizvane.mktcenterserviceimpl.common.enums.BusinessTypeEnum;
 import com.bizvane.mktcenterserviceimpl.common.enums.TaskStatusEnum;
 import com.bizvane.mktcenterserviceimpl.common.job.XxlJobConfig;
 import com.bizvane.utils.enumutils.JobEnum;
@@ -57,6 +58,8 @@ public class JobUtil {
         xxlJobInfo.setExecutorFailStrategy(JobEnum.EXECUTOR_FAIL_STRATEGY_NULL.getValue());
         //设置负责人
         xxlJobInfo.setAuthor(stageUser.getName());
+        //设置业务类型
+        xxlJobInfo.setBizType(BusinessTypeEnum.ACTIVITY_TYPE_ACTIVITY.getCode());
         //添加job
         jobClient.addJob(xxlJobInfo);
     }
@@ -85,13 +88,16 @@ public class JobUtil {
         xxlJobInfo.setExecutorFailStrategy(JobEnum.EXECUTOR_FAIL_STRATEGY_NULL.getValue());
         //设置负责人
         xxlJobInfo.setAuthor(stageUser.getName());
+        //设置业务类型
+        xxlJobInfo.setBizType(BusinessTypeEnum.ACTIVITY_TYPE_ACTIVITY.getCode());
         //添加job
         jobClient.addJob(xxlJobInfo);
     }
 
     public  void addStartTaskJob(SysAccountPO stageUser, MktTaskPOWithBLOBs mktTaskPOWithBLOBs) {
         //任务状态设置为待执行:创建时为待执行=1        到结束时间时为:已结束=4
-        mktTaskPOWithBLOBs.setCheckStatus(mktTaskPOWithBLOBs.getCheckStatus());
+        //活动状态设置为待执行
+        mktTaskPOWithBLOBs.setTaskStatus(TaskStatusEnum.TASK_STATUS_PENDING.getCode());
         //构建job对象
         XxlJobInfo xxlJobInfo = new XxlJobInfo();
         //设置appName
@@ -114,9 +120,41 @@ public class JobUtil {
         xxlJobInfo.setExecutorFailStrategy(JobEnum.EXECUTOR_FAIL_STRATEGY_NULL.getValue());
         //设置负责人
         xxlJobInfo.setAuthor(stageUser.getName());
+        //设置业务类型
+        xxlJobInfo.setBizType(BusinessTypeEnum.ACTIVITY_TYPE_TASK.getCode());
         //添加job
         jobClient.addJob(xxlJobInfo);
     }
-
+    public  void addEndTaskJob(SysAccountPO stageUser, MktTaskPOWithBLOBs mktTaskPOWithBLOBs) {
+        //任务状态设置为待执行:创建时为待执行=1        到结束时间时为:已结束=4
+        //活动状态设置为待执行
+        mktTaskPOWithBLOBs.setTaskStatus(TaskStatusEnum.TASK_STATUS_FINISHED.getCode());
+        //构建job对象
+        XxlJobInfo xxlJobInfo = new XxlJobInfo();
+        //设置appName
+        xxlJobInfo.setAppName(xxlJobConfig.getAppName());
+        //设置路由策略
+        xxlJobInfo.setExecutorRouteStrategy(JobEnum.EXECUTOR_ROUTE_STRATEGY_FIRST.getValue());
+        //设置job定时器
+        xxlJobInfo.setJobCron(DateUtil.getCronExpression(mktTaskPOWithBLOBs.getStartTime()));
+        //设置运行模式
+        xxlJobInfo.setGlueType(JobEnum.GLUE_TYPE_BEAN.getValue());
+        //设置job处理器
+        xxlJobInfo.setExecutorHandler(JobHandlerConstants.task);
+        //设置job描述
+        xxlJobInfo.setJobDesc(mktTaskPOWithBLOBs.getTaskInfo());
+        //设置执行参数
+        xxlJobInfo.setExecutorParam(mktTaskPOWithBLOBs.getTaskCode());
+        //设置阻塞处理策略
+        xxlJobInfo.setExecutorBlockStrategy(JobEnum.EXECUTOR_BLOCK_SERIAL_EXECUTION.getValue());
+        //设置失败处理策略
+        xxlJobInfo.setExecutorFailStrategy(JobEnum.EXECUTOR_FAIL_STRATEGY_NULL.getValue());
+        //设置负责人
+        xxlJobInfo.setAuthor(stageUser.getName());
+        //设置业务类型
+        xxlJobInfo.setBizType(BusinessTypeEnum.ACTIVITY_TYPE_TASK.getCode());
+        //添加job
+        jobClient.addJob(xxlJobInfo);
+    }
 
 }

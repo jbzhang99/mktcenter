@@ -99,7 +99,7 @@ public class ActivitySmartServiceImpl implements ActivitySmartService {
         //活动id不能为空
         if(vo.getMktActivityId()==null){
             responseData.setCode(ResponseConstants.ERROR);
-            responseData.setMessage(ResponseConstants.ERROR_MSG);
+            responseData.setMessage(ActivityConstants.SMART_ACTIVITY_ID_EMPTY);
             return responseData;
         }
         PageHelper.startPage(pageForm.getPageNumber(),pageForm.getPageSize());
@@ -193,6 +193,33 @@ public class ActivitySmartServiceImpl implements ActivitySmartService {
         BeanUtils.copyProperties(vo,mktActivitySmartPO);
         mktActivitySmartPO.setValid(Boolean.FALSE);
         mktActivitySmartPOMapper.updateByPrimaryKeySelective(mktActivitySmartPO);
+        responseData.setMessage(ResponseConstants.SUCCESS_MSG);
+        return responseData;
+    }
+
+    /**
+     * 复制智能营销分组
+     * @param vo
+     * @return
+     */
+    @Override
+    public ResponseData<Integer> copySmartActivity(ActivitySmartVO vo) {
+        ResponseData responseData = new ResponseData();
+
+        MktActivitySmartPO mktActivitySmartPO = mktActivitySmartPOMapper.selectByPrimaryKey(vo.getMktActivitySmartId());
+
+        mktActivitySmartPO.setCreateDate(new Date());
+        mktActivitySmartPO.setCreateUserId(vo.getCreateUserId());
+        mktActivitySmartPO.setCreateUserName(vo.getCreateUserName());
+
+        mktActivitySmartPO.setModifiedDate(null);
+        mktActivitySmartPO.setModifiedUserId(null);
+        mktActivitySmartPO.setModifiedUserName(null);
+
+        mktActivitySmartPO.setMktTaskName(mktActivitySmartPO.getMktTaskName()+ActivityConstants.SMART_ACTIVITY_COPY);
+
+        mktActivitySmartPOMapper.insertSelective(mktActivitySmartPO);
+
         responseData.setMessage(ResponseConstants.SUCCESS_MSG);
         return responseData;
     }
