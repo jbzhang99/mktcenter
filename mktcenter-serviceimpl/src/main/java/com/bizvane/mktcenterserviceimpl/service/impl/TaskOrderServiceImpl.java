@@ -13,6 +13,8 @@ import com.bizvane.mktcenterservice.models.vo.TaskConsumeVO;
 import com.bizvane.mktcenterservice.models.vo.TaskVO;
 import com.bizvane.mktcenterserviceimpl.common.constants.SystemConstants;
 import com.bizvane.mktcenterserviceimpl.common.constants.TaskConstants;
+import com.bizvane.mktcenterserviceimpl.common.enums.CheckStatusEnum;
+import com.bizvane.mktcenterserviceimpl.common.enums.TaskStatusEnum;
 import com.bizvane.mktcenterserviceimpl.common.utils.CodeUtil;
 import com.bizvane.mktcenterserviceimpl.common.utils.TaskParamCheckUtil;
 import com.bizvane.mktcenterserviceimpl.common.utils.TimeUtils;
@@ -93,22 +95,13 @@ public class TaskOrderServiceImpl implements TaskOrderService {
         if (responseData.getCode()<0){
             return responseData;
         }
-        //1.判断是否需要审核  1:需要审核 0:不需要
-        SysCheckConfigPo sysCheckConfigPo = new SysCheckConfigPo();
-        sysCheckConfigPo.setSysBrandId(vo.getMktTaskPOWithBLOBs().getSysBrandId());
-        Integer checkStatus = taskService.getCheckStatus(sysCheckConfigPo);
-
+        //1.生成任务编号
         String taskCode = CodeUtil.getTaskCode();
         //2.任务主表新增
         MktTaskPOWithBLOBs mktTaskPOWithBLOBs = vo.getMktTaskPOWithBLOBs();
+        mktTaskPOWithBLOBs = this.isOrNoCheckState(mktTaskPOWithBLOBs);
         mktTaskPOWithBLOBs.setTaskCode(taskCode);
-        if(TaskConstants.ZERO.equals(checkStatus)){
-            //待审核=0
-            mktTaskPOWithBLOBs.setCheckStatus(TaskConstants.ZERO);
-        }else{
-            //已审核=3
-            mktTaskPOWithBLOBs.setCheckStatus(TaskConstants.THREE);
-        }
+
         Long mktTaskId = taskService.addTask(mktTaskPOWithBLOBs, stageUser);
 
         //3.任务消费表新增
@@ -118,52 +111,88 @@ public class TaskOrderServiceImpl implements TaskOrderService {
 
         //4.新增奖励新增  biz_type 活动类型  1=活动
         List<MktCouponPO> mktCouponPOList = vo.getMktCouponPOList();
-
         if (CollectionUtils.isNotEmpty(mktCouponPOList)){
-
             mktCouponPOList.stream().forEach(param->{
                 param.setBizId(mktTaskId);
                 param.setBizCode(taskCode);
                 param.setBizType(TaskConstants.TASK_TYPE);
                 taskCouponService.addTaskCoupon(param,stageUser);
             });
-
         }
-
         //5.新增消息新增
         List<MktMessagePO> mktmessagePOList = vo.getMktmessagePOList();
         if (CollectionUtils.isNotEmpty(mktmessagePOList)){
             mktmessagePOList.stream().forEach(param-> {
-                param.setBizId(mktTaskId);
-                taskMessageService.addTaskMessage(param,stageUser);
-            }
+                        param.setBizId(mktTaskId);
+                        taskMessageService.addTaskMessage(param,stageUser);
+                    }
             );
         }
 
         //6.判断时间是否滞后   2=滞后执行    3=立即执行
         Integer ImmediatelyRunStatus = TimeUtils.IsImmediatelyRun(mktTaskPOWithBLOBs.getStartTime());
-        if(TaskConstants.ZERO.equals(checkStatus)){
-            //任务待审核=0,判断是否要滞后执行
-            if (TaskConstants.SECOND.equals(ImmediatelyRunStatus)){
-
-            }else if(TaskConstants.SECOND.equals(ImmediatelyRunStatus)){
-
-            }
-
-        }else{
-            //任务已审核=3,判断是否要滞后执行
-
-        }
-
-
-
-
-
-
-
+//        if(TaskConstants.ZERO.equals(checkStatus)){
+//            //任务待审核=0,判断是否要滞后执行
+//            if (TaskConstants.SECOND.equals(ImmediatelyRunStatus)){
+//
+//            }else if(TaskConstants.SECOND.equals(ImmediatelyRunStatus)){
+//
+//            }
+//
+//        }else{
+//            //任务已审核=3,判断是否要滞后执行
+//
+//        }
         responseData.setCode(SystemConstants.SUCCESS_CODE);
         responseData.setMessage(SystemConstants.SUCCESS_MESSAGE);
         return responseData;
+    }
+
+    /**
+     * 判断是否滞后执行
+     */
+    public  MktTaskPOWithBLOBs   isOrNoCheckState(MktTaskPOWithBLOBs po) throws ParseException {
+        //1.判断是否需要审核  1:需要审核 0:不需要
+        SysCheckConfigPo sysCheckConfigPo = new SysCheckConfigPo();
+        sysCheckConfigPo.setSysBrandId(po.getSysBrandId());
+        Integer checkStatus = taskService.getCheckStatus(sysCheckConfigPo);
+        //判断时间是否滞后   2=滞后执行    3和1=立即执行
+        Integer ImmediatelyRunStatus = TimeUtils.IsImmediatelyRun(po.getStartTime());
+        if(TaskConstants.ZERO.equals(checkStatus)){
+            //待审核=1
+            po.setCheckStatus(CheckStatusEnum.CHECK_STATUS_PENDING.getCode());
+            //待执行=1
+            po.setCheckStatus(TaskStatusEnum.TASK_STATUS_PENDING.getCode());
+        }else{
+            //已审核=3
+            po.setCheckStatus(TaskConstants.THREE);
+            if(TaskConstants.THREE.equals(ImmediatelyRunStatus)){
+                //待执行
+                po.setCheckStatus(TaskStatusEnum.TASK_STATUS_PENDING.getCode());
+            }else{
+                //执行中
+                po.setCheckStatus(TaskStatusEnum.TASK_STATUS_EXECUTING.getCode());
+            }
+        }
+        return po;
+    }
+
+    /**
+     * 判断时间是否滞后,已经是否立即执行,还是创建job执行
+     */
+    public  void   doOrderTask(TaskConsumeVO vo){
+        MktTaskPOWithBLOBs mktTaskPO = vo.getMktTaskPOWithBLOBs();
+        Integer checkStatus = mktTaskPO.getCheckStatus();
+        Integer taskStatus = mktTaskPO.getTaskStatus();
+        //已审核   执行中
+        if (TaskConstants.THREE.equals(checkStatus) && TaskConstants.SECOND.equals(taskStatus) ){
+
+         }
+         //已审核   待执行
+        if (TaskConstants.THREE.equals(checkStatus) && TaskConstants.FIRST.equals(taskStatus) ){
+
+        }
+
     }
 
     /**
