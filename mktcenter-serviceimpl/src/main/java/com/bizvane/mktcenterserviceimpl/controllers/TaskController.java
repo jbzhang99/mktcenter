@@ -1,13 +1,18 @@
 package com.bizvane.mktcenterserviceimpl.controllers;
 
 import com.bizvane.mktcenterservice.interfaces.TaskService;
+import com.bizvane.mktcenterservice.models.po.MktTaskPOWithBLOBs;
+import com.bizvane.mktcenterservice.models.vo.PageForm;
+import com.bizvane.mktcenterservice.models.vo.TaskVO;
 import com.bizvane.utils.responseinfo.ResponseData;
 import com.bizvane.utils.tokens.SysAccountPO;
+import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 /**
  * @author chen.li
@@ -21,6 +26,15 @@ public class TaskController {
 
     @Autowired
     private TaskService taskService;
+    /**
+     * 根据任务类型查询任务列表
+     */
+    @RequestMapping("getTaskByTaskType")
+    public ResponseData<PageInfo<MktTaskPOWithBLOBs>> getTaskByTaskType(TaskVO vo, PageForm pageForm){
+        return  taskService.getTaskByTaskType(vo,pageForm);
+    }
+
+
 
     /**
      * 禁用任务

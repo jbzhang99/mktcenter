@@ -5,11 +5,13 @@ import com.bizvane.mktcenterservice.models.bo.TaskBO;
 import com.bizvane.mktcenterservice.models.po.MktCouponPO;
 import com.bizvane.mktcenterservice.models.vo.MessageVO;
 import com.bizvane.mktcenterservice.models.vo.PageForm;
+import com.bizvane.mktcenterservice.models.vo.TaskConsumeVO;
 import com.bizvane.mktcenterservice.models.vo.TaskVO;
 import com.bizvane.mktcenterserviceimpl.common.constants.SystemConstants;
 import com.bizvane.mktcenterserviceimpl.common.utils.TaskParamCheckUtil;
 import com.bizvane.utils.responseinfo.ResponseData;
 import com.bizvane.utils.tokens.SysAccountPO;
+import com.bizvane.utils.tokens.TokenUtils;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,26 +53,11 @@ public class TaskOrderController {
      * @return
      */
     @RequestMapping("addTask")
-    public ResponseData<Integer> addTask(TaskVO vo, List<MktCouponPO> couponCodeList, List<MessageVO> messageVOList, HttpServletRequest request){
-        TaskBO bo = new TaskBO();
-        bo.setTaskVO(vo);
-        bo.setMktCouponPOList(couponCodeList);
-        bo.setMessageVOList(messageVOList);
-        //参数校验
-        ResponseData responseData = TaskParamCheckUtil.checkParam(bo);
-        //参数校验不通过
-        if(SystemConstants.ERROR_CODE==responseData.getCode()){
-            return responseData;
-        }
+    public ResponseData<Integer> addTask(TaskConsumeVO vo, HttpServletRequest request){
         //参数校验通过，获取操作人信息
-//        SysAccountPO stageUser = TokenUtils.getStageUser(request);
-        SysAccountPO stageUser = new SysAccountPO();
+       SysAccountPO stageUser = TokenUtils.getStageUser(request);
 
-        //新增活动
-        ResponseData<Integer> integerResponseData = taskOrderService.addTask(bo, stageUser);
-
-        //返回
-        return integerResponseData;
+       return  taskOrderService.addTask(vo, stageUser);
     }
 
     /**
@@ -92,11 +79,11 @@ public class TaskOrderController {
         //参数校验通过，获取操作人信息
         SysAccountPO stageUser = new SysAccountPO();
         //更新活动
-        ResponseData<Integer> registerData = taskOrderService.updateTask(bo,stageUser);
+       // ResponseData<Integer> registerData = taskOrderService.updateTask(bo,stageUser);
 
         //返回
 
-        return registerData;
+        return null;
     }
 
     /**

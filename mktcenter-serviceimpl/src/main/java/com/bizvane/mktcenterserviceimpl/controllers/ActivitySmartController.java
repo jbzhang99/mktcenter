@@ -1,6 +1,8 @@
 package com.bizvane.mktcenterserviceimpl.controllers;
 
 import com.bizvane.mktcenterservice.interfaces.ActivitySmartService;
+import com.bizvane.mktcenterservice.models.po.MktActivitySmartPO;
+import com.bizvane.mktcenterservice.models.po.MktCouponPO;
 import com.bizvane.mktcenterservice.models.vo.ActivitySmartVO;
 import com.bizvane.mktcenterservice.models.vo.PageForm;
 import com.bizvane.mktcenterserviceimpl.common.utils.ActivityParamCheckUtil;
@@ -12,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 /**
  * @author chen.li
@@ -27,13 +30,21 @@ public class ActivitySmartController {
     private ActivitySmartService activitySmartService;
 
     /**
-     * 查询活动列表
+     * 查询智能营销活动列表(方块)
      * @return
      */
     @RequestMapping("getActivityList")
-    public ResponseData<PageInfo<ActivitySmartVO>> getActivityList(ActivitySmartVO vo, PageForm pageForm){
-        ResponseData<PageInfo<ActivitySmartVO>> activityRegisterList = activitySmartService.getActivityList(vo, pageForm);
-        return activityRegisterList;
+    public ResponseData<List<ActivitySmartVO>> getActivityList(ActivitySmartVO vo){
+        return activitySmartService.getActivityList(vo);
+    }
+
+    /**
+     * 查询历史营销活动列表
+     * @return
+     */
+    @RequestMapping("getActivityHistoryList")
+    public ResponseData<PageInfo<MktActivitySmartPO>> getActivityHistoryList(ActivitySmartVO vo, PageForm pageForm){
+        return activitySmartService.getActivityHistoryList(vo, pageForm);
     }
 
     /**
@@ -42,13 +53,12 @@ public class ActivitySmartController {
      * @return
      */
     @RequestMapping("addCouponActivity")
-    public ResponseData<Integer> addCouponActivity(ActivitySmartVO vo, HttpServletRequest request){
-        //参数校验
-        ResponseData responseData = ActivityParamCheckUtil.checkSmartActivityParam(vo);
-        //参数校验通过，获取操作人信息
+    public ResponseData<Integer> addCouponActivity(ActivitySmartVO vo, List<MktCouponPO> couponCodeList, HttpServletRequest request){
+        //获取操作人信息
 //        SysAccountPO stageUser = TokenUtils.getStageUser(request);
         SysAccountPO stageUser = new SysAccountPO();
-        return new ResponseData<>();
+        ResponseData<Integer> responseData = activitySmartService.addCouponActivity(vo, couponCodeList, stageUser);
+        return responseData;
     }
 
     /**

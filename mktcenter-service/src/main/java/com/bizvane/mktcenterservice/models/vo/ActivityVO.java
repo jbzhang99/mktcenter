@@ -164,6 +164,16 @@ public class ActivityVO extends MktActivityPO {
         this.orderSource = orderSource;
     }
 
+
+    @io.swagger.annotations.ApiModelProperty(value = "ÿ��ÿ�������ȡ������", name = "perPersonPerDayMax", required = false, example = "")
+    private Integer perPersonPerDayMax;
+
+    @io.swagger.annotations.ApiModelProperty(value = "ÿ�������ȡ", name = "perPersonMax", required = false, example = "")
+    private Integer perPersonMax;
+
+    private String couponCode;
+
+    private String couponName;
     public String getActivityInfo() {
         return activityInfo;
     }
@@ -338,5 +348,37 @@ public class ActivityVO extends MktActivityPO {
 
     public void setQrcode(String qrcode) {
         this.qrcode = qrcode;
+    }
+
+    public Integer getPerPersonPerDayMax() {
+        return perPersonPerDayMax;
+    }
+
+    public void setPerPersonPerDayMax(Integer perPersonPerDayMax) {
+        this.perPersonPerDayMax = perPersonPerDayMax;
+    }
+
+    public Integer getPerPersonMax() {
+        return perPersonMax;
+    }
+
+    public void setPerPersonMax(Integer perPersonMax) {
+        this.perPersonMax = perPersonMax;
+    }
+
+    public String getCouponCode() {
+        return couponCode;
+    }
+
+    public void setCouponCode(String couponCode) {
+        this.couponCode = couponCode;
+    }
+
+    public String getCouponName() {
+        return couponName;
+    }
+
+    public void setCouponName(String couponName) {
+        this.couponName = couponName;
     }
 }

@@ -30,4 +30,15 @@ public class TaskConstants {
 
     //邀请注册
     public final static String ERROR_MSG_invite_num_EMPTY ="邀请注册人数为空";
+
+    //任务类型
+    //活动
+    public  final static Integer  ACTIVITY_TYPE=1;
+    //任务
+    public  final static Integer  TASK_TYPE=2;
+
+    //查询数据的不同标识
+    public  final static Integer   FIRST=1;//全部的
+    public  final static Integer   SECOND=2;//启用的
+    public  final static Integer   THREE=3;//已禁用的
 }

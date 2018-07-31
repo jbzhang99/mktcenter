@@ -11,6 +11,12 @@ import java.math.BigDecimal;
  * @Copyright (c) 2018 上海商帆信息科技有限公司-版权所有
  */
 public class TaskVO extends MktTaskPO {
+    /**
+     * 1.获取所有数据
+     * 2.获取启用的数据
+     * 3.获取禁用的数据
+     */
+    private  String  showType;
 
     /**
      * 只读. 任务描述. task_info
@@ -169,5 +175,13 @@ public class TaskVO extends MktTaskPO {
 
     public void setShareUrl(String shareUrl) {
         this.shareUrl = shareUrl;
+    }
+
+    public String getShowType() {
+        return showType;
+    }
+
+    public void setShowType(String showType) {
+        this.showType = showType;
     }
 }

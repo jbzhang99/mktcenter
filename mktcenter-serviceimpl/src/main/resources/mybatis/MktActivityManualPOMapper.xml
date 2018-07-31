@@ -550,7 +550,7 @@
        and <![CDATA[ tma.end_time >=#{endTime}]]>
      </if>
    </select>
-  <!--活动效果分析-->
+
   <select id="getActivityList" parameterType="com.bizvane.mktcenterservice.models.vo.ActivityVO" resultType="com.bizvane.mktcenterservice.models.vo.ActivityVO">
     SELECT
     tma.mkt_activity_id,

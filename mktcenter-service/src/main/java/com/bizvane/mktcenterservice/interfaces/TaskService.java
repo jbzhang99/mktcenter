@@ -1,7 +1,15 @@
 package com.bizvane.mktcenterservice.interfaces;
 
+import com.bizvane.centerstageservice.models.po.SysCheckConfigPo;
+import com.bizvane.centerstageservice.models.vo.SysCheckConfigVo;
+import com.bizvane.mktcenterservice.models.po.MktTaskPOWithBLOBs;
+import com.bizvane.mktcenterservice.models.vo.PageForm;
+import com.bizvane.mktcenterservice.models.vo.TaskVO;
 import com.bizvane.utils.responseinfo.ResponseData;
 import com.bizvane.utils.tokens.SysAccountPO;
+import com.github.pagehelper.PageInfo;
+
+import java.util.List;
 
 /**
  * @author chen.li
@@ -10,6 +18,31 @@ import com.bizvane.utils.tokens.SysAccountPO;
  * @Copyright (c) 2018 上海商帆信息科技有限公司-版权所有
  */
 public interface TaskService {
+    /**
+     * 根据品牌id查询任务是否需要审核
+     */
+
+    public  Integer  getCheckStatus(SysCheckConfigPo sysCheckConfigPo);
+    /**
+     * 根据任务类型查询任务列表
+     * @param vo
+     * @return
+     */
+    public ResponseData<PageInfo<MktTaskPOWithBLOBs>> getTaskByTaskType(TaskVO vo, PageForm pageForm);
+
+    /**
+     * 新增
+     */
+    public  Long  addTask(MktTaskPOWithBLOBs task,SysAccountPO sysAccountPO);
+
+    /**
+     * 修改
+     * @param task
+     * @param stageUser
+     * @return
+     */
+    public  Integer   updateTask(MktTaskPOWithBLOBs task, SysAccountPO stageUser);
+
     /**
      * 禁用/停止任务
      * @param mktTaskId

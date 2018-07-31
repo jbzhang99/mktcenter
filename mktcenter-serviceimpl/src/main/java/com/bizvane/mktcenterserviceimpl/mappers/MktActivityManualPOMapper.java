@@ -10,88 +10,88 @@ import java.util.List;
 
 public interface MktActivityManualPOMapper {
     /**
-	 * 只读. 
+	 * 只读.
 	 * @mbg.generated  2018-07-30 08:29:50
 	 */
 	long countByExample(MktActivityManualPOExample example);
 
 	/**
-	 * 只读. 
+	 * 只读.
 	 * @mbg.generated  2018-07-30 08:29:50
 	 */
 	int deleteByExample(MktActivityManualPOExample example);
 
 	/**
-	 * 只读. 
+	 * 只读.
 	 * @mbg.generated  2018-07-30 08:29:50
 	 */
 	int deleteByPrimaryKey(Long mktActivityManualId);
 
 	/**
-	 * 只读. 
+	 * 只读.
 	 * @mbg.generated  2018-07-30 08:29:50
 	 */
 	int insert(MktActivityManualPO record);
 
 	/**
-	 * 只读. 
+	 * 只读.
 	 * @mbg.generated  2018-07-30 08:29:50
 	 */
 	int insertSelective(MktActivityManualPO record);
 
 	/**
-	 * 只读. 
+	 * 只读.
 	 * @mbg.generated  2018-07-30 08:29:50
 	 */
 	List<MktActivityManualPO> selectByExampleWithBLOBs(MktActivityManualPOExample example);
 
 	/**
-	 * 只读. 
+	 * 只读.
 	 * @mbg.generated  2018-07-30 08:29:50
 	 */
 	List<MktActivityManualPO> selectByExample(MktActivityManualPOExample example);
 
 	/**
-	 * 只读. 
+	 * 只读.
 	 * @mbg.generated  2018-07-30 08:29:50
 	 */
 	MktActivityManualPO selectByPrimaryKey(Long mktActivityManualId);
 
 	/**
-	 * 只读. 
+	 * 只读.
 	 * @mbg.generated  2018-07-30 08:29:50
 	 */
 	int updateByExampleSelective(@Param("record") MktActivityManualPO record,
 			@Param("example") MktActivityManualPOExample example);
 
 	/**
-	 * 只读. 
+	 * 只读.
 	 * @mbg.generated  2018-07-30 08:29:50
 	 */
 	int updateByExampleWithBLOBs(@Param("record") MktActivityManualPO record,
 			@Param("example") MktActivityManualPOExample example);
 
 	/**
-	 * 只读. 
+	 * 只读.
 	 * @mbg.generated  2018-07-30 08:29:50
 	 */
 	int updateByExample(@Param("record") MktActivityManualPO record,
 			@Param("example") MktActivityManualPOExample example);
 
 	/**
-	 * 只读. 
+	 * 只读.
 	 * @mbg.generated  2018-07-30 08:29:50
 	 */
 	int updateByPrimaryKeySelective(MktActivityManualPO record);
 
 	/**
-	 * 只读. 
+	 * 只读.
 	 * @mbg.generated  2018-07-30 08:29:50
 	 */
 	int updateByPrimaryKeyWithBLOBs(MktActivityManualPO record);
 
 	/**
-	 * 只读. 
+	 * 只读.
 	 * @mbg.generated  2018-07-30 08:29:50
 	 */
 	int updateByPrimaryKey(MktActivityManualPO record);
