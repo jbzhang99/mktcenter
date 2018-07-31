@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
+import java.text.ParseException;
 import java.util.List;
 
 /**
@@ -53,7 +54,7 @@ public class TaskOrderController {
      * @return
      */
     @RequestMapping("addTask")
-    public ResponseData<Integer> addTask(TaskConsumeVO vo, HttpServletRequest request){
+    public ResponseData<Integer> addTask(TaskConsumeVO vo, HttpServletRequest request) throws ParseException {
         //参数校验通过，获取操作人信息
        SysAccountPO stageUser = TokenUtils.getStageUser(request);
 
