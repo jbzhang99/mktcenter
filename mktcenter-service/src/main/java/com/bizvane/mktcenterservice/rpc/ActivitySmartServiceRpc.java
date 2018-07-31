@@ -4,7 +4,9 @@ import com.bizvane.mktcenterservice.models.vo.ActivitySmartVO;
 import com.bizvane.utils.responseinfo.PageInfo;
 import com.bizvane.utils.responseinfo.ResponseData;
 import org.springframework.cloud.openfeign.FeignClient;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 /**
  * @author chen.li
@@ -18,18 +20,18 @@ public interface ActivitySmartServiceRpc {
 
     @RequestMapping("getActivityById")
     @io.swagger.annotations.ApiModelProperty(value = "ActivitySmartVO",name = "通过id获取活动", required = false,example = "")
-    public ResponseData<ActivitySmartVO> getActivityById(Long mktActivitySmartId);
+    public ResponseData<ActivitySmartVO> getActivityById(@RequestParam("mktActivitySmartId") Long mktActivitySmartId);
 
     @RequestMapping("getActivityList")
     @io.swagger.annotations.ApiModelProperty(value = "ActivitySmartVO",name = "查询智能营销活动列表", required = false,example = "")
-    public ResponseData<PageInfo<ActivitySmartVO>> getActivityList(ActivitySmartVO vo);
+    public ResponseData<PageInfo<ActivitySmartVO>> getActivityList(@RequestBody ActivitySmartVO vo);
 
     @RequestMapping("addActivity")
     @io.swagger.annotations.ApiModelProperty(value = "ActivitySmartVO",name = "添加智能营销活动", required = false,example = "")
-    public ResponseData<Integer> addActivity(ActivitySmartVO vo);
+    public ResponseData<Integer> addActivity(@RequestBody ActivitySmartVO vo);
 
     @RequestMapping("updateActivity")
     @io.swagger.annotations.ApiModelProperty(value = "ActivitySmartVO",name = "更新智能营销活动", required = false,example = "")
-    public ResponseData<Integer> updateActivity(ActivitySmartVO vo);
+    public ResponseData<Integer> updateActivity(@RequestBody ActivitySmartVO vo);
 
 }

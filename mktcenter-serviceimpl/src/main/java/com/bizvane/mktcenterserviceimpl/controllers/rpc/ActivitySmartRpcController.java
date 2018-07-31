@@ -32,7 +32,10 @@ public class ActivitySmartRpcController {
 
     @RequestMapping("getActivityList")
     @io.swagger.annotations.ApiModelProperty(value = "ActivitySmartVO",name = "查询智能营销活动列表", required = false,example = "")
-    public ResponseData<PageInfo<MktActivitySmartPO>> getActivityList(ActivitySmartVO vo, PageForm pageForm){
+    public ResponseData<PageInfo<MktActivitySmartPO>> getActivityList(ActivitySmartVO vo){
+        PageForm pageForm = new PageForm();
+        pageForm.setPageNumber(vo.getPageNumber());
+        pageForm.setPageSize(vo.getPageSize());
         return activitySmartService.getActivityList(vo,pageForm);
     }
 

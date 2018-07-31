@@ -72,6 +72,11 @@ public class ActivitySmartVO extends MktActivityPO {
      */
     private String mktTaskName;
 
+
+    private Integer pageNumber =1;
+
+    private Integer pageSize =10;
+
     public Integer getMktType() {
         return mktType;
     }
@@ -150,5 +155,21 @@ public class ActivitySmartVO extends MktActivityPO {
 
     public void setMktTaskName(String mktTaskName) {
         this.mktTaskName = mktTaskName;
+    }
+
+    public Integer getPageNumber() {
+        return pageNumber;
+    }
+
+    public void setPageNumber(Integer pageNumber) {
+        this.pageNumber = pageNumber;
+    }
+
+    public Integer getPageSize() {
+        return pageSize;
+    }
+
+    public void setPageSize(Integer pageSize) {
+        this.pageSize = pageSize;
     }
 }
