@@ -67,6 +67,21 @@ public class ActivitySmartVO extends MktActivityPO {
      */
     private String activityInfo;
 
+    /**
+     * 活动任务名称
+     */
+    private String mktTaskName;
+
+
+    private Integer pageNumber =1;
+
+    private Integer pageSize =10;
+
+    /**
+     * pkid
+     */
+    private Long mktActivitySmartId;
+
     public Integer getMktType() {
         return mktType;
     }
@@ -137,5 +152,37 @@ public class ActivitySmartVO extends MktActivityPO {
 
     public void setActivityInfo(String activityInfo) {
         this.activityInfo = activityInfo;
+    }
+
+    public String getMktTaskName() {
+        return mktTaskName;
+    }
+
+    public void setMktTaskName(String mktTaskName) {
+        this.mktTaskName = mktTaskName;
+    }
+
+    public Integer getPageNumber() {
+        return pageNumber;
+    }
+
+    public void setPageNumber(Integer pageNumber) {
+        this.pageNumber = pageNumber;
+    }
+
+    public Integer getPageSize() {
+        return pageSize;
+    }
+
+    public void setPageSize(Integer pageSize) {
+        this.pageSize = pageSize;
+    }
+
+    public Long getMktActivitySmartId() {
+        return mktActivitySmartId;
+    }
+
+    public void setMktActivitySmartId(Long mktActivitySmartId) {
+        this.mktActivitySmartId = mktActivitySmartId;
     }
 }

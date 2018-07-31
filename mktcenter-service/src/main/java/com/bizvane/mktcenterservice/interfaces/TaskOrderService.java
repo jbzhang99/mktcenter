@@ -8,6 +8,7 @@ import com.bizvane.mktcenterservice.models.vo.TaskVO;
 import com.bizvane.utils.responseinfo.ResponseData;
 import com.bizvane.utils.tokens.SysAccountPO;
 
+import java.text.ParseException;
 import java.util.List;
 
 /**
@@ -28,7 +29,7 @@ public interface TaskOrderService {
      * @param bo
      * @return
      */
-    public ResponseData<Integer> addTask(TaskConsumeVO vo, SysAccountPO stageUser);
+    public ResponseData<Integer> addTask(TaskConsumeVO vo, SysAccountPO stageUser) throws ParseException;
 
     /**
      * 修改任务

@@ -1,11 +1,17 @@
 package com.bizvane.mktcenterserviceimpl.controllers.rpc;
 
 import com.bizvane.mktcenterservice.interfaces.ActivityService;
+import com.bizvane.mktcenterservice.interfaces.ActivitySmartService;
+import com.bizvane.mktcenterservice.models.po.MktActivitySmartPO;
 import com.bizvane.mktcenterservice.models.vo.ActivitySmartVO;
-import com.bizvane.utils.responseinfo.PageInfo;
+import com.bizvane.mktcenterservice.models.vo.PageForm;
 import com.bizvane.utils.responseinfo.ResponseData;
+import com.bizvane.utils.tokens.SysAccountPO;
+import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
@@ -19,30 +25,33 @@ import org.springframework.web.bind.annotation.RestController;
 public class ActivitySmartRpcController {
 
     @Autowired
-    private ActivityService activityService;
+    private ActivitySmartService activitySmartService;
 
-    @RequestMapping("getActivityById")
+    @RequestMapping("getSmartActivityById")
     @io.swagger.annotations.ApiModelProperty(value = "ActivitySmartVO",name = "通过id获取活动", required = false,example = "")
-    public ResponseData<ActivitySmartVO> getActivityById(Long mktActivityId){
-        return new ResponseData<>();
+    public ResponseData<MktActivitySmartPO> getSmartActivityById(@RequestParam("mktActivitySmartId") Long mktActivitySmartId){
+        return activitySmartService.getSmartActivityById(mktActivitySmartId);
     }
 
-    @RequestMapping("getActivityList")
+    @RequestMapping("getSmartActivityList")
     @io.swagger.annotations.ApiModelProperty(value = "ActivitySmartVO",name = "查询智能营销活动列表", required = false,example = "")
-    public ResponseData<PageInfo<ActivitySmartVO>> getActivityList(ActivitySmartVO vo){
-        return new ResponseData<>();
+    public ResponseData<PageInfo<MktActivitySmartPO>> getSmartActivityList(@RequestBody ActivitySmartVO vo){
+        PageForm pageForm = new PageForm();
+        pageForm.setPageNumber(vo.getPageNumber());
+        pageForm.setPageSize(vo.getPageSize());
+        return activitySmartService.getSmartActivityList(vo,pageForm);
     }
 
-    @RequestMapping("addActivity")
+    @RequestMapping("addSmartActivity")
     @io.swagger.annotations.ApiModelProperty(value = "ActivitySmartVO",name = "添加智能营销活动", required = false,example = "")
-    public ResponseData<Integer> addActivity(ActivitySmartVO vo){
-        return new ResponseData<>();
+    public ResponseData<Integer> addSmartActivity(@RequestBody ActivitySmartVO vo){
+        return activitySmartService.addSmartActivity(vo);
     }
 
-    @RequestMapping("updateActivity")
+    @RequestMapping("updateSmartActivity")
     @io.swagger.annotations.ApiModelProperty(value = "ActivitySmartVO",name = "更新智能营销活动", required = false,example = "")
-    public ResponseData<Integer> updateActivity(ActivitySmartVO vo){
-        return new ResponseData<>();
+    public ResponseData<Integer> updateSmartActivity(@RequestBody ActivitySmartVO vo){
+        return activitySmartService.updateSmartActivity(vo);
     }
 
 }

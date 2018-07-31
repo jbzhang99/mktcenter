@@ -83,37 +83,70 @@ public class ExecuteParamCheckUtil {
      * @param activityVO
      * @return
      */
-    public  static Boolean CheckCommodity(OrderModelBo vo,ActivityVO activityVO){
-        boolean  falg=false;
-        if(false==activityVO.getCommodityLimit()){
+    public  static Boolean CheckCommodity(OrderModelBo vo,ActivityVO activityVO) {
+        boolean falg = false;
+        if (false == activityVO.getCommodityLimit()) {
             falg = true;
-        }else{
+        } else {
             //判断是否是黑名单
-            if(!StringUtils.isBlank(activityVO.getCommodityBlacklist()) ){
+            if (!StringUtils.isBlank(activityVO.getCommodityBlacklist())) {
                 String commodityBlacklist = activityVO.getCommodityBlacklist();
                 List<String> result = Arrays.asList(commodityBlacklist.split(","));
-                for (String commodityBlack:result){
-                    if(commodityBlack.equals(vo.getProductNo())){
-                        falg = false;
-                        break;
-                    }else{
-                        falg = true;
+                String productNos = vo.getProductNos();
+                List<String> productNoList = Arrays.asList(productNos.split(","));
+                result.retainAll(productNoList);
+                boolean fa=result.size()>0;
+                    if (fa==true){
+                        falg=false;
+                    }else {
+                        falg=true;
                     }
-                }
+
             }
             //判断是否是白名单
-            if(!StringUtils.isBlank(activityVO.getCommodityWhitelist())){
+            if (!StringUtils.isBlank(activityVO.getCommodityWhitelist())) {
                 String commodityWhitelist = activityVO.getCommodityWhitelist();
                 List<String> result = Arrays.asList(commodityWhitelist.split(","));
-                for (String commodityWhite:result) {
-                    if(commodityWhite.equals(vo.getProductNo())){
-                        falg = true;
-                        break;
-                    }else{
-                        falg = false;
-                    }
-                }
+                String productNos = vo.getProductNos();
+                List<String> productNoList = Arrays.asList(productNos.split(","));
+                    boolean contains = result.containsAll(productNoList);
+                        falg=contains;
             }
+
+        }
+        return falg;
+    }
+
+    /**
+     * 判断门店
+     * @param vo
+     * @param activityVO
+     * @return
+     */
+    public  static Boolean CheckserviceStore(OrderModelBo vo,ActivityVO activityVO) {
+        boolean falg = false;
+        if (false == activityVO.getStoreLimit()) {
+            falg = true;
+        }else{
+            //判断是都是黑名单
+            if (!StringUtils.isBlank(activityVO.getStoreBlacklist())) {
+                String StoreBlacklist = activityVO.getStoreBlacklist();
+                List<String> result = Arrays.asList(StoreBlacklist.split(","));
+                 boolean contains  =result.contains(vo.getServiceStoreId());
+                 if (contains==true){
+                     falg=false;
+                 }else{
+                     falg=true;
+                 }
+            }
+
+            //判断是否是白名单
+            if (!StringUtils.isBlank(activityVO.getStoreWhitelist())) {
+                String StoreWhitelist = activityVO.getStoreWhitelist();
+                List<String> result = Arrays.asList(StoreWhitelist.split(","));
+                falg=result.contains(vo.getServiceStoreId());
+            }
+
         }
         return falg;
     }

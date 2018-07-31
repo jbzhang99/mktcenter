@@ -19,11 +19,11 @@ import java.util.List;
 public interface ActivitySmartService {
 
     /**
-     * 查询智能营销活动列表
+     * 查询智能营销分组列表
      * @param vo
      * @return
      */
-    public ResponseData<List<ActivitySmartVO>> getActivityList(ActivitySmartVO vo);
+    public ResponseData<PageInfo<MktActivitySmartPO>> getSmartActivityList(ActivitySmartVO vo, PageForm pageForm);
 
     /**
      * 查询历史营销活动列表
@@ -35,4 +35,24 @@ public interface ActivitySmartService {
 
     public ResponseData<Integer> addCouponActivity(ActivitySmartVO vo, List<MktCouponPO> couponCodeList, SysAccountPO stageUser);
 
+    /**
+     * 查询某个智能营销分组
+     * @param mktActivitySmartId
+     * @return
+     */
+    public ResponseData<MktActivitySmartPO> getSmartActivityById(Long mktActivitySmartId);
+
+    /**
+     * 添加智能营销分组
+     * @param vo
+     * @return
+     */
+    public ResponseData<Integer> addSmartActivity(ActivitySmartVO vo);
+
+    /**
+     * 修改智能营销分组
+     * @param vo
+     * @return
+     */
+    public ResponseData<Integer> updateSmartActivity(ActivitySmartVO vo);
 }

@@ -32,5 +32,10 @@ public class ActivityConstants {
     public static String ERROR_MSG_ORDER_SOURCE_EMPTY ="订单来源为空";
     public static String ERROR_MSG_ORDER_MIN_PRICE_EMPTY ="消费最低金额为空";
 
+    //智能营销
     public static Long SMART_ACTIVITY_GROUP = 0L;
+    public static String SMART_ACTIVITY_TASK_NAME_EMPTY = "智能营销名称为空";
+    public static String SMART_ACTIVITY_TARGET_MEMBER_EMPTY = "智能营销会员条件为空";
+
+
 }
