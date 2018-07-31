@@ -18,6 +18,11 @@ public class ActivitySmartVO extends MktActivityPO {
      */
     @io.swagger.annotations.ApiModelProperty(value = "营销方式：1优惠券营销，2积分营销，3短信营销，4微信模板消息营销", name = "mktType", required = false, example = "")
     private Integer mktType;
+
+    /**
+     * 营销方式名称
+     */
+    private String mktTypeStr;
     /**
      * 只读. 会员分组id. member_group_id
      * @mbg.generated  2018-07-27 20:48:29
@@ -81,11 +86,6 @@ public class ActivitySmartVO extends MktActivityPO {
      * 状态： 1启用，0禁用
      */
     private Integer status;
-
-    /**
-     * pkid
-     */
-    private Long mktActivitySmartId;
 
     public Integer getMktType() {
         return mktType;
@@ -183,19 +183,19 @@ public class ActivitySmartVO extends MktActivityPO {
         this.pageSize = pageSize;
     }
 
-    public Long getMktActivitySmartId() {
-        return mktActivitySmartId;
-    }
-
-    public void setMktActivitySmartId(Long mktActivitySmartId) {
-        this.mktActivitySmartId = mktActivitySmartId;
-    }
-
     public Integer getStatus() {
         return status;
     }
 
     public void setStatus(Integer status) {
         this.status = status;
+    }
+
+    public String getMktTypeStr() {
+        return mktTypeStr;
+    }
+
+    public void setMktTypeStr(String mktTypeStr) {
+        this.mktTypeStr = mktTypeStr;
     }
 }
