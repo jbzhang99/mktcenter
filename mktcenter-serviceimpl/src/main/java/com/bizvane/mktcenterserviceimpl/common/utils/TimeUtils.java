@@ -30,7 +30,7 @@ public class TimeUtils {
      *
      */
     
-    public  Integer  IsImmediatelyRun(Date timeparam) throws ParseException {
+    public static Integer  IsImmediatelyRun(Date timeparam) throws ParseException {
         timeparam=sdf.parse(sdf.format(timeparam));
         Date dateNow = sdf.parse(sdf.format(new Date()));
 
