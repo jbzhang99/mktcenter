@@ -9,28 +9,28 @@ import java.util.List;
 public class MktTaskRecordPOExample implements Serializable {
     /**
 	 * 只读. 
-	 * @mbg.generated  2018-07-31 14:19:14
+	 * @mbg.generated  2018-07-31 14:22:17
 	 */
 	protected String orderByClause;
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-07-31 14:19:14
+	 * @mbg.generated  2018-07-31 14:22:17
 	 */
 	protected boolean distinct;
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-07-31 14:19:14
+	 * @mbg.generated  2018-07-31 14:22:17
 	 */
 	protected List<Criteria> oredCriteria;
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-07-31 14:19:14
+	 * @mbg.generated  2018-07-31 14:22:17
 	 */
 	private static final long serialVersionUID = 1L;
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-07-31 14:19:14
+	 * @mbg.generated  2018-07-31 14:22:17
 	 */
 	public MktTaskRecordPOExample() {
 		oredCriteria = new ArrayList<Criteria>();
@@ -38,7 +38,7 @@ public class MktTaskRecordPOExample implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-07-31 14:19:14
+	 * @mbg.generated  2018-07-31 14:22:17
 	 */
 	public void setOrderByClause(String orderByClause) {
 		this.orderByClause = orderByClause;
@@ -46,7 +46,7 @@ public class MktTaskRecordPOExample implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-07-31 14:19:14
+	 * @mbg.generated  2018-07-31 14:22:17
 	 */
 	public String getOrderByClause() {
 		return orderByClause;
@@ -54,7 +54,7 @@ public class MktTaskRecordPOExample implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-07-31 14:19:14
+	 * @mbg.generated  2018-07-31 14:22:17
 	 */
 	public void setDistinct(boolean distinct) {
 		this.distinct = distinct;
@@ -62,7 +62,7 @@ public class MktTaskRecordPOExample implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-07-31 14:19:14
+	 * @mbg.generated  2018-07-31 14:22:17
 	 */
 	public boolean isDistinct() {
 		return distinct;
@@ -70,7 +70,7 @@ public class MktTaskRecordPOExample implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-07-31 14:19:14
+	 * @mbg.generated  2018-07-31 14:22:17
 	 */
 	public List<Criteria> getOredCriteria() {
 		return oredCriteria;
@@ -78,7 +78,7 @@ public class MktTaskRecordPOExample implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-07-31 14:19:14
+	 * @mbg.generated  2018-07-31 14:22:17
 	 */
 	public void or(Criteria criteria) {
 		oredCriteria.add(criteria);
@@ -86,7 +86,7 @@ public class MktTaskRecordPOExample implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-07-31 14:19:14
+	 * @mbg.generated  2018-07-31 14:22:17
 	 */
 	public Criteria or() {
 		Criteria criteria = createCriteriaInternal();
@@ -96,7 +96,7 @@ public class MktTaskRecordPOExample implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-07-31 14:19:14
+	 * @mbg.generated  2018-07-31 14:22:17
 	 */
 	public Criteria createCriteria() {
 		Criteria criteria = createCriteriaInternal();
@@ -108,7 +108,7 @@ public class MktTaskRecordPOExample implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-07-31 14:19:14
+	 * @mbg.generated  2018-07-31 14:22:17
 	 */
 	protected Criteria createCriteriaInternal() {
 		Criteria criteria = new Criteria();
@@ -117,7 +117,7 @@ public class MktTaskRecordPOExample implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-07-31 14:19:14
+	 * @mbg.generated  2018-07-31 14:22:17
 	 */
 	public void clear() {
 		oredCriteria.clear();
@@ -127,7 +127,7 @@ public class MktTaskRecordPOExample implements Serializable {
 
 	/**
 	 * 只读. t_mkt_task_record
-	 * @mbg.generated  2018-07-31 14:19:14
+	 * @mbg.generated  2018-07-31 14:22:17
 	 */
 	protected abstract static class GeneratedCriteria implements Serializable {
 		protected List<Criterion> criteria;
@@ -540,63 +540,63 @@ public class MktTaskRecordPOExample implements Serializable {
 			return (Criteria) this;
 		}
 
-		public Criteria andParticipateIsNull() {
-			addCriterion("participate is null");
+		public Criteria andParticipateDateIsNull() {
+			addCriterion("participate_date is null");
 			return (Criteria) this;
 		}
 
-		public Criteria andParticipateIsNotNull() {
-			addCriterion("participate is not null");
+		public Criteria andParticipateDateIsNotNull() {
+			addCriterion("participate_date is not null");
 			return (Criteria) this;
 		}
 
-		public Criteria andParticipateEqualTo(Date value) {
-			addCriterion("participate =", value, "participate");
+		public Criteria andParticipateDateEqualTo(Date value) {
+			addCriterion("participate_date =", value, "participateDate");
 			return (Criteria) this;
 		}
 
-		public Criteria andParticipateNotEqualTo(Date value) {
-			addCriterion("participate <>", value, "participate");
+		public Criteria andParticipateDateNotEqualTo(Date value) {
+			addCriterion("participate_date <>", value, "participateDate");
 			return (Criteria) this;
 		}
 
-		public Criteria andParticipateGreaterThan(Date value) {
-			addCriterion("participate >", value, "participate");
+		public Criteria andParticipateDateGreaterThan(Date value) {
+			addCriterion("participate_date >", value, "participateDate");
 			return (Criteria) this;
 		}
 
-		public Criteria andParticipateGreaterThanOrEqualTo(Date value) {
-			addCriterion("participate >=", value, "participate");
+		public Criteria andParticipateDateGreaterThanOrEqualTo(Date value) {
+			addCriterion("participate_date >=", value, "participateDate");
 			return (Criteria) this;
 		}
 
-		public Criteria andParticipateLessThan(Date value) {
-			addCriterion("participate <", value, "participate");
+		public Criteria andParticipateDateLessThan(Date value) {
+			addCriterion("participate_date <", value, "participateDate");
 			return (Criteria) this;
 		}
 
-		public Criteria andParticipateLessThanOrEqualTo(Date value) {
-			addCriterion("participate <=", value, "participate");
+		public Criteria andParticipateDateLessThanOrEqualTo(Date value) {
+			addCriterion("participate_date <=", value, "participateDate");
 			return (Criteria) this;
 		}
 
-		public Criteria andParticipateIn(List<Date> values) {
-			addCriterion("participate in", values, "participate");
+		public Criteria andParticipateDateIn(List<Date> values) {
+			addCriterion("participate_date in", values, "participateDate");
 			return (Criteria) this;
 		}
 
-		public Criteria andParticipateNotIn(List<Date> values) {
-			addCriterion("participate not in", values, "participate");
+		public Criteria andParticipateDateNotIn(List<Date> values) {
+			addCriterion("participate_date not in", values, "participateDate");
 			return (Criteria) this;
 		}
 
-		public Criteria andParticipateBetween(Date value1, Date value2) {
-			addCriterion("participate between", value1, value2, "participate");
+		public Criteria andParticipateDateBetween(Date value1, Date value2) {
+			addCriterion("participate_date between", value1, value2, "participateDate");
 			return (Criteria) this;
 		}
 
-		public Criteria andParticipateNotBetween(Date value1, Date value2) {
-			addCriterion("participate not between", value1, value2, "participate");
+		public Criteria andParticipateDateNotBetween(Date value1, Date value2) {
+			addCriterion("participate_date not between", value1, value2, "participateDate");
 			return (Criteria) this;
 		}
 
@@ -1113,7 +1113,7 @@ public class MktTaskRecordPOExample implements Serializable {
 
 	/**
 	 * 只读. t_mkt_task_record
-	 * @mbg.generated  2018-07-31 14:19:14
+	 * @mbg.generated  2018-07-31 14:22:17
 	 */
 	public static class Criterion implements Serializable {
 		private String condition;
