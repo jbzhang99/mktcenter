@@ -1,5 +1,6 @@
 package com.bizvane.mktcenterservice.interfaces;
 
+import com.bizvane.mktcenterservice.models.bo.ActivitySmartBO;
 import com.bizvane.mktcenterservice.models.po.MktActivitySmartPO;
 import com.bizvane.mktcenterservice.models.po.MktCouponPO;
 import com.bizvane.mktcenterservice.models.vo.ActivitySmartVO;
@@ -43,6 +44,13 @@ public interface ActivitySmartService {
      * @return
      */
     public ResponseData<MktActivitySmartPO> getSmartActivityById(Long mktActivitySmartId);
+
+    /**
+     * 查询某个智能营销活动详情
+     * @param mktActivityId
+     * @return
+     */
+    public ResponseData<ActivitySmartBO> getActivityDetailById(Long mktActivityId);
 
     /**
      * 添加智能营销分组

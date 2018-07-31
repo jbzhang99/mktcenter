@@ -4,7 +4,7 @@
   <resultMap id="BaseResultMap" type="com.bizvane.mktcenterservice.models.po.MktTaskRecordPO">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-31 14:22:17.
+      This element was generated on 2018-07-31 19:48:47.
     -->
     <id column="mkt_task_record_id" jdbcType="BIGINT" property="mktTaskRecordId" />
     <result column="task_type" jdbcType="INTEGER" property="taskType" />
@@ -13,6 +13,7 @@
     <result column="share_times" jdbcType="INTEGER" property="shareTimes" />
     <result column="consume_amount" jdbcType="DECIMAL" property="consumeAmount" />
     <result column="participate_date" jdbcType="TIMESTAMP" property="participateDate" />
+    <result column="rewarded" jdbcType="INTEGER" property="rewarded" />
     <result column="remark" jdbcType="VARCHAR" property="remark" />
     <result column="create_user_id" jdbcType="BIGINT" property="createUserId" />
     <result column="create_user_name" jdbcType="VARCHAR" property="createUserName" />
@@ -25,7 +26,7 @@
   <sql id="Example_Where_Clause">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-31 14:22:17.
+      This element was generated on 2018-07-31 19:48:47.
     -->
     <where>
       <foreach collection="oredCriteria" item="criteria" separator="or">
@@ -58,7 +59,7 @@
   <sql id="Update_By_Example_Where_Clause">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-31 14:22:17.
+      This element was generated on 2018-07-31 19:48:47.
     -->
     <where>
       <foreach collection="example.oredCriteria" item="criteria" separator="or">
@@ -91,16 +92,16 @@
   <sql id="Base_Column_List">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-31 14:22:17.
+      This element was generated on 2018-07-31 19:48:47.
     -->
     mkt_task_record_id, task_type, task_id, member_code, share_times, consume_amount, 
-    participate_date, remark, create_user_id, create_user_name, create_date, modified_user_id, 
-    modified_user_name, modified_date, valid
+    participate_date, rewarded, remark, create_user_id, create_user_name, create_date, 
+    modified_user_id, modified_user_name, modified_date, valid
   </sql>
   <select id="selectByExample" parameterType="com.bizvane.mktcenterservice.models.po.MktTaskRecordPOExample" resultMap="BaseResultMap">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-31 14:22:17.
+      This element was generated on 2018-07-31 19:48:47.
     -->
     select
     <if test="distinct">
@@ -118,7 +119,7 @@
   <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-31 14:22:17.
+      This element was generated on 2018-07-31 19:48:47.
     -->
     select 
     <include refid="Base_Column_List" />
@@ -128,7 +129,7 @@
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-31 14:22:17.
+      This element was generated on 2018-07-31 19:48:47.
     -->
     delete from t_mkt_task_record
     where mkt_task_record_id = #{mktTaskRecordId,jdbcType=BIGINT}
@@ -136,7 +137,7 @@
   <delete id="deleteByExample" parameterType="com.bizvane.mktcenterservice.models.po.MktTaskRecordPOExample">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-31 14:22:17.
+      This element was generated on 2018-07-31 19:48:47.
     -->
     delete from t_mkt_task_record
     <if test="_parameter != null">
@@ -146,26 +147,28 @@
   <insert id="insert" parameterType="com.bizvane.mktcenterservice.models.po.MktTaskRecordPO">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-31 14:22:17.
+      This element was generated on 2018-07-31 19:48:47.
     -->
     <selectKey keyProperty="mktTaskRecordId" order="AFTER" resultType="java.lang.Long">
       SELECT LAST_INSERT_ID()
     </selectKey>
     insert into t_mkt_task_record (task_type, task_id, member_code, 
       share_times, consume_amount, participate_date, 
-      remark, create_user_id, create_user_name, 
-      create_date, modified_user_id, modified_user_name, 
-      modified_date, valid)
+      rewarded, remark, create_user_id, 
+      create_user_name, create_date, modified_user_id, 
+      modified_user_name, modified_date, valid
+      )
     values (#{taskType,jdbcType=INTEGER}, #{taskId,jdbcType=BIGINT}, #{memberCode,jdbcType=VARCHAR}, 
       #{shareTimes,jdbcType=INTEGER}, #{consumeAmount,jdbcType=DECIMAL}, #{participateDate,jdbcType=TIMESTAMP}, 
-      #{remark,jdbcType=VARCHAR}, #{createUserId,jdbcType=BIGINT}, #{createUserName,jdbcType=VARCHAR}, 
-      #{createDate,jdbcType=TIMESTAMP}, #{modifiedUserId,jdbcType=BIGINT}, #{modifiedUserName,jdbcType=VARCHAR}, 
-      #{modifiedDate,jdbcType=TIMESTAMP}, #{valid,jdbcType=BIT})
+      #{rewarded,jdbcType=INTEGER}, #{remark,jdbcType=VARCHAR}, #{createUserId,jdbcType=BIGINT}, 
+      #{createUserName,jdbcType=VARCHAR}, #{createDate,jdbcType=TIMESTAMP}, #{modifiedUserId,jdbcType=BIGINT}, 
+      #{modifiedUserName,jdbcType=VARCHAR}, #{modifiedDate,jdbcType=TIMESTAMP}, #{valid,jdbcType=BIT}
+      )
   </insert>
   <insert id="insertSelective" parameterType="com.bizvane.mktcenterservice.models.po.MktTaskRecordPO">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-31 14:22:17.
+      This element was generated on 2018-07-31 19:48:47.
     -->
     <selectKey keyProperty="mktTaskRecordId" order="AFTER" resultType="java.lang.Long">
       SELECT LAST_INSERT_ID()
@@ -189,6 +192,9 @@
       </if>
       <if test="participateDate != null">
         participate_date,
+      </if>
+      <if test="rewarded != null">
+        rewarded,
       </if>
       <if test="remark != null">
         remark,
@@ -234,6 +240,9 @@
       <if test="participateDate != null">
         #{participateDate,jdbcType=TIMESTAMP},
       </if>
+      <if test="rewarded != null">
+        #{rewarded,jdbcType=INTEGER},
+      </if>
       <if test="remark != null">
         #{remark,jdbcType=VARCHAR},
       </if>
@@ -263,7 +272,7 @@
   <select id="countByExample" parameterType="com.bizvane.mktcenterservice.models.po.MktTaskRecordPOExample" resultType="java.lang.Long">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-31 14:22:17.
+      This element was generated on 2018-07-31 19:48:47.
     -->
     select count(*) from t_mkt_task_record
     <if test="_parameter != null">
@@ -273,7 +282,7 @@
   <update id="updateByExampleSelective" parameterType="map">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-31 14:22:17.
+      This element was generated on 2018-07-31 19:48:47.
     -->
     update t_mkt_task_record
     <set>
@@ -297,6 +306,9 @@
       </if>
       <if test="record.participateDate != null">
         participate_date = #{record.participateDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.rewarded != null">
+        rewarded = #{record.rewarded,jdbcType=INTEGER},
       </if>
       <if test="record.remark != null">
         remark = #{record.remark,jdbcType=VARCHAR},
@@ -330,7 +342,7 @@
   <update id="updateByExample" parameterType="map">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-31 14:22:17.
+      This element was generated on 2018-07-31 19:48:47.
     -->
     update t_mkt_task_record
     set mkt_task_record_id = #{record.mktTaskRecordId,jdbcType=BIGINT},
@@ -340,6 +352,7 @@
       share_times = #{record.shareTimes,jdbcType=INTEGER},
       consume_amount = #{record.consumeAmount,jdbcType=DECIMAL},
       participate_date = #{record.participateDate,jdbcType=TIMESTAMP},
+      rewarded = #{record.rewarded,jdbcType=INTEGER},
       remark = #{record.remark,jdbcType=VARCHAR},
       create_user_id = #{record.createUserId,jdbcType=BIGINT},
       create_user_name = #{record.createUserName,jdbcType=VARCHAR},
@@ -355,7 +368,7 @@
   <update id="updateByPrimaryKeySelective" parameterType="com.bizvane.mktcenterservice.models.po.MktTaskRecordPO">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-31 14:22:17.
+      This element was generated on 2018-07-31 19:48:47.
     -->
     update t_mkt_task_record
     <set>
@@ -376,6 +389,9 @@
       </if>
       <if test="participateDate != null">
         participate_date = #{participateDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="rewarded != null">
+        rewarded = #{rewarded,jdbcType=INTEGER},
       </if>
       <if test="remark != null">
         remark = #{remark,jdbcType=VARCHAR},
@@ -407,7 +423,7 @@
   <update id="updateByPrimaryKey" parameterType="com.bizvane.mktcenterservice.models.po.MktTaskRecordPO">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-31 14:22:17.
+      This element was generated on 2018-07-31 19:48:47.
     -->
     update t_mkt_task_record
     set task_type = #{taskType,jdbcType=INTEGER},
@@ -416,6 +432,7 @@
       share_times = #{shareTimes,jdbcType=INTEGER},
       consume_amount = #{consumeAmount,jdbcType=DECIMAL},
       participate_date = #{participateDate,jdbcType=TIMESTAMP},
+      rewarded = #{rewarded,jdbcType=INTEGER},
       remark = #{remark,jdbcType=VARCHAR},
       create_user_id = #{createUserId,jdbcType=BIGINT},
       create_user_name = #{createUserName,jdbcType=VARCHAR},
