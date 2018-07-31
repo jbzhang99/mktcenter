@@ -3,12 +3,14 @@ package com.bizvane.mktcenterserviceimpl.service.impl;
 import com.bizvane.mktcenterservice.interfaces.ActivitySmartService;
 import com.bizvane.mktcenterservice.models.po.MktActivitySmartPO;
 import com.bizvane.mktcenterservice.models.po.MktActivitySmartPOExample;
+import com.bizvane.mktcenterservice.models.po.MktCouponPO;
 import com.bizvane.mktcenterservice.models.vo.ActivitySmartVO;
 import com.bizvane.mktcenterservice.models.vo.PageForm;
+import com.bizvane.mktcenterserviceimpl.common.constants.ActivityConstants;
 import com.bizvane.mktcenterserviceimpl.common.constants.ResponseConstants;
-import com.bizvane.mktcenterserviceimpl.common.enums.MktTypeEnum;
 import com.bizvane.mktcenterserviceimpl.mappers.MktActivitySmartPOMapper;
 import com.bizvane.utils.responseinfo.ResponseData;
+import com.bizvane.utils.tokens.SysAccountPO;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,15 +31,23 @@ public class ActivitySmartServiceImpl implements ActivitySmartService {
     private MktActivitySmartPOMapper mktActivitySmartPOMapper;
 
     /**
-     * 查询智能营销活动列表
+     * 查询智能营销活动列表(方块)
      * @param vo
      * @return
      */
     @Override
-    public ResponseData<ActivitySmartVO> getActivityList(ActivitySmartVO vo) {
+    public ResponseData<List<ActivitySmartVO>> getActivityList(ActivitySmartVO vo) {
         ResponseData responseData = new ResponseData();
-        List<ActivitySmartVO> activityRegisterList = mktActivitySmartPOMapper.getActivityList(vo);
-        responseData.setData(activityRegisterList);
+        //品牌id不能为空
+        if(vo.getSysBrandId()==null){
+            responseData.setCode(ResponseConstants.ERROR);
+            responseData.setMessage(ResponseConstants.ERROR_MSG);
+            return responseData;
+        }
+        MktActivitySmartPOExample example = new MktActivitySmartPOExample();
+        example.createCriteria().andValidEqualTo(Boolean.TRUE).andMktActivityIdEqualTo(ActivityConstants.SMART_ACTIVITY_GROUP);
+        List<MktActivitySmartPO> mktActivitySmartPOS = mktActivitySmartPOMapper.selectByExampleWithBLOBs(example);
+        responseData.setData(mktActivitySmartPOS);
         return responseData;
     }
 
@@ -57,21 +67,27 @@ public class ActivitySmartServiceImpl implements ActivitySmartService {
             return responseData;
         }
         PageHelper.startPage(pageForm.getPageNumber(),pageForm.getPageSize());
-        MktActivitySmartPOExample example = new MktActivitySmartPOExample();
-        MktActivitySmartPOExample.Criteria criteria = example.createCriteria();
-        criteria.andMktActivityIdEqualTo(vo.getMktActivityId()).andValidEqualTo(Boolean.TRUE);
-        if(vo.getCreateDateStart()!=null){
-            criteria.andCreateDateGreaterThanOrEqualTo(vo.getCreateDateStart());
-        }
-        if(vo.getCreateDateEnd()!= null){
-            criteria.andCreateDateLessThanOrEqualTo(vo.getCreateDateEnd());
-        }
-        if(vo.getMktType()!=null && vo.getMktType().intValue()!=MktTypeEnum.TASK_STATUS_ALL.getCode()){
-            criteria.andMktTypeEqualTo(vo.getMktType());
-        }
-        List<MktActivitySmartPO> mktActivitySmartPOS = mktActivitySmartPOMapper.selectByExampleWithBLOBs(example);
-        PageInfo<MktActivitySmartPO> pageInfo = new PageInfo<>(mktActivitySmartPOS);
+        List<ActivitySmartVO> activityList = mktActivitySmartPOMapper.getActivityList(vo);
+        PageInfo<ActivitySmartVO> pageInfo = new PageInfo<>(activityList);
         responseData.setData(pageInfo);
+        return responseData;
+    }
+
+    /**
+     * 对某个智能营销组创建任务
+     * 任务类型：1优惠券营销
+     * @return
+     */
+    @Override
+    public ResponseData<Integer> addCouponActivity(ActivitySmartVO vo, List<MktCouponPO> couponCodeList, SysAccountPO stageUser) {
+        ResponseData responseData = new ResponseData();
+
+        //新增活动主表
+
+        //新增智能营销表
+
+        //新增奖励券表
+
         return responseData;
     }
 }
