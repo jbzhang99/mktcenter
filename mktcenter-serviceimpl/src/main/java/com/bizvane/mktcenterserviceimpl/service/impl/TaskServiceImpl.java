@@ -1,5 +1,8 @@
 package com.bizvane.mktcenterserviceimpl.service.impl;
 
+import com.bizvane.centerstageservice.models.po.SysCheckConfigPo;
+import com.bizvane.centerstageservice.models.vo.SysCheckConfigVo;
+import com.bizvane.centerstageservice.rpc.SysCheckConfigServiceRpc;
 import com.bizvane.mktcenterservice.interfaces.TaskService;
 import com.bizvane.mktcenterservice.models.po.MktTaskPO;
 import com.bizvane.mktcenterservice.models.po.MktTaskPOExample;
@@ -36,6 +39,22 @@ public class TaskServiceImpl implements TaskService {
 
     @Autowired
     private MktTaskPOMapper mktTaskPOMapper;
+    @Autowired
+    private SysCheckConfigServiceRpc sysCheckConfigServiceRpc;
+
+
+
+    /**
+     * 根据品牌Id 查询审核配置，是否需要审核然后判断
+     * 1:需要审核 0:不需要
+     * @return
+     */
+    @Override
+    public Integer getCheckStatus(SysCheckConfigPo sysCheckConfigPo) {
+        ResponseData<Integer> responseData = sysCheckConfigServiceRpc.ifCheckConfig(sysCheckConfigPo);
+        return  responseData.getData();
+
+    }
 
     /**
      * 根据任务类型查询任务

@@ -1,12 +1,13 @@
 package com.bizvane.mktcenterserviceimpl.service.impl;
 
+import com.bizvane.centerstageservice.models.po.SysCheckConfigPo;
+import com.bizvane.centerstageservice.models.vo.SysCheckConfigVo;
+import com.bizvane.centerstageservice.rpc.SysCheckConfigServiceRpc;
 import com.bizvane.mktcenterservice.interfaces.TaskCouponService;
 import com.bizvane.mktcenterservice.interfaces.TaskMessageService;
 import com.bizvane.mktcenterservice.interfaces.TaskOrderService;
 import com.bizvane.mktcenterservice.interfaces.TaskService;
-import com.bizvane.mktcenterservice.models.bo.TaskBO;
 import com.bizvane.mktcenterservice.models.po.*;
-import com.bizvane.mktcenterservice.models.vo.PageForm;
 import com.bizvane.mktcenterservice.models.vo.TaskConsumeVO;
 import com.bizvane.mktcenterservice.models.vo.TaskVO;
 import com.bizvane.mktcenterserviceimpl.common.constants.SystemConstants;
@@ -14,22 +15,15 @@ import com.bizvane.mktcenterserviceimpl.common.constants.TaskConstants;
 import com.bizvane.mktcenterserviceimpl.common.utils.CodeUtil;
 import com.bizvane.mktcenterserviceimpl.common.utils.TaskParamCheckUtil;
 import com.bizvane.mktcenterserviceimpl.common.utils.TimeUtils;
-import com.bizvane.mktcenterserviceimpl.mappers.MktCouponPOMapper;
-import com.bizvane.mktcenterserviceimpl.mappers.MktMessagePOMapper;
 import com.bizvane.mktcenterserviceimpl.mappers.MktTaskOrderPOMapper;
-import com.bizvane.mktcenterserviceimpl.mappers.MktTaskPOMapper;
 import com.bizvane.utils.responseinfo.ResponseData;
 import com.bizvane.utils.tokens.SysAccountPO;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.apache.commons.collections.CollectionUtils;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.thymeleaf.expression.Lists;
-
-import java.beans.Transient;
 import java.util.List;
 
 /**
@@ -53,6 +47,8 @@ public class TaskOrderServiceImpl implements TaskOrderService {
     @Autowired
     private MktTaskOrderPOMapper mktTaskOrderPOMapper;
 
+
+
     /**s
      * 查询任务
      * @return
@@ -70,7 +66,10 @@ public class TaskOrderServiceImpl implements TaskOrderService {
     @Transactional
     @Override
     public ResponseData<Integer> addTask(TaskConsumeVO vo, SysAccountPO stageUser) {
-       // Integer  data =0;
+        SysCheckConfigPo sysCheckConfigPo = new SysCheckConfigPo();
+        sysCheckConfigPo.setSysBrandId(vo.getMktTaskPOWithBLOBs().getSysBrandId());
+        Integer checkStatus = taskService.getCheckStatus(sysCheckConfigPo);
+
         //0.参数的检验
         ResponseData responseData = TaskParamCheckUtil.checkParam(vo);
         if (responseData.getCode()<0){

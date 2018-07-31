@@ -1,5 +1,7 @@
 package com.bizvane.mktcenterservice.interfaces;
 
+import com.bizvane.centerstageservice.models.po.SysCheckConfigPo;
+import com.bizvane.centerstageservice.models.vo.SysCheckConfigVo;
 import com.bizvane.mktcenterservice.models.po.MktTaskPOWithBLOBs;
 import com.bizvane.mktcenterservice.models.vo.PageForm;
 import com.bizvane.mktcenterservice.models.vo.TaskVO;
@@ -16,6 +18,11 @@ import java.util.List;
  * @Copyright (c) 2018 上海商帆信息科技有限公司-版权所有
  */
 public interface TaskService {
+    /**
+     * 根据品牌id查询任务是否需要审核
+     */
+
+    public  Integer  getCheckStatus(SysCheckConfigPo sysCheckConfigPo);
     /**
      * 根据任务类型查询任务列表
      * @param vo

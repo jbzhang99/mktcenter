@@ -153,6 +153,17 @@ public class ActivityVO extends MktActivityPO {
 
     @io.swagger.annotations.ApiModelProperty(value = "��ά���ַ", name = "qrcode", required = false, example = "")
     private String qrcode;
+    @io.swagger.annotations.ApiModelProperty(value = "订单来源：1线下订单，2微商城订单", name = "orderSource", required = false, example = "")
+    private Integer orderSource;//订单来源
+
+    public Integer getOrderSource() {
+        return orderSource;
+    }
+
+    public void setOrderSource(Integer orderSource) {
+        this.orderSource = orderSource;
+    }
+
 
     @io.swagger.annotations.ApiModelProperty(value = "ÿ��ÿ�������ȡ������", name = "perPersonPerDayMax", required = false, example = "")
     private Integer perPersonPerDayMax;

@@ -20,6 +20,7 @@ import com.bizvane.mktcenterserviceimpl.common.enums.ActivityTypeEnum;
 import com.bizvane.mktcenterserviceimpl.common.enums.BusinessTypeEnum;
 import com.bizvane.mktcenterserviceimpl.common.enums.CheckStatusEnum;
 import com.bizvane.mktcenterserviceimpl.common.job.XxlJobConfig;
+import com.bizvane.mktcenterserviceimpl.common.utils.ExecuteParamCheckUtil;
 import com.bizvane.mktcenterserviceimpl.common.utils.JobUtil;
 import com.bizvane.mktcenterserviceimpl.mappers.MktActivityOrderPOMapper;
 import com.bizvane.mktcenterserviceimpl.mappers.MktActivityPOMapper;
@@ -36,6 +37,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
@@ -423,6 +425,27 @@ public class ActivityOrderServiceImpl implements ActivityOrderService {
         activity.setActivityType(ActivityTypeEnum.ACTIVITY_TYPE_REGISGER.getCode());
         List<ActivityVO> OrderList = mktActivityOrderPOMapper.getActivityOrderList(activity);
         for (ActivityVO activityVO:OrderList) {
+            //判断会员范围 会员类型
+            if(!ExecuteParamCheckUtil.CheckMemberType(vo.getMemberType(),activityVO.getMemberType())){
+                continue;
+            }
+            //判断会员等级
+            if(!ExecuteParamCheckUtil.CheckMbrLevelCode(vo.getLevelId(),activityVO.getMbrLevelCode())){
+                continue;
+            }
+            //判断订单来源
+            if(!ExecuteParamCheckUtil.CheckOrderFrom(vo.getOrderFrom(),activityVO.getOrderSource())){
+                continue;
+            }
+            //判断金额是否满足
+            if (ExecuteParamCheckUtil.CheckPayMoney(vo.getPayMoney(),new BigDecimal(activityVO.getOrderMinPrice()))){
+                continue;
+            }
+
+
+
+
+
             //增加积分奖励新增接口
             IntegralRecordModel var1 = new IntegralRecordModel();
             var1.setMemberCode(vo.getMemberCode().toString());
@@ -447,4 +470,5 @@ public class ActivityOrderServiceImpl implements ActivityOrderService {
         }
         return responseData;
     }
+
 }
