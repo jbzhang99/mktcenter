@@ -1,15 +1,21 @@
 package com.bizvane.mktcenterserviceimpl.service.impl;
 
+import com.bizvane.centerstageservice.rpc.SysCheckConfigServiceRpc;
+import com.bizvane.couponfacade.interfaces.SendCouponServiceFeign;
+import com.bizvane.members.facade.service.api.IntegralRecordApiService;
 import com.bizvane.mktcenterservice.interfaces.ActivitySmartService;
-import com.bizvane.mktcenterservice.models.po.MktActivitySmartPO;
-import com.bizvane.mktcenterservice.models.po.MktActivitySmartPOExample;
-import com.bizvane.mktcenterservice.models.po.MktCouponPO;
+import com.bizvane.mktcenterservice.models.po.*;
 import com.bizvane.mktcenterservice.models.vo.ActivitySmartVO;
+import com.bizvane.mktcenterservice.models.vo.MessageVO;
 import com.bizvane.mktcenterservice.models.vo.PageForm;
 import com.bizvane.mktcenterserviceimpl.common.constants.ActivityConstants;
 import com.bizvane.mktcenterserviceimpl.common.constants.ResponseConstants;
 import com.bizvane.mktcenterserviceimpl.common.enums.MktTypeEnum;
+import com.bizvane.mktcenterserviceimpl.common.utils.JobUtil;
+import com.bizvane.mktcenterserviceimpl.mappers.MktActivityPOMapper;
 import com.bizvane.mktcenterserviceimpl.mappers.MktActivitySmartPOMapper;
+import com.bizvane.mktcenterserviceimpl.mappers.MktCouponPOMapper;
+import com.bizvane.mktcenterserviceimpl.mappers.MktMessagePOMapper;
 import com.bizvane.utils.responseinfo.ResponseData;
 import com.bizvane.utils.tokens.SysAccountPO;
 import com.github.pagehelper.PageHelper;
@@ -17,8 +23,10 @@ import com.github.pagehelper.PageInfo;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -32,6 +40,27 @@ public class ActivitySmartServiceImpl implements ActivitySmartService {
 
     @Autowired
     private MktActivitySmartPOMapper mktActivitySmartPOMapper;
+
+    @Autowired
+    private MktActivityPOMapper mktActivityPOMapper;
+
+    @Autowired
+    private JobUtil jobUtil;
+
+    @Autowired
+    private SysCheckConfigServiceRpc sysCheckConfigServiceRpc;
+
+    @Autowired
+    private MktCouponPOMapper mktCouponPOMapper;
+
+    @Autowired
+    private MktMessagePOMapper mktMessagePOMapper;
+
+    @Autowired
+    private IntegralRecordApiService integralRecordApiService;
+
+    @Autowired
+    private SendCouponServiceFeign sendCouponServiceFeign;
 
     /**
      * 查询智能营销分组列表(方块)
@@ -76,24 +105,6 @@ public class ActivitySmartServiceImpl implements ActivitySmartService {
         List<ActivitySmartVO> activityList = mktActivitySmartPOMapper.getActivityList(vo);
         PageInfo<ActivitySmartVO> pageInfo = new PageInfo<>(activityList);
         responseData.setData(pageInfo);
-        return responseData;
-    }
-
-    /**
-     * 对某个智能营销组创建任务
-     * 任务类型：1优惠券营销
-     * @return
-     */
-    @Override
-    public ResponseData<Integer> addCouponActivity(ActivitySmartVO vo, List<MktCouponPO> couponCodeList, SysAccountPO stageUser) {
-        ResponseData responseData = new ResponseData();
-
-        //新增活动主表
-
-        //新增智能营销表
-
-        //新增奖励券表
-
         return responseData;
     }
 
@@ -167,5 +178,51 @@ public class ActivitySmartServiceImpl implements ActivitySmartService {
         mktActivitySmartPOMapper.updateByPrimaryKeyWithBLOBs(mktActivitySmartPO);
         responseData.setMessage(ResponseConstants.SUCCESS_MSG);
         return responseData;
+    }
+
+    /**
+     * 对某个智能营销组创建任务
+     * 任务类型：1优惠券营销
+     * @return
+     */
+    @Override
+    public ResponseData<Integer> addCouponActivity(ActivitySmartVO vo, List<MktCouponPO> couponCodeList, SysAccountPO stageUser) {
+        ResponseData responseData = new ResponseData();
+
+        vo.setCreateUserId(stageUser.getSysAccountId());
+        vo.setCreateDate(new Date());
+        vo.setCreateUserName(stageUser.getName());
+
+        //新增活动主表
+        MktActivityPOWithBLOBs mktActivityPOWithBLOBs = new MktActivityPOWithBLOBs();
+        BeanUtils.copyProperties(vo,mktActivityPOWithBLOBs);
+        mktActivityPOMapper.insertSelective(mktActivityPOWithBLOBs);
+        //新增智能营销表
+        MktActivitySmartPO mktActivitySmartPO = new MktActivitySmartPO();
+        BeanUtils.copyProperties(vo,mktActivitySmartPO);
+        mktActivitySmartPOMapper.insertSelective(mktActivitySmartPO);
+        //新增奖励券表
+        if(!CollectionUtils.isEmpty(couponCodeList)){
+            for(MktCouponPO mktCouponPO : couponCodeList){
+                mktCouponPOMapper.insertSelective(mktCouponPO);
+            }
+        }
+        responseData.setMessage(ResponseConstants.SUCCESS_MSG);
+        return responseData;
+    }
+
+    @Override
+    public ResponseData<Integer> addIntegralActivity(ActivitySmartVO vo) {
+        return null;
+    }
+
+    @Override
+    public ResponseData<Integer> addSmsActivity(ActivitySmartVO vo, MessageVO messageVO) {
+        return null;
+    }
+
+    @Override
+    public ResponseData<Integer> addTemplateMsgActivity(ActivitySmartVO vo, MessageVO messageVO) {
+        return null;
     }
 }
