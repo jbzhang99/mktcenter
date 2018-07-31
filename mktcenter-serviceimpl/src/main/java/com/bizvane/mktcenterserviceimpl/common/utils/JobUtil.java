@@ -5,6 +5,7 @@ import com.bizvane.mktcenterservice.models.po.MktTaskPOWithBLOBs;
 import com.bizvane.mktcenterservice.models.vo.ActivityVO;
 import com.bizvane.mktcenterserviceimpl.common.constants.JobHandlerConstants;
 import com.bizvane.mktcenterserviceimpl.common.enums.ActivityStatusEnum;
+import com.bizvane.mktcenterserviceimpl.common.enums.BusinessTypeEnum;
 import com.bizvane.mktcenterserviceimpl.common.enums.TaskStatusEnum;
 import com.bizvane.mktcenterserviceimpl.common.job.XxlJobConfig;
 import com.bizvane.utils.enumutils.JobEnum;
@@ -57,6 +58,8 @@ public class JobUtil {
         xxlJobInfo.setExecutorFailStrategy(JobEnum.EXECUTOR_FAIL_STRATEGY_NULL.getValue());
         //设置负责人
         xxlJobInfo.setAuthor(stageUser.getName());
+        //设置业务类型
+        xxlJobInfo.setBizType(BusinessTypeEnum.ACTIVITY_TYPE_ACTIVITY.getCode());
         //添加job
         jobClient.addJob(xxlJobInfo);
     }
@@ -85,6 +88,8 @@ public class JobUtil {
         xxlJobInfo.setExecutorFailStrategy(JobEnum.EXECUTOR_FAIL_STRATEGY_NULL.getValue());
         //设置负责人
         xxlJobInfo.setAuthor(stageUser.getName());
+        //设置业务类型
+        xxlJobInfo.setBizType(BusinessTypeEnum.ACTIVITY_TYPE_ACTIVITY.getCode());
         //添加job
         jobClient.addJob(xxlJobInfo);
     }
