@@ -4,6 +4,7 @@ import com.bizvane.mktcenterservice.interfaces.ActivitySmartService;
 import com.bizvane.mktcenterservice.models.po.MktActivitySmartPO;
 import com.bizvane.mktcenterservice.models.po.MktCouponPO;
 import com.bizvane.mktcenterservice.models.vo.ActivitySmartVO;
+import com.bizvane.mktcenterservice.models.vo.MessageVO;
 import com.bizvane.mktcenterservice.models.vo.PageForm;
 import com.bizvane.mktcenterserviceimpl.common.utils.ActivityParamCheckUtil;
 import com.bizvane.utils.responseinfo.ResponseData;
@@ -82,7 +83,7 @@ public class ActivitySmartController {
      * @return
      */
     @RequestMapping("addSmsActivity")
-    public ResponseData<Integer> addSmsActivity(ActivitySmartVO vo, HttpServletRequest request){
+    public ResponseData<Integer> addSmsActivity(ActivitySmartVO vo, MessageVO messageVO,HttpServletRequest request){
         //参数校验
         ResponseData responseData = ActivityParamCheckUtil.checkSmartActivityParam(vo);
         //参数校验通过，获取操作人信息
@@ -97,7 +98,7 @@ public class ActivitySmartController {
      * @return
      */
     @RequestMapping("addTemplateMsgActivity")
-    public ResponseData<Integer> addTemplateMsgActivity(ActivitySmartVO vo, HttpServletRequest request){
+    public ResponseData<Integer> addTemplateMsgActivity(ActivitySmartVO vo,MessageVO messageVO, HttpServletRequest request){
         //参数校验
         ResponseData responseData = ActivityParamCheckUtil.checkSmartActivityParam(vo);
         //参数校验通过，获取操作人信息

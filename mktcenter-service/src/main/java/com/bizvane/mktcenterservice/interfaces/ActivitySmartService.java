@@ -3,11 +3,13 @@ package com.bizvane.mktcenterservice.interfaces;
 import com.bizvane.mktcenterservice.models.po.MktActivitySmartPO;
 import com.bizvane.mktcenterservice.models.po.MktCouponPO;
 import com.bizvane.mktcenterservice.models.vo.ActivitySmartVO;
+import com.bizvane.mktcenterservice.models.vo.MessageVO;
 import com.bizvane.mktcenterservice.models.vo.PageForm;
 import com.bizvane.utils.responseinfo.ResponseData;
 import com.bizvane.utils.tokens.SysAccountPO;
 import com.github.pagehelper.PageInfo;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 /**
@@ -33,8 +35,6 @@ public interface ActivitySmartService {
      */
     public ResponseData<PageInfo<MktActivitySmartPO>> getActivityHistoryList(ActivitySmartVO vo, PageForm pageForm);
 
-    public ResponseData<Integer> addCouponActivity(ActivitySmartVO vo, List<MktCouponPO> couponCodeList, SysAccountPO stageUser);
-
     /**
      * 查询某个智能营销分组
      * @param mktActivitySmartId
@@ -55,4 +55,38 @@ public interface ActivitySmartService {
      * @return
      */
     public ResponseData<Integer> updateSmartActivity(ActivitySmartVO vo);
+
+    /**
+     * 对某个智能营销组创建任务
+     * 任务类型：1优惠券营销
+     * @param vo
+     * @param couponCodeList
+     * @param stageUser
+     * @return
+     */
+    public ResponseData<Integer> addCouponActivity(ActivitySmartVO vo, List<MktCouponPO> couponCodeList, SysAccountPO stageUser);
+
+    /**
+     * 对某个智能营销组创建任务
+     * 任务类型：2积分营销
+     * @param vo
+     * @return
+     */
+    public ResponseData<Integer> addIntegralActivity(ActivitySmartVO vo);
+
+    /**
+     * 对某个智能营销组创建任务
+     * 任务类型：3短信营销
+     * @param vo
+     * @return
+     */
+    public ResponseData<Integer> addSmsActivity(ActivitySmartVO vo, MessageVO messageVO);
+
+    /**
+     * 对某个智能营销组创建任务
+     * 任务类型：4微信模板消息营销
+     * @param vo
+     * @return
+     */
+    public ResponseData<Integer> addTemplateMsgActivity(ActivitySmartVO vo, MessageVO messageVO);
 }
