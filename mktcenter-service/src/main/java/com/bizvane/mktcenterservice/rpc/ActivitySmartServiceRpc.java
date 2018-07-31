@@ -34,4 +34,8 @@ public interface ActivitySmartServiceRpc {
     @io.swagger.annotations.ApiModelProperty(value = "ActivitySmartVO",name = "更新智能营销活动", required = false,example = "")
     public ResponseData<Integer> updateActivity(@RequestBody ActivitySmartVO vo);
 
+    @RequestMapping("deleteSmartActivity")
+    @io.swagger.annotations.ApiModelProperty(value = "ActivitySmartVO",name = "删除智能营销活动分组", required = false,example = "")
+    public ResponseData<Integer> deleteActivity(@RequestBody ActivitySmartVO vo);
+
 }

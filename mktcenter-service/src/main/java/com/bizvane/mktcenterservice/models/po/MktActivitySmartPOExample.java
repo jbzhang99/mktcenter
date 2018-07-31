@@ -8,28 +8,28 @@ import java.util.List;
 public class MktActivitySmartPOExample implements Serializable {
     /**
 	 * 只读. 
-	 * @mbg.generated  2018-07-30 13:47:28
+	 * @mbg.generated  2018-07-31 15:39:04
 	 */
 	protected String orderByClause;
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-07-30 13:47:28
+	 * @mbg.generated  2018-07-31 15:39:04
 	 */
 	protected boolean distinct;
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-07-30 13:47:28
+	 * @mbg.generated  2018-07-31 15:39:04
 	 */
 	protected List<Criteria> oredCriteria;
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-07-30 13:47:28
+	 * @mbg.generated  2018-07-31 15:39:04
 	 */
 	private static final long serialVersionUID = 1L;
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-07-30 13:47:28
+	 * @mbg.generated  2018-07-31 15:39:04
 	 */
 	public MktActivitySmartPOExample() {
 		oredCriteria = new ArrayList<Criteria>();
@@ -37,7 +37,7 @@ public class MktActivitySmartPOExample implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-07-30 13:47:28
+	 * @mbg.generated  2018-07-31 15:39:04
 	 */
 	public void setOrderByClause(String orderByClause) {
 		this.orderByClause = orderByClause;
@@ -45,7 +45,7 @@ public class MktActivitySmartPOExample implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-07-30 13:47:28
+	 * @mbg.generated  2018-07-31 15:39:04
 	 */
 	public String getOrderByClause() {
 		return orderByClause;
@@ -53,7 +53,7 @@ public class MktActivitySmartPOExample implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-07-30 13:47:28
+	 * @mbg.generated  2018-07-31 15:39:04
 	 */
 	public void setDistinct(boolean distinct) {
 		this.distinct = distinct;
@@ -61,7 +61,7 @@ public class MktActivitySmartPOExample implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-07-30 13:47:28
+	 * @mbg.generated  2018-07-31 15:39:04
 	 */
 	public boolean isDistinct() {
 		return distinct;
@@ -69,7 +69,7 @@ public class MktActivitySmartPOExample implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-07-30 13:47:28
+	 * @mbg.generated  2018-07-31 15:39:04
 	 */
 	public List<Criteria> getOredCriteria() {
 		return oredCriteria;
@@ -77,7 +77,7 @@ public class MktActivitySmartPOExample implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-07-30 13:47:28
+	 * @mbg.generated  2018-07-31 15:39:04
 	 */
 	public void or(Criteria criteria) {
 		oredCriteria.add(criteria);
@@ -85,7 +85,7 @@ public class MktActivitySmartPOExample implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-07-30 13:47:28
+	 * @mbg.generated  2018-07-31 15:39:04
 	 */
 	public Criteria or() {
 		Criteria criteria = createCriteriaInternal();
@@ -95,7 +95,7 @@ public class MktActivitySmartPOExample implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-07-30 13:47:28
+	 * @mbg.generated  2018-07-31 15:39:04
 	 */
 	public Criteria createCriteria() {
 		Criteria criteria = createCriteriaInternal();
@@ -107,7 +107,7 @@ public class MktActivitySmartPOExample implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-07-30 13:47:28
+	 * @mbg.generated  2018-07-31 15:39:04
 	 */
 	protected Criteria createCriteriaInternal() {
 		Criteria criteria = new Criteria();
@@ -116,7 +116,7 @@ public class MktActivitySmartPOExample implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-07-30 13:47:28
+	 * @mbg.generated  2018-07-31 15:39:04
 	 */
 	public void clear() {
 		oredCriteria.clear();
@@ -126,7 +126,7 @@ public class MktActivitySmartPOExample implements Serializable {
 
 	/**
 	 * 只读. t_mkt_activity_smart
-	 * @mbg.generated  2018-07-30 13:47:28
+	 * @mbg.generated  2018-07-31 15:39:04
 	 */
 	protected abstract static class GeneratedCriteria implements Serializable {
 		protected List<Criterion> criteria;
@@ -669,6 +669,66 @@ public class MktActivitySmartPOExample implements Serializable {
 			return (Criteria) this;
 		}
 
+		public Criteria andStatusIsNull() {
+			addCriterion("status is null");
+			return (Criteria) this;
+		}
+
+		public Criteria andStatusIsNotNull() {
+			addCriterion("status is not null");
+			return (Criteria) this;
+		}
+
+		public Criteria andStatusEqualTo(Integer value) {
+			addCriterion("status =", value, "status");
+			return (Criteria) this;
+		}
+
+		public Criteria andStatusNotEqualTo(Integer value) {
+			addCriterion("status <>", value, "status");
+			return (Criteria) this;
+		}
+
+		public Criteria andStatusGreaterThan(Integer value) {
+			addCriterion("status >", value, "status");
+			return (Criteria) this;
+		}
+
+		public Criteria andStatusGreaterThanOrEqualTo(Integer value) {
+			addCriterion("status >=", value, "status");
+			return (Criteria) this;
+		}
+
+		public Criteria andStatusLessThan(Integer value) {
+			addCriterion("status <", value, "status");
+			return (Criteria) this;
+		}
+
+		public Criteria andStatusLessThanOrEqualTo(Integer value) {
+			addCriterion("status <=", value, "status");
+			return (Criteria) this;
+		}
+
+		public Criteria andStatusIn(List<Integer> values) {
+			addCriterion("status in", values, "status");
+			return (Criteria) this;
+		}
+
+		public Criteria andStatusNotIn(List<Integer> values) {
+			addCriterion("status not in", values, "status");
+			return (Criteria) this;
+		}
+
+		public Criteria andStatusBetween(Integer value1, Integer value2) {
+			addCriterion("status between", value1, value2, "status");
+			return (Criteria) this;
+		}
+
+		public Criteria andStatusNotBetween(Integer value1, Integer value2) {
+			addCriterion("status not between", value1, value2, "status");
+			return (Criteria) this;
+		}
+
 		public Criteria andRemarkIsNull() {
 			addCriterion("remark is null");
 			return (Criteria) this;
@@ -1182,7 +1242,7 @@ public class MktActivitySmartPOExample implements Serializable {
 
 	/**
 	 * 只读. t_mkt_activity_smart
-	 * @mbg.generated  2018-07-30 13:47:28
+	 * @mbg.generated  2018-07-31 15:39:04
 	 */
 	public static class Criterion implements Serializable {
 		private String condition;

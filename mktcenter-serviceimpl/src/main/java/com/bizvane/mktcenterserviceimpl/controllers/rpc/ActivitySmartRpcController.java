@@ -54,4 +54,10 @@ public class ActivitySmartRpcController {
         return activitySmartService.updateSmartActivity(vo);
     }
 
+    @RequestMapping("deleteSmartActivity")
+    @io.swagger.annotations.ApiModelProperty(value = "mktActivitySmartId",name = "删除智能营销活动分组", required = false,example = "")
+    public ResponseData<Integer> deleteSmartActivity(@RequestBody ActivitySmartVO vo){
+        return activitySmartService.deleteSmartActivity(vo);
+    }
+
 }

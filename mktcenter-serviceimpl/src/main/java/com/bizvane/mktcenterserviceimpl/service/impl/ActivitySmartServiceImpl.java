@@ -182,6 +182,22 @@ public class ActivitySmartServiceImpl implements ActivitySmartService {
     }
 
     /**
+     * 删除智能营销分组
+     * @param vo
+     * @return
+     */
+    @Override
+    public ResponseData<Integer> deleteSmartActivity(ActivitySmartVO vo) {
+        ResponseData responseData = new ResponseData();
+        MktActivitySmartPO mktActivitySmartPO = new MktActivitySmartPO();
+        BeanUtils.copyProperties(vo,mktActivitySmartPO);
+        mktActivitySmartPO.setValid(Boolean.FALSE);
+        mktActivitySmartPOMapper.updateByPrimaryKeySelective(mktActivitySmartPO);
+        responseData.setMessage(ResponseConstants.SUCCESS_MSG);
+        return responseData;
+    }
+
+    /**
      * 对某个智能营销组创建任务
      * 任务类型：1优惠券营销
      * @return
@@ -212,18 +228,97 @@ public class ActivitySmartServiceImpl implements ActivitySmartService {
         return responseData;
     }
 
+    /**
+     * 对某个智能营销组创建任务
+     * 任务类型：2积分营销
+     * @param vo
+     * @return
+     */
     @Override
-    public ResponseData<Integer> addIntegralActivity(ActivitySmartVO vo) {
-        return null;
+    public ResponseData<Integer> addIntegralActivity(ActivitySmartVO vo, SysAccountPO stageUser) {
+        ResponseData responseData = new ResponseData();
+
+        vo.setCreateUserId(stageUser.getSysAccountId());
+        vo.setCreateDate(new Date());
+        vo.setCreateUserName(stageUser.getName());
+
+        //新增活动主表
+        MktActivityPOWithBLOBs mktActivityPOWithBLOBs = new MktActivityPOWithBLOBs();
+        BeanUtils.copyProperties(vo,mktActivityPOWithBLOBs);
+        mktActivityPOMapper.insertSelective(mktActivityPOWithBLOBs);
+
+        //新增智能营销表
+        MktActivitySmartPO mktActivitySmartPO = new MktActivitySmartPO();
+        BeanUtils.copyProperties(vo,mktActivitySmartPO);
+        mktActivitySmartPOMapper.insertSelective(mktActivitySmartPO);
+
+        responseData.setMessage(ResponseConstants.SUCCESS_MSG);
+        return responseData;
     }
 
+    /**
+     * 对某个智能营销组创建任务
+     * 任务类型：3短信营销
+     * @param vo
+     * @return
+     */
     @Override
-    public ResponseData<Integer> addSmsActivity(ActivitySmartVO vo, MessageVO messageVO) {
-        return null;
+    public ResponseData<Integer> addSmsActivity(ActivitySmartVO vo, MessageVO messageVO, SysAccountPO stageUser) {
+        ResponseData responseData = new ResponseData();
+
+        vo.setCreateUserId(stageUser.getSysAccountId());
+        vo.setCreateDate(new Date());
+        vo.setCreateUserName(stageUser.getName());
+
+        //新增活动主表
+        MktActivityPOWithBLOBs mktActivityPOWithBLOBs = new MktActivityPOWithBLOBs();
+        BeanUtils.copyProperties(vo,mktActivityPOWithBLOBs);
+        mktActivityPOMapper.insertSelective(mktActivityPOWithBLOBs);
+
+        //新增智能营销表
+        MktActivitySmartPO mktActivitySmartPO = new MktActivitySmartPO();
+        BeanUtils.copyProperties(vo,mktActivitySmartPO);
+        mktActivitySmartPOMapper.insertSelective(mktActivitySmartPO);
+
+        //新增消息表
+        MktMessagePO mktMessagePO = new MktMessagePO();
+        BeanUtils.copyProperties(vo,mktMessagePO);
+        mktMessagePOMapper.insertSelective(mktMessagePO);
+
+        responseData.setMessage(ResponseConstants.SUCCESS_MSG);
+        return responseData;
     }
 
+    /**
+     * 对某个智能营销组创建任务
+     * 任务类型：4微信模板消息营销
+     * @param vo
+     * @return
+     */
     @Override
-    public ResponseData<Integer> addTemplateMsgActivity(ActivitySmartVO vo, MessageVO messageVO) {
-        return null;
+    public ResponseData<Integer> addTemplateMsgActivity(ActivitySmartVO vo, MessageVO messageVO, SysAccountPO stageUser) {
+        ResponseData responseData = new ResponseData();
+
+        vo.setCreateUserId(stageUser.getSysAccountId());
+        vo.setCreateDate(new Date());
+        vo.setCreateUserName(stageUser.getName());
+
+        //新增活动主表
+        MktActivityPOWithBLOBs mktActivityPOWithBLOBs = new MktActivityPOWithBLOBs();
+        BeanUtils.copyProperties(vo,mktActivityPOWithBLOBs);
+        mktActivityPOMapper.insertSelective(mktActivityPOWithBLOBs);
+
+        //新增智能营销表
+        MktActivitySmartPO mktActivitySmartPO = new MktActivitySmartPO();
+        BeanUtils.copyProperties(vo,mktActivitySmartPO);
+        mktActivitySmartPOMapper.insertSelective(mktActivitySmartPO);
+
+        //新增消息表
+        MktMessagePO mktMessagePO = new MktMessagePO();
+        BeanUtils.copyProperties(vo,mktMessagePO);
+        mktMessagePOMapper.insertSelective(mktMessagePO);
+
+        responseData.setMessage(ResponseConstants.SUCCESS_MSG);
+        return responseData;
     }
 }

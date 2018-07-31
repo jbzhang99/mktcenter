@@ -70,10 +70,11 @@ public class ActivitySmartController {
     @RequestMapping("addIntegralActivity")
     public ResponseData<Integer> addIntegralActivity(ActivitySmartVO vo, HttpServletRequest request){
         //参数校验
-        ResponseData responseData = ActivityParamCheckUtil.checkSmartActivityParam(vo);
+         ActivityParamCheckUtil.checkSmartActivityParam(vo);
         //参数校验通过，获取操作人信息
 //        SysAccountPO stageUser = TokenUtils.getStageUser(request);
         SysAccountPO stageUser = new SysAccountPO();
+        ResponseData<Integer> responseData = activitySmartService.addIntegralActivity(vo,stageUser);
         return new ResponseData<>();
     }
 
@@ -85,10 +86,11 @@ public class ActivitySmartController {
     @RequestMapping("addSmsActivity")
     public ResponseData<Integer> addSmsActivity(ActivitySmartVO vo, MessageVO messageVO,HttpServletRequest request){
         //参数校验
-        ResponseData responseData = ActivityParamCheckUtil.checkSmartActivityParam(vo);
+        ActivityParamCheckUtil.checkSmartActivityParam(vo);
         //参数校验通过，获取操作人信息
 //        SysAccountPO stageUser = TokenUtils.getStageUser(request);
         SysAccountPO stageUser = new SysAccountPO();
+        ResponseData<Integer> responseData = activitySmartService.addSmsActivity(vo,messageVO,stageUser);
         return new ResponseData<>();
     }
 
@@ -100,10 +102,11 @@ public class ActivitySmartController {
     @RequestMapping("addTemplateMsgActivity")
     public ResponseData<Integer> addTemplateMsgActivity(ActivitySmartVO vo,MessageVO messageVO, HttpServletRequest request){
         //参数校验
-        ResponseData responseData = ActivityParamCheckUtil.checkSmartActivityParam(vo);
+         ActivityParamCheckUtil.checkSmartActivityParam(vo);
         //参数校验通过，获取操作人信息
 //        SysAccountPO stageUser = TokenUtils.getStageUser(request);
         SysAccountPO stageUser = new SysAccountPO();
+        ResponseData<Integer> responseData = activitySmartService.addTemplateMsgActivity(vo,messageVO,stageUser);
         return new ResponseData<>();
     }
 }
