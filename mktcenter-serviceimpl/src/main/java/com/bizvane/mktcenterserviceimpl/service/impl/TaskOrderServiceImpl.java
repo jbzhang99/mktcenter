@@ -182,13 +182,16 @@ public class TaskOrderServiceImpl implements TaskOrderService {
      */
     public  void   doOrderTask(TaskConsumeVO vo){
         MktTaskPOWithBLOBs mktTaskPO = vo.getMktTaskPOWithBLOBs();
-        Integer checkStatus = mktTaskPO.getCheckStatus();
-        Integer taskStatus = mktTaskPO.getTaskStatus();
-        //已审核   执行中
+        Integer checkStatus = mktTaskPO.getCheckStatus();//审核状态
+        Integer taskStatus = mktTaskPO.getTaskStatus();//执行状态
+        //已审核   执行中  执行时间小于当前时间 或等于当前时间
         if (TaskConstants.THREE.equals(checkStatus) && TaskConstants.SECOND.equals(taskStatus) ){
 
+           if (CollectionUtils.isNotEmpty(vo.getMktCouponPOList())){
+
+           }
          }
-         //已审核   待执行
+         //已审核   待执行,创建job
         if (TaskConstants.THREE.equals(checkStatus) && TaskConstants.FIRST.equals(taskStatus) ){
 
         }
