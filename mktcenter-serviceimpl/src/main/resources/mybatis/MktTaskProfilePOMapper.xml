@@ -478,4 +478,17 @@
       AND tmt.sys_brand_id = #{sysBrandId}
     </if>
   </select>
+  <select id="getChosenExtendProperties" parameterType="com.bizvane.mktcenterservice.models.vo.TaskVO" resultType="string">
+    SELECT
+    tmtp.property_code
+    FROM
+    t_mkt_task_profile tmtp
+    INNER JOIN t_mkt_task tmt ON tmt.mkt_task_id = tmtp.mkt_task_id
+    AND tmt.valid = 1
+    AND tmtp.valid = 1
+    <where>
+      tmt.sys_brand_id=#{sysBrandId}
+    </where>
+
+  </select>
 </mapper>

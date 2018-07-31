@@ -33,10 +33,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
-import java.util.Collections;
-import java.util.Date;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 /**
  * @author chen.li
@@ -354,6 +351,34 @@ public class TaskProfileServiceImpl implements TaskProfileService {
      */
     @Override
     public ResponseData<List<TaskVO>> selectTaskById(Long mktTaskId) {
-        return null;
+        ResponseData responseData = new ResponseData();
+        TaskVO taskVO = new TaskVO();
+        taskVO.setMktTaskId(mktTaskId);
+        List<TaskVO> taskVOList = mktTaskProfilePOMapper.getTaskList(taskVO);
+        responseData.setData(taskVOList);
+        responseData.setMessage(SysResponseEnum.SUCCESS.getMessage());
+        responseData.setCode(SysResponseEnum.SUCCESS.getCode());
+        return responseData;
     }
+
+    /**
+     * 查询商家选择出的让会员完善的扩展信息字段
+     * @param brandId
+     * @return
+     */
+    @Override
+    public ResponseData getChosenExtendProperty(long brandId){
+        ResponseData responseData = new ResponseData();
+        TaskVO taskVO = new TaskVO();
+        taskVO.setSysBrandId(brandId);
+        String properties = mktTaskProfilePOMapper.getChosenExtendProperties(taskVO);
+        String[] property = properties.split(",");
+        List<String> list = new ArrayList<>();
+        for(String p:property){
+            list.add(p);
+        }
+        responseData.setData(list);
+        return responseData;
+    }
+
 }

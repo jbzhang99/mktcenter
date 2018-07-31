@@ -128,6 +128,22 @@ public class TaskProfileController {
 
     }
 
+/*
+    */
+/**
+     * 会员界面获得需完善资料字段
+     * @param brandid
+     * @return
+     *//*
+
+    public ResponseData getChosenExtendProperties(Long brandid){
+        ResponseData responseData = new ResponseData();
+
+
+        return responseData;
+    }
+*/
+
 
 }
 

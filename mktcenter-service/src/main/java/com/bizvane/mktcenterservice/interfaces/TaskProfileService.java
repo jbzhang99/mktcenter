@@ -45,4 +45,12 @@ public interface TaskProfileService {
      * @return
      */
     public ResponseData<List<TaskVO>> selectTaskById(Long mktTaskId);
+
+    /**
+     * 查询商家选择出的让会员完善的扩展信息字段
+     * @param brandId
+     * @return
+     */
+    public ResponseData getChosenExtendProperty(long brandId);
+
 }
