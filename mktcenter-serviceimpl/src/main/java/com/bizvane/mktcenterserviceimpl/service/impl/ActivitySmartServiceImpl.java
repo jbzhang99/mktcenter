@@ -15,6 +15,7 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import java.util.List;
 
@@ -36,18 +37,26 @@ public class ActivitySmartServiceImpl implements ActivitySmartService {
      * @return
      */
     @Override
-    public ResponseData<List<ActivitySmartVO>> getActivityList(ActivitySmartVO vo) {
+    public ResponseData<PageInfo<MktActivitySmartPO>> getActivityList(ActivitySmartVO vo, PageForm pageForm) {
         ResponseData responseData = new ResponseData();
-        //品牌id不能为空
-        if(vo.getSysBrandId()==null){
-            responseData.setCode(ResponseConstants.ERROR);
-            responseData.setMessage(ResponseConstants.ERROR_MSG);
-            return responseData;
-        }
+        PageHelper.startPage(pageForm.getPageNumber(),pageForm.getPageSize());
+//        //品牌id不能为空
+//        if(vo.getSysBrandId()==null){
+//            responseData.setCode(ResponseConstants.ERROR);
+//            responseData.setMessage(ResponseConstants.ERROR_MSG);
+//            return responseData;
+//        }
         MktActivitySmartPOExample example = new MktActivitySmartPOExample();
-        example.createCriteria().andValidEqualTo(Boolean.TRUE).andMktActivityIdEqualTo(ActivityConstants.SMART_ACTIVITY_GROUP);
+        MktActivitySmartPOExample.Criteria criteria = example.createCriteria();
+        criteria.andValidEqualTo(Boolean.TRUE).andMktActivityIdEqualTo(ActivityConstants.SMART_ACTIVITY_GROUP);
+
+        if(!StringUtils.isEmpty(vo.getMktTaskName())){
+            criteria.andMktTaskNameLike(vo.getMktTaskName());
+        }
+
         List<MktActivitySmartPO> mktActivitySmartPOS = mktActivitySmartPOMapper.selectByExampleWithBLOBs(example);
-        responseData.setData(mktActivitySmartPOS);
+        PageInfo<MktActivitySmartPO> pageInfo = new PageInfo<>(mktActivitySmartPOS);
+        responseData.setData(pageInfo);
         return responseData;
     }
 
@@ -88,6 +97,45 @@ public class ActivitySmartServiceImpl implements ActivitySmartService {
 
         //新增奖励券表
 
+        return responseData;
+    }
+
+    /**
+     * 查询某个智能营销分组
+     * @param mktActivitySmartId
+     * @return
+     */
+    @Override
+    public ResponseData<MktActivitySmartPO> getActivityById(Long mktActivitySmartId) {
+        ResponseData responseData = new ResponseData();
+        MktActivitySmartPO mktActivitySmartPO = mktActivitySmartPOMapper.selectByPrimaryKey(mktActivitySmartId);
+        responseData.setData(mktActivitySmartPO);
+        return responseData;
+    }
+
+    /**
+     * 添加智能营销分组
+     * @param vo
+     * @return
+     */
+    @Override
+    public ResponseData<Integer> addSmartActivity(ActivitySmartVO vo) {
+        ResponseData responseData = new ResponseData();
+//        MktActivitySmartPO mktActivitySmartPO = mktActivitySmartPOMapper.selectByPrimaryKey(mktActivitySmartId);
+//        responseData.setData(mktActivitySmartPO);
+        return responseData;
+    }
+
+    /**
+     * 修改智能营销分组
+     * @param vo
+     * @return
+     */
+    @Override
+    public ResponseData<Integer> updateSmartActivity(ActivitySmartVO vo) {
+        ResponseData responseData = new ResponseData();
+//        MktActivitySmartPO mktActivitySmartPO = mktActivitySmartPOMapper.selectByPrimaryKey(mktActivitySmartId);
+//        responseData.setData(mktActivitySmartPO);
         return responseData;
     }
 }

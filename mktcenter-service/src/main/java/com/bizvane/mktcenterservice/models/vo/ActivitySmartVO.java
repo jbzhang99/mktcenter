@@ -67,6 +67,11 @@ public class ActivitySmartVO extends MktActivityPO {
      */
     private String activityInfo;
 
+    /**
+     * 活动任务名称
+     */
+    private String mktTaskName;
+
     public Integer getMktType() {
         return mktType;
     }
@@ -137,5 +142,13 @@ public class ActivitySmartVO extends MktActivityPO {
 
     public void setActivityInfo(String activityInfo) {
         this.activityInfo = activityInfo;
+    }
+
+    public String getMktTaskName() {
+        return mktTaskName;
+    }
+
+    public void setMktTaskName(String mktTaskName) {
+        this.mktTaskName = mktTaskName;
     }
 }

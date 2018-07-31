@@ -580,8 +580,8 @@
     INNER JOIN t_mkt_activity_smart tmas ON tma.mkt_activity_id = tmas.mkt_activity_id
     and tma.valid=1
     and tmas.valid=1
-    <if test="sysBrandId != null and sysBrandId!=0L">
-      AND tma.sys_brand_id = #{sysBrandId}
+    <if test="mktActivityId != null">
+      AND tma.mkt_activity_id = #{mktActivityId}
     </if>
   </select>
 </mapper>

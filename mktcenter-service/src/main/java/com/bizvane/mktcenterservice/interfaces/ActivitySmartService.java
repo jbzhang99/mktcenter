@@ -23,7 +23,7 @@ public interface ActivitySmartService {
      * @param vo
      * @return
      */
-    public ResponseData<List<ActivitySmartVO>> getActivityList(ActivitySmartVO vo);
+    public ResponseData<PageInfo<MktActivitySmartPO>> getActivityList(ActivitySmartVO vo, PageForm pageForm);
 
     /**
      * 查询历史营销活动列表
@@ -34,5 +34,26 @@ public interface ActivitySmartService {
     public ResponseData<PageInfo<MktActivitySmartPO>> getActivityHistoryList(ActivitySmartVO vo, PageForm pageForm);
 
     public ResponseData<Integer> addCouponActivity(ActivitySmartVO vo, List<MktCouponPO> couponCodeList, SysAccountPO stageUser);
+
+    /**
+     * 查询某个智能营销分组
+     * @param mktActivitySmartId
+     * @return
+     */
+    public ResponseData<MktActivitySmartPO> getActivityById(Long mktActivitySmartId);
+
+    /**
+     * 添加智能营销分组
+     * @param vo
+     * @return
+     */
+    public ResponseData<Integer> addSmartActivity(ActivitySmartVO vo);
+
+    /**
+     * 修改智能营销分组
+     * @param vo
+     * @return
+     */
+    public ResponseData<Integer> updateSmartActivity(ActivitySmartVO vo);
 
 }

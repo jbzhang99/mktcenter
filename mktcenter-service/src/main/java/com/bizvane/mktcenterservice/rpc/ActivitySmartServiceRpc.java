@@ -18,7 +18,7 @@ public interface ActivitySmartServiceRpc {
 
     @RequestMapping("getActivityById")
     @io.swagger.annotations.ApiModelProperty(value = "ActivitySmartVO",name = "通过id获取活动", required = false,example = "")
-    public ResponseData<ActivitySmartVO> getActivityById(Long mktActivityId);
+    public ResponseData<ActivitySmartVO> getActivityById(Long mktActivitySmartId);
 
     @RequestMapping("getActivityList")
     @io.swagger.annotations.ApiModelProperty(value = "ActivitySmartVO",name = "查询智能营销活动列表", required = false,example = "")
