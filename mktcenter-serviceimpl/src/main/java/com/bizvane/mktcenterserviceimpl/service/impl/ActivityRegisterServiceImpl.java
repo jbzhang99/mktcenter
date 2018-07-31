@@ -5,7 +5,7 @@ import com.bizvane.centerstageservice.models.vo.SysCheckConfigVo;
 import com.bizvane.centerstageservice.rpc.SysCheckConfigServiceRpc;
 import com.bizvane.couponfacade.interfaces.SendCouponServiceFeign;
 import com.bizvane.couponfacade.models.vo.SendCouponSimpleRequestVO;
-import com.bizvane.members.facade.enums.IntegralRecordTypeEnum;
+import com.bizvane.members.facade.enums.IntegralChangeTypeEnum;
 import com.bizvane.members.facade.models.IntegralRecordModel;
 import com.bizvane.members.facade.models.MemberInfoModel;
 import com.bizvane.members.facade.service.api.IntegralRecordApiService;
@@ -19,18 +19,22 @@ import com.bizvane.mktcenterserviceimpl.common.enums.ActivityStatusEnum;
 import com.bizvane.mktcenterserviceimpl.common.enums.ActivityTypeEnum;
 import com.bizvane.mktcenterserviceimpl.common.enums.BusinessTypeEnum;
 import com.bizvane.mktcenterserviceimpl.common.enums.CheckStatusEnum;
+import com.bizvane.mktcenterserviceimpl.common.utils.CodeUtil;
 import com.bizvane.mktcenterserviceimpl.common.utils.JobUtil;
 import com.bizvane.mktcenterserviceimpl.mappers.MktActivityPOMapper;
 import com.bizvane.mktcenterserviceimpl.mappers.MktActivityRegisterPOMapper;
 import com.bizvane.mktcenterserviceimpl.mappers.MktCouponPOMapper;
 import com.bizvane.mktcenterserviceimpl.mappers.MktMessagePOMapper;
 import com.bizvane.utils.enumutils.SysResponseEnum;
+import com.bizvane.utils.jobutils.JobClient;
+import com.bizvane.utils.jobutils.XxlJobInfo;
 import com.bizvane.utils.responseinfo.ResponseData;
 import com.bizvane.utils.tokens.SysAccountPO;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
@@ -68,6 +72,8 @@ public class ActivityRegisterServiceImpl implements ActivityRegisterService {
     private IntegralRecordApiService integralRecordApiService;
     @Autowired
     private SendCouponServiceFeign sendCouponServiceFeign;
+    @Autowired
+    private JobClient jobClient;
     /**
      * 查询活动列表
      * @param vo
@@ -96,8 +102,8 @@ public class ActivityRegisterServiceImpl implements ActivityRegisterService {
         ResponseData responseData = new ResponseData();
         //得到大实体类
         ActivityVO activityVO = bo.getActivityVO();
-        //暂时用uuid生成活动编号9
-        String activityCode = "AC"+ UUID.randomUUID().toString().replaceAll("-", "");
+        //工具类生成活动编码
+        String activityCode = CodeUtil.getActivityCode();
         activityVO.setActivityCode(activityCode);
         //增加活动类型是开卡活动
         activityVO.setActivityType(ActivityTypeEnum.ACTIVITY_TYPE_REGISGER.getCode());
@@ -245,7 +251,7 @@ public class ActivityRegisterServiceImpl implements ActivityRegisterService {
                 var1.setMemberCode(vo.getMemberCode());
                 var1.setChangeBills(activityVO.getActivityCode());
                 var1.setChangeIntegral(activityVO.getPoints());
-                var1.setChangeWay(IntegralRecordTypeEnum.INCOME.getCode());
+                var1.setChangeWay(IntegralChangeTypeEnum.INCOME.getCode());
                 integralRecordApiService.updateMemberIntegral(var1);
 
                 // 增加卷奖励接口
@@ -287,6 +293,10 @@ public class ActivityRegisterServiceImpl implements ActivityRegisterService {
         }
         MktActivityPOWithBLOBs mktActivityPOWithBLOBs = new MktActivityPOWithBLOBs();
         BeanUtils.copyProperties(activityVO,mktActivityPOWithBLOBs);
+        //查询job
+       /* XxlJobInfo xxlJobInfo = new XxlJobInfo();
+        xxlJobInfo.setExecutorParam(activityVO.getActivityCode());
+        ResponseEntity<String> s =jobClient.getJobInfoByBizJob(xxlJobInfo);*/
 
         //查询审核配置，是否需要审核然后判断
         SysCheckConfigVo so = new SysCheckConfigVo();

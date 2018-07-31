@@ -20,6 +20,27 @@
         <result column="modified_date" jdbcType="TIMESTAMP" property="modifiedDate"/>
         <result column="valid" jdbcType="BIT" property="valid"/>
     </resultMap>
+    <!-- 消费次数任务详情 -->
+    <resultMap id="taskOrderDetailsMap" type="com.bizvane.mktcenterservice.models.bo.TaskDetailBO" autoMapping="true">
+        <id column="mkt_task_id" property="mktTaskId"/>
+      <!--  <association property="mktTaskPOWithBLOBs" javaType="com.bizvane.mktcenterservice.models.po.MktTaskPOWithBLOBs" autoMapping="true">
+            <result column="mkt_task_id" property="mktTaskId"/>
+        </association>-->
+
+        <association property="mktTaskOrderPO" javaType="com.bizvane.mktcenterservice.models.po.MktTaskOrderPO" autoMapping="true">
+            <result column="mkt_task_order_id" property="mktTaskOrderId"/>
+        </association>
+
+        <collection property="mktCouponPOList" javaType="java.util.List" ofType="com.bizvane.mktcenterservice.models.po.MktCouponPO" autoMapping="true">
+            <result column="mkt_coupon_id" property="mktCouponId"/>
+        </collection>
+
+        <collection property="mktmessagePOList" javaType="java.util.List" ofType="com.bizvane.mktcenterservice.models.po.MktMessagePO" autoMapping="true">
+            <result column="mkt_msg_id" property="mktMsgId"/>
+        </collection>
+
+    </resultMap>
+
     <sql id="Example_Where_Clause">
         <!--
           WARNING - 只读 - @mbg.generated
@@ -446,46 +467,45 @@
             AND tmt.sys_brand_id = #{sysBrandId}
         </if>
     </select>
-    <select id="getOrderTaskDetails" parameterType="java.lang.Long"
-            resultType="com.bizvane.mktcenterservice.models.vo.TaskConsumeVO">
-   SELECT
-	tta.mkt_task_id,
-	tta.sys_company_id,
-	tta.sys_brand_id,
-	tta.task_code,
-	tta.task_type,
-	tta.task_name,
-	tta.start_time,
-	tta.end_time,
-	tta.task_info,
-	tta.points,
-	tta.task_list_img,
-	tta.task_detail_img,
-	tta.check_status,
-	tta.task_status,
-	tta.remark,
-	tto.mkt_task_order_id,
-	tto.order_source,
-	tto.consume_amount,
-	tto.consume_times,
-	tmc.mkt_coupon_id,
-	tmc.coupon_code,
-	tmc.coupon_name,
-	tmm.mkt_msg_id,
-	tmm.msg_type,
-	tmm.msg_code,
-	tmm.template_msg_id,
-	tmm.send_time,
-	tmm.msg_content
-    FROM
-        t_mkt_task tta
-    INNER JOIN t_mkt_task_order tto ON tta.mkt_task_id = tto.mkt_task_id
-    LEFT JOIN t_mkt_coupon tmc ON tto.mkt_task_id = tmc.biz_id
-    LEFT JOIN t_mkt_message tmm ON tmc.biz_id = tmm.biz_id
-    WHERE tta.valid=1 AND tto.valid=1 AND tmc.valid=1  AND  tmm.valid=1
-    <if test="mktTaskId != null and mktTaskId!= '' ">
-      AND tmt.mkt_task_id = #{mktTaskId}
-    </if>
+    <select id="getOrderTaskDetails" parameterType="java.lang.Long"  resultMap="taskOrderDetailsMap">
+       SELECT
+        tta.mkt_task_id,
+        tta.sys_company_id,
+        tta.sys_brand_id,
+        tta.task_code,
+        tta.task_type,
+        tta.task_name,
+        tta.start_time,
+        tta.end_time,
+        tta.task_info,
+        tta.points,
+        tta.task_list_img,
+        tta.task_detail_img,
+        tta.check_status,
+        tta.task_status,
+        tta.remark,
+        tto.mkt_task_order_id,
+        tto.order_source,
+        tto.consume_amount,
+        tto.consume_times,
+        tmc.mkt_coupon_id,
+        tmc.coupon_code,
+        tmc.coupon_name,
+        tmm.mkt_msg_id,
+        tmm.msg_type,
+        tmm.msg_code,
+        tmm.template_msg_id,
+        tmm.send_time,
+        tmm.msg_content
+        FROM
+            t_mkt_task tta
+        INNER JOIN t_mkt_task_order tto ON tta.mkt_task_id = tto.mkt_task_id
+        LEFT JOIN t_mkt_coupon tmc ON tto.mkt_task_id = tmc.biz_id
+        LEFT JOIN t_mkt_message tmm ON tmc.biz_id = tmm.biz_id
+        WHERE 1=1
+        <if test="mktTaskId != null and mktTaskId!= '' ">
+          AND tta.mkt_task_id = #{mktTaskId}
+        </if>
   </select>
 
 

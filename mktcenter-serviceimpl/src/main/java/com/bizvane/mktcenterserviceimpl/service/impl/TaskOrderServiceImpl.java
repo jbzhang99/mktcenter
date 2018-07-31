@@ -7,6 +7,7 @@ import com.bizvane.mktcenterservice.interfaces.TaskCouponService;
 import com.bizvane.mktcenterservice.interfaces.TaskMessageService;
 import com.bizvane.mktcenterservice.interfaces.TaskOrderService;
 import com.bizvane.mktcenterservice.interfaces.TaskService;
+import com.bizvane.mktcenterservice.models.bo.TaskDetailBO;
 import com.bizvane.mktcenterservice.models.po.*;
 import com.bizvane.mktcenterservice.models.vo.TaskConsumeVO;
 import com.bizvane.mktcenterservice.models.vo.TaskVO;
@@ -16,11 +17,13 @@ import com.bizvane.mktcenterserviceimpl.common.utils.CodeUtil;
 import com.bizvane.mktcenterserviceimpl.common.utils.TaskParamCheckUtil;
 import com.bizvane.mktcenterserviceimpl.common.utils.TimeUtils;
 import com.bizvane.mktcenterserviceimpl.mappers.MktTaskOrderPOMapper;
+import com.bizvane.utils.enumutils.SysResponseEnum;
 import com.bizvane.utils.responseinfo.ResponseData;
 import com.bizvane.utils.tokens.SysAccountPO;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.apache.commons.collections.CollectionUtils;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -49,10 +52,27 @@ public class TaskOrderServiceImpl implements TaskOrderService {
     @Autowired
     private MktTaskOrderPOMapper mktTaskOrderPOMapper;
 
+    /**
+     * 审核任务:任务id   任务状态
+     * 审核状态：1未审核，2审核中，3已审核，4已驳回',
+     */
+    @Override
+    public  Integer  checkOrderTask(TaskVO vo){
+        MktTaskOrderPO mktTaskOrderPO = new MktTaskOrderPO();
+        BeanUtils.copyProperties(vo,mktTaskOrderPO);
+        return  mktTaskOrderPOMapper.updateByPrimaryKeySelective(mktTaskOrderPO);
 
+    }
+    /**
+     * 根据任务Id查询任务详情
+     */
+    @Override
+    public List<TaskDetailBO> getOrderTaskDetails(Long mktTaskId) {
+        return mktTaskOrderPOMapper.getOrderTaskDetails(mktTaskId);
+    }
 
-    /**s
-     * 查询任务
+    /**
+     *查询任务列表
      * @return
      */
     @Override

@@ -5,10 +5,7 @@ import com.bizvane.centerstageservice.models.vo.SysCheckConfigVo;
 import com.bizvane.centerstageservice.rpc.SysCheckConfigServiceRpc;
 import com.bizvane.mktcenterservice.interfaces.ActivityBirthdayService;
 import com.bizvane.mktcenterservice.models.bo.ActivityBO;
-import com.bizvane.mktcenterservice.models.po.MktActivityBirthdayPO;
-import com.bizvane.mktcenterservice.models.po.MktActivityPOWithBLOBs;
-import com.bizvane.mktcenterservice.models.po.MktCouponPO;
-import com.bizvane.mktcenterservice.models.po.MktMessagePO;
+import com.bizvane.mktcenterservice.models.po.*;
 import com.bizvane.mktcenterservice.models.vo.ActivityVO;
 import com.bizvane.mktcenterservice.models.vo.MessageVO;
 import com.bizvane.mktcenterservice.models.vo.PageForm;
@@ -260,6 +257,148 @@ public class ActivityBirthdayServiceImpl implements ActivityBirthdayService {
 
         responseData.setCode(SysResponseEnum.SUCCESS.getCode());
         responseData.setMessage(SysResponseEnum.SUCCESS.getMessage());
+        return responseData;
+    }
+
+    /**
+     * 修改活动
+     * @param bo
+     * @param stageUser
+     * @return
+     */
+    @Override
+    public ResponseData<Integer> updateActivityBirthday(ActivityBO bo, SysAccountPO stageUser) {
+        //返回对象
+        ResponseData responseData = new ResponseData();
+        //得到大实体类
+        ActivityVO activityVO = bo.getActivityVO();
+        if(activityVO.getCheckStatus()!=CheckStatusEnum.CHECK_STATUS_PENDING.getCode()||activityVO.getCheckStatus()!=CheckStatusEnum.CHECK_STATUS_REJECTED.getCode()){
+            responseData.setCode(SysResponseEnum.FAILED.getCode());
+            responseData.setMessage("该任务不能修改!");
+            return responseData;
+        }
+
+        MktActivityPOWithBLOBs mktActivityPOWithBLOBs = new MktActivityPOWithBLOBs();
+        BeanUtils.copyProperties(activityVO,mktActivityPOWithBLOBs);
+
+        //查询审核配置，是否需要审核然后判断
+        SysCheckConfigVo so = new SysCheckConfigVo();
+        so.setSysBrandId(activityVO.getSysBrandId());
+        ResponseData<List<SysCheckConfigVo>> sysCheckConfigVo =sysCheckConfigServiceRpc.getCheckConfigListAll(so);
+        List<SysCheckConfigVo> sysCheckConfigVoList = sysCheckConfigVo.getData();
+        //判断是否有审核配置
+        int i = 0;
+        if(!CollectionUtils.isEmpty(sysCheckConfigVoList)){
+            for (SysCheckConfigVo sysCheckConfig:sysCheckConfigVoList) {
+                //判断是否需要审核  暂时先写这三个审核类型 后期确定下来写成枚举类
+                if(sysCheckConfig.getFunctionCode().equals("C0001") || sysCheckConfig.getFunctionCode().equals("C0002") || sysCheckConfig.getFunctionCode().equals("C0003")){
+                    i+=1;
+                }
+            }
+        }
+
+        if(i>0){
+            //查询结果如果需要审核审核状态为待审核
+            mktActivityPOWithBLOBs.setCheckStatus(CheckStatusEnum.CHECK_STATUS_PENDING.getCode());
+            //活动状态设置为待执行
+            mktActivityPOWithBLOBs.setActivityStatus(ActivityStatusEnum.ACTIVITY_STATUS_PENDING.getCode());
+
+            //如果是待审核数据则需要增加一条审核数据
+            //已驳回的可以新建审核
+            if(activityVO.getCheckStatus() == CheckStatusEnum.CHECK_STATUS_REJECTED.getCode()){
+                SysCheckConfigPo po = new SysCheckConfigPo();
+                po.setSysBrandId(mktActivityPOWithBLOBs.getSysBrandId());
+                po.setFunctionCode(mktActivityPOWithBLOBs.getActivityCode());
+                po.setFunctionName(mktActivityPOWithBLOBs.getActivityName());
+                po.setCreateDate(new Date());
+                po.setCreateUserId(stageUser.getSysAccountId());
+                po.setCreateUserName(stageUser.getName());
+                sysCheckConfigServiceRpc.addCheckConfig(po);
+            }
+
+            //getStartTime 开始时间>当前时间增加job
+            if( new Date().before(activityVO.getStartTime())){
+                //创建任务调度任务开始时间
+                jobUtil.addJob(stageUser,activityVO,mktActivityPOWithBLOBs,mktActivityPOWithBLOBs.getActivityCode());
+                //创建任务调度任务结束时间
+                jobUtil.addJobEndTime(stageUser,activityVO,mktActivityPOWithBLOBs,mktActivityPOWithBLOBs.getActivityCode());
+            }
+        }else{
+            //查询结果如果不需要审核审核状态为已审核
+            mktActivityPOWithBLOBs.setCheckStatus(CheckStatusEnum.CHECK_STATUS_APPROVED.getCode());
+            //getStartTime 开始时间>当前时间增加job
+            if( new Date().before(activityVO.getStartTime())){
+                //活动状态设置为待执行
+                mktActivityPOWithBLOBs.setActivityStatus(ActivityStatusEnum.ACTIVITY_STATUS_PENDING.getCode());
+                //创建任务调度任务开始时间
+                jobUtil.addJob(stageUser,activityVO,mktActivityPOWithBLOBs,mktActivityPOWithBLOBs.getActivityCode());
+                //创建任务调度任务结束时间
+                jobUtil.addJobEndTime(stageUser,activityVO,mktActivityPOWithBLOBs,mktActivityPOWithBLOBs.getActivityCode());
+            }else{
+                //活动状态设置为执行中
+                mktActivityPOWithBLOBs.setActivityStatus(ActivityStatusEnum.ACTIVITY_STATUS_EXECUTING.getCode());
+                //发送模板消息和短信消息TODO
+
+            }
+        }
+
+        //修改活动主表
+        mktActivityPOWithBLOBs.setModifiedDate(new Date());
+        mktActivityPOWithBLOBs.setModifiedUserId(stageUser.getSysAccountId());
+        mktActivityPOWithBLOBs.setModifiedUserName(stageUser.getName());
+        mktActivityPOMapper.updateByPrimaryKeySelective(mktActivityPOWithBLOBs);
+
+        //获取新增后数据id
+        Long mktActivityId = mktActivityPOWithBLOBs.getMktActivityId();
+
+
+        //修改生日活动表
+        MktActivityBirthdayPO mktActivityBirthdayPO = new MktActivityBirthdayPO();
+        BeanUtils.copyProperties(mktActivityPOWithBLOBs,mktActivityBirthdayPO);
+        mktActivityBirthdayPO.setMktActivityId(mktActivityId);
+        mktActivityBirthdayPOMapper.updateByPrimaryKeySelective(mktActivityBirthdayPO);
+
+        //先删除在新增
+        MktCouponPO record = new MktCouponPO();
+        record.setValid(false);
+        MktCouponPOExample example = new MktCouponPOExample();
+        example.createCriteria().andBizIdEqualTo(mktActivityId);
+        mktCouponPOMapper.updateByExampleSelective(record,example);
+        //修改券奖励
+        List<MktCouponPO> couponCodeList = bo.getCouponCodeList();
+        if(!CollectionUtils.isEmpty(couponCodeList)){
+            for(MktCouponPO couponCode : couponCodeList){
+                MktCouponPO mktCouponPO = new MktCouponPO();
+                BeanUtils.copyProperties(mktActivityPOWithBLOBs,mktCouponPO);
+                mktCouponPO.setBizType(BusinessTypeEnum.ACTIVITY_TYPE_ACTIVITY.getCode());
+                mktCouponPO.setBizId(mktActivityId);
+                mktCouponPO.setCouponCode(couponCode.getCouponCode());
+                mktCouponPO.setCouponName(couponCode.getCouponName());
+                mktCouponPO.setCouponId(couponCode.getCouponId());
+                mktCouponPO.setBizId(couponCode.getBizId());
+                mktCouponPOMapper.insertSelective(mktCouponPO);
+            }
+        }
+
+
+        //先删除在新增
+        MktMessagePO message = new MktMessagePO();
+        message.setValid(false);
+        MktMessagePOExample exam = new MktMessagePOExample();
+        exam.createCriteria().andBizIdEqualTo(mktActivityId);
+        mktMessagePOMapper.updateByExampleSelective(message,exam);
+        //修改活动消息
+        List<MessageVO> messageVOList = bo.getMessageVOList();
+        if(!CollectionUtils.isEmpty(messageVOList)){
+            for(MessageVO messageVO : messageVOList){
+                MktMessagePO mktMessagePO = new MktMessagePO();
+                BeanUtils.copyProperties(mktActivityPOWithBLOBs,mktMessagePO);
+                BeanUtils.copyProperties(messageVO,mktMessagePO);
+                mktMessagePO.setBizType(BusinessTypeEnum.ACTIVITY_TYPE_ACTIVITY.getCode());
+                mktMessagePO.setBizId(mktActivityId);
+                mktMessagePOMapper.insertSelective(mktMessagePO);
+            }
+        }
         return responseData;
     }
 }

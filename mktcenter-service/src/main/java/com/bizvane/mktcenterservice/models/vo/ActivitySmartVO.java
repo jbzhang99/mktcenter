@@ -78,6 +78,11 @@ public class ActivitySmartVO extends MktActivityPO {
     private Integer pageSize =10;
 
     /**
+     * 状态： 1启用，0禁用
+     */
+    private Integer status;
+
+    /**
      * pkid
      */
     private Long mktActivitySmartId;
@@ -184,5 +189,13 @@ public class ActivitySmartVO extends MktActivityPO {
 
     public void setMktActivitySmartId(Long mktActivitySmartId) {
         this.mktActivitySmartId = mktActivitySmartId;
+    }
+
+    public Integer getStatus() {
+        return status;
+    }
+
+    public void setStatus(Integer status) {
+        this.status = status;
     }
 }

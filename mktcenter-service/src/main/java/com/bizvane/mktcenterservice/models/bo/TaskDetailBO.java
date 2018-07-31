@@ -1,9 +1,13 @@
 package com.bizvane.mktcenterservice.models.bo;
 
+import com.bizvane.mktcenterservice.models.po.MktCouponPO;
+import com.bizvane.mktcenterservice.models.po.MktMessagePO;
+import com.bizvane.mktcenterservice.models.po.MktTaskOrderPO;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
 
 /**
  * @Author: lijunwei
@@ -28,26 +32,20 @@ public class TaskDetailBO {
     private String taskListImg;
     private String taskDetailImg;
 
-    private Long mktTaskOrderId;
-    private Integer orderSource;
-    private BigDecimal consumeAmount;
-    private Integer consumeTimes;
+    /**
+     * 会员订单与消费
+     */
+    private MktTaskOrderPO mktTaskOrderPO;
 
-    private Long mktTaskInviteId;
-    private Integer inviteNum;
+    /**
+     * 券号列表(奖励)
+     */
+    private List<MktCouponPO> mktCouponPOList;
 
-    private Long mktCouponId;
-    private Long couponId;
-    private String couponCode;
-    private String couponName;
-
-    private Long mktMsgId;
-    private Integer bizType;
-    private Long bizId;
-    private String msgType;
-    private String msgCode;
-    private String templateMsgId;
-    private Date sendTime;
+    /**
+     * 消息对象
+     */
+    private List<MktMessagePO> mktmessagePOList;
 
     public Long getMktTaskId() {
         return mktTaskId;
@@ -169,139 +167,27 @@ public class TaskDetailBO {
         this.taskDetailImg = taskDetailImg;
     }
 
-    public Long getMktTaskOrderId() {
-        return mktTaskOrderId;
+    public MktTaskOrderPO getMktTaskOrderPO() {
+        return mktTaskOrderPO;
     }
 
-    public void setMktTaskOrderId(Long mktTaskOrderId) {
-        this.mktTaskOrderId = mktTaskOrderId;
+    public void setMktTaskOrderPO(MktTaskOrderPO mktTaskOrderPO) {
+        this.mktTaskOrderPO = mktTaskOrderPO;
     }
 
-    public Integer getOrderSource() {
-        return orderSource;
+    public List<MktCouponPO> getMktCouponPOList() {
+        return mktCouponPOList;
     }
 
-    public void setOrderSource(Integer orderSource) {
-        this.orderSource = orderSource;
+    public void setMktCouponPOList(List<MktCouponPO> mktCouponPOList) {
+        this.mktCouponPOList = mktCouponPOList;
     }
 
-    public BigDecimal getConsumeAmount() {
-        return consumeAmount;
+    public List<MktMessagePO> getMktmessagePOList() {
+        return mktmessagePOList;
     }
 
-    public void setConsumeAmount(BigDecimal consumeAmount) {
-        this.consumeAmount = consumeAmount;
-    }
-
-    public Integer getConsumeTimes() {
-        return consumeTimes;
-    }
-
-    public void setConsumeTimes(Integer consumeTimes) {
-        this.consumeTimes = consumeTimes;
-    }
-
-    public Long getMktTaskInviteId() {
-        return mktTaskInviteId;
-    }
-
-    public void setMktTaskInviteId(Long mktTaskInviteId) {
-        this.mktTaskInviteId = mktTaskInviteId;
-    }
-
-    public Integer getInviteNum() {
-        return inviteNum;
-    }
-
-    public void setInviteNum(Integer inviteNum) {
-        this.inviteNum = inviteNum;
-    }
-
-    public Long getMktCouponId() {
-        return mktCouponId;
-    }
-
-    public void setMktCouponId(Long mktCouponId) {
-        this.mktCouponId = mktCouponId;
-    }
-
-    public Long getCouponId() {
-        return couponId;
-    }
-
-    public void setCouponId(Long couponId) {
-        this.couponId = couponId;
-    }
-
-    public String getCouponCode() {
-        return couponCode;
-    }
-
-    public void setCouponCode(String couponCode) {
-        this.couponCode = couponCode;
-    }
-
-    public String getCouponName() {
-        return couponName;
-    }
-
-    public void setCouponName(String couponName) {
-        this.couponName = couponName;
-    }
-
-    public Long getMktMsgId() {
-        return mktMsgId;
-    }
-
-    public void setMktMsgId(Long mktMsgId) {
-        this.mktMsgId = mktMsgId;
-    }
-
-    public Integer getBizType() {
-        return bizType;
-    }
-
-    public void setBizType(Integer bizType) {
-        this.bizType = bizType;
-    }
-
-    public Long getBizId() {
-        return bizId;
-    }
-
-    public void setBizId(Long bizId) {
-        this.bizId = bizId;
-    }
-
-    public String getMsgType() {
-        return msgType;
-    }
-
-    public void setMsgType(String msgType) {
-        this.msgType = msgType;
-    }
-
-    public String getMsgCode() {
-        return msgCode;
-    }
-
-    public void setMsgCode(String msgCode) {
-        this.msgCode = msgCode;
-    }
-
-    public String getTemplateMsgId() {
-        return templateMsgId;
-    }
-
-    public void setTemplateMsgId(String templateMsgId) {
-        this.templateMsgId = templateMsgId;
-    }
-
-    public Date getSendTime() {
-        return sendTime;
-    }
-
-    public void setSendTime(Date sendTime) {
-        this.sendTime = sendTime;
+    public void setMktmessagePOList(List<MktMessagePO> mktmessagePOList) {
+        this.mktmessagePOList = mktmessagePOList;
     }
 }

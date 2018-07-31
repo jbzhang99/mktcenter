@@ -8,6 +8,7 @@ import com.bizvane.mktcenterservice.models.vo.PageForm;
 import com.bizvane.utils.responseinfo.ResponseData;
 import com.bizvane.utils.tokens.SysAccountPO;
 import com.github.pagehelper.PageInfo;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
@@ -57,6 +58,13 @@ public interface ActivitySmartService {
     public ResponseData<Integer> updateSmartActivity(ActivitySmartVO vo);
 
     /**
+     * 删除智能营销分组
+     * @param vo
+     * @return
+     */
+    public ResponseData<Integer> deleteSmartActivity(ActivitySmartVO vo);
+
+    /**
      * 对某个智能营销组创建任务
      * 任务类型：1优惠券营销
      * @param vo
@@ -72,7 +80,7 @@ public interface ActivitySmartService {
      * @param vo
      * @return
      */
-    public ResponseData<Integer> addIntegralActivity(ActivitySmartVO vo);
+    public ResponseData<Integer> addIntegralActivity(ActivitySmartVO vo, SysAccountPO stageUser);
 
     /**
      * 对某个智能营销组创建任务
@@ -80,7 +88,7 @@ public interface ActivitySmartService {
      * @param vo
      * @return
      */
-    public ResponseData<Integer> addSmsActivity(ActivitySmartVO vo, MessageVO messageVO);
+    public ResponseData<Integer> addSmsActivity(ActivitySmartVO vo, MessageVO messageVO, SysAccountPO stageUser);
 
     /**
      * 对某个智能营销组创建任务
@@ -88,5 +96,5 @@ public interface ActivitySmartService {
      * @param vo
      * @return
      */
-    public ResponseData<Integer> addTemplateMsgActivity(ActivitySmartVO vo, MessageVO messageVO);
+    public ResponseData<Integer> addTemplateMsgActivity(ActivitySmartVO vo, MessageVO messageVO, SysAccountPO stageUser);
 }

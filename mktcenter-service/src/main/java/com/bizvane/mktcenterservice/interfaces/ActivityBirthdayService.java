@@ -41,4 +41,9 @@ public interface ActivityBirthdayService {
      * @return
      */
     public ResponseData<Integer> checkActivityBirthday(MktActivityPOWithBLOBs bs, SysAccountPO sysAccountPO);
+    /**
+     * 修改活动
+     * @return
+     */
+    public ResponseData<Integer> updateActivityBirthday(ActivityBO bo,SysAccountPO stageUser);
 }

@@ -5,7 +5,7 @@ import com.bizvane.centerstageservice.models.vo.SysCheckConfigVo;
 import com.bizvane.centerstageservice.rpc.SysCheckConfigServiceRpc;
 import com.bizvane.couponfacade.interfaces.SendCouponServiceFeign;
 import com.bizvane.couponfacade.models.vo.SendCouponSimpleRequestVO;
-import com.bizvane.members.facade.enums.IntegralRecordTypeEnum;
+import com.bizvane.members.facade.enums.IntegralChangeTypeEnum;
 import com.bizvane.members.facade.models.IntegralRecordModel;
 import com.bizvane.members.facade.service.api.IntegralRecordApiService;
 import com.bizvane.mktcenterservice.interfaces.ActivityOrderService;
@@ -457,7 +457,7 @@ public class ActivityOrderServiceImpl implements ActivityOrderService {
             var1.setMemberCode(vo.getMemberCode().toString());
             var1.setChangeBills(activityVO.getActivityCode());
             var1.setChangeIntegral(activityVO.getPoints());
-            var1.setChangeWay(IntegralRecordTypeEnum.INCOME.getCode());
+            var1.setChangeWay(IntegralChangeTypeEnum.INCOME.getCode());
             integralRecordApiService.updateMemberIntegral(var1);
 
             // 增加卷奖励接口
