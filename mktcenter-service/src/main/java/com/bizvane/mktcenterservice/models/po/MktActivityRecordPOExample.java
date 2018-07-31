@@ -9,28 +9,28 @@ import java.util.List;
 public class MktActivityRecordPOExample implements Serializable {
     /**
 	 * 只读. 
-	 * @mbg.generated  2018-07-31 14:19:14
+	 * @mbg.generated  2018-07-31 14:22:17
 	 */
 	protected String orderByClause;
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-07-31 14:19:14
+	 * @mbg.generated  2018-07-31 14:22:17
 	 */
 	protected boolean distinct;
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-07-31 14:19:14
+	 * @mbg.generated  2018-07-31 14:22:17
 	 */
 	protected List<Criteria> oredCriteria;
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-07-31 14:19:14
+	 * @mbg.generated  2018-07-31 14:22:17
 	 */
 	private static final long serialVersionUID = 1L;
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-07-31 14:19:14
+	 * @mbg.generated  2018-07-31 14:22:17
 	 */
 	public MktActivityRecordPOExample() {
 		oredCriteria = new ArrayList<Criteria>();
@@ -38,7 +38,7 @@ public class MktActivityRecordPOExample implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-07-31 14:19:14
+	 * @mbg.generated  2018-07-31 14:22:17
 	 */
 	public void setOrderByClause(String orderByClause) {
 		this.orderByClause = orderByClause;
@@ -46,7 +46,7 @@ public class MktActivityRecordPOExample implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-07-31 14:19:14
+	 * @mbg.generated  2018-07-31 14:22:17
 	 */
 	public String getOrderByClause() {
 		return orderByClause;
@@ -54,7 +54,7 @@ public class MktActivityRecordPOExample implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-07-31 14:19:14
+	 * @mbg.generated  2018-07-31 14:22:17
 	 */
 	public void setDistinct(boolean distinct) {
 		this.distinct = distinct;
@@ -62,7 +62,7 @@ public class MktActivityRecordPOExample implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-07-31 14:19:14
+	 * @mbg.generated  2018-07-31 14:22:17
 	 */
 	public boolean isDistinct() {
 		return distinct;
@@ -70,7 +70,7 @@ public class MktActivityRecordPOExample implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-07-31 14:19:14
+	 * @mbg.generated  2018-07-31 14:22:17
 	 */
 	public List<Criteria> getOredCriteria() {
 		return oredCriteria;
@@ -78,7 +78,7 @@ public class MktActivityRecordPOExample implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-07-31 14:19:14
+	 * @mbg.generated  2018-07-31 14:22:17
 	 */
 	public void or(Criteria criteria) {
 		oredCriteria.add(criteria);
@@ -86,7 +86,7 @@ public class MktActivityRecordPOExample implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-07-31 14:19:14
+	 * @mbg.generated  2018-07-31 14:22:17
 	 */
 	public Criteria or() {
 		Criteria criteria = createCriteriaInternal();
@@ -96,7 +96,7 @@ public class MktActivityRecordPOExample implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-07-31 14:19:14
+	 * @mbg.generated  2018-07-31 14:22:17
 	 */
 	public Criteria createCriteria() {
 		Criteria criteria = createCriteriaInternal();
@@ -108,7 +108,7 @@ public class MktActivityRecordPOExample implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-07-31 14:19:14
+	 * @mbg.generated  2018-07-31 14:22:17
 	 */
 	protected Criteria createCriteriaInternal() {
 		Criteria criteria = new Criteria();
@@ -117,7 +117,7 @@ public class MktActivityRecordPOExample implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-07-31 14:19:14
+	 * @mbg.generated  2018-07-31 14:22:17
 	 */
 	public void clear() {
 		oredCriteria.clear();
@@ -127,7 +127,7 @@ public class MktActivityRecordPOExample implements Serializable {
 
 	/**
 	 * 只读. t_mkt_activity_record
-	 * @mbg.generated  2018-07-31 14:19:14
+	 * @mbg.generated  2018-07-31 14:22:17
 	 */
 	protected abstract static class GeneratedCriteria implements Serializable {
 		protected List<Criterion> criteria;
@@ -1053,7 +1053,7 @@ public class MktActivityRecordPOExample implements Serializable {
 
 	/**
 	 * 只读. t_mkt_activity_record
-	 * @mbg.generated  2018-07-31 14:19:14
+	 * @mbg.generated  2018-07-31 14:22:17
 	 */
 	public static class Criterion implements Serializable {
 		private String condition;

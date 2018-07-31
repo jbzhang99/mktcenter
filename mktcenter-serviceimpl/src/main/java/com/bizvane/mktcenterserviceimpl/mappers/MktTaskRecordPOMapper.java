@@ -9,68 +9,68 @@ public interface MktTaskRecordPOMapper {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-07-31 14:19:14
+	 * @mbg.generated  2018-07-31 14:22:17
 	 */
 	long countByExample(MktTaskRecordPOExample example);
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-07-31 14:19:14
+	 * @mbg.generated  2018-07-31 14:22:17
 	 */
 	int deleteByExample(MktTaskRecordPOExample example);
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-07-31 14:19:14
+	 * @mbg.generated  2018-07-31 14:22:17
 	 */
 	int deleteByPrimaryKey(Long mktTaskRecordId);
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-07-31 14:19:14
+	 * @mbg.generated  2018-07-31 14:22:17
 	 */
 	int insert(MktTaskRecordPO record);
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-07-31 14:19:14
+	 * @mbg.generated  2018-07-31 14:22:17
 	 */
 	int insertSelective(MktTaskRecordPO record);
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-07-31 14:19:14
+	 * @mbg.generated  2018-07-31 14:22:17
 	 */
 	List<MktTaskRecordPO> selectByExample(MktTaskRecordPOExample example);
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-07-31 14:19:14
+	 * @mbg.generated  2018-07-31 14:22:17
 	 */
 	MktTaskRecordPO selectByPrimaryKey(Long mktTaskRecordId);
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-07-31 14:19:14
+	 * @mbg.generated  2018-07-31 14:22:17
 	 */
 	int updateByExampleSelective(@Param("record") MktTaskRecordPO record,
 			@Param("example") MktTaskRecordPOExample example);
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-07-31 14:19:14
+	 * @mbg.generated  2018-07-31 14:22:17
 	 */
 	int updateByExample(@Param("record") MktTaskRecordPO record, @Param("example") MktTaskRecordPOExample example);
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-07-31 14:19:14
+	 * @mbg.generated  2018-07-31 14:22:17
 	 */
 	int updateByPrimaryKeySelective(MktTaskRecordPO record);
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-07-31 14:19:14
+	 * @mbg.generated  2018-07-31 14:22:17
 	 */
 	int updateByPrimaryKey(MktTaskRecordPO record);
 }
