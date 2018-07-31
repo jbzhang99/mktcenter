@@ -425,6 +425,10 @@ public class ActivityOrderServiceImpl implements ActivityOrderService {
         activity.setActivityType(ActivityTypeEnum.ACTIVITY_TYPE_REGISGER.getCode());
         List<ActivityVO> OrderList = mktActivityOrderPOMapper.getActivityOrderList(activity);
         for (ActivityVO activityVO:OrderList) {
+            //判断金额是否满足
+            if (!ExecuteParamCheckUtil.CheckPayMoney(vo.getPayMoney(),new BigDecimal(activityVO.getOrderMinPrice()))){
+                continue;
+            }
             //判断会员范围 会员类型
             if(!ExecuteParamCheckUtil.CheckMemberType(vo.getMemberType(),activityVO.getMemberType())){
                 continue;
@@ -437,13 +441,15 @@ public class ActivityOrderServiceImpl implements ActivityOrderService {
             if(!ExecuteParamCheckUtil.CheckOrderFrom(vo.getOrderFrom(),activityVO.getOrderSource())){
                 continue;
             }
-            //判断金额是否满足
-            if (ExecuteParamCheckUtil.CheckPayMoney(vo.getPayMoney(),new BigDecimal(activityVO.getOrderMinPrice()))){
+
+            //判断适用商品
+            if (!ExecuteParamCheckUtil.CheckCommodity(vo,activityVO)){
                 continue;
             }
-
-
-
+            //判断适用门店
+            if (!ExecuteParamCheckUtil.CheckserviceStore(vo,activityVO)){
+                continue;
+            }
 
 
             //增加积分奖励新增接口

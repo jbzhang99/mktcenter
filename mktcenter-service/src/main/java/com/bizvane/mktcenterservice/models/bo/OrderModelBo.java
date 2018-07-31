@@ -10,10 +10,18 @@ public class OrderModelBo {
     private Integer brandId;//品牌id
     private Integer orderFrom;//订单来源
     private BigDecimal payMoney;//订单金额
-    private String productNo;//商品编码
+    private String productNos;//商品编码
     private Long serviceStoreId;//服务门店id
     private Long levelId;//会员等级id
     private Integer memberType;//会员范围
+
+    public String getProductNos() {
+        return productNos;
+    }
+
+    public void setProductNos(String productNos) {
+        this.productNos = productNos;
+    }
 
     public Integer getMemberType() {
         return memberType;
@@ -53,14 +61,6 @@ public class OrderModelBo {
 
     public void setOrderFrom(Integer orderFrom) {
         this.orderFrom = orderFrom;
-    }
-
-    public String getProductNo() {
-        return productNo;
-    }
-
-    public void setProductNo(String productNo) {
-        this.productNo = productNo;
     }
 
     public Long getServiceStoreId() {
