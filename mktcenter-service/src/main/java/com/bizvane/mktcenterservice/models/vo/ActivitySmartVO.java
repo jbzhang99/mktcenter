@@ -77,6 +77,11 @@ public class ActivitySmartVO extends MktActivityPO {
 
     private Integer pageSize =10;
 
+    /**
+     * pkid
+     */
+    private Long mktActivitySmartId;
+
     public Integer getMktType() {
         return mktType;
     }
@@ -171,5 +176,13 @@ public class ActivitySmartVO extends MktActivityPO {
 
     public void setPageSize(Integer pageSize) {
         this.pageSize = pageSize;
+    }
+
+    public Long getMktActivitySmartId() {
+        return mktActivitySmartId;
+    }
+
+    public void setMktActivitySmartId(Long mktActivitySmartId) {
+        this.mktActivitySmartId = mktActivitySmartId;
     }
 }

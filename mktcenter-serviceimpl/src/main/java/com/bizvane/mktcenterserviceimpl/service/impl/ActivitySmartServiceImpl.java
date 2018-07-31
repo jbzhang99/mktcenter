@@ -8,11 +8,13 @@ import com.bizvane.mktcenterservice.models.vo.ActivitySmartVO;
 import com.bizvane.mktcenterservice.models.vo.PageForm;
 import com.bizvane.mktcenterserviceimpl.common.constants.ActivityConstants;
 import com.bizvane.mktcenterserviceimpl.common.constants.ResponseConstants;
+import com.bizvane.mktcenterserviceimpl.common.enums.MktTypeEnum;
 import com.bizvane.mktcenterserviceimpl.mappers.MktActivitySmartPOMapper;
 import com.bizvane.utils.responseinfo.ResponseData;
 import com.bizvane.utils.tokens.SysAccountPO;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
@@ -32,20 +34,15 @@ public class ActivitySmartServiceImpl implements ActivitySmartService {
     private MktActivitySmartPOMapper mktActivitySmartPOMapper;
 
     /**
-     * 查询智能营销活动列表(方块)
+     * 查询智能营销分组列表(方块)
      * @param vo
      * @return
      */
     @Override
-    public ResponseData<PageInfo<MktActivitySmartPO>> getActivityList(ActivitySmartVO vo, PageForm pageForm) {
+    public ResponseData<PageInfo<MktActivitySmartPO>> getSmartActivityList(ActivitySmartVO vo, PageForm pageForm) {
         ResponseData responseData = new ResponseData();
         PageHelper.startPage(pageForm.getPageNumber(),pageForm.getPageSize());
-//        //品牌id不能为空
-//        if(vo.getSysBrandId()==null){
-//            responseData.setCode(ResponseConstants.ERROR);
-//            responseData.setMessage(ResponseConstants.ERROR_MSG);
-//            return responseData;
-//        }
+
         MktActivitySmartPOExample example = new MktActivitySmartPOExample();
         MktActivitySmartPOExample.Criteria criteria = example.createCriteria();
         criteria.andValidEqualTo(Boolean.TRUE).andMktActivityIdEqualTo(ActivityConstants.SMART_ACTIVITY_GROUP);
@@ -106,7 +103,7 @@ public class ActivitySmartServiceImpl implements ActivitySmartService {
      * @return
      */
     @Override
-    public ResponseData<MktActivitySmartPO> getActivityById(Long mktActivitySmartId) {
+    public ResponseData<MktActivitySmartPO> getSmartActivityById(Long mktActivitySmartId) {
         ResponseData responseData = new ResponseData();
         MktActivitySmartPO mktActivitySmartPO = mktActivitySmartPOMapper.selectByPrimaryKey(mktActivitySmartId);
         responseData.setData(mktActivitySmartPO);
@@ -121,8 +118,26 @@ public class ActivitySmartServiceImpl implements ActivitySmartService {
     @Override
     public ResponseData<Integer> addSmartActivity(ActivitySmartVO vo) {
         ResponseData responseData = new ResponseData();
-//        MktActivitySmartPO mktActivitySmartPO = mktActivitySmartPOMapper.selectByPrimaryKey(mktActivitySmartId);
-//        responseData.setData(mktActivitySmartPO);
+
+        //营销名称为空
+        if(StringUtils.isEmpty(vo.getMktTaskName())){
+            responseData.setCode(ResponseConstants.ERROR);
+            responseData.setMessage(ActivityConstants.SMART_ACTIVITY_TASK_NAME_EMPTY);
+            return responseData;
+        }
+
+        //会员条件
+        if(StringUtils.isEmpty(vo.getTargetMbr())){
+            responseData.setCode(ResponseConstants.ERROR);
+            responseData.setMessage(ActivityConstants.SMART_ACTIVITY_TARGET_MEMBER_EMPTY);
+            return responseData;
+        }
+        MktActivitySmartPO mktActivitySmartPO = new MktActivitySmartPO();
+        BeanUtils.copyProperties(vo,mktActivitySmartPO);
+        mktActivitySmartPO.setMktActivityId(ActivityConstants.SMART_ACTIVITY_GROUP);
+        mktActivitySmartPO.setMktType(MktTypeEnum.TASK_STATUS_ALL.getCode());
+        mktActivitySmartPOMapper.insertSelective(mktActivitySmartPO);
+        responseData.setMessage(ResponseConstants.SUCCESS_MSG);
         return responseData;
     }
 
@@ -134,8 +149,23 @@ public class ActivitySmartServiceImpl implements ActivitySmartService {
     @Override
     public ResponseData<Integer> updateSmartActivity(ActivitySmartVO vo) {
         ResponseData responseData = new ResponseData();
-//        MktActivitySmartPO mktActivitySmartPO = mktActivitySmartPOMapper.selectByPrimaryKey(mktActivitySmartId);
-//        responseData.setData(mktActivitySmartPO);
+        //营销名称为空
+        if(StringUtils.isEmpty(vo.getMktTaskName())){
+            responseData.setCode(ResponseConstants.ERROR);
+            responseData.setMessage(ActivityConstants.SMART_ACTIVITY_TASK_NAME_EMPTY);
+            return responseData;
+        }
+
+        //会员条件
+        if(StringUtils.isEmpty(vo.getTargetMbr())){
+            responseData.setCode(ResponseConstants.ERROR);
+            responseData.setMessage(ActivityConstants.SMART_ACTIVITY_TARGET_MEMBER_EMPTY);
+            return responseData;
+        }
+        MktActivitySmartPO mktActivitySmartPO = new MktActivitySmartPO();
+        BeanUtils.copyProperties(vo,mktActivitySmartPO);
+        mktActivitySmartPOMapper.updateByPrimaryKeyWithBLOBs(mktActivitySmartPO);
+        responseData.setMessage(ResponseConstants.SUCCESS_MSG);
         return responseData;
     }
 }
