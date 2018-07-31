@@ -1,9 +1,9 @@
 package com.bizvane.mktcenterserviceimpl.mappers;
 
+import com.bizvane.mktcenterservice.models.bo.TaskDetailBO;
 import com.bizvane.mktcenterservice.models.po.MktTaskOrderPO;
 import com.bizvane.mktcenterservice.models.po.MktTaskOrderPOExample;
 import java.util.List;
-
 import com.bizvane.mktcenterservice.models.vo.TaskVO;
 import org.apache.ibatis.annotations.Param;
 
@@ -77,4 +77,9 @@ public interface MktTaskOrderPOMapper {
 	int updateByPrimaryKey(MktTaskOrderPO record);
 
 	List<TaskVO> getTaskList(TaskVO vo);
+
+	/**
+	 * 查询次数任务详情
+	 */
+	public  List<TaskDetailBO> getOrderTaskDetails(@Param("mktTaskId") Long mktTaskId);
 }

@@ -1,12 +1,14 @@
 package com.bizvane.mktcenterservice.interfaces;
 
 import com.bizvane.mktcenterservice.models.bo.TaskBO;
+import com.bizvane.mktcenterservice.models.bo.TaskDetailBO;
 import com.bizvane.mktcenterservice.models.po.MktTaskOrderPO;
 import com.bizvane.mktcenterservice.models.vo.PageForm;
 import com.bizvane.mktcenterservice.models.vo.TaskConsumeVO;
 import com.bizvane.mktcenterservice.models.vo.TaskVO;
 import com.bizvane.utils.responseinfo.ResponseData;
 import com.bizvane.utils.tokens.SysAccountPO;
+import org.apache.ibatis.annotations.Param;
 
 import java.text.ParseException;
 import java.util.List;
@@ -19,7 +21,11 @@ import java.util.List;
  */
 public interface TaskOrderService {
     /**
-     * 查询任务
+     * 查询任务详情
+     */
+    public  List<TaskDetailBO> getOrderTaskDetails(Long mktTaskId);
+    /**
+     * 查询任务列表
      * @return
      */
     public List<TaskVO> selectTask(TaskVO vo);

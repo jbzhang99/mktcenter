@@ -7,6 +7,7 @@ import com.bizvane.mktcenterservice.interfaces.TaskCouponService;
 import com.bizvane.mktcenterservice.interfaces.TaskMessageService;
 import com.bizvane.mktcenterservice.interfaces.TaskOrderService;
 import com.bizvane.mktcenterservice.interfaces.TaskService;
+import com.bizvane.mktcenterservice.models.bo.TaskDetailBO;
 import com.bizvane.mktcenterservice.models.po.*;
 import com.bizvane.mktcenterservice.models.vo.TaskConsumeVO;
 import com.bizvane.mktcenterservice.models.vo.TaskVO;
@@ -50,6 +51,10 @@ public class TaskOrderServiceImpl implements TaskOrderService {
     private MktTaskOrderPOMapper mktTaskOrderPOMapper;
 
 
+    @Override
+    public List<TaskDetailBO> getOrderTaskDetails(Long mktTaskId) {
+        return mktTaskOrderPOMapper.getOrderTaskDetails(mktTaskId);
+    }
 
     /**s
      * 查询任务
