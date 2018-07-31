@@ -10,6 +10,7 @@ import com.bizvane.mktcenterservice.models.vo.MessageVO;
 import com.bizvane.mktcenterservice.models.vo.PageForm;
 import com.bizvane.mktcenterserviceimpl.common.constants.ActivityConstants;
 import com.bizvane.mktcenterserviceimpl.common.constants.ResponseConstants;
+import com.bizvane.mktcenterserviceimpl.common.constants.SystemConstants;
 import com.bizvane.mktcenterserviceimpl.common.enums.MktTypeEnum;
 import com.bizvane.mktcenterserviceimpl.common.utils.JobUtil;
 import com.bizvane.mktcenterserviceimpl.mappers.MktActivityPOMapper;
@@ -77,7 +78,7 @@ public class ActivitySmartServiceImpl implements ActivitySmartService {
         criteria.andValidEqualTo(Boolean.TRUE).andMktActivityIdEqualTo(ActivityConstants.SMART_ACTIVITY_GROUP);
 
         if(!StringUtils.isEmpty(vo.getMktTaskName())){
-            criteria.andMktTaskNameLike(vo.getMktTaskName());
+            criteria.andMktTaskNameLike(SystemConstants.LIKE_SYMBOL+vo.getMktTaskName()+SystemConstants.LIKE_SYMBOL);
         }
 
         List<MktActivitySmartPO> mktActivitySmartPOS = mktActivitySmartPOMapper.selectByExampleWithBLOBs(example);
@@ -175,7 +176,7 @@ public class ActivitySmartServiceImpl implements ActivitySmartService {
         }
         MktActivitySmartPO mktActivitySmartPO = new MktActivitySmartPO();
         BeanUtils.copyProperties(vo,mktActivitySmartPO);
-        mktActivitySmartPOMapper.updateByPrimaryKeyWithBLOBs(mktActivitySmartPO);
+        mktActivitySmartPOMapper.updateByPrimaryKeySelective(mktActivitySmartPO);
         responseData.setMessage(ResponseConstants.SUCCESS_MSG);
         return responseData;
     }

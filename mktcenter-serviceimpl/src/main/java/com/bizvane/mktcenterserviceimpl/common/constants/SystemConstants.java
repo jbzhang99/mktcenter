@@ -14,4 +14,6 @@ public class SystemConstants {
     public static String ERROR_MSG_PARAM_EMPTY ="参数为空";
     public static String ERROR_TASK_TYPE_ERRO="任务类型不匹配";
     public static final String CHARSET = "UTF-8";
+    public static final String LIKE_SYMBOL = "%";
+
 }
