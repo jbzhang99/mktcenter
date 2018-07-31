@@ -20,22 +20,26 @@ public interface ActivitySmartServiceRpc {
 
     @RequestMapping("getSmartActivityById")
     @io.swagger.annotations.ApiModelProperty(value = "ActivitySmartVO",name = "通过id获取活动", required = false,example = "")
-    public ResponseData<ActivitySmartVO> getActivityById(@RequestParam("mktActivitySmartId") Long mktActivitySmartId);
+    public ResponseData<ActivitySmartVO> getSmartActivityById(@RequestParam("mktActivitySmartId") Long mktActivitySmartId);
 
     @RequestMapping("getSmartActivityList")
     @io.swagger.annotations.ApiModelProperty(value = "ActivitySmartVO",name = "查询智能营销活动列表", required = false,example = "")
-    public ResponseData<PageInfo<ActivitySmartVO>> getActivityList(@RequestBody ActivitySmartVO vo);
+    public ResponseData<PageInfo<ActivitySmartVO>> getSmartActivityList(@RequestBody ActivitySmartVO vo);
 
     @RequestMapping("addSmartActivity")
     @io.swagger.annotations.ApiModelProperty(value = "ActivitySmartVO",name = "添加智能营销活动", required = false,example = "")
-    public ResponseData<Integer> addActivity(@RequestBody ActivitySmartVO vo);
+    public ResponseData<Integer> addSmartActivity(@RequestBody ActivitySmartVO vo);
 
     @RequestMapping("updateSmartActivity")
     @io.swagger.annotations.ApiModelProperty(value = "ActivitySmartVO",name = "更新智能营销活动", required = false,example = "")
-    public ResponseData<Integer> updateActivity(@RequestBody ActivitySmartVO vo);
+    public ResponseData<Integer> updateSmartActivity(@RequestBody ActivitySmartVO vo);
 
     @RequestMapping("deleteSmartActivity")
     @io.swagger.annotations.ApiModelProperty(value = "ActivitySmartVO",name = "删除智能营销活动分组", required = false,example = "")
-    public ResponseData<Integer> deleteActivity(@RequestBody ActivitySmartVO vo);
+    public ResponseData<Integer> deleteSmartActivity(@RequestBody ActivitySmartVO vo);
+
+    @RequestMapping("copySmartActivity")
+    @io.swagger.annotations.ApiModelProperty(value = "ActivitySmartVO",name = "复制智能营销活动分组", required = false,example = "")
+    public ResponseData<Integer> copySmartActivity(@RequestBody ActivitySmartVO vo);
 
 }

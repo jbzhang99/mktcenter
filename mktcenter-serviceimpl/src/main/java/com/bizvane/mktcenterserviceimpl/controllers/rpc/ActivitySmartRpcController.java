@@ -60,4 +60,10 @@ public class ActivitySmartRpcController {
         return activitySmartService.deleteSmartActivity(vo);
     }
 
+    @RequestMapping("copySmartActivity")
+    @io.swagger.annotations.ApiModelProperty(value = "ActivitySmartVO",name = "复制智能营销活动分组", required = false,example = "")
+    public ResponseData<Integer> copySmartActivity(@RequestBody ActivitySmartVO vo){
+        return activitySmartService.copySmartActivity(vo);
+    }
+
 }
