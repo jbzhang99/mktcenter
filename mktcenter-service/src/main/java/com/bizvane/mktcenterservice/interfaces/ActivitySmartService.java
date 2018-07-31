@@ -67,6 +67,13 @@ public interface ActivitySmartService {
     public ResponseData<Integer> updateSmartActivity(ActivitySmartVO vo);
 
     /**
+     * 启用/禁用智能营销分组
+     * @param vo
+     * @return
+     */
+    public ResponseData<Integer> updateSmartActivityStatus(ActivitySmartVO vo);
+
+    /**
      * 删除智能营销分组
      * @param vo
      * @return
