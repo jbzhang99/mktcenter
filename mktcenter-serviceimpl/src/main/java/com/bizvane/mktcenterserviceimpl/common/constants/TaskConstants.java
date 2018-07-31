@@ -38,7 +38,10 @@ public class TaskConstants {
     public  final static Integer  TASK_TYPE=2;
 
     //查询数据的不同标识
+    public  final static Integer   ZERO = 0;//全部的
     public  final static Integer   FIRST=1;//全部的
     public  final static Integer   SECOND=2;//启用的
     public  final static Integer   THREE=3;//已禁用的
+    public  final static Integer   FOUR = 4;
+
 }
