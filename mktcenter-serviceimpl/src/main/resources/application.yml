@@ -76,13 +76,13 @@ feign:
   client:
     centerstage:
       name: centerstage
-      path: centerstage
+      path: centerstage.api
     coupon:
       name: coupon
-      path: coupon
+      path: coupon.api
     members:
       name: members-server
-      path: members
+      path: members.api
 
 rocketmq:
   onsaddr: http://onsaddr-internet.aliyun.com/rocketmq/nsaddr4client-internet
