@@ -5,6 +5,13 @@ import com.bizvane.centerstageservice.models.po.SysCheckPo;
 import com.bizvane.centerstageservice.models.vo.SysCheckConfigVo;
 import com.bizvane.centerstageservice.rpc.SysCheckConfigServiceRpc;
 import com.bizvane.centerstageservice.rpc.SysCheckServiceRpc;
+import com.bizvane.couponfacade.interfaces.SendCouponServiceFeign;
+import com.bizvane.couponfacade.models.vo.SendCouponSimpleRequestVO;
+import com.bizvane.members.facade.enums.IntegralBusinessTypeEnum;
+import com.bizvane.members.facade.enums.IntegralChangeTypeEnum;
+import com.bizvane.members.facade.models.IntegralRecordModel;
+import com.bizvane.members.facade.models.MemberInfoModel;
+import com.bizvane.members.facade.service.api.IntegralRecordApiService;
 import com.bizvane.mktcenterservice.interfaces.TaskShareService;
 import com.bizvane.mktcenterservice.models.bo.TaskBO;
 import com.bizvane.mktcenterservice.models.po.*;
@@ -34,6 +41,7 @@ import org.springframework.util.CollectionUtils;
 
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 /**
  * @author gengxiaoyu
@@ -65,6 +73,12 @@ public class TaskShareServiceImpl implements TaskShareService {
     @Autowired
     private MktMessagePOMapper mktMessagePOMapper;
 
+    @Autowired
+    private IntegralRecordApiService integralRecordApiService;
+
+    @Autowired
+    private SendCouponServiceFeign sendCouponServiceFeign;
+
     /**
      * 获取任务列表
      * @param vo
@@ -72,7 +86,7 @@ public class TaskShareServiceImpl implements TaskShareService {
      * @return
      */
     @Override
-    public ResponseData<TaskVO> getTaskList(TaskVO vo, PageForm pageForm) {
+    public ResponseData<PageInfo<TaskVO>> getTaskList(TaskVO vo, PageForm pageForm) {
         ResponseData responseData = new ResponseData();
         PageHelper.startPage(pageForm.getPageNumber(),pageForm.getPageSize());
         List<TaskVO> activityRegisterList = mktTaskSharePOMapper.getTaskList(vo);
@@ -213,6 +227,7 @@ public class TaskShareServiceImpl implements TaskShareService {
                 mktCouponPO1.setCreateUserName(stageUser.getName());
                 mktCouponPO1.setCreateUserId(stageUser.getSysAccountId());
                 mktCouponPO1.setCreateDate(new Date());
+                mktCouponPO1.setBizId(taskVOId);
                 mktCouponPO1.setBizType(BusinessTypeEnum.ACTIVITY_TYPE_TASK.getCode());
                 mktCouponPO1.setCouponName(mktCouponPO.getCouponName());
                 mktCouponPO1.setCouponId(mktCouponPO.getCouponId());//是id还是code
@@ -235,16 +250,14 @@ public class TaskShareServiceImpl implements TaskShareService {
                 mktMessagePO.setCreateDate(new Date());
                 BeanUtils.copyProperties(mktTaskSharePO,mktMessagePO);
 
+                mktMessagePO.setBizId(taskVOId);
                 mktMessagePOMapper.insertSelective(mktMessagePO);
             }
         }
         return null;
     }
 
-    @Override
-    public ResponseData<Integer> executeTask(TaskVO vo) {
-        return null;
-    }
+
 
 
     /**
@@ -394,8 +407,63 @@ public class TaskShareServiceImpl implements TaskShareService {
         return responseData;
     }
 
+    /**
+     * 查询任务详情
+     * @param mktTaskId
+     * @return
+     */
     @Override
     public ResponseData<List<TaskVO>> selectTaskById(Long mktTaskId) {
-        return null;
+        ResponseData responseData = new ResponseData();
+        TaskVO taskVO = new TaskVO();
+        taskVO.setMktTaskId(mktTaskId);
+        List<TaskVO> taskVOList = mktTaskSharePOMapper.getTaskList(taskVO);
+        responseData.setData(taskVOList);
+        responseData.setMessage(SysResponseEnum.SUCCESS.getMessage());
+        responseData.setCode(SysResponseEnum.SUCCESS.getCode());
+        return responseData;
+    }
+
+    /**
+     * 执行任务
+     * @param vo 或者传回的是任务编号？
+     * @param memberInfoModel 或者传回的是会员编号？
+     * @return
+     */
+    @Override
+    public ResponseData executeTask(TaskVO vo, MemberInfoModel memberInfoModel) {
+        ResponseData responseData = new ResponseData();
+        //查询出该品牌下微信分享的任务   so传过来的参数到底是什么呢
+/*        TaskVO taskVO = new TaskVO();
+        taskVO.setSysBrandId(memberInfoModel.getBrandId());
+        taskVO.setTaskCode(taskVO.getTaskCode());
+        taskVO.setTaskType(TaskTypeEnum.TASK_TYPE_PROFILE.getCode());*/
+        MktTaskPO mktTaskPO = mktTaskPOMapper.selectByPrimaryKey(vo.getMktTaskId());
+
+            //调用发券模块为会员发券   券可能多张，且券的消息需要从task_coupon中查出来
+
+            MktCouponPOExample mktCouponPOExample = new MktCouponPOExample();
+            MktCouponPOExample.Criteria criteria = mktCouponPOExample.createCriteria();
+            criteria.andBizIdEqualTo(vo.getMktTaskId()).andBizTypeEqualTo(BusinessTypeEnum.ACTIVITY_TYPE_TASK.getCode()).andValidEqualTo(true);
+
+
+            List<MktCouponPO> mktCouponPOList = mktCouponPOMapper.selectByExample(mktCouponPOExample);
+
+            //遍历券信息添加
+
+            for (MktCouponPO mktCouponPO:mktCouponPOList){
+                SendCouponSimpleRequestVO sendCouponSimpleRequestVO = new SendCouponSimpleRequestVO();
+                sendCouponSimpleRequestVO.setMemberCode(memberInfoModel.getMemberCode());
+                sendCouponSimpleRequestVO.setSendBussienId(mktCouponPO.getBizId());
+                sendCouponSimpleRequestVO.setCouponDefinitionId(mktCouponPO.getCouponId());//id还是code？？？
+                sendCouponSimpleRequestVO.getSendType();//sendtype是？？
+                sendCouponServiceFeign.simple(sendCouponSimpleRequestVO);
+            }
+
+        }else{
+            responseData.setMessage("未完成该任务");
+        }
+
+        return responseData;
     }
 }

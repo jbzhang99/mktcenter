@@ -6,6 +6,13 @@ import com.bizvane.centerstageservice.models.po.SysCheckPo;
 import com.bizvane.centerstageservice.models.vo.SysCheckConfigVo;
 import com.bizvane.centerstageservice.rpc.SysCheckConfigServiceRpc;
 import com.bizvane.centerstageservice.rpc.SysCheckServiceRpc;
+import com.bizvane.couponfacade.interfaces.SendCouponServiceFeign;
+import com.bizvane.couponfacade.models.vo.SendCouponSimpleRequestVO;
+import com.bizvane.members.facade.enums.IntegralBusinessTypeEnum;
+import com.bizvane.members.facade.enums.IntegralChangeTypeEnum;
+import com.bizvane.members.facade.models.IntegralRecordModel;
+import com.bizvane.members.facade.models.MemberInfoModel;
+import com.bizvane.members.facade.service.api.IntegralRecordApiService;
 import com.bizvane.mktcenterservice.interfaces.TaskProfileService;
 import com.bizvane.mktcenterservice.models.bo.TaskBO;
 import com.bizvane.mktcenterservice.models.po.*;
@@ -64,6 +71,15 @@ public class TaskProfileServiceImpl implements TaskProfileService {
 
     @Autowired
     private MktTaskRecordPOMapper mktTaskRecordPOMapper;
+
+    @Autowired
+    private IntegralRecordApiService integralRecordApiService;
+
+    @Autowired
+    private SendCouponServiceFeign sendCouponServiceFeign;
+
+    @Autowired
+    private MktCouponPOMapper mktCouponPOMapper;
 
 
 
@@ -194,6 +210,7 @@ public class TaskProfileServiceImpl implements TaskProfileService {
                 mktCouponPO1.setCouponName(mktCouponPO.getCouponName());
                 mktCouponPO1.setCouponId(mktCouponPO.getCouponId());//是id还是code
                 mktCouponPO1.setCouponCode(mktCouponPO.getCouponCode());
+                mktCouponPO1.setBizId(taskVOId);
 
                 mktCouponPOMapper.insertSelective(mktCouponPO1);
 
@@ -214,6 +231,7 @@ public class TaskProfileServiceImpl implements TaskProfileService {
                 mktMessagePO.setCreateDate(new Date());
                 BeanUtils.copyProperties(mktTaskProfilePO,mktMessagePO);
                 mktMessagePO.setMsgContent(messageVO.getMsgContent());
+                mktMessagePO.setBizId(taskVOId);
                 //模板消息id？哪里的？
                 mktMessagePOMapper.insertSelective(mktMessagePO);
             }
@@ -222,15 +240,7 @@ public class TaskProfileServiceImpl implements TaskProfileService {
         return responseData;
     }
 
-    /**
-     * 执行任务
-     * @param vo
-     * @return
-     */
-    @Override
-    public ResponseData<Integer> executeTask(TaskVO vo) {
-       return null;
-    }
+
 
     /**
      * 修改任务
@@ -361,8 +371,13 @@ public class TaskProfileServiceImpl implements TaskProfileService {
         return responseData;
     }
 
+    /*@Override
+    public ResponseData getChosenExtendProperty(Long brandId) {
+        return null;
+    }*/
+
     /**
-     * 查询商家选择出的让会员完善的扩展信息字段
+     * 查询商家选择出的让会员完善的扩展信息字段   用不到了！！！！！
      * @param brandId
      * @return
      *//*
@@ -414,7 +429,59 @@ public class TaskProfileServiceImpl implements TaskProfileService {
         return null;
     }
 
+    /**
+     * 执行任务
+     * @param vo 或者传回的是任务编号？
+     * @param memberInfoModel 或者传回的是会员编号？
+     * @return
+     */
+    @Override
+    public ResponseData executeTask(TaskVO vo, MemberInfoModel memberInfoModel) {
+        ResponseData responseData = new ResponseData();
+        //查询出该品牌下完善资料的任务   so传过来的参数到底是什么呢
+/*        TaskVO taskVO = new TaskVO();
+        taskVO.setSysBrandId(memberInfoModel.getBrandId());
+        taskVO.setTaskCode(taskVO.getTaskCode());
+        taskVO.setTaskType(TaskTypeEnum.TASK_TYPE_PROFILE.getCode());*/
+        MktTaskPO mktTaskPO = mktTaskPOMapper.selectByPrimaryKey(vo.getMktTaskId());
 
+
+            //调用会员模块为会员加积分
+            IntegralRecordModel integralRecordModel = new IntegralRecordModel();
+            integralRecordModel.setMemberCode(memberInfoModel.getMemberCode());
+            integralRecordModel.setMemberName(memberInfoModel.getName());
+            integralRecordModel.setChangeBills(UUID.randomUUID().toString().replaceAll("-",""));
+            integralRecordModel.setChangeDate(new Date());
+            integralRecordModel.setChangeIntegral(vo.getPoints());
+            integralRecordModel.setChangeWay(IntegralChangeTypeEnum.INCOME.getCode());
+            integralRecordModel.setBusinessWay(IntegralBusinessTypeEnum.TASK_INCOME.getCode());
+
+            integralRecordApiService.updateMemberIntegral(integralRecordModel);
+
+            //调用发券模块为会员发券   券可能多张，且券的消息需要从task_coupon中查出来
+
+            MktCouponPOExample mktCouponPOExample = new MktCouponPOExample();
+            MktCouponPOExample.Criteria criteria = mktCouponPOExample.createCriteria();
+            criteria.andBizIdEqualTo(vo.getMktTaskId()).andBizTypeEqualTo(BusinessTypeEnum.ACTIVITY_TYPE_TASK.getCode()).andValidEqualTo(true);
+
+
+            List<MktCouponPO> mktCouponPOList = mktCouponPOMapper.selectByExample(mktCouponPOExample);
+
+            //遍历券信息添加
+
+            for (MktCouponPO mktCouponPO:mktCouponPOList){
+                SendCouponSimpleRequestVO sendCouponSimpleRequestVO = new SendCouponSimpleRequestVO();
+                sendCouponSimpleRequestVO.setMemberCode(memberInfoModel.getMemberCode());
+                sendCouponSimpleRequestVO.setSendBussienId(mktCouponPO.getBizId());
+                sendCouponSimpleRequestVO.setCouponDefinitionId(mktCouponPO.getCouponId());//id还是code？？？
+                sendCouponSimpleRequestVO.getSendType();//sendtype是？？
+                sendCouponServiceFeign.simple(sendCouponSimpleRequestVO);
+            }
+
+
+
+        return responseData;
+    }
 
 
 

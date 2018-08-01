@@ -1,10 +1,12 @@
 package com.bizvane.mktcenterservice.interfaces;
 
+import com.bizvane.members.facade.models.MemberInfoModel;
 import com.bizvane.mktcenterservice.models.bo.TaskBO;
 import com.bizvane.mktcenterservice.models.vo.PageForm;
 import com.bizvane.mktcenterservice.models.vo.TaskVO;
 import com.bizvane.utils.responseinfo.ResponseData;
 import com.bizvane.utils.tokens.SysAccountPO;
+import com.github.pagehelper.PageInfo;
 
 import java.util.List;
 
@@ -21,7 +23,7 @@ public interface TaskShareService {
      * @param vo
      * @return
      */
-    public ResponseData<TaskVO> getTaskList(TaskVO vo, PageForm pageForm);
+    public ResponseData<PageInfo<TaskVO>> getTaskList(TaskVO vo, PageForm pageForm);
 
     /**
      * 新增任务
@@ -35,7 +37,7 @@ public interface TaskShareService {
      * @param
      * @return
      */
-    public ResponseData<Integer> executeTask(TaskVO vo);
+    public ResponseData<Integer> executeTask(TaskVO vo, MemberInfoModel memberInfoModel);
 
     /**
      * 修改任务

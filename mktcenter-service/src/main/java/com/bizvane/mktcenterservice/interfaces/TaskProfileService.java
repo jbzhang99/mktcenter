@@ -1,5 +1,6 @@
 package com.bizvane.mktcenterservice.interfaces;
 
+import com.bizvane.members.facade.models.MemberInfoModel;
 import com.bizvane.mktcenterservice.models.bo.TaskBO;
 import com.bizvane.mktcenterservice.models.po.MktMessagePOExample;
 import com.bizvane.mktcenterservice.models.po.MktTaskRecordPO;
@@ -28,11 +29,12 @@ public interface TaskProfileService {
     public ResponseData<Integer> addTask(TaskBO bo, SysAccountPO stageUser);
 
     /**
-     *执行任务
+     * 执行任务
      * @param vo
+     * @param memberInfoModel
      * @return
      */
-    public ResponseData<Integer> executeTask(TaskVO vo);
+    public ResponseData<Integer> executeTask(TaskVO vo, MemberInfoModel memberInfoModel);
 
     /**
      * 修改任务
@@ -49,12 +51,12 @@ public interface TaskProfileService {
      */
     public ResponseData<List<TaskVO>> selectTaskById(Long mktTaskId);
 
-    /**
-     * 查询商家选择出的让会员完善的扩展信息字段
-     * @param brandId
-     * @return
-     */
-    public ResponseData getChosenExtendProperty(Long brandId);
+//    /**
+//     * 查询商家选择出的让会员完善的扩展信息字段
+//     * @param brandId
+//     * @return
+//     */
+//    public ResponseData getChosenExtendProperty(Long brandId);
 
     /**
      * 根据时间查询完善资料的人数及发行的优惠券以及积分
