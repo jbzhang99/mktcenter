@@ -19,6 +19,7 @@ import com.bizvane.mktcenterserviceimpl.common.enums.ActivityStatusEnum;
 import com.bizvane.mktcenterserviceimpl.common.enums.ActivityTypeEnum;
 import com.bizvane.mktcenterserviceimpl.common.enums.BusinessTypeEnum;
 import com.bizvane.mktcenterserviceimpl.common.enums.CheckStatusEnum;
+import com.bizvane.mktcenterserviceimpl.common.utils.CodeUtil;
 import com.bizvane.mktcenterserviceimpl.common.utils.JobUtil;
 import com.bizvane.mktcenterserviceimpl.mappers.MktActivityPOMapper;
 import com.bizvane.mktcenterserviceimpl.mappers.MktActivityUpgradePOMapper;
@@ -91,9 +92,8 @@ public class ActivityUpgradeServiceImpl implements ActivityUpgradeService {
         ResponseData responseData = new ResponseData();
         //得到大实体类
         ActivityVO activityVO = bo.getActivityVO();
-        //暂时用uuid生成活动编号
-        String activityCode = "AC"+ UUID.randomUUID().toString().replaceAll("-", "");
-        activityVO.setActivityCode(activityCode);
+        //工具类生成活动编码
+        String activityCode = CodeUtil.getActivityCode();
         //增加活动类型是升级活动
         activityVO.setActivityType(ActivityTypeEnum.ACTIVITY_TYPE_UPGRADE.getCode());
         MktActivityPOWithBLOBs mktActivityPOWithBLOBs = new MktActivityPOWithBLOBs();
