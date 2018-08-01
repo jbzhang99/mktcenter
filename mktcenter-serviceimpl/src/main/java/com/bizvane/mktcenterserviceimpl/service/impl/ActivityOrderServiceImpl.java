@@ -20,6 +20,7 @@ import com.bizvane.mktcenterserviceimpl.common.enums.ActivityTypeEnum;
 import com.bizvane.mktcenterserviceimpl.common.enums.BusinessTypeEnum;
 import com.bizvane.mktcenterserviceimpl.common.enums.CheckStatusEnum;
 import com.bizvane.mktcenterserviceimpl.common.job.XxlJobConfig;
+import com.bizvane.mktcenterserviceimpl.common.utils.CodeUtil;
 import com.bizvane.mktcenterserviceimpl.common.utils.ExecuteParamCheckUtil;
 import com.bizvane.mktcenterserviceimpl.common.utils.JobUtil;
 import com.bizvane.mktcenterserviceimpl.mappers.MktActivityOrderPOMapper;
@@ -99,8 +100,8 @@ public class ActivityOrderServiceImpl implements ActivityOrderService {
         ResponseData responseData = new ResponseData();
         //得到大实体类
         ActivityVO activityVO = bo.getActivityVO();
-        //暂时用uuid生成活动编号9
-        String activityCode = "AC"+ UUID.randomUUID().toString().replaceAll("-", "");
+        //工具类生成活动编码
+        String activityCode = CodeUtil.getActivityCode();
         activityVO.setActivityCode(activityCode);
         //增加活动类型是消费活动
         activityVO.setActivityType(ActivityTypeEnum.ACTIVITY_TYPE_ORDER.getCode());

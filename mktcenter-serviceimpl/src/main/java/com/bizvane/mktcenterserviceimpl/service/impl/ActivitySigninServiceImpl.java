@@ -10,13 +10,16 @@ import com.bizvane.members.facade.service.api.IntegralRecordApiService;
 import com.bizvane.mktcenterservice.interfaces.ActivitySigninService;
 import com.bizvane.mktcenterservice.models.bo.ActivityBO;
 import com.bizvane.mktcenterservice.models.po.MktActivityPOWithBLOBs;
+import com.bizvane.mktcenterservice.models.po.MktActivityRecordPO;
 import com.bizvane.mktcenterservice.models.po.MktActivitySignin;
 import com.bizvane.mktcenterservice.models.vo.ActivityVO;
 import com.bizvane.mktcenterservice.models.vo.PageForm;
 import com.bizvane.mktcenterserviceimpl.common.enums.ActivityStatusEnum;
 import com.bizvane.mktcenterserviceimpl.common.enums.ActivityTypeEnum;
 import com.bizvane.mktcenterserviceimpl.common.enums.CheckStatusEnum;
+import com.bizvane.mktcenterserviceimpl.common.utils.CodeUtil;
 import com.bizvane.mktcenterserviceimpl.mappers.MktActivityPOMapper;
+import com.bizvane.mktcenterserviceimpl.mappers.MktActivityRecordPOMapper;
 import com.bizvane.mktcenterserviceimpl.mappers.MktActivitySigninMapper;
 import com.bizvane.mktcenterserviceimpl.mappers.MktMessagePOMapper;
 import com.bizvane.utils.enumutils.SysResponseEnum;
@@ -52,6 +55,8 @@ public class ActivitySigninServiceImpl implements ActivitySigninService {
     private SysCheckConfigServiceRpc sysCheckConfigServiceRpc;
     @Autowired
     private IntegralRecordApiService integralRecordApiService;
+    @Autowired
+    private MktActivityRecordPOMapper mktActivityRecordPOMapper;
     /**
      * 查询签到活动列表
      * @param vo
@@ -80,8 +85,8 @@ public class ActivitySigninServiceImpl implements ActivitySigninService {
         ResponseData responseData = new ResponseData();
         //得到大实体类
         ActivityVO activityVO = bo.getActivityVO();
-        //暂时用uuid生成活动编号9
-        String activityCode = "AC"+ UUID.randomUUID().toString().replaceAll("-", "");
+        //工具类生成活动编码
+        String activityCode = CodeUtil.getActivityCode();
         activityVO.setActivityCode(activityCode);
         //增加活动类型是签到活动
         activityVO.setActivityType(ActivityTypeEnum.ACTIVITY_TYPE_SIGNIN.getCode());
@@ -183,7 +188,7 @@ public class ActivitySigninServiceImpl implements ActivitySigninService {
         ActivityVO activity = new ActivityVO();
         activity.setActivityStatus(ActivityStatusEnum.ACTIVITY_STATUS_EXECUTING.getCode());
         activity.setSysBrandId(vo.getBrandId());
-        activity.setActivityType(ActivityTypeEnum.ACTIVITY_TYPE_REGISGER.getCode());
+        activity.setActivityType(ActivityTypeEnum.ACTIVITY_TYPE_SIGNIN.getCode());
         List<ActivityVO> signinList = mktActivitySigninMapper.getActivitySigninList(activity);
         for (ActivityVO activityVO:signinList) {
             //增加积分奖励新增接口
@@ -193,9 +198,15 @@ public class ActivitySigninServiceImpl implements ActivitySigninService {
             var1.setChangeIntegral(activityVO.getPoints());
             var1.setChangeWay(IntegralChangeTypeEnum.INCOME.getCode());
             integralRecordApiService.updateMemberIntegral(var1);
-            // 增加卷奖励接口
+            //新增积分到会员参与活动记录表中数据
+            MktActivityRecordPO po = new MktActivityRecordPO();
+            po.setActivityType(ActivityTypeEnum.ACTIVITY_TYPE_SIGNIN.getCode());
+            po.setMemberCode(vo.getMemberCode());
+            po.setParticipateDate(new Date());
+            po.setPoints(activityVO.getPoints());
+            mktActivityRecordPOMapper.insertSelective(po);
         }
-        return null;
+        return responseData;
     }
 
     /**

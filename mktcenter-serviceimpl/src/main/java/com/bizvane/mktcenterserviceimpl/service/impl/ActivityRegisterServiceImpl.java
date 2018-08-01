@@ -32,6 +32,7 @@ import com.bizvane.utils.responseinfo.ResponseData;
 import com.bizvane.utils.tokens.SysAccountPO;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -50,6 +51,7 @@ import java.util.UUID;
  * @Copyright (c) 2018 上海商帆信息科技有限公司-版权所有
  */
 @Service
+@Slf4j
 public class ActivityRegisterServiceImpl implements ActivityRegisterService {
 
     @Autowired
@@ -294,9 +296,11 @@ public class ActivityRegisterServiceImpl implements ActivityRegisterService {
         MktActivityPOWithBLOBs mktActivityPOWithBLOBs = new MktActivityPOWithBLOBs();
         BeanUtils.copyProperties(activityVO,mktActivityPOWithBLOBs);
         //查询job
-       /* XxlJobInfo xxlJobInfo = new XxlJobInfo();
+        XxlJobInfo xxlJobInfo = new XxlJobInfo();
         xxlJobInfo.setExecutorParam(activityVO.getActivityCode());
-        ResponseEntity<String> s =jobClient.getJobInfoByBizJob(xxlJobInfo);*/
+        xxlJobInfo.setBizType(BusinessTypeEnum.ACTIVITY_TYPE_ACTIVITY.getCode());
+        ResponseEntity<String> jobList =jobClient.getJobInfoByBizJob(xxlJobInfo);
+
 
         //查询审核配置，是否需要审核然后判断
         SysCheckConfigVo so = new SysCheckConfigVo();
