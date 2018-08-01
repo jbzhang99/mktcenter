@@ -1,6 +1,7 @@
 package com.bizvane.mktcenterserviceimpl.controllers;
 
 import com.bizvane.mktcenterservice.interfaces.ActivitySmartService;
+import com.bizvane.mktcenterservice.models.bo.ActivitySmartBO;
 import com.bizvane.mktcenterservice.models.po.MktActivitySmartPO;
 import com.bizvane.mktcenterservice.models.po.MktCouponPO;
 import com.bizvane.mktcenterservice.models.vo.ActivitySmartVO;
@@ -12,6 +13,7 @@ import com.bizvane.utils.tokens.SysAccountPO;
 import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
@@ -31,7 +33,7 @@ public class ActivitySmartController {
     private ActivitySmartService activitySmartService;
 
     /**
-     * 查询智能营销活动列表(方块)
+     * 查询智能营销活动分组列表(方块)
      * @return
      */
     @RequestMapping("getSmartActivityList")
@@ -46,6 +48,16 @@ public class ActivitySmartController {
     @RequestMapping("getActivityHistoryList")
     public ResponseData<PageInfo<MktActivitySmartPO>> getActivityHistoryList(ActivitySmartVO vo, PageForm pageForm){
         return activitySmartService.getActivityHistoryList(vo, pageForm);
+    }
+
+    /**
+     * 查询某个智能营销详情
+     * @param mktActivityId
+     * @return
+     */
+    @RequestMapping("getActivityDetailById")
+    public ResponseData<ActivitySmartBO> getActivityDetailById(Long mktActivityId){
+        return activitySmartService.getActivityDetailById(mktActivityId);
     }
 
     /**

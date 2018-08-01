@@ -4,6 +4,7 @@ import com.bizvane.centerstageservice.rpc.SysCheckConfigServiceRpc;
 import com.bizvane.couponfacade.interfaces.SendCouponServiceFeign;
 import com.bizvane.members.facade.service.api.IntegralRecordApiService;
 import com.bizvane.mktcenterservice.interfaces.ActivitySmartService;
+import com.bizvane.mktcenterservice.models.bo.ActivitySmartBO;
 import com.bizvane.mktcenterservice.models.po.*;
 import com.bizvane.mktcenterservice.models.vo.ActivitySmartVO;
 import com.bizvane.mktcenterservice.models.vo.MessageVO;
@@ -97,13 +98,17 @@ public class ActivitySmartServiceImpl implements ActivitySmartService {
     public ResponseData<PageInfo<MktActivitySmartPO>> getActivityHistoryList(ActivitySmartVO vo, PageForm pageForm) {
         ResponseData responseData = new ResponseData();
         //活动id不能为空
-        if(vo.getMktActivityId()==null){
+        if(vo.getMktActivitySmartId()==null){
             responseData.setCode(ResponseConstants.ERROR);
             responseData.setMessage(ActivityConstants.SMART_ACTIVITY_ID_EMPTY);
             return responseData;
         }
         PageHelper.startPage(pageForm.getPageNumber(),pageForm.getPageSize());
         List<ActivitySmartVO> activityList = mktActivitySmartPOMapper.getActivityList(vo);
+
+        for(ActivitySmartVO activitySmartVO :activityList){
+            activitySmartVO.setMktTypeStr(MktTypeEnum.getMktTypeEnumByCode(activitySmartVO.getMktType()).getMessage());
+        }
         PageInfo<ActivitySmartVO> pageInfo = new PageInfo<>(activityList);
         responseData.setData(pageInfo);
         return responseData;
@@ -120,6 +125,16 @@ public class ActivitySmartServiceImpl implements ActivitySmartService {
         MktActivitySmartPO mktActivitySmartPO = mktActivitySmartPOMapper.selectByPrimaryKey(mktActivitySmartId);
         responseData.setData(mktActivitySmartPO);
         return responseData;
+    }
+
+    /**
+     * 查询某个智能营销活动详情
+     * @param mktActivityId
+     * @return
+     */
+    @Override
+    public ResponseData<ActivitySmartBO> getActivityDetailById(Long mktActivityId) {
+        return null;
     }
 
     /**
@@ -174,6 +189,21 @@ public class ActivitySmartServiceImpl implements ActivitySmartService {
             responseData.setMessage(ActivityConstants.SMART_ACTIVITY_TARGET_MEMBER_EMPTY);
             return responseData;
         }
+        MktActivitySmartPO mktActivitySmartPO = new MktActivitySmartPO();
+        BeanUtils.copyProperties(vo,mktActivitySmartPO);
+        mktActivitySmartPOMapper.updateByPrimaryKeySelective(mktActivitySmartPO);
+        responseData.setMessage(ResponseConstants.SUCCESS_MSG);
+        return responseData;
+    }
+
+    /**
+     * 启用/禁用智能营销分组
+     * @param vo
+     * @return
+     */
+    @Override
+    public ResponseData<Integer> updateSmartActivityStatus(ActivitySmartVO vo) {
+        ResponseData responseData = new ResponseData();
         MktActivitySmartPO mktActivitySmartPO = new MktActivitySmartPO();
         BeanUtils.copyProperties(vo,mktActivitySmartPO);
         mktActivitySmartPOMapper.updateByPrimaryKeySelective(mktActivitySmartPO);

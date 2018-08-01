@@ -19,6 +19,7 @@ import com.bizvane.mktcenterserviceimpl.common.enums.ActivityStatusEnum;
 import com.bizvane.mktcenterserviceimpl.common.enums.ActivityTypeEnum;
 import com.bizvane.mktcenterserviceimpl.common.enums.BusinessTypeEnum;
 import com.bizvane.mktcenterserviceimpl.common.enums.CheckStatusEnum;
+import com.bizvane.mktcenterserviceimpl.common.utils.CodeUtil;
 import com.bizvane.mktcenterserviceimpl.common.utils.JobUtil;
 import com.bizvane.mktcenterserviceimpl.mappers.MktActivityPOMapper;
 import com.bizvane.mktcenterserviceimpl.mappers.MktActivityUpgradePOMapper;
@@ -91,9 +92,8 @@ public class ActivityUpgradeServiceImpl implements ActivityUpgradeService {
         ResponseData responseData = new ResponseData();
         //得到大实体类
         ActivityVO activityVO = bo.getActivityVO();
-        //暂时用uuid生成活动编号
-        String activityCode = "AC"+ UUID.randomUUID().toString().replaceAll("-", "");
-        activityVO.setActivityCode(activityCode);
+        //工具类生成活动编码
+        String activityCode = CodeUtil.getActivityCode();
         //增加活动类型是升级活动
         activityVO.setActivityType(ActivityTypeEnum.ACTIVITY_TYPE_UPGRADE.getCode());
         MktActivityPOWithBLOBs mktActivityPOWithBLOBs = new MktActivityPOWithBLOBs();
@@ -147,9 +147,9 @@ public class ActivityUpgradeServiceImpl implements ActivityUpgradeService {
             //getStartTime 开始时间>当前时间增加job
             if(1 != bo.getActivityVO().getLongTerm() && new Date().before(activityVO.getStartTime())){
                 //创建任务调度任务开始时间
-                jobUtil.addJob(stageUser,activityVO,mktActivityPOWithBLOBs,activityCode);
+                jobUtil.addJob(stageUser,activityVO,activityCode);
                 //创建任务调度任务结束时间
-                jobUtil.addJobEndTime(stageUser,activityVO,mktActivityPOWithBLOBs,activityCode);
+                jobUtil.addJobEndTime(stageUser,activityVO,activityCode);
             }
         }else{
             //查询结果如果不需要审核审核状态为已审核
@@ -159,9 +159,9 @@ public class ActivityUpgradeServiceImpl implements ActivityUpgradeService {
                 //活动状态设置为待执行
                 mktActivityPOWithBLOBs.setActivityStatus(ActivityStatusEnum.ACTIVITY_STATUS_PENDING.getCode());
                 //创建任务调度任务开始时间
-                jobUtil.addJob(stageUser,activityVO,mktActivityPOWithBLOBs,activityCode);
+                jobUtil.addJob(stageUser,activityVO,activityCode);
                 //创建任务调度任务结束时间
-                jobUtil.addJobEndTime(stageUser,activityVO,mktActivityPOWithBLOBs,activityCode);
+                jobUtil.addJobEndTime(stageUser,activityVO,activityCode);
             }else{
                 //活动状态设置为执行中
                 mktActivityPOWithBLOBs.setActivityStatus(ActivityStatusEnum.ACTIVITY_STATUS_EXECUTING.getCode());
@@ -277,9 +277,9 @@ public class ActivityUpgradeServiceImpl implements ActivityUpgradeService {
             //getStartTime 开始时间>当前时间增加job
             if(1 != bo.getActivityVO().getLongTerm() && new Date().before(activityVO.getStartTime())){
                 //创建任务调度任务开始时间
-                jobUtil.addJob(stageUser,activityVO,mktActivityPOWithBLOBs,activityVO.getActivityCode());
+                jobUtil.addJob(stageUser,activityVO,activityVO.getActivityCode());
                 //创建任务调度任务结束时间
-                jobUtil.addJobEndTime(stageUser,activityVO,mktActivityPOWithBLOBs,activityVO.getActivityCode());
+                jobUtil.addJobEndTime(stageUser,activityVO,activityVO.getActivityCode());
             }
         }else{
             //查询结果如果不需要审核审核状态为已审核
@@ -289,9 +289,9 @@ public class ActivityUpgradeServiceImpl implements ActivityUpgradeService {
                 //活动状态设置为待执行
                 mktActivityPOWithBLOBs.setActivityStatus(ActivityStatusEnum.ACTIVITY_STATUS_PENDING.getCode());
                 //创建任务调度任务开始时间
-                jobUtil.addJob(stageUser,activityVO,mktActivityPOWithBLOBs,activityVO.getActivityCode());
+                jobUtil.addJob(stageUser,activityVO,activityVO.getActivityCode());
                 //创建任务调度任务结束时间
-                jobUtil.addJobEndTime(stageUser,activityVO,mktActivityPOWithBLOBs,activityVO.getActivityCode());
+                jobUtil.addJobEndTime(stageUser,activityVO,activityVO.getActivityCode());
             }else{
                 //活动状态设置为执行中
                 mktActivityPOWithBLOBs.setActivityStatus(ActivityStatusEnum.ACTIVITY_STATUS_EXECUTING.getCode());

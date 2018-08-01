@@ -32,6 +32,7 @@ import com.bizvane.utils.responseinfo.ResponseData;
 import com.bizvane.utils.tokens.SysAccountPO;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -50,6 +51,7 @@ import java.util.UUID;
  * @Copyright (c) 2018 上海商帆信息科技有限公司-版权所有
  */
 @Service
+@Slf4j
 public class ActivityRegisterServiceImpl implements ActivityRegisterService {
 
     @Autowired
@@ -109,7 +111,8 @@ public class ActivityRegisterServiceImpl implements ActivityRegisterService {
         activityVO.setActivityType(ActivityTypeEnum.ACTIVITY_TYPE_REGISGER.getCode());
         MktActivityPOWithBLOBs mktActivityPOWithBLOBs = new MktActivityPOWithBLOBs();
         BeanUtils.copyProperties(activityVO,mktActivityPOWithBLOBs);
-
+        //活动状态设置为待执行
+        mktActivityPOWithBLOBs.setActivityStatus(ActivityStatusEnum.ACTIVITY_STATUS_PENDING.getCode());
         //查询判断长期活动同一会员等级是否有重复
         if(1 == bo.getActivityVO().getLongTerm()){
             ActivityVO vo = new ActivityVO();
@@ -158,9 +161,9 @@ public class ActivityRegisterServiceImpl implements ActivityRegisterService {
             //getStartTime 开始时间>当前时间增加job
             if(1 != bo.getActivityVO().getLongTerm() && new Date().before(activityVO.getStartTime())){
                 //创建任务调度任务开始时间
-                jobUtil.addJob(stageUser,activityVO,mktActivityPOWithBLOBs,activityCode);
+                jobUtil.addJob(stageUser,activityVO,activityCode);
                 //创建任务调度任务结束时间
-                jobUtil.addJobEndTime(stageUser,activityVO,mktActivityPOWithBLOBs,activityCode);
+                jobUtil.addJobEndTime(stageUser,activityVO,activityCode);
             }
         }else{
             //查询结果如果不需要审核审核状态为已审核
@@ -170,9 +173,9 @@ public class ActivityRegisterServiceImpl implements ActivityRegisterService {
                 //活动状态设置为待执行
                 mktActivityPOWithBLOBs.setActivityStatus(ActivityStatusEnum.ACTIVITY_STATUS_PENDING.getCode());
                 //创建任务调度任务开始时间
-                jobUtil.addJob(stageUser,activityVO,mktActivityPOWithBLOBs,activityCode);
+                jobUtil.addJob(stageUser,activityVO,activityCode);
                 //创建任务调度任务结束时间
-                jobUtil.addJobEndTime(stageUser,activityVO,mktActivityPOWithBLOBs,activityCode);
+                jobUtil.addJobEndTime(stageUser,activityVO,activityCode);
             }else{
                 //活动状态设置为执行中
                 mktActivityPOWithBLOBs.setActivityStatus(ActivityStatusEnum.ACTIVITY_STATUS_EXECUTING.getCode());
@@ -233,6 +236,7 @@ public class ActivityRegisterServiceImpl implements ActivityRegisterService {
      * @return
      */
     @Override
+    @Transactional
     public ResponseData<Integer> executeActivity(MemberInfoModel vo) {
         //返回对象
         ResponseData responseData = new ResponseData();
@@ -281,6 +285,7 @@ public class ActivityRegisterServiceImpl implements ActivityRegisterService {
      * @return
      */
     @Override
+    @Transactional
     public ResponseData<Integer> updateActivityRegister(ActivityBO bo, SysAccountPO stageUser) {
         //返回对象
         ResponseData responseData = new ResponseData();
@@ -294,9 +299,11 @@ public class ActivityRegisterServiceImpl implements ActivityRegisterService {
         MktActivityPOWithBLOBs mktActivityPOWithBLOBs = new MktActivityPOWithBLOBs();
         BeanUtils.copyProperties(activityVO,mktActivityPOWithBLOBs);
         //查询job
-       /* XxlJobInfo xxlJobInfo = new XxlJobInfo();
+        XxlJobInfo xxlJobInfo = new XxlJobInfo();
         xxlJobInfo.setExecutorParam(activityVO.getActivityCode());
-        ResponseEntity<String> s =jobClient.getJobInfoByBizJob(xxlJobInfo);*/
+        xxlJobInfo.setBizType(BusinessTypeEnum.ACTIVITY_TYPE_ACTIVITY.getCode());
+        ResponseEntity<String> jobList =jobClient.getJobInfoByBizJob(xxlJobInfo);
+
 
         //查询审核配置，是否需要审核然后判断
         SysCheckConfigVo so = new SysCheckConfigVo();
@@ -334,9 +341,9 @@ public class ActivityRegisterServiceImpl implements ActivityRegisterService {
             //getStartTime 开始时间>当前时间增加job
             if(1 != bo.getActivityVO().getLongTerm() && new Date().before(activityVO.getStartTime())){
                 //创建任务调度任务开始时间
-                jobUtil.addJob(stageUser,activityVO,mktActivityPOWithBLOBs,mktActivityPOWithBLOBs.getActivityCode());
+                jobUtil.addJob(stageUser,activityVO,mktActivityPOWithBLOBs.getActivityCode());
                 //创建任务调度任务结束时间
-                jobUtil.addJobEndTime(stageUser,activityVO,mktActivityPOWithBLOBs,mktActivityPOWithBLOBs.getActivityCode());
+                jobUtil.addJobEndTime(stageUser,activityVO,mktActivityPOWithBLOBs.getActivityCode());
             }
         }else{
             //查询结果如果不需要审核审核状态为已审核
@@ -346,9 +353,9 @@ public class ActivityRegisterServiceImpl implements ActivityRegisterService {
                 //活动状态设置为待执行
                 mktActivityPOWithBLOBs.setActivityStatus(ActivityStatusEnum.ACTIVITY_STATUS_PENDING.getCode());
                 //创建任务调度任务开始时间
-                jobUtil.addJob(stageUser,activityVO,mktActivityPOWithBLOBs,mktActivityPOWithBLOBs.getActivityCode());
+                jobUtil.addJob(stageUser,activityVO,mktActivityPOWithBLOBs.getActivityCode());
                 //创建任务调度任务结束时间
-                jobUtil.addJobEndTime(stageUser,activityVO,mktActivityPOWithBLOBs,mktActivityPOWithBLOBs.getActivityCode());
+                jobUtil.addJobEndTime(stageUser,activityVO,mktActivityPOWithBLOBs.getActivityCode());
             }else{
                 //活动状态设置为执行中
                 mktActivityPOWithBLOBs.setActivityStatus(ActivityStatusEnum.ACTIVITY_STATUS_EXECUTING.getCode());
