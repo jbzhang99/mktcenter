@@ -1,11 +1,14 @@
 package com.bizvane.mktcenterservice.interfaces;
 
 import com.bizvane.mktcenterservice.models.bo.TaskBO;
+import com.bizvane.mktcenterservice.models.po.MktMessagePOExample;
+import com.bizvane.mktcenterservice.models.po.MktTaskRecordPO;
 import com.bizvane.mktcenterservice.models.vo.PageForm;
 import com.bizvane.mktcenterservice.models.vo.TaskVO;
 import com.bizvane.utils.responseinfo.ResponseData;
 import com.bizvane.utils.tokens.SysAccountPO;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -51,6 +54,22 @@ public interface TaskProfileService {
      * @param brandId
      * @return
      */
-    public ResponseData getChosenExtendProperty(long brandId);
+    public ResponseData getChosenExtendProperty(Long brandId);
+
+    /**
+     * 根据时间查询完善资料的人数及发行的优惠券以及积分
+     * @param date1
+     * @param date2
+     * @return
+     */
+    public ResponseData<List<MktTaskRecordPO>> getTaskProfileRecordByTime(Date date1,Date date2);
+
+    /**
+     * 任务审核
+     * @param taskVO
+     * @param sysAccountPO
+     * @return
+     */
+    public ResponseData checkTaskProfile(TaskVO taskVO,SysAccountPO sysAccountPO);
 
 }

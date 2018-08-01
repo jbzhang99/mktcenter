@@ -18,10 +18,7 @@ import com.bizvane.mktcenterserviceimpl.common.enums.TaskStatusEnum;
 import com.bizvane.mktcenterserviceimpl.common.enums.TaskTypeEnum;
 import com.bizvane.mktcenterserviceimpl.common.utils.CodeUtil;
 import com.bizvane.mktcenterserviceimpl.common.utils.JobUtil;
-import com.bizvane.mktcenterserviceimpl.mappers.MktCouponPOMapper;
-import com.bizvane.mktcenterserviceimpl.mappers.MktMessagePOMapper;
-import com.bizvane.mktcenterserviceimpl.mappers.MktTaskPOMapper;
-import com.bizvane.mktcenterserviceimpl.mappers.MktTaskProfilePOMapper;
+import com.bizvane.mktcenterserviceimpl.mappers.*;
 import com.bizvane.utils.commonutils.PageForm;
 import com.bizvane.utils.enumutils.SysResponseEnum;
 import com.bizvane.utils.responseinfo.ResponseData;
@@ -36,7 +33,7 @@ import org.springframework.util.CollectionUtils;
 import java.util.*;
 
 /**
- * @author chen.li
+ * @author gengxiaoyu
  * @date on 2018/7/16 14:13
  * @description 完善资料任务
  * @Copyright (c) 2018 上海商帆信息科技有限公司-版权所有
@@ -64,6 +61,9 @@ public class TaskProfileServiceImpl implements TaskProfileService {
 
     @Autowired
     private SysCheckServiceRpc sysCheckServiceRpc;
+
+    @Autowired
+    private MktTaskRecordPOMapper mktTaskRecordPOMapper;
 
 
 
@@ -206,7 +206,7 @@ public class TaskProfileServiceImpl implements TaskProfileService {
             for (MessageVO messageVO:bo.getMessageVOList()){
                 MessageVO messageVO1 = new MessageVO();
                 messageVO1.setMsgType(messageVO.getMsgType());
-                messageVO1.setSendTime(new Date());//开始发送时间是当创建任务之后立即发送还是？
+                messageVO1.setSendTime(messageVO.getSendTime());//开始发送时间是当创建任务之后立即发送还是？
 
                 MktMessagePO mktMessagePO = new MktMessagePO();
                 BeanUtils.copyProperties(messageVO1,mktMessagePO);
@@ -244,7 +244,7 @@ public class TaskProfileServiceImpl implements TaskProfileService {
         ResponseData responseData = new ResponseData();
         TaskVO taskVO = bo.getTaskVO();
         //接收需要修改的任务vo对象判断是否状态为待审核
-        //状态为待审核或者被驳回时才可修改
+        //状态为待审核或者被驳回时才可修改,其他状态为不可修改
         if (taskVO.getCheckStatus()!=CheckStatusEnum.CHECK_STATUS_PENDING.getCode()&&taskVO.getCheckStatus()!=CheckStatusEnum.CHECK_STATUS_REJECTED.getCode()){
             responseData.setCode(SysResponseEnum.FAILED.getCode());
             responseData.setMessage("该任务不可修改");
@@ -365,9 +365,9 @@ public class TaskProfileServiceImpl implements TaskProfileService {
      * 查询商家选择出的让会员完善的扩展信息字段
      * @param brandId
      * @return
-     */
+     *//*
     @Override
-    public ResponseData getChosenExtendProperty(long brandId){
+    public ResponseData<List<String>> getChosenExtendProperty(Long brandId){
         ResponseData responseData = new ResponseData();
         TaskVO taskVO = new TaskVO();
         taskVO.setSysBrandId(brandId);
@@ -379,6 +379,44 @@ public class TaskProfileServiceImpl implements TaskProfileService {
         }
         responseData.setData(list);
         return responseData;
+    }*/
+
+
+    /**
+     * 根据时间查询完善资料的人数及发行的优惠券以及积分
+     * @param date1
+     * @param date2
+     * @return
+     */
+   @Override
+    public ResponseData<List<MktTaskRecordPO>> getTaskProfileRecordByTime(Date date1,Date date2){
+        ResponseData responseData = new ResponseData();
+        MktTaskRecordPOExample example = new MktTaskRecordPOExample();
+        MktTaskRecordPOExample.Criteria criteria = example.createCriteria();
+        criteria.andParticipateDateBetween(date1,date2);
+        List<MktTaskRecordPO> mktTaskRecordPOList = mktTaskRecordPOMapper.selectByExample(example);
+        responseData.setData(mktTaskRecordPOList);
+
+        return null;
     }
+
+
+    /**
+     * 任务审核
+     * @param taskVO
+     * @param sysAccountPO
+     * @return
+     */
+    @Override
+    public ResponseData checkTaskProfile(TaskVO taskVO,SysAccountPO sysAccountPO){
+        ResponseData data = new ResponseData();
+
+        return null;
+    }
+
+
+
+
+
 
 }

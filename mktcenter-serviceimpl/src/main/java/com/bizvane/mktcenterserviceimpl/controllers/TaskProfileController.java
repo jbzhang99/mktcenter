@@ -22,7 +22,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 /**
- * @author chen.li
+ * @author gengxiaoyu
  * @date on 2018/7/13 13:39
  * @description
  * @Copyright (c) 2018 上海商帆信息科技有限公司-版权所有
@@ -57,8 +57,9 @@ public class TaskProfileController {
         bo.setMessageVOList(messageVOList);
 
         //获取操作人信息
-//        SysAccountPO stageUser = TokenUtils.getStageUser(request);
+        //SysAccountPO stageUser = TokenUtils.getStageUser(request);
         SysAccountPO stageUser = new SysAccountPO();
+
 
         //新增任务
         ResponseData<Integer> integerResponseData = taskProfileService.addTask(bo, stageUser);
@@ -128,21 +129,7 @@ public class TaskProfileController {
 
     }
 
-/*
-    */
-/**
-     * 会员界面获得需完善资料字段
-     * @param brandid
-     * @return
-     *//*
 
-    public ResponseData getChosenExtendProperties(Long brandid){
-        ResponseData responseData = new ResponseData();
-
-
-        return responseData;
-    }
-*/
 
 
 }
