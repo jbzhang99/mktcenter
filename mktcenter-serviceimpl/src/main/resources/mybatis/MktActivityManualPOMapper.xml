@@ -527,10 +527,10 @@
     on tma.mkt_activity_id = tmm.mkt_activity_id
     where tmm.valid=1 and tma.valid=1
      <if test="receiveType != null and receiveType != '' ">
-       AND tmm.receive_type = #{receiveType}
+       AND tmm.receive_type = #{receiveType,jdbcType=INTEGER}
      </if>
      <if test="activityStatus != null and activityStatus!= '' ">
-       AND tma.activity_status = #{activityStatus}
+       AND tma.activity_status = #{activityStatus,jdbcType=INTEGER}
      </if>
 
      <if test="createDateStart != null and createDateStart!= '' ">
@@ -590,9 +590,87 @@
     and tmmm.valid=1
     <!--活动主表ID -->
     <if test="mktActivityId != null and mktActivityId!= '' ">
-      AND tma.mkt_activity_id = #{mktActivityId}
+      AND tma.mkt_activity_id = #{mktActivityId,jdbcType=BIGINT}
     </if>
 
+
+  </select>
+
+  <select id="getActivityIdList" parameterType="com.bizvane.mktcenterservice.models.vo.ActivityVO"  resultType="com.bizvane.mktcenterservice.models.vo.ActivityVO">
+    SELECT
+    tma.mkt_activity_id,
+    tma.activity_code,
+    tma.activity_name,
+    tma.start_time,
+    tma.end_time,
+    tma.activity_info,
+    tma.long_term,
+    tma.activity_list_img,
+    tma.activity_detail_img,
+    tma.check_status,
+    tma.activity_status,
+    tma.remark,
+    tma.create_user_id,
+    tma.create_user_name,
+    tma.create_date,
+    tmam.receive_type,
+    tmam.qrcode,
+    tmam.per_person_per_day_max,
+    tmam.per_person_max,
+    tmam.remark,
+    tmam.mkt_activity_manual_id,
+    tmc.coupon_name,
+    tmc.coupon_code
+
+    FROM
+    t_mkt_activity tma
+    LEFT JOIN t_mkt_activity_manual tmam ON tma.mkt_activity_id = tmam.mkt_activity_id
+    left join  t_mkt_coupon tmc
+    on tmc.biz_id = tma.mkt_activity_id
+WHERE
+    tmam.valid = 1
+    AND tma.valid = 1
+    and tmc.valid=1
+    <if test="sysBrandId != null and sysBrandId!= '' ">
+      AND tma.sys_brand_id = #{sysBrandId,jdbcType=BIGINT}
+    </if>
+    <if test="sysCompanyId != null and sysCompanyId!= '' ">
+      AND tma.sys_company_id = #{sysCompanyId,jdbcType=BIGINT}
+    </if>
+    <if test="activityCode != null and activityCode!= '' ">
+    AND tma.activity_code = #{activityCode,jdbcType=VARCHAR}
+  </if>
+    <if test="activityType != null and activityType!= '' ">
+      AND tma.activity_type = #{activityType,jdbcType=INTEGER}
+    </if>
+  </select>
+
+  <select id="getActivityManualEffect">
+    SELECT
+    tma.activity_name,
+    tma.start_time,
+    tma.end_time,
+    tmam.receive_type
+    FROM
+    t_mkt_activity tma
+    LEFT JOIN t_mkt_activity_manual tmam ON tma.mkt_activity_id = tmam.mkt_activity_id
+    WHERE
+    tma.valid=1
+    and tmam.valid=1
+    <if test="sysCompanyId != null and sysCompanyId!= '' ">
+      AND tma.sys_company_id = #{sysCompanyId}
+    </if>
+    <if test="sysBrandId != null and sysBrandId!= '' ">
+      AND tma.sys_brand_id = #{sysBrandId}
+    </if>
+    <if test="receiveType != null">
+      and receive_type = #{receiveType,jdbcType=INTEGER},
+    </if>
+  </select>
+
+  <select id="selectByActivityId" parameterType="java.lang.Long" resultType="com.bizvane.mktcenterservice.models.po.MktActivityManualPO">
+    select
+    <include refid="Base_Column_List" /> from t_mkt_activity_manual where valid=1 and mkt_activity_id = #{_parameter}
 
   </select>
 </mapper>

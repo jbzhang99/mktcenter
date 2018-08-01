@@ -443,4 +443,39 @@
       valid = #{valid,jdbcType=BIT}
     where mkt_activity_record_id = #{mktActivityRecordId,jdbcType=BIGINT}
   </update>
+
+  <select id="selectActivityRecordPOList" parameterType="com.bizvane.mktcenterservice.models.po.MktActivityRecordPO" resultType="com.bizvane.mktcenterservice.models.po.MktActivityRecordPO">
+
+SELECT
+	activity_type,
+	create_date,
+	order_amount,
+	participate_date,
+	remark,
+	modified_user_name
+FROM
+	t_mkt_activity_record
+WHERE
+	valid = 1
+    <if test="acitivityId != null">
+     and  acitivity_id = #{acitivityId,jdbcType=BIGINT},
+    </if>
+
+    <if test="memberCode != null">
+      and member_code = #{memberCode,jdbcType=VARCHAR},
+    </if>
+  </select>
+  <select id="countByCondition" parameterType="com.bizvane.mktcenterservice.models.po.MktActivityRecordPO" resultType="java.lang.Integer">
+     select count(1) from t_mkt_activity_record
+    where
+      valid = 1
+    <if test="acitivityId != null">
+      and  acitivity_id = #{acitivityId,jdbcType=BIGINT},
+    </if>
+
+    <if test="memberCode != null">
+      and member_code = #{memberCode,jdbcType=VARCHAR},
+    </if>
+
+  </select>
 </mapper>

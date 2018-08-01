@@ -98,12 +98,10 @@ public interface MktActivityManualPOMapper {
 
 	List<ActivityVO> getActivityManualList(ActivityVO vo);
 
-    int  addActivityManual(ActivityBO bo);
-
-    int addActivity(ActivityBO bo);
-
     List<ActivityVO> getActivityManualEffect(ActivityVO vo);
 
     List<ActivityVO> getActivityList(ActivityVO vo);
 
+    List<ActivityVO> getActivityIdList(ActivityVO vo);
+	MktActivityManualPO selectByActivityId(Long mktActivityId);
 }

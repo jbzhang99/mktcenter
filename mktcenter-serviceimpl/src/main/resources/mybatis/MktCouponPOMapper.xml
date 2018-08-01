@@ -426,4 +426,40 @@
       valid = #{valid,jdbcType=BIT}
     where mkt_coupon_id = #{mktCouponId,jdbcType=BIGINT}
   </update>
+  <select id="selectMktActivityManualId" parameterType="com.bizvane.mktcenterservice.models.po.MktCouponPO"
+                     resultType="com.bizvane.mktcenterservice.models.po.MktCouponPO">
+SELECT
+	tmc.biz_id,
+	tmc.biz_code,
+	tmc.coupon_code,
+	tmc.coupon_name,
+	tmc.coupon_id
+FROM
+	t_mkt_coupon tmc
+WHERE
+	tmc.valid = 1
+    <if test="couponCode != null">
+    and tmc.coupon_code = #{couponCode,jdbcType=VARCHAR},
+  </if>
+    <if test="bizType != null">
+     and  tmc.biz_type = #{bizType,jdbcType=INTEGER},
+    </if>
+  </select>
+
+  <select id="selectCouponCode" parameterType="com.bizvane.mktcenterservice.models.po.MktCouponPO" resultType="com.bizvane.mktcenterservice.models.po.MktCouponPO">
+    SELECT
+	tmc.coupon_code,
+	tmc.coupon_id,
+	tmc.biz_code
+FROM
+	t_mkt_coupon tmc
+WHERE
+	tmc.valid = 1
+    <if test="bizId != null">
+      and tmc.biz_id =#{bizId,jdbcType=BIGINT},
+    </if>
+    <if test="bizId != null">
+      and tmc.biz_type = #{bizType,jdbcType=INTEGER}
+  </if>
+  </select>
 </mapper>

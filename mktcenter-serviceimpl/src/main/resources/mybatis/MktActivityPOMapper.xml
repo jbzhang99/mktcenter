@@ -673,4 +673,8 @@
     where activity_code = #{activityCode}
     AND check_status = 3  AND valid = 1
   </update>
+
+  <select id="selectActivity" parameterType="com.bizvane.mktcenterservice.models.vo.ActivityVO" resultType="com.bizvane.mktcenterservice.models.vo.ActivityVO">
+
+  </select>
 </mapper>

@@ -74,4 +74,7 @@ public interface MktActivityRecordPOMapper {
 	 * @mbg.generated  2018-08-01 09:21:14
 	 */
 	int updateByPrimaryKey(MktActivityRecordPO record);
+	int countByCondition(MktActivityRecordPO mktActivityRecordPO);
+
+	List<MktActivityRecordPO>  selectActivityRecordPOList(MktActivityRecordPO mktActivityRecordPO);
 }
