@@ -197,6 +197,21 @@ public class ActivitySmartServiceImpl implements ActivitySmartService {
     }
 
     /**
+     * 启用/禁用智能营销分组
+     * @param vo
+     * @return
+     */
+    @Override
+    public ResponseData<Integer> updateSmartActivityStatus(ActivitySmartVO vo) {
+        ResponseData responseData = new ResponseData();
+        MktActivitySmartPO mktActivitySmartPO = new MktActivitySmartPO();
+        BeanUtils.copyProperties(vo,mktActivitySmartPO);
+        mktActivitySmartPOMapper.updateByPrimaryKeySelective(mktActivitySmartPO);
+        responseData.setMessage(ResponseConstants.SUCCESS_MSG);
+        return responseData;
+    }
+
+    /**
      * 删除智能营销分组
      * @param vo
      * @return
