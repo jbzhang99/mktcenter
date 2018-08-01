@@ -11,131 +11,131 @@ public class MktActivityPO implements Serializable {
 	 * 只读. pkid. mkt_activity_id
 	 * @mbg.generated  2018-07-31 18:34:31
 	 */
-	@io.swagger.annotations.ApiModelProperty(value = "pkid", name = "mktActivityId", required = false, example = "")
+	@io.swagger.annotations.ApiModelProperty(value = "pkid", name = "mktActivityId", required = false, example = "pkid")
 	private Long mktActivityId;
 	/**
 	 * 只读. 所属企业id. sys_company_id
 	 * @mbg.generated  2018-07-31 18:34:31
 	 */
-	@io.swagger.annotations.ApiModelProperty(value = "所属企业id", name = "sysCompanyId", required = false, example = "")
+	@io.swagger.annotations.ApiModelProperty(value = "所属企业id", name = "sysCompanyId", required = false, example = "所属企业id")
 	private Long sysCompanyId;
 	/**
 	 * 只读. 所属品牌id. sys_brand_id
 	 * @mbg.generated  2018-07-31 18:34:31
 	 */
-	@io.swagger.annotations.ApiModelProperty(value = "所属品牌id", name = "sysBrandId", required = false, example = "")
+	@io.swagger.annotations.ApiModelProperty(value = "所属品牌id", name = "sysBrandId", required = false, example = "所属品牌id")
 	private Long sysBrandId;
 	/**
 	 * 只读. 所属智能营销分组id. mkt_activity_smart_id
 	 * @mbg.generated  2018-07-31 18:34:31
 	 */
-	@io.swagger.annotations.ApiModelProperty(value = "所属智能营销分组id", name = "mktActivitySmartId", required = false, example = "")
+	@io.swagger.annotations.ApiModelProperty(value = "所属智能营销分组id", name = "mktActivitySmartId", required = false, example = "所属智能营销分组id")
 	private Long mktActivitySmartId;
 	/**
 	 * 只读. 活动编号. activity_code
 	 * @mbg.generated  2018-07-31 18:34:31
 	 */
-	@io.swagger.annotations.ApiModelProperty(value = "活动编号", name = "activityCode", required = false, example = "")
+	@io.swagger.annotations.ApiModelProperty(value = "活动编号", name = "activityCode", required = false, example = "活动编号")
 	private String activityCode;
 	/**
 	 * 只读. 活动类型：1开卡活动，2升级活动，3扫码领券，4手动领券，5消费活动，6签到活动，7生日活动，8智能营销. activity_type
 	 * @mbg.generated  2018-07-31 18:34:31
 	 */
-	@io.swagger.annotations.ApiModelProperty(value = "活动类型：1开卡活动，2升级活动，3扫码领券，4手动领券，5消费活动，6签到活动，7生日活动，8智能营销", name = "activityType", required = false, example = "")
+	@io.swagger.annotations.ApiModelProperty(value = "活动类型：1开卡活动，2升级活动，3扫码领券，4手动领券，5消费活动，6签到活动，7生日活动，8智能营销", name = "activityType", required = false, example = "活动类型：1开卡活动，2升级活动，3扫码领券，4手动领券，5消费活动，6签到活动，7生日活动，8智能营销")
 	private Integer activityType;
 	/**
 	 * 只读. 活动名称. activity_name
 	 * @mbg.generated  2018-07-31 18:34:31
 	 */
-	@io.swagger.annotations.ApiModelProperty(value = "活动名称", name = "activityName", required = false, example = "")
+	@io.swagger.annotations.ApiModelProperty(value = "活动名称", name = "activityName", required = false, example = "活动名称")
 	private String activityName;
 	/**
 	 * 只读. 活动开始时间. start_time
 	 * @mbg.generated  2018-07-31 18:34:31
 	 */
 	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", locale = "zh", timezone = "GMT+8")
-	@io.swagger.annotations.ApiModelProperty(value = "活动开始时间", name = "startTime", required = false, example = "")
+	@io.swagger.annotations.ApiModelProperty(value = "活动开始时间", name = "startTime", required = false, example = "活动开始时间")
 	private Date startTime;
 	/**
 	 * 只读. 活动结束时间. end_time
 	 * @mbg.generated  2018-07-31 18:34:31
 	 */
 	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", locale = "zh", timezone = "GMT+8")
-	@io.swagger.annotations.ApiModelProperty(value = "活动结束时间", name = "endTime", required = false, example = "")
+	@io.swagger.annotations.ApiModelProperty(value = "活动结束时间", name = "endTime", required = false, example = "活动结束时间")
 	private Date endTime;
 	/**
 	 * 只读. 是否长期：1是，0否. long_term
 	 * @mbg.generated  2018-07-31 18:34:31
 	 */
-	@io.swagger.annotations.ApiModelProperty(value = "是否长期：1是，0否", name = "longTerm", required = false, example = "")
+	@io.swagger.annotations.ApiModelProperty(value = "是否长期：1是，0否", name = "longTerm", required = false, example = "是否长期：1是，0否")
 	private Integer longTerm;
 	/**
 	 * 只读. 赠送积分. points
 	 * @mbg.generated  2018-07-31 18:34:31
 	 */
-	@io.swagger.annotations.ApiModelProperty(value = "赠送积分", name = "points", required = false, example = "")
+	@io.swagger.annotations.ApiModelProperty(value = "赠送积分", name = "points", required = false, example = "赠送积分")
 	private Integer points;
 	/**
 	 * 只读. 审核状态：0全部，1待审核，2审核中，3已审核，4已驳回. check_status
 	 * @mbg.generated  2018-07-31 18:34:31
 	 */
-	@io.swagger.annotations.ApiModelProperty(value = "审核状态：0全部，1待审核，2审核中，3已审核，4已驳回", name = "checkStatus", required = false, example = "")
+	@io.swagger.annotations.ApiModelProperty(value = "审核状态：0全部，1待审核，2审核中，3已审核，4已驳回", name = "checkStatus", required = false, example = "审核状态：0全部，1待审核，2审核中，3已审核，4已驳回")
 	private Integer checkStatus;
 	/**
 	 * 只读. 活动状态：0全部，1待执行，2执行中，3已结束. activity_status
 	 * @mbg.generated  2018-07-31 18:34:31
 	 */
-	@io.swagger.annotations.ApiModelProperty(value = "活动状态：0全部，1待执行，2执行中，3已结束", name = "activityStatus", required = false, example = "")
+	@io.swagger.annotations.ApiModelProperty(value = "活动状态：0全部，1待执行，2执行中，3已结束", name = "activityStatus", required = false, example = "活动状态：0全部，1待执行，2执行中，3已结束")
 	private Integer activityStatus;
 	/**
 	 * 只读. 备注. remark
 	 * @mbg.generated  2018-07-31 18:34:31
 	 */
-	@io.swagger.annotations.ApiModelProperty(value = "备注", name = "remark", required = false, example = "")
+	@io.swagger.annotations.ApiModelProperty(value = "备注", name = "remark", required = false, example = "备注")
 	private String remark;
 	/**
 	 * 只读. 创建人id. create_user_id
 	 * @mbg.generated  2018-07-31 18:34:31
 	 */
-	@io.swagger.annotations.ApiModelProperty(value = "创建人id", name = "createUserId", required = false, example = "")
+	@io.swagger.annotations.ApiModelProperty(value = "创建人id", name = "createUserId", required = false, example = "创建人id")
 	private Long createUserId;
 	/**
 	 * 只读. 创建人. create_user_name
 	 * @mbg.generated  2018-07-31 18:34:31
 	 */
-	@io.swagger.annotations.ApiModelProperty(value = "创建人", name = "createUserName", required = false, example = "")
+	@io.swagger.annotations.ApiModelProperty(value = "创建人", name = "createUserName", required = false, example = "创建人")
 	private String createUserName;
 	/**
 	 * 只读. 创建日期. create_date
 	 * @mbg.generated  2018-07-31 18:34:31
 	 */
 	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", locale = "zh", timezone = "GMT+8")
-	@io.swagger.annotations.ApiModelProperty(value = "创建日期", name = "createDate", required = false, example = "")
+	@io.swagger.annotations.ApiModelProperty(value = "创建日期", name = "createDate", required = false, example = "创建日期")
 	private Date createDate;
 	/**
 	 * 只读. 修改人id. modified_user_id
 	 * @mbg.generated  2018-07-31 18:34:31
 	 */
-	@io.swagger.annotations.ApiModelProperty(value = "修改人id", name = "modifiedUserId", required = false, example = "")
+	@io.swagger.annotations.ApiModelProperty(value = "修改人id", name = "modifiedUserId", required = false, example = "修改人id")
 	private Long modifiedUserId;
 	/**
 	 * 只读. 修改人. modified_user_name
 	 * @mbg.generated  2018-07-31 18:34:31
 	 */
-	@io.swagger.annotations.ApiModelProperty(value = "修改人", name = "modifiedUserName", required = false, example = "")
+	@io.swagger.annotations.ApiModelProperty(value = "修改人", name = "modifiedUserName", required = false, example = "修改人")
 	private String modifiedUserName;
 	/**
 	 * 只读. 修改时间. modified_date
 	 * @mbg.generated  2018-07-31 18:34:31
 	 */
 	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", locale = "zh", timezone = "GMT+8")
-	@io.swagger.annotations.ApiModelProperty(value = "修改时间", name = "modifiedDate", required = false, example = "")
+	@io.swagger.annotations.ApiModelProperty(value = "修改时间", name = "modifiedDate", required = false, example = "修改时间")
 	private Date modifiedDate;
 	/**
 	 * 只读. 数据有效性：1=有效；0=无效. valid
 	 * @mbg.generated  2018-07-31 18:34:31
 	 */
-	@io.swagger.annotations.ApiModelProperty(value = "数据有效性：1=有效；0=无效", name = "valid", required = false, example = "")
+	@io.swagger.annotations.ApiModelProperty(value = "数据有效性：1=有效；0=无效", name = "valid", required = false, example = "数据有效性：1=有效；0=无效")
 	private Boolean valid;
 	/**
 	 * 只读. 
