@@ -15,5 +15,6 @@ public class SystemConstants {
     public static String ERROR_TASK_TYPE_ERRO="任务类型不匹配";
     public static final String CHARSET = "UTF-8";
     public static final String LIKE_SYMBOL = "%";
-
+    public static final String CAN_NOT_RECEIVE = "领取已超过限制，不可再领取";
+    public static final  String ERROR_SQL="数据库操作失败";
 }

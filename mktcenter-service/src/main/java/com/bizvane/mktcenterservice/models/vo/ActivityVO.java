@@ -1,5 +1,6 @@
 package com.bizvane.mktcenterservice.models.vo;
 
+import com.bizvane.couponfacade.models.po.CouponEntityPO;
 import com.bizvane.mktcenterservice.models.po.MktActivityPO;
 import com.bizvane.mktcenterservice.models.po.MktActivityRegisterPO;
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -152,7 +153,7 @@ public class ActivityVO extends MktActivityPO {
     private Integer receiveType;
 
     @io.swagger.annotations.ApiModelProperty(value = "��ά���ַ", name = "qrcode", required = false, example = "")
-    private String qrcode;
+    private String qrcode;//二维码
     @io.swagger.annotations.ApiModelProperty(value = "订单来源：1线下订单，2微商城订单", name = "orderSource", required = false, example = "")
     private Integer orderSource;//订单来源
 
@@ -171,9 +172,15 @@ public class ActivityVO extends MktActivityPO {
     @io.swagger.annotations.ApiModelProperty(value = "ÿ�������ȡ", name = "perPersonMax", required = false, example = "")
     private Integer perPersonMax;
 
-    private String couponCode;
+    private String couponCode;//券号
 
-    private String couponName;
+    private String couponName;//券名称
+    //是否可领取
+    private Boolean canReceive;
+   //活动明细id
+    private Long mktActivityManualId;
+
+    private CouponEntityPO couponEntityPO;
     public String getActivityInfo() {
         return activityInfo;
     }
@@ -380,5 +387,29 @@ public class ActivityVO extends MktActivityPO {
 
     public void setCouponName(String couponName) {
         this.couponName = couponName;
+    }
+
+    public Boolean getCanReceive() {
+        return canReceive;
+    }
+
+    public void setCanReceive(Boolean canReceive) {
+        this.canReceive = canReceive;
+    }
+
+    public Long getMktActivityManualId() {
+        return mktActivityManualId;
+    }
+
+    public void setMktActivityManualId(Long mktActivityManualId) {
+        this.mktActivityManualId = mktActivityManualId;
+    }
+
+    public CouponEntityPO getCouponEntityPO() {
+        return couponEntityPO;
+    }
+
+    public void setCouponEntityPO(CouponEntityPO couponEntityPO) {
+        this.couponEntityPO = couponEntityPO;
     }
 }

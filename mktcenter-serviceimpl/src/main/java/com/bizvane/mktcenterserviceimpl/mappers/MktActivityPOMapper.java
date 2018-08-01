@@ -4,7 +4,10 @@ import com.bizvane.mktcenterservice.models.po.MktActivityPO;
 import com.bizvane.mktcenterservice.models.po.MktActivityPOExample;
 import com.bizvane.mktcenterservice.models.po.MktActivityPOWithBLOBs;
 import java.util.List;
+
+import com.bizvane.mktcenterservice.models.vo.ActivityVO;
 import org.apache.ibatis.annotations.Param;
+import sun.security.x509.AVA;
 
 public interface MktActivityPOMapper {
 
@@ -100,4 +103,6 @@ public interface MktActivityPOMapper {
 	 * @return
 	 */
 	int updateActivityStatus(MktActivityPO  po);
+
+	ActivityVO selectActivity(ActivityVO vo);
 }

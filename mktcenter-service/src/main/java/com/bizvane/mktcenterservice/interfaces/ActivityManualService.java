@@ -1,11 +1,15 @@
 package com.bizvane.mktcenterservice.interfaces;
 
 
+import com.bizvane.couponfacade.models.vo.CouponDetailResponseVO;
+import com.bizvane.members.facade.models.MemberInfoModel;
 import com.bizvane.mktcenterservice.models.bo.ActivityBO;
 import com.bizvane.mktcenterservice.models.vo.ActivityVO;
 import com.bizvane.mktcenterservice.models.vo.PageForm;
 import com.bizvane.utils.responseinfo.ResponseData;
 import com.bizvane.utils.tokens.SysAccountPO;
+
+import java.util.List;
 
 
 public interface ActivityManualService {
@@ -14,9 +18,12 @@ public interface ActivityManualService {
 
   ResponseData<Integer> addActivityManual(Long couponId, ActivityVO activityVO,SysAccountPO stageUser);
 
-/*  ResponseData<Integer> executeActivity(MemberInfoModel vo);*/
+  ResponseData<Integer> executeActivity(MemberInfoModel vo,String couponCode);
 
-  ResponseData<ActivityBO> getActivityManualEffect(ActivityVO vo);
+  ResponseData<List<ActivityBO>> getActivityManualEffect(ActivityVO vo);
 
   ResponseData<ActivityVO> selectActivityManualById(Long mktActivityId);
+
+  ResponseData<List<ActivityVO>>  getActivityByMemberInfo(MemberInfoModel memberInfoModel);
+  ResponseData<ActivityVO>  getActivityByQrcode(MemberInfoModel memberInfoModel,String activityCode);
 }
