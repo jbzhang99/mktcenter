@@ -1,15 +1,13 @@
 package com.bizvane.mktcenterserviceimpl.service.impl;
 
 import com.bizvane.centerstageservice.models.po.SysCheckConfigPo;
-import com.bizvane.centerstageservice.models.vo.SysCheckConfigVo;
-import com.bizvane.centerstageservice.rpc.SysCheckConfigServiceRpc;
 import com.bizvane.mktcenterservice.interfaces.TaskCouponService;
 import com.bizvane.mktcenterservice.interfaces.TaskMessageService;
 import com.bizvane.mktcenterservice.interfaces.TaskOrderService;
 import com.bizvane.mktcenterservice.interfaces.TaskService;
 import com.bizvane.mktcenterservice.models.bo.TaskDetailBO;
 import com.bizvane.mktcenterservice.models.po.*;
-import com.bizvane.mktcenterservice.models.vo.TaskConsumeVO;
+import com.bizvane.mktcenterservice.models.vo.TaskDetailVO;
 import com.bizvane.mktcenterservice.models.vo.TaskVO;
 import com.bizvane.mktcenterserviceimpl.common.constants.SystemConstants;
 import com.bizvane.mktcenterserviceimpl.common.constants.TaskConstants;
@@ -19,11 +17,8 @@ import com.bizvane.mktcenterserviceimpl.common.utils.CodeUtil;
 import com.bizvane.mktcenterserviceimpl.common.utils.TaskParamCheckUtil;
 import com.bizvane.mktcenterserviceimpl.common.utils.TimeUtils;
 import com.bizvane.mktcenterserviceimpl.mappers.MktTaskOrderPOMapper;
-import com.bizvane.utils.enumutils.SysResponseEnum;
 import com.bizvane.utils.responseinfo.ResponseData;
 import com.bizvane.utils.tokens.SysAccountPO;
-import com.github.pagehelper.PageHelper;
-import com.github.pagehelper.PageInfo;
 import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -89,23 +84,28 @@ public class TaskOrderServiceImpl implements TaskOrderService {
      */
     @Transactional
     @Override
-    public ResponseData<Integer> addTask(TaskConsumeVO vo, SysAccountPO stageUser) throws ParseException {
+    public ResponseData<Integer> addTask(TaskDetailVO vo, SysAccountPO stageUser) throws ParseException {
         //0.参数的检验
-        ResponseData responseData = TaskParamCheckUtil.checkParam(vo);
+       ResponseData responseData = TaskParamCheckUtil.checkParam(vo);
         if (responseData.getCode()<0){
             return responseData;
         }
+        vo.setValid(Boolean.TRUE);
+        vo.setCreateDate(TimeUtils.getNowTime());
+        vo.setCreateUserId(stageUser.getSysAccountId());
+        vo.setCreateUserName(stageUser.getName());
+
         //1.生成任务编号
         String taskCode = CodeUtil.getTaskCode();
         //2.任务主表新增
-        MktTaskPOWithBLOBs mktTaskPOWithBLOBs = vo.getMktTaskPOWithBLOBs();
-        mktTaskPOWithBLOBs = this.isOrNoCheckState(mktTaskPOWithBLOBs);
+        MktTaskPOWithBLOBs mktTaskPOWithBLOBs = new MktTaskPOWithBLOBs();
+        BeanUtils.copyProperties(vo, mktTaskPOWithBLOBs);
         mktTaskPOWithBLOBs.setTaskCode(taskCode);
-
         Long mktTaskId = taskService.addTask(mktTaskPOWithBLOBs, stageUser);
 
         //3.任务消费表新增
-        MktTaskOrderPO mktTaskOrderPO = vo.getMktTaskOrderPO();
+        MktTaskOrderPO mktTaskOrderPO = new  MktTaskOrderPO();
+        BeanUtils.copyProperties(vo, mktTaskOrderPO);
         mktTaskOrderPO.setMktTaskId(mktTaskId);
         this.insertOrderTask(mktTaskOrderPO,stageUser);
 
@@ -124,6 +124,7 @@ public class TaskOrderServiceImpl implements TaskOrderService {
         if (CollectionUtils.isNotEmpty(mktmessagePOList)){
             mktmessagePOList.stream().forEach(param-> {
                         param.setBizId(mktTaskId);
+                        param.setBizType(TaskConstants.TASK_TYPE);
                         taskMessageService.addTaskMessage(param,stageUser);
                     }
             );
@@ -180,10 +181,9 @@ public class TaskOrderServiceImpl implements TaskOrderService {
     /**
      * 判断时间是否滞后,已经是否立即执行,还是创建job执行
      */
-    public  void   doOrderTask(TaskConsumeVO vo){
-        MktTaskPOWithBLOBs mktTaskPO = vo.getMktTaskPOWithBLOBs();
-        Integer checkStatus = mktTaskPO.getCheckStatus();//审核状态
-        Integer taskStatus = mktTaskPO.getTaskStatus();//执行状态
+    public  void   doOrderTask(TaskDetailVO vo){
+        Integer checkStatus = vo.getCheckStatus();//审核状态
+        Integer taskStatus = vo.getTaskStatus();//执行状态
         //已审核   执行中  执行时间小于当前时间 或等于当前时间
         if (TaskConstants.THREE.equals(checkStatus) && TaskConstants.SECOND.equals(taskStatus) ){
 
@@ -211,9 +211,9 @@ public class TaskOrderServiceImpl implements TaskOrderService {
      */
     public Integer  insertOrderTask(MktTaskOrderPO po,SysAccountPO stageUser){
 
-        po.setCreateDate(TimeUtils.getNowTime());
-        po.setCreateUserId(stageUser.getSysAccountId());
-        po.setCreateUserName(stageUser.getName());
+//        po.setCreateDate(TimeUtils.getNowTime());
+//        po.setCreateUserId(stageUser.getSysAccountId());
+//        po.setCreateUserName(stageUser.getName());
 
         return  mktTaskOrderPOMapper.insertSelective(po);
     }

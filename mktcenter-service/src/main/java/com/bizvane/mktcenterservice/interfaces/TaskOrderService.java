@@ -1,14 +1,11 @@
 package com.bizvane.mktcenterservice.interfaces;
 
-import com.bizvane.mktcenterservice.models.bo.TaskBO;
 import com.bizvane.mktcenterservice.models.bo.TaskDetailBO;
 import com.bizvane.mktcenterservice.models.po.MktTaskOrderPO;
-import com.bizvane.mktcenterservice.models.vo.PageForm;
-import com.bizvane.mktcenterservice.models.vo.TaskConsumeVO;
+import com.bizvane.mktcenterservice.models.vo.TaskDetailVO;
 import com.bizvane.mktcenterservice.models.vo.TaskVO;
 import com.bizvane.utils.responseinfo.ResponseData;
 import com.bizvane.utils.tokens.SysAccountPO;
-import org.apache.ibatis.annotations.Param;
 
 import java.text.ParseException;
 import java.util.List;
@@ -41,7 +38,7 @@ public interface TaskOrderService {
      * @param bo
      * @return
      */
-    public ResponseData<Integer> addTask(TaskConsumeVO vo, SysAccountPO stageUser) throws ParseException;
+    public ResponseData<Integer> addTask(TaskDetailVO vo, SysAccountPO stageUser) throws ParseException;
 
     /**
      * 修改任务
