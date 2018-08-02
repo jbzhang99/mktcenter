@@ -12,7 +12,10 @@ import com.bizvane.mktcenterservice.models.vo.PageForm;
 import com.bizvane.mktcenterserviceimpl.common.constants.ActivityConstants;
 import com.bizvane.mktcenterserviceimpl.common.constants.ResponseConstants;
 import com.bizvane.mktcenterserviceimpl.common.constants.SystemConstants;
+import com.bizvane.mktcenterserviceimpl.common.enums.ActivityStatusEnum;
+import com.bizvane.mktcenterserviceimpl.common.enums.CheckStatusEnum;
 import com.bizvane.mktcenterserviceimpl.common.enums.MktTypeEnum;
+import com.bizvane.mktcenterserviceimpl.common.utils.CodeUtil;
 import com.bizvane.mktcenterserviceimpl.common.utils.JobUtil;
 import com.bizvane.mktcenterserviceimpl.mappers.MktActivityPOMapper;
 import com.bizvane.mktcenterserviceimpl.mappers.MktActivitySmartPOMapper;
@@ -267,9 +270,26 @@ public class ActivitySmartServiceImpl implements ActivitySmartService {
         vo.setCreateDate(new Date());
         vo.setCreateUserName(stageUser.getName());
 
+        //生成活动编号
+        String activityCode = CodeUtil.getActivityCode();
         //新增活动主表
         MktActivityPOWithBLOBs mktActivityPOWithBLOBs = new MktActivityPOWithBLOBs();
         BeanUtils.copyProperties(vo,mktActivityPOWithBLOBs);
+        //活动编号
+        mktActivityPOWithBLOBs.setActivityCode(activityCode);
+        //设置审核状态为已审核
+        mktActivityPOWithBLOBs.setCheckStatus(CheckStatusEnum.CHECK_STATUS_APPROVED.getCode());
+
+        //如果活动时间滞后
+        if(new Date().before(vo.getStartTime())){
+            //活动状态设置为待执行
+            mktActivityPOWithBLOBs.setActivityStatus(ActivityStatusEnum.ACTIVITY_STATUS_PENDING.getCode());
+            //创建任务调度任务开始时间
+//            jobUtil.addJob(stageUser,vo,activityCode);
+            //创建任务调度任务结束时间
+//            jobUtil.addJobEndTime(stageUser,vo,activityCode);
+        }
+
         mktActivityPOMapper.insertSelective(mktActivityPOWithBLOBs);
         //新增智能营销表
         MktActivitySmartPO mktActivitySmartPO = new MktActivitySmartPO();
