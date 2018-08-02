@@ -9,28 +9,28 @@ import java.util.List;
 public class MktTaskRecordPOExample implements Serializable {
     /**
 	 * 只读. 
-	 * @mbg.generated  2018-08-01 09:21:14
+	 * @mbg.generated  2018-08-02 14:07:08
 	 */
 	protected String orderByClause;
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-08-01 09:21:14
+	 * @mbg.generated  2018-08-02 14:07:08
 	 */
 	protected boolean distinct;
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-08-01 09:21:14
+	 * @mbg.generated  2018-08-02 14:07:08
 	 */
 	protected List<Criteria> oredCriteria;
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-08-01 09:21:14
+	 * @mbg.generated  2018-08-02 14:07:08
 	 */
 	private static final long serialVersionUID = 1L;
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-08-01 09:21:14
+	 * @mbg.generated  2018-08-02 14:07:08
 	 */
 	public MktTaskRecordPOExample() {
 		oredCriteria = new ArrayList<Criteria>();
@@ -38,7 +38,7 @@ public class MktTaskRecordPOExample implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-08-01 09:21:14
+	 * @mbg.generated  2018-08-02 14:07:08
 	 */
 	public void setOrderByClause(String orderByClause) {
 		this.orderByClause = orderByClause;
@@ -46,7 +46,7 @@ public class MktTaskRecordPOExample implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-08-01 09:21:14
+	 * @mbg.generated  2018-08-02 14:07:08
 	 */
 	public String getOrderByClause() {
 		return orderByClause;
@@ -54,7 +54,7 @@ public class MktTaskRecordPOExample implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-08-01 09:21:14
+	 * @mbg.generated  2018-08-02 14:07:08
 	 */
 	public void setDistinct(boolean distinct) {
 		this.distinct = distinct;
@@ -62,7 +62,7 @@ public class MktTaskRecordPOExample implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-08-01 09:21:14
+	 * @mbg.generated  2018-08-02 14:07:08
 	 */
 	public boolean isDistinct() {
 		return distinct;
@@ -70,7 +70,7 @@ public class MktTaskRecordPOExample implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-08-01 09:21:14
+	 * @mbg.generated  2018-08-02 14:07:08
 	 */
 	public List<Criteria> getOredCriteria() {
 		return oredCriteria;
@@ -78,7 +78,7 @@ public class MktTaskRecordPOExample implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-08-01 09:21:14
+	 * @mbg.generated  2018-08-02 14:07:08
 	 */
 	public void or(Criteria criteria) {
 		oredCriteria.add(criteria);
@@ -86,7 +86,7 @@ public class MktTaskRecordPOExample implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-08-01 09:21:14
+	 * @mbg.generated  2018-08-02 14:07:08
 	 */
 	public Criteria or() {
 		Criteria criteria = createCriteriaInternal();
@@ -96,7 +96,7 @@ public class MktTaskRecordPOExample implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-08-01 09:21:14
+	 * @mbg.generated  2018-08-02 14:07:08
 	 */
 	public Criteria createCriteria() {
 		Criteria criteria = createCriteriaInternal();
@@ -108,7 +108,7 @@ public class MktTaskRecordPOExample implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-08-01 09:21:14
+	 * @mbg.generated  2018-08-02 14:07:08
 	 */
 	protected Criteria createCriteriaInternal() {
 		Criteria criteria = new Criteria();
@@ -117,7 +117,7 @@ public class MktTaskRecordPOExample implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-08-01 09:21:14
+	 * @mbg.generated  2018-08-02 14:07:08
 	 */
 	public void clear() {
 		oredCriteria.clear();
@@ -127,7 +127,7 @@ public class MktTaskRecordPOExample implements Serializable {
 
 	/**
 	 * 只读. t_mkt_task_record
-	 * @mbg.generated  2018-08-01 09:21:14
+	 * @mbg.generated  2018-08-02 14:07:08
 	 */
 	protected abstract static class GeneratedCriteria implements Serializable {
 		protected List<Criterion> criteria;
@@ -227,6 +227,66 @@ public class MktTaskRecordPOExample implements Serializable {
 
 		public Criteria andMktTaskRecordIdNotBetween(Long value1, Long value2) {
 			addCriterion("mkt_task_record_id not between", value1, value2, "mktTaskRecordId");
+			return (Criteria) this;
+		}
+
+		public Criteria andSysBrandIdIsNull() {
+			addCriterion("sys_brand_id is null");
+			return (Criteria) this;
+		}
+
+		public Criteria andSysBrandIdIsNotNull() {
+			addCriterion("sys_brand_id is not null");
+			return (Criteria) this;
+		}
+
+		public Criteria andSysBrandIdEqualTo(Long value) {
+			addCriterion("sys_brand_id =", value, "sysBrandId");
+			return (Criteria) this;
+		}
+
+		public Criteria andSysBrandIdNotEqualTo(Long value) {
+			addCriterion("sys_brand_id <>", value, "sysBrandId");
+			return (Criteria) this;
+		}
+
+		public Criteria andSysBrandIdGreaterThan(Long value) {
+			addCriterion("sys_brand_id >", value, "sysBrandId");
+			return (Criteria) this;
+		}
+
+		public Criteria andSysBrandIdGreaterThanOrEqualTo(Long value) {
+			addCriterion("sys_brand_id >=", value, "sysBrandId");
+			return (Criteria) this;
+		}
+
+		public Criteria andSysBrandIdLessThan(Long value) {
+			addCriterion("sys_brand_id <", value, "sysBrandId");
+			return (Criteria) this;
+		}
+
+		public Criteria andSysBrandIdLessThanOrEqualTo(Long value) {
+			addCriterion("sys_brand_id <=", value, "sysBrandId");
+			return (Criteria) this;
+		}
+
+		public Criteria andSysBrandIdIn(List<Long> values) {
+			addCriterion("sys_brand_id in", values, "sysBrandId");
+			return (Criteria) this;
+		}
+
+		public Criteria andSysBrandIdNotIn(List<Long> values) {
+			addCriterion("sys_brand_id not in", values, "sysBrandId");
+			return (Criteria) this;
+		}
+
+		public Criteria andSysBrandIdBetween(Long value1, Long value2) {
+			addCriterion("sys_brand_id between", value1, value2, "sysBrandId");
+			return (Criteria) this;
+		}
+
+		public Criteria andSysBrandIdNotBetween(Long value1, Long value2) {
+			addCriterion("sys_brand_id not between", value1, value2, "sysBrandId");
 			return (Criteria) this;
 		}
 
@@ -417,66 +477,6 @@ public class MktTaskRecordPOExample implements Serializable {
 
 		public Criteria andMemberCodeNotBetween(String value1, String value2) {
 			addCriterion("member_code not between", value1, value2, "memberCode");
-			return (Criteria) this;
-		}
-
-		public Criteria andShareTimesIsNull() {
-			addCriterion("share_times is null");
-			return (Criteria) this;
-		}
-
-		public Criteria andShareTimesIsNotNull() {
-			addCriterion("share_times is not null");
-			return (Criteria) this;
-		}
-
-		public Criteria andShareTimesEqualTo(Integer value) {
-			addCriterion("share_times =", value, "shareTimes");
-			return (Criteria) this;
-		}
-
-		public Criteria andShareTimesNotEqualTo(Integer value) {
-			addCriterion("share_times <>", value, "shareTimes");
-			return (Criteria) this;
-		}
-
-		public Criteria andShareTimesGreaterThan(Integer value) {
-			addCriterion("share_times >", value, "shareTimes");
-			return (Criteria) this;
-		}
-
-		public Criteria andShareTimesGreaterThanOrEqualTo(Integer value) {
-			addCriterion("share_times >=", value, "shareTimes");
-			return (Criteria) this;
-		}
-
-		public Criteria andShareTimesLessThan(Integer value) {
-			addCriterion("share_times <", value, "shareTimes");
-			return (Criteria) this;
-		}
-
-		public Criteria andShareTimesLessThanOrEqualTo(Integer value) {
-			addCriterion("share_times <=", value, "shareTimes");
-			return (Criteria) this;
-		}
-
-		public Criteria andShareTimesIn(List<Integer> values) {
-			addCriterion("share_times in", values, "shareTimes");
-			return (Criteria) this;
-		}
-
-		public Criteria andShareTimesNotIn(List<Integer> values) {
-			addCriterion("share_times not in", values, "shareTimes");
-			return (Criteria) this;
-		}
-
-		public Criteria andShareTimesBetween(Integer value1, Integer value2) {
-			addCriterion("share_times between", value1, value2, "shareTimes");
-			return (Criteria) this;
-		}
-
-		public Criteria andShareTimesNotBetween(Integer value1, Integer value2) {
-			addCriterion("share_times not between", value1, value2, "shareTimes");
 			return (Criteria) this;
 		}
 
@@ -1233,7 +1233,7 @@ public class MktTaskRecordPOExample implements Serializable {
 
 	/**
 	 * 只读. t_mkt_task_record
-	 * @mbg.generated  2018-08-01 09:21:14
+	 * @mbg.generated  2018-08-02 14:07:08
 	 */
 	public static class Criterion implements Serializable {
 		private String condition;

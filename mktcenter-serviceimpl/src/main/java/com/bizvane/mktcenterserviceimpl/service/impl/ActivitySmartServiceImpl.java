@@ -12,12 +12,16 @@ import com.bizvane.mktcenterservice.models.vo.PageForm;
 import com.bizvane.mktcenterserviceimpl.common.constants.ActivityConstants;
 import com.bizvane.mktcenterserviceimpl.common.constants.ResponseConstants;
 import com.bizvane.mktcenterserviceimpl.common.constants.SystemConstants;
+import com.bizvane.mktcenterserviceimpl.common.enums.ActivityStatusEnum;
+import com.bizvane.mktcenterserviceimpl.common.enums.CheckStatusEnum;
 import com.bizvane.mktcenterserviceimpl.common.enums.MktTypeEnum;
+import com.bizvane.mktcenterserviceimpl.common.utils.CodeUtil;
 import com.bizvane.mktcenterserviceimpl.common.utils.JobUtil;
 import com.bizvane.mktcenterserviceimpl.mappers.MktActivityPOMapper;
 import com.bizvane.mktcenterserviceimpl.mappers.MktActivitySmartPOMapper;
 import com.bizvane.mktcenterserviceimpl.mappers.MktCouponPOMapper;
 import com.bizvane.mktcenterserviceimpl.mappers.MktMessagePOMapper;
+import com.bizvane.utils.enumutils.SysResponseEnum;
 import com.bizvane.utils.responseinfo.ResponseData;
 import com.bizvane.utils.tokens.SysAccountPO;
 import com.github.pagehelper.PageHelper;
@@ -255,7 +259,7 @@ public class ActivitySmartServiceImpl implements ActivitySmartService {
     }
 
     /**
-     * 对某个智能营销组创建任务
+     * 对某个智能营销组创建任务，需要给mktSmartActivityId
      * 任务类型：1优惠券营销
      * @return
      */
@@ -263,18 +267,49 @@ public class ActivitySmartServiceImpl implements ActivitySmartService {
     public ResponseData<Integer> addCouponActivity(ActivitySmartVO vo, List<MktCouponPO> couponCodeList, SysAccountPO stageUser) {
         ResponseData responseData = new ResponseData();
 
+        //关联的智能营销分组不能为空
+        if(vo.getMktActivitySmartId()==null){
+            responseData.setCode(SysResponseEnum.FAILED.getCode());
+            responseData.setMessage(SysResponseEnum.MODEL_FAILED_VALIDATION.getMessage());
+            return responseData;
+        }
+
         vo.setCreateUserId(stageUser.getSysAccountId());
         vo.setCreateDate(new Date());
         vo.setCreateUserName(stageUser.getName());
 
-        //新增活动主表
+        //生成活动编号
+        String activityCode = CodeUtil.getActivityCode();
+        //拷贝属性
         MktActivityPOWithBLOBs mktActivityPOWithBLOBs = new MktActivityPOWithBLOBs();
         BeanUtils.copyProperties(vo,mktActivityPOWithBLOBs);
+        //活动编号
+        mktActivityPOWithBLOBs.setActivityCode(activityCode);
+        //设置审核状态为已审核
+        mktActivityPOWithBLOBs.setCheckStatus(CheckStatusEnum.CHECK_STATUS_APPROVED.getCode());
+
+        //如果活动时间滞后
+        if(new Date().before(vo.getStartTime())){
+            //活动状态设置为待执行
+            mktActivityPOWithBLOBs.setActivityStatus(ActivityStatusEnum.ACTIVITY_STATUS_PENDING.getCode());
+            //创建任务调度任务开始时间
+//            jobUtil.addJob(stageUser,vo,activityCode);
+            //创建任务调度任务结束时间
+//            jobUtil.addJobEndTime(stageUser,vo,activityCode);
+        }else{
+            //活动状态设置为执行中
+            mktActivityPOWithBLOBs.setActivityStatus(ActivityStatusEnum.ACTIVITY_STATUS_EXECUTING.getCode());
+        }
+        //新增活动主表
         mktActivityPOMapper.insertSelective(mktActivityPOWithBLOBs);
         //新增智能营销表
         MktActivitySmartPO mktActivitySmartPO = new MktActivitySmartPO();
         BeanUtils.copyProperties(vo,mktActivitySmartPO);
         mktActivitySmartPOMapper.insertSelective(mktActivitySmartPO);
+
+        //获取新增后数据id
+        Long mktActivityId = mktActivityPOWithBLOBs.getMktActivityId();
+
         //新增奖励券表
         if(!CollectionUtils.isEmpty(couponCodeList)){
             for(MktCouponPO mktCouponPO : couponCodeList){
