@@ -4,9 +4,10 @@
   <resultMap id="BaseResultMap" type="com.bizvane.mktcenterservice.models.po.MktActivityRecordPO">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-08-01 09:21:14.
+      This element was generated on 2018-08-02 14:07:08.
     -->
     <id column="mkt_activity_record_id" jdbcType="BIGINT" property="mktActivityRecordId" />
+    <result column="sys_brand_id" jdbcType="BIGINT" property="sysBrandId" />
     <result column="activity_type" jdbcType="INTEGER" property="activityType" />
     <result column="acitivity_id" jdbcType="BIGINT" property="acitivityId" />
     <result column="member_code" jdbcType="VARCHAR" property="memberCode" />
@@ -26,7 +27,7 @@
   <sql id="Example_Where_Clause">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-08-01 09:21:14.
+      This element was generated on 2018-08-02 14:07:08.
     -->
     <where>
       <foreach collection="oredCriteria" item="criteria" separator="or">
@@ -59,7 +60,7 @@
   <sql id="Update_By_Example_Where_Clause">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-08-01 09:21:14.
+      This element was generated on 2018-08-02 14:07:08.
     -->
     <where>
       <foreach collection="example.oredCriteria" item="criteria" separator="or">
@@ -92,16 +93,16 @@
   <sql id="Base_Column_List">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-08-01 09:21:14.
+      This element was generated on 2018-08-02 14:07:08.
     -->
-    mkt_activity_record_id, activity_type, acitivity_id, member_code, order_amount, participate_date, 
-    rewarded, points, remark, create_user_id, create_user_name, create_date, modified_user_id, 
-    modified_user_name, modified_date, valid
+    mkt_activity_record_id, sys_brand_id, activity_type, acitivity_id, member_code, order_amount, 
+    participate_date, rewarded, points, remark, create_user_id, create_user_name, create_date, 
+    modified_user_id, modified_user_name, modified_date, valid
   </sql>
   <select id="selectByExample" parameterType="com.bizvane.mktcenterservice.models.po.MktActivityRecordPOExample" resultMap="BaseResultMap">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-08-01 09:21:14.
+      This element was generated on 2018-08-02 14:07:08.
     -->
     select
     <if test="distinct">
@@ -119,7 +120,7 @@
   <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-08-01 09:21:14.
+      This element was generated on 2018-08-02 14:07:08.
     -->
     select 
     <include refid="Base_Column_List" />
@@ -129,7 +130,7 @@
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-08-01 09:21:14.
+      This element was generated on 2018-08-02 14:07:08.
     -->
     delete from t_mkt_activity_record
     where mkt_activity_record_id = #{mktActivityRecordId,jdbcType=BIGINT}
@@ -137,7 +138,7 @@
   <delete id="deleteByExample" parameterType="com.bizvane.mktcenterservice.models.po.MktActivityRecordPOExample">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-08-01 09:21:14.
+      This element was generated on 2018-08-02 14:07:08.
     -->
     delete from t_mkt_activity_record
     <if test="_parameter != null">
@@ -147,34 +148,37 @@
   <insert id="insert" parameterType="com.bizvane.mktcenterservice.models.po.MktActivityRecordPO">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-08-01 09:21:14.
+      This element was generated on 2018-08-02 14:07:08.
     -->
     <selectKey keyProperty="mktActivityRecordId" order="AFTER" resultType="java.lang.Long">
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into t_mkt_activity_record (activity_type, acitivity_id, member_code, 
-      order_amount, participate_date, rewarded, 
-      points, remark, create_user_id, 
-      create_user_name, create_date, modified_user_id, 
-      modified_user_name, modified_date, valid
-      )
-    values (#{activityType,jdbcType=INTEGER}, #{acitivityId,jdbcType=BIGINT}, #{memberCode,jdbcType=VARCHAR}, 
-      #{orderAmount,jdbcType=DECIMAL}, #{participateDate,jdbcType=TIMESTAMP}, #{rewarded,jdbcType=INTEGER}, 
-      #{points,jdbcType=INTEGER}, #{remark,jdbcType=VARCHAR}, #{createUserId,jdbcType=BIGINT}, 
-      #{createUserName,jdbcType=VARCHAR}, #{createDate,jdbcType=TIMESTAMP}, #{modifiedUserId,jdbcType=BIGINT}, 
-      #{modifiedUserName,jdbcType=VARCHAR}, #{modifiedDate,jdbcType=TIMESTAMP}, #{valid,jdbcType=BIT}
-      )
+    insert into t_mkt_activity_record (sys_brand_id, activity_type, acitivity_id, 
+      member_code, order_amount, participate_date, 
+      rewarded, points, remark, 
+      create_user_id, create_user_name, create_date, 
+      modified_user_id, modified_user_name, modified_date, 
+      valid)
+    values (#{sysBrandId,jdbcType=BIGINT}, #{activityType,jdbcType=INTEGER}, #{acitivityId,jdbcType=BIGINT}, 
+      #{memberCode,jdbcType=VARCHAR}, #{orderAmount,jdbcType=DECIMAL}, #{participateDate,jdbcType=TIMESTAMP}, 
+      #{rewarded,jdbcType=INTEGER}, #{points,jdbcType=INTEGER}, #{remark,jdbcType=VARCHAR}, 
+      #{createUserId,jdbcType=BIGINT}, #{createUserName,jdbcType=VARCHAR}, #{createDate,jdbcType=TIMESTAMP}, 
+      #{modifiedUserId,jdbcType=BIGINT}, #{modifiedUserName,jdbcType=VARCHAR}, #{modifiedDate,jdbcType=TIMESTAMP}, 
+      #{valid,jdbcType=BIT})
   </insert>
   <insert id="insertSelective" parameterType="com.bizvane.mktcenterservice.models.po.MktActivityRecordPO">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-08-01 09:21:14.
+      This element was generated on 2018-08-02 14:07:08.
     -->
     <selectKey keyProperty="mktActivityRecordId" order="AFTER" resultType="java.lang.Long">
       SELECT LAST_INSERT_ID()
     </selectKey>
     insert into t_mkt_activity_record
     <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="sysBrandId != null">
+        sys_brand_id,
+      </if>
       <if test="activityType != null">
         activity_type,
       </if>
@@ -222,6 +226,9 @@
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="sysBrandId != null">
+        #{sysBrandId,jdbcType=BIGINT},
+      </if>
       <if test="activityType != null">
         #{activityType,jdbcType=INTEGER},
       </if>
@@ -272,7 +279,7 @@
   <select id="countByExample" parameterType="com.bizvane.mktcenterservice.models.po.MktActivityRecordPOExample" resultType="java.lang.Long">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-08-01 09:21:14.
+      This element was generated on 2018-08-02 14:07:08.
     -->
     select count(*) from t_mkt_activity_record
     <if test="_parameter != null">
@@ -282,12 +289,15 @@
   <update id="updateByExampleSelective" parameterType="map">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-08-01 09:21:14.
+      This element was generated on 2018-08-02 14:07:08.
     -->
     update t_mkt_activity_record
     <set>
       <if test="record.mktActivityRecordId != null">
         mkt_activity_record_id = #{record.mktActivityRecordId,jdbcType=BIGINT},
+      </if>
+      <if test="record.sysBrandId != null">
+        sys_brand_id = #{record.sysBrandId,jdbcType=BIGINT},
       </if>
       <if test="record.activityType != null">
         activity_type = #{record.activityType,jdbcType=INTEGER},
@@ -342,10 +352,11 @@
   <update id="updateByExample" parameterType="map">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-08-01 09:21:14.
+      This element was generated on 2018-08-02 14:07:08.
     -->
     update t_mkt_activity_record
     set mkt_activity_record_id = #{record.mktActivityRecordId,jdbcType=BIGINT},
+      sys_brand_id = #{record.sysBrandId,jdbcType=BIGINT},
       activity_type = #{record.activityType,jdbcType=INTEGER},
       acitivity_id = #{record.acitivityId,jdbcType=BIGINT},
       member_code = #{record.memberCode,jdbcType=VARCHAR},
@@ -368,10 +379,13 @@
   <update id="updateByPrimaryKeySelective" parameterType="com.bizvane.mktcenterservice.models.po.MktActivityRecordPO">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-08-01 09:21:14.
+      This element was generated on 2018-08-02 14:07:08.
     -->
     update t_mkt_activity_record
     <set>
+      <if test="sysBrandId != null">
+        sys_brand_id = #{sysBrandId,jdbcType=BIGINT},
+      </if>
       <if test="activityType != null">
         activity_type = #{activityType,jdbcType=INTEGER},
       </if>
@@ -423,10 +437,11 @@
   <update id="updateByPrimaryKey" parameterType="com.bizvane.mktcenterservice.models.po.MktActivityRecordPO">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-08-01 09:21:14.
+      This element was generated on 2018-08-02 14:07:08.
     -->
     update t_mkt_activity_record
-    set activity_type = #{activityType,jdbcType=INTEGER},
+    set sys_brand_id = #{sysBrandId,jdbcType=BIGINT},
+      activity_type = #{activityType,jdbcType=INTEGER},
       acitivity_id = #{acitivityId,jdbcType=BIGINT},
       member_code = #{memberCode,jdbcType=VARCHAR},
       order_amount = #{orderAmount,jdbcType=DECIMAL},
