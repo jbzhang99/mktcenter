@@ -533,21 +533,21 @@
        AND tma.activity_status = #{activityStatus,jdbcType=INTEGER}
      </if>
 
-     <if test="createDateStart != null and createDateStart!= '' ">
-       AND <![CDATA[ tma.create_date >=#{createDateStart}]]>
+     <if test="createDateStart != null ">
+       AND <![CDATA[ tma.create_date >= #{createDateStart,jdbcType=TIMESTAMP}]]>
      </if>
-     <if test="createDateEnd != null and createDateEnd!= '' ">
-       AND  <![CDATA[ tma.create_date < = #{createDateEnd}]]>
-     </if>
-
-     <if test="startTime != null and startTime != '' ">
-     <!-- AND &amp;lt;![CDATA[t.start_time &amp;gt;= to_date(#{startTime},'yyyy-mm-dd')]]&amp;gt;-->
-      and <![CDATA[ tma.start_time >=#{startTime}]]>
+     <if test="createDateEnd != null ">
+       AND  <![CDATA[ tma.create_date < = #{createDateEnd,jdbcType=TIMESTAMP}]]>
      </if>
 
-     <if test="endTime != null and endTime != '' ">
-       <!-- AND &amp;lt;![CDATA[t.end_time &amp;gt;= to_date(#{startTime},'yyyy-mm-dd')]]&amp;gt;-->
-       and <![CDATA[ tma.end_time >=#{endTime}]]>
+     <if test="startTime != null ">
+
+      and <![CDATA[ tma.start_time >=#{startTime,jdbcType=TIMESTAMP}]]>
+     </if>
+
+     <if test="endTime != null ">
+
+       and <![CDATA[ tma.end_time <=#{endTime,jdbcType=TIMESTAMP}]]>
      </if>
    </select>
 
@@ -587,12 +587,11 @@
     `t_mkt_activity` tma
     INNER JOIN t_mkt_activity_manual tmm ON tma.mkt_activity_id = tmm.mkt_activity_id
     and tma.valid=1
-    and tmmm.valid=1
+    and tmm.valid=1
     <!--活动主表ID -->
     <if test="mktActivityId != null and mktActivityId!= '' ">
       AND tma.mkt_activity_id = #{mktActivityId,jdbcType=BIGINT}
     </if>
-
 
   </select>
 

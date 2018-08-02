@@ -439,10 +439,10 @@ FROM
 WHERE
 	tmc.valid = 1
     <if test="couponCode != null">
-    and tmc.coupon_code = #{couponCode,jdbcType=VARCHAR},
+    and tmc.coupon_code = #{couponCode,jdbcType=VARCHAR}
   </if>
     <if test="bizType != null">
-     and  tmc.biz_type = #{bizType,jdbcType=INTEGER},
+     and  tmc.biz_type = #{bizType,jdbcType=INTEGER}
     </if>
   </select>
 
@@ -456,7 +456,7 @@ FROM
 WHERE
 	tmc.valid = 1
     <if test="bizId != null">
-      and tmc.biz_id =#{bizId,jdbcType=BIGINT},
+      and tmc.biz_id =#{bizId,jdbcType=BIGINT}
     </if>
     <if test="bizId != null">
       and tmc.biz_type = #{bizType,jdbcType=INTEGER}

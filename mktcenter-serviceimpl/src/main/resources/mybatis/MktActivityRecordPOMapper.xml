@@ -458,11 +458,11 @@ FROM
 WHERE
 	valid = 1
     <if test="acitivityId != null">
-     and  acitivity_id = #{acitivityId,jdbcType=BIGINT},
+     and  acitivity_id = #{acitivityId,jdbcType=BIGINT}
     </if>
 
     <if test="memberCode != null">
-      and member_code = #{memberCode,jdbcType=VARCHAR},
+      and member_code = #{memberCode,jdbcType=VARCHAR}
     </if>
   </select>
   <select id="countByCondition" parameterType="com.bizvane.mktcenterservice.models.po.MktActivityRecordPO" resultType="java.lang.Integer">
@@ -470,11 +470,11 @@ WHERE
     where
       valid = 1
     <if test="acitivityId != null">
-      and  acitivity_id = #{acitivityId,jdbcType=BIGINT},
+      and  acitivity_id = #{acitivityId,jdbcType=BIGINT}
     </if>
 
     <if test="memberCode != null">
-      and member_code = #{memberCode,jdbcType=VARCHAR},
+      and member_code = #{memberCode,jdbcType=VARCHAR}
     </if>
 
   </select>
