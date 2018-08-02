@@ -1,17 +1,14 @@
 package com.bizvane.mktcenterserviceimpl.controllers;
 
-import com.bizvane.couponfacade.models.vo.CouponDetailResponseVO;
 import com.bizvane.members.facade.models.MemberInfoModel;
 import com.bizvane.mktcenterservice.interfaces.ActivityManualService;
 import com.bizvane.mktcenterservice.models.bo.ActivityBO;
 import com.bizvane.mktcenterservice.models.vo.ActivityVO;
 import com.bizvane.mktcenterservice.models.vo.PageForm;
-import com.bizvane.mktcenterserviceimpl.common.constants.SystemConstants;
 import com.bizvane.mktcenterserviceimpl.common.utils.ActivityParamCheckUtil;
 import com.bizvane.utils.tokens.SysAccountPO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import com.bizvane.utils.responseinfo.ResponseData;
@@ -47,12 +44,15 @@ public class ActivityManualController {
      */
     @RequestMapping("/addActivity")
    public  ResponseData<Integer> addActivity(Long couponId, ActivityVO activityVO,HttpServletRequest request){
+       log.info("创建活动，入参,couponId:"+couponId+",activityVo"+activityVO+",httpServletRequest:"+request);
         //1.入参校验
         ActivityParamCheckUtil.checkManualParam(activityVO,couponId) ;
         //取缓存
         // SysAccountPO stageUser = TokenUtils.getStageUser(request);
         SysAccountPO stageUser = new SysAccountPO();
+
         ResponseData<Integer> activityManualResponseData = activityManualService.addActivityManual(couponId,activityVO,stageUser);
+        log.info("创建活动出参:"+activityManualResponseData);
        return activityManualResponseData;
    }
 
@@ -62,14 +62,8 @@ public class ActivityManualController {
    *
    * */
    @RequestMapping("/getActivityByMemberInfo")
-    public ResponseData<List<ActivityVO>> getActivityByMemberInfo(MemberInfoModel memberInfoModel){
-       ResponseData responseData =  new ResponseData();
-           //入参校验
-       if(null==memberInfoModel){
-           responseData.setCode(SystemConstants.ERROR_CODE);
-           responseData.setMessage("会员信息为空");
-       }
-       ResponseData<List<ActivityVO>> activityVoList=activityManualService.getActivityByMemberInfo(memberInfoModel);
+    public ResponseData<List<ActivityVO>> getActivityByMemberInfo(MemberInfoModel memberInfoModel,Integer activityType){
+       ResponseData<List<ActivityVO>> activityVoList=activityManualService.getActivityByMemberInfo(memberInfoModel,activityType);
         return activityVoList;
     }
 
@@ -89,22 +83,9 @@ public class ActivityManualController {
     * */
 
     @RequestMapping("/getActivityByQrcode")
-    public ResponseData<ActivityVO> getActivityByQrcode(MemberInfoModel memberInfoModel,String activityCode  ){
-        ResponseData responseData =  new ResponseData();
-        //入参校验
-    if(null==memberInfoModel){
-        responseData.setCode(SystemConstants.ERROR_CODE);
-        responseData.setMessage(SystemConstants.ERROR_MSG_PARAM_EMPTY);
-    }
-    if(StringUtils.isEmpty(activityCode)){
-        responseData.setCode(SystemConstants.ERROR_CODE);
-        responseData.setMessage(SystemConstants.ERROR_MSG_PARAM_EMPTY);
-    }
-        ResponseData<ActivityVO> activityVo=activityManualService.getActivityByQrcode(memberInfoModel,activityCode);
-        responseData.setData(activityVo);
-        responseData.setMessage(SystemConstants.SUCCESS_MESSAGE);
-        responseData.setCode(SystemConstants.ERROR_CODE);
-        return responseData;
+    public ResponseData<ActivityVO> getActivityByQrcode(MemberInfoModel memberInfoModel,String activityCode,Integer activityType  ){
+        ResponseData<ActivityVO> activityVo=activityManualService.getActivityByQrcode(memberInfoModel,activityCode,activityType);
+        return activityVo;
     }
 
    /**
@@ -112,8 +93,7 @@ public class ActivityManualController {
    * */
    @RequestMapping("/getActivityManualEffect")
    public ResponseData<List<ActivityBO>>getActivityManualEffect(ActivityVO activityVO){
-       ResponseData responseData = activityManualService.getActivityManualEffect(activityVO);
-       return  responseData;
+      return activityManualService.getActivityManualEffect(activityVO);
  }
 
     /**
