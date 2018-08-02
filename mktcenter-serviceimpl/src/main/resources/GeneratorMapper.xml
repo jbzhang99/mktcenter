@@ -118,5 +118,9 @@
         <!--<table tableName="t_mkt_activity_manual" domainObjectName="MktActivityManualPO">-->
             <!--<generatedKey column="mkt_activity_manual_id" sqlStatement="MySql" identity="true"/>-->
         <!--</table>-->
+
+        <table tableName="t_mkt_activity_smart_group" domainObjectName="MktActivitySmartGroupPO">
+            <generatedKey column="mkt_activity_smart_group_id" sqlStatement="MySql" identity="true"/>
+        </table>
     </context>
 </generatorConfiguration>

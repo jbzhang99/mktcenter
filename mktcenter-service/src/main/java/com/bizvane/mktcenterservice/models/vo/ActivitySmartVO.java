@@ -43,6 +43,60 @@ public class ActivitySmartVO extends MktActivitySmartPO {
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", locale = "zh", timezone = "GMT+8")
     private Date endTime;
 
+    /**
+     * 只读.
+     营销名称/分组名称. member_group_name
+     *
+     * @mbg.generated 2018-08-02 20:38:44
+     */
+    @io.swagger.annotations.ApiModelProperty(value = "营销名称/分组名称",name = "memberGroupName", required = false,example = "")
+    private String memberGroupName;
+
+    /**
+     * 只读.
+     pkid. mkt_activity_smart_group_id
+     *
+     * @mbg.generated 2018-08-02 20:38:44
+     */
+    @io.swagger.annotations.ApiModelProperty(value = "pkid",name = "mktActivitySmartGroupId", required = false,example = "")
+    private Long mktActivitySmartGroupId;
+
+    /**
+     * 只读.
+     会员模块分组编号. member_group_code
+     *
+     * @mbg.generated 2018-08-02 20:38:44
+     */
+    @io.swagger.annotations.ApiModelProperty(value = "会员模块分组编号",name = "memberGroupCode", required = false,example = "")
+    private String memberGroupCode;
+
+    /**
+     * 只读.
+     预计目标会员统计. target_mbr_count
+     *
+     * @mbg.generated 2018-08-02 20:38:44
+     */
+    @io.swagger.annotations.ApiModelProperty(value = "预计目标会员统计",name = "targetMbrCount", required = false,example = "")
+    private Integer targetMbrCount;
+
+    /**
+     * 只读.
+     预计目标会员数量的统计时间. target_mbr_count_time
+     *
+     * @mbg.generated 2018-08-02 20:38:44
+     */
+    @io.swagger.annotations.ApiModelProperty(value = "预计目标会员数量的统计时间",name = "targetMbrCountTime", required = false,example = "")
+    private Date targetMbrCountTime;
+
+    /**
+     * 只读.
+     分组状态：0禁用，1启用. status
+     *
+     * @mbg.generated 2018-08-02 20:38:44
+     */
+    @io.swagger.annotations.ApiModelProperty(value = "分组状态：0禁用，1启用",name = "status", required = false,example = "")
+    private Boolean status;
+
     public Date getCreateDateStart() {
         return createDateStart;
     }
@@ -89,5 +143,57 @@ public class ActivitySmartVO extends MktActivitySmartPO {
 
     public void setEndTime(Date endTime) {
         this.endTime = endTime;
+    }
+
+    public String getMemberGroupName() {
+        return memberGroupName;
+    }
+
+    public void setMemberGroupName(String memberGroupName) {
+        this.memberGroupName = memberGroupName;
+    }
+
+    public Long getMktActivitySmartGroupId() {
+        return mktActivitySmartGroupId;
+    }
+
+    public void setMktActivitySmartGroupId(Long mktActivitySmartGroupId) {
+        this.mktActivitySmartGroupId = mktActivitySmartGroupId;
+    }
+
+    public String getMemberGroupCode() {
+        return memberGroupCode;
+    }
+
+    public void setMemberGroupCode(String memberGroupCode) {
+        this.memberGroupCode = memberGroupCode;
+    }
+
+    @Override
+    public Integer getTargetMbrCount() {
+        return targetMbrCount;
+    }
+
+    @Override
+    public void setTargetMbrCount(Integer targetMbrCount) {
+        this.targetMbrCount = targetMbrCount;
+    }
+
+    @Override
+    public Date getTargetMbrCountTime() {
+        return targetMbrCountTime;
+    }
+
+    @Override
+    public void setTargetMbrCountTime(Date targetMbrCountTime) {
+        this.targetMbrCountTime = targetMbrCountTime;
+    }
+
+    public Boolean getStatus() {
+        return status;
+    }
+
+    public void setStatus(Boolean status) {
+        this.status = status;
     }
 }

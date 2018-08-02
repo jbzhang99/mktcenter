@@ -17,10 +17,7 @@ import com.bizvane.mktcenterserviceimpl.common.enums.CheckStatusEnum;
 import com.bizvane.mktcenterserviceimpl.common.enums.MktTypeEnum;
 import com.bizvane.mktcenterserviceimpl.common.utils.CodeUtil;
 import com.bizvane.mktcenterserviceimpl.common.utils.JobUtil;
-import com.bizvane.mktcenterserviceimpl.mappers.MktActivityPOMapper;
-import com.bizvane.mktcenterserviceimpl.mappers.MktActivitySmartPOMapper;
-import com.bizvane.mktcenterserviceimpl.mappers.MktCouponPOMapper;
-import com.bizvane.mktcenterserviceimpl.mappers.MktMessagePOMapper;
+import com.bizvane.mktcenterserviceimpl.mappers.*;
 import com.bizvane.utils.enumutils.SysResponseEnum;
 import com.bizvane.utils.responseinfo.ResponseData;
 import com.bizvane.utils.tokens.SysAccountPO;
@@ -46,6 +43,9 @@ public class ActivitySmartServiceImpl implements ActivitySmartService {
 
     @Autowired
     private MktActivitySmartPOMapper mktActivitySmartPOMapper;
+
+    @Autowired
+    private MktActivitySmartGroupPOMapper mktActivitySmartGroupPOMapper;
 
     @Autowired
     private MktActivityPOMapper mktActivityPOMapper;
@@ -78,16 +78,16 @@ public class ActivitySmartServiceImpl implements ActivitySmartService {
         ResponseData responseData = new ResponseData();
         PageHelper.startPage(pageForm.getPageNumber(),pageForm.getPageSize());
 
-        MktActivitySmartPOExample example = new MktActivitySmartPOExample();
-        MktActivitySmartPOExample.Criteria criteria = example.createCriteria();
+        MktActivitySmartGroupPOExample example = new MktActivitySmartGroupPOExample();
+        MktActivitySmartGroupPOExample.Criteria criteria = example.createCriteria();
         criteria.andValidEqualTo(Boolean.TRUE);
 
         if(!StringUtils.isEmpty(vo.getMemberGroupName())){
             criteria.andMemberGroupNameEqualTo(SystemConstants.LIKE_SYMBOL+vo.getMemberGroupName()+SystemConstants.LIKE_SYMBOL);
         }
 
-        List<MktActivitySmartPO> mktActivitySmartPOS = mktActivitySmartPOMapper.selectByExampleWithBLOBs(example);
-        PageInfo<MktActivitySmartPO> pageInfo = new PageInfo<>(mktActivitySmartPOS);
+        List<MktActivitySmartGroupPO> mktActivitySmartGroupPOS = mktActivitySmartGroupPOMapper.selectByExampleWithBLOBs(example);
+        PageInfo<MktActivitySmartGroupPO> pageInfo = new PageInfo<>(mktActivitySmartGroupPOS);
         responseData.setData(pageInfo);
         return responseData;
     }
@@ -235,19 +235,19 @@ public class ActivitySmartServiceImpl implements ActivitySmartService {
     public ResponseData<Integer> copySmartActivity(ActivitySmartVO vo) {
         ResponseData responseData = new ResponseData();
 
-        MktActivitySmartPO mktActivitySmartPO = mktActivitySmartPOMapper.selectByPrimaryKey(vo.getMktActivitySmartId());
+        MktActivitySmartGroupPO mktActivitySmartGroupPO = mktActivitySmartGroupPOMapper.selectByPrimaryKey(vo.getMktActivitySmartId());
 
-        mktActivitySmartPO.setCreateDate(new Date());
-        mktActivitySmartPO.setCreateUserId(vo.getCreateUserId());
-        mktActivitySmartPO.setCreateUserName(vo.getCreateUserName());
+        mktActivitySmartGroupPO.setCreateDate(new Date());
+        mktActivitySmartGroupPO.setCreateUserId(vo.getCreateUserId());
+        mktActivitySmartGroupPO.setCreateUserName(vo.getCreateUserName());
 
-        mktActivitySmartPO.setModifiedDate(null);
-        mktActivitySmartPO.setModifiedUserId(null);
-        mktActivitySmartPO.setModifiedUserName(null);
+        mktActivitySmartGroupPO.setModifiedDate(null);
+        mktActivitySmartGroupPO.setModifiedUserId(null);
+        mktActivitySmartGroupPO.setModifiedUserName(null);
 
-        mktActivitySmartPO.setMemberGroupName(mktActivitySmartPO.getMemberGroupName()+ActivityConstants.SMART_ACTIVITY_COPY);
+        mktActivitySmartGroupPO.setMemberGroupName(mktActivitySmartGroupPO.getMemberGroupName()+ActivityConstants.SMART_ACTIVITY_COPY);
 
-        mktActivitySmartPOMapper.insertSelective(mktActivitySmartPO);
+        mktActivitySmartGroupPOMapper.insertSelective(mktActivitySmartGroupPO);
 
         responseData.setMessage(ResponseConstants.SUCCESS_MSG);
         return responseData;
