@@ -8,28 +8,28 @@ import java.util.List;
 public class MktActivitySmartPOExample implements Serializable {
     /**
 	 * 只读. 
-	 * @mbg.generated  2018-07-31 19:48:47
+	 * @mbg.generated  2018-08-02 20:03:31
 	 */
 	protected String orderByClause;
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-07-31 19:48:47
+	 * @mbg.generated  2018-08-02 20:03:31
 	 */
 	protected boolean distinct;
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-07-31 19:48:47
+	 * @mbg.generated  2018-08-02 20:03:31
 	 */
 	protected List<Criteria> oredCriteria;
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-07-31 19:48:47
+	 * @mbg.generated  2018-08-02 20:03:31
 	 */
 	private static final long serialVersionUID = 1L;
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-07-31 19:48:47
+	 * @mbg.generated  2018-08-02 20:03:31
 	 */
 	public MktActivitySmartPOExample() {
 		oredCriteria = new ArrayList<Criteria>();
@@ -37,7 +37,7 @@ public class MktActivitySmartPOExample implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-07-31 19:48:47
+	 * @mbg.generated  2018-08-02 20:03:31
 	 */
 	public void setOrderByClause(String orderByClause) {
 		this.orderByClause = orderByClause;
@@ -45,7 +45,7 @@ public class MktActivitySmartPOExample implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-07-31 19:48:47
+	 * @mbg.generated  2018-08-02 20:03:31
 	 */
 	public String getOrderByClause() {
 		return orderByClause;
@@ -53,7 +53,7 @@ public class MktActivitySmartPOExample implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-07-31 19:48:47
+	 * @mbg.generated  2018-08-02 20:03:31
 	 */
 	public void setDistinct(boolean distinct) {
 		this.distinct = distinct;
@@ -61,7 +61,7 @@ public class MktActivitySmartPOExample implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-07-31 19:48:47
+	 * @mbg.generated  2018-08-02 20:03:31
 	 */
 	public boolean isDistinct() {
 		return distinct;
@@ -69,7 +69,7 @@ public class MktActivitySmartPOExample implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-07-31 19:48:47
+	 * @mbg.generated  2018-08-02 20:03:31
 	 */
 	public List<Criteria> getOredCriteria() {
 		return oredCriteria;
@@ -77,7 +77,7 @@ public class MktActivitySmartPOExample implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-07-31 19:48:47
+	 * @mbg.generated  2018-08-02 20:03:31
 	 */
 	public void or(Criteria criteria) {
 		oredCriteria.add(criteria);
@@ -85,7 +85,7 @@ public class MktActivitySmartPOExample implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-07-31 19:48:47
+	 * @mbg.generated  2018-08-02 20:03:31
 	 */
 	public Criteria or() {
 		Criteria criteria = createCriteriaInternal();
@@ -95,7 +95,7 @@ public class MktActivitySmartPOExample implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-07-31 19:48:47
+	 * @mbg.generated  2018-08-02 20:03:31
 	 */
 	public Criteria createCriteria() {
 		Criteria criteria = createCriteriaInternal();
@@ -107,7 +107,7 @@ public class MktActivitySmartPOExample implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-07-31 19:48:47
+	 * @mbg.generated  2018-08-02 20:03:31
 	 */
 	protected Criteria createCriteriaInternal() {
 		Criteria criteria = new Criteria();
@@ -116,7 +116,7 @@ public class MktActivitySmartPOExample implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-07-31 19:48:47
+	 * @mbg.generated  2018-08-02 20:03:31
 	 */
 	public void clear() {
 		oredCriteria.clear();
@@ -126,7 +126,7 @@ public class MktActivitySmartPOExample implements Serializable {
 
 	/**
 	 * 只读. t_mkt_activity_smart
-	 * @mbg.generated  2018-07-31 19:48:47
+	 * @mbg.generated  2018-08-02 20:03:31
 	 */
 	protected abstract static class GeneratedCriteria implements Serializable {
 		protected List<Criterion> criteria;
@@ -226,196 +226,6 @@ public class MktActivitySmartPOExample implements Serializable {
 
 		public Criteria andMktActivitySmartIdNotBetween(Long value1, Long value2) {
 			addCriterion("mkt_activity_smart_id not between", value1, value2, "mktActivitySmartId");
-			return (Criteria) this;
-		}
-
-		public Criteria andMktActivityIdIsNull() {
-			addCriterion("mkt_activity_id is null");
-			return (Criteria) this;
-		}
-
-		public Criteria andMktActivityIdIsNotNull() {
-			addCriterion("mkt_activity_id is not null");
-			return (Criteria) this;
-		}
-
-		public Criteria andMktActivityIdEqualTo(Long value) {
-			addCriterion("mkt_activity_id =", value, "mktActivityId");
-			return (Criteria) this;
-		}
-
-		public Criteria andMktActivityIdNotEqualTo(Long value) {
-			addCriterion("mkt_activity_id <>", value, "mktActivityId");
-			return (Criteria) this;
-		}
-
-		public Criteria andMktActivityIdGreaterThan(Long value) {
-			addCriterion("mkt_activity_id >", value, "mktActivityId");
-			return (Criteria) this;
-		}
-
-		public Criteria andMktActivityIdGreaterThanOrEqualTo(Long value) {
-			addCriterion("mkt_activity_id >=", value, "mktActivityId");
-			return (Criteria) this;
-		}
-
-		public Criteria andMktActivityIdLessThan(Long value) {
-			addCriterion("mkt_activity_id <", value, "mktActivityId");
-			return (Criteria) this;
-		}
-
-		public Criteria andMktActivityIdLessThanOrEqualTo(Long value) {
-			addCriterion("mkt_activity_id <=", value, "mktActivityId");
-			return (Criteria) this;
-		}
-
-		public Criteria andMktActivityIdIn(List<Long> values) {
-			addCriterion("mkt_activity_id in", values, "mktActivityId");
-			return (Criteria) this;
-		}
-
-		public Criteria andMktActivityIdNotIn(List<Long> values) {
-			addCriterion("mkt_activity_id not in", values, "mktActivityId");
-			return (Criteria) this;
-		}
-
-		public Criteria andMktActivityIdBetween(Long value1, Long value2) {
-			addCriterion("mkt_activity_id between", value1, value2, "mktActivityId");
-			return (Criteria) this;
-		}
-
-		public Criteria andMktActivityIdNotBetween(Long value1, Long value2) {
-			addCriterion("mkt_activity_id not between", value1, value2, "mktActivityId");
-			return (Criteria) this;
-		}
-
-		public Criteria andMktTypeIsNull() {
-			addCriterion("mkt_type is null");
-			return (Criteria) this;
-		}
-
-		public Criteria andMktTypeIsNotNull() {
-			addCriterion("mkt_type is not null");
-			return (Criteria) this;
-		}
-
-		public Criteria andMktTypeEqualTo(Integer value) {
-			addCriterion("mkt_type =", value, "mktType");
-			return (Criteria) this;
-		}
-
-		public Criteria andMktTypeNotEqualTo(Integer value) {
-			addCriterion("mkt_type <>", value, "mktType");
-			return (Criteria) this;
-		}
-
-		public Criteria andMktTypeGreaterThan(Integer value) {
-			addCriterion("mkt_type >", value, "mktType");
-			return (Criteria) this;
-		}
-
-		public Criteria andMktTypeGreaterThanOrEqualTo(Integer value) {
-			addCriterion("mkt_type >=", value, "mktType");
-			return (Criteria) this;
-		}
-
-		public Criteria andMktTypeLessThan(Integer value) {
-			addCriterion("mkt_type <", value, "mktType");
-			return (Criteria) this;
-		}
-
-		public Criteria andMktTypeLessThanOrEqualTo(Integer value) {
-			addCriterion("mkt_type <=", value, "mktType");
-			return (Criteria) this;
-		}
-
-		public Criteria andMktTypeIn(List<Integer> values) {
-			addCriterion("mkt_type in", values, "mktType");
-			return (Criteria) this;
-		}
-
-		public Criteria andMktTypeNotIn(List<Integer> values) {
-			addCriterion("mkt_type not in", values, "mktType");
-			return (Criteria) this;
-		}
-
-		public Criteria andMktTypeBetween(Integer value1, Integer value2) {
-			addCriterion("mkt_type between", value1, value2, "mktType");
-			return (Criteria) this;
-		}
-
-		public Criteria andMktTypeNotBetween(Integer value1, Integer value2) {
-			addCriterion("mkt_type not between", value1, value2, "mktType");
-			return (Criteria) this;
-		}
-
-		public Criteria andMktTaskNameIsNull() {
-			addCriterion("mkt_task_name is null");
-			return (Criteria) this;
-		}
-
-		public Criteria andMktTaskNameIsNotNull() {
-			addCriterion("mkt_task_name is not null");
-			return (Criteria) this;
-		}
-
-		public Criteria andMktTaskNameEqualTo(String value) {
-			addCriterion("mkt_task_name =", value, "mktTaskName");
-			return (Criteria) this;
-		}
-
-		public Criteria andMktTaskNameNotEqualTo(String value) {
-			addCriterion("mkt_task_name <>", value, "mktTaskName");
-			return (Criteria) this;
-		}
-
-		public Criteria andMktTaskNameGreaterThan(String value) {
-			addCriterion("mkt_task_name >", value, "mktTaskName");
-			return (Criteria) this;
-		}
-
-		public Criteria andMktTaskNameGreaterThanOrEqualTo(String value) {
-			addCriterion("mkt_task_name >=", value, "mktTaskName");
-			return (Criteria) this;
-		}
-
-		public Criteria andMktTaskNameLessThan(String value) {
-			addCriterion("mkt_task_name <", value, "mktTaskName");
-			return (Criteria) this;
-		}
-
-		public Criteria andMktTaskNameLessThanOrEqualTo(String value) {
-			addCriterion("mkt_task_name <=", value, "mktTaskName");
-			return (Criteria) this;
-		}
-
-		public Criteria andMktTaskNameLike(String value) {
-			addCriterion("mkt_task_name like", value, "mktTaskName");
-			return (Criteria) this;
-		}
-
-		public Criteria andMktTaskNameNotLike(String value) {
-			addCriterion("mkt_task_name not like", value, "mktTaskName");
-			return (Criteria) this;
-		}
-
-		public Criteria andMktTaskNameIn(List<String> values) {
-			addCriterion("mkt_task_name in", values, "mktTaskName");
-			return (Criteria) this;
-		}
-
-		public Criteria andMktTaskNameNotIn(List<String> values) {
-			addCriterion("mkt_task_name not in", values, "mktTaskName");
-			return (Criteria) this;
-		}
-
-		public Criteria andMktTaskNameBetween(String value1, String value2) {
-			addCriterion("mkt_task_name between", value1, value2, "mktTaskName");
-			return (Criteria) this;
-		}
-
-		public Criteria andMktTaskNameNotBetween(String value1, String value2) {
-			addCriterion("mkt_task_name not between", value1, value2, "mktTaskName");
 			return (Criteria) this;
 		}
 
@@ -546,6 +356,76 @@ public class MktActivitySmartPOExample implements Serializable {
 
 		public Criteria andMemberGroupCodeNotBetween(String value1, String value2) {
 			addCriterion("member_group_code not between", value1, value2, "memberGroupCode");
+			return (Criteria) this;
+		}
+
+		public Criteria andMemberGroupNameIsNull() {
+			addCriterion("member_group_name is null");
+			return (Criteria) this;
+		}
+
+		public Criteria andMemberGroupNameIsNotNull() {
+			addCriterion("member_group_name is not null");
+			return (Criteria) this;
+		}
+
+		public Criteria andMemberGroupNameEqualTo(String value) {
+			addCriterion("member_group_name =", value, "memberGroupName");
+			return (Criteria) this;
+		}
+
+		public Criteria andMemberGroupNameNotEqualTo(String value) {
+			addCriterion("member_group_name <>", value, "memberGroupName");
+			return (Criteria) this;
+		}
+
+		public Criteria andMemberGroupNameGreaterThan(String value) {
+			addCriterion("member_group_name >", value, "memberGroupName");
+			return (Criteria) this;
+		}
+
+		public Criteria andMemberGroupNameGreaterThanOrEqualTo(String value) {
+			addCriterion("member_group_name >=", value, "memberGroupName");
+			return (Criteria) this;
+		}
+
+		public Criteria andMemberGroupNameLessThan(String value) {
+			addCriterion("member_group_name <", value, "memberGroupName");
+			return (Criteria) this;
+		}
+
+		public Criteria andMemberGroupNameLessThanOrEqualTo(String value) {
+			addCriterion("member_group_name <=", value, "memberGroupName");
+			return (Criteria) this;
+		}
+
+		public Criteria andMemberGroupNameLike(String value) {
+			addCriterion("member_group_name like", value, "memberGroupName");
+			return (Criteria) this;
+		}
+
+		public Criteria andMemberGroupNameNotLike(String value) {
+			addCriterion("member_group_name not like", value, "memberGroupName");
+			return (Criteria) this;
+		}
+
+		public Criteria andMemberGroupNameIn(List<String> values) {
+			addCriterion("member_group_name in", values, "memberGroupName");
+			return (Criteria) this;
+		}
+
+		public Criteria andMemberGroupNameNotIn(List<String> values) {
+			addCriterion("member_group_name not in", values, "memberGroupName");
+			return (Criteria) this;
+		}
+
+		public Criteria andMemberGroupNameBetween(String value1, String value2) {
+			addCriterion("member_group_name between", value1, value2, "memberGroupName");
+			return (Criteria) this;
+		}
+
+		public Criteria andMemberGroupNameNotBetween(String value1, String value2) {
+			addCriterion("member_group_name not between", value1, value2, "memberGroupName");
 			return (Criteria) this;
 		}
 
@@ -1242,7 +1122,7 @@ public class MktActivitySmartPOExample implements Serializable {
 
 	/**
 	 * 只读. t_mkt_activity_smart
-	 * @mbg.generated  2018-07-31 19:48:47
+	 * @mbg.generated  2018-08-02 20:03:31
 	 */
 	public static class Criterion implements Serializable {
 		private String condition;

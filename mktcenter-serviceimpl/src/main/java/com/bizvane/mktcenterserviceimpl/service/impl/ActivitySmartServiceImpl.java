@@ -80,10 +80,10 @@ public class ActivitySmartServiceImpl implements ActivitySmartService {
 
         MktActivitySmartPOExample example = new MktActivitySmartPOExample();
         MktActivitySmartPOExample.Criteria criteria = example.createCriteria();
-        criteria.andValidEqualTo(Boolean.TRUE).andMktActivityIdEqualTo(ActivityConstants.SMART_ACTIVITY_GROUP);
+        criteria.andValidEqualTo(Boolean.TRUE);
 
-        if(!StringUtils.isEmpty(vo.getMktTaskName())){
-            criteria.andMktTaskNameLike(SystemConstants.LIKE_SYMBOL+vo.getMktTaskName()+SystemConstants.LIKE_SYMBOL);
+        if(!StringUtils.isEmpty(vo.getMemberGroupName())){
+            criteria.andMemberGroupNameEqualTo(SystemConstants.LIKE_SYMBOL+vo.getMemberGroupName()+SystemConstants.LIKE_SYMBOL);
         }
 
         List<MktActivitySmartPO> mktActivitySmartPOS = mktActivitySmartPOMapper.selectByExampleWithBLOBs(example);
@@ -110,9 +110,6 @@ public class ActivitySmartServiceImpl implements ActivitySmartService {
         PageHelper.startPage(pageForm.getPageNumber(),pageForm.getPageSize());
         List<ActivitySmartVO> activityList = mktActivitySmartPOMapper.getActivityList(vo);
 
-        for(ActivitySmartVO activitySmartVO :activityList){
-            activitySmartVO.setMktTypeStr(MktTypeEnum.getMktTypeEnumByCode(activitySmartVO.getMktType()).getMessage());
-        }
         PageInfo<ActivitySmartVO> pageInfo = new PageInfo<>(activityList);
         responseData.setData(pageInfo);
         return responseData;
@@ -151,7 +148,7 @@ public class ActivitySmartServiceImpl implements ActivitySmartService {
         ResponseData responseData = new ResponseData();
 
         //营销名称为空
-        if(StringUtils.isEmpty(vo.getMktTaskName())){
+        if(StringUtils.isEmpty(vo.getMemberGroupName())){
             responseData.setCode(ResponseConstants.ERROR);
             responseData.setMessage(ActivityConstants.SMART_ACTIVITY_TASK_NAME_EMPTY);
             return responseData;
@@ -165,8 +162,6 @@ public class ActivitySmartServiceImpl implements ActivitySmartService {
         }
         MktActivitySmartPO mktActivitySmartPO = new MktActivitySmartPO();
         BeanUtils.copyProperties(vo,mktActivitySmartPO);
-        mktActivitySmartPO.setMktActivityId(ActivityConstants.SMART_ACTIVITY_GROUP);
-        mktActivitySmartPO.setMktType(MktTypeEnum.TASK_STATUS_ALL.getCode());
         mktActivitySmartPOMapper.insertSelective(mktActivitySmartPO);
         responseData.setMessage(ResponseConstants.SUCCESS_MSG);
         return responseData;
@@ -181,7 +176,7 @@ public class ActivitySmartServiceImpl implements ActivitySmartService {
     public ResponseData<Integer> updateSmartActivity(ActivitySmartVO vo) {
         ResponseData responseData = new ResponseData();
         //营销名称为空
-        if(StringUtils.isEmpty(vo.getMktTaskName())){
+        if(StringUtils.isEmpty(vo.getMemberGroupName())){
             responseData.setCode(ResponseConstants.ERROR);
             responseData.setMessage(ActivityConstants.SMART_ACTIVITY_TASK_NAME_EMPTY);
             return responseData;
@@ -250,7 +245,7 @@ public class ActivitySmartServiceImpl implements ActivitySmartService {
         mktActivitySmartPO.setModifiedUserId(null);
         mktActivitySmartPO.setModifiedUserName(null);
 
-        mktActivitySmartPO.setMktTaskName(mktActivitySmartPO.getMktTaskName()+ActivityConstants.SMART_ACTIVITY_COPY);
+        mktActivitySmartPO.setMemberGroupName(mktActivitySmartPO.getMemberGroupName()+ActivityConstants.SMART_ACTIVITY_COPY);
 
         mktActivitySmartPOMapper.insertSelective(mktActivitySmartPO);
 
