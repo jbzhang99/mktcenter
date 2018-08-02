@@ -74,7 +74,7 @@ public class ActivitySmartServiceImpl implements ActivitySmartService {
      * @return
      */
     @Override
-    public ResponseData<PageInfo<MktActivitySmartPO>> getSmartActivityList(ActivitySmartVO vo, PageForm pageForm) {
+    public ResponseData<PageInfo<MktActivitySmartGroupPO>> getSmartActivityList(ActivitySmartVO vo, PageForm pageForm) {
         ResponseData responseData = new ResponseData();
         PageHelper.startPage(pageForm.getPageNumber(),pageForm.getPageSize());
 
@@ -117,14 +117,14 @@ public class ActivitySmartServiceImpl implements ActivitySmartService {
 
     /**
      * 查询某个智能营销分组
-     * @param mktActivitySmartId
+     * @param mktActivitySmartGroupId
      * @return
      */
     @Override
-    public ResponseData<MktActivitySmartPO> getSmartActivityById(Long mktActivitySmartId) {
+    public ResponseData<MktActivitySmartGroupPO> getSmartActivityById(Long mktActivitySmartGroupId) {
         ResponseData responseData = new ResponseData();
-        MktActivitySmartPO mktActivitySmartPO = mktActivitySmartPOMapper.selectByPrimaryKey(mktActivitySmartId);
-        responseData.setData(mktActivitySmartPO);
+        MktActivitySmartGroupPO mktActivitySmartGroupPO = mktActivitySmartGroupPOMapper.selectByPrimaryKey(mktActivitySmartGroupId);
+        responseData.setData(mktActivitySmartGroupPO);
         return responseData;
     }
 
@@ -160,9 +160,9 @@ public class ActivitySmartServiceImpl implements ActivitySmartService {
             responseData.setMessage(ActivityConstants.SMART_ACTIVITY_TARGET_MEMBER_EMPTY);
             return responseData;
         }
-        MktActivitySmartPO mktActivitySmartPO = new MktActivitySmartPO();
+        MktActivitySmartGroupPO mktActivitySmartPO = new MktActivitySmartGroupPO();
         BeanUtils.copyProperties(vo,mktActivitySmartPO);
-        mktActivitySmartPOMapper.insertSelective(mktActivitySmartPO);
+        mktActivitySmartGroupPOMapper.insertSelective(mktActivitySmartPO);
         responseData.setMessage(ResponseConstants.SUCCESS_MSG);
         return responseData;
     }
@@ -188,9 +188,9 @@ public class ActivitySmartServiceImpl implements ActivitySmartService {
             responseData.setMessage(ActivityConstants.SMART_ACTIVITY_TARGET_MEMBER_EMPTY);
             return responseData;
         }
-        MktActivitySmartPO mktActivitySmartPO = new MktActivitySmartPO();
+        MktActivitySmartGroupPO mktActivitySmartPO = new MktActivitySmartGroupPO();
         BeanUtils.copyProperties(vo,mktActivitySmartPO);
-        mktActivitySmartPOMapper.updateByPrimaryKeySelective(mktActivitySmartPO);
+        mktActivitySmartGroupPOMapper.updateByPrimaryKeySelective(mktActivitySmartPO);
         responseData.setMessage(ResponseConstants.SUCCESS_MSG);
         return responseData;
     }
@@ -203,9 +203,9 @@ public class ActivitySmartServiceImpl implements ActivitySmartService {
     @Override
     public ResponseData<Integer> updateSmartActivityStatus(ActivitySmartVO vo) {
         ResponseData responseData = new ResponseData();
-        MktActivitySmartPO mktActivitySmartPO = new MktActivitySmartPO();
+        MktActivitySmartGroupPO mktActivitySmartPO = new MktActivitySmartGroupPO();
         BeanUtils.copyProperties(vo,mktActivitySmartPO);
-        mktActivitySmartPOMapper.updateByPrimaryKeySelective(mktActivitySmartPO);
+        mktActivitySmartGroupPOMapper.updateByPrimaryKeySelective(mktActivitySmartPO);
         responseData.setMessage(ResponseConstants.SUCCESS_MSG);
         return responseData;
     }
@@ -218,10 +218,10 @@ public class ActivitySmartServiceImpl implements ActivitySmartService {
     @Override
     public ResponseData<Integer> deleteSmartActivity(ActivitySmartVO vo) {
         ResponseData responseData = new ResponseData();
-        MktActivitySmartPO mktActivitySmartPO = new MktActivitySmartPO();
+        MktActivitySmartGroupPO mktActivitySmartPO = new MktActivitySmartGroupPO();
         BeanUtils.copyProperties(vo,mktActivitySmartPO);
         mktActivitySmartPO.setValid(Boolean.FALSE);
-        mktActivitySmartPOMapper.updateByPrimaryKeySelective(mktActivitySmartPO);
+        mktActivitySmartGroupPOMapper.updateByPrimaryKeySelective(mktActivitySmartPO);
         responseData.setMessage(ResponseConstants.SUCCESS_MSG);
         return responseData;
     }

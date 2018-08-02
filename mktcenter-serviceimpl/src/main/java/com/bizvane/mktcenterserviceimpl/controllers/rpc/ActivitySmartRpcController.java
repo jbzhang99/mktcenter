@@ -2,6 +2,7 @@ package com.bizvane.mktcenterserviceimpl.controllers.rpc;
 
 import com.bizvane.mktcenterservice.interfaces.ActivityService;
 import com.bizvane.mktcenterservice.interfaces.ActivitySmartService;
+import com.bizvane.mktcenterservice.models.po.MktActivitySmartGroupPO;
 import com.bizvane.mktcenterservice.models.po.MktActivitySmartPO;
 import com.bizvane.mktcenterservice.models.vo.ActivitySmartVO;
 import com.bizvane.mktcenterservice.models.vo.PageForm;
@@ -28,14 +29,14 @@ public class ActivitySmartRpcController {
     private ActivitySmartService activitySmartService;
 
     @RequestMapping("getSmartActivityById")
-    @io.swagger.annotations.ApiModelProperty(value = "ActivitySmartVO",name = "通过id获取活动", required = false,example = "")
-    public ResponseData<MktActivitySmartPO> getSmartActivityById(@RequestParam("mktActivitySmartId") Long mktActivitySmartId){
+    @io.swagger.annotations.ApiModelProperty(value = "mktActivitySmartId",name = "通过id获取活动分组", required = false,example = "")
+    public ResponseData<MktActivitySmartGroupPO> getSmartActivityById(@RequestParam("mktActivitySmartId") Long mktActivitySmartId){
         return activitySmartService.getSmartActivityById(mktActivitySmartId);
     }
 
     @RequestMapping("getSmartActivityList")
     @io.swagger.annotations.ApiModelProperty(value = "ActivitySmartVO",name = "查询智能营销活动列表", required = false,example = "")
-    public ResponseData<PageInfo<MktActivitySmartPO>> getSmartActivityList(@RequestBody ActivitySmartVO vo){
+    public ResponseData<PageInfo<MktActivitySmartGroupPO>> getSmartActivityList(@RequestBody ActivitySmartVO vo){
         PageForm pageForm = new PageForm();
         pageForm.setPageNumber(vo.getPageNumber());
         pageForm.setPageSize(vo.getPageSize());
