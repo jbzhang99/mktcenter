@@ -24,5 +24,10 @@ public interface TaskMessageService {
      */
     public  Integer  updateTaskMessage(MktMessagePO po,SysAccountPO stageUser);
 
-
+    /**
+     *
+     * @param stageUser
+     * @return
+     */
+    public  Integer  deleteTaskMessage(Long bizId,SysAccountPO stageUser);
 }

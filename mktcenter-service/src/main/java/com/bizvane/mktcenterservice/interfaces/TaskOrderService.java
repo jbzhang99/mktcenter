@@ -35,31 +35,16 @@ public interface TaskOrderService {
 
     /**
      * 新增任务
-     * @param bo
      * @return
      */
     public ResponseData<Integer> addTask(TaskDetailVO vo, SysAccountPO stageUser) throws ParseException;
 
     /**
-     * 修改任务
-     * @param po
-     * @param stageUser
-     * @return
-     */
-    public ResponseData<Integer> updateTask(MktTaskOrderPO po,SysAccountPO stageUser);
-
-    /**
-     * 执行任务
-     * @param
-     * @return
-     */
-    public ResponseData<Integer> executeTask(TaskVO vo);
-
-    /**
      * 修改消费任务
      * @return
      */
-    public Integer updateOrderTask(MktTaskOrderPO po, SysAccountPO stageUser);
+    public ResponseData updateOrderTask(TaskDetailVO vo, SysAccountPO stageUser);
 
+    public Integer modifieOrderTask(MktTaskOrderPO po, SysAccountPO stageUser);
 
 }

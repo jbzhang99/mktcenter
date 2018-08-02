@@ -120,10 +120,6 @@ public class TaskServiceImpl implements TaskService {
      */
     @Override
     public Long addTask(MktTaskPOWithBLOBs task, SysAccountPO stageUser) {
-        task.setCreateDate(TimeUtils.getNowTime());
-        task.setCreateUserId(stageUser.getSysAccountId());
-        task.setCreateUserName(stageUser.getName());
-
         mktTaskPOMapper.insertSelective(task);
         return task.getMktTaskId();
     }
@@ -133,10 +129,6 @@ public class TaskServiceImpl implements TaskService {
      */
     @Override
     public  Integer   updateTask(MktTaskPOWithBLOBs task, SysAccountPO stageUser){
-        task.setModifiedDate(TimeUtils.getNowTime());
-        task.setModifiedUserId(stageUser.getCtrlAccountId());
-        task.setModifiedUserName(stageUser.getName());
-
         return mktTaskPOMapper.updateByPrimaryKeySelective(task);
     }
 

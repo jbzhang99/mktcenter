@@ -54,12 +54,13 @@ public class TaskOrderServiceImpl implements TaskOrderService {
      * 审核状态：1未审核，2审核中，3已审核，4已驳回',
      */
     @Override
-    public  Integer  checkOrderTask(TaskVO vo){
+    public Integer checkOrderTask(TaskVO vo) {
         MktTaskOrderPO mktTaskOrderPO = new MktTaskOrderPO();
-        BeanUtils.copyProperties(vo,mktTaskOrderPO);
-        return  mktTaskOrderPOMapper.updateByPrimaryKeySelective(mktTaskOrderPO);
+        BeanUtils.copyProperties(vo, mktTaskOrderPO);
+        return mktTaskOrderPOMapper.updateByPrimaryKeySelective(mktTaskOrderPO);
 
     }
+
     /**
      * 根据任务Id查询任务详情
      */
@@ -69,15 +70,18 @@ public class TaskOrderServiceImpl implements TaskOrderService {
     }
 
     /**
-     *查询任务列表
+     * 查询任务列表
+     *
      * @return
      */
     @Override
     public List<TaskVO> selectTask(TaskVO vo) {
         return mktTaskOrderPOMapper.getTaskList(vo);
     }
+
     /**
      * 创建任务
+     *
      * @param vo
      * @param stageUser
      * @return
@@ -86,8 +90,8 @@ public class TaskOrderServiceImpl implements TaskOrderService {
     @Override
     public ResponseData<Integer> addTask(TaskDetailVO vo, SysAccountPO stageUser) throws ParseException {
         //0.参数的检验
-       ResponseData responseData = TaskParamCheckUtil.checkParam(vo);
-        if (responseData.getCode()<0){
+        ResponseData responseData = TaskParamCheckUtil.checkParam(vo);
+        if (responseData.getCode() < 0) {
             return responseData;
         }
         vo.setValid(Boolean.TRUE);
@@ -104,28 +108,28 @@ public class TaskOrderServiceImpl implements TaskOrderService {
         Long mktTaskId = taskService.addTask(mktTaskPOWithBLOBs, stageUser);
 
         //3.任务消费表新增
-        MktTaskOrderPO mktTaskOrderPO = new  MktTaskOrderPO();
+        MktTaskOrderPO mktTaskOrderPO = new MktTaskOrderPO();
         BeanUtils.copyProperties(vo, mktTaskOrderPO);
         mktTaskOrderPO.setMktTaskId(mktTaskId);
-        this.insertOrderTask(mktTaskOrderPO,stageUser);
+        this.insertOrderTask(mktTaskOrderPO, stageUser);
 
         //4.新增奖励新增  biz_type 活动类型  1=活动
         List<MktCouponPO> mktCouponPOList = vo.getMktCouponPOList();
-        if (CollectionUtils.isNotEmpty(mktCouponPOList)){
-            mktCouponPOList.stream().forEach(param->{
+        if (CollectionUtils.isNotEmpty(mktCouponPOList)) {
+            mktCouponPOList.stream().forEach(param -> {
                 param.setBizId(mktTaskId);
                 param.setBizCode(taskCode);
                 param.setBizType(TaskConstants.TASK_TYPE);
-                taskCouponService.addTaskCoupon(param,stageUser);
+                taskCouponService.addTaskCoupon(param, stageUser);
             });
         }
         //5.新增消息新增
         List<MktMessagePO> mktmessagePOList = vo.getMktmessagePOList();
-        if (CollectionUtils.isNotEmpty(mktmessagePOList)){
-            mktmessagePOList.stream().forEach(param-> {
+        if (CollectionUtils.isNotEmpty(mktmessagePOList)) {
+            mktmessagePOList.stream().forEach(param -> {
                         param.setBizId(mktTaskId);
                         param.setBizType(TaskConstants.TASK_TYPE);
-                        taskMessageService.addTaskMessage(param,stageUser);
+                        taskMessageService.addTaskMessage(param, stageUser);
                     }
             );
         }
@@ -152,25 +156,25 @@ public class TaskOrderServiceImpl implements TaskOrderService {
     /**
      * 判断是否滞后执行
      */
-    public  MktTaskPOWithBLOBs   isOrNoCheckState(MktTaskPOWithBLOBs po) throws ParseException {
+    public MktTaskPOWithBLOBs isOrNoCheckState(MktTaskPOWithBLOBs po) throws ParseException {
         //1.判断是否需要审核  1:需要审核 0:不需要
         SysCheckConfigPo sysCheckConfigPo = new SysCheckConfigPo();
         sysCheckConfigPo.setSysBrandId(po.getSysBrandId());
         Integer checkStatus = taskService.getCheckStatus(sysCheckConfigPo);
         //判断时间是否滞后   2=滞后执行    3和1=立即执行
         Integer ImmediatelyRunStatus = TimeUtils.IsImmediatelyRun(po.getStartTime());
-        if(TaskConstants.ZERO.equals(checkStatus)){
+        if (TaskConstants.ZERO.equals(checkStatus)) {
             //待审核=1
             po.setCheckStatus(CheckStatusEnum.CHECK_STATUS_PENDING.getCode());
             //待执行=1
             po.setCheckStatus(TaskStatusEnum.TASK_STATUS_PENDING.getCode());
-        }else{
+        } else {
             //已审核=3
             po.setCheckStatus(TaskConstants.THREE);
-            if(TaskConstants.THREE.equals(ImmediatelyRunStatus)){
+            if (TaskConstants.THREE.equals(ImmediatelyRunStatus)) {
                 //待执行
                 po.setCheckStatus(TaskStatusEnum.TASK_STATUS_PENDING.getCode());
-            }else{
+            } else {
                 //执行中
                 po.setCheckStatus(TaskStatusEnum.TASK_STATUS_EXECUTING.getCode());
             }
@@ -181,66 +185,103 @@ public class TaskOrderServiceImpl implements TaskOrderService {
     /**
      * 判断时间是否滞后,已经是否立即执行,还是创建job执行
      */
-    public  void   doOrderTask(TaskDetailVO vo){
+    public void doOrderTask(TaskDetailVO vo) {
         Integer checkStatus = vo.getCheckStatus();//审核状态
         Integer taskStatus = vo.getTaskStatus();//执行状态
         //已审核   执行中  执行时间小于当前时间 或等于当前时间
-        if (TaskConstants.THREE.equals(checkStatus) && TaskConstants.SECOND.equals(taskStatus) ){
+        if (TaskConstants.THREE.equals(checkStatus) && TaskConstants.SECOND.equals(taskStatus)) {
 
-           if (CollectionUtils.isNotEmpty(vo.getMktCouponPOList())){
+            if (CollectionUtils.isNotEmpty(vo.getMktCouponPOList())) {
 
-           }
-           //判断是否需要发送消息和短信
-         }
-         //已审核   待执行,创建job
-        if (TaskConstants.THREE.equals(checkStatus) && TaskConstants.FIRST.equals(taskStatus) ){
+            }
+            //判断是否需要发送消息和短信
+        }
+        //已审核   待执行,创建job
+        if (TaskConstants.THREE.equals(checkStatus) && TaskConstants.FIRST.equals(taskStatus)) {
             //判断是否需要发送消息和短信
         }
 
     }
 
-    /**
-     * 更新任务
-     */
-    @Override
-    public ResponseData<Integer> updateTask(MktTaskOrderPO po,SysAccountPO stageUser) {
-        return null;
-    }
-    /**
-     * 新增消费任务
-     */
-    public Integer  insertOrderTask(MktTaskOrderPO po,SysAccountPO stageUser){
 
-//        po.setCreateDate(TimeUtils.getNowTime());
-//        po.setCreateUserId(stageUser.getSysAccountId());
-//        po.setCreateUserName(stageUser.getName());
 
-        return  mktTaskOrderPOMapper.insertSelective(po);
-    }
-    /**
-     * 执行任务
-     * @param vo
-     * @return
-     */
-    @Override
-    public ResponseData<Integer> executeTask(TaskVO vo) {
-        return null;
-    }
 
     /**
      * 更新消费任务
+     *
      * @param stageUser
      * @return
      */
     @Override
-    public Integer updateOrderTask(MktTaskOrderPO po,SysAccountPO stageUser) {
-        po.setModifiedDate(TimeUtils.getNowTime());
-        po.setModifiedUserId(stageUser.getSysAccountId());
-        po.setCreateUserName(stageUser.getName());
+    public ResponseData updateOrderTask(TaskDetailVO vo, SysAccountPO stageUser) {
+        //        mktTaskOrderPOMapper.updateByPrimaryKeySelective(po);
+        //0.参数的检验
+        ResponseData responseData = TaskParamCheckUtil.checkParam(vo);
+        if (responseData.getCode() < 0) {
+            return responseData;
+        }
+        vo.setValid(Boolean.TRUE);
+        vo.setModifiedDate(TimeUtils.getNowTime());
+        vo.setModifiedUserName(stageUser.getName());
+        vo.setModifiedUserId(stageUser.getSysAccountId());
 
-        return  mktTaskOrderPOMapper.updateByPrimaryKeySelective(po);
+        Long mktTaskId = vo.getMktTaskId();
+       // String taskCode = vo.getTaskCode();
+        //1.任务主表修改
+        MktTaskPOWithBLOBs mktTaskPOWithBLOBs = new MktTaskPOWithBLOBs();
+        BeanUtils.copyProperties(vo, mktTaskPOWithBLOBs);
+        taskService.updateTask(mktTaskPOWithBLOBs, stageUser);
+
+        //3.任务消费表修改
+        MktTaskOrderPO mktTaskOrderPO = new MktTaskOrderPO();
+        BeanUtils.copyProperties(vo, mktTaskOrderPO);
+        this.modifieOrderTask(mktTaskOrderPO, stageUser);
+
+        //4.奖励修改 biz_type 活动类型  1=活动
+        taskCouponService.deleteTaskCoupon(mktTaskId,stageUser);
+        List<MktCouponPO> mktCouponPOList = vo.getMktCouponPOList();
+        if (CollectionUtils.isNotEmpty(mktCouponPOList)) {
+            mktCouponPOList.stream().forEach(param -> {
+                param.setBizId(mktTaskId);
+                param.setBizType(TaskConstants.TASK_TYPE);
+                taskCouponService.addTaskCoupon(param, stageUser);
+            });
+        }
+        //5.修改消息
+        List<MktMessagePO> mktmessagePOList = vo.getMktmessagePOList();
+        if (CollectionUtils.isNotEmpty(mktmessagePOList)) {
+            mktmessagePOList.stream().forEach(param -> {
+                        param.setBizId(mktTaskId);
+                        param.setBizType(TaskConstants.TASK_TYPE);
+                        taskMessageService.addTaskMessage(param, stageUser);
+                    }
+            );
+        }
+
+        responseData.setCode(SystemConstants.SUCCESS_CODE);
+        responseData.setMessage(SystemConstants.SUCCESS_MESSAGE);
+        return responseData;
+
 
     }
 
+    /**
+     * 新增消费任务
+     */
+    public Integer insertOrderTask(MktTaskOrderPO po, SysAccountPO stageUser) {
+        return mktTaskOrderPOMapper.insertSelective(po);
+    }
 
+    /**
+     * 修改
+     * @param stageUser
+     * @return
+     */
+    @Override
+    public Integer modifieOrderTask(MktTaskOrderPO po, SysAccountPO stageUser) {
+        MktTaskOrderPOExample example = new MktTaskOrderPOExample();
+        example.createCriteria().andMktTaskIdEqualTo(po.getMktTaskId()).andValidEqualTo(Boolean.TRUE);
+
+       return  mktTaskOrderPOMapper.updateByExample(po,example);
+    }
 }
