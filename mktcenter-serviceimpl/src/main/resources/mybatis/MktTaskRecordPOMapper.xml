@@ -458,4 +458,10 @@
       valid = #{valid,jdbcType=BIT}
     where mkt_task_record_id = #{mktTaskRecordId,jdbcType=BIGINT}
   </update>
+
+
+  <select id="selectCountByTime" parameterType="" resultType="">
+    SELECT
+    COUNT(member_code)
+  </select>
 </mapper>

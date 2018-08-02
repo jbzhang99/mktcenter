@@ -16,15 +16,14 @@ import com.bizvane.members.facade.service.api.IntegralRecordApiService;
 import com.bizvane.mktcenterservice.interfaces.TaskProfileService;
 import com.bizvane.mktcenterservice.models.bo.TaskBO;
 import com.bizvane.mktcenterservice.models.po.*;
-import com.bizvane.mktcenterservice.models.vo.ActivityVO;
-import com.bizvane.mktcenterservice.models.vo.MessageVO;
-import com.bizvane.mktcenterservice.models.vo.TaskVO;
+import com.bizvane.mktcenterservice.models.vo.*;
 import com.bizvane.mktcenterserviceimpl.common.enums.BusinessTypeEnum;
 import com.bizvane.mktcenterserviceimpl.common.enums.CheckStatusEnum;
 import com.bizvane.mktcenterserviceimpl.common.enums.TaskStatusEnum;
 import com.bizvane.mktcenterserviceimpl.common.enums.TaskTypeEnum;
 import com.bizvane.mktcenterserviceimpl.common.utils.CodeUtil;
 import com.bizvane.mktcenterserviceimpl.common.utils.JobUtil;
+import com.bizvane.mktcenterserviceimpl.common.utils.TaskParamCheckUtil;
 import com.bizvane.mktcenterserviceimpl.mappers.*;
 import com.bizvane.utils.commonutils.PageForm;
 import com.bizvane.utils.enumutils.SysResponseEnum;
@@ -38,6 +37,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
 import java.util.*;
+
+import static javafx.scene.input.KeyCode.L;
 
 /**
  * @author gengxiaoyu
@@ -80,6 +81,9 @@ public class TaskProfileServiceImpl implements TaskProfileService {
 
     @Autowired
     private MktCouponPOMapper mktCouponPOMapper;
+
+    @Autowired
+    private MktTaskRecordPOMapper mktTaskRecordPOMapper;
 
 
 
@@ -397,23 +401,7 @@ public class TaskProfileServiceImpl implements TaskProfileService {
     }*/
 
 
-    /**
-     * 根据时间查询完善资料的人数及发行的优惠券以及积分
-     * @param date1
-     * @param date2
-     * @return
-     */
-   @Override
-    public ResponseData<List<MktTaskRecordPO>> getTaskProfileRecordByTime(Date date1,Date date2){
-        ResponseData responseData = new ResponseData();
-        MktTaskRecordPOExample example = new MktTaskRecordPOExample();
-        MktTaskRecordPOExample.Criteria criteria = example.createCriteria();
-        criteria.andParticipateDateBetween(date1,date2);
-        List<MktTaskRecordPO> mktTaskRecordPOList = mktTaskRecordPOMapper.selectByExample(example);
-        responseData.setData(mktTaskRecordPOList);
 
-        return null;
-    }
 
 
     /**
@@ -480,10 +468,91 @@ public class TaskProfileServiceImpl implements TaskProfileService {
 
 
 
+
         return responseData;
     }
 
+    /**
+     * 效果分析
+     * @param date1
+     * @param date2
+     * @param stageUser
+     * @return
+     */
+    @Override
+    public ResponseData<TaskRecordVO> getTaskProfileRecordByTime(Date date1, Date date2,SysAccountPO stageUser){
+        ResponseData responseData = new ResponseData();
 
+
+        //根据任务类型，品牌id查询出任务得出所有参与该类型任务人数
+        MktTaskRecordPOExample example = new MktTaskRecordPOExample();
+        MktTaskRecordPOExample.Criteria criteria = example.createCriteria();
+        criteria.andTaskTypeEqualTo(TaskTypeEnum.TASK_TYPE_PROFILE.getCode()).andSysBrandIdEqualTo(stageUser.getBrandId()).andValidEqualTo(true);
+        //一、查出时间之内参与任务的总人数
+        Long countMbr = mktTaskRecordPOMapper.countByExample(example);
+        TaskRecordVO taskRecordVO = new TaskRecordVO();
+        taskRecordVO.setAllCountMbr(countMbr);
+
+
+
+        //二、算出赠送总积分
+
+        MktTaskPOExample mktTaskPOExample = new MktTaskPOExample();
+        MktTaskPOExample.Criteria criteria1 = mktTaskPOExample.createCriteria();
+        criteria1.andTaskTypeEqualTo(TaskTypeEnum.TASK_TYPE_PROFILE.getCode()).andSysBrandIdEqualTo(stageUser.getBrandId()).andValidEqualTo(true);
+
+        List<MktTaskPO> mktTaskPOList = mktTaskPOMapper.selectByExample(mktTaskPOExample);
+        MktTaskPO mktTaskPO = mktTaskPOList.get(0);
+        Integer taskPoints = mktTaskPO.getPoints();
+        Long lTaskPoints = (long)taskPoints;
+        Long allPoints = (countMbr*lTaskPoints);
+        taskRecordVO.setAllPoints(allPoints);
+
+        //三、算出赠送总券数
+        //根据taskid查出该任务赠送券数
+
+        MktCouponPOExample mktCouponPOExample = new MktCouponPOExample();
+        MktCouponPOExample.Criteria criteria2 = mktCouponPOExample.createCriteria();
+        criteria2.andBizIdEqualTo(mktTaskPO.getMktTaskId()).andValidEqualTo(true);
+        Long oneTaskCoupon = mktCouponPOMapper.countByExample(mktCouponPOExample);
+        Long allCountCoupon = countMbr*oneTaskCoupon;
+        taskRecordVO.setAllCountCoupon(allCountCoupon);
+
+        //四、已被核销的优惠券？从哪查
+
+        //五、根据日期查询
+
+
+        for (Date i = date1;i==date2;){}
+
+        List<DayTaskRecordVo> dayTaskRecordVoList = taskRecordVO.getDayTaskRecordVoList();
+
+        return responseData;
+    }
+
+    /**
+     * 添加任务记录
+     * @param vo
+     * @param memberInfoModel
+     * @return
+     */
+    public ResponseData addToRecord(TaskVO vo, MemberInfoModel memberInfoModel){
+        //将完成任务的信息添加进taskrecord表中
+        MktTaskPO mktTaskPO = mktTaskPOMapper.selectByPrimaryKey(vo.getMktTaskId());
+
+        ResponseData responseData = new ResponseData();
+        MktTaskRecordPO mktTaskRecordPO = new MktTaskRecordPO();
+
+        mktTaskRecordPO.setTaskType(TaskTypeEnum.TASK_TYPE_PROFILE.getCode());
+        mktTaskRecordPO.setTaskId(vo.getMktTaskId());
+        mktTaskRecordPO.setMemberCode(memberInfoModel.getMemberCode());
+        mktTaskRecordPO.setPoints(vo.getPoints());//奖励积分是不是也该去掉？？
+        mktTaskRecordPO.setParticipateDate(new Date());
+        BeanUtils.copyProperties(mktTaskPO,mktTaskRecordPO);
+        //是否奖励过 奖励次数？
+        mktTaskRecordPOMapper.insertSelective(mktTaskRecordPO);
+        return responseData;
+    }
 
 
 }

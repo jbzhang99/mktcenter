@@ -5,6 +5,7 @@ import com.bizvane.mktcenterservice.models.bo.TaskBO;
 import com.bizvane.mktcenterservice.models.po.MktMessagePOExample;
 import com.bizvane.mktcenterservice.models.po.MktTaskRecordPO;
 import com.bizvane.mktcenterservice.models.vo.PageForm;
+import com.bizvane.mktcenterservice.models.vo.TaskRecordVO;
 import com.bizvane.mktcenterservice.models.vo.TaskVO;
 import com.bizvane.utils.responseinfo.ResponseData;
 import com.bizvane.utils.tokens.SysAccountPO;
@@ -59,12 +60,13 @@ public interface TaskProfileService {
 //    public ResponseData getChosenExtendProperty(Long brandId);
 
     /**
-     * 根据时间查询完善资料的人数及发行的优惠券以及积分
+     * 完善资料任务效果分析
      * @param date1
      * @param date2
+     * @param stageUser
      * @return
      */
-    public ResponseData<List<MktTaskRecordPO>> getTaskProfileRecordByTime(Date date1,Date date2);
+    public ResponseData<TaskRecordVO> getTaskProfileRecordByTime(Date date1, Date date2,SysAccountPO stageUser);
 
     /**
      * 任务审核
@@ -73,5 +75,13 @@ public interface TaskProfileService {
      * @return
      */
     public ResponseData checkTaskProfile(TaskVO taskVO,SysAccountPO sysAccountPO);
+
+    /**
+     * 添加任务记录
+     * @param vo
+     * @param memberInfoModel
+     * @return
+     */
+    public ResponseData addToRecord(TaskVO vo, MemberInfoModel memberInfoModel);
 
 }

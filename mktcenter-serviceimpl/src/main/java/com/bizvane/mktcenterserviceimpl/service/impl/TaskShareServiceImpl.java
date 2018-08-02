@@ -24,15 +24,13 @@ import com.bizvane.mktcenterserviceimpl.common.enums.TaskStatusEnum;
 import com.bizvane.mktcenterserviceimpl.common.enums.TaskTypeEnum;
 import com.bizvane.mktcenterserviceimpl.common.utils.CodeUtil;
 import com.bizvane.mktcenterserviceimpl.common.utils.JobUtil;
-import com.bizvane.mktcenterserviceimpl.mappers.MktCouponPOMapper;
-import com.bizvane.mktcenterserviceimpl.mappers.MktMessagePOMapper;
-import com.bizvane.mktcenterserviceimpl.mappers.MktTaskPOMapper;
-import com.bizvane.mktcenterserviceimpl.mappers.MktTaskSharePOMapper;
+import com.bizvane.mktcenterserviceimpl.mappers.*;
 import com.bizvane.utils.enumutils.SysResponseEnum;
 import com.bizvane.utils.responseinfo.ResponseData;
 import com.bizvane.utils.tokens.SysAccountPO;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.netflix.discovery.converters.Auto;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -78,6 +76,9 @@ public class TaskShareServiceImpl implements TaskShareService {
 
     @Autowired
     private SendCouponServiceFeign sendCouponServiceFeign;
+
+    @Autowired
+    private MktTaskRecordPOMapper mktTaskRecordPOMapper;
 
     /**
      * 获取任务列表
@@ -460,10 +461,35 @@ public class TaskShareServiceImpl implements TaskShareService {
                 sendCouponServiceFeign.simple(sendCouponSimpleRequestVO);
             }
 
-        }else{
-            responseData.setMessage("未完成该任务");
-        }
+
 
         return responseData;
     }
+
+    /**
+     * 添加任务记录
+     * @param vo
+     * @param memberInfoModel
+     * @return
+     */
+    public ResponseData addToRecord(TaskVO vo, MemberInfoModel memberInfoModel){
+        //将完成任务的信息添加进taskrecord表中
+        MktTaskPO mktTaskPO = mktTaskPOMapper.selectByPrimaryKey(vo.getMktTaskId());
+
+        ResponseData responseData = new ResponseData();
+        MktTaskRecordPO mktTaskRecordPO = new MktTaskRecordPO();
+
+        mktTaskRecordPO.setTaskType(TaskTypeEnum.TASK_TYPE_SHARE.getCode());
+        mktTaskRecordPO.setTaskId(vo.getMktTaskId());
+        mktTaskRecordPO.setMemberCode(memberInfoModel.getMemberCode());
+        mktTaskRecordPO.setPoints(vo.getPoints());//奖励积分是不是也该去掉？？
+        mktTaskRecordPO.setParticipateDate(new Date());
+        BeanUtils.copyProperties(mktTaskPO,mktTaskRecordPO);
+        //是否奖励过 奖励次数？
+        mktTaskRecordPOMapper.insertSelective(mktTaskRecordPO);
+        return responseData;
+    }
+
+
+
 }
