@@ -54,7 +54,7 @@ public class CodeUtil {
     }
 
     private synchronized static  StringBuilder getRaCodedom(StringBuilder stringBuilder) throws InterruptedException {
-        Thread.sleep(10);
+        Thread.sleep(1);
         stringBuilder.append(sdf.format(new Date()));
         stringBuilder.append(Math.round(Math.random() * 9));
         return stringBuilder;
