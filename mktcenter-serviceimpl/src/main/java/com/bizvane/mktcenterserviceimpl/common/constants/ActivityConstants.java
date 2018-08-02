@@ -40,4 +40,8 @@ public class ActivityConstants {
     public static String SMART_ACTIVITY_ID_EMPTY = "活动id为空";
 
 
+    public static final String CAN_NOT_RECEIVE = "领取已超过限制，不可再领取";
+    public static final  String ERROR_SQL="操作失败";
+    public static final  String RETURN_EMPTY="数据为空";
+
 }
