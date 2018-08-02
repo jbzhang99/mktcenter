@@ -190,10 +190,11 @@ public class TaskOrderServiceImpl implements TaskOrderService {
            if (CollectionUtils.isNotEmpty(vo.getMktCouponPOList())){
 
            }
+           //判断是否需要发送消息和短信
          }
          //已审核   待执行,创建job
         if (TaskConstants.THREE.equals(checkStatus) && TaskConstants.FIRST.equals(taskStatus) ){
-
+            //判断是否需要发送消息和短信
         }
 
     }

@@ -35,18 +35,6 @@ public class ActivityBirthdayJobEndHandler extends IJobHandler {
         po.setActivityStatus(ActivityStatusEnum.ACTIVITY_STATUS_FINISHED.getCode());
         //把活动状态改成已结束
         int sum = mktActivityPOMapper.updateActivityStatus(po);
-        //删除每天那个执行的定时任务
-        //查询该活动是否已经审核
-        MktActivityPOExample examplem = new MktActivityPOExample();
-        examplem.createCriteria().andActivityCodeEqualTo(param);
-        examplem.createCriteria().andValidEqualTo(true);
-        List<MktActivityPO> mktActivityPOs = mktActivityPOMapper.selectByExample(examplem);
-        //查询job
-        XxlJobInfo xxlJobInfo = new XxlJobInfo();
-        xxlJobInfo.setExecutorParam(mktActivityPOs.get(0).getActivityCode());
-        xxlJobInfo.setBizType(BusinessTypeEnum.ACTIVITY_TYPE_ACTIVITY.getCode());
-        ResponseEntity<String> jobList =jobClient.getJobInfoByBizJob(xxlJobInfo);
-        //删除jobTODO
         returnT.setCode(0);
         returnT.setContent("活动执行完毕");
         returnT.setMsg("success");

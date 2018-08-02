@@ -224,8 +224,13 @@ public class ActivityRegisterServiceImpl implements ActivityRegisterService {
                 mktMessagePOMapper.insertSelective(mktMessagePO);
             }
         }
+        //如果执行状态为执行中 就要发送消息
+        if(mktActivityPOWithBLOBs.getActivityStatus()==ActivityStatusEnum.ACTIVITY_STATUS_EXECUTING.getCode()){
 
+        }
         //结束
+        responseData.setCode(SysResponseEnum.SUCCESS.getCode());
+        responseData.setMessage(SysResponseEnum.SUCCESS.getMessage());
         return responseData;
     }
 
@@ -275,6 +280,8 @@ public class ActivityRegisterServiceImpl implements ActivityRegisterService {
 
 
         }
+        responseData.setCode(SysResponseEnum.SUCCESS.getCode());
+        responseData.setMessage(SysResponseEnum.SUCCESS.getMessage());
         return responseData;
     }
 
@@ -419,6 +426,8 @@ public class ActivityRegisterServiceImpl implements ActivityRegisterService {
                 mktMessagePOMapper.insertSelective(mktMessagePO);
             }
         }
+        responseData.setCode(SysResponseEnum.SUCCESS.getCode());
+        responseData.setMessage(SysResponseEnum.SUCCESS.getMessage());
         return responseData;
     }
 
