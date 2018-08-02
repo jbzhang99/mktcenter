@@ -36,26 +36,38 @@ public class JobUtil {
      * @param activityCode
      */
     public  void addJob(SysAccountPO stageUser, ActivityVO activityVO,String activityCode) {
-        addJob(activityVO.getStartTime(),activityVO.getActivityInfo(),activityCode,stageUser.getName());
+        String activityJobType = JobHandlerConstants.activity;
+        int businessType =BusinessTypeEnum.ACTIVITY_TYPE_ACTIVITY.getCode();
+        addJob(activityVO.getStartTime(),activityVO.getActivityInfo(),activityCode,stageUser.getName(),activityJobType,businessType);
     }
     public  void addJobEndTime(SysAccountPO stageUser, ActivityVO activityVO, String activityCode) {
-        addJob(activityVO.getEndTime(),activityVO.getActivityInfo(),activityCode,stageUser.getName());
+        String activityJobType = JobHandlerConstants.endActivity;
+        int businessType =BusinessTypeEnum.ACTIVITY_TYPE_ACTIVITY.getCode();
+        addJob(activityVO.getEndTime(),activityVO.getActivityInfo(),activityCode,stageUser.getName(),activityJobType,businessType);
     }
     //新增生日开始job
     public  void addStratBirthdayJob(SysAccountPO stageUser, ActivityVO activityVO, String activityCode) {
-        addJob(activityVO.getStartTime(),activityVO.getActivityInfo(),activityCode,stageUser.getName());
+        String activityJobType = JobHandlerConstants.startActivityBirthday;
+        int businessType =BusinessTypeEnum.ACTIVITY_TYPE_ACTIVITY.getCode();
+        addJob(activityVO.getStartTime(),activityVO.getActivityInfo(),activityCode,stageUser.getName(),activityJobType,businessType);
     }
     //新增生日结束job
     public  void addEndBirthdayJob(SysAccountPO stageUser, ActivityVO activityVO, String activityCode) {
-        addJob(activityVO.getEndTime(),activityVO.getActivityInfo(),activityCode,stageUser.getName());
+        String activityJobType = JobHandlerConstants.endActivityBirthday;
+        int businessType =BusinessTypeEnum.ACTIVITY_TYPE_ACTIVITY.getCode();
+        addJob(activityVO.getEndTime(),activityVO.getActivityInfo(),activityCode,stageUser.getName(),activityJobType,businessType);
     }
     public  void addStartTaskJob(SysAccountPO stageUser, MktTaskPOWithBLOBs mktTaskPOWithBLOBs) {
+        String activityJobType = JobHandlerConstants.task;
+        int businessType =BusinessTypeEnum.ACTIVITY_TYPE_TASK.getCode();
         //任务状态设置为待执行:创建时为待执行=1        到结束时间时为:已结束=4
-        addJob(mktTaskPOWithBLOBs.getStartTime(),mktTaskPOWithBLOBs.getTaskInfo(),mktTaskPOWithBLOBs.getTaskCode(),stageUser.getName());
+        addJob(mktTaskPOWithBLOBs.getStartTime(),mktTaskPOWithBLOBs.getTaskInfo(),mktTaskPOWithBLOBs.getTaskCode(),stageUser.getName(),activityJobType,businessType);
     }
     public  void addEndTaskJob(SysAccountPO stageUser, MktTaskPOWithBLOBs mktTaskPOWithBLOBs) {
+        String activityJobType = JobHandlerConstants.task;
+        int businessType =BusinessTypeEnum.ACTIVITY_TYPE_TASK.getCode();
         //任务状态设置为待执行:创建时为待执行=1        到结束时间时为:已结束=4
-        addJob(mktTaskPOWithBLOBs.getEndTime(),mktTaskPOWithBLOBs.getTaskInfo(),mktTaskPOWithBLOBs.getTaskCode(),stageUser.getName());
+        addJob(mktTaskPOWithBLOBs.getEndTime(),mktTaskPOWithBLOBs.getTaskInfo(),mktTaskPOWithBLOBs.getTaskCode(),stageUser.getName(),activityJobType,businessType);
     }
 
     /**
@@ -65,7 +77,7 @@ public class JobUtil {
      * @param bizCode
      * @param author
      */
-    public void addJob(Date execuDate,String desc,String bizCode,String author){
+    public void addJob(Date execuDate,String desc,String bizCode,String author,String activityJobType,int businessType){
         //构建job对象
         XxlJobInfo xxlJobInfo = new XxlJobInfo();
         //设置appName
@@ -77,7 +89,7 @@ public class JobUtil {
         //设置运行模式
         xxlJobInfo.setGlueType(JobEnum.GLUE_TYPE_BEAN.getValue());
         //设置job处理器
-        xxlJobInfo.setExecutorHandler(JobHandlerConstants.endActivityBirthday);
+        xxlJobInfo.setExecutorHandler(activityJobType);
         //设置job描述
         xxlJobInfo.setJobDesc(desc);
         //设置执行参数
@@ -89,7 +101,7 @@ public class JobUtil {
         //设置负责人
         xxlJobInfo.setAuthor(author);
         //设置业务类型
-        xxlJobInfo.setBizType(BusinessTypeEnum.ACTIVITY_TYPE_ACTIVITY.getCode());
+        xxlJobInfo.setBizType(businessType);
         //添加job
         jobClient.addJob(xxlJobInfo);
     }
