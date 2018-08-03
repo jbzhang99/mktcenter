@@ -83,13 +83,6 @@ public class TaskProfileServiceImpl implements TaskProfileService {
     @Autowired
     private MktCouponPOMapper mktCouponPOMapper;
 
-
-
-    @Autowired
-    private TimeUtils timeUtils;
-
-
-
     /**
      * 新建完善资料任务
      * @param bo
@@ -527,7 +520,7 @@ public class TaskProfileServiceImpl implements TaskProfileService {
 
 
         List<DayTaskRecordVo> dayTaskRecordVoList = taskRecordVO.getDayTaskRecordVoList();
-        for (Date i = date1;i.after(date2);i=timeUtils.getNextDay(i)){
+        for (Date i = date1;i.after(date2);i=TimeUtils.getNextDay(i)){
             DayTaskRecordVo dayTaskRecordVo = new DayTaskRecordVo();
             //1.根据日期，任务类型，品牌id查询出任务得出所有参与该类型任务人数
 

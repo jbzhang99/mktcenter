@@ -48,7 +48,7 @@ public class TimeUtils {
        }
     }
 
-    public Date getNextDay(Date date){
+    public static Date getNextDay(Date date){
         Calendar calendar = new GregorianCalendar();
         calendar.setTime(date);
         calendar.add(Calendar.DATE,1);

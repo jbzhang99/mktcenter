@@ -17,7 +17,7 @@ import org.springframework.stereotype.Component;
  * @description
  * @Copyright (c) 2018 上海商帆信息科技有限公司-版权所有
  */
-@JobHandler(value="activity")
+@JobHandler(value="activitySmart")
 @Component
 public class ActivitySmartJobHandler extends IJobHandler {
 

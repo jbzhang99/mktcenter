@@ -22,7 +22,6 @@ import com.bizvane.mktcenterserviceimpl.common.enums.TaskStatusEnum;
 import com.bizvane.mktcenterserviceimpl.common.enums.TaskTypeEnum;
 import com.bizvane.mktcenterserviceimpl.common.utils.CodeUtil;
 import com.bizvane.mktcenterserviceimpl.common.utils.JobUtil;
-import com.bizvane.mktcenterserviceimpl.common.utils.TimeUtils;
 import com.bizvane.mktcenterserviceimpl.mappers.*;
 import com.bizvane.utils.enumutils.SysResponseEnum;
 import com.bizvane.utils.responseinfo.ResponseData;
@@ -76,9 +75,6 @@ public class TaskShareServiceImpl implements TaskShareService {
 
     @Autowired
     private MktTaskRecordPOMapper mktTaskRecordPOMapper;
-
-    @Autowired
-    private TimeUtils timeUtils;
 
     /**
      * 获取任务列表
