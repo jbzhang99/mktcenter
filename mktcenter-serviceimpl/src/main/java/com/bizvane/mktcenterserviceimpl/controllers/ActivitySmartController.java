@@ -39,7 +39,7 @@ public class ActivitySmartController {
      */
     @RequestMapping("getSmartActivityGroupList")
     public ResponseData<PageInfo<MktActivitySmartGroupPO>> getSmartActivityGroupList(ActivitySmartVO vo, PageForm pageForm){
-        return activitySmartService.getSmartActivityList(vo,pageForm);
+        return activitySmartService.getSmartActivityGroupList(vo,pageForm);
     }
 
     /**
