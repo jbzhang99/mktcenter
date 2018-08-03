@@ -1,8 +1,10 @@
 package com.bizvane.mktcenterserviceimpl.service.impl;
 
 import com.bizvane.centerstageservice.models.po.SysCheckConfigPo;
+import com.bizvane.centerstageservice.models.po.SysCheckPo;
 import com.bizvane.centerstageservice.models.vo.SysCheckConfigVo;
 import com.bizvane.centerstageservice.rpc.SysCheckConfigServiceRpc;
+import com.bizvane.centerstageservice.rpc.SysCheckServiceRpc;
 import com.bizvane.couponfacade.interfaces.SendCouponServiceFeign;
 import com.bizvane.couponfacade.models.vo.SendCouponSimpleRequestVO;
 import com.bizvane.members.facade.enums.IntegralChangeTypeEnum;
@@ -33,6 +35,7 @@ import com.github.pagehelper.PageInfo;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
 import java.util.Date;
@@ -64,6 +67,8 @@ public class ActivityUpgradeServiceImpl implements ActivityUpgradeService {
     private IntegralRecordApiService integralRecordApiService;
     @Autowired
     private SendCouponServiceFeign sendCouponServiceFeign;
+    @Autowired
+    private SysCheckServiceRpc sysCheckServiceRpc;
     /**
      * 查询升级活动列表
      * @param vo
@@ -77,6 +82,8 @@ public class ActivityUpgradeServiceImpl implements ActivityUpgradeService {
         List<ActivityVO> activityUpgradeList = mktActivityUpgradePOMapper.getActivityUpgradeList(vo);
         PageInfo<ActivityVO> pageInfo = new PageInfo<>(activityUpgradeList);
         responseData.setData(pageInfo);
+        responseData.setCode(SysResponseEnum.SUCCESS.getCode());
+        responseData.setMessage(SysResponseEnum.SUCCESS.getMessage());
         return responseData;
     }
 
@@ -87,6 +94,7 @@ public class ActivityUpgradeServiceImpl implements ActivityUpgradeService {
      * @return
      */
     @Override
+    @Transactional
     public ResponseData<Integer> addActivityUpgrade(ActivityBO bo, SysAccountPO stageUser) {
         //返回对象
         ResponseData responseData = new ResponseData();
@@ -136,14 +144,17 @@ public class ActivityUpgradeServiceImpl implements ActivityUpgradeService {
             mktActivityPOWithBLOBs.setActivityStatus(ActivityStatusEnum.ACTIVITY_STATUS_PENDING.getCode());
 
             //如果是待审核数据则需要增加一条审核数据
-            SysCheckConfigPo po = new SysCheckConfigPo();
+            SysCheckPo po = new SysCheckPo();
             po.setSysBrandId(mktActivityPOWithBLOBs.getSysBrandId());
             po.setFunctionCode(mktActivityPOWithBLOBs.getActivityCode());
-            po.setFunctionName(mktActivityPOWithBLOBs.getActivityName());
+            po.setBusinessName(mktActivityPOWithBLOBs.getActivityName());
+            po.setBusinessType(ActivityTypeEnum.ACTIVITY_TYPE_UPGRADE.getCode());
+            po.setFunctionCode("C0002");
+            po.setCheckStatus(CheckStatusEnum.CHECK_STATUS_PENDING.getCode());
             po.setCreateDate(new Date());
             po.setCreateUserId(stageUser.getSysAccountId());
             po.setCreateUserName(stageUser.getName());
-            sysCheckConfigServiceRpc.addCheckConfig(po);
+            sysCheckServiceRpc.addCheck(po);
             //getStartTime 开始时间>当前时间增加job
             if(1 != bo.getActivityVO().getLongTerm() && new Date().before(activityVO.getStartTime())){
                 //创建任务调度任务开始时间
@@ -216,6 +227,8 @@ public class ActivityUpgradeServiceImpl implements ActivityUpgradeService {
         }
 
         //结束
+        responseData.setCode(SysResponseEnum.SUCCESS.getCode());
+        responseData.setMessage(SysResponseEnum.SUCCESS.getMessage());
         return responseData;
     }
 
@@ -226,6 +239,7 @@ public class ActivityUpgradeServiceImpl implements ActivityUpgradeService {
      * @return
      */
     @Override
+    @Transactional
     public ResponseData<Integer> updateActivityUpgrade(ActivityBO bo, SysAccountPO stageUser) {
         //返回对象
         ResponseData responseData = new ResponseData();
@@ -264,14 +278,17 @@ public class ActivityUpgradeServiceImpl implements ActivityUpgradeService {
             //如果是待审核数据则需要增加一条审核数据
             //已驳回的可以新建审核
             if(activityVO.getCheckStatus() == CheckStatusEnum.CHECK_STATUS_REJECTED.getCode()){
-                SysCheckConfigPo po = new SysCheckConfigPo();
+                SysCheckPo po = new SysCheckPo();
                 po.setSysBrandId(mktActivityPOWithBLOBs.getSysBrandId());
                 po.setFunctionCode(mktActivityPOWithBLOBs.getActivityCode());
-                po.setFunctionName(mktActivityPOWithBLOBs.getActivityName());
+                po.setBusinessName(mktActivityPOWithBLOBs.getActivityName());
+                po.setBusinessType(ActivityTypeEnum.ACTIVITY_TYPE_UPGRADE.getCode());
+                po.setFunctionCode("C0002");
+                po.setCheckStatus(CheckStatusEnum.CHECK_STATUS_PENDING.getCode());
                 po.setCreateDate(new Date());
                 po.setCreateUserId(stageUser.getSysAccountId());
                 po.setCreateUserName(stageUser.getName());
-                sysCheckConfigServiceRpc.addCheckConfig(po);
+                sysCheckServiceRpc.addCheck(po);
             }
 
             //getStartTime 开始时间>当前时间增加job
@@ -353,6 +370,8 @@ public class ActivityUpgradeServiceImpl implements ActivityUpgradeService {
                 mktMessagePOMapper.insertSelective(mktMessagePO);
             }
         }
+        responseData.setCode(SysResponseEnum.SUCCESS.getCode());
+        responseData.setMessage(SysResponseEnum.SUCCESS.getMessage());
         return responseData;
     }
 
@@ -379,6 +398,7 @@ public class ActivityUpgradeServiceImpl implements ActivityUpgradeService {
      * @return
      */
     @Override
+    @Transactional
     public ResponseData<Integer> executeUpgrades(MemberInfoModel vo) {
         //返回对象
         ResponseData responseData = new ResponseData();
@@ -412,6 +432,8 @@ public class ActivityUpgradeServiceImpl implements ActivityUpgradeService {
                 sendCouponServiceFeign.simple(va);
             }
         }
+        responseData.setCode(SysResponseEnum.SUCCESS.getCode());
+        responseData.setMessage(SysResponseEnum.SUCCESS.getMessage());
         return responseData;
     }
 
@@ -422,6 +444,7 @@ public class ActivityUpgradeServiceImpl implements ActivityUpgradeService {
      * @return
      */
     @Override
+    @Transactional
     public ResponseData<Integer> checkActivityUpgrades(MktActivityPOWithBLOBs bs, SysAccountPO sysAccountPO) {
         ResponseData responseData = new ResponseData();
         bs.setModifiedUserId(sysAccountPO.getSysAccountId());
@@ -453,7 +476,8 @@ public class ActivityUpgradeServiceImpl implements ActivityUpgradeService {
             bs.setActivityStatus(ActivityStatusEnum.ACTIVITY_STATUS_FINISHED.getCode());
             int i = mktActivityPOMapper.updateByPrimaryKeySelective(bs);
         }
-
+        responseData.setCode(SysResponseEnum.SUCCESS.getCode());
+        responseData.setMessage(SysResponseEnum.SUCCESS.getMessage());
         return responseData;
     }
 }

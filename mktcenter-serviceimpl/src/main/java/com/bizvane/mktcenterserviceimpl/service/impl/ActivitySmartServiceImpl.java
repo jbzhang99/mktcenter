@@ -362,15 +362,22 @@ public class ActivitySmartServiceImpl implements ActivitySmartService {
         ResponseData responseData = new ResponseData();
 
         //关联的智能营销分组不能为空
-        if(vo.getMktActivitySmartId()==null){
+        if(vo.getMktActivitySmartGroupId()==null){
             responseData.setCode(SysResponseEnum.FAILED.getCode());
             responseData.setMessage(SysResponseEnum.MODEL_FAILED_VALIDATION.getMessage());
             return responseData;
         }
 
+/*        if(vo.getMktActivitySmartId()==null){
+            responseData.setCode(SysResponseEnum.FAILED.getCode());
+            responseData.setMessage(SysResponseEnum.MODEL_FAILED_VALIDATION.getMessage());
+            return responseData;
+        }*/
+
         vo.setCreateUserId(stageUser.getSysAccountId());
         vo.setCreateDate(new Date());
         vo.setCreateUserName(stageUser.getName());
+
 
         //生成活动编号
         String activityCode = CodeUtil.getActivityCode();
@@ -379,6 +386,10 @@ public class ActivitySmartServiceImpl implements ActivitySmartService {
         BeanUtils.copyProperties(vo,mktActivityPOWithBLOBs);
         //活动编号
         mktActivityPOWithBLOBs.setActivityCode(activityCode);
+        mktActivityPOWithBLOBs.setSysCompanyId(stageUser.getSysCompanyId());
+        mktActivityPOWithBLOBs.setSysBrandId(stageUser.getBrandId());
+        mktActivityPOWithBLOBs.setActivityType(ActivityTypeEnum.ACTIVITY_TYPE_SMART.getCode());
+
         //设置审核状态为已审核
         mktActivityPOWithBLOBs.setCheckStatus(CheckStatusEnum.CHECK_STATUS_APPROVED.getCode());
 
