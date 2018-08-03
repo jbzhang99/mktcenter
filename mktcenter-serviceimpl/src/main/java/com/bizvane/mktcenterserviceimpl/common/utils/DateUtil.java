@@ -1,6 +1,9 @@
 package com.bizvane.mktcenterserviceimpl.common.utils;
 
+import com.sun.javaws.Main;
+
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 
 /**
@@ -35,4 +38,20 @@ public class DateUtil {
         String dateFormat = "ss mm HH dd MM ? yyyy";
         return formatDateByPattern(date, dateFormat);
     }
+
+    /**
+     * 获取某天时间的零点时间
+     * @return
+     */
+    public static Date getZeroTime(){
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(new Date());
+        calendar.set(Calendar.HOUR_OF_DAY, 0);
+        calendar.set(Calendar.MINUTE, 0);
+        calendar.set(Calendar.SECOND, 0);
+        Date zero = calendar.getTime();
+        return zero;
+    }
+
+
 }

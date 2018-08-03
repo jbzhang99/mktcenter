@@ -4,6 +4,8 @@ package com.bizvane.mktcenterservice.interfaces;
 import com.bizvane.couponfacade.models.vo.CouponDetailResponseVO;
 import com.bizvane.members.facade.models.MemberInfoModel;
 import com.bizvane.mktcenterservice.models.bo.ActivityBO;
+import com.bizvane.mktcenterservice.models.po.MktActivityPOWithBLOBs;
+import com.bizvane.mktcenterservice.models.vo.ActivityManualVO;
 import com.bizvane.mktcenterservice.models.vo.ActivityVO;
 import com.bizvane.mktcenterservice.models.vo.PageForm;
 import com.bizvane.utils.responseinfo.ResponseData;
@@ -18,7 +20,7 @@ public interface ActivityManualService {
 
   ResponseData<Integer> addActivityManual(Long couponId, ActivityVO activityVO,SysAccountPO stageUser);
 
-  ResponseData<Integer> executeActivity(MemberInfoModel vo,String couponCode,Integer activityType);
+  ResponseData<Integer> executeActivity(ActivityManualVO vo);
 
   ResponseData<List<ActivityBO>> getActivityManualEffect(ActivityVO vo);
 
@@ -26,4 +28,8 @@ public interface ActivityManualService {
 
   ResponseData<List<ActivityVO>>  getActivityByMemberInfo(MemberInfoModel memberInfoModel,Integer activityType);
   ResponseData<ActivityVO>  getActivityByQrcode(MemberInfoModel memberInfoModel,String activityCode,Integer activityType);
+
+  ResponseData<Integer>  checkActivity(MktActivityPOWithBLOBs bs,SysAccountPO sysAccountPO);
+
+
 }

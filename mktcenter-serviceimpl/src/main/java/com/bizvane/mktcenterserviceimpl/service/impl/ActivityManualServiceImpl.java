@@ -1,5 +1,6 @@
 package com.bizvane.mktcenterserviceimpl.service.impl;
 
+import com.alibaba.fastjson.JSON;
 import com.bizvane.centerstageservice.models.po.SysCheckConfigPo;
 import com.bizvane.centerstageservice.models.vo.SysCheckConfigVo;
 import com.bizvane.centerstageservice.rpc.SysCheckConfigServiceRpc;
@@ -8,17 +9,23 @@ import com.bizvane.couponfacade.models.po.CouponEntityPO;
 import com.bizvane.members.facade.models.MemberInfoModel;
 import com.bizvane.mktcenterservice.interfaces.ActivityManualService;
 import com.bizvane.mktcenterservice.models.bo.ActivityBO;
+import com.bizvane.mktcenterservice.models.bo.AwardBO;
 import com.bizvane.mktcenterservice.models.po.*;
+import com.bizvane.mktcenterservice.models.vo.ActivityManualVO;
 import com.bizvane.mktcenterservice.models.vo.ActivityVO;
 import com.bizvane.mktcenterservice.models.vo.PageForm;
+import com.bizvane.mktcenterserviceimpl.common.award.Award;
 import com.bizvane.mktcenterserviceimpl.common.config.QRCodeConfig;
 import com.bizvane.mktcenterserviceimpl.common.constants.ActivityConstants;
+import com.bizvane.mktcenterserviceimpl.common.constants.ResponseConstants;
 import com.bizvane.mktcenterserviceimpl.common.constants.SystemConstants;
 import com.bizvane.mktcenterserviceimpl.common.enums.ActivityStatusEnum;
 import com.bizvane.mktcenterserviceimpl.common.enums.ActivityTypeEnum;
+import com.bizvane.mktcenterserviceimpl.common.enums.BusinessTypeEnum;
 import com.bizvane.mktcenterserviceimpl.common.enums.CheckStatusEnum;
 import com.bizvane.mktcenterserviceimpl.common.utils.ActivityParamCheckUtil;
 import com.bizvane.mktcenterserviceimpl.common.utils.CodeUtil;
+import com.bizvane.mktcenterserviceimpl.common.utils.DateUtil;
 import com.bizvane.mktcenterserviceimpl.common.utils.JobUtil;
 import com.bizvane.mktcenterserviceimpl.mappers.*;
 import com.bizvane.utils.enumutils.SysResponseEnum;
@@ -64,6 +71,10 @@ public class ActivityManualServiceImpl implements ActivityManualService {
     private CouponQueryServiceFeign couponQueryServiceFeign;
     @Autowired
     private MktMessagePOMapper mktMessagePOMapper;
+
+    @Autowired
+    private Award award;
+
     @Override
     public ResponseData<ActivityVO> getActivityManualList(ActivityVO vo, PageForm pageForm) {
         ResponseData responseData = new ResponseData();
@@ -185,7 +196,7 @@ public class ActivityManualServiceImpl implements ActivityManualService {
         MktCouponPO mktCouponPO = new MktCouponPO();
         mktCouponPO.setCouponId(couponId);
         mktCouponPO.setBizId(mktActivityId);//活动id
-        mktCouponPO.setBizType(1);//业务类型 1.活动改为枚举，不要出现魔数
+        mktCouponPO.setBizType(BusinessTypeEnum.ACTIVITY_TYPE_ACTIVITY.getCode());//业务类型 1.活动改为枚举，不要出现魔数
         mktCouponPO.setModifiedUserId(stageUser.getSysAccountId());
         mktCouponPO.setModifiedUserName(stageUser.getName());
         mktCouponPO.setModifiedDate(new Date());
@@ -205,100 +216,111 @@ public class ActivityManualServiceImpl implements ActivityManualService {
       }
     }
 
+    /**
+     * 领券
+     * @param vo
+     * @return
+     */
     @Override
-    public ResponseData<Integer> executeActivity(MemberInfoModel memberInfoModel, String couponCode,Integer activityType) {
-        log.info("领券活动-执行活动，入参:memberInfoModel-"+memberInfoModel+",couponCode:"+couponCode);
+    public ResponseData<Integer> executeActivity(ActivityManualVO vo) {
+        log.info("领券活动-执行活动，入参:memberInfoModel-"+ JSON.toJSONString(vo).toString());
         ResponseData responseData = new ResponseData();
         ActivityVO activityVO = new ActivityVO();
+        if(vo==null){
+            log.warn("参数为空");
+            responseData.setCode(SystemConstants.ERROR_CODE);
+            responseData.setMessage(SystemConstants.ERROR_MSG_PARAM_EMPTY);
+            return  responseData;
+        }
+        MemberInfoModel memberInfoModel = vo.getMemberInfoModel();
         try {
-        activityVO.setActivityStatus(ActivityStatusEnum.ACTIVITY_STATUS_EXECUTING.getCode());
-        if(null==memberInfoModel||null==memberInfoModel.getBrandId()||StringUtils.isEmpty(memberInfoModel.getMemberCode())){
-            log.warn("会员信息为空");
-            responseData.setCode(SystemConstants.ERROR_CODE);
-            responseData.setMessage(SystemConstants.ERROR_MSG_PARAM_EMPTY);
-            return  responseData;
-        }
-        if(StringUtils.isEmpty(couponCode)){
-            log.warn("领券活动-执行活动-券号为空");
-            responseData.setCode(SystemConstants.ERROR_CODE);
-            responseData.setMessage(SystemConstants.ERROR_MSG_PARAM_EMPTY);
-            return  responseData;
-        }
-        activityVO.setSysBrandId(memberInfoModel.getBrandId());
-        MktActivityRecordPO mktActivityRecordPO = new MktActivityRecordPO();
-        mktActivityRecordPO.setMemberCode(memberInfoModel.getMemberCode());
-        //查券表得到活动id
-        MktCouponPO mktCouponPO = new MktCouponPO();
-        mktCouponPO.setCouponCode(couponCode);
-        mktCouponPO.setBizType(1);
-        MktCouponPO mktCouponPO1 = mktCouponPOMapper.selectMktActivityManualId(mktCouponPO);//活动id
-        if (mktCouponPO1 == null) {
-            log.warn("领券活动-执行活动-查询券信息为空");
-            responseData.setCode(SystemConstants.ERROR_CODE);
-            responseData.setMessage(ActivityConstants.RETURN_EMPTY);
-            return responseData;
-        }
-        //查规则
-        MktActivityManualPO mktActivityManualPO = mktActivityManualPOMapper.selectByActivityId(mktCouponPO1.getBizId());
-         if(null==mktActivityManualPO){
-             log.warn("领券活动-执行活动-查询领券规则信息为空");
-             responseData.setCode(SystemConstants.ERROR_CODE);
-             responseData.setMessage(ActivityConstants.RETURN_EMPTY);
-             return responseData;
-         }
-        mktActivityRecordPO.setAcitivityId(mktActivityManualPO.getMktActivityManualId());
-        mktActivityRecordPO.setMemberCode(memberInfoModel.getMemberCode());
-        //查记录
-        int count = mktActivityRecordPOMapper.countByCondition(mktActivityRecordPO);
-        List<MktActivityRecordPO> mktActivityRecordList = mktActivityRecordPOMapper.selectActivityRecordPOList(mktActivityRecordPO);
-
-        ResponseData<CouponEntityPO> couponByCouponCode = couponQueryServiceFeign.findCouponByCouponCode(couponCode);
-        //校验是否可领取
-        activityVO.setCanReceive(true);
-        if(count==0||mktActivityRecordList.isEmpty()||0==mktActivityRecordList.size()){
-            log.info("领券活动-执行活动-该会员未领取该活动券");
-            activityVO.setCouponEntityPO(couponByCouponCode.getData());
-            responseData.setCode(SystemConstants.SUCCESS_CODE);
-            responseData.setMessage(SystemConstants.SUCCESS_MESSAGE);
-            responseData.setData(activityVO);
-            return responseData;
-        }
-        if (count > mktActivityManualPO.getPerPersonMax()) {
-            log.warn("领取超过最大限制");
-            activityVO.setCanReceive(false);
-            activityVO.setCouponEntityPO(couponByCouponCode.getData());
-            responseData.setCode(SystemConstants.SUCCESS_CODE);
-            responseData.setMessage(ActivityConstants.CAN_NOT_RECEIVE);
-            return responseData;
-        }
-        int receiveCount = 0;
-        for (MktActivityRecordPO recordPO : mktActivityRecordList) {
-            if (recordPO.getParticipateDate().compareTo(new Date()) == 0) {
-                receiveCount++;
+            if(null==memberInfoModel||null==memberInfoModel.getBrandId()||StringUtils.isEmpty(memberInfoModel.getMemberCode())){
+                log.warn("参数/品牌id/会员信息为空");
+                responseData.setCode(SystemConstants.ERROR_CODE);
+                responseData.setMessage(SystemConstants.ERROR_MSG_PARAM_EMPTY);
+                return  responseData;
             }
-        }
-        if (receiveCount > mktActivityManualPO.getPerPersonPerDayMax()) {
-            log.warn("领取超过当日最大限制");
-            activityVO.setCanReceive(false);
-            activityVO.setCouponEntityPO(couponByCouponCode.getData());
-            responseData.setCode(SystemConstants.SUCCESS_CODE);
-            responseData.setMessage(ActivityConstants.CAN_NOT_RECEIVE);
-            return responseData;
-        }
-        //todo 调券接口将会员和券绑定
-        //新增记录表
-        mktActivityRecordPO.setMemberCode(memberInfoModel.getMemberCode());
-        mktActivityRecordPO.setAcitivityId(mktActivityManualPO.getMktActivityManualId());
-        mktActivityRecordPO.setActivityType(activityType);
-        mktActivityRecordPO.setParticipateDate(new Date());
-        mktActivityRecordPO.setCreateUserId(memberInfoModel.getCreateUserId());
-        mktActivityManualPO.setCreateDate(new Date());
-        mktActivityManualPO.setCreateUserName(memberInfoModel.getCreateUserName());
-        mktActivityRecordPO.setModifiedUserId(memberInfoModel.getModifiedUserId());
-        mktActivityRecordPO.setModifiedDate(new Date());
-        mktActivityRecordPO.setModifiedUserName(memberInfoModel.getModifiedUserName());
-        log.info("领券活动-执行活动-新增记录表，入参:"+mktActivityRecordPO);
-        mktActivityRecordPOMapper.insertSelective(mktActivityRecordPO);
+            if(StringUtils.isEmpty(vo.getCouponCode())){
+                log.warn("领券活动-执行活动-券号为空");
+                responseData.setCode(SystemConstants.ERROR_CODE);
+                responseData.setMessage(SystemConstants.ERROR_MSG_PARAM_EMPTY);
+                return  responseData;
+            }
+            activityVO.setSysBrandId(memberInfoModel.getBrandId());
+            MktActivityRecordPO mktActivityRecordPO = new MktActivityRecordPO();
+            mktActivityRecordPO.setMemberCode(memberInfoModel.getMemberCode());
+
+            //查规则
+            MktActivityManualPOExample mktActivityManualPOExample = new MktActivityManualPOExample();
+            mktActivityManualPOExample.createCriteria().andValidEqualTo(Boolean.TRUE).andMktActivityIdEqualTo(vo.getMktActivityId());
+            List<MktActivityManualPO> mktActivityManualPOS = mktActivityManualPOMapper.selectByExampleWithBLOBs(mktActivityManualPOExample);
+            if(CollectionUtils.isEmpty(mktActivityManualPOS)){
+                log.warn("领券活动-执行活动-查询领券规则信息为空");
+                responseData.setCode(SystemConstants.ERROR_CODE);
+                responseData.setMessage(ActivityConstants.RETURN_EMPTY);
+                return responseData;
+            }
+            MktActivityManualPO mktActivityManualPO = mktActivityManualPOS.get(0);
+            mktActivityRecordPO.setAcitivityId(mktActivityManualPO.getMktActivityManualId());
+            mktActivityRecordPO.setMemberCode(memberInfoModel.getMemberCode());
+            //查记录
+            int count = mktActivityRecordPOMapper.countByCondition(mktActivityRecordPO);
+            List<MktActivityRecordPO> mktActivityRecordList = mktActivityRecordPOMapper.selectActivityRecordPOList(mktActivityRecordPO);
+
+            ResponseData<CouponEntityPO> couponByCouponCode = couponQueryServiceFeign.findCouponByCouponCode(vo.getCouponCode());
+            //校验是否可领取
+            activityVO.setCanReceive(true);
+            if(count==0||CollectionUtils.isEmpty(mktActivityRecordList)){
+                log.info("领券活动-执行活动-该会员未领取该活动券");
+                activityVO.setCouponEntityPO(couponByCouponCode.getData());
+                responseData.setCode(SystemConstants.SUCCESS_CODE);
+                responseData.setMessage(SystemConstants.SUCCESS_MESSAGE);
+                responseData.setData(activityVO);
+                return responseData;
+            }
+            if (count > mktActivityManualPO.getPerPersonMax()) {
+                log.warn("领取超过最大限制");
+                activityVO.setCanReceive(false);
+                activityVO.setCouponEntityPO(couponByCouponCode.getData());
+                responseData.setCode(SystemConstants.SUCCESS_CODE);
+                responseData.setMessage(ActivityConstants.CAN_NOT_RECEIVE);
+                return responseData;
+            }
+            int receiveCount = 0;
+            for (MktActivityRecordPO recordPO : mktActivityRecordList) {
+                if (new Date().after(recordPO.getParticipateDate()) && (DateUtil.getZeroTime()).before(recordPO.getParticipateDate())) {
+                    receiveCount++;
+                }
+            }
+            if (receiveCount > mktActivityManualPO.getPerPersonPerDayMax()) {
+                log.warn("领取超过当日最大限制");
+                activityVO.setCanReceive(false);
+                activityVO.setCouponEntityPO(couponByCouponCode.getData());
+                responseData.setCode(SystemConstants.SUCCESS_CODE);
+                responseData.setMessage(ActivityConstants.CAN_NOT_RECEIVE);
+                return responseData;
+            }
+
+            //发券
+            AwardBO awardBO = new AwardBO();
+            awardBO.setCouponDefinitionId(vo.getCouponId());
+            awardBO.setMemberCode(vo.getMemberInfoModel().getMemberCode());
+            awardBO.setSendBussienId(vo.getMktActivityId());
+            award.execute(awardBO);
+
+            //新增记录表
+            mktActivityRecordPO.setMemberCode(memberInfoModel.getMemberCode());
+            mktActivityRecordPO.setAcitivityId(mktActivityManualPO.getMktActivityManualId());
+            mktActivityRecordPO.setActivityType(vo.getActivityType());
+            mktActivityRecordPO.setParticipateDate(new Date());
+            mktActivityRecordPO.setCreateUserId(memberInfoModel.getCreateUserId());
+            mktActivityManualPO.setCreateDate(new Date());
+            mktActivityManualPO.setCreateUserName(memberInfoModel.getCreateUserName());
+            mktActivityRecordPO.setModifiedUserId(memberInfoModel.getModifiedUserId());
+            mktActivityRecordPO.setModifiedDate(new Date());
+            mktActivityRecordPO.setModifiedUserName(memberInfoModel.getModifiedUserName());
+            log.info("领券活动-执行活动-新增记录表，入参:"+mktActivityRecordPO);
+            mktActivityRecordPOMapper.insertSelective(mktActivityRecordPO);
         }catch (Exception e){
             log.error("领券活动-执行活动-出错:"+e.getMessage());
             responseData.setCode(SystemConstants.ERROR_CODE);
@@ -354,31 +376,12 @@ public class ActivityManualServiceImpl implements ActivityManualService {
             return  responseData;
         }
         try {
-        ActivityVO vo = new ActivityVO();
-        vo.setActivityCode(businessCode);
-        log.info("领券活动-查询活动详情-getActivityList入参:"+vo);
-        List<ActivityVO> activityManualList = mktActivityManualPOMapper.getActivityList(vo);
-        log.info("领券活动-查询活动详情-出参:"+activityManualList);
-            //查询活动卷
-            MktCouponPOExample example = new  MktCouponPOExample();
-            example.createCriteria().andBizIdEqualTo(activityManualList.get(0).getMktActivityId());
-            example.createCriteria().andValidEqualTo(true);
-            List<MktCouponPO> mktCouponPOs= mktCouponPOMapper.selectByExample(example);
-            //查询消息模板
-            MktMessagePOExample exampl = new MktMessagePOExample();
-            example.createCriteria().andBizIdEqualTo(activityManualList.get(0).getMktActivityId());
-            List<MktMessagePO> listMktMessage = mktMessagePOMapper.selectByExample(exampl);
-            ActivityBO bo = new ActivityBO();
-            if(CollectionUtils.isEmpty(activityManualList)){
-                bo.setActivityVO(activityManualList.get(0));
-            }
-            if(CollectionUtils.isEmpty(mktCouponPOs)){
-                bo.setCouponCodeList(mktCouponPOs);
-            }
-            if(CollectionUtils.isEmpty(listMktMessage)){
-                bo.setMessageVOList(listMktMessage);
-            }
-        responseData.setData(activityManualList);
+            ActivityVO vo = new ActivityVO();
+            vo.setActivityCode(businessCode);
+            log.info("领券活动-查询活动详情-getActivityList入参:"+vo);
+            List<ActivityVO> activityManualList = mktActivityManualPOMapper.getActivityList(vo);
+            log.info("领券活动-查询活动详情-出参:"+activityManualList);
+            responseData.setData(activityManualList);
         }catch (Exception e){
             log.error("领券活动-查询活动详情出错"+e.getMessage());
             responseData.setCode(SystemConstants.ERROR_CODE);
@@ -424,7 +427,7 @@ public class ActivityManualServiceImpl implements ActivityManualService {
             log.info("查询活动，入参:"+activityVO);
           List<ActivityVO> activityList = mktActivityManualPOMapper.getActivityIdList(activityVO);
              log.info("查询活动，出参:"+activityList);
-             if(activityList.isEmpty()&&0==activityList.size()){
+             if(CollectionUtils.isEmpty(activityList)){
                  log.warn("查询活动为空");
                  responseData.setCode(SystemConstants.SUCCESS_CODE);
                  responseData.setMessage("查询领券中心活动为空");
@@ -434,7 +437,7 @@ public class ActivityManualServiceImpl implements ActivityManualService {
             //2.查询活动对应的所有券
             MktCouponPO couponPO = new MktCouponPO();
             couponPO.setBizId(activityVO1.getMktActivityId());
-            couponPO.setBizType(1);
+            couponPO.setBizType(BusinessTypeEnum.ACTIVITY_TYPE_ACTIVITY.getCode());
             MktCouponPO mktCouponPO = mktCouponPOMapper.selectMktActivityManualId(couponPO);
             if(null==mktCouponPO){
                 log.warn("领券中心活动对应的券为空");
@@ -445,7 +448,7 @@ public class ActivityManualServiceImpl implements ActivityManualService {
             log.info("couponQueryServiceFeign.findCouponByCouponCode--->入参为:"+mktCouponPO.getCouponCode());
             ResponseData<CouponEntityPO> couponByCouponCode = couponQueryServiceFeign.findCouponByCouponCode(mktCouponPO.getCouponCode());
            log.info("couponQueryServiceFeign.findCouponByCouponCode--->出参为:"+couponByCouponCode);
-           if(couponByCouponCode.getCode()==-1){
+           if(!ResponseConstants.SUCCESS.equals(couponByCouponCode.getCode())){
             log.warn("couponQueryServiceFeign.findCouponByCouponCode--->出错:"+couponByCouponCode.getMessage());
                responseData.setCode(SystemConstants.ERROR_CODE);
                responseData.setMessage(couponByCouponCode.getMessage());
@@ -465,7 +468,7 @@ public class ActivityManualServiceImpl implements ActivityManualService {
             log.info("记录中查到的已领取数量:"+count);
             List<MktActivityRecordPO> mktActivityRecordList = mktActivityRecordPOMapper.selectActivityRecordPOList(mktActivityRecordPO);
            log.info("记录表中查到已领取的list:"+mktActivityRecordList);
-           if(0==count||mktActivityRecordList.isEmpty()){
+           if(0==count||CollectionUtils.isEmpty(mktActivityRecordList)){
                log.info("该会员未领取该活动券");
                activityVO1.setCouponEntityPO(couponByCouponCode.getData());
                responseData.setCode(SystemConstants.SUCCESS_CODE);
@@ -475,7 +478,7 @@ public class ActivityManualServiceImpl implements ActivityManualService {
             //校验今日已领取的
             int receiveCount = 0;
             for (MktActivityRecordPO recordPO : mktActivityRecordList) {
-                if (recordPO.getParticipateDate().compareTo(new Date()) == 0) {
+                if (new Date().after(recordPO.getParticipateDate()) && (DateUtil.getZeroTime()).before(recordPO.getParticipateDate())) {
                     receiveCount++;
                 }
             }
@@ -529,7 +532,7 @@ public class ActivityManualServiceImpl implements ActivityManualService {
             activityVO.setActivityType(activityType);
             log.info("领券活动-扫码领券-入参activityVO:"+activityVO);
             List<ActivityVO> activityVOList1 = mktActivityManualPOMapper.getActivityIdList(activityVO);
-            if (activityVOList1.isEmpty()) {
+            if (activityVOList1.isEmpty()||0==activityVOList1.size()) {
                 log.warn("领券活动-查询扫码领券活动为空");
                 responseData.setCode(SystemConstants.SUCCESS_CODE);
                 responseData.setMessage(ActivityConstants.RETURN_EMPTY);
@@ -539,7 +542,7 @@ public class ActivityManualServiceImpl implements ActivityManualService {
             //2.查询活动对应的所有券
             MktCouponPO couponPO = new MktCouponPO();
             couponPO.setBizId(activityVO.getMktActivityId());
-            couponPO.setBizType(1);
+            couponPO.setBizType(BusinessTypeEnum.ACTIVITY_TYPE_ACTIVITY.getCode());
             log.info("领券活动-扫码领券-入参couponPO:"+couponPO);
             MktCouponPO mktCouponPO = mktCouponPOMapper.selectMktActivityManualId(couponPO);
             log.info("couponQueryServiceFeign.findCouponByCouponCode---入参:"+mktCouponPO.getCouponCode());
@@ -554,7 +557,7 @@ public class ActivityManualServiceImpl implements ActivityManualService {
             log.info("记录中查到的已领取数量:"+count);
             List<MktActivityRecordPO> mktActivityRecordList = mktActivityRecordPOMapper.selectActivityRecordPOList(mktActivityRecordPO);
             log.info("记录表中查到已领取的list:"+mktActivityRecordList);
-            activityVO.setCanReceive(true);
+            activityVO.setCanReceive(Boolean.TRUE);
             if(0==count||mktActivityRecordList.isEmpty()){
                 log.info("该会员未领取该活动券");
                 activityVO.setCouponEntityPO(couponByCouponCode.getData());
@@ -565,7 +568,7 @@ public class ActivityManualServiceImpl implements ActivityManualService {
             //校验今日已领取的
             int receiveCount = 0;
             for (MktActivityRecordPO recordPO : mktActivityRecordList) {
-                if (recordPO.getParticipateDate().compareTo(new Date()) == 0) {
+                if (new Date().after(recordPO.getParticipateDate()) && (DateUtil.getZeroTime()).before(recordPO.getParticipateDate())) {
                     receiveCount++;
                 }
             }
@@ -586,6 +589,26 @@ public class ActivityManualServiceImpl implements ActivityManualService {
             responseData.setMessage("查询领券中心出错");
         }
         //4.返回所有券列表及是否可领取
+        responseData.setCode(SystemConstants.SUCCESS_CODE);
+        responseData.setMessage(SystemConstants.SUCCESS_MESSAGE);
+        return responseData;
+    }
+
+    /**
+     * 审核
+     * @param bs
+     * @param sysAccountPO
+     * @return
+     */
+    @Override
+    public ResponseData<Integer> checkActivity(MktActivityPOWithBLOBs bs, SysAccountPO sysAccountPO) {
+        ResponseData responseData = new ResponseData();
+        MktActivityPOExample mktActivityPOExample = new MktActivityPOExample();
+        mktActivityPOExample.createCriteria().andValidEqualTo(Boolean.TRUE).andActivityCodeEqualTo(bs.getActivityCode());
+        mktActivityPOMapper.updateByExampleSelective(bs,mktActivityPOExample);
+
+        //todo 调用中台审核接口更改此单据状态
+
         responseData.setCode(SystemConstants.SUCCESS_CODE);
         responseData.setMessage(SystemConstants.SUCCESS_MESSAGE);
         return responseData;

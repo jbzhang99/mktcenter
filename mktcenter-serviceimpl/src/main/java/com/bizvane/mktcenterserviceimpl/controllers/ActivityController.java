@@ -33,6 +33,9 @@ public class ActivityController {
     @Autowired
     private ActivityBirthdayService activityBirthdayService;
 
+    @Autowired
+    private ActivityManualService activityManualService;
+
     /**
      * 禁用/启用活动
      * @param vo
@@ -62,23 +65,28 @@ public class ActivityController {
 //        SysAccountPO stageUser = TokenUtils.getStageUser(request);
         //开卡活动审核
         if(bs.getActivityType()==ActivityTypeEnum.ACTIVITY_TYPE_REGISGER.getCode()){
-            ResponseData<Integer> integerResponseData = activityService.checkActivityById(bs, stageUser);
+            responseData = activityService.checkActivityById(bs, stageUser);
         }
         //会员升级活动审核
         if(bs.getActivityType()==ActivityTypeEnum.ACTIVITY_TYPE_UPGRADE.getCode()){
-            ResponseData<Integer> integerResponseData = activityUpgradeService.checkActivityUpgrades(bs,stageUser);
+            responseData = activityUpgradeService.checkActivityUpgrades(bs,stageUser);
         }
         //会员生日活动
         if(bs.getActivityType()==ActivityTypeEnum.ACTIVITY_TYPE_BIRTHDAY.getCode()){
-            ResponseData<Integer> integerResponseData = activityBirthdayService.checkActivityBirthday(bs,stageUser);
+            responseData = activityBirthdayService.checkActivityBirthday(bs,stageUser);
         }
         //会员消费活动审核
         if(bs.getActivityType()==ActivityTypeEnum.ACTIVITY_TYPE_ORDER.getCode()){
-            ResponseData<Integer> integerResponseData =activityOrderService.checkActivityOrder(bs,stageUser);
+            responseData =activityOrderService.checkActivityOrder(bs,stageUser);
         }
         //会员签到活动审核
         if(bs.getActivityType()==ActivityTypeEnum.ACTIVITY_TYPE_SIGNIN.getCode()){
-            ResponseData<Integer> integerResponseData = activitySigninService.checkActivitySignin(bs,stageUser);
+            responseData = activitySigninService.checkActivitySignin(bs,stageUser);
+
+        }
+        //扫码领券&手动领券审核
+        if(bs.getActivityType()==ActivityTypeEnum.ACTIVITY_TYPE_QRCODE.getCode()||bs.getActivityType()==ActivityTypeEnum.ACTIVITY_TYPE_MANUAL.getCode()){
+            responseData = activityManualService.checkActivity(bs,stageUser);
 
         }
         return responseData;

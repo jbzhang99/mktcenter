@@ -103,5 +103,4 @@ public interface MktActivityManualPOMapper {
     List<ActivityVO> getActivityList(ActivityVO vo);
 
     List<ActivityVO> getActivityIdList(ActivityVO vo);
-	MktActivityManualPO selectByActivityId(Long mktActivityId);
 }

@@ -670,9 +670,4 @@ WHERE
     </if>
   </select>
 
-  <select id="selectByActivityId" parameterType="java.lang.Long" resultType="com.bizvane.mktcenterservice.models.po.MktActivityManualPO">
-    select
-    <include refid="Base_Column_List" /> from t_mkt_activity_manual where valid=1 and mkt_activity_id = #{_parameter}
-
-  </select>
 </mapper>
