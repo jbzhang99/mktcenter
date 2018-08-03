@@ -43,7 +43,7 @@ import java.util.List;
  * @Copyright (c) 2018 上海商帆信息科技有限公司-版权所有
  */
 @Service
-public class TaskInviteImpl implements TaskInviteService {
+public class TaskInviteServiceImpl implements TaskInviteService {
     @Autowired
     protected TaskService taskService;
 
