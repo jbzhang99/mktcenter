@@ -112,13 +112,12 @@ public interface ActivitySmartService {
      * @param vo
      * @return
      */
-    public ResponseData<Integer> addSmsActivity(ActivitySmartVO vo, MessageVO messageVO, SysAccountPO stageUser);
+    public ResponseData<Integer> addMessageActivity(ActivitySmartVO vo, MessageVO messageVO, SysAccountPO stageUser);
 
     /**
-     * 对某个智能营销组创建任务
-     * 任务类型：4微信模板消息营销
-     * @param vo
+     * 执行活动
+     * @param activityCode
      * @return
      */
-    public ResponseData<Integer> addTemplateMsgActivity(ActivitySmartVO vo, MessageVO messageVO, SysAccountPO stageUser);
+    public ResponseData<Integer> execute(Integer mktSmartType,String activityCode);
 }

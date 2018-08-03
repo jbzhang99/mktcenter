@@ -94,4 +94,44 @@ public class ActivityServiceImpl implements ActivityService {
         responseData.setMessage(SysResponseEnum.SUCCESS.getMessage());
         return responseData;
     }
+
+    /**
+     * 奖励券
+     * @param activityCode
+     * @return
+     */
+    public ResponseData<Integer> awardCoupon(String activityCode){
+        ResponseData responseData = new ResponseData();
+        return responseData;
+    }
+
+    /**
+     * 奖励积分
+     * @param activityCode
+     * @return
+     */
+    public ResponseData<Integer> awardIntegral(String activityCode){
+        ResponseData responseData = new ResponseData();
+        return responseData;
+    }
+
+    /**
+     * 发送短信
+     * @param activityCode
+     * @return
+     */
+    public ResponseData<Integer> sendSms(String activityCode){
+        ResponseData responseData = new ResponseData();
+        return responseData;
+    }
+
+    /**
+     * 发送模板消息
+     * @param activityCode
+     * @return
+     */
+    public ResponseData<Integer> sendWxTemplateMessage(String activityCode){
+        ResponseData responseData = new ResponseData();
+        return responseData;
+    }
 }

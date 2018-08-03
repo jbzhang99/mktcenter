@@ -12,7 +12,8 @@ public enum MktSmartTypeEnum {
     SMART_TYPE_COUPON(1,"优惠券营销"),
     SMART_TYPE_INTEGRAL(2,"积分营销"),
     SMART_TYPE_SMS(3,"短信营销"),
-    SMART_TYPE_WXMESSAGE(4,"微信模板消息营销");
+    SMART_TYPE_WXMESSAGE(4,"微信模板消息营销"),
+    SMART_TYPE_MESSAGE(5,"短信营销/微信模板消息营销");
 
     private int code;
     private String message;

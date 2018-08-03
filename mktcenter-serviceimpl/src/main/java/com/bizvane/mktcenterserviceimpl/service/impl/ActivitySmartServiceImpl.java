@@ -142,7 +142,11 @@ public class ActivitySmartServiceImpl implements ActivitySmartService {
         }
 
         MktSmartTypeEnum mktSmartTypeEnum = MktSmartTypeEnum.getMktSmartTypeEnumByCode(mktSmartType);
-
+        if(mktSmartTypeEnum==null){
+            responseData.setCode(SysResponseEnum.FAILED.getCode());
+            responseData.setMessage(SysResponseEnum.MODEL_FAILED_VALIDATION.getMessage());
+            return responseData;
+        }
         switch (mktSmartTypeEnum){
             case SMART_TYPE_COUPON:
                 responseData =getCouponActivityDetailById(mktActivityId);
@@ -350,7 +354,7 @@ public class ActivitySmartServiceImpl implements ActivitySmartService {
     }
 
     /**
-     * 对某个智能营销组创建任务，需要给mktSmartActivityId
+     * 对某个智能营销组创建任务，需要给mktSmartActivityGroupId
      * 任务类型：1优惠券营销
      * @return
      */
@@ -365,16 +369,9 @@ public class ActivitySmartServiceImpl implements ActivitySmartService {
             return responseData;
         }
 
-/*        if(vo.getMktActivitySmartId()==null){
-            responseData.setCode(SysResponseEnum.FAILED.getCode());
-            responseData.setMessage(SysResponseEnum.MODEL_FAILED_VALIDATION.getMessage());
-            return responseData;
-        }*/
-
         vo.setCreateUserId(stageUser.getSysAccountId());
         vo.setCreateDate(new Date());
         vo.setCreateUserName(stageUser.getName());
-
 
         //生成活动编号
         String activityCode = CodeUtil.getActivityCode();
@@ -387,37 +384,45 @@ public class ActivitySmartServiceImpl implements ActivitySmartService {
         mktActivityPOWithBLOBs.setSysBrandId(stageUser.getBrandId());
         mktActivityPOWithBLOBs.setActivityType(ActivityTypeEnum.ACTIVITY_TYPE_SMART.getCode());
 
-        //设置审核状态为已审核
-        mktActivityPOWithBLOBs.setCheckStatus(CheckStatusEnum.CHECK_STATUS_APPROVED.getCode());
-
+        Boolean execute = Boolean.FALSE;
         //如果活动时间滞后
         if(new Date().before(vo.getStartTime())){
             //活动状态设置为待执行
             mktActivityPOWithBLOBs.setActivityStatus(ActivityStatusEnum.ACTIVITY_STATUS_PENDING.getCode());
-            //创建任务调度任务开始时间
-//            jobUtil.addJob(stageUser,vo,activityCode);
-            //创建任务调度任务结束时间
-//            jobUtil.addJobEndTime(stageUser,vo,activityCode);
+            //创建任务调度
+            jobUtil.addSmartActivityJob(stageUser,vo);
         }else{
             //活动状态设置为执行中
             mktActivityPOWithBLOBs.setActivityStatus(ActivityStatusEnum.ACTIVITY_STATUS_EXECUTING.getCode());
+            //需要立即执行
+            execute = Boolean.TRUE;
         }
         //新增活动主表
         mktActivityPOMapper.insertSelective(mktActivityPOWithBLOBs);
+        //获取新增后数据id
+        Long mktActivityId = mktActivityPOWithBLOBs.getMktActivityId();
+
         //新增智能营销表
         MktActivitySmartPO mktActivitySmartPO = new MktActivitySmartPO();
         BeanUtils.copyProperties(vo,mktActivitySmartPO);
+        mktActivitySmartPO.setMktActivityId(mktActivityId);
         mktActivitySmartPOMapper.insertSelective(mktActivitySmartPO);
-
-        //获取新增后数据id
-        Long mktActivityId = mktActivityPOWithBLOBs.getMktActivityId();
 
         //新增奖励券表
         if(!CollectionUtils.isEmpty(couponCodeList)){
             for(MktCouponPO mktCouponPO : couponCodeList){
+                mktCouponPO.setBizType(BusinessTypeEnum.ACTIVITY_TYPE_ACTIVITY.getCode());
+                mktCouponPO.setBizId(mktActivityId);
+                mktCouponPO.setCreateDate(new Date());
+                mktCouponPO.setCreateUserId(stageUser.getSysAccountId());
+                mktCouponPO.setCreateUserName(stageUser.getName());
                 mktCouponPOMapper.insertSelective(mktCouponPO);
             }
         }
+
+        //执行
+        execute(MktSmartTypeEnum.SMART_TYPE_COUPON.getCode(),activityCode);
+
         responseData.setMessage(ResponseConstants.SUCCESS_MSG);
         return responseData;
     }
@@ -432,19 +437,54 @@ public class ActivitySmartServiceImpl implements ActivitySmartService {
     public ResponseData<Integer> addIntegralActivity(ActivitySmartVO vo, SysAccountPO stageUser) {
         ResponseData responseData = new ResponseData();
 
+        //关联的智能营销分组不能为空
+        if(vo.getMktActivitySmartGroupId()==null){
+            responseData.setCode(SysResponseEnum.FAILED.getCode());
+            responseData.setMessage(SysResponseEnum.MODEL_FAILED_VALIDATION.getMessage());
+            return responseData;
+        }
+
         vo.setCreateUserId(stageUser.getSysAccountId());
         vo.setCreateDate(new Date());
         vo.setCreateUserName(stageUser.getName());
 
-        //新增活动主表
+        //生成活动编号
+        String activityCode = CodeUtil.getActivityCode();
+        //拷贝属性
         MktActivityPOWithBLOBs mktActivityPOWithBLOBs = new MktActivityPOWithBLOBs();
         BeanUtils.copyProperties(vo,mktActivityPOWithBLOBs);
+        //活动编号
+        mktActivityPOWithBLOBs.setActivityCode(activityCode);
+        mktActivityPOWithBLOBs.setSysCompanyId(stageUser.getSysCompanyId());
+        mktActivityPOWithBLOBs.setSysBrandId(stageUser.getBrandId());
+        mktActivityPOWithBLOBs.setActivityType(ActivityTypeEnum.ACTIVITY_TYPE_SMART.getCode());
+
+        Boolean execute = Boolean.FALSE;
+        //如果活动时间滞后
+        if(new Date().before(vo.getStartTime())){
+            //活动状态设置为待执行
+            mktActivityPOWithBLOBs.setActivityStatus(ActivityStatusEnum.ACTIVITY_STATUS_PENDING.getCode());
+            //创建任务调度
+            jobUtil.addSmartActivityJob(stageUser,vo);
+        }else{
+            //活动状态设置为执行中
+            mktActivityPOWithBLOBs.setActivityStatus(ActivityStatusEnum.ACTIVITY_STATUS_EXECUTING.getCode());
+            //需要立即执行
+            execute = Boolean.TRUE;
+        }
+        //新增活动主表
         mktActivityPOMapper.insertSelective(mktActivityPOWithBLOBs);
+        //获取新增后数据id
+        Long mktActivityId = mktActivityPOWithBLOBs.getMktActivityId();
 
         //新增智能营销表
         MktActivitySmartPO mktActivitySmartPO = new MktActivitySmartPO();
         BeanUtils.copyProperties(vo,mktActivitySmartPO);
+        mktActivitySmartPO.setMktActivityId(mktActivityId);
         mktActivitySmartPOMapper.insertSelective(mktActivitySmartPO);
+
+        //执行
+        execute(MktSmartTypeEnum.SMART_TYPE_INTEGRAL.getCode(),activityCode);
 
         responseData.setMessage(ResponseConstants.SUCCESS_MSG);
         return responseData;
@@ -452,67 +492,97 @@ public class ActivitySmartServiceImpl implements ActivitySmartService {
 
     /**
      * 对某个智能营销组创建任务
-     * 任务类型：3短信营销
+     * 任务类型：3短信营销/4微信模板消息营销
      * @param vo
      * @return
      */
     @Override
-    public ResponseData<Integer> addSmsActivity(ActivitySmartVO vo, MessageVO messageVO, SysAccountPO stageUser) {
+    public ResponseData<Integer> addMessageActivity(ActivitySmartVO vo, MessageVO messageVO, SysAccountPO stageUser) {
         ResponseData responseData = new ResponseData();
+
+        //关联的智能营销分组不能为空
+        if(vo.getMktActivitySmartGroupId()==null){
+            responseData.setCode(SysResponseEnum.FAILED.getCode());
+            responseData.setMessage(SysResponseEnum.MODEL_FAILED_VALIDATION.getMessage());
+            return responseData;
+        }
 
         vo.setCreateUserId(stageUser.getSysAccountId());
         vo.setCreateDate(new Date());
         vo.setCreateUserName(stageUser.getName());
 
-        //新增活动主表
+        //生成活动编号
+        String activityCode = CodeUtil.getActivityCode();
+        //拷贝属性
         MktActivityPOWithBLOBs mktActivityPOWithBLOBs = new MktActivityPOWithBLOBs();
         BeanUtils.copyProperties(vo,mktActivityPOWithBLOBs);
+        //活动编号
+        mktActivityPOWithBLOBs.setActivityCode(activityCode);
+        mktActivityPOWithBLOBs.setSysCompanyId(stageUser.getSysCompanyId());
+        mktActivityPOWithBLOBs.setSysBrandId(stageUser.getBrandId());
+        mktActivityPOWithBLOBs.setActivityType(ActivityTypeEnum.ACTIVITY_TYPE_SMART.getCode());
+
+        Boolean execute = Boolean.FALSE;
+        //如果活动时间滞后
+        if(new Date().before(vo.getStartTime())){
+            //活动状态设置为待执行
+            mktActivityPOWithBLOBs.setActivityStatus(ActivityStatusEnum.ACTIVITY_STATUS_PENDING.getCode());
+            //创建任务调度
+            jobUtil.addSmartActivityJob(stageUser,vo);
+        }else{
+            //活动状态设置为执行中
+            mktActivityPOWithBLOBs.setActivityStatus(ActivityStatusEnum.ACTIVITY_STATUS_EXECUTING.getCode());
+            //需要立即执行
+            execute = Boolean.TRUE;
+        }
+        //新增活动主表
         mktActivityPOMapper.insertSelective(mktActivityPOWithBLOBs);
+        //获取新增后数据id
+        Long mktActivityId = mktActivityPOWithBLOBs.getMktActivityId();
 
         //新增智能营销表
         MktActivitySmartPO mktActivitySmartPO = new MktActivitySmartPO();
         BeanUtils.copyProperties(vo,mktActivitySmartPO);
+        mktActivitySmartPO.setMktActivityId(mktActivityId);
         mktActivitySmartPOMapper.insertSelective(mktActivitySmartPO);
 
         //新增消息表
         MktMessagePO mktMessagePO = new MktMessagePO();
-        BeanUtils.copyProperties(vo,mktMessagePO);
+        mktMessagePO.setBizType(BusinessTypeEnum.ACTIVITY_TYPE_ACTIVITY.getCode());
+        mktMessagePO.setBizId(mktActivityId);
+        mktMessagePO.setCreateDate(new Date());
+        mktMessagePO.setCreateUserId(stageUser.getSysAccountId());
+        mktMessagePO.setCreateUserName(stageUser.getName());
         mktMessagePOMapper.insertSelective(mktMessagePO);
+
+        //执行
+        execute(MktSmartTypeEnum.SMART_TYPE_MESSAGE.getCode(),activityCode);
 
         responseData.setMessage(ResponseConstants.SUCCESS_MSG);
         return responseData;
     }
 
     /**
-     * 对某个智能营销组创建任务
-     * 任务类型：4微信模板消息营销
-     * @param vo
+     * 执行job
+     * @param mktSmartType
+     * @param activityCode
      * @return
      */
     @Override
-    public ResponseData<Integer> addTemplateMsgActivity(ActivitySmartVO vo, MessageVO messageVO, SysAccountPO stageUser) {
+    public ResponseData<Integer> execute(Integer mktSmartType,String activityCode) {
         ResponseData responseData = new ResponseData();
+        MktSmartTypeEnum mktSmartTypeEnum = MktSmartTypeEnum.getMktSmartTypeEnumByCode(mktSmartType);
 
-        vo.setCreateUserId(stageUser.getSysAccountId());
-        vo.setCreateDate(new Date());
-        vo.setCreateUserName(stageUser.getName());
+        if(mktSmartTypeEnum==null){
+            responseData.setCode(SysResponseEnum.FAILED.getCode());
+            responseData.setMessage(SysResponseEnum.MODEL_FAILED_VALIDATION.getMessage());
+            return responseData;
+        }
 
-        //新增活动主表
-        MktActivityPOWithBLOBs mktActivityPOWithBLOBs = new MktActivityPOWithBLOBs();
-        BeanUtils.copyProperties(vo,mktActivityPOWithBLOBs);
-        mktActivityPOMapper.insertSelective(mktActivityPOWithBLOBs);
-
-        //新增智能营销表
-        MktActivitySmartPO mktActivitySmartPO = new MktActivitySmartPO();
-        BeanUtils.copyProperties(vo,mktActivitySmartPO);
-        mktActivitySmartPOMapper.insertSelective(mktActivitySmartPO);
-
-        //新增消息表
-        MktMessagePO mktMessagePO = new MktMessagePO();
-        BeanUtils.copyProperties(vo,mktMessagePO);
-        mktMessagePOMapper.insertSelective(mktMessagePO);
-
-        responseData.setMessage(ResponseConstants.SUCCESS_MSG);
         return responseData;
     }
+
+
+
+
 }
