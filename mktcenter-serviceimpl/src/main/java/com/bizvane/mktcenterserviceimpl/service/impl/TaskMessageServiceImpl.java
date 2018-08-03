@@ -25,7 +25,7 @@ public class TaskMessageServiceImpl implements TaskMessageService {
         po.setCreateUserId(stageUser.getSysAccountId());
         po.setCreateUserName(stageUser.getName());
 
-        return  mktMessagePOMapper.insertSelective(po);
+        return mktMessagePOMapper.insertSelective(po);
 
     }
 
@@ -35,7 +35,7 @@ public class TaskMessageServiceImpl implements TaskMessageService {
         po.setModifiedUserId(stageUser.getSysAccountId());
         po.setCreateUserName(stageUser.getName());
 
-       return mktMessagePOMapper.updateByPrimaryKeySelective(po);
+        return mktMessagePOMapper.updateByPrimaryKeySelective(po);
 
     }
 
@@ -49,6 +49,7 @@ public class TaskMessageServiceImpl implements TaskMessageService {
 
         MktMessagePOExample example = new MktMessagePOExample();
         example.createCriteria().andBizIdEqualTo(bizId).andValidEqualTo(Boolean.TRUE);
-        return mktMessagePOMapper.updateByExampleSelective(po,example);
+
+        return mktMessagePOMapper.updateByExampleSelective(po, example);
     }
 }

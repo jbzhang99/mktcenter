@@ -204,14 +204,13 @@ public class TaskOrderServiceImpl implements TaskOrderService {
     }
 
 
-
-
     /**
      * 更新消费任务
      *
      * @param stageUser
      * @return
      */
+    @Transactional
     @Override
     public ResponseData updateOrderTask(TaskDetailVO vo, SysAccountPO stageUser) {
         //        mktTaskOrderPOMapper.updateByPrimaryKeySelective(po);
@@ -226,7 +225,7 @@ public class TaskOrderServiceImpl implements TaskOrderService {
         vo.setModifiedUserId(stageUser.getSysAccountId());
 
         Long mktTaskId = vo.getMktTaskId();
-       // String taskCode = vo.getTaskCode();
+        // String taskCode = vo.getTaskCode();
         //1.任务主表修改
         MktTaskPOWithBLOBs mktTaskPOWithBLOBs = new MktTaskPOWithBLOBs();
         BeanUtils.copyProperties(vo, mktTaskPOWithBLOBs);
@@ -238,7 +237,7 @@ public class TaskOrderServiceImpl implements TaskOrderService {
         this.modifieOrderTask(mktTaskOrderPO, stageUser);
 
         //4.奖励修改 biz_type 活动类型  1=活动
-        taskCouponService.deleteTaskCoupon(mktTaskId,stageUser);
+        taskCouponService.deleteTaskCoupon(mktTaskId, stageUser);
         List<MktCouponPO> mktCouponPOList = vo.getMktCouponPOList();
         if (CollectionUtils.isNotEmpty(mktCouponPOList)) {
             mktCouponPOList.stream().forEach(param -> {
@@ -248,6 +247,7 @@ public class TaskOrderServiceImpl implements TaskOrderService {
             });
         }
         //5.修改消息
+        taskMessageService.deleteTaskMessage(mktTaskId,stageUser);
         List<MktMessagePO> mktmessagePOList = vo.getMktmessagePOList();
         if (CollectionUtils.isNotEmpty(mktmessagePOList)) {
             mktmessagePOList.stream().forEach(param -> {
@@ -274,6 +274,7 @@ public class TaskOrderServiceImpl implements TaskOrderService {
 
     /**
      * 修改
+     *
      * @param stageUser
      * @return
      */
@@ -282,6 +283,6 @@ public class TaskOrderServiceImpl implements TaskOrderService {
         MktTaskOrderPOExample example = new MktTaskOrderPOExample();
         example.createCriteria().andMktTaskIdEqualTo(po.getMktTaskId()).andValidEqualTo(Boolean.TRUE);
 
-       return  mktTaskOrderPOMapper.updateByExample(po,example);
+        return mktTaskOrderPOMapper.updateByExample(po, example);
     }
 }
