@@ -2,6 +2,7 @@ package com.bizvane.mktcenterservice.interfaces;
 
 import com.bizvane.centerstageservice.models.po.SysCheckConfigPo;
 import com.bizvane.centerstageservice.models.vo.SysCheckConfigVo;
+import com.bizvane.members.facade.models.MemberInfoModel;
 import com.bizvane.mktcenterservice.models.po.MktTaskPOWithBLOBs;
 import com.bizvane.mktcenterservice.models.vo.PageForm;
 import com.bizvane.mktcenterservice.models.vo.TaskVO;
@@ -56,4 +57,11 @@ public interface TaskService {
      * @return
      */
     public ResponseData<Integer> checkTaskById(Long mktTaskId, SysAccountPO sysAccountPO);
+
+    /**
+     * 获取公司下的所有会员
+     * @param sysCompanyId
+     * @return
+     */
+    public  List<MemberInfoModel>  getCompanyMemebers(Long sysCompanyId);
 }

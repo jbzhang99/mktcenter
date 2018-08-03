@@ -3,6 +3,8 @@ package com.bizvane.mktcenterserviceimpl.service.impl;
 import com.bizvane.centerstageservice.models.po.SysCheckConfigPo;
 import com.bizvane.centerstageservice.models.vo.SysCheckConfigVo;
 import com.bizvane.centerstageservice.rpc.SysCheckConfigServiceRpc;
+import com.bizvane.members.facade.models.MemberInfoModel;
+import com.bizvane.members.facade.service.api.MemberInfoApiService;
 import com.bizvane.mktcenterservice.interfaces.TaskService;
 import com.bizvane.mktcenterservice.models.po.MktTaskPO;
 import com.bizvane.mktcenterservice.models.po.MktTaskPOExample;
@@ -41,8 +43,21 @@ public class TaskServiceImpl implements TaskService {
     private MktTaskPOMapper mktTaskPOMapper;
     @Autowired
     private SysCheckConfigServiceRpc sysCheckConfigServiceRpc;
+    @Autowired
+    private MemberInfoApiService memberInfoApiService;
 
+    /**
+     * 查询公司下的所有会员
+     */
+    @Override
+    public  List<MemberInfoModel>  getCompanyMemebers(Long sysCompanyId){
+        MemberInfoModel members = new MemberInfoModel();
+        members.setCompanyId(sysCompanyId);
+        ResponseData<List<MemberInfoModel>> memberInfo = memberInfoApiService.getMemberInfo(members);
+        List<MemberInfoModel> list = memberInfo.getData();
+        return list;
 
+    }
 
     /**
      * 根据品牌Id 查询审核配置，是否需要审核然后判断

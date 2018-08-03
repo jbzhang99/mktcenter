@@ -1,19 +1,23 @@
 package com.bizvane.mktcenterserviceimpl.service.impl;
 
 import com.bizvane.centerstageservice.models.po.SysCheckConfigPo;
+import com.bizvane.members.facade.models.MemberInfoModel;
 import com.bizvane.mktcenterservice.interfaces.TaskCouponService;
 import com.bizvane.mktcenterservice.interfaces.TaskInviteService;
 import com.bizvane.mktcenterservice.interfaces.TaskMessageService;
 import com.bizvane.mktcenterservice.interfaces.TaskService;
+import com.bizvane.mktcenterservice.models.bo.AwardBO;
 import com.bizvane.mktcenterservice.models.bo.TaskBO;
 import com.bizvane.mktcenterservice.models.bo.TaskDetailBO;
 import com.bizvane.mktcenterservice.models.po.*;
 import com.bizvane.mktcenterservice.models.vo.PageForm;
 import com.bizvane.mktcenterservice.models.vo.TaskDetailVO;
 import com.bizvane.mktcenterservice.models.vo.TaskVO;
+import com.bizvane.mktcenterserviceimpl.common.award.Award;
 import com.bizvane.mktcenterserviceimpl.common.constants.SystemConstants;
 import com.bizvane.mktcenterserviceimpl.common.constants.TaskConstants;
 import com.bizvane.mktcenterserviceimpl.common.enums.CheckStatusEnum;
+import com.bizvane.mktcenterserviceimpl.common.enums.MktSmartTypeEnum;
 import com.bizvane.mktcenterserviceimpl.common.enums.TaskStatusEnum;
 import com.bizvane.mktcenterserviceimpl.common.utils.CodeUtil;
 import com.bizvane.mktcenterserviceimpl.common.utils.TaskParamCheckUtil;
@@ -51,6 +55,9 @@ public class TaskInviteImpl implements TaskInviteService {
 
     @Autowired
     private MktTaskInvitePOMapper mktTaskInvitePOMapper;
+
+    @Autowired
+    private Award award;
 
     /**
      * 审核任务:任务id   任务状态
@@ -135,20 +142,9 @@ public class TaskInviteImpl implements TaskInviteService {
             );
         }
 
-        //6.判断时间是否滞后   2=滞后执行    3=立即执行
-        Integer ImmediatelyRunStatus = TimeUtils.IsImmediatelyRun(mktTaskPOWithBLOBs.getStartTime());
-//        if(TaskConstants.ZERO.equals(checkStatus)){
-//            //任务待审核=0,判断是否要滞后执行
-//            if (TaskConstants.SECOND.equals(ImmediatelyRunStatus)){
-//
-//            }else if(TaskConstants.SECOND.equals(ImmediatelyRunStatus)){
-//
-//            }
-//
-//        }else{
-//            //任务已审核=3,判断是否要滞后执行
-//
-//        }
+        //6.处理任务
+        this.doOrderTask(vo);
+
         responseData.setCode(SystemConstants.SUCCESS_CODE);
         responseData.setMessage(SystemConstants.SUCCESS_MESSAGE);
         return responseData;
@@ -185,16 +181,59 @@ public class TaskInviteImpl implements TaskInviteService {
      * 判断时间是否滞后,已经是否立即执行,还是创建job执行
      */
     public void doOrderTask(TaskDetailVO vo) {
-        Integer checkStatus = vo.getCheckStatus();//审核状态
-        Integer taskStatus = vo.getTaskStatus();//执行状态
+        //公司id
+        Long sysCompanyId = vo.getSysCompanyId();
+        //审核状态
+        Integer checkStatus = vo.getCheckStatus();
+        //执行状态
+        Integer taskStatus = vo.getTaskStatus();
+        //公司下的会员
+        List<MemberInfoModel> companyMemebers = taskService.getCompanyMemebers(sysCompanyId);
+
         //已审核   执行中  执行时间小于当前时间 或等于当前时间
         if (TaskConstants.THREE.equals(checkStatus) && TaskConstants.SECOND.equals(taskStatus)) {
-
-            if (CollectionUtils.isNotEmpty(vo.getMktCouponPOList())) {
+            //判断奖励
+            List<MktCouponPO> mktCouponPOList = vo.getMktCouponPOList();
+            if (CollectionUtils.isNotEmpty(mktCouponPOList) && CollectionUtils.isNotEmpty(companyMemebers)) {
 
             }
             //判断是否需要发送消息和短信
+            List<MktMessagePO> mktmessagePOList = vo.getMktmessagePOList();
+            if (CollectionUtils.isNotEmpty(mktmessagePOList)) {
+                mktmessagePOList.stream().forEach(
+                        message -> {
+                            String msgType = message.getMsgType();
+                            companyMemebers.stream().forEach(
+                                    obj -> {
+                                        AwardBO bo = new AwardBO();
+                                        //会员code
+                                        bo.setMemberCode(obj.getMemberCode());
+                                        //券id
+                                        //bo.setCouponDefinitionId();
+                                        //发送类型
+                                        //bo.setSendType()
+                                        //任务务id
+                                        bo.setSendBussienId(message.getBizId());
+                                        bo.setChangeIntegral(vo.getPoints());
+                                        bo.setMemberName(obj.getName());
+                                        bo.setCardNo(obj.getCardNo());
+                                        //1模板消息，2短信'
+                                        if (TaskConstants.FIRST.equals(msgType)){
+                                            //1券，2积分，3短信，4模板消息
+                                            bo.setMktSmartType(MktSmartTypeEnum.SMART_TYPE_SMS.getCode());
+                                        }else{
+                                            bo.setMktSmartType(MktSmartTypeEnum.SMART_TYPE_WXMESSAGE.getCode());
+                                        }
+
+                                        award.execute(bo);
+                                    }
+                            );
+
+                        }
+                );
+            }
         }
+
         //已审核   待执行,创建job
         if (TaskConstants.THREE.equals(checkStatus) && TaskConstants.FIRST.equals(taskStatus)) {
             //判断是否需要发送消息和短信
