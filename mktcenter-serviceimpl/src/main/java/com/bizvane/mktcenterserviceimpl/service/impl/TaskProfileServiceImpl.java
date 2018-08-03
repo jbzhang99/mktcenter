@@ -26,7 +26,7 @@ import com.bizvane.mktcenterserviceimpl.common.utils.JobUtil;
 import com.bizvane.mktcenterserviceimpl.common.utils.TaskParamCheckUtil;
 import com.bizvane.mktcenterserviceimpl.common.utils.TimeUtils;
 import com.bizvane.mktcenterserviceimpl.mappers.*;
-import com.bizvane.utils.commonutils.PageForm;
+//import com.bizvane.utils.commonutils.PageForm;
 import com.bizvane.utils.enumutils.SysResponseEnum;
 import com.bizvane.utils.responseinfo.ResponseData;
 import com.bizvane.utils.tokens.SysAccountPO;
@@ -63,8 +63,7 @@ public class TaskProfileServiceImpl implements TaskProfileService {
     @Autowired
     private MktTaskPOMapper mktTaskPOMapper;
 
-    @Autowired
-    private MktCouponPOMapper mktCouponPOMapper;
+
 
     @Autowired
     private MktMessagePOMapper mktMessagePOMapper;
@@ -84,8 +83,7 @@ public class TaskProfileServiceImpl implements TaskProfileService {
     @Autowired
     private MktCouponPOMapper mktCouponPOMapper;
 
-    @Autowired
-    private MktTaskRecordPOMapper mktTaskRecordPOMapper;
+
 
     @Autowired
     private TimeUtils timeUtils;
@@ -447,7 +445,7 @@ public class TaskProfileServiceImpl implements TaskProfileService {
             integralRecordModel.setChangeDate(new Date());
             integralRecordModel.setChangeIntegral(vo.getPoints());
             integralRecordModel.setChangeWay(IntegralChangeTypeEnum.INCOME.getCode());
-            integralRecordModel.setBusinessWay(IntegralBusinessTypeEnum.TASK_INCOME.getCode());
+           // integralRecordModel.setBusinessWay(IntegralBusinessTypeEnum.TASK_INCOME.getCode());todo
 
             integralRecordApiService.updateMemberIntegral(integralRecordModel);
 

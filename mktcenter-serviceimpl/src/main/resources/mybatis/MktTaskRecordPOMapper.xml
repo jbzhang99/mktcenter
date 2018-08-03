@@ -463,7 +463,9 @@
     SELECT
         count( * )
     FROM
-        ( SELECT COUNT( mkt_task_record_id ) c, member_code, task_id FROM `t_mkt_task_record` GROUP BY task_id, member_code HAVING task_id = #{taskId} ) a
+        ( SELECT COUNT( mkt_task_record_id ) c, member_code, task_id FROM `t_mkt_task_record` GROUP BY task_id, member_code HAVING
+
+    task_id = #{taskId} ) a
     <where>
       a.c =#{oneTaskShareTimes}
     </where>
