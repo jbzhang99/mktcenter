@@ -231,7 +231,7 @@ public class TaskInviteServiceImpl implements TaskInviteService {
 
                         }
                 );
-            }
+             }
         }
 
         //已审核   待执行,创建job
