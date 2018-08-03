@@ -413,11 +413,11 @@
   </update>
   <select id="selectMktActivityManualId" parameterType="com.bizvane.mktcenterservice.models.po.MktCouponPO" resultType="com.bizvane.mktcenterservice.models.po.MktCouponPO">
 SELECT
-	tmc.biz_id as bizType ,
-    tmc.biz_code as bizCode,
-    tmc.coupon_code as couponCode,
-    tmc.coupon_name as couponName,
-    tmc.coupon_id as couponId
+	tmc.biz_id ,
+    tmc.biz_code,
+    tmc.coupon_code,
+    tmc.coupon_name,
+    tmc.coupon_id
 FROM
 	t_mkt_coupon tmc
 WHERE

@@ -1,6 +1,5 @@
 package com.bizvane.mktcenterserviceimpl.controllers;
 
-import com.bizvane.members.facade.models.MemberInfoModel;
 import com.bizvane.mktcenterservice.interfaces.ActivityManualService;
 import com.bizvane.mktcenterservice.models.bo.ActivityBO;
 import com.bizvane.mktcenterservice.models.vo.ActivityVO;
