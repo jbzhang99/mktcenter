@@ -13,8 +13,9 @@ import com.bizvane.mktcenterserviceimpl.common.constants.ActivityConstants;
 import com.bizvane.mktcenterserviceimpl.common.constants.ResponseConstants;
 import com.bizvane.mktcenterserviceimpl.common.constants.SystemConstants;
 import com.bizvane.mktcenterserviceimpl.common.enums.ActivityStatusEnum;
+import com.bizvane.mktcenterserviceimpl.common.enums.BusinessTypeEnum;
 import com.bizvane.mktcenterserviceimpl.common.enums.CheckStatusEnum;
-import com.bizvane.mktcenterserviceimpl.common.enums.MktTypeEnum;
+import com.bizvane.mktcenterserviceimpl.common.enums.MktSmartTypeEnum;
 import com.bizvane.mktcenterserviceimpl.common.utils.CodeUtil;
 import com.bizvane.mktcenterserviceimpl.common.utils.JobUtil;
 import com.bizvane.mktcenterserviceimpl.mappers.*;
@@ -134,8 +135,106 @@ public class ActivitySmartServiceImpl implements ActivitySmartService {
      * @return
      */
     @Override
-    public ResponseData<ActivitySmartBO> getActivityDetailById(Long mktActivityId) {
-        return null;
+    public ResponseData<ActivitySmartVO> getActivityDetailById(Long mktActivityId,Integer mktSmartType) {
+        ResponseData responseData = new ResponseData();
+        //活动分组id不能为空
+        if(mktActivityId==null){
+            responseData.setCode(ResponseConstants.ERROR);
+            responseData.setMessage(ActivityConstants.ERROR_MSG_ACTIVITY_ID_EMPTY);
+            return responseData;
+        }
+
+        MktSmartTypeEnum mktSmartTypeEnum = MktSmartTypeEnum.getMktSmartTypeEnumByCode(mktSmartType);
+
+        switch (mktSmartTypeEnum){
+            case SMART_TYPE_COUPON:
+                responseData =getCouponActivityDetailById(mktActivityId);
+                break;
+            case SMART_TYPE_INTEGRAL:
+                responseData =getIntegralActivityDetailById(mktActivityId);
+                break;
+            case SMART_TYPE_SMS:
+            case SMART_TYPE_WXMESSAGE:
+                responseData =getMessageActivityDetailById(mktActivityId);
+                break;
+            default:break;
+        }
+        return responseData;
+    }
+
+    /**
+     * 查询券营销详情
+     * @return
+     */
+    public ResponseData<ActivitySmartVO> getCouponActivityDetailById(Long mktActivityId){
+        ResponseData responseData = new ResponseData();
+        ActivitySmartVO activitySmartVO = new ActivitySmartVO();
+        //主表
+        MktActivityPOWithBLOBs mktActivityPOWithBLOBs = mktActivityPOMapper.selectByPrimaryKey(mktActivityId);
+        BeanUtils.copyProperties(mktActivityPOWithBLOBs,activitySmartVO);
+        //智能营销规则表
+        MktActivitySmartPOExample mktActivitySmartPOExample = new MktActivitySmartPOExample();
+        mktActivitySmartPOExample.createCriteria().andValidEqualTo(Boolean.TRUE).andMktActivityIdEqualTo(mktActivityId);
+        List<MktActivitySmartPO> mktActivitySmartPOS = mktActivitySmartPOMapper.selectByExample(mktActivitySmartPOExample);
+        if(!CollectionUtils.isEmpty(mktActivitySmartPOS)){
+            activitySmartVO.setTargetMbr(mktActivitySmartPOS.get(0).getTargetMbr());
+        }
+        //券表
+        MktCouponPOExample mktCouponPOExample = new MktCouponPOExample();
+        mktCouponPOExample.createCriteria().andValidEqualTo(Boolean.TRUE).andBizTypeEqualTo(BusinessTypeEnum.ACTIVITY_TYPE_ACTIVITY.getCode()).andBizIdEqualTo(mktActivityId);
+        List<MktCouponPO> mktCouponPOS = mktCouponPOMapper.selectByExample(mktCouponPOExample);
+        activitySmartVO.setMktCouponPOS(mktCouponPOS);
+        responseData.setData(activitySmartVO);
+        return responseData;
+    }
+
+    /**
+     * 查询积分营销详情
+     * @return
+     */
+    public ResponseData<ActivitySmartVO> getIntegralActivityDetailById(Long mktActivityId){
+        ResponseData responseData = new ResponseData();
+        ActivitySmartVO activitySmartVO = new ActivitySmartVO();
+        //主表
+        MktActivityPOWithBLOBs mktActivityPOWithBLOBs = mktActivityPOMapper.selectByPrimaryKey(mktActivityId);
+        BeanUtils.copyProperties(mktActivityPOWithBLOBs,activitySmartVO);
+        //智能营销规则表
+        MktActivitySmartPOExample mktActivitySmartPOExample = new MktActivitySmartPOExample();
+        mktActivitySmartPOExample.createCriteria().andValidEqualTo(Boolean.TRUE).andMktActivityIdEqualTo(mktActivityId);
+        List<MktActivitySmartPO> mktActivitySmartPOS = mktActivitySmartPOMapper.selectByExample(mktActivitySmartPOExample);
+        if(!CollectionUtils.isEmpty(mktActivitySmartPOS)){
+            activitySmartVO.setTargetMbr(mktActivitySmartPOS.get(0).getTargetMbr());
+        }
+        responseData.setData(activitySmartVO);
+        return responseData;
+    }
+
+    /**
+     * 查询短信/模板消息营销详情
+     * @return
+     */
+    public ResponseData<ActivitySmartVO> getMessageActivityDetailById(Long mktActivityId){
+        ResponseData responseData = new ResponseData();
+        ActivitySmartVO activitySmartVO = new ActivitySmartVO();
+        //主表
+        MktActivityPOWithBLOBs mktActivityPOWithBLOBs = mktActivityPOMapper.selectByPrimaryKey(mktActivityId);
+        BeanUtils.copyProperties(mktActivityPOWithBLOBs,activitySmartVO);
+        //智能营销规则表
+        MktActivitySmartPOExample mktActivitySmartPOExample = new MktActivitySmartPOExample();
+        mktActivitySmartPOExample.createCriteria().andValidEqualTo(Boolean.TRUE).andMktActivityIdEqualTo(mktActivityId);
+        List<MktActivitySmartPO> mktActivitySmartPOS = mktActivitySmartPOMapper.selectByExample(mktActivitySmartPOExample);
+        if(!CollectionUtils.isEmpty(mktActivitySmartPOS)){
+            activitySmartVO.setTargetMbr(mktActivitySmartPOS.get(0).getTargetMbr());
+        }
+        //消息表
+        MktMessagePOExample mktMessagePOExample = new MktMessagePOExample();
+        mktMessagePOExample.createCriteria().andValidEqualTo(Boolean.TRUE).andBizTypeEqualTo(BusinessTypeEnum.ACTIVITY_TYPE_ACTIVITY.getCode()).andBizIdEqualTo(mktActivityId);
+        List<MktMessagePO> mktMessagePOS = mktMessagePOMapper.selectByExample(mktMessagePOExample);
+        if(!CollectionUtils.isEmpty(mktMessagePOS)){
+            activitySmartVO.setMktMessagePO(mktMessagePOS.get(0));
+        }
+        responseData.setData(activitySmartVO);
+        return responseData;
     }
 
     /**

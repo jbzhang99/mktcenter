@@ -51,7 +51,7 @@ public interface ActivitySmartService {
      * @param mktActivityId
      * @return
      */
-    public ResponseData<ActivitySmartBO> getActivityDetailById(Long mktActivityId);
+    public ResponseData<ActivitySmartVO> getActivityDetailById(Long mktActivityId,Integer mktSmartType);
 
     /**
      * 添加智能营销分组

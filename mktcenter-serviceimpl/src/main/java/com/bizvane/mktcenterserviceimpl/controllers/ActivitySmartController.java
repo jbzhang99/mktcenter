@@ -57,8 +57,8 @@ public class ActivitySmartController {
      * @return
      */
     @RequestMapping("getActivityDetailById")
-    public ResponseData<ActivitySmartBO> getActivityDetailById(Long mktActivityId){
-        return activitySmartService.getActivityDetailById(mktActivityId);
+    public ResponseData<ActivitySmartVO> getActivityDetailById(Long mktActivityId,Integer mktSmartType){
+        return activitySmartService.getActivityDetailById(mktActivityId,mktSmartType);
     }
 
     /**

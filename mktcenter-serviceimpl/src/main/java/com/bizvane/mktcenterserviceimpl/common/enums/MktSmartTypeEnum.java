@@ -6,24 +6,24 @@ package com.bizvane.mktcenterserviceimpl.common.enums;
  * @description 营销方式
  * @Copyright (c) 2018 上海商帆信息科技有限公司-版权所有
  */
-public enum MktTypeEnum {
+public enum MktSmartTypeEnum {
 
-    TASK_STATUS_ALL(0,"全部"),
-    TASK_STATUS_PENDING(1,"优惠券营销"),
-    TASK_STATUS_EXECUTING(2,"积分营销"),
-    TASK_STATUS_DISABLED(3,"短信营销"),
-    TASK_STATUS_FINISHED(4,"微信模板消息营销");
+    SMART_TYPE_ALL(0,"全部"),
+    SMART_TYPE_COUPON(1,"优惠券营销"),
+    SMART_TYPE_INTEGRAL(2,"积分营销"),
+    SMART_TYPE_SMS(3,"短信营销"),
+    SMART_TYPE_WXMESSAGE(4,"微信模板消息营销");
 
     private int code;
     private String message;
 
-    MktTypeEnum(int code, String message) {
+    MktSmartTypeEnum(int code, String message) {
         this.code = code;
         this.message = message;
     }
 
-    public static MktTypeEnum getMktTypeEnumByCode(int code){
-        for(MktTypeEnum mktTypeEnum : MktTypeEnum.values()){
+    public static MktSmartTypeEnum getMktSmartTypeEnumByCode(int code){
+        for(MktSmartTypeEnum mktTypeEnum : MktSmartTypeEnum.values()){
             if(code==mktTypeEnum.getCode()){
                 return mktTypeEnum;
             }
