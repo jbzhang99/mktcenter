@@ -41,7 +41,7 @@ public interface ActivityUpgradeService {
      * @param 
      * @return
      */
-    public ResponseData<List<ActivityVO>> selectActivityUpgradesById(String activityCode);
+    public ResponseData<ActivityBO> selectActivityUpgradesById(String businessCode);
 
     /**
      * 执行活动

@@ -95,8 +95,8 @@ public class ActivityManualController {
      * 查看活动详情
      */
     @RequestMapping("/selectActivityManualById")
-    public ResponseData<ActivityVO> selectActivityManualById(Long mktActivityId){
-        return activityManualService.selectActivityManualById(mktActivityId);
+    public ResponseData<ActivityBO> selectActivityManualById(String businessCode){
+        return activityManualService.selectActivityManualById(businessCode);
     }
 
 }

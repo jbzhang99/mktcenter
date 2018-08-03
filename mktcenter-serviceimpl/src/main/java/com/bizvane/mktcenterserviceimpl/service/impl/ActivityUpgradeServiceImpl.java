@@ -214,9 +214,9 @@ public class ActivityUpgradeServiceImpl implements ActivityUpgradeService {
         }
 
         //新增活动消息
-        List<MessageVO> messageVOList = bo.getMessageVOList();
+        List<MktMessagePO> messageVOList = bo.getMessageVOList();
         if(!CollectionUtils.isEmpty(messageVOList)){
-            for(MessageVO messageVO : messageVOList){
+            for(MktMessagePO messageVO : messageVOList){
                 MktMessagePO mktMessagePO = new MktMessagePO();
                 BeanUtils.copyProperties(mktActivityPOWithBLOBs,mktMessagePO);
                 BeanUtils.copyProperties(messageVO,mktMessagePO);
@@ -359,9 +359,9 @@ public class ActivityUpgradeServiceImpl implements ActivityUpgradeService {
         exam.createCriteria().andBizIdEqualTo(mktActivityId);
         mktMessagePOMapper.updateByExampleSelective(message,exam);
         //修改活动消息
-        List<MessageVO> messageVOList = bo.getMessageVOList();
+        List<MktMessagePO> messageVOList = bo.getMessageVOList();
         if(!CollectionUtils.isEmpty(messageVOList)){
-            for(MessageVO messageVO : messageVOList){
+            for(MktMessagePO messageVO : messageVOList){
                 MktMessagePO mktMessagePO = new MktMessagePO();
                 BeanUtils.copyProperties(mktActivityPOWithBLOBs,mktMessagePO);
                 BeanUtils.copyProperties(messageVO,mktMessagePO);
@@ -377,16 +377,35 @@ public class ActivityUpgradeServiceImpl implements ActivityUpgradeService {
 
     /**
      * 查询升级活动详情
-     * @param activityCode
+     * @param businessCode
      * @return
      */
     @Override
-    public ResponseData<List<ActivityVO>> selectActivityUpgradesById(String activityCode) {
+    public ResponseData<ActivityBO> selectActivityUpgradesById(String businessCode) {
         ResponseData responseData = new ResponseData();
         ActivityVO vo= new ActivityVO();
-        vo.setActivityCode(activityCode);
+        vo.setActivityCode(businessCode);
         List<ActivityVO> upgradeList = mktActivityUpgradePOMapper.getActivityUpgradeList(vo);
-        responseData.setData(upgradeList);
+        //查询活动卷
+        MktCouponPOExample example = new  MktCouponPOExample();
+        example.createCriteria().andBizIdEqualTo(upgradeList.get(0).getMktActivityId());
+        example.createCriteria().andValidEqualTo(true);
+        List<MktCouponPO> mktCouponPOs= mktCouponPOMapper.selectByExample(example);
+        //查询消息模板
+        MktMessagePOExample exampl = new MktMessagePOExample();
+        example.createCriteria().andBizIdEqualTo(upgradeList.get(0).getMktActivityId());
+        List<MktMessagePO> listMktMessage = mktMessagePOMapper.selectByExample(exampl);
+        ActivityBO bo = new ActivityBO();
+        if(CollectionUtils.isEmpty(upgradeList)){
+            bo.setActivityVO(upgradeList.get(0));
+        }
+        if(CollectionUtils.isEmpty(mktCouponPOs)){
+            bo.setCouponCodeList(mktCouponPOs);
+        }
+        if(CollectionUtils.isEmpty(listMktMessage)){
+            bo.setMessageVOList(listMktMessage);
+        }
+        responseData.setData(bo);
         responseData.setCode(SysResponseEnum.SUCCESS.getCode());
         responseData.setMessage(SysResponseEnum.SUCCESS.getMessage());
         return responseData;

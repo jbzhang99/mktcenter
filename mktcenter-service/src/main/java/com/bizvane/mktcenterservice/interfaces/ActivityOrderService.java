@@ -35,7 +35,7 @@ public interface ActivityOrderService {
      * @param
      * @return
      */
-    public ResponseData<List<ActivityVO>> selectActivityOrderById(String activityCode);
+    public ResponseData<ActivityBO> selectActivityOrderById(String businessCode);
     /**
      * 修改活动
      * @return

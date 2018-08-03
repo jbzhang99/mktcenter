@@ -4,6 +4,7 @@ import com.bizvane.members.facade.models.MemberInfoModel;
 import com.bizvane.mktcenterservice.interfaces.ActivityUpgradeService;
 import com.bizvane.mktcenterservice.models.bo.ActivityBO;
 import com.bizvane.mktcenterservice.models.po.MktCouponPO;
+import com.bizvane.mktcenterservice.models.po.MktMessagePO;
 import com.bizvane.mktcenterservice.models.vo.ActivityVO;
 import com.bizvane.mktcenterservice.models.vo.MessageVO;
 import com.bizvane.mktcenterservice.models.vo.PageForm;
@@ -45,7 +46,7 @@ public class ActivityUpgradeController {
      * @return
      */
     @RequestMapping("addActivityUpgrade.do")
-    public ResponseData<Integer> addActivityUpgrade(ActivityVO activityVO, List<MktCouponPO> couponCodeList, List<MessageVO> messageVOList, HttpServletRequest request){
+    public ResponseData<Integer> addActivityUpgrade(ActivityVO activityVO, List<MktCouponPO> couponCodeList, List<MktMessagePO> messageVOList, HttpServletRequest request){
         ActivityBO bo = new ActivityBO();
         bo.setActivityVO(activityVO);
         bo.setCouponCodeList(couponCodeList);
@@ -72,7 +73,7 @@ public class ActivityUpgradeController {
      * @return
      */
     @RequestMapping("updateActivityUpgrade.do")
-    public ResponseData<Integer> updateActivityUpgrade(ActivityVO activityVO, List<MktCouponPO> couponCodeList, List<MessageVO> messageVOList, HttpServletRequest request){
+    public ResponseData<Integer> updateActivityUpgrade(ActivityVO activityVO, List<MktCouponPO> couponCodeList, List<MktMessagePO> messageVOList, HttpServletRequest request){
         ActivityBO bo = new ActivityBO();
         bo.setActivityVO(activityVO);
         bo.setCouponCodeList(couponCodeList);
@@ -95,12 +96,12 @@ public class ActivityUpgradeController {
 
     /**
      * 查询活动详情
-     * @param activityCode
+     * @param businessCode
      * @return
      */
     @RequestMapping("selectActivityUpgradesById")
-    public ResponseData<List<ActivityVO>> selectActivityUpgradesById(String activityCode){
-        return activityUpgradeService.selectActivityUpgradesById(activityCode);
+    public ResponseData<ActivityBO> selectActivityUpgradesById(String businessCode){
+        return activityUpgradeService.selectActivityUpgradesById(businessCode);
     }
     /**
      * 执行活动

@@ -22,7 +22,7 @@ public interface ActivityManualService {
 
   ResponseData<List<ActivityBO>> getActivityManualEffect(ActivityVO vo);
 
-  ResponseData<ActivityVO> selectActivityManualById(Long mktActivityId);
+  ResponseData<ActivityBO> selectActivityManualById(String businessCode);
 
   ResponseData<List<ActivityVO>>  getActivityByMemberInfo(MemberInfoModel memberInfoModel,Integer activityType);
   ResponseData<ActivityVO>  getActivityByQrcode(MemberInfoModel memberInfoModel,String activityCode,Integer activityType);

@@ -1,5 +1,7 @@
 package com.bizvane.mktcenterservice.models.vo;
 
+import com.bizvane.mktcenterservice.models.po.MktMessagePO;
+
 import java.util.Date;
 
 /**
@@ -8,7 +10,7 @@ import java.util.Date;
  * @description 消息对象
  * @Copyright (c) 2018 上海商帆信息科技有限公司-版权所有
  */
-public class MessageVO {
+public class MessageVO extends MktMessagePO {
 
     /**
      * 消息编号

@@ -11,19 +11,14 @@ import com.bizvane.members.facade.models.MemberInfoModel;
 import com.bizvane.members.facade.service.api.IntegralRecordApiService;
 import com.bizvane.mktcenterservice.interfaces.ActivitySigninService;
 import com.bizvane.mktcenterservice.models.bo.ActivityBO;
-import com.bizvane.mktcenterservice.models.po.MktActivityPOWithBLOBs;
-import com.bizvane.mktcenterservice.models.po.MktActivityRecordPO;
-import com.bizvane.mktcenterservice.models.po.MktActivitySignin;
+import com.bizvane.mktcenterservice.models.po.*;
 import com.bizvane.mktcenterservice.models.vo.ActivityVO;
 import com.bizvane.mktcenterservice.models.vo.PageForm;
 import com.bizvane.mktcenterserviceimpl.common.enums.ActivityStatusEnum;
 import com.bizvane.mktcenterserviceimpl.common.enums.ActivityTypeEnum;
 import com.bizvane.mktcenterserviceimpl.common.enums.CheckStatusEnum;
 import com.bizvane.mktcenterserviceimpl.common.utils.CodeUtil;
-import com.bizvane.mktcenterserviceimpl.mappers.MktActivityPOMapper;
-import com.bizvane.mktcenterserviceimpl.mappers.MktActivityRecordPOMapper;
-import com.bizvane.mktcenterserviceimpl.mappers.MktActivitySigninMapper;
-import com.bizvane.mktcenterserviceimpl.mappers.MktMessagePOMapper;
+import com.bizvane.mktcenterserviceimpl.mappers.*;
 import com.bizvane.utils.enumutils.SysResponseEnum;
 import com.bizvane.utils.responseinfo.ResponseData;
 import com.bizvane.utils.tokens.SysAccountPO;
@@ -62,6 +57,8 @@ public class ActivitySigninServiceImpl implements ActivitySigninService {
     private MktActivityRecordPOMapper mktActivityRecordPOMapper;
     @Autowired
     private SysCheckServiceRpc sysCheckServiceRpc;
+    @Autowired
+    private MktCouponPOMapper mktCouponPOMapper;
     /**
      * 查询签到活动列表
      * @param vo
@@ -172,16 +169,35 @@ public class ActivitySigninServiceImpl implements ActivitySigninService {
 
     /**
      * 查看活动详情
-     * @param activityCode
+     * @param businessCode
      * @return
      */
     @Override
-    public ResponseData<List<ActivityVO>> selectActivitySigninById(String activityCode) {
+    public ResponseData<ActivityBO> selectActivitySigninById(String businessCode) {
         ResponseData responseData = new ResponseData();
         ActivityVO vo= new ActivityVO();
-        vo.setActivityCode(activityCode);
+        vo.setActivityCode(businessCode);
         List<ActivityVO> signinList = mktActivitySigninMapper.getActivitySigninList(vo);
-        responseData.setData(signinList);
+        //查询活动卷
+        MktCouponPOExample example = new  MktCouponPOExample();
+        example.createCriteria().andBizIdEqualTo(signinList.get(0).getMktActivityId());
+        example.createCriteria().andValidEqualTo(true);
+        List<MktCouponPO> mktCouponPOs= mktCouponPOMapper.selectByExample(example);
+        //查询消息模板
+        MktMessagePOExample exampl = new MktMessagePOExample();
+        example.createCriteria().andBizIdEqualTo(signinList.get(0).getMktActivityId());
+        List<MktMessagePO> listMktMessage = mktMessagePOMapper.selectByExample(exampl);
+        ActivityBO bo = new ActivityBO();
+        if(CollectionUtils.isEmpty(signinList)){
+            bo.setActivityVO(signinList.get(0));
+        }
+        if(CollectionUtils.isEmpty(mktCouponPOs)){
+            bo.setCouponCodeList(mktCouponPOs);
+        }
+        if(CollectionUtils.isEmpty(listMktMessage)){
+            bo.setMessageVOList(listMktMessage);
+        }
+        responseData.setData(bo);
         responseData.setCode(SysResponseEnum.SUCCESS.getCode());
         responseData.setMessage(SysResponseEnum.SUCCESS.getMessage());
         return responseData;

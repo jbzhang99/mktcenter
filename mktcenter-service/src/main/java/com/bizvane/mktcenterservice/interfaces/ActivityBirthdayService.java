@@ -34,7 +34,7 @@ public interface ActivityBirthdayService {
      * @param
      * @return
      */
-    public ResponseData<List<ActivityVO>> selectActivityBirthdayById(String activityCode);
+    public ResponseData<ActivityBO> selectActivityBirthdayById(String businessCode);
     /**
      * 活动审核
      * @param

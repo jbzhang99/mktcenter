@@ -35,7 +35,7 @@ public interface ActivitySigninService {
      * @param
      * @return
      */
-    public ResponseData<List<ActivityVO>> selectActivitySigninById(String activityCode);
+    public ResponseData<ActivityBO> selectActivitySigninById(String businessCode);
     /**
      * 执行活动
      * @param

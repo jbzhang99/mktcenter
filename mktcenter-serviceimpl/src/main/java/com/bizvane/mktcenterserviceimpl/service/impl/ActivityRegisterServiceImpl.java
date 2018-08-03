@@ -220,9 +220,9 @@ public class ActivityRegisterServiceImpl implements ActivityRegisterService {
         }
 
         //新增活动消息
-        List<MessageVO> messageVOList = bo.getMessageVOList();
+        List<MktMessagePO> messageVOList = bo.getMessageVOList();
         if(!CollectionUtils.isEmpty(messageVOList)){
-            for(MessageVO messageVO : messageVOList){
+            for(MktMessagePO messageVO : messageVOList){
                 MktMessagePO mktMessagePO = new MktMessagePO();
                 BeanUtils.copyProperties(mktActivityPOWithBLOBs,mktMessagePO);
                 BeanUtils.copyProperties(messageVO,mktMessagePO);
@@ -425,9 +425,9 @@ public class ActivityRegisterServiceImpl implements ActivityRegisterService {
         exam.createCriteria().andBizIdEqualTo(mktActivityId);
         mktMessagePOMapper.updateByExampleSelective(message,exam);
         //修改活动消息
-        List<MessageVO> messageVOList = bo.getMessageVOList();
+        List<MktMessagePO> messageVOList = bo.getMessageVOList();
         if(!CollectionUtils.isEmpty(messageVOList)){
-            for(MessageVO messageVO : messageVOList){
+            for(MktMessagePO messageVO : messageVOList){
                 MktMessagePO mktMessagePO = new MktMessagePO();
                 BeanUtils.copyProperties(mktActivityPOWithBLOBs,mktMessagePO);
                 BeanUtils.copyProperties(messageVO,mktMessagePO);
@@ -443,16 +443,35 @@ public class ActivityRegisterServiceImpl implements ActivityRegisterService {
 
     /**
      *  查询活动详情
-     * @param activityCode
+     * @param businessCode
      * @return
      */
     @Override
-    public ResponseData<List<ActivityVO>> selectActivityRegisterById(String activityCode) {
+    public ResponseData<ActivityBO> selectActivityRegisterById(String businessCode) {
         ResponseData responseData = new ResponseData();
         ActivityVO vo= new ActivityVO();
-        vo.setActivityCode(activityCode);
+        vo.setActivityCode(businessCode);
         List<ActivityVO> registerList = mktActivityRegisterPOMapper.getActivityList(vo);
-        responseData.setData(registerList);
+        //查询活动卷
+        MktCouponPOExample example = new  MktCouponPOExample();
+        example.createCriteria().andBizIdEqualTo(registerList.get(0).getMktActivityId());
+        example.createCriteria().andValidEqualTo(true);
+        List<MktCouponPO> mktCouponPOs= mktCouponPOMapper.selectByExample(example);
+        //查询消息模板
+        MktMessagePOExample exampl = new MktMessagePOExample();
+        example.createCriteria().andBizIdEqualTo(registerList.get(0).getMktActivityId());
+        List<MktMessagePO> listMktMessage = mktMessagePOMapper.selectByExample(exampl);
+        ActivityBO bo = new ActivityBO();
+        if(CollectionUtils.isEmpty(registerList)){
+            bo.setActivityVO(registerList.get(0));
+        }
+        if(CollectionUtils.isEmpty(mktCouponPOs)){
+            bo.setCouponCodeList(mktCouponPOs);
+        }
+        if(CollectionUtils.isEmpty(listMktMessage)){
+            bo.setMessageVOList(listMktMessage);
+        }
+        responseData.setData(bo);
         responseData.setCode(SysResponseEnum.SUCCESS.getCode());
         responseData.setMessage(SysResponseEnum.SUCCESS.getMessage());
         return responseData;

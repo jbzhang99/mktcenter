@@ -49,5 +49,5 @@ public interface ActivityRegisterService {
      * @param activityCode
      * @return
      */
-    public ResponseData<List<ActivityVO>> selectActivityRegisterById(String activityCode);
+    public ResponseData<ActivityBO> selectActivityRegisterById(String businessCode);
 }
