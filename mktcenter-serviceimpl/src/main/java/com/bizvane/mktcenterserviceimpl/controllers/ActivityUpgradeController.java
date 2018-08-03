@@ -95,12 +95,12 @@ public class ActivityUpgradeController {
 
     /**
      * 查询活动详情
-     * @param mktActivityId
+     * @param activityCode
      * @return
      */
     @RequestMapping("selectActivityUpgradesById")
-    public ResponseData<List<ActivityVO>> selectActivityUpgradesById(Long mktActivityId){
-        return activityUpgradeService.selectActivityUpgradesById(mktActivityId);
+    public ResponseData<List<ActivityVO>> selectActivityUpgradesById(String activityCode){
+        return activityUpgradeService.selectActivityUpgradesById(activityCode);
     }
     /**
      * 执行活动

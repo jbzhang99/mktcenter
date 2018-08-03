@@ -70,12 +70,12 @@ public class ActivityOrderController {
 
     /**
      * 查询活动详情
-     * @param mktActivityId
+     * @param activityCode
      * @return
      */
     @RequestMapping("selectActivityOrderById")
-    public ResponseData<List<ActivityVO>> selectActivityOrderById(Long mktActivityId){
-        return activityOrderService.selectActivityOrderById(mktActivityId);
+    public ResponseData<List<ActivityVO>> selectActivityOrderById(String activityCode){
+        return activityOrderService.selectActivityOrderById(activityCode);
     }
     /**
      * 修改活动

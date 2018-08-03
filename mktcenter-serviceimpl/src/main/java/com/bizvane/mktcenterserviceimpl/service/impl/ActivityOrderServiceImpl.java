@@ -226,14 +226,14 @@ public class ActivityOrderServiceImpl implements ActivityOrderService {
 
     /**
      * 查询活动
-     * @param mktActivityId
+     * @param activityCode
      * @return
      */
     @Override
-    public ResponseData<List<ActivityVO>> selectActivityOrderById(Long mktActivityId) {
+    public ResponseData<List<ActivityVO>> selectActivityOrderById(String activityCode) {
         ResponseData responseData = new ResponseData();
         ActivityVO vo= new ActivityVO();
-        vo.setMktActivityId(mktActivityId);
+        vo.setActivityCode(activityCode);
         List<ActivityVO> orderList = mktActivityOrderPOMapper.getActivityOrderList(vo);
         responseData.setData(orderList);
         responseData.setCode(SysResponseEnum.SUCCESS.getCode());

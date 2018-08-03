@@ -172,14 +172,14 @@ public class ActivitySigninServiceImpl implements ActivitySigninService {
 
     /**
      * 查看活动详情
-     * @param mktActivityId
+     * @param activityCode
      * @return
      */
     @Override
-    public ResponseData<List<ActivityVO>> selectActivitySigninById(Long mktActivityId) {
+    public ResponseData<List<ActivityVO>> selectActivitySigninById(String activityCode) {
         ResponseData responseData = new ResponseData();
         ActivityVO vo= new ActivityVO();
-        vo.setMktActivityId(mktActivityId);
+        vo.setActivityCode(activityCode);
         List<ActivityVO> signinList = mktActivitySigninMapper.getActivitySigninList(vo);
         responseData.setData(signinList);
         responseData.setCode(SysResponseEnum.SUCCESS.getCode());

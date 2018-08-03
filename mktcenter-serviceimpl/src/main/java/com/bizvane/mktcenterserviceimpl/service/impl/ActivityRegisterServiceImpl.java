@@ -443,14 +443,14 @@ public class ActivityRegisterServiceImpl implements ActivityRegisterService {
 
     /**
      *  查询活动详情
-     * @param mktActivityId
+     * @param activityCode
      * @return
      */
     @Override
-    public ResponseData<List<ActivityVO>> selectActivityRegisterById(Long mktActivityId) {
+    public ResponseData<List<ActivityVO>> selectActivityRegisterById(String activityCode) {
         ResponseData responseData = new ResponseData();
         ActivityVO vo= new ActivityVO();
-        vo.setMktActivityId(mktActivityId);
+        vo.setActivityCode(activityCode);
         List<ActivityVO> registerList = mktActivityRegisterPOMapper.getActivityList(vo);
         responseData.setData(registerList);
         responseData.setCode(SysResponseEnum.SUCCESS.getCode());

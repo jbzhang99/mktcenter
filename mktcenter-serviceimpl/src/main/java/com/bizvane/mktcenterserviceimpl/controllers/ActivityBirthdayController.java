@@ -67,11 +67,11 @@ public class ActivityBirthdayController {
     }
     /**
      * 查询活动详情
-     * @param mktActivityId
+     * @param activityCode
      * @return
      */
-    public ResponseData<List<ActivityVO>> selectActivityBirthdayById(Long mktActivityId){
-        return activityBirthdayService.selectActivityBirthdayById(mktActivityId);
+    public ResponseData<List<ActivityVO>> selectActivityBirthdayById(String activityCode){
+        return activityBirthdayService.selectActivityBirthdayById(activityCode);
     }
     /**
      * 修改活动

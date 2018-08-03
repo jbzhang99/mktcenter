@@ -377,14 +377,14 @@ public class ActivityUpgradeServiceImpl implements ActivityUpgradeService {
 
     /**
      * 查询升级活动详情
-     * @param mktActivityId
+     * @param activityCode
      * @return
      */
     @Override
-    public ResponseData<List<ActivityVO>> selectActivityUpgradesById(Long mktActivityId) {
+    public ResponseData<List<ActivityVO>> selectActivityUpgradesById(String activityCode) {
         ResponseData responseData = new ResponseData();
         ActivityVO vo= new ActivityVO();
-        vo.setMktActivityId(mktActivityId);
+        vo.setActivityCode(activityCode);
         List<ActivityVO> upgradeList = mktActivityUpgradePOMapper.getActivityUpgradeList(vo);
         responseData.setData(upgradeList);
         responseData.setCode(SysResponseEnum.SUCCESS.getCode());

@@ -218,14 +218,14 @@ public class ActivityBirthdayServiceImpl implements ActivityBirthdayService {
 
     /**
      * 查询生日活动详情
-     * @param mktActivityId
+     * @param activityCode
      * @return
      */
     @Override
-    public ResponseData<List<ActivityVO>> selectActivityBirthdayById(Long mktActivityId) {
+    public ResponseData<List<ActivityVO>> selectActivityBirthdayById(String activityCode) {
         ResponseData responseData = new ResponseData();
         ActivityVO vo= new ActivityVO();
-        vo.setMktActivityId(mktActivityId);
+        vo.setActivityCode(activityCode);
         List<ActivityVO> registerList = mktActivityBirthdayPOMapper.getActivityBirthdayList(vo);
         responseData.setData(registerList);
         responseData.setCode(SysResponseEnum.SUCCESS.getCode());

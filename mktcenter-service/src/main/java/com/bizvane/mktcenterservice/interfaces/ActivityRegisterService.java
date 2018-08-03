@@ -46,8 +46,8 @@ public interface ActivityRegisterService {
 
     /**
      * 查询活动详情
-     * @param mktActivityId
+     * @param activityCode
      * @return
      */
-    public ResponseData<List<ActivityVO>> selectActivityRegisterById(Long mktActivityId);
+    public ResponseData<List<ActivityVO>> selectActivityRegisterById(String activityCode);
 }

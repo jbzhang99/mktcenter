@@ -32,10 +32,10 @@ public interface ActivityOrderService {
     public ResponseData<Integer> addActivityOrder(ActivityBO bo, SysAccountPO stageUser);
     /**
      * 查询活动详情
-     * @param mktActivityId
+     * @param
      * @return
      */
-    public ResponseData<List<ActivityVO>> selectActivityOrderById(Long mktActivityId);
+    public ResponseData<List<ActivityVO>> selectActivityOrderById(String activityCode);
     /**
      * 修改活动
      * @return
