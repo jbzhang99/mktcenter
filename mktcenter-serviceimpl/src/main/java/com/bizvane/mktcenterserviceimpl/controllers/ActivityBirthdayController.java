@@ -70,6 +70,7 @@ public class ActivityBirthdayController {
      * @param activityCode
      * @return
      */
+    @RequestMapping("selectActivityBirthdayById")
     public ResponseData<List<ActivityVO>> selectActivityBirthdayById(String activityCode){
         return activityBirthdayService.selectActivityBirthdayById(activityCode);
     }
