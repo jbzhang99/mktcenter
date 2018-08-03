@@ -1,11 +1,13 @@
 package com.bizvane.mktcenterserviceimpl.service.impl;
 
-import com.bizvane.centerstageservice.models.po.SysCheckConfigPo;
 import com.bizvane.centerstageservice.models.po.SysCheckPo;
 import com.bizvane.centerstageservice.models.vo.SysCheckConfigVo;
 import com.bizvane.centerstageservice.rpc.SysCheckConfigServiceRpc;
 import com.bizvane.centerstageservice.rpc.SysCheckServiceRpc;
+import com.bizvane.couponfacade.interfaces.CouponQueryServiceFeign;
 import com.bizvane.couponfacade.interfaces.SendCouponServiceFeign;
+import com.bizvane.couponfacade.models.po.CouponEntityPO;
+import com.bizvane.couponfacade.models.vo.CouponEntityAndDefinitionVO;
 import com.bizvane.couponfacade.models.vo.SendCouponSimpleRequestVO;
 import com.bizvane.members.facade.enums.IntegralChangeTypeEnum;
 import com.bizvane.members.facade.models.IntegralRecordModel;
@@ -15,7 +17,6 @@ import com.bizvane.mktcenterservice.interfaces.ActivityRegisterService;
 import com.bizvane.mktcenterservice.models.bo.ActivityBO;
 import com.bizvane.mktcenterservice.models.po.*;
 import com.bizvane.mktcenterservice.models.vo.ActivityVO;
-import com.bizvane.mktcenterservice.models.vo.MessageVO;
 import com.bizvane.mktcenterservice.models.vo.PageForm;
 import com.bizvane.mktcenterserviceimpl.common.enums.ActivityStatusEnum;
 import com.bizvane.mktcenterserviceimpl.common.enums.ActivityTypeEnum;
@@ -42,9 +43,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.UUID;
 
 /**
  * @author chen.li
@@ -80,6 +81,8 @@ public class ActivityRegisterServiceImpl implements ActivityRegisterService {
     private JobClient jobClient;
     @Autowired
     private SysCheckServiceRpc sysCheckServiceRpc;
+    @Autowired
+    private CouponQueryServiceFeign couponQueryServiceFeign;
     /**
      * 查询活动列表
      * @param vo
@@ -457,19 +460,30 @@ public class ActivityRegisterServiceImpl implements ActivityRegisterService {
         example.createCriteria().andBizIdEqualTo(registerList.get(0).getMktActivityId());
         example.createCriteria().andValidEqualTo(true);
         List<MktCouponPO> mktCouponPOs= mktCouponPOMapper.selectByExample(example);
+        //查询券接口
+        List<CouponEntityAndDefinitionVO> lists = new ArrayList<>();
+        if(!CollectionUtils.isEmpty(mktCouponPOs)){
+            for (MktCouponPO po:mktCouponPOs) {
+                CouponEntityPO couponEntity = new CouponEntityPO();
+                couponEntity.setCouponEntityId(po.getCouponId());
+                ResponseData<CouponEntityAndDefinitionVO>  entityAndDefinition = couponQueryServiceFeign.getAllRpc(couponEntity);
+                lists.add(entityAndDefinition.getData());
+            }
+        }
+
         //查询消息模板
         MktMessagePOExample exampl = new MktMessagePOExample();
         example.createCriteria().andBizIdEqualTo(registerList.get(0).getMktActivityId());
         List<MktMessagePO> listMktMessage = mktMessagePOMapper.selectByExample(exampl);
         ActivityBO bo = new ActivityBO();
-        if(CollectionUtils.isEmpty(registerList)){
+        if(!CollectionUtils.isEmpty(registerList)){
             bo.setActivityVO(registerList.get(0));
         }
-        if(CollectionUtils.isEmpty(mktCouponPOs)){
-            bo.setCouponCodeList(mktCouponPOs);
-        }
-        if(CollectionUtils.isEmpty(listMktMessage)){
+        if(!CollectionUtils.isEmpty(listMktMessage)){
             bo.setMessageVOList(listMktMessage);
+        }
+        if(!CollectionUtils.isEmpty(lists)){
+            bo.setCouponEntityAndDefinitionVOList(lists);
         }
         responseData.setData(bo);
         responseData.setCode(SysResponseEnum.SUCCESS.getCode());

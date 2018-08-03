@@ -5,7 +5,10 @@ import com.bizvane.centerstageservice.models.po.SysCheckPo;
 import com.bizvane.centerstageservice.models.vo.SysCheckConfigVo;
 import com.bizvane.centerstageservice.rpc.SysCheckConfigServiceRpc;
 import com.bizvane.centerstageservice.rpc.SysCheckServiceRpc;
+import com.bizvane.couponfacade.interfaces.CouponQueryServiceFeign;
 import com.bizvane.couponfacade.interfaces.SendCouponServiceFeign;
+import com.bizvane.couponfacade.models.po.CouponEntityPO;
+import com.bizvane.couponfacade.models.vo.CouponEntityAndDefinitionVO;
 import com.bizvane.couponfacade.models.vo.SendCouponSimpleRequestVO;
 import com.bizvane.members.facade.enums.IntegralChangeTypeEnum;
 import com.bizvane.members.facade.models.IntegralRecordModel;
@@ -38,6 +41,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
@@ -69,6 +73,8 @@ public class ActivityUpgradeServiceImpl implements ActivityUpgradeService {
     private SendCouponServiceFeign sendCouponServiceFeign;
     @Autowired
     private SysCheckServiceRpc sysCheckServiceRpc;
+    @Autowired
+    private CouponQueryServiceFeign couponQueryServiceFeign;
     /**
      * 查询升级活动列表
      * @param vo
@@ -391,18 +397,28 @@ public class ActivityUpgradeServiceImpl implements ActivityUpgradeService {
         example.createCriteria().andBizIdEqualTo(upgradeList.get(0).getMktActivityId());
         example.createCriteria().andValidEqualTo(true);
         List<MktCouponPO> mktCouponPOs= mktCouponPOMapper.selectByExample(example);
+        //查询券接口
+        List<CouponEntityAndDefinitionVO> lists = new ArrayList<>();
+        if(!CollectionUtils.isEmpty(mktCouponPOs)){
+            for (MktCouponPO po:mktCouponPOs) {
+                CouponEntityPO couponEntity = new CouponEntityPO();
+                couponEntity.setCouponEntityId(po.getCouponId());
+                ResponseData<CouponEntityAndDefinitionVO>  entityAndDefinition = couponQueryServiceFeign.getAllRpc(couponEntity);
+                lists.add(entityAndDefinition.getData());
+            }
+        }
         //查询消息模板
         MktMessagePOExample exampl = new MktMessagePOExample();
         example.createCriteria().andBizIdEqualTo(upgradeList.get(0).getMktActivityId());
         List<MktMessagePO> listMktMessage = mktMessagePOMapper.selectByExample(exampl);
         ActivityBO bo = new ActivityBO();
-        if(CollectionUtils.isEmpty(upgradeList)){
+        if(!CollectionUtils.isEmpty(upgradeList)){
             bo.setActivityVO(upgradeList.get(0));
         }
-        if(CollectionUtils.isEmpty(mktCouponPOs)){
-            bo.setCouponCodeList(mktCouponPOs);
+        if(!CollectionUtils.isEmpty(lists)){
+            bo.setCouponEntityAndDefinitionVOList(lists);
         }
-        if(CollectionUtils.isEmpty(listMktMessage)){
+        if(!CollectionUtils.isEmpty(listMktMessage)){
             bo.setMessageVOList(listMktMessage);
         }
         responseData.setData(bo);
