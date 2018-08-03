@@ -32,7 +32,7 @@ import java.util.List;
  * 消费金额任务
  */
 @RestController
-@RequestMapping("taskInvite")
+@RequestMapping("/taskInvite")
 public class TaskInviteController {
 
     @Autowired
@@ -41,7 +41,7 @@ public class TaskInviteController {
     /**
      * 任务审核
      */
-    @RequestMapping("checkInviteTask")
+    @RequestMapping("/checkInviteTask")
     public  ResponseData<Integer>  checkInviteTask(TaskVO vo){
         ResponseData<Integer> result = new ResponseData<Integer>(SysResponseEnum.FAILED.getCode(),SysResponseEnum.FAILED.getMessage(),null);
         Integer data = taskInviteService.checkInviteTask(vo);
@@ -54,7 +54,7 @@ public class TaskInviteController {
     /**
      * 查询消费任务详情
      */
-    @RequestMapping("getAmountTaskDetails")
+    @RequestMapping("/getInviteTaskDetails")
     public  ResponseData<TaskDetailBO> getInviteTaskDetails(Long mktTaskId){
         ResponseData<TaskDetailBO> result = new ResponseData<TaskDetailBO>(SysResponseEnum.FAILED.getCode(),SysResponseEnum.FAILED.getMessage(),null);
         List<TaskDetailBO> lists = taskInviteService.getInviteTaskDetails(mktTaskId);
@@ -72,7 +72,7 @@ public class TaskInviteController {
      * 创建任务
      * @return
      */
-    @RequestMapping("addTask")
+    @RequestMapping("/addTask")
     public ResponseData<Integer> addTask(TaskDetailVO vo, HttpServletRequest request) throws ParseException {
         //参数校验通过，获取操作人信息
         SysAccountPO stageUser = TokenUtils.getStageUser(request);
@@ -82,7 +82,7 @@ public class TaskInviteController {
     /**
      * 修改任务
      */
-    @RequestMapping("updateInviteTask")
+    @RequestMapping("/updateInviteTask")
     public ResponseData updateInviteTask(TaskDetailVO vo, HttpServletRequest request){
         SysAccountPO stageUser = TokenUtils.getStageUser(request);
 

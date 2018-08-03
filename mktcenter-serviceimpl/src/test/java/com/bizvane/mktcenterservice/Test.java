@@ -3,8 +3,12 @@ package com.bizvane.mktcenterservice;
 import com.bizvane.mktcenterservice.models.po.MktActivityPOWithBLOBs;
 import com.bizvane.mktcenterservice.models.po.MktMessagePO;
 import com.bizvane.mktcenterservice.models.vo.MessageVO;
+import com.bizvane.mktcenterserviceimpl.MktcenterApplication;
 import com.google.common.collect.Lists;
+import org.junit.runner.RunWith;
 import org.springframework.beans.BeanUtils;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.junit4.SpringRunner;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -17,6 +21,8 @@ import java.util.Optional;
  * @description
  * @Copyright (c) 2018 上海商帆信息科技有限公司-版权所有
  */
+@RunWith(SpringRunner.class)
+@SpringBootTest(classes={MktcenterApplication.class})
 public class Test {
 
     public void test1(){

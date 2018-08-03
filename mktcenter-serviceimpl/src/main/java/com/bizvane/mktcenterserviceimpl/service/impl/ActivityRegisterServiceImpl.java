@@ -1,8 +1,10 @@
 package com.bizvane.mktcenterserviceimpl.service.impl;
 
 import com.bizvane.centerstageservice.models.po.SysCheckConfigPo;
+import com.bizvane.centerstageservice.models.po.SysCheckPo;
 import com.bizvane.centerstageservice.models.vo.SysCheckConfigVo;
 import com.bizvane.centerstageservice.rpc.SysCheckConfigServiceRpc;
+import com.bizvane.centerstageservice.rpc.SysCheckServiceRpc;
 import com.bizvane.couponfacade.interfaces.SendCouponServiceFeign;
 import com.bizvane.couponfacade.models.vo.SendCouponSimpleRequestVO;
 import com.bizvane.members.facade.enums.IntegralChangeTypeEnum;
@@ -76,6 +78,8 @@ public class ActivityRegisterServiceImpl implements ActivityRegisterService {
     private SendCouponServiceFeign sendCouponServiceFeign;
     @Autowired
     private JobClient jobClient;
+    @Autowired
+    private SysCheckServiceRpc sysCheckServiceRpc;
     /**
      * 查询活动列表
      * @param vo
@@ -150,14 +154,17 @@ public class ActivityRegisterServiceImpl implements ActivityRegisterService {
             mktActivityPOWithBLOBs.setActivityStatus(ActivityStatusEnum.ACTIVITY_STATUS_PENDING.getCode());
 
             //如果是待审核数据则需要增加一条审核数据
-            SysCheckConfigPo po = new SysCheckConfigPo();
+            SysCheckPo  po = new SysCheckPo();
             po.setSysBrandId(mktActivityPOWithBLOBs.getSysBrandId());
             po.setFunctionCode(mktActivityPOWithBLOBs.getActivityCode());
-            po.setFunctionName(mktActivityPOWithBLOBs.getActivityName());
+            po.setBusinessName(mktActivityPOWithBLOBs.getActivityName());
+            po.setBusinessType(ActivityTypeEnum.ACTIVITY_TYPE_REGISGER.getCode());
+            po.setFunctionCode("C0002");
+            po.setCheckStatus(CheckStatusEnum.CHECK_STATUS_PENDING.getCode());
             po.setCreateDate(new Date());
             po.setCreateUserId(stageUser.getSysAccountId());
             po.setCreateUserName(stageUser.getName());
-            sysCheckConfigServiceRpc.addCheckConfig(po);
+            sysCheckServiceRpc.addCheck(po);
             //getStartTime 开始时间>当前时间增加job
             if(1 != bo.getActivityVO().getLongTerm() && new Date().before(activityVO.getStartTime())){
                 //创建任务调度任务开始时间
@@ -213,9 +220,9 @@ public class ActivityRegisterServiceImpl implements ActivityRegisterService {
         }
 
         //新增活动消息
-        List<MessageVO> messageVOList = bo.getMessageVOList();
+        List<MktMessagePO> messageVOList = bo.getMessageVOList();
         if(!CollectionUtils.isEmpty(messageVOList)){
-            for(MessageVO messageVO : messageVOList){
+            for(MktMessagePO messageVO : messageVOList){
                 MktMessagePO mktMessagePO = new MktMessagePO();
                 BeanUtils.copyProperties(mktActivityPOWithBLOBs,mktMessagePO);
                 BeanUtils.copyProperties(messageVO,mktMessagePO);
@@ -335,14 +342,17 @@ public class ActivityRegisterServiceImpl implements ActivityRegisterService {
             //已驳回的可以新建审核
             if(activityVO.getCheckStatus() == CheckStatusEnum.CHECK_STATUS_REJECTED.getCode()){
                 //如果是待审核数据则需要增加一条审核数据
-                SysCheckConfigPo po = new SysCheckConfigPo();
+                SysCheckPo  po = new SysCheckPo();
                 po.setSysBrandId(mktActivityPOWithBLOBs.getSysBrandId());
                 po.setFunctionCode(mktActivityPOWithBLOBs.getActivityCode());
-                po.setFunctionName(mktActivityPOWithBLOBs.getActivityName());
+                po.setBusinessName(mktActivityPOWithBLOBs.getActivityName());
+                po.setBusinessType(ActivityTypeEnum.ACTIVITY_TYPE_REGISGER.getCode());
+                po.setFunctionCode("C0002");
+                po.setCheckStatus(CheckStatusEnum.CHECK_STATUS_PENDING.getCode());
                 po.setCreateDate(new Date());
                 po.setCreateUserId(stageUser.getSysAccountId());
                 po.setCreateUserName(stageUser.getName());
-                sysCheckConfigServiceRpc.addCheckConfig(po);
+                sysCheckServiceRpc.addCheck(po);
             }
 
             //getStartTime 开始时间>当前时间增加job
@@ -415,9 +425,9 @@ public class ActivityRegisterServiceImpl implements ActivityRegisterService {
         exam.createCriteria().andBizIdEqualTo(mktActivityId);
         mktMessagePOMapper.updateByExampleSelective(message,exam);
         //修改活动消息
-        List<MessageVO> messageVOList = bo.getMessageVOList();
+        List<MktMessagePO> messageVOList = bo.getMessageVOList();
         if(!CollectionUtils.isEmpty(messageVOList)){
-            for(MessageVO messageVO : messageVOList){
+            for(MktMessagePO messageVO : messageVOList){
                 MktMessagePO mktMessagePO = new MktMessagePO();
                 BeanUtils.copyProperties(mktActivityPOWithBLOBs,mktMessagePO);
                 BeanUtils.copyProperties(messageVO,mktMessagePO);
@@ -433,16 +443,35 @@ public class ActivityRegisterServiceImpl implements ActivityRegisterService {
 
     /**
      *  查询活动详情
-     * @param mktActivityId
+     * @param businessCode
      * @return
      */
     @Override
-    public ResponseData<List<ActivityVO>> selectActivityRegisterById(Long mktActivityId) {
+    public ResponseData<ActivityBO> selectActivityRegisterById(String businessCode) {
         ResponseData responseData = new ResponseData();
         ActivityVO vo= new ActivityVO();
-        vo.setMktActivityId(mktActivityId);
+        vo.setActivityCode(businessCode);
         List<ActivityVO> registerList = mktActivityRegisterPOMapper.getActivityList(vo);
-        responseData.setData(registerList);
+        //查询活动卷
+        MktCouponPOExample example = new  MktCouponPOExample();
+        example.createCriteria().andBizIdEqualTo(registerList.get(0).getMktActivityId());
+        example.createCriteria().andValidEqualTo(true);
+        List<MktCouponPO> mktCouponPOs= mktCouponPOMapper.selectByExample(example);
+        //查询消息模板
+        MktMessagePOExample exampl = new MktMessagePOExample();
+        example.createCriteria().andBizIdEqualTo(registerList.get(0).getMktActivityId());
+        List<MktMessagePO> listMktMessage = mktMessagePOMapper.selectByExample(exampl);
+        ActivityBO bo = new ActivityBO();
+        if(CollectionUtils.isEmpty(registerList)){
+            bo.setActivityVO(registerList.get(0));
+        }
+        if(CollectionUtils.isEmpty(mktCouponPOs)){
+            bo.setCouponCodeList(mktCouponPOs);
+        }
+        if(CollectionUtils.isEmpty(listMktMessage)){
+            bo.setMessageVOList(listMktMessage);
+        }
+        responseData.setData(bo);
         responseData.setCode(SysResponseEnum.SUCCESS.getCode());
         responseData.setMessage(SysResponseEnum.SUCCESS.getMessage());
         return responseData;

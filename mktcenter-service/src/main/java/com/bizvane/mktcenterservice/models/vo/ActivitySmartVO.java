@@ -2,9 +2,12 @@ package com.bizvane.mktcenterservice.models.vo;
 
 import com.bizvane.mktcenterservice.models.po.MktActivityPO;
 import com.bizvane.mktcenterservice.models.po.MktActivitySmartPO;
+import com.bizvane.mktcenterservice.models.po.MktCouponPO;
+import com.bizvane.mktcenterservice.models.po.MktMessagePO;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * @author chen.li
@@ -72,30 +75,87 @@ public class ActivitySmartVO extends MktActivitySmartPO {
 
     /**
      * 只读.
-     预计目标会员统计. target_mbr_count
-     *
-     * @mbg.generated 2018-08-02 20:38:44
-     */
-    @io.swagger.annotations.ApiModelProperty(value = "预计目标会员统计",name = "targetMbrCount", required = false,example = "")
-    private Integer targetMbrCount;
-
-    /**
-     * 只读.
-     预计目标会员数量的统计时间. target_mbr_count_time
-     *
-     * @mbg.generated 2018-08-02 20:38:44
-     */
-    @io.swagger.annotations.ApiModelProperty(value = "预计目标会员数量的统计时间",name = "targetMbrCountTime", required = false,example = "")
-    private Date targetMbrCountTime;
-
-    /**
-     * 只读.
      分组状态：0禁用，1启用. status
      *
      * @mbg.generated 2018-08-02 20:38:44
      */
     @io.swagger.annotations.ApiModelProperty(value = "分组状态：0禁用，1启用",name = "status", required = false,example = "")
     private Boolean status;
+
+    /**
+     * 优惠券对象列表
+     */
+    private List<MktCouponPO> mktCouponPOS;
+
+    /**
+     * 只读. 所属企业id. sys_company_id
+     * @mbg.generated  2018-08-02 20:38:44
+     */
+    @io.swagger.annotations.ApiModelProperty(value = "所属企业id", name = "sysCompanyId", required = false, example = "")
+    private Long sysCompanyId;
+    /**
+     * 只读. 所属品牌id. sys_brand_id
+     * @mbg.generated  2018-08-02 20:38:44
+     */
+    @io.swagger.annotations.ApiModelProperty(value = "所属品牌id", name = "sysBrandId", required = false, example = "")
+    private Long sysBrandId;
+
+    /**
+     * 只读. 活动编号. activity_code
+     * @mbg.generated  2018-08-02 20:38:44
+     */
+    @io.swagger.annotations.ApiModelProperty(value = "活动编号", name = "activityCode", required = false, example = "")
+    private String activityCode;
+    /**
+     * 只读. 活动类型：1开卡活动，2升级活动，3扫码领券，4手动领券，5消费活动，6签到活动，7生日活动，8智能营销. activity_type
+     * @mbg.generated  2018-08-02 20:38:44
+     */
+    @io.swagger.annotations.ApiModelProperty(value = "活动类型：1开卡活动，2升级活动，3扫码领券，4手动领券，5消费活动，6签到活动，7生日活动，8智能营销", name = "activityType", required = false, example = "")
+    private Integer activityType;
+    /**
+     * 只读. 活动名称. activity_name
+     * @mbg.generated  2018-08-02 20:38:44
+     */
+    @io.swagger.annotations.ApiModelProperty(value = "活动名称", name = "activityName", required = false, example = "")
+    private String activityName;
+
+    /**
+     * 只读. 是否长期：1是，0否. long_term
+     * @mbg.generated  2018-08-02 20:38:44
+     */
+    @io.swagger.annotations.ApiModelProperty(value = "是否长期：1是，0否", name = "longTerm", required = false, example = "")
+    private Integer longTerm;
+    /**
+     * 只读. 赠送积分. points
+     * @mbg.generated  2018-08-02 20:38:44
+     */
+    @io.swagger.annotations.ApiModelProperty(value = "赠送积分", name = "points", required = false, example = "")
+    private Integer points;
+    /**
+     * 只读. 审核状态：0全部，1待审核，2审核中，3已审核，4已驳回. check_status
+     * @mbg.generated  2018-08-02 20:38:44
+     */
+    @io.swagger.annotations.ApiModelProperty(value = "审核状态：0全部，1待审核，2审核中，3已审核，4已驳回", name = "checkStatus", required = false, example = "")
+    private Integer checkStatus;
+    /**
+     * 只读. 活动状态：0全部，1待执行，2执行中，3已结束. activity_status
+     * @mbg.generated  2018-08-02 20:38:44
+     */
+    @io.swagger.annotations.ApiModelProperty(value = "活动状态：0全部，1待执行，2执行中，3已结束", name = "activityStatus", required = false, example = "")
+    private Integer activityStatus;
+
+
+    /**
+     * 只读. 活动描述、简介. activity_info
+     * @mbg.generated  2018-08-02 20:38:44
+     */
+    @io.swagger.annotations.ApiModelProperty(value = "活动描述、简介", name = "activityInfo", required = false, example = "")
+    private String activityInfo;
+
+    /**
+     * 消息对象
+     */
+    private MktMessagePO mktMessagePO;
 
     public Date getCreateDateStart() {
         return createDateStart;
@@ -169,31 +229,107 @@ public class ActivitySmartVO extends MktActivitySmartPO {
         this.memberGroupCode = memberGroupCode;
     }
 
-    @Override
-    public Integer getTargetMbrCount() {
-        return targetMbrCount;
-    }
-
-    @Override
-    public void setTargetMbrCount(Integer targetMbrCount) {
-        this.targetMbrCount = targetMbrCount;
-    }
-
-    @Override
-    public Date getTargetMbrCountTime() {
-        return targetMbrCountTime;
-    }
-
-    @Override
-    public void setTargetMbrCountTime(Date targetMbrCountTime) {
-        this.targetMbrCountTime = targetMbrCountTime;
-    }
-
     public Boolean getStatus() {
         return status;
     }
 
     public void setStatus(Boolean status) {
         this.status = status;
+    }
+
+    public List<MktCouponPO> getMktCouponPOS() {
+        return mktCouponPOS;
+    }
+
+    public void setMktCouponPOS(List<MktCouponPO> mktCouponPOS) {
+        this.mktCouponPOS = mktCouponPOS;
+    }
+
+    public Long getSysCompanyId() {
+        return sysCompanyId;
+    }
+
+    public void setSysCompanyId(Long sysCompanyId) {
+        this.sysCompanyId = sysCompanyId;
+    }
+
+    public Long getSysBrandId() {
+        return sysBrandId;
+    }
+
+    public void setSysBrandId(Long sysBrandId) {
+        this.sysBrandId = sysBrandId;
+    }
+
+    public String getActivityCode() {
+        return activityCode;
+    }
+
+    public void setActivityCode(String activityCode) {
+        this.activityCode = activityCode;
+    }
+
+    public Integer getActivityType() {
+        return activityType;
+    }
+
+    public void setActivityType(Integer activityType) {
+        this.activityType = activityType;
+    }
+
+    public String getActivityName() {
+        return activityName;
+    }
+
+    public void setActivityName(String activityName) {
+        this.activityName = activityName;
+    }
+
+    public Integer getLongTerm() {
+        return longTerm;
+    }
+
+    public void setLongTerm(Integer longTerm) {
+        this.longTerm = longTerm;
+    }
+
+    public Integer getPoints() {
+        return points;
+    }
+
+    public void setPoints(Integer points) {
+        this.points = points;
+    }
+
+    public Integer getCheckStatus() {
+        return checkStatus;
+    }
+
+    public void setCheckStatus(Integer checkStatus) {
+        this.checkStatus = checkStatus;
+    }
+
+    public Integer getActivityStatus() {
+        return activityStatus;
+    }
+
+    public void setActivityStatus(Integer activityStatus) {
+        this.activityStatus = activityStatus;
+    }
+
+    public String getActivityInfo() {
+        return activityInfo;
+    }
+
+    public void setActivityInfo(String activityInfo) {
+        this.activityInfo = activityInfo;
+    }
+
+    public MktMessagePO getMktMessagePO() {
+        return mktMessagePO;
+    }
+
+    public void setMktMessagePO(MktMessagePO mktMessagePO) {
+        this.mktMessagePO = mktMessagePO;
     }
 }

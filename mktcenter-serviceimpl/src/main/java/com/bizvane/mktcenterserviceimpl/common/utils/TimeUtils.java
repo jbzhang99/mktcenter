@@ -4,7 +4,9 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.ParsePosition;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 
 /**
  * @Author: lijunwei
@@ -45,4 +47,14 @@ public class TimeUtils {
             return Integer.valueOf(3);
        }
     }
+
+    public static Date getNextDay(Date date){
+        Calendar calendar = new GregorianCalendar();
+        calendar.setTime(date);
+        calendar.add(Calendar.DATE,1);
+        Date date1 = calendar.getTime();
+        return date1;
+    }
+
+
 }

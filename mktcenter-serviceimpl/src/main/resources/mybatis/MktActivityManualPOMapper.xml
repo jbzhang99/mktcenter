@@ -592,7 +592,10 @@
     <if test="mktActivityId != null and mktActivityId!= '' ">
       AND tma.mkt_activity_id = #{mktActivityId,jdbcType=BIGINT}
     </if>
-
+    <!--活动编号-->
+    <if test="activityCode != null and activityCode!= ''">
+      AND tma.activity_code = #{activityCode}
+    </if>
   </select>
 
   <select id="getActivityIdList" parameterType="com.bizvane.mktcenterservice.models.vo.ActivityVO"  resultType="com.bizvane.mktcenterservice.models.vo.ActivityVO">

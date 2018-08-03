@@ -4,6 +4,7 @@ import com.bizvane.mktcenterservice.interfaces.ActivityOrderService;
 import com.bizvane.mktcenterservice.models.bo.ActivityBO;
 import com.bizvane.mktcenterservice.models.bo.OrderModelBo;
 import com.bizvane.mktcenterservice.models.po.MktCouponPO;
+import com.bizvane.mktcenterservice.models.po.MktMessagePO;
 import com.bizvane.mktcenterservice.models.vo.ActivityVO;
 import com.bizvane.mktcenterservice.models.vo.MessageVO;
 import com.bizvane.mktcenterservice.models.vo.PageForm;
@@ -46,7 +47,7 @@ public class ActivityOrderController {
      * @return
      */
     @RequestMapping("addActivityOrder.do")
-    public ResponseData<Integer> addActivityOrder(ActivityVO activityVO, List<MktCouponPO> couponCodeList, List<MessageVO> messageVOList, HttpServletRequest request){
+    public ResponseData<Integer> addActivityOrder(ActivityVO activityVO, List<MktCouponPO> couponCodeList, List<MktMessagePO> messageVOList, HttpServletRequest request){
         ActivityBO bo = new ActivityBO();
         bo.setActivityVO(activityVO);
         bo.setCouponCodeList(couponCodeList);
@@ -70,18 +71,18 @@ public class ActivityOrderController {
 
     /**
      * 查询活动详情
-     * @param mktActivityId
+     * @param businessCode
      * @return
      */
     @RequestMapping("selectActivityOrderById")
-    public ResponseData<List<ActivityVO>> selectActivityOrderById(Long mktActivityId){
-        return activityOrderService.selectActivityOrderById(mktActivityId);
+    public ResponseData<ActivityBO> selectActivityOrderById(String businessCode){
+        return activityOrderService.selectActivityOrderById(businessCode);
     }
     /**
      * 修改活动
      * @return
      */
-    public ResponseData<Integer> updateActivityOrder(ActivityVO activityVO, List<MktCouponPO> couponCodeList, List<MessageVO> messageVOList, HttpServletRequest request){
+    public ResponseData<Integer> updateActivityOrder(ActivityVO activityVO, List<MktCouponPO> couponCodeList, List<MktMessagePO> messageVOList, HttpServletRequest request){
         ActivityBO bo = new ActivityBO();
         bo.setActivityVO(activityVO);
         bo.setCouponCodeList(couponCodeList);

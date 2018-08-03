@@ -1,5 +1,9 @@
 package com.bizvane.mktcenterserviceimpl.controllers;
 
+import com.bizvane.members.facade.models.ExtendPropertyModel;
+import com.bizvane.members.facade.models.MemberInfoModel;
+import com.bizvane.members.facade.service.api.ExtendPropertyApiService;
+import com.bizvane.members.facade.service.api.MemberInfoApiService;
 import com.bizvane.members.facade.service.api.MemberLevelApiService;
 import com.bizvane.mktcenterservice.interfaces.TaskProfileService;
 import com.bizvane.mktcenterservice.models.bo.TaskBO;
@@ -19,7 +23,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 /**
- * @author chen.li
+ * @author gengxiaoyu
  * @date on 2018/7/13 13:39
  * @description
  * @Copyright (c) 2018 上海商帆信息科技有限公司-版权所有
@@ -34,15 +38,13 @@ public class TaskProfileController {
     @Autowired
     private MemberLevelApiService memberLevelApiService;
 
-    /**
-     * 查询任务列表
-     * @return
-     */
-    @RequestMapping("getTaskList")
-    public ResponseData<TaskVO> getTaskList(TaskVO vo, PageForm pageForm){
-        ResponseData<TaskVO> taskVOResponseData = taskProfileService.getTaskList(vo, pageForm);
-        return taskVOResponseData;
-    }
+    @Autowired
+    private MemberInfoApiService memberInfoApiService;
+
+    @Autowired
+    private ExtendPropertyApiService extendPropertyApiService;
+
+
 
     /**
      * 创建任务
@@ -56,8 +58,9 @@ public class TaskProfileController {
         bo.setMessageVOList(messageVOList);
 
         //获取操作人信息
-//        SysAccountPO stageUser = TokenUtils.getStageUser(request);
+        //SysAccountPO stageUser = TokenUtils.getStageUser(request);
         SysAccountPO stageUser = new SysAccountPO();
+
 
         //新增任务
         ResponseData<Integer> integerResponseData = taskProfileService.addTask(bo, stageUser);
@@ -97,17 +100,38 @@ public class TaskProfileController {
      * @param
      * @return
      */
-    public ResponseData<Integer> executeTask(TaskVO vo){
+    public ResponseData<Integer> executeTask(TaskVO vo,MemberInfoModel memberInfoModel){
 
-        return taskProfileService.executeTask(vo);
+        return taskProfileService.executeTask(vo,memberInfoModel);
     }
 
     /**
      * 查询任务详情
-     * @param mktActivityId
+     * @param mktTaskId
      * @return
      */
-    public ResponseData<List<TaskVO>> selectTaskById(Long mktActivityId){
-        return taskProfileService.selectTaskById(mktActivityId);
+    public ResponseData<List<TaskVO>> selectTaskById(Long mktTaskId){
+        return taskProfileService.selectTaskById(mktTaskId);
     }
+
+
+    /**
+     * 查询商家自定义扩展信息
+     * @param
+     * @return
+     */
+    //前端传回的是品牌id还是ExtendPropertyModel？？？？
+    @RequestMapping("getExtendProperty")
+    public ResponseData getExtendProperty(Long brandid){
+
+        ExtendPropertyModel extendPropertyModel = new ExtendPropertyModel();
+        extendPropertyModel.setBrandId(brandid);
+        return extendPropertyApiService.getExtendProperty(extendPropertyModel);
+
+    }
+
+
+
+
 }
+

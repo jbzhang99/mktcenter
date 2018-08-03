@@ -20,10 +20,7 @@ import com.bizvane.mktcenterserviceimpl.common.enums.CheckStatusEnum;
 import com.bizvane.mktcenterserviceimpl.common.utils.ActivityParamCheckUtil;
 import com.bizvane.mktcenterserviceimpl.common.utils.CodeUtil;
 import com.bizvane.mktcenterserviceimpl.common.utils.JobUtil;
-import com.bizvane.mktcenterserviceimpl.mappers.MktActivityManualPOMapper;
-import com.bizvane.mktcenterserviceimpl.mappers.MktActivityPOMapper;
-import com.bizvane.mktcenterserviceimpl.mappers.MktActivityRecordPOMapper;
-import com.bizvane.mktcenterserviceimpl.mappers.MktCouponPOMapper;
+import com.bizvane.mktcenterserviceimpl.mappers.*;
 import com.bizvane.utils.enumutils.SysResponseEnum;
 import com.bizvane.utils.responseinfo.ResponseData;
 import com.bizvane.utils.tokens.SysAccountPO;
@@ -65,7 +62,8 @@ public class ActivityManualServiceImpl implements ActivityManualService {
 
     @Autowired
     private CouponQueryServiceFeign couponQueryServiceFeign;
-
+    @Autowired
+    private MktMessagePOMapper mktMessagePOMapper;
     @Override
     public ResponseData<ActivityVO> getActivityManualList(ActivityVO vo, PageForm pageForm) {
         ResponseData responseData = new ResponseData();
@@ -187,7 +185,6 @@ public class ActivityManualServiceImpl implements ActivityManualService {
         MktCouponPO mktCouponPO = new MktCouponPO();
         mktCouponPO.setCouponId(couponId);
         mktCouponPO.setBizId(mktActivityId);//活动id
-        mktCouponPO.setBizCode(activityCode);//活动编号
         mktCouponPO.setBizType(1);//业务类型 1.活动改为枚举，不要出现魔数
         mktCouponPO.setModifiedUserId(stageUser.getSysAccountId());
         mktCouponPO.setModifiedUserName(stageUser.getName());
@@ -348,9 +345,9 @@ public class ActivityManualServiceImpl implements ActivityManualService {
 
 
     @Override
-    public ResponseData<ActivityVO> selectActivityManualById(Long mktActivityId) {
+    public ResponseData<ActivityBO> selectActivityManualById(String businessCode) {
         ResponseData responseData = new ResponseData();
-        if(null==mktActivityId){
+        if(StringUtils.isEmpty(businessCode)){
             log.error("领券活动-查询活动详情-入参为空");
             responseData.setCode(SystemConstants.ERROR_CODE);
             responseData.setMessage(SystemConstants.ERROR_MSG_PARAM_EMPTY);
@@ -358,10 +355,29 @@ public class ActivityManualServiceImpl implements ActivityManualService {
         }
         try {
         ActivityVO vo = new ActivityVO();
-        vo.setMktActivityId(mktActivityId);
+        vo.setActivityCode(businessCode);
         log.info("领券活动-查询活动详情-getActivityList入参:"+vo);
         List<ActivityVO> activityManualList = mktActivityManualPOMapper.getActivityList(vo);
         log.info("领券活动-查询活动详情-出参:"+activityManualList);
+            //查询活动卷
+            MktCouponPOExample example = new  MktCouponPOExample();
+            example.createCriteria().andBizIdEqualTo(activityManualList.get(0).getMktActivityId());
+            example.createCriteria().andValidEqualTo(true);
+            List<MktCouponPO> mktCouponPOs= mktCouponPOMapper.selectByExample(example);
+            //查询消息模板
+            MktMessagePOExample exampl = new MktMessagePOExample();
+            example.createCriteria().andBizIdEqualTo(activityManualList.get(0).getMktActivityId());
+            List<MktMessagePO> listMktMessage = mktMessagePOMapper.selectByExample(exampl);
+            ActivityBO bo = new ActivityBO();
+            if(CollectionUtils.isEmpty(activityManualList)){
+                bo.setActivityVO(activityManualList.get(0));
+            }
+            if(CollectionUtils.isEmpty(mktCouponPOs)){
+                bo.setCouponCodeList(mktCouponPOs);
+            }
+            if(CollectionUtils.isEmpty(listMktMessage)){
+                bo.setMessageVOList(listMktMessage);
+            }
         responseData.setData(activityManualList);
         }catch (Exception e){
             log.error("领券活动-查询活动详情出错"+e.getMessage());

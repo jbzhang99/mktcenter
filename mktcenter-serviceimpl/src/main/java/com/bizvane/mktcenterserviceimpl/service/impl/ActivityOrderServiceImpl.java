@@ -1,8 +1,10 @@
 package com.bizvane.mktcenterserviceimpl.service.impl;
 
 import com.bizvane.centerstageservice.models.po.SysCheckConfigPo;
+import com.bizvane.centerstageservice.models.po.SysCheckPo;
 import com.bizvane.centerstageservice.models.vo.SysCheckConfigVo;
 import com.bizvane.centerstageservice.rpc.SysCheckConfigServiceRpc;
+import com.bizvane.centerstageservice.rpc.SysCheckServiceRpc;
 import com.bizvane.couponfacade.interfaces.SendCouponServiceFeign;
 import com.bizvane.couponfacade.models.vo.SendCouponSimpleRequestVO;
 import com.bizvane.members.facade.enums.IntegralChangeTypeEnum;
@@ -36,6 +38,7 @@ import com.github.pagehelper.PageInfo;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
 import java.math.BigDecimal;
@@ -72,6 +75,8 @@ public class ActivityOrderServiceImpl implements ActivityOrderService {
     private IntegralRecordApiService integralRecordApiService;
     @Autowired
     private SendCouponServiceFeign sendCouponServiceFeign;
+    @Autowired
+    private SysCheckServiceRpc sysCheckServiceRpc;
     /**
      * 查询消费活动列表
      * @param vo
@@ -85,6 +90,8 @@ public class ActivityOrderServiceImpl implements ActivityOrderService {
         List<ActivityVO> activityOrderList = mktActivityOrderPOMapper.getActivityOrderList(vo);
         PageInfo<ActivityVO> pageInfo = new PageInfo<>(activityOrderList);
         responseData.setData(pageInfo);
+        responseData.setCode(SysResponseEnum.SUCCESS.getCode());
+        responseData.setMessage(SysResponseEnum.SUCCESS.getMessage());
         return responseData;
     }
 
@@ -95,6 +102,7 @@ public class ActivityOrderServiceImpl implements ActivityOrderService {
      * @return
      */
     @Override
+    @Transactional
     public ResponseData<Integer> addActivityOrder(ActivityBO bo, SysAccountPO stageUser) {
         //返回对象
         ResponseData responseData = new ResponseData();
@@ -128,16 +136,18 @@ public class ActivityOrderServiceImpl implements ActivityOrderService {
             mktActivityPOWithBLOBs.setCheckStatus(CheckStatusEnum.CHECK_STATUS_PENDING.getCode());
             //活动状态设置为待执行
             mktActivityPOWithBLOBs.setActivityStatus(ActivityStatusEnum.ACTIVITY_STATUS_PENDING.getCode());
-
-            //如果是待审核数据则需要增加一条审核数据
-            SysCheckConfigPo po = new SysCheckConfigPo();
+            //新增审核
+            SysCheckPo po = new SysCheckPo();
             po.setSysBrandId(mktActivityPOWithBLOBs.getSysBrandId());
             po.setFunctionCode(mktActivityPOWithBLOBs.getActivityCode());
-            po.setFunctionName(mktActivityPOWithBLOBs.getActivityName());
+            po.setBusinessName(mktActivityPOWithBLOBs.getActivityName());
+            po.setBusinessType(ActivityTypeEnum.ACTIVITY_TYPE_ORDER.getCode());
+            po.setFunctionCode("C0002");
+            po.setCheckStatus(CheckStatusEnum.CHECK_STATUS_PENDING.getCode());
             po.setCreateDate(new Date());
             po.setCreateUserId(stageUser.getSysAccountId());
             po.setCreateUserName(stageUser.getName());
-            sysCheckConfigServiceRpc.addCheckConfig(po);
+            sysCheckServiceRpc.addCheck(po);
             //getStartTime 开始时间>当前时间增加job
             if( new Date().before(activityVO.getStartTime())){
                 //创建任务调度任务开始时间
@@ -198,9 +208,9 @@ public class ActivityOrderServiceImpl implements ActivityOrderService {
         }
 
         //新增活动消息
-        List<MessageVO> messageVOList = bo.getMessageVOList();
+        List<MktMessagePO> messageVOList = bo.getMessageVOList();
         if(!CollectionUtils.isEmpty(messageVOList)){
-            for(MessageVO messageVO : messageVOList){
+            for(MktMessagePO messageVO : messageVOList){
                 MktMessagePO mktMessagePO = new MktMessagePO();
                 BeanUtils.copyProperties(mktActivityPOWithBLOBs,mktMessagePO);
                 BeanUtils.copyProperties(messageVO,mktMessagePO);
@@ -209,21 +219,42 @@ public class ActivityOrderServiceImpl implements ActivityOrderService {
                 mktMessagePOMapper.insertSelective(mktMessagePO);
             }
         }
+        responseData.setCode(SysResponseEnum.SUCCESS.getCode());
+        responseData.setMessage(SysResponseEnum.SUCCESS.getMessage());
         return responseData;
     }
 
     /**
      * 查询活动
-     * @param mktActivityId
+     * @param businessCode
      * @return
      */
     @Override
-    public ResponseData<List<ActivityVO>> selectActivityOrderById(Long mktActivityId) {
+    public ResponseData<ActivityBO> selectActivityOrderById(String businessCode) {
         ResponseData responseData = new ResponseData();
         ActivityVO vo= new ActivityVO();
-        vo.setMktActivityId(mktActivityId);
+        vo.setActivityCode(businessCode);
         List<ActivityVO> orderList = mktActivityOrderPOMapper.getActivityOrderList(vo);
-        responseData.setData(orderList);
+        //查询活动卷
+        MktCouponPOExample example = new  MktCouponPOExample();
+        example.createCriteria().andBizIdEqualTo(orderList.get(0).getMktActivityId());
+        example.createCriteria().andValidEqualTo(true);
+        List<MktCouponPO> mktCouponPOs= mktCouponPOMapper.selectByExample(example);
+        //查询消息模板
+        MktMessagePOExample exampl = new MktMessagePOExample();
+        example.createCriteria().andBizIdEqualTo(orderList.get(0).getMktActivityId());
+        List<MktMessagePO> listMktMessage = mktMessagePOMapper.selectByExample(exampl);
+        ActivityBO bo = new ActivityBO();
+        if(CollectionUtils.isEmpty(orderList)){
+            bo.setActivityVO(orderList.get(0));
+        }
+        if(CollectionUtils.isEmpty(mktCouponPOs)){
+            bo.setCouponCodeList(mktCouponPOs);
+        }
+        if(CollectionUtils.isEmpty(listMktMessage)){
+            bo.setMessageVOList(listMktMessage);
+        }
+        responseData.setData(bo);
         responseData.setCode(SysResponseEnum.SUCCESS.getCode());
         responseData.setMessage(SysResponseEnum.SUCCESS.getMessage());
         return responseData;
@@ -236,6 +267,7 @@ public class ActivityOrderServiceImpl implements ActivityOrderService {
      * @return
      */
     @Override
+    @Transactional
     public ResponseData<Integer> updateActivityOrder(ActivityBO bo, SysAccountPO stageUser) {
         //返回对象
         ResponseData responseData = new ResponseData();
@@ -273,14 +305,17 @@ public class ActivityOrderServiceImpl implements ActivityOrderService {
             //如果是待审核数据则需要增加一条审核数据
             //已驳回的可以新建审核
             if(activityVO.getCheckStatus() == CheckStatusEnum.CHECK_STATUS_REJECTED.getCode()){
-                SysCheckConfigPo po = new SysCheckConfigPo();
+                SysCheckPo po = new SysCheckPo();
                 po.setSysBrandId(mktActivityPOWithBLOBs.getSysBrandId());
                 po.setFunctionCode(mktActivityPOWithBLOBs.getActivityCode());
-                po.setFunctionName(mktActivityPOWithBLOBs.getActivityName());
+                po.setBusinessName(mktActivityPOWithBLOBs.getActivityName());
+                po.setBusinessType(ActivityTypeEnum.ACTIVITY_TYPE_ORDER.getCode());
+                po.setFunctionCode("C0002");
+                po.setCheckStatus(CheckStatusEnum.CHECK_STATUS_PENDING.getCode());
                 po.setCreateDate(new Date());
                 po.setCreateUserId(stageUser.getSysAccountId());
                 po.setCreateUserName(stageUser.getName());
-                sysCheckConfigServiceRpc.addCheckConfig(po);
+                sysCheckServiceRpc.addCheck(po);
             }
 
             //getStartTime 开始时间>当前时间增加job
@@ -354,9 +389,9 @@ public class ActivityOrderServiceImpl implements ActivityOrderService {
         exam.createCriteria().andBizIdEqualTo(mktActivityId);
         mktMessagePOMapper.updateByExampleSelective(message,exam);
         //修改活动消息
-        List<MessageVO> messageVOList = bo.getMessageVOList();
+        List<MktMessagePO> messageVOList = bo.getMessageVOList();
         if(!CollectionUtils.isEmpty(messageVOList)){
-            for(MessageVO messageVO : messageVOList){
+            for(MktMessagePO messageVO : messageVOList){
                 MktMessagePO mktMessagePO = new MktMessagePO();
                 BeanUtils.copyProperties(mktActivityPOWithBLOBs,mktMessagePO);
                 BeanUtils.copyProperties(messageVO,mktMessagePO);
@@ -365,6 +400,8 @@ public class ActivityOrderServiceImpl implements ActivityOrderService {
                 mktMessagePOMapper.insertSelective(mktMessagePO);
             }
         }
+        responseData.setCode(SysResponseEnum.SUCCESS.getCode());
+        responseData.setMessage(SysResponseEnum.SUCCESS.getMessage());
         return responseData;
     }
 
@@ -375,6 +412,7 @@ public class ActivityOrderServiceImpl implements ActivityOrderService {
      * @return
      */
     @Override
+    @Transactional
     public ResponseData<Integer> checkActivityOrder(MktActivityPOWithBLOBs bs, SysAccountPO sysAccountPO) {
         ResponseData responseData = new ResponseData();
         bs.setModifiedUserId(sysAccountPO.getSysAccountId());
@@ -406,7 +444,8 @@ public class ActivityOrderServiceImpl implements ActivityOrderService {
             bs.setActivityStatus(ActivityStatusEnum.ACTIVITY_STATUS_FINISHED.getCode());
             int i = mktActivityPOMapper.updateByPrimaryKeySelective(bs);
         }
-
+        responseData.setCode(SysResponseEnum.SUCCESS.getCode());
+        responseData.setMessage(SysResponseEnum.SUCCESS.getMessage());
         return responseData;
     }
 
@@ -416,6 +455,7 @@ public class ActivityOrderServiceImpl implements ActivityOrderService {
      * @return
      */
     @Override
+    @Transactional
     public ResponseData<Integer> executeOrder(OrderModelBo vo) {
         //返回对象
         ResponseData responseData = new ResponseData();
@@ -475,6 +515,8 @@ public class ActivityOrderServiceImpl implements ActivityOrderService {
                 sendCouponServiceFeign.simple(va);
             }
         }
+        responseData.setCode(SysResponseEnum.SUCCESS.getCode());
+        responseData.setMessage(SysResponseEnum.SUCCESS.getMessage());
         return responseData;
     }
 

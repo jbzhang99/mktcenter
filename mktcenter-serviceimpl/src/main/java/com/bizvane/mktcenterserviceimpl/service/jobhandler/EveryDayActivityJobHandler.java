@@ -57,7 +57,6 @@ public class EveryDayActivityJobHandler extends IJobHandler {
                 var1.setChangeIntegral(activityBirthday.getPoints());
                 var1.setChangeWay(IntegralChangeTypeEnum.INCOME.getCode());
                 integralRecordApiService.updateMemberIntegral(var1);
-                //新增券奖励
                 // 增加卷奖励接口
                 MktCouponPOExample example = new  MktCouponPOExample();
                 example.createCriteria().andBizIdEqualTo(activityBirthday.getMktActivityId());
@@ -72,7 +71,9 @@ public class EveryDayActivityJobHandler extends IJobHandler {
                     sendCouponServiceFeign.simple(va);
                 }
             }
-        //查询品牌下所有会员 发送奖励TODO
-        return null;
+        returnT.setCode(0);
+        returnT.setContent("活动执行完毕");
+        returnT.setMsg("success");
+        return returnT;
     }
 }

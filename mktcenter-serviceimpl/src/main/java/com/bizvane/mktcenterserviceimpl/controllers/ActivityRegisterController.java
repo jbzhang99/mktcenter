@@ -4,6 +4,7 @@ import com.bizvane.members.facade.models.MemberInfoModel;
 import com.bizvane.mktcenterservice.interfaces.ActivityRegisterService;
 import com.bizvane.mktcenterservice.models.bo.ActivityBO;
 import com.bizvane.mktcenterservice.models.po.MktCouponPO;
+import com.bizvane.mktcenterservice.models.po.MktMessagePO;
 import com.bizvane.mktcenterservice.models.vo.ActivityVO;
 import com.bizvane.mktcenterservice.models.vo.MessageVO;
 import com.bizvane.mktcenterservice.models.vo.PageForm;
@@ -46,7 +47,7 @@ public class ActivityRegisterController {
      * @return
      */
     @RequestMapping("addActivity.do")
-    public ResponseData<Integer> addActivity(ActivityVO activityVO, List<MktCouponPO> couponCodeList, List<MessageVO> messageVOList, HttpServletRequest request){
+    public ResponseData<Integer> addActivity(ActivityVO activityVO, List<MktCouponPO> couponCodeList, List<MktMessagePO> messageVOList, HttpServletRequest request){
         ActivityBO bo = new ActivityBO();
         bo.setActivityVO(activityVO);
         bo.setCouponCodeList(couponCodeList);
@@ -74,7 +75,7 @@ public class ActivityRegisterController {
      * @return
      */
     @RequestMapping("updateActivityRegister.do")
-    public ResponseData<Integer> updateActivityRegister(ActivityVO activityVO, List<MktCouponPO> couponCodeList, List<MessageVO> messageVOList, HttpServletRequest request){
+    public ResponseData<Integer> updateActivityRegister(ActivityVO activityVO, List<MktCouponPO> couponCodeList, List<MktMessagePO> messageVOList, HttpServletRequest request){
         ActivityBO bo = new ActivityBO();
         bo.setActivityVO(activityVO);
         bo.setCouponCodeList(couponCodeList);
@@ -105,11 +106,11 @@ public class ActivityRegisterController {
     }
     /**
      * 查询活动详情
-     * @param mktActivityId
+     * @param businessCode
      * @return
      */
     @RequestMapping("selectActivityRegisterById")
-    public ResponseData<List<ActivityVO>> selectActivityRegisterById(Long mktActivityId){
-        return activityRegisterService.selectActivityRegisterById(mktActivityId);
+    public ResponseData<ActivityBO> selectActivityRegisterById(String businessCode){
+        return activityRegisterService.selectActivityRegisterById(businessCode);
     }
 }

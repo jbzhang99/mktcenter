@@ -3,6 +3,7 @@ package com.bizvane.mktcenterserviceimpl.controllers;
 import com.bizvane.mktcenterservice.interfaces.ActivityBirthdayService;
 import com.bizvane.mktcenterservice.models.bo.ActivityBO;
 import com.bizvane.mktcenterservice.models.po.MktCouponPO;
+import com.bizvane.mktcenterservice.models.po.MktMessagePO;
 import com.bizvane.mktcenterservice.models.vo.ActivityVO;
 import com.bizvane.mktcenterservice.models.vo.MessageVO;
 import com.bizvane.mktcenterservice.models.vo.PageForm;
@@ -44,7 +45,7 @@ public class ActivityBirthdayController {
      * @return
      */
     @RequestMapping("addActivityBirthday.do")
-    public ResponseData<Integer> addActivityBirthday(ActivityVO activityVO, List<MktCouponPO> couponCodeList, List<MessageVO> messageVOList, HttpServletRequest request){
+    public ResponseData<Integer> addActivityBirthday(ActivityVO activityVO, List<MktCouponPO> couponCodeList, List<MktMessagePO> messageVOList, HttpServletRequest request){
         ActivityBO bo = new ActivityBO();
         bo.setActivityVO(activityVO);
         bo.setCouponCodeList(couponCodeList);
@@ -67,11 +68,12 @@ public class ActivityBirthdayController {
     }
     /**
      * 查询活动详情
-     * @param mktActivityId
+     * @param businessCode
      * @return
      */
-    public ResponseData<List<ActivityVO>> selectActivityBirthdayById(Long mktActivityId){
-        return activityBirthdayService.selectActivityBirthdayById(mktActivityId);
+    @RequestMapping("selectActivityBirthdayById")
+    public ResponseData<ActivityBO> selectActivityBirthdayById(String businessCode){
+        return activityBirthdayService.selectActivityBirthdayById(businessCode);
     }
     /**
      * 修改活动
@@ -79,7 +81,7 @@ public class ActivityBirthdayController {
      * @return
      */
     @RequestMapping("updateActivityBirthday")
-    public ResponseData<Integer> updateActivityBirthday(ActivityVO activityVO, List<MktCouponPO> couponCodeList, List<MessageVO> messageVOList, HttpServletRequest request){
+    public ResponseData<Integer> updateActivityBirthday(ActivityVO activityVO, List<MktCouponPO> couponCodeList, List<MktMessagePO> messageVOList, HttpServletRequest request){
         ActivityBO bo = new ActivityBO();
         bo.setActivityVO(activityVO);
         bo.setCouponCodeList(couponCodeList);

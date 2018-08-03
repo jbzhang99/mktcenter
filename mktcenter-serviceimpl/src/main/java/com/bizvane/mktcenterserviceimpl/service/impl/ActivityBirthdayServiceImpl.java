@@ -1,8 +1,10 @@
 package com.bizvane.mktcenterserviceimpl.service.impl;
 
 import com.bizvane.centerstageservice.models.po.SysCheckConfigPo;
+import com.bizvane.centerstageservice.models.po.SysCheckPo;
 import com.bizvane.centerstageservice.models.vo.SysCheckConfigVo;
 import com.bizvane.centerstageservice.rpc.SysCheckConfigServiceRpc;
+import com.bizvane.centerstageservice.rpc.SysCheckServiceRpc;
 import com.bizvane.mktcenterservice.interfaces.ActivityBirthdayService;
 import com.bizvane.mktcenterservice.models.bo.ActivityBO;
 import com.bizvane.mktcenterservice.models.po.*;
@@ -27,6 +29,7 @@ import com.github.pagehelper.PageInfo;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
 import java.util.Date;
@@ -54,6 +57,8 @@ public class ActivityBirthdayServiceImpl implements ActivityBirthdayService {
     private JobUtil jobUtil;
     @Autowired
     private SysCheckConfigServiceRpc sysCheckConfigServiceRpc;
+    @Autowired
+    private SysCheckServiceRpc sysCheckServiceRpc;
     /**
      * 查询生日活动列表
      * @param vo
@@ -67,6 +72,8 @@ public class ActivityBirthdayServiceImpl implements ActivityBirthdayService {
         List<ActivityVO> activityBirthdayList = mktActivityBirthdayPOMapper.getActivityBirthdayList(vo);
         PageInfo<ActivityVO> pageInfo = new PageInfo<>(activityBirthdayList);
         responseData.setData(pageInfo);
+        responseData.setCode(SysResponseEnum.SUCCESS.getCode());
+        responseData.setMessage(SysResponseEnum.SUCCESS.getMessage());
         return responseData;
     }
 
@@ -77,6 +84,7 @@ public class ActivityBirthdayServiceImpl implements ActivityBirthdayService {
      * @return
      */
     @Override
+    @Transactional
     public ResponseData<Integer> addActivityBirthday(ActivityBO bo, SysAccountPO stageUser) {
         //返回对象
         ResponseData responseData = new ResponseData();
@@ -127,14 +135,17 @@ public class ActivityBirthdayServiceImpl implements ActivityBirthdayService {
             mktActivityPOWithBLOBs.setActivityStatus(ActivityStatusEnum.ACTIVITY_STATUS_PENDING.getCode());
 
             //如果是待审核数据则需要增加一条审核数据
-            SysCheckConfigPo po = new SysCheckConfigPo();
+            SysCheckPo po = new SysCheckPo();
             po.setSysBrandId(mktActivityPOWithBLOBs.getSysBrandId());
             po.setFunctionCode(mktActivityPOWithBLOBs.getActivityCode());
-            po.setFunctionName(mktActivityPOWithBLOBs.getActivityName());
+            po.setBusinessName(mktActivityPOWithBLOBs.getActivityName());
+            po.setBusinessType(ActivityTypeEnum.ACTIVITY_TYPE_BIRTHDAY.getCode());
+            po.setFunctionCode("C0002");
+            po.setCheckStatus(CheckStatusEnum.CHECK_STATUS_PENDING.getCode());
             po.setCreateDate(new Date());
             po.setCreateUserId(stageUser.getSysAccountId());
             po.setCreateUserName(stageUser.getName());
-            sysCheckConfigServiceRpc.addCheckConfig(po);
+            sysCheckServiceRpc.addCheck(po);
             //getStartTime 开始时间>当前时间增加job
             if(1 != bo.getActivityVO().getLongTerm() && new Date().before(activityVO.getStartTime())){
                 //创建任务调度任务开始时间
@@ -189,9 +200,9 @@ public class ActivityBirthdayServiceImpl implements ActivityBirthdayService {
         }
 
         //新增活动消息
-        List<MessageVO> messageVOList = bo.getMessageVOList();
+        List<MktMessagePO> messageVOList = bo.getMessageVOList();
         if(!CollectionUtils.isEmpty(messageVOList)){
-            for(MessageVO messageVO : messageVOList){
+            for(MktMessagePO messageVO : messageVOList){
                 MktMessagePO mktMessagePO = new MktMessagePO();
                 BeanUtils.copyProperties(mktActivityPOWithBLOBs,mktMessagePO);
                 BeanUtils.copyProperties(messageVO,mktMessagePO);
@@ -200,21 +211,44 @@ public class ActivityBirthdayServiceImpl implements ActivityBirthdayService {
                 mktMessagePOMapper.insertSelective(mktMessagePO);
             }
         }
+        responseData.setCode(SysResponseEnum.SUCCESS.getCode());
+        responseData.setMessage(SysResponseEnum.SUCCESS.getMessage());
         return responseData;
     }
 
     /**
      * 查询生日活动详情
-     * @param mktActivityId
+     * @param businessCode
      * @return
      */
     @Override
-    public ResponseData<List<ActivityVO>> selectActivityBirthdayById(Long mktActivityId) {
+    public ResponseData<ActivityBO> selectActivityBirthdayById(String businessCode) {
         ResponseData responseData = new ResponseData();
         ActivityVO vo= new ActivityVO();
-        vo.setMktActivityId(mktActivityId);
+        vo.setActivityCode(businessCode);
+        //查询主表和字表数据
         List<ActivityVO> registerList = mktActivityBirthdayPOMapper.getActivityBirthdayList(vo);
-        responseData.setData(registerList);
+        //查询活动卷
+        MktCouponPOExample example = new  MktCouponPOExample();
+        example.createCriteria().andBizIdEqualTo(registerList.get(0).getMktActivityId());
+        example.createCriteria().andValidEqualTo(true);
+        List<MktCouponPO> mktCouponPOs= mktCouponPOMapper.selectByExample(example);
+        //查询消息模板
+        MktMessagePOExample exampl = new MktMessagePOExample();
+        example.createCriteria().andBizIdEqualTo(registerList.get(0).getMktActivityId());
+        List<MktMessagePO> listMktMessage = mktMessagePOMapper.selectByExample(exampl);
+        ActivityBO bo = new ActivityBO();
+        if(CollectionUtils.isEmpty(registerList)){
+            bo.setActivityVO(registerList.get(0));
+        }
+        if(CollectionUtils.isEmpty(mktCouponPOs)){
+            bo.setCouponCodeList(mktCouponPOs);
+        }
+        if(CollectionUtils.isEmpty(listMktMessage)){
+            bo.setMessageVOList(listMktMessage);
+        }
+
+        responseData.setData(bo);
         responseData.setCode(SysResponseEnum.SUCCESS.getCode());
         responseData.setMessage(SysResponseEnum.SUCCESS.getMessage());
         return responseData;
@@ -227,6 +261,7 @@ public class ActivityBirthdayServiceImpl implements ActivityBirthdayService {
      * @return
      */
     @Override
+    @Transactional
     public ResponseData<Integer> checkActivityBirthday(MktActivityPOWithBLOBs bs, SysAccountPO sysAccountPO) {
         ResponseData responseData = new ResponseData();
         bs.setModifiedUserId(sysAccountPO.getSysAccountId());
@@ -265,6 +300,7 @@ public class ActivityBirthdayServiceImpl implements ActivityBirthdayService {
      * @return
      */
     @Override
+    @Transactional
     public ResponseData<Integer> updateActivityBirthday(ActivityBO bo, SysAccountPO stageUser) {
         //返回对象
         ResponseData responseData = new ResponseData();
@@ -304,14 +340,17 @@ public class ActivityBirthdayServiceImpl implements ActivityBirthdayService {
             //如果是待审核数据则需要增加一条审核数据
             //已驳回的可以新建审核
             if(activityVO.getCheckStatus() == CheckStatusEnum.CHECK_STATUS_REJECTED.getCode()){
-                SysCheckConfigPo po = new SysCheckConfigPo();
+                SysCheckPo po = new SysCheckPo();
                 po.setSysBrandId(mktActivityPOWithBLOBs.getSysBrandId());
                 po.setFunctionCode(mktActivityPOWithBLOBs.getActivityCode());
-                po.setFunctionName(mktActivityPOWithBLOBs.getActivityName());
+                po.setBusinessName(mktActivityPOWithBLOBs.getActivityName());
+                po.setBusinessType(ActivityTypeEnum.ACTIVITY_TYPE_BIRTHDAY.getCode());
+                po.setFunctionCode("C0002");
+                po.setCheckStatus(CheckStatusEnum.CHECK_STATUS_PENDING.getCode());
                 po.setCreateDate(new Date());
                 po.setCreateUserId(stageUser.getSysAccountId());
                 po.setCreateUserName(stageUser.getName());
-                sysCheckConfigServiceRpc.addCheckConfig(po);
+                sysCheckServiceRpc.addCheck(po);
             }
 
             //getStartTime 开始时间>当前时间增加job
@@ -386,9 +425,9 @@ public class ActivityBirthdayServiceImpl implements ActivityBirthdayService {
         exam.createCriteria().andBizIdEqualTo(mktActivityId);
         mktMessagePOMapper.updateByExampleSelective(message,exam);
         //修改活动消息
-        List<MessageVO> messageVOList = bo.getMessageVOList();
+        List<MktMessagePO> messageVOList = bo.getMessageVOList();
         if(!CollectionUtils.isEmpty(messageVOList)){
-            for(MessageVO messageVO : messageVOList){
+            for(MktMessagePO messageVO : messageVOList){
                 MktMessagePO mktMessagePO = new MktMessagePO();
                 BeanUtils.copyProperties(mktActivityPOWithBLOBs,mktMessagePO);
                 BeanUtils.copyProperties(messageVO,mktMessagePO);
@@ -397,6 +436,8 @@ public class ActivityBirthdayServiceImpl implements ActivityBirthdayService {
                 mktMessagePOMapper.insertSelective(mktMessagePO);
             }
         }
+        responseData.setCode(SysResponseEnum.SUCCESS.getCode());
+        responseData.setMessage(SysResponseEnum.SUCCESS.getMessage());
         return responseData;
     }
 }

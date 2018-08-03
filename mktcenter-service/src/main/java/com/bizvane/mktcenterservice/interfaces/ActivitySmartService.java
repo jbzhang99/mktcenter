@@ -10,6 +10,7 @@ import com.bizvane.mktcenterservice.models.vo.PageForm;
 import com.bizvane.utils.responseinfo.ResponseData;
 import com.bizvane.utils.tokens.SysAccountPO;
 import com.github.pagehelper.PageInfo;
+import org.apache.poi.ss.formula.functions.T;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -51,7 +52,7 @@ public interface ActivitySmartService {
      * @param mktActivityId
      * @return
      */
-    public ResponseData<ActivitySmartBO> getActivityDetailById(Long mktActivityId);
+    public ResponseData<ActivitySmartVO> getActivityDetailById(Long mktActivityId,Integer mktSmartType);
 
     /**
      * 添加智能营销分组
@@ -112,13 +113,7 @@ public interface ActivitySmartService {
      * @param vo
      * @return
      */
-    public ResponseData<Integer> addSmsActivity(ActivitySmartVO vo, MessageVO messageVO, SysAccountPO stageUser);
+    public ResponseData<Integer> addMessageActivity(ActivitySmartVO vo, MessageVO messageVO, SysAccountPO stageUser);
 
-    /**
-     * 对某个智能营销组创建任务
-     * 任务类型：4微信模板消息营销
-     * @param vo
-     * @return
-     */
-    public ResponseData<Integer> addTemplateMsgActivity(ActivitySmartVO vo, MessageVO messageVO, SysAccountPO stageUser);
+    public ResponseData<T> execute(ActivitySmartBO bo);
 }

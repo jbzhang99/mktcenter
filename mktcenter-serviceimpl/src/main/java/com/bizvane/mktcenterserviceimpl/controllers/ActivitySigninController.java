@@ -4,6 +4,7 @@ import com.bizvane.members.facade.models.MemberInfoModel;
 import com.bizvane.mktcenterservice.interfaces.ActivitySigninService;
 import com.bizvane.mktcenterservice.models.bo.ActivityBO;
 import com.bizvane.mktcenterservice.models.po.MktCouponPO;
+import com.bizvane.mktcenterservice.models.po.MktMessagePO;
 import com.bizvane.mktcenterservice.models.vo.ActivityVO;
 import com.bizvane.mktcenterservice.models.vo.MessageVO;
 import com.bizvane.mktcenterservice.models.vo.PageForm;
@@ -46,7 +47,7 @@ public class ActivitySigninController {
      * @return
      */
     @RequestMapping("addActivitySignin.do")
-    public ResponseData<Integer> addActivitySignin(ActivityVO activityVO, List<MktCouponPO> couponCodeList, List<MessageVO> messageVOList, HttpServletRequest request) {
+    public ResponseData<Integer> addActivitySignin(ActivityVO activityVO, List<MktCouponPO> couponCodeList, List<MktMessagePO> messageVOList, HttpServletRequest request) {
         ActivityBO bo = new ActivityBO();
         bo.setActivityVO(activityVO);
         bo.setCouponCodeList(couponCodeList);
@@ -69,12 +70,12 @@ public class ActivitySigninController {
     }
     /**
      * 查询活动详情
-     * @param mktActivityId
+     * @param businessCode
      * @return
      */
     @RequestMapping("selectActivitySigninById")
-    public ResponseData<List<ActivityVO>> selectActivitySigninById(Long mktActivityId){
-        return activitySigninService.selectActivitySigninById(mktActivityId);
+    public ResponseData<ActivityBO> selectActivitySigninById(String businessCode){
+        return activitySigninService.selectActivitySigninById(businessCode);
     }
     /**
      * 执行活动

@@ -1,11 +1,16 @@
 package com.bizvane.mktcenterservice.interfaces;
 
+import com.bizvane.members.facade.models.MemberInfoModel;
 import com.bizvane.mktcenterservice.models.bo.TaskBO;
+import com.bizvane.mktcenterservice.models.po.MktMessagePOExample;
+import com.bizvane.mktcenterservice.models.po.MktTaskRecordPO;
 import com.bizvane.mktcenterservice.models.vo.PageForm;
+import com.bizvane.mktcenterservice.models.vo.TaskRecordVO;
 import com.bizvane.mktcenterservice.models.vo.TaskVO;
 import com.bizvane.utils.responseinfo.ResponseData;
 import com.bizvane.utils.tokens.SysAccountPO;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -16,28 +21,26 @@ import java.util.List;
  */
 public interface TaskProfileService {
     /**
-     * 查询任务列表
-     * @param vo
-     * @return
-     */
-    public ResponseData<TaskVO> getTaskList(TaskVO vo, PageForm pageForm);
-
-    /**
-     * 新增任务
+     * 添加完善资料任务
      * @param bo
+     * @param stageUser
      * @return
      */
+
     public ResponseData<Integer> addTask(TaskBO bo, SysAccountPO stageUser);
 
     /**
      * 执行任务
-     * @param
+     * @param vo
+     * @param memberInfoModel
      * @return
      */
-    public ResponseData<Integer> executeTask(TaskVO vo);
+    public ResponseData<Integer> executeTask(TaskVO vo, MemberInfoModel memberInfoModel);
 
     /**
      * 修改任务
+     * @param bo
+     * @param stageUser
      * @return
      */
     public ResponseData<Integer> updateTask(TaskBO bo,SysAccountPO stageUser);
@@ -48,4 +51,37 @@ public interface TaskProfileService {
      * @return
      */
     public ResponseData<List<TaskVO>> selectTaskById(Long mktTaskId);
+
+//    /**
+//     * 查询商家选择出的让会员完善的扩展信息字段
+//     * @param brandId
+//     * @return
+//     */
+//    public ResponseData getChosenExtendProperty(Long brandId);
+
+    /**
+     * 完善资料任务效果分析
+     * @param date1
+     * @param date2
+     * @param stageUser
+     * @return
+     */
+    public ResponseData<TaskRecordVO> getTaskProfileRecordByTime(Date date1, Date date2,SysAccountPO stageUser);
+
+    /**
+     * 任务审核
+     * @param taskVO
+     * @param sysAccountPO
+     * @return
+     */
+    public ResponseData checkTaskProfile(TaskVO taskVO,SysAccountPO sysAccountPO);
+
+    /**
+     * 添加任务记录
+     * @param vo
+     * @param memberInfoModel
+     * @return
+     */
+    public ResponseData addToRecord(TaskVO vo, MemberInfoModel memberInfoModel);
+
 }

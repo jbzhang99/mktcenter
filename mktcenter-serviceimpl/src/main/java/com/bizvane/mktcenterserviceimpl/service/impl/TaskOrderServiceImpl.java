@@ -117,7 +117,6 @@ public class TaskOrderServiceImpl implements TaskOrderService {
         if (CollectionUtils.isNotEmpty(mktCouponPOList)) {
             mktCouponPOList.stream().forEach(param -> {
                 param.setBizId(mktTaskId);
-                param.setBizCode(taskCode);
                 param.setBizType(TaskConstants.TASK_TYPE);
                 taskCouponService.addTaskCoupon(param, stageUser);
             });

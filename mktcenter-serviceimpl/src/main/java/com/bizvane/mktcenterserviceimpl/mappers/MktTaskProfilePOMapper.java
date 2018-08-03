@@ -97,4 +97,11 @@ public interface MktTaskProfilePOMapper {
 	int updateByPrimaryKey(MktTaskProfilePO record);
 
 	List<TaskVO> getTaskList(TaskVO vo);
+
+	/**
+	 *
+	 * @param taskVO
+	 * @return
+	 */
+	String getChosenExtendProperties(TaskVO taskVO);
 }

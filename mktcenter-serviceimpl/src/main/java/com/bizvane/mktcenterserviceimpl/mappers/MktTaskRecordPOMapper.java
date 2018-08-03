@@ -3,6 +3,8 @@ package com.bizvane.mktcenterserviceimpl.mappers;
 import com.bizvane.mktcenterservice.models.po.MktTaskRecordPO;
 import com.bizvane.mktcenterservice.models.po.MktTaskRecordPOExample;
 import java.util.List;
+import java.util.Map;
+
 import org.apache.ibatis.annotations.Param;
 
 public interface MktTaskRecordPOMapper {
@@ -73,4 +75,6 @@ public interface MktTaskRecordPOMapper {
 	 * @mbg.generated  2018-08-02 14:07:08
 	 */
 	int updateByPrimaryKey(MktTaskRecordPO record);
+
+	Long countCompleteMbr(Map<String,Long> map);
 }

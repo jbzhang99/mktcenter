@@ -1,6 +1,7 @@
 package com.bizvane.mktcenterservice.models.bo;
 
 import com.bizvane.mktcenterservice.models.po.MktCouponPO;
+import com.bizvane.mktcenterservice.models.po.MktMessagePO;
 import com.bizvane.mktcenterservice.models.vo.ActivityVO;
 import com.bizvane.mktcenterservice.models.vo.MessageVO;
 
@@ -27,7 +28,15 @@ public class ActivityBO {
     /**
      * 消息对象
      */
-    private List<MessageVO> messageVOList;
+    private List<MktMessagePO> messageVOList;
+
+    public List<MktMessagePO> getMessageVOList() {
+        return messageVOList;
+    }
+
+    public void setMessageVOList(List<MktMessagePO> messageVOList) {
+        this.messageVOList = messageVOList;
+    }
 
     public List<MktCouponPO> getCouponCodeList() {
         return couponCodeList;
@@ -43,13 +52,5 @@ public class ActivityBO {
 
     public void setActivityVO(ActivityVO activityVO) {
         this.activityVO = activityVO;
-    }
-
-    public List<MessageVO> getMessageVOList() {
-        return messageVOList;
-    }
-
-    public void setMessageVOList(List<MessageVO> messageVOList) {
-        this.messageVOList = messageVOList;
     }
 }

@@ -2,6 +2,7 @@ package com.bizvane.mktcenterserviceimpl.common.utils;
 
 import com.bizvane.mktcenterservice.models.po.MktActivityPOWithBLOBs;
 import com.bizvane.mktcenterservice.models.po.MktTaskPOWithBLOBs;
+import com.bizvane.mktcenterservice.models.vo.ActivitySmartVO;
 import com.bizvane.mktcenterservice.models.vo.ActivityVO;
 import com.bizvane.mktcenterserviceimpl.common.constants.JobHandlerConstants;
 import com.bizvane.mktcenterserviceimpl.common.enums.ActivityStatusEnum;
@@ -71,13 +72,23 @@ public class JobUtil {
     }
 
     /**
+     * 添加智能营销job，只有开始
+     * @param stageUser
+     * @param vo
+     */
+    public  void addSmartActivityJob(SysAccountPO stageUser, ActivitySmartVO vo) {
+        String param =vo.getMktSmartType()+"&"+vo.getActivityCode();
+        addJob(vo.getStartTime(),vo.getActivityName(),param,stageUser.getName(),JobHandlerConstants.smartActivity,BusinessTypeEnum.ACTIVITY_TYPE_ACTIVITY.getCode());
+    }
+
+    /**
      * 通用job添加方法
      * @param execuDate
      * @param desc
      * @param bizCode
      * @param author
      */
-    public void addJob(Date execuDate,String desc,String bizCode,String author,String activityJobType,int businessType){
+    public void addJob(Date execuDate,String desc,String param,String author,String jobHandler,int businessType){
         //构建job对象
         XxlJobInfo xxlJobInfo = new XxlJobInfo();
         //设置appName
@@ -89,11 +100,11 @@ public class JobUtil {
         //设置运行模式
         xxlJobInfo.setGlueType(JobEnum.GLUE_TYPE_BEAN.getValue());
         //设置job处理器
-        xxlJobInfo.setExecutorHandler(activityJobType);
+        xxlJobInfo.setExecutorHandler(jobHandler);
         //设置job描述
         xxlJobInfo.setJobDesc(desc);
         //设置执行参数
-        xxlJobInfo.setExecutorParam(bizCode);
+        xxlJobInfo.setExecutorParam(param);
         //设置阻塞处理策略
         xxlJobInfo.setExecutorBlockStrategy(JobEnum.EXECUTOR_BLOCK_SERIAL_EXECUTION.getValue());
         //设置失败处理策略
