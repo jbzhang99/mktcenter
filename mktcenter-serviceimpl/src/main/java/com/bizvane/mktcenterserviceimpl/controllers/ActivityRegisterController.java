@@ -105,7 +105,7 @@ public class ActivityRegisterController {
     }
     /**
      * 查询活动详情
-     * @param ctivityCode
+     * @param activityCode
      * @return
      */
     @RequestMapping("selectActivityRegisterById")
