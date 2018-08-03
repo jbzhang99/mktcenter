@@ -101,10 +101,10 @@ public class ActivitySmartServiceImpl implements ActivitySmartService {
     @Override
     public ResponseData<PageInfo<MktActivitySmartPO>> getActivityHistoryList(ActivitySmartVO vo, PageForm pageForm) {
         ResponseData responseData = new ResponseData();
-        //活动id不能为空
-        if(vo.getMktActivitySmartId()==null){
+        //活动分组id不能为空
+        if(vo.getMktActivitySmartGroupId()==null){
             responseData.setCode(ResponseConstants.ERROR);
-            responseData.setMessage(ActivityConstants.SMART_ACTIVITY_ID_EMPTY);
+            responseData.setMessage(ActivityConstants.SMART_ACTIVITY_GROUP_ID_EMPTY);
             return responseData;
         }
         PageHelper.startPage(pageForm.getPageNumber(),pageForm.getPageSize());
