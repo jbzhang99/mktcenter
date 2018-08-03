@@ -98,8 +98,8 @@
       WARNING - 只读 - @mbg.generated
       This element was generated on 2018-08-02 20:38:44.
     -->
-    mkt_activity_smart_id, mkt_activity_id, mkt_smart_type, target_mbr_count, target_mbr_count_time, 
-    remark, create_user_id, create_user_name, create_date, modified_user_id, modified_user_name, 
+    mkt_activity_smart_id, mkt_activity_id, mkt_smart_type, target_mbr_count, target_mbr_count_time,
+    remark, create_user_id, create_user_name, create_date, modified_user_id, modified_user_name,
     modified_date, valid
   </sql>
   <sql id="Blob_Column_List">
@@ -513,19 +513,24 @@
     tma.modified_user_name,
     tma.modified_date,
     tma.valid,
-
     tmas.mkt_activity_smart_id,
-    tmas.mkt_type,
-    tmas.member_group_id,
-    tmas.member_group_code,
-    tmas.target_mbr,
+    tmas.mkt_activity_id,
+    tmas.mkt_smart_type,
     tmas.target_mbr_count,
-    tmas.target_mbr_count_time
+    tmas.target_mbr_count_time,
+    tmas.remark,
+    tmas.create_user_id,
+    tmas.create_user_name,
+    tmas.create_date,
+    tmas.modified_user_id,
+    tmas.modified_user_name,
+    tmas.modified_date,
+    tmas.valid
     FROM
     `t_mkt_activity` tma
     INNER JOIN t_mkt_activity_smart tmas ON tma.mkt_activity_id = tmas.mkt_activity_id
-    and tma.valid=1
-    and tmas.valid=1
+    AND tma.valid = 1
+    AND tmas.valid = 1
     <if test="mktActivitySmartId != null">
       AND tma.mkt_activity_smart_id = #{mktActivitySmartId}
     </if>
