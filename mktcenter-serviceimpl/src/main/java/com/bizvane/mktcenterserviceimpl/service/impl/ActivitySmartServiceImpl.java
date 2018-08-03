@@ -75,7 +75,7 @@ public class ActivitySmartServiceImpl implements ActivitySmartService {
      * @return
      */
     @Override
-    public ResponseData<PageInfo<MktActivitySmartGroupPO>> getSmartActivityList(ActivitySmartVO vo, PageForm pageForm) {
+    public ResponseData<PageInfo<MktActivitySmartGroupPO>> getSmartActivityGroupList(ActivitySmartVO vo, PageForm pageForm) {
         ResponseData responseData = new ResponseData();
         PageHelper.startPage(pageForm.getPageNumber(),pageForm.getPageSize());
 
@@ -102,10 +102,10 @@ public class ActivitySmartServiceImpl implements ActivitySmartService {
     @Override
     public ResponseData<PageInfo<MktActivitySmartPO>> getActivityHistoryList(ActivitySmartVO vo, PageForm pageForm) {
         ResponseData responseData = new ResponseData();
-        //活动id不能为空
-        if(vo.getMktActivitySmartId()==null){
+        //活动分组id不能为空
+        if(vo.getMktActivitySmartGroupId()==null){
             responseData.setCode(ResponseConstants.ERROR);
-            responseData.setMessage(ActivityConstants.SMART_ACTIVITY_ID_EMPTY);
+            responseData.setMessage(ActivityConstants.SMART_ACTIVITY_GROUP_ID_EMPTY);
             return responseData;
         }
         PageHelper.startPage(pageForm.getPageNumber(),pageForm.getPageSize());
@@ -122,7 +122,7 @@ public class ActivitySmartServiceImpl implements ActivitySmartService {
      * @return
      */
     @Override
-    public ResponseData<MktActivitySmartGroupPO> getSmartActivityById(Long mktActivitySmartGroupId) {
+    public ResponseData<MktActivitySmartGroupPO> getSmartActivityGroupById(Long mktActivitySmartGroupId) {
         ResponseData responseData = new ResponseData();
         MktActivitySmartGroupPO mktActivitySmartGroupPO = mktActivitySmartGroupPOMapper.selectByPrimaryKey(mktActivitySmartGroupId);
         responseData.setData(mktActivitySmartGroupPO);
@@ -145,7 +145,7 @@ public class ActivitySmartServiceImpl implements ActivitySmartService {
      * @return
      */
     @Override
-    public ResponseData<Integer> addSmartActivity(ActivitySmartVO vo) {
+    public ResponseData<Integer> addSmartActivityGroup(ActivitySmartVO vo) {
         ResponseData responseData = new ResponseData();
 
         //营销名称为空
@@ -174,7 +174,7 @@ public class ActivitySmartServiceImpl implements ActivitySmartService {
      * @return
      */
     @Override
-    public ResponseData<Integer> updateSmartActivity(ActivitySmartVO vo) {
+    public ResponseData<Integer> updateSmartActivityGroup(ActivitySmartVO vo) {
         ResponseData responseData = new ResponseData();
         //营销名称为空
         if(StringUtils.isEmpty(vo.getMemberGroupName())){
@@ -202,7 +202,7 @@ public class ActivitySmartServiceImpl implements ActivitySmartService {
      * @return
      */
     @Override
-    public ResponseData<Integer> updateSmartActivityStatus(ActivitySmartVO vo) {
+    public ResponseData<Integer> updateSmartActivityGroupStatus(ActivitySmartVO vo) {
         ResponseData responseData = new ResponseData();
         MktActivitySmartGroupPO mktActivitySmartPO = new MktActivitySmartGroupPO();
         BeanUtils.copyProperties(vo,mktActivitySmartPO);
@@ -217,7 +217,7 @@ public class ActivitySmartServiceImpl implements ActivitySmartService {
      * @return
      */
     @Override
-    public ResponseData<Integer> deleteSmartActivity(ActivitySmartVO vo) {
+    public ResponseData<Integer> deleteSmartActivityGroup(ActivitySmartVO vo) {
         ResponseData responseData = new ResponseData();
         MktActivitySmartGroupPO mktActivitySmartPO = new MktActivitySmartGroupPO();
         BeanUtils.copyProperties(vo,mktActivitySmartPO);
@@ -233,7 +233,7 @@ public class ActivitySmartServiceImpl implements ActivitySmartService {
      * @return
      */
     @Override
-    public ResponseData<Integer> copySmartActivity(ActivitySmartVO vo) {
+    public ResponseData<Integer> copySmartActivityGroup(ActivitySmartVO vo) {
         ResponseData responseData = new ResponseData();
 
         MktActivitySmartGroupPO mktActivitySmartGroupPO = mktActivitySmartGroupPOMapper.selectByPrimaryKey(vo.getMktActivitySmartId());

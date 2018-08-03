@@ -30,8 +30,8 @@ public class TaskAmountController {
     /**
      * 任务审核
      */
-    @RequestMapping("checkAmounTask")
-    public ResponseData<Integer> checkOrderTask(TaskVO vo){
+    @RequestMapping("checkAmountTask")
+    public  ResponseData<Integer>  checkOrderTask(TaskVO vo){
         ResponseData<Integer> result = new ResponseData<Integer>(SysResponseEnum.FAILED.getCode(),SysResponseEnum.FAILED.getMessage(),null);
         Integer data = taskAmountService.checkAmountTask(vo);
         if (data>0){
@@ -40,7 +40,6 @@ public class TaskAmountController {
         }
         return result;
     }
-
     /**
      * 查询消费任务详情
      */
@@ -69,7 +68,13 @@ public class TaskAmountController {
 
         return  taskAmountService.addTask(vo, stageUser);
     }
+    /**
+     * 修改任务
+     */
+    @RequestMapping("updateAmountTask")
+    public ResponseData updateAmountTask(TaskDetailVO vo, HttpServletRequest request){
+        SysAccountPO stageUser = TokenUtils.getStageUser(request);
 
-
-
+        return  taskAmountService.updateAmountTask(vo, stageUser);
+    }
 }

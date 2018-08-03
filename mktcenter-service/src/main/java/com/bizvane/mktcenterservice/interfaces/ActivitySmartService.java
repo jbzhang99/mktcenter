@@ -29,7 +29,7 @@ public interface ActivitySmartService {
      * @param vo
      * @return
      */
-    public ResponseData<PageInfo<MktActivitySmartGroupPO>> getSmartActivityList(ActivitySmartVO vo, PageForm pageForm);
+    public ResponseData<PageInfo<MktActivitySmartGroupPO>> getSmartActivityGroupList(ActivitySmartVO vo, PageForm pageForm);
 
     /**
      * 查询历史营销活动列表
@@ -44,7 +44,7 @@ public interface ActivitySmartService {
      * @param mktActivitySmartId
      * @return
      */
-    public ResponseData<MktActivitySmartGroupPO> getSmartActivityById(Long mktActivitySmartId);
+    public ResponseData<MktActivitySmartGroupPO> getSmartActivityGroupById(Long mktActivitySmartId);
 
     /**
      * 查询某个智能营销活动详情
@@ -58,35 +58,35 @@ public interface ActivitySmartService {
      * @param vo
      * @return
      */
-    public ResponseData<Integer> addSmartActivity(ActivitySmartVO vo);
+    public ResponseData<Integer> addSmartActivityGroup(ActivitySmartVO vo);
 
     /**
      * 修改智能营销分组
      * @param vo
      * @return
      */
-    public ResponseData<Integer> updateSmartActivity(ActivitySmartVO vo);
+    public ResponseData<Integer> updateSmartActivityGroup(ActivitySmartVO vo);
 
     /**
      * 启用/禁用智能营销分组
      * @param vo
      * @return
      */
-    public ResponseData<Integer> updateSmartActivityStatus(ActivitySmartVO vo);
+    public ResponseData<Integer> updateSmartActivityGroupStatus(ActivitySmartVO vo);
 
     /**
      * 删除智能营销分组
      * @param vo
      * @return
      */
-    public ResponseData<Integer> deleteSmartActivity(ActivitySmartVO vo);
+    public ResponseData<Integer> deleteSmartActivityGroup(ActivitySmartVO vo);
 
     /**
      * 复制智能营销分组
      * @param vo
      * @return
      */
-    public ResponseData<Integer> copySmartActivity(ActivitySmartVO vo);
+    public ResponseData<Integer> copySmartActivityGroup(ActivitySmartVO vo);
 
     /**
      * 对某个智能营销组创建任务

@@ -63,19 +63,6 @@ public class TaskOrderController {
 
         return  result;
     }
-    /**
-     * 查询任务列表并分页(有问题)
-     * @return
-     */
-    @RequestMapping("getTaskList")
-    public ResponseData<TaskVO> getTaskList(TaskVO vo, PageForm pageForm){
-        ResponseData responseData = new ResponseData();
-        PageHelper.startPage(pageForm.getPageNumber(),pageForm.getPageSize());
-        List<TaskVO> activityRegisterList = taskOrderService.selectTask(vo);
-        PageInfo<TaskVO> pageInfo = new PageInfo<>(activityRegisterList);
-        responseData.setData(pageInfo);
-        return responseData;
-    }
 
     /**
      * 创建任务
@@ -88,6 +75,12 @@ public class TaskOrderController {
 
        return  taskOrderService.addTask(vo, stageUser);
     }
+/**
+ * 修改任务
+ */
+    public ResponseData updateOrderTask(TaskDetailVO vo, HttpServletRequest request){
+        SysAccountPO stageUser = TokenUtils.getStageUser(request);
 
-
+        return  taskOrderService.updateOrderTask(vo, stageUser);
+    }
 }

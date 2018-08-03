@@ -68,7 +68,6 @@ public class TaskOrderServiceImpl implements TaskOrderService {
     public List<TaskDetailBO> getOrderTaskDetails(Long mktTaskId) {
         return mktTaskOrderPOMapper.getOrderTaskDetails(mktTaskId);
     }
-
     /**
      * 查询任务列表
      *
@@ -152,7 +151,6 @@ public class TaskOrderServiceImpl implements TaskOrderService {
         responseData.setMessage(SystemConstants.SUCCESS_MESSAGE);
         return responseData;
     }
-
     /**
      * 判断是否滞后执行
      */
@@ -181,7 +179,6 @@ public class TaskOrderServiceImpl implements TaskOrderService {
         }
         return po;
     }
-
     /**
      * 判断时间是否滞后,已经是否立即执行,还是创建job执行
      */
@@ -202,8 +199,6 @@ public class TaskOrderServiceImpl implements TaskOrderService {
         }
 
     }
-
-
     /**
      * 更新消费任务
      *

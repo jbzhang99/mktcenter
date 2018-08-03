@@ -495,6 +495,7 @@
     tma.mkt_activity_id,
     tma.sys_company_id,
     tma.sys_brand_id,
+    tma.mkt_activity_smart_group_id,
     tma.activity_code,
     tma.activity_type,
     tma.activity_name,
@@ -513,6 +514,7 @@
     tma.modified_user_name,
     tma.modified_date,
     tma.valid,
+
     tmas.mkt_activity_smart_id,
     tmas.mkt_activity_id,
     tmas.mkt_smart_type,
@@ -531,8 +533,8 @@
     INNER JOIN t_mkt_activity_smart tmas ON tma.mkt_activity_id = tmas.mkt_activity_id
     AND tma.valid = 1
     AND tmas.valid = 1
-    <if test="mktActivitySmartId != null">
-      AND tma.mkt_activity_smart_id = #{mktActivitySmartId}
+    <if test="mktActivitySmartGroupId != null">
+      AND tma.mkt_activity_smart_group_id = #{mktActivitySmartGroupId}
     </if>
     <if test="createDateStart != null">
       AND <![CDATA[ tma.create_date >=#{createDateStart}]]>
@@ -540,8 +542,8 @@
     <if test="createDateEnd != null">
       AND <![CDATA[ tma.create_date <=#{createDateEnd}]]>
     </if>
-    <if test="mktType != null and mktType!=0">
-      AND tmas.mkt_type = #{mktType}
+    <if test="mktSmartType != null and mktSmartType!=0">
+      AND tmas.mkt_smart_type = #{mktSmartType}
     </if>
   </select>
 </mapper>

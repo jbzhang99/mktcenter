@@ -28,49 +28,49 @@ public class ActivitySmartRpcController {
     @Autowired
     private ActivitySmartService activitySmartService;
 
-    @RequestMapping("getSmartActivityById")
+    @RequestMapping("getSmartActivityGroupById")
     @io.swagger.annotations.ApiModelProperty(value = "mktActivitySmartId",name = "通过id获取活动分组", required = false,example = "")
-    public ResponseData<MktActivitySmartGroupPO> getSmartActivityById(@RequestParam("mktActivitySmartId") Long mktActivitySmartId){
-        return activitySmartService.getSmartActivityById(mktActivitySmartId);
+    public ResponseData<MktActivitySmartGroupPO> getSmartActivityGroupById(@RequestParam("mktActivitySmartId") Long mktActivitySmartId){
+        return activitySmartService.getSmartActivityGroupById(mktActivitySmartId);
     }
 
-    @RequestMapping("getSmartActivityList")
+    @RequestMapping("getSmartActivityGroupList")
     @io.swagger.annotations.ApiModelProperty(value = "ActivitySmartVO",name = "查询智能营销活动列表", required = false,example = "")
-    public ResponseData<PageInfo<MktActivitySmartGroupPO>> getSmartActivityList(@RequestBody ActivitySmartVO vo){
+    public ResponseData<PageInfo<MktActivitySmartGroupPO>> getSmartActivityGroupList(@RequestBody ActivitySmartVO vo){
         PageForm pageForm = new PageForm();
         pageForm.setPageNumber(vo.getPageNumber());
         pageForm.setPageSize(vo.getPageSize());
-        return activitySmartService.getSmartActivityList(vo,pageForm);
+        return activitySmartService.getSmartActivityGroupList(vo,pageForm);
     }
 
-    @RequestMapping("addSmartActivity")
+    @RequestMapping("addSmartActivityGroup")
     @io.swagger.annotations.ApiModelProperty(value = "ActivitySmartVO",name = "添加智能营销活动", required = false,example = "")
-    public ResponseData<Integer> addSmartActivity(@RequestBody ActivitySmartVO vo){
-        return activitySmartService.addSmartActivity(vo);
+    public ResponseData<Integer> addSmartActivityGroup(@RequestBody ActivitySmartVO vo){
+        return activitySmartService.addSmartActivityGroup(vo);
     }
 
-    @RequestMapping("updateSmartActivity")
+    @RequestMapping("updateSmartActivityGroup")
     @io.swagger.annotations.ApiModelProperty(value = "ActivitySmartVO",name = "更新智能营销活动", required = false,example = "")
-    public ResponseData<Integer> updateSmartActivity(@RequestBody ActivitySmartVO vo){
-        return activitySmartService.updateSmartActivity(vo);
+    public ResponseData<Integer> updateSmartActivityGroup(@RequestBody ActivitySmartVO vo){
+        return activitySmartService.updateSmartActivityGroup(vo);
     }
 
-    @RequestMapping("updateSmartActivityStatus")
+    @RequestMapping("updateSmartActivityGroupStatus")
     @io.swagger.annotations.ApiModelProperty(value = "ActivitySmartVO",name = "启用/禁用智能营销活动", required = false,example = "")
-    public ResponseData<Integer> updateSmartActivityStatus(@RequestBody ActivitySmartVO vo){
-        return activitySmartService.updateSmartActivityStatus(vo);
+    public ResponseData<Integer> updateSmartActivityGroupStatus(@RequestBody ActivitySmartVO vo){
+        return activitySmartService.updateSmartActivityGroupStatus(vo);
     }
 
-    @RequestMapping("deleteSmartActivity")
+    @RequestMapping("deleteSmartActivityGroup")
     @io.swagger.annotations.ApiModelProperty(value = "mktActivitySmartId",name = "删除智能营销活动分组", required = false,example = "")
-    public ResponseData<Integer> deleteSmartActivity(@RequestBody ActivitySmartVO vo){
-        return activitySmartService.deleteSmartActivity(vo);
+    public ResponseData<Integer> deleteSmartActivityGroup(@RequestBody ActivitySmartVO vo){
+        return activitySmartService.deleteSmartActivityGroup(vo);
     }
 
-    @RequestMapping("copySmartActivity")
+    @RequestMapping("copySmartActivityGroup")
     @io.swagger.annotations.ApiModelProperty(value = "ActivitySmartVO",name = "复制智能营销活动分组", required = false,example = "")
-    public ResponseData<Integer> copySmartActivity(@RequestBody ActivitySmartVO vo){
-        return activitySmartService.copySmartActivity(vo);
+    public ResponseData<Integer> copySmartActivityGroup(@RequestBody ActivitySmartVO vo){
+        return activitySmartService.copySmartActivityGroup(vo);
     }
 
 }
