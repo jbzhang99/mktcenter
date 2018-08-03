@@ -1,6 +1,7 @@
 package com.bizvane.mktcenterserviceimpl.controllers;
 
 import com.bizvane.members.facade.models.ExtendPropertyModel;
+import com.bizvane.members.facade.models.MemberInfoModel;
 import com.bizvane.members.facade.service.api.ExtendPropertyApiService;
 import com.bizvane.members.facade.service.api.MemberInfoApiService;
 import com.bizvane.members.facade.service.api.MemberLevelApiService;
@@ -99,9 +100,9 @@ public class TaskProfileController {
      * @param
      * @return
      */
-    public ResponseData<Integer> executeTask(TaskVO vo){
+    public ResponseData<Integer> executeTask(TaskVO vo,MemberInfoModel memberInfoModel){
 
-        return taskProfileService.executeTask(vo);
+        return taskProfileService.executeTask(vo,memberInfoModel);
     }
 
     /**

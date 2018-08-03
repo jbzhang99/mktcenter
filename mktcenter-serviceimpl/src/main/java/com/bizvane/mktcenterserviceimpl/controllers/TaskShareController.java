@@ -1,5 +1,6 @@
 package com.bizvane.mktcenterserviceimpl.controllers;
 
+import com.bizvane.members.facade.models.MemberInfoModel;
 import com.bizvane.mktcenterservice.interfaces.TaskShareService;
 import com.bizvane.mktcenterservice.models.bo.TaskBO;
 import com.bizvane.mktcenterservice.models.po.MktCouponPO;
@@ -10,6 +11,7 @@ import com.bizvane.mktcenterserviceimpl.common.constants.SystemConstants;
 import com.bizvane.mktcenterserviceimpl.common.utils.TaskParamCheckUtil;
 import com.bizvane.utils.responseinfo.ResponseData;
 import com.bizvane.utils.tokens.SysAccountPO;
+import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -35,8 +37,8 @@ public class TaskShareController {
      * @return
      */
     @RequestMapping("getTaskList")
-    public ResponseData<TaskVO> getTaskList(TaskVO vo, PageForm pageForm){
-        ResponseData<TaskVO> taskVOResponseData = taskShareService.getTaskList(vo, pageForm);
+    public ResponseData<PageInfo<TaskVO>> getTaskList(TaskVO vo, PageForm pageForm){
+        ResponseData<PageInfo<TaskVO>> taskVOResponseData = taskShareService.getTaskList(vo, pageForm);
         return taskVOResponseData;
     }
 
@@ -98,9 +100,9 @@ public class TaskShareController {
      * @param
      * @return
      */
-    public ResponseData<Integer> executeTask(TaskVO vo){
+    public ResponseData<Integer> executeTask(TaskVO vo,MemberInfoModel memberInfoModel){
 
-        return taskShareService.executeTask(vo);
+        return taskShareService.executeTask(vo,memberInfoModel);
     }
 
     /**
