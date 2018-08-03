@@ -1,8 +1,10 @@
 package com.bizvane.mktcenterserviceimpl.service.impl;
 
 import com.bizvane.centerstageservice.models.po.SysCheckConfigPo;
+import com.bizvane.centerstageservice.models.po.SysCheckPo;
 import com.bizvane.centerstageservice.models.vo.SysCheckConfigVo;
 import com.bizvane.centerstageservice.rpc.SysCheckConfigServiceRpc;
+import com.bizvane.centerstageservice.rpc.SysCheckServiceRpc;
 import com.bizvane.members.facade.enums.IntegralChangeTypeEnum;
 import com.bizvane.members.facade.models.IntegralRecordModel;
 import com.bizvane.members.facade.models.MemberInfoModel;
@@ -30,6 +32,7 @@ import com.github.pagehelper.PageInfo;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
 import java.util.Date;
@@ -57,6 +60,8 @@ public class ActivitySigninServiceImpl implements ActivitySigninService {
     private IntegralRecordApiService integralRecordApiService;
     @Autowired
     private MktActivityRecordPOMapper mktActivityRecordPOMapper;
+    @Autowired
+    private SysCheckServiceRpc sysCheckServiceRpc;
     /**
      * 查询签到活动列表
      * @param vo
@@ -70,6 +75,8 @@ public class ActivitySigninServiceImpl implements ActivitySigninService {
         List<ActivityVO> activitySigninList = mktActivitySigninMapper.getActivitySigninList(vo);
         PageInfo<ActivityVO> pageInfo = new PageInfo<>(activitySigninList);
         responseData.setData(pageInfo);
+        responseData.setCode(SysResponseEnum.SUCCESS.getCode());
+        responseData.setMessage(SysResponseEnum.SUCCESS.getMessage());
         return responseData;
     }
 
@@ -80,6 +87,7 @@ public class ActivitySigninServiceImpl implements ActivitySigninService {
      * @return
      */
     @Override
+    @Transactional
     public ResponseData<Integer> addActivitySignin(ActivityBO bo, SysAccountPO stageUser) {
         //返回对象
         ResponseData responseData = new ResponseData();
@@ -123,14 +131,17 @@ public class ActivitySigninServiceImpl implements ActivitySigninService {
             mktActivityPOWithBLOBs.setActivityStatus(ActivityStatusEnum.ACTIVITY_STATUS_PENDING.getCode());
 
             //如果是待审核数据则需要增加一条审核数据
-            SysCheckConfigPo po = new SysCheckConfigPo();
+            SysCheckPo po = new SysCheckPo();
             po.setSysBrandId(mktActivityPOWithBLOBs.getSysBrandId());
             po.setFunctionCode(mktActivityPOWithBLOBs.getActivityCode());
-            po.setFunctionName(mktActivityPOWithBLOBs.getActivityName());
+            po.setBusinessName(mktActivityPOWithBLOBs.getActivityName());
+            po.setBusinessType(ActivityTypeEnum.ACTIVITY_TYPE_SIGNIN.getCode());
+            po.setFunctionCode("C0002");
+            po.setCheckStatus(CheckStatusEnum.CHECK_STATUS_PENDING.getCode());
             po.setCreateDate(new Date());
             po.setCreateUserId(stageUser.getSysAccountId());
             po.setCreateUserName(stageUser.getName());
-            sysCheckConfigServiceRpc.addCheckConfig(po);
+            sysCheckServiceRpc.addCheck(po);
         }else{
             //查询结果如果不需要审核审核状态为已审核
             mktActivityPOWithBLOBs.setCheckStatus(CheckStatusEnum.CHECK_STATUS_APPROVED.getCode());
@@ -154,7 +165,8 @@ public class ActivitySigninServiceImpl implements ActivitySigninService {
         BeanUtils.copyProperties(mktActivityPOWithBLOBs,mktActivitySignin);
         mktActivitySignin.setMktActivityId(mktActivityId);
         mktActivitySigninMapper.insertSelective(mktActivitySignin);
-
+        responseData.setCode(SysResponseEnum.SUCCESS.getCode());
+        responseData.setMessage(SysResponseEnum.SUCCESS.getMessage());
         return responseData;
     }
 
@@ -181,6 +193,7 @@ public class ActivitySigninServiceImpl implements ActivitySigninService {
      * @return
      */
     @Override
+    @Transactional
     public ResponseData<Integer> executeActivitySignin(MemberInfoModel vo) {
         //返回对象
         ResponseData responseData = new ResponseData();
@@ -206,6 +219,8 @@ public class ActivitySigninServiceImpl implements ActivitySigninService {
             po.setPoints(activityVO.getPoints());
             mktActivityRecordPOMapper.insertSelective(po);
         }
+        responseData.setCode(SysResponseEnum.SUCCESS.getCode());
+        responseData.setMessage(SysResponseEnum.SUCCESS.getMessage());
         return responseData;
     }
 
@@ -230,6 +245,8 @@ public class ActivitySigninServiceImpl implements ActivitySigninService {
             bs.setActivityStatus(ActivityStatusEnum.ACTIVITY_STATUS_FINISHED.getCode());
             int i = mktActivityPOMapper.updateByPrimaryKeySelective(bs);
         }
+        responseData.setCode(SysResponseEnum.SUCCESS.getCode());
+        responseData.setMessage(SysResponseEnum.SUCCESS.getMessage());
         return responseData;
     }
 }
