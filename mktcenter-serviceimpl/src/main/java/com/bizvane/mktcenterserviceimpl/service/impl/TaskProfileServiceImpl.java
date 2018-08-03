@@ -24,6 +24,7 @@ import com.bizvane.mktcenterserviceimpl.common.enums.TaskTypeEnum;
 import com.bizvane.mktcenterserviceimpl.common.utils.CodeUtil;
 import com.bizvane.mktcenterserviceimpl.common.utils.JobUtil;
 import com.bizvane.mktcenterserviceimpl.common.utils.TaskParamCheckUtil;
+import com.bizvane.mktcenterserviceimpl.common.utils.TimeUtils;
 import com.bizvane.mktcenterserviceimpl.mappers.*;
 import com.bizvane.utils.commonutils.PageForm;
 import com.bizvane.utils.enumutils.SysResponseEnum;
@@ -31,6 +32,7 @@ import com.bizvane.utils.responseinfo.ResponseData;
 import com.bizvane.utils.tokens.SysAccountPO;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.netflix.discovery.converters.Auto;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -84,6 +86,9 @@ public class TaskProfileServiceImpl implements TaskProfileService {
 
     @Autowired
     private MktTaskRecordPOMapper mktTaskRecordPOMapper;
+
+    @Autowired
+    private TimeUtils timeUtils;
 
 
 
@@ -523,9 +528,28 @@ public class TaskProfileServiceImpl implements TaskProfileService {
         //五、根据日期查询
 
 
-        for (Date i = date1;i==date2;){}
-
         List<DayTaskRecordVo> dayTaskRecordVoList = taskRecordVO.getDayTaskRecordVoList();
+        for (Date i = date1;i.after(date2);i=timeUtils.getNextDay(i)){
+            DayTaskRecordVo dayTaskRecordVo = new DayTaskRecordVo();
+            //1.根据日期，任务类型，品牌id查询出任务得出所有参与该类型任务人数
+
+            MktTaskRecordPOExample mktTaskRecordPOExample = new MktTaskRecordPOExample();
+            MktTaskRecordPOExample.Criteria criteria3 = mktTaskRecordPOExample.createCriteria();
+            criteria3.andParticipateDateEqualTo(i).andSysBrandIdEqualTo(stageUser.getBrandId()).andValidEqualTo(true).andTaskTypeEqualTo(TaskTypeEnum.TASK_TYPE_PROFILE.getCode());
+            Long dayCountMbr = mktTaskRecordPOMapper.countByExample(mktTaskRecordPOExample);
+            //每天参与任务的人所获总积分
+            Long daycountpoints = dayCountMbr*lTaskPoints;
+            //券
+            Long dayCountCoupon = dayCountMbr*oneTaskCoupon;
+
+            dayTaskRecordVo.setDayCountCoupon(dayCountCoupon);
+            dayTaskRecordVo.setDayCountMbr(dayCountMbr);
+            dayTaskRecordVo.setDayPoints(daycountpoints);
+            dayTaskRecordVoList.add(dayTaskRecordVo);
+
+        }
+
+        responseData.setData(taskRecordVO);
 
         return responseData;
     }

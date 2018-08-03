@@ -15,15 +15,14 @@ import com.bizvane.members.facade.service.api.IntegralRecordApiService;
 import com.bizvane.mktcenterservice.interfaces.TaskShareService;
 import com.bizvane.mktcenterservice.models.bo.TaskBO;
 import com.bizvane.mktcenterservice.models.po.*;
-import com.bizvane.mktcenterservice.models.vo.MessageVO;
-import com.bizvane.mktcenterservice.models.vo.PageForm;
-import com.bizvane.mktcenterservice.models.vo.TaskVO;
+import com.bizvane.mktcenterservice.models.vo.*;
 import com.bizvane.mktcenterserviceimpl.common.enums.BusinessTypeEnum;
 import com.bizvane.mktcenterserviceimpl.common.enums.CheckStatusEnum;
 import com.bizvane.mktcenterserviceimpl.common.enums.TaskStatusEnum;
 import com.bizvane.mktcenterserviceimpl.common.enums.TaskTypeEnum;
 import com.bizvane.mktcenterserviceimpl.common.utils.CodeUtil;
 import com.bizvane.mktcenterserviceimpl.common.utils.JobUtil;
+import com.bizvane.mktcenterserviceimpl.common.utils.TimeUtils;
 import com.bizvane.mktcenterserviceimpl.mappers.*;
 import com.bizvane.utils.enumutils.SysResponseEnum;
 import com.bizvane.utils.responseinfo.ResponseData;
@@ -80,12 +79,16 @@ public class TaskShareServiceImpl implements TaskShareService {
     @Autowired
     private MktTaskRecordPOMapper mktTaskRecordPOMapper;
 
+    @Autowired
+    private TimeUtils timeUtils;
+
     /**
      * 获取任务列表
      * @param vo
      * @param pageForm
      * @return
      */
+
     @Override
     public ResponseData<PageInfo<TaskVO>> getTaskList(TaskVO vo, PageForm pageForm) {
         ResponseData responseData = new ResponseData();
@@ -487,6 +490,147 @@ public class TaskShareServiceImpl implements TaskShareService {
         BeanUtils.copyProperties(mktTaskPO,mktTaskRecordPO);
         //是否奖励过 奖励次数？
         mktTaskRecordPOMapper.insertSelective(mktTaskRecordPO);
+        return responseData;
+    }
+
+    /**
+     * 效果分析
+     * @param date1
+     * @param date2
+     * @param stageUser
+     * @return
+     */
+    @Override
+    public ResponseData<TaskRecordVO> getTaskShareRecordByTime(Date date1, Date date2, SysAccountPO stageUser){
+        ResponseData responseData = new ResponseData();
+
+        //合计是指该时间之内合计还是？全部？
+
+
+
+        //根据任务类型，品牌id查询出任务得出所有参与该类型任务人数
+        MktTaskRecordPOExample example = new MktTaskRecordPOExample();
+        MktTaskRecordPOExample.Criteria criteria = example.createCriteria();
+        criteria.andTaskTypeEqualTo(TaskTypeEnum.TASK_TYPE_PROFILE.getCode()).andSysBrandIdEqualTo(stageUser.getBrandId()).andValidEqualTo(true);
+        //一、查出时间之内参与任务的总人数
+        Long countMbr = mktTaskRecordPOMapper.countByExample(example);
+        TaskRecordVO taskRecordVO = new TaskRecordVO();
+        taskRecordVO.setAllCountMbr(countMbr);
+
+
+
+        //二、算出赠送总积分
+
+        //1.从任务主表中根据brandid和任务类型查出所有的分享任务的taskid以及名称
+        MktTaskPOExample mktTaskPOExample = new MktTaskPOExample();
+        MktTaskPOExample.Criteria criteria1 = mktTaskPOExample.createCriteria();
+        criteria1.andValidEqualTo(true).andSysBrandIdEqualTo(stageUser.getBrandId()).andTaskTypeEqualTo(TaskTypeEnum.TASK_TYPE_SHARE.getCode())
+        List<MktTaskPO> mktTaskPOList = mktTaskPOMapper.selectByExample(mktTaskPOExample);
+        Long countPoints = 0L;
+        Long countCoupon = 0L;
+        List<DayTaskRecordVo> dayTaskRecordVoList = taskRecordVO.getDayTaskRecordVoList();
+        //
+        for (MktTaskPO mktTaskPO:mktTaskPOList){
+
+            Long taskId = mktTaskPO.getMktTaskId();
+            Integer points = mktTaskPO.getPoints();
+            //根据taskid在记录表中查出对应的人数再乘以相应的积分
+            MktTaskRecordPOExample mktTaskRecordPOExample = new MktTaskRecordPOExample();
+            MktTaskRecordPOExample.Criteria criteria2 = mktTaskRecordPOExample.createCriteria();
+            criteria2.andTaskIdEqualTo(taskId).andValidEqualTo(true);
+            Long oneTaskcountMbr = mktTaskRecordPOMapper.countByExample(mktTaskRecordPOExample);
+            Long oneTaskCountPoints = points*oneTaskcountMbr;
+            countPoints = countPoints+oneTaskCountPoints;
+
+            //根据taskid查出该任务赠送券数
+
+
+
+            MktCouponPOExample mktCouponPOExample = new MktCouponPOExample();
+            MktCouponPOExample.Criteria criteria4 = mktCouponPOExample.createCriteria();
+            criteria4.andBizIdEqualTo(taskId).andValidEqualTo(true);
+            Long oneTaskCoupon = mktCouponPOMapper.countByExample(mktCouponPOExample);
+            Long oneTaskCountCoupon = oneTaskcountMbr*oneTaskCoupon;
+            countCoupon = countCoupon+oneTaskCountCoupon;
+
+
+
+            //根据taskid去分享任务表查出该任务需要完成的分享次数   最终查出完成任务的总人数
+            MktTaskSharePOExample mktTaskSharePOExample = new MktTaskSharePOExample();
+            MktTaskSharePOExample.Criteria criteria3 = mktTaskSharePOExample.createCriteria();
+            criteria3.andMktTaskIdEqualTo(taskId).andValidEqualTo(true);
+            List<MktTaskSharePO> mktTaskSharePOList  =mktTaskSharePOMapper.selectByExample(mktTaskSharePOExample);
+            MktTaskSharePO mktTaskSharePO = mktTaskSharePOList.get(0);
+            Integer oneTaskShareTimes = mktTaskSharePO.getShareTimes();
+
+
+            //将每个分享任务的内容添加进list中
+
+            DayTaskRecordVo dayTaskRecordVo = new DayTaskRecordVo();
+            dayTaskRecordVo.setTaskName(mktTaskPO.getTaskName());
+            dayTaskRecordVo.setOneTaskCountMbr(oneTaskcountMbr);
+            dayTaskRecordVo.setOneTaskPoints(oneTaskCountPoints);
+            //dayTaskRecordVo.setOneTaskInvalidCountCoupon();调接口
+            dayTaskRecordVo.setOneTaskCountCoupon(oneTaskCountCoupon);
+            dayTaskRecordVo.setOneTaskCompleteCountMbr();
+
+
+
+            dayTaskRecordVoList.add(dayTaskRecordVo);
+        }
+
+        taskRecordVO.setAllPoints(countPoints);
+        taskRecordVO.setAllCountCoupon(countCoupon);
+
+        /*MktTaskPOExample mktTaskPOExample = new MktTaskPOExample();
+        MktTaskPOExample.Criteria criteria1 = mktTaskPOExample.createCriteria();
+        criteria1.andTaskTypeEqualTo(TaskTypeEnum.TASK_TYPE_PROFILE.getCode()).andSysBrandIdEqualTo(stageUser.getBrandId()).andValidEqualTo(true);
+
+        List<MktTaskPO> mktTaskPOList = mktTaskPOMapper.selectByExample(mktTaskPOExample);
+        MktTaskPO mktTaskPO = mktTaskPOList.get(0);
+        Integer taskPoints = mktTaskPO.getPoints();
+        Long lTaskPoints = (long)taskPoints;
+        Long allPoints = (countMbr*lTaskPoints);
+        taskRecordVO.setAllPoints(allPoints);*/
+
+        //三、算出赠送总券数
+        //根据taskid查出该任务赠送券数
+
+        /*MktCouponPOExample mktCouponPOExample = new MktCouponPOExample();
+        MktCouponPOExample.Criteria criteria2 = mktCouponPOExample.createCriteria();
+        criteria2.andBizIdEqualTo(mktTaskPO.getMktTaskId()).andValidEqualTo(true);
+        Long oneTaskCoupon = mktCouponPOMapper.countByExample(mktCouponPOExample);
+        Long allCountCoupon = countMbr*oneTaskCoupon;
+        taskRecordVO.setAllCountCoupon(allCountCoupon);*/
+
+        //四、已被核销的优惠券？从哪查
+
+        //五、根据日期查询
+
+/*
+        List<DayTaskRecordVo> dayTaskRecordVoList = taskRecordVO.getDayTaskRecordVoList();
+        for (Date i = date1;i.after(date2);i=timeUtils.getNextDay(i)){
+            DayTaskRecordVo dayTaskRecordVo = new DayTaskRecordVo();
+            //1.根据日期，任务类型，品牌id查询出任务得出所有参与该类型任务人数
+
+            MktTaskRecordPOExample mktTaskRecordPOExample = new MktTaskRecordPOExample();
+            MktTaskRecordPOExample.Criteria criteria3 = mktTaskRecordPOExample.createCriteria();
+            criteria3.andParticipateDateEqualTo(i).andSysBrandIdEqualTo(stageUser.getBrandId()).andValidEqualTo(true).andTaskTypeEqualTo(TaskTypeEnum.TASK_TYPE_PROFILE.getCode());
+            Long dayCountMbr = mktTaskRecordPOMapper.countByExample(mktTaskRecordPOExample);
+            //每天参与任务的人所获总积分
+            Long daycountpoints = dayCountMbr*lTaskPoints;
+            //券
+            Long dayCountCoupon = dayCountMbr*oneTaskCoupon;
+
+            dayTaskRecordVo.setDayCountCoupon(dayCountCoupon);
+            dayTaskRecordVo.setDayCountMbr(dayCountMbr);
+            dayTaskRecordVo.setDayPoints(daycountpoints);
+            dayTaskRecordVoList.add(dayTaskRecordVo);
+
+        }*/
+
+        responseData.setData(taskRecordVO);
+
         return responseData;
     }
 

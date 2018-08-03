@@ -3,11 +3,13 @@ package com.bizvane.mktcenterservice.interfaces;
 import com.bizvane.members.facade.models.MemberInfoModel;
 import com.bizvane.mktcenterservice.models.bo.TaskBO;
 import com.bizvane.mktcenterservice.models.vo.PageForm;
+import com.bizvane.mktcenterservice.models.vo.TaskRecordVO;
 import com.bizvane.mktcenterservice.models.vo.TaskVO;
 import com.bizvane.utils.responseinfo.ResponseData;
 import com.bizvane.utils.tokens.SysAccountPO;
 import com.github.pagehelper.PageInfo;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -51,5 +53,15 @@ public interface TaskShareService {
      * @return
      */
     public ResponseData<List<TaskVO>> selectTaskById(Long mktTaskId);
+
+
+    /**
+     *
+     * @param date1
+     * @param date2
+     * @param stageUser
+     * @return
+     */
+    public ResponseData<TaskRecordVO> getTaskShareRecordByTime(Date date1, Date date2, SysAccountPO stageUser)
 
 }
