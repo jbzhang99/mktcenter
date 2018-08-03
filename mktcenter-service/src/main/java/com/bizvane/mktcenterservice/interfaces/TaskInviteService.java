@@ -1,11 +1,16 @@
 package com.bizvane.mktcenterservice.interfaces;
 
 import com.bizvane.mktcenterservice.models.bo.TaskBO;
+import com.bizvane.mktcenterservice.models.bo.TaskDetailBO;
+import com.bizvane.mktcenterservice.models.po.MktTaskInvitePO;
+import com.bizvane.mktcenterservice.models.po.MktTaskOrderPO;
 import com.bizvane.mktcenterservice.models.vo.PageForm;
+import com.bizvane.mktcenterservice.models.vo.TaskDetailVO;
 import com.bizvane.mktcenterservice.models.vo.TaskVO;
 import com.bizvane.utils.responseinfo.ResponseData;
 import com.bizvane.utils.tokens.SysAccountPO;
 
+import java.text.ParseException;
 import java.util.List;
 
 /**
@@ -15,38 +20,46 @@ import java.util.List;
  * @Copyright (c) 2018 上海商帆信息科技有限公司-版权所有
  */
 public interface TaskInviteService {
-
     /**
-     * 查询任务列表
+     * 任务的审核
      * @param vo
      * @return
      */
-    public ResponseData<TaskVO> getTaskList(TaskVO vo, PageForm pageForm);
-
-    /**
-     * 新增任务
-     * @param bo
-     * @return
-     */
-    public ResponseData<Integer> addTask(TaskBO bo, SysAccountPO stageUser);
-
-    /**
-     * 执行任务
-     * @param
-     * @return
-     */
-    public ResponseData<Integer> executeTask(TaskVO vo);
-
-    /**
-     * 修改任务
-     * @return
-     */
-    public ResponseData<Integer> updateTask(TaskBO bo,SysAccountPO stageUser);
+    public  Integer  checkInviteTask(TaskVO vo);
 
     /**
      * 查询任务详情
-     * @param mktTaskId
+     */
+    public List<TaskDetailBO> getInviteTaskDetails(Long mktTaskId);
+
+    /**
+     * 查询任务列表
      * @return
      */
-    public ResponseData<List<TaskVO>> selectTaskById(Long mktTaskId);
+    public List<TaskVO> selectTask(TaskVO vo);
+
+    /**
+     * 新增任务
+     * @return
+     */
+    public ResponseData<Integer> addTask(TaskDetailVO vo, SysAccountPO stageUser) throws ParseException;
+
+    /**
+     * 修改任务
+     * @param stageUser
+     * @return
+     */
+    public ResponseData updateInviteTask(TaskDetailVO vo, SysAccountPO stageUser);
+    /**
+     * 新增具体任务
+     */
+    public Integer insertInviteTask(MktTaskInvitePO po, SysAccountPO stageUser);
+    /**
+     * 修改具体任务
+     * @param po
+     * @param stageUser
+     * @return
+     */
+    public Integer modifieInviteTask(MktTaskInvitePO po, SysAccountPO stageUser);
 }
+

@@ -1,5 +1,6 @@
 package com.bizvane.mktcenterserviceimpl.mappers;
 
+import com.bizvane.mktcenterservice.models.bo.TaskDetailBO;
 import com.bizvane.mktcenterservice.models.po.MktTaskInvitePO;
 import com.bizvane.mktcenterservice.models.po.MktTaskInvitePOExample;
 import java.util.List;
@@ -78,4 +79,6 @@ public interface MktTaskInvitePOMapper {
 	int updateByPrimaryKey(MktTaskInvitePO record);
 
 	List<TaskVO> getTaskList(TaskVO vo);
+	
+	public  List<TaskDetailBO> getInviteTaskDetails(@Param("mktTaskId") Long mktTaskId);
 }

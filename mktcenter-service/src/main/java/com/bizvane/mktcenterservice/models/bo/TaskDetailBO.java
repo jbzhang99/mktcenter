@@ -2,6 +2,7 @@ package com.bizvane.mktcenterservice.models.bo;
 
 import com.bizvane.mktcenterservice.models.po.MktCouponPO;
 import com.bizvane.mktcenterservice.models.po.MktMessagePO;
+import com.bizvane.mktcenterservice.models.po.MktTaskInvitePO;
 import com.bizvane.mktcenterservice.models.po.MktTaskOrderPO;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
@@ -37,6 +38,10 @@ public class TaskDetailBO {
      */
     private MktTaskOrderPO mktTaskOrderPO;
 
+    /**
+     * 会员开卡任务
+     */
+    private MktTaskInvitePO mktTaskInvitePO;
     /**
      * 券号列表(奖励)
      */
@@ -189,5 +194,13 @@ public class TaskDetailBO {
 
     public void setMktmessagePOList(List<MktMessagePO> mktmessagePOList) {
         this.mktmessagePOList = mktmessagePOList;
+    }
+
+    public MktTaskInvitePO getMktTaskInvitePO() {
+        return mktTaskInvitePO;
+    }
+
+    public void setMktTaskInvitePO(MktTaskInvitePO mktTaskInvitePO) {
+        this.mktTaskInvitePO = mktTaskInvitePO;
     }
 }

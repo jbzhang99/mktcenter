@@ -3,6 +3,7 @@ package com.bizvane.mktcenterserviceimpl.controllers;
 import com.alibaba.fastjson.JSON;
 import com.bizvane.mktcenterservice.interfaces.TaskInviteService;
 import com.bizvane.mktcenterservice.models.bo.TaskBO;
+import com.bizvane.mktcenterservice.models.bo.TaskDetailBO;
 import com.bizvane.mktcenterservice.models.po.MktCouponPO;
 import com.bizvane.mktcenterservice.models.vo.MessageVO;
 import com.bizvane.mktcenterservice.models.vo.PageForm;
@@ -10,13 +11,17 @@ import com.bizvane.mktcenterservice.models.vo.TaskDetailVO;
 import com.bizvane.mktcenterservice.models.vo.TaskVO;
 import com.bizvane.mktcenterserviceimpl.common.constants.SystemConstants;
 import com.bizvane.mktcenterserviceimpl.common.utils.TaskParamCheckUtil;
+import com.bizvane.utils.enumutils.SysResponseEnum;
 import com.bizvane.utils.responseinfo.ResponseData;
 import com.bizvane.utils.tokens.SysAccountPO;
+import com.bizvane.utils.tokens.TokenUtils;
+import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
+import java.text.ParseException;
 import java.util.List;
 
 /**
@@ -33,20 +38,34 @@ public class TaskInviteController {
     @Autowired
     private TaskInviteService taskInviteService;
 
-    @RequestMapping("/test")
-    public  String  test(TaskDetailVO vo){
-        String s = JSON.toJSONString(vo);
-        return JSON.toJSONString(vo);
-    }
-
     /**
-     * 查询任务列表
-     * @return
+     * 任务审核
      */
-    @RequestMapping("getTaskList")
-    public ResponseData<TaskVO> getTaskList(TaskVO vo, PageForm pageForm){
-        ResponseData<TaskVO> taskVOResponseData = taskInviteService.getTaskList(vo, pageForm);
-        return taskVOResponseData;
+    @RequestMapping("checkInviteTask")
+    public  ResponseData<Integer>  checkInviteTask(TaskVO vo){
+        ResponseData<Integer> result = new ResponseData<Integer>(SysResponseEnum.FAILED.getCode(),SysResponseEnum.FAILED.getMessage(),null);
+        Integer data = taskInviteService.checkInviteTask(vo);
+        if (data>0){
+            result.setCode(SysResponseEnum.SUCCESS.getCode());
+            result.setMessage(SysResponseEnum.SUCCESS.getMessage());
+        }
+        return result;
+    }
+    /**
+     * 查询消费任务详情
+     */
+    @RequestMapping("getAmountTaskDetails")
+    public  ResponseData<TaskDetailBO> getInviteTaskDetails(Long mktTaskId){
+        ResponseData<TaskDetailBO> result = new ResponseData<TaskDetailBO>(SysResponseEnum.FAILED.getCode(),SysResponseEnum.FAILED.getMessage(),null);
+        List<TaskDetailBO> lists = taskInviteService.getInviteTaskDetails(mktTaskId);
+
+        if (CollectionUtils.isNotEmpty(lists)){
+            result.setCode(SysResponseEnum.SUCCESS.getCode());
+            result.setMessage(SysResponseEnum.SUCCESS.getMessage());
+            result.setData(lists.get(0));
+        }
+
+        return  result;
     }
 
     /**
@@ -54,70 +73,19 @@ public class TaskInviteController {
      * @return
      */
     @RequestMapping("addTask")
-    public ResponseData<Integer> addTask(TaskVO vo, List<MktCouponPO> couponCodeList, List<MessageVO> messageVOList, HttpServletRequest request){
-        TaskBO bo = new TaskBO();
-        bo.setTaskVO(vo);
-        bo.setMktCouponPOList(couponCodeList);
-        bo.setMessageVOList(messageVOList);
-        //参数校验
-        ResponseData responseData = TaskParamCheckUtil.checkParam(bo);
-        //参数校验不通过
-        if(SystemConstants.ERROR_CODE==responseData.getCode()){
-            return responseData;
-        }
+    public ResponseData<Integer> addTask(TaskDetailVO vo, HttpServletRequest request) throws ParseException {
         //参数校验通过，获取操作人信息
-//        SysAccountPO stageUser = TokenUtils.getStageUser(request);
-        SysAccountPO stageUser = new SysAccountPO();
+        SysAccountPO stageUser = TokenUtils.getStageUser(request);
 
-        //新增活动
-        ResponseData<Integer> integerResponseData = taskInviteService.addTask(bo, stageUser);
-
-        //返回
-        return integerResponseData;
+        return  taskInviteService.addTask(vo, stageUser);
     }
-
     /**
      * 修改任务
-     * @param
-     * @return
      */
-    public ResponseData<Integer> updateTask(TaskVO vo, List<MktCouponPO> couponCodeList, List<MessageVO> messageVOList, HttpServletRequest request){
-        TaskBO bo = new TaskBO();
-        bo.setTaskVO(vo);
-        bo.setMktCouponPOList(couponCodeList);
-        bo.setMessageVOList(messageVOList);
-        //参数校验
-        ResponseData responseData = TaskParamCheckUtil.checkParam(bo);
-        //参数校验不通过
-        if(SystemConstants.ERROR_CODE==responseData.getCode()){
-            return responseData;
-        }
-        //参数校验通过，获取操作人信息
-        SysAccountPO stageUser = new SysAccountPO();
-        //更新活动
-        ResponseData<Integer> registerData = taskInviteService.updateTask(bo,stageUser);
+    @RequestMapping("updateInviteTask")
+    public ResponseData updateInviteTask(TaskDetailVO vo, HttpServletRequest request){
+        SysAccountPO stageUser = TokenUtils.getStageUser(request);
 
-        //返回
-
-        return registerData;
-    }
-
-    /**
-     * 执行任务
-     * @param
-     * @return
-     */
-    public ResponseData<Integer> executeTask(TaskVO vo){
-
-        return taskInviteService.executeTask(vo);
-    }
-
-    /**
-     * 查询任务详情
-     * @param mktActivityId
-     * @return
-     */
-    public ResponseData<List<TaskVO>> selectTaskById(Long mktActivityId){
-        return taskInviteService.selectTaskById(mktActivityId);
+        return  taskInviteService.updateInviteTask(vo, stageUser);
     }
 }
