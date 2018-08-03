@@ -46,6 +46,16 @@ public interface TaskAmountService {
      * @param stageUser
      * @return
      */
-    public ResponseData<Integer> updateTask(MktTaskOrderPO po, SysAccountPO stageUser);
-
+    public ResponseData updateAmountTask(TaskDetailVO vo, SysAccountPO stageUser);
+    /**
+     * 新增具体任务
+     */
+    public Integer insertAmoutTask(MktTaskOrderPO po, SysAccountPO stageUser);
+    /**
+     * 修改具体任务
+     * @param po
+     * @param stageUser
+     * @return
+     */
+    public Integer modifieAmoutTask(MktTaskOrderPO po, SysAccountPO stageUser);
 }
