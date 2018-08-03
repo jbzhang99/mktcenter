@@ -2,6 +2,7 @@ package com.bizvane.mktcenterserviceimpl.controllers;
 
 import com.bizvane.mktcenterservice.interfaces.ActivitySmartService;
 import com.bizvane.mktcenterservice.models.bo.ActivitySmartBO;
+import com.bizvane.mktcenterservice.models.po.MktActivitySmartGroupPO;
 import com.bizvane.mktcenterservice.models.po.MktActivitySmartPO;
 import com.bizvane.mktcenterservice.models.po.MktCouponPO;
 import com.bizvane.mktcenterservice.models.vo.ActivitySmartVO;
@@ -36,8 +37,8 @@ public class ActivitySmartController {
      * 查询智能营销活动分组列表(方块)
      * @return
      */
-    @RequestMapping("getSmartActivityList")
-    public ResponseData<PageInfo<MktActivitySmartPO>> getSmartActivityList(ActivitySmartVO vo,PageForm pageForm){
+    @RequestMapping("getSmartActivityGroupList")
+    public ResponseData<PageInfo<MktActivitySmartGroupPO>> getSmartActivityGroupList(ActivitySmartVO vo, PageForm pageForm){
         return activitySmartService.getSmartActivityList(vo,pageForm);
     }
 

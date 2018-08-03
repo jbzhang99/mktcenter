@@ -3,7 +3,6 @@ package com.bizvane.mktcenterservice;
 import com.alibaba.fastjson.JSON;
 import com.bizvane.mktcenterservice.interfaces.TaskOrderService;
 import com.bizvane.mktcenterservice.models.bo.TaskDetailBO;
-import com.bizvane.mktcenterservice.models.vo.TaskConsumeVO;
 import com.bizvane.mktcenterserviceimpl.MktcenterApplication;
 import org.junit.Test;
 import org.junit.runner.RunWith;

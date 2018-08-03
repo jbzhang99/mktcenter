@@ -1,10 +1,12 @@
 package com.bizvane.mktcenterserviceimpl.controllers;
 
+import com.alibaba.fastjson.JSON;
 import com.bizvane.mktcenterservice.interfaces.TaskInviteService;
 import com.bizvane.mktcenterservice.models.bo.TaskBO;
 import com.bizvane.mktcenterservice.models.po.MktCouponPO;
 import com.bizvane.mktcenterservice.models.vo.MessageVO;
 import com.bizvane.mktcenterservice.models.vo.PageForm;
+import com.bizvane.mktcenterservice.models.vo.TaskDetailVO;
 import com.bizvane.mktcenterservice.models.vo.TaskVO;
 import com.bizvane.mktcenterserviceimpl.common.constants.SystemConstants;
 import com.bizvane.mktcenterserviceimpl.common.utils.TaskParamCheckUtil;
@@ -22,6 +24,7 @@ import java.util.List;
  * @date on 2018/7/13 13:38
  * @description
  * @Copyright (c) 2018 上海商帆信息科技有限公司-版权所有
+ * 消费金额任务
  */
 @RestController
 @RequestMapping("taskInvite")
@@ -29,6 +32,12 @@ public class TaskInviteController {
 
     @Autowired
     private TaskInviteService taskInviteService;
+
+    @RequestMapping("/test")
+    public  String  test(TaskDetailVO vo){
+        String s = JSON.toJSONString(vo);
+        return JSON.toJSONString(vo);
+    }
 
     /**
      * 查询任务列表

@@ -9,124 +9,100 @@ public class MktActivitySmartPO implements Serializable {
 
 	/**
 	 * 只读. pkid. mkt_activity_smart_id
-	 * @mbg.generated  2018-07-31 19:48:47
+	 * @mbg.generated  2018-08-02 20:38:44
 	 */
 	@io.swagger.annotations.ApiModelProperty(value = "pkid", name = "mktActivitySmartId", required = false, example = "")
 	private Long mktActivitySmartId;
 	/**
-	 * 只读. 关联活动id. mkt_activity_id
-	 * @mbg.generated  2018-07-31 19:48:47
+	 * 只读. 活动主表id. mkt_activity_id
+	 * @mbg.generated  2018-08-02 20:38:44
 	 */
-	@io.swagger.annotations.ApiModelProperty(value = "关联活动id", name = "mktActivityId", required = false, example = "")
+	@io.swagger.annotations.ApiModelProperty(value = "活动主表id", name = "mktActivityId", required = false, example = "")
 	private Long mktActivityId;
 	/**
-	 * 只读. 营销方式：1优惠券营销，2积分营销，3短信营销，4微信模板消息营销. mkt_type
-	 * @mbg.generated  2018-07-31 19:48:47
+	 * 只读. 智能营销方式：1优惠券营销，2积分营销，3短信营销，4微信模板消息营销. mkt_smart_type
+	 * @mbg.generated  2018-08-02 20:38:44
 	 */
-	@io.swagger.annotations.ApiModelProperty(value = "营销方式：1优惠券营销，2积分营销，3短信营销，4微信模板消息营销", name = "mktType", required = false, example = "")
-	private Integer mktType;
-	/**
-	 * 只读. 营销任务名称. mkt_task_name
-	 * @mbg.generated  2018-07-31 19:48:47
-	 */
-	@io.swagger.annotations.ApiModelProperty(value = "营销任务名称", name = "mktTaskName", required = false, example = "")
-	private String mktTaskName;
-	/**
-	 * 只读. 会员分组id. member_group_id
-	 * @mbg.generated  2018-07-31 19:48:47
-	 */
-	@io.swagger.annotations.ApiModelProperty(value = "会员分组id", name = "memberGroupId", required = false, example = "")
-	private Long memberGroupId;
-	/**
-	 * 只读. 会员分组编号. member_group_code
-	 * @mbg.generated  2018-07-31 19:48:47
-	 */
-	@io.swagger.annotations.ApiModelProperty(value = "会员分组编号", name = "memberGroupCode", required = false, example = "")
-	private String memberGroupCode;
+	@io.swagger.annotations.ApiModelProperty(value = "智能营销方式：1优惠券营销，2积分营销，3短信营销，4微信模板消息营销", name = "mktSmartType", required = false, example = "")
+	private Integer mktSmartType;
 	/**
 	 * 只读. 预计目标会员统计. target_mbr_count
-	 * @mbg.generated  2018-07-31 19:48:47
+	 * @mbg.generated  2018-08-02 20:38:44
 	 */
 	@io.swagger.annotations.ApiModelProperty(value = "预计目标会员统计", name = "targetMbrCount", required = false, example = "")
 	private Integer targetMbrCount;
 	/**
 	 * 只读. 预计目标会员数量的统计时间. target_mbr_count_time
-	 * @mbg.generated  2018-07-31 19:48:47
+	 * @mbg.generated  2018-08-02 20:38:44
 	 */
 	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", locale = "zh", timezone = "GMT+8")
 	@io.swagger.annotations.ApiModelProperty(value = "预计目标会员数量的统计时间", name = "targetMbrCountTime", required = false, example = "")
 	private Date targetMbrCountTime;
 	/**
-	 * 只读. 分组状态：0禁用，1启用. status
-	 * @mbg.generated  2018-07-31 19:48:47
-	 */
-	@io.swagger.annotations.ApiModelProperty(value = "分组状态：0禁用，1启用", name = "status", required = false, example = "")
-	private Boolean status;
-	/**
 	 * 只读. 备注. remark
-	 * @mbg.generated  2018-07-31 19:48:47
+	 * @mbg.generated  2018-08-02 20:38:44
 	 */
 	@io.swagger.annotations.ApiModelProperty(value = "备注", name = "remark", required = false, example = "")
 	private String remark;
 	/**
 	 * 只读. 创建人id. create_user_id
-	 * @mbg.generated  2018-07-31 19:48:47
+	 * @mbg.generated  2018-08-02 20:38:44
 	 */
 	@io.swagger.annotations.ApiModelProperty(value = "创建人id", name = "createUserId", required = false, example = "")
 	private Long createUserId;
 	/**
 	 * 只读. 创建人. create_user_name
-	 * @mbg.generated  2018-07-31 19:48:47
+	 * @mbg.generated  2018-08-02 20:38:44
 	 */
 	@io.swagger.annotations.ApiModelProperty(value = "创建人", name = "createUserName", required = false, example = "")
 	private String createUserName;
 	/**
 	 * 只读. 创建日期. create_date
-	 * @mbg.generated  2018-07-31 19:48:47
+	 * @mbg.generated  2018-08-02 20:38:44
 	 */
 	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", locale = "zh", timezone = "GMT+8")
 	@io.swagger.annotations.ApiModelProperty(value = "创建日期", name = "createDate", required = false, example = "")
 	private Date createDate;
 	/**
 	 * 只读. 修改人id. modified_user_id
-	 * @mbg.generated  2018-07-31 19:48:47
+	 * @mbg.generated  2018-08-02 20:38:44
 	 */
 	@io.swagger.annotations.ApiModelProperty(value = "修改人id", name = "modifiedUserId", required = false, example = "")
 	private Long modifiedUserId;
 	/**
 	 * 只读. 修改人. modified_user_name
-	 * @mbg.generated  2018-07-31 19:48:47
+	 * @mbg.generated  2018-08-02 20:38:44
 	 */
 	@io.swagger.annotations.ApiModelProperty(value = "修改人", name = "modifiedUserName", required = false, example = "")
 	private String modifiedUserName;
 	/**
 	 * 只读. 修改时间. modified_date
-	 * @mbg.generated  2018-07-31 19:48:47
+	 * @mbg.generated  2018-08-02 20:38:44
 	 */
 	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", locale = "zh", timezone = "GMT+8")
 	@io.swagger.annotations.ApiModelProperty(value = "修改时间", name = "modifiedDate", required = false, example = "")
 	private Date modifiedDate;
 	/**
 	 * 只读. 数据有效性：1=有效；0=无效. valid
-	 * @mbg.generated  2018-07-31 19:48:47
+	 * @mbg.generated  2018-08-02 20:38:44
 	 */
 	@io.swagger.annotations.ApiModelProperty(value = "数据有效性：1=有效；0=无效", name = "valid", required = false, example = "")
 	private Boolean valid;
 	/**
-	 * 只读. 目标会员在会员模块中的搜索条件. target_mbr
-	 * @mbg.generated  2018-07-31 19:48:47
+	 * 只读. 目标会员在会员模块中的搜索条件/json. target_mbr
+	 * @mbg.generated  2018-08-02 20:38:44
 	 */
-	@io.swagger.annotations.ApiModelProperty(value = "目标会员在会员模块中的搜索条件", name = "targetMbr", required = false, example = "")
+	@io.swagger.annotations.ApiModelProperty(value = "目标会员在会员模块中的搜索条件/json", name = "targetMbr", required = false, example = "")
 	private String targetMbr;
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-07-31 19:48:47
+	 * @mbg.generated  2018-08-02 20:38:44
 	 */
 	private static final long serialVersionUID = 1L;
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-07-31 19:48:47
+	 * @mbg.generated  2018-08-02 20:38:44
 	 */
 	public Long getMktActivitySmartId() {
 		return mktActivitySmartId;
@@ -134,7 +110,7 @@ public class MktActivitySmartPO implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-07-31 19:48:47
+	 * @mbg.generated  2018-08-02 20:38:44
 	 */
 	public void setMktActivitySmartId(Long mktActivitySmartId) {
 		this.mktActivitySmartId = mktActivitySmartId;
@@ -142,7 +118,7 @@ public class MktActivitySmartPO implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-07-31 19:48:47
+	 * @mbg.generated  2018-08-02 20:38:44
 	 */
 	public Long getMktActivityId() {
 		return mktActivityId;
@@ -150,7 +126,7 @@ public class MktActivitySmartPO implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-07-31 19:48:47
+	 * @mbg.generated  2018-08-02 20:38:44
 	 */
 	public void setMktActivityId(Long mktActivityId) {
 		this.mktActivityId = mktActivityId;
@@ -158,71 +134,23 @@ public class MktActivitySmartPO implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-07-31 19:48:47
+	 * @mbg.generated  2018-08-02 20:38:44
 	 */
-	public Integer getMktType() {
-		return mktType;
+	public Integer getMktSmartType() {
+		return mktSmartType;
 	}
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-07-31 19:48:47
+	 * @mbg.generated  2018-08-02 20:38:44
 	 */
-	public void setMktType(Integer mktType) {
-		this.mktType = mktType;
+	public void setMktSmartType(Integer mktSmartType) {
+		this.mktSmartType = mktSmartType;
 	}
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-07-31 19:48:47
-	 */
-	public String getMktTaskName() {
-		return mktTaskName;
-	}
-
-	/**
-	 * 只读. 
-	 * @mbg.generated  2018-07-31 19:48:47
-	 */
-	public void setMktTaskName(String mktTaskName) {
-		this.mktTaskName = mktTaskName == null ? null : mktTaskName.trim();
-	}
-
-	/**
-	 * 只读. 
-	 * @mbg.generated  2018-07-31 19:48:47
-	 */
-	public Long getMemberGroupId() {
-		return memberGroupId;
-	}
-
-	/**
-	 * 只读. 
-	 * @mbg.generated  2018-07-31 19:48:47
-	 */
-	public void setMemberGroupId(Long memberGroupId) {
-		this.memberGroupId = memberGroupId;
-	}
-
-	/**
-	 * 只读. 
-	 * @mbg.generated  2018-07-31 19:48:47
-	 */
-	public String getMemberGroupCode() {
-		return memberGroupCode;
-	}
-
-	/**
-	 * 只读. 
-	 * @mbg.generated  2018-07-31 19:48:47
-	 */
-	public void setMemberGroupCode(String memberGroupCode) {
-		this.memberGroupCode = memberGroupCode == null ? null : memberGroupCode.trim();
-	}
-
-	/**
-	 * 只读. 
-	 * @mbg.generated  2018-07-31 19:48:47
+	 * @mbg.generated  2018-08-02 20:38:44
 	 */
 	public Integer getTargetMbrCount() {
 		return targetMbrCount;
@@ -230,7 +158,7 @@ public class MktActivitySmartPO implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-07-31 19:48:47
+	 * @mbg.generated  2018-08-02 20:38:44
 	 */
 	public void setTargetMbrCount(Integer targetMbrCount) {
 		this.targetMbrCount = targetMbrCount;
@@ -238,7 +166,7 @@ public class MktActivitySmartPO implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-07-31 19:48:47
+	 * @mbg.generated  2018-08-02 20:38:44
 	 */
 	public Date getTargetMbrCountTime() {
 		return targetMbrCountTime;
@@ -246,7 +174,7 @@ public class MktActivitySmartPO implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-07-31 19:48:47
+	 * @mbg.generated  2018-08-02 20:38:44
 	 */
 	public void setTargetMbrCountTime(Date targetMbrCountTime) {
 		this.targetMbrCountTime = targetMbrCountTime;
@@ -254,23 +182,7 @@ public class MktActivitySmartPO implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-07-31 19:48:47
-	 */
-	public Boolean getStatus() {
-		return status;
-	}
-
-	/**
-	 * 只读. 
-	 * @mbg.generated  2018-07-31 19:48:47
-	 */
-	public void setStatus(Boolean status) {
-		this.status = status;
-	}
-
-	/**
-	 * 只读. 
-	 * @mbg.generated  2018-07-31 19:48:47
+	 * @mbg.generated  2018-08-02 20:38:44
 	 */
 	public String getRemark() {
 		return remark;
@@ -278,7 +190,7 @@ public class MktActivitySmartPO implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-07-31 19:48:47
+	 * @mbg.generated  2018-08-02 20:38:44
 	 */
 	public void setRemark(String remark) {
 		this.remark = remark == null ? null : remark.trim();
@@ -286,7 +198,7 @@ public class MktActivitySmartPO implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-07-31 19:48:47
+	 * @mbg.generated  2018-08-02 20:38:44
 	 */
 	public Long getCreateUserId() {
 		return createUserId;
@@ -294,7 +206,7 @@ public class MktActivitySmartPO implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-07-31 19:48:47
+	 * @mbg.generated  2018-08-02 20:38:44
 	 */
 	public void setCreateUserId(Long createUserId) {
 		this.createUserId = createUserId;
@@ -302,7 +214,7 @@ public class MktActivitySmartPO implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-07-31 19:48:47
+	 * @mbg.generated  2018-08-02 20:38:44
 	 */
 	public String getCreateUserName() {
 		return createUserName;
@@ -310,7 +222,7 @@ public class MktActivitySmartPO implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-07-31 19:48:47
+	 * @mbg.generated  2018-08-02 20:38:44
 	 */
 	public void setCreateUserName(String createUserName) {
 		this.createUserName = createUserName == null ? null : createUserName.trim();
@@ -318,7 +230,7 @@ public class MktActivitySmartPO implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-07-31 19:48:47
+	 * @mbg.generated  2018-08-02 20:38:44
 	 */
 	public Date getCreateDate() {
 		return createDate;
@@ -326,7 +238,7 @@ public class MktActivitySmartPO implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-07-31 19:48:47
+	 * @mbg.generated  2018-08-02 20:38:44
 	 */
 	public void setCreateDate(Date createDate) {
 		this.createDate = createDate;
@@ -334,7 +246,7 @@ public class MktActivitySmartPO implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-07-31 19:48:47
+	 * @mbg.generated  2018-08-02 20:38:44
 	 */
 	public Long getModifiedUserId() {
 		return modifiedUserId;
@@ -342,7 +254,7 @@ public class MktActivitySmartPO implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-07-31 19:48:47
+	 * @mbg.generated  2018-08-02 20:38:44
 	 */
 	public void setModifiedUserId(Long modifiedUserId) {
 		this.modifiedUserId = modifiedUserId;
@@ -350,7 +262,7 @@ public class MktActivitySmartPO implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-07-31 19:48:47
+	 * @mbg.generated  2018-08-02 20:38:44
 	 */
 	public String getModifiedUserName() {
 		return modifiedUserName;
@@ -358,7 +270,7 @@ public class MktActivitySmartPO implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-07-31 19:48:47
+	 * @mbg.generated  2018-08-02 20:38:44
 	 */
 	public void setModifiedUserName(String modifiedUserName) {
 		this.modifiedUserName = modifiedUserName == null ? null : modifiedUserName.trim();
@@ -366,7 +278,7 @@ public class MktActivitySmartPO implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-07-31 19:48:47
+	 * @mbg.generated  2018-08-02 20:38:44
 	 */
 	public Date getModifiedDate() {
 		return modifiedDate;
@@ -374,7 +286,7 @@ public class MktActivitySmartPO implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-07-31 19:48:47
+	 * @mbg.generated  2018-08-02 20:38:44
 	 */
 	public void setModifiedDate(Date modifiedDate) {
 		this.modifiedDate = modifiedDate;
@@ -382,7 +294,7 @@ public class MktActivitySmartPO implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-07-31 19:48:47
+	 * @mbg.generated  2018-08-02 20:38:44
 	 */
 	public Boolean getValid() {
 		return valid;
@@ -390,7 +302,7 @@ public class MktActivitySmartPO implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-07-31 19:48:47
+	 * @mbg.generated  2018-08-02 20:38:44
 	 */
 	public void setValid(Boolean valid) {
 		this.valid = valid;
@@ -398,7 +310,7 @@ public class MktActivitySmartPO implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-07-31 19:48:47
+	 * @mbg.generated  2018-08-02 20:38:44
 	 */
 	public String getTargetMbr() {
 		return targetMbr;
@@ -406,7 +318,7 @@ public class MktActivitySmartPO implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-07-31 19:48:47
+	 * @mbg.generated  2018-08-02 20:38:44
 	 */
 	public void setTargetMbr(String targetMbr) {
 		this.targetMbr = targetMbr == null ? null : targetMbr.trim();

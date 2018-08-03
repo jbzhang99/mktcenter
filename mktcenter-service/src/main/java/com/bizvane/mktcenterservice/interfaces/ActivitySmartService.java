@@ -1,6 +1,7 @@
 package com.bizvane.mktcenterservice.interfaces;
 
 import com.bizvane.mktcenterservice.models.bo.ActivitySmartBO;
+import com.bizvane.mktcenterservice.models.po.MktActivitySmartGroupPO;
 import com.bizvane.mktcenterservice.models.po.MktActivitySmartPO;
 import com.bizvane.mktcenterservice.models.po.MktCouponPO;
 import com.bizvane.mktcenterservice.models.vo.ActivitySmartVO;
@@ -28,7 +29,7 @@ public interface ActivitySmartService {
      * @param vo
      * @return
      */
-    public ResponseData<PageInfo<MktActivitySmartPO>> getSmartActivityList(ActivitySmartVO vo, PageForm pageForm);
+    public ResponseData<PageInfo<MktActivitySmartGroupPO>> getSmartActivityList(ActivitySmartVO vo, PageForm pageForm);
 
     /**
      * 查询历史营销活动列表
@@ -43,7 +44,7 @@ public interface ActivitySmartService {
      * @param mktActivitySmartId
      * @return
      */
-    public ResponseData<MktActivitySmartPO> getSmartActivityById(Long mktActivitySmartId);
+    public ResponseData<MktActivitySmartGroupPO> getSmartActivityById(Long mktActivitySmartId);
 
     /**
      * 查询某个智能营销活动详情

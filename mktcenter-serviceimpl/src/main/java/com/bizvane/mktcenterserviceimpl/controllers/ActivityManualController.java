@@ -44,16 +44,11 @@ public class ActivityManualController {
      */
     @RequestMapping("/addActivity")
    public  ResponseData<Integer> addActivity(Long couponId, ActivityVO activityVO,HttpServletRequest request){
-       log.info("创建活动，入参,couponId:"+couponId+",activityVo"+activityVO+",httpServletRequest:"+request);
-        //1.入参校验
-        ActivityParamCheckUtil.checkManualParam(activityVO,couponId) ;
         //取缓存
         // SysAccountPO stageUser = TokenUtils.getStageUser(request);
         SysAccountPO stageUser = new SysAccountPO();
+       return  activityManualService.addActivityManual(couponId,activityVO,stageUser);
 
-        ResponseData<Integer> activityManualResponseData = activityManualService.addActivityManual(couponId,activityVO,stageUser);
-        log.info("创建活动出参:"+activityManualResponseData);
-       return activityManualResponseData;
    }
 
 
@@ -63,8 +58,8 @@ public class ActivityManualController {
    * */
    @RequestMapping("/getActivityByMemberInfo")
     public ResponseData<List<ActivityVO>> getActivityByMemberInfo(MemberInfoModel memberInfoModel,Integer activityType){
-       ResponseData<List<ActivityVO>> activityVoList=activityManualService.getActivityByMemberInfo(memberInfoModel,activityType);
-        return activityVoList;
+       return activityManualService.getActivityByMemberInfo(memberInfoModel,activityType);
+
     }
 
    /**

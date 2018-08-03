@@ -11,22 +11,23 @@ import java.text.ParseException;
 import java.util.List;
 
 /**
- * @author chen.li
- * @date on 2018/7/16 14:06
- * @description
- * @Copyright (c) 2018 上海商帆信息科技有限公司-版权所有
+ * @Author: lijunwei
+ * @Time: 2018/8/2 18:04
+ * 消费金额
  */
-public interface TaskOrderService {
+public interface TaskAmountService {
     /**
      * 任务的审核
      * @param vo
      * @return
      */
-    public  Integer  checkOrderTask(TaskVO vo);
+    public  Integer  checkAmountTask(TaskVO vo);
+
     /**
      * 查询任务详情
      */
-    public  List<TaskDetailBO> getOrderTaskDetails(Long mktTaskId);
+    public List<TaskDetailBO> getAmountTaskDetails(Long mktTaskId);
+
     /**
      * 查询任务列表
      * @return
@@ -40,11 +41,21 @@ public interface TaskOrderService {
     public ResponseData<Integer> addTask(TaskDetailVO vo, SysAccountPO stageUser) throws ParseException;
 
     /**
-     * 修改消费任务
+     * 修改任务
+     * @param po
+     * @param stageUser
      * @return
      */
-    public ResponseData updateOrderTask(TaskDetailVO vo, SysAccountPO stageUser);
-
-    public Integer modifieOrderTask(MktTaskOrderPO po, SysAccountPO stageUser);
-
+    public ResponseData updateAmountTask(TaskDetailVO vo, SysAccountPO stageUser);
+    /**
+     * 新增具体任务
+     */
+    public Integer insertAmoutTask(MktTaskOrderPO po, SysAccountPO stageUser);
+    /**
+     * 修改具体任务
+     * @param po
+     * @param stageUser
+     * @return
+     */
+    public Integer modifieAmoutTask(MktTaskOrderPO po, SysAccountPO stageUser);
 }

@@ -93,3 +93,6 @@ threadPool:
   corePoolSize: 16
   maximumPoolSize: 64
   keepAliveTime: 60
+
+activity:
+  qrcodeurl: http://www.xxx.bizvane.com/qrcode?activityCode={activityCode}

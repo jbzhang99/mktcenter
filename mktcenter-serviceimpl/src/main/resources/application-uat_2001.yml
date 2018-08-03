@@ -38,3 +38,5 @@ mybatis:
 logging:
   level:
     com.bizvane.userinfoservice.mapper: debug
+activity:
+  qrcodeurl: http://www.xxx.bizvane.com/qrcode?activityCode=

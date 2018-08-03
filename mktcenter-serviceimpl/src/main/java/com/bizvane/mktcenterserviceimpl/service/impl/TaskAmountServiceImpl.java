@@ -1,9 +1,9 @@
 package com.bizvane.mktcenterserviceimpl.service.impl;
 
 import com.bizvane.centerstageservice.models.po.SysCheckConfigPo;
+import com.bizvane.mktcenterservice.interfaces.TaskAmountService;
 import com.bizvane.mktcenterservice.interfaces.TaskCouponService;
 import com.bizvane.mktcenterservice.interfaces.TaskMessageService;
-import com.bizvane.mktcenterservice.interfaces.TaskOrderService;
 import com.bizvane.mktcenterservice.interfaces.TaskService;
 import com.bizvane.mktcenterservice.models.bo.TaskDetailBO;
 import com.bizvane.mktcenterservice.models.po.*;
@@ -29,14 +29,11 @@ import java.text.ParseException;
 import java.util.List;
 
 /**
- * @author chen.li
- * @date on 2018/7/16 14:13
- * @description
- * @Copyright (c) 2018 上海商帆信息科技有限公司-版权所有
+ * @Author: lijunwei
+ * @Time: 2018/8/2 18:04
  */
 @Service
-public class TaskOrderServiceImpl implements TaskOrderService {
-
+public class TaskAmountServiceImpl implements TaskAmountService {
     @Autowired
     protected TaskService taskService;
 
@@ -48,13 +45,12 @@ public class TaskOrderServiceImpl implements TaskOrderService {
 
     @Autowired
     private MktTaskOrderPOMapper mktTaskOrderPOMapper;
-
     /**
      * 审核任务:任务id   任务状态
      * 审核状态：1未审核，2审核中，3已审核，4已驳回',
      */
     @Override
-    public Integer checkOrderTask(TaskVO vo) {
+    public Integer checkAmountTask(TaskVO vo) {
         MktTaskOrderPO mktTaskOrderPO = new MktTaskOrderPO();
         BeanUtils.copyProperties(vo, mktTaskOrderPO);
         return mktTaskOrderPOMapper.updateByPrimaryKeySelective(mktTaskOrderPO);
@@ -65,7 +61,7 @@ public class TaskOrderServiceImpl implements TaskOrderService {
      * 根据任务Id查询任务详情
      */
     @Override
-    public List<TaskDetailBO> getOrderTaskDetails(Long mktTaskId) {
+    public List<TaskDetailBO> getAmountTaskDetails(Long mktTaskId) {
         return mktTaskOrderPOMapper.getOrderTaskDetails(mktTaskId);
     }
     /**
@@ -110,7 +106,7 @@ public class TaskOrderServiceImpl implements TaskOrderService {
         MktTaskOrderPO mktTaskOrderPO = new MktTaskOrderPO();
         BeanUtils.copyProperties(vo, mktTaskOrderPO);
         mktTaskOrderPO.setMktTaskId(mktTaskId);
-        this.insertOrderTask(mktTaskOrderPO, stageUser);
+        this.insertAmoutTask(mktTaskOrderPO, stageUser);
 
         //4.新增奖励新增  biz_type 活动类型  1=活动
         List<MktCouponPO> mktCouponPOList = vo.getMktCouponPOList();
@@ -207,7 +203,7 @@ public class TaskOrderServiceImpl implements TaskOrderService {
      */
     @Transactional
     @Override
-    public ResponseData updateOrderTask(TaskDetailVO vo, SysAccountPO stageUser) {
+    public ResponseData updateAmountTask(TaskDetailVO vo, SysAccountPO stageUser) {
         //        mktTaskOrderPOMapper.updateByPrimaryKeySelective(po);
         //0.参数的检验
         ResponseData responseData = TaskParamCheckUtil.checkParam(vo);
@@ -229,7 +225,7 @@ public class TaskOrderServiceImpl implements TaskOrderService {
         //3.任务消费表修改
         MktTaskOrderPO mktTaskOrderPO = new MktTaskOrderPO();
         BeanUtils.copyProperties(vo, mktTaskOrderPO);
-        this.modifieOrderTask(mktTaskOrderPO, stageUser);
+        this.modifieAmoutTask(mktTaskOrderPO, stageUser);
 
         //4.奖励修改 biz_type 活动类型  1=活动
         taskCouponService.deleteTaskCoupon(mktTaskId, stageUser);
@@ -263,7 +259,8 @@ public class TaskOrderServiceImpl implements TaskOrderService {
     /**
      * 新增消费任务
      */
-    public Integer insertOrderTask(MktTaskOrderPO po, SysAccountPO stageUser) {
+    @Override
+    public Integer insertAmoutTask(MktTaskOrderPO po, SysAccountPO stageUser) {
         return mktTaskOrderPOMapper.insertSelective(po);
     }
 
@@ -274,7 +271,7 @@ public class TaskOrderServiceImpl implements TaskOrderService {
      * @return
      */
     @Override
-    public Integer modifieOrderTask(MktTaskOrderPO po, SysAccountPO stageUser) {
+    public Integer modifieAmoutTask(MktTaskOrderPO po, SysAccountPO stageUser) {
         MktTaskOrderPOExample example = new MktTaskOrderPOExample();
         example.createCriteria().andMktTaskIdEqualTo(po.getMktTaskId()).andValidEqualTo(Boolean.TRUE);
 

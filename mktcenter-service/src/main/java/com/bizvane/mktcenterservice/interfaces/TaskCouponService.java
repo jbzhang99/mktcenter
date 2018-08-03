@@ -18,4 +18,12 @@ public interface TaskCouponService {
      * @return
      */
     public  Integer   updateTaskCoupon(MktCouponPO po,SysAccountPO stageUser);
+
+    /**
+     * 删除
+     * @param bizId
+     * @param stageUser
+     * @return
+     */
+    public Integer deleteTaskCoupon(Long  bizId,SysAccountPO stageUser);
 }

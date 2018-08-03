@@ -8,17 +8,16 @@ import com.bizvane.couponfacade.models.po.CouponEntityPO;
 import com.bizvane.members.facade.models.MemberInfoModel;
 import com.bizvane.mktcenterservice.interfaces.ActivityManualService;
 import com.bizvane.mktcenterservice.models.bo.ActivityBO;
-import com.bizvane.mktcenterservice.models.po.MktActivityManualPO;
-import com.bizvane.mktcenterservice.models.po.MktActivityPOWithBLOBs;
-import com.bizvane.mktcenterservice.models.po.MktActivityRecordPO;
-import com.bizvane.mktcenterservice.models.po.MktCouponPO;
+import com.bizvane.mktcenterservice.models.po.*;
 import com.bizvane.mktcenterservice.models.vo.ActivityVO;
 import com.bizvane.mktcenterservice.models.vo.PageForm;
+import com.bizvane.mktcenterserviceimpl.common.config.QRCodeConfig;
 import com.bizvane.mktcenterserviceimpl.common.constants.ActivityConstants;
 import com.bizvane.mktcenterserviceimpl.common.constants.SystemConstants;
 import com.bizvane.mktcenterserviceimpl.common.enums.ActivityStatusEnum;
 import com.bizvane.mktcenterserviceimpl.common.enums.ActivityTypeEnum;
 import com.bizvane.mktcenterserviceimpl.common.enums.CheckStatusEnum;
+import com.bizvane.mktcenterserviceimpl.common.utils.ActivityParamCheckUtil;
 import com.bizvane.mktcenterserviceimpl.common.utils.JobUtil;
 import com.bizvane.mktcenterserviceimpl.mappers.MktActivityManualPOMapper;
 import com.bizvane.mktcenterserviceimpl.mappers.MktActivityPOMapper;
@@ -96,13 +95,16 @@ public class ActivityManualServiceImpl implements ActivityManualService {
     @Transactional
     public ResponseData<Integer> addActivityManual(Long couponId, ActivityVO activityVO, SysAccountPO stageUser) {
         ResponseData responseData = new ResponseData();
-        log.info("");
+        log.info("领券活动-创建活动-入参:couponId:"+couponId+",activityVO:"+activityVO.toString()+",stageUser:"+stageUser.toString());
+        //1.入参校验
+        ActivityParamCheckUtil.checkManualParam(activityVO,couponId) ;
         activityVO.setCreateUserName(stageUser.getName());
         activityVO.setCreateUserId(stageUser.getSysAccountId());
         activityVO.setCreateDate(new Date());
-
+     try {
         //活动编号
         String activityCode = "AC" + UUID.randomUUID().toString().replaceAll("-", "");
+        log.info("领券活动-创建活动-活动编号:"+activityCode);
         activityVO.setActivityCode(activityCode);
         //活动类型
         MktActivityPOWithBLOBs mktActivityPOWithBLOBs = new MktActivityPOWithBLOBs();
@@ -162,16 +164,23 @@ public class ActivityManualServiceImpl implements ActivityManualService {
                 mktActivityPOWithBLOBs.setActivityStatus(ActivityStatusEnum.ACTIVITY_STATUS_EXECUTING.getCode());
             }
         }
-
         //新增活动主表
+         log.info("领券活动-创建活动-新增活动主表入参:"+mktActivityPOWithBLOBs);
         mktActivityPOMapper.insertSelective(mktActivityPOWithBLOBs);
         //返回主表的id
         Long mktActivityId = mktActivityPOWithBLOBs.getMktActivityId();
+        log.info("领券活动-创建活动-新增活动-活动主表id"+mktActivityId);
         //新增明细表
         MktActivityManualPO mktActivityManualPO = new MktActivityManualPO();
         BeanUtils.copyProperties(activityVO, mktActivityManualPO);
         mktActivityManualPO.setMktActivityId(mktActivityId);
         // todo 券二维码
+
+         StringBuffer stringBuffer  = new StringBuffer();
+         QRCodeConfig qrCodeConfig = new QRCodeConfig();
+         stringBuffer.append(qrCodeConfig.getQrcodeurl()).append(activityCode) ;
+     //掉接口
+
         mktActivityManualPOMapper.insertSelective(mktActivityManualPO);
         //新增券表,和活动绑定
         MktCouponPO mktCouponPO = new MktCouponPO();
@@ -184,10 +193,18 @@ public class ActivityManualServiceImpl implements ActivityManualService {
         mktCouponPO.setModifiedDate(new Date());
         mktCouponPO.setCouponName(activityVO.getCouponName());
         mktCouponPO.setCouponCode(activityVO.getCouponCode());
+        log.info("领券活动-创建活动-新增券表-入参:"+mktCouponPO);
         mktCouponPOMapper.insertSelective(mktCouponPO);
         responseData.setCode(SystemConstants.SUCCESS_CODE);
         responseData.setMessage(SystemConstants.SUCCESS_MESSAGE);
-        return responseData;
+        log.info("领券活动-创建活动-成功");
+         return responseData;
+     }catch (Exception e){
+         log.error("领券活动-创建活动-出错");
+         responseData.setCode(SystemConstants.ERROR_CODE);
+         responseData.setMessage(ActivityConstants.ERROR_SQL);
+         return responseData;
+      }
     }
 
     @Override
@@ -196,8 +213,6 @@ public class ActivityManualServiceImpl implements ActivityManualService {
         ResponseData responseData = new ResponseData();
         ActivityVO activityVO = new ActivityVO();
         try {
-
-
         activityVO.setActivityStatus(ActivityStatusEnum.ACTIVITY_STATUS_EXECUTING.getCode());
         if(null==memberInfoModel||null==memberInfoModel.getBrandId()||StringUtils.isEmpty(memberInfoModel.getMemberCode())){
             log.warn("会员信息为空");
@@ -216,7 +231,7 @@ public class ActivityManualServiceImpl implements ActivityManualService {
         mktActivityRecordPO.setMemberCode(memberInfoModel.getMemberCode());
         //查券表得到活动id
         MktCouponPO mktCouponPO = new MktCouponPO();
-        mktCouponPO.setCouponCode(activityVO.getCouponCode());
+        mktCouponPO.setCouponCode(couponCode);
         mktCouponPO.setBizType(1);
         MktCouponPO mktCouponPO1 = mktCouponPOMapper.selectMktActivityManualId(mktCouponPO);//活动id
         if (mktCouponPO1 == null) {
@@ -242,7 +257,7 @@ public class ActivityManualServiceImpl implements ActivityManualService {
         ResponseData<CouponEntityPO> couponByCouponCode = couponQueryServiceFeign.findCouponByCouponCode(couponCode);
         //校验是否可领取
         activityVO.setCanReceive(true);
-        if(count==0||mktActivityRecordList.isEmpty()){
+        if(count==0||mktActivityRecordList.isEmpty()||0==mktActivityRecordList.size()){
             log.info("领券活动-执行活动-该会员未领取该活动券");
             activityVO.setCouponEntityPO(couponByCouponCode.getData());
             responseData.setCode(SystemConstants.SUCCESS_CODE);
@@ -392,7 +407,7 @@ public class ActivityManualServiceImpl implements ActivityManualService {
             log.info("查询活动，入参:"+activityVO);
           List<ActivityVO> activityList = mktActivityManualPOMapper.getActivityIdList(activityVO);
              log.info("查询活动，出参:"+activityList);
-             if(activityList.isEmpty()){
+             if(activityList.isEmpty()&&0==activityList.size()){
                  log.warn("查询活动为空");
                  responseData.setCode(SystemConstants.SUCCESS_CODE);
                  responseData.setMessage("查询领券中心活动为空");

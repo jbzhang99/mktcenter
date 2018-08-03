@@ -1,6 +1,7 @@
 package com.bizvane.mktcenterservice.models.vo;
 
 import com.bizvane.mktcenterservice.models.po.MktActivityPO;
+import com.bizvane.mktcenterservice.models.po.MktActivitySmartPO;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 import java.util.Date;
@@ -11,49 +12,7 @@ import java.util.Date;
  * @description 智能营销活动VO
  * @Copyright (c) 2018 上海商帆信息科技有限公司-版权所有
  */
-public class ActivitySmartVO extends MktActivityPO {
-    /**
-     * 只读. 营销方式：1优惠券营销，2积分营销，3短信营销，4微信模板消息营销. mkt_type
-     * @mbg.generated  2018-07-27 20:48:29
-     */
-    @io.swagger.annotations.ApiModelProperty(value = "营销方式：1优惠券营销，2积分营销，3短信营销，4微信模板消息营销", name = "mktType", required = false, example = "营销方式：1优惠券营销，2积分营销，3短信营销，4微信模板消息营销")
-    private Integer mktType;
-
-    /**
-     * 营销方式名称
-     */
-    private String mktTypeStr;
-    /**
-     * 只读. 会员分组id. member_group_id
-     * @mbg.generated  2018-07-27 20:48:29
-     */
-    @io.swagger.annotations.ApiModelProperty(value = "会员分组id", name = "memberGroupId", required = false, example = "会员分组id")
-    private Long memberGroupId;
-    /**
-     * 只读. 会员分组编号. member_group_code
-     * @mbg.generated  2018-07-27 20:48:29
-     */
-    @io.swagger.annotations.ApiModelProperty(value = "会员分组编号", name = "memberGroupCode", required = false, example = "会员分组编号")
-    private String memberGroupCode;
-    /**
-     * 只读. 预计目标会员统计. target_mbr_count
-     * @mbg.generated  2018-07-27 20:48:29
-     */
-    @io.swagger.annotations.ApiModelProperty(value = "预计目标会员统计", name = "targetMbrCount", required = false, example = "预计目标会员统计")
-    private Integer targetMbrCount;
-    /**
-     * 只读. 预计目标会员数量的统计时间. target_mbr_count_time
-     * @mbg.generated  2018-07-27 20:48:29
-     */
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", locale = "zh", timezone = "GMT+8")
-    @io.swagger.annotations.ApiModelProperty(value = "预计目标会员数量的统计时间", name = "targetMbrCountTime", required = false, example = "预计目标会员数量的统计时间")
-    private Date targetMbrCountTime;
-    /**
-     * 只读. 目标会员在会员模块中的搜索条件. target_mbr
-     * @mbg.generated  2018-07-27 20:48:29
-     */
-    @io.swagger.annotations.ApiModelProperty(value = "目标会员在会员模块中的搜索条件", name = "targetMbr", required = false, example = "目标会员在会员模块中的搜索条件")
-    private String targetMbr;
+public class ActivitySmartVO extends MktActivitySmartPO {
 
     /**
      * 创建时间开始
@@ -67,73 +26,76 @@ public class ActivitySmartVO extends MktActivityPO {
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", locale = "zh", timezone = "GMT+8")
     private Date createDateEnd;
 
-    /**
-     * 活动描述
-     */
-    private String activityInfo;
-
-    /**
-     * 活动任务名称
-     */
-    private String mktTaskName;
-
 
     private Integer pageNumber =1;
 
     private Integer pageSize =10;
 
     /**
-     * 状态： 1启用，0禁用
+     * 开始日期
      */
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", locale = "zh", timezone = "GMT+8")
+    private Date startTime;
+
+    /**
+     * 结束日期
+     */
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", locale = "zh", timezone = "GMT+8")
+    private Date endTime;
+
+    /**
+     * 只读.
+     营销名称/分组名称. member_group_name
+     *
+     * @mbg.generated 2018-08-02 20:38:44
+     */
+    @io.swagger.annotations.ApiModelProperty(value = "营销名称/分组名称",name = "memberGroupName", required = false,example = "")
+    private String memberGroupName;
+
+    /**
+     * 只读.
+     pkid. mkt_activity_smart_group_id
+     *
+     * @mbg.generated 2018-08-02 20:38:44
+     */
+    @io.swagger.annotations.ApiModelProperty(value = "pkid",name = "mktActivitySmartGroupId", required = false,example = "")
+    private Long mktActivitySmartGroupId;
+
+    /**
+     * 只读.
+     会员模块分组编号. member_group_code
+     *
+     * @mbg.generated 2018-08-02 20:38:44
+     */
+    @io.swagger.annotations.ApiModelProperty(value = "会员模块分组编号",name = "memberGroupCode", required = false,example = "")
+    private String memberGroupCode;
+
+    /**
+     * 只读.
+     预计目标会员统计. target_mbr_count
+     *
+     * @mbg.generated 2018-08-02 20:38:44
+     */
+    @io.swagger.annotations.ApiModelProperty(value = "预计目标会员统计",name = "targetMbrCount", required = false,example = "")
+    private Integer targetMbrCount;
+
+    /**
+     * 只读.
+     预计目标会员数量的统计时间. target_mbr_count_time
+     *
+     * @mbg.generated 2018-08-02 20:38:44
+     */
+    @io.swagger.annotations.ApiModelProperty(value = "预计目标会员数量的统计时间",name = "targetMbrCountTime", required = false,example = "")
+    private Date targetMbrCountTime;
+
+    /**
+     * 只读.
+     分组状态：0禁用，1启用. status
+     *
+     * @mbg.generated 2018-08-02 20:38:44
+     */
+    @io.swagger.annotations.ApiModelProperty(value = "分组状态：0禁用，1启用",name = "status", required = false,example = "")
     private Boolean status;
-
-    public Integer getMktType() {
-        return mktType;
-    }
-
-    public void setMktType(Integer mktType) {
-        this.mktType = mktType;
-    }
-
-    public Long getMemberGroupId() {
-        return memberGroupId;
-    }
-
-    public void setMemberGroupId(Long memberGroupId) {
-        this.memberGroupId = memberGroupId;
-    }
-
-    public String getMemberGroupCode() {
-        return memberGroupCode;
-    }
-
-    public void setMemberGroupCode(String memberGroupCode) {
-        this.memberGroupCode = memberGroupCode;
-    }
-
-    public Integer getTargetMbrCount() {
-        return targetMbrCount;
-    }
-
-    public void setTargetMbrCount(Integer targetMbrCount) {
-        this.targetMbrCount = targetMbrCount;
-    }
-
-    public Date getTargetMbrCountTime() {
-        return targetMbrCountTime;
-    }
-
-    public void setTargetMbrCountTime(Date targetMbrCountTime) {
-        this.targetMbrCountTime = targetMbrCountTime;
-    }
-
-    public String getTargetMbr() {
-        return targetMbr;
-    }
-
-    public void setTargetMbr(String targetMbr) {
-        this.targetMbr = targetMbr;
-    }
 
     public Date getCreateDateStart() {
         return createDateStart;
@@ -149,22 +111,6 @@ public class ActivitySmartVO extends MktActivityPO {
 
     public void setCreateDateEnd(Date createDateEnd) {
         this.createDateEnd = createDateEnd;
-    }
-
-    public String getActivityInfo() {
-        return activityInfo;
-    }
-
-    public void setActivityInfo(String activityInfo) {
-        this.activityInfo = activityInfo;
-    }
-
-    public String getMktTaskName() {
-        return mktTaskName;
-    }
-
-    public void setMktTaskName(String mktTaskName) {
-        this.mktTaskName = mktTaskName;
     }
 
     public Integer getPageNumber() {
@@ -183,19 +129,71 @@ public class ActivitySmartVO extends MktActivityPO {
         this.pageSize = pageSize;
     }
 
+    public Date getStartTime() {
+        return startTime;
+    }
+
+    public void setStartTime(Date startTime) {
+        this.startTime = startTime;
+    }
+
+    public Date getEndTime() {
+        return endTime;
+    }
+
+    public void setEndTime(Date endTime) {
+        this.endTime = endTime;
+    }
+
+    public String getMemberGroupName() {
+        return memberGroupName;
+    }
+
+    public void setMemberGroupName(String memberGroupName) {
+        this.memberGroupName = memberGroupName;
+    }
+
+    public Long getMktActivitySmartGroupId() {
+        return mktActivitySmartGroupId;
+    }
+
+    public void setMktActivitySmartGroupId(Long mktActivitySmartGroupId) {
+        this.mktActivitySmartGroupId = mktActivitySmartGroupId;
+    }
+
+    public String getMemberGroupCode() {
+        return memberGroupCode;
+    }
+
+    public void setMemberGroupCode(String memberGroupCode) {
+        this.memberGroupCode = memberGroupCode;
+    }
+
+    @Override
+    public Integer getTargetMbrCount() {
+        return targetMbrCount;
+    }
+
+    @Override
+    public void setTargetMbrCount(Integer targetMbrCount) {
+        this.targetMbrCount = targetMbrCount;
+    }
+
+    @Override
+    public Date getTargetMbrCountTime() {
+        return targetMbrCountTime;
+    }
+
+    @Override
+    public void setTargetMbrCountTime(Date targetMbrCountTime) {
+        this.targetMbrCountTime = targetMbrCountTime;
+    }
+
     public Boolean getStatus() {
         return status;
     }
 
     public void setStatus(Boolean status) {
         this.status = status;
-    }
-
-    public String getMktTypeStr() {
-        return mktTypeStr;
-    }
-
-    public void setMktTypeStr(String mktTypeStr) {
-        this.mktTypeStr = mktTypeStr;
     }
 }

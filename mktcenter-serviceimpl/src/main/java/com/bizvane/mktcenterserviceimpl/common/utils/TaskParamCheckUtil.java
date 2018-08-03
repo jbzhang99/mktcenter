@@ -1,17 +1,13 @@
 package com.bizvane.mktcenterserviceimpl.common.utils;
 
-import com.bizvane.mktcenterservice.models.bo.ActivityBO;
 import com.bizvane.mktcenterservice.models.bo.TaskBO;
 import com.bizvane.mktcenterservice.models.po.MktCouponPO;
 import com.bizvane.mktcenterservice.models.po.MktTaskOrderPO;
 import com.bizvane.mktcenterservice.models.po.MktTaskPOWithBLOBs;
-import com.bizvane.mktcenterservice.models.vo.ActivityVO;
-import com.bizvane.mktcenterservice.models.vo.TaskConsumeVO;
+import com.bizvane.mktcenterservice.models.vo.TaskDetailVO;
 import com.bizvane.mktcenterservice.models.vo.TaskVO;
-import com.bizvane.mktcenterserviceimpl.common.constants.ActivityConstants;
 import com.bizvane.mktcenterserviceimpl.common.constants.SystemConstants;
 import com.bizvane.mktcenterserviceimpl.common.constants.TaskConstants;
-import com.bizvane.mktcenterserviceimpl.common.enums.ActivityTypeEnum;
 import com.bizvane.mktcenterserviceimpl.common.enums.TaskTypeEnum;
 import com.bizvane.utils.responseinfo.ResponseData;
 import org.apache.commons.collections.CollectionUtils;
@@ -116,42 +112,41 @@ public class TaskParamCheckUtil {
      * @param vo
      * @return
      */
-    public static ResponseData checkParam(TaskConsumeVO vo){
+    public static ResponseData checkParam(TaskDetailVO vo){
         ResponseData responseData = new ResponseData();
         responseData.setCode(SystemConstants.ERROR_CODE);
 
         //任务主体参数校验
-        MktTaskPOWithBLOBs mktTaskPOWithBLOBs = vo.getMktTaskPOWithBLOBs();
-        MktTaskOrderPO mktTaskOrderPO = vo.getMktTaskOrderPO();
+
         List<MktCouponPO> mktCouponPOList = vo.getMktCouponPOList();
   
-        if(vo ==null || mktTaskPOWithBLOBs==null ||mktTaskOrderPO==null || CollectionUtils.isEmpty(mktCouponPOList)){
+        if(vo ==null){
             responseData.setMessage(SystemConstants.ERROR_MSG_PARAM_EMPTY);
             return responseData;
         }
         //任务名称为空
-        if(StringUtils.isEmpty(mktTaskPOWithBLOBs.getTaskName())){
+        if(StringUtils.isEmpty(vo.getTaskName())){
             responseData.setMessage(TaskConstants.ERROR_MSG_TASK_NAME_EMPTY);
             return responseData;
         }
         //任务开始时间，结束时间校验
-        if(mktTaskPOWithBLOBs.getStartTime()==null || mktTaskPOWithBLOBs.getEndTime()==null){
+        if(vo.getStartTime()==null || vo.getEndTime()==null){
             responseData.setMessage(TaskConstants.ERROR_MSG_TASK_DATE_EMPTY);
             return responseData;
         }
         //任务描述校验
-        if(StringUtils.isEmpty(mktTaskPOWithBLOBs.getTaskInfo())){
+        if(StringUtils.isEmpty(vo.getTaskInfo())){
             responseData.setMessage(TaskConstants.ERROR_MSG_TASK_INFO_EMPTY);
             return responseData;
         }
         //任务类型
-        if(mktTaskPOWithBLOBs.getTaskType()==null){
+        if(vo.getTaskType()==null){
             responseData.setMessage(TaskConstants.ERROR_MSG_TASK_TYPE_EMPTY);
             return responseData;
         }
 
         //各类型活动参数校验
-        TaskTypeEnum activityTypeEnum = TaskTypeEnum.getTaskTypeEnumByCode(mktTaskPOWithBLOBs.getTaskType());
+        TaskTypeEnum activityTypeEnum = TaskTypeEnum.getTaskTypeEnumByCode(vo.getTaskType());
         //防止前端传来活动类型与枚举类型不匹配产生的空指针
         if(activityTypeEnum==null){
             responseData.setMessage(TaskConstants.ERROR_MSG_TASK_TYPE_NOT_EXISTS);

@@ -10,19 +10,25 @@ import com.bizvane.utils.tokens.SysAccountPO;
 public interface TaskMessageService {
     /**
      * 新增
+     *
      * @param po
      * @param stageUser
      * @return
      */
-    public  Integer  addTaskMessage(MktMessagePO po,SysAccountPO stageUser);
+    public Integer addTaskMessage(MktMessagePO po, SysAccountPO stageUser);
 
     /**
      * 修改
+     *
      * @param po
      * @param stageUser
      * @return
      */
-    public  Integer  updateTaskMessage(MktMessagePO po,SysAccountPO stageUser);
+    public Integer updateTaskMessage(MktMessagePO po, SysAccountPO stageUser);
 
-
+    /**
+     * @param stageUser
+     * @return
+     */
+    public Integer deleteTaskMessage(Long bizId, SysAccountPO stageUser);
 }
