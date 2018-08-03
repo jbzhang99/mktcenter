@@ -394,8 +394,7 @@ public class ActivityUpgradeServiceImpl implements ActivityUpgradeService {
         List<ActivityVO> upgradeList = mktActivityUpgradePOMapper.getActivityUpgradeList(vo);
         //查询活动卷
         MktCouponPOExample example = new  MktCouponPOExample();
-        example.createCriteria().andBizIdEqualTo(upgradeList.get(0).getMktActivityId());
-        example.createCriteria().andValidEqualTo(true);
+        example.createCriteria().andBizIdEqualTo(upgradeList.get(0).getMktActivityId()).andValidEqualTo(true);
         List<MktCouponPO> mktCouponPOs= mktCouponPOMapper.selectByExample(example);
         //查询券接口
         List<CouponEntityAndDefinitionVO> lists = new ArrayList<>();
@@ -409,13 +408,13 @@ public class ActivityUpgradeServiceImpl implements ActivityUpgradeService {
         }
         //查询消息模板
         MktMessagePOExample exampl = new MktMessagePOExample();
-        example.createCriteria().andBizIdEqualTo(upgradeList.get(0).getMktActivityId());
+        exampl.createCriteria().andBizIdEqualTo(upgradeList.get(0).getMktActivityId()).andValidEqualTo(true);
         List<MktMessagePO> listMktMessage = mktMessagePOMapper.selectByExample(exampl);
         ActivityBO bo = new ActivityBO();
         if(!CollectionUtils.isEmpty(upgradeList)){
             bo.setActivityVO(upgradeList.get(0));
         }
-        if(!CollectionUtils.isEmpty(lists)){
+       if(!CollectionUtils.isEmpty(lists)){
             bo.setCouponEntityAndDefinitionVOList(lists);
         }
         if(!CollectionUtils.isEmpty(listMktMessage)){

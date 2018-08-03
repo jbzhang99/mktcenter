@@ -243,8 +243,7 @@ public class ActivityOrderServiceImpl implements ActivityOrderService {
         List<ActivityVO> orderList = mktActivityOrderPOMapper.getActivityOrderList(vo);
         //查询活动卷
         MktCouponPOExample example = new  MktCouponPOExample();
-        example.createCriteria().andBizIdEqualTo(orderList.get(0).getMktActivityId());
-        example.createCriteria().andValidEqualTo(true);
+        example.createCriteria().andBizIdEqualTo(orderList.get(0).getMktActivityId()).andValidEqualTo(true);
         List<MktCouponPO> mktCouponPOs= mktCouponPOMapper.selectByExample(example);
         //查询券接口
         List<CouponEntityAndDefinitionVO> lists = new ArrayList<>();
@@ -258,7 +257,7 @@ public class ActivityOrderServiceImpl implements ActivityOrderService {
         }
         //查询消息模板
         MktMessagePOExample exampl = new MktMessagePOExample();
-        example.createCriteria().andBizIdEqualTo(orderList.get(0).getMktActivityId());
+        exampl.createCriteria().andBizIdEqualTo(orderList.get(0).getMktActivityId()).andValidEqualTo(true);
         List<MktMessagePO> listMktMessage = mktMessagePOMapper.selectByExample(exampl);
         ActivityBO bo = new ActivityBO();
         if(!CollectionUtils.isEmpty(orderList)){
