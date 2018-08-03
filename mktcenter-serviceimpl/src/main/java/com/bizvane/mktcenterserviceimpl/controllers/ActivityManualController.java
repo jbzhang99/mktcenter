@@ -5,7 +5,6 @@ import com.bizvane.mktcenterservice.interfaces.ActivityManualService;
 import com.bizvane.mktcenterservice.models.bo.ActivityBO;
 import com.bizvane.mktcenterservice.models.vo.ActivityVO;
 import com.bizvane.mktcenterservice.models.vo.PageForm;
-import com.bizvane.mktcenterserviceimpl.common.utils.ActivityParamCheckUtil;
 import com.bizvane.utils.tokens.SysAccountPO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,37 +50,6 @@ public class ActivityManualController {
 
    }
 
-
-   /**
-   *领券中心查询
-   *
-   * */
-   @RequestMapping("/getActivityByMemberInfo")
-    public ResponseData<List<ActivityVO>> getActivityByMemberInfo(MemberInfoModel memberInfoModel,Integer activityType){
-       return activityManualService.getActivityByMemberInfo(memberInfoModel,activityType);
-
-    }
-
-   /**
-   * 执行活动，增加领券记录，加人和券绑定
-   * */
-
-    @RequestMapping("/executeActivity")
-    public  ResponseData<Integer> executeActivity(MemberInfoModel  model,String couponCode){
-        return activityManualService.executeActivity(model,couponCode);
-    }
-
-
-    /**
-    *
-    * 扫码领券查询
-    * */
-
-    @RequestMapping("/getActivityByQrcode")
-    public ResponseData<ActivityVO> getActivityByQrcode(MemberInfoModel memberInfoModel,String activityCode,Integer activityType  ){
-        ResponseData<ActivityVO> activityVo=activityManualService.getActivityByQrcode(memberInfoModel,activityCode,activityType);
-        return activityVo;
-    }
 
    /**
    * 查询活动效果分析

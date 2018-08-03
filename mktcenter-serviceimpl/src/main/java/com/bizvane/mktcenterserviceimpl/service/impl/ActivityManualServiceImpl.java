@@ -18,6 +18,7 @@ import com.bizvane.mktcenterserviceimpl.common.enums.ActivityStatusEnum;
 import com.bizvane.mktcenterserviceimpl.common.enums.ActivityTypeEnum;
 import com.bizvane.mktcenterserviceimpl.common.enums.CheckStatusEnum;
 import com.bizvane.mktcenterserviceimpl.common.utils.ActivityParamCheckUtil;
+import com.bizvane.mktcenterserviceimpl.common.utils.CodeUtil;
 import com.bizvane.mktcenterserviceimpl.common.utils.JobUtil;
 import com.bizvane.mktcenterserviceimpl.mappers.MktActivityManualPOMapper;
 import com.bizvane.mktcenterserviceimpl.mappers.MktActivityPOMapper;
@@ -103,7 +104,7 @@ public class ActivityManualServiceImpl implements ActivityManualService {
         activityVO.setCreateDate(new Date());
      try {
         //活动编号
-        String activityCode = "AC" + UUID.randomUUID().toString().replaceAll("-", "");
+        String activityCode = CodeUtil.getActivityCode();
         log.info("领券活动-创建活动-活动编号:"+activityCode);
         activityVO.setActivityCode(activityCode);
         //活动类型
@@ -208,7 +209,7 @@ public class ActivityManualServiceImpl implements ActivityManualService {
     }
 
     @Override
-    public ResponseData<Integer> executeActivity(MemberInfoModel memberInfoModel, String couponCode) {
+    public ResponseData<Integer> executeActivity(MemberInfoModel memberInfoModel, String couponCode,Integer activityType) {
         log.info("领券活动-执行活动，入参:memberInfoModel-"+memberInfoModel+",couponCode:"+couponCode);
         ResponseData responseData = new ResponseData();
         ActivityVO activityVO = new ActivityVO();
@@ -291,7 +292,7 @@ public class ActivityManualServiceImpl implements ActivityManualService {
         //新增记录表
         mktActivityRecordPO.setMemberCode(memberInfoModel.getMemberCode());
         mktActivityRecordPO.setAcitivityId(mktActivityManualPO.getMktActivityManualId());
-        mktActivityRecordPO.setActivityType(activityVO.getActivityType());
+        mktActivityRecordPO.setActivityType(activityType);
         mktActivityRecordPO.setParticipateDate(new Date());
         mktActivityRecordPO.setCreateUserId(memberInfoModel.getCreateUserId());
         mktActivityManualPO.setCreateDate(new Date());
@@ -418,7 +419,7 @@ public class ActivityManualServiceImpl implements ActivityManualService {
             MktCouponPO couponPO = new MktCouponPO();
             couponPO.setBizId(activityVO1.getMktActivityId());
             couponPO.setBizType(1);
-            MktCouponPO mktCouponPO = mktCouponPOMapper.selectCouponCode(couponPO);
+            MktCouponPO mktCouponPO = mktCouponPOMapper.selectMktActivityManualId(couponPO);
             if(null==mktCouponPO){
                 log.warn("领券中心活动对应的券为空");
                 responseData.setCode(SystemConstants.ERROR_CODE);
@@ -524,10 +525,10 @@ public class ActivityManualServiceImpl implements ActivityManualService {
             couponPO.setBizId(activityVO.getMktActivityId());
             couponPO.setBizType(1);
             log.info("领券活动-扫码领券-入参couponPO:"+couponPO);
-            MktCouponPO mktCouponPO = mktCouponPOMapper.selectCouponCode(couponPO);
+            MktCouponPO mktCouponPO = mktCouponPOMapper.selectMktActivityManualId(couponPO);
             log.info("couponQueryServiceFeign.findCouponByCouponCode---入参:"+mktCouponPO.getCouponCode());
             ResponseData<CouponEntityPO> couponByCouponCode = couponQueryServiceFeign.findCouponByCouponCode(mktCouponPO.getCouponCode());
-           log.info("couponQueryServiceFeign.findCouponByCouponCode---出参:"+couponByCouponCode);
+            log.info("couponQueryServiceFeign.findCouponByCouponCode---出参:"+couponByCouponCode);
             //3.校验是否满足规则
             MktActivityRecordPO mktActivityRecordPO = new MktActivityRecordPO();
             mktActivityRecordPO.setMemberCode(memberInfoModel.getMemberCode());

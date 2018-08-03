@@ -136,6 +136,7 @@ public class ActivitySmartServiceImpl implements ActivitySmartService {
      */
     @Override
     public ResponseData<ActivitySmartBO> getActivityDetailById(Long mktActivityId) {
+
         return null;
     }
 

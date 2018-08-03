@@ -18,7 +18,7 @@ public interface ActivityManualService {
 
   ResponseData<Integer> addActivityManual(Long couponId, ActivityVO activityVO,SysAccountPO stageUser);
 
-  ResponseData<Integer> executeActivity(MemberInfoModel vo,String couponCode);
+  ResponseData<Integer> executeActivity(MemberInfoModel vo,String couponCode,Integer activityType);
 
   ResponseData<List<ActivityBO>> getActivityManualEffect(ActivityVO vo);
 
