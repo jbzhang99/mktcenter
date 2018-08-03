@@ -1,11 +1,13 @@
 package com.bizvane.mktcenterserviceimpl.service.jobhandler;
 
 import com.bizvane.mktcenterservice.interfaces.ActivitySmartService;
+import com.bizvane.mktcenterservice.models.bo.ActivitySmartBO;
 import com.bizvane.mktcenterserviceimpl.common.constants.ResponseConstants;
 import com.bizvane.utils.responseinfo.ResponseData;
 import com.xxl.job.core.biz.model.ReturnT;
 import com.xxl.job.core.handler.IJobHandler;
 import com.xxl.job.core.handler.annotation.JobHandler;
+import org.apache.poi.ss.formula.functions.T;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -29,7 +31,7 @@ public class ActivitySmartJobHandler extends IJobHandler {
         if(split.length>1){
             Integer mktSmartType = Integer.valueOf(split[0]);
             String activitiCode = split[1];
-            ResponseData<Integer> execute = activitySmartService.execute(mktSmartType,activitiCode);
+            ResponseData<T> execute = activitySmartService.execute(new ActivitySmartBO());
             returnT.setCode(ResponseConstants.SUCCESS);
             returnT.setContent(ResponseConstants.SUCCESS_MSG);
             returnT.setMsg(ResponseConstants.SUCCESS_MSG);

@@ -10,6 +10,7 @@ import com.bizvane.mktcenterservice.models.vo.PageForm;
 import com.bizvane.utils.responseinfo.ResponseData;
 import com.bizvane.utils.tokens.SysAccountPO;
 import com.github.pagehelper.PageInfo;
+import org.apache.poi.ss.formula.functions.T;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -114,10 +115,5 @@ public interface ActivitySmartService {
      */
     public ResponseData<Integer> addMessageActivity(ActivitySmartVO vo, MessageVO messageVO, SysAccountPO stageUser);
 
-    /**
-     * 执行活动
-     * @param activityCode
-     * @return
-     */
-    public ResponseData<Integer> execute(Integer mktSmartType,String activityCode);
+    public ResponseData<T> execute(ActivitySmartBO bo);
 }

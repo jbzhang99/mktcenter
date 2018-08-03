@@ -1,14 +1,15 @@
 package com.bizvane.mktcenterserviceimpl.service.impl;
 
-import com.bizvane.centerstageservice.rpc.SysCheckConfigServiceRpc;
-import com.bizvane.couponfacade.interfaces.SendCouponServiceFeign;
-import com.bizvane.members.facade.service.api.IntegralRecordApiService;
+import com.bizvane.members.facade.models.MemberInfoModel;
+import com.bizvane.members.facade.service.api.MemberInfoApiService;
 import com.bizvane.mktcenterservice.interfaces.ActivitySmartService;
 import com.bizvane.mktcenterservice.models.bo.ActivitySmartBO;
+import com.bizvane.mktcenterservice.models.bo.AwardBO;
 import com.bizvane.mktcenterservice.models.po.*;
 import com.bizvane.mktcenterservice.models.vo.ActivitySmartVO;
 import com.bizvane.mktcenterservice.models.vo.MessageVO;
 import com.bizvane.mktcenterservice.models.vo.PageForm;
+import com.bizvane.mktcenterserviceimpl.common.award.Award;
 import com.bizvane.mktcenterserviceimpl.common.constants.ActivityConstants;
 import com.bizvane.mktcenterserviceimpl.common.constants.ResponseConstants;
 import com.bizvane.mktcenterserviceimpl.common.constants.SystemConstants;
@@ -21,6 +22,7 @@ import com.bizvane.utils.responseinfo.ResponseData;
 import com.bizvane.utils.tokens.SysAccountPO;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import org.apache.poi.ss.formula.functions.T;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -52,19 +54,16 @@ public class ActivitySmartServiceImpl implements ActivitySmartService {
     private JobUtil jobUtil;
 
     @Autowired
-    private SysCheckConfigServiceRpc sysCheckConfigServiceRpc;
-
-    @Autowired
     private MktCouponPOMapper mktCouponPOMapper;
 
     @Autowired
     private MktMessagePOMapper mktMessagePOMapper;
 
     @Autowired
-    private IntegralRecordApiService integralRecordApiService;
+    private Award award;
 
     @Autowired
-    private SendCouponServiceFeign sendCouponServiceFeign;
+    private MemberInfoApiService memberInfoApiService;
 
     /**
      * 查询智能营销分组列表(方块)
@@ -421,7 +420,10 @@ public class ActivitySmartServiceImpl implements ActivitySmartService {
         }
 
         //执行
-        execute(MktSmartTypeEnum.SMART_TYPE_COUPON.getCode(),activityCode);
+        //根据条件获取人，再遍历
+        AwardBO awardBO = new AwardBO();
+        awardBO.setMktSmartType(MktSmartTypeEnum.SMART_TYPE_COUPON.getCode());
+        award.execute(awardBO);
 
         responseData.setMessage(ResponseConstants.SUCCESS_MSG);
         return responseData;
@@ -484,7 +486,8 @@ public class ActivitySmartServiceImpl implements ActivitySmartService {
         mktActivitySmartPOMapper.insertSelective(mktActivitySmartPO);
 
         //执行
-        execute(MktSmartTypeEnum.SMART_TYPE_INTEGRAL.getCode(),activityCode);
+        AwardBO awardBO = new AwardBO();
+        award.execute(awardBO);
 
         responseData.setMessage(ResponseConstants.SUCCESS_MSG);
         return responseData;
@@ -556,33 +559,19 @@ public class ActivitySmartServiceImpl implements ActivitySmartService {
         mktMessagePOMapper.insertSelective(mktMessagePO);
 
         //执行
-        execute(MktSmartTypeEnum.SMART_TYPE_MESSAGE.getCode(),activityCode);
+        AwardBO awardBO = new AwardBO();
+        award.execute(awardBO);
 
         responseData.setMessage(ResponseConstants.SUCCESS_MSG);
         return responseData;
     }
 
     /**
-     * 执行job
-     * @param mktSmartType
-     * @param activityCode
+     * 执行智能营销策略
      * @return
      */
-    @Override
-    public ResponseData<Integer> execute(Integer mktSmartType,String activityCode) {
+    public ResponseData<T> execute(ActivitySmartBO bo){
         ResponseData responseData = new ResponseData();
-        MktSmartTypeEnum mktSmartTypeEnum = MktSmartTypeEnum.getMktSmartTypeEnumByCode(mktSmartType);
-
-        if(mktSmartTypeEnum==null){
-            responseData.setCode(SysResponseEnum.FAILED.getCode());
-            responseData.setMessage(SysResponseEnum.MODEL_FAILED_VALIDATION.getMessage());
-            return responseData;
-        }
-
         return responseData;
     }
-
-
-
-
 }

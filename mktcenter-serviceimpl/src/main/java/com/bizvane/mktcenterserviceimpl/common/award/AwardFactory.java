@@ -85,7 +85,7 @@ public class AwardFactory {
 
     /**
      * 发送短信
-     * @param activityCode
+     * @param bo
      * @return
      */
     public ResponseData<Integer> sendSms(AwardBO bo){
@@ -96,7 +96,7 @@ public class AwardFactory {
 
     /**
      * 发送模板消息
-     * @param activityCode
+     * @param bo
      * @return
      */
     public ResponseData<Integer> sendWxTemplateMessage(AwardBO bo){
