@@ -270,6 +270,7 @@ public class TaskShareServiceImpl implements TaskShareService {
      * @param stageUser
      * @return
      */
+    @Transactional
     @Override
     public ResponseData<Integer> updateTask(TaskBO bo, SysAccountPO stageUser) {
 
@@ -416,6 +417,7 @@ public class TaskShareServiceImpl implements TaskShareService {
      * @param mktTaskId
      * @return
      */
+
     @Override
     public ResponseData<List<TaskVO>> selectTaskById(Long mktTaskId) {
         ResponseData responseData = new ResponseData();
@@ -434,6 +436,7 @@ public class TaskShareServiceImpl implements TaskShareService {
      * @param memberInfoModel 或者传回的是会员编号？
      * @return
      */
+    @Transactional
     @Override
     public ResponseData executeTask(TaskVO vo, MemberInfoModel memberInfoModel) {
         ResponseData responseData = new ResponseData();
@@ -475,6 +478,8 @@ public class TaskShareServiceImpl implements TaskShareService {
      * @param memberInfoModel
      * @return
      */
+    @Transactional
+    @Override
     public ResponseData addToRecord(TaskVO vo, MemberInfoModel memberInfoModel){
         //将完成任务的信息添加进taskrecord表中
         MktTaskPO mktTaskPO = mktTaskPOMapper.selectByPrimaryKey(vo.getMktTaskId());
@@ -500,8 +505,9 @@ public class TaskShareServiceImpl implements TaskShareService {
      * @param stageUser
      * @return
      */
+    @Transactional
     @Override
-    public ResponseData<TaskRecordVO> getTaskShareRecordByTime(Date date1, Date date2, SysAccountPO stageUser){
+    public ResponseData<TaskRecordVO> getTaskShareRecordByTime(Date date1, Date date2, SysAccountPO stageUser,String taskName){
         ResponseData responseData = new ResponseData();
 
         //合计是指该时间之内合计还是？全部？
@@ -512,10 +518,10 @@ public class TaskShareServiceImpl implements TaskShareService {
         MktTaskRecordPOExample example = new MktTaskRecordPOExample();
         MktTaskRecordPOExample.Criteria criteria = example.createCriteria();
         criteria.andTaskTypeEqualTo(TaskTypeEnum.TASK_TYPE_PROFILE.getCode()).andSysBrandIdEqualTo(stageUser.getBrandId()).andValidEqualTo(true);
-        //一、查出时间之内参与任务的总人数
+        //一、查出时间之内参与微信任务的总人数
         Long countMbr = mktTaskRecordPOMapper.countByExample(example);
         TaskRecordVO taskRecordVO = new TaskRecordVO();
-        taskRecordVO.setAllCountMbr(countMbr);
+
 
 
 
@@ -563,6 +569,16 @@ public class TaskShareServiceImpl implements TaskShareService {
             MktTaskSharePO mktTaskSharePO = mktTaskSharePOList.get(0);
             Integer oneTaskShareTimes = mktTaskSharePO.getShareTimes();
 
+            //根据taskid count出该任务的条数 即该任务的分享次数
+
+            MktTaskRecordPOExample mktTaskRecordPOExample1 = new MktTaskRecordPOExample();
+            MktTaskRecordPOExample.Criteria criteria5 = mktTaskRecordPOExample1.createCriteria();
+            criteria5.andTaskIdEqualTo(taskId);
+            Long oneTaskCountShareTimes = mktTaskRecordPOMapper.countByExample(mktTaskRecordPOExample1);
+
+
+            //根据会员编号  taskid  查出该任务
+
 
             //将每个分享任务的内容添加进list中
 
@@ -573,6 +589,7 @@ public class TaskShareServiceImpl implements TaskShareService {
             //dayTaskRecordVo.setOneTaskInvalidCountCoupon();调接口
             dayTaskRecordVo.setOneTaskCountCoupon(oneTaskCountCoupon);
             dayTaskRecordVo.setOneTaskCompleteCountMbr();
+            dayTaskRecordVo.setOneTaskShareTimes(oneTaskCountShareTimes);
 
 
 
@@ -581,6 +598,7 @@ public class TaskShareServiceImpl implements TaskShareService {
 
         taskRecordVO.setAllPoints(countPoints);
         taskRecordVO.setAllCountCoupon(countCoupon);
+        taskRecordVO.setAllCountMbr(countMbr);
 
         /*MktTaskPOExample mktTaskPOExample = new MktTaskPOExample();
         MktTaskPOExample.Criteria criteria1 = mktTaskPOExample.createCriteria();

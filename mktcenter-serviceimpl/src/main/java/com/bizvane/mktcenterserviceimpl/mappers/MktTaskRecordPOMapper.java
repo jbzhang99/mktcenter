@@ -73,4 +73,6 @@ public interface MktTaskRecordPOMapper {
 	 * @mbg.generated  2018-08-02 14:07:08
 	 */
 	int updateByPrimaryKey(MktTaskRecordPO record);
+
+	Long
 }

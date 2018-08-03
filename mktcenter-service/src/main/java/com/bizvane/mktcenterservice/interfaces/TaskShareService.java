@@ -62,6 +62,15 @@ public interface TaskShareService {
      * @param stageUser
      * @return
      */
-    public ResponseData<TaskRecordVO> getTaskShareRecordByTime(Date date1, Date date2, SysAccountPO stageUser)
+    public ResponseData<TaskRecordVO> getTaskShareRecordByTime(Date date1, Date date2, SysAccountPO stageUser,String taskName);
+
+
+    /**
+     * 添加任务记录
+     * @param vo
+     * @param memberInfoModel
+     * @return
+     */
+    public ResponseData addToRecord(TaskVO vo, MemberInfoModel memberInfoModel);
 
 }
