@@ -469,5 +469,9 @@
     <if test="activityType != null and activityType!= ''">
       AND tma.activity_type = #{activityType}
     </if>
+    <!--活动编号-->
+    <if test="activityCode != null and activityCode!= ''">
+      AND tma.activity_code = #{activityCode}
+    </if>
   </select>
 </mapper>

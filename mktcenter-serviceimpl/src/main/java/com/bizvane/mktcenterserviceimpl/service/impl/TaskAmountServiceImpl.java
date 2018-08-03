@@ -113,7 +113,6 @@ public class TaskAmountServiceImpl implements TaskAmountService {
         if (CollectionUtils.isNotEmpty(mktCouponPOList)) {
             mktCouponPOList.stream().forEach(param -> {
                 param.setBizId(mktTaskId);
-                param.setBizCode(taskCode);
                 param.setBizType(TaskConstants.TASK_TYPE);
                 taskCouponService.addTaskCoupon(param, stageUser);
             });

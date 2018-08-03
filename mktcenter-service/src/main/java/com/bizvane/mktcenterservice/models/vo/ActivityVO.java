@@ -157,19 +157,8 @@ public class ActivityVO extends MktActivityPO {
     @io.swagger.annotations.ApiModelProperty(value = "订单来源：1线下订单，2微商城订单", name = "orderSource", required = false, example = "")
     private Integer orderSource;//订单来源
 
-    public Integer getOrderSource() {
-        return orderSource;
-    }
-
-    public void setOrderSource(Integer orderSource) {
-        this.orderSource = orderSource;
-    }
-
-
-    @io.swagger.annotations.ApiModelProperty(value = "ÿ��ÿ�������ȡ������", name = "perPersonPerDayMax", required = false, example = "")
     private Integer perPersonPerDayMax;
 
-    @io.swagger.annotations.ApiModelProperty(value = "ÿ�������ȡ", name = "perPersonMax", required = false, example = "")
     private Integer perPersonMax;
 
     private String couponCode;//券号
@@ -181,6 +170,27 @@ public class ActivityVO extends MktActivityPO {
     private Long mktActivityManualId;
 
     private CouponEntityPO couponEntityPO;
+
+    /**
+     * 会员编号
+     */
+    private String memberCode;
+    public Integer getOrderSource() {
+        return orderSource;
+    }
+
+    public void setOrderSource(Integer orderSource) {
+        this.orderSource = orderSource;
+    }
+
+    public String getMemberCode() {
+        return memberCode;
+    }
+
+    public void setMemberCode(String memberCode) {
+        this.memberCode = memberCode;
+    }
+
     public String getActivityInfo() {
         return activityInfo;
     }

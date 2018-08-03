@@ -105,11 +105,11 @@ public class ActivityRegisterController {
     }
     /**
      * 查询活动详情
-     * @param mktActivityId
+     * @param activityCode
      * @return
      */
     @RequestMapping("selectActivityRegisterById")
-    public ResponseData<List<ActivityVO>> selectActivityRegisterById(Long mktActivityId){
-        return activityRegisterService.selectActivityRegisterById(mktActivityId);
+    public ResponseData<List<ActivityVO>> selectActivityRegisterById(String activityCode){
+        return activityRegisterService.selectActivityRegisterById(activityCode);
     }
 }

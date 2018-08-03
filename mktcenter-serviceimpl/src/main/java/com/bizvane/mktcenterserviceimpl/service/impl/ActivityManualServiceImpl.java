@@ -186,7 +186,6 @@ public class ActivityManualServiceImpl implements ActivityManualService {
         MktCouponPO mktCouponPO = new MktCouponPO();
         mktCouponPO.setCouponId(couponId);
         mktCouponPO.setBizId(mktActivityId);//活动id
-        mktCouponPO.setBizCode(activityCode);//活动编号
         mktCouponPO.setBizType(1);//业务类型 1.活动改为枚举，不要出现魔数
         mktCouponPO.setModifiedUserId(stageUser.getSysAccountId());
         mktCouponPO.setModifiedUserName(stageUser.getName());

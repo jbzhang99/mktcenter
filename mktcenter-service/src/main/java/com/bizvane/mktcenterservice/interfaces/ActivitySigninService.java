@@ -32,10 +32,10 @@ public interface ActivitySigninService {
     public ResponseData<Integer> addActivitySignin(ActivityBO bo, SysAccountPO stageUser);
     /**
      * 查询活动详情
-     * @param mktActivityId
+     * @param
      * @return
      */
-    public ResponseData<List<ActivityVO>> selectActivitySigninById(Long mktActivityId);
+    public ResponseData<List<ActivityVO>> selectActivitySigninById(String activityCode);
     /**
      * 执行活动
      * @param

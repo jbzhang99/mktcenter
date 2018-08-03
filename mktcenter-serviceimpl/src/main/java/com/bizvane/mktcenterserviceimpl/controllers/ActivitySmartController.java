@@ -39,7 +39,7 @@ public class ActivitySmartController {
      */
     @RequestMapping("getSmartActivityGroupList")
     public ResponseData<PageInfo<MktActivitySmartGroupPO>> getSmartActivityGroupList(ActivitySmartVO vo, PageForm pageForm){
-        return activitySmartService.getSmartActivityList(vo,pageForm);
+        return activitySmartService.getSmartActivityGroupList(vo,pageForm);
     }
 
     /**
@@ -57,8 +57,8 @@ public class ActivitySmartController {
      * @return
      */
     @RequestMapping("getActivityDetailById")
-    public ResponseData<ActivitySmartBO> getActivityDetailById(Long mktActivityId){
-        return activitySmartService.getActivityDetailById(mktActivityId);
+    public ResponseData<ActivitySmartVO> getActivityDetailById(Long mktActivityId,Integer mktSmartType){
+        return activitySmartService.getActivityDetailById(mktActivityId,mktSmartType);
     }
 
     /**
@@ -93,7 +93,7 @@ public class ActivitySmartController {
 
     /**
      * 对某个智能营销组创建任务
-     * 任务类型：3短信营销
+     * 任务类型：3短信营销/4微信模板消息
      * @return
      */
     @RequestMapping("addSmsActivity")
@@ -103,23 +103,7 @@ public class ActivitySmartController {
         //参数校验通过，获取操作人信息
 //        SysAccountPO stageUser = TokenUtils.getStageUser(request);
         SysAccountPO stageUser = new SysAccountPO();
-        ResponseData<Integer> responseData = activitySmartService.addSmsActivity(vo,messageVO,stageUser);
-        return new ResponseData<>();
-    }
-
-    /**
-     * 对某个智能营销组创建任务
-     * 任务类型：4微信模板消息营销
-     * @return
-     */
-    @RequestMapping("addTemplateMsgActivity")
-    public ResponseData<Integer> addTemplateMsgActivity(ActivitySmartVO vo,MessageVO messageVO, HttpServletRequest request){
-        //参数校验
-         ActivityParamCheckUtil.checkSmartActivityParam(vo);
-        //参数校验通过，获取操作人信息
-//        SysAccountPO stageUser = TokenUtils.getStageUser(request);
-        SysAccountPO stageUser = new SysAccountPO();
-        ResponseData<Integer> responseData = activitySmartService.addTemplateMsgActivity(vo,messageVO,stageUser);
+        ResponseData<Integer> responseData = activitySmartService.addMessageActivity(vo,messageVO,stageUser);
         return new ResponseData<>();
     }
 }

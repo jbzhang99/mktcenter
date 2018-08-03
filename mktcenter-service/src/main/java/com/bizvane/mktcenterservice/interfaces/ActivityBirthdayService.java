@@ -31,10 +31,10 @@ public interface ActivityBirthdayService {
     public ResponseData<Integer> addActivityBirthday(ActivityBO bo, SysAccountPO stageUser);
     /**
      * 查询活动详情
-     * @param mktActivityId
+     * @param
      * @return
      */
-    public ResponseData<List<ActivityVO>> selectActivityBirthdayById(Long mktActivityId);
+    public ResponseData<List<ActivityVO>> selectActivityBirthdayById(String activityCode);
     /**
      * 活动审核
      * @param

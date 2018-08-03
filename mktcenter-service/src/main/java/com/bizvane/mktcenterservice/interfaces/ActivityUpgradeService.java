@@ -38,10 +38,10 @@ public interface ActivityUpgradeService {
 
     /**
      * 查询活动详情
-     * @param mktActivityId
+     * @param 
      * @return
      */
-    public ResponseData<List<ActivityVO>> selectActivityUpgradesById(Long mktActivityId);
+    public ResponseData<List<ActivityVO>> selectActivityUpgradesById(String activityCode);
 
     /**
      * 执行活动
