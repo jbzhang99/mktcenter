@@ -6,6 +6,7 @@ import com.bizvane.centerstageservice.models.vo.SysCheckConfigVo;
 import com.bizvane.centerstageservice.rpc.SysCheckConfigServiceRpc;
 import com.bizvane.couponfacade.interfaces.CouponQueryServiceFeign;
 import com.bizvane.couponfacade.models.po.CouponEntityPO;
+import com.bizvane.couponfacade.models.vo.CouponEntityAndDefinitionVO;
 import com.bizvane.members.facade.models.MemberInfoModel;
 import com.bizvane.mktcenterservice.interfaces.ActivityManualService;
 import com.bizvane.mktcenterservice.models.bo.ActivityBO;
@@ -379,7 +380,29 @@ public class ActivityManualServiceImpl implements ActivityManualService {
             log.info("领券活动-查询活动详情-getActivityList入参:"+vo);
             List<ActivityVO> activityManualList = mktActivityManualPOMapper.getActivityList(vo);
             log.info("领券活动-查询活动详情-出参:"+activityManualList);
-            responseData.setData(activityManualList);
+            //查询活动卷
+            MktCouponPOExample example = new  MktCouponPOExample();
+            example.createCriteria().andBizIdEqualTo(activityManualList.get(0).getMktActivityId()).andValidEqualTo(true);
+            List<MktCouponPO> mktCouponPOs= mktCouponPOMapper.selectByExample(example);
+            //查询券接口
+            List<CouponEntityAndDefinitionVO> lists = new ArrayList<>();
+            if(!CollectionUtils.isEmpty(mktCouponPOs)){
+                for (MktCouponPO po:mktCouponPOs) {
+                    CouponEntityPO couponEntity = new CouponEntityPO();
+                    couponEntity.setCouponEntityId(po.getCouponId());
+                    ResponseData<CouponEntityAndDefinitionVO>  entityAndDefinition = couponQueryServiceFeign.getAllRpc(couponEntity);
+                    lists.add(entityAndDefinition.getData());
+                }
+            }
+
+            ActivityBO bo = new ActivityBO();
+            if(!CollectionUtils.isEmpty(activityManualList)){
+                bo.setActivityVO(activityManualList.get(0));
+            }
+            if(!CollectionUtils.isEmpty(lists)){
+                bo.setCouponEntityAndDefinitionVOList(lists);
+            }
+            responseData.setData(bo);
         }catch (Exception e){
             log.error("领券活动-查询活动详情出错"+e.getMessage());
             responseData.setCode(SystemConstants.ERROR_CODE);
