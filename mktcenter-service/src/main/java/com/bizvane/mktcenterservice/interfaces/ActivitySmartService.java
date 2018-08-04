@@ -93,11 +93,10 @@ public interface ActivitySmartService {
      * 对某个智能营销组创建任务
      * 任务类型：1优惠券营销
      * @param vo
-     * @param couponCodeList
      * @param stageUser
      * @return
      */
-    public ResponseData<Integer> addCouponActivity(ActivitySmartVO vo, List<MktCouponPO> couponCodeList, SysAccountPO stageUser);
+    public ResponseData<Integer> addCouponActivity(ActivitySmartVO vo, SysAccountPO stageUser);
 
     /**
      * 对某个智能营销组创建任务
@@ -113,7 +112,17 @@ public interface ActivitySmartService {
      * @param vo
      * @return
      */
-    public ResponseData<Integer> addMessageActivity(ActivitySmartVO vo, MessageVO messageVO, SysAccountPO stageUser);
+    public ResponseData<Integer> addSmsActivity(ActivitySmartVO vo, MessageVO messageVO, SysAccountPO stageUser);
+
+    /**
+     * 对某个智能营销组创建任务
+     * 任务类型：4微信模板消息
+     * @param vo
+     * @param messageVO
+     * @param stageUser
+     * @return
+     */
+    public ResponseData<Integer> addWxMessageActivity(ActivitySmartVO vo, MessageVO messageVO, SysAccountPO stageUser);
 
     public ResponseData<T> execute(ActivitySmartBO bo);
 }

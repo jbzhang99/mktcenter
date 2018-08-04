@@ -12,4 +12,5 @@ public class ResponseConstants {
     public static final String SUCCESS_MSG="操作成功！";
     public static final Integer ERROR=-1;
     public static final String ERROR_MSG="操作失败！";
+    public static final String DATA_NOT_EXIST="查询数据不存在！";
 }

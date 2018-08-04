@@ -67,11 +67,11 @@ public class ActivitySmartController {
      * @return
      */
     @RequestMapping("addCouponActivity")
-    public ResponseData<Integer> addCouponActivity(ActivitySmartVO vo, List<MktCouponPO> couponCodeList, HttpServletRequest request){
+    public ResponseData<Integer> addCouponActivity(ActivitySmartVO vo, HttpServletRequest request){
         //获取操作人信息
 //        SysAccountPO stageUser = TokenUtils.getStageUser(request);
         SysAccountPO stageUser = new SysAccountPO();
-        ResponseData<Integer> responseData = activitySmartService.addCouponActivity(vo, couponCodeList, stageUser);
+        ResponseData<Integer> responseData = activitySmartService.addCouponActivity(vo, stageUser);
         return responseData;
     }
 
@@ -93,7 +93,7 @@ public class ActivitySmartController {
 
     /**
      * 对某个智能营销组创建任务
-     * 任务类型：3短信营销/4微信模板消息
+     * 任务类型：3短信营销
      * @return
      */
     @RequestMapping("addSmsActivity")
@@ -103,7 +103,23 @@ public class ActivitySmartController {
         //参数校验通过，获取操作人信息
 //        SysAccountPO stageUser = TokenUtils.getStageUser(request);
         SysAccountPO stageUser = new SysAccountPO();
-        ResponseData<Integer> responseData = activitySmartService.addMessageActivity(vo,messageVO,stageUser);
+        ResponseData<Integer> responseData = activitySmartService.addSmsActivity(vo,messageVO,stageUser);
+        return new ResponseData<>();
+    }
+
+    /**
+     * 对某个智能营销组创建任务
+     * 任务类型：4微信模板消息
+     * @return
+     */
+    @RequestMapping("addWxMessageActivity")
+    public ResponseData<Integer> addWxMessageActivity(ActivitySmartVO vo, MessageVO messageVO,HttpServletRequest request){
+        //参数校验
+        ActivityParamCheckUtil.checkSmartActivityParam(vo);
+        //参数校验通过，获取操作人信息
+//        SysAccountPO stageUser = TokenUtils.getStageUser(request);
+        SysAccountPO stageUser = new SysAccountPO();
+        ResponseData<Integer> responseData = activitySmartService.addWxMessageActivity(vo,messageVO,stageUser);
         return new ResponseData<>();
     }
 }
