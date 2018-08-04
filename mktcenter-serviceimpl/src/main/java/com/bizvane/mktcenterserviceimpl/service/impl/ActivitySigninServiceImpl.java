@@ -14,12 +14,15 @@ import com.bizvane.members.facade.models.MemberInfoModel;
 import com.bizvane.members.facade.service.api.IntegralRecordApiService;
 import com.bizvane.mktcenterservice.interfaces.ActivitySigninService;
 import com.bizvane.mktcenterservice.models.bo.ActivityBO;
+import com.bizvane.mktcenterservice.models.bo.AwardBO;
 import com.bizvane.mktcenterservice.models.po.*;
 import com.bizvane.mktcenterservice.models.vo.ActivityVO;
 import com.bizvane.mktcenterservice.models.vo.PageForm;
+import com.bizvane.mktcenterserviceimpl.common.award.Award;
 import com.bizvane.mktcenterserviceimpl.common.enums.ActivityStatusEnum;
 import com.bizvane.mktcenterserviceimpl.common.enums.ActivityTypeEnum;
 import com.bizvane.mktcenterserviceimpl.common.enums.CheckStatusEnum;
+import com.bizvane.mktcenterserviceimpl.common.enums.MktSmartTypeEnum;
 import com.bizvane.mktcenterserviceimpl.common.utils.CodeUtil;
 import com.bizvane.mktcenterserviceimpl.mappers.*;
 import com.bizvane.utils.enumutils.SysResponseEnum;
@@ -65,6 +68,8 @@ public class ActivitySigninServiceImpl implements ActivitySigninService {
     private MktCouponPOMapper mktCouponPOMapper;
     @Autowired
     private CouponQueryServiceFeign couponQueryServiceFeign;
+    @Autowired
+    private Award award;
     /**
      * 查询签到活动列表
      * @param vo
@@ -236,12 +241,13 @@ public class ActivitySigninServiceImpl implements ActivitySigninService {
         List<ActivityVO> signinList = mktActivitySigninMapper.getActivitySigninList(activity);
         for (ActivityVO activityVO:signinList) {
             //增加积分奖励新增接口
-            IntegralRecordModel var1 = new IntegralRecordModel();
-            var1.setMemberCode(vo.getMemberCode());
-            var1.setChangeBills(activityVO.getActivityCode());
-            var1.setChangeIntegral(activityVO.getPoints());
-            var1.setChangeWay(IntegralChangeTypeEnum.INCOME.getCode());
-            integralRecordApiService.updateMemberIntegral(var1);
+            AwardBO bo = new AwardBO();
+            bo.setMemberCode(vo.getMemberCode());
+            bo.setChangeBills(activityVO.getActivityCode());
+            bo.setChangeIntegral(activityVO.getPoints());
+            bo.setChangeWay(IntegralChangeTypeEnum.INCOME.getCode());
+            bo.setMktSmartType(MktSmartTypeEnum.SMART_TYPE_INTEGRAL.getCode());
+            award.execute(bo);
             //新增积分到会员参与活动记录表中数据
             MktActivityRecordPO po = new MktActivityRecordPO();
             po.setActivityType(ActivityTypeEnum.ACTIVITY_TYPE_SIGNIN.getCode());

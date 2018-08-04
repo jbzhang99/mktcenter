@@ -8,20 +8,17 @@ import com.bizvane.couponfacade.interfaces.CouponQueryServiceFeign;
 import com.bizvane.couponfacade.interfaces.SendCouponServiceFeign;
 import com.bizvane.couponfacade.models.po.CouponEntityPO;
 import com.bizvane.couponfacade.models.vo.CouponEntityAndDefinitionVO;
-import com.bizvane.couponfacade.models.vo.SendCouponSimpleRequestVO;
 import com.bizvane.members.facade.enums.IntegralChangeTypeEnum;
-import com.bizvane.members.facade.models.IntegralRecordModel;
 import com.bizvane.members.facade.models.MemberInfoModel;
 import com.bizvane.members.facade.service.api.IntegralRecordApiService;
 import com.bizvane.mktcenterservice.interfaces.ActivityRegisterService;
 import com.bizvane.mktcenterservice.models.bo.ActivityBO;
+import com.bizvane.mktcenterservice.models.bo.AwardBO;
 import com.bizvane.mktcenterservice.models.po.*;
 import com.bizvane.mktcenterservice.models.vo.ActivityVO;
 import com.bizvane.mktcenterservice.models.vo.PageForm;
-import com.bizvane.mktcenterserviceimpl.common.enums.ActivityStatusEnum;
-import com.bizvane.mktcenterserviceimpl.common.enums.ActivityTypeEnum;
-import com.bizvane.mktcenterserviceimpl.common.enums.BusinessTypeEnum;
-import com.bizvane.mktcenterserviceimpl.common.enums.CheckStatusEnum;
+import com.bizvane.mktcenterserviceimpl.common.award.Award;
+import com.bizvane.mktcenterserviceimpl.common.enums.*;
 import com.bizvane.mktcenterserviceimpl.common.utils.CodeUtil;
 import com.bizvane.mktcenterserviceimpl.common.utils.JobUtil;
 import com.bizvane.mktcenterserviceimpl.mappers.MktActivityPOMapper;
@@ -83,6 +80,8 @@ public class ActivityRegisterServiceImpl implements ActivityRegisterService {
     private SysCheckServiceRpc sysCheckServiceRpc;
     @Autowired
     private CouponQueryServiceFeign couponQueryServiceFeign;
+    @Autowired
+    private Award award;
     /**
      * 查询活动列表
      * @param vo
@@ -266,25 +265,25 @@ public class ActivityRegisterServiceImpl implements ActivityRegisterService {
             //判断开卡会员适合哪个活动根据开卡会员等级判断
             if(activityVO.getMbrLevelCode().equals(vo.getLevelId().toString()) || activityVO.getMbrLevelCode().equals("0")){
                 //增加积分奖励新增接口
-                IntegralRecordModel var1 = new IntegralRecordModel();
-                var1.setMemberCode(vo.getMemberCode());
-                var1.setChangeBills(activityVO.getActivityCode());
-                var1.setChangeIntegral(activityVO.getPoints());
-                var1.setChangeWay(IntegralChangeTypeEnum.INCOME.getCode());
-                integralRecordApiService.updateMemberIntegral(var1);
+                AwardBO bo = new AwardBO();
+                bo.setMemberCode(vo.getMemberCode());
+                bo.setChangeBills(activityVO.getActivityCode());
+                bo.setChangeIntegral(activityVO.getPoints());
+                bo.setChangeWay(IntegralChangeTypeEnum.INCOME.getCode());
+                bo.setMktSmartType(MktSmartTypeEnum.SMART_TYPE_INTEGRAL.getCode());
+                award.execute(bo);
 
                 // 增加卷奖励接口
                 MktCouponPOExample example = new  MktCouponPOExample();
-                example.createCriteria().andBizIdEqualTo(activityVO.getMktActivityId());
-                example.createCriteria().andValidEqualTo(true);
+                example.createCriteria().andBizIdEqualTo(activityVO.getMktActivityId()).andValidEqualTo(true);;
                 List<MktCouponPO> mktCouponPOs= mktCouponPOMapper.selectByExample(example);
                 for (MktCouponPO mktCouponPO:mktCouponPOs) {
-                    SendCouponSimpleRequestVO va = new SendCouponSimpleRequestVO();
-                    va.setMemberCode(vo.getMemberCode());
-                    va.setCouponDefinitionId(mktCouponPO.getCouponId());
-                    va.setSendBussienId(mktCouponPO.getBizId());
-                    va.setSendType("10");
-                    sendCouponServiceFeign.simple(va);
+                    AwardBO awardBO = new AwardBO();
+                    awardBO.setMemberCode(vo.getMemberCode());
+                    awardBO.setCouponDefinitionId(mktCouponPO.getCouponId());
+                    awardBO.setSendBussienId(mktCouponPO.getBizId());
+                    awardBO.setMktSmartType(MktSmartTypeEnum.SMART_TYPE_COUPON.getCode());
+                    award.execute(awardBO);
                 }
             }
 

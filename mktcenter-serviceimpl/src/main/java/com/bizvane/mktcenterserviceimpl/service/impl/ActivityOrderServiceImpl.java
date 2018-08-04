@@ -15,15 +15,14 @@ import com.bizvane.members.facade.models.IntegralRecordModel;
 import com.bizvane.members.facade.service.api.IntegralRecordApiService;
 import com.bizvane.mktcenterservice.interfaces.ActivityOrderService;
 import com.bizvane.mktcenterservice.models.bo.ActivityBO;
+import com.bizvane.mktcenterservice.models.bo.AwardBO;
 import com.bizvane.mktcenterservice.models.bo.OrderModelBo;
 import com.bizvane.mktcenterservice.models.po.*;
 import com.bizvane.mktcenterservice.models.vo.ActivityVO;
 import com.bizvane.mktcenterservice.models.vo.MessageVO;
 import com.bizvane.mktcenterservice.models.vo.PageForm;
-import com.bizvane.mktcenterserviceimpl.common.enums.ActivityStatusEnum;
-import com.bizvane.mktcenterserviceimpl.common.enums.ActivityTypeEnum;
-import com.bizvane.mktcenterserviceimpl.common.enums.BusinessTypeEnum;
-import com.bizvane.mktcenterserviceimpl.common.enums.CheckStatusEnum;
+import com.bizvane.mktcenterserviceimpl.common.award.Award;
+import com.bizvane.mktcenterserviceimpl.common.enums.*;
 import com.bizvane.mktcenterserviceimpl.common.job.XxlJobConfig;
 import com.bizvane.mktcenterserviceimpl.common.utils.CodeUtil;
 import com.bizvane.mktcenterserviceimpl.common.utils.ExecuteParamCheckUtil;
@@ -76,13 +75,11 @@ public class ActivityOrderServiceImpl implements ActivityOrderService {
     @Autowired
     private JobUtil jobUtil;
     @Autowired
-    private IntegralRecordApiService integralRecordApiService;
-    @Autowired
-    private SendCouponServiceFeign sendCouponServiceFeign;
-    @Autowired
     private SysCheckServiceRpc sysCheckServiceRpc;
     @Autowired
     private CouponQueryServiceFeign couponQueryServiceFeign;
+    @Autowired
+    private Award award;
     /**
      * 查询消费活动列表
      * @param vo
@@ -517,12 +514,13 @@ public class ActivityOrderServiceImpl implements ActivityOrderService {
 
 
             //增加积分奖励新增接口
-            IntegralRecordModel var1 = new IntegralRecordModel();
-            var1.setMemberCode(vo.getMemberCode().toString());
-            var1.setChangeBills(activityVO.getActivityCode());
-            var1.setChangeIntegral(activityVO.getPoints());
-            var1.setChangeWay(IntegralChangeTypeEnum.INCOME.getCode());
-            integralRecordApiService.updateMemberIntegral(var1);
+            AwardBO bo = new AwardBO();
+            bo.setMemberCode(vo.getMemberCode().toString());
+            bo.setChangeBills(activityVO.getActivityCode());
+            bo.setChangeIntegral(activityVO.getPoints());
+            bo.setChangeWay(IntegralChangeTypeEnum.INCOME.getCode());
+            bo.setMktSmartType(MktSmartTypeEnum.SMART_TYPE_INTEGRAL.getCode());
+            award.execute(bo);
 
             // 增加卷奖励接口
             MktCouponPOExample example = new  MktCouponPOExample();
@@ -530,12 +528,12 @@ public class ActivityOrderServiceImpl implements ActivityOrderService {
             example.createCriteria().andValidEqualTo(true);
             List<MktCouponPO> mktCouponPOs= mktCouponPOMapper.selectByExample(example);
             for (MktCouponPO mktCouponPO:mktCouponPOs) {
-                SendCouponSimpleRequestVO va = new SendCouponSimpleRequestVO();
-                va.setMemberCode(vo.getMemberCode().toString());
-                va.setCouponDefinitionId(mktCouponPO.getCouponId());
-                va.setSendBussienId(mktCouponPO.getBizId());
-                va.setSendType("10");
-                sendCouponServiceFeign.simple(va);
+                AwardBO awardBO = new AwardBO();
+                awardBO.setMemberCode(vo.getMemberCode().toString());
+                awardBO.setCouponDefinitionId(mktCouponPO.getCouponId());
+                awardBO.setSendBussienId(mktCouponPO.getBizId());
+                awardBO.setMktSmartType(MktSmartTypeEnum.SMART_TYPE_COUPON.getCode());
+                award.execute(awardBO);
             }
         }
         responseData.setCode(SysResponseEnum.SUCCESS.getCode());
