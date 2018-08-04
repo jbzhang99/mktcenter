@@ -1,13 +1,10 @@
 package com.bizvane.mktcenterserviceimpl.common.utils;
 
-import com.bizvane.mktcenterservice.models.po.MktActivityPOWithBLOBs;
 import com.bizvane.mktcenterservice.models.po.MktTaskPOWithBLOBs;
 import com.bizvane.mktcenterservice.models.vo.ActivitySmartVO;
 import com.bizvane.mktcenterservice.models.vo.ActivityVO;
 import com.bizvane.mktcenterserviceimpl.common.constants.JobHandlerConstants;
-import com.bizvane.mktcenterserviceimpl.common.enums.ActivityStatusEnum;
 import com.bizvane.mktcenterserviceimpl.common.enums.BusinessTypeEnum;
-import com.bizvane.mktcenterserviceimpl.common.enums.TaskStatusEnum;
 import com.bizvane.mktcenterserviceimpl.common.job.XxlJobConfig;
 import com.bizvane.utils.enumutils.JobEnum;
 import com.bizvane.utils.jobutils.JobClient;
@@ -85,8 +82,10 @@ public class JobUtil {
      * 通用job添加方法
      * @param execuDate
      * @param desc
-     * @param bizCode
+     * @param param
      * @param author
+     * @param jobHandler
+     * @param businessType
      */
     public void addJob(Date execuDate,String desc,String param,String author,String jobHandler,int businessType){
         //构建job对象

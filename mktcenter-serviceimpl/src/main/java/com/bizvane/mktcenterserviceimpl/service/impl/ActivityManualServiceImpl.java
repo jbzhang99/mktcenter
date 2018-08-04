@@ -49,8 +49,6 @@ import java.util.UUID;
 @Service
 @Slf4j
 public class ActivityManualServiceImpl implements ActivityManualService {
-
-
     @Autowired
     private MktActivityManualPOMapper mktActivityManualPOMapper;
     @Autowired
