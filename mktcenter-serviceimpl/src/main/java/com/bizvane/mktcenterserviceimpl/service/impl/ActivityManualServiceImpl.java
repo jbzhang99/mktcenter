@@ -444,6 +444,7 @@ public class ActivityManualServiceImpl implements ActivityManualService {
         ActivityVO activityVO = new ActivityVO();
         activityVO.setSysBrandId(memberInfoModel.getBrandId());
         activityVO.setActivityType(activityType);
+        activityVO.setActivityStatus(ActivityStatusEnum.ACTIVITY_STATUS_EXECUTING.getCode());
         try {
             log.info("查询活动，入参:"+JSON.toJSONString(activityVO));
           List<ActivityVO> activityList = mktActivityManualPOMapper.getActivityIdList(activityVO);

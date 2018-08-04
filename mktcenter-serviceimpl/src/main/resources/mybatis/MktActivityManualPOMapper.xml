@@ -645,6 +645,9 @@ WHERE
     <if test="activityType != null and activityType!= '' ">
       AND tma.activity_type = #{activityType,jdbcType=INTEGER}
     </if>
+    <if test="activityStatus != null and activityStatus!= '' ">
+      AND tma.activity_status = #{activityStatus,jdbcType=INTEGER}
+    </if>
   </select>
 
   <select id="getActivityManualEffect">
