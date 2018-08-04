@@ -29,13 +29,13 @@ public class ActivitySmartRpcController {
     private ActivitySmartService activitySmartService;
 
     @RequestMapping("getSmartActivityGroupById")
-    @io.swagger.annotations.ApiModelProperty(value = "mktActivitySmartId",name = "通过id获取活动分组", required = false,example = "")
-    public ResponseData<MktActivitySmartGroupPO> getSmartActivityGroupById(@RequestParam("mktActivitySmartId") Long mktActivitySmartId){
-        return activitySmartService.getSmartActivityGroupById(mktActivitySmartId);
+    @io.swagger.annotations.ApiModelProperty(value = "mktActivitySmartId",name = "通过id获取智能营销分组", required = false,example = "")
+    public ResponseData<MktActivitySmartGroupPO> getSmartActivityGroupById(@RequestParam("mktActivitySmartGroupId") Long mktActivitySmartGroupId){
+        return activitySmartService.getSmartActivityGroupById(mktActivitySmartGroupId);
     }
 
     @RequestMapping("getSmartActivityGroupList")
-    @io.swagger.annotations.ApiModelProperty(value = "ActivitySmartVO",name = "查询智能营销活动列表", required = false,example = "")
+    @io.swagger.annotations.ApiModelProperty(value = "ActivitySmartVO",name = "查询智能营销分组列表", required = false,example = "")
     public ResponseData<PageInfo<MktActivitySmartGroupPO>> getSmartActivityGroupList(@RequestBody ActivitySmartVO vo){
         PageForm pageForm = new PageForm();
         pageForm.setPageNumber(vo.getPageNumber());
@@ -44,19 +44,19 @@ public class ActivitySmartRpcController {
     }
 
     @RequestMapping("addSmartActivityGroup")
-    @io.swagger.annotations.ApiModelProperty(value = "ActivitySmartVO",name = "添加智能营销活动", required = false,example = "")
+    @io.swagger.annotations.ApiModelProperty(value = "ActivitySmartVO",name = "添加智能营销分组", required = false,example = "")
     public ResponseData<Integer> addSmartActivityGroup(@RequestBody ActivitySmartVO vo){
         return activitySmartService.addSmartActivityGroup(vo);
     }
 
     @RequestMapping("updateSmartActivityGroup")
-    @io.swagger.annotations.ApiModelProperty(value = "ActivitySmartVO",name = "更新智能营销活动", required = false,example = "")
+    @io.swagger.annotations.ApiModelProperty(value = "ActivitySmartVO",name = "更新智能营销分组", required = false,example = "")
     public ResponseData<Integer> updateSmartActivityGroup(@RequestBody ActivitySmartVO vo){
         return activitySmartService.updateSmartActivityGroup(vo);
     }
 
     @RequestMapping("updateSmartActivityGroupStatus")
-    @io.swagger.annotations.ApiModelProperty(value = "ActivitySmartVO",name = "启用/禁用智能营销活动", required = false,example = "")
+    @io.swagger.annotations.ApiModelProperty(value = "ActivitySmartVO",name = "启用/禁用智能营销分组", required = false,example = "")
     public ResponseData<Integer> updateSmartActivityGroupStatus(@RequestBody ActivitySmartVO vo){
         return activitySmartService.updateSmartActivityGroupStatus(vo);
     }

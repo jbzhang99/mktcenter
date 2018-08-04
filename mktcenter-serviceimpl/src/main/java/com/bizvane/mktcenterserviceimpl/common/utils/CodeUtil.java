@@ -1,13 +1,9 @@
 package com.bizvane.mktcenterserviceimpl.common.utils;
 
-import org.bson.types.Code;
-
-import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
-import java.util.UUID;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
@@ -18,38 +14,33 @@ import java.util.concurrent.locks.ReentrantLock;
 public class CodeUtil {
     private  final  static String  TASK_PREFIX="TC";
     private  final  static String  ACTIVITY_PREFIX="AC";
+    private  final  static String  MEMBER_GROUP_CODE_PREFIX="MGC";
     private  final  static SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmssSSS");
-    private  final  static Lock lock = new ReentrantLock();
 
     public synchronized static   String  getTaskCode()  {
-        StringBuilder stringBuilder=null;
-        String  code="";
-        try {
-        stringBuilder = new StringBuilder();
-        stringBuilder.append(TASK_PREFIX);
-        getRaCodedom(stringBuilder);
-        code = stringBuilder.toString();
-
-        }catch (Exception e){
-            e.printStackTrace();
-        }finally {
-            return code;
-        }
-
+        return generateCode(TASK_PREFIX);
     }
 
     public synchronized static  String  getActivityCode()  {
+        return generateCode(ACTIVITY_PREFIX);
+    }
+
+    public static String getMemberGroupCode()  {
+        return generateCode(MEMBER_GROUP_CODE_PREFIX);
+    }
+
+    public synchronized static  String  generateCode(String feature)  {
         StringBuilder stringBuilder=null;
         String  code="";
         try {
             stringBuilder = new StringBuilder();
-            stringBuilder.append(ACTIVITY_PREFIX);
+            stringBuilder.append(feature);
             getRaCodedom(stringBuilder);
             code = stringBuilder.toString();
         }catch (Exception e){
             e.printStackTrace();
         }finally {
-         return code;
+            return code;
         }
     }
 

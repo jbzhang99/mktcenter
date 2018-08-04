@@ -80,7 +80,7 @@ public class ActivitySmartServiceImpl implements ActivitySmartService {
         criteria.andValidEqualTo(Boolean.TRUE);
 
         if(!StringUtils.isEmpty(vo.getMemberGroupName())){
-            criteria.andMemberGroupNameEqualTo(SystemConstants.LIKE_SYMBOL+vo.getMemberGroupName()+SystemConstants.LIKE_SYMBOL);
+            criteria.andMemberGroupNameLike(SystemConstants.LIKE_SYMBOL+vo.getMemberGroupName()+SystemConstants.LIKE_SYMBOL);
         }
 
         List<MktActivitySmartGroupPO> mktActivitySmartGroupPOS = mktActivitySmartGroupPOMapper.selectByExampleWithBLOBs(example);
@@ -261,6 +261,8 @@ public class ActivitySmartServiceImpl implements ActivitySmartService {
         }
         MktActivitySmartGroupPO mktActivitySmartPO = new MktActivitySmartGroupPO();
         BeanUtils.copyProperties(vo,mktActivitySmartPO);
+
+        mktActivitySmartPO.setMemberGroupCode(CodeUtil.getMemberGroupCode());
         mktActivitySmartGroupPOMapper.insertSelective(mktActivitySmartPO);
         responseData.setMessage(ResponseConstants.SUCCESS_MSG);
         return responseData;
