@@ -336,7 +336,7 @@ public class ActivitySmartServiceImpl implements ActivitySmartService {
     public ResponseData<Integer> copySmartActivityGroup(ActivitySmartVO vo) {
         ResponseData responseData = new ResponseData();
 
-        MktActivitySmartGroupPO mktActivitySmartGroupPO = mktActivitySmartGroupPOMapper.selectByPrimaryKey(vo.getMktActivitySmartId());
+        MktActivitySmartGroupPO mktActivitySmartGroupPO = mktActivitySmartGroupPOMapper.selectByPrimaryKey(vo.getMktActivitySmartGroupId());
 
         mktActivitySmartGroupPO.setCreateDate(new Date());
         mktActivitySmartGroupPO.setCreateUserId(vo.getCreateUserId());
@@ -346,6 +346,7 @@ public class ActivitySmartServiceImpl implements ActivitySmartService {
         mktActivitySmartGroupPO.setModifiedUserId(null);
         mktActivitySmartGroupPO.setModifiedUserName(null);
 
+        mktActivitySmartGroupPO.setMemberGroupCode(CodeUtil.getMemberGroupCode());
         mktActivitySmartGroupPO.setMemberGroupName(mktActivitySmartGroupPO.getMemberGroupName()+ActivityConstants.SMART_ACTIVITY_COPY);
 
         mktActivitySmartGroupPOMapper.insertSelective(mktActivitySmartGroupPO);
