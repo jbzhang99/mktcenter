@@ -1,9 +1,7 @@
 package com.bizvane.mktcenterserviceimpl.service.impl;
 
 import com.bizvane.mktcenterservice.interfaces.ActivityService;
-import com.bizvane.mktcenterservice.models.po.MktActivityPOWithBLOBs;
-import com.bizvane.mktcenterservice.models.po.MktMessagePO;
-import com.bizvane.mktcenterservice.models.po.MktMessagePOExample;
+import com.bizvane.mktcenterservice.models.po.*;
 import com.bizvane.mktcenterservice.models.vo.ActivityVO;
 import com.bizvane.mktcenterserviceimpl.common.enums.ActivityStatusEnum;
 import com.bizvane.mktcenterserviceimpl.common.enums.CheckStatusEnum;
@@ -12,6 +10,7 @@ import com.bizvane.mktcenterserviceimpl.mappers.MktMessagePOMapper;
 import com.bizvane.utils.enumutils.SysResponseEnum;
 import com.bizvane.utils.responseinfo.ResponseData;
 import com.bizvane.utils.tokens.SysAccountPO;
+import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -64,12 +63,20 @@ public class ActivityServiceImpl implements ActivityService {
         bs.setModifiedUserId(sysAccountPO.getSysAccountId());
         bs.setModifiedDate(new Date());
         bs.setModifiedUserName(sysAccountPO.getName());
-        //根据id查询出审核活动的详细信息
-        MktActivityPOWithBLOBs mktActivityPOWithBLOBs = mktActivityPOMapper.selectByPrimaryKey(bs.getMktActivityId());
+        //根据code查询出审核活动的详细信息
+        MktActivityPOExample exampl = new MktActivityPOExample();
+        exampl.createCriteria().andActivityCodeEqualTo(bs.getActivityCode()).andValidEqualTo(true);
+        List<MktActivityPO> mktActivityPO = mktActivityPOMapper.selectByExample(exampl);
+        if (CollectionUtils.isEmpty(mktActivityPO)){
+            responseData.setCode(SysResponseEnum.FAILED.getCode());
+            responseData.setMessage(SysResponseEnum.OPERATE_FAILED_DATA_NOT_EXISTS.getMessage());
+            return responseData;
+        }
+        MktActivityPO activityPO = mktActivityPO.get(0);
         //判断是审核通过还是审核驳回
         if(bs.getCheckStatus()==CheckStatusEnum.CHECK_STATUS_APPROVED.getCode()){
             //活动开始时间<当前时间<活动结束时间  或者长期活动 也就是StartTime=null
-            if(1== mktActivityPOWithBLOBs.getLongTerm() ||(new Date().after(mktActivityPOWithBLOBs.getStartTime()) && new Date().before(mktActivityPOWithBLOBs.getEndTime()))){
+            if(1== activityPO.getLongTerm() ||(new Date().after(activityPO.getStartTime()) && new Date().before(activityPO.getEndTime()))){
                 //将活动状态变更为执行中 并且发送消息
                 bs.setActivityStatus(ActivityStatusEnum.ACTIVITY_STATUS_EXECUTING.getCode());
                 int i = mktActivityPOMapper.updateByPrimaryKeySelective(bs);
@@ -81,7 +88,7 @@ public class ActivityServiceImpl implements ActivityService {
 
             }
             //判断审核时间 >活动结束时间  将活动状态变为已结束
-            if(new Date().after(mktActivityPOWithBLOBs.getEndTime())){
+            if(new Date().after(activityPO.getEndTime())){
                 bs.setActivityStatus(ActivityStatusEnum.ACTIVITY_STATUS_FINISHED.getCode());
                 int i = mktActivityPOMapper.updateByPrimaryKeySelective(bs);
             }

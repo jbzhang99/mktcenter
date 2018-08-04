@@ -433,12 +433,20 @@ public class ActivityOrderServiceImpl implements ActivityOrderService {
         bs.setModifiedUserId(sysAccountPO.getSysAccountId());
         bs.setModifiedDate(new Date());
         bs.setModifiedUserName(sysAccountPO.getName());
-        //根据id查询出审核活动的详细信息
-        MktActivityPOWithBLOBs mktActivityPOWithBLOBs = mktActivityPOMapper.selectByPrimaryKey(bs.getMktActivityId());
+        //根据code查询出审核活动的详细信息
+        MktActivityPOExample exampl = new MktActivityPOExample();
+        exampl.createCriteria().andActivityCodeEqualTo(bs.getActivityCode()).andValidEqualTo(true);
+        List<MktActivityPO> mktActivityPO = mktActivityPOMapper.selectByExample(exampl);
+        if (org.apache.commons.collections.CollectionUtils.isEmpty(mktActivityPO)){
+            responseData.setCode(SysResponseEnum.FAILED.getCode());
+            responseData.setMessage(SysResponseEnum.OPERATE_FAILED_DATA_NOT_EXISTS.getMessage());
+            return responseData;
+        }
+        MktActivityPO activityPO = mktActivityPO.get(0);
         //判断是审核通过还是审核驳回
         if(bs.getCheckStatus()==CheckStatusEnum.CHECK_STATUS_APPROVED.getCode()){
             //活动开始时间<当前时间<活动结束时间  或者长期活动 也就是StartTime=null
-            if(new Date().after(mktActivityPOWithBLOBs.getStartTime()) && new Date().before(mktActivityPOWithBLOBs.getEndTime())){
+            if(new Date().after(activityPO.getStartTime()) && new Date().before(activityPO.getEndTime())){
                 //将活动状态变更为执行中 并且发送消息（当前活动适用会员）
                 bs.setActivityStatus(ActivityStatusEnum.ACTIVITY_STATUS_EXECUTING.getCode());
                 int i = mktActivityPOMapper.updateByPrimaryKeySelective(bs);
@@ -450,7 +458,7 @@ public class ActivityOrderServiceImpl implements ActivityOrderService {
 
             }
             //判断审核时间 >活动结束时间  将活动状态变为已结束
-            if(new Date().after(mktActivityPOWithBLOBs.getEndTime())){
+            if(new Date().after(activityPO.getEndTime())){
                 bs.setActivityStatus(ActivityStatusEnum.ACTIVITY_STATUS_FINISHED.getCode());
                 int i = mktActivityPOMapper.updateByPrimaryKeySelective(bs);
             }
