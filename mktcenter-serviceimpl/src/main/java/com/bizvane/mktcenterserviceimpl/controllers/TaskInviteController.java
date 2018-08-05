@@ -83,7 +83,7 @@ public class TaskInviteController {
      * 修改任务
      */
     @RequestMapping("/updateInviteTask")
-    public ResponseData updateInviteTask(TaskDetailVO vo, HttpServletRequest request){
+    public ResponseData updateInviteTask(TaskDetailVO vo, HttpServletRequest request) throws ParseException {
         SysAccountPO stageUser = TokenUtils.getStageUser(request);
 
         return  taskInviteService.updateInviteTask(vo, stageUser);

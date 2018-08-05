@@ -83,7 +83,9 @@ feign:
     members:
       name: members-server
       path: members.api
-
+    message:
+      name: members-server
+      path: message.api
 rocketmq:
   onsaddr: http://onsaddr-internet.aliyun.com/rocketmq/nsaddr4client-internet
   accessKey: LTAIpoqUHsXq6q7r
