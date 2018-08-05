@@ -105,6 +105,11 @@ public class AwardBO {
     )
     private String cardNo;
     @ApiModelProperty(
+            value = "会员手机号",
+            name = "phone"
+    )
+    private  String phone;
+    @ApiModelProperty(
             value = "变更时间最大值",
             name = "changeDateMax"
     )
@@ -297,5 +302,13 @@ public class AwardBO {
 
     public void setMktSmartType(Integer mktSmartType) {
         this.mktSmartType = mktSmartType;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
     }
 }

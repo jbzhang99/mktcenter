@@ -49,7 +49,7 @@ public interface TaskInviteService {
      * @param stageUser
      * @return
      */
-    public ResponseData updateInviteTask(TaskDetailVO vo, SysAccountPO stageUser);
+    public ResponseData updateInviteTask(TaskDetailVO vo, SysAccountPO stageUser) throws ParseException;
     /**
      * 新增具体任务
      */

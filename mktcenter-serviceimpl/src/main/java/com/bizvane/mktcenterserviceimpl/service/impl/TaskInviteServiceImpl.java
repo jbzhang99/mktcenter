@@ -20,6 +20,7 @@ import com.bizvane.mktcenterserviceimpl.common.enums.CheckStatusEnum;
 import com.bizvane.mktcenterserviceimpl.common.enums.MktSmartTypeEnum;
 import com.bizvane.mktcenterserviceimpl.common.enums.TaskStatusEnum;
 import com.bizvane.mktcenterserviceimpl.common.utils.CodeUtil;
+import com.bizvane.mktcenterserviceimpl.common.utils.JobUtil;
 import com.bizvane.mktcenterserviceimpl.common.utils.TaskParamCheckUtil;
 import com.bizvane.mktcenterserviceimpl.common.utils.TimeUtils;
 import com.bizvane.mktcenterserviceimpl.mappers.MktTaskInvitePOMapper;
@@ -59,6 +60,8 @@ public class TaskInviteServiceImpl implements TaskInviteService {
     @Autowired
     private Award award;
 
+    @Autowired
+    private JobUtil  jobUtil;
     /**
      * 审核任务:任务id   任务状态
      * 审核状态：1未审核，2审核中，3已审核，4已驳回',
@@ -90,7 +93,6 @@ public class TaskInviteServiceImpl implements TaskInviteService {
 
     /**
      * 创建任务
-     *
      * @param vo
      * @param stageUser
      * @return
@@ -114,6 +116,8 @@ public class TaskInviteServiceImpl implements TaskInviteService {
         MktTaskPOWithBLOBs mktTaskPOWithBLOBs = new MktTaskPOWithBLOBs();
         BeanUtils.copyProperties(vo, mktTaskPOWithBLOBs);
         mktTaskPOWithBLOBs.setTaskCode(taskCode);
+        //状态的设置
+        mktTaskPOWithBLOBs = taskService.isOrNoCheckState(mktTaskPOWithBLOBs);
         Long mktTaskId = taskService.addTask(mktTaskPOWithBLOBs, stageUser);
 
         //3.任务消费表新增
@@ -143,103 +147,13 @@ public class TaskInviteServiceImpl implements TaskInviteService {
         }
 
         //6.处理任务
-        this.doOrderTask(vo);
+        taskService.doOrderTask(vo,mktTaskPOWithBLOBs,stageUser);
 
         responseData.setCode(SystemConstants.SUCCESS_CODE);
         responseData.setMessage(SystemConstants.SUCCESS_MESSAGE);
         return responseData;
     }
-    /**
-     * 判断是否滞后执行
-     */
-    public MktTaskPOWithBLOBs isOrNoCheckState(MktTaskPOWithBLOBs po) throws ParseException {
-        //1.判断是否需要审核  1:需要审核 0:不需要
-        SysCheckConfigPo sysCheckConfigPo = new SysCheckConfigPo();
-        sysCheckConfigPo.setSysBrandId(po.getSysBrandId());
-        Integer checkStatus = taskService.getCheckStatus(sysCheckConfigPo);
-        //判断时间是否滞后   2=滞后执行    3和1=立即执行
-        Integer ImmediatelyRunStatus = TimeUtils.IsImmediatelyRun(po.getStartTime());
-        if (TaskConstants.ZERO.equals(checkStatus)) {
-            //待审核=1
-            po.setCheckStatus(CheckStatusEnum.CHECK_STATUS_PENDING.getCode());
-            //待执行=1
-            po.setCheckStatus(TaskStatusEnum.TASK_STATUS_PENDING.getCode());
-        } else {
-            //已审核=3
-            po.setCheckStatus(TaskConstants.THREE);
-            if (TaskConstants.THREE.equals(ImmediatelyRunStatus)) {
-                //待执行
-                po.setCheckStatus(TaskStatusEnum.TASK_STATUS_PENDING.getCode());
-            } else {
-                //执行中
-                po.setCheckStatus(TaskStatusEnum.TASK_STATUS_EXECUTING.getCode());
-            }
-        }
-        return po;
-    }
-    /**
-     * 判断时间是否滞后,已经是否立即执行,还是创建job执行
-     */
-    public void doOrderTask(TaskDetailVO vo) {
-        //公司id
-        Long sysCompanyId = vo.getSysCompanyId();
-        //审核状态
-        Integer checkStatus = vo.getCheckStatus();
-        //执行状态
-        Integer taskStatus = vo.getTaskStatus();
-        //公司下的会员
-        List<MemberInfoModel> companyMemebers = taskService.getCompanyMemebers(sysCompanyId);
 
-        //已审核   执行中  执行时间小于当前时间 或等于当前时间
-        if (TaskConstants.THREE.equals(checkStatus) && TaskConstants.SECOND.equals(taskStatus)) {
-            //判断奖励
-            List<MktCouponPO> mktCouponPOList = vo.getMktCouponPOList();
-            if (CollectionUtils.isNotEmpty(mktCouponPOList) && CollectionUtils.isNotEmpty(companyMemebers)) {
-
-            }
-            //判断是否需要发送消息和短信
-            List<MktMessagePO> mktmessagePOList = vo.getMktmessagePOList();
-            if (CollectionUtils.isNotEmpty(mktmessagePOList)) {
-                mktmessagePOList.stream().forEach(
-                        message -> {
-                            String msgType = message.getMsgType();
-                            companyMemebers.stream().forEach(
-                                    obj -> {
-                                        AwardBO bo = new AwardBO();
-                                        //会员code
-                                        bo.setMemberCode(obj.getMemberCode());
-                                        //券id
-                                        //bo.setCouponDefinitionId();
-                                        //发送类型
-                                        //bo.setSendType()
-                                        //任务务id
-                                        bo.setSendBussienId(message.getBizId());
-                                        bo.setChangeIntegral(vo.getPoints());
-                                        bo.setMemberName(obj.getName());
-                                        bo.setCardNo(obj.getCardNo());
-                                        //1模板消息，2短信'
-                                        if (TaskConstants.FIRST.equals(msgType)){
-                                            //1券，2积分，3短信，4模板消息
-                                            bo.setMktSmartType(MktSmartTypeEnum.SMART_TYPE_SMS.getCode());
-                                        }else{
-                                            bo.setMktSmartType(MktSmartTypeEnum.SMART_TYPE_WXMESSAGE.getCode());
-                                        }
-
-                                        award.execute(bo);
-                                    }
-                            );
-
-                        }
-                );
-             }
-        }
-
-        //已审核   待执行,创建job
-        if (TaskConstants.THREE.equals(checkStatus) && TaskConstants.FIRST.equals(taskStatus)) {
-            //判断是否需要发送消息和短信
-        }
-
-    }
     /**
      * 更新消费任务
      *
@@ -248,7 +162,7 @@ public class TaskInviteServiceImpl implements TaskInviteService {
      */
     @Transactional
     @Override
-    public ResponseData updateInviteTask(TaskDetailVO vo, SysAccountPO stageUser) {
+    public ResponseData updateInviteTask(TaskDetailVO vo, SysAccountPO stageUser) throws ParseException {
         //        mktTaskOrderPOMapper.updateByPrimaryKeySelective(po);
         //0.参数的检验
         ResponseData responseData = TaskParamCheckUtil.checkParam(vo);
@@ -265,6 +179,8 @@ public class TaskInviteServiceImpl implements TaskInviteService {
         //1.任务主表修改
         MktTaskPOWithBLOBs mktTaskPOWithBLOBs = new MktTaskPOWithBLOBs();
         BeanUtils.copyProperties(vo, mktTaskPOWithBLOBs);
+        //状态的设置
+        mktTaskPOWithBLOBs = taskService.isOrNoCheckState(mktTaskPOWithBLOBs);
         taskService.updateTask(mktTaskPOWithBLOBs, stageUser);
 
         //3.任务消费表修改
@@ -293,6 +209,8 @@ public class TaskInviteServiceImpl implements TaskInviteService {
                     }
             );
         }
+        //6.处理任务
+        taskService.doOrderTask(vo,mktTaskPOWithBLOBs,stageUser);
 
         responseData.setCode(SystemConstants.SUCCESS_CODE);
         responseData.setMessage(SystemConstants.SUCCESS_MESSAGE);
@@ -319,7 +237,6 @@ public class TaskInviteServiceImpl implements TaskInviteService {
     public Integer modifieInviteTask(MktTaskInvitePO po, SysAccountPO stageUser) {
         MktTaskInvitePOExample example = new MktTaskInvitePOExample();
         example.createCriteria().andMktTaskIdEqualTo(po.getMktTaskId()).andValidEqualTo(Boolean.TRUE);
-
         return mktTaskInvitePOMapper.updateByExample(po, example);
     }
 }

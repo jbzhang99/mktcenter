@@ -6,8 +6,11 @@ import com.bizvane.mktcenterservice.models.po.MktMessagePOExample;
 import com.bizvane.mktcenterserviceimpl.common.utils.TimeUtils;
 import com.bizvane.mktcenterserviceimpl.mappers.MktMessagePOMapper;
 import com.bizvane.utils.tokens.SysAccountPO;
+import com.fasterxml.jackson.databind.node.BooleanNode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 /**
  * @Author: lijunwei
@@ -51,5 +54,17 @@ public class TaskMessageServiceImpl implements TaskMessageService {
         example.createCriteria().andBizIdEqualTo(bizId).andValidEqualTo(Boolean.TRUE);
 
         return mktMessagePOMapper.updateByExampleSelective(po, example);
+    }
+
+    /**
+     * 任务的消息列表
+     * @param bizid
+     * @return
+     */
+    @Override
+    public List<MktMessagePO> getMktMessagePOS(Long bizid) {
+        MktMessagePOExample example = new MktMessagePOExample();
+        example.createCriteria().andBizIdEqualTo(bizid).andBizTypeEqualTo(Integer.valueOf(2)).andValidEqualTo(Boolean.TRUE);
+        return mktMessagePOMapper.selectByExample(example);
     }
 }

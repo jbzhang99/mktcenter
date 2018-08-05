@@ -77,7 +77,35 @@ public class JobUtil {
         String param =vo.getMktSmartType()+"&"+vo.getActivityCode();
         addJob(vo.getStartTime(),vo.getActivityName(),param,stageUser.getName(),JobHandlerConstants.smartActivity,BusinessTypeEnum.ACTIVITY_TYPE_ACTIVITY.getCode());
     }
+/**
+ * 添加任务开始job
+ */
+public  void addTaskStartJob(SysAccountPO stageUser, MktTaskPOWithBLOBs po) {
+    StringBuilder builder = new StringBuilder();
+    builder.append(po.getMktTaskId());
+    builder.append("&");
+    builder.append(BusinessTypeEnum.ACTIVITY_TYPE_TASK.getCode());//任务=2
+    builder.append("&");
+    builder.append(po.getSysCompanyId());
+    String param =builder.toString();
+    addJob(po.getStartTime(),po.getTaskName(),param,stageUser.getName(),JobHandlerConstants.START_TASK,BusinessTypeEnum.ACTIVITY_TYPE_TASK.getCode());
+}
 
+    /**
+     * 添加任务结束job
+     * @param stageUser
+     * @param po
+     */
+    public  void addTaskEndJob(SysAccountPO stageUser, MktTaskPOWithBLOBs po) {
+        StringBuilder builder = new StringBuilder();
+        builder.append(po.getMktTaskId());
+        builder.append("&");
+        builder.append(BusinessTypeEnum.ACTIVITY_TYPE_TASK.getCode());
+        builder.append("&");
+        builder.append(po.getSysCompanyId());
+        String param =builder.toString();
+        addJob(po.getStartTime(),po.getTaskName(),param,stageUser.getName(),JobHandlerConstants.END_TASK,BusinessTypeEnum.ACTIVITY_TYPE_TASK.getCode());
+    }
     /**
      * 通用job添加方法
      * @param execuDate

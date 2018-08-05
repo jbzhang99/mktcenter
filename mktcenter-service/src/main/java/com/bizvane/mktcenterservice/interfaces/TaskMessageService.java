@@ -3,6 +3,8 @@ package com.bizvane.mktcenterservice.interfaces;
 import com.bizvane.mktcenterservice.models.po.MktMessagePO;
 import com.bizvane.utils.tokens.SysAccountPO;
 
+import java.util.List;
+
 /**
  * @Author: lijunwei
  * @Time: 2018/7/30 11:13
@@ -31,4 +33,6 @@ public interface TaskMessageService {
      * @return
      */
     public Integer deleteTaskMessage(Long bizId, SysAccountPO stageUser);
+
+    public List<MktMessagePO> getMktMessagePOS(Long bizid);
 }

@@ -11,6 +11,8 @@ public class JobHandlerConstants {
     public static String activity = "activity";
     //任务
     public static String task = "task";
+    public static String START_TASK = "startTaskJob";
+    public static String END_TASK = "endTaskJob";
     //结束活动
     public static String endActivity = "endActivity";
     //生日活动开始

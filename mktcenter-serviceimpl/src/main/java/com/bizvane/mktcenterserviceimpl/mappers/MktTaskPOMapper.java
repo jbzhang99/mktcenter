@@ -1,9 +1,12 @@
 package com.bizvane.mktcenterserviceimpl.mappers;
 
+import com.bizvane.mktcenterservice.models.bo.TaskDetailBO;
 import com.bizvane.mktcenterservice.models.po.MktTaskPO;
 import com.bizvane.mktcenterservice.models.po.MktTaskPOExample;
 import com.bizvane.mktcenterservice.models.po.MktTaskPOWithBLOBs;
 import java.util.List;
+
+import com.bizvane.mktcenterservice.models.vo.TaskDetailVO;
 import org.apache.ibatis.annotations.Param;
 
 public interface MktTaskPOMapper {
@@ -93,4 +96,6 @@ public interface MktTaskPOMapper {
 	 * @mbg.generated  2018-07-14 13:26:02
 	 */
 	int updateByPrimaryKey(MktTaskPO record);
+
+	public  List<TaskDetailVO> getTaskDetailByTaskId  (@Param("mktTaskId") Long mktTaskId);
 }

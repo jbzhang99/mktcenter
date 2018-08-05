@@ -58,12 +58,12 @@ public class TaskController {
      * @return
      */
     @RequestMapping("checkTaskById")
-    public ResponseData<Integer> checkTaskById(Long mktTaskId, HttpServletRequest request){
+    public ResponseData<Integer> checkTaskById(Long mktTaskId ,Integer checkStatus, HttpServletRequest request){
         //获取操作人信息
         SysAccountPO stageUser =new SysAccountPO();
 //        SysAccountPO stageUser = TokenUtils.getStageUser(request);
         //审核任务
-        ResponseData<Integer> integerResponseData = taskService.checkTaskById(mktTaskId, stageUser);
+        ResponseData<Integer> integerResponseData = taskService.checkTaskById(mktTaskId,checkStatus,stageUser);
         return integerResponseData;
     }
 }
