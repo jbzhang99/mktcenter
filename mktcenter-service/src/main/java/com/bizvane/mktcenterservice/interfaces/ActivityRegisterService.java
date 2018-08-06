@@ -46,7 +46,7 @@ public interface ActivityRegisterService {
 
     /**
      * 查询活动详情
-     * @param activityCode
+     * @param
      * @return
      */
     public ResponseData<ActivityBO> selectActivityRegisterById(String businessCode);

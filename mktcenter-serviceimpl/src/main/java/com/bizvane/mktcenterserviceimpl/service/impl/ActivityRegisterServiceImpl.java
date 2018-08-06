@@ -1,5 +1,6 @@
 package com.bizvane.mktcenterserviceimpl.service.impl;
 
+import com.alibaba.fastjson.JSON;
 import com.bizvane.centerstageservice.models.po.SysCheckPo;
 import com.bizvane.centerstageservice.models.vo.SysCheckConfigVo;
 import com.bizvane.centerstageservice.rpc.SysCheckConfigServiceRpc;
@@ -18,6 +19,7 @@ import com.bizvane.mktcenterservice.models.po.*;
 import com.bizvane.mktcenterservice.models.vo.ActivityVO;
 import com.bizvane.mktcenterservice.models.vo.PageForm;
 import com.bizvane.mktcenterserviceimpl.common.award.Award;
+import com.bizvane.mktcenterserviceimpl.common.constants.SystemConstants;
 import com.bizvane.mktcenterserviceimpl.common.enums.*;
 import com.bizvane.mktcenterserviceimpl.common.utils.CodeUtil;
 import com.bizvane.mktcenterserviceimpl.common.utils.JobUtil;
@@ -92,7 +94,15 @@ public class ActivityRegisterServiceImpl implements ActivityRegisterService {
     public ResponseData<ActivityVO> getActivityList(ActivityVO vo,PageForm pageForm) {
         ResponseData responseData = new ResponseData();
         PageHelper.startPage(pageForm.getPageNumber(),pageForm.getPageSize());
-        List<ActivityVO> activityRegisterList = mktActivityRegisterPOMapper.getActivityList(vo);
+        List<ActivityVO> activityRegisterList = new ArrayList<>();
+        try{
+            log.info("开卡活动列表开始，参数="+vo);
+            activityRegisterList = mktActivityRegisterPOMapper.getActivityList(vo);
+        }catch (Exception e){
+            log.error("开卡活动查询活动列表出错." + e.getMessage());
+            responseData.setCode(SysResponseEnum.FAILED.getCode());
+            responseData.setMessage(e.getMessage());
+        }
         PageInfo<ActivityVO> pageInfo = new PageInfo<>(activityRegisterList);
         responseData.setData(pageInfo);
         return responseData;
@@ -106,6 +116,7 @@ public class ActivityRegisterServiceImpl implements ActivityRegisterService {
     @Override
     @Transactional
     public ResponseData<Integer> addActivity(ActivityBO bo,SysAccountPO stageUser) {
+        log.info("开卡活动-创建活动-入参:"+bo);
         //返回对象
         ResponseData responseData = new ResponseData();
         //得到大实体类
@@ -119,6 +130,7 @@ public class ActivityRegisterServiceImpl implements ActivityRegisterService {
         BeanUtils.copyProperties(activityVO,mktActivityPOWithBLOBs);
         //活动状态设置为待执行
         mktActivityPOWithBLOBs.setActivityStatus(ActivityStatusEnum.ACTIVITY_STATUS_PENDING.getCode());
+             try{
         //查询判断长期活动同一会员等级是否有重复
         if(1 == bo.getActivityVO().getLongTerm()){
             ActivityVO vo = new ActivityVO();
@@ -196,7 +208,9 @@ public class ActivityRegisterServiceImpl implements ActivityRegisterService {
         mktActivityPOWithBLOBs.setCreateDate(new Date());
         mktActivityPOWithBLOBs.setCreateUserId(stageUser.getSysAccountId());
         mktActivityPOWithBLOBs.setCreateUserName(stageUser.getName());
+        log.info("领券活动-创建活动-新增活动主表入参:"+ JSON.toJSONString(mktActivityPOWithBLOBs));
         mktActivityPOMapper.insertSelective(mktActivityPOWithBLOBs);
+        log.info("开卡活动-创建主表活动-成功");
         //获取新增后数据id
         Long mktActivityId = mktActivityPOWithBLOBs.getMktActivityId();
 
@@ -204,8 +218,9 @@ public class ActivityRegisterServiceImpl implements ActivityRegisterService {
         MktActivityRegisterPO mktActivityRegisterPO = new MktActivityRegisterPO();
         BeanUtils.copyProperties(mktActivityPOWithBLOBs,mktActivityRegisterPO);
         mktActivityRegisterPO.setMktActivityId(mktActivityId);
+        log.info("领券活动-创建活动-新增开卡活动表入参:"+ JSON.toJSONString(mktActivityRegisterPO));
         mktActivityRegisterPOMapper.insertSelective(mktActivityRegisterPO);
-
+        log.info("开卡活动-创建开卡活动表活动-成功");
         //新增券奖励
         List<MktCouponPO> couponCodeList = bo.getCouponCodeList();
         if(!CollectionUtils.isEmpty(couponCodeList)){
@@ -237,10 +252,19 @@ public class ActivityRegisterServiceImpl implements ActivityRegisterService {
         if(mktActivityPOWithBLOBs.getActivityStatus()==ActivityStatusEnum.ACTIVITY_STATUS_EXECUTING.getCode()){
 
         }
-        //结束
-        responseData.setCode(SysResponseEnum.SUCCESS.getCode());
-        responseData.setMessage(SysResponseEnum.SUCCESS.getMessage());
-        return responseData;
+                 //结束
+                 responseData.setCode(SysResponseEnum.SUCCESS.getCode());
+                 responseData.setMessage(SysResponseEnum.SUCCESS.getMessage());
+                 log.info("开卡活动-创建活动-成功");
+                 return responseData;
+            }catch (Exception e){
+                 //结束
+                 log.error("开卡活动-创建活动-出错");
+                 responseData.setCode(SysResponseEnum.FAILED.getCode());
+                 responseData.setMessage(SysResponseEnum.FAILED.getMessage());
+                 return responseData;
+        }
+
     }
 
 
@@ -252,6 +276,7 @@ public class ActivityRegisterServiceImpl implements ActivityRegisterService {
     @Override
     @Transactional
     public ResponseData<Integer> executeActivity(MemberInfoModel vo) {
+        log.info("开卡活动-开卡活动执行开始");
         //返回对象
         ResponseData responseData = new ResponseData();
         //查询品牌下所有执行中的活动
@@ -259,9 +284,15 @@ public class ActivityRegisterServiceImpl implements ActivityRegisterService {
         activity.setActivityStatus(ActivityStatusEnum.ACTIVITY_STATUS_EXECUTING.getCode());
         activity.setSysBrandId(vo.getBrandId());
         activity.setActivityType(ActivityTypeEnum.ACTIVITY_TYPE_REGISGER.getCode());
-
-        List<ActivityVO> RegisterList = mktActivityRegisterPOMapper.getActivityList(activity);
-        for (ActivityVO activityVO:RegisterList) {
+        log.info("开卡活动-查询品牌下说有执行中的活动参数："+JSON.toJSONString(activity));
+        List<ActivityVO> registerList = mktActivityRegisterPOMapper.getActivityList(activity);
+        if (CollectionUtils.isEmpty(registerList)){
+            responseData.setCode(SysResponseEnum.OPERATE_FAILED_DATA_NOT_EXISTS.getCode());
+            responseData.setMessage(SysResponseEnum.OPERATE_FAILED_DATA_NOT_EXISTS.getMessage());
+            log.info("开卡活动-该品牌下没有执行中的活动");
+            return responseData;
+        }
+        for (ActivityVO activityVO:registerList) {
             //判断开卡会员适合哪个活动根据开卡会员等级判断
             if(activityVO.getMbrLevelCode().equals(vo.getLevelId().toString()) || activityVO.getMbrLevelCode().equals("0")){
                 //增加积分奖励新增接口
@@ -277,18 +308,22 @@ public class ActivityRegisterServiceImpl implements ActivityRegisterService {
                 MktCouponPOExample example = new  MktCouponPOExample();
                 example.createCriteria().andBizIdEqualTo(activityVO.getMktActivityId()).andValidEqualTo(true);;
                 List<MktCouponPO> mktCouponPOs= mktCouponPOMapper.selectByExample(example);
-                for (MktCouponPO mktCouponPO:mktCouponPOs) {
-                    AwardBO awardBO = new AwardBO();
-                    awardBO.setMemberCode(vo.getMemberCode());
-                    awardBO.setCouponDefinitionId(mktCouponPO.getCouponId());
-                    awardBO.setSendBussienId(mktCouponPO.getBizId());
-                    awardBO.setMktSmartType(MktSmartTypeEnum.SMART_TYPE_COUPON.getCode());
-                    award.execute(awardBO);
+                if(!CollectionUtils.isEmpty(mktCouponPOs)){
+                    for (MktCouponPO mktCouponPO:mktCouponPOs) {
+                        AwardBO awardBO = new AwardBO();
+                        awardBO.setMemberCode(vo.getMemberCode());
+                        awardBO.setCouponDefinitionId(mktCouponPO.getCouponId());
+                        awardBO.setSendBussienId(mktCouponPO.getBizId());
+                        awardBO.setMktSmartType(MktSmartTypeEnum.SMART_TYPE_COUPON.getCode());
+                        award.execute(awardBO);
+                    }
                 }
+
             }
 
 
         }
+        log.info("执行活动成功！");
         responseData.setCode(SysResponseEnum.SUCCESS.getCode());
         responseData.setMessage(SysResponseEnum.SUCCESS.getMessage());
         return responseData;
@@ -303,6 +338,7 @@ public class ActivityRegisterServiceImpl implements ActivityRegisterService {
     @Override
     @Transactional
     public ResponseData<Integer> updateActivityRegister(ActivityBO bo, SysAccountPO stageUser) {
+        log.info("修改活动开始！");
         //返回对象
         ResponseData responseData = new ResponseData();
         //得到大实体类
@@ -314,7 +350,7 @@ public class ActivityRegisterServiceImpl implements ActivityRegisterService {
         }
         MktActivityPOWithBLOBs mktActivityPOWithBLOBs = new MktActivityPOWithBLOBs();
         BeanUtils.copyProperties(activityVO,mktActivityPOWithBLOBs);
-        //查询job
+        //查询job 查出id  修改时候要先删除原来的job任务
         XxlJobInfo xxlJobInfo = new XxlJobInfo();
         xxlJobInfo.setExecutorParam(activityVO.getActivityCode());
         xxlJobInfo.setBizType(BusinessTypeEnum.ACTIVITY_TYPE_ACTIVITY.getCode());
@@ -386,7 +422,9 @@ public class ActivityRegisterServiceImpl implements ActivityRegisterService {
         mktActivityPOWithBLOBs.setModifiedDate(new Date());
         mktActivityPOWithBLOBs.setModifiedUserId(stageUser.getSysAccountId());
         mktActivityPOWithBLOBs.setModifiedUserName(stageUser.getName());
+        log.info("开卡活动修改-修改开卡活动主表的参数："+JSON.toJSONString(mktActivityPOWithBLOBs));
         mktActivityPOMapper.updateByPrimaryKeySelective(mktActivityPOWithBLOBs);
+        log.info("修改开卡活动成功");
         //获取活动数据id
         Long mktActivityId = mktActivityPOWithBLOBs.getMktActivityId();
 
@@ -394,8 +432,9 @@ public class ActivityRegisterServiceImpl implements ActivityRegisterService {
         MktActivityRegisterPO mktActivityRegisterPO = new MktActivityRegisterPO();
         BeanUtils.copyProperties(mktActivityPOWithBLOBs,mktActivityRegisterPO);
         mktActivityRegisterPO.setMktActivityId(mktActivityId);
+        log.info("开卡活动修改-修改开卡活动表的参数："+JSON.toJSONString(mktActivityRegisterPO));
         mktActivityRegisterPOMapper.updateByPrimaryKeySelective(mktActivityRegisterPO);
-
+        log.info("修改开卡活动表成功");
 
         //先删除在新增
         MktCouponPO record = new MktCouponPO();
@@ -450,24 +489,33 @@ public class ActivityRegisterServiceImpl implements ActivityRegisterService {
      */
     @Override
     public ResponseData<ActivityBO> selectActivityRegisterById(String businessCode) {
+        log.info("查询开卡活动详情="+businessCode);
         ResponseData responseData = new ResponseData();
         ActivityVO vo= new ActivityVO();
         vo.setActivityCode(businessCode);
         List<ActivityVO> registerList = mktActivityRegisterPOMapper.getActivityList(vo);
+        if(CollectionUtils.isEmpty(registerList)){
+            responseData.setCode(SysResponseEnum.OPERATE_FAILED_DATA_NOT_EXISTS.getCode());
+            responseData.setMessage(SysResponseEnum.OPERATE_FAILED_DATA_NOT_EXISTS.getMessage());
+            return responseData;
+        }
         //查询活动卷
         MktCouponPOExample example = new  MktCouponPOExample();
         example.createCriteria().andBizIdEqualTo(registerList.get(0).getMktActivityId()).andValidEqualTo(true);
         List<MktCouponPO> mktCouponPOs= mktCouponPOMapper.selectByExample(example);
-        //查询券接口
         List<CouponEntityAndDefinitionVO> lists = new ArrayList<>();
-        if(!CollectionUtils.isEmpty(mktCouponPOs)){
-            for (MktCouponPO po:mktCouponPOs) {
-                CouponEntityPO couponEntity = new CouponEntityPO();
-                couponEntity.setCouponEntityId(po.getCouponId());
-                ResponseData<CouponEntityAndDefinitionVO>  entityAndDefinition = couponQueryServiceFeign.getAllRpc(couponEntity);
-                lists.add(entityAndDefinition.getData());
+        if (!CollectionUtils.isEmpty(mktCouponPOs)){
+            //查询券接口
+            if(!CollectionUtils.isEmpty(mktCouponPOs)){
+                for (MktCouponPO po:mktCouponPOs) {
+                    CouponEntityPO couponEntity = new CouponEntityPO();
+                    couponEntity.setCouponEntityId(po.getCouponId());
+                    ResponseData<CouponEntityAndDefinitionVO>  entityAndDefinition = couponQueryServiceFeign.getAllRpc(couponEntity);
+                    lists.add(entityAndDefinition.getData());
+                }
             }
         }
+
 
         //查询消息模板
         MktMessagePOExample exampl = new MktMessagePOExample();

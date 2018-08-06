@@ -103,6 +103,21 @@ public class ActivityServiceImpl implements ActivityService {
     }
 
     /**
+     * 小程序端查询活动列表
+     * @param vo
+     * @return
+     */
+    @Override
+    public ResponseData<List<ActivityVO>> getActivityList(ActivityVO vo) {
+        ResponseData responseData = new ResponseData();
+        List<ActivityVO> activityList =mktActivityPOMapper.getActivityList(vo);
+        responseData.setData(activityList);
+        responseData.setCode(SysResponseEnum.SUCCESS.getCode());
+        responseData.setMessage(SysResponseEnum.SUCCESS.getMessage());
+        return responseData;
+    }
+
+    /**
      * 奖励券
      * @param activityCode
      * @return
