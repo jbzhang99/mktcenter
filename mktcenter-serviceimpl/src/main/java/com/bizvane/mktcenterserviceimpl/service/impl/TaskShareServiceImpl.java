@@ -412,7 +412,7 @@ public class TaskShareServiceImpl implements TaskShareService {
      */
 
     @Override
-    public ResponseData<List<TaskVO>> selectTaskById(Long mktTaskId) {
+    public ResponseData<TaskBO> selectTaskById(Long mktTaskId) {
         ResponseData responseData = new ResponseData();
         TaskBO taskBO = new TaskBO();
         TaskVO taskVO = new TaskVO();

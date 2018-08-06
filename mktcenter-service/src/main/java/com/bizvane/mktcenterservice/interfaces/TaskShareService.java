@@ -52,7 +52,7 @@ public interface TaskShareService {
      * @param mktTaskId
      * @return
      */
-    public ResponseData<List<TaskVO>> selectTaskById(Long mktTaskId);
+    public ResponseData<TaskBO> selectTaskById(Long mktTaskId);
 
 
     /**
