@@ -65,7 +65,7 @@ public class EveryDayActivityJobHandler extends IJobHandler {
                 for (MktCouponPO mktCouponPO:mktCouponPOs) {
                     SendCouponSimpleRequestVO va = new SendCouponSimpleRequestVO();
                     va.setMemberCode("会员编号");
-                    va.setCouponDefinitionId(mktCouponPO.getCouponId());
+                    va.setCouponDefinitionId(mktCouponPO.getCouponDefinitionId());
                     va.setSendBussienId(mktCouponPO.getBizId());
                     va.setSendType("10");
                     sendCouponServiceFeign.simple(va);

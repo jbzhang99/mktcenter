@@ -1,6 +1,7 @@
 package com.bizvane.mktcenterserviceimpl.controllers.rpc;
 
 import com.bizvane.mktcenterservice.interfaces.*;
+import com.bizvane.mktcenterservice.models.bo.ActivityBO;
 import com.bizvane.mktcenterservice.models.po.MktActivityPOWithBLOBs;
 import com.bizvane.mktcenterservice.models.vo.ActivityVO;
 import com.bizvane.mktcenterserviceimpl.common.enums.ActivityTypeEnum;
@@ -9,9 +10,11 @@ import com.bizvane.utils.tokens.SysAccountPO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 /**
  * @author chen.li
@@ -33,6 +36,8 @@ public class ActivityRpcController {
     private ActivitySigninService activitySigninService;
     @Autowired
     private ActivityBirthdayService activityBirthdayService;
+    @Autowired
+    private ActivityRegisterService activityRegisterService;
 
     /**
      * 禁用/启用活动
@@ -83,5 +88,41 @@ public class ActivityRpcController {
 
         }
         return responseData;
+    }
+    /**
+     * 查询开卡活动详情
+     * @param activityCode
+     * @return
+     */
+    @RequestMapping("selectActivityRegisterById")
+    public ResponseData<ActivityBO> selectActivityRegisterById(@RequestParam("activityCode") String activityCode){
+        return activityRegisterService.selectActivityRegisterById(activityCode);
+    }
+    /**
+     * 查询活动详情
+     * @param activityCode
+     * @return
+     */
+    @RequestMapping("selectActivityOrderById")
+    public ResponseData<ActivityBO> selectActivityOrderById(@RequestParam("activityCode") String activityCode){
+        return activityOrderService.selectActivityOrderById(activityCode);
+    }
+    /**
+     * 查询活动详情
+     * @param activityCode
+     * @return
+     */
+    @RequestMapping("selectActivityUpgradesById")
+    public ResponseData<ActivityBO> selectActivityUpgradesById(@RequestParam("activityCode") String activityCode){
+        return activityUpgradeService.selectActivityUpgradesById(activityCode);
+    }
+    /**
+     * 小程序端活动列表
+     * @param vo
+     * @return
+     */
+    @RequestMapping("getActivityList")
+    public ResponseData<List<ActivityVO>>  getActivityList(ActivityVO vo){
+        return activityService.getActivityList(vo);
     }
 }

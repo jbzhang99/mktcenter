@@ -5,6 +5,8 @@ import com.bizvane.mktcenterservice.models.vo.ActivityVO;
 import com.bizvane.utils.responseinfo.ResponseData;
 import com.bizvane.utils.tokens.SysAccountPO;
 
+import java.util.List;
+
 /**
  * @author chen.li
  * @date on 2018/7/6 19:49
@@ -26,5 +28,12 @@ public interface ActivityService {
      * @return
      */
     public ResponseData<Integer> checkActivityById(MktActivityPOWithBLOBs bs, SysAccountPO sysAccountPO);
+
+    /**
+     * 小程序端活动列表
+     * @param vo
+     * @return
+     */
+    public ResponseData<List<ActivityVO>>  getActivityList(ActivityVO vo);
 
 }

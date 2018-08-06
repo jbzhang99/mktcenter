@@ -199,7 +199,7 @@ public class ActivityBirthdayServiceImpl implements ActivityBirthdayService {
                 mktCouponPO.setBizId(mktActivityId);
                 mktCouponPO.setCouponCode(couponCode.getCouponCode());
                 mktCouponPO.setCouponName(couponCode.getCouponName());
-                mktCouponPO.setCouponId(couponCode.getCouponId());
+                mktCouponPO.setCouponDefinitionId(couponCode.getCouponDefinitionId());
                 mktCouponPO.setBizId(couponCode.getBizId());
                 mktCouponPOMapper.insertSelective(mktCouponPO);
             }
@@ -243,7 +243,7 @@ public class ActivityBirthdayServiceImpl implements ActivityBirthdayService {
         if(!CollectionUtils.isEmpty(mktCouponPOs)){
             for (MktCouponPO po:mktCouponPOs) {
                 CouponEntityPO couponEntity = new CouponEntityPO();
-                couponEntity.setCouponEntityId(po.getCouponId());
+                couponEntity.setCouponEntityId(po.getCouponDefinitionId());
                 ResponseData<CouponEntityAndDefinitionVO>  entityAndDefinition = couponQueryServiceFeign.getAllRpc(couponEntity);
                 lists.add(entityAndDefinition.getData());
             }
@@ -434,7 +434,7 @@ public class ActivityBirthdayServiceImpl implements ActivityBirthdayService {
                 mktCouponPO.setBizId(mktActivityId);
                 mktCouponPO.setCouponCode(couponCode.getCouponCode());
                 mktCouponPO.setCouponName(couponCode.getCouponName());
-                mktCouponPO.setCouponId(couponCode.getCouponId());
+                mktCouponPO.setCouponDefinitionId(couponCode.getCouponDefinitionId());
                 mktCouponPO.setBizId(couponCode.getBizId());
                 mktCouponPOMapper.insertSelective(mktCouponPO);
             }

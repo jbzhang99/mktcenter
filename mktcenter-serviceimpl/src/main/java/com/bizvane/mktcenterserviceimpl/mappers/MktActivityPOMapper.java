@@ -104,5 +104,5 @@ public interface MktActivityPOMapper {
 	 */
 	int updateActivityStatus(MktActivityPO  po);
 
-	ActivityVO selectActivity(ActivityVO vo);
+	List<ActivityVO> getActivityList(ActivityVO vo);
 }

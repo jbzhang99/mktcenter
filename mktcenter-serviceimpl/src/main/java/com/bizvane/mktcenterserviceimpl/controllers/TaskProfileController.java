@@ -8,6 +8,7 @@ import com.bizvane.members.facade.service.api.MemberLevelApiService;
 import com.bizvane.mktcenterservice.interfaces.TaskProfileService;
 import com.bizvane.mktcenterservice.models.bo.TaskBO;
 import com.bizvane.mktcenterservice.models.po.MktCouponPO;
+import com.bizvane.mktcenterservice.models.po.MktMessagePO;
 import com.bizvane.mktcenterservice.models.vo.MessageVO;
 import com.bizvane.mktcenterservice.models.vo.PageForm;
 import com.bizvane.mktcenterservice.models.vo.TaskVO;
@@ -51,11 +52,11 @@ public class TaskProfileController {
      * @return
      */
     @RequestMapping("addTask")
-    public ResponseData<Integer> addTask(TaskVO vo, List<MktCouponPO> couponCodeList, List<MessageVO> messageVOList, HttpServletRequest request){
+    public ResponseData<Integer> addTask(TaskVO vo, List<MktCouponPO> couponCodeList, List<MktMessagePO> messagePOList, HttpServletRequest request){
         TaskBO bo = new TaskBO();
         bo.setTaskVO(vo);
         bo.setMktCouponPOList(couponCodeList);
-        bo.setMessageVOList(messageVOList);
+        bo.setMessagePOList(messagePOList);
 
         //获取操作人信息
         //SysAccountPO stageUser = TokenUtils.getStageUser(request);
@@ -71,14 +72,18 @@ public class TaskProfileController {
 
     /**
      * 修改任务
-     * @param
+     * @param vo
+     * @param couponCodeList
+     * @param messagePOList
+     * @param request
      * @return
      */
-    public ResponseData<Integer> updateTask(TaskVO vo, List<MktCouponPO> couponCodeList, List<MessageVO> messageVOList, HttpServletRequest request){
+    @RequestMapping("updateTask")
+    public ResponseData<Integer> updateTask(TaskVO vo, List<MktCouponPO> couponCodeList, List<MktMessagePO> messagePOList, HttpServletRequest request){
         TaskBO bo = new TaskBO();
         bo.setTaskVO(vo);
         bo.setMktCouponPOList(couponCodeList);
-        bo.setMessageVOList(messageVOList);
+        bo.setMessagePOList(messagePOList);
         //参数校验
         ResponseData responseData = TaskParamCheckUtil.checkParam(bo);
         //参数校验不通过
@@ -100,6 +105,7 @@ public class TaskProfileController {
      * @param
      * @return
      */
+    @RequestMapping("executeTask")
     public ResponseData<Integer> executeTask(TaskVO vo,MemberInfoModel memberInfoModel){
 
         return taskProfileService.executeTask(vo,memberInfoModel);
@@ -110,7 +116,8 @@ public class TaskProfileController {
      * @param mktTaskId
      * @return
      */
-    public ResponseData<List<TaskVO>> selectTaskById(Long mktTaskId){
+    @RequestMapping("selectTaskById")
+    public ResponseData<TaskBO> selectTaskById(Long mktTaskId){
         return taskProfileService.selectTaskById(mktTaskId);
     }
 
@@ -129,9 +136,6 @@ public class TaskProfileController {
         return extendPropertyApiService.getExtendProperty(extendPropertyModel);
 
     }
-
-
-
 
 }
 

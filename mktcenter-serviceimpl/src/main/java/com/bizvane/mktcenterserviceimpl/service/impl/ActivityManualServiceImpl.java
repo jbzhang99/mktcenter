@@ -218,7 +218,7 @@ public class ActivityManualServiceImpl implements ActivityManualService {
         mktActivityManualPOMapper.insertSelective(mktActivityManualPO);
         //新增券表,和活动绑定
         MktCouponPO mktCouponPO = new MktCouponPO();
-        mktCouponPO.setCouponId(couponId);
+        mktCouponPO.setCouponDefinitionId(couponId);
         mktCouponPO.setBizId(mktActivityId);//活动id
         mktCouponPO.setBizType(BusinessTypeEnum.ACTIVITY_TYPE_ACTIVITY.getCode());//业务类型 1.活动改为枚举，不要出现魔数
         mktCouponPO.setModifiedUserId(stageUser.getSysAccountId());
@@ -438,8 +438,7 @@ public class ActivityManualServiceImpl implements ActivityManualService {
             if(!CollectionUtils.isEmpty(mktCouponPOs)){
                 for (MktCouponPO po:mktCouponPOs) {
                     CouponEntityPO couponEntity = new CouponEntityPO();
-                    couponEntity.setCouponEntityId(po.getCouponId());
-                    log.info("领券活动-调券接口-入参:"+JSON.toJSONString(couponEntity));
+                    couponEntity.setCouponEntityId(po.getCouponDefinitionId());
                     ResponseData<CouponEntityAndDefinitionVO>  entityAndDefinition = couponQueryServiceFeign.getAllRpc(couponEntity);
                     log.info("领券活动-调券接口-出参:"+JSON.toJSONString(entityAndDefinition));
                     lists.add(entityAndDefinition.getData());
