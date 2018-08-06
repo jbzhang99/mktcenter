@@ -77,11 +77,13 @@ public class ActivityManualServiceImpl implements ActivityManualService {
     @Override
     public ResponseData<ActivityVO> getActivityManualList(ActivityVO vo, PageForm pageForm) {
         ResponseData responseData = new ResponseData();
+        log.info("领券活动查询活动列表入参:ActivityVO:"+JSON.toJSONString(vo));
         PageHelper.startPage(pageForm.getPageNum(), pageForm.getPageSize());
         List<ActivityVO> activityManualList = new ArrayList<>();
         try {
             log.info("查询领券活动列表开始");
             activityManualList = mktActivityManualPOMapper.getActivityManualList(vo);
+            log.info("领券活动查询活动列表出参:"+activityManualList);
         } catch (Exception e) {
             log.error("领券活动查询活动列表出错." + e.getMessage());
             responseData.setCode(SystemConstants.ERROR_CODE);
@@ -174,7 +176,7 @@ public class ActivityManualServiceImpl implements ActivityManualService {
             }
         }
         //新增活动主表
-         log.info("领券活动-创建活动-新增活动主表入参:"+mktActivityPOWithBLOBs);
+         log.info("领券活动-创建活动-新增活动主表入参:"+JSON.toJSONString(mktActivityPOWithBLOBs));
         mktActivityPOMapper.insertSelective(mktActivityPOWithBLOBs);
         //返回主表的id
         Long mktActivityId = mktActivityPOWithBLOBs.getMktActivityId();
@@ -201,7 +203,7 @@ public class ActivityManualServiceImpl implements ActivityManualService {
         mktCouponPO.setModifiedDate(new Date());
         mktCouponPO.setCouponName(activityVO.getCouponName());
         mktCouponPO.setCouponCode(activityVO.getCouponCode());
-        log.info("领券活动-创建活动-新增券表-入参:"+mktCouponPO);
+        log.info("领券活动-创建活动-新增券表-入参:"+JSON.toJSONString(mktCouponPO));
         mktCouponPOMapper.insertSelective(mktCouponPO);
         responseData.setCode(SystemConstants.SUCCESS_CODE);
         responseData.setMessage(SystemConstants.SUCCESS_MESSAGE);
@@ -278,7 +280,7 @@ public class ActivityManualServiceImpl implements ActivityManualService {
                 return responseData;
             }
             if (count > mktActivityManualPO.getPerPersonMax()) {
-                log.warn("领取超过最大限制");
+                log.warn("领取超过最大限制,已领取:"+count+"，最大限制为:"+mktActivityManualPO.getPerPersonMax());
                 activityVO.setCanReceive(false);
                 activityVO.setCouponEntityPO(couponByCouponCode.getData());
                 responseData.setCode(SystemConstants.SUCCESS_CODE);
@@ -292,7 +294,7 @@ public class ActivityManualServiceImpl implements ActivityManualService {
                 }
             }
             if (receiveCount > mktActivityManualPO.getPerPersonPerDayMax()) {
-                log.warn("领取超过当日最大限制");
+                log.warn("领取超过当日最大限制,已领取数:"+receiveCount+",当日最大限制为:"+mktActivityManualPO.getPerPersonPerDayMax());
                 activityVO.setCanReceive(false);
                 activityVO.setCouponEntityPO(couponByCouponCode.getData());
                 responseData.setCode(SystemConstants.SUCCESS_CODE);
@@ -305,6 +307,7 @@ public class ActivityManualServiceImpl implements ActivityManualService {
             awardBO.setCouponDefinitionId(vo.getCouponId());
             awardBO.setMemberCode(vo.getMemberInfoModel().getMemberCode());
             awardBO.setSendBussienId(vo.getMktActivityId());
+            log.info("领券活动执行活动-发券调接口入参:"+JSON.toJSONString(awardBO));
             award.execute(awardBO);
 
             //新增记录表
@@ -334,6 +337,7 @@ public class ActivityManualServiceImpl implements ActivityManualService {
 
     @Override
     public ResponseData<List<ActivityBO>> getActivityManualEffect(ActivityVO vo) {
+        log.info("领券活动-活动效果分析-入参:"+JSON.toJSONString(vo));
         ResponseData responseData = new ResponseData<>();
         List<MktCouponPO> mktCouponPOList = new ArrayList<>();
         try {
@@ -344,6 +348,7 @@ public class ActivityManualServiceImpl implements ActivityManualService {
          */
         //查活动信息
         List<ActivityVO> activityManualEffectList = mktActivityManualPOMapper.getActivityManualEffect(vo);
+       log.info("领券活动-活动效果分析-出参:"+JSON.toJSONString(activityManualEffectList));
         List<ActivityBO> list = new ArrayList<>();
         ActivityBO activityBO = new ActivityBO();
         for (ActivityVO activityVO : activityManualEffectList) {

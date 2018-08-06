@@ -27,10 +27,7 @@ public class ActivityManualController {
       * */
     @RequestMapping("/getActivityList")
     public  ResponseData<ActivityVO> getActivityList(ActivityVO vo, PageForm  pageForm){
-        log.info("领券活动查询活动列表入参:ActivityVO:"+vo);
-        ResponseData<ActivityVO> activityManualList = activityManualService.getActivityManualList(vo,pageForm);
-       log.info("领券活动查询活动列表出参:"+activityManualList);
-       return activityManualList;
+        return activityManualService.getActivityManualList(vo,pageForm);
     }
 
     /*
