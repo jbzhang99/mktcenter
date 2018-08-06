@@ -1,6 +1,8 @@
 package com.bizvane.mktcenterservice.models.bo;
 
+import com.bizvane.couponfacade.models.po.CouponDefinitionPO;
 import com.bizvane.mktcenterservice.models.po.MktCouponPO;
+import com.bizvane.mktcenterservice.models.po.MktMessagePO;
 import com.bizvane.mktcenterservice.models.vo.MessageVO;
 import com.bizvane.mktcenterservice.models.vo.TaskVO;
 
@@ -27,7 +29,14 @@ public class TaskBO {
     /**
      * 消息对象
      */
-    private List<MessageVO> messageVOList;
+    private List<MktMessagePO> messagePOList;
+
+    /**
+     * 券Defination
+     * @return
+     */
+
+    private List<CouponDefinitionPO> couponDefinitionPOList;
 
     public TaskVO getTaskVO() {
         return taskVO;
@@ -45,11 +54,19 @@ public class TaskBO {
         this.mktCouponPOList = mktCouponPOList;
     }
 
-    public List<MessageVO> getMessageVOList() {
-        return messageVOList;
+    public List<MktMessagePO> getMessagePOList() {
+        return messagePOList;
     }
 
-    public void setMessageVOList(List<MessageVO> messageVOList) {
-        this.messageVOList = messageVOList;
+    public void setMessagePOList(List<MktMessagePO> messagePOList) {
+        this.messagePOList = messagePOList;
+    }
+
+    public List<CouponDefinitionPO> getCouponDefinitionPOList() {
+        return couponDefinitionPOList;
+    }
+
+    public void setCouponDefinitionPOList(List<CouponDefinitionPO> couponDefinitionPOList) {
+        this.couponDefinitionPOList = couponDefinitionPOList;
     }
 }

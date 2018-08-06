@@ -47,10 +47,10 @@ public interface TaskProfileService {
 
     /**
      * 查询任务详情
-     * @param mktTaskId
+     * @param taskId
      * @return
      */
-    public ResponseData<List<TaskVO>> selectTaskById(Long mktTaskId);
+    public ResponseData<TaskBO> selectTaskById(Long taskId);
 
 //    /**
 //     * 查询商家选择出的让会员完善的扩展信息字段
@@ -66,7 +66,7 @@ public interface TaskProfileService {
      * @param stageUser
      * @return
      */
-    public ResponseData<TaskRecordVO> getTaskProfileRecordByTime(Date date1, Date date2,SysAccountPO stageUser);
+    public ResponseData<TaskRecordVO> getTaskProfileRecordByTime(Date date1, Date date2,SysAccountPO stageUser,PageForm pageForm);
 
     /**
      * 任务审核

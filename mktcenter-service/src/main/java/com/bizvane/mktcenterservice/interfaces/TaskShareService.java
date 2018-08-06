@@ -62,7 +62,7 @@ public interface TaskShareService {
      * @param stageUser
      * @return
      */
-    public ResponseData<TaskRecordVO> getTaskShareRecordByTime(Date date1, Date date2, SysAccountPO stageUser,String taskName);
+    public ResponseData<TaskRecordVO> getTaskShareRecordByTime(Date date1, Date date2, SysAccountPO stageUser,String taskName,PageForm pageForm);
 
 
     /**
