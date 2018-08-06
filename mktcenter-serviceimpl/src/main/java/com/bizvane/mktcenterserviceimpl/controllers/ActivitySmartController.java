@@ -51,6 +51,12 @@ public class ActivitySmartController {
         return activitySmartService.getActivityHistoryList(vo, pageForm);
     }
 
+    @RequestMapping("getSmartActivityGroupById")
+    @io.swagger.annotations.ApiModelProperty(value = "mktActivitySmartId",name = "通过id获取智能营销分组", required = false,example = "")
+    public ResponseData<MktActivitySmartGroupPO> getSmartActivityGroupById(Long mktActivitySmartGroupId){
+        return activitySmartService.getSmartActivityGroupById(mktActivitySmartGroupId);
+    }
+
     /**
      * 查询某个智能营销详情
      * @param mktActivityId

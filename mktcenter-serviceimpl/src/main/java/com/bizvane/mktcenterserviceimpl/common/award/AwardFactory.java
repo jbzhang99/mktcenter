@@ -3,11 +3,13 @@ package com.bizvane.mktcenterserviceimpl.common.award;
 import com.bizvane.couponfacade.interfaces.SendCouponServiceFeign;
 import com.bizvane.couponfacade.models.vo.SendCouponSimpleRequestVO;
 import com.bizvane.members.facade.enums.IntegralChangeTypeEnum;
+import com.bizvane.members.facade.exception.MemberException;
 import com.bizvane.members.facade.models.IntegralRecordModel;
 import com.bizvane.members.facade.service.api.IntegralRecordApiService;
 import com.bizvane.mktcenterservice.models.bo.AwardBO;
 import com.bizvane.mktcenterservice.models.vo.ActivityVO;
 import com.bizvane.utils.responseinfo.ResponseData;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -18,6 +20,7 @@ import org.springframework.stereotype.Component;
  * @Copyright (c) 2018 上海商帆信息科技有限公司-版权所有
  */
 @Component
+@Slf4j
 public class AwardFactory {
 
     /**
@@ -40,12 +43,17 @@ public class AwardFactory {
      */
     public ResponseData<Integer> awardCouponSimple(AwardBO bo){
         ResponseData responseData = new ResponseData();
-        SendCouponSimpleRequestVO va = new SendCouponSimpleRequestVO();
-        va.setMemberCode(bo.getMemberCode());
-        va.setCouponDefinitionId(bo.getCouponDefinitionId());
-        va.setSendBussienId(bo.getSendBussienId());
-        va.setSendType("10");
-        sendCouponServiceFeign.simple(va);
+
+        try {
+            SendCouponSimpleRequestVO va = new SendCouponSimpleRequestVO();
+            va.setMemberCode(bo.getMemberCode());
+            va.setCouponDefinitionId(bo.getCouponDefinitionId());
+            va.setSendBussienId(bo.getSendBussienId());
+            va.setSendType("10");
+            sendCouponServiceFeign.simple(va);
+        } catch (Exception e) {
+            log.error("com.bizvane.mktcenterserviceimpl.common.award.AwardFactory.awardCouponSimple error:"+e.getMessage());
+        }
         return responseData;
     }
 
@@ -56,12 +64,16 @@ public class AwardFactory {
      */
     public ResponseData<Integer> awardCouponBatch(AwardBO bo){
         ResponseData responseData = new ResponseData();
-        SendCouponSimpleRequestVO va = new SendCouponSimpleRequestVO();
-        va.setMemberCode(bo.getMemberCode());
-        va.setCouponDefinitionId(bo.getCouponDefinitionId());
-        va.setSendBussienId(bo.getSendBussienId());
-        va.setSendType("10");
-        sendCouponServiceFeign.simple(va);
+        try {
+            SendCouponSimpleRequestVO va = new SendCouponSimpleRequestVO();
+            va.setMemberCode(bo.getMemberCode());
+            va.setCouponDefinitionId(bo.getCouponDefinitionId());
+            va.setSendBussienId(bo.getSendBussienId());
+            va.setSendType("10");
+            sendCouponServiceFeign.simple(va);
+        } catch (Exception e) {
+            log.error("com.bizvane.mktcenterserviceimpl.common.award.AwardFactory.awardCouponBatch error:"+e.getMessage());
+        }
         return responseData;
     }
 
@@ -72,13 +84,17 @@ public class AwardFactory {
      */
     public ResponseData<Integer> awardIntegral(AwardBO bo){
         ResponseData responseData = new ResponseData();
-        //增加积分奖励新增接口
-        IntegralRecordModel var1 = new IntegralRecordModel();
-        var1.setMemberCode(bo.getMemberCode());
-        var1.setChangeBills(bo.getChangeBills());
-        var1.setChangeIntegral(bo.getChangeIntegral());
-        var1.setChangeWay(IntegralChangeTypeEnum.INCOME.getCode());
-        integralRecordApiService.updateMemberIntegral(var1);
+        try {
+            //增加积分奖励新增接口
+            IntegralRecordModel var1 = new IntegralRecordModel();
+            var1.setMemberCode(bo.getMemberCode());
+            var1.setChangeBills(bo.getChangeBills());
+            var1.setChangeIntegral(bo.getChangeIntegral());
+            var1.setChangeWay(IntegralChangeTypeEnum.INCOME.getCode());
+            integralRecordApiService.updateMemberIntegral(var1);
+        } catch (MemberException e) {
+            log.error("com.bizvane.mktcenterserviceimpl.common.award.AwardFactory.awardIntegral error:"+e.getMessage());
+        }
         return responseData;
     }
 

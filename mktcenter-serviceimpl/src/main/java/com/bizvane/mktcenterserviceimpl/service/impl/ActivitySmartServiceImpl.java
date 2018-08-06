@@ -492,8 +492,16 @@ public class ActivitySmartServiceImpl implements ActivitySmartService {
         mktActivityPOWithBLOBs.setSysCompanyId(stageUser.getSysCompanyId());
         mktActivityPOWithBLOBs.setSysBrandId(stageUser.getBrandId());
         mktActivityPOWithBLOBs.setActivityType(ActivityTypeEnum.ACTIVITY_TYPE_SMART.getCode());
+        mktActivityPOWithBLOBs.setCheckStatus(CheckStatusEnum.CHECK_STATUS_APPROVED.getCode());
 
         Boolean execute = Boolean.FALSE;
+
+        if(vo.getStartTime()==null){
+            log.warn("vo.getStartTime() is null");
+            responseData.setCode(SysResponseEnum.FAILED.getCode());
+            responseData.setMessage(SysResponseEnum.MODEL_FAILED_VALIDATION.getMessage());
+            return responseData;
+        }
         //如果活动时间滞后
         if(new Date().before(vo.getStartTime())){
             log.info("new Date().before(vo.getStartTime()) is true");
@@ -583,8 +591,15 @@ public class ActivitySmartServiceImpl implements ActivitySmartService {
         mktActivityPOWithBLOBs.setSysCompanyId(stageUser.getSysCompanyId());
         mktActivityPOWithBLOBs.setSysBrandId(stageUser.getBrandId());
         mktActivityPOWithBLOBs.setActivityType(ActivityTypeEnum.ACTIVITY_TYPE_SMART.getCode());
+        mktActivityPOWithBLOBs.setCheckStatus(CheckStatusEnum.CHECK_STATUS_APPROVED.getCode());
 
         Boolean execute = Boolean.FALSE;
+        if(vo.getStartTime()==null){
+            log.warn("vo.getStartTime() is null");
+            responseData.setCode(SysResponseEnum.FAILED.getCode());
+            responseData.setMessage(SysResponseEnum.MODEL_FAILED_VALIDATION.getMessage());
+            return responseData;
+        }
         //如果活动时间滞后
         if(new Date().before(vo.getStartTime())){
             log.warn("vnew Date().before(vo.getStartTime()) is true");
@@ -659,8 +674,15 @@ public class ActivitySmartServiceImpl implements ActivitySmartService {
         mktActivityPOWithBLOBs.setSysCompanyId(stageUser.getSysCompanyId());
         mktActivityPOWithBLOBs.setSysBrandId(stageUser.getBrandId());
         mktActivityPOWithBLOBs.setActivityType(ActivityTypeEnum.ACTIVITY_TYPE_SMART.getCode());
+        mktActivityPOWithBLOBs.setCheckStatus(CheckStatusEnum.CHECK_STATUS_APPROVED.getCode());
 
         Boolean execute = Boolean.FALSE;
+        if(vo.getStartTime()==null){
+            log.warn("vo.getStartTime() is null");
+            responseData.setCode(SysResponseEnum.FAILED.getCode());
+            responseData.setMessage(SysResponseEnum.MODEL_FAILED_VALIDATION.getMessage());
+            return responseData;
+        }
         //如果活动时间滞后
         if(new Date().before(vo.getStartTime())){
             log.info("new Date().before(vo.getStartTime()) is true");
@@ -746,8 +768,15 @@ public class ActivitySmartServiceImpl implements ActivitySmartService {
         mktActivityPOWithBLOBs.setSysCompanyId(stageUser.getSysCompanyId());
         mktActivityPOWithBLOBs.setSysBrandId(stageUser.getBrandId());
         mktActivityPOWithBLOBs.setActivityType(ActivityTypeEnum.ACTIVITY_TYPE_SMART.getCode());
+        mktActivityPOWithBLOBs.setCheckStatus(CheckStatusEnum.CHECK_STATUS_APPROVED.getCode());
 
         Boolean execute = Boolean.FALSE;
+        if(vo.getStartTime()==null){
+            log.warn("vo.getStartTime() is null");
+            responseData.setCode(SysResponseEnum.FAILED.getCode());
+            responseData.setMessage(SysResponseEnum.MODEL_FAILED_VALIDATION.getMessage());
+            return responseData;
+        }
         //如果活动时间滞后
         if(new Date().before(vo.getStartTime())){
             log.info("new Date().before(vo.getStartTime()) is true");
