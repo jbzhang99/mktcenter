@@ -204,7 +204,7 @@ public class ActivityOrderServiceImpl implements ActivityOrderService {
                 mktCouponPO.setBizId(mktActivityId);
                 mktCouponPO.setCouponCode(couponCode.getCouponCode());
                 mktCouponPO.setCouponName(couponCode.getCouponName());
-                mktCouponPO.setCouponId(couponCode.getCouponId());
+                mktCouponPO.setCouponDefinitionId(couponCode.getCouponDefinitionId());
                 mktCouponPO.setBizId(couponCode.getBizId());
                 mktCouponPOMapper.insertSelective(mktCouponPO);
             }
@@ -247,7 +247,7 @@ public class ActivityOrderServiceImpl implements ActivityOrderService {
         if(!CollectionUtils.isEmpty(mktCouponPOs)){
             for (MktCouponPO po:mktCouponPOs) {
                 CouponEntityPO couponEntity = new CouponEntityPO();
-                couponEntity.setCouponEntityId(po.getCouponId());
+                couponEntity.setCouponEntityId(po.getCouponDefinitionId());
                 ResponseData<CouponEntityAndDefinitionVO>  entityAndDefinition = couponQueryServiceFeign.getAllRpc(couponEntity);
                 lists.add(entityAndDefinition.getData());
             }
@@ -387,7 +387,7 @@ public class ActivityOrderServiceImpl implements ActivityOrderService {
                 mktCouponPO.setBizId(mktActivityId);
                 mktCouponPO.setCouponCode(couponCode.getCouponCode());
                 mktCouponPO.setCouponName(couponCode.getCouponName());
-                mktCouponPO.setCouponId(couponCode.getCouponId());
+                mktCouponPO.setCouponDefinitionId(couponCode.getCouponDefinitionId());
                 mktCouponPO.setBizId(couponCode.getBizId());
                 mktCouponPOMapper.insertSelective(mktCouponPO);
             }
@@ -530,7 +530,7 @@ public class ActivityOrderServiceImpl implements ActivityOrderService {
             for (MktCouponPO mktCouponPO:mktCouponPOs) {
                 AwardBO awardBO = new AwardBO();
                 awardBO.setMemberCode(vo.getMemberCode().toString());
-                awardBO.setCouponDefinitionId(mktCouponPO.getCouponId());
+                awardBO.setCouponDefinitionId(mktCouponPO.getCouponDefinitionId());
                 awardBO.setSendBussienId(mktCouponPO.getBizId());
                 awardBO.setMktSmartType(MktSmartTypeEnum.SMART_TYPE_COUPON.getCode());
                 award.execute(awardBO);

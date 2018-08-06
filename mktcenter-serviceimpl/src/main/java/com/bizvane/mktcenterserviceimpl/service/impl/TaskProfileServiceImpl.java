@@ -223,7 +223,7 @@ public class TaskProfileServiceImpl implements TaskProfileService {
                 mktCouponPO1.setCreateDate(new Date());
                 mktCouponPO1.setBizType(BusinessTypeEnum.ACTIVITY_TYPE_TASK.getCode());
                 mktCouponPO1.setCouponName(mktCouponPO.getCouponName());
-                mktCouponPO1.setCouponId(mktCouponPO.getCouponId());//是id还是code
+                mktCouponPO1.setCouponDefinitionId(mktCouponPO.getCouponDefinitionId());//是id还是code
                 mktCouponPO1.setCouponCode(mktCouponPO.getCouponCode());
                 mktCouponPO1.setBizId(taskVOId);
 
@@ -334,7 +334,7 @@ public class TaskProfileServiceImpl implements TaskProfileService {
                 mktCouponPO2.setBizType(BusinessTypeEnum.ACTIVITY_TYPE_TASK.getCode());
                 mktCouponPO2.setCouponCode(mktCouponPO1.getCouponCode());
                 mktCouponPO2.setCouponName(mktCouponPO1.getCouponName());
-                mktCouponPO2.setCouponId(mktCouponPO1.getCouponId());
+                mktCouponPO2.setCouponDefinitionId(mktCouponPO1.getCouponDefinitionId());
                 BeanUtils.copyProperties(taskVO,mktCouponPO2);
                 mktCouponPOMapper.insertSelective(mktCouponPO2);
             }
@@ -402,7 +402,7 @@ public class TaskProfileServiceImpl implements TaskProfileService {
         List<CouponDefinitionPO> couponDefinitionPOS = new ArrayList<>();
         //查询券定义
         for (MktCouponPO mktCouponPO:mktCouponPOList){
-            Long couponDefinitionId = mktCouponPO.getCouponId();
+            Long couponDefinitionId = mktCouponPO.getCouponDefinitionId();
 
             ResponseData<CouponDefinitionPO> coupon = couponDefinitionServiceFeign.findRpc(couponDefinitionId);
             CouponDefinitionPO couponDefinitionPO = coupon.getData();
@@ -499,7 +499,7 @@ public class TaskProfileServiceImpl implements TaskProfileService {
         bo.setBusinessWay(BusinessTypeEnum.ACTIVITY_TYPE_TASK.getMessage());
         bo.setSendBussienId(vo.getMktTaskId());
         for (MktCouponPO mktCouponPO:mktCouponPOList){
-            Long couponDefId = mktCouponPO.getCouponId();
+            Long couponDefId = mktCouponPO.getBizId();
             bo.setCouponDefinitionId(couponDefId);
             award.execute(bo);
         }

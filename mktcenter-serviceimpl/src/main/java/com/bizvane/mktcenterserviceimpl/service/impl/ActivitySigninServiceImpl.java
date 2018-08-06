@@ -198,7 +198,7 @@ public class ActivitySigninServiceImpl implements ActivitySigninService {
         if(!CollectionUtils.isEmpty(mktCouponPOs)){
             for (MktCouponPO po:mktCouponPOs) {
                 CouponEntityPO couponEntity = new CouponEntityPO();
-                couponEntity.setCouponEntityId(po.getCouponId());
+                couponEntity.setCouponEntityId(po.getCouponDefinitionId());
                 ResponseData<CouponEntityAndDefinitionVO>  entityAndDefinition = couponQueryServiceFeign.getAllRpc(couponEntity);
                 lists.add(entityAndDefinition.getData());
             }
