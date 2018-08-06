@@ -6,6 +6,8 @@ import com.bizvane.members.facade.enums.IntegralChangeTypeEnum;
 import com.bizvane.members.facade.exception.MemberException;
 import com.bizvane.members.facade.models.IntegralRecordModel;
 import com.bizvane.members.facade.service.api.IntegralRecordApiService;
+import com.bizvane.messagefacade.interfaces.SendCommonMessageFeign;
+import com.bizvane.messagefacade.models.vo.SysSmsConfigVO;
 import com.bizvane.mktcenterservice.models.bo.AwardBO;
 import com.bizvane.mktcenterservice.models.vo.ActivityVO;
 import com.bizvane.utils.responseinfo.ResponseData;
@@ -35,6 +37,8 @@ public class AwardFactory {
     @Autowired
     private IntegralRecordApiService integralRecordApiService;
 
+    @Autowired
+    private SendCommonMessageFeign sendCommonMessageFeign;
 
     /**
      * 奖励券，单
@@ -105,8 +109,16 @@ public class AwardFactory {
      * @return
      */
     public ResponseData<Integer> sendSms(AwardBO bo){
-        ResponseData responseData = new ResponseData();
-        return responseData;
+
+        SysSmsConfigVO msgvo = new SysSmsConfigVO();
+        msgvo.setChannelName("moments3.4");
+        msgvo.setChannelAccount("JJ0253");//账号
+        msgvo.setChannelPassword("513678");//密码
+        msgvo.setChannelService("http://TSN19.800CT.COM:8901/MWGate/wmgw.asmx/MongateSendSubmit");//路径
+        msgvo.setPhone(bo.getPhone());//手机
+        msgvo.setMsgContent("任务活动发短信!");//内容
+      return sendCommonMessageFeign.sendSmg(msgvo);
+
     }
 
 
