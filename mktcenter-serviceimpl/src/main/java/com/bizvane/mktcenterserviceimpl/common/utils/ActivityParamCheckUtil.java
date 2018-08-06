@@ -174,37 +174,49 @@ public class ActivityParamCheckUtil {
         return responseData;
     }
 
-    public static  ResponseData checkManualParam (ActivityVO vo,Long couponId){
+    public static ResponseData checkAddActivityParams(Long couponId, ActivityVO activityVO) {
         ResponseData responseData = new ResponseData();
-        if(StringUtils.isEmpty(vo.getActivityName())){
+        if(activityVO==null){
+            responseData.setCode(SystemConstants.ERROR_CODE);
+            responseData.setMessage(SystemConstants.ERROR_MSG_PARAM_EMPTY);
+            return responseData;
+        }
+        if(StringUtils.isEmpty(activityVO.getActivityName())){
             responseData.setCode(SystemConstants.ERROR_CODE);
             responseData.setMessage(ActivityConstants.ERROR_MSG_ACTIVITY_NAME_EMPTY);
             return responseData;
         }
-        if(StringUtils.isEmpty(vo.getCreateDateStart())||StringUtils.isEmpty(vo.getCreateDateEnd())){
+        if(StringUtils.isEmpty(String.valueOf(activityVO.getReceiveType()))||activityVO.getReceiveType()!=2||activityVO.getReceiveType()!=1){
+            responseData.setCode(SystemConstants.ERROR_CODE);
+            responseData.setMessage(ActivityConstants.ERROR_RECEIVE_TYPE_EMPTY);
+            return responseData;
+        }
+        if(StringUtils.isEmpty(activityVO.getCreateDateStart())||StringUtils.isEmpty(activityVO.getCreateDateEnd())){
             responseData.setCode(SystemConstants.ERROR_CODE);
             responseData.setMessage(ActivityConstants.ERROR_MSG_ACTIVITY_DATE_EMPTY);
             return responseData;
         }
-        if(SystemConstants.ERROR_CODE==(responseData.getCode())){
+        if(null==activityVO.getPerPersonMax()){
+            responseData.setCode(SystemConstants.ERROR_CODE);
+            responseData.setMessage(ActivityConstants.MAX_CAN_RECEIVE);
             return responseData;
         }
-        if(vo==null){
+        if(null==activityVO.getPerPersonPerDayMax()){
             responseData.setCode(SystemConstants.ERROR_CODE);
-            responseData.setMessage("领取方式为空");
-            return responseData;
-        }
-        if(StringUtils.isEmpty(String.valueOf(vo.getReceiveType()))||vo.getReceiveType()!=2||vo.getReceiveType()!=1){
-            responseData.setCode(SystemConstants.ERROR_CODE);
-            responseData.setMessage("领取方式有误");
+            responseData.setMessage(ActivityConstants.MAX_DAY_CAN_RECEIVE);
             return responseData;
         }
         if(null==couponId){
             responseData.setCode(SystemConstants.ERROR_CODE);
-            responseData.setMessage("券定义id为空");
+            responseData.setMessage(ActivityConstants.COUPON_INFO_EMPTY);
             return responseData;
         }
-      return responseData;
+        if(StringUtils.isEmpty(activityVO.getActivityInfo())){
+            responseData.setCode(SystemConstants.ERROR_CODE);
+            responseData.setMessage(ActivityConstants.ERROR_MSG_ACTIVITY_INFO_EMPTY);
+            return responseData;
+        }
+        return responseData;
     }
 
     //智能营销活动参数校验

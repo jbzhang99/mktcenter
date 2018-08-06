@@ -541,13 +541,17 @@
      </if>
 
      <if test="startTime != null ">
-
       and <![CDATA[ tma.start_time >=#{startTime,jdbcType=TIMESTAMP}]]>
      </if>
 
      <if test="endTime != null ">
-
        and <![CDATA[ tma.end_time <=#{endTime,jdbcType=TIMESTAMP}]]>
+     </if>
+     <if test="activityName != null and activityName != '' ">
+       AND tma.activity_name = #{activityName,jdbcType=VARCHAR}
+     </if>
+     <if test="sysBrandId != null and sysBrandId != '' ">
+       AND tma.sys_brand_id = #{sysBrandId,jdbcType=BIGINT}
      </if>
    </select>
 
@@ -594,7 +598,7 @@
     </if>
     <!--活动编号-->
     <if test="activityCode != null and activityCode!= ''">
-      AND tma.activity_code = #{activityCode}
+      AND tma.activity_code = #{activityCode,jdbcType=VARCHAR}
     </if>
   </select>
 

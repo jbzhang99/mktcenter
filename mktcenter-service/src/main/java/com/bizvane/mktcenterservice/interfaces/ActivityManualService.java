@@ -22,7 +22,7 @@ public interface ActivityManualService {
 
   ResponseData<Integer> executeActivity(ActivityManualVO vo);
 
-  ResponseData<List<ActivityBO>> getActivityManualEffect(ActivityVO vo);
+  ResponseData<List<ActivityBO>> getActivityManualEffect(ActivityVO vo,SysAccountPO stageUser);
 
   ResponseData<ActivityBO> selectActivityManualById(String businessCode);
 

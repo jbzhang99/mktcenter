@@ -51,8 +51,10 @@ public class ActivityManualController {
    * 查询活动效果分析
    * */
    @RequestMapping("/getActivityManualEffect")
-   public ResponseData<List<ActivityBO>>getActivityManualEffect(ActivityVO activityVO){
-      return activityManualService.getActivityManualEffect(activityVO);
+   public ResponseData<List<ActivityBO>>getActivityManualEffect(ActivityVO activityVO,HttpServletRequest request){
+       // SysAccountPO stageUser = TokenUtils.getStageUser(request);
+       SysAccountPO stageUser = new SysAccountPO();
+       return activityManualService.getActivityManualEffect(activityVO,stageUser);
  }
 
     /**

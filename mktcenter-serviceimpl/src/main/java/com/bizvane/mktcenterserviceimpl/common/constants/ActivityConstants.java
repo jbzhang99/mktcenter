@@ -1,5 +1,7 @@
 package com.bizvane.mktcenterserviceimpl.common.constants;
 
+import org.reflections.scanners.FieldAnnotationsScanner;
+
 /**
  * @author chen.li
  * @date on 2018/7/13 10:13
@@ -44,5 +46,8 @@ public class ActivityConstants {
     public static final String CAN_NOT_RECEIVE = "领取已超过限制，不可再领取";
     public static final  String ERROR_SQL="操作失败";
     public static final  String RETURN_EMPTY="数据为空";
-
+    public static final String MAX_CAN_RECEIVE="每人最多领取为空";
+    public static final String MAX_DAY_CAN_RECEIVE="每人每日最多领取为空";
+    public static final String COUPON_INFO_EMPTY="选择优惠券信息为空";
+    public static final String ERROR_RECEIVE_TYPE_EMPTY="领取方式有误";
 }
