@@ -108,10 +108,11 @@ public class TaskShareController {
 
     /**
      * 查询任务详情
-     * @param mktActivityId
+     * @param mktTaskId
      * @return
      */
-    public ResponseData<List<TaskVO>> selectTaskById(Long mktActivityId){
-        return taskShareService.selectTaskById(mktActivityId);
+    @RequestMapping("selectTaskById")
+    public ResponseData<TaskBO> selectTaskById(Long mktTaskId){
+        return taskShareService.selectTaskById(mktTaskId);
     }
 }

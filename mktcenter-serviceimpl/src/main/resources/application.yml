@@ -10,7 +10,7 @@ spring:
   swagger:
     show: true
   application:
-    name: mktcenter
+    name: mktcenter-wkq
 #  security:
 #    enabled: false
 #    user:

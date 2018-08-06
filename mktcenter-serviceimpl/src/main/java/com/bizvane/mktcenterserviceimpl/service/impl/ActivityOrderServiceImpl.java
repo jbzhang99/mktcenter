@@ -319,7 +319,7 @@ public class ActivityOrderServiceImpl implements ActivityOrderService {
             if(activityVO.getCheckStatus() == CheckStatusEnum.CHECK_STATUS_REJECTED.getCode()){
                 SysCheckPo po = new SysCheckPo();
                 po.setSysBrandId(mktActivityPOWithBLOBs.getSysBrandId());
-                po.setFunctionCode(mktActivityPOWithBLOBs.getActivityCode());
+                po.setBusinessCode(mktActivityPOWithBLOBs.getActivityCode());
                 po.setBusinessName(mktActivityPOWithBLOBs.getActivityName());
                 po.setBusinessType(ActivityTypeEnum.ACTIVITY_TYPE_ORDER.getCode());
                 po.setFunctionCode("C0002");

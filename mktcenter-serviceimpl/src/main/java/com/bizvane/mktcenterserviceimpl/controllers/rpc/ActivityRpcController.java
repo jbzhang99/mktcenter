@@ -3,7 +3,9 @@ package com.bizvane.mktcenterserviceimpl.controllers.rpc;
 import com.bizvane.mktcenterservice.interfaces.*;
 import com.bizvane.mktcenterservice.models.bo.ActivityBO;
 import com.bizvane.mktcenterservice.models.po.MktActivityPOWithBLOBs;
+import com.bizvane.mktcenterservice.models.po.MktActivityRecordPO;
 import com.bizvane.mktcenterservice.models.vo.ActivityVO;
+import com.bizvane.mktcenterservice.models.vo.MktActivityRecordVO;
 import com.bizvane.mktcenterserviceimpl.common.enums.ActivityTypeEnum;
 import com.bizvane.utils.responseinfo.ResponseData;
 import com.bizvane.utils.tokens.SysAccountPO;
@@ -38,7 +40,8 @@ public class ActivityRpcController {
     private ActivityBirthdayService activityBirthdayService;
     @Autowired
     private ActivityRegisterService activityRegisterService;
-
+    @Autowired
+    private ActivityRecordService activityRecordService;
     /**
      * 禁用/启用活动
      * @param vo
@@ -124,5 +127,15 @@ public class ActivityRpcController {
     @RequestMapping("getActivityList")
     public ResponseData<List<ActivityVO>>  getActivityList(ActivityVO vo){
         return activityService.getActivityList(vo);
+    }
+
+    /**
+     * 小程序端会员签到
+     * @param vo
+     * @return
+     */
+    @RequestMapping("getActivityRecordPOList")
+    public ResponseData<List<MktActivityRecordPO>> getActivityRecordPOList(MktActivityRecordVO vo){
+        return activityRecordService.getActivityRecordPOList(vo);
     }
 }

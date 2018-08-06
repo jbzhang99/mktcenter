@@ -52,7 +52,7 @@ public class AwardFactory {
             va.setSendType("10");
             sendCouponServiceFeign.simple(va);
         } catch (Exception e) {
-            log.error("com.bizvane.mktcenterserviceimpl.common.award.AwardFactory.awardCouponSimple error:"+e.getMessage());
+//            log.error("com.bizvane.mktcenterserviceimpl.common.award.AwardFactory.awardCouponSimple error:"+e.getMessage());
         }
         return responseData;
     }

@@ -382,7 +382,7 @@ public class ActivityRegisterServiceImpl implements ActivityRegisterService {
                 //如果是待审核数据则需要增加一条审核数据
                 SysCheckPo  po = new SysCheckPo();
                 po.setSysBrandId(mktActivityPOWithBLOBs.getSysBrandId());
-                po.setFunctionCode(mktActivityPOWithBLOBs.getActivityCode());
+                po.setBusinessCode(mktActivityPOWithBLOBs.getActivityCode());
                 po.setBusinessName(mktActivityPOWithBLOBs.getActivityName());
                 po.setBusinessType(ActivityTypeEnum.ACTIVITY_TYPE_REGISGER.getCode());
                 po.setFunctionCode("C0002");
