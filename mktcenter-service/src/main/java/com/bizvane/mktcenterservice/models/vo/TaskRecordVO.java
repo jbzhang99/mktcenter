@@ -2,6 +2,7 @@ package com.bizvane.mktcenterservice.models.vo;
 
 import com.bizvane.mktcenterservice.models.po.MktTaskProfilePO;
 import com.bizvane.mktcenterservice.models.po.MktTaskRecordPO;
+import com.github.pagehelper.PageInfo;
 
 import java.util.Date;
 import java.util.List;
@@ -25,7 +26,7 @@ public class TaskRecordVO extends MktTaskRecordPO{
 
 
     //每天的记录
-    private List<DayTaskRecordVo> dayTaskRecordVoList;
+    private PageInfo<DayTaskRecordVo> dayTaskRecordVoList;
 
 
 
@@ -67,11 +68,11 @@ public class TaskRecordVO extends MktTaskRecordPO{
         this.allinvalidCountCoupon = allinvalidCountCoupon;
     }
 
-    public List<DayTaskRecordVo> getDayTaskRecordVoList() {
+    public PageInfo<DayTaskRecordVo> getDayTaskRecordVoList() {
         return dayTaskRecordVoList;
     }
 
-    public void setDayTaskRecordVoList(List<DayTaskRecordVo> dayTaskRecordVoList) {
+    public void setDayTaskRecordVoList(PageInfo<DayTaskRecordVo> dayTaskRecordVoList) {
         this.dayTaskRecordVoList = dayTaskRecordVoList;
     }
 }
