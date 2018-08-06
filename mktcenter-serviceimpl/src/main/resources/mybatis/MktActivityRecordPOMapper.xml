@@ -493,4 +493,21 @@ WHERE
     </if>
 
   </select>
+  <!-- 小程序端查询签到记录 -->
+  <select id="getActivityRecordPOList" parameterType="com.bizvane.mktcenterservice.models.vo.MktActivityRecordVO" resultMap="BaseResultMap">
+
+    SELECT
+    *
+    FROM
+    t_mkt_activity_record
+    WHERE
+    valid = 1 AND activity_type=6
+    <if test="monthDate != null and monthDate!= ''">
+      and  date_format(participate_date,'%Y-%m')= #{monthDate}
+    </if>
+
+    <if test="memberCodev != null andmemberCode!= ''">
+      and member_code = #{memberCode,jdbcType=VARCHAR}
+    </if>
+  </select>
 </mapper>

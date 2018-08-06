@@ -3,6 +3,8 @@ package com.bizvane.mktcenterserviceimpl.mappers;
 import com.bizvane.mktcenterservice.models.po.MktActivityRecordPO;
 import com.bizvane.mktcenterservice.models.po.MktActivityRecordPOExample;
 import java.util.List;
+
+import com.bizvane.mktcenterservice.models.vo.MktActivityRecordVO;
 import org.apache.ibatis.annotations.Param;
 
 public interface MktActivityRecordPOMapper {
@@ -78,4 +80,5 @@ public interface MktActivityRecordPOMapper {
 	int countByCondition(MktActivityRecordPO mktActivityRecordPO);
 
 	List<MktActivityRecordPO>  selectActivityRecordPOList(MktActivityRecordPO mktActivityRecordPO);
+	List<MktActivityRecordPO>  getActivityRecordPOList(MktActivityRecordVO vo);
 }
