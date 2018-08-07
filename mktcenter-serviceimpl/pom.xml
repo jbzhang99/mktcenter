@@ -199,6 +199,13 @@
 			<artifactId>message-facade</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
+
+		<!-- 引入短信 -->
+		<dependency>
+			<groupId>com.bizvane</groupId>
+			<artifactId>wechat-facade</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+		</dependency>
 	</dependencies>
 	<dependencyManagement>
 		<dependencies>
