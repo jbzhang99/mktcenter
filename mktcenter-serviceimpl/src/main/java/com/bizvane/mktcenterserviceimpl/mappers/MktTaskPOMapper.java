@@ -6,6 +6,8 @@ import com.bizvane.mktcenterservice.models.bo.TaskOrderAwardBO;
 import com.bizvane.mktcenterservice.models.po.MktTaskPO;
 import com.bizvane.mktcenterservice.models.po.MktTaskPOExample;
 import com.bizvane.mktcenterservice.models.po.MktTaskPOWithBLOBs;
+
+import java.util.Date;
 import java.util.List;
 
 import com.bizvane.mktcenterservice.models.vo.TaskDetailVO;
@@ -101,7 +103,7 @@ public interface MktTaskPOMapper {
 
 	public  List<TaskDetailVO> getTaskDetailByTaskId  (@Param("mktTaskId") Long mktTaskId);
 
-	public List<TaskOrderAwardBO> getTaskOrderAwardList(@Param("sysCompanyId") Long sysCompanyId,@Param("sysBrandId") Long sysBrandId);
+	public List<TaskOrderAwardBO> getTaskOrderAwardList(@Param("sysCompanyId") Long sysCompanyId,@Param("sysBrandId") Long sysBrandId,@Param("placeOrderTime")Date placeOrderTime);
 
-	public List<TaskInviteAwardBO> getTaskInviteAwardList(@Param("sysCompanyId") Long sysCompanyId, @Param("sysBrandId") Long sysBrandId);
+	public List<TaskInviteAwardBO> getTaskInviteAwardList(@Param("sysCompanyId") Long sysCompanyId, @Param("sysBrandId") Long sysBrandId,@Param("placeOrderTime")Date placeOrderTime);
 }

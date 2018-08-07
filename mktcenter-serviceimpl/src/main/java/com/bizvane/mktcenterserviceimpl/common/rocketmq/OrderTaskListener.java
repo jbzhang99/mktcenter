@@ -8,12 +8,14 @@ import com.aliyun.openservices.ons.api.Message;
 import com.aliyun.openservices.ons.api.MessageListener;
 import com.bizvane.members.facade.models.OrderServeModel;
 import com.bizvane.mktcenterservice.interfaces.TaskService;
+import com.bizvane.mktcenterservice.models.bo.TaskOrderAwardBO;
 import com.bizvane.mktcenterservice.models.vo.TaskDetailVO;
 import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -39,15 +41,19 @@ public class OrderTaskListener implements MessageListener {
 //        private BigDecimal tradeAmount;//消费金额
 //        private Date placeOrderTime;//消费时间
 
-        OrderServeModel orderServeModel1 = JSONObject.parseObject(modelStr, OrderServeModel.class);
-        List<TaskDetailVO> tasklists = taskService.getTaskDetailByTaskId(null);
-        if (CollectionUtils.isNotEmpty(tasklists)){
-            tasklists.stream().forEach(obj->{
-             //判断订单时间
+        OrderServeModel model = JSONObject.parseObject(modelStr, OrderServeModel.class);
+        Long companyId = model.getCompanyId();
+        Long brandId = model.getBrandId();
+        Date placeOrderTime = model.getPlaceOrderTime();
+        List<TaskOrderAwardBO> taskOrderAwardList = taskService.getTaskOrderAwardList(companyId, brandId, placeOrderTime);
 
-            //判断订单累计金额
+        if (CollectionUtils.isNotEmpty(taskOrderAwardList)){
+            taskOrderAwardList.stream().forEach(obj->{
+                //判断订单时间
 
-           //判断消费次数
+                //判断订单累计金额
+
+                //判断消费次数
 
             });
         }

@@ -70,8 +70,9 @@ public class TaskServiceImpl implements TaskService {
      * @param sysBrandId
      * @return
      */
-    public List<TaskOrderAwardBO> getTaskOrderAwardList(Long sysCompanyId,Long sysBrandId){
-       return mktTaskPOMapper.getTaskOrderAwardList(sysCompanyId,sysBrandId);
+    @Override
+    public List<TaskOrderAwardBO> getTaskOrderAwardList(Long sysCompanyId, Long sysBrandId,Date placeOrderTime){
+       return mktTaskPOMapper.getTaskOrderAwardList(sysCompanyId,sysBrandId,placeOrderTime);
     }
     /**
      * 根据公司id和品牌id查询执行中的邀请类任务
@@ -79,8 +80,9 @@ public class TaskServiceImpl implements TaskService {
      * @param sysBrandId
      * @return
      */
-    public List<TaskInviteAwardBO> getTaskInviteAwardList(Long sysCompanyId, Long sysBrandId){
-        return mktTaskPOMapper.getTaskInviteAwardList(sysCompanyId, sysBrandId);
+    @Override
+    public List<TaskInviteAwardBO> getTaskInviteAwardList(Long sysCompanyId, Long sysBrandId,Date placeOrderTime){
+        return mktTaskPOMapper.getTaskInviteAwardList(sysCompanyId, sysBrandId,placeOrderTime);
     }
 
     /**

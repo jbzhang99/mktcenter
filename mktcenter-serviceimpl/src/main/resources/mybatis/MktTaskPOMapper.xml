@@ -795,6 +795,10 @@
     <if test = "sysBrandId != null and sysBrandId!= '' ">
       AND sys_brand_id=#{sysBrandId}
     </if>
+    <if test="placeOrderTime!=null and placeOrderTime!=''">
+      AND tta.start_time <![CDATA[<=]]>#{placeOrderTime}
+      AND tta.end_time <![CDATA[>=]]> #{placeOrderTime}
+    </if>
   </select>
 
   <select id="getTaskInviteAwardList" parameterType="java.lang.Long"  resultMap="taskInviteAwardMap">
@@ -835,6 +839,10 @@
     </if>
     <if test = "sysBrandId != null and sysBrandId!= '' ">
       AND sys_brand_id=#{sysBrandId}
+    </if>
+    <if test="placeOrderTime!=null and placeOrderTime!=''">
+      AND tta.start_time <![CDATA[<=]]>#{placeOrderTime}
+      AND tta.end_time <![CDATA[>=]]> #{placeOrderTime}
     </if>
   </select>
 </mapper>

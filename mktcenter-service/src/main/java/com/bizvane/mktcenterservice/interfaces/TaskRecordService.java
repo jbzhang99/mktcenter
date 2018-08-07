@@ -23,4 +23,11 @@ public interface TaskRecordService {
      * @return
      */
     public Integer updateTaskRecord(MktTaskRecordPO po, SysAccountPO stageUser);
+
+    /**
+     * 查询
+     * @param po
+     * @return
+     */
+    public Integer getTaskRecord(MktTaskRecordPO po);
 }

@@ -3,6 +3,8 @@ package com.bizvane.mktcenterservice.interfaces;
 import com.bizvane.centerstageservice.models.po.SysCheckConfigPo;
 import com.bizvane.centerstageservice.models.vo.SysCheckConfigVo;
 import com.bizvane.members.facade.models.MemberInfoModel;
+import com.bizvane.mktcenterservice.models.bo.TaskInviteAwardBO;
+import com.bizvane.mktcenterservice.models.bo.TaskOrderAwardBO;
 import com.bizvane.mktcenterservice.models.po.MktMessagePO;
 import com.bizvane.mktcenterservice.models.po.MktTaskPOWithBLOBs;
 import com.bizvane.mktcenterservice.models.vo.PageForm;
@@ -13,6 +15,7 @@ import com.bizvane.utils.tokens.SysAccountPO;
 import com.github.pagehelper.PageInfo;
 
 import java.text.ParseException;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -22,6 +25,20 @@ import java.util.List;
  * @Copyright (c) 2018 上海商帆信息科技有限公司-版权所有
  */
 public interface TaskService {
+    /**
+     * 根据公司id和品牌id查询执行中的消费类任务
+     * @param sysCompanyId
+     * @param sysBrandId
+     * @return
+     */
+    public List<TaskOrderAwardBO> getTaskOrderAwardList(Long sysCompanyId, Long sysBrandId,Date placeOrderTime);
+    /**
+     * 根据公司id和品牌id查询执行中的邀请类任务
+     * @param sysCompanyId
+     * @param sysBrandId
+     * @return
+     */
+    public List<TaskInviteAwardBO> getTaskInviteAwardList(Long sysCompanyId, Long sysBrandId,Date placeOrderTime);
     /**
      * 查询订单详情
      * @param mktTaskId

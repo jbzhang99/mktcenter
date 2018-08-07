@@ -42,4 +42,11 @@ public class TaskRecordServiceImpl implements TaskRecordService {
         po.setModifiedUserName(stageUser.getName());
         return mktTaskRecordPOMapper.insertSelective(po);
     }
+
+    @Override
+    public Integer getTaskRecord(MktTaskRecordPO po) {
+
+   return null;
+    }
+
 }
