@@ -10,6 +10,7 @@ import com.bizvane.messagefacade.interfaces.SendCommonMessageFeign;
 import com.bizvane.messagefacade.models.vo.SysSmsConfigVO;
 import com.bizvane.mktcenterservice.models.bo.AwardBO;
 import com.bizvane.mktcenterservice.models.vo.ActivityVO;
+import com.bizvane.mktcenterserviceimpl.common.constants.ResponseConstants;
 import com.bizvane.utils.responseinfo.ResponseData;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -56,6 +57,8 @@ public class AwardFactory {
             sendCouponServiceFeign.simple(va);
         } catch (Exception e) {
             log.error("com.bizvane.mktcenterserviceimpl.common.award.AwardFactory.awardCouponSimple error"+ e.getMessage());
+            responseData.setCode(ResponseConstants.ERROR);
+            return responseData;
         }
         return responseData;
     }
@@ -76,6 +79,8 @@ public class AwardFactory {
             sendCouponServiceFeign.simple(va);
         } catch (Exception e) {
             log.error("com.bizvane.mktcenterserviceimpl.common.award.AwardFactory.awardCouponBatch error:"+e.getMessage());
+            responseData.setCode(ResponseConstants.ERROR);
+            return responseData;
         }
         return responseData;
     }
@@ -97,6 +102,8 @@ public class AwardFactory {
             integralRecordApiService.updateMemberIntegral(var1);
         } catch (MemberException e) {
             log.error("com.bizvane.mktcenterserviceimpl.common.award.AwardFactory.awardIntegral error:"+e.getMessage());
+            responseData.setCode(ResponseConstants.ERROR);
+            return responseData;
         }
         return responseData;
     }
