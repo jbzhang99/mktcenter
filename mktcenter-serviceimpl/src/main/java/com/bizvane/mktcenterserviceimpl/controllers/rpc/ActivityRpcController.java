@@ -126,7 +126,7 @@ public class ActivityRpcController {
      * @return
      */
     @RequestMapping("getActivityList")
-    public ResponseData<List<ActivityVO>>  getActivityList(ActivityVO vo){
+    public ResponseData<List<ActivityVO>>  getActivityList(@RequestBody ActivityVO vo){
         return activityService.getActivityList(vo);
     }
 
@@ -136,7 +136,7 @@ public class ActivityRpcController {
      * @return
      */
     @RequestMapping("getActivityRecordPOList")
-    public ResponseData<List<MktActivityRecordPO>> getActivityRecordPOList(MktActivityRecordVO vo){
+    public ResponseData<List<MktActivityRecordPO>> getActivityRecordPOList(@RequestBody MktActivityRecordVO vo){
         return activityRecordService.getActivityRecordPOList(vo);
     }
     /**
@@ -145,7 +145,7 @@ public class ActivityRpcController {
      * @return
      */
     @RequestMapping("executeActivitySignin")
-    public ResponseData<Integer> executeActivitySignin(MemberInfoModel vo){
+    public ResponseData<Integer> executeActivitySignin(@RequestBody MemberInfoModel vo){
         return activitySigninService.executeActivitySignin(vo);
     }
 }
