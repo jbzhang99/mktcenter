@@ -29,6 +29,8 @@ import com.bizvane.mktcenterserviceimpl.common.utils.CodeUtil;
 import com.bizvane.mktcenterserviceimpl.common.utils.JobUtil;
 import com.bizvane.mktcenterserviceimpl.mappers.*;
 import com.bizvane.utils.enumutils.SysResponseEnum;
+import com.bizvane.utils.jobutils.JobClient;
+import com.bizvane.utils.jobutils.XxlJobInfo;
 import com.bizvane.utils.responseinfo.ResponseData;
 import com.bizvane.utils.tokens.SysAccountPO;
 import com.github.pagehelper.PageHelper;
@@ -89,6 +91,9 @@ public class TaskShareServiceImpl implements TaskShareService {
 
     @Autowired
     private CouponDefinitionServiceFeign couponDefinitionServiceFeign;
+
+    @Autowired
+    private JobClient jobClient;
 
 
     /**
@@ -331,6 +336,13 @@ public class TaskShareServiceImpl implements TaskShareService {
             if (mktTaskOldPO.getStartTime().before(new Date())){
                 //新任务时间滞后？
                 if (taskVO.getStartTime().after(new Date())){
+
+                    //将原job删除  防止冲突
+                    XxlJobInfo xxlJobInfo = new XxlJobInfo();
+                    xxlJobInfo.setBizType(BusinessTypeEnum.ACTIVITY_TYPE_TASK.getCode());
+                    xxlJobInfo.setBizCode(taskVO.getTaskCode());
+                    jobClient.removeByBiz(xxlJobInfo);
+
                     //新建job调度开始时间
                     jobUtil.addStartTaskJob(stageUser,mktTaskPOWithBLOBs);
                     //结束时间
@@ -341,6 +353,13 @@ public class TaskShareServiceImpl implements TaskShareService {
                 //新任务时间滞后？
                 if (taskVO.getStartTime().after(new Date())){
                     //调整job调度开始时间
+
+                    //将原job删除  防止冲突
+                    XxlJobInfo xxlJobInfo = new XxlJobInfo();
+                    xxlJobInfo.setBizType(BusinessTypeEnum.ACTIVITY_TYPE_TASK.getCode());
+                    xxlJobInfo.setBizCode(taskVO.getTaskCode());
+                    jobClient.removeByBiz(xxlJobInfo);
+
                     jobUtil.addStartTaskJob(stageUser,mktTaskPOWithBLOBs);
                     jobUtil.addEndTaskJob(stageUser,mktTaskPOWithBLOBs);
                 }
@@ -434,14 +453,14 @@ public class TaskShareServiceImpl implements TaskShareService {
 
 
         List<CouponDefinitionPO> couponDefinitionPOS = new ArrayList<>();
-        //查询券定义
+       /* //查询券定义
         for (MktCouponPO mktCouponPO:mktCouponPOList){
             Long couponDefinitionId = mktCouponPO.getCouponDefinitionId();
 
             ResponseData<CouponDefinitionPO> coupon = couponDefinitionServiceFeign.findRpc(couponDefinitionId);
             CouponDefinitionPO couponDefinitionPO = coupon.getData();
             couponDefinitionPOS.add(couponDefinitionPO);
-        }
+        }*/
 
 
 
@@ -678,6 +697,45 @@ public class TaskShareServiceImpl implements TaskShareService {
         mktTaskPOWithBLOBs.setTaskStatus(TaskStatusEnum.TASK_STATUS_DISABLED.getCode());
         mktTaskPOMapper.updateByPrimaryKeySelective(mktTaskPOWithBLOBs);
         responseData.setData(ResponseConstants.SUCCESS_MSG);
+        return responseData;
+    }
+
+
+    /**
+     * 审核任务
+     * @return
+     */
+    public ResponseData checkTaskShare(Long taskId,SysAccountPO stageUser,Integer checkStatus){
+        ResponseData responseData = new ResponseData();
+        //根据taskId查询出该任务
+
+        MktTaskPOWithBLOBs mktTaskPOWithBLOBs = mktTaskPOMapper.selectByPrimaryKey(taskId);
+        //审核通过
+        if (checkStatus==CheckStatusEnum.CHECK_STATUS_APPROVED.getCode()){
+            mktTaskPOWithBLOBs.setCheckStatus(CheckStatusEnum.CHECK_STATUS_APPROVED.getCode());
+            //审核时间未超过任务结束时间
+            if (new Date().before(mktTaskPOWithBLOBs.getEndTime())){
+                //审核时间超过任务开始时间
+                if(new Date().after(mktTaskPOWithBLOBs.getStartTime())){
+                    mktTaskPOWithBLOBs.setTaskStatus(TaskStatusEnum.TASK_STATUS_EXECUTING.getCode());
+                    //todo 执行发送消息
+                }//审核时间未超过任务开始时间
+                else{
+                    mktTaskPOWithBLOBs.setTaskStatus(TaskStatusEnum.TASK_STATUS_PENDING.getCode());
+                }
+
+            }//审核时间超过任务结束时间
+            else{
+                mktTaskPOWithBLOBs.setTaskStatus(TaskStatusEnum.TASK_STATUS_FINISHED.getCode());
+            }
+        }//审核驳回
+        else{
+            mktTaskPOWithBLOBs.setCheckStatus(CheckStatusEnum.CHECK_STATUS_REJECTED.getCode());
+            mktTaskPOWithBLOBs.setTaskStatus(TaskStatusEnum.TASK_STATUS_PENDING.getCode());
+        }
+
+        mktTaskPOMapper.updateByPrimaryKeySelective(mktTaskPOWithBLOBs);
+        responseData.setMessage(ResponseConstants.SUCCESS_MSG);
         return responseData;
     }
 

@@ -137,5 +137,12 @@ public class TaskProfileController {
 
     }
 
+    @RequestMapping("checkTaskprofile")
+    public ResponseData checkTaskprofile(Long taskId,SysAccountPO stageUser){
+
+
+        return null;
+    }
+
 }
 

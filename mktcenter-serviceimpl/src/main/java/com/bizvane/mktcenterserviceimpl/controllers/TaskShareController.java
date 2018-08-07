@@ -115,4 +115,16 @@ public class TaskShareController {
     public ResponseData<TaskBO> selectTaskById(Long businessId){
         return taskShareService.selectTaskById(businessId);
     }
+
+    /**
+     * 审核任务
+     * @param taskId
+     * @param stageUser
+     * @return
+     */
+    @RequestMapping("checkTaskprofile")
+    public ResponseData checkTaskprofile(Long taskId,SysAccountPO stageUser){
+
+        return null;
+    }
 }

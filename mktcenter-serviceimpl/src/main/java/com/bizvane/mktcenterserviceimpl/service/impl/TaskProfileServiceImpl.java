@@ -457,21 +457,6 @@ public class TaskProfileServiceImpl implements TaskProfileService {
 
 
 
-
-    /**
-     * 任务审核
-     * @param taskVO
-     * @param sysAccountPO
-     * @return
-     */
-    @Override
-    @Transactional
-    public ResponseData checkTaskProfile(TaskVO taskVO,SysAccountPO sysAccountPO){
-        ResponseData data = new ResponseData();
-
-        return null;
-    }
-
     /**
      * 执行任务
      * @param vo 或者传回的是任务编号？
@@ -671,5 +656,47 @@ public class TaskProfileServiceImpl implements TaskProfileService {
         responseData.setData(ResponseConstants.SUCCESS_MSG);
         return responseData;
     }
+
+    /**
+     * 任务审核
+     * @param taskId
+     * @param stageUser
+     * @param checkStatus
+     * @return
+     */
+    public ResponseData checkTaskProfile(Long taskId,SysAccountPO stageUser,Integer checkStatus){
+        ResponseData responseData = new ResponseData();
+        //根据taskId查询出该任务
+
+        MktTaskPOWithBLOBs mktTaskPOWithBLOBs = mktTaskPOMapper.selectByPrimaryKey(taskId);
+        //审核通过
+        if (checkStatus==CheckStatusEnum.CHECK_STATUS_APPROVED.getCode()){
+            mktTaskPOWithBLOBs.setCheckStatus(CheckStatusEnum.CHECK_STATUS_APPROVED.getCode());
+            //审核时间未超过任务结束时间
+            if (new Date().before(mktTaskPOWithBLOBs.getEndTime())){
+                //审核时间超过任务开始时间
+                if(new Date().after(mktTaskPOWithBLOBs.getStartTime())){
+                    mktTaskPOWithBLOBs.setTaskStatus(TaskStatusEnum.TASK_STATUS_EXECUTING.getCode());
+                    //todo 执行发送消息
+                }//审核时间未超过任务开始时间
+                else{
+                    mktTaskPOWithBLOBs.setTaskStatus(TaskStatusEnum.TASK_STATUS_PENDING.getCode());
+                }
+
+            }//审核时间超过任务结束时间
+            else{
+                mktTaskPOWithBLOBs.setTaskStatus(TaskStatusEnum.TASK_STATUS_FINISHED.getCode());
+            }
+        }//审核驳回
+        else{
+            mktTaskPOWithBLOBs.setCheckStatus(CheckStatusEnum.CHECK_STATUS_REJECTED.getCode());
+            mktTaskPOWithBLOBs.setTaskStatus(TaskStatusEnum.TASK_STATUS_PENDING.getCode());
+        }
+
+        mktTaskPOMapper.updateByPrimaryKeySelective(mktTaskPOWithBLOBs);
+        responseData.setMessage(ResponseConstants.SUCCESS_MSG);
+        return responseData;
+    }
+
 
 }

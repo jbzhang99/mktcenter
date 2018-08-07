@@ -56,7 +56,7 @@ public interface TaskShareService {
 
 
     /**
-     *
+     *效果分析
      * @param date1
      * @param date2
      * @param stageUser
@@ -73,4 +73,21 @@ public interface TaskShareService {
      */
     public ResponseData addToRecord(TaskVO vo, MemberInfoModel memberInfoModel);
 
+    /**
+     * 禁用任务
+     * @param taskId
+     * @param stageUser
+     * @return
+     */
+    public ResponseData stopTask(Long taskId,SysAccountPO stageUser);
+
+    /**
+     *
+     * 任务审核
+     * @param taskId
+     * @param stageUser
+     * @param checkStatus
+     * @return
+     */
+    public ResponseData checkTaskShare(Long taskId,SysAccountPO stageUser,Integer checkStatus);
 }

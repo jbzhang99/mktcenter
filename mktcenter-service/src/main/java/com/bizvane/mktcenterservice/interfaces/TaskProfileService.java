@@ -68,13 +68,6 @@ public interface TaskProfileService {
      */
     public ResponseData<TaskRecordVO> getTaskProfileRecordByTime(Date date1, Date date2,SysAccountPO stageUser,PageForm pageForm);
 
-    /**
-     * 任务审核
-     * @param taskVO
-     * @param sysAccountPO
-     * @return
-     */
-    public ResponseData checkTaskProfile(TaskVO taskVO,SysAccountPO sysAccountPO);
 
     /**
      * 添加任务记录
@@ -91,5 +84,14 @@ public interface TaskProfileService {
      * @return
      */
     public ResponseData stopTask(Long taskId,SysAccountPO stageUser);
+
+    /**
+     * 任务审核
+     * @param taskId
+     * @param stageUser
+     * @param checkStatus
+     * @return
+     */
+    public ResponseData checkTaskProfile(Long taskId,SysAccountPO stageUser,Integer checkStatus);
 
 }
