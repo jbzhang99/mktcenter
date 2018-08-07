@@ -17,7 +17,7 @@ import org.springframework.stereotype.Component;
  * @description
  * @Copyright (c) 2018 上海商帆信息科技有限公司-版权所有
  */
-@JobHandler(value="activitySmart")
+@JobHandler(value="smartActivity")
 @Component
 public class ActivitySmartJobHandler extends IJobHandler {
 
@@ -27,19 +27,24 @@ public class ActivitySmartJobHandler extends IJobHandler {
     @Override
     public ReturnT<String> execute(String param) throws Exception {
         ReturnT returnT = new ReturnT();
-        String[] split = param.split("&");
-        if(split.length>1){
-            Integer mktSmartType = Integer.valueOf(split[0]);
-            String activitiCode = split[1];
-            ResponseData<T> execute = activitySmartService.execute(new ActivitySmartBO());
-            returnT.setCode(ResponseConstants.SUCCESS);
-            returnT.setContent(ResponseConstants.SUCCESS_MSG);
-            returnT.setMsg(ResponseConstants.SUCCESS_MSG);
-        }else{
-            returnT.setCode(ResponseConstants.ERROR);
-            returnT.setContent(ResponseConstants.ERROR_MSG);
-            returnT.setMsg(ResponseConstants.ERROR_MSG);
+
+        try {
+            String[] split = param.split("&");
+            if(split.length>1){
+                Integer mktSmartType = Integer.valueOf(split[0]);
+                String activitiCode = split[1];
+                ResponseData<T> execute = activitySmartService.execute(new ActivitySmartBO());
+                returnT.setCode(ResponseConstants.SUCCESS);
+                returnT.setContent(ResponseConstants.SUCCESS_MSG);
+                returnT.setMsg(ResponseConstants.SUCCESS_MSG);
+            }else{
+                returnT.setCode(ResponseConstants.ERROR);
+                returnT.setContent(ResponseConstants.ERROR_MSG);
+                returnT.setMsg(ResponseConstants.ERROR_MSG);
+            }
+        } catch (NumberFormatException e) {
+            e.printStackTrace();
         }
-        return null;
+        return returnT;
     }
 }

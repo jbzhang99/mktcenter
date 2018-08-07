@@ -10,6 +10,7 @@ import com.bizvane.utils.enumutils.JobEnum;
 import com.bizvane.utils.jobutils.JobClient;
 import com.bizvane.utils.jobutils.XxlJobInfo;
 import com.bizvane.utils.tokens.SysAccountPO;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -25,6 +26,8 @@ public class JobUtil {
 
     @Autowired
     private JobClient jobClient;
+
+    public static final String defaultStr ="无";
 
     /**
      * 创建调度任务
@@ -141,6 +144,9 @@ public  void addTaskStartJob(SysAccountPO stageUser, MktTaskPOWithBLOBs po) {
         //设置job处理器
         xxlJobInfo.setExecutorHandler(jobHandler);
         //设置job描述
+        if(StringUtils.isBlank(desc)){
+            desc = defaultStr;
+        }
         xxlJobInfo.setJobDesc(desc);
         //设置执行参数
         xxlJobInfo.setExecutorParam(param);
@@ -149,6 +155,9 @@ public  void addTaskStartJob(SysAccountPO stageUser, MktTaskPOWithBLOBs po) {
         //设置失败处理策略
         xxlJobInfo.setExecutorFailStrategy(JobEnum.EXECUTOR_FAIL_STRATEGY_NULL.getValue());
         //设置负责人
+        if(StringUtils.isBlank(author)){
+            author = defaultStr;
+        }
         xxlJobInfo.setAuthor(author);
         //设置业务类型
         xxlJobInfo.setBizType(businessType);

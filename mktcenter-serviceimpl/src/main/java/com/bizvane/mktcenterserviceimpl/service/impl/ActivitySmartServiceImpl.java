@@ -484,6 +484,7 @@ public class ActivitySmartServiceImpl implements ActivitySmartService {
 
         //生成活动编号
         String activityCode = CodeUtil.getActivityCode();
+        vo.setActivityCode(activityCode);
         //拷贝属性
         MktActivityPOWithBLOBs mktActivityPOWithBLOBs = new MktActivityPOWithBLOBs();
         BeanUtils.copyProperties(vo,mktActivityPOWithBLOBs);
@@ -583,6 +584,7 @@ public class ActivitySmartServiceImpl implements ActivitySmartService {
 
         //生成活动编号
         String activityCode = CodeUtil.getActivityCode();
+        vo.setActivityCode(activityCode);
         //拷贝属性
         MktActivityPOWithBLOBs mktActivityPOWithBLOBs = new MktActivityPOWithBLOBs();
         BeanUtils.copyProperties(vo,mktActivityPOWithBLOBs);
@@ -670,6 +672,7 @@ public class ActivitySmartServiceImpl implements ActivitySmartService {
 
         //生成活动编号
         String activityCode = CodeUtil.getActivityCode();
+        vo.setActivityCode(activityCode);
         //拷贝属性
         MktActivityPOWithBLOBs mktActivityPOWithBLOBs = new MktActivityPOWithBLOBs();
         BeanUtils.copyProperties(vo,mktActivityPOWithBLOBs);
@@ -768,6 +771,7 @@ public class ActivitySmartServiceImpl implements ActivitySmartService {
 
         //生成活动编号
         String activityCode = CodeUtil.getActivityCode();
+        vo.setActivityCode(activityCode);
         //拷贝属性
         MktActivityPOWithBLOBs mktActivityPOWithBLOBs = new MktActivityPOWithBLOBs();
         BeanUtils.copyProperties(vo,mktActivityPOWithBLOBs);
