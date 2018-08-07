@@ -14,7 +14,7 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 @SpringBootApplication(scanBasePackages = "com.bizvane")
 @EnableDiscoveryClient
 @EnableSwagger2
-@EnableFeignClients(basePackages={"com.bizvane.centerstageservice.rpc","com.bizvane.members.facade.service.api","com.bizvane.couponfacade.interfaces","com.bizvane.messagefacade.interfaces"})
+@EnableFeignClients(basePackages={"com.bizvane.centerstageservice.rpc","com.bizvane.members.facade.service.api","com.bizvane.couponfacade.interfaces","com.bizvane.messagefacade.interfaces","com.bizvane.wechatfacade.interfaces"})
 @MapperScan("com.bizvane.mktcenterserviceimpl.mappers")
 public class MktcenterApplication {
 
