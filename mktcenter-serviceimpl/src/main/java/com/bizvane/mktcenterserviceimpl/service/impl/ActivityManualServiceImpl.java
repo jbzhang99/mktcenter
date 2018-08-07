@@ -10,6 +10,7 @@ import com.bizvane.couponfacade.models.po.CouponDefinitionPO;
 import com.bizvane.couponfacade.models.po.CouponEntityPO;
 import com.bizvane.couponfacade.models.vo.CouponDefinitionListQueryVO;
 import com.bizvane.couponfacade.models.vo.CouponEntityAndDefinitionVO;
+import com.bizvane.couponfacade.models.vo.CouponFindCouponCountResponseVO;
 import com.bizvane.members.facade.models.MemberInfoModel;
 import com.bizvane.mktcenterservice.interfaces.ActivityManualService;
 import com.bizvane.mktcenterservice.models.bo.ActivityBO;
@@ -46,6 +47,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -81,9 +83,9 @@ public class ActivityManualServiceImpl implements ActivityManualService {
     @Autowired
     private QRCodeServiceFeign qrCodeServiceFeign;
 
-    @Autowired
+   /* @Autowired
     private CouponDefinitionServiceFeign couponDefinitionServiceFeign;
-
+*/
     @Override
     public ResponseData<ActivityVO> getActivityManualList(ActivityVO vo, PageForm pageForm) {
         ResponseData responseData = new ResponseData();
@@ -198,11 +200,11 @@ public class ActivityManualServiceImpl implements ActivityManualService {
         // 扫码领券的二维码
       if(1==activityVO.getReceiveType()){
          QRCodeConfig qrCodeConfig = new QRCodeConfig();
-         QRCodeCreateRequestVO qrCodeCreateRequestVO = new QRCodeCreateRequestVO();
-         qrCodeCreateRequestVO.setSysBrandId(activityVO.getSysBrandId());
+        QRCodeCreateRequestVO qrCodeCreateRequestVO = new QRCodeCreateRequestVO();
+        /*  qrCodeCreateRequestVO.setSysBrandId(activityVO.getSysBrandId());
+         //todo
          qrCodeCreateRequestVO.setBusinessCode(activityCode);
-         qrCodeCreateRequestVO.setBusinessType(String.valueOf(BusinessTypeEnum.ACTIVITY_TYPE_ACTIVITY.getCode()));
-         qrCodeCreateRequestVO.setLogoImageUrl(qrCodeConfig.getQrcodeurl());
+         qrCodeCreateRequestVO.setBusinessType(String.valueOf(BusinessTypeEnum.ACTIVITY_TYPE_ACTIVITY.getCode()));*/
         log.info("领券活动-创建活动-扫码领券查询二维码入参:"+JSON.toJSONString(qrCodeCreateRequestVO));
          ResponseData<String> qrCodeResponseData= qrCodeServiceFeign.createQRCode(qrCodeCreateRequestVO);
          if(null==qrCodeCreateRequestVO){
@@ -220,7 +222,7 @@ public class ActivityManualServiceImpl implements ActivityManualService {
         MktCouponPO mktCouponPO = new MktCouponPO();
         mktCouponPO.setCouponDefinitionId(couponId);
         mktCouponPO.setBizId(mktActivityId);//活动id
-        mktCouponPO.setBizType(BusinessTypeEnum.ACTIVITY_TYPE_ACTIVITY.getCode());//业务类型 1.活动改为枚举，不要出现魔数
+        mktCouponPO.setBizType(BusinessTypeEnum.ACTIVITY_TYPE_ACTIVITY.getCode());
         mktCouponPO.setModifiedUserId(stageUser.getSysAccountId());
         mktCouponPO.setModifiedUserName(stageUser.getName());
         mktCouponPO.setModifiedDate(new Date());
@@ -384,28 +386,32 @@ public class ActivityManualServiceImpl implements ActivityManualService {
          * 入参：
          * 出参领取张数，核销张数，核销率，券收益
          */
-        vo.setSysBrandId( stageUser.getBrandId());
+        vo.setSysBrandId(stageUser.getBrandId());
         try {
         List<ActivityVO> activityVOList = mktActivityManualPOMapper.getActivityManualList(vo);
+        int sumCouponReceive =0;
+        int sumCouponUse=0;
+        BigDecimal sumCouponMoney=new BigDecimal(0);
         for(ActivityVO vo1:activityVOList){
-            vo1.getActivityCode();
-            MktCouponPOExample mktCouponPOExample= new MktCouponPOExample();
-            mktCouponPOExample.createCriteria().andBizIdEqualTo(vo1.getMktActivityId());
-            List<MktCouponPO> couponPOList= mktCouponPOMapper.selectByExample(mktCouponPOExample);
-            if(CollectionUtils.isEmpty(couponPOList)){
-              continue;
-            }
-            CouponDefinitionListQueryVO couponDefinitionListQueryVO = new CouponDefinitionListQueryVO();
-            //couponDefinitionListQueryVO.setCouponDefinitionId(couponPOList.get(0));
-            ResponseData<com.bizvane.utils.responseinfo.PageInfo<CouponDefinitionPO>> couponResponseData=couponDefinitionServiceFeign.getListRpc(couponDefinitionListQueryVO) ;//一个活动只有一张券
-        }
+            Long sendBusinessId = vo1.getMktActivityId();
+            Date createDtStart =vo.getCreateDateStart();
+            Date createDtEnd=vo.getCreateDateEnd();
+            ResponseData<CouponFindCouponCountResponseVO> couponResponseData=couponQueryServiceFeign.findCouponCountBySendBusinessId(sendBusinessId,createDtStart,createDtEnd) ;//一个活动只有一张券
+          //  vo1.setCouponFindCouponCountResponseVO(couponResponseData.getData());
+            sumCouponReceive=sumCouponReceive+couponResponseData.getData().getCouponSum();//券总数量
+            sumCouponUse=sumCouponUse+couponResponseData.getData().getCouponUsedSum();//券已使用总数量
+            sumCouponMoney=sumCouponMoney.add(couponResponseData.getData().getMoney());//券收益
+           //计算核销率
 
+         }
+         responseData.setData(activityVOList);
         }catch (Exception e){
          log.info("领券活动-查询活动效果分析-出错"+e.getMessage());
             responseData.setMessage(ActivityConstants.ERROR_SQL);
             responseData.setCode(SystemConstants.ERROR_CODE);
             return  responseData;
         }
+
         responseData.setMessage(SystemConstants.SUCCESS_MESSAGE);
         responseData.setCode(SystemConstants.SUCCESS_CODE);
         return responseData;
@@ -484,7 +490,7 @@ public class ActivityManualServiceImpl implements ActivityManualService {
         }
         if(null==activityType){
             log.warn("领券中心-活动类型为空");
-            responseData.setCode(SystemConstants.ERROR_CODE);
+              responseData.setCode(SystemConstants.ERROR_CODE);
             responseData.setMessage("活动类型为空");
             return responseData;
         }

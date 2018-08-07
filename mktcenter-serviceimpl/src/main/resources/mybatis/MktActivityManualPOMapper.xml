@@ -553,6 +553,9 @@
      <if test="sysBrandId != null and sysBrandId != '' ">
        AND tma.sys_brand_id = #{sysBrandId,jdbcType=BIGINT}
      </if>
+       <if test="mktActivityId != null and mktActivityId != '' ">
+           AND tma.mkt_activity_id = #{mktActivityId,jdbcType=BIGINT}
+       </if>
    </select>
 
   <select id="getActivityList" parameterType="com.bizvane.mktcenterservice.models.vo.ActivityVO" resultType="com.bizvane.mktcenterservice.models.vo.ActivityVO">
