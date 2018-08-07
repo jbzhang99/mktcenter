@@ -113,12 +113,12 @@ public class TaskProfileController {
 
     /**
      * 查询任务详情
-     * @param mktTaskId
+     * @param businessId
      * @return
      */
     @RequestMapping("selectTaskById")
-    public ResponseData<TaskBO> selectTaskById(Long mktTaskId){
-        return taskProfileService.selectTaskById(mktTaskId);
+    public ResponseData<TaskBO> selectTaskById(Long businessId){
+        return taskProfileService.selectTaskById(businessId);
     }
 
 

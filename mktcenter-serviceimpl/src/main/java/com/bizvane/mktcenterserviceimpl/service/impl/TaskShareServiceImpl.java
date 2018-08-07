@@ -23,6 +23,7 @@ import com.bizvane.mktcenterservice.models.bo.TaskBO;
 import com.bizvane.mktcenterservice.models.po.*;
 import com.bizvane.mktcenterservice.models.vo.*;
 import com.bizvane.mktcenterserviceimpl.common.award.Award;
+import com.bizvane.mktcenterserviceimpl.common.constants.ResponseConstants;
 import com.bizvane.mktcenterserviceimpl.common.enums.*;
 import com.bizvane.mktcenterserviceimpl.common.utils.CodeUtil;
 import com.bizvane.mktcenterserviceimpl.common.utils.JobUtil;
@@ -622,23 +623,23 @@ public class TaskShareServiceImpl implements TaskShareService {
 
 
             //每个taskid核销的优惠券数
-            CouponEntityPO couponEntityPO = new CouponEntityPO();
+            //CouponEntityPO couponEntityPO = new CouponEntityPO();
 
-            couponEntityPO.setSendBusinessId(taskId);
-            ResponseData<CouponFindCouponCountResponseVO> allInvalidCountCouponResp = couponQueryServiceFeign.findCouponCount(couponEntityPO);
+            //couponEntityPO.setSendBusinessId(taskId);
+            //ResponseData<CouponFindCouponCountResponseVO> allInvalidCountCouponResp = couponQueryServiceFeign.findCouponCount(couponEntityPO);
 
-            CouponFindCouponCountResponseVO allInvalidCountCoupon = allInvalidCountCouponResp.getData();
-            int count =  allInvalidCountCoupon.getCouponUsedSum();
+            //CouponFindCouponCountResponseVO allInvalidCountCoupon = allInvalidCountCouponResp.getData();
+            //int count =  allInvalidCountCoupon.getCouponUsedSum();
 
 
-            allTaskInvaildCountCoupon = allTaskInvaildCountCoupon+count;
+           // allTaskInvaildCountCoupon = allTaskInvaildCountCoupon+count;
             //将每个分享任务的内容添加进list中
 
             DayTaskRecordVo dayTaskRecordVo = new DayTaskRecordVo();
             dayTaskRecordVo.setTaskName(mktTaskPO.getTaskName());
             dayTaskRecordVo.setOneTaskCountMbr(oneTaskcountMbr);
             dayTaskRecordVo.setOneTaskPoints(oneTaskCountPoints);
-            dayTaskRecordVo.setOneTaskInvalidCountCoupon((long)count);
+            //dayTaskRecordVo.setOneTaskInvalidCountCoupon((long)count);
             dayTaskRecordVo.setOneTaskCountCoupon(oneTaskCountCoupon);
             dayTaskRecordVo.setOneTaskCompleteCountMbr(comlpeteMbr);
             dayTaskRecordVo.setOneTaskShareTimes(oneTaskCountShareTimes);
@@ -651,11 +652,32 @@ public class TaskShareServiceImpl implements TaskShareService {
         taskRecordVO.setAllPoints(countPoints);
         taskRecordVO.setAllCountCoupon(countCoupon);
         taskRecordVO.setAllCountMbr(countMbr);
-        taskRecordVO.setAllinvalidCountCoupon(allTaskInvaildCountCoupon);
+        //taskRecordVO.setAllinvalidCountCoupon(allTaskInvaildCountCoupon);
         taskRecordVO.setDayTaskRecordVoList(pageInfo);
 
         responseData.setData(taskRecordVO);
 
+        return responseData;
+    }
+
+
+    /**
+     * 禁用任务
+     * @param taskId
+     * @param stageUser
+     * @return
+     */
+    public ResponseData stopTask(Long taskId,SysAccountPO stageUser){
+
+        //根据taskid查出该任务
+        ResponseData responseData = new ResponseData();
+        MktTaskPOWithBLOBs mktTaskPOWithBLOBs =  mktTaskPOMapper.selectByPrimaryKey(taskId);
+        mktTaskPOWithBLOBs.setModifiedDate(new Date());
+        mktTaskPOWithBLOBs.setModifiedUserId(stageUser.getSysAccountId());
+        mktTaskPOWithBLOBs.setModifiedUserName(stageUser.getName());
+        mktTaskPOWithBLOBs.setTaskStatus(TaskStatusEnum.TASK_STATUS_DISABLED.getCode());
+        mktTaskPOMapper.updateByPrimaryKeySelective(mktTaskPOWithBLOBs);
+        responseData.setData(ResponseConstants.SUCCESS_MSG);
         return responseData;
     }
 

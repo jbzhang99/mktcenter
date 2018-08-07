@@ -24,6 +24,7 @@ import com.bizvane.mktcenterservice.models.bo.TaskBO;
 import com.bizvane.mktcenterservice.models.po.*;
 import com.bizvane.mktcenterservice.models.vo.*;
 import com.bizvane.mktcenterserviceimpl.common.award.Award;
+import com.bizvane.mktcenterserviceimpl.common.constants.ResponseConstants;
 import com.bizvane.mktcenterserviceimpl.common.enums.*;
 import com.bizvane.mktcenterserviceimpl.common.utils.CodeUtil;
 import com.bizvane.mktcenterserviceimpl.common.utils.JobUtil;
@@ -400,14 +401,14 @@ public class TaskProfileServiceImpl implements TaskProfileService {
 
 
         List<CouponDefinitionPO> couponDefinitionPOS = new ArrayList<>();
-        //查询券定义
+       /* //查询券定义
         for (MktCouponPO mktCouponPO:mktCouponPOList){
             Long couponDefinitionId = mktCouponPO.getCouponDefinitionId();
 
             ResponseData<CouponDefinitionPO> coupon = couponDefinitionServiceFeign.findRpc(couponDefinitionId);
             CouponDefinitionPO couponDefinitionPO = coupon.getData();
             couponDefinitionPOS.add(couponDefinitionPO);
-        }
+        }*/
 
 
 
@@ -499,7 +500,7 @@ public class TaskProfileServiceImpl implements TaskProfileService {
         bo.setBusinessWay(BusinessTypeEnum.ACTIVITY_TYPE_TASK.getMessage());
         bo.setSendBussienId(vo.getMktTaskId());
         for (MktCouponPO mktCouponPO:mktCouponPOList){
-            Long couponDefId = mktCouponPO.getBizId();
+            Long couponDefId = mktCouponPO.getCouponDefinitionId();
             bo.setCouponDefinitionId(couponDefId);
             award.execute(bo);
         }
@@ -651,5 +652,24 @@ public class TaskProfileServiceImpl implements TaskProfileService {
         return responseData;
     }
 
+    /**
+     * 禁用任务
+     * @param taskId
+     * @param stageUser
+     * @return
+     */
+    public ResponseData stopTask(Long taskId,SysAccountPO stageUser){
+
+        //根据taskid查出该任务
+        ResponseData responseData = new ResponseData();
+        MktTaskPOWithBLOBs mktTaskPOWithBLOBs =  mktTaskPOMapper.selectByPrimaryKey(taskId);
+        mktTaskPOWithBLOBs.setModifiedDate(new Date());
+        mktTaskPOWithBLOBs.setModifiedUserId(stageUser.getSysAccountId());
+        mktTaskPOWithBLOBs.setModifiedUserName(stageUser.getName());
+        mktTaskPOWithBLOBs.setTaskStatus(TaskStatusEnum.TASK_STATUS_DISABLED.getCode());
+        mktTaskPOMapper.updateByPrimaryKeySelective(mktTaskPOWithBLOBs);
+        responseData.setData(ResponseConstants.SUCCESS_MSG);
+        return responseData;
+    }
 
 }
