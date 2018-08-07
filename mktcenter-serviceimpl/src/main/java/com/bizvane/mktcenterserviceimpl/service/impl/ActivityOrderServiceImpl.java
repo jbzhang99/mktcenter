@@ -298,6 +298,7 @@ public class ActivityOrderServiceImpl implements ActivityOrderService {
     @Override
     @Transactional
     public ResponseData<Integer> updateActivityOrder(ActivityBO bo, SysAccountPO stageUser) {
+        log.info("修改消费活动开始");
         //返回对象
         ResponseData responseData = new ResponseData();
         //得到大实体类
@@ -450,6 +451,7 @@ public class ActivityOrderServiceImpl implements ActivityOrderService {
     @Override
     @Transactional
     public ResponseData<Integer> checkActivityOrder(MktActivityPOWithBLOBs bs, SysAccountPO sysAccountPO) {
+        log.info("审核消费活动开始");
         ResponseData responseData = new ResponseData();
         bs.setModifiedUserId(sysAccountPO.getSysAccountId());
         bs.setModifiedDate(new Date());
@@ -458,7 +460,8 @@ public class ActivityOrderServiceImpl implements ActivityOrderService {
         MktActivityPOExample exampl = new MktActivityPOExample();
         exampl.createCriteria().andActivityCodeEqualTo(bs.getActivityCode()).andValidEqualTo(true);
         List<MktActivityPO> mktActivityPO = mktActivityPOMapper.selectByExample(exampl);
-        if (org.apache.commons.collections.CollectionUtils.isEmpty(mktActivityPO)){
+        if (CollectionUtils.isEmpty(mktActivityPO)){
+            log.warn("查询不到数据！");
             responseData.setCode(SysResponseEnum.FAILED.getCode());
             responseData.setMessage(SysResponseEnum.OPERATE_FAILED_DATA_NOT_EXISTS.getMessage());
             return responseData;
@@ -471,6 +474,7 @@ public class ActivityOrderServiceImpl implements ActivityOrderService {
                 //将活动状态变更为执行中 并且发送消息（当前活动适用会员）
                 bs.setActivityStatus(ActivityStatusEnum.ACTIVITY_STATUS_EXECUTING.getCode());
                 int i = mktActivityPOMapper.updateByPrimaryKeySelective(bs);
+                log.info("发送模板消息和短信消息");
                 //发送模板消息TODO
                 //查询消息集合
                 MktMessagePOExample example = new MktMessagePOExample();
@@ -487,7 +491,9 @@ public class ActivityOrderServiceImpl implements ActivityOrderService {
         }else{
             bs.setActivityStatus(ActivityStatusEnum.ACTIVITY_STATUS_FINISHED.getCode());
             int i = mktActivityPOMapper.updateByPrimaryKeySelective(bs);
+            log.info("更新审核状态");
         }
+        log.info("审核消费活动结束");
         responseData.setCode(SysResponseEnum.SUCCESS.getCode());
         responseData.setMessage(SysResponseEnum.SUCCESS.getMessage());
         return responseData;
@@ -501,6 +507,7 @@ public class ActivityOrderServiceImpl implements ActivityOrderService {
     @Override
     @Transactional
     public ResponseData<Integer> executeOrder(OrderModelBo vo) {
+        log.info("执行消费活动开始");
         //返回对象
         ResponseData responseData = new ResponseData();
         //查询品牌下所有执行中的活动
@@ -508,8 +515,14 @@ public class ActivityOrderServiceImpl implements ActivityOrderService {
         activity.setActivityStatus(ActivityStatusEnum.ACTIVITY_STATUS_EXECUTING.getCode());
         activity.setSysBrandId(vo.getBrandId().longValue());
         activity.setActivityType(ActivityTypeEnum.ACTIVITY_TYPE_REGISGER.getCode());
-        List<ActivityVO> OrderList = mktActivityOrderPOMapper.getActivityOrderList(activity);
-        for (ActivityVO activityVO:OrderList) {
+        List<ActivityVO> orderList = mktActivityOrderPOMapper.getActivityOrderList(activity);
+        if (CollectionUtils.isEmpty(orderList)){
+            log.warn("查询数据不存在");
+            responseData.setCode(SysResponseEnum.OPERATE_FAILED_DATA_NOT_EXISTS.getCode());
+            responseData.setMessage(SysResponseEnum.OPERATE_FAILED_DATA_NOT_EXISTS.getMessage());
+            return responseData;
+        }
+        for (ActivityVO activityVO:orderList) {
             //判断金额是否满足
             if (!ExecuteParamCheckUtil.CheckPayMoney(vo.getPayMoney(),new BigDecimal(activityVO.getOrderMinPrice()))){
                 continue;
@@ -544,21 +557,25 @@ public class ActivityOrderServiceImpl implements ActivityOrderService {
             bo.setChangeIntegral(activityVO.getPoints());
             bo.setChangeWay(IntegralChangeTypeEnum.INCOME.getCode());
             bo.setMktSmartType(MktSmartTypeEnum.SMART_TYPE_INTEGRAL.getCode());
+            log.info("新增积分奖励="+activityVO.getPoints());
             award.execute(bo);
 
             // 增加卷奖励接口
+            log.info("新增券奖励");
             MktCouponPOExample example = new  MktCouponPOExample();
-            example.createCriteria().andBizIdEqualTo(activityVO.getMktActivityId());
-            example.createCriteria().andValidEqualTo(true);
+            example.createCriteria().andBizIdEqualTo(activityVO.getMktActivityId()).andValidEqualTo(true);
             List<MktCouponPO> mktCouponPOs= mktCouponPOMapper.selectByExample(example);
-            for (MktCouponPO mktCouponPO:mktCouponPOs) {
-                AwardBO awardBO = new AwardBO();
-                awardBO.setMemberCode(vo.getMemberCode().toString());
-                awardBO.setCouponDefinitionId(mktCouponPO.getCouponDefinitionId());
-                awardBO.setSendBussienId(mktCouponPO.getBizId());
-                awardBO.setMktSmartType(MktSmartTypeEnum.SMART_TYPE_COUPON.getCode());
-                award.execute(awardBO);
+            if (!CollectionUtils.isEmpty(mktCouponPOs)){
+                for (MktCouponPO mktCouponPO:mktCouponPOs) {
+                    AwardBO awardBO = new AwardBO();
+                    awardBO.setMemberCode(vo.getMemberCode().toString());
+                    awardBO.setCouponDefinitionId(mktCouponPO.getCouponDefinitionId());
+                    awardBO.setSendBussienId(mktCouponPO.getBizId());
+                    awardBO.setMktSmartType(MktSmartTypeEnum.SMART_TYPE_COUPON.getCode());
+                    award.execute(awardBO);
+                }
             }
+
         }
         responseData.setCode(SysResponseEnum.SUCCESS.getCode());
         responseData.setMessage(SysResponseEnum.SUCCESS.getMessage());

@@ -1,5 +1,6 @@
 package com.bizvane.mktcenterserviceimpl.service.impl;
 
+import com.alibaba.fastjson.JSON;
 import com.bizvane.centerstageservice.models.po.SysCheckConfigPo;
 import com.bizvane.centerstageservice.models.po.SysCheckPo;
 import com.bizvane.centerstageservice.models.vo.SysCheckConfigVo;
@@ -30,6 +31,7 @@ import com.bizvane.utils.responseinfo.ResponseData;
 import com.bizvane.utils.tokens.SysAccountPO;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -48,6 +50,7 @@ import java.util.UUID;
  * @Copyright (c) 2018 上海商帆信息科技有限公司-版权所有
  */
 @Service
+@Slf4j
 public class ActivitySigninServiceImpl implements ActivitySigninService {
 
     @Autowired
@@ -78,6 +81,7 @@ public class ActivitySigninServiceImpl implements ActivitySigninService {
      */
     @Override
     public ResponseData<ActivityVO> getActivitySigninList(ActivityVO vo, PageForm pageForm) {
+        log.info("查询签到活动列表");
         ResponseData responseData = new ResponseData();
         PageHelper.startPage(pageForm.getPageNumber(),pageForm.getPageSize());
         List<ActivityVO> activitySigninList = mktActivitySigninMapper.getActivitySigninList(vo);
@@ -97,6 +101,7 @@ public class ActivitySigninServiceImpl implements ActivitySigninService {
     @Override
     @Transactional
     public ResponseData<Integer> addActivitySignin(ActivityBO bo, SysAccountPO stageUser) {
+        log.info("创建签到活动开始");
         //返回对象
         ResponseData responseData = new ResponseData();
         //得到大实体类
@@ -139,6 +144,7 @@ public class ActivitySigninServiceImpl implements ActivitySigninService {
             mktActivityPOWithBLOBs.setActivityStatus(ActivityStatusEnum.ACTIVITY_STATUS_PENDING.getCode());
 
             //如果是待审核数据则需要增加一条审核数据
+            log.info("增加审核中心一条数据");
             SysCheckPo po = new SysCheckPo();
             po.setSysBrandId(mktActivityPOWithBLOBs.getSysBrandId());
             po.setBusinessCode(mktActivityPOWithBLOBs.getActivityCode());
@@ -163,6 +169,7 @@ public class ActivitySigninServiceImpl implements ActivitySigninService {
         mktActivityPOWithBLOBs.setCreateDate(new Date());
         mktActivityPOWithBLOBs.setCreateUserId(stageUser.getSysAccountId());
         mktActivityPOWithBLOBs.setCreateUserName(stageUser.getName());
+        log.info("新增主表数据="+ JSON.toJSONString(mktActivityPOWithBLOBs));
         mktActivityPOMapper.insertSelective(mktActivityPOWithBLOBs);
 
         //获取新增后数据id
@@ -172,6 +179,7 @@ public class ActivitySigninServiceImpl implements ActivitySigninService {
         MktActivitySignin mktActivitySignin = new MktActivitySignin();
         BeanUtils.copyProperties(mktActivityPOWithBLOBs,mktActivitySignin);
         mktActivitySignin.setMktActivityId(mktActivityId);
+        log.info("新增签到表数据="+ JSON.toJSONString(mktActivitySignin));
         mktActivitySigninMapper.insertSelective(mktActivitySignin);
         responseData.setCode(SysResponseEnum.SUCCESS.getCode());
         responseData.setMessage(SysResponseEnum.SUCCESS.getMessage());
@@ -185,10 +193,16 @@ public class ActivitySigninServiceImpl implements ActivitySigninService {
      */
     @Override
     public ResponseData<ActivityBO> selectActivitySigninById(String businessCode) {
+        log.info("查询签到详情");
         ResponseData responseData = new ResponseData();
         ActivityVO vo= new ActivityVO();
         vo.setActivityCode(businessCode);
         List<ActivityVO> signinList = mktActivitySigninMapper.getActivitySigninList(vo);
+        if (CollectionUtils.isEmpty(signinList)){
+            responseData.setCode(SysResponseEnum.OPERATE_FAILED_DATA_NOT_EXISTS.getCode());
+            responseData.setMessage(SysResponseEnum.OPERATE_FAILED_DATA_NOT_EXISTS.getMessage());
+            return responseData;
+        }
         //查询活动卷
         MktCouponPOExample example = new  MktCouponPOExample();
         example.createCriteria().andBizIdEqualTo(signinList.get(0).getMktActivityId()).andValidEqualTo(true);
@@ -204,6 +218,7 @@ public class ActivitySigninServiceImpl implements ActivitySigninService {
             }
         }
         //查询消息模板
+        log.info("查询消息模板");
         MktMessagePOExample exampl = new MktMessagePOExample();
         exampl.createCriteria().andBizIdEqualTo(signinList.get(0).getMktActivityId()).andValidEqualTo(true);
         List<MktMessagePO> listMktMessage = mktMessagePOMapper.selectByExample(exampl);
@@ -231,6 +246,7 @@ public class ActivitySigninServiceImpl implements ActivitySigninService {
     @Override
     @Transactional
     public ResponseData<Integer> executeActivitySignin(MemberInfoModel vo) {
+        log.info("执行签到活动="+vo.getBrandId()+"="+vo.getMemberCode());
         //返回对象
         ResponseData responseData = new ResponseData();
         //查询品牌下所有执行中的活动
@@ -239,6 +255,11 @@ public class ActivitySigninServiceImpl implements ActivitySigninService {
         activity.setSysBrandId(vo.getBrandId());
         activity.setActivityType(ActivityTypeEnum.ACTIVITY_TYPE_SIGNIN.getCode());
         List<ActivityVO> signinList = mktActivitySigninMapper.getActivitySigninList(activity);
+        if (CollectionUtils.isEmpty(signinList)){
+            responseData.setCode(SysResponseEnum.OPERATE_FAILED_DATA_NOT_EXISTS.getCode());
+            responseData.setMessage(SysResponseEnum.OPERATE_FAILED_DATA_NOT_EXISTS.getMessage());
+            return responseData;
+        }
         for (ActivityVO activityVO:signinList) {
             //增加积分奖励新增接口
             AwardBO bo = new AwardBO();
@@ -247,6 +268,7 @@ public class ActivitySigninServiceImpl implements ActivitySigninService {
             bo.setChangeIntegral(activityVO.getPoints());
             bo.setChangeWay(IntegralChangeTypeEnum.INCOME.getCode());
             bo.setMktSmartType(MktSmartTypeEnum.SMART_TYPE_INTEGRAL.getCode());
+            log.info("新增积分奖励");
             award.execute(bo);
             //新增积分到会员参与活动记录表中数据
             MktActivityRecordPO po = new MktActivityRecordPO();
@@ -254,6 +276,7 @@ public class ActivitySigninServiceImpl implements ActivitySigninService {
             po.setMemberCode(vo.getMemberCode());
             po.setParticipateDate(new Date());
             po.setPoints(activityVO.getPoints());
+            log.info("新增积分记录表");
             mktActivityRecordPOMapper.insertSelective(po);
         }
         responseData.setCode(SysResponseEnum.SUCCESS.getCode());
@@ -269,18 +292,22 @@ public class ActivitySigninServiceImpl implements ActivitySigninService {
      */
     @Override
     public ResponseData<Integer> checkActivitySignin(MktActivityPOWithBLOBs bs, SysAccountPO sysAccountPO) {
+       log.info("审核活动开始");
         ResponseData responseData = new ResponseData();
         bs.setModifiedUserId(sysAccountPO.getSysAccountId());
         bs.setModifiedDate(new Date());
         bs.setModifiedUserName(sysAccountPO.getName());
         //判断是审核通过还是审核驳回
         if(bs.getCheckStatus()==CheckStatusEnum.CHECK_STATUS_APPROVED.getCode()){
-                //将活动状态变更为执行中 ）
+                //将活动状态变更为执行中
+                 log.info("更新活动状态");
                 bs.setActivityStatus(ActivityStatusEnum.ACTIVITY_STATUS_EXECUTING.getCode());
                 int i = mktActivityPOMapper.updateByPrimaryKeySelective(bs);
         }else{
+            log.info("更新活动状态");
             bs.setActivityStatus(ActivityStatusEnum.ACTIVITY_STATUS_FINISHED.getCode());
             int i = mktActivityPOMapper.updateByPrimaryKeySelective(bs);
+
         }
         responseData.setCode(SysResponseEnum.SUCCESS.getCode());
         responseData.setMessage(SysResponseEnum.SUCCESS.getMessage());

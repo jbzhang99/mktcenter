@@ -1,5 +1,6 @@
 package com.bizvane.mktcenterserviceimpl.service.impl;
 
+import com.alibaba.fastjson.JSON;
 import com.bizvane.centerstageservice.models.po.SysCheckConfigPo;
 import com.bizvane.centerstageservice.models.po.SysCheckPo;
 import com.bizvane.centerstageservice.models.vo.SysCheckConfigVo;
@@ -36,6 +37,7 @@ import com.bizvane.utils.responseinfo.ResponseData;
 import com.bizvane.utils.tokens.SysAccountPO;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -54,6 +56,7 @@ import java.util.UUID;
  * @Copyright (c) 2018 上海商帆信息科技有限公司-版权所有
  */
 @Service
+@Slf4j
 public class ActivityUpgradeServiceImpl implements ActivityUpgradeService {
 
     @Autowired
@@ -88,6 +91,7 @@ public class ActivityUpgradeServiceImpl implements ActivityUpgradeService {
      */
     @Override
     public ResponseData<ActivityVO> getActivityUpgradeList(ActivityVO vo, PageForm pageForm) {
+        log.info("查询升级活动列表");
         ResponseData responseData = new ResponseData();
         PageHelper.startPage(pageForm.getPageNumber(),pageForm.getPageSize());
         List<ActivityVO> activityUpgradeList = mktActivityUpgradePOMapper.getActivityUpgradeList(vo);
@@ -107,6 +111,7 @@ public class ActivityUpgradeServiceImpl implements ActivityUpgradeService {
     @Override
     @Transactional
     public ResponseData<Integer> addActivityUpgrade(ActivityBO bo, SysAccountPO stageUser) {
+        log.info("创建升级活动开始");
         //返回对象
         ResponseData responseData = new ResponseData();
         //得到大实体类
@@ -165,9 +170,11 @@ public class ActivityUpgradeServiceImpl implements ActivityUpgradeService {
             po.setCreateDate(new Date());
             po.setCreateUserId(stageUser.getSysAccountId());
             po.setCreateUserName(stageUser.getName());
+            log.info("新增一条审核中心数据="+ JSON.toJSONString(po));
             sysCheckServiceRpc.addCheck(po);
             //getStartTime 开始时间>当前时间增加job
             if(1 != bo.getActivityVO().getLongTerm() && new Date().before(activityVO.getStartTime())){
+                log.info("新增job任务");
                 //创建任务调度任务开始时间
                 jobUtil.addJob(stageUser,activityVO,activityCode);
                 //创建任务调度任务结束时间
@@ -180,6 +187,7 @@ public class ActivityUpgradeServiceImpl implements ActivityUpgradeService {
             if(1 != bo.getActivityVO().getLongTerm() && new Date().before(activityVO.getStartTime())){
                 //活动状态设置为待执行
                 mktActivityPOWithBLOBs.setActivityStatus(ActivityStatusEnum.ACTIVITY_STATUS_PENDING.getCode());
+                log.info("新增job任务");
                 //创建任务调度任务开始时间
                 jobUtil.addJob(stageUser,activityVO,activityCode);
                 //创建任务调度任务结束时间
@@ -196,6 +204,7 @@ public class ActivityUpgradeServiceImpl implements ActivityUpgradeService {
         mktActivityPOWithBLOBs.setCreateDate(new Date());
         mktActivityPOWithBLOBs.setCreateUserId(stageUser.getSysAccountId());
         mktActivityPOWithBLOBs.setCreateUserName(stageUser.getName());
+        log.info("新增主表数据="+ JSON.toJSONString(mktActivityPOWithBLOBs));
         mktActivityPOMapper.insertSelective(mktActivityPOWithBLOBs);
         //获取新增后数据id
         Long mktActivityId = mktActivityPOWithBLOBs.getMktActivityId();
@@ -205,6 +214,7 @@ public class ActivityUpgradeServiceImpl implements ActivityUpgradeService {
         MktActivityUpgradePO mktActivityUpgradePO = new MktActivityUpgradePO();
         BeanUtils.copyProperties(mktActivityPOWithBLOBs,mktActivityUpgradePO);
         mktActivityUpgradePO.setMktActivityId(mktActivityId);
+        log.info("新增升级表数据="+ JSON.toJSONString(mktActivityUpgradePO));
         mktActivityUpgradePOMapper.insertSelective(mktActivityUpgradePO);
 
 
@@ -238,6 +248,7 @@ public class ActivityUpgradeServiceImpl implements ActivityUpgradeService {
         }
 
         //结束
+        log.info("创建升级活动结束");
         responseData.setCode(SysResponseEnum.SUCCESS.getCode());
         responseData.setMessage(SysResponseEnum.SUCCESS.getMessage());
         return responseData;
@@ -252,6 +263,7 @@ public class ActivityUpgradeServiceImpl implements ActivityUpgradeService {
     @Override
     @Transactional
     public ResponseData<Integer> updateActivityUpgrade(ActivityBO bo, SysAccountPO stageUser) {
+        log.info("修改升级活动开始");
         //返回对象
         ResponseData responseData = new ResponseData();
         //得到大实体类
@@ -302,6 +314,7 @@ public class ActivityUpgradeServiceImpl implements ActivityUpgradeService {
                 po.setCreateDate(new Date());
                 po.setCreateUserId(stageUser.getSysAccountId());
                 po.setCreateUserName(stageUser.getName());
+                log.info("新增一条数据到审核中心="+ JSON.toJSONString(po));
                 sysCheckServiceRpc.addCheck(po);
             }
 
@@ -338,6 +351,7 @@ public class ActivityUpgradeServiceImpl implements ActivityUpgradeService {
         mktActivityPOWithBLOBs.setModifiedDate(new Date());
         mktActivityPOWithBLOBs.setModifiedUserId(stageUser.getSysAccountId());
         mktActivityPOWithBLOBs.setModifiedUserName(stageUser.getName());
+        log.info("修改活动主表="+ JSON.toJSONString(mktActivityPOWithBLOBs));
         mktActivityPOMapper.updateByPrimaryKeySelective(mktActivityPOWithBLOBs);
         //获取新增后数据id
         Long mktActivityId = mktActivityPOWithBLOBs.getMktActivityId();
@@ -346,6 +360,7 @@ public class ActivityUpgradeServiceImpl implements ActivityUpgradeService {
         MktActivityUpgradePO mktActivityUpgradePO = new MktActivityUpgradePO();
         BeanUtils.copyProperties(mktActivityPOWithBLOBs,mktActivityUpgradePO);
         mktActivityUpgradePO.setMktActivityId(mktActivityId);
+        log.info("修改活动升级表="+ JSON.toJSONString(mktActivityUpgradePO));
         mktActivityUpgradePOMapper.updateByPrimaryKeySelective(mktActivityUpgradePO);
         //先删除在新增
         MktCouponPO record = new MktCouponPO();
@@ -400,10 +415,16 @@ public class ActivityUpgradeServiceImpl implements ActivityUpgradeService {
      */
     @Override
     public ResponseData<ActivityBO> selectActivityUpgradesById(String businessCode) {
+        log.info("查询升级活动表参数businessCode="+businessCode);
         ResponseData responseData = new ResponseData();
         ActivityVO vo= new ActivityVO();
         vo.setActivityCode(businessCode);
         List<ActivityVO> upgradeList = mktActivityUpgradePOMapper.getActivityUpgradeList(vo);
+        if (CollectionUtils.isEmpty(upgradeList)){
+            responseData.setCode(SysResponseEnum.OPERATE_FAILED_DATA_NOT_EXISTS.getCode());
+            responseData.setMessage(SysResponseEnum.OPERATE_FAILED_DATA_NOT_EXISTS.getMessage());
+            return responseData;
+        }
         //查询活动卷
         MktCouponPOExample example = new  MktCouponPOExample();
         example.createCriteria().andBizIdEqualTo(upgradeList.get(0).getMktActivityId()).andValidEqualTo(true);
@@ -446,6 +467,7 @@ public class ActivityUpgradeServiceImpl implements ActivityUpgradeService {
     @Override
     @Transactional
     public ResponseData<Integer> executeUpgrades(MemberInfoModel vo) {
+        log.info("执行升级活动开始");
         //返回对象
         ResponseData responseData = new ResponseData();
         //查询品牌下所有执行中的活动
@@ -456,6 +478,11 @@ public class ActivityUpgradeServiceImpl implements ActivityUpgradeService {
         //查询会员等级相应的活动
         activity.setMbrLevelCode(vo.getLevelId().toString());
         List<ActivityVO> upgradeList = mktActivityUpgradePOMapper.getActivityUpgradeList(activity);
+        if (CollectionUtils.isEmpty(upgradeList)){
+            responseData.setCode(SysResponseEnum.OPERATE_FAILED_DATA_NOT_EXISTS.getCode());
+            responseData.setMessage("没有对应的活动");
+            return responseData;
+        }
         for (ActivityVO activityVO:upgradeList) {
             ////增加积分奖励新增接口
             AwardBO bo = new AwardBO();
@@ -464,11 +491,11 @@ public class ActivityUpgradeServiceImpl implements ActivityUpgradeService {
             bo.setChangeIntegral(activityVO.getPoints());
             bo.setChangeWay(IntegralChangeTypeEnum.INCOME.getCode());
             bo.setMktSmartType(MktSmartTypeEnum.SMART_TYPE_INTEGRAL.getCode());
+            log.info("新增积分奖励");
             award.execute(bo);
             // 增加卷奖励接口
             MktCouponPOExample example = new  MktCouponPOExample();
-            example.createCriteria().andBizIdEqualTo(activityVO.getMktActivityId());
-            example.createCriteria().andValidEqualTo(true);
+            example.createCriteria().andBizIdEqualTo(activityVO.getMktActivityId()).andValidEqualTo(true);
             List<MktCouponPO> mktCouponPOs= mktCouponPOMapper.selectByExample(example);
             for (MktCouponPO mktCouponPO:mktCouponPOs) {
                 AwardBO awardBO = new AwardBO();
@@ -476,6 +503,7 @@ public class ActivityUpgradeServiceImpl implements ActivityUpgradeService {
                 awardBO.setCouponDefinitionId(mktCouponPO.getCouponDefinitionId());
                 awardBO.setSendBussienId(mktCouponPO.getBizId());
                 awardBO.setMktSmartType(MktSmartTypeEnum.SMART_TYPE_COUPON.getCode());
+                log.info("新增券奖励");
                 award.execute(awardBO);
             }
         }
@@ -493,6 +521,7 @@ public class ActivityUpgradeServiceImpl implements ActivityUpgradeService {
     @Override
     @Transactional
     public ResponseData<Integer> checkActivityUpgrades(MktActivityPOWithBLOBs bs, SysAccountPO sysAccountPO) {
+        log.info("会员升级活动审核");
         ResponseData responseData = new ResponseData();
         bs.setModifiedUserId(sysAccountPO.getSysAccountId());
         bs.setModifiedDate(new Date());
@@ -501,7 +530,7 @@ public class ActivityUpgradeServiceImpl implements ActivityUpgradeService {
         MktActivityPOExample exampl = new MktActivityPOExample();
         exampl.createCriteria().andActivityCodeEqualTo(bs.getActivityCode()).andValidEqualTo(true);
         List<MktActivityPO> mktActivityPO = mktActivityPOMapper.selectByExample(exampl);
-        if (org.apache.commons.collections.CollectionUtils.isEmpty(mktActivityPO)){
+        if (CollectionUtils.isEmpty(mktActivityPO)){
             responseData.setCode(SysResponseEnum.FAILED.getCode());
             responseData.setMessage(SysResponseEnum.OPERATE_FAILED_DATA_NOT_EXISTS.getMessage());
             return responseData;
