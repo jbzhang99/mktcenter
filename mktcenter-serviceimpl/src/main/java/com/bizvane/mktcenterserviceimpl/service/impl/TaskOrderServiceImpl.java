@@ -49,25 +49,7 @@ public class TaskOrderServiceImpl implements TaskOrderService {
     @Autowired
     private MktTaskOrderPOMapper mktTaskOrderPOMapper;
 
-    /**
-     * 审核任务:任务id   任务状态
-     * 审核状态：1未审核，2审核中，3已审核，4已驳回',
-     */
-    @Override
-    public Integer checkOrderTask(TaskVO vo) {
-        MktTaskOrderPO mktTaskOrderPO = new MktTaskOrderPO();
-        BeanUtils.copyProperties(vo, mktTaskOrderPO);
-        return mktTaskOrderPOMapper.updateByPrimaryKeySelective(mktTaskOrderPO);
 
-    }
-
-    /**
-     * 根据任务Id查询任务详情
-     */
-    @Override
-    public List<TaskDetailBO> getOrderTaskDetails(Long mktTaskId) {
-        return mktTaskOrderPOMapper.getOrderTaskDetails(mktTaskId);
-    }
     /**
      * 查询任务列表
      *
@@ -202,7 +184,25 @@ public class TaskOrderServiceImpl implements TaskOrderService {
 
 
     }
+    /**
+     * 审核任务:任务id   任务状态
+     * 审核状态：1未审核，2审核中，3已审核，4已驳回',
+     */
+    @Override
+    public Integer checkOrderTask(TaskVO vo) {
+        MktTaskOrderPO mktTaskOrderPO = new MktTaskOrderPO();
+        BeanUtils.copyProperties(vo, mktTaskOrderPO);
+        return mktTaskOrderPOMapper.updateByPrimaryKeySelective(mktTaskOrderPO);
 
+    }
+
+    /**
+     * 根据任务Id查询任务详情
+     */
+    @Override
+    public List<TaskDetailBO> getOrderTaskDetails(Long mktTaskId) {
+        return mktTaskOrderPOMapper.getOrderTaskDetails(mktTaskId);
+    }
     /**
      * 新增消费任务
      */
