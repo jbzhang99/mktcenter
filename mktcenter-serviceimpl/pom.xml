@@ -142,38 +142,40 @@
 			<artifactId>xxl-job-core</artifactId>
 			<version>1.9.1</version>
 		</dependency>
-
 		<!--券模块依赖-->
 		<dependency>
 			<groupId>com.bizvane</groupId>
 			<artifactId>coupon-facade</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
-
-		<!--&lt;!&ndash;中台模块依赖&ndash;&gt;-->
+		<!--中台模块依赖-->
 		<dependency>
 			<groupId>com.bizvane</groupId>
 			<artifactId>centerstage-service</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
-
-		<!--&lt;!&ndash;中控模块依赖&ndash;&gt;-->
+		<!--中控模块依赖-->
 		<dependency>
 			<groupId>com.bizvane</groupId>
 			<artifactId>centercontrol-service</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
-
 		<!--会员模块依赖-->
 		<dependency>
 			<groupId>com.bizvane</groupId>
 			<artifactId>members-facade</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
-
+		<!-- 引入消息 -->
 		<dependency>
 			<groupId>com.bizvane</groupId>
 			<artifactId>message-facade</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+		</dependency>
+		<!-- 引入微信模块，二维码 -->
+		<dependency>
+			<groupId>com.bizvane</groupId>
+			<artifactId>wechat-facade</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
 		<!-- spring-boot-starter-data-mongodb -->
@@ -193,19 +195,7 @@
 			<artifactId>fastjson</artifactId>
 			<version>1.2.39</version>
 		</dependency>
-		<!-- 引入短信 -->
-		<dependency>
-			<groupId>com.bizvane</groupId>
-			<artifactId>message-facade</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
-		</dependency>
 
-		<!-- 引入短信 -->
-		<dependency>
-			<groupId>com.bizvane</groupId>
-			<artifactId>wechat-facade</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
-		</dependency>
 	</dependencies>
 	<dependencyManagement>
 		<dependencies>
