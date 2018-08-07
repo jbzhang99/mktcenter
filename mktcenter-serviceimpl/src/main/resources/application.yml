@@ -97,4 +97,4 @@ threadPool:
   keepAliveTime: 60
 
 activity:
-  qrcodeurl: http://www.xxx.bizvane.com/qrcode?activityCode={activityCode}
+  qrcodeurl: http://www.xxx.bizvane.com/qrcode?activityCode=

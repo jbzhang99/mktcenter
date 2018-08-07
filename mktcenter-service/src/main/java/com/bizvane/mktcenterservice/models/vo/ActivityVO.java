@@ -1,10 +1,12 @@
 package com.bizvane.mktcenterservice.models.vo;
 
 import com.bizvane.couponfacade.models.po.CouponEntityPO;
+import com.bizvane.couponfacade.models.vo.CouponFindCouponCountResponseVO;
 import com.bizvane.mktcenterservice.models.po.MktActivityPO;
 import com.bizvane.mktcenterservice.models.po.MktActivityRegisterPO;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
 /**
@@ -171,6 +173,11 @@ public class ActivityVO extends MktActivityPO {
 
     private CouponEntityPO couponEntityPO;
 
+    private CouponFindCouponCountResponseVO couponFindCouponCountResponseVO;
+
+    /**核销率
+     * */
+    private String useCouponRate;
     /**
      * 会员编号
      */
@@ -421,5 +428,21 @@ public class ActivityVO extends MktActivityPO {
 
     public void setCouponEntityPO(CouponEntityPO couponEntityPO) {
         this.couponEntityPO = couponEntityPO;
+    }
+
+    public CouponFindCouponCountResponseVO getCouponFindCouponCountResponseVO() {
+        return couponFindCouponCountResponseVO;
+    }
+
+    public void setCouponFindCouponCountResponseVO(CouponFindCouponCountResponseVO couponFindCouponCountResponseVO) {
+        this.couponFindCouponCountResponseVO = couponFindCouponCountResponseVO;
+    }
+
+    public String getUseCouponRate() {
+        return useCouponRate;
+    }
+
+    public void setUseCouponRate(String useCouponRate) {
+        this.useCouponRate = useCouponRate;
     }
 }

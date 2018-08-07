@@ -14,6 +14,7 @@ import com.bizvane.couponfacade.models.vo.CouponFindCouponCountResponseVO;
 import com.bizvane.members.facade.models.MemberInfoModel;
 import com.bizvane.mktcenterservice.interfaces.ActivityManualService;
 import com.bizvane.mktcenterservice.models.bo.ActivityBO;
+import com.bizvane.mktcenterservice.models.bo.ActivityManualBO;
 import com.bizvane.mktcenterservice.models.bo.AwardBO;
 import com.bizvane.mktcenterservice.models.po.*;
 import com.bizvane.mktcenterservice.models.vo.ActivityManualVO;
@@ -37,6 +38,7 @@ import com.bizvane.utils.responseinfo.ResponseData;
 import com.bizvane.utils.tokens.SysAccountPO;
 import com.bizvane.wechatfacade.interfaces.QRCodeServiceFeign;
 import com.bizvane.wechatfacade.models.vo.QRCodeCreateRequestVO;
+import com.bizvane.wechatfacade.models.vo.UrlQRCodeCreateRequestVO;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import lombok.extern.slf4j.Slf4j;
@@ -48,6 +50,7 @@ import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
 import java.math.BigDecimal;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -200,21 +203,19 @@ public class ActivityManualServiceImpl implements ActivityManualService {
         // 扫码领券的二维码
       if(1==activityVO.getReceiveType()){
          QRCodeConfig qrCodeConfig = new QRCodeConfig();
-        QRCodeCreateRequestVO qrCodeCreateRequestVO = new QRCodeCreateRequestVO();
-        /*  qrCodeCreateRequestVO.setSysBrandId(activityVO.getSysBrandId());
-         //todo
-         qrCodeCreateRequestVO.setBusinessCode(activityCode);
-         qrCodeCreateRequestVO.setBusinessType(String.valueOf(BusinessTypeEnum.ACTIVITY_TYPE_ACTIVITY.getCode()));*/
-        log.info("领券活动-创建活动-扫码领券查询二维码入参:"+JSON.toJSONString(qrCodeCreateRequestVO));
-         ResponseData<String> qrCodeResponseData= qrCodeServiceFeign.createQRCode(qrCodeCreateRequestVO);
-         if(null==qrCodeCreateRequestVO){
+         String url= qrCodeConfig.getQrcodeurl()+activityVO.getActivityCode();
+          UrlQRCodeCreateRequestVO urlQRCodeCreateRequestVO = new UrlQRCodeCreateRequestVO();
+          urlQRCodeCreateRequestVO.setSysBrandId(activityVO.getSysBrandId());
+          urlQRCodeCreateRequestVO.setUrl(url);
+         log.info("领券活动-创建活动-扫码领券查询二维码入参:"+JSON.toJSONString(urlQRCodeCreateRequestVO));
+         ResponseData<String> qrCodeResponseData= qrCodeServiceFeign.createUrlQRCode(urlQRCodeCreateRequestVO);
+         if(null==qrCodeResponseData||null==qrCodeResponseData.getData()){
             log.info("领券活动-创建活动-扫码领券生成二维码为空");
             responseData.setMessage(SystemConstants.ERROR_QR_CODE_EMPTY);
             responseData.setData(SystemConstants.ERROR_CODE);
             return responseData;
          }
-         String qrCodeUrl=qrCodeResponseData.getData();
-         mktActivityManualPO.setQrcode(qrCodeUrl);
+          mktActivityManualPO.setQrcode(qrCodeResponseData.getData());
        }
        log.info("领券活动-创建活动-新增领券规则表，入参:"+JSON.toJSONString(mktActivityManualPO));
         mktActivityManualPOMapper.insertSelective(mktActivityManualPO);
@@ -377,16 +378,9 @@ public class ActivityManualServiceImpl implements ActivityManualService {
 
 
     @Override
-    public ResponseData<List<ActivityBO>> getActivityManualEffect(ActivityVO vo,SysAccountPO stageUser) {
+    public ResponseData<List<ActivityBO>> getActivityManualEffect(ActivityVO vo) {
         log.info("领券活动-活动效果分析-入参:"+JSON.toJSONString(vo));
         ResponseData responseData = new ResponseData<>();
-        //查询该品牌下的所有领券活动
-        //todo调券接口查询券信息
-        /**
-         * 入参：
-         * 出参领取张数，核销张数，核销率，券收益
-         */
-        vo.setSysBrandId(stageUser.getBrandId());
         try {
         List<ActivityVO> activityVOList = mktActivityManualPOMapper.getActivityManualList(vo);
         int sumCouponReceive =0;
@@ -397,21 +391,26 @@ public class ActivityManualServiceImpl implements ActivityManualService {
             Date createDtStart =vo.getCreateDateStart();
             Date createDtEnd=vo.getCreateDateEnd();
             ResponseData<CouponFindCouponCountResponseVO> couponResponseData=couponQueryServiceFeign.findCouponCountBySendBusinessId(sendBusinessId,createDtStart,createDtEnd) ;//一个活动只有一张券
-          //  vo1.setCouponFindCouponCountResponseVO(couponResponseData.getData());
+            vo1.setCouponFindCouponCountResponseVO(couponResponseData.getData());
             sumCouponReceive=sumCouponReceive+couponResponseData.getData().getCouponSum();//券总数量
             sumCouponUse=sumCouponUse+couponResponseData.getData().getCouponUsedSum();//券已使用总数量
             sumCouponMoney=sumCouponMoney.add(couponResponseData.getData().getMoney());//券收益
            //计算核销率
-
+            DecimalFormat df = new DecimalFormat("0.00%");
+            vo1.setUseCouponRate(df.format(couponResponseData.getData().getCouponUsedSum()/couponResponseData.getData().getCouponSum()));
          }
-         responseData.setData(activityVOList);
+         ActivityManualBO activityManualBO = new ActivityManualBO();
+            activityManualBO.setActivityVOList(activityVOList);
+            activityManualBO.setSumCouponMoney(sumCouponMoney);
+            activityManualBO.setSumCouponReceive(sumCouponReceive);
+            activityManualBO.setSumCouponUse(sumCouponUse);
+         responseData.setData(activityManualBO);
         }catch (Exception e){
          log.info("领券活动-查询活动效果分析-出错"+e.getMessage());
             responseData.setMessage(ActivityConstants.ERROR_SQL);
             responseData.setCode(SystemConstants.ERROR_CODE);
             return  responseData;
         }
-
         responseData.setMessage(SystemConstants.SUCCESS_MESSAGE);
         responseData.setCode(SystemConstants.SUCCESS_CODE);
         return responseData;
@@ -444,7 +443,7 @@ public class ActivityManualServiceImpl implements ActivityManualService {
             if(!CollectionUtils.isEmpty(mktCouponPOs)){
                 for (MktCouponPO po:mktCouponPOs) {
                     CouponEntityPO couponEntity = new CouponEntityPO();
-                    couponEntity.setCouponEntityId(po.getCouponDefinitionId());
+                    couponEntity.setCouponDefinitionId(po.getCouponDefinitionId().toString());
                     ResponseData<CouponEntityAndDefinitionVO>  entityAndDefinition = couponQueryServiceFeign.getAllRpc(couponEntity);
                     log.info("领券活动-调券接口-出参:"+JSON.toJSONString(entityAndDefinition));
                     lists.add(entityAndDefinition.getData());

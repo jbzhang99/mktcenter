@@ -30,9 +30,6 @@ public class ActivityManualController {
         return activityManualService.getActivityManualList(vo,pageForm);
     }
 
-    /*
-    * 查询优惠券
-    */
 
     /**
      *创建活动
@@ -51,10 +48,9 @@ public class ActivityManualController {
    * 查询活动效果分析
    * */
    @RequestMapping("/getActivityManualEffect")
-   public ResponseData<List<ActivityBO>>getActivityManualEffect(ActivityVO activityVO,HttpServletRequest request){
-       // SysAccountPO stageUser = TokenUtils.getStageUser(request);
-       SysAccountPO stageUser = new SysAccountPO();
-       return activityManualService.getActivityManualEffect(activityVO,stageUser);
+   public ResponseData<List<ActivityBO>>getActivityManualEffect(ActivityVO activityVO){
+
+       return activityManualService.getActivityManualEffect(activityVO);
  }
 
     /**
