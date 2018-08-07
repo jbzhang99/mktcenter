@@ -72,7 +72,7 @@ public interface ActivityServiceRpc {
   * @return
   */
  @RequestMapping("getActivityList")
- ResponseData<List<ActivityVO>> getActivityList(ActivityVO vo);
+ ResponseData<List<ActivityVO>> getActivityList(@RequestBody ActivityVO vo);
 
  /**
   * 签到列表
@@ -80,12 +80,12 @@ public interface ActivityServiceRpc {
   * @return
   */
  @RequestMapping("getActivityRecordPOList")
- public ResponseData<List<MktActivityRecordPO>> getActivityRecordPOList(MktActivityRecordVO vo);
+ public ResponseData<List<MktActivityRecordPO>> getActivityRecordPOList(@RequestBody MktActivityRecordVO vo);
  /**
   * 执行活动
   * @param
   * @return
   */
  @RequestMapping("executeActivitySignin")
- public ResponseData<Integer> executeActivitySignin(MemberInfoModel vo);
+ public ResponseData<Integer> executeActivitySignin(@RequestBody MemberInfoModel vo);
 }
