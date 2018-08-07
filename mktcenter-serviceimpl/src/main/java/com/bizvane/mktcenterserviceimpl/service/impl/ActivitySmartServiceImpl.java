@@ -528,27 +528,23 @@ public class ActivitySmartServiceImpl implements ActivitySmartService {
         mktActivitySmartPOMapper.insertSelective(mktActivitySmartPO);
 
         //新增奖励券表
-//        if(!CollectionUtils.isEmpty(vo.getMktCouponPOS())){
-//            log.info("vo.getMktCouponPOS()) is empty");
-//            for(MktCouponPO mktCouponPO : vo.getMktCouponPOS()){
-//                mktCouponPO.setBizType(BusinessTypeEnum.ACTIVITY_TYPE_ACTIVITY.getCode());
-//                mktCouponPO.setBizId(mktActivityId);
-//                mktCouponPO.setCreateDate(new Date());
-//                mktCouponPO.setCreateUserId(stageUser.getSysAccountId());
-//                mktCouponPO.setCreateUserName(stageUser.getName());
-//                mktCouponPOMapper.insertSelective(mktCouponPO);
-//            }
-//        }
+        if(!CollectionUtils.isEmpty(vo.getMktCouponPOS())){
+            log.info("vo.getMktCouponPOS()) is empty");
+            for(MktCouponPO mktCouponPO : vo.getMktCouponPOS()){
+                mktCouponPO.setBizType(BusinessTypeEnum.ACTIVITY_TYPE_ACTIVITY.getCode());
+                mktCouponPO.setBizId(mktActivityId);
+                mktCouponPO.setCreateDate(new Date());
+                mktCouponPO.setCreateUserId(stageUser.getSysAccountId());
+                mktCouponPO.setCreateUserName(stageUser.getName());
+                mktCouponPOMapper.insertSelective(mktCouponPO);
+            }
+        }
 
         //执行
         //根据条件获取人，再遍历
-        try {
-            AwardBO awardBO = new AwardBO();
-            awardBO.setMktSmartType(MktSmartTypeEnum.SMART_TYPE_COUPON.getCode());
-            award.execute(awardBO);
-        } catch (Exception e) {
-            log.error("com.bizvane.mktcenterserviceimpl.service.impl.ActivitySmartServiceImpl.addCouponActivity error"+ e.getMessage());
-        }
+        AwardBO awardBO = new AwardBO();
+        awardBO.setMktSmartType(MktSmartTypeEnum.SMART_TYPE_COUPON.getCode());
+        award.execute(awardBO);
 
         responseData.setMessage(ResponseConstants.SUCCESS_MSG);
         log.info("com.bizvane.mktcenterserviceimpl.service.impl.ActivitySmartServiceImpl.addCouponActivity result"+ JSON.toJSONString(responseData));
