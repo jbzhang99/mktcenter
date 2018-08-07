@@ -8,6 +8,8 @@ import com.bizvane.members.facade.service.api.MemberInfoApiService;
 import com.bizvane.mktcenterservice.interfaces.TaskMessageService;
 import com.bizvane.mktcenterservice.interfaces.TaskService;
 import com.bizvane.mktcenterservice.models.bo.AwardBO;
+import com.bizvane.mktcenterservice.models.bo.TaskInviteAwardBO;
+import com.bizvane.mktcenterservice.models.bo.TaskOrderAwardBO;
 import com.bizvane.mktcenterservice.models.po.MktMessagePO;
 import com.bizvane.mktcenterservice.models.po.MktTaskPO;
 import com.bizvane.mktcenterservice.models.po.MktTaskPOExample;
@@ -61,6 +63,25 @@ public class TaskServiceImpl implements TaskService {
     private TaskMessageService taskMessageService;
     @Autowired
     private JobUtil jobUtil;
+
+    /**
+     * 根据公司id和品牌id查询执行中的消费类任务
+     * @param sysCompanyId
+     * @param sysBrandId
+     * @return
+     */
+    public List<TaskOrderAwardBO> getTaskOrderAwardList(Long sysCompanyId,Long sysBrandId){
+       return mktTaskPOMapper.getTaskOrderAwardList(sysCompanyId,sysBrandId);
+    }
+    /**
+     * 根据公司id和品牌id查询执行中的邀请类任务
+     * @param sysCompanyId
+     * @param sysBrandId
+     * @return
+     */
+    public List<TaskInviteAwardBO> getTaskInviteAwardList(Long sysCompanyId, Long sysBrandId){
+        return mktTaskPOMapper.getTaskInviteAwardList(sysCompanyId, sysBrandId);
+    }
 
     /**
      * 消费  邀请任务都可使用,查询任务详情(TaskDetailVO)

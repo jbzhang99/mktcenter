@@ -1,6 +1,8 @@
 package com.bizvane.mktcenterserviceimpl.mappers;
 
 import com.bizvane.mktcenterservice.models.bo.TaskDetailBO;
+import com.bizvane.mktcenterservice.models.bo.TaskInviteAwardBO;
+import com.bizvane.mktcenterservice.models.bo.TaskOrderAwardBO;
 import com.bizvane.mktcenterservice.models.po.MktTaskPO;
 import com.bizvane.mktcenterservice.models.po.MktTaskPOExample;
 import com.bizvane.mktcenterservice.models.po.MktTaskPOWithBLOBs;
@@ -98,4 +100,8 @@ public interface MktTaskPOMapper {
 	int updateByPrimaryKey(MktTaskPO record);
 
 	public  List<TaskDetailVO> getTaskDetailByTaskId  (@Param("mktTaskId") Long mktTaskId);
+
+	public List<TaskOrderAwardBO> getTaskOrderAwardList(@Param("sysCompanyId") Long sysCompanyId,@Param("sysBrandId") Long sysBrandId);
+
+	public List<TaskInviteAwardBO> getTaskInviteAwardList(@Param("sysCompanyId") Long sysCompanyId, @Param("sysBrandId") Long sysBrandId);
 }
