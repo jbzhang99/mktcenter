@@ -84,4 +84,12 @@ public interface TaskProfileService {
      */
     public ResponseData addToRecord(TaskVO vo, MemberInfoModel memberInfoModel);
 
+    /**
+     * 禁用任务
+     * @param taskId
+     * @param stageUser
+     * @return
+     */
+    public ResponseData stopTask(Long taskId,SysAccountPO stageUser);
+
 }
