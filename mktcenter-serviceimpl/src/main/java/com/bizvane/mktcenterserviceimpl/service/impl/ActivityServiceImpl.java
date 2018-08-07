@@ -1,5 +1,7 @@
 package com.bizvane.mktcenterserviceimpl.service.impl;
 
+import com.bizvane.centerstageservice.models.po.SysCheckPo;
+import com.bizvane.centerstageservice.rpc.SysCheckServiceRpc;
 import com.bizvane.mktcenterservice.interfaces.ActivityService;
 import com.bizvane.mktcenterservice.models.po.*;
 import com.bizvane.mktcenterservice.models.vo.ActivityVO;
@@ -30,7 +32,8 @@ public class ActivityServiceImpl implements ActivityService {
     private MktActivityPOMapper mktActivityPOMapper;
     @Autowired
     private MktMessagePOMapper mktMessagePOMapper;
-
+    @Autowired
+    private SysCheckServiceRpc sysCheckServiceRpc;
     /**
      * 禁用/启用活动
      * @param vo
@@ -58,11 +61,14 @@ public class ActivityServiceImpl implements ActivityService {
      * @return
      */
     @Override
-    public ResponseData<Integer> checkActivityById(MktActivityPOWithBLOBs bs, SysAccountPO sysAccountPO) {
+    public ResponseData<Integer> checkActivityById(SysCheckPo po, SysAccountPO sysAccountPO) {
         ResponseData responseData = new ResponseData();
+        MktActivityPOWithBLOBs bs = new MktActivityPOWithBLOBs();
         bs.setModifiedUserId(sysAccountPO.getSysAccountId());
         bs.setModifiedDate(new Date());
         bs.setModifiedUserName(sysAccountPO.getName());
+        bs.setCheckStatus(po.getCheckStatus());
+        bs.setActivityCode(po.getBusinessCode());
         //根据code查询出审核活动的详细信息
         MktActivityPOExample exampl = new MktActivityPOExample();
         exampl.createCriteria().andActivityCodeEqualTo(bs.getActivityCode()).andValidEqualTo(true);
@@ -97,6 +103,8 @@ public class ActivityServiceImpl implements ActivityService {
             bs.setActivityStatus(ActivityStatusEnum.ACTIVITY_STATUS_FINISHED.getCode());
             int i = mktActivityPOMapper.updateByPrimaryKeySelective(bs);
         }
+        //更新审核中心状态
+        sysCheckServiceRpc.updateCheck(po);
         responseData.setCode(SysResponseEnum.SUCCESS.getCode());
         responseData.setMessage(SysResponseEnum.SUCCESS.getMessage());
         return responseData;

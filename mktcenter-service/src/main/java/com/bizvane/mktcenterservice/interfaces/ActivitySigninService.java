@@ -1,5 +1,6 @@
 package com.bizvane.mktcenterservice.interfaces;
 
+import com.bizvane.centerstageservice.models.po.SysCheckPo;
 import com.bizvane.members.facade.models.MemberInfoModel;
 import com.bizvane.mktcenterservice.models.bo.ActivityBO;
 import com.bizvane.mktcenterservice.models.po.MktActivityPOWithBLOBs;
@@ -47,5 +48,5 @@ public interface ActivitySigninService {
      * @param
      * @return
      */
-    public ResponseData<Integer> checkActivitySignin(MktActivityPOWithBLOBs bs, SysAccountPO sysAccountPO);
+    public ResponseData<Integer> checkActivitySignin(SysCheckPo po, SysAccountPO sysAccountPO);
 }

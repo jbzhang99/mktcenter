@@ -1,5 +1,6 @@
 package com.bizvane.mktcenterservice.interfaces;
 
+import com.bizvane.centerstageservice.models.po.SysCheckPo;
 import com.bizvane.members.facade.models.MemberInfoModel;
 import com.bizvane.mktcenterservice.models.bo.ActivityBO;
 import com.bizvane.mktcenterservice.models.bo.OrderModelBo;
@@ -46,7 +47,7 @@ public interface ActivityOrderService {
      * @param
      * @return
      */
-    public ResponseData<Integer> checkActivityOrder(MktActivityPOWithBLOBs bs, SysAccountPO sysAccountPO);
+    public ResponseData<Integer> checkActivityOrder(SysCheckPo po, SysAccountPO sysAccountPO);
     /**
      * 执行活动
      * @param

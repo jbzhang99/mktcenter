@@ -1,5 +1,6 @@
 package com.bizvane.mktcenterservice.interfaces;
 
+import com.bizvane.centerstageservice.models.po.SysCheckPo;
 import com.bizvane.members.facade.models.MemberInfoModel;
 import com.bizvane.mktcenterservice.models.bo.ActivityBO;
 import com.bizvane.mktcenterservice.models.po.MktActivityPOWithBLOBs;
@@ -54,5 +55,5 @@ public interface ActivityUpgradeService {
      * @param
      * @return
      */
-    public ResponseData<Integer> checkActivityUpgrades(MktActivityPOWithBLOBs bs, SysAccountPO sysAccountPO);
+    public ResponseData<Integer> checkActivityUpgrades(SysCheckPo po, SysAccountPO sysAccountPO);
 }

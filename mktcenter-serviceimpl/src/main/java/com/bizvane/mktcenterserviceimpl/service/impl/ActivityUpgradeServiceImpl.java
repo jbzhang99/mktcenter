@@ -514,18 +514,21 @@ public class ActivityUpgradeServiceImpl implements ActivityUpgradeService {
 
     /**
      * 会员活动审核
-     * @param bs
+     * @param
      * @param sysAccountPO
      * @return
      */
     @Override
     @Transactional
-    public ResponseData<Integer> checkActivityUpgrades(MktActivityPOWithBLOBs bs, SysAccountPO sysAccountPO) {
+    public ResponseData<Integer> checkActivityUpgrades(SysCheckPo po, SysAccountPO sysAccountPO) {
         log.info("会员升级活动审核");
         ResponseData responseData = new ResponseData();
+        MktActivityPOWithBLOBs bs = new MktActivityPOWithBLOBs();
         bs.setModifiedUserId(sysAccountPO.getSysAccountId());
         bs.setModifiedDate(new Date());
         bs.setModifiedUserName(sysAccountPO.getName());
+        bs.setCheckStatus(po.getCheckStatus());
+        bs.setActivityCode(po.getBusinessCode());
         //根据code查询出审核活动的详细信息
         MktActivityPOExample exampl = new MktActivityPOExample();
         exampl.createCriteria().andActivityCodeEqualTo(bs.getActivityCode()).andValidEqualTo(true);
@@ -560,6 +563,8 @@ public class ActivityUpgradeServiceImpl implements ActivityUpgradeService {
             bs.setActivityStatus(ActivityStatusEnum.ACTIVITY_STATUS_FINISHED.getCode());
             int i = mktActivityPOMapper.updateByPrimaryKeySelective(bs);
         }
+        //更新审核中心状态
+        sysCheckServiceRpc.updateCheck(po);
         responseData.setCode(SysResponseEnum.SUCCESS.getCode());
         responseData.setMessage(SysResponseEnum.SUCCESS.getMessage());
         return responseData;

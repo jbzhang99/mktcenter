@@ -1,5 +1,6 @@
 package com.bizvane.mktcenterserviceimpl.controllers.rpc;
 
+import com.bizvane.centerstageservice.models.po.SysCheckPo;
 import com.bizvane.members.facade.models.MemberInfoModel;
 import com.bizvane.mktcenterservice.interfaces.*;
 import com.bizvane.mktcenterservice.models.bo.ActivityBO;
@@ -43,6 +44,8 @@ public class ActivityRpcController {
     private ActivityRegisterService activityRegisterService;
     @Autowired
     private ActivityRecordService activityRecordService;
+    @Autowired
+    private ActivityManualService activityManualService;
     /**
      * 禁用/启用活动
      * @param vo
@@ -65,30 +68,35 @@ public class ActivityRpcController {
      * @return
      */
     @RequestMapping("checkActivityById")
-    public ResponseData<Integer> checkActivityById(@RequestBody MktActivityPOWithBLOBs bs, HttpServletRequest request){
+    public ResponseData<Integer> checkActivityById(@RequestBody SysCheckPo po, HttpServletRequest request){
         ResponseData responseData = new ResponseData();
         //获取操作人信息
         SysAccountPO stageUser =new SysAccountPO();
 //        SysAccountPO stageUser = TokenUtils.getStageUser(request);
         //开卡活动审核
-        if(bs.getActivityType()==ActivityTypeEnum.ACTIVITY_TYPE_REGISGER.getCode()){
-            ResponseData<Integer> integerResponseData = activityService.checkActivityById(bs, stageUser);
+        if(po.getBusinessType()==ActivityTypeEnum.ACTIVITY_TYPE_REGISGER.getCode()){
+            responseData = activityService.checkActivityById(po, stageUser);
         }
         //会员升级活动审核
-        if(bs.getActivityType()==ActivityTypeEnum.ACTIVITY_TYPE_UPGRADE.getCode()){
-            ResponseData<Integer> integerResponseData = activityUpgradeService.checkActivityUpgrades(bs,stageUser);
+        if(po.getBusinessType()==ActivityTypeEnum.ACTIVITY_TYPE_UPGRADE.getCode()){
+            responseData = activityUpgradeService.checkActivityUpgrades(po,stageUser);
         }
         //会员生日活动
-        if(bs.getActivityType()==ActivityTypeEnum.ACTIVITY_TYPE_BIRTHDAY.getCode()){
-            ResponseData<Integer> integerResponseData = activityBirthdayService.checkActivityBirthday(bs,stageUser);
+        if(po.getBusinessType()==ActivityTypeEnum.ACTIVITY_TYPE_BIRTHDAY.getCode()){
+            responseData = activityBirthdayService.checkActivityBirthday(po,stageUser);
         }
         //会员消费活动审核
-        if(bs.getActivityType()==ActivityTypeEnum.ACTIVITY_TYPE_ORDER.getCode()){
-            ResponseData<Integer> integerResponseData =activityOrderService.checkActivityOrder(bs,stageUser);
+        if(po.getBusinessType()==ActivityTypeEnum.ACTIVITY_TYPE_ORDER.getCode()){
+            responseData =activityOrderService.checkActivityOrder(po,stageUser);
         }
         //会员签到活动审核
-        if(bs.getActivityType()==ActivityTypeEnum.ACTIVITY_TYPE_SIGNIN.getCode()){
-            ResponseData<Integer> integerResponseData = activitySigninService.checkActivitySignin(bs,stageUser);
+        if(po.getBusinessType()==ActivityTypeEnum.ACTIVITY_TYPE_SIGNIN.getCode()){
+            responseData = activitySigninService.checkActivitySignin(po,stageUser);
+
+        }
+        //扫码领券&手动领券审核
+        if(po.getBusinessType()==ActivityTypeEnum.ACTIVITY_TYPE_QRCODE.getCode()||po.getBusinessType()==ActivityTypeEnum.ACTIVITY_TYPE_MANUAL.getCode()){
+            responseData = activityManualService.checkActivity(po,stageUser);
 
         }
         return responseData;

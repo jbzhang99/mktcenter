@@ -450,12 +450,15 @@ public class ActivityOrderServiceImpl implements ActivityOrderService {
      */
     @Override
     @Transactional
-    public ResponseData<Integer> checkActivityOrder(MktActivityPOWithBLOBs bs, SysAccountPO sysAccountPO) {
+    public ResponseData<Integer> checkActivityOrder(SysCheckPo po, SysAccountPO sysAccountPO) {
         log.info("审核消费活动开始");
         ResponseData responseData = new ResponseData();
+        MktActivityPOWithBLOBs bs = new MktActivityPOWithBLOBs();
         bs.setModifiedUserId(sysAccountPO.getSysAccountId());
         bs.setModifiedDate(new Date());
         bs.setModifiedUserName(sysAccountPO.getName());
+        bs.setCheckStatus(po.getCheckStatus());
+        bs.setActivityCode(po.getBusinessCode());
         //根据code查询出审核活动的详细信息
         MktActivityPOExample exampl = new MktActivityPOExample();
         exampl.createCriteria().andActivityCodeEqualTo(bs.getActivityCode()).andValidEqualTo(true);
@@ -493,6 +496,8 @@ public class ActivityOrderServiceImpl implements ActivityOrderService {
             int i = mktActivityPOMapper.updateByPrimaryKeySelective(bs);
             log.info("更新审核状态");
         }
+        //更新审核中心状态
+        sysCheckServiceRpc.updateCheck(po);
         log.info("审核消费活动结束");
         responseData.setCode(SysResponseEnum.SUCCESS.getCode());
         responseData.setMessage(SysResponseEnum.SUCCESS.getMessage());

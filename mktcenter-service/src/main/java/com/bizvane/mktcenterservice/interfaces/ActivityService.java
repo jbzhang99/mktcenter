@@ -1,5 +1,6 @@
 package com.bizvane.mktcenterservice.interfaces;
 
+import com.bizvane.centerstageservice.models.po.SysCheckPo;
 import com.bizvane.mktcenterservice.models.po.MktActivityPOWithBLOBs;
 import com.bizvane.mktcenterservice.models.vo.ActivityVO;
 import com.bizvane.utils.responseinfo.ResponseData;
@@ -27,7 +28,7 @@ public interface ActivityService {
      * @param
      * @return
      */
-    public ResponseData<Integer> checkActivityById(MktActivityPOWithBLOBs bs, SysAccountPO sysAccountPO);
+    public ResponseData<Integer> checkActivityById(SysCheckPo po, SysAccountPO sysAccountPO);
 
     /**
      * 小程序端活动列表

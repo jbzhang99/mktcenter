@@ -1,6 +1,7 @@
 package com.bizvane.mktcenterservice.interfaces;
 
 
+import com.bizvane.centerstageservice.models.po.SysCheckPo;
 import com.bizvane.couponfacade.models.vo.CouponDetailResponseVO;
 import com.bizvane.members.facade.models.MemberInfoModel;
 import com.bizvane.mktcenterservice.models.bo.ActivityBO;
@@ -29,7 +30,7 @@ public interface ActivityManualService {
   ResponseData<List<ActivityVO>>  getActivityByMemberInfo(MemberInfoModel memberInfoModel,Integer activityType);
   ResponseData<ActivityVO>  getActivityByQrcode(MemberInfoModel memberInfoModel,String activityCode,Integer activityType);
 
-  ResponseData<Integer>  checkActivity(MktActivityPOWithBLOBs bs,SysAccountPO sysAccountPO);
+  ResponseData<Integer>  checkActivity(SysCheckPo po, SysAccountPO sysAccountPO);
 
 
 }

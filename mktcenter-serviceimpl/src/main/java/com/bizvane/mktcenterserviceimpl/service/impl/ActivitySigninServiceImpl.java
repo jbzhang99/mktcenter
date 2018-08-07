@@ -286,17 +286,20 @@ public class ActivitySigninServiceImpl implements ActivitySigninService {
 
     /**
      * 审核会员签到活动
-     * @param bs
+     * @param
      * @param sysAccountPO
      * @return
      */
     @Override
-    public ResponseData<Integer> checkActivitySignin(MktActivityPOWithBLOBs bs, SysAccountPO sysAccountPO) {
+    public ResponseData<Integer> checkActivitySignin(SysCheckPo po, SysAccountPO sysAccountPO) {
        log.info("审核活动开始");
         ResponseData responseData = new ResponseData();
+        MktActivityPOWithBLOBs bs = new MktActivityPOWithBLOBs();
         bs.setModifiedUserId(sysAccountPO.getSysAccountId());
         bs.setModifiedDate(new Date());
         bs.setModifiedUserName(sysAccountPO.getName());
+        bs.setCheckStatus(po.getCheckStatus());
+        bs.setActivityCode(po.getBusinessCode());
         //判断是审核通过还是审核驳回
         if(bs.getCheckStatus()==CheckStatusEnum.CHECK_STATUS_APPROVED.getCode()){
                 //将活动状态变更为执行中
@@ -309,6 +312,8 @@ public class ActivitySigninServiceImpl implements ActivitySigninService {
             int i = mktActivityPOMapper.updateByPrimaryKeySelective(bs);
 
         }
+        //更新审核中心状态
+        sysCheckServiceRpc.updateCheck(po);
         responseData.setCode(SysResponseEnum.SUCCESS.getCode());
         responseData.setMessage(SysResponseEnum.SUCCESS.getMessage());
         return responseData;

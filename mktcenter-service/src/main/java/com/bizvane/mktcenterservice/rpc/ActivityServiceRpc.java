@@ -1,5 +1,6 @@
 package com.bizvane.mktcenterservice.rpc;
 
+import com.bizvane.centerstageservice.models.po.SysCheckPo;
 import com.bizvane.members.facade.models.MemberInfoModel;
 import com.bizvane.mktcenterservice.models.bo.ActivityBO;
 import com.bizvane.mktcenterservice.models.po.MktActivityPOWithBLOBs;
@@ -23,11 +24,11 @@ public interface ActivityServiceRpc {
  /**
   * 审核
   *
-  * @param bs
+  * @param
   * @return
   */
  @RequestMapping("checkActivityById")
- ResponseData<Integer> checkActivityByIdRpc(@RequestBody MktActivityPOWithBLOBs bs);
+ ResponseData<Integer> checkActivityByIdRpc(@RequestBody SysCheckPo po);
 
  /**
   * 禁用/启用活动

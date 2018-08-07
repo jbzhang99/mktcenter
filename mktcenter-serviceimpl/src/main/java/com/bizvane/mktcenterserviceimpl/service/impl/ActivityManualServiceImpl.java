@@ -2,8 +2,10 @@ package com.bizvane.mktcenterserviceimpl.service.impl;
 
 import com.alibaba.fastjson.JSON;
 import com.bizvane.centerstageservice.models.po.SysCheckConfigPo;
+import com.bizvane.centerstageservice.models.po.SysCheckPo;
 import com.bizvane.centerstageservice.models.vo.SysCheckConfigVo;
 import com.bizvane.centerstageservice.rpc.SysCheckConfigServiceRpc;
+import com.bizvane.centerstageservice.rpc.SysCheckServiceRpc;
 import com.bizvane.couponfacade.interfaces.CouponQueryServiceFeign;
 import com.bizvane.couponfacade.models.po.CouponEntityPO;
 import com.bizvane.couponfacade.models.vo.CouponEntityAndDefinitionVO;
@@ -80,7 +82,8 @@ public class ActivityManualServiceImpl implements ActivityManualService {
 
     @Autowired
     private QRCodeServiceFeign qrCodeServiceFeign;
-
+    @Autowired
+    private SysCheckServiceRpc sysCheckServiceRpc;
     @Override
     public ResponseData<ActivityVO> getActivityManualList(ActivityVO vo, PageForm pageForm) {
         ResponseData responseData = new ResponseData();
@@ -666,19 +669,26 @@ public class ActivityManualServiceImpl implements ActivityManualService {
 
     /**
      * 审核
-     * @param bs
+     * @param
      * @param sysAccountPO
      * @return
      */
     @Override
-    public ResponseData<Integer> checkActivity(MktActivityPOWithBLOBs bs, SysAccountPO sysAccountPO) {
+    public ResponseData<Integer> checkActivity(SysCheckPo po, SysAccountPO sysAccountPO) {
         ResponseData responseData = new ResponseData();
+        MktActivityPOWithBLOBs bs = new MktActivityPOWithBLOBs();
+        bs.setModifiedUserId(sysAccountPO.getSysAccountId());
+        bs.setModifiedDate(new Date());
+        bs.setModifiedUserName(sysAccountPO.getName());
+        bs.setCheckStatus(po.getCheckStatus());
+        bs.setActivityCode(po.getBusinessCode());
         MktActivityPOExample mktActivityPOExample = new MktActivityPOExample();
         mktActivityPOExample.createCriteria().andValidEqualTo(Boolean.TRUE).andActivityCodeEqualTo(bs.getActivityCode());
         mktActivityPOMapper.updateByExampleSelective(bs,mktActivityPOExample);
 
         //todo 调用中台审核接口更改此单据状态
-
+        //更新审核中心状态
+        sysCheckServiceRpc.updateCheck(po);
         responseData.setCode(SystemConstants.SUCCESS_CODE);
         responseData.setMessage(SystemConstants.SUCCESS_MESSAGE);
         return responseData;
