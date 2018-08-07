@@ -30,6 +30,8 @@ import com.bizvane.mktcenterserviceimpl.mappers.MktActivityUpgradePOMapper;
 import com.bizvane.mktcenterserviceimpl.mappers.MktCouponPOMapper;
 import com.bizvane.mktcenterserviceimpl.mappers.MktMessagePOMapper;
 import com.bizvane.utils.enumutils.SysResponseEnum;
+import com.bizvane.utils.jobutils.JobClient;
+import com.bizvane.utils.jobutils.XxlJobInfo;
 import com.bizvane.utils.responseinfo.ResponseData;
 import com.bizvane.utils.tokens.SysAccountPO;
 import com.github.pagehelper.PageHelper;
@@ -76,6 +78,8 @@ public class ActivityUpgradeServiceImpl implements ActivityUpgradeService {
     private CouponQueryServiceFeign couponQueryServiceFeign;
     @Autowired
     private Award award;
+    @Autowired
+    private JobClient jobClient;
     /**
      * 查询升级活动列表
      * @param vo
@@ -259,7 +263,10 @@ public class ActivityUpgradeServiceImpl implements ActivityUpgradeService {
         }
         MktActivityPOWithBLOBs mktActivityPOWithBLOBs = new MktActivityPOWithBLOBs();
         BeanUtils.copyProperties(activityVO,mktActivityPOWithBLOBs);
-
+        //job类
+        XxlJobInfo xxlJobInfo = new XxlJobInfo();
+        xxlJobInfo.setExecutorParam(activityVO.getActivityCode());
+        xxlJobInfo.setBizType(BusinessTypeEnum.ACTIVITY_TYPE_ACTIVITY.getCode());
         //查询审核配置，是否需要审核然后判断
         SysCheckConfigVo so = new SysCheckConfigVo();
         so.setSysBrandId(activityVO.getSysBrandId());
@@ -300,6 +307,8 @@ public class ActivityUpgradeServiceImpl implements ActivityUpgradeService {
 
             //getStartTime 开始时间>当前时间增加job
             if(1 != bo.getActivityVO().getLongTerm() && new Date().before(activityVO.getStartTime())){
+                //先删除原来创建的job任务
+                jobClient.removeByBiz(xxlJobInfo);
                 //创建任务调度任务开始时间
                 jobUtil.addJob(stageUser,activityVO,activityVO.getActivityCode());
                 //创建任务调度任务结束时间
@@ -312,6 +321,8 @@ public class ActivityUpgradeServiceImpl implements ActivityUpgradeService {
             if(1 != bo.getActivityVO().getLongTerm() && new Date().before(activityVO.getStartTime())){
                 //活动状态设置为待执行
                 mktActivityPOWithBLOBs.setActivityStatus(ActivityStatusEnum.ACTIVITY_STATUS_PENDING.getCode());
+                //先删除原来创建的job任务
+                jobClient.removeByBiz(xxlJobInfo);
                 //创建任务调度任务开始时间
                 jobUtil.addJob(stageUser,activityVO,activityVO.getActivityCode());
                 //创建任务调度任务结束时间

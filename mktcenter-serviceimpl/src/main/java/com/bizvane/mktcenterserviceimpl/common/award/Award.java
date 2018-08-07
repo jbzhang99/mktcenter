@@ -22,28 +22,24 @@ public class Award {
 
     public ResponseData<T> execute(AwardBO bo){
         ResponseData responseData = new ResponseData();
-        try {
-            MktSmartTypeEnum mktSmartTypeEnum = MktSmartTypeEnum.getMktSmartTypeEnumByCode(bo.getMktSmartType());
-            switch (mktSmartTypeEnum){
-                //券奖励
-                case SMART_TYPE_COUPON:
-                    responseData =awardFactory.awardCouponSimple(bo);
-                    break;
-                //积分奖励
-                case SMART_TYPE_INTEGRAL:
-                    responseData =awardFactory.awardIntegral(bo);
-                    break;
-                //消息奖励
-                case SMART_TYPE_SMS:
-                    responseData =awardFactory.sendSms(bo);
-                    break;
-                case SMART_TYPE_WXMESSAGE:
-                    responseData =awardFactory.sendWxTemplateMessage(bo);
-                    break;
-                default:break;
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
+        MktSmartTypeEnum mktSmartTypeEnum = MktSmartTypeEnum.getMktSmartTypeEnumByCode(bo.getMktSmartType());
+        switch (mktSmartTypeEnum){
+            //券奖励
+            case SMART_TYPE_COUPON:
+                responseData =awardFactory.awardCouponSimple(bo);
+                break;
+            //积分奖励
+            case SMART_TYPE_INTEGRAL:
+                responseData =awardFactory.awardIntegral(bo);
+                break;
+            //消息奖励
+            case SMART_TYPE_SMS:
+                responseData =awardFactory.sendSms(bo);
+                break;
+            case SMART_TYPE_WXMESSAGE:
+                responseData =awardFactory.sendWxTemplateMessage(bo);
+                break;
+            default:break;
         }
         return responseData;
     }

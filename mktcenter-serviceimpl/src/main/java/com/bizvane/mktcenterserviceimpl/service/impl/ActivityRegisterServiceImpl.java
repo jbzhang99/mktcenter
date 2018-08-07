@@ -350,13 +350,10 @@ public class ActivityRegisterServiceImpl implements ActivityRegisterService {
         }
         MktActivityPOWithBLOBs mktActivityPOWithBLOBs = new MktActivityPOWithBLOBs();
         BeanUtils.copyProperties(activityVO,mktActivityPOWithBLOBs);
-        //查询job 查出id  修改时候要先删除原来的job任务
+        //job类
         XxlJobInfo xxlJobInfo = new XxlJobInfo();
         xxlJobInfo.setExecutorParam(activityVO.getActivityCode());
         xxlJobInfo.setBizType(BusinessTypeEnum.ACTIVITY_TYPE_ACTIVITY.getCode());
-        ResponseEntity<String> jobList =jobClient.getJobInfoByBizJob(xxlJobInfo);
-
-
         //查询审核配置，是否需要审核然后判断
         SysCheckConfigVo so = new SysCheckConfigVo();
         so.setSysBrandId(activityVO.getSysBrandId());
@@ -395,6 +392,8 @@ public class ActivityRegisterServiceImpl implements ActivityRegisterService {
 
             //getStartTime 开始时间>当前时间增加job
             if(1 != bo.getActivityVO().getLongTerm() && new Date().before(activityVO.getStartTime())){
+                //先删除原来创建的job任务
+                jobClient.removeByBiz(xxlJobInfo);
                 //创建任务调度任务开始时间
                 jobUtil.addJob(stageUser,activityVO,mktActivityPOWithBLOBs.getActivityCode());
                 //创建任务调度任务结束时间
@@ -407,6 +406,8 @@ public class ActivityRegisterServiceImpl implements ActivityRegisterService {
             if(1 != bo.getActivityVO().getLongTerm() && new Date().before(activityVO.getStartTime())){
                 //活动状态设置为待执行
                 mktActivityPOWithBLOBs.setActivityStatus(ActivityStatusEnum.ACTIVITY_STATUS_PENDING.getCode());
+                //先删除原来创建的job任务
+                jobClient.removeByBiz(xxlJobInfo);
                 //创建任务调度任务开始时间
                 jobUtil.addJob(stageUser,activityVO,mktActivityPOWithBLOBs.getActivityCode());
                 //创建任务调度任务结束时间
@@ -504,7 +505,6 @@ public class ActivityRegisterServiceImpl implements ActivityRegisterService {
         example.createCriteria().andBizIdEqualTo(registerList.get(0).getMktActivityId()).andValidEqualTo(true);
         List<MktCouponPO> mktCouponPOs= mktCouponPOMapper.selectByExample(example);
         List<CouponEntityAndDefinitionVO> lists = new ArrayList<>();
-        if (!CollectionUtils.isEmpty(mktCouponPOs)){
             //查询券接口
             if(!CollectionUtils.isEmpty(mktCouponPOs)){
                 for (MktCouponPO po:mktCouponPOs) {
@@ -514,7 +514,6 @@ public class ActivityRegisterServiceImpl implements ActivityRegisterService {
                     lists.add(entityAndDefinition.getData());
                 }
             }
-        }
 
 
         //查询消息模板

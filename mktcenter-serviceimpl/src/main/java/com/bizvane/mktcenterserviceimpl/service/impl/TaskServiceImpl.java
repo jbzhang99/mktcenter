@@ -119,9 +119,13 @@ public class TaskServiceImpl implements TaskService {
             //判断是否需要发送消息和短信
             List<MktMessagePO> mktmessagePOList = vo.getMktmessagePOList();
             this.sendSmg(sysCompanyId);
+
+            jobUtil.addTaskEndJob(stageUser, mktTaskPOWithBLOBs);
         }
         //已审核   待执行,创建job
         if (TaskConstants.THREE.equals(checkStatus) && TaskConstants.FIRST.equals(taskStatus)) {
+            //先清除一下job
+
             //判断是否需要发送消息和短信,创建job
             jobUtil.addTaskStartJob(stageUser, mktTaskPOWithBLOBs);
             jobUtil.addTaskEndJob(stageUser, mktTaskPOWithBLOBs);

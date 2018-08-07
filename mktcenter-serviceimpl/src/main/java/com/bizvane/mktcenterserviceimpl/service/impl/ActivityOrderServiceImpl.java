@@ -1,5 +1,6 @@
 package com.bizvane.mktcenterserviceimpl.service.impl;
 
+import com.alibaba.fastjson.JSON;
 import com.bizvane.centerstageservice.models.po.SysCheckConfigPo;
 import com.bizvane.centerstageservice.models.po.SysCheckPo;
 import com.bizvane.centerstageservice.models.vo.SysCheckConfigVo;
@@ -33,10 +34,12 @@ import com.bizvane.mktcenterserviceimpl.mappers.MktCouponPOMapper;
 import com.bizvane.mktcenterserviceimpl.mappers.MktMessagePOMapper;
 import com.bizvane.utils.enumutils.SysResponseEnum;
 import com.bizvane.utils.jobutils.JobClient;
+import com.bizvane.utils.jobutils.XxlJobInfo;
 import com.bizvane.utils.responseinfo.ResponseData;
 import com.bizvane.utils.tokens.SysAccountPO;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -56,6 +59,7 @@ import java.util.UUID;
  * @Copyright (c) 2018 上海商帆信息科技有限公司-版权所有
  */
 @Service
+@Slf4j
 public class ActivityOrderServiceImpl implements ActivityOrderService {
 
     @Autowired
@@ -88,6 +92,7 @@ public class ActivityOrderServiceImpl implements ActivityOrderService {
      */
     @Override
     public ResponseData<ActivityVO> getActivityOrderList(ActivityVO vo, PageForm pageForm) {
+        log.info("查询消费活动列表开始");
         ResponseData responseData = new ResponseData();
         PageHelper.startPage(pageForm.getPageNumber(),pageForm.getPageSize());
         List<ActivityVO> activityOrderList = mktActivityOrderPOMapper.getActivityOrderList(vo);
@@ -107,6 +112,7 @@ public class ActivityOrderServiceImpl implements ActivityOrderService {
     @Override
     @Transactional
     public ResponseData<Integer> addActivityOrder(ActivityBO bo, SysAccountPO stageUser) {
+        log.info("创建消费活动开始");
         //返回对象
         ResponseData responseData = new ResponseData();
         //得到大实体类
@@ -182,6 +188,7 @@ public class ActivityOrderServiceImpl implements ActivityOrderService {
         mktActivityPOWithBLOBs.setCreateDate(new Date());
         mktActivityPOWithBLOBs.setCreateUserId(stageUser.getSysAccountId());
         mktActivityPOWithBLOBs.setCreateUserName(stageUser.getName());
+        log.info("生成消费活动主表参数="+ JSON.toJSONString(mktActivityPOWithBLOBs));
         mktActivityPOMapper.insertSelective(mktActivityPOWithBLOBs);
 
         //获取新增后数据id
@@ -192,6 +199,7 @@ public class ActivityOrderServiceImpl implements ActivityOrderService {
         MktActivityOrderPOWithBLOBs mktActivityOrderPOWithBLOBs = new MktActivityOrderPOWithBLOBs();
         BeanUtils.copyProperties(mktActivityPOWithBLOBs,mktActivityOrderPOWithBLOBs);
         mktActivityOrderPOWithBLOBs.setMktActivityId(mktActivityId);
+        log.info("生成消费活动消费表参数="+ JSON.toJSONString(mktActivityOrderPOWithBLOBs));
         mktActivityOrderPOMapper.insertSelective(mktActivityOrderPOWithBLOBs);
 
         //新增券奖励
@@ -222,6 +230,7 @@ public class ActivityOrderServiceImpl implements ActivityOrderService {
                 mktMessagePOMapper.insertSelective(mktMessagePO);
             }
         }
+        log.info("消费活动创建结束");
         responseData.setCode(SysResponseEnum.SUCCESS.getCode());
         responseData.setMessage(SysResponseEnum.SUCCESS.getMessage());
         return responseData;
@@ -234,10 +243,17 @@ public class ActivityOrderServiceImpl implements ActivityOrderService {
      */
     @Override
     public ResponseData<ActivityBO> selectActivityOrderById(String businessCode) {
+        log.info("查询消费活动详情开始参数="+businessCode);
         ResponseData responseData = new ResponseData();
         ActivityVO vo= new ActivityVO();
         vo.setActivityCode(businessCode);
         List<ActivityVO> orderList = mktActivityOrderPOMapper.getActivityOrderList(vo);
+        if (CollectionUtils.isEmpty(orderList)){
+            log.warn("没有查询到数据");
+            responseData.setCode(SysResponseEnum.OPERATE_FAILED_DATA_NOT_EXISTS.getCode());
+            responseData.setMessage(SysResponseEnum.OPERATE_FAILED_DATA_NOT_EXISTS.getMessage());
+            return responseData;
+        }
         //查询活动卷
         MktCouponPOExample example = new  MktCouponPOExample();
         example.createCriteria().andBizIdEqualTo(orderList.get(0).getMktActivityId()).andValidEqualTo(true);
@@ -266,6 +282,7 @@ public class ActivityOrderServiceImpl implements ActivityOrderService {
         if(!CollectionUtils.isEmpty(listMktMessage)){
             bo.setMessageVOList(listMktMessage);
         }
+        log.info("查询消费活动详情结束");
         responseData.setData(bo);
         responseData.setCode(SysResponseEnum.SUCCESS.getCode());
         responseData.setMessage(SysResponseEnum.SUCCESS.getMessage());
@@ -292,7 +309,10 @@ public class ActivityOrderServiceImpl implements ActivityOrderService {
         }
         MktActivityPOWithBLOBs mktActivityPOWithBLOBs = new MktActivityPOWithBLOBs();
         BeanUtils.copyProperties(activityVO,mktActivityPOWithBLOBs);
-
+        //job类
+        XxlJobInfo xxlJobInfo = new XxlJobInfo();
+        xxlJobInfo.setExecutorParam(activityVO.getActivityCode());
+        xxlJobInfo.setBizType(BusinessTypeEnum.ACTIVITY_TYPE_ACTIVITY.getCode());
         //查询审核配置，是否需要审核然后判断
         SysCheckConfigVo so = new SysCheckConfigVo();
         so.setSysBrandId(activityVO.getSysBrandId());
@@ -332,6 +352,8 @@ public class ActivityOrderServiceImpl implements ActivityOrderService {
 
             //getStartTime 开始时间>当前时间增加job
             if( new Date().before(activityVO.getStartTime())){
+                //先删除原来创建的job任务
+                jobClient.removeByBiz(xxlJobInfo);
                 //创建任务调度任务开始时间
                 jobUtil.addJob(stageUser,activityVO,mktActivityPOWithBLOBs.getActivityCode());
                 //创建任务调度任务结束时间
@@ -344,6 +366,8 @@ public class ActivityOrderServiceImpl implements ActivityOrderService {
             if( new Date().before(activityVO.getStartTime())){
                 //活动状态设置为待执行
                 mktActivityPOWithBLOBs.setActivityStatus(ActivityStatusEnum.ACTIVITY_STATUS_PENDING.getCode());
+                //先删除原来创建的job任务
+                jobClient.removeByBiz(xxlJobInfo);
                 //创建任务调度任务开始时间
                 jobUtil.addJob(stageUser,activityVO,mktActivityPOWithBLOBs.getActivityCode());
                 //创建任务调度任务结束时间

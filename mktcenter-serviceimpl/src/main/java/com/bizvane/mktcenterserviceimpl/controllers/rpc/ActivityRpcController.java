@@ -1,5 +1,6 @@
 package com.bizvane.mktcenterserviceimpl.controllers.rpc;
 
+import com.bizvane.members.facade.models.MemberInfoModel;
 import com.bizvane.mktcenterservice.interfaces.*;
 import com.bizvane.mktcenterservice.models.bo.ActivityBO;
 import com.bizvane.mktcenterservice.models.po.MktActivityPOWithBLOBs;
@@ -125,7 +126,7 @@ public class ActivityRpcController {
      * @return
      */
     @RequestMapping("getActivityList")
-    public ResponseData<List<ActivityVO>>  getActivityList(ActivityVO vo){
+    public ResponseData<List<ActivityVO>>  getActivityList(@RequestBody ActivityVO vo){
         return activityService.getActivityList(vo);
     }
 
@@ -135,7 +136,16 @@ public class ActivityRpcController {
      * @return
      */
     @RequestMapping("getActivityRecordPOList")
-    public ResponseData<List<MktActivityRecordPO>> getActivityRecordPOList(MktActivityRecordVO vo){
+    public ResponseData<List<MktActivityRecordPO>> getActivityRecordPOList(@RequestBody MktActivityRecordVO vo){
         return activityRecordService.getActivityRecordPOList(vo);
+    }
+    /**
+     * 执行活动
+     * @param
+     * @return
+     */
+    @RequestMapping("executeActivitySignin")
+    public ResponseData<Integer> executeActivitySignin(@RequestBody MemberInfoModel vo){
+        return activitySigninService.executeActivitySignin(vo);
     }
 }

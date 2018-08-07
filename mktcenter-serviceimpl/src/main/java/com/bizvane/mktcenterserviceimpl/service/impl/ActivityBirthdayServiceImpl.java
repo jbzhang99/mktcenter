@@ -1,5 +1,6 @@
 package com.bizvane.mktcenterserviceimpl.service.impl;
 
+import com.alibaba.fastjson.JSON;
 import com.bizvane.centerstageservice.models.po.SysCheckConfigPo;
 import com.bizvane.centerstageservice.models.po.SysCheckPo;
 import com.bizvane.centerstageservice.models.vo.SysCheckConfigVo;
@@ -25,10 +26,13 @@ import com.bizvane.mktcenterserviceimpl.mappers.MktActivityPOMapper;
 import com.bizvane.mktcenterserviceimpl.mappers.MktCouponPOMapper;
 import com.bizvane.mktcenterserviceimpl.mappers.MktMessagePOMapper;
 import com.bizvane.utils.enumutils.SysResponseEnum;
+import com.bizvane.utils.jobutils.JobClient;
+import com.bizvane.utils.jobutils.XxlJobInfo;
 import com.bizvane.utils.responseinfo.ResponseData;
 import com.bizvane.utils.tokens.SysAccountPO;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -47,6 +51,7 @@ import java.util.UUID;
  * @Copyright (c) 2018 上海商帆信息科技有限公司-版权所有
  */
 @Service
+@Slf4j
 public class ActivityBirthdayServiceImpl implements ActivityBirthdayService {
 
     @Autowired
@@ -65,6 +70,8 @@ public class ActivityBirthdayServiceImpl implements ActivityBirthdayService {
     private SysCheckServiceRpc sysCheckServiceRpc;
     @Autowired
     private CouponQueryServiceFeign couponQueryServiceFeign;
+    @Autowired
+    private JobClient jobClient;
     /**
      * 查询生日活动列表
      * @param vo
@@ -73,6 +80,7 @@ public class ActivityBirthdayServiceImpl implements ActivityBirthdayService {
      */
     @Override
     public ResponseData<ActivityVO> getActivityBirthdayList(ActivityVO vo, PageForm pageForm) {
+        log.info("查询生日活动列表开始");
         ResponseData responseData = new ResponseData();
         PageHelper.startPage(pageForm.getPageNumber(),pageForm.getPageSize());
         List<ActivityVO> activityBirthdayList = mktActivityBirthdayPOMapper.getActivityBirthdayList(vo);
@@ -92,6 +100,7 @@ public class ActivityBirthdayServiceImpl implements ActivityBirthdayService {
     @Override
     @Transactional
     public ResponseData<Integer> addActivityBirthday(ActivityBO bo, SysAccountPO stageUser) {
+        log.info("创建生日活动开始");
         //返回对象
         ResponseData responseData = new ResponseData();
         //得到大实体类
@@ -112,6 +121,7 @@ public class ActivityBirthdayServiceImpl implements ActivityBirthdayService {
             vo.setSysBrandId(activityVO.getSysBrandId());
             List<ActivityVO> registerList = mktActivityBirthdayPOMapper.getActivityBirthdayList(vo);
             if(!CollectionUtils.isEmpty(registerList)){
+                log.warn("已存在同一类型的长期活动");
                 responseData.setCode(SysResponseEnum.FAILED.getCode());
                 responseData.setMessage("已存在同一类型的长期活动!");
                 return responseData;
@@ -151,6 +161,7 @@ public class ActivityBirthdayServiceImpl implements ActivityBirthdayService {
             po.setCreateDate(new Date());
             po.setCreateUserId(stageUser.getSysAccountId());
             po.setCreateUserName(stageUser.getName());
+            log.info("增加一条数据到审核中心");
             sysCheckServiceRpc.addCheck(po);
             //getStartTime 开始时间>当前时间增加job
             if(1 != bo.getActivityVO().getLongTerm() && new Date().before(activityVO.getStartTime())){
@@ -179,6 +190,7 @@ public class ActivityBirthdayServiceImpl implements ActivityBirthdayService {
         mktActivityPOWithBLOBs.setCreateDate(new Date());
         mktActivityPOWithBLOBs.setCreateUserId(stageUser.getSysAccountId());
         mktActivityPOWithBLOBs.setCreateUserName(stageUser.getName());
+        log.info("增加一条数据到主表参数为："+ JSON.toJSONString(mktActivityPOWithBLOBs));
         mktActivityPOMapper.insertSelective(mktActivityPOWithBLOBs);
         //获取新增后数据id
         Long mktActivityId = mktActivityPOWithBLOBs.getMktActivityId();
@@ -187,6 +199,7 @@ public class ActivityBirthdayServiceImpl implements ActivityBirthdayService {
         MktActivityBirthdayPO mktActivityBirthdayPO = new MktActivityBirthdayPO();
         BeanUtils.copyProperties(mktActivityPOWithBLOBs,mktActivityBirthdayPO);
         mktActivityBirthdayPO.setMktActivityId(mktActivityId);
+        log.info("增加一条数据到生日表参数为："+ JSON.toJSONString(mktActivityBirthdayPO));
         mktActivityBirthdayPOMapper.insertSelective(mktActivityBirthdayPO);
 
         //新增券奖励
@@ -229,11 +242,17 @@ public class ActivityBirthdayServiceImpl implements ActivityBirthdayService {
      */
     @Override
     public ResponseData<ActivityBO> selectActivityBirthdayById(String businessCode) {
+        log.info("查询生日详情参数="+businessCode);
         ResponseData responseData = new ResponseData();
         ActivityVO vo= new ActivityVO();
         vo.setActivityCode(businessCode);
         //查询主表和字表数据
         List<ActivityVO> registerList = mktActivityBirthdayPOMapper.getActivityBirthdayList(vo);
+        if (CollectionUtils.isEmpty(registerList)){
+            responseData.setCode(SysResponseEnum.OPERATE_FAILED_DATA_NOT_EXISTS.getCode());
+            responseData.setMessage(SysResponseEnum.OPERATE_FAILED_DATA_NOT_EXISTS.getMessage());
+            return responseData;
+        }
         //查询活动卷
         MktCouponPOExample example = new  MktCouponPOExample();
         example.createCriteria().andBizIdEqualTo(registerList.get(0).getMktActivityId()).andValidEqualTo(true);
@@ -278,6 +297,7 @@ public class ActivityBirthdayServiceImpl implements ActivityBirthdayService {
     @Override
     @Transactional
     public ResponseData<Integer> checkActivityBirthday(MktActivityPOWithBLOBs bs, SysAccountPO sysAccountPO) {
+        log.info("审核生日活动开始参数ActivityCode="+bs.getActivityCode()+"checkStatus="+bs.getCheckStatus());
         ResponseData responseData = new ResponseData();
         bs.setModifiedUserId(sysAccountPO.getSysAccountId());
         bs.setModifiedDate(new Date());
@@ -325,6 +345,7 @@ public class ActivityBirthdayServiceImpl implements ActivityBirthdayService {
     @Override
     @Transactional
     public ResponseData<Integer> updateActivityBirthday(ActivityBO bo, SysAccountPO stageUser) {
+        log.info("生日活动修改开始");
         //返回对象
         ResponseData responseData = new ResponseData();
         //得到大实体类
@@ -337,7 +358,10 @@ public class ActivityBirthdayServiceImpl implements ActivityBirthdayService {
 
         MktActivityPOWithBLOBs mktActivityPOWithBLOBs = new MktActivityPOWithBLOBs();
         BeanUtils.copyProperties(activityVO,mktActivityPOWithBLOBs);
-
+        //job类
+        XxlJobInfo xxlJobInfo = new XxlJobInfo();
+        xxlJobInfo.setExecutorParam(activityVO.getActivityCode());
+        xxlJobInfo.setBizType(BusinessTypeEnum.ACTIVITY_TYPE_ACTIVITY.getCode());
         //查询审核配置，是否需要审核然后判断
         SysCheckConfigVo so = new SysCheckConfigVo();
         so.setSysBrandId(activityVO.getSysBrandId());
@@ -378,6 +402,8 @@ public class ActivityBirthdayServiceImpl implements ActivityBirthdayService {
 
             //getStartTime 开始时间>当前时间增加job
             if( new Date().before(activityVO.getStartTime())){
+                //先删除原来创建的job任务
+                jobClient.removeByBiz(xxlJobInfo);
                 //创建任务调度任务开始时间
                 jobUtil.addStratBirthdayJob(stageUser,activityVO,mktActivityPOWithBLOBs.getActivityCode());
                 //创建任务调度任务结束时间
@@ -390,6 +416,8 @@ public class ActivityBirthdayServiceImpl implements ActivityBirthdayService {
             if( new Date().before(activityVO.getStartTime())){
                 //活动状态设置为待执行
                 mktActivityPOWithBLOBs.setActivityStatus(ActivityStatusEnum.ACTIVITY_STATUS_PENDING.getCode());
+                //先删除原来创建的job任务
+                jobClient.removeByBiz(xxlJobInfo);
                 //创建任务调度任务开始时间
                 jobUtil.addStratBirthdayJob(stageUser,activityVO,mktActivityPOWithBLOBs.getActivityCode());
                 //创建任务调度任务结束时间
@@ -459,6 +487,7 @@ public class ActivityBirthdayServiceImpl implements ActivityBirthdayService {
                 mktMessagePOMapper.insertSelective(mktMessagePO);
             }
         }
+        log.info("任务修改结束");
         responseData.setCode(SysResponseEnum.SUCCESS.getCode());
         responseData.setMessage(SysResponseEnum.SUCCESS.getMessage());
         return responseData;
