@@ -1,6 +1,5 @@
 package com.bizvane.mktcenterserviceimpl.common.rocketmq;
 
-import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.aliyun.openservices.ons.api.Action;
 import com.aliyun.openservices.ons.api.ConsumeContext;
@@ -9,17 +8,12 @@ import com.aliyun.openservices.ons.api.MessageListener;
 import com.bizvane.members.facade.models.OrderServeModel;
 import com.bizvane.mktcenterservice.interfaces.TaskRecordService;
 import com.bizvane.mktcenterservice.interfaces.TaskService;
-import com.bizvane.mktcenterservice.models.bo.AwardBO;
-import com.bizvane.mktcenterservice.models.bo.TaskOrderAwardBO;
+import com.bizvane.mktcenterservice.models.bo.TaskAwardBO;
 import com.bizvane.mktcenterservice.models.bo.TotalStatisticsBO;
 import com.bizvane.mktcenterservice.models.po.MktCouponPO;
 import com.bizvane.mktcenterservice.models.po.MktTaskRecordPO;
 import com.bizvane.mktcenterservice.models.vo.MktTaskRecordVO;
-import com.bizvane.mktcenterservice.models.vo.TaskDetailVO;
-import com.bizvane.mktcenterserviceimpl.common.constants.TaskConstants;
-import com.bizvane.mktcenterserviceimpl.common.enums.MktSmartTypeEnum;
 import com.bizvane.mktcenterserviceimpl.common.enums.TaskTypeEnum;
-import groovy.ui.SystemOutputInterceptor;
 import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,7 +44,7 @@ public class OrderTaskListener implements MessageListener {
         Long companyId = model.getCompanyId();
         Long brandId = model.getBrandId();
         Date placeOrderTime = model.getPlaceOrderTime();
-        List<TaskOrderAwardBO> taskOrderAwardList = taskService.getTaskOrderAwardList(companyId, brandId, placeOrderTime);
+        List<TaskAwardBO> taskOrderAwardList = taskService.getTaskOrderAwardList(companyId, brandId, placeOrderTime);
         if (CollectionUtils.isNotEmpty(taskOrderAwardList)){
             taskOrderAwardList.stream().forEach(obj->{
                 this.doExecuteTask(model, obj);
@@ -60,7 +54,7 @@ public class OrderTaskListener implements MessageListener {
         return Action.CommitMessage;
     }
 //      //任务类型：1完善资料，2分享任务，3邀请注册，4累计消费次数，5累计消费金额',
-    private void doExecuteTask(OrderServeModel model, TaskOrderAwardBO obj) {
+    private void doExecuteTask(OrderServeModel model, TaskAwardBO obj) {
         BigDecimal tradeAmount = model.getTradeAmount();//订单金额
         Long brandId = model.getBrandId();
         String memberCode = model.getMemberCode();

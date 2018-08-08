@@ -68,8 +68,8 @@
     </collection>
 
   </resultMap>
-  <!-- 用于查询订单奖励的条件-->
-  <resultMap id="taskOrderAwardMap" type="com.bizvane.mktcenterservice.models.vo.TaskDetailVO" autoMapping="true">
+  <!-- 用于查询奖励的条件-->
+  <resultMap id="taskAwardMap" type="com.bizvane.mktcenterservice.models.bo.TaskAwardBO" autoMapping="true">
     <id column="mkt_task_id" property="mktTaskId"/>
     <result column="sys_company_id"  property="sysCompanyId" />
     <result column="sys_brand_id"  property="sysBrandId" />
@@ -89,25 +89,6 @@
     <result column="consume_amount"  property="consumeAmount"/>
     <result column="consume_times"  property="consumeTimes"/>
 
-    <collection property="mktCouponPOList" javaType="java.util.List" ofType="com.bizvane.mktcenterservice.models.po.MktCouponPO" autoMapping="true">
-      <result column="mkt_coupon_id" property="mktCouponId"/>
-    </collection>
-  </resultMap>
-  <!-- 用于查询邀请奖励的条件-->
-  <resultMap id="taskInviteAwardMap" type="com.bizvane.mktcenterservice.models.vo.TaskDetailVO" autoMapping="true">
-    <id column="mkt_task_id" property="mktTaskId"/>
-    <result column="sys_company_id"  property="sysCompanyId" />
-    <result column="sys_brand_id"  property="sysBrandId" />
-    <result column="task_code"  property="taskCode" />
-    <result column="task_type"  property="taskType" />
-    <result column="task_name"  property="taskName" />
-    <result column="start_time"  property="startTime" />
-    <result column="end_time"  property="endTime" />
-    <result column="points"  property="points" />
-    <result column="check_status"  property="checkStatus" />
-    <result column="task_status"  property="taskStatus" />
-    <result column="remark"  property="remark" />
-
     <result column="mkt_task_invite_id"  property="mktTaskInviteId" />
     <result column="invite_num"  property="inviteNum" />
 
@@ -115,6 +96,28 @@
       <result column="mkt_coupon_id" property="mktCouponId"/>
     </collection>
   </resultMap>
+  <!--&lt;!&ndash; 用于查询邀请奖励的条件&ndash;&gt;-->
+  <!--<resultMap id="taskInviteAwardMap" type="com.bizvane.mktcenterservice.models.vo.TaskDetailVO" autoMapping="true">-->
+    <!--<id column="mkt_task_id" property="mktTaskId"/>-->
+    <!--<result column="sys_company_id"  property="sysCompanyId" />-->
+    <!--<result column="sys_brand_id"  property="sysBrandId" />-->
+    <!--<result column="task_code"  property="taskCode" />-->
+    <!--<result column="task_type"  property="taskType" />-->
+    <!--<result column="task_name"  property="taskName" />-->
+    <!--<result column="start_time"  property="startTime" />-->
+    <!--<result column="end_time"  property="endTime" />-->
+    <!--<result column="points"  property="points" />-->
+    <!--<result column="check_status"  property="checkStatus" />-->
+    <!--<result column="task_status"  property="taskStatus" />-->
+    <!--<result column="remark"  property="remark" />-->
+
+    <!--<result column="mkt_task_invite_id"  property="mktTaskInviteId" />-->
+    <!--<result column="invite_num"  property="inviteNum" />-->
+
+    <!--<collection property="mktCouponPOList" javaType="java.util.List" ofType="com.bizvane.mktcenterservice.models.po.MktCouponPO" autoMapping="true">-->
+      <!--<result column="mkt_coupon_id" property="mktCouponId"/>-->
+    <!--</collection>-->
+  <!--</resultMap>-->
 
   <sql id="Example_Where_Clause">
     <!--
@@ -754,7 +757,7 @@
     </if >
   </select>
 <!-- 根据公司id和品牌id,查询任务的订单和消费次数-->
-  <select id="getTaskOrderAwardList" parameterType="java.lang.Long"  resultMap="taskOrderAwardMap">
+  <select id="getTaskOrderAwardList"   resultMap="taskAwardMap">
       SELECT
           tta.mkt_task_id,
           tta.sys_company_id,
@@ -801,7 +804,7 @@
     </if>
   </select>
 
-  <select id="getTaskInviteAwardList" parameterType="java.lang.Long"  resultMap="taskInviteAwardMap">
+  <select id="getTaskInviteAwardList"   resultMap="taskAwardMap">
     SELECT
     tta.mkt_task_id,
     tta.sys_company_id,
