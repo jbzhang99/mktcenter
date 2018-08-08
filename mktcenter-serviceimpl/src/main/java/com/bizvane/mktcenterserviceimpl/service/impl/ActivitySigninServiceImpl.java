@@ -111,6 +111,8 @@ public class ActivitySigninServiceImpl implements ActivitySigninService {
         activityVO.setActivityCode(activityCode);
         //增加活动类型是签到活动
         activityVO.setActivityType(ActivityTypeEnum.ACTIVITY_TYPE_SIGNIN.getCode());
+        //增加品牌id
+        activityVO.setSysBrandId(stageUser.getBrandId());
         MktActivityPOWithBLOBs mktActivityPOWithBLOBs = new MktActivityPOWithBLOBs();
         BeanUtils.copyProperties(activityVO,mktActivityPOWithBLOBs);
         //查询看是否已存在签到活动

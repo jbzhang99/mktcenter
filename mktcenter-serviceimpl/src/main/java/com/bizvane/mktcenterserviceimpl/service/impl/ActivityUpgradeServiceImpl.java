@@ -119,6 +119,8 @@ public class ActivityUpgradeServiceImpl implements ActivityUpgradeService {
         String activityCode = CodeUtil.getActivityCode();
         //增加活动类型是升级活动
         activityVO.setActivityType(ActivityTypeEnum.ACTIVITY_TYPE_UPGRADE.getCode());
+        //增加品牌id
+        activityVO.setSysBrandId(stageUser.getBrandId());
         MktActivityPOWithBLOBs mktActivityPOWithBLOBs = new MktActivityPOWithBLOBs();
         BeanUtils.copyProperties(activityVO,mktActivityPOWithBLOBs);
         //查询判断长期活动同一会员等级是否有重复

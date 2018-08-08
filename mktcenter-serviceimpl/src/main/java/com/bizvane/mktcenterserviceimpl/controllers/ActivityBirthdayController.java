@@ -11,6 +11,7 @@ import com.bizvane.mktcenterserviceimpl.common.constants.SystemConstants;
 import com.bizvane.mktcenterserviceimpl.common.utils.ActivityParamCheckUtil;
 import com.bizvane.utils.responseinfo.ResponseData;
 import com.bizvane.utils.tokens.SysAccountPO;
+import com.bizvane.utils.tokens.TokenUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -57,8 +58,7 @@ public class ActivityBirthdayController {
             return responseData;
         }
         //参数校验通过，获取操作人信息
-//        SysAccountPO stageUser = TokenUtils.getStageUser(request);
-        SysAccountPO stageUser = new SysAccountPO();
+        SysAccountPO stageUser = TokenUtils.getStageUser(request);
 
         //新增活动
         ResponseData<Integer> integerResponseData = activityBirthdayService.addActivityBirthday(bo, stageUser);

@@ -125,6 +125,8 @@ public class ActivityRegisterServiceImpl implements ActivityRegisterService {
         activityVO.setActivityCode(activityCode);
         //增加活动类型是开卡活动
         activityVO.setActivityType(ActivityTypeEnum.ACTIVITY_TYPE_REGISGER.getCode());
+        //增加品牌id
+        activityVO.setSysBrandId(stageUser.getBrandId());
         MktActivityPOWithBLOBs mktActivityPOWithBLOBs = new MktActivityPOWithBLOBs();
         BeanUtils.copyProperties(activityVO,mktActivityPOWithBLOBs);
         //活动状态设置为待执行

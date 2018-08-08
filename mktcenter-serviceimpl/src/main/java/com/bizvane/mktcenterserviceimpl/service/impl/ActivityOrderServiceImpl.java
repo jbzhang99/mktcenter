@@ -121,6 +121,8 @@ public class ActivityOrderServiceImpl implements ActivityOrderService {
         activityVO.setActivityCode(activityCode);
         //增加活动类型是消费活动
         activityVO.setActivityType(ActivityTypeEnum.ACTIVITY_TYPE_ORDER.getCode());
+        //增加品牌id
+        activityVO.setSysBrandId(stageUser.getBrandId());
         MktActivityPOWithBLOBs mktActivityPOWithBLOBs = new MktActivityPOWithBLOBs();
         BeanUtils.copyProperties(activityVO,mktActivityPOWithBLOBs);
 
