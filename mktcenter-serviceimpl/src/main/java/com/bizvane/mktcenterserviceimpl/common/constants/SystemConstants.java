@@ -17,4 +17,7 @@ public class SystemConstants {
     public static final String LIKE_SYMBOL = "%";
     public static final String ERROR_QR_CODE_EMPTY="二维码为空";
 
+    public static final String PRECISION="0.00";
+    public static final String PRECISION_PERCENTAGE="0.00%";
+
 }

@@ -25,7 +25,7 @@ public interface ActivityManualService {
 
   ResponseData<List<ActivityBO>> getActivityManualEffect(ActivityVO vo);
 
-  ResponseData<ActivityBO> selectActivityManualById(String businessCode);
+  ResponseData<ActivityBO> selectActivityManualByBusinessCode(String businessCode);
 
   ResponseData<List<ActivityVO>>  getActivityByMemberInfo(MemberInfoModel memberInfoModel,Integer activityType);
   ResponseData<ActivityVO>  getActivityByQrcode(MemberInfoModel memberInfoModel,String activityCode,Integer activityType);
