@@ -629,7 +629,7 @@
     tmam.remark,
     tmam.mkt_activity_manual_id,
     tmc.coupon_name,
-    tmc.coupon_code
+    tmc.coupon_definition_id
 
     FROM
     t_mkt_activity tma

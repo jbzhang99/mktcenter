@@ -1,5 +1,6 @@
 package com.bizvane.mktcenterservice.models.vo;
 
+import com.bizvane.couponfacade.models.po.CouponDefinitionPO;
 import com.bizvane.couponfacade.models.po.CouponEntityPO;
 import com.bizvane.couponfacade.models.vo.CouponFindCouponCountResponseVO;
 import com.bizvane.mktcenterservice.models.po.MktActivityPO;
@@ -163,6 +164,11 @@ public class ActivityVO extends MktActivityPO {
 
     private Integer perPersonMax;
 
+    /**
+     * 券定义id
+     */
+    private Long couponDefinitionId;
+
     private String couponCode;//券号
 
     private String couponName;//券名称
@@ -171,7 +177,15 @@ public class ActivityVO extends MktActivityPO {
    //活动明细id
     private Long mktActivityManualId;
 
+    /**
+     * 券实例
+     */
     private CouponEntityPO couponEntityPO;
+
+    /**
+     * 券定义
+     */
+    private CouponDefinitionPO couponDefinitionPO;
 
     private CouponFindCouponCountResponseVO couponFindCouponCountResponseVO;
 
@@ -444,5 +458,22 @@ public class ActivityVO extends MktActivityPO {
 
     public void setUseCouponRate(String useCouponRate) {
         this.useCouponRate = useCouponRate;
+    }
+
+    public Long getCouponDefinitionId() {
+        return couponDefinitionId;
+    }
+
+    public void setCouponDefinitionId(Long couponDefinitionId) {
+        this.couponDefinitionId = couponDefinitionId;
+    }
+
+
+    public CouponDefinitionPO getCouponDefinitionPO() {
+        return couponDefinitionPO;
+    }
+
+    public void setCouponDefinitionPO(CouponDefinitionPO couponDefinitionPO) {
+        this.couponDefinitionPO = couponDefinitionPO;
     }
 }

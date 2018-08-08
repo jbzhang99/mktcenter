@@ -24,6 +24,9 @@ spring:
   data:
     mongodb:
       database: "7"
+  jackson:
+    date-format: yyyy-MM-dd HH:mm:ss
+    time-zone: GMT+8
 eureka:
   instance:
     metadata-map:
@@ -78,7 +81,7 @@ feign:
       name: centerstage
       path: centerstage.api
     coupon:
-      name: coupon
+      name: coupon-ceshi
       path: coupon.api
     members:
       name: members-server
@@ -98,6 +101,8 @@ threadPool:
   corePoolSize: 16
   maximumPoolSize: 64
   keepAliveTime: 60
+
+
 
 activity:
   qrcodeurl: http://www.xxx.bizvane.com/qrcode?activityCode=
