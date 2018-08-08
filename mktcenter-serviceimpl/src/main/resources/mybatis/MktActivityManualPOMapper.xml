@@ -4,11 +4,10 @@
   <resultMap id="BaseResultMap" type="com.bizvane.mktcenterservice.models.po.MktActivityManualPO">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-30 08:29:50.
+      This element was generated on 2018-08-08 14:19:59.
     -->
     <id column="mkt_activity_manual_id" jdbcType="BIGINT" property="mktActivityManualId" />
     <result column="mkt_activity_id" jdbcType="BIGINT" property="mktActivityId" />
-    <result column="receive_type" jdbcType="INTEGER" property="receiveType" />
     <result column="per_person_per_day_max" jdbcType="INTEGER" property="perPersonPerDayMax" />
     <result column="per_person_max" jdbcType="INTEGER" property="perPersonMax" />
     <result column="remark" jdbcType="VARCHAR" property="remark" />
@@ -23,14 +22,14 @@
   <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.bizvane.mktcenterservice.models.po.MktActivityManualPO">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-30 08:29:50.
+      This element was generated on 2018-08-08 14:19:59.
     -->
     <result column="qrcode" jdbcType="LONGVARCHAR" property="qrcode" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-30 08:29:50.
+      This element was generated on 2018-08-08 14:19:59.
     -->
     <where>
       <foreach collection="oredCriteria" item="criteria" separator="or">
@@ -63,7 +62,7 @@
   <sql id="Update_By_Example_Where_Clause">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-30 08:29:50.
+      This element was generated on 2018-08-08 14:19:59.
     -->
     <where>
       <foreach collection="example.oredCriteria" item="criteria" separator="or">
@@ -96,23 +95,23 @@
   <sql id="Base_Column_List">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-30 08:29:50.
+      This element was generated on 2018-08-08 14:19:59.
     -->
-    mkt_activity_manual_id, mkt_activity_id, receive_type, per_person_per_day_max, per_person_max, 
+    mkt_activity_manual_id, mkt_activity_id, per_person_per_day_max, per_person_max, 
     remark, create_user_id, create_user_name, create_date, modified_user_id, modified_user_name, 
     modified_date, valid
   </sql>
   <sql id="Blob_Column_List">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-30 08:29:50.
+      This element was generated on 2018-08-08 14:19:59.
     -->
     qrcode
   </sql>
   <select id="selectByExampleWithBLOBs" parameterType="com.bizvane.mktcenterservice.models.po.MktActivityManualPOExample" resultMap="ResultMapWithBLOBs">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-30 08:29:50.
+      This element was generated on 2018-08-08 14:19:59.
     -->
     select
     <if test="distinct">
@@ -132,7 +131,7 @@
   <select id="selectByExample" parameterType="com.bizvane.mktcenterservice.models.po.MktActivityManualPOExample" resultMap="BaseResultMap">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-30 08:29:50.
+      This element was generated on 2018-08-08 14:19:59.
     -->
     select
     <if test="distinct">
@@ -150,7 +149,7 @@
   <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="ResultMapWithBLOBs">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-30 08:29:50.
+      This element was generated on 2018-08-08 14:19:59.
     -->
     select 
     <include refid="Base_Column_List" />
@@ -162,7 +161,7 @@
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-30 08:29:50.
+      This element was generated on 2018-08-08 14:19:59.
     -->
     delete from t_mkt_activity_manual
     where mkt_activity_manual_id = #{mktActivityManualId,jdbcType=BIGINT}
@@ -170,7 +169,7 @@
   <delete id="deleteByExample" parameterType="com.bizvane.mktcenterservice.models.po.MktActivityManualPOExample">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-30 08:29:50.
+      This element was generated on 2018-08-08 14:19:59.
     -->
     delete from t_mkt_activity_manual
     <if test="_parameter != null">
@@ -180,17 +179,17 @@
   <insert id="insert" parameterType="com.bizvane.mktcenterservice.models.po.MktActivityManualPO">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-30 08:29:50.
+      This element was generated on 2018-08-08 14:19:59.
     -->
     <selectKey keyProperty="mktActivityManualId" order="AFTER" resultType="java.lang.Long">
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into t_mkt_activity_manual (mkt_activity_id, receive_type, per_person_per_day_max, 
+    insert into t_mkt_activity_manual (mkt_activity_id, per_person_per_day_max, 
       per_person_max, remark, create_user_id, 
       create_user_name, create_date, modified_user_id, 
       modified_user_name, modified_date, valid, 
       qrcode)
-    values (#{mktActivityId,jdbcType=BIGINT}, #{receiveType,jdbcType=INTEGER}, #{perPersonPerDayMax,jdbcType=INTEGER}, 
+    values (#{mktActivityId,jdbcType=BIGINT}, #{perPersonPerDayMax,jdbcType=INTEGER}, 
       #{perPersonMax,jdbcType=INTEGER}, #{remark,jdbcType=VARCHAR}, #{createUserId,jdbcType=BIGINT}, 
       #{createUserName,jdbcType=VARCHAR}, #{createDate,jdbcType=TIMESTAMP}, #{modifiedUserId,jdbcType=BIGINT}, 
       #{modifiedUserName,jdbcType=VARCHAR}, #{modifiedDate,jdbcType=TIMESTAMP}, #{valid,jdbcType=BIT}, 
@@ -199,7 +198,7 @@
   <insert id="insertSelective" parameterType="com.bizvane.mktcenterservice.models.po.MktActivityManualPO">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-30 08:29:50.
+      This element was generated on 2018-08-08 14:19:59.
     -->
     <selectKey keyProperty="mktActivityManualId" order="AFTER" resultType="java.lang.Long">
       SELECT LAST_INSERT_ID()
@@ -208,9 +207,6 @@
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="mktActivityId != null">
         mkt_activity_id,
-      </if>
-      <if test="receiveType != null">
-        receive_type,
       </if>
       <if test="perPersonPerDayMax != null">
         per_person_per_day_max,
@@ -250,9 +246,6 @@
       <if test="mktActivityId != null">
         #{mktActivityId,jdbcType=BIGINT},
       </if>
-      <if test="receiveType != null">
-        #{receiveType,jdbcType=INTEGER},
-      </if>
       <if test="perPersonPerDayMax != null">
         #{perPersonPerDayMax,jdbcType=INTEGER},
       </if>
@@ -291,7 +284,7 @@
   <select id="countByExample" parameterType="com.bizvane.mktcenterservice.models.po.MktActivityManualPOExample" resultType="java.lang.Long">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-30 08:29:50.
+      This element was generated on 2018-08-08 14:19:59.
     -->
     select count(*) from t_mkt_activity_manual
     <if test="_parameter != null">
@@ -301,7 +294,7 @@
   <update id="updateByExampleSelective" parameterType="map">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-30 08:29:50.
+      This element was generated on 2018-08-08 14:19:59.
     -->
     update t_mkt_activity_manual
     <set>
@@ -310,9 +303,6 @@
       </if>
       <if test="record.mktActivityId != null">
         mkt_activity_id = #{record.mktActivityId,jdbcType=BIGINT},
-      </if>
-      <if test="record.receiveType != null">
-        receive_type = #{record.receiveType,jdbcType=INTEGER},
       </if>
       <if test="record.perPersonPerDayMax != null">
         per_person_per_day_max = #{record.perPersonPerDayMax,jdbcType=INTEGER},
@@ -355,12 +345,11 @@
   <update id="updateByExampleWithBLOBs" parameterType="map">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-30 08:29:50.
+      This element was generated on 2018-08-08 14:19:59.
     -->
     update t_mkt_activity_manual
     set mkt_activity_manual_id = #{record.mktActivityManualId,jdbcType=BIGINT},
       mkt_activity_id = #{record.mktActivityId,jdbcType=BIGINT},
-      receive_type = #{record.receiveType,jdbcType=INTEGER},
       per_person_per_day_max = #{record.perPersonPerDayMax,jdbcType=INTEGER},
       per_person_max = #{record.perPersonMax,jdbcType=INTEGER},
       remark = #{record.remark,jdbcType=VARCHAR},
@@ -379,12 +368,11 @@
   <update id="updateByExample" parameterType="map">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-30 08:29:50.
+      This element was generated on 2018-08-08 14:19:59.
     -->
     update t_mkt_activity_manual
     set mkt_activity_manual_id = #{record.mktActivityManualId,jdbcType=BIGINT},
       mkt_activity_id = #{record.mktActivityId,jdbcType=BIGINT},
-      receive_type = #{record.receiveType,jdbcType=INTEGER},
       per_person_per_day_max = #{record.perPersonPerDayMax,jdbcType=INTEGER},
       per_person_max = #{record.perPersonMax,jdbcType=INTEGER},
       remark = #{record.remark,jdbcType=VARCHAR},
@@ -402,15 +390,12 @@
   <update id="updateByPrimaryKeySelective" parameterType="com.bizvane.mktcenterservice.models.po.MktActivityManualPO">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-30 08:29:50.
+      This element was generated on 2018-08-08 14:19:59.
     -->
     update t_mkt_activity_manual
     <set>
       <if test="mktActivityId != null">
         mkt_activity_id = #{mktActivityId,jdbcType=BIGINT},
-      </if>
-      <if test="receiveType != null">
-        receive_type = #{receiveType,jdbcType=INTEGER},
       </if>
       <if test="perPersonPerDayMax != null">
         per_person_per_day_max = #{perPersonPerDayMax,jdbcType=INTEGER},
@@ -451,11 +436,10 @@
   <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.bizvane.mktcenterservice.models.po.MktActivityManualPO">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-30 08:29:50.
+      This element was generated on 2018-08-08 14:19:59.
     -->
     update t_mkt_activity_manual
     set mkt_activity_id = #{mktActivityId,jdbcType=BIGINT},
-      receive_type = #{receiveType,jdbcType=INTEGER},
       per_person_per_day_max = #{perPersonPerDayMax,jdbcType=INTEGER},
       per_person_max = #{perPersonMax,jdbcType=INTEGER},
       remark = #{remark,jdbcType=VARCHAR},
@@ -472,11 +456,10 @@
   <update id="updateByPrimaryKey" parameterType="com.bizvane.mktcenterservice.models.po.MktActivityManualPO">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-30 08:29:50.
+      This element was generated on 2018-08-08 14:19:59.
     -->
     update t_mkt_activity_manual
     set mkt_activity_id = #{mktActivityId,jdbcType=BIGINT},
-      receive_type = #{receiveType,jdbcType=INTEGER},
       per_person_per_day_max = #{perPersonPerDayMax,jdbcType=INTEGER},
       per_person_max = #{perPersonMax,jdbcType=INTEGER},
       remark = #{remark,jdbcType=VARCHAR},
@@ -513,7 +496,6 @@
      tma.modified_date,
      tma.valid,
 
-     tmm.receive_type,
      tmm.per_person_per_day_max,
      tmm.per_person_max,
      tmm.remark,
@@ -526,18 +508,19 @@
     left join t_mkt_activity_manual tmm
     on tma.mkt_activity_id = tmm.mkt_activity_id
     where tmm.valid=1 and tma.valid=1
-     <if test="receiveType != null and receiveType != '' ">
-       AND tmm.receive_type = #{receiveType,jdbcType=INTEGER}
-     </if>
+
      <if test="activityStatus != null and activityStatus!= '' ">
        AND tma.activity_status = #{activityStatus,jdbcType=INTEGER}
      </if>
 
+     <if test="activityType != null and activityType!= '' ">
+       AND tma.activity_type = #{activityType,jdbcType=INTEGER}
+     </if>
      <if test="createDateStart != null ">
        AND <![CDATA[ tma.create_date >= #{createDateStart,jdbcType=TIMESTAMP}]]>
      </if>
      <if test="createDateEnd != null ">
-       AND  <![CDATA[ tma.create_date < = #{createDateEnd,jdbcType=TIMESTAMP}]]>
+       AND  <![CDATA[ tma.create_date <= #{createDateEnd,jdbcType=TIMESTAMP}]]>
      </if>
 
      <if test="startTime != null ">
@@ -581,7 +564,6 @@
     tma.modified_date,
     tma.valid,
 
-    tmm.receive_type,
     tmm.per_person_per_day_max,
     tmm.per_person_max,
     tmm.remark,
@@ -605,7 +587,7 @@
     </if>
   </select>
 
-  <select id="getActivityIdList" parameterType="com.bizvane.mktcenterservice.models.vo.ActivityVO"  resultType="com.bizvane.mktcenterservice.models.vo.ActivityVO">
+  <select id="getActivityIdList" parameterType="com.bizvane.mktcenterservice.models.vo.ActivityVO" resultType="com.bizvane.mktcenterservice.models.vo.ActivityVO">
     SELECT
     tma.mkt_activity_id,
     tma.activity_code,
@@ -622,7 +604,6 @@
     tma.create_user_id,
     tma.create_user_name,
     tma.create_date,
-    tmam.receive_type,
     tmam.qrcode,
     tmam.per_person_per_day_max,
     tmam.per_person_max,
@@ -662,7 +643,6 @@ WHERE
     tma.activity_name,
     tma.start_time,
     tma.end_time,
-    tmam.receive_type
     FROM
     t_mkt_activity tma
     LEFT JOIN t_mkt_activity_manual tmam ON tma.mkt_activity_id = tmam.mkt_activity_id
@@ -675,9 +655,7 @@ WHERE
     <if test="sysBrandId != null and sysBrandId!= '' ">
       AND tma.sys_brand_id = #{sysBrandId}
     </if>
-    <if test="receiveType != null">
-      and receive_type = #{receiveType,jdbcType=INTEGER},
-    </if>
+
   </select>
 
 </mapper>

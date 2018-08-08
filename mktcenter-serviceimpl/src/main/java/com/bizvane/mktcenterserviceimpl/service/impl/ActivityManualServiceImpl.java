@@ -27,6 +27,7 @@ import com.bizvane.mktcenterserviceimpl.common.constants.ActivityConstants;
 import com.bizvane.mktcenterserviceimpl.common.constants.ResponseConstants;
 import com.bizvane.mktcenterserviceimpl.common.constants.SystemConstants;
 import com.bizvane.mktcenterserviceimpl.common.enums.ActivityStatusEnum;
+import com.bizvane.mktcenterserviceimpl.common.enums.ActivityTypeEnum;
 import com.bizvane.mktcenterserviceimpl.common.enums.BusinessTypeEnum;
 import com.bizvane.mktcenterserviceimpl.common.enums.CheckStatusEnum;
 import com.bizvane.mktcenterserviceimpl.common.utils.ActivityParamCheckUtil;
@@ -202,7 +203,7 @@ public class ActivityManualServiceImpl implements ActivityManualService {
         BeanUtils.copyProperties(activityVO, mktActivityManualPO);
         mktActivityManualPO.setMktActivityId(mktActivityId);
         // 扫码领券的二维码
-      if(1==activityVO.getReceiveType()){
+      if(ActivityTypeEnum.ACTIVITY_TYPE_QRCODE.getCode()==activityVO.getActivityType()){
          QRCodeConfig qrCodeConfig = new QRCodeConfig();
          String url= qrCodeConfig.getQrcodeurl()+activityVO.getActivityCode();
           UrlQRCodeCreateRequestVO urlQRCodeCreateRequestVO = new UrlQRCodeCreateRequestVO();

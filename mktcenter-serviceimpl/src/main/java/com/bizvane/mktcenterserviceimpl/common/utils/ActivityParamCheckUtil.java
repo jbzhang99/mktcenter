@@ -186,11 +186,6 @@ public class ActivityParamCheckUtil {
             responseData.setMessage(ActivityConstants.ERROR_MSG_ACTIVITY_NAME_EMPTY);
             return responseData;
         }
-        if(StringUtils.isEmpty(String.valueOf(activityVO.getReceiveType()))||activityVO.getReceiveType()!=2||activityVO.getReceiveType()!=1){
-            responseData.setCode(SystemConstants.ERROR_CODE);
-            responseData.setMessage(ActivityConstants.ERROR_RECEIVE_TYPE_EMPTY);
-            return responseData;
-        }
         if(StringUtils.isEmpty(activityVO.getCreateDateStart())||StringUtils.isEmpty(activityVO.getCreateDateEnd())){
             responseData.setCode(SystemConstants.ERROR_CODE);
             responseData.setMessage(ActivityConstants.ERROR_MSG_ACTIVITY_DATE_EMPTY);

@@ -35,11 +35,11 @@ public class ActivityManualController {
      *创建活动
      */
     @RequestMapping("/addActivity")
-   public  ResponseData<Integer> addActivity(Long couponId, ActivityVO activityVO,HttpServletRequest request){
+   public  ResponseData<Integer> addActivity(Long couponDefinitionId, ActivityVO activityVO,HttpServletRequest request){
         //取缓存
         // SysAccountPO stageUser = TokenUtils.getStageUser(request);
         SysAccountPO stageUser = new SysAccountPO();
-       return  activityManualService.addActivityManual(couponId,activityVO,stageUser);
+       return  activityManualService.addActivityManual(couponDefinitionId,activityVO,stageUser);
 
    }
 

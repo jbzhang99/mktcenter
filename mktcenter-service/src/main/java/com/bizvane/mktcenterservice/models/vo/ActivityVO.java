@@ -146,15 +146,6 @@ public class ActivityVO extends MktActivityPO {
     @io.swagger.annotations.ApiModelProperty(value = "创建日期", name = "createDateEnd", required = false, example = "")
     private Date createDateEnd;
 
-    /**
-     * 只读.
-     领取方式：1扫码领券，2手动领券. receive_type
-     *
-     * @mbg.generated 2018-07-19 16:07:25
-     */
-    @io.swagger.annotations.ApiModelProperty(value = "领取方式：1扫码领券，2手动领券",name = "receiveType", required = false,example = "")
-    private Integer receiveType;
-
     @io.swagger.annotations.ApiModelProperty(value = "��ά���ַ", name = "qrcode", required = false, example = "")
     private String qrcode;//二维码
     @io.swagger.annotations.ApiModelProperty(value = "订单来源：1线下订单，2微商城订单", name = "orderSource", required = false, example = "")
@@ -364,20 +355,12 @@ public class ActivityVO extends MktActivityPO {
         return createDateEnd;
     }
 
-    public Integer getReceiveType() {
-        return receiveType;
-    }
-
     public void setCreateDateStart(Date createDateStart) {
         this.createDateStart = createDateStart;
     }
 
     public void setCreateDateEnd(Date createDateEnd) {
         this.createDateEnd = createDateEnd;
-    }
-
-    public void setReceiveType(Integer receiveType) {
-        this.receiveType = receiveType;
     }
 
     public String getQrcode() {
