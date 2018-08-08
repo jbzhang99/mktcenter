@@ -13,7 +13,7 @@ public class ActivityManualVO extends MktActivityManualPO {
 
     private String couponCode;
 
-    private Long couponId;
+    private Long couponDefinitionId;
 
     public MemberInfoModel getMemberInfoModel() {
         return memberInfoModel;
@@ -48,11 +48,11 @@ public class ActivityManualVO extends MktActivityManualPO {
         this.couponCode = couponCode;
     }
 
-    public Long getCouponId() {
-        return couponId;
+    public Long getCouponDefinitionId() {
+        return couponDefinitionId;
     }
 
-    public void setCouponId(Long couponId) {
-        this.couponId = couponId;
+    public void setCouponDefinitionId(Long couponDefinitionId) {
+        this.couponDefinitionId = couponDefinitionId;
     }
 }
