@@ -508,18 +508,6 @@
         </if>
   </select>
 
-    <select id="getTotalStatistics"   resultType="com.bizvane.mktcenterservice.models.bo.TotalStatisticsBO">
-        SELECT
-            SUM(consume_amount) AS totalConsume,
-            COUNT(mkt_task_record_id) AS totalTimes
-        FROM
-            t_mkt_task_record
-        WHERE
-            valid = 1
-        AND sys_brand_id =#{sysBrandId}
-        AND task_type =#{taskType}
-        AND member_code =#{memberCode}
-        AND task_id=#{taskIds}
-    </select>
+
 
 </mapper>
