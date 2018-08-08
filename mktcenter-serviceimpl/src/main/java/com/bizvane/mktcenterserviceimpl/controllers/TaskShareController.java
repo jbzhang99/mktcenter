@@ -14,10 +14,12 @@ import com.bizvane.utils.responseinfo.ResponseData;
 import com.bizvane.utils.tokens.SysAccountPO;
 import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -48,11 +50,8 @@ public class TaskShareController {
      * @return
      */
     @RequestMapping("addTask")
-    public ResponseData<Integer> addTask(TaskVO vo, List<MktCouponPO> couponCodeList, List<MktMessagePO> messagePOList, HttpServletRequest request){
-        TaskBO bo = new TaskBO();
-        bo.setTaskVO(vo);
-        bo.setMktCouponPOList(couponCodeList);
-        bo.setMessagePOList(messagePOList);
+    public ResponseData<Integer> addTask(TaskBO bo, HttpServletRequest request){
+
         //参数校验
         ResponseData responseData = TaskParamCheckUtil.checkParam(bo);
         //参数校验不通过
@@ -75,11 +74,9 @@ public class TaskShareController {
      * @param
      * @return
      */
-    public ResponseData<Integer> updateTask(TaskVO vo, List<MktCouponPO> couponCodeList, List<MktMessagePO> messagePOList, HttpServletRequest request){
-        TaskBO bo = new TaskBO();
-        bo.setTaskVO(vo);
-        bo.setMktCouponPOList(couponCodeList);
-        bo.setMessagePOList(messagePOList);
+    @RequestMapping("updateTask")
+    public ResponseData<Integer> updateTask(TaskBO bo, HttpServletRequest request){
+
         //参数校验
         ResponseData responseData = TaskParamCheckUtil.checkParam(bo);
         //参数校验不通过
@@ -101,6 +98,7 @@ public class TaskShareController {
      * @param
      * @return
      */
+    @RequestMapping("executeTask")
     public ResponseData<Integer> executeTask(TaskVO vo,MemberInfoModel memberInfoModel){
 
         return taskShareService.executeTask(vo,memberInfoModel);
@@ -122,9 +120,42 @@ public class TaskShareController {
      * @param stageUser
      * @return
      */
-    @RequestMapping("checkTaskprofile")
-    public ResponseData checkTaskprofile(Long taskId,SysAccountPO stageUser){
+    @RequestMapping("checkTaskShare")
+    public ResponseData checkTaskShare(Long taskId,SysAccountPO stageUser,Integer checkStatus){
 
-        return null;
+        return taskShareService.checkTaskShare(taskId,stageUser,checkStatus);
+    }
+
+
+    /**
+     * 禁用任务
+     * @param taskId
+     * @param stageUser
+     * @return
+     */
+    @RequestMapping("stopTask")
+    public ResponseData stopTask(Long taskId,SysAccountPO stageUser){
+        return taskShareService.stopTask(taskId, stageUser);
+    }
+
+    public ResponseData getTaskShareRecordByTime(Date date1, Date date2, SysAccountPO stageUser, String taskName, PageForm pageForm){
+
+        return taskShareService.getTaskShareRecordByTime(date1,date2,stageUser,taskName,pageForm);
+    }
+
+
+    /**
+     * 效果分析
+     * @param date1
+     * @param date2
+     * @param stageUser
+     * @param pageForm
+     * @return
+     */
+    @RequestMapping("getTaskProfileRecordByTime")
+    public ResponseData getTaskProfileRecordByTime(Date date1, Date date2, SysAccountPO stageUser,String taskName, PageForm pageForm){
+
+        return taskShareService.getTaskShareRecordByTime(date1,date2,stageUser,taskName,pageForm);
     }
 }
+

@@ -7,6 +7,10 @@ import java.util.Date;
  */
 public class DayTaskRecordVo {
 
+    //参与日期
+
+    private Date partDate;
+
     //某天的赠送总积分数
     private Long dayPoints;
 

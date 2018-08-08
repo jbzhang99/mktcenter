@@ -91,15 +91,14 @@ public class TaskProfileServiceImpl implements TaskProfileService {
     @Autowired
     private MktCouponPOMapper mktCouponPOMapper;
 
-
-    @Autowired
-    private CouponQueryServiceFeign couponQueryServiceFeign;
-
     @Autowired
     private Award award;
 
     @Autowired
     private CouponDefinitionServiceFeign couponDefinitionServiceFeign;
+
+    @Autowired
+    private CouponQueryServiceFeign couponQueryServiceFeign;
 
 
 
@@ -118,138 +117,151 @@ public class TaskProfileServiceImpl implements TaskProfileService {
         //需要返回的对象
         ResponseData responseData = new ResponseData();
 
-        String taskCode = CodeUtil.getTaskCode();
-        //将任务编号添加进vo对象
-        taskVO.setTaskCode(taskCode);
-        //添加任务类型为完善资料
-        taskVO.setTaskType(TaskTypeEnum.TASK_TYPE_PROFILE.getCode());
+        try{
 
-        //判断完善资料任务是否有重复
-        TaskVO vo =  new TaskVO();
-        //完善资料是针对品牌还是商家？conpany or brand？and此处的id到底是stageuser携带过来额还是taskvo携带来的
-        vo.setSysBrandId(stageUser.getBrandId());
-        vo.setTaskType(taskVO.getTaskType());//或者直接填完善资料的任务类型???
+            String taskCode = CodeUtil.getTaskCode();
+            //将任务编号添加进vo对象
+            taskVO.setTaskCode(taskCode);
+            //添加任务类型为完善资料
+            taskVO.setTaskType(TaskTypeEnum.TASK_TYPE_PROFILE.getCode());
 
-        MktTaskPOExample mktTaskPOExample = new MktTaskPOExample();
-        mktTaskPOExample.createCriteria().andValidEqualTo(true).andSysBrandIdEqualTo(taskVO.getSysBrandId()).andTaskTypeEqualTo(TaskTypeEnum.TASK_TYPE_PROFILE.getCode());
-        List<MktTaskPO> taskPOList = mktTaskPOMapper.selectByExample(mktTaskPOExample);
-        //集合不为空，则说明设置重复
-        if (!CollectionUtils.isEmpty(taskPOList)){
-            responseData.setCode(SysResponseEnum.FAILED.getCode());
-            responseData.setMessage("完善资料任务已存在，不可重复创建");
-            return responseData;
-        }
+            //判断完善资料任务是否有重复
+            TaskVO vo =  new TaskVO();
+            //完善资料是针对品牌还是商家？conpany or brand？and此处的id到底是stageuser携带过来额还是taskvo携带来的
+            vo.setSysBrandId(stageUser.getBrandId());
+            vo.setTaskType(taskVO.getTaskType());//或者直接填完善资料的任务类型???
 
-
-        //判断任务是否需要审核
-
-        SysCheckConfigVo sysCheckConfigVo = new SysCheckConfigVo();
-        sysCheckConfigVo.setSysBrandId(taskVO.getSysBrandId());
-        //sysCheckConfigVo.setFunctionCode(taskVO.);
-        ResponseData<List<SysCheckConfigVo>> rls = sysCheckConfigServiceRpc.getCheckConfigListAll(sysCheckConfigVo);
-        List<SysCheckConfigVo> sysCheckConfigVoList = rls.getData();
-        int i = 0;
+            MktTaskPOExample mktTaskPOExample = new MktTaskPOExample();
+            mktTaskPOExample.createCriteria().andValidEqualTo(true).andSysBrandIdEqualTo(taskVO.getSysBrandId()).andTaskTypeEqualTo(TaskTypeEnum.TASK_TYPE_PROFILE.getCode());
+            List<MktTaskPO> taskPOList = mktTaskPOMapper.selectByExample(mktTaskPOExample);
+            //集合不为空，则说明设置重复
+            if (!CollectionUtils.isEmpty(taskPOList)){
+                responseData.setCode(SysResponseEnum.FAILED.getCode());
+                responseData.setMessage("完善资料任务已存在，不可重复创建");
+                return responseData;
+            }
 
 
-        //所查集合不为空 该品牌可能有功能需要审核
-        if(!CollectionUtils.isEmpty(sysCheckConfigVoList)){
-            for(SysCheckConfigVo sysCheckConfigVo1:sysCheckConfigVoList){
-                //会员任务需要审核   会员任务的编号是C0003？
-                if (sysCheckConfigVo1.getFunctionCode().equals("C0003")){
-                    i+=1;
+            //判断任务是否需要审核
+
+            SysCheckConfigVo sysCheckConfigVo = new SysCheckConfigVo();
+            sysCheckConfigVo.setSysBrandId(taskVO.getSysBrandId());
+            //sysCheckConfigVo.setFunctionCode(taskVO.);
+            ResponseData<List<SysCheckConfigVo>> rls = sysCheckConfigServiceRpc.getCheckConfigListAll(sysCheckConfigVo);
+            List<SysCheckConfigVo> sysCheckConfigVoList = rls.getData();
+            int i = 0;
+
+
+            //所查集合不为空 该品牌可能有功能需要审核
+            if(!CollectionUtils.isEmpty(sysCheckConfigVoList)){
+                for(SysCheckConfigVo sysCheckConfigVo1:sysCheckConfigVoList){
+                    //会员任务需要审核   会员任务的编号是C0003？
+                    if (sysCheckConfigVo1.getFunctionCode().equals("C0003")){
+                        i+=1;
+                    }
                 }
             }
-        }
-        //会员任务需要审核
-        if(i>0){
-            //新增审核单  任务状态为：待审核
-            taskVO.setCheckStatus(CheckStatusEnum.CHECK_STATUS_PENDING.getCode());
+            //会员任务需要审核
+            if(i>0){
+                //新增审核单  任务状态为：待审核
+                taskVO.setCheckStatus(CheckStatusEnum.CHECK_STATUS_PENDING.getCode());
 
 
-            //新增一条审核单
-            //functioncode和functionname分别指的是什么？
-            SysCheckPo sysCheckPo = new SysCheckPo();
-            sysCheckPo.setSysBrandId(taskVO.getSysBrandId());
-            sysCheckPo.setFunctionCode("C0003");//写成枚举？
+                //新增一条审核单
+                //functioncode和functionname分别指的是什么？
+                SysCheckPo sysCheckPo = new SysCheckPo();
+                sysCheckPo.setSysBrandId(taskVO.getSysBrandId());
+                sysCheckPo.setFunctionCode("C0003");//写成枚举？
 //            sysCheckPo.setb
-            sysCheckPo.setCreateDate(new Date());
-            sysCheckPo.setCreateUserName(stageUser.getName());
-            sysCheckPo.setCreateUserId(stageUser.getSysAccountId());
-            sysCheckPo.setSysBrandId(taskVO.getSysBrandId());
-            sysCheckPo.setCheckStatus(CheckStatusEnum.CHECK_STATUS_PENDING.getCode());
-            sysCheckPo.setBusinessType(BusinessTypeEnum.ACTIVITY_TYPE_TASK.getCode());
-            sysCheckPo.setBusinessId(taskVO.getMktTaskId());
-            sysCheckPo.setBusinessCode(taskVO.getTaskCode());
-            sysCheckServiceRpc.addCheck(sysCheckPo);
+                sysCheckPo.setCreateDate(new Date());
+                sysCheckPo.setCreateUserName(stageUser.getName());
+                sysCheckPo.setCreateUserId(stageUser.getSysAccountId());
+                sysCheckPo.setSysBrandId(taskVO.getSysBrandId());
+                sysCheckPo.setCheckStatus(CheckStatusEnum.CHECK_STATUS_PENDING.getCode());
+                sysCheckPo.setBusinessType(BusinessTypeEnum.ACTIVITY_TYPE_TASK.getCode());
+                sysCheckPo.setBusinessId(taskVO.getMktTaskId());
+                sysCheckPo.setBusinessCode(taskVO.getTaskCode());
+               //sysCheckServiceRpc.addCheck(sysCheckPo);
 
 
-            //任务时间不滞后
+                //任务时间不滞后
 
-            taskVO.setTaskStatus(TaskStatusEnum.TASK_STATUS_PENDING.getCode());
-        }//如果不需要审核
-        else{
-            //任务时间不滞后
-            taskVO.setCheckStatus(CheckStatusEnum.CHECK_STATUS_APPROVED.getCode());
-            taskVO.setTaskStatus(TaskStatusEnum.TASK_STATUS_EXECUTING.getCode());
-        }
-
-        //将数据插入任务主表
-        taskVO.setCreateDate(new Date());
-        taskVO.setCreateUserName(stageUser.getName());
-        taskVO.setCreateUserId(stageUser.getSysAccountId());
-
-        MktTaskPOWithBLOBs mktTaskPOWithBLOBs = new MktTaskPOWithBLOBs();
-        BeanUtils.copyProperties(taskVO,mktTaskPOWithBLOBs);
-        mktTaskPOMapper.insert(mktTaskPOWithBLOBs);
-
-        Long taskVOId = mktTaskPOWithBLOBs.getMktTaskId();
-
-        //将数据插入完善资料任务表
-        MktTaskProfilePO mktTaskProfilePO = new MktTaskProfilePO();
-        mktTaskProfilePO.setCreateDate(new Date());
-        mktTaskProfilePO.setCreateUserId(stageUser.getSysAccountId());
-        mktTaskProfilePO.setCreateUserName(stageUser.getName());
-        mktTaskProfilePO.setMktTaskId(taskVOId);
-        //将客户选择会员需要完善的扩展属性添加进完善资料任务表
-        mktTaskProfilePO.setPropertyCode(taskVO.getPropertyCode());
-        mktTaskProfilePOMapper.insertSelective(mktTaskProfilePO);
-
-        //需要发奖励
-        if (!CollectionUtils.isEmpty(bo.getMktCouponPOList())){
-            for (MktCouponPO mktCouponPO:bo.getMktCouponPOList()){
-                //增加券
-                MktCouponPO mktCouponPO1 = new MktCouponPO();
-                mktCouponPO1.setCreateUserName(stageUser.getName());
-                mktCouponPO1.setCreateUserId(stageUser.getSysAccountId());
-                mktCouponPO1.setCreateDate(new Date());
-                mktCouponPO1.setBizType(BusinessTypeEnum.ACTIVITY_TYPE_TASK.getCode());
-                mktCouponPO1.setCouponName(mktCouponPO.getCouponName());
-                mktCouponPO1.setCouponDefinitionId(mktCouponPO.getCouponDefinitionId());//是id还是code
-                mktCouponPO1.setBizId(taskVOId);
-
-                mktCouponPOMapper.insertSelective(mktCouponPO1);
-
+                taskVO.setTaskStatus(TaskStatusEnum.TASK_STATUS_PENDING.getCode());
+            }//如果不需要审核
+            else{
+                //任务时间不滞后
+                taskVO.setCheckStatus(CheckStatusEnum.CHECK_STATUS_APPROVED.getCode());
+                taskVO.setTaskStatus(TaskStatusEnum.TASK_STATUS_EXECUTING.getCode());
             }
-        }
 
-        //需要发消息
+            //将数据插入任务主表
+            taskVO.setCreateDate(new Date());
+            taskVO.setCreateUserName(stageUser.getName());
+            taskVO.setCreateUserId(stageUser.getSysAccountId());
 
-        if(!CollectionUtils.isEmpty(bo.getMessagePOList())){
-            for (MktMessagePO messagePO:bo.getMessagePOList()){
-                MktMessagePO messageVO1 = new MessageVO();
-                messageVO1.setMsgType(messagePO.getMsgType());
-                messageVO1.setSendTime(new Date());//完善资料任务无开始时间  so……创建任务之后立即发送消息？
+            MktTaskPOWithBLOBs mktTaskPOWithBLOBs = new MktTaskPOWithBLOBs();
+            BeanUtils.copyProperties(taskVO,mktTaskPOWithBLOBs);
+            mktTaskPOMapper.insert(mktTaskPOWithBLOBs);
 
-                MktMessagePO mktMessagePO = new MktMessagePO();
-                BeanUtils.copyProperties(messageVO1,mktMessagePO);
-                mktMessagePO.setBizType(BusinessTypeEnum.ACTIVITY_TYPE_TASK.getCode());
-                mktMessagePO.setCreateDate(new Date());
-                BeanUtils.copyProperties(mktTaskProfilePO,mktMessagePO);
-                mktMessagePO.setMsgContent(messagePO.getMsgContent());
-                mktMessagePO.setBizId(taskVOId);
-                //模板消息id？哪里的？
-                mktMessagePOMapper.insertSelective(mktMessagePO);
+            Long taskVOId = mktTaskPOWithBLOBs.getMktTaskId();
+
+            //将数据插入完善资料任务表
+            MktTaskProfilePO mktTaskProfilePO = new MktTaskProfilePO();
+            mktTaskProfilePO.setCreateDate(new Date());
+            mktTaskProfilePO.setCreateUserId(stageUser.getSysAccountId());
+            mktTaskProfilePO.setCreateUserName(stageUser.getName());
+            mktTaskProfilePO.setMktTaskId(taskVOId);
+            //将客户选择会员需要完善的扩展属性添加进完善资料任务表
+            mktTaskProfilePO.setPropertyCode(taskVO.getPropertyCode());
+            mktTaskProfilePOMapper.insertSelective(mktTaskProfilePO);
+
+            //需要发奖励
+            if (!CollectionUtils.isEmpty(bo.getMktCouponPOList())){
+                for (MktCouponPO mktCouponPO:bo.getMktCouponPOList()){
+                    //增加券
+                    MktCouponPO mktCouponPO1 = new MktCouponPO();
+                    mktCouponPO1.setCreateUserName(stageUser.getName());
+                    mktCouponPO1.setCreateUserId(stageUser.getSysAccountId());
+                    mktCouponPO1.setCreateDate(new Date());
+                    mktCouponPO1.setBizType(BusinessTypeEnum.ACTIVITY_TYPE_TASK.getCode());
+                    mktCouponPO1.setCouponName(mktCouponPO.getCouponName());
+                    mktCouponPO1.setCouponDefinitionId(mktCouponPO.getCouponDefinitionId());//是id还是code
+                    mktCouponPO1.setBizId(taskVOId);
+
+                    mktCouponPOMapper.insertSelective(mktCouponPO1);
+
+                }
             }
+
+            //需要发消息
+
+            if(!CollectionUtils.isEmpty(bo.getMessagePOList())){
+                for (MktMessagePO messagePO:bo.getMessagePOList()){
+                    MktMessagePO messageVO1 = new MessageVO();
+                    messageVO1.setMsgType(messagePO.getMsgType());
+                    messageVO1.setSendTime(new Date());//完善资料任务无开始时间  so……创建任务之后立即发送消息？
+
+                    MktMessagePO mktMessagePO = new MktMessagePO();
+                    BeanUtils.copyProperties(messageVO1,mktMessagePO);
+                    mktMessagePO.setBizType(BusinessTypeEnum.ACTIVITY_TYPE_TASK.getCode());
+                    mktMessagePO.setCreateDate(new Date());
+                    BeanUtils.copyProperties(mktTaskProfilePO,mktMessagePO);
+                    mktMessagePO.setMsgContent(messagePO.getMsgContent());
+                    mktMessagePO.setBizId(taskVOId);
+                    //模板消息id？哪里的？
+                    mktMessagePOMapper.insertSelective(mktMessagePO);
+                }
+            }
+
+            // TODO: 2018/8/7 发送消息 
+            responseData.setCode(SysResponseEnum.SUCCESS.getCode());
+            responseData.setMessage(SysResponseEnum.SUCCESS.getMessage());
+
+        }catch (Exception e){
+
+            responseData.setCode(SysResponseEnum.FAILED.getCode());
+            responseData.setMessage(SysResponseEnum.FAILED.getMessage());
+            return responseData;
         }
 
         return responseData;
@@ -265,7 +277,7 @@ public class TaskProfileServiceImpl implements TaskProfileService {
      */
     @Override
     @Transactional
-    public ResponseData<Integer> updateTask(TaskBO bo, SysAccountPO stageUser) {
+    public ResponseData updateTask(TaskBO bo, SysAccountPO stageUser) {
 
         ResponseData responseData = new ResponseData();
         TaskVO taskVO = bo.getTaskVO();
@@ -274,100 +286,113 @@ public class TaskProfileServiceImpl implements TaskProfileService {
         if (taskVO.getCheckStatus()!=CheckStatusEnum.CHECK_STATUS_PENDING.getCode()&&taskVO.getCheckStatus()!=CheckStatusEnum.CHECK_STATUS_REJECTED.getCode()){
             responseData.setCode(SysResponseEnum.FAILED.getCode());
             responseData.setMessage("该任务不可修改");
+            return responseData;
         }
 
+        try {
 
-        //如果状态为已驳回，需新增审核单
-        if(taskVO.getCheckStatus()==CheckStatusEnum.CHECK_STATUS_REJECTED.getCode()){
-            SysCheckPo sysCheckPo = new SysCheckPo();
-            sysCheckPo.setSysBrandId(taskVO.getSysBrandId());
-            sysCheckPo.setFunctionCode("C0003");//写成枚举？
-            sysCheckPo.setCreateDate(new Date());
-            sysCheckPo.setCreateUserName(stageUser.getName());
-            sysCheckPo.setCreateUserId(stageUser.getSysAccountId());
-            sysCheckPo.setSysBrandId(taskVO.getSysBrandId());
-            sysCheckPo.setCheckStatus(CheckStatusEnum.CHECK_STATUS_PENDING.getCode());
-            sysCheckPo.setBusinessType(BusinessTypeEnum.ACTIVITY_TYPE_TASK.getCode());
-            sysCheckPo.setBusinessId(taskVO.getMktTaskId());
-            sysCheckPo.setBusinessCode(taskVO.getTaskCode());
-            sysCheckServiceRpc.addCheck(sysCheckPo);
+            //如果状态为已驳回，需新增审核单
+            if(taskVO.getCheckStatus()==CheckStatusEnum.CHECK_STATUS_REJECTED.getCode()){
+                SysCheckPo sysCheckPo = new SysCheckPo();
+                sysCheckPo.setSysBrandId(taskVO.getSysBrandId());
+                sysCheckPo.setFunctionCode("C0003");//写成枚举？
+                sysCheckPo.setCreateDate(new Date());
+                sysCheckPo.setCreateUserName(stageUser.getName());
+                sysCheckPo.setCreateUserId(stageUser.getSysAccountId());
+                sysCheckPo.setSysBrandId(taskVO.getSysBrandId());
+                sysCheckPo.setCheckStatus(CheckStatusEnum.CHECK_STATUS_PENDING.getCode());
+                sysCheckPo.setBusinessType(BusinessTypeEnum.ACTIVITY_TYPE_TASK.getCode());
+                sysCheckPo.setBusinessId(taskVO.getMktTaskId());
+                sysCheckPo.setBusinessCode(taskVO.getTaskCode());
+                //sysCheckServiceRpc.addCheck(sysCheckPo);
 
-        }
-        //修改任务状态为待审核和待执行
-        taskVO.setCheckStatus(CheckStatusEnum.CHECK_STATUS_PENDING.getCode());
-        taskVO.setTaskStatus(TaskStatusEnum.TASK_STATUS_PENDING.getCode());
-        //修改任务其他信息
-        taskVO.setModifiedDate(new Date());
-        taskVO.setModifiedUserId(stageUser.getSysAccountId());
-        taskVO.setModifiedUserName(stageUser.getName());
-
-        //更新任务主表
-        MktTaskPOWithBLOBs mktTaskPOWithBLOBs = new MktTaskPOWithBLOBs();
-        BeanUtils.copyProperties(taskVO,mktTaskPOWithBLOBs);
-        mktTaskPOMapper.updateByPrimaryKeySelective(mktTaskPOWithBLOBs);
-
-        //更新完善资料任务表
-
-        MktTaskProfilePO mktTaskProfilePO = new MktTaskProfilePO();
-        mktTaskProfilePO.setModifiedDate(new Date());
-        mktTaskProfilePO.setModifiedUserId(stageUser.getSysAccountId());
-        mktTaskProfilePO.setModifiedUserName(stageUser.getName());
-
-        mktTaskProfilePO.setPropertyCode(taskVO.getPropertyCode());
-        mktTaskProfilePOMapper.updateByPrimaryKeySelective(mktTaskProfilePO);
-
-        //修改奖励
-        //修改券  修改前后券的数量可能不一样  so无法直接进行修改
-
-        MktCouponPO mktCouponPO = new MktCouponPO();
-        mktCouponPO.setValid(false);
-        MktCouponPOExample mktCouponPOExample = new MktCouponPOExample();
-        MktCouponPOExample.Criteria criteria = mktCouponPOExample.createCriteria();
-        criteria.andBizIdEqualTo(taskVO.getMktTaskId());
-
-
-        mktCouponPOMapper.updateByExampleSelective(mktCouponPO,mktCouponPOExample);
-        List<MktCouponPO> mktCouponPOList = bo.getMktCouponPOList();
-        if (!CollectionUtils.isEmpty(mktCouponPOList)){
-            for (MktCouponPO mktCouponPO1:mktCouponPOList){
-                MktCouponPO mktCouponPO2 = new MktCouponPO();
-                mktCouponPO2.setBizType(BusinessTypeEnum.ACTIVITY_TYPE_TASK.getCode());
-                mktCouponPO2.setCouponName(mktCouponPO1.getCouponName());
-                mktCouponPO2.setCouponDefinitionId(mktCouponPO1.getCouponDefinitionId());
-                BeanUtils.copyProperties(taskVO,mktCouponPO2);
-                mktCouponPOMapper.insertSelective(mktCouponPO2);
             }
-        }
+            //修改任务状态为待审核和待执行
+            taskVO.setCheckStatus(CheckStatusEnum.CHECK_STATUS_PENDING.getCode());
+            taskVO.setTaskStatus(TaskStatusEnum.TASK_STATUS_PENDING.getCode());
+            //修改任务其他信息
+            taskVO.setModifiedDate(new Date());
+            taskVO.setModifiedUserId(stageUser.getSysAccountId());
+            taskVO.setModifiedUserName(stageUser.getName());
 
-        //修改消息
-        MktMessagePO record = new MktMessagePO();
-        record.setValid(false);
-        MktMessagePOExample mktMessagePOExample = new MktMessagePOExample();
-        MktMessagePOExample.Criteria criteria1 = mktMessagePOExample.createCriteria();
-        criteria1.andBizIdEqualTo(taskVO.getMktTaskId());
-        mktMessagePOMapper.updateByExampleSelective(record,mktMessagePOExample);
+            //更新任务主表
+            MktTaskPOWithBLOBs mktTaskPOWithBLOBs = new MktTaskPOWithBLOBs();
+            BeanUtils.copyProperties(taskVO,mktTaskPOWithBLOBs);
+            mktTaskPOMapper.updateByPrimaryKeySelective(mktTaskPOWithBLOBs);
+
+            //更新完善资料任务表
+
+            MktTaskProfilePO mktTaskProfilePO = new MktTaskProfilePO();
+            mktTaskProfilePO.setModifiedDate(new Date());
+            mktTaskProfilePO.setModifiedUserId(stageUser.getSysAccountId());
+            mktTaskProfilePO.setModifiedUserName(stageUser.getName());
+
+            mktTaskProfilePO.setPropertyCode(taskVO.getPropertyCode());
+            mktTaskProfilePOMapper.updateByPrimaryKeySelective(mktTaskProfilePO);
+
+            //修改奖励
+            //修改券  修改前后券的数量可能不一样  so无法直接进行修改
+
+            MktCouponPO mktCouponPO = new MktCouponPO();
+            mktCouponPO.setValid(false);
+            MktCouponPOExample mktCouponPOExample = new MktCouponPOExample();
+            MktCouponPOExample.Criteria criteria = mktCouponPOExample.createCriteria();
+            criteria.andBizIdEqualTo(taskVO.getMktTaskId());
 
 
-        //添加新消息
-        List<MktMessagePO> mktMessagePOList = bo.getMessagePOList();
+            mktCouponPOMapper.updateByExampleSelective(mktCouponPO,mktCouponPOExample);
+            List<MktCouponPO> mktCouponPOList = bo.getMktCouponPOList();
+            if (!CollectionUtils.isEmpty(mktCouponPOList)){
+                for (MktCouponPO mktCouponPO1:mktCouponPOList){
+                    MktCouponPO mktCouponPO2 = new MktCouponPO();
+                    mktCouponPO2.setBizType(BusinessTypeEnum.ACTIVITY_TYPE_TASK.getCode());
 
-        if(!CollectionUtils.isEmpty(mktMessagePOList)){
-            for(MktMessagePO messagePO:mktMessagePOList){
-                MktMessagePO mktMessagePO = new MktMessagePO();
-                mktMessagePO.setMsgContent(messagePO.getMsgContent());
-                mktMessagePO.setCreateDate(new Date());
-                mktMessagePO.setBizId(taskVO.getMktTaskId());
-                mktMessagePO.setBizType(BusinessTypeEnum.ACTIVITY_TYPE_TASK.getCode());
-                mktMessagePO.setCreateUserId(stageUser.getSysAccountId());
-                mktMessagePO.setCreateUserName(stageUser.getName());
-                mktMessagePO.setMsgType(messagePO.getMsgType());
-                mktMessagePO.setSendTime(messagePO.getSendTime());
-                //消息编号？模板？
-                mktMessagePOMapper.insertSelective(mktMessagePO);
+                    mktCouponPO2.setCouponName(mktCouponPO1.getCouponName());
+                    mktCouponPO2.setCouponDefinitionId(mktCouponPO1.getCouponDefinitionId());
+                    BeanUtils.copyProperties(taskVO,mktCouponPO2);
+                    mktCouponPOMapper.insertSelective(mktCouponPO2);
+                }
             }
 
-        }
+            //修改消息
+            MktMessagePO record = new MktMessagePO();
+            record.setValid(false);
+            MktMessagePOExample mktMessagePOExample = new MktMessagePOExample();
+            MktMessagePOExample.Criteria criteria1 = mktMessagePOExample.createCriteria();
+            criteria1.andBizIdEqualTo(taskVO.getMktTaskId());
+            mktMessagePOMapper.updateByExampleSelective(record,mktMessagePOExample);
 
+
+            //添加新消息
+            List<MktMessagePO> mktMessagePOList = bo.getMessagePOList();
+
+            if(!CollectionUtils.isEmpty(mktMessagePOList)){
+                for(MktMessagePO messagePO:mktMessagePOList){
+                    MktMessagePO mktMessagePO = new MktMessagePO();
+                    mktMessagePO.setMsgContent(messagePO.getMsgContent());
+                    mktMessagePO.setCreateDate(new Date());
+                    mktMessagePO.setBizId(taskVO.getMktTaskId());
+                    mktMessagePO.setBizType(BusinessTypeEnum.ACTIVITY_TYPE_TASK.getCode());
+                    mktMessagePO.setCreateUserId(stageUser.getSysAccountId());
+                    mktMessagePO.setCreateUserName(stageUser.getName());
+                    mktMessagePO.setMsgType(messagePO.getMsgType());
+                    mktMessagePO.setSendTime(taskVO.getStartTime());
+                    //消息编号？模板？
+                    mktMessagePOMapper.insertSelective(mktMessagePO);
+                }
+
+            }
+            // TODO: 2018/8/7 发送消息
+
+            responseData.setCode(SysResponseEnum.SUCCESS.getCode());
+            responseData.setMessage(SysResponseEnum.SUCCESS.getMessage());
+
+        }catch (Exception e){
+            e.printStackTrace();
+            responseData.setMessage(SysResponseEnum.FAILED.getMessage());
+            responseData.setCode(SysResponseEnum.FAILED.getCode());
+            return responseData;
+        }
         return responseData;
     }
 
@@ -380,6 +405,20 @@ public class TaskProfileServiceImpl implements TaskProfileService {
     @Transactional
     public ResponseData<TaskBO> selectTaskById(Long mktTaskId) {
         ResponseData responseData = new ResponseData();
+
+
+        try {
+
+
+
+
+        }catch (Exception e){
+            e.printStackTrace();
+            responseData.setMessage(SysResponseEnum.FAILED.getMessage());
+            responseData.setCode(SysResponseEnum.FAILED.getCode());
+            return responseData;
+        }
+
         TaskBO taskBO = new TaskBO();
         TaskVO taskVO = new TaskVO();
         taskVO.setMktTaskId(mktTaskId);
@@ -399,7 +438,7 @@ public class TaskProfileServiceImpl implements TaskProfileService {
 
 
         List<CouponDefinitionPO> couponDefinitionPOS = new ArrayList<>();
-       /* //查询券定义
+       /* todo//查询券定义
         for (MktCouponPO mktCouponPO:mktCouponPOList){
             Long couponDefinitionId = mktCouponPO.getCouponDefinitionId();
 
@@ -407,8 +446,6 @@ public class TaskProfileServiceImpl implements TaskProfileService {
             CouponDefinitionPO couponDefinitionPO = coupon.getData();
             couponDefinitionPOS.add(couponDefinitionPO);
         }*/
-
-
 
         if (taskVo!=null){
             taskBO.setTaskVO(taskVo);
@@ -466,39 +503,66 @@ public class TaskProfileServiceImpl implements TaskProfileService {
     public ResponseData executeTask(TaskVO vo, MemberInfoModel memberInfoModel) {
         ResponseData responseData = new ResponseData();
 
-        //一、券
+        try {
 
-        //1.从coupon表中查出该业务单号对应的券的id（可能多张，所以遍历添加）
-        MktCouponPOExample mktCouponPOExample = new MktCouponPOExample();
-        MktCouponPOExample.Criteria criteria = mktCouponPOExample.createCriteria();
-        criteria.andBizIdEqualTo(vo.getMktTaskId()).andBizTypeEqualTo(BusinessTypeEnum.ACTIVITY_TYPE_TASK.getCode()).andValidEqualTo(true);
+            //一、券
 
-        List<MktCouponPO> mktCouponPOList = mktCouponPOMapper.selectByExample(mktCouponPOExample);
+            //1.从coupon表中查出该业务单号对应的券的id（可能多张，所以遍历添加）
+            MktCouponPOExample mktCouponPOExample = new MktCouponPOExample();
+            MktCouponPOExample.Criteria criteria = mktCouponPOExample.createCriteria();
+            criteria.andBizIdEqualTo(vo.getMktTaskId()).andBizTypeEqualTo(BusinessTypeEnum.ACTIVITY_TYPE_TASK.getCode()).andValidEqualTo(true);
 
-        //2.创建AwardBo对象 添加通用信息 并遍历该业务的券信息添加券的信息
-        AwardBO bo = new AwardBO();
-        bo.setMemberCode(memberInfoModel.getMemberCode());
-        bo.setMemberName(memberInfoModel.getName());
-        bo.setMktSmartType(MktSmartTypeEnum.SMART_TYPE_COUPON.getCode());
-        bo.setBusinessWay(BusinessTypeEnum.ACTIVITY_TYPE_TASK.getMessage());
-        bo.setSendBussienId(vo.getMktTaskId());
-        for (MktCouponPO mktCouponPO:mktCouponPOList){
-            Long couponDefId = mktCouponPO.getCouponDefinitionId();
-            bo.setCouponDefinitionId(couponDefId);
-            award.execute(bo);
+            List<MktCouponPO> mktCouponPOList = mktCouponPOMapper.selectByExample(mktCouponPOExample);
+
+            //2.创建AwardBo对象 添加通用信息 并遍历该业务的券信息添加券的信息
+            AwardBO bo = new AwardBO();
+            bo.setMemberCode(memberInfoModel.getMemberCode());
+            bo.setMemberName(memberInfoModel.getName());
+            bo.setMktSmartType(MktSmartTypeEnum.SMART_TYPE_COUPON.getCode());
+            bo.setBusinessWay(BusinessTypeEnum.ACTIVITY_TYPE_TASK.getMessage());
+            bo.setSendBussienId(vo.getMktTaskId());
+            for (MktCouponPO mktCouponPO:mktCouponPOList){
+                Long couponDefId = mktCouponPO.getCouponDefinitionId();
+                bo.setCouponDefinitionId(couponDefId);
+                //award.execute(bo);
+            }
+
+            //二、积分
+
+            AwardBO bo2 = new AwardBO();
+            bo2.setChangeBills(UUID.randomUUID().toString().replaceAll("-",""));//todo 暂时用uuid生成
+            bo2.setBusinessWay(BusinessTypeEnum.ACTIVITY_TYPE_TASK.getMessage());
+            bo2.setSendBussienId(vo.getMktTaskId());
+            bo2.setMemberCode(memberInfoModel.getMemberCode());
+            bo2.setMemberName(memberInfoModel.getName());
+            bo2.setMktSmartType(MktSmartTypeEnum.SMART_TYPE_INTEGRAL.getCode());
+            bo2.setChangeIntegral(vo.getPoints());
+           // award.execute(bo2);
+
+            //三、将完成任务的信息添加进taskrecord表中
+            MktTaskPO mktTaskPO = mktTaskPOMapper.selectByPrimaryKey(vo.getMktTaskId());
+
+            MktTaskRecordPO mktTaskRecordPO = new MktTaskRecordPO();
+
+            mktTaskRecordPO.setTaskType(TaskTypeEnum.TASK_TYPE_PROFILE.getCode());
+            mktTaskRecordPO.setTaskId(vo.getMktTaskId());
+            mktTaskRecordPO.setMemberCode(memberInfoModel.getMemberCode());
+            //mktTaskRecordPO.setPoints(vo.getPoints());//奖励积分是不是也该去掉？？Todo
+            mktTaskRecordPO.setParticipateDate(new Date());
+            BeanUtils.copyProperties(mktTaskPO,mktTaskRecordPO);
+            //是否奖励过 奖励次数？
+            mktTaskRecordPOMapper.insertSelective(mktTaskRecordPO);
+
+            responseData.setMessage(SysResponseEnum.SUCCESS.getMessage());
+            responseData.setCode(SysResponseEnum.SUCCESS.getCode());
+
+        }catch(Exception e){
+            e.printStackTrace();
+            responseData.setCode(SysResponseEnum.FAILED.getCode());
+            responseData.setMessage(SysResponseEnum.FAILED.getMessage());
+            return responseData;
+
         }
-
-        //二、积分
-
-        AwardBO bo2 = new AwardBO();
-        bo2.setChangeBills(UUID.randomUUID().toString().replaceAll("-",""));//todo 暂时用uuid生成
-        bo2.setBusinessWay(BusinessTypeEnum.ACTIVITY_TYPE_TASK.getMessage());
-        bo2.setSendBussienId(vo.getMktTaskId());
-        bo2.setMemberCode(memberInfoModel.getMemberCode());
-        bo2.setMemberName(memberInfoModel.getName());
-        bo2.setMktSmartType(MktSmartTypeEnum.SMART_TYPE_INTEGRAL.getCode());
-        bo2.setChangeIntegral(vo.getPoints());
-        award.execute(bo2);
 
         return responseData;
     }
@@ -516,95 +580,108 @@ public class TaskProfileServiceImpl implements TaskProfileService {
     public ResponseData<TaskRecordVO> getTaskProfileRecordByTime(Date date1, Date date2,SysAccountPO stageUser,PageForm pageForm){
         ResponseData responseData = new ResponseData();
 
+        try {
 
-        //根据任务类型，品牌id查询出任务得出所有参与该类型任务人数
-        MktTaskRecordPOExample example = new MktTaskRecordPOExample();
-        MktTaskRecordPOExample.Criteria criteria = example.createCriteria();
-        criteria.andTaskTypeEqualTo(TaskTypeEnum.TASK_TYPE_PROFILE.getCode()).andSysBrandIdEqualTo(stageUser.getBrandId()).andValidEqualTo(true);
+            //根据任务类型，品牌id查询出任务得出所有参与该类型任务人数
+            MktTaskRecordPOExample example = new MktTaskRecordPOExample();
+            MktTaskRecordPOExample.Criteria criteria = example.createCriteria();
+            criteria.andTaskTypeEqualTo(TaskTypeEnum.TASK_TYPE_PROFILE.getCode()).andSysBrandIdEqualTo(stageUser.getBrandId()).andValidEqualTo(true);
 
-        //根据品牌id  任务类型查出该品牌下的完善资料任务
-        MktTaskPOExample mktTaskPOExample = new MktTaskPOExample();
-        MktTaskPOExample.Criteria criteria1 = mktTaskPOExample.createCriteria();
-        criteria1.andTaskTypeEqualTo(TaskTypeEnum.TASK_TYPE_PROFILE.getCode()).andSysBrandIdEqualTo(stageUser.getBrandId()).andValidEqualTo(true);
+            //根据品牌id  任务类型查出该品牌下的完善资料任务
+            MktTaskPOExample mktTaskPOExample = new MktTaskPOExample();
+            MktTaskPOExample.Criteria criteria1 = mktTaskPOExample.createCriteria();
+            criteria1.andTaskTypeEqualTo(TaskTypeEnum.TASK_TYPE_PROFILE.getCode()).andSysBrandIdEqualTo(stageUser.getBrandId()).andValidEqualTo(true);
 
-        List<MktTaskPO> mktTaskPOList = mktTaskPOMapper.selectByExample(mktTaskPOExample);
-        MktTaskPO mktTaskPO = mktTaskPOList.get(0);
+            List<MktTaskPO> mktTaskPOList = mktTaskPOMapper.selectByExample(mktTaskPOExample);
+            MktTaskPO mktTaskPO = mktTaskPOList.get(0);
 
 
-        //一、查出时间之内参与该任务的总人数
-        if(date1!=null&&date2!=null){
-            criteria.andParticipateDateBetween(date1,date2);
-        }else if (date1!=null&&date2==null){
-            criteria.andParticipateDateGreaterThanOrEqualTo(date1);
-            date2=new Date();
-        }else if (date1==null&&date2!=null){
-            criteria.andParticipateDateLessThanOrEqualTo(date2);
-            date1 = mktTaskPO.getStartTime();
+            //一、查出时间之内参与该任务的总人数
+            if(date1!=null&&date2!=null){
+                criteria.andParticipateDateBetween(date1,date2);
+            }else if (date1!=null&&date2==null){
+                criteria.andParticipateDateGreaterThanOrEqualTo(date1);
+                date2=new Date();
+            }else if (date1==null&&date2!=null){
+                criteria.andParticipateDateLessThanOrEqualTo(date2);
+                date1 = mktTaskPO.getStartTime();
+            }else if(date1==null&&date2==null){
+                date1 = mktTaskPO.getStartTime();
+                date2=new Date();
+            }
+            Long countMbr = mktTaskRecordPOMapper.countByExample(example);
+            TaskRecordVO taskRecordVO = new TaskRecordVO();
+
+            //二、算出赠送总积分
+
+
+            Integer taskPoints = mktTaskPO.getPoints();
+            Long lTaskPoints = (long)taskPoints;
+            Long allPoints = (countMbr*lTaskPoints);
+
+
+            //三、算出赠送总券数
+            //根据taskid查出该任务赠送券数
+
+            MktCouponPOExample mktCouponPOExample = new MktCouponPOExample();
+            MktCouponPOExample.Criteria criteria2 = mktCouponPOExample.createCriteria();
+            criteria2.andBizIdEqualTo(mktTaskPO.getMktTaskId()).andValidEqualTo(true);
+            Long oneTaskCoupon = mktCouponPOMapper.countByExample(mktCouponPOExample);
+            Long allCountCoupon = countMbr*oneTaskCoupon;
+
+
+            /*//四、已被核销的优惠券？todo
+
+            CouponEntityPO couponEntityPO = new CouponEntityPO();
+
+            couponEntityPO.setSendBusinessId(mktTaskPO.getMktTaskId());
+            ResponseData<CouponFindCouponCountResponseVO> allInvalidCountCouponResp = couponQueryServiceFeign.findCouponCountBySendBusinessId(mktTaskPO.getMktTaskId(),date1,date2);
+
+            CouponFindCouponCountResponseVO allInvalidCountCoupon = allInvalidCountCouponResp.getData();
+            int count =  allInvalidCountCoupon.getCouponUsedSum();*/
+
+
+            //五、根据日期查询
+
+            List<DayTaskRecordVo> dayTaskRecordVoList = new ArrayList<>();
+            for (Date i = date1;i.before(date2);i=TimeUtils.getNextDay(i)){
+                DayTaskRecordVo dayTaskRecordVo = new DayTaskRecordVo();
+                //1.根据日期，任务类型，品牌id查询出任务得出每天所有参与该类型任务人数
+
+                MktTaskRecordPOExample mktTaskRecordPOExample = new MktTaskRecordPOExample();
+                MktTaskRecordPOExample.Criteria criteria3 = mktTaskRecordPOExample.createCriteria();
+                criteria3.andParticipateDateEqualTo(i).andSysBrandIdEqualTo(stageUser.getBrandId()).andValidEqualTo(true).andTaskTypeEqualTo(TaskTypeEnum.TASK_TYPE_PROFILE.getCode());
+                Long dayCountMbr = mktTaskRecordPOMapper.countByExample(mktTaskRecordPOExample);
+                //每天参与任务的人所获总积分
+                Long daycountpoints = dayCountMbr*lTaskPoints;
+                //券
+                Long dayCountCoupon = dayCountMbr*oneTaskCoupon;
+
+                dayTaskRecordVo.setDayCountCoupon(dayCountCoupon);
+                dayTaskRecordVo.setDayCountMbr(dayCountMbr);
+                dayTaskRecordVo.setDayPoints(daycountpoints);
+                dayTaskRecordVoList.add(dayTaskRecordVo);
+
+            }
+
+            PageHelper.startPage(pageForm.getPageNumber(),pageForm.getPageSize());
+            PageInfo<DayTaskRecordVo> pageInfo = new PageInfo<>(dayTaskRecordVoList);
+            //taskRecordVO.setAllinvalidCountCoupon((long)count);todo
+            taskRecordVO.setAllCountCoupon(allCountCoupon);
+            taskRecordVO.setAllPoints(allPoints);
+            taskRecordVO.setDayTaskRecordVoList(pageInfo);
+            taskRecordVO.setAllCountMbr(countMbr);
+
+            responseData.setData(taskRecordVO);
+            responseData.setCode(SysResponseEnum.SUCCESS.getCode());
+            responseData.setMessage(SysResponseEnum.SUCCESS.getMessage());
+
+        }catch (Exception e){
+            e.printStackTrace();
+            responseData.setMessage(SysResponseEnum.FAILED.getMessage());
+            responseData.setCode(SysResponseEnum.FAILED.getCode());
+            return responseData;
         }
-        Long countMbr = mktTaskRecordPOMapper.countByExample(example);
-        TaskRecordVO taskRecordVO = new TaskRecordVO();
-
-        //二、算出赠送总积分
-
-
-        Integer taskPoints = mktTaskPO.getPoints();
-        Long lTaskPoints = (long)taskPoints;
-        Long allPoints = (countMbr*lTaskPoints);
-
-
-        //三、算出赠送总券数
-        //根据taskid查出该任务赠送券数
-
-        MktCouponPOExample mktCouponPOExample = new MktCouponPOExample();
-        MktCouponPOExample.Criteria criteria2 = mktCouponPOExample.createCriteria();
-        criteria2.andBizIdEqualTo(mktTaskPO.getMktTaskId()).andValidEqualTo(true);
-        Long oneTaskCoupon = mktCouponPOMapper.countByExample(mktCouponPOExample);
-        Long allCountCoupon = countMbr*oneTaskCoupon;
-
-
-        //四、已被核销的优惠券？todo
-
-       /* CouponEntityPO couponEntityPO = new CouponEntityPO();
-
-        couponEntityPO.setSendBusinessId(mktTaskPO.getMktTaskId());
-        ResponseData<CouponFindCouponCountResponseVO> allInvalidCountCouponResp = couponQueryServiceFeign.findCouponCount(couponEntityPO);
-
-        CouponFindCouponCountResponseVO allInvalidCountCoupon = allInvalidCountCouponResp.getData();
-        int count =  allInvalidCountCoupon.getCouponUsedSum();*/
-
-
-        //五、根据日期查询
-
-        List<DayTaskRecordVo> dayTaskRecordVoList = new ArrayList<>();
-        for (Date i = date1;i.after(date2);i=TimeUtils.getNextDay(i)){
-            DayTaskRecordVo dayTaskRecordVo = new DayTaskRecordVo();
-            //1.根据日期，任务类型，品牌id查询出任务得出每天所有参与该类型任务人数
-
-            MktTaskRecordPOExample mktTaskRecordPOExample = new MktTaskRecordPOExample();
-            MktTaskRecordPOExample.Criteria criteria3 = mktTaskRecordPOExample.createCriteria();
-            criteria3.andParticipateDateEqualTo(i).andSysBrandIdEqualTo(stageUser.getBrandId()).andValidEqualTo(true).andTaskTypeEqualTo(TaskTypeEnum.TASK_TYPE_PROFILE.getCode());
-            Long dayCountMbr = mktTaskRecordPOMapper.countByExample(mktTaskRecordPOExample);
-            //每天参与任务的人所获总积分
-            Long daycountpoints = dayCountMbr*lTaskPoints;
-            //券
-            Long dayCountCoupon = dayCountMbr*oneTaskCoupon;
-
-            dayTaskRecordVo.setDayCountCoupon(dayCountCoupon);
-            dayTaskRecordVo.setDayCountMbr(dayCountMbr);
-            dayTaskRecordVo.setDayPoints(daycountpoints);
-            dayTaskRecordVoList.add(dayTaskRecordVo);
-
-        }
-
-        PageHelper.startPage(pageForm.getPageNumber(),pageForm.getPageSize());
-        PageInfo<DayTaskRecordVo> pageInfo = new PageInfo<>(dayTaskRecordVoList);
-        //taskRecordVO.setAllinvalidCountCoupon((long)count);todo
-        taskRecordVO.setAllCountCoupon(allCountCoupon);
-        taskRecordVO.setAllPoints(allPoints);
-        taskRecordVO.setDayTaskRecordVoList(pageInfo);
-        taskRecordVO.setAllCountMbr(countMbr);
-
-        responseData.setData(taskRecordVO);
 
         return responseData;
     }
@@ -618,20 +695,33 @@ public class TaskProfileServiceImpl implements TaskProfileService {
     @Override
     @Transactional
     public ResponseData addToRecord(TaskVO vo, MemberInfoModel memberInfoModel){
-        //将完成任务的信息添加进taskrecord表中
-        MktTaskPO mktTaskPO = mktTaskPOMapper.selectByPrimaryKey(vo.getMktTaskId());
-
         ResponseData responseData = new ResponseData();
-        MktTaskRecordPO mktTaskRecordPO = new MktTaskRecordPO();
+        try {
 
-        mktTaskRecordPO.setTaskType(TaskTypeEnum.TASK_TYPE_PROFILE.getCode());
-        mktTaskRecordPO.setTaskId(vo.getMktTaskId());
-        mktTaskRecordPO.setMemberCode(memberInfoModel.getMemberCode());
-        mktTaskRecordPO.setPoints(vo.getPoints());//奖励积分是不是也该去掉？？
-        mktTaskRecordPO.setParticipateDate(new Date());
-        BeanUtils.copyProperties(mktTaskPO,mktTaskRecordPO);
-        //是否奖励过 奖励次数？
-        mktTaskRecordPOMapper.insertSelective(mktTaskRecordPO);
+            //将完成任务的信息添加进taskrecord表中
+            MktTaskPO mktTaskPO = mktTaskPOMapper.selectByPrimaryKey(vo.getMktTaskId());
+
+            MktTaskRecordPO mktTaskRecordPO = new MktTaskRecordPO();
+
+            mktTaskRecordPO.setTaskType(TaskTypeEnum.TASK_TYPE_PROFILE.getCode());
+            mktTaskRecordPO.setTaskId(vo.getMktTaskId());
+            mktTaskRecordPO.setMemberCode(memberInfoModel.getMemberCode());
+            mktTaskRecordPO.setPoints(vo.getPoints());//奖励积分是不是也该去掉？？
+            mktTaskRecordPO.setParticipateDate(new Date());
+            BeanUtils.copyProperties(mktTaskPO,mktTaskRecordPO);
+            //是否奖励过 奖励次数？
+            mktTaskRecordPOMapper.insertSelective(mktTaskRecordPO);
+            responseData.setMessage(SysResponseEnum.SUCCESS.getMessage());
+            responseData.setCode(SysResponseEnum.SUCCESS.getCode());
+
+        }catch (Exception e){
+            e.printStackTrace();
+            responseData.setMessage(SysResponseEnum.FAILED.getMessage());
+            responseData.setCode(SysResponseEnum.FAILED.getCode());
+            return responseData;
+        }
+
+
         return responseData;
     }
 
@@ -642,16 +732,27 @@ public class TaskProfileServiceImpl implements TaskProfileService {
      * @return
      */
     public ResponseData stopTask(Long taskId,SysAccountPO stageUser){
-
-        //根据taskid查出该任务
         ResponseData responseData = new ResponseData();
-        MktTaskPOWithBLOBs mktTaskPOWithBLOBs =  mktTaskPOMapper.selectByPrimaryKey(taskId);
-        mktTaskPOWithBLOBs.setModifiedDate(new Date());
-        mktTaskPOWithBLOBs.setModifiedUserId(stageUser.getSysAccountId());
-        mktTaskPOWithBLOBs.setModifiedUserName(stageUser.getName());
-        mktTaskPOWithBLOBs.setTaskStatus(TaskStatusEnum.TASK_STATUS_DISABLED.getCode());
-        mktTaskPOMapper.updateByPrimaryKeySelective(mktTaskPOWithBLOBs);
-        responseData.setData(ResponseConstants.SUCCESS_MSG);
+
+        try {
+
+            //根据taskid查出该任务
+
+            MktTaskPOWithBLOBs mktTaskPOWithBLOBs =  mktTaskPOMapper.selectByPrimaryKey(taskId);
+            mktTaskPOWithBLOBs.setModifiedDate(new Date());
+            mktTaskPOWithBLOBs.setModifiedUserId(stageUser.getSysAccountId());
+            mktTaskPOWithBLOBs.setModifiedUserName(stageUser.getName());
+            mktTaskPOWithBLOBs.setTaskStatus(TaskStatusEnum.TASK_STATUS_DISABLED.getCode());
+            mktTaskPOMapper.updateByPrimaryKeySelective(mktTaskPOWithBLOBs);
+            responseData.setData(ResponseConstants.SUCCESS_MSG);
+
+        }catch (Exception e){
+            e.printStackTrace();
+            responseData.setMessage(SysResponseEnum.FAILED.getMessage());
+            responseData.setCode(SysResponseEnum.FAILED.getCode());
+            return responseData;
+        }
+
         return responseData;
     }
 
@@ -664,35 +765,48 @@ public class TaskProfileServiceImpl implements TaskProfileService {
      */
     public ResponseData checkTaskProfile(Long taskId,SysAccountPO stageUser,Integer checkStatus){
         ResponseData responseData = new ResponseData();
-        //根据taskId查询出该任务
 
-        MktTaskPOWithBLOBs mktTaskPOWithBLOBs = mktTaskPOMapper.selectByPrimaryKey(taskId);
-        //审核通过
-        if (checkStatus==CheckStatusEnum.CHECK_STATUS_APPROVED.getCode()){
-            mktTaskPOWithBLOBs.setCheckStatus(CheckStatusEnum.CHECK_STATUS_APPROVED.getCode());
-            //审核时间未超过任务结束时间
-            if (new Date().before(mktTaskPOWithBLOBs.getEndTime())){
-                //审核时间超过任务开始时间
-                if(new Date().after(mktTaskPOWithBLOBs.getStartTime())){
-                    mktTaskPOWithBLOBs.setTaskStatus(TaskStatusEnum.TASK_STATUS_EXECUTING.getCode());
-                    //todo 执行发送消息
-                }//审核时间未超过任务开始时间
+        try {
+
+//根据taskId查询出该任务
+
+            MktTaskPOWithBLOBs mktTaskPOWithBLOBs = mktTaskPOMapper.selectByPrimaryKey(taskId);
+            //审核通过
+            if (checkStatus==CheckStatusEnum.CHECK_STATUS_APPROVED.getCode()){
+                mktTaskPOWithBLOBs.setCheckStatus(CheckStatusEnum.CHECK_STATUS_APPROVED.getCode());
+                //todo 调用审核接口改变审核单状态
+                //审核时间未超过任务结束时间
+                if (new Date().before(mktTaskPOWithBLOBs.getEndTime())){
+                    //审核时间超过任务开始时间
+                    if(new Date().after(mktTaskPOWithBLOBs.getStartTime())){
+                        mktTaskPOWithBLOBs.setTaskStatus(TaskStatusEnum.TASK_STATUS_EXECUTING.getCode());
+                        //todo 执行发送消息
+                    }//审核时间未超过任务开始时间
+                    else{
+                        mktTaskPOWithBLOBs.setTaskStatus(TaskStatusEnum.TASK_STATUS_PENDING.getCode());
+                    }
+
+                }//审核时间超过任务结束时间
                 else{
-                    mktTaskPOWithBLOBs.setTaskStatus(TaskStatusEnum.TASK_STATUS_PENDING.getCode());
+                    mktTaskPOWithBLOBs.setTaskStatus(TaskStatusEnum.TASK_STATUS_FINISHED.getCode());
                 }
-
-            }//审核时间超过任务结束时间
+            }//审核驳回
             else{
-                mktTaskPOWithBLOBs.setTaskStatus(TaskStatusEnum.TASK_STATUS_FINISHED.getCode());
+                mktTaskPOWithBLOBs.setCheckStatus(CheckStatusEnum.CHECK_STATUS_REJECTED.getCode());
+                mktTaskPOWithBLOBs.setTaskStatus(TaskStatusEnum.TASK_STATUS_PENDING.getCode());
             }
-        }//审核驳回
-        else{
-            mktTaskPOWithBLOBs.setCheckStatus(CheckStatusEnum.CHECK_STATUS_REJECTED.getCode());
-            mktTaskPOWithBLOBs.setTaskStatus(TaskStatusEnum.TASK_STATUS_PENDING.getCode());
+
+            mktTaskPOMapper.updateByPrimaryKeySelective(mktTaskPOWithBLOBs);
+
+            responseData.setMessage(SysResponseEnum.SUCCESS.getMessage());
+            responseData.setCode(SysResponseEnum.SUCCESS.getCode());
+        }catch(Exception e){
+            e.printStackTrace();
+            responseData.setMessage(SysResponseEnum.FAILED.getMessage());
+            responseData.setCode(SysResponseEnum.FAILED.getCode());
+            return responseData;
         }
 
-        mktTaskPOMapper.updateByPrimaryKeySelective(mktTaskPOWithBLOBs);
-        responseData.setMessage(ResponseConstants.SUCCESS_MSG);
         return responseData;
     }
 
