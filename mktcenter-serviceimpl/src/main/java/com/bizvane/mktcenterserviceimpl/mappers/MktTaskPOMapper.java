@@ -1,8 +1,7 @@
 package com.bizvane.mktcenterserviceimpl.mappers;
 
-import com.bizvane.mktcenterservice.models.bo.TaskDetailBO;
 import com.bizvane.mktcenterservice.models.bo.TaskInviteAwardBO;
-import com.bizvane.mktcenterservice.models.bo.TaskOrderAwardBO;
+import com.bizvane.mktcenterservice.models.bo.TaskAwardBO;
 import com.bizvane.mktcenterservice.models.po.MktTaskPO;
 import com.bizvane.mktcenterservice.models.po.MktTaskPOExample;
 import com.bizvane.mktcenterservice.models.po.MktTaskPOWithBLOBs;
@@ -103,7 +102,21 @@ public interface MktTaskPOMapper {
 
 	public  List<TaskDetailVO> getTaskDetailByTaskId  (@Param("mktTaskId") Long mktTaskId);
 
-	public List<TaskOrderAwardBO> getTaskOrderAwardList(@Param("sysCompanyId") Long sysCompanyId,@Param("sysBrandId") Long sysBrandId,@Param("placeOrderTime")Date placeOrderTime);
+	/**
+	 * 获取订单任务的奖励条件
+	 * @param sysCompanyId
+	 * @param sysBrandId
+	 * @param placeOrderTime
+	 * @return
+	 */
 
-	public List<TaskInviteAwardBO> getTaskInviteAwardList(@Param("sysCompanyId") Long sysCompanyId, @Param("sysBrandId") Long sysBrandId,@Param("placeOrderTime")Date placeOrderTime);
+	public List<TaskAwardBO> getTaskOrderAwardList(@Param("sysCompanyId") Long sysCompanyId, @Param("sysBrandId") Long sysBrandId, @Param("placeOrderTime")Date placeOrderTime);
+	/**
+	 * 获取邀请开卡任务的奖励条件
+	 * @param sysCompanyId
+	 * @param sysBrandId
+	 * @param placeOrderTime
+	 * @return
+	 */
+	public List<TaskAwardBO> getTaskInviteAwardList(@Param("sysCompanyId") Long sysCompanyId, @Param("sysBrandId") Long sysBrandId,@Param("placeOrderTime")Date placeOrderTime);
 }

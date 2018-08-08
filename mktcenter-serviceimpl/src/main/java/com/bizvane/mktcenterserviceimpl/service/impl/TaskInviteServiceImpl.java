@@ -239,5 +239,8 @@ public class TaskInviteServiceImpl implements TaskInviteService {
         example.createCriteria().andMktTaskIdEqualTo(po.getMktTaskId()).andValidEqualTo(Boolean.TRUE);
         return mktTaskInvitePOMapper.updateByExample(po, example);
     }
+    /**
+     * 邀请任务的
+     */
 }
 

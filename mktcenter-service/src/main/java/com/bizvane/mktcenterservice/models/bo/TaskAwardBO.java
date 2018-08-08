@@ -11,7 +11,7 @@ import java.util.List;
  * @Time: 2018/8/7 16:49
  * 消费奖励相关的判断Bo
  */
-public class TaskOrderAwardBO extends MktTaskPOWithBLOBs {
+public class TaskAwardBO extends MktTaskPOWithBLOBs {
     //消费任务
     private Long mktTaskOrderId;
     //任务条件/订单来源限制：0全部类型，1线下订单，2微商城订单
