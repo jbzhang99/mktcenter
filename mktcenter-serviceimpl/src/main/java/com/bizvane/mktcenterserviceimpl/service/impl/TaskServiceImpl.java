@@ -4,16 +4,14 @@ import com.bizvane.centerstageservice.models.po.SysCheckConfigPo;
 import com.bizvane.centerstageservice.models.vo.SysCheckConfigVo;
 import com.bizvane.centerstageservice.rpc.SysCheckConfigServiceRpc;
 import com.bizvane.members.facade.models.MemberInfoModel;
+import com.bizvane.members.facade.models.OrderServeModel;
 import com.bizvane.members.facade.service.api.MemberInfoApiService;
 import com.bizvane.mktcenterservice.interfaces.TaskMessageService;
 import com.bizvane.mktcenterservice.interfaces.TaskService;
 import com.bizvane.mktcenterservice.models.bo.AwardBO;
 import com.bizvane.mktcenterservice.models.bo.TaskInviteAwardBO;
 import com.bizvane.mktcenterservice.models.bo.TaskOrderAwardBO;
-import com.bizvane.mktcenterservice.models.po.MktMessagePO;
-import com.bizvane.mktcenterservice.models.po.MktTaskPO;
-import com.bizvane.mktcenterservice.models.po.MktTaskPOExample;
-import com.bizvane.mktcenterservice.models.po.MktTaskPOWithBLOBs;
+import com.bizvane.mktcenterservice.models.po.*;
 import com.bizvane.mktcenterservice.models.vo.PageForm;
 import com.bizvane.mktcenterservice.models.vo.TaskDetailVO;
 import com.bizvane.mktcenterservice.models.vo.TaskVO;
@@ -204,6 +202,43 @@ public class TaskServiceImpl implements TaskService {
 
     }
 
+    /**
+     * 发送券和积分
+     */
+    @Override
+    public void sendCouponAndPoint(OrderServeModel model,TaskOrderAwardBO orderAwardBO){
+        List<MktCouponPO> mktCouponPOList = orderAwardBO.getMktCouponPOList();
+        Integer points = orderAwardBO.getPoints();
+
+        AwardBO bo = new AwardBO();
+        //会员code
+        bo.setMemberCode(model.getMemberCode());
+        //任务务id
+        bo.setSendBussienId(orderAwardBO.getMktTaskId());
+        //暂定
+      //  bo.setMemberName();
+        bo.setCardNo(model.getCarNo());
+
+        if (points!=null && points>0){
+             //2=积分营销
+            bo.setChangeIntegral(orderAwardBO.getPoints());
+            bo.setMktSmartType(MktSmartTypeEnum.SMART_TYPE_INTEGRAL.getCode());
+            award.execute(bo);
+        }
+        if(CollectionUtils.isNotEmpty(mktCouponPOList)){
+            //1=优惠券营销
+            bo.setMktSmartType(MktSmartTypeEnum.SMART_TYPE_COUPON.getCode());
+            mktCouponPOList.stream().forEach(param->{
+                //券id
+                bo.setCouponDefinitionId(param.getCouponDefinitionId());
+                award.execute(bo);
+            });
+
+
+        }
+
+
+    }
     /**
      * 根据品牌Id 查询审核配置，是否需要审核然后判断
      * 1:需要审核 0:不需要

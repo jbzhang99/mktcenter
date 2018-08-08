@@ -1,15 +1,21 @@
 package com.bizvane.mktcenterservice;
 
+import com.alibaba.fastjson.JSON;
+import com.bizvane.mktcenterservice.interfaces.TaskRecordService;
 import com.bizvane.mktcenterservice.models.po.MktActivityPOWithBLOBs;
 import com.bizvane.mktcenterservice.models.po.MktMessagePO;
+import com.bizvane.mktcenterservice.models.po.MktTaskRecordPO;
 import com.bizvane.mktcenterservice.models.vo.MessageVO;
 import com.bizvane.mktcenterserviceimpl.MktcenterApplication;
 import com.google.common.collect.Lists;
 import org.junit.runner.RunWith;
 import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
+import springfox.documentation.spring.web.json.Json;
 
+import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -24,6 +30,21 @@ import java.util.Optional;
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes={MktcenterApplication.class})
 public class Test {
+    @Autowired
+    private TaskRecordService taskRecordService;
+@org.junit.Test
+  public  void   tests00003(){
+    MktTaskRecordPO recordPO = new MktTaskRecordPO();
+    recordPO.setMemberCode("111");
+    recordPO.setConsumeAmount(new BigDecimal("111"));
+    taskRecordService.addTaskRecord(recordPO);
+
+    String s = JSON.toJSONString(recordPO);
+    System.out.println("----------"+s);
+}
+
+
+
 
     public void test1(){
         // \u000d System.out.println("hello world");

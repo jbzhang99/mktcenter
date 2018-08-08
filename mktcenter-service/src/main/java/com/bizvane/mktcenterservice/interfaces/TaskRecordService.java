@@ -1,6 +1,8 @@
 package com.bizvane.mktcenterservice.interfaces;
 
+import com.bizvane.mktcenterservice.models.bo.TotalStatisticsBO;
 import com.bizvane.mktcenterservice.models.po.MktTaskRecordPO;
+import com.bizvane.mktcenterservice.models.vo.MktTaskRecordVO;
 import com.bizvane.utils.tokens.SysAccountPO;
 
 import java.util.List;
@@ -12,24 +14,28 @@ import java.util.List;
 public interface TaskRecordService {
     /**
      * 添加记录
-     * @param po
-     * @param stageUser
+     * @param vo
      * @return
      */
-    public Integer addTaskRecord(MktTaskRecordPO po, SysAccountPO stageUser);
+    public Integer addTaskRecord(MktTaskRecordPO vo);
 
     /**
      * 修改记录
-     * @param po
-     * @param stageUser
      * @return
      */
-    public Integer updateTaskRecord(MktTaskRecordPO po, SysAccountPO stageUser);
+    public Integer updateTaskRecord(MktTaskRecordPO po);
 
     /**
      * 查询
-     * @param po
+     * @param vo
      * @return
      */
-    public List<MktTaskRecordPO> getTaskRecord(MktTaskRecordPO po);
+    public TotalStatisticsBO getTotalStatistics(MktTaskRecordVO vo) ;
+
+    /**
+     * 判断是否获取过奖励
+     * @param vo
+     * @return
+     */
+    public Boolean getIsOrNoAward(MktTaskRecordVO vo);
 }
