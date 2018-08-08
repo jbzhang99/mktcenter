@@ -10,6 +10,7 @@ import com.bizvane.mktcenterservice.models.bo.AwardBO;
 import com.bizvane.mktcenterservice.models.bo.TaskBO;
 import com.bizvane.mktcenterservice.models.bo.TaskDetailBO;
 import com.bizvane.mktcenterservice.models.po.*;
+import com.bizvane.mktcenterservice.models.vo.InviteSuccessVO;
 import com.bizvane.mktcenterservice.models.vo.PageForm;
 import com.bizvane.mktcenterservice.models.vo.TaskDetailVO;
 import com.bizvane.mktcenterservice.models.vo.TaskVO;
@@ -240,7 +241,10 @@ public class TaskInviteServiceImpl implements TaskInviteService {
         return mktTaskInvitePOMapper.updateByExample(po, example);
     }
     /**
-     * 邀请任务的
+     * 执行邀请任务的奖励
      */
+    public  void    doAwardInvite(InviteSuccessVO vo){
+
+    }
 }
 
