@@ -1,10 +1,12 @@
 package com.bizvane.mktcenterserviceimpl.mappers;
 
+import com.bizvane.mktcenterservice.models.bo.TotalStatisticsBO;
 import com.bizvane.mktcenterservice.models.po.MktTaskRecordPO;
 import com.bizvane.mktcenterservice.models.po.MktTaskRecordPOExample;
 import java.util.List;
 import java.util.Map;
 
+import com.bizvane.mktcenterservice.models.vo.MktTaskRecordVO;
 import org.apache.ibatis.annotations.Param;
 
 public interface MktTaskRecordPOMapper {
@@ -77,4 +79,6 @@ public interface MktTaskRecordPOMapper {
 	int updateByPrimaryKey(MktTaskRecordPO record);
 
 	Long countCompleteMbr(Map<String,Long> map);
+
+	List<TotalStatisticsBO> getTotalStatistics(MktTaskRecordVO vo);
 }

@@ -174,24 +174,24 @@ public class ActivityParamCheckUtil {
         return responseData;
     }
 
-    public static ResponseData checkAddActivityParams(Long couponId, ActivityVO activityVO) {
+    public static ResponseData checkManualActivityParams(Long couponId, ActivityVO activityVO) {
         ResponseData responseData = new ResponseData();
         if(activityVO==null){
             responseData.setCode(SystemConstants.ERROR_CODE);
             responseData.setMessage(SystemConstants.ERROR_MSG_PARAM_EMPTY);
             return responseData;
         }
+        if(activityVO.getSysBrandId()==null){
+            responseData.setCode(SystemConstants.ERROR_CODE);
+            responseData.setMessage(ActivityConstants.ERROR_MSG_BRAND_ID_EMPTY);
+            return  responseData;
+        }
         if(StringUtils.isEmpty(activityVO.getActivityName())){
             responseData.setCode(SystemConstants.ERROR_CODE);
             responseData.setMessage(ActivityConstants.ERROR_MSG_ACTIVITY_NAME_EMPTY);
             return responseData;
         }
-        if(StringUtils.isEmpty(String.valueOf(activityVO.getReceiveType()))||activityVO.getReceiveType()!=2||activityVO.getReceiveType()!=1){
-            responseData.setCode(SystemConstants.ERROR_CODE);
-            responseData.setMessage(ActivityConstants.ERROR_RECEIVE_TYPE_EMPTY);
-            return responseData;
-        }
-        if(StringUtils.isEmpty(activityVO.getCreateDateStart())||StringUtils.isEmpty(activityVO.getCreateDateEnd())){
+        if(StringUtils.isEmpty(activityVO.getStartTime())||StringUtils.isEmpty(activityVO.getEndTime())){
             responseData.setCode(SystemConstants.ERROR_CODE);
             responseData.setMessage(ActivityConstants.ERROR_MSG_ACTIVITY_DATE_EMPTY);
             return responseData;
@@ -209,11 +209,6 @@ public class ActivityParamCheckUtil {
         if(null==couponId){
             responseData.setCode(SystemConstants.ERROR_CODE);
             responseData.setMessage(ActivityConstants.COUPON_INFO_EMPTY);
-            return responseData;
-        }
-        if(StringUtils.isEmpty(activityVO.getActivityInfo())){
-            responseData.setCode(SystemConstants.ERROR_CODE);
-            responseData.setMessage(ActivityConstants.ERROR_MSG_ACTIVITY_INFO_EMPTY);
             return responseData;
         }
         return responseData;

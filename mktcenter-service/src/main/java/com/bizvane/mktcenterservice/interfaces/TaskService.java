@@ -3,6 +3,7 @@ package com.bizvane.mktcenterservice.interfaces;
 import com.bizvane.centerstageservice.models.po.SysCheckConfigPo;
 import com.bizvane.centerstageservice.models.vo.SysCheckConfigVo;
 import com.bizvane.members.facade.models.MemberInfoModel;
+import com.bizvane.members.facade.models.OrderServeModel;
 import com.bizvane.mktcenterservice.models.bo.TaskInviteAwardBO;
 import com.bizvane.mktcenterservice.models.bo.TaskOrderAwardBO;
 import com.bizvane.mktcenterservice.models.po.MktMessagePO;
@@ -25,6 +26,7 @@ import java.util.List;
  * @Copyright (c) 2018 上海商帆信息科技有限公司-版权所有
  */
 public interface TaskService {
+
     /**
      * 根据公司id和品牌id查询执行中的消费类任务
      * @param sysCompanyId
@@ -66,6 +68,13 @@ public interface TaskService {
      * @param sysCompanyId
      */
     public  void  sendSmg(Long sysCompanyId);
+
+    /**
+     * 发送券和积分
+     * @param model
+     * @param orderAwardBO
+     */
+    public void sendCouponAndPoint(OrderServeModel model, TaskOrderAwardBO orderAwardBO);
     /**
      * 根据品牌id查询任务是否需要审核
      */

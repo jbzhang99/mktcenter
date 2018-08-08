@@ -9,11 +9,19 @@ import com.aliyun.openservices.ons.api.MessageListener;
 import com.bizvane.members.facade.models.OrderServeModel;
 import com.bizvane.mktcenterservice.interfaces.TaskRecordService;
 import com.bizvane.mktcenterservice.interfaces.TaskService;
+import com.bizvane.mktcenterservice.models.bo.AwardBO;
 import com.bizvane.mktcenterservice.models.bo.TaskOrderAwardBO;
+import com.bizvane.mktcenterservice.models.bo.TotalStatisticsBO;
+import com.bizvane.mktcenterservice.models.po.MktCouponPO;
 import com.bizvane.mktcenterservice.models.po.MktTaskRecordPO;
+import com.bizvane.mktcenterservice.models.vo.MktTaskRecordVO;
 import com.bizvane.mktcenterservice.models.vo.TaskDetailVO;
+import com.bizvane.mktcenterserviceimpl.common.constants.TaskConstants;
+import com.bizvane.mktcenterserviceimpl.common.enums.MktSmartTypeEnum;
 import com.bizvane.mktcenterserviceimpl.common.enums.TaskTypeEnum;
+import groovy.ui.SystemOutputInterceptor;
 import org.apache.commons.collections.CollectionUtils;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -38,14 +46,6 @@ public class OrderTaskListener implements MessageListener {
         //获取订单信息
         String modelStr= new String(message.getBody());
 
-//        private String memberCode; //会员code
-//        private String carNo; //会员卡号
-//        private Long companyId;//公司id
-//        private Long brandId;//品牌id
-//        private Long mbrOrderId;// 订单id
-//        private BigDecimal tradeAmount;//消费金额
-//        private Date placeOrderTime;//消费时间
-
         OrderServeModel model = JSONObject.parseObject(modelStr, OrderServeModel.class);
         Long companyId = model.getCompanyId();
         Long brandId = model.getBrandId();
@@ -54,42 +54,68 @@ public class OrderTaskListener implements MessageListener {
         if (CollectionUtils.isNotEmpty(taskOrderAwardList)){
             taskOrderAwardList.stream().forEach(obj->{
                 this.doExecuteTask(model, obj);
-                //判断订单累计金额
-                //判断消费次数
             });
         }
         //如果想测试消息重投的功能,可以将Action.CommitMessage 替换成Action.ReconsumeLater
         return Action.CommitMessage;
     }
-
+//      //任务类型：1完善资料，2分享任务，3邀请注册，4累计消费次数，5累计消费金额',
     private void doExecuteTask(OrderServeModel model, TaskOrderAwardBO obj) {
+        BigDecimal tradeAmount = model.getTradeAmount();//订单金额
         Long brandId = model.getBrandId();
         String memberCode = model.getMemberCode();
         Integer taskType = obj.getTaskType();
         Long mktTaskId = obj.getMktTaskId();
         BigDecimal consumeAmount = obj.getConsumeAmount();//累计金额
-
+        Integer consumeTimes = obj.getConsumeTimes();//消费次数
         Integer points = obj.getPoints();//奖励积分
+        List<MktCouponPO> couponPOList = obj.getMktCouponPOList();//券
 
-        MktTaskRecordPO recordPO = new MktTaskRecordPO();
-        recordPO.setSysBrandId(brandId);
-        //任务类型：1完善资料，2分享任务，3邀请注册，4累计消费次数，5累计消费金额',
-        recordPO.setTaskType(taskType);
-        recordPO.setTaskId(mktTaskId);
-        recordPO.setMemberCode(memberCode);
-        List<MktTaskRecordPO> taskRecords = taskRecordService.getTaskRecord(recordPO);
-        if (CollectionUtils.isNotEmpty(taskRecords)){
-            MktTaskRecordPO mktTaskRecordPO = taskRecords.get(0);
-            //累计消费=4
-            if (TaskTypeEnum.TASK_TYPE_CONSUME_TIMES.getCode()==taskType){
+        MktTaskRecordVO recordVO = new MktTaskRecordVO();
+        recordVO.setSysBrandId(brandId);
+        recordVO.setTaskType(taskType);
+        recordVO.setTaskId(mktTaskId);
+        recordVO.setMemberCode(memberCode);
 
-            }
-            //累计金额=5
-            if (TaskTypeEnum.TASK_TYPE_CONSUME_AMOUNT.getCode()==taskType){
+        // 获取会员是否已经成功参与过某一活动
+        Boolean isOrNoAward = taskRecordService.getIsOrNoAward(recordVO);
 
-            }
+        if (!isOrNoAward){
+            MktTaskRecordPO recordPO = new MktTaskRecordPO();
+            BeanUtils.copyProperties(recordVO,recordPO);
+            recordPO.setConsumeAmount(tradeAmount);
+            taskRecordService.addTaskRecord(recordPO);
 
-        }else {
+            //获取会员参与某一活动放总金额和总次数
+            TotalStatisticsBO totalBO = taskRecordService.getTotalStatistics(recordVO);
+
+               //累计消费次数任务=4
+                if (TaskTypeEnum.TASK_TYPE_CONSUME_TIMES.getCode()==taskType){
+                    if(totalBO!=null && totalBO.getTotalTimes()!=null){
+                        Long totalTimes = totalBO.getTotalTimes();
+                        totalTimes=totalTimes+1;
+                        if (consumeTimes.equals(totalTimes)){
+                            recordPO.setPoints(points);
+                            recordPO.setRewarded(Integer.valueOf(1));
+                            taskRecordService.updateTaskRecord(recordPO);
+                            taskService.sendCouponAndPoint(model,obj);
+                        }
+                    }
+                }
+
+                //累计金额任务=5
+                if (TaskTypeEnum.TASK_TYPE_CONSUME_AMOUNT.getCode()==taskType){
+                    if(totalBO!=null && totalBO.getTotalConsume()!=null){
+                        BigDecimal totalConsume = totalBO.getTotalConsume();
+                        totalConsume=totalConsume.add(tradeAmount);
+                        if(totalConsume.compareTo(consumeAmount) == 1){
+                            recordPO.setRewarded(Integer.valueOf(1));
+                            taskRecordService.updateTaskRecord(recordPO);
+                            taskService.sendCouponAndPoint(model,obj);
+                        }
+                    }
+                }
+
 
         }
     }

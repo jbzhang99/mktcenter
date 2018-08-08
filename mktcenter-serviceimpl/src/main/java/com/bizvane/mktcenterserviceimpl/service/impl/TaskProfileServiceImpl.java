@@ -225,7 +225,6 @@ public class TaskProfileServiceImpl implements TaskProfileService {
                 mktCouponPO1.setBizType(BusinessTypeEnum.ACTIVITY_TYPE_TASK.getCode());
                 mktCouponPO1.setCouponName(mktCouponPO.getCouponName());
                 mktCouponPO1.setCouponDefinitionId(mktCouponPO.getCouponDefinitionId());//是id还是code
-                mktCouponPO1.setCouponCode(mktCouponPO.getCouponCode());
                 mktCouponPO1.setBizId(taskVOId);
 
                 mktCouponPOMapper.insertSelective(mktCouponPO1);
@@ -333,7 +332,6 @@ public class TaskProfileServiceImpl implements TaskProfileService {
             for (MktCouponPO mktCouponPO1:mktCouponPOList){
                 MktCouponPO mktCouponPO2 = new MktCouponPO();
                 mktCouponPO2.setBizType(BusinessTypeEnum.ACTIVITY_TYPE_TASK.getCode());
-                mktCouponPO2.setCouponCode(mktCouponPO1.getCouponCode());
                 mktCouponPO2.setCouponName(mktCouponPO1.getCouponName());
                 mktCouponPO2.setCouponDefinitionId(mktCouponPO1.getCouponDefinitionId());
                 BeanUtils.copyProperties(taskVO,mktCouponPO2);

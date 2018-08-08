@@ -228,7 +228,6 @@ public class ActivityRegisterServiceImpl implements ActivityRegisterService {
                 BeanUtils.copyProperties(mktActivityPOWithBLOBs,mktCouponPO);
                 mktCouponPO.setBizType(BusinessTypeEnum.ACTIVITY_TYPE_ACTIVITY.getCode());
                 mktCouponPO.setBizId(mktActivityId);
-                mktCouponPO.setCouponCode(couponCode.getCouponCode());
                 mktCouponPO.setCouponName(couponCode.getCouponName());
                 mktCouponPO.setCouponDefinitionId(couponCode.getCouponDefinitionId());
                 mktCouponPOMapper.insertSelective(mktCouponPO);
@@ -459,7 +458,6 @@ public class ActivityRegisterServiceImpl implements ActivityRegisterService {
                 BeanUtils.copyProperties(mktActivityPOWithBLOBs,mktCouponPO);
                 mktCouponPO.setBizType(BusinessTypeEnum.ACTIVITY_TYPE_ACTIVITY.getCode());
                 mktCouponPO.setBizId(mktActivityId);
-                mktCouponPO.setCouponCode(couponCode.getCouponCode());
                 mktCouponPO.setCouponName(couponCode.getCouponName());
                 mktCouponPO.setCouponDefinitionId(couponCode.getCouponDefinitionId());
                 mktCouponPO.setBizId(couponCode.getBizId());
