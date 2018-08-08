@@ -28,10 +28,7 @@ import com.bizvane.mktcenterserviceimpl.common.job.XxlJobConfig;
 import com.bizvane.mktcenterserviceimpl.common.utils.CodeUtil;
 import com.bizvane.mktcenterserviceimpl.common.utils.ExecuteParamCheckUtil;
 import com.bizvane.mktcenterserviceimpl.common.utils.JobUtil;
-import com.bizvane.mktcenterserviceimpl.mappers.MktActivityOrderPOMapper;
-import com.bizvane.mktcenterserviceimpl.mappers.MktActivityPOMapper;
-import com.bizvane.mktcenterserviceimpl.mappers.MktCouponPOMapper;
-import com.bizvane.mktcenterserviceimpl.mappers.MktMessagePOMapper;
+import com.bizvane.mktcenterserviceimpl.mappers.*;
 import com.bizvane.utils.enumutils.SysResponseEnum;
 import com.bizvane.utils.jobutils.JobClient;
 import com.bizvane.utils.jobutils.XxlJobInfo;
@@ -84,6 +81,8 @@ public class ActivityOrderServiceImpl implements ActivityOrderService {
     private CouponQueryServiceFeign couponQueryServiceFeign;
     @Autowired
     private Award award;
+    @Autowired
+    private MktActivityRecordPOMapper mktActivityRecordPOMapper;
     /**
      * 查询消费活动列表
      * @param vo
@@ -444,7 +443,7 @@ public class ActivityOrderServiceImpl implements ActivityOrderService {
 
     /**
      * 审核消费活动
-     * @param bs
+     * @param
      * @param sysAccountPO
      * @return
      */
@@ -580,6 +579,16 @@ public class ActivityOrderServiceImpl implements ActivityOrderService {
                     award.execute(awardBO);
                 }
             }
+            //新增积分到会员参与活动记录表中数据
+            MktActivityRecordPO po = new MktActivityRecordPO();
+            po.setActivityType(ActivityTypeEnum.ACTIVITY_TYPE_ORDER.getCode());
+            po.setMemberCode(vo.getMemberCode().toString());
+            po.setParticipateDate(new Date());
+            po.setPoints(activityVO.getPoints());
+            po.setAcitivityId(activityVO.getMktActivityId());
+            po.setSysBrandId(activityVO.getSysBrandId());
+            log.info("新增积分记录表");
+            mktActivityRecordPOMapper.insertSelective(po);
 
         }
         responseData.setCode(SysResponseEnum.SUCCESS.getCode());

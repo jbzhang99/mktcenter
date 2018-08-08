@@ -276,6 +276,8 @@ public class ActivitySigninServiceImpl implements ActivitySigninService {
             po.setMemberCode(vo.getMemberCode());
             po.setParticipateDate(new Date());
             po.setPoints(activityVO.getPoints());
+            po.setAcitivityId(activityVO.getMktActivityId());
+            po.setSysBrandId(activityVO.getSysBrandId());
             log.info("新增积分记录表");
             mktActivityRecordPOMapper.insertSelective(po);
         }

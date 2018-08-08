@@ -1,8 +1,10 @@
 package com.bizvane.mktcenterservice.interfaces;
 
 import com.bizvane.centerstageservice.models.po.SysCheckPo;
+import com.bizvane.mktcenterservice.models.bo.ActivityAnalysisCountBO;
 import com.bizvane.mktcenterservice.models.po.MktActivityPOWithBLOBs;
 import com.bizvane.mktcenterservice.models.vo.ActivityVO;
+import com.bizvane.mktcenterservice.models.vo.PageForm;
 import com.bizvane.utils.responseinfo.ResponseData;
 import com.bizvane.utils.tokens.SysAccountPO;
 
@@ -36,5 +38,12 @@ public interface ActivityService {
      * @return
      */
     public ResponseData<List<ActivityVO>>  getActivityList(ActivityVO vo);
+
+    /**
+     * 查询效果分析统计
+     * @param bo
+     * @return
+     */
+    public ResponseData<ActivityAnalysisCountBO> getActivityAnalysisCountpage(ActivityAnalysisCountBO bo,PageForm pageForm);
 
 }

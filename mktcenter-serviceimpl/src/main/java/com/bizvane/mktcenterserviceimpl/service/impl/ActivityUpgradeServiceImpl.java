@@ -26,10 +26,7 @@ import com.bizvane.mktcenterserviceimpl.common.award.Award;
 import com.bizvane.mktcenterserviceimpl.common.enums.*;
 import com.bizvane.mktcenterserviceimpl.common.utils.CodeUtil;
 import com.bizvane.mktcenterserviceimpl.common.utils.JobUtil;
-import com.bizvane.mktcenterserviceimpl.mappers.MktActivityPOMapper;
-import com.bizvane.mktcenterserviceimpl.mappers.MktActivityUpgradePOMapper;
-import com.bizvane.mktcenterserviceimpl.mappers.MktCouponPOMapper;
-import com.bizvane.mktcenterserviceimpl.mappers.MktMessagePOMapper;
+import com.bizvane.mktcenterserviceimpl.mappers.*;
 import com.bizvane.utils.enumutils.SysResponseEnum;
 import com.bizvane.utils.jobutils.JobClient;
 import com.bizvane.utils.jobutils.XxlJobInfo;
@@ -83,6 +80,8 @@ public class ActivityUpgradeServiceImpl implements ActivityUpgradeService {
     private Award award;
     @Autowired
     private JobClient jobClient;
+    @Autowired
+    private MktActivityRecordPOMapper mktActivityRecordPOMapper;
     /**
      * 查询升级活动列表
      * @param vo
@@ -506,6 +505,16 @@ public class ActivityUpgradeServiceImpl implements ActivityUpgradeService {
                 log.info("新增券奖励");
                 award.execute(awardBO);
             }
+            //新增积分到会员参与活动记录表中数据
+            MktActivityRecordPO po = new MktActivityRecordPO();
+            po.setActivityType(ActivityTypeEnum.ACTIVITY_TYPE_UPGRADE.getCode());
+            po.setMemberCode(vo.getMemberCode());
+            po.setParticipateDate(new Date());
+            po.setPoints(activityVO.getPoints());
+            po.setAcitivityId(activityVO.getMktActivityId());
+            po.setSysBrandId(activityVO.getSysBrandId());
+            log.info("新增积分记录表");
+            mktActivityRecordPOMapper.insertSelective(po);
         }
         responseData.setCode(SysResponseEnum.SUCCESS.getCode());
         responseData.setMessage(SysResponseEnum.SUCCESS.getMessage());

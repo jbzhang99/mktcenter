@@ -683,4 +683,29 @@
     </if>
     Group by c.biz_id
   </select>
+  <!-- 活动效果分析-->
+  <select id="getActivityAnalysisCountpage" parameterType="com.bizvane.mktcenterservice.models.bo.ActivityAnalysisCountBO" resultType="com.bizvane.mktcenterservice.models.bo.ActivityAnalysisCountBO">
+    SELECT t.mkt_activity_id AS mktActivityId,t.activity_name AS activityName,
+    t.long_term AS longTerm,t.start_time AS startTime,t.end_time AS endTime,t.activity_code AS activityCode,
+    t.sys_brand_id as sysBrandId,a.su AS participateNumber
+    FROM t_mkt_activity t
+    LEFT JOIN
+    (
+    SELECT acitivity_id, COUNT(1)su
+    FROM t_mkt_activity_record
+    GROUP BY acitivity_id) a ON a.acitivity_id=t.mkt_activity_id
+    WHERE t.valid=1
+    <if test="sysBrandId != null and sysBrandId!= ''">
+      AND t.sys_brand_id = #{sysBrandId}
+    </if>
+    <if test="activityType != null and activityType!= ''">
+      AND t.activity_type = #{activityType}
+    </if>
+    <if test="startDate!=null and startDate!=''">
+      and t.create_date &gt;= str_to_date(#{startDate},'%Y-%m-%d')
+    </if>
+    <if test="endDate!=null and endDate!=''">
+      and t.create_date &lt;= str_to_date(#{endDate},'%Y-%m-%d')
+    </if>
+  </select>
 </mapper>

@@ -2,9 +2,13 @@ package com.bizvane.mktcenterserviceimpl.service.impl;
 
 import com.bizvane.centerstageservice.models.po.SysCheckPo;
 import com.bizvane.centerstageservice.rpc.SysCheckServiceRpc;
+import com.bizvane.couponfacade.interfaces.CouponQueryServiceFeign;
+import com.bizvane.couponfacade.models.vo.CouponFindCouponCountResponseVO;
 import com.bizvane.mktcenterservice.interfaces.ActivityService;
+import com.bizvane.mktcenterservice.models.bo.ActivityAnalysisCountBO;
 import com.bizvane.mktcenterservice.models.po.*;
 import com.bizvane.mktcenterservice.models.vo.ActivityVO;
+import com.bizvane.mktcenterservice.models.vo.PageForm;
 import com.bizvane.mktcenterserviceimpl.common.enums.ActivityStatusEnum;
 import com.bizvane.mktcenterserviceimpl.common.enums.CheckStatusEnum;
 import com.bizvane.mktcenterserviceimpl.mappers.MktActivityPOMapper;
@@ -12,10 +16,13 @@ import com.bizvane.mktcenterserviceimpl.mappers.MktMessagePOMapper;
 import com.bizvane.utils.enumutils.SysResponseEnum;
 import com.bizvane.utils.responseinfo.ResponseData;
 import com.bizvane.utils.tokens.SysAccountPO;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.text.NumberFormat;
 import java.util.Date;
 import java.util.List;
 
@@ -34,6 +41,8 @@ public class ActivityServiceImpl implements ActivityService {
     private MktMessagePOMapper mktMessagePOMapper;
     @Autowired
     private SysCheckServiceRpc sysCheckServiceRpc;
+    @Autowired
+    private CouponQueryServiceFeign couponQueryServiceFeign;
     /**
      * 禁用/启用活动
      * @param vo
@@ -122,6 +131,47 @@ public class ActivityServiceImpl implements ActivityService {
         responseData.setData(activityList);
         responseData.setCode(SysResponseEnum.SUCCESS.getCode());
         responseData.setMessage(SysResponseEnum.SUCCESS.getMessage());
+        return responseData;
+    }
+
+    /**
+     * 活动效果分析
+     * @param bo
+     * @param pageForm
+     * @return
+     */
+    @Override
+    public ResponseData<ActivityAnalysisCountBO> getActivityAnalysisCountpage(ActivityAnalysisCountBO bo, PageForm pageForm) {
+        ResponseData responseData = new ResponseData();
+        PageHelper.startPage(pageForm.getPageNumber(),pageForm.getPageSize());
+        //分页查询出主表信息
+        List<ActivityAnalysisCountBO> activityAnalysisList = mktActivityPOMapper.getActivityAnalysisCountpage(bo);
+        if (!CollectionUtils.isEmpty(activityAnalysisList)){
+            for (ActivityAnalysisCountBO activityAnalysisCount:activityAnalysisList) {
+                //查询券统计
+                ResponseData<CouponFindCouponCountResponseVO> couponFindCouponCountResponseVODate = couponQueryServiceFeign.findCouponCountBySendBusinessId(activityAnalysisCount.getMktActivityId(),activityAnalysisCount.getSysBrandId());
+                CouponFindCouponCountResponseVO couponFindCouponCountResponseVO = couponFindCouponCountResponseVODate.getData();
+                //券数量
+                activityAnalysisCount.setCouponSum(couponFindCouponCountResponseVO.getCouponSum());
+                //核销券数量
+                activityAnalysisCount.setCouponUsedSum(couponFindCouponCountResponseVO.getCouponUsedSum());
+                //收益
+                activityAnalysisCount.setMoney(couponFindCouponCountResponseVO.getMoney());
+                //核销率
+                // 创建一个数值格式化对象
+                NumberFormat numberFormat = NumberFormat.getInstance();
+                // 设置精确到小数点后2位
+                numberFormat.setMaximumFractionDigits(2);
+                String result = numberFormat.format((float)couponFindCouponCountResponseVO.getCouponUsedSum()/(float)couponFindCouponCountResponseVO.getCouponSum()*100);
+                activityAnalysisCount.setCouponUsedSumPercentage(result+"%");
+                //查询积分统计方法TODO
+
+            }
+
+        }
+
+        PageInfo<ActivityAnalysisCountBO> pageInfo = new PageInfo<>(activityAnalysisList);
+        responseData.setData(pageInfo);
         return responseData;
     }
 

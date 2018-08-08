@@ -1,5 +1,6 @@
 package com.bizvane.mktcenterserviceimpl.mappers;
 
+import com.bizvane.mktcenterservice.models.bo.ActivityAnalysisCountBO;
 import com.bizvane.mktcenterservice.models.po.MktActivityPO;
 import com.bizvane.mktcenterservice.models.po.MktActivityPOExample;
 import com.bizvane.mktcenterservice.models.po.MktActivityPOWithBLOBs;
@@ -105,4 +106,6 @@ public interface MktActivityPOMapper {
 	int updateActivityStatus(MktActivityPO  po);
 
 	List<ActivityVO> getActivityList(ActivityVO vo);
+	//活动效果分析查询
+	List<ActivityAnalysisCountBO>  getActivityAnalysisCountpage(ActivityAnalysisCountBO bo);
 }
