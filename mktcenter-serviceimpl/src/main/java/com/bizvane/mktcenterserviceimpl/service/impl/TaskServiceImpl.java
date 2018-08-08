@@ -198,6 +198,22 @@ public class TaskServiceImpl implements TaskService {
         return list;
 
     }
+    /**
+     * 查询公司下的某一会员的详情
+     */
+    @Override
+    public MemberInfoModel getCompanyMemeberDetail(String  memberCode) {
+        MemberInfoModel members = new MemberInfoModel();
+        members.setMemberCode(memberCode);
+        ResponseData<List<MemberInfoModel>> memberInfo = memberInfoApiService.getMemberInfo(members);
+        List<MemberInfoModel> list = memberInfo.getData();
+        MemberInfoModel memberInfoModel=null;
+        if (CollectionUtils.isNotEmpty(list)){
+            memberInfoModel=list.get(0);
+        }
+        return memberInfoModel;
+
+    }
 
     /**
      * 发送券和积分

@@ -22,4 +22,20 @@ public class InviteSuccessVO {
     public void setMemberCode(String memberCode) {
         this.memberCode = memberCode;
     }
+
+    public Date getOpenCardTime() {
+        return openCardTime;
+    }
+
+    public void setOpenCardTime(Date openCardTime) {
+        this.openCardTime = openCardTime;
+    }
+
+    public String getInviteMemberCode() {
+        return inviteMemberCode;
+    }
+
+    public void setInviteMemberCode(String inviteMemberCode) {
+        this.inviteMemberCode = inviteMemberCode;
+    }
 }

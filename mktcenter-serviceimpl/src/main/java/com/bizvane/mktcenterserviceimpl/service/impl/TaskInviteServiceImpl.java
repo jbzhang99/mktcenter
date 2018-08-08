@@ -2,18 +2,10 @@ package com.bizvane.mktcenterserviceimpl.service.impl;
 
 import com.bizvane.centerstageservice.models.po.SysCheckConfigPo;
 import com.bizvane.members.facade.models.MemberInfoModel;
-import com.bizvane.mktcenterservice.interfaces.TaskCouponService;
-import com.bizvane.mktcenterservice.interfaces.TaskInviteService;
-import com.bizvane.mktcenterservice.interfaces.TaskMessageService;
-import com.bizvane.mktcenterservice.interfaces.TaskService;
-import com.bizvane.mktcenterservice.models.bo.AwardBO;
-import com.bizvane.mktcenterservice.models.bo.TaskBO;
-import com.bizvane.mktcenterservice.models.bo.TaskDetailBO;
+import com.bizvane.mktcenterservice.interfaces.*;
+import com.bizvane.mktcenterservice.models.bo.*;
 import com.bizvane.mktcenterservice.models.po.*;
-import com.bizvane.mktcenterservice.models.vo.InviteSuccessVO;
-import com.bizvane.mktcenterservice.models.vo.PageForm;
-import com.bizvane.mktcenterservice.models.vo.TaskDetailVO;
-import com.bizvane.mktcenterservice.models.vo.TaskVO;
+import com.bizvane.mktcenterservice.models.vo.*;
 import com.bizvane.mktcenterserviceimpl.common.award.Award;
 import com.bizvane.mktcenterserviceimpl.common.constants.SystemConstants;
 import com.bizvane.mktcenterserviceimpl.common.constants.TaskConstants;
@@ -36,6 +28,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.text.ParseException;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -60,6 +53,9 @@ public class TaskInviteServiceImpl implements TaskInviteService {
 
     @Autowired
     private Award award;
+
+    @Autowired
+    private TaskRecordService taskRecordService;
 
     @Autowired
     private JobUtil  jobUtil;
@@ -243,7 +239,43 @@ public class TaskInviteServiceImpl implements TaskInviteService {
     /**
      * 执行邀请任务的奖励
      */
-    public  void    doAwardInvite(InviteSuccessVO vo){
+    public  void   doAwardInvite(InviteSuccessVO vo){
+        String inviteMemberCode = vo.getInviteMemberCode();
+        MemberInfoModel memeberDetail = taskService.getCompanyMemeberDetail(inviteMemberCode);
+        Long companyId = memeberDetail.getCompanyId();
+        Long brandId = memeberDetail.getBrandId();
+        Date openCardTime = memeberDetail.getOpenCardTime();
+        //符合条件的任务列表
+        List<TaskAwardBO> taskInviteAwardList = taskService.getTaskOrderAwardList(companyId, brandId, openCardTime);
+        if (CollectionUtils.isNotEmpty(taskInviteAwardList)){
+            taskInviteAwardList.stream().forEach(obj->{
+                Integer taskType = obj.getTaskType();
+                Long mktTaskId = obj.getMktTaskId();
+
+                MktTaskRecordVO recordVO = new MktTaskRecordVO();
+                recordVO.setSysBrandId(brandId);
+                recordVO.setTaskType(taskType);
+                recordVO.setTaskId(mktTaskId);
+                recordVO.setMemberCode(inviteMemberCode);
+
+                // 获取会员是否已经成功参与过某一活动
+                Boolean isOrNoAward = taskRecordService.getIsOrNoAward(recordVO);
+                if (!isOrNoAward){
+                    MktTaskRecordPO recordPO = new MktTaskRecordPO();
+                    BeanUtils.copyProperties(recordVO,recordPO);
+                    recordPO.setParticipateDate(openCardTime);
+                    taskRecordService.addTaskRecord(recordPO);
+
+                    //获取会员参与某一活动放总金额和总次数
+                    TotalStatisticsBO totalBO = taskRecordService.getTotalStatistics(recordVO);
+//                    if (){
+//
+//                    }
+
+                }
+
+            });
+        }
 
     }
 }

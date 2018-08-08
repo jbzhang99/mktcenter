@@ -47,14 +47,14 @@ public class OrderTaskListener implements MessageListener {
         List<TaskAwardBO> taskOrderAwardList = taskService.getTaskOrderAwardList(companyId, brandId, placeOrderTime);
         if (CollectionUtils.isNotEmpty(taskOrderAwardList)){
             taskOrderAwardList.stream().forEach(obj->{
-                this.doExecuteTask(model, obj);
+                this.doExecuteTask(model, obj,placeOrderTime);
             });
         }
         //如果想测试消息重投的功能,可以将Action.CommitMessage 替换成Action.ReconsumeLater
         return Action.CommitMessage;
     }
 //      //任务类型：1完善资料，2分享任务，3邀请注册，4累计消费次数，5累计消费金额',
-    private void doExecuteTask(OrderServeModel model, TaskAwardBO obj) {
+    private void doExecuteTask(OrderServeModel model, TaskAwardBO obj,Date placeOrderTime) {
         BigDecimal tradeAmount = model.getTradeAmount();//订单金额
         Long brandId = model.getBrandId();
         String memberCode = model.getMemberCode();
@@ -78,6 +78,7 @@ public class OrderTaskListener implements MessageListener {
             MktTaskRecordPO recordPO = new MktTaskRecordPO();
             BeanUtils.copyProperties(recordVO,recordPO);
             recordPO.setConsumeAmount(tradeAmount);
+            recordPO.setParticipateDate(placeOrderTime);
             taskRecordService.addTaskRecord(recordPO);
 
             //获取会员参与某一活动放总金额和总次数

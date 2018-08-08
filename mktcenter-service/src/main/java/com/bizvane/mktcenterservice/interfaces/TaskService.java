@@ -119,4 +119,9 @@ public interface TaskService {
      * @return
      */
     public  List<MemberInfoModel>  getCompanyMemebers(Long sysCompanyId);
+
+    /**
+     * 查询公司下的某一会员的详情
+     */
+    public MemberInfoModel getCompanyMemeberDetail(String  memberCode);
 }
