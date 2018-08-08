@@ -3,6 +3,8 @@ package com.bizvane.mktcenterservice.interfaces;
 import com.bizvane.mktcenterservice.models.po.MktTaskRecordPO;
 import com.bizvane.utils.tokens.SysAccountPO;
 
+import java.util.List;
+
 /**
  * @Author: lijunwei
  * @Time: 2018/8/6 23:44
@@ -29,5 +31,5 @@ public interface TaskRecordService {
      * @param po
      * @return
      */
-    public Integer getTaskRecord(MktTaskRecordPO po);
+    public List<MktTaskRecordPO> getTaskRecord(MktTaskRecordPO po);
 }
