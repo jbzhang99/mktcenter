@@ -114,18 +114,20 @@ public class ActivityManualServiceImpl implements ActivityManualService {
     /**
      * 创建活动
      *
-     * @param couponId
+     * @param couponDefinitionId
      * @param activityVO
      * @param stageUser
      * @return
      */
     @Override
     @Transactional
-    public ResponseData<Integer> addActivityManual(Long couponId, ActivityVO activityVO, SysAccountPO stageUser) {
-        log.info("领券活动-创建活动-入参:couponId:"+couponId+",activityVO:"+JSON.toJSONString(activityVO)+",stageUser:"+JSON.toJSONString(stageUser));
+    public ResponseData<Integer> addActivityManual(Long couponDefinitionId, ActivityVO activityVO, SysAccountPO stageUser) {
+        log.info("领券活动-创建活动-入参:couponId:"+couponDefinitionId+",activityVO:"+JSON.toJSONString(activityVO)+",stageUser:"+JSON.toJSONString(stageUser));
         //1.入参校验
-        ResponseData responseData = new ResponseData();
-        ActivityParamCheckUtil.checkAddActivityParams(couponId, activityVO);
+        ResponseData responseData = ActivityParamCheckUtil.checkManualActivityParams(couponDefinitionId, activityVO);
+        if(responseData.getCode()==ResponseConstants.ERROR){
+            return responseData;
+        }
         activityVO.setCreateUserName(stageUser.getName());
         activityVO.setCreateUserId(stageUser.getSysAccountId());
         activityVO.setCreateDate(new Date());
@@ -210,27 +212,31 @@ public class ActivityManualServiceImpl implements ActivityManualService {
           urlQRCodeCreateRequestVO.setSysBrandId(activityVO.getSysBrandId());
           urlQRCodeCreateRequestVO.setUrl(url);
          log.info("领券活动-创建活动-扫码领券查询二维码入参:"+JSON.toJSONString(urlQRCodeCreateRequestVO));
-         ResponseData<String> qrCodeResponseData= qrCodeServiceFeign.createUrlQRCode(urlQRCodeCreateRequestVO);
-         if(null==qrCodeResponseData||null==qrCodeResponseData.getData()){
-            log.info("领券活动-创建活动-扫码领券生成二维码为空");
-            responseData.setMessage(SystemConstants.ERROR_QR_CODE_EMPTY);
-            responseData.setData(SystemConstants.ERROR_CODE);
-            return responseData;
-         }
-          mktActivityManualPO.setQrcode(qrCodeResponseData.getData());
+          ResponseData<String> qrCodeResponseData= null;
+          try {
+              qrCodeResponseData = qrCodeServiceFeign.createUrlQRCode(urlQRCodeCreateRequestVO);
+              if(null==qrCodeResponseData||null==qrCodeResponseData.getData()){
+                  log.info("领券活动-创建活动-扫码领券生成二维码为空");
+                  responseData.setMessage(SystemConstants.ERROR_QR_CODE_EMPTY);
+                  responseData.setData(SystemConstants.ERROR_CODE);
+                  return responseData;
+              }
+              mktActivityManualPO.setQrcode(qrCodeResponseData.getData());
+          } catch (Exception e) {
+              e.printStackTrace();
+          }
        }
        log.info("领券活动-创建活动-新增领券规则表，入参:"+JSON.toJSONString(mktActivityManualPO));
         mktActivityManualPOMapper.insertSelective(mktActivityManualPO);
         //新增券表,和活动绑定
         MktCouponPO mktCouponPO = new MktCouponPO();
-        mktCouponPO.setCouponDefinitionId(couponId);
+        mktCouponPO.setCouponDefinitionId(couponDefinitionId);
         mktCouponPO.setBizId(mktActivityId);//活动id
         mktCouponPO.setBizType(BusinessTypeEnum.ACTIVITY_TYPE_ACTIVITY.getCode());
         mktCouponPO.setModifiedUserId(stageUser.getSysAccountId());
         mktCouponPO.setModifiedUserName(stageUser.getName());
         mktCouponPO.setModifiedDate(new Date());
         mktCouponPO.setCouponName(activityVO.getCouponName());
-        mktCouponPO.setCouponCode(activityVO.getCouponCode());
         log.info("领券活动-创建活动-新增券表-入参:"+JSON.toJSONString(mktCouponPO));
         mktCouponPOMapper.insertSelective(mktCouponPO);
             responseData.setCode(SystemConstants.SUCCESS_CODE);
@@ -238,7 +244,7 @@ public class ActivityManualServiceImpl implements ActivityManualService {
         log.info("领券活动-创建活动-成功");
          return responseData;
      }catch (Exception e){
-         log.error("领券活动-创建活动-出错");
+         log.error("领券活动-创建活动-出错"+e.getMessage());
          responseData.setCode(SystemConstants.ERROR_CODE);
          responseData.setMessage(ActivityConstants.ERROR_SQL);
          return responseData;

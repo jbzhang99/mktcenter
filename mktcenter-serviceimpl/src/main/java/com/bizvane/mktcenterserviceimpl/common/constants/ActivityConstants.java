@@ -17,6 +17,7 @@ public class ActivityConstants {
     public static String ERROR_MSG_ACTIVITY_INFO_EMPTY ="活动说明为空";
     public static String ERROR_MSG_ACTIVITY_TYPE_EMPTY ="活动类型为空";
     public static String ERROR_MSG_ACTIVITY_ID_EMPTY ="活动ID为空";
+    public static String ERROR_MSG_BRAND_ID_EMPTY ="品牌ID为空";
 
     public static String ERROR_MSG_ACTIVITY_TYPE_NOT_EXISTS ="活动类型不存在";
 

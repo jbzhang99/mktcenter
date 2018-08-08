@@ -226,7 +226,6 @@ public class ActivityUpgradeServiceImpl implements ActivityUpgradeService {
                 BeanUtils.copyProperties(mktActivityPOWithBLOBs,mktCouponPO);
                 mktCouponPO.setBizType(BusinessTypeEnum.ACTIVITY_TYPE_ACTIVITY.getCode());
                 mktCouponPO.setBizId(mktActivityId);
-                mktCouponPO.setCouponCode(couponCode.getCouponCode());
                 mktCouponPO.setCouponName(couponCode.getCouponName());
                 mktCouponPO.setCouponDefinitionId(couponCode.getCouponDefinitionId());
                 mktCouponPO.setBizId(couponCode.getBizId());
@@ -376,7 +375,6 @@ public class ActivityUpgradeServiceImpl implements ActivityUpgradeService {
                 BeanUtils.copyProperties(mktActivityPOWithBLOBs,mktCouponPO);
                 mktCouponPO.setBizType(BusinessTypeEnum.ACTIVITY_TYPE_ACTIVITY.getCode());
                 mktCouponPO.setBizId(mktActivityId);
-                mktCouponPO.setCouponCode(couponCode.getCouponCode());
                 mktCouponPO.setCouponName(couponCode.getCouponName());
                 mktCouponPO.setCouponDefinitionId(couponCode.getCouponDefinitionId());
                 mktCouponPO.setBizId(couponCode.getBizId());
