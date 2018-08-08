@@ -435,7 +435,7 @@ public class ActivityUpgradeServiceImpl implements ActivityUpgradeService {
             for (MktCouponPO po:mktCouponPOs) {
                 CouponEntityPO couponEntity = new CouponEntityPO();
                 couponEntity.setCouponEntityId(po.getCouponDefinitionId());
-                ResponseData<CouponEntityAndDefinitionVO>  entityAndDefinition = couponQueryServiceFeign.getAllRpc(couponEntity);
+                ResponseData<CouponEntityAndDefinitionVO>  entityAndDefinition = couponQueryServiceFeign.getCouponDetail(couponEntity);
                 lists.add(entityAndDefinition.getData());
             }
         }

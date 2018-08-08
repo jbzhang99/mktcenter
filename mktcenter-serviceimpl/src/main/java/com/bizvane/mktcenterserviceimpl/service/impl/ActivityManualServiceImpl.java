@@ -439,7 +439,7 @@ public class ActivityManualServiceImpl implements ActivityManualService {
                 for (MktCouponPO po:mktCouponPOs) {
                     CouponEntityPO couponEntity = new CouponEntityPO();
                     couponEntity.setCouponDefinitionId(po.getCouponDefinitionId().toString());
-                    ResponseData<CouponEntityAndDefinitionVO>  entityAndDefinition = couponQueryServiceFeign.getAllRpc(couponEntity);
+                    ResponseData<CouponEntityAndDefinitionVO>  entityAndDefinition = couponQueryServiceFeign.getCouponDetail(couponEntity);
                     log.info("领券活动-调券接口-出参:"+JSON.toJSONString(entityAndDefinition));
                     lists.add(entityAndDefinition.getData());
                 }
