@@ -26,10 +26,7 @@ import com.bizvane.mktcenterserviceimpl.common.config.QRCodeConfig;
 import com.bizvane.mktcenterserviceimpl.common.constants.ActivityConstants;
 import com.bizvane.mktcenterserviceimpl.common.constants.ResponseConstants;
 import com.bizvane.mktcenterserviceimpl.common.constants.SystemConstants;
-import com.bizvane.mktcenterserviceimpl.common.enums.ActivityStatusEnum;
-import com.bizvane.mktcenterserviceimpl.common.enums.ActivityTypeEnum;
-import com.bizvane.mktcenterserviceimpl.common.enums.BusinessTypeEnum;
-import com.bizvane.mktcenterserviceimpl.common.enums.CheckStatusEnum;
+import com.bizvane.mktcenterserviceimpl.common.enums.*;
 import com.bizvane.mktcenterserviceimpl.common.utils.ActivityParamCheckUtil;
 import com.bizvane.mktcenterserviceimpl.common.utils.CodeUtil;
 import com.bizvane.mktcenterserviceimpl.common.utils.DateUtil;
@@ -385,7 +382,7 @@ public class ActivityManualServiceImpl implements ActivityManualService {
                 Long sendBusinessId = vo1.getMktActivityId();
                 Date createDtStart =vo.getCreateDateStart();
                 Date createDtEnd=vo.getCreateDateEnd();
-                ResponseData<CouponFindCouponCountResponseVO> couponResponseData=couponQueryServiceFeign.findCouponCountBySendBusinessId(sendBusinessId,vo.getSysBrandId()) ;//一个活动只有一张券
+                ResponseData<CouponFindCouponCountResponseVO> couponResponseData=couponQueryServiceFeign.findCouponCountBySendBusinessId(sendBusinessId, CouponSendTypeEnum.getCouponSendTypeEnumByMktModuleCode(vo.getActivityType()).getCouponModuleCode(),vo.getSysBrandId()) ;//一个活动只有一张券
                 vo1.setCouponFindCouponCountResponseVO(couponResponseData.getData());
                 sumCouponReceive=sumCouponReceive+couponResponseData.getData().getCouponSum();//券总数量
                 sumCouponUse=sumCouponUse+couponResponseData.getData().getCouponUsedSum();//券已使用总数量

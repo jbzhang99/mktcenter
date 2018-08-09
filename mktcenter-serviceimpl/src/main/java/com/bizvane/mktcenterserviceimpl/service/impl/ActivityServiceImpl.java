@@ -11,6 +11,7 @@ import com.bizvane.mktcenterservice.models.vo.ActivityVO;
 import com.bizvane.mktcenterservice.models.vo.PageForm;
 import com.bizvane.mktcenterserviceimpl.common.enums.ActivityStatusEnum;
 import com.bizvane.mktcenterserviceimpl.common.enums.CheckStatusEnum;
+import com.bizvane.mktcenterserviceimpl.common.enums.CouponSendTypeEnum;
 import com.bizvane.mktcenterserviceimpl.mappers.MktActivityPOMapper;
 import com.bizvane.mktcenterserviceimpl.mappers.MktMessagePOMapper;
 import com.bizvane.utils.enumutils.SysResponseEnum;
@@ -149,7 +150,7 @@ public class ActivityServiceImpl implements ActivityService {
         if (!CollectionUtils.isEmpty(activityAnalysisList)){
             for (ActivityAnalysisCountBO activityAnalysisCount:activityAnalysisList) {
                 //查询券统计
-                ResponseData<CouponFindCouponCountResponseVO> couponFindCouponCountResponseVODate = couponQueryServiceFeign.findCouponCountBySendBusinessId(activityAnalysisCount.getMktActivityId(),activityAnalysisCount.getSysBrandId());
+                ResponseData<CouponFindCouponCountResponseVO> couponFindCouponCountResponseVODate = couponQueryServiceFeign.findCouponCountBySendBusinessId(activityAnalysisCount.getMktActivityId(), CouponSendTypeEnum.getCouponSendTypeEnumByMktModuleCode(bo.getActivityType()).getCouponModuleCode(),activityAnalysisCount.getSysBrandId());
                 CouponFindCouponCountResponseVO couponFindCouponCountResponseVO = couponFindCouponCountResponseVODate.getData();
                 //券数量
                 activityAnalysisCount.setCouponSum(couponFindCouponCountResponseVO.getCouponSum());
