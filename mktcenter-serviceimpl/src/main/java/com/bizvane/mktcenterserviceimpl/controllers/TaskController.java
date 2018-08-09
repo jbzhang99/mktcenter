@@ -3,6 +3,8 @@ package com.bizvane.mktcenterserviceimpl.controllers;
 import com.bizvane.mktcenterservice.interfaces.TaskService;
 import com.bizvane.mktcenterservice.models.po.MktTaskPOWithBLOBs;
 import com.bizvane.mktcenterservice.models.vo.PageForm;
+import com.bizvane.mktcenterservice.models.vo.TaskAnalysisVo;
+import com.bizvane.mktcenterservice.models.vo.TaskRecordVO;
 import com.bizvane.mktcenterservice.models.vo.TaskVO;
 import com.bizvane.utils.responseinfo.ResponseData;
 import com.bizvane.utils.tokens.SysAccountPO;
@@ -65,5 +67,9 @@ public class TaskController {
         //审核任务
         ResponseData<Integer> integerResponseData = taskService.checkTaskById(mktTaskId,checkStatus,stageUser);
         return integerResponseData;
+    }
+    @RequestMapping("doAnalysis")
+    public ResponseData<TaskRecordVO> doAnalysis(TaskAnalysisVo vo){
+       return taskService.doAnalysis(vo);
     }
 }

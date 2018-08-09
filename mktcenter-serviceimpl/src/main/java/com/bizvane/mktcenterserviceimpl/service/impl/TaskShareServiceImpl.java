@@ -36,7 +36,6 @@ import com.bizvane.utils.tokens.SysAccountPO;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.netflix.discovery.converters.Auto;
-import com.sun.xml.internal.bind.v2.TODO;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -85,7 +84,7 @@ public class TaskShareServiceImpl implements TaskShareService {
     private MktTaskRecordPOMapper mktTaskRecordPOMapper;
 
     @Autowired
-    private CouponQueryServiceFeign couponQueryServiceFeign;
+    private CouponQueryServiceFeign couponQueryService;
 
     @Autowired
     private Award award;

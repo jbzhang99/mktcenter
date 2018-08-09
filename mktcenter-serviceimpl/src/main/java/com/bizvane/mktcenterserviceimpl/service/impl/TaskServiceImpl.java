@@ -2,7 +2,9 @@ package com.bizvane.mktcenterserviceimpl.service.impl;
 
 import com.bizvane.centerstageservice.models.po.SysCheckConfigPo;
 import com.bizvane.centerstageservice.rpc.SysCheckConfigServiceRpc;
+import com.bizvane.couponfacade.enums.SendTypeEnum;
 import com.bizvane.couponfacade.interfaces.CouponQueryServiceFeign;
+import com.bizvane.couponfacade.models.vo.CouponFindCouponCountResponseVO;
 import com.bizvane.members.facade.models.MemberInfoModel;
 import com.bizvane.members.facade.models.OrderServeModel;
 import com.bizvane.members.facade.service.api.MemberInfoApiService;
@@ -16,6 +18,7 @@ import com.bizvane.mktcenterservice.models.po.*;
 import com.bizvane.mktcenterservice.models.vo.*;
 import com.bizvane.mktcenterserviceimpl.common.award.Award;
 import com.bizvane.mktcenterserviceimpl.common.constants.ResponseConstants;
+import com.bizvane.mktcenterserviceimpl.common.constants.SystemConstants;
 import com.bizvane.mktcenterserviceimpl.common.constants.TaskConstants;
 import com.bizvane.mktcenterserviceimpl.common.enums.CheckStatusEnum;
 import com.bizvane.mktcenterserviceimpl.common.enums.MktSmartTypeEnum;
@@ -23,6 +26,7 @@ import com.bizvane.mktcenterserviceimpl.common.enums.TaskStatusEnum;
 import com.bizvane.mktcenterserviceimpl.common.utils.JobUtil;
 import com.bizvane.mktcenterserviceimpl.common.utils.TimeUtils;
 import com.bizvane.mktcenterserviceimpl.mappers.MktTaskPOMapper;
+import com.bizvane.mktcenterserviceimpl.mappers.MktTaskRecordPOMapper;
 import com.bizvane.utils.enumutils.SysResponseEnum;
 import com.bizvane.utils.responseinfo.ResponseData;
 import com.bizvane.utils.tokens.SysAccountPO;
@@ -36,6 +40,7 @@ import org.springframework.stereotype.Service;
 import java.text.ParseException;
 import java.util.Date;
 import java.util.List;
+import com.bizvane.mktcenterserviceimpl.common.enums.TaskTypeEnum;
 
 /**
  * @author chen.li
@@ -61,7 +66,9 @@ public class TaskServiceImpl implements TaskService {
     @Autowired
     private TaskRecordService taskRecordService;
     @Autowired
-    private  CouponQueryServiceFeign couponQueryService;
+    private CouponQueryServiceFeign couponQueryService;
+    @Autowired
+    private MktTaskRecordPOMapper mktTaskRecordPOMapper;
 
     /**
      * 根据公司id和品牌id查询执行中的消费类任务
@@ -389,15 +396,62 @@ public class TaskServiceImpl implements TaskService {
     /**
      * 效果分析的明细
      */
-    public   void doAnalysis(TaskAnalysisVo vo){
+    @Override
+    public ResponseData<TaskRecordVO> doAnalysis(TaskAnalysisVo vo){
+        ResponseData<TaskRecordVO> result = new ResponseData<TaskRecordVO>(SysResponseEnum.SUCCESS.getCode(),SysResponseEnum.SUCCESS.getMessage(),null);
         Long sysBrandId = vo.getSysBrandId();
         //每个任务的券,积分,会员 总数
-        List<DayTaskRecordVo> analysislists = taskRecordService.getAnalysisResult(vo);
-        if (CollectionUtils.isNotEmpty(analysislists)){
-            analysislists.stream().forEach(task->{
-                //couponQueryService.findCouponCountBySendBusinessId(task.getTaskId(),sysBrandId);
-            });
-        }
+        PageHelper.startPage(vo.getPageNum(),vo.getPageSize());
+        List<DayTaskRecordVo> analysisall = mktTaskRecordPOMapper.getAnalysisResult(vo);
+        PageInfo<DayTaskRecordVo> dayTaskRecordVoPage = new PageInfo<>(analysisall);
+        List<DayTaskRecordVo> analysislists = dayTaskRecordVoPage.getList();
+        //赠送总积分数
+        Long allPoints=0L;
+        //发行券总张数
+        Long allCountCoupon=0L;
+        //参与任务总人数
+        Long allCountMbr=0L;
+        //被核销优惠券总数
+        Long allinvalidCountCoupon=0L;
 
+        if (CollectionUtils.isNotEmpty(analysislists)){
+            for (DayTaskRecordVo task: analysislists) {
+                TaskTypeEnum taskTypeEnum = TaskTypeEnum.getTaskTypeEnumByCode(vo.getTaskType());
+                String sendType=null;
+                switch (taskTypeEnum){
+                    case TASK_TYPE_CONSUME_TIMES:
+                        // 累计消费次数
+                        sendType=SendTypeEnum.SEND_COUPON_COUSUME_TIMES_TASK.getCode();
+                        break;
+                    case TASK_TYPE_CONSUME_AMOUNT:
+                        //累计消费金额
+                        sendType=SendTypeEnum.SEND_COUPON_COUSUME_MONEY_TASK.getCode();
+                        break;
+
+                    case TASK_TYPE_INVITE:
+                        //邀请注册
+                        sendType=SendTypeEnum.SEND_COUPON_INVITE_OPENCARD_TASK.getCode();
+                        break;
+                }
+                ResponseData<CouponFindCouponCountResponseVO> couponCount= couponQueryService.findCouponCountBySendBusinessId(task.getTaskId(), sendType, sysBrandId);
+                CouponFindCouponCountResponseVO data = couponCount.getData();
+                int couponSum = data.getCouponSum();
+                task.setOneTaskInvalidCountCoupon(Long.valueOf(couponSum));
+
+                allPoints=allPoints+task.getOneTaskPoints();
+                allCountCoupon= allCountCoupon+task.getOneTaskCountCoupon();
+                allCountMbr=allCountMbr+task.getOneTaskCountMbr();
+                allinvalidCountCoupon = allinvalidCountCoupon+Long.valueOf(couponSum);
+            }
+        }
+        TaskRecordVO taskRecordVO = new TaskRecordVO();
+        taskRecordVO.setAllPoints(allPoints);
+        taskRecordVO.setAllCountCoupon(allCountCoupon);
+        taskRecordVO.setAllCountMbr(allCountMbr);
+        taskRecordVO.setAllinvalidCountCoupon(allinvalidCountCoupon);
+        taskRecordVO.setDayTaskRecordVoList(dayTaskRecordVoPage);
+
+        result.setData(taskRecordVO);
+        return result;
     }
 }

@@ -6,9 +6,7 @@ import com.bizvane.members.facade.models.OrderServeModel;
 import com.bizvane.mktcenterservice.models.bo.TaskInviteAwardBO;
 import com.bizvane.mktcenterservice.models.bo.TaskAwardBO;
 import com.bizvane.mktcenterservice.models.po.MktTaskPOWithBLOBs;
-import com.bizvane.mktcenterservice.models.vo.PageForm;
-import com.bizvane.mktcenterservice.models.vo.TaskDetailVO;
-import com.bizvane.mktcenterservice.models.vo.TaskVO;
+import com.bizvane.mktcenterservice.models.vo.*;
 import com.bizvane.utils.responseinfo.ResponseData;
 import com.bizvane.utils.tokens.SysAccountPO;
 import com.github.pagehelper.PageInfo;
@@ -123,4 +121,9 @@ public interface TaskService {
      * 查询公司下的某一会员的详情
      */
     public MemberInfoModel getCompanyMemeberDetail(String  memberCode);
+
+    /**
+     * 效果分析的明细
+     */
+    public ResponseData<TaskRecordVO> doAnalysis(TaskAnalysisVo vo);
 }
