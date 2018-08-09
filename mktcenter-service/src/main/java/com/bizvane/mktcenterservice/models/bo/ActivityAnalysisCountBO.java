@@ -18,9 +18,9 @@ public class ActivityAnalysisCountBO {
 
     private Long participateNumber;//参与人数
 
-    private int couponSum;//发行优惠券数量
+    private Long couponSum;//发行优惠券数量
 
-    private int couponUsedSum;//已核销数量
+    private Long couponUsedSum;//已核销数量
 
     private BigDecimal money;//收益
 
@@ -42,44 +42,20 @@ public class ActivityAnalysisCountBO {
 
     private String  activityCode;//活动编号
 
-    public String getActivityCode() {
-        return activityCode;
+    public Long getCouponSum() {
+        return couponSum;
     }
 
-    public void setActivityCode(String activityCode) {
-        this.activityCode = activityCode;
+    public void setCouponSum(Long couponSum) {
+        this.couponSum = couponSum;
     }
 
-    public String getStartDate() {
-        return startDate;
+    public Long getCouponUsedSum() {
+        return couponUsedSum;
     }
 
-    public void setStartDate(String startDate) {
-        this.startDate = startDate;
-    }
-
-    public String getEndDate() {
-        return endDate;
-    }
-
-    public void setEndDate(String endDate) {
-        this.endDate = endDate;
-    }
-
-    public Integer getActivityType() {
-        return activityType;
-    }
-
-    public void setActivityType(Integer activityType) {
-        this.activityType = activityType;
-    }
-
-    public Long getSysBrandId() {
-        return sysBrandId;
-    }
-
-    public void setSysBrandId(Long sysBrandId) {
-        this.sysBrandId = sysBrandId;
+    public void setCouponUsedSum(Long couponUsedSum) {
+        this.couponUsedSum = couponUsedSum;
     }
 
     public Long getMktActivityId() {
@@ -88,22 +64,6 @@ public class ActivityAnalysisCountBO {
 
     public void setMktActivityId(Long mktActivityId) {
         this.mktActivityId = mktActivityId;
-    }
-
-    public Date getStartTime() {
-        return startTime;
-    }
-
-    public void setStartTime(Date startTime) {
-        this.startTime = startTime;
-    }
-
-    public Date getEndTime() {
-        return endTime;
-    }
-
-    public void setEndTime(Date endTime) {
-        this.endTime = endTime;
     }
 
     public String getActivityName() {
@@ -130,22 +90,6 @@ public class ActivityAnalysisCountBO {
         this.participateNumber = participateNumber;
     }
 
-    public int getCouponSum() {
-        return couponSum;
-    }
-
-    public void setCouponSum(int couponSum) {
-        this.couponSum = couponSum;
-    }
-
-    public int getCouponUsedSum() {
-        return couponUsedSum;
-    }
-
-    public void setCouponUsedSum(int couponUsedSum) {
-        this.couponUsedSum = couponUsedSum;
-    }
-
     public BigDecimal getMoney() {
         return money;
     }
@@ -170,4 +114,59 @@ public class ActivityAnalysisCountBO {
         this.pointsSum = pointsSum;
     }
 
+    public String getStartDate() {
+        return startDate;
+    }
+
+    public void setStartDate(String startDate) {
+        this.startDate = startDate;
+    }
+
+    public String getEndDate() {
+        return endDate;
+    }
+
+    public void setEndDate(String endDate) {
+        this.endDate = endDate;
+    }
+
+    public Date getStartTime() {
+        return startTime;
+    }
+
+    public void setStartTime(Date startTime) {
+        this.startTime = startTime;
+    }
+
+    public Date getEndTime() {
+        return endTime;
+    }
+
+    public void setEndTime(Date endTime) {
+        this.endTime = endTime;
+    }
+
+    public Long getSysBrandId() {
+        return sysBrandId;
+    }
+
+    public void setSysBrandId(Long sysBrandId) {
+        this.sysBrandId = sysBrandId;
+    }
+
+    public Integer getActivityType() {
+        return activityType;
+    }
+
+    public void setActivityType(Integer activityType) {
+        this.activityType = activityType;
+    }
+
+    public String getActivityCode() {
+        return activityCode;
+    }
+
+    public void setActivityCode(String activityCode) {
+        this.activityCode = activityCode;
+    }
 }
