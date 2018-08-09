@@ -6,7 +6,9 @@ import com.bizvane.mktcenterservice.models.po.MktTaskRecordPOExample;
 import java.util.List;
 import java.util.Map;
 
+import com.bizvane.mktcenterservice.models.vo.DayTaskRecordVo;
 import com.bizvane.mktcenterservice.models.vo.MktTaskRecordVO;
+import com.bizvane.mktcenterservice.models.vo.TaskAnalysisVo;
 import org.apache.ibatis.annotations.Param;
 
 public interface MktTaskRecordPOMapper {
@@ -81,4 +83,11 @@ public interface MktTaskRecordPOMapper {
 	Long countCompleteMbr(Map<String,Long> map);
 
 	List<TotalStatisticsBO> getTotalStatistics(MktTaskRecordVO vo);
+
+	/**
+	 * 分析效果分析
+	 * @param vo
+	 * @return
+	 */
+	List<DayTaskRecordVo> getAnalysisResult(TaskAnalysisVo vo);
 }

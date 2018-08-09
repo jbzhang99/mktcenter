@@ -21,11 +21,11 @@ public class TaskRecordVO extends MktTaskRecordPO{
     //参与任务总人数
     private Long allCountMbr;
 
-    //被核销优惠券数
+    //被核销优惠券总数
     private Long allinvalidCountCoupon;
 
 
-    //每天的记录
+    //每天或每条记录 的分页结果
     private PageInfo<DayTaskRecordVo> dayTaskRecordVoList;
 
 

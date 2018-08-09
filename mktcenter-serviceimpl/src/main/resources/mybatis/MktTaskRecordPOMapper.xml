@@ -503,4 +503,35 @@
     AND member_code =#{memberCode}
     AND task_id=#{taskIds}
   </select>
+
+  <!--效果分析-->
+   <select id="getAnalysisResult" resultType="com.bizvane.mktcenterservice.models.vo.DayTaskRecordVo">
+       SELECT
+       tmtr.task_id,
+       tmt.task_code,
+       tmt.task_name,
+       SUM(tmtr.coupon_num) AS oneTaskCountCoupon,
+       SUM(tmtr.points)  AS oneTaskPoints,
+       count(distinct tmtr.member_code) AS oneTaskCompleteCountMbr
+       FROM
+       t_mkt_task_record tmtr   INNER JOIN t_mkt_task  tmt ON tmtr.task_id=tmt.mkt_task_id
+       WHERE
+       tmtr.valid = 1
+       AND tmt.valid=1
+       AND tmtr.rewarded = 1
+
+       AND tmtr.sys_brand_id = #{sysBrandId}
+       AND tmtr.task_type = #{taskType}
+       <if test="taskName!=null and taskName!=''">
+       AND tmt.task_name like CONCAT('%',#{taskName},'%')
+       </if>
+       <if test="endTime!=null and endTime!=''">
+         AND tta.create_date <![CDATA[<=]]>#{endTime}
+       </if>
+       <if test="startTime!=null and startTime!=''">
+         AND tta.create_date <![CDATA[>=]]> #{startTime}
+       </if>
+       GROUP BY tmtr.task_id,tmtr.task_type
+   </select>
+
 </mapper>
