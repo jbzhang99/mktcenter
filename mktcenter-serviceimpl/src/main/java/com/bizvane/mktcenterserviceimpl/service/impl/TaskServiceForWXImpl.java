@@ -4,6 +4,7 @@ import com.bizvane.mktcenterservice.interfaces.TaskServiceForWX;
 import com.bizvane.mktcenterservice.models.vo.TaskVO;
 import com.bizvane.mktcenterserviceimpl.common.enums.TaskTypeEnum;
 import com.bizvane.utils.responseinfo.ResponseData;
+import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -12,6 +13,7 @@ import java.util.List;
 /**
  * Created by Geng on 2018/8/9.
  */
+@Service
 public class TaskServiceForWXImpl implements TaskServiceForWX{
 
 
