@@ -4,6 +4,8 @@ import com.bizvane.centerstageservice.models.po.SysCheckPo;
 import com.bizvane.centerstageservice.rpc.SysCheckServiceRpc;
 import com.bizvane.couponfacade.interfaces.CouponQueryServiceFeign;
 import com.bizvane.couponfacade.models.vo.CouponFindCouponCountResponseVO;
+import com.bizvane.members.facade.models.MemberInfoModel;
+import com.bizvane.members.facade.service.api.MemberInfoApiService;
 import com.bizvane.mktcenterservice.interfaces.ActivityService;
 import com.bizvane.mktcenterservice.models.bo.ActivityAnalysisCountBO;
 import com.bizvane.mktcenterservice.models.po.*;
@@ -13,6 +15,7 @@ import com.bizvane.mktcenterserviceimpl.common.enums.ActivityStatusEnum;
 import com.bizvane.mktcenterserviceimpl.common.enums.CheckStatusEnum;
 import com.bizvane.mktcenterserviceimpl.common.enums.CouponSendTypeEnum;
 import com.bizvane.mktcenterserviceimpl.mappers.MktActivityPOMapper;
+import com.bizvane.mktcenterserviceimpl.mappers.MktActivityRegisterPOMapper;
 import com.bizvane.mktcenterserviceimpl.mappers.MktMessagePOMapper;
 import com.bizvane.utils.enumutils.SysResponseEnum;
 import com.bizvane.utils.responseinfo.ResponseData;
@@ -44,6 +47,10 @@ public class ActivityServiceImpl implements ActivityService {
     private SysCheckServiceRpc sysCheckServiceRpc;
     @Autowired
     private CouponQueryServiceFeign couponQueryServiceFeign;
+    @Autowired
+    private MemberInfoApiService memberInfoApiService;
+    @Autowired
+    private MktActivityRegisterPOMapper mktActivityRegisterPOMapper;
     /**
      * 禁用/启用活动
      * @param vo
@@ -80,15 +87,15 @@ public class ActivityServiceImpl implements ActivityService {
         bs.setCheckStatus(po.getCheckStatus());
         bs.setActivityCode(po.getBusinessCode());
         //根据code查询出审核活动的详细信息
-        MktActivityPOExample exampl = new MktActivityPOExample();
-        exampl.createCriteria().andActivityCodeEqualTo(bs.getActivityCode()).andValidEqualTo(true);
-        List<MktActivityPO> mktActivityPO = mktActivityPOMapper.selectByExample(exampl);
-        if (CollectionUtils.isEmpty(mktActivityPO)){
+        ActivityVO vo = new ActivityVO();
+        vo.setActivityCode(po.getBusinessCode());
+        List<ActivityVO> activityRegisterList = mktActivityRegisterPOMapper.getActivityList(vo);
+        if (CollectionUtils.isEmpty(activityRegisterList)){
             responseData.setCode(SysResponseEnum.FAILED.getCode());
             responseData.setMessage(SysResponseEnum.OPERATE_FAILED_DATA_NOT_EXISTS.getMessage());
             return responseData;
         }
-        MktActivityPO activityPO = mktActivityPO.get(0);
+        ActivityVO activityPO = activityRegisterList.get(0);
         //判断是审核通过还是审核驳回
         if(bs.getCheckStatus()==CheckStatusEnum.CHECK_STATUS_APPROVED.getCode()){
             //活动开始时间<当前时间<活动结束时间  或者长期活动 也就是StartTime=null
@@ -99,8 +106,28 @@ public class ActivityServiceImpl implements ActivityService {
                 //发送模板消息TODO
                 //查询消息集合
                 MktMessagePOExample example = new MktMessagePOExample();
-                example.createCriteria().andBizIdEqualTo(bs.getMktActivityId());
+                example.createCriteria().andBizIdEqualTo(po.getBusinessId()).andValidEqualTo(true);
                 List<MktMessagePO> ListMktMessage = mktMessagePOMapper.selectByExample(example);
+                //查询对应的会员
+                MemberInfoModel memberInfoModel= new MemberInfoModel();
+                memberInfoModel.setBrandId(activityPO.getSysBrandId());
+                memberInfoModel.setLevelId(Long.parseLong(activityPO.getMbrLevelCode()));
+                ResponseData<List<MemberInfoModel>> memberInfoModelLists =memberInfoApiService.getMemberInfo(memberInfoModel);
+                List<MemberInfoModel> memberInfoModelList = memberInfoModelLists.getData();
+                //循环发送
+                if (!org.springframework.util.CollectionUtils.isEmpty(memberInfoModelList)){
+                    for (MemberInfoModel memberInfo:memberInfoModelList) {
+                        //循环信息类然后发送
+                        for (MktMessagePO mktMessagePO:ListMktMessage) {
+                            if (mktMessagePO.getMsgType().equals("1")){
+                                //发送微信模板消息
+                            }
+                            if (mktMessagePO.getMsgType().equals("2")){
+                                //发送短信消息
+                            }
+                        }
+                    }
+                }
 
             }
             //判断审核时间 >活动结束时间  将活动状态变为已结束

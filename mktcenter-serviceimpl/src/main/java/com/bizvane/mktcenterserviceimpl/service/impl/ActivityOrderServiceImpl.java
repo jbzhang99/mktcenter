@@ -13,7 +13,9 @@ import com.bizvane.couponfacade.models.vo.CouponEntityAndDefinitionVO;
 import com.bizvane.couponfacade.models.vo.SendCouponSimpleRequestVO;
 import com.bizvane.members.facade.enums.IntegralChangeTypeEnum;
 import com.bizvane.members.facade.models.IntegralRecordModel;
+import com.bizvane.members.facade.models.MemberInfoModel;
 import com.bizvane.members.facade.service.api.IntegralRecordApiService;
+import com.bizvane.members.facade.service.api.MemberInfoApiService;
 import com.bizvane.mktcenterservice.interfaces.ActivityOrderService;
 import com.bizvane.mktcenterservice.models.bo.ActivityBO;
 import com.bizvane.mktcenterservice.models.bo.AwardBO;
@@ -83,6 +85,8 @@ public class ActivityOrderServiceImpl implements ActivityOrderService {
     private Award award;
     @Autowired
     private MktActivityRecordPOMapper mktActivityRecordPOMapper;
+    @Autowired
+    private MemberInfoApiService memberInfoApiService;
     /**
      * 查询消费活动列表
      * @param vo
@@ -179,7 +183,7 @@ public class ActivityOrderServiceImpl implements ActivityOrderService {
             }else{
                 //活动状态设置为执行中
                 mktActivityPOWithBLOBs.setActivityStatus(ActivityStatusEnum.ACTIVITY_STATUS_EXECUTING.getCode());
-                //发送模板消息和短信消息TODO
+
 
             }
         }
@@ -229,6 +233,33 @@ public class ActivityOrderServiceImpl implements ActivityOrderService {
                 mktMessagePO.setBizId(mktActivityId);
                 mktMessagePOMapper.insertSelective(mktMessagePO);
             }
+        }
+        //发送模板消息和短信消息
+        //如果执行状态为执行中 就要发送消息
+        if(mktActivityPOWithBLOBs.getActivityStatus()==ActivityStatusEnum.ACTIVITY_STATUS_EXECUTING.getCode()){
+            //查询对应的会员
+            MemberInfoModel memberInfoModel= new MemberInfoModel();
+            memberInfoModel.setBrandId(activityVO.getSysBrandId());
+            if (!activityVO.getMbrLevelCode().equals("0")){
+                memberInfoModel.setLevelId(Long.parseLong(activityVO.getMbrLevelCode()));
+            }
+            ResponseData<List<MemberInfoModel>> memberInfoModelLists =memberInfoApiService.getMemberInfo(memberInfoModel);
+            List<MemberInfoModel> memberInfoModelList = memberInfoModelLists.getData();
+            //循环发送
+            if (!CollectionUtils.isEmpty(memberInfoModelList)){
+                for (MemberInfoModel memberInfo:memberInfoModelList) {
+                    //循环信息类然后发送
+                    for (MktMessagePO mktMessagePO:messageVOList) {
+                        if (mktMessagePO.getMsgType().equals("1")){
+                            //发送微信模板消息
+                        }
+                        if (mktMessagePO.getMsgType().equals("2")){
+                            //发送短信消息
+                        }
+                    }
+                }
+            }
+
         }
         log.info("消费活动创建结束");
         responseData.setCode(SysResponseEnum.SUCCESS.getCode());
@@ -376,7 +407,6 @@ public class ActivityOrderServiceImpl implements ActivityOrderService {
             }else{
                 //活动状态设置为执行中
                 mktActivityPOWithBLOBs.setActivityStatus(ActivityStatusEnum.ACTIVITY_STATUS_EXECUTING.getCode());
-                //发送模板消息和短信消息TODO
 
             }
         }
@@ -436,6 +466,33 @@ public class ActivityOrderServiceImpl implements ActivityOrderService {
                 mktMessagePOMapper.insertSelective(mktMessagePO);
             }
         }
+        //发送模板消息和短信消息
+        //如果执行状态为执行中 就要发送消息
+        if(mktActivityPOWithBLOBs.getActivityStatus()==ActivityStatusEnum.ACTIVITY_STATUS_EXECUTING.getCode()){
+            //查询对应的会员
+            MemberInfoModel memberInfoModel= new MemberInfoModel();
+            memberInfoModel.setBrandId(activityVO.getSysBrandId());
+            if (!activityVO.getMbrLevelCode().equals("0")){
+                memberInfoModel.setLevelId(Long.parseLong(activityVO.getMbrLevelCode()));
+            }
+            ResponseData<List<MemberInfoModel>> memberInfoModelLists =memberInfoApiService.getMemberInfo(memberInfoModel);
+            List<MemberInfoModel> memberInfoModelList = memberInfoModelLists.getData();
+            //循环发送
+            if (!CollectionUtils.isEmpty(memberInfoModelList)){
+                for (MemberInfoModel memberInfo:memberInfoModelList) {
+                    //循环信息类然后发送
+                    for (MktMessagePO mktMessagePO:messageVOList) {
+                        if (mktMessagePO.getMsgType().equals("1")){
+                            //发送微信模板消息
+                        }
+                        if (mktMessagePO.getMsgType().equals("2")){
+                            //发送短信消息
+                        }
+                    }
+                }
+            }
+
+        }
         responseData.setCode(SysResponseEnum.SUCCESS.getCode());
         responseData.setMessage(SysResponseEnum.SUCCESS.getMessage());
         return responseData;
@@ -459,16 +516,16 @@ public class ActivityOrderServiceImpl implements ActivityOrderService {
         bs.setCheckStatus(po.getCheckStatus());
         bs.setActivityCode(po.getBusinessCode());
         //根据code查询出审核活动的详细信息
-        MktActivityPOExample exampl = new MktActivityPOExample();
-        exampl.createCriteria().andActivityCodeEqualTo(bs.getActivityCode()).andValidEqualTo(true);
-        List<MktActivityPO> mktActivityPO = mktActivityPOMapper.selectByExample(exampl);
-        if (CollectionUtils.isEmpty(mktActivityPO)){
+        ActivityVO vo = new ActivityVO();
+        vo.setActivityCode(bs.getActivityCode());
+        List<ActivityVO> activityOrderList = mktActivityOrderPOMapper.getActivityOrderList(vo);
+        if (CollectionUtils.isEmpty(activityOrderList)){
             log.warn("查询不到数据！");
             responseData.setCode(SysResponseEnum.FAILED.getCode());
             responseData.setMessage(SysResponseEnum.OPERATE_FAILED_DATA_NOT_EXISTS.getMessage());
             return responseData;
         }
-        MktActivityPO activityPO = mktActivityPO.get(0);
+        ActivityVO activityPO = activityOrderList.get(0);
         //判断是审核通过还是审核驳回
         if(bs.getCheckStatus()==CheckStatusEnum.CHECK_STATUS_APPROVED.getCode()){
             //活动开始时间<当前时间<活动结束时间  或者长期活动 也就是StartTime=null
@@ -477,11 +534,33 @@ public class ActivityOrderServiceImpl implements ActivityOrderService {
                 bs.setActivityStatus(ActivityStatusEnum.ACTIVITY_STATUS_EXECUTING.getCode());
                 int i = mktActivityPOMapper.updateByPrimaryKeySelective(bs);
                 log.info("发送模板消息和短信消息");
-                //发送模板消息TODO
+                //发送模板消息
                 //查询消息集合
                 MktMessagePOExample example = new MktMessagePOExample();
-                example.createCriteria().andBizIdEqualTo(bs.getMktActivityId());
+                example.createCriteria().andBizIdEqualTo(po.getBusinessId()).andValidEqualTo(true);
                 List<MktMessagePO> ListMktMessage = mktMessagePOMapper.selectByExample(example);
+                //查询对应的会员
+                MemberInfoModel memberInfoModel= new MemberInfoModel();
+                memberInfoModel.setBrandId(activityPO.getSysBrandId());
+                if (!activityPO.getMbrLevelCode().equals("0")){
+                    memberInfoModel.setLevelId(Long.parseLong(activityPO.getMbrLevelCode()));
+                }
+                ResponseData<List<MemberInfoModel>> memberInfoModelLists =memberInfoApiService.getMemberInfo(memberInfoModel);
+                List<MemberInfoModel> memberInfoModelList = memberInfoModelLists.getData();
+                //循环发送
+                if (!CollectionUtils.isEmpty(memberInfoModelList)){
+                    for (MemberInfoModel memberInfo:memberInfoModelList) {
+                        //循环信息类然后发送
+                        for (MktMessagePO mktMessagePO:ListMktMessage) {
+                            if (mktMessagePO.getMsgType().equals("1")){
+                                //发送微信模板消息
+                            }
+                            if (mktMessagePO.getMsgType().equals("2")){
+                                //发送短信消息
+                            }
+                        }
+                    }
+                }
 
             }
             //判断审核时间 >活动结束时间  将活动状态变为已结束

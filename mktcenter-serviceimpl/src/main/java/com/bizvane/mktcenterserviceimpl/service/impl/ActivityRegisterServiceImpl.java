@@ -10,8 +10,10 @@ import com.bizvane.couponfacade.interfaces.SendCouponServiceFeign;
 import com.bizvane.couponfacade.models.po.CouponEntityPO;
 import com.bizvane.couponfacade.models.vo.CouponEntityAndDefinitionVO;
 import com.bizvane.members.facade.enums.IntegralChangeTypeEnum;
+import com.bizvane.members.facade.exception.MemberException;
 import com.bizvane.members.facade.models.MemberInfoModel;
 import com.bizvane.members.facade.service.api.IntegralRecordApiService;
+import com.bizvane.members.facade.service.api.MemberInfoApiService;
 import com.bizvane.mktcenterservice.interfaces.ActivityRegisterService;
 import com.bizvane.mktcenterservice.models.bo.ActivityBO;
 import com.bizvane.mktcenterservice.models.bo.AwardBO;
@@ -83,6 +85,8 @@ public class ActivityRegisterServiceImpl implements ActivityRegisterService {
     private Award award;
     @Autowired
     private MktActivityRecordPOMapper mktActivityRecordPOMapper;
+    @Autowired
+    private MemberInfoApiService memberInfoApiService;
     /**
      * 查询活动列表
      * @param vo
@@ -131,7 +135,7 @@ public class ActivityRegisterServiceImpl implements ActivityRegisterService {
         BeanUtils.copyProperties(activityVO,mktActivityPOWithBLOBs);
         //活动状态设置为待执行
         mktActivityPOWithBLOBs.setActivityStatus(ActivityStatusEnum.ACTIVITY_STATUS_PENDING.getCode());
-             try{
+        try{
         //查询判断长期活动同一会员等级是否有重复
         if(1 == bo.getActivityVO().getLongTerm()){
             ActivityVO vo = new ActivityVO();
@@ -250,7 +254,26 @@ public class ActivityRegisterServiceImpl implements ActivityRegisterService {
         }
         //如果执行状态为执行中 就要发送消息
         if(mktActivityPOWithBLOBs.getActivityStatus()==ActivityStatusEnum.ACTIVITY_STATUS_EXECUTING.getCode()){
-
+            //查询对应的会员
+            MemberInfoModel memberInfoModel= new MemberInfoModel();
+            memberInfoModel.setBrandId(activityVO.getSysBrandId());
+            memberInfoModel.setLevelId(Long.parseLong(activityVO.getMbrLevelCode()));
+            ResponseData<List<MemberInfoModel>> memberInfoModelLists =memberInfoApiService.getMemberInfo(memberInfoModel);
+            List<MemberInfoModel> memberInfoModelList = memberInfoModelLists.getData();
+            //循环发送
+            if (!CollectionUtils.isEmpty(memberInfoModelList)){
+                for (MemberInfoModel memberInfo:memberInfoModelList) {
+                    //循环信息类然后发送
+                    for (MktMessagePO mktMessagePO:messageVOList) {
+                        if (mktMessagePO.getMsgType().equals("1")){
+                            //发送微信模板消息
+                        }
+                        if (mktMessagePO.getMsgType().equals("2")){
+                            //发送短信消息
+                        }
+                    }
+                }
+            }
         }
                  //结束
                  responseData.setCode(SysResponseEnum.SUCCESS.getCode());
@@ -484,6 +507,29 @@ public class ActivityRegisterServiceImpl implements ActivityRegisterService {
                 mktMessagePO.setBizType(BusinessTypeEnum.ACTIVITY_TYPE_ACTIVITY.getCode());
                 mktMessagePO.setBizId(mktActivityId);
                 mktMessagePOMapper.insertSelective(mktMessagePO);
+            }
+        }
+        //如果执行状态为执行中 就要发送消息
+        if(mktActivityPOWithBLOBs.getActivityStatus()==ActivityStatusEnum.ACTIVITY_STATUS_EXECUTING.getCode()){
+            //查询对应的会员
+            MemberInfoModel memberInfoModel= new MemberInfoModel();
+            memberInfoModel.setBrandId(activityVO.getSysBrandId());
+            memberInfoModel.setLevelId(Long.parseLong(activityVO.getMbrLevelCode()));
+            ResponseData<List<MemberInfoModel>> memberInfoModelLists =memberInfoApiService.getMemberInfo(memberInfoModel);
+            List<MemberInfoModel> memberInfoModelList = memberInfoModelLists.getData();
+            //循环发送
+            if (!CollectionUtils.isEmpty(memberInfoModelList)){
+                for (MemberInfoModel memberInfo:memberInfoModelList) {
+                    //循环信息类然后发送
+                    for (MktMessagePO mktMessagePO:messageVOList) {
+                        if (mktMessagePO.getMsgType().equals("1")){
+                            //发送微信模板消息
+                        }
+                        if (mktMessagePO.getMsgType().equals("2")){
+                            //发送短信消息
+                        }
+                    }
+                }
             }
         }
         responseData.setCode(SysResponseEnum.SUCCESS.getCode());
