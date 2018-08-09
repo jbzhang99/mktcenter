@@ -12,7 +12,12 @@ import com.bizvane.mktcenterserviceimpl.common.utils.ActivityParamCheckUtil;
 import com.bizvane.utils.responseinfo.ResponseData;
 import com.bizvane.utils.tokens.SysAccountPO;
 import com.github.pagehelper.PageInfo;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -26,6 +31,7 @@ import java.util.List;
  * @description 智能营销
  * @Copyright (c) 2018 上海商帆信息科技有限公司-版权所有
  */
+@Api(description = "会员分组")
 @RestController
 @RequestMapping("activitySmart")
 public class ActivitySmartController {
@@ -37,7 +43,11 @@ public class ActivitySmartController {
      * 查询智能营销活动分组列表(方块)
      * @return
      */
-    @RequestMapping("getSmartActivityGroupList")
+    @ApiOperation(value = "查询智能营销活动分组列表(方块)")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "memberGroupName", dataType = "String", value = "智能营销会员分组名称", paramType = "query", required = true),
+    })
+    @PostMapping("getSmartActivityGroupList")
     public ResponseData<PageInfo<MktActivitySmartGroupPO>> getSmartActivityGroupList(ActivitySmartVO vo, PageForm pageForm){
         return activitySmartService.getSmartActivityGroupList(vo,pageForm);
     }
@@ -46,13 +56,25 @@ public class ActivitySmartController {
      * 查询历史营销活动列表
      * @return
      */
-    @RequestMapping("getActivityHistoryList")
+    @ApiOperation(value = "查询历史营销活动列表")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "memberGroupName", dataType = "String", value = "智能营销会员分组名称", paramType = "query", required = true),
+    })
+    @PostMapping("getActivityHistoryList")
     public ResponseData<PageInfo<MktActivitySmartPO>> getActivityHistoryList(ActivitySmartVO vo, PageForm pageForm){
         return activitySmartService.getActivityHistoryList(vo, pageForm);
     }
 
-    @RequestMapping("getSmartActivityGroupById")
-    @io.swagger.annotations.ApiModelProperty(value = "mktActivitySmartId",name = "通过id获取智能营销分组", required = false,example = "")
+    /**
+     *
+     * @param mktActivitySmartGroupId
+     * @return
+     */
+    @ApiOperation(value = "通过id获取智能营销分组")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "mktActivitySmartGroupId", dataType = "Long", value = "智能营销会员分组id", paramType = "query", required = true),
+    })
+    @PostMapping("getSmartActivityGroupById")
     public ResponseData<MktActivitySmartGroupPO> getSmartActivityGroupById(Long mktActivitySmartGroupId){
         return activitySmartService.getSmartActivityGroupById(mktActivitySmartGroupId);
     }
@@ -62,7 +84,12 @@ public class ActivitySmartController {
      * @param mktActivityId
      * @return
      */
-    @RequestMapping("getActivityDetailById")
+    @ApiOperation(value = "查询某个智能营销详情")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "mktActivityId", dataType = "Long", value = "智能营销活动id", paramType = "query", required = true),
+            @ApiImplicitParam(name = "mktSmartType", dataType = "Integer", value = "智能营销方式", paramType = "query", required = true),
+    })
+    @PostMapping("getActivityDetailById")
     public ResponseData<ActivitySmartVO> getActivityDetailById(Long mktActivityId,Integer mktSmartType){
         return activitySmartService.getActivityDetailById(mktActivityId,mktSmartType);
     }
@@ -72,7 +99,8 @@ public class ActivitySmartController {
      * 任务类型：1优惠券营销
      * @return
      */
-    @RequestMapping("addCouponActivity")
+    @ApiOperation(value = "对某个智能营销组创建任务，任务类型：1优惠券营销")
+    @PostMapping("addCouponActivity")
     public ResponseData<Integer> addCouponActivity(ActivitySmartVO vo, HttpServletRequest request){
         //获取操作人信息
 //        SysAccountPO stageUser = TokenUtils.getStageUser(request);
@@ -86,7 +114,8 @@ public class ActivitySmartController {
      * 任务类型：2积分营销
      * @return
      */
-    @RequestMapping("addIntegralActivity")
+    @ApiOperation(value = "对某个智能营销组创建任务，任务类型：2积分营销")
+    @PostMapping("addIntegralActivity")
     public ResponseData<Integer> addIntegralActivity(ActivitySmartVO vo, HttpServletRequest request){
         //参数校验
          ActivityParamCheckUtil.checkSmartActivityParam(vo);
@@ -102,7 +131,8 @@ public class ActivitySmartController {
      * 任务类型：3短信营销
      * @return
      */
-    @RequestMapping("addSmsActivity")
+    @ApiOperation(value = "对某个智能营销组创建任务，任务类型：3短信营销")
+    @PostMapping("addSmsActivity")
     public ResponseData<Integer> addSmsActivity(ActivitySmartVO vo, MessageVO messageVO,HttpServletRequest request){
         //参数校验
         ActivityParamCheckUtil.checkSmartActivityParam(vo);
@@ -118,7 +148,8 @@ public class ActivitySmartController {
      * 任务类型：4微信模板消息
      * @return
      */
-    @RequestMapping("addWxMessageActivity")
+    @ApiOperation(value = "对某个智能营销组创建任务，任务类型：4微信模板消息")
+    @PostMapping("addWxMessageActivity")
     public ResponseData<Integer> addWxMessageActivity(ActivitySmartVO vo, MessageVO messageVO,HttpServletRequest request){
         //参数校验
         ActivityParamCheckUtil.checkSmartActivityParam(vo);
