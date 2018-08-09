@@ -108,7 +108,7 @@ public interface TaskService {
      * @param mktTaskId
      * @return
      */
-    public ResponseData<Integer> checkTaskById(Long mktTaskId,Integer checkStatus, SysAccountPO sysAccountPO);
+    public ResponseData<Integer> checkTaskById(Long mktTaskId,Integer checkStatus, SysAccountPO sysAccountPO,Date startTime) throws ParseException;
 
     /**
      * 获取公司下的所有会员
@@ -126,4 +126,14 @@ public interface TaskService {
      * 效果分析的明细
      */
     public ResponseData<TaskRecordVO> doAnalysis(TaskAnalysisVo vo);
+    /**
+     * 将需要审核的任务添加到中台
+     * @param po
+     */
+    public  void addCheckData(MktTaskPOWithBLOBs po);
+    /**
+     *修改添加到中台任务的状态
+     * @param po
+     */
+    public  void updateCheckData(MktTaskPOWithBLOBs po);
 }

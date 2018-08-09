@@ -1,7 +1,9 @@
 package com.bizvane.mktcenterserviceimpl.service.impl;
 
 import com.bizvane.centerstageservice.models.po.SysCheckConfigPo;
+import com.bizvane.centerstageservice.models.po.SysCheckPo;
 import com.bizvane.centerstageservice.rpc.SysCheckConfigServiceRpc;
+import com.bizvane.centerstageservice.rpc.SysCheckServiceRpc;
 import com.bizvane.couponfacade.enums.SendTypeEnum;
 import com.bizvane.couponfacade.interfaces.CouponQueryServiceFeign;
 import com.bizvane.couponfacade.models.vo.CouponFindCouponCountResponseVO;
@@ -70,6 +72,8 @@ public class TaskServiceImpl implements TaskService {
     @Autowired
     private MktTaskRecordPOMapper mktTaskRecordPOMapper;
 
+    private   SysCheckServiceRpc sysCheckServiceRpc;
+
     /**
      * 根据公司id和品牌id查询执行中的消费类任务
      * @param sysCompanyId
@@ -107,30 +111,33 @@ public class TaskServiceImpl implements TaskService {
      */
     @Override
     public MktTaskPOWithBLOBs isOrNoCheckState(MktTaskPOWithBLOBs po) throws ParseException {
-        //1.判断是否需要审核  1:需要审核 0:不需要
+        //1.判断是否需要审核  1=需要审核   0=不需要
         SysCheckConfigPo sysCheckConfigPo = new SysCheckConfigPo();
         sysCheckConfigPo.setSysBrandId(po.getSysBrandId());
         Integer checkStatus = this.getCheckStatus(sysCheckConfigPo);
-        //判断时间是否滞后   2=滞后执行    3和1=立即执行
+        //判断时间是否滞后   2=滞后执行    1=立即执行
         Integer ImmediatelyRunStatus = TimeUtils.IsImmediatelyRun(po.getStartTime());
-        if (TaskConstants.ZERO.equals(checkStatus)) {
+        // checkStatus=1=需要审核
+        if (TaskConstants.FIRST.equals(checkStatus)) {
             //待审核=1
             po.setCheckStatus(CheckStatusEnum.CHECK_STATUS_PENDING.getCode());
             //待执行=1
-            po.setCheckStatus(TaskStatusEnum.TASK_STATUS_PENDING.getCode());
+            po.setTaskStatus(TaskStatusEnum.TASK_STATUS_PENDING.getCode());
         } else {
+            // checkStatus=0=不需要审核
             //已审核=3
-            po.setCheckStatus(TaskConstants.THREE);
-            if (TaskConstants.THREE.equals(ImmediatelyRunStatus)) {
-                //待执行
-                po.setCheckStatus(TaskStatusEnum.TASK_STATUS_PENDING.getCode());
+            po.setCheckStatus(CheckStatusEnum.CHECK_STATUS_APPROVED.getCode());
+            if (TaskConstants.SECOND.equals(ImmediatelyRunStatus)) {
+                //1=待执行
+                po.setTaskStatus(TaskStatusEnum.TASK_STATUS_PENDING.getCode());
             } else {
-                //执行中
-                po.setCheckStatus(TaskStatusEnum.TASK_STATUS_EXECUTING.getCode());
+                //2.执行中
+                po.setTaskStatus(TaskStatusEnum.TASK_STATUS_EXECUTING.getCode());
             }
         }
         return po;
     }
+
 
     /**
      * 判断时间是否滞后,已经是否立即执行,还是创建job执行
@@ -197,34 +204,7 @@ public class TaskServiceImpl implements TaskService {
         }
     }
 
-    /**
-     * 查询公司下的所有会员
-     */
-    @Override
-    public List<MemberInfoModel> getCompanyMemebers(Long sysCompanyId) {
-        MemberInfoModel members = new MemberInfoModel();
-        members.setCompanyId(sysCompanyId);
-        ResponseData<List<MemberInfoModel>> memberInfo = memberInfoApiService.getMemberInfo(members);
-        List<MemberInfoModel> list = memberInfo.getData();
-        return list;
 
-    }
-    /**
-     * 查询公司下的某一会员的详情
-     */
-    @Override
-    public MemberInfoModel getCompanyMemeberDetail(String  memberCode) {
-        MemberInfoModel members = new MemberInfoModel();
-        members.setMemberCode(memberCode);
-        ResponseData<List<MemberInfoModel>> memberInfo = memberInfoApiService.getMemberInfo(members);
-        List<MemberInfoModel> list = memberInfo.getData();
-        MemberInfoModel memberInfoModel=null;
-        if (CollectionUtils.isNotEmpty(list)){
-            memberInfoModel=list.get(0);
-        }
-        return memberInfoModel;
-
-    }
 
     /**
      * 发送券和积分
@@ -276,41 +256,7 @@ public class TaskServiceImpl implements TaskService {
 
     }
 
-    /**
-     * 根据任务类型查询任务
-     */
-    @Override
-    public ResponseData<PageInfo<MktTaskPOWithBLOBs>> getTaskByTaskType(TaskVO vo, PageForm pageForm) {
-        ResponseData<PageInfo<MktTaskPOWithBLOBs>> result = new ResponseData<PageInfo<MktTaskPOWithBLOBs>>(SysResponseEnum.FAILED.getCode(), SysResponseEnum.FAILED.getMessage(), null);
-        String showType = vo.getShowType();
-        //1完善资料，2分享任务，3邀请注册，4累计消费次数，5累计消费金额',
-        PageHelper.startPage(pageForm.getPageNumber(), pageForm.getPageSize());
 
-        MktTaskPOExample mktTaskPOExample = new MktTaskPOExample();
-        //查询所有
-        if (TaskConstants.FIRST.equals(showType)) {
-            mktTaskPOExample.createCriteria().andTaskTypeEqualTo(vo.getTaskType());
-        } else if (TaskConstants.SECOND.equals(showType)) {
-            //查询已启用
-            mktTaskPOExample.createCriteria().andTaskTypeEqualTo(vo.getTaskType()).andValidEqualTo(Boolean.TRUE);
-        } else if (TaskConstants.THREE.equals(showType)) {
-            //查询已启用
-            mktTaskPOExample.createCriteria().andTaskTypeEqualTo(vo.getTaskType()).andValidEqualTo(Boolean.FALSE);
-        }
-        mktTaskPOExample.setOrderByClause("create_date desc");
-
-        List<MktTaskPOWithBLOBs> lists = mktTaskPOMapper.selectByExampleWithBLOBs(mktTaskPOExample);
-
-        if (CollectionUtils.isNotEmpty(lists)) {
-            PageInfo<MktTaskPOWithBLOBs> pageInfo = new PageInfo<MktTaskPOWithBLOBs>();
-            result.setData(pageInfo);
-            result.setCode(SysResponseEnum.SUCCESS.getCode());
-            result.setMessage(SysResponseEnum.SUCCESS.getMessage());
-        }
-
-        return result;
-
-    }
 
     /**
      * 禁用/停用任务
@@ -334,46 +280,37 @@ public class TaskServiceImpl implements TaskService {
     }
 
     /**
-     * 新增任务主表任务数据
-     *
-     * @param task
-     * @param stageUser
-     * @return
-     */
-    @Override
-    public Long addTask(MktTaskPOWithBLOBs task, SysAccountPO stageUser) {
-        mktTaskPOMapper.insertSelective(task);
-        return task.getMktTaskId();
-    }
-
-    /**
-     * 修改任务
-     */
-    @Override
-    public Integer updateTask(MktTaskPOWithBLOBs task, SysAccountPO stageUser) {
-        return mktTaskPOMapper.updateByPrimaryKeySelective(task);
-    }
-
-
-    /**
      * 任务审核:通过/驳回
+     * 需要传递任务开始时间,修改执行状态
      *
      * @param mktTaskId
      * @param sysAccountPO
      * @return
      */
     @Override
-    public ResponseData<Integer> checkTaskById(Long mktTaskId, Integer checkStatus, SysAccountPO sysAccountPO) {
+    public ResponseData<Integer> checkTaskById(Long mktTaskId, Integer checkStatus, SysAccountPO sysAccountPO,Date startTime) throws ParseException {
         ResponseData<Integer> result = new ResponseData<Integer>(SysResponseEnum.FAILED.getCode(), SysResponseEnum.FAILED.getMessage(), null);
-
         ResponseData responseData = new ResponseData();
         MktTaskPOWithBLOBs mktTaskPOWithBLOBs = new MktTaskPOWithBLOBs();
+        //判断时间是否滞后   2=滞后执行    1=立即执行
+        Integer ImmediatelyRunStatus = TimeUtils.IsImmediatelyRun(startTime);
+        if (TaskConstants.THREE.equals(checkStatus)) {
+            //判断时间是否滞后   2=滞后执行    1=立即执行
+            if (TaskConstants.SECOND.equals(ImmediatelyRunStatus)) {
+                //1=待执行
+                mktTaskPOWithBLOBs.setTaskStatus(TaskStatusEnum.TASK_STATUS_PENDING.getCode());
+            } else {
+                //2.执行中
+                mktTaskPOWithBLOBs.setTaskStatus(TaskStatusEnum.TASK_STATUS_EXECUTING.getCode());
+            }
+        }
         mktTaskPOWithBLOBs.setMktTaskId(mktTaskId);
-        mktTaskPOWithBLOBs.setTaskStatus(checkStatus);
+        mktTaskPOWithBLOBs.setCheckStatus(checkStatus);
         mktTaskPOWithBLOBs.setModifiedDate(new Date());
         mktTaskPOWithBLOBs.setModifiedUserId(sysAccountPO.getSysAccountId());
         mktTaskPOWithBLOBs.setModifiedUserName(sysAccountPO.getName());
         int i = mktTaskPOMapper.updateByPrimaryKeySelective(mktTaskPOWithBLOBs);
+        this.updateCheckData(mktTaskPOWithBLOBs);
 
         if (i > 0) {
             result.setCode(SysResponseEnum.SUCCESS.getCode());
@@ -453,5 +390,123 @@ public class TaskServiceImpl implements TaskService {
 
         result.setData(taskRecordVO);
         return result;
+    }
+    /**
+     * 新增任务主表任务数据
+     *
+     * @param task
+     * @param stageUser
+     * @return
+     */
+    @Override
+    public Long addTask(MktTaskPOWithBLOBs task, SysAccountPO stageUser) {
+        mktTaskPOMapper.insertSelective(task);
+        return task.getMktTaskId();
+    }
+
+    /**
+     * 修改任务
+     */
+    @Override
+    public Integer updateTask(MktTaskPOWithBLOBs task, SysAccountPO stageUser) {
+        return mktTaskPOMapper.updateByPrimaryKeySelective(task);
+    }
+
+    /**
+     * 将需要审核的任务添加到中台
+     * @param po
+     */
+    @Override
+    public  void addCheckData(MktTaskPOWithBLOBs po) {
+        Integer taskType = po.getTaskType();
+        //待审核=1
+        if(TaskConstants.FIRST.equals(taskType)) {
+            SysCheckPo checkPo = new SysCheckPo();
+            checkPo.setSysBrandId(po.getSysBrandId());
+            checkPo.setBusinessType(taskType);
+            checkPo.setBusinessId(po.getMktTaskId());
+            checkPo.setBusinessCode(po.getTaskCode());
+            checkPo.setBusinessName(po.getTaskName());
+            checkPo.setCheckStatus(CheckStatusEnum.CHECK_STATUS_PENDING.getCode());
+            sysCheckServiceRpc.addCheck(checkPo);
+        }
+
+    }
+    /**
+     *修改添加到中台任务的状态
+     * @param po
+     */
+    @Override
+    public  void updateCheckData(MktTaskPOWithBLOBs po) {
+        //已审核=3
+        SysCheckPo checkPo = new SysCheckPo();
+        checkPo.setSysBrandId(po.getSysBrandId());
+        checkPo.setBusinessCode(po.getTaskCode());
+        checkPo.setCheckStatus(CheckStatusEnum.CHECK_STATUS_APPROVED.getCode());
+    }
+
+    /**
+     * 查询公司下的所有会员
+     */
+    @Override
+    public List<MemberInfoModel> getCompanyMemebers(Long sysCompanyId) {
+        MemberInfoModel members = new MemberInfoModel();
+        members.setCompanyId(sysCompanyId);
+        ResponseData<List<MemberInfoModel>> memberInfo = memberInfoApiService.getMemberInfo(members);
+        List<MemberInfoModel> list = memberInfo.getData();
+        return list;
+
+    }
+    /**
+     * 查询公司下的某一会员的详情
+     */
+    @Override
+    public MemberInfoModel getCompanyMemeberDetail(String  memberCode) {
+        MemberInfoModel members = new MemberInfoModel();
+        members.setMemberCode(memberCode);
+        ResponseData<List<MemberInfoModel>> memberInfo = memberInfoApiService.getMemberInfo(members);
+        List<MemberInfoModel> list = memberInfo.getData();
+        MemberInfoModel memberInfoModel=null;
+        if (CollectionUtils.isNotEmpty(list)){
+            memberInfoModel=list.get(0);
+        }
+        return memberInfoModel;
+
+    }
+
+    /**
+     * 根据任务类型查询任务
+     */
+    @Override
+    public ResponseData<PageInfo<MktTaskPOWithBLOBs>> getTaskByTaskType(TaskVO vo, PageForm pageForm) {
+        ResponseData<PageInfo<MktTaskPOWithBLOBs>> result = new ResponseData<PageInfo<MktTaskPOWithBLOBs>>(SysResponseEnum.FAILED.getCode(), SysResponseEnum.FAILED.getMessage(), null);
+        String showType = vo.getShowType();
+        //1完善资料，2分享任务，3邀请注册，4累计消费次数，5累计消费金额',
+        PageHelper.startPage(pageForm.getPageNumber(), pageForm.getPageSize());
+
+        MktTaskPOExample mktTaskPOExample = new MktTaskPOExample();
+        //查询所有
+        if (TaskConstants.FIRST.equals(showType)) {
+            mktTaskPOExample.createCriteria().andTaskTypeEqualTo(vo.getTaskType());
+        } else if (TaskConstants.SECOND.equals(showType)) {
+            //查询已启用
+            mktTaskPOExample.createCriteria().andTaskTypeEqualTo(vo.getTaskType()).andValidEqualTo(Boolean.TRUE);
+        } else if (TaskConstants.THREE.equals(showType)) {
+            //查询已启用
+            mktTaskPOExample.createCriteria().andTaskTypeEqualTo(vo.getTaskType()).andValidEqualTo(Boolean.FALSE);
+        }
+        mktTaskPOExample.setOrderByClause("create_date desc");
+
+        List<MktTaskPOWithBLOBs> lists = mktTaskPOMapper.selectByExampleWithBLOBs(mktTaskPOExample);
+
+        if (CollectionUtils.isNotEmpty(lists)) {
+            PageInfo<MktTaskPOWithBLOBs> pageInfo = new PageInfo<MktTaskPOWithBLOBs>();
+            result.setData(pageInfo);
+            result.setCode(SysResponseEnum.SUCCESS.getCode());
+            result.setMessage(SysResponseEnum.SUCCESS.getMessage());
+        }
+
+        return result;
+
     }
 }
