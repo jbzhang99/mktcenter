@@ -62,7 +62,6 @@ public class TaskOrderServiceImpl implements TaskOrderService {
 
     /**
      * 创建任务
-     *
      * @param vo
      * @param stageUser
      * @return
@@ -124,7 +123,6 @@ public class TaskOrderServiceImpl implements TaskOrderService {
 
     /**
      * 更新消费任务
-     *
      * @param stageUser
      * @return
      */
@@ -223,4 +221,5 @@ public class TaskOrderServiceImpl implements TaskOrderService {
 
         return mktTaskOrderPOMapper.updateByExample(po, example);
     }
+
 }
