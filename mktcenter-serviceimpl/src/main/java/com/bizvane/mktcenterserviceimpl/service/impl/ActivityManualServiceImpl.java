@@ -375,8 +375,8 @@ public class ActivityManualServiceImpl implements ActivityManualService {
         ResponseData responseData = new ResponseData<>();
         try {
             List<ActivityVO> activityVOList = mktActivityManualPOMapper.getActivityManualList(vo);
-            int sumCouponReceive =0;
-            int sumCouponUse=0;
+            Long sumCouponReceive =0L;
+            Long sumCouponUse=0L;
             BigDecimal sumCouponMoney=BigDecimal.ZERO;
             for(ActivityVO vo1:activityVOList){
                 Long sendBusinessId = vo1.getMktActivityId();

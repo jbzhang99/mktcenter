@@ -18,9 +18,9 @@ public class ActivityAnalysisCountBO {
 
     private Long participateNumber;//参与人数
 
-    private int couponSum;//发行优惠券数量
+    private Long couponSum;//发行优惠券数量
 
-    private int couponUsedSum;//已核销数量
+    private Long couponUsedSum;//已核销数量
 
     private BigDecimal money;//收益
 
@@ -130,19 +130,19 @@ public class ActivityAnalysisCountBO {
         this.participateNumber = participateNumber;
     }
 
-    public int getCouponSum() {
+    public Long getCouponSum() {
         return couponSum;
     }
 
-    public void setCouponSum(int couponSum) {
+    public void setCouponSum(Long couponSum) {
         this.couponSum = couponSum;
     }
 
-    public int getCouponUsedSum() {
+    public Long getCouponUsedSum() {
         return couponUsedSum;
     }
 
-    public void setCouponUsedSum(int couponUsedSum) {
+    public void setCouponUsedSum(Long couponUsedSum) {
         this.couponUsedSum = couponUsedSum;
     }
 

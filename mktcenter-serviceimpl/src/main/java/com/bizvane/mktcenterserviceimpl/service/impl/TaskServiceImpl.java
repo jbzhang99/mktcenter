@@ -435,7 +435,7 @@ public class TaskServiceImpl implements TaskService {
                 }
                 ResponseData<CouponFindCouponCountResponseVO> couponCount= couponQueryService.findCouponCountBySendBusinessId(task.getTaskId(), sendType, sysBrandId);
                 CouponFindCouponCountResponseVO data = couponCount.getData();
-                int couponSum = data.getCouponSum();
+                Long couponSum = data.getCouponSum();
                 task.setOneTaskInvalidCountCoupon(Long.valueOf(couponSum));
 
                 allPoints=allPoints+task.getOneTaskPoints();
