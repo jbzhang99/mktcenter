@@ -8,12 +8,11 @@ import java.util.Date;
  * 分析结果分析
  */
 public class TaskAnalysisVo {
- private  Long sysBrandId;
+    private  Long sysBrandId;
     private  Integer taskType;
     private String  taskName;
     private Date endTime;
     private Date  startTime;
-
     public Long getSysBrandId() {
         return sysBrandId;
     }
@@ -53,4 +52,5 @@ public class TaskAnalysisVo {
     public void setStartTime(Date startTime) {
         this.startTime = startTime;
     }
+
 }

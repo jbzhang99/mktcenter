@@ -2,18 +2,18 @@ package com.bizvane.mktcenterserviceimpl.service.impl;
 
 import com.bizvane.centerstageservice.models.po.SysCheckConfigPo;
 import com.bizvane.centerstageservice.rpc.SysCheckConfigServiceRpc;
+import com.bizvane.couponfacade.interfaces.CouponQueryServiceFeign;
 import com.bizvane.members.facade.models.MemberInfoModel;
 import com.bizvane.members.facade.models.OrderServeModel;
 import com.bizvane.members.facade.service.api.MemberInfoApiService;
 import com.bizvane.mktcenterservice.interfaces.TaskMessageService;
+import com.bizvane.mktcenterservice.interfaces.TaskRecordService;
 import com.bizvane.mktcenterservice.interfaces.TaskService;
 import com.bizvane.mktcenterservice.models.bo.AwardBO;
 import com.bizvane.mktcenterservice.models.bo.TaskInviteAwardBO;
 import com.bizvane.mktcenterservice.models.bo.TaskAwardBO;
 import com.bizvane.mktcenterservice.models.po.*;
-import com.bizvane.mktcenterservice.models.vo.PageForm;
-import com.bizvane.mktcenterservice.models.vo.TaskDetailVO;
-import com.bizvane.mktcenterservice.models.vo.TaskVO;
+import com.bizvane.mktcenterservice.models.vo.*;
 import com.bizvane.mktcenterserviceimpl.common.award.Award;
 import com.bizvane.mktcenterserviceimpl.common.constants.ResponseConstants;
 import com.bizvane.mktcenterserviceimpl.common.constants.TaskConstants;
@@ -58,6 +58,10 @@ public class TaskServiceImpl implements TaskService {
     private TaskMessageService taskMessageService;
     @Autowired
     private JobUtil jobUtil;
+    @Autowired
+    private TaskRecordService taskRecordService;
+    @Autowired
+    private  CouponQueryServiceFeign couponQueryService;
 
     /**
      * 根据公司id和品牌id查询执行中的消费类任务
@@ -67,7 +71,7 @@ public class TaskServiceImpl implements TaskService {
      */
     @Override
     public List<TaskAwardBO> getTaskOrderAwardList(Long sysCompanyId, Long sysBrandId, Date placeOrderTime){
-       return mktTaskPOMapper.getTaskOrderAwardList(sysCompanyId,sysBrandId,placeOrderTime);
+        return mktTaskPOMapper.getTaskOrderAwardList(sysCompanyId,sysBrandId,placeOrderTime);
     }
     /**
      * 根据公司id和品牌id查询执行中的邀请类任务
@@ -229,11 +233,11 @@ public class TaskServiceImpl implements TaskService {
         //任务务id
         bo.setSendBussienId(orderAwardBO.getMktTaskId());
         //暂定
-      //  bo.setMemberName();
+        //  bo.setMemberName();
         bo.setCardNo(carNo);
 
         if (points!=null && points>0){
-             //2=积分营销
+            //2=积分营销
             bo.setChangeIntegral(orderAwardBO.getPoints());
             bo.setMktSmartType(MktSmartTypeEnum.SMART_TYPE_INTEGRAL.getCode());
             award.execute(bo);
@@ -382,5 +386,18 @@ public class TaskServiceImpl implements TaskService {
         return responseData;
     }
 
+    /**
+     * 效果分析的明细
+     */
+    public   void doAnalysis(TaskAnalysisVo vo){
+        Long sysBrandId = vo.getSysBrandId();
+        //每个任务的券,积分,会员 总数
+        List<DayTaskRecordVo> analysislists = taskRecordService.getAnalysisResult(vo);
+        if (CollectionUtils.isNotEmpty(analysislists)){
+            analysislists.stream().forEach(task->{
+                //couponQueryService.findCouponCountBySendBusinessId(task.getTaskId(),sysBrandId);
+            });
+        }
 
+    }
 }
