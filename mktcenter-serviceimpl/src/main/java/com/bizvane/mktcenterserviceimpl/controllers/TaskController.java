@@ -68,6 +68,12 @@ public class TaskController {
         ResponseData<Integer> integerResponseData = taskService.checkTaskById(mktTaskId,checkStatus,stageUser);
         return integerResponseData;
     }
+
+    /**
+     * 任务效果分析
+     * @param vo
+     * @return
+     */
     @RequestMapping("doAnalysis")
     public ResponseData<TaskRecordVO> doAnalysis(TaskAnalysisVo vo){
        return taskService.doAnalysis(vo);
