@@ -17,10 +17,12 @@ import com.bizvane.mktcenterserviceimpl.common.utils.TaskParamCheckUtil;
 import com.bizvane.utils.responseinfo.ResponseData;
 import com.bizvane.utils.tokens.SysAccountPO;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -52,16 +54,18 @@ public class TaskProfileController {
      * @return
      */
     @RequestMapping("addTask")
-    public ResponseData<Integer> addTask(TaskVO vo, List<MktCouponPO> couponCodeList, List<MktMessagePO> messagePOList, HttpServletRequest request){
-        TaskBO bo = new TaskBO();
-        bo.setTaskVO(vo);
-        bo.setMktCouponPOList(couponCodeList);
-        bo.setMessagePOList(messagePOList);
+    public ResponseData<Integer> addTask(TaskBO bo, HttpServletRequest request){
 
         //获取操作人信息
         //SysAccountPO stageUser = TokenUtils.getStageUser(request);
         SysAccountPO stageUser = new SysAccountPO();
 
+        //参数校验
+        ResponseData responseData =  TaskParamCheckUtil.checkParam(bo);
+        //参数校验不通过
+        if (responseData.getCode()==SystemConstants.ERROR_CODE){
+            return responseData;
+        }
 
         //新增任务
         ResponseData<Integer> integerResponseData = taskProfileService.addTask(bo, stageUser);
@@ -72,18 +76,12 @@ public class TaskProfileController {
 
     /**
      * 修改任务
-     * @param vo
-     * @param couponCodeList
-     * @param messagePOList
+     * @param bo
      * @param request
      * @return
      */
     @RequestMapping("updateTask")
-    public ResponseData<Integer> updateTask(TaskVO vo, List<MktCouponPO> couponCodeList, List<MktMessagePO> messagePOList, HttpServletRequest request){
-        TaskBO bo = new TaskBO();
-        bo.setTaskVO(vo);
-        bo.setMktCouponPOList(couponCodeList);
-        bo.setMessagePOList(messagePOList);
+    public ResponseData<Integer> updateTask(TaskBO bo, HttpServletRequest request){
         //参数校验
         ResponseData responseData = TaskParamCheckUtil.checkParam(bo);
         //参数校验不通过
@@ -137,11 +135,45 @@ public class TaskProfileController {
 
     }
 
+    /**
+     * 任务审核
+     * @param taskId
+     * @param stageUser
+     * @return
+     */
     @RequestMapping("checkTaskprofile")
-    public ResponseData checkTaskprofile(Long taskId,SysAccountPO stageUser){
+    public ResponseData checkTaskprofile(Long taskId,SysAccountPO stageUser,Integer checkStatus){
+
+        ResponseData responseData = new ResponseData();
+        responseData = taskProfileService.checkTaskProfile(taskId,stageUser,checkStatus);
+        return responseData;
+    }
 
 
-        return null;
+    /**
+     * 禁用任务
+     * @param taskId
+     * @param stageUser
+     * @return
+     */
+    @RequestMapping("stopTask")
+    public ResponseData stopTask(Long taskId,SysAccountPO stageUser){
+        return taskProfileService.stopTask(taskId, stageUser);
+    }
+
+
+    /**
+     * 效果分析
+     * @param date1
+     * @param date2
+     * @param stageUser
+     * @param pageForm
+     * @return
+     */
+    @RequestMapping("getTaskProfileRecordByTime")
+    public ResponseData getTaskProfileRecordByTime(Date date1, Date date2, SysAccountPO stageUser, PageForm pageForm){
+
+        return taskProfileService.getTaskProfileRecordByTime(date1,date2,stageUser,pageForm);
     }
 
 }

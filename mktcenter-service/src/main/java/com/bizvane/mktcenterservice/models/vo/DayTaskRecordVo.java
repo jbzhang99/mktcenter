@@ -6,6 +6,11 @@ import java.util.Date;
  * Created by Geng on 2018/8/2.
  */
 public class DayTaskRecordVo {
+   private Long taskId;
+    private String taskCode;
+    //参与日期
+
+    private Date partDate;
 
     //某天的赠送总积分数
     private Long dayPoints;
@@ -148,5 +153,29 @@ public class DayTaskRecordVo {
 
     public void setOneTaskCountMbr(Long oneTaskCountMbr) {
         this.oneTaskCountMbr = oneTaskCountMbr;
+    }
+
+    public Long getTaskId() {
+        return taskId;
+    }
+
+    public void setTaskId(Long taskId) {
+        this.taskId = taskId;
+    }
+
+    public String getTaskCode() {
+        return taskCode;
+    }
+
+    public void setTaskCode(String taskCode) {
+        this.taskCode = taskCode;
+    }
+
+    public Date getPartDate() {
+        return partDate;
+    }
+
+    public void setPartDate(Date partDate) {
+        this.partDate = partDate;
     }
 }

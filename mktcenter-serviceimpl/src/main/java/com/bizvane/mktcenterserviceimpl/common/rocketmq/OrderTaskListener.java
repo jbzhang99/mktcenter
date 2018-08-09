@@ -1,6 +1,5 @@
 package com.bizvane.mktcenterserviceimpl.common.rocketmq;
 
-import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.aliyun.openservices.ons.api.Action;
 import com.aliyun.openservices.ons.api.ConsumeContext;
@@ -9,17 +8,12 @@ import com.aliyun.openservices.ons.api.MessageListener;
 import com.bizvane.members.facade.models.OrderServeModel;
 import com.bizvane.mktcenterservice.interfaces.TaskRecordService;
 import com.bizvane.mktcenterservice.interfaces.TaskService;
-import com.bizvane.mktcenterservice.models.bo.AwardBO;
-import com.bizvane.mktcenterservice.models.bo.TaskOrderAwardBO;
+import com.bizvane.mktcenterservice.models.bo.TaskAwardBO;
 import com.bizvane.mktcenterservice.models.bo.TotalStatisticsBO;
 import com.bizvane.mktcenterservice.models.po.MktCouponPO;
 import com.bizvane.mktcenterservice.models.po.MktTaskRecordPO;
 import com.bizvane.mktcenterservice.models.vo.MktTaskRecordVO;
-import com.bizvane.mktcenterservice.models.vo.TaskDetailVO;
-import com.bizvane.mktcenterserviceimpl.common.constants.TaskConstants;
-import com.bizvane.mktcenterserviceimpl.common.enums.MktSmartTypeEnum;
 import com.bizvane.mktcenterserviceimpl.common.enums.TaskTypeEnum;
-import groovy.ui.SystemOutputInterceptor;
 import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,20 +44,22 @@ public class OrderTaskListener implements MessageListener {
         Long companyId = model.getCompanyId();
         Long brandId = model.getBrandId();
         Date placeOrderTime = model.getPlaceOrderTime();
-        List<TaskOrderAwardBO> taskOrderAwardList = taskService.getTaskOrderAwardList(companyId, brandId, placeOrderTime);
+        List<TaskAwardBO> taskOrderAwardList = taskService.getTaskOrderAwardList(companyId, brandId, placeOrderTime);
         if (CollectionUtils.isNotEmpty(taskOrderAwardList)){
             taskOrderAwardList.stream().forEach(obj->{
-                this.doExecuteTask(model, obj);
+                this.doExecuteTask(model, obj,placeOrderTime);
             });
         }
         //如果想测试消息重投的功能,可以将Action.CommitMessage 替换成Action.ReconsumeLater
         return Action.CommitMessage;
     }
-//      //任务类型：1完善资料，2分享任务，3邀请注册，4累计消费次数，5累计消费金额',
-    private void doExecuteTask(OrderServeModel model, TaskOrderAwardBO obj) {
+
+    //任务类型：1完善资料，2分享任务，3邀请注册，4累计消费次数，5累计消费金额',
+    private void doExecuteTask(OrderServeModel model, TaskAwardBO obj,Date placeOrderTime) {
         BigDecimal tradeAmount = model.getTradeAmount();//订单金额
         Long brandId = model.getBrandId();
         String memberCode = model.getMemberCode();
+        String carNo = model.getCarNo();
         Integer taskType = obj.getTaskType();
         Long mktTaskId = obj.getMktTaskId();
         BigDecimal consumeAmount = obj.getConsumeAmount();//累计金额
@@ -84,6 +80,7 @@ public class OrderTaskListener implements MessageListener {
             MktTaskRecordPO recordPO = new MktTaskRecordPO();
             BeanUtils.copyProperties(recordVO,recordPO);
             recordPO.setConsumeAmount(tradeAmount);
+            recordPO.setParticipateDate(placeOrderTime);
             taskRecordService.addTaskRecord(recordPO);
 
             //获取会员参与某一活动放总金额和总次数
@@ -91,28 +88,21 @@ public class OrderTaskListener implements MessageListener {
 
                //累计消费次数任务=4
                 if (TaskTypeEnum.TASK_TYPE_CONSUME_TIMES.getCode()==taskType){
-                    if(totalBO!=null && totalBO.getTotalTimes()!=null){
-                        Long totalTimes = totalBO.getTotalTimes();
-                        totalTimes=totalTimes+1;
-                        if (consumeTimes.equals(totalTimes)){
+                    if(totalBO!=null && totalBO.getTotalTimes()!=null && totalBO.getTotalTimes().equals(consumeTimes)){
                             recordPO.setPoints(points);
                             recordPO.setRewarded(Integer.valueOf(1));
                             taskRecordService.updateTaskRecord(recordPO);
-                            taskService.sendCouponAndPoint(model,obj);
-                        }
+                            taskService.sendCouponAndPoint(memberCode,carNo,obj);
                     }
                 }
 
                 //累计金额任务=5
                 if (TaskTypeEnum.TASK_TYPE_CONSUME_AMOUNT.getCode()==taskType){
-                    if(totalBO!=null && totalBO.getTotalConsume()!=null){
-                        BigDecimal totalConsume = totalBO.getTotalConsume();
-                        totalConsume=totalConsume.add(tradeAmount);
-                        if(totalConsume.compareTo(consumeAmount) == 1){
+                    if(totalBO!=null && totalBO.getTotalConsume()!=null && totalBO.getTotalConsume().compareTo(consumeAmount) == 1){
                             recordPO.setRewarded(Integer.valueOf(1));
                             taskRecordService.updateTaskRecord(recordPO);
-                            taskService.sendCouponAndPoint(model,obj);
-                        }
+                            taskService.sendCouponAndPoint(memberCode,carNo,obj);
+
                     }
                 }
 

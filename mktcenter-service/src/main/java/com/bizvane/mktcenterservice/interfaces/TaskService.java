@@ -1,12 +1,10 @@
 package com.bizvane.mktcenterservice.interfaces;
 
 import com.bizvane.centerstageservice.models.po.SysCheckConfigPo;
-import com.bizvane.centerstageservice.models.vo.SysCheckConfigVo;
 import com.bizvane.members.facade.models.MemberInfoModel;
 import com.bizvane.members.facade.models.OrderServeModel;
 import com.bizvane.mktcenterservice.models.bo.TaskInviteAwardBO;
-import com.bizvane.mktcenterservice.models.bo.TaskOrderAwardBO;
-import com.bizvane.mktcenterservice.models.po.MktMessagePO;
+import com.bizvane.mktcenterservice.models.bo.TaskAwardBO;
 import com.bizvane.mktcenterservice.models.po.MktTaskPOWithBLOBs;
 import com.bizvane.mktcenterservice.models.vo.PageForm;
 import com.bizvane.mktcenterservice.models.vo.TaskDetailVO;
@@ -33,14 +31,15 @@ public interface TaskService {
      * @param sysBrandId
      * @return
      */
-    public List<TaskOrderAwardBO> getTaskOrderAwardList(Long sysCompanyId, Long sysBrandId,Date placeOrderTime);
+    public List<TaskAwardBO> getTaskOrderAwardList(Long sysCompanyId, Long sysBrandId, Date placeOrderTime);
     /**
      * 根据公司id和品牌id查询执行中的邀请类任务
      * @param sysCompanyId
      * @param sysBrandId
      * @return
+     *
      */
-    public List<TaskInviteAwardBO> getTaskInviteAwardList(Long sysCompanyId, Long sysBrandId,Date placeOrderTime);
+    public List<TaskAwardBO> getTaskInviteAwardList(Long sysCompanyId, Long sysBrandId,Date placeOrderTime);
     /**
      * 查询订单详情
      * @param mktTaskId
@@ -71,10 +70,9 @@ public interface TaskService {
 
     /**
      * 发送券和积分
-     * @param model
      * @param orderAwardBO
      */
-    public void sendCouponAndPoint(OrderServeModel model, TaskOrderAwardBO orderAwardBO);
+    public void sendCouponAndPoint(String memberCode,String carNo,TaskAwardBO orderAwardBO);
     /**
      * 根据品牌id查询任务是否需要审核
      */
@@ -120,4 +118,9 @@ public interface TaskService {
      * @return
      */
     public  List<MemberInfoModel>  getCompanyMemebers(Long sysCompanyId);
+
+    /**
+     * 查询公司下的某一会员的详情
+     */
+    public MemberInfoModel getCompanyMemeberDetail(String  memberCode);
 }

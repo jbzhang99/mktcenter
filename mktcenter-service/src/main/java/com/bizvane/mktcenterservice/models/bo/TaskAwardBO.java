@@ -11,7 +11,7 @@ import java.util.List;
  * @Time: 2018/8/7 16:49
  * 消费奖励相关的判断Bo
  */
-public class TaskOrderAwardBO extends MktTaskPOWithBLOBs {
+public class TaskAwardBO extends MktTaskPOWithBLOBs {
     //消费任务
     private Long mktTaskOrderId;
     //任务条件/订单来源限制：0全部类型，1线下订单，2微商城订单
@@ -20,6 +20,11 @@ public class TaskOrderAwardBO extends MktTaskPOWithBLOBs {
     private BigDecimal consumeAmount;
     //次数
     private Integer consumeTimes;
+
+    //邀请开卡任务Id
+    private Long mktTaskInviteId;
+    //邀请开卡人数
+    private Integer inviteNum;
 
     //券奖励
     private List<MktCouponPO> mktCouponPOList;
@@ -62,5 +67,21 @@ public class TaskOrderAwardBO extends MktTaskPOWithBLOBs {
 
     public void setMktCouponPOList(List<MktCouponPO> mktCouponPOList) {
         this.mktCouponPOList = mktCouponPOList;
+    }
+
+    public Long getMktTaskInviteId() {
+        return mktTaskInviteId;
+    }
+
+    public void setMktTaskInviteId(Long mktTaskInviteId) {
+        this.mktTaskInviteId = mktTaskInviteId;
+    }
+
+    public Integer getInviteNum() {
+        return inviteNum;
+    }
+
+    public void setInviteNum(Integer inviteNum) {
+        this.inviteNum = inviteNum;
     }
 }

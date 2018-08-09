@@ -505,16 +505,20 @@
     INNER JOIN t_mkt_task_share tmts ON tmt.mkt_task_id = tmts.mkt_task_id
     AND tmt.valid = 1
     AND tmts.valid = 1
-    <!--任务主表ID -->
+<!--    &lt;!&ndash;任务主表ID &ndash;&gt;
     <if test="mktTaskId != null and mktTaskId!= '' ">
       AND tmt.mkt_task_id = #{mktTaskId}
-    </if>
+    </if>-->
     <if test="taskStatus != null and taskStatus!=0">
       AND tmt.task_status = #{taskStatus}
     </if>
     <!--所属品牌id -->
     <if test="sysBrandId != null and sysBrandId!= ''">
       AND tmt.sys_brand_id = #{sysBrandId}
+    </if>
+    <!--任务类型 -->
+    <if test="taskType != null and taskType!= ''">
+      AND tmt.task_type = #{taskType}
     </if>
   </select>
 </mapper>

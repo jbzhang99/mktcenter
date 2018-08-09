@@ -1,6 +1,7 @@
 package com.bizvane.mktcenterservice.models.po;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -47,6 +48,7 @@ public class MktTaskPO implements Serializable {
 	 * 只读. 任务开始时间. start_time
 	 * @mbg.generated  2018-07-14 13:26:02
 	 */
+	@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
 	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", locale = "zh", timezone = "GMT+8")
 	@io.swagger.annotations.ApiModelProperty(value = "任务开始时间", name = "startTime", required = false, example = "")
 	private Date startTime;
@@ -54,6 +56,7 @@ public class MktTaskPO implements Serializable {
 	 * 只读. 任务结束时间. end_time
 	 * @mbg.generated  2018-07-14 13:26:02
 	 */
+	@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
 	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", locale = "zh", timezone = "GMT+8")
 	@io.swagger.annotations.ApiModelProperty(value = "任务结束时间", name = "endTime", required = false, example = "")
 	private Date endTime;
@@ -97,6 +100,7 @@ public class MktTaskPO implements Serializable {
 	 * 只读. 创建日期. create_date
 	 * @mbg.generated  2018-07-14 13:26:02
 	 */
+	@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
 	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", locale = "zh", timezone = "GMT+8")
 	@io.swagger.annotations.ApiModelProperty(value = "创建日期", name = "createDate", required = false, example = "")
 	private Date createDate;
@@ -116,6 +120,7 @@ public class MktTaskPO implements Serializable {
 	 * 只读. 修改时间. modified_date
 	 * @mbg.generated  2018-07-14 13:26:02
 	 */
+	@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
 	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", locale = "zh", timezone = "GMT+8")
 	@io.swagger.annotations.ApiModelProperty(value = "修改时间", name = "modifiedDate", required = false, example = "")
 	private Date modifiedDate;

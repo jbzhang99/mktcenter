@@ -1,7 +1,6 @@
 package com.bizvane.mktcenterserviceimpl.service.impl;
 
 import com.bizvane.centerstageservice.models.po.SysCheckConfigPo;
-import com.bizvane.centerstageservice.models.vo.SysCheckConfigVo;
 import com.bizvane.centerstageservice.rpc.SysCheckConfigServiceRpc;
 import com.bizvane.members.facade.models.MemberInfoModel;
 import com.bizvane.members.facade.models.OrderServeModel;
@@ -10,7 +9,7 @@ import com.bizvane.mktcenterservice.interfaces.TaskMessageService;
 import com.bizvane.mktcenterservice.interfaces.TaskService;
 import com.bizvane.mktcenterservice.models.bo.AwardBO;
 import com.bizvane.mktcenterservice.models.bo.TaskInviteAwardBO;
-import com.bizvane.mktcenterservice.models.bo.TaskOrderAwardBO;
+import com.bizvane.mktcenterservice.models.bo.TaskAwardBO;
 import com.bizvane.mktcenterservice.models.po.*;
 import com.bizvane.mktcenterservice.models.vo.PageForm;
 import com.bizvane.mktcenterservice.models.vo.TaskDetailVO;
@@ -30,8 +29,6 @@ import com.bizvane.utils.tokens.SysAccountPO;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.lang3.StringUtils;
-import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -69,7 +66,7 @@ public class TaskServiceImpl implements TaskService {
      * @return
      */
     @Override
-    public List<TaskOrderAwardBO> getTaskOrderAwardList(Long sysCompanyId, Long sysBrandId,Date placeOrderTime){
+    public List<TaskAwardBO> getTaskOrderAwardList(Long sysCompanyId, Long sysBrandId, Date placeOrderTime){
        return mktTaskPOMapper.getTaskOrderAwardList(sysCompanyId,sysBrandId,placeOrderTime);
     }
     /**
@@ -79,7 +76,7 @@ public class TaskServiceImpl implements TaskService {
      * @return
      */
     @Override
-    public List<TaskInviteAwardBO> getTaskInviteAwardList(Long sysCompanyId, Long sysBrandId,Date placeOrderTime){
+    public List<TaskAwardBO> getTaskInviteAwardList(Long sysCompanyId, Long sysBrandId,Date placeOrderTime){
         return mktTaskPOMapper.getTaskInviteAwardList(sysCompanyId, sysBrandId,placeOrderTime);
     }
 
@@ -201,23 +198,39 @@ public class TaskServiceImpl implements TaskService {
         return list;
 
     }
+    /**
+     * 查询公司下的某一会员的详情
+     */
+    @Override
+    public MemberInfoModel getCompanyMemeberDetail(String  memberCode) {
+        MemberInfoModel members = new MemberInfoModel();
+        members.setMemberCode(memberCode);
+        ResponseData<List<MemberInfoModel>> memberInfo = memberInfoApiService.getMemberInfo(members);
+        List<MemberInfoModel> list = memberInfo.getData();
+        MemberInfoModel memberInfoModel=null;
+        if (CollectionUtils.isNotEmpty(list)){
+            memberInfoModel=list.get(0);
+        }
+        return memberInfoModel;
+
+    }
 
     /**
      * 发送券和积分
      */
     @Override
-    public void sendCouponAndPoint(OrderServeModel model,TaskOrderAwardBO orderAwardBO){
+    public void sendCouponAndPoint(String memberCode,String carNo,TaskAwardBO orderAwardBO){
         List<MktCouponPO> mktCouponPOList = orderAwardBO.getMktCouponPOList();
         Integer points = orderAwardBO.getPoints();
 
         AwardBO bo = new AwardBO();
         //会员code
-        bo.setMemberCode(model.getMemberCode());
+        bo.setMemberCode(memberCode);
         //任务务id
         bo.setSendBussienId(orderAwardBO.getMktTaskId());
         //暂定
       //  bo.setMemberName();
-        bo.setCardNo(model.getCarNo());
+        bo.setCardNo(carNo);
 
         if (points!=null && points>0){
              //2=积分营销
