@@ -130,6 +130,13 @@ public class ActivitySmartServiceImpl implements ActivitySmartService {
     public ResponseData<MktActivitySmartGroupPO> getSmartActivityGroupById(Long mktActivitySmartGroupId) {
         log.info("com.bizvane.mktcenterserviceimpl.service.impl.ActivitySmartServiceImpl.getSmartActivityGroupById param"+"mktActivitySmartGroupId:"+ mktActivitySmartGroupId);
         ResponseData responseData = new ResponseData();
+        //活动分组id不能为空
+        if(mktActivitySmartGroupId==null){
+            log.warn("mktActivitySmartGroupId is null");
+            responseData.setCode(ResponseConstants.ERROR);
+            responseData.setMessage(ActivityConstants.SMART_ACTIVITY_GROUP_ID_EMPTY);
+            return responseData;
+        }
         MktActivitySmartGroupPO mktActivitySmartGroupPO = mktActivitySmartGroupPOMapper.selectByPrimaryKey(mktActivitySmartGroupId);
         responseData.setData(mktActivitySmartGroupPO);
         log.info("com.bizvane.mktcenterserviceimpl.service.impl.ActivitySmartServiceImpl.getSmartActivityGroupById result"+ JSON.toJSONString(responseData));
