@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
+import java.text.ParseException;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -60,12 +62,12 @@ public class TaskController {
      * @return
      */
     @RequestMapping("checkTaskById")
-    public ResponseData<Integer> checkTaskById(Long mktTaskId ,Integer checkStatus, HttpServletRequest request){
+    public ResponseData<Integer> checkTaskById(Long mktTaskId , Integer checkStatus, Date startTime,HttpServletRequest request) throws ParseException {
         //获取操作人信息
         SysAccountPO stageUser =new SysAccountPO();
 //        SysAccountPO stageUser = TokenUtils.getStageUser(request);
         //审核任务
-        ResponseData<Integer> integerResponseData = taskService.checkTaskById(mktTaskId,checkStatus,stageUser);
+        ResponseData<Integer> integerResponseData = taskService.checkTaskById(mktTaskId,checkStatus,stageUser,startTime);
         return integerResponseData;
     }
 
