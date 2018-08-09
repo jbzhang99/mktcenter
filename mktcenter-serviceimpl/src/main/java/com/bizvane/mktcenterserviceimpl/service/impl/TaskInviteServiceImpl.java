@@ -240,17 +240,26 @@ public class TaskInviteServiceImpl implements TaskInviteService {
      * 执行邀请任务的奖励
      */
     public  void   doAwardInvite(InviteSuccessVO vo){
+        //被邀请人信息
+        Date openCardTime = vo.getOpenCardTime();
+
+        //邀请人的信息
         String inviteMemberCode = vo.getInviteMemberCode();
         MemberInfoModel memeberDetail = taskService.getCompanyMemeberDetail(inviteMemberCode);
         Long companyId = memeberDetail.getCompanyId();
         Long brandId = memeberDetail.getBrandId();
-        Date openCardTime = memeberDetail.getOpenCardTime();
+        String memberCode = memeberDetail.getMemberCode();
+        String cardNo = memeberDetail.getCardNo();
+
         //符合条件的任务列表
-        List<TaskAwardBO> taskInviteAwardList = taskService.getTaskOrderAwardList(companyId, brandId, openCardTime);
+        List<TaskAwardBO> taskInviteAwardList = taskService.getTaskInviteAwardList(companyId, brandId, openCardTime);
+
         if (CollectionUtils.isNotEmpty(taskInviteAwardList)){
             taskInviteAwardList.stream().forEach(obj->{
                 Integer taskType = obj.getTaskType();
                 Long mktTaskId = obj.getMktTaskId();
+                //邀请开卡人数
+                Integer inviteNum = obj.getInviteNum();
 
                 MktTaskRecordVO recordVO = new MktTaskRecordVO();
                 recordVO.setSysBrandId(brandId);
@@ -268,9 +277,11 @@ public class TaskInviteServiceImpl implements TaskInviteService {
 
                     //获取会员参与某一活动放总金额和总次数
                     TotalStatisticsBO totalBO = taskRecordService.getTotalStatistics(recordVO);
-//                    if (){
-//
-//                    }
+                    if (totalBO!=null && totalBO.getTotalTimes()!=null &&  totalBO.getTotalTimes().equals(inviteNum)){
+                        recordPO.setRewarded(Integer.valueOf(1));
+                        taskRecordService.updateTaskRecord(recordPO);
+                        taskService.sendCouponAndPoint(memberCode,cardNo,obj);
+                    }
 
                 }
 

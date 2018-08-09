@@ -53,11 +53,13 @@ public class OrderTaskListener implements MessageListener {
         //如果想测试消息重投的功能,可以将Action.CommitMessage 替换成Action.ReconsumeLater
         return Action.CommitMessage;
     }
-//      //任务类型：1完善资料，2分享任务，3邀请注册，4累计消费次数，5累计消费金额',
+
+    //任务类型：1完善资料，2分享任务，3邀请注册，4累计消费次数，5累计消费金额',
     private void doExecuteTask(OrderServeModel model, TaskAwardBO obj,Date placeOrderTime) {
         BigDecimal tradeAmount = model.getTradeAmount();//订单金额
         Long brandId = model.getBrandId();
         String memberCode = model.getMemberCode();
+        String carNo = model.getCarNo();
         Integer taskType = obj.getTaskType();
         Long mktTaskId = obj.getMktTaskId();
         BigDecimal consumeAmount = obj.getConsumeAmount();//累计金额
@@ -86,28 +88,21 @@ public class OrderTaskListener implements MessageListener {
 
                //累计消费次数任务=4
                 if (TaskTypeEnum.TASK_TYPE_CONSUME_TIMES.getCode()==taskType){
-                    if(totalBO!=null && totalBO.getTotalTimes()!=null){
-                        Long totalTimes = totalBO.getTotalTimes();
-                        totalTimes=totalTimes+1;
-                        if (consumeTimes.equals(totalTimes)){
+                    if(totalBO!=null && totalBO.getTotalTimes()!=null && totalBO.getTotalTimes().equals(consumeTimes)){
                             recordPO.setPoints(points);
                             recordPO.setRewarded(Integer.valueOf(1));
                             taskRecordService.updateTaskRecord(recordPO);
-                            taskService.sendCouponAndPoint(model,obj);
-                        }
+                            taskService.sendCouponAndPoint(memberCode,carNo,obj);
                     }
                 }
 
                 //累计金额任务=5
                 if (TaskTypeEnum.TASK_TYPE_CONSUME_AMOUNT.getCode()==taskType){
-                    if(totalBO!=null && totalBO.getTotalConsume()!=null){
-                        BigDecimal totalConsume = totalBO.getTotalConsume();
-                        totalConsume=totalConsume.add(tradeAmount);
-                        if(totalConsume.compareTo(consumeAmount) == 1){
+                    if(totalBO!=null && totalBO.getTotalConsume()!=null && totalBO.getTotalConsume().compareTo(consumeAmount) == 1){
                             recordPO.setRewarded(Integer.valueOf(1));
                             taskRecordService.updateTaskRecord(recordPO);
-                            taskService.sendCouponAndPoint(model,obj);
-                        }
+                            taskService.sendCouponAndPoint(memberCode,carNo,obj);
+
                     }
                 }
 

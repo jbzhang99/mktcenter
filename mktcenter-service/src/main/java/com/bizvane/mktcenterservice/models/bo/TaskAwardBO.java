@@ -21,6 +21,11 @@ public class TaskAwardBO extends MktTaskPOWithBLOBs {
     //次数
     private Integer consumeTimes;
 
+    //邀请开卡任务Id
+    private Long mktTaskInviteId;
+    //邀请开卡人数
+    private Integer inviteNum;
+
     //券奖励
     private List<MktCouponPO> mktCouponPOList;
 
@@ -62,5 +67,21 @@ public class TaskAwardBO extends MktTaskPOWithBLOBs {
 
     public void setMktCouponPOList(List<MktCouponPO> mktCouponPOList) {
         this.mktCouponPOList = mktCouponPOList;
+    }
+
+    public Long getMktTaskInviteId() {
+        return mktTaskInviteId;
+    }
+
+    public void setMktTaskInviteId(Long mktTaskInviteId) {
+        this.mktTaskInviteId = mktTaskInviteId;
+    }
+
+    public Integer getInviteNum() {
+        return inviteNum;
+    }
+
+    public void setInviteNum(Integer inviteNum) {
+        this.inviteNum = inviteNum;
     }
 }

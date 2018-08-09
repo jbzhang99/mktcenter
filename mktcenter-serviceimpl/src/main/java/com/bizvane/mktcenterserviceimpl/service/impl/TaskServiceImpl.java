@@ -219,18 +219,18 @@ public class TaskServiceImpl implements TaskService {
      * 发送券和积分
      */
     @Override
-    public void sendCouponAndPoint(OrderServeModel model,TaskAwardBO orderAwardBO){
+    public void sendCouponAndPoint(String memberCode,String carNo,TaskAwardBO orderAwardBO){
         List<MktCouponPO> mktCouponPOList = orderAwardBO.getMktCouponPOList();
         Integer points = orderAwardBO.getPoints();
 
         AwardBO bo = new AwardBO();
         //会员code
-        bo.setMemberCode(model.getMemberCode());
+        bo.setMemberCode(memberCode);
         //任务务id
         bo.setSendBussienId(orderAwardBO.getMktTaskId());
         //暂定
       //  bo.setMemberName();
-        bo.setCardNo(model.getCarNo());
+        bo.setCardNo(carNo);
 
         if (points!=null && points>0){
              //2=积分营销
