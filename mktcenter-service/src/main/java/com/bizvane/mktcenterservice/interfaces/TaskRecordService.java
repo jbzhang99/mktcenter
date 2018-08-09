@@ -2,7 +2,9 @@ package com.bizvane.mktcenterservice.interfaces;
 
 import com.bizvane.mktcenterservice.models.bo.TotalStatisticsBO;
 import com.bizvane.mktcenterservice.models.po.MktTaskRecordPO;
+import com.bizvane.mktcenterservice.models.vo.DayTaskRecordVo;
 import com.bizvane.mktcenterservice.models.vo.MktTaskRecordVO;
+import com.bizvane.mktcenterservice.models.vo.TaskAnalysisVo;
 import com.bizvane.utils.tokens.SysAccountPO;
 
 import java.util.List;
@@ -38,4 +40,11 @@ public interface TaskRecordService {
      * @return
      */
     public Boolean getIsOrNoAward(MktTaskRecordVO vo);
+
+    /**
+     * 效果分析
+     * @param vo
+     * @return
+     */
+    List<DayTaskRecordVo> getAnalysisResult(TaskAnalysisVo vo);
 }
