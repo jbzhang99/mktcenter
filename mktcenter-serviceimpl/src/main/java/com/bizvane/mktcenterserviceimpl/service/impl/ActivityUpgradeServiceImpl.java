@@ -16,6 +16,7 @@ import com.bizvane.members.facade.models.IntegralRecordModel;
 import com.bizvane.members.facade.models.MemberInfoModel;
 import com.bizvane.members.facade.service.api.IntegralRecordApiService;
 import com.bizvane.members.facade.service.api.MemberInfoApiService;
+import com.bizvane.members.facade.service.api.MemberLevelApiService;
 import com.bizvane.mktcenterservice.interfaces.ActivityUpgradeService;
 import com.bizvane.mktcenterservice.models.bo.ActivityBO;
 import com.bizvane.mktcenterservice.models.bo.AwardBO;
@@ -85,6 +86,8 @@ public class ActivityUpgradeServiceImpl implements ActivityUpgradeService {
     private MktActivityRecordPOMapper mktActivityRecordPOMapper;
     @Autowired
     private MemberInfoApiService memberInfoApiService;
+    @Autowired
+    private MemberLevelApiService memberLevelApiService;
     /**
      * 查询升级活动列表
      * @param vo
@@ -607,6 +610,8 @@ public class ActivityUpgradeServiceImpl implements ActivityUpgradeService {
                 MktMessagePOExample example = new MktMessagePOExample();
                 example.createCriteria().andBizIdEqualTo(po.getBusinessId()).andValidEqualTo(true);
                 List<MktMessagePO> ListMktMessage = mktMessagePOMapper.selectByExample(example);
+                //查询该会员下一个等级
+                memberLevelApiService.queryOnLevel(Long.parseLong(activityPO.getMbrLevelCode()));
                 //查询对应的会员
                 MemberInfoModel memberInfoModel= new MemberInfoModel();
                 memberInfoModel.setBrandId(activityPO.getSysBrandId());

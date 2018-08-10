@@ -47,7 +47,7 @@ public class ActivityRegisterController {
      * 创建活动
      * @return
      */
-    @RequestMapping("addActivity.do")
+    @RequestMapping("addActivity")
     public ResponseData<Integer> addActivity(ActivityVO activityVO, List<MktCouponPO> couponCodeList, List<MktMessagePO> messageVOList, HttpServletRequest request){
         ActivityBO bo = new ActivityBO();
         bo.setActivityVO(activityVO);

@@ -4,7 +4,9 @@ import com.bizvane.centerstageservice.models.po.SysCheckPo;
 import com.bizvane.centerstageservice.rpc.SysCheckServiceRpc;
 import com.bizvane.couponfacade.interfaces.CouponQueryServiceFeign;
 import com.bizvane.couponfacade.models.vo.CouponFindCouponCountResponseVO;
+import com.bizvane.members.facade.models.IntegralRecordModel;
 import com.bizvane.members.facade.models.MemberInfoModel;
+import com.bizvane.members.facade.service.api.IntegralRecordApiService;
 import com.bizvane.members.facade.service.api.MemberInfoApiService;
 import com.bizvane.mktcenterservice.interfaces.ActivityService;
 import com.bizvane.mktcenterservice.models.bo.ActivityAnalysisCountBO;
@@ -51,6 +53,8 @@ public class ActivityServiceImpl implements ActivityService {
     private MemberInfoApiService memberInfoApiService;
     @Autowired
     private MktActivityRegisterPOMapper mktActivityRegisterPOMapper;
+    @Autowired
+    private IntegralRecordApiService integralRecordApiService;
     /**
      * 禁用/启用活动
      * @param vo
@@ -61,7 +65,7 @@ public class ActivityServiceImpl implements ActivityService {
         ResponseData responseData = new ResponseData();
         MktActivityPOWithBLOBs mktActivityPOWithBLOBs = new MktActivityPOWithBLOBs();
         mktActivityPOWithBLOBs.setMktActivityId(vo.getMktActivityId());
-        mktActivityPOWithBLOBs.setValid(vo.getValid());
+        mktActivityPOWithBLOBs.setActivityStatus(4);
         mktActivityPOWithBLOBs.setModifiedUserId(sysAccountPO.getSysAccountId());
         mktActivityPOWithBLOBs.setModifiedDate(new Date());
         mktActivityPOWithBLOBs.setModifiedUserName(sysAccountPO.getName());
@@ -192,8 +196,14 @@ public class ActivityServiceImpl implements ActivityService {
                 numberFormat.setMaximumFractionDigits(2);
                 String result = numberFormat.format((float)couponFindCouponCountResponseVO.getCouponUsedSum()/(float)couponFindCouponCountResponseVO.getCouponSum()*100);
                 activityAnalysisCount.setCouponUsedSumPercentage(result+"%");
-                //查询积分统计方法TODO
-
+                //查询积分统计方法
+                IntegralRecordModel integralRecordModel = new IntegralRecordModel();
+                integralRecordModel.setChangeBills(activityAnalysisCount.getActivityCode());
+               ResponseData<Integer> sums = integralRecordApiService.queryIntegralCount(integralRecordModel);
+               Integer su = sums.getData();
+                //积分总数
+                activityAnalysisCount.setPointsSum(su);
+                //积分 合计 券收益合计
             }
 
         }
