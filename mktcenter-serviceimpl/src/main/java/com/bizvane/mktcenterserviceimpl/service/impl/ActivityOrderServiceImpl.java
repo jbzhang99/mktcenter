@@ -515,6 +515,7 @@ public class ActivityOrderServiceImpl implements ActivityOrderService {
         bs.setModifiedUserName(sysAccountPO.getName());
         bs.setCheckStatus(po.getCheckStatus());
         bs.setActivityCode(po.getBusinessCode());
+        bs.setMktActivityId(po.getBusinessId());
         //根据code查询出审核活动的详细信息
         ActivityVO vo = new ActivityVO();
         vo.setActivityCode(bs.getActivityCode());

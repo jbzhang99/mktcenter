@@ -306,6 +306,7 @@ public class ActivityBirthdayServiceImpl implements ActivityBirthdayService {
         bs.setModifiedUserName(sysAccountPO.getName());
         bs.setCheckStatus(po.getCheckStatus());
         bs.setActivityCode(po.getBusinessCode());
+        bs.setMktActivityId(po.getBusinessId());
         //根据code查询出审核活动的详细信息
         MktActivityPOExample exampl = new MktActivityPOExample();
         exampl.createCriteria().andActivityCodeEqualTo(bs.getActivityCode()).andValidEqualTo(true);

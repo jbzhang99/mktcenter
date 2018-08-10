@@ -655,11 +655,23 @@ public class ActivityManualServiceImpl implements ActivityManualService {
         bs.setModifiedUserName(sysAccountPO.getName());
         bs.setCheckStatus(po.getCheckStatus());
         bs.setActivityCode(po.getBusinessCode());
-        MktActivityPOExample mktActivityPOExample = new MktActivityPOExample();
-        mktActivityPOExample.createCriteria().andValidEqualTo(Boolean.TRUE).andActivityCodeEqualTo(bs.getActivityCode());
-        mktActivityPOMapper.updateByExampleSelective(bs,mktActivityPOExample);
+        bs.setMktActivityId(po.getBusinessId());
+        //查询扫码领卷的的详细信息
+        ActivityVO vo = new ActivityVO();
+        vo.setActivityCode(bs.getActivityCode());
+        List<ActivityVO> activityManualList = mktActivityManualPOMapper.getActivityManualList(vo);
+        ActivityVO activityVO = activityManualList.get(0);
+       // 活动开始时间<当前时间<活动结束时间  变为执行中
+        if(new Date().after(activityVO.getStartTime()) && new Date().before(activityVO.getEndTime())){
+            bs.setActivityStatus(ActivityStatusEnum.ACTIVITY_STATUS_EXECUTING.getCode());
+            mktActivityPOMapper.updateByPrimaryKeySelective(bs);
+        }
+        //判断审核时间 >活动结束时间  将活动状态变为已结束
+        if(new Date().after(activityVO.getEndTime())){
+            bs.setActivityStatus(ActivityStatusEnum.ACTIVITY_STATUS_FINISHED.getCode());
+            mktActivityPOMapper.updateByPrimaryKeySelective(bs);
+        }
 
-        //todo 调用中台审核接口更改此单据状态
         //更新审核中心状态
         sysCheckServiceRpc.updateCheck(po);
         responseData.setCode(SystemConstants.SUCCESS_CODE);

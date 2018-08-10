@@ -304,6 +304,7 @@ public class ActivitySigninServiceImpl implements ActivitySigninService {
         bs.setModifiedUserName(sysAccountPO.getName());
         bs.setCheckStatus(po.getCheckStatus());
         bs.setActivityCode(po.getBusinessCode());
+        bs.setMktActivityId(po.getBusinessId());
         //判断是审核通过还是审核驳回
         if(bs.getCheckStatus()==CheckStatusEnum.CHECK_STATUS_APPROVED.getCode()){
                 //将活动状态变更为执行中
