@@ -13,6 +13,7 @@ import com.bizvane.couponfacade.models.vo.CouponEntityAndDefinitionVO;
 import com.bizvane.couponfacade.models.vo.SendCouponSimpleRequestVO;
 import com.bizvane.members.facade.enums.IntegralChangeTypeEnum;
 import com.bizvane.members.facade.models.IntegralRecordModel;
+import com.bizvane.members.facade.models.MbrLevelModel;
 import com.bizvane.members.facade.models.MemberInfoModel;
 import com.bizvane.members.facade.service.api.IntegralRecordApiService;
 import com.bizvane.members.facade.service.api.MemberInfoApiService;
@@ -253,10 +254,13 @@ public class ActivityUpgradeServiceImpl implements ActivityUpgradeService {
         }
         //如果执行状态为执行中 就要发送消息
         if(mktActivityPOWithBLOBs.getActivityStatus()==ActivityStatusEnum.ACTIVITY_STATUS_EXECUTING.getCode()){
+            //查询该会员下一个等级
+            ResponseData<MbrLevelModel> MbrLevelModels = memberLevelApiService.queryOnLevel(Long.parseLong(activityVO.getMbrLevelCode()));
+            MbrLevelModel  mbrLevel = MbrLevelModels.getData();
             //查询对应的会员
             MemberInfoModel memberInfoModel= new MemberInfoModel();
             memberInfoModel.setBrandId(activityVO.getSysBrandId());
-            memberInfoModel.setLevelId(Long.parseLong(activityVO.getMbrLevelCode()));
+            memberInfoModel.setLevelId(mbrLevel.getMbrLevelId());
             ResponseData<List<MemberInfoModel>> memberInfoModelLists =memberInfoApiService.getMemberInfo(memberInfoModel);
             List<MemberInfoModel> memberInfoModelList = memberInfoModelLists.getData();
             //循环发送
@@ -431,10 +435,13 @@ public class ActivityUpgradeServiceImpl implements ActivityUpgradeService {
         }
         //如果执行状态为执行中 就要发送消息
         if(mktActivityPOWithBLOBs.getActivityStatus()==ActivityStatusEnum.ACTIVITY_STATUS_EXECUTING.getCode()){
+            //查询该会员下一个等级
+            ResponseData<MbrLevelModel> MbrLevelModels = memberLevelApiService.queryOnLevel(Long.parseLong(activityVO.getMbrLevelCode()));
+            MbrLevelModel  mbrLevel = MbrLevelModels.getData();
             //查询对应的会员
             MemberInfoModel memberInfoModel= new MemberInfoModel();
             memberInfoModel.setBrandId(activityVO.getSysBrandId());
-            memberInfoModel.setLevelId(Long.parseLong(activityVO.getMbrLevelCode()));
+            memberInfoModel.setLevelId(mbrLevel.getMbrLevelId());
             ResponseData<List<MemberInfoModel>> memberInfoModelLists =memberInfoApiService.getMemberInfo(memberInfoModel);
             List<MemberInfoModel> memberInfoModelList = memberInfoModelLists.getData();
             //循环发送
@@ -611,11 +618,12 @@ public class ActivityUpgradeServiceImpl implements ActivityUpgradeService {
                 example.createCriteria().andBizIdEqualTo(po.getBusinessId()).andValidEqualTo(true);
                 List<MktMessagePO> ListMktMessage = mktMessagePOMapper.selectByExample(example);
                 //查询该会员下一个等级
-                memberLevelApiService.queryOnLevel(Long.parseLong(activityPO.getMbrLevelCode()));
+                ResponseData<MbrLevelModel> MbrLevelModels = memberLevelApiService.queryOnLevel(Long.parseLong(activityPO.getMbrLevelCode()));
+                MbrLevelModel  mbrLevel = MbrLevelModels.getData();
                 //查询对应的会员
                 MemberInfoModel memberInfoModel= new MemberInfoModel();
                 memberInfoModel.setBrandId(activityPO.getSysBrandId());
-                memberInfoModel.setLevelId(Long.parseLong(activityPO.getMbrLevelCode()));
+                memberInfoModel.setLevelId(mbrLevel.getMbrLevelId());
                 ResponseData<List<MemberInfoModel>> memberInfoModelLists =memberInfoApiService.getMemberInfo(memberInfoModel);
                 List<MemberInfoModel> memberInfoModelList = memberInfoModelLists.getData();
                 //循环发送
