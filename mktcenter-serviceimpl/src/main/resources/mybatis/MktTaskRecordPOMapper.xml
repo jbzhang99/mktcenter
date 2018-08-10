@@ -474,15 +474,15 @@
     where mkt_task_record_id = #{mktTaskRecordId,jdbcType=BIGINT}
   </update>
 
-  <select id="countCompleteMbr" parameterType="map" resultType="long">
+  <select id="countPartMbr" parameterType="com.bizvane.mktcenterservice.models.po.MktTaskSharePO" resultType="long">
     SELECT
         count( * )
     FROM
         ( SELECT COUNT( mkt_task_record_id ) c, member_code, task_id FROM `t_mkt_task_record` GROUP BY task_id, member_code HAVING
 
-    task_id = #{taskId} ) a
+    task_id = #{mktTaskId} ) a
     <where>
-      a.c =#{oneTaskShareTimes}
+      a.c =#{shareTimes}
     </where>
 
 
@@ -507,11 +507,11 @@
   <!--效果分析-->
    <select id="getAnalysisResult" resultType="com.bizvane.mktcenterservice.models.vo.DayTaskRecordVo">
        SELECT
-       tmtr.task_id,
-       tmt.task_code,
-       tmt.task_name,
-       SUM(tmtr.coupon_num) AS oneTaskCountCoupon,
-       SUM(tmtr.points)  AS oneTaskPoints,
+       tmtr.task_id AS taskId,
+       tmt.task_code AS taskCode,
+       tmt.task_name AS taskName,
+      <!-- SUM(tmtr.coupon_num) AS oneTaskCountCoupon,
+       SUM(tmtr.points)  AS oneTaskPoints,-->
        count(distinct tmtr.member_code) AS oneTaskCompleteCountMbr
        FROM
        t_mkt_task_record tmtr   INNER JOIN t_mkt_task  tmt ON tmtr.task_id=tmt.mkt_task_id
@@ -526,10 +526,10 @@
        AND tmt.task_name like CONCAT('%',#{taskName},'%')
        </if>
        <if test="endTime!=null and endTime!=''">
-         AND tta.create_date <![CDATA[<=]]>#{endTime}
+         AND tmt.create_date <![CDATA[<=]]>#{endTime}
        </if>
        <if test="startTime!=null and startTime!=''">
-         AND tta.create_date <![CDATA[>=]]> #{startTime}
+         AND tmt.create_date <![CDATA[>=]]> #{startTime}
        </if>
        GROUP BY tmtr.task_id,tmtr.task_type
    </select>

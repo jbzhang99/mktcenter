@@ -10,7 +10,7 @@ import java.util.List;
 /**
  * Created by Geng on 2018/8/1.
  */
-public class TaskRecordVO extends MktTaskRecordPO{
+public class TaskRecordVO{
 
     //赠送总积分数
     private Long allPoints;

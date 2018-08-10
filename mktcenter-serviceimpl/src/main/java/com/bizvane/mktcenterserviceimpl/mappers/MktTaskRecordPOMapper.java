@@ -6,6 +6,7 @@ import com.bizvane.mktcenterservice.models.po.MktTaskRecordPOExample;
 import java.util.List;
 import java.util.Map;
 
+import com.bizvane.mktcenterservice.models.po.MktTaskSharePO;
 import com.bizvane.mktcenterservice.models.vo.DayTaskRecordVo;
 import com.bizvane.mktcenterservice.models.vo.MktTaskRecordVO;
 import com.bizvane.mktcenterservice.models.vo.TaskAnalysisVo;
@@ -80,7 +81,7 @@ public interface MktTaskRecordPOMapper {
 	 */
 	int updateByPrimaryKey(MktTaskRecordPO record);
 
-	Long countCompleteMbr(Map<String,Long> map);
+	Long countPartMbr(MktTaskSharePO mktTaskSharePO);
 
 	List<TotalStatisticsBO> getTotalStatistics(MktTaskRecordVO vo);
 
