@@ -22,7 +22,13 @@ public class MktcenterApplication {
 	// @Value("${swagger.show}")
 	// private boolean swaggerShow;
 
-	@LoadBalanced
+	/**
+	 * @LoadBalanced负载均衡的原理是需要请求的url为在注册中心进行注册过的某个服务的请求，e.x. postURL=http://HELLO-SERVICE/hello
+	 * 如果请求的非注册的服务，将不能使用此负载注解，否则会报找不到服务
+	 * @param restTemplateBuilder
+	 * @return
+	 */
+//	@LoadBalanced
 	@Bean
 	RestTemplate restTemplate(RestTemplateBuilder restTemplateBuilder) {
 		return restTemplateBuilder.build();
