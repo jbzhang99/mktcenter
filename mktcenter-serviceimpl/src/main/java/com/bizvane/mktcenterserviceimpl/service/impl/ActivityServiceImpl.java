@@ -184,9 +184,9 @@ public class ActivityServiceImpl implements ActivityService {
                 ResponseData<CouponFindCouponCountResponseVO> couponFindCouponCountResponseVODate = couponQueryServiceFeign.findCouponCountBySendBusinessId(activityAnalysisCount.getMktActivityId(), CouponSendTypeEnum.getCouponSendTypeEnumByMktModuleCode(bo.getActivityType()).getCouponModuleCode(),activityAnalysisCount.getSysBrandId());
                 CouponFindCouponCountResponseVO couponFindCouponCountResponseVO = couponFindCouponCountResponseVODate.getData();
                 //券数量
-//                activityAnalysisCount.setCouponSum(couponFindCouponCountResponseVO.getCouponSum());
-//                //核销券数量
-//                activityAnalysisCount.setCouponUsedSum(couponFindCouponCountResponseVO.getCouponUsedSum());
+               activityAnalysisCount.setCouponSum(couponFindCouponCountResponseVO.getCouponSum());
+                //核销券数量
+                activityAnalysisCount.setCouponUsedSum(couponFindCouponCountResponseVO.getCouponUsedSum());
                 //收益
                 activityAnalysisCount.setMoney(couponFindCouponCountResponseVO.getMoney());
                 //核销率
