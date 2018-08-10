@@ -2,12 +2,13 @@ package com.bizvane.mktcenterserviceimpl.common.enums;
 
 /**
  * @author chen.li
- * @date on 2018/7/14 13:35
- * @description
+ * @date on 2018/7/13 17:40
+ * @description 业务类型枚举
  * @Copyright (c) 2018 上海商帆信息科技有限公司-版权所有
  */
 public enum BusinessTypeEnum {
 
+    ACTIVITY_TYPE_ALL(0,"全部"),
     ACTIVITY_TYPE_ACTIVITY(1,"营销活动"),
     ACTIVITY_TYPE_TASK(2,"营销任务");
 
@@ -20,9 +21,9 @@ public enum BusinessTypeEnum {
     }
 
     public static BusinessTypeEnum getBusinessTypeEnumByCode(int code){
-        for(BusinessTypeEnum businessTypeEnum : BusinessTypeEnum.values()){
-            if(code==businessTypeEnum.getCode()){
-                return businessTypeEnum;
+        for(BusinessTypeEnum checkStatusEnum : BusinessTypeEnum.values()){
+            if(code==checkStatusEnum.getCode()){
+                return checkStatusEnum;
             }
         }
         return null;

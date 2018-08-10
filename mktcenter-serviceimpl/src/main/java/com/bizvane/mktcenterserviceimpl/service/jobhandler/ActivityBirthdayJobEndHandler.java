@@ -1,20 +1,14 @@
 package com.bizvane.mktcenterserviceimpl.service.jobhandler;
 
 import com.bizvane.mktcenterservice.models.po.MktActivityPO;
-import com.bizvane.mktcenterservice.models.po.MktActivityPOExample;
 import com.bizvane.mktcenterserviceimpl.common.enums.ActivityStatusEnum;
-import com.bizvane.mktcenterserviceimpl.common.enums.BusinessTypeEnum;
 import com.bizvane.mktcenterserviceimpl.mappers.MktActivityPOMapper;
 import com.bizvane.utils.jobutils.JobClient;
-import com.bizvane.utils.jobutils.XxlJobInfo;
 import com.xxl.job.core.biz.model.ReturnT;
 import com.xxl.job.core.handler.IJobHandler;
 import com.xxl.job.core.handler.annotation.JobHandler;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
-
-import java.util.List;
 
 /**
  * Created by agan on 2018/8/1.
