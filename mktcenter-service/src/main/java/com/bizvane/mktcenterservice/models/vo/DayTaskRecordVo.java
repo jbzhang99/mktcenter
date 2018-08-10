@@ -51,6 +51,9 @@ public class DayTaskRecordVo {
     //某任务参与的会员总人数
     private Long oneTaskCountMbr;
 
+
+
+
     public Long getDayPoints() {
         return dayPoints;
     }

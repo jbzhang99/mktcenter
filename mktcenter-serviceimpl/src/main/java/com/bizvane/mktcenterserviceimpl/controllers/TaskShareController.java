@@ -12,6 +12,7 @@ import com.bizvane.mktcenterserviceimpl.common.constants.SystemConstants;
 import com.bizvane.mktcenterserviceimpl.common.utils.TaskParamCheckUtil;
 import com.bizvane.utils.responseinfo.ResponseData;
 import com.bizvane.utils.tokens.SysAccountPO;
+import com.bizvane.utils.tokens.TokenUtils;
 import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -59,8 +60,8 @@ public class TaskShareController {
             return responseData;
         }
         //参数校验通过，获取操作人信息
-//        SysAccountPO stageUser = TokenUtils.getStageUser(request);
-        SysAccountPO stageUser = new SysAccountPO();
+        SysAccountPO stageUser = TokenUtils.getStageUser(request);
+        //SysAccountPO stageUser = new SysAccountPO();
 
         //新增活动
         ResponseData<Integer> integerResponseData = taskShareService.addTask(bo, stageUser);
@@ -84,7 +85,8 @@ public class TaskShareController {
             return responseData;
         }
         //参数校验通过，获取操作人信息
-        SysAccountPO stageUser = new SysAccountPO();
+        SysAccountPO stageUser=TokenUtils.getStageUser(request);
+        //SysAccountPO stageUser = new SysAccountPO();
         //更新活动
         ResponseData<Integer> registerData = taskShareService.updateTask(bo,stageUser);
 
@@ -117,12 +119,14 @@ public class TaskShareController {
     /**
      * 审核任务
      * @param taskId
-     * @param stageUser
+     * @param checkStatus
+     * @param request
      * @return
      */
     @RequestMapping("checkTaskShare")
-    public ResponseData checkTaskShare(Long taskId,SysAccountPO stageUser,Integer checkStatus){
+    public ResponseData checkTaskShare(Long taskId,Integer checkStatus,HttpServletRequest request){
 
+        SysAccountPO stageUser= TokenUtils.getStageUser(request);
         return taskShareService.checkTaskShare(taskId,stageUser,checkStatus);
     }
 
@@ -138,8 +142,8 @@ public class TaskShareController {
         return taskShareService.stopTask(taskId, stageUser);
     }
 
-    public ResponseData getTaskShareRecordByTime(Date date1, Date date2, SysAccountPO stageUser, String taskName, PageForm pageForm){
-
+    public ResponseData getTaskShareRecordByTime(Date date1, Date date2,HttpServletRequest request , String taskName, PageForm pageForm){
+        SysAccountPO stageUser=TokenUtils.getStageUser(request);
         return taskShareService.getTaskShareRecordByTime(date1,date2,stageUser,taskName,pageForm);
     }
 

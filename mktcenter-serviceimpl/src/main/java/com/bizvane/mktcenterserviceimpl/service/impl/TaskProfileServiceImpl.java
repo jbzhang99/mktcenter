@@ -517,6 +517,10 @@ public class TaskProfileServiceImpl implements TaskProfileService {
 
             //二、积分
 
+            ////根据taskid从任务主表中查出该task
+
+            MktTaskPOWithBLOBs mktTaskPOWithBLOBs =  mktTaskPOMapper.selectByPrimaryKey(vo.getMktTaskId());
+
             AwardBO bo2 = new AwardBO();
             bo2.setChangeBills(UUID.randomUUID().toString().replaceAll("-",""));//todo 暂时用uuid生成
             bo2.setBusinessWay(BusinessTypeEnum.ACTIVITY_TYPE_TASK.getMessage());
@@ -524,7 +528,7 @@ public class TaskProfileServiceImpl implements TaskProfileService {
             bo2.setMemberCode(memberInfoModel.getMemberCode());
             bo2.setMemberName(memberInfoModel.getName());
             bo2.setMktSmartType(MktSmartTypeEnum.SMART_TYPE_INTEGRAL.getCode());
-            bo2.setChangeIntegral(vo.getPoints());
+            bo2.setChangeIntegral(mktTaskPOWithBLOBs.getPoints());
            // award.execute(bo2);
 
             //三、将完成任务的信息添加进taskrecord表中
@@ -648,6 +652,7 @@ public class TaskProfileServiceImpl implements TaskProfileService {
                 dayTaskRecordVo.setDayCountCoupon(dayCountCoupon);
                 dayTaskRecordVo.setDayCountMbr(dayCountMbr);
                 dayTaskRecordVo.setDayPoints(daycountpoints);
+                dayTaskRecordVo.setPartDate(i);
                 dayTaskRecordVoList.add(dayTaskRecordVo);
 
             }
@@ -674,6 +679,8 @@ public class TaskProfileServiceImpl implements TaskProfileService {
         return responseData;
     }
 
+
+
     /**
      * 添加任务记录
      * @param vo
@@ -685,6 +692,7 @@ public class TaskProfileServiceImpl implements TaskProfileService {
     public ResponseData addToRecord(TaskVO vo, MemberInfoModel memberInfoModel){
         ResponseData responseData = new ResponseData();
         try {
+            //在添加记录之前判断是否此次分享完成之后就会完成该任务
 
             //将完成任务的信息添加进taskrecord表中
             MktTaskPO mktTaskPO = mktTaskPOMapper.selectByPrimaryKey(vo.getMktTaskId());
@@ -762,7 +770,14 @@ public class TaskProfileServiceImpl implements TaskProfileService {
             //审核通过
             if (checkStatus==CheckStatusEnum.CHECK_STATUS_APPROVED.getCode()){
                 mktTaskPOWithBLOBs.setCheckStatus(CheckStatusEnum.CHECK_STATUS_APPROVED.getCode());
-                //todo 调用审核接口改变审核单状态
+
+                //调用审核接口修改审核单状态
+                SysCheckPo sysCheckPo = new SysCheckPo();
+                sysCheckPo.setBusinessId(taskId);
+                sysCheckPo.setBusinessCode(mktTaskPOWithBLOBs.getTaskCode());
+                sysCheckPo.setCheckStatus(CheckStatusEnum.CHECK_STATUS_APPROVED.getCode());
+
+                sysCheckServiceRpc.updateCheck(sysCheckPo);
                 //审核时间未超过任务结束时间
                 if (new Date().before(mktTaskPOWithBLOBs.getEndTime())){
                     //审核时间超过任务开始时间
@@ -782,6 +797,13 @@ public class TaskProfileServiceImpl implements TaskProfileService {
             else{
                 mktTaskPOWithBLOBs.setCheckStatus(CheckStatusEnum.CHECK_STATUS_REJECTED.getCode());
                 mktTaskPOWithBLOBs.setTaskStatus(TaskStatusEnum.TASK_STATUS_PENDING.getCode());
+                //调用审核接口修改审核单状态
+                SysCheckPo sysCheckPo = new SysCheckPo();
+                sysCheckPo.setBusinessId(taskId);
+                sysCheckPo.setBusinessCode(mktTaskPOWithBLOBs.getTaskCode());
+                sysCheckPo.setCheckStatus(CheckStatusEnum.CHECK_STATUS_REJECTED.getCode());
+
+                sysCheckServiceRpc.updateCheck(sysCheckPo);
             }
 
             mktTaskPOMapper.updateByPrimaryKeySelective(mktTaskPOWithBLOBs);
