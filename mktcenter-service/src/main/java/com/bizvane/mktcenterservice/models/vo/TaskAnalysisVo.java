@@ -8,12 +8,14 @@ import java.util.Date;
  * 分析结果分析
  */
 public class TaskAnalysisVo {
- private  Long sysBrandId;
+    private Integer pageSize=10;
+    private Integer pageNum=1;
+
+    private  Long sysBrandId;
     private  Integer taskType;
     private String  taskName;
     private Date endTime;
     private Date  startTime;
-
     public Long getSysBrandId() {
         return sysBrandId;
     }
@@ -52,5 +54,21 @@ public class TaskAnalysisVo {
 
     public void setStartTime(Date startTime) {
         this.startTime = startTime;
+    }
+
+    public Integer getPageSize() {
+        return pageSize;
+    }
+
+    public void setPageSize(Integer pageSize) {
+        this.pageSize = pageSize;
+    }
+
+    public Integer getPageNum() {
+        return pageNum;
+    }
+
+    public void setPageNum(Integer pageNum) {
+        this.pageNum = pageNum;
     }
 }

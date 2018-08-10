@@ -4,7 +4,9 @@ import com.bizvane.mktcenterservice.interfaces.TaskRecordService;
 import com.bizvane.mktcenterservice.models.bo.TotalStatisticsBO;
 import com.bizvane.mktcenterservice.models.po.MktTaskRecordPO;
 import com.bizvane.mktcenterservice.models.po.MktTaskRecordPOExample;
+import com.bizvane.mktcenterservice.models.vo.DayTaskRecordVo;
 import com.bizvane.mktcenterservice.models.vo.MktTaskRecordVO;
+import com.bizvane.mktcenterservice.models.vo.TaskAnalysisVo;
 import com.bizvane.mktcenterserviceimpl.common.constants.TaskConstants;
 import com.bizvane.mktcenterserviceimpl.common.utils.TimeUtils;
 import com.bizvane.mktcenterserviceimpl.mappers.MktTaskRecordPOMapper;
@@ -79,9 +81,17 @@ public class TaskRecordServiceImpl implements TaskRecordService {
                 .andRewardedEqualTo(Integer.valueOf(1)).andTaskTypeEqualTo(taskType).andValidEqualTo(Boolean.TRUE);
         List<MktTaskRecordPO> list= mktTaskRecordPOMapper.selectByExample(excamle);
         if (CollectionUtils.isNotEmpty(list) && list.get(0)!=null && TaskConstants.FIRST.equals(list.get(0).getRewarded()) ){
-         return  Boolean.TRUE;
+            return  Boolean.TRUE;
         }
         return  Boolean.FALSE;
     }
-
+    /**
+     * 分析效果分析
+     * @param vo
+     * @return
+     */
+    @Override
+    public   List<DayTaskRecordVo> getAnalysisResult(TaskAnalysisVo vo){
+        return   mktTaskRecordPOMapper.getAnalysisResult(vo);
+    }
 }

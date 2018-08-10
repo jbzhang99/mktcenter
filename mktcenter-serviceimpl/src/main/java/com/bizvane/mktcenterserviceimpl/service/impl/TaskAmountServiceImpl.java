@@ -100,7 +100,9 @@ public class TaskAmountServiceImpl implements TaskAmountService {
         MktTaskPOWithBLOBs mktTaskPOWithBLOBs = new MktTaskPOWithBLOBs();
         BeanUtils.copyProperties(vo, mktTaskPOWithBLOBs);
         mktTaskPOWithBLOBs.setTaskCode(taskCode);
+        mktTaskPOWithBLOBs = taskService.isOrNoCheckState(mktTaskPOWithBLOBs);
         Long mktTaskId = taskService.addTask(mktTaskPOWithBLOBs, stageUser);
+        taskService.addCheckData(mktTaskPOWithBLOBs);
 
         //3.任务消费表新增
         MktTaskOrderPO mktTaskOrderPO = new MktTaskOrderPO();

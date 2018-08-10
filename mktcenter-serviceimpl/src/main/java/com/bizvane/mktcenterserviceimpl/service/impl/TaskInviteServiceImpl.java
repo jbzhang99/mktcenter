@@ -116,6 +116,7 @@ public class TaskInviteServiceImpl implements TaskInviteService {
         //状态的设置
         mktTaskPOWithBLOBs = taskService.isOrNoCheckState(mktTaskPOWithBLOBs);
         Long mktTaskId = taskService.addTask(mktTaskPOWithBLOBs, stageUser);
+        taskService.addCheckData(mktTaskPOWithBLOBs);
 
         //3.任务消费表新增
         MktTaskInvitePO mktTaskInvitePO = new MktTaskInvitePO();

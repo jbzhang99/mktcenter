@@ -44,7 +44,7 @@ public class TimeUtils {
             return Integer.valueOf(2);
        } else {
             //等于当前时间
-            return Integer.valueOf(3);
+            return Integer.valueOf(1);
        }
     }
 

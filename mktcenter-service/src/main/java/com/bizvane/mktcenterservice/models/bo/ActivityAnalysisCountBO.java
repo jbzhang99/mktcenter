@@ -42,22 +42,6 @@ public class ActivityAnalysisCountBO {
 
     private String  activityCode;//活动编号
 
-    public Long getCouponSum() {
-        return couponSum;
-    }
-
-    public void setCouponSum(Long couponSum) {
-        this.couponSum = couponSum;
-    }
-
-    public Long getCouponUsedSum() {
-        return couponUsedSum;
-    }
-
-    public void setCouponUsedSum(Long couponUsedSum) {
-        this.couponUsedSum = couponUsedSum;
-    }
-
     public Long getMktActivityId() {
         return mktActivityId;
     }

@@ -17,10 +17,10 @@ public class ActivityManualBO {
     /***
      * 券总数量
      */
-    private Integer sumCouponReceive;
+    private Long sumCouponReceive;
   /**
    * 券使用数量*/
-    private Integer sumCouponUse;
+    private Long sumCouponUse;
 
     private BigDecimal sumCouponMoney;
 
@@ -33,19 +33,19 @@ public class ActivityManualBO {
         this.activityVOList = activityVOList;
     }
 
-    public Integer getSumCouponReceive() {
+    public Long getSumCouponReceive() {
         return sumCouponReceive;
     }
 
-    public void setSumCouponReceive(Integer sumCouponReceive) {
+    public void setSumCouponReceive(Long sumCouponReceive) {
         this.sumCouponReceive = sumCouponReceive;
     }
 
-    public Integer getSumCouponUse() {
+    public Long getSumCouponUse() {
         return sumCouponUse;
     }
 
-    public void setSumCouponUse(Integer sumCouponUse) {
+    public void setSumCouponUse(Long sumCouponUse) {
         this.sumCouponUse = sumCouponUse;
     }
 

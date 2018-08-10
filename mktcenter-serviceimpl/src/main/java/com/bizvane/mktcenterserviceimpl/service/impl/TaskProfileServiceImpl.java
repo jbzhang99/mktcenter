@@ -635,7 +635,7 @@ public class TaskProfileServiceImpl implements TaskProfileService {
             CouponEntityPO couponEntityPO = new CouponEntityPO();
 
             couponEntityPO.setSendBusinessId(mktTaskPO.getMktTaskId());
-            ResponseData<CouponFindCouponCountResponseVO> allInvalidCountCouponResp = couponQueryServiceFeign.findCouponCountBySendBusinessId(mktTaskPO.getMktTaskId(),date1,date2);
+            ResponseData<CouponFindCouponCountResponseVO> allInvalidCountCouponResp = couponQueryServiceFeign.findCouponCountByDate()
 
             CouponFindCouponCountResponseVO allInvalidCountCoupon = allInvalidCountCouponResp.getData();
             int count =  allInvalidCountCoupon.getCouponUsedSum();*/

@@ -3,6 +3,8 @@ package com.bizvane.mktcenterserviceimpl.controllers;
 import com.bizvane.mktcenterservice.interfaces.TaskService;
 import com.bizvane.mktcenterservice.models.po.MktTaskPOWithBLOBs;
 import com.bizvane.mktcenterservice.models.vo.PageForm;
+import com.bizvane.mktcenterservice.models.vo.TaskAnalysisVo;
+import com.bizvane.mktcenterservice.models.vo.TaskRecordVO;
 import com.bizvane.mktcenterservice.models.vo.TaskVO;
 import com.bizvane.utils.responseinfo.ResponseData;
 import com.bizvane.utils.tokens.SysAccountPO;
@@ -12,6 +14,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
+import java.text.ParseException;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -58,12 +62,22 @@ public class TaskController {
      * @return
      */
     @RequestMapping("checkTaskById")
-    public ResponseData<Integer> checkTaskById(Long mktTaskId ,Integer checkStatus, HttpServletRequest request){
+    public ResponseData<Integer> checkTaskById(Long mktTaskId , Integer checkStatus, Date startTime,HttpServletRequest request) throws ParseException {
         //获取操作人信息
         SysAccountPO stageUser =new SysAccountPO();
 //        SysAccountPO stageUser = TokenUtils.getStageUser(request);
         //审核任务
-        ResponseData<Integer> integerResponseData = taskService.checkTaskById(mktTaskId,checkStatus,stageUser);
+        ResponseData<Integer> integerResponseData = taskService.checkTaskById(mktTaskId,checkStatus,stageUser,startTime);
         return integerResponseData;
+    }
+
+    /**
+     * 任务效果分析
+     * @param vo
+     * @return
+     */
+    @RequestMapping("doAnalysis")
+    public ResponseData<TaskRecordVO> doAnalysis(TaskAnalysisVo vo){
+       return taskService.doAnalysis(vo);
     }
 }
