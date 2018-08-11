@@ -134,30 +134,36 @@ public class TaskShareController {
     /**
      * 禁用任务
      * @param taskId
-     * @param stageUser
+     * @param request
      * @return
      */
     @RequestMapping("stopTask")
-    public ResponseData stopTask(Long taskId,SysAccountPO stageUser){
+    public ResponseData stopTask(Long taskId,HttpServletRequest request){
+
+        SysAccountPO stageUser = TokenUtils.getStageUser(request);
+
         return taskShareService.stopTask(taskId, stageUser);
     }
 
-    public ResponseData getTaskShareRecordByTime(Date date1, Date date2,HttpServletRequest request , String taskName, PageForm pageForm){
+   /* public ResponseData getTaskShareRecordByTime(Date date1, Date date2,HttpServletRequest request , String taskName, PageForm pageForm){
         SysAccountPO stageUser=TokenUtils.getStageUser(request);
         return taskShareService.getTaskShareRecordByTime(date1,date2,stageUser,taskName,pageForm);
-    }
+    }*/
 
 
     /**
      * 效果分析
      * @param date1
      * @param date2
-     * @param stageUser
+     * @param request
+     * @param taskName
      * @param pageForm
      * @return
      */
     @RequestMapping("getTaskProfileRecordByTime")
-    public ResponseData getTaskProfileRecordByTime(Date date1, Date date2, SysAccountPO stageUser,String taskName, PageForm pageForm){
+    public ResponseData getTaskProfileRecordByTime(Date date1, Date date2,HttpServletRequest request ,String taskName, PageForm pageForm){
+
+        SysAccountPO stageUser = TokenUtils.getStageUser(request);
 
         return taskShareService.getTaskShareRecordByTime(date1,date2,stageUser,taskName,pageForm);
     }

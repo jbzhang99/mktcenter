@@ -8,6 +8,8 @@ import com.bizvane.couponfacade.interfaces.CouponDefinitionServiceFeign;
 import com.bizvane.couponfacade.interfaces.CouponQueryServiceFeign;
 import com.bizvane.couponfacade.interfaces.SendCouponServiceFeign;
 import com.bizvane.couponfacade.models.po.CouponDefinitionPO;
+import com.bizvane.couponfacade.models.vo.CouponEntityVO;
+import com.bizvane.couponfacade.models.vo.CouponFindCouponCountResponseVO;
 import com.bizvane.members.facade.models.MemberInfoModel;
 import com.bizvane.members.facade.service.api.IntegralRecordApiService;
 import com.bizvane.mktcenterservice.interfaces.TaskProfileService;
@@ -502,18 +504,23 @@ public class TaskProfileServiceImpl implements TaskProfileService {
 
             List<MktCouponPO> mktCouponPOList = mktCouponPOMapper.selectByExample(mktCouponPOExample);
 
-            //2.创建AwardBo对象 添加通用信息 并遍历该业务的券信息添加券的信息
-            AwardBO bo = new AwardBO();
-            bo.setMemberCode(memberInfoModel.getMemberCode());
-            bo.setMemberName(memberInfoModel.getName());
-            bo.setMktSmartType(MktSmartTypeEnum.SMART_TYPE_COUPON.getCode());
-            bo.setBusinessWay(BusinessTypeEnum.ACTIVITY_TYPE_TASK.getMessage());
-            bo.setSendBussienId(vo.getMktTaskId());
-            for (MktCouponPO mktCouponPO:mktCouponPOList){
-                Long couponDefId = mktCouponPO.getCouponDefinitionId();
-                bo.setCouponDefinitionId(couponDefId);
-                //award.execute(bo);
+            //判断一下是否为空
+            if (!CollectionUtils.isEmpty(mktCouponPOList)){
+                //2.如果不为空则有券奖励   创建AwardBo对象 添加通用信息 并遍历该业务的券信息添加券的信息
+                AwardBO bo = new AwardBO();
+                bo.setMemberCode(memberInfoModel.getMemberCode());
+                bo.setMemberName(memberInfoModel.getName());
+                bo.setMktSmartType(MktSmartTypeEnum.SMART_TYPE_COUPON.getCode());
+                bo.setBusinessWay(BusinessTypeEnum.ACTIVITY_TYPE_TASK.getMessage());
+                bo.setSendBussienId(vo.getMktTaskId());
+                for (MktCouponPO mktCouponPO:mktCouponPOList){
+                    Long couponDefId = mktCouponPO.getCouponDefinitionId();
+                    bo.setCouponDefinitionId(couponDefId);
+                    //award.execute(bo);todo
+                }
+
             }
+
 
             //二、积分
 
@@ -521,15 +528,18 @@ public class TaskProfileServiceImpl implements TaskProfileService {
 
             MktTaskPOWithBLOBs mktTaskPOWithBLOBs =  mktTaskPOMapper.selectByPrimaryKey(vo.getMktTaskId());
 
-            AwardBO bo2 = new AwardBO();
-            bo2.setChangeBills(UUID.randomUUID().toString().replaceAll("-",""));//todo 暂时用uuid生成
-            bo2.setBusinessWay(BusinessTypeEnum.ACTIVITY_TYPE_TASK.getMessage());
-            bo2.setSendBussienId(vo.getMktTaskId());
-            bo2.setMemberCode(memberInfoModel.getMemberCode());
-            bo2.setMemberName(memberInfoModel.getName());
-            bo2.setMktSmartType(MktSmartTypeEnum.SMART_TYPE_INTEGRAL.getCode());
-            bo2.setChangeIntegral(mktTaskPOWithBLOBs.getPoints());
-           // award.execute(bo2);
+            if (mktTaskPOWithBLOBs.getPoints()!=null){
+                AwardBO bo2 = new AwardBO();
+                bo2.setChangeBills(UUID.randomUUID().toString().replaceAll("-",""));//todo 暂时用uuid生成
+                bo2.setBusinessWay(BusinessTypeEnum.ACTIVITY_TYPE_TASK.getMessage());
+                bo2.setSendBussienId(vo.getMktTaskId());
+                bo2.setMemberCode(memberInfoModel.getMemberCode());
+                bo2.setMemberName(memberInfoModel.getName());
+                bo2.setMktSmartType(MktSmartTypeEnum.SMART_TYPE_INTEGRAL.getCode());
+                bo2.setChangeIntegral(mktTaskPOWithBLOBs.getPoints());
+                // award.execute(bo2);todo
+            }
+
 
             //三、将完成任务的信息添加进taskrecord表中
             MktTaskPO mktTaskPO = mktTaskPOMapper.selectByPrimaryKey(vo.getMktTaskId());
@@ -539,10 +549,12 @@ public class TaskProfileServiceImpl implements TaskProfileService {
             mktTaskRecordPO.setTaskType(TaskTypeEnum.TASK_TYPE_PROFILE.getCode());
             mktTaskRecordPO.setTaskId(vo.getMktTaskId());
             mktTaskRecordPO.setMemberCode(memberInfoModel.getMemberCode());
-            //mktTaskRecordPO.setPoints(vo.getPoints());//奖励积分是不是也该去掉？？Todo
+            mktTaskRecordPO.setPoints(mktTaskPOWithBLOBs.getPoints());//奖励积分是不是也该去掉？？Todo
             mktTaskRecordPO.setParticipateDate(new Date());
             BeanUtils.copyProperties(mktTaskPO,mktTaskRecordPO);
             //是否奖励过 奖励次数？
+            mktTaskRecordPO.setRewarded(1);
+            mktTaskRecordPO.setCouponNum(mktCouponPOList.size());
             mktTaskRecordPOMapper.insertSelective(mktTaskRecordPO);
 
             responseData.setMessage(SysResponseEnum.SUCCESS.getMessage());
@@ -622,15 +634,20 @@ public class TaskProfileServiceImpl implements TaskProfileService {
             Long allCountCoupon = countMbr*oneTaskCoupon;
 
 
-            /*//四、已被核销的优惠券？todo
+            //四、已被核销的优惠券？todo
 
-            CouponEntityPO couponEntityPO = new CouponEntityPO();
+            //核销的优惠券
 
-            couponEntityPO.setSendBusinessId(mktTaskPO.getMktTaskId());
-            ResponseData<CouponFindCouponCountResponseVO> allInvalidCountCouponResp = couponQueryServiceFeign.findCouponCountByDate()
+            CouponEntityVO couponEntityVO = new CouponEntityVO();
+            couponEntityVO.setSendBusinessId(mktTaskPO.getMktTaskId());
+            couponEntityVO.setSendType("60");
+            couponEntityVO.setSysBrandId(stageUser.getBrandId());
+            couponEntityVO.setDtStart(date1);
+            couponEntityVO.setDtEnd(date2);
+            ResponseData<CouponFindCouponCountResponseVO> responseVOResponseData = couponQueryServiceFeign.findCouponCountByDate(couponEntityVO);
+            CouponFindCouponCountResponseVO data = responseVOResponseData.getData();
+            Long couponUsedSum = data.getCouponUsedSum();
 
-            CouponFindCouponCountResponseVO allInvalidCountCoupon = allInvalidCountCouponResp.getData();
-            int count =  allInvalidCountCoupon.getCouponUsedSum();*/
 
 
             //五、根据日期查询
@@ -644,7 +661,7 @@ public class TaskProfileServiceImpl implements TaskProfileService {
                 MktTaskRecordPOExample.Criteria criteria3 = mktTaskRecordPOExample.createCriteria();
                 criteria3.andParticipateDateEqualTo(i).andSysBrandIdEqualTo(stageUser.getBrandId()).andValidEqualTo(true).andTaskTypeEqualTo(TaskTypeEnum.TASK_TYPE_PROFILE.getCode());
                 Long dayCountMbr = mktTaskRecordPOMapper.countByExample(mktTaskRecordPOExample);
-                //每天参与任务的人所获总积分
+                //每天参与任务的人所获总积分 todo  调用接口
                 Long daycountpoints = dayCountMbr*lTaskPoints;
                 //券
                 Long dayCountCoupon = dayCountMbr*oneTaskCoupon;
@@ -659,11 +676,13 @@ public class TaskProfileServiceImpl implements TaskProfileService {
 
             PageHelper.startPage(pageForm.getPageNumber(),pageForm.getPageSize());
             PageInfo<DayTaskRecordVo> pageInfo = new PageInfo<>(dayTaskRecordVoList);
-            //taskRecordVO.setAllinvalidCountCoupon((long)count);todo
+
             taskRecordVO.setAllCountCoupon(allCountCoupon);
             taskRecordVO.setAllPoints(allPoints);
             taskRecordVO.setDayTaskRecordVoList(pageInfo);
             taskRecordVO.setAllCountMbr(countMbr);
+            taskRecordVO.setAllinvalidCountCoupon(couponUsedSum);
+
 
             responseData.setData(taskRecordVO);
             responseData.setCode(SysResponseEnum.SUCCESS.getCode());

@@ -970,7 +970,6 @@ public class TaskShareServiceImpl implements TaskShareService {
         Long allCountCoupon=0L;
         Long allCountMbr=0L;
         Long allinvalidCountCoupon=0L;
-        PageInfo<DayTaskRecordVo> dayTaskRecordVoPage;
 
 
         try {
@@ -1000,8 +999,14 @@ public class TaskShareServiceImpl implements TaskShareService {
                 Long countPartMbr = mktTaskRecordPOMapper.countPartMbr(mktTaskSharePO);
                 dayTaskRecordVo.setOneTaskCountMbr(countPartMbr);
 
+                //某个任务的发行优惠券
+                Long oneTaskCountCoupon = dayTaskRecordVo.getOneTaskCountCoupon();
+                allCountCoupon = allCountCoupon+oneTaskCountCoupon;
+
                 //某个任务的完成人数
-                dayTaskRecordVo.getOneTaskCountMbr();
+                Long oneTaskCountMbr = dayTaskRecordVo.getOneTaskCountMbr();
+                allCountMbr = allCountMbr+oneTaskCountMbr;
+
 
                 //根据taskid查出记录条数 即为该任务分享次数
 
@@ -1010,7 +1015,8 @@ public class TaskShareServiceImpl implements TaskShareService {
                 Long oneTaskCountShareTimes = mktTaskRecordPOMapper.countByExample(mktTaskRecordPOExample);
                 dayTaskRecordVo.setOneTaskShareTimes(oneTaskCountShareTimes);
 
-                //核销的优惠券   todo
+
+                //核销的优惠券
 
                 CouponEntityVO couponEntityVO = new CouponEntityVO();
                 couponEntityVO.setSendBusinessId(taskId);
@@ -1023,11 +1029,20 @@ public class TaskShareServiceImpl implements TaskShareService {
 
                 allinvalidCountCoupon=allinvalidCountCoupon+couponUsedSum;
 
-                //赠送的积分数  todo
+                //赠送的积分数  todo  调用积分接口
 
 
 
             }
+
+            PageHelper.startPage(pageForm.getPageNum(),pageForm.getPageSize());
+            PageInfo<DayTaskRecordVo> pageInfo = new PageInfo<>(dayTaskRecordVoList);
+
+            taskRecordVO.setAllCountMbr(allCountMbr);
+            taskRecordVO.setAllinvalidCountCoupon(allinvalidCountCoupon);
+            taskRecordVO.setAllCountCoupon(allCountCoupon);
+            //taskRecordVO.setAllPoints();todo
+            taskRecordVO.setDayTaskRecordVoList(pageInfo);
 
 
             responseData.setData(taskRecordVO);
