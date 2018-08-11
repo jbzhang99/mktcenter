@@ -9,6 +9,7 @@ import com.bizvane.mktcenterservice.models.vo.MessageVO;
 import com.bizvane.mktcenterservice.models.vo.PageForm;
 import com.bizvane.mktcenterservice.models.vo.TaskVO;
 import com.bizvane.mktcenterserviceimpl.common.constants.SystemConstants;
+import com.bizvane.mktcenterserviceimpl.common.enums.TaskTypeEnum;
 import com.bizvane.mktcenterserviceimpl.common.utils.TaskParamCheckUtil;
 import com.bizvane.utils.responseinfo.ResponseData;
 import com.bizvane.utils.tokens.SysAccountPO;
@@ -51,17 +52,18 @@ public class TaskShareController {
      * @return
      */
     @RequestMapping("addTask")
-    public ResponseData<Integer> addTask(TaskBO bo, HttpServletRequest request){
+    public ResponseData<Integer> addTask(TaskBO bo,HttpServletRequest request){
 
         //参数校验
+        bo.getTaskVO().setTaskType(TaskTypeEnum.TASK_TYPE_SHARE.getCode());
         ResponseData responseData = TaskParamCheckUtil.checkParam(bo);
         //参数校验不通过
         if(SystemConstants.ERROR_CODE==responseData.getCode()){
             return responseData;
         }
         //参数校验通过，获取操作人信息
-        SysAccountPO stageUser = TokenUtils.getStageUser(request);
-        //SysAccountPO stageUser = new SysAccountPO();
+        //SysAccountPO stageUser = TokenUtils.getStageUser(request);
+        SysAccountPO stageUser = new SysAccountPO();
 
         //新增活动
         ResponseData<Integer> integerResponseData = taskShareService.addTask(bo, stageUser);
@@ -76,7 +78,7 @@ public class TaskShareController {
      * @return
      */
     @RequestMapping("updateTask")
-    public ResponseData<Integer> updateTask(TaskBO bo, HttpServletRequest request){
+    public ResponseData<Integer> updateTask(TaskBO bo, HttpServletRequest request,SysAccountPO stageUser){
 
         //参数校验
         ResponseData responseData = TaskParamCheckUtil.checkParam(bo);
@@ -85,7 +87,7 @@ public class TaskShareController {
             return responseData;
         }
         //参数校验通过，获取操作人信息
-        SysAccountPO stageUser=TokenUtils.getStageUser(request);
+        //SysAccountPO stageUser=TokenUtils.getStageUser(request);
         //SysAccountPO stageUser = new SysAccountPO();
         //更新活动
         ResponseData<Integer> registerData = taskShareService.updateTask(bo,stageUser);

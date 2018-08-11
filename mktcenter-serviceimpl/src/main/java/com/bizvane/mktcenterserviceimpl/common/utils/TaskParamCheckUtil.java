@@ -42,21 +42,14 @@ public class TaskParamCheckUtil {
             responseData.setMessage(TaskConstants.ERROR_MSG_TASK_NAME_EMPTY);
             return responseData;
         }
-        //任务开始时间，结束时间校验
-        if(vo.getStartTime()==null || vo.getEndTime()==null){
-            responseData.setMessage(TaskConstants.ERROR_MSG_TASK_DATE_EMPTY);
-            return responseData;
-        }
-        //任务描述校验
-        if(StringUtils.isEmpty(vo.getTaskInfo())){
-            responseData.setMessage(TaskConstants.ERROR_MSG_TASK_INFO_EMPTY);
-            return responseData;
-        }
-        //任务类型
+
+
+
+        /*//任务类型
         if(vo.getTaskType()==null){
             responseData.setMessage(TaskConstants.ERROR_MSG_TASK_TYPE_EMPTY);
             return responseData;
-        }
+        }*/
 
         //各类型活动参数校验
         TaskTypeEnum activityTypeEnum = TaskTypeEnum.getTaskTypeEnumByCode(vo.getTaskType());
@@ -85,6 +78,24 @@ public class TaskParamCheckUtil {
                 responseData.setCode(SystemConstants.SUCCESS_CODE);
                 break;
         }
+
+        //如果任务不为完善资料 则需判断任务时间以及描述
+        if (activityTypeEnum!=TaskTypeEnum.TASK_TYPE_PROFILE){
+            //任务开始时间，结束时间校验
+            if(vo.getStartTime()==null || vo.getEndTime()==null){
+                responseData.setMessage(TaskConstants.ERROR_MSG_TASK_DATE_EMPTY);
+                return responseData;
+            }
+            //任务描述校验
+            if(StringUtils.isEmpty(vo.getTaskInfo())){
+                responseData.setMessage(TaskConstants.ERROR_MSG_TASK_INFO_EMPTY);
+                return responseData;
+            }
+
+        }
+
+
+
 
         if(responseData.getCode()==SystemConstants.ERROR_CODE){
             return responseData;

@@ -36,6 +36,8 @@ public class TaskBO {
      * @return
      */
 
+
+
     private List<CouponDefinitionPO> couponDefinitionPOList;
 
     public TaskVO getTaskVO() {

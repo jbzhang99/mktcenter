@@ -118,7 +118,7 @@ public class TaskProfileServiceImpl implements TaskProfileService {
             //判断完善资料任务是否有重复
             TaskVO vo =  new TaskVO();
             //完善资料是针对品牌还是商家？conpany or brand？and此处的id到底是stageuser携带过来额还是taskvo携带来的
-            vo.setSysBrandId(stageUser.getBrandId());
+            vo.setSysBrandId(taskVO.getSysBrandId());
             vo.setTaskType(taskVO.getTaskType());//或者直接填完善资料的任务类型???
 
             MktTaskPOExample mktTaskPOExample = new MktTaskPOExample();

@@ -328,7 +328,7 @@ public class TaskShareServiceImpl implements TaskShareService {
 
             }
             //判断任务开始时间是否修改
-            //根据tskid查询出原任务开始时间
+            //根据taskid查询出原任务开始时间
             MktTaskPO mktTaskOldPO = mktTaskPOMapper.selectByPrimaryKey(taskVO.getMktTaskId());
             //与修改后的时间进行对比,若修改过则i=1,未修改则i=0
             int i = 0;

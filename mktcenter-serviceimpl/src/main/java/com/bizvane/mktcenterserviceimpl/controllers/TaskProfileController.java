@@ -13,6 +13,7 @@ import com.bizvane.mktcenterservice.models.vo.MessageVO;
 import com.bizvane.mktcenterservice.models.vo.PageForm;
 import com.bizvane.mktcenterservice.models.vo.TaskVO;
 import com.bizvane.mktcenterserviceimpl.common.constants.SystemConstants;
+import com.bizvane.mktcenterserviceimpl.common.enums.TaskTypeEnum;
 import com.bizvane.mktcenterserviceimpl.common.utils.TaskParamCheckUtil;
 import com.bizvane.utils.responseinfo.ResponseData;
 import com.bizvane.utils.tokens.SysAccountPO;
@@ -55,12 +56,14 @@ public class TaskProfileController {
      * @return
      */
     @RequestMapping("addTask")
-    public ResponseData<Integer> addTask(TaskBO bo, HttpServletRequest request){
+    public ResponseData<Integer> addTask(TaskBO bo, HttpServletRequest request,SysAccountPO stageUser){
 
         //获取操作人信息
-        SysAccountPO stageUser = TokenUtils.getStageUser(request);
+        //SysAccountPO stageUser = TokenUtils.getStageUser(request);
         //SysAccountPO stageUser = new SysAccountPO();
 
+        bo.getTaskVO().setTaskType(TaskTypeEnum.TASK_TYPE_PROFILE.getCode());
+        //todo  将propertyCode传给我
         //参数校验
         ResponseData responseData =  TaskParamCheckUtil.checkParam(bo);
         //参数校验不通过
@@ -82,7 +85,7 @@ public class TaskProfileController {
      * @return
      */
     @RequestMapping("updateTask")
-    public ResponseData<Integer> updateTask(TaskBO bo, HttpServletRequest request){
+    public ResponseData<Integer> updateTask(TaskBO bo, HttpServletRequest request,SysAccountPO stageUser){
         //参数校验
         ResponseData responseData = TaskParamCheckUtil.checkParam(bo);
         //参数校验不通过
@@ -90,7 +93,7 @@ public class TaskProfileController {
             return responseData;
         }
         //参数校验通过，获取操作人信息
-        SysAccountPO stageUser = TokenUtils.getStageUser(request);
+        //SysAccountPO stageUser = TokenUtils.getStageUser(request);
         //SysAccountPO stageUser = new SysAccountPO();
         //更新活动
         ResponseData<Integer> registerData = taskProfileService.updateTask(bo,stageUser);
