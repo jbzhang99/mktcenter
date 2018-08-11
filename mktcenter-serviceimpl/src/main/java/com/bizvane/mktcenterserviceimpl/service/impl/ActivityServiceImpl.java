@@ -2,6 +2,7 @@ package com.bizvane.mktcenterserviceimpl.service.impl;
 
 import com.bizvane.centerstageservice.models.po.SysCheckPo;
 import com.bizvane.centerstageservice.rpc.SysCheckServiceRpc;
+import com.bizvane.couponfacade.enums.SendTypeEnum;
 import com.bizvane.couponfacade.interfaces.CouponQueryServiceFeign;
 import com.bizvane.couponfacade.models.vo.CouponFindCouponCountResponseVO;
 import com.bizvane.members.facade.models.IntegralRecordModel;
@@ -10,10 +11,12 @@ import com.bizvane.members.facade.service.api.IntegralRecordApiService;
 import com.bizvane.members.facade.service.api.MemberInfoApiService;
 import com.bizvane.mktcenterservice.interfaces.ActivityService;
 import com.bizvane.mktcenterservice.models.bo.ActivityAnalysisCountBO;
+import com.bizvane.mktcenterservice.models.bo.CtivityAnalysisBO;
 import com.bizvane.mktcenterservice.models.po.*;
 import com.bizvane.mktcenterservice.models.vo.ActivityVO;
 import com.bizvane.mktcenterservice.models.vo.PageForm;
 import com.bizvane.mktcenterserviceimpl.common.enums.ActivityStatusEnum;
+import com.bizvane.mktcenterserviceimpl.common.enums.ActivityTypeEnum;
 import com.bizvane.mktcenterserviceimpl.common.enums.CheckStatusEnum;
 import com.bizvane.mktcenterserviceimpl.common.enums.CouponSendTypeEnum;
 import com.bizvane.mktcenterserviceimpl.mappers.MktActivityPOMapper;
@@ -174,8 +177,9 @@ public class ActivityServiceImpl implements ActivityService {
      * @return
      */
     @Override
-    public ResponseData<ActivityAnalysisCountBO> getActivityAnalysisCountpage(ActivityAnalysisCountBO bo, PageForm pageForm) {
+    public ResponseData<CtivityAnalysisBO> getActivityAnalysisCountpage(ActivityAnalysisCountBO bo, PageForm pageForm) {
         ResponseData responseData = new ResponseData();
+        CtivityAnalysisBO ctivityAnalysisBO = new CtivityAnalysisBO();
         PageHelper.startPage(pageForm.getPageNumber(),pageForm.getPageSize());
         //分页查询出主表信息
         List<ActivityAnalysisCountBO> activityAnalysisList = mktActivityPOMapper.getActivityAnalysisCountpage(bo);
@@ -197,20 +201,45 @@ public class ActivityServiceImpl implements ActivityService {
                 numberFormat.setMaximumFractionDigits(2);
                 String result = numberFormat.format((float)couponFindCouponCountResponseVO.getCouponUsedSum()/(float)couponFindCouponCountResponseVO.getCouponSum()*100);
                 activityAnalysisCount.setCouponUsedSumPercentage(result+"%");
-                //查询积分统计方法
-                IntegralRecordModel integralRecordModel = new IntegralRecordModel();
-                integralRecordModel.setChangeBills(activityAnalysisCount.getActivityCode());
-               ResponseData<Integer> sums = integralRecordApiService.queryIntegralCount(integralRecordModel);
-               Integer su = sums.getData();
-                //积分总数
-                activityAnalysisCount.setPointsSum(su);
-                //积分 合计 券收益合计
+
             }
 
         }
-
+        //合计积分总数 和参与人数总数
+        CtivityAnalysisBO ctivityAnalysis = mktActivityPOMapper.getActivityAnalysisTotal(bo);
+        //参与人数
+        ctivityAnalysisBO.setParticipateTotal(ctivityAnalysis.getParticipateTotal());
+        //积分总数
+        ctivityAnalysisBO.setPointsSumTotal(ctivityAnalysis.getPointsSumTotal());
+        //积分 合计 券收益合计
+        String activityType="";
+        if(bo.getActivityType()== ActivityTypeEnum.ACTIVITY_TYPE_REGISGER.getCode()){
+            activityType = SendTypeEnum.SEND_COUPON_ONLINE_ACTIVITY.getCode();
+        }
+        if(bo.getActivityType()== ActivityTypeEnum.ACTIVITY_TYPE_UPGRADE.getCode()){
+            activityType = SendTypeEnum.SEND_COUPON_UPGRADE_ACTIVITY.getCode();
+        }
+        if(bo.getActivityType()== ActivityTypeEnum.ACTIVITY_TYPE_ORDER.getCode()){
+            activityType = SendTypeEnum.SEND_COUPON_COUSUME_ACTIVITY.getCode();
+        }
+        if(bo.getActivityType()== ActivityTypeEnum.ACTIVITY_TYPE_SIGNIN.getCode()){
+            activityType = SendTypeEnum.SEND_COUPON_SIGN_ACTIVITY.getCode();
+        }
+        if(bo.getActivityType()== ActivityTypeEnum.ACTIVITY_TYPE_BIRTHDAY.getCode()){
+            activityType = SendTypeEnum.SEND_COUPON_BIRTH_ACTIVITY.getCode();
+        }
+        //查询券合计
+        ResponseData<CouponFindCouponCountResponseVO> couponFindCouponCountVO =  couponQueryServiceFeign.getCountBySendType(activityType,bo.getSysBrandId());
+        CouponFindCouponCountResponseVO couponFindCoupon = couponFindCouponCountVO.getData();
+        //合计优惠券总数量
+        ctivityAnalysisBO.setCouponSumTotal(couponFindCoupon.getCouponSum());
+        //合计优惠券核销数量
+        ctivityAnalysisBO.setCouponUsedSumTotal(couponFindCoupon.getCouponUsedSum());
+        //合计券收益
+        ctivityAnalysisBO.setMoneyTotal(couponFindCoupon.getMoney());
         PageInfo<ActivityAnalysisCountBO> pageInfo = new PageInfo<>(activityAnalysisList);
-        responseData.setData(pageInfo);
+        ctivityAnalysisBO.setActivityAnalysisCountBO(pageInfo.getList());
+        responseData.setData(ctivityAnalysisBO);
         return responseData;
     }
 

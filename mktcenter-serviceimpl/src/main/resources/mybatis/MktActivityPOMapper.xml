@@ -687,11 +687,11 @@
   <select id="getActivityAnalysisCountpage" parameterType="com.bizvane.mktcenterservice.models.bo.ActivityAnalysisCountBO" resultType="com.bizvane.mktcenterservice.models.bo.ActivityAnalysisCountBO">
     SELECT t.mkt_activity_id AS mktActivityId,t.activity_name AS activityName,
     t.long_term AS longTerm,t.start_time AS startTime,t.end_time AS endTime,t.activity_code AS activityCode,
-    t.sys_brand_id as sysBrandId,a.su AS participateNumber
+    t.sys_brand_id as sysBrandId,a.su AS participateNumber,a.pointsSum AS pointsSum
     FROM t_mkt_activity t
     LEFT JOIN
     (
-    SELECT acitivity_id, COUNT(1)su
+    SELECT acitivity_id, COUNT(1)su,sum(points)pointsSum
     FROM t_mkt_activity_record
     GROUP BY acitivity_id) a ON a.acitivity_id=t.mkt_activity_id
     WHERE t.valid=1
@@ -708,4 +708,16 @@
       and t.create_date &lt;= str_to_date(#{endDate},'%Y-%m-%d')
     </if>
   </select>
+  <select id="getActivityAnalysisTotal" parameterType="com.bizvane.mktcenterservice.models.bo.ActivityAnalysisCountBO" resultType="com.bizvane.mktcenterservice.models.bo.CtivityAnalysisBO">
+    SELECT COUNT(1)participateTotal, SUM(points)pointsSumTotal
+    FROM t_mkt_activity_record t
+    WHERE t.valid=1
+    <if test="sysBrandId != null and sysBrandId!= ''">
+      AND t.sys_brand_id = #{sysBrandId}
+    </if>
+    <if test="activityType != null and activityType!= ''">
+      AND t.activity_type = #{activityType}
+    </if>
+  </select>
+  <!--查询同一种类型积分总数量和总参与人数 -->
 </mapper>

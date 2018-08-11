@@ -3,7 +3,7 @@ package com.bizvane.mktcenterserviceimpl.controllers;
 import com.bizvane.centerstageservice.models.po.SysCheckPo;
 import com.bizvane.mktcenterservice.interfaces.*;
 import com.bizvane.mktcenterservice.models.bo.ActivityAnalysisCountBO;
-import com.bizvane.mktcenterservice.models.po.MktActivityPOWithBLOBs;
+import com.bizvane.mktcenterservice.models.bo.CtivityAnalysisBO;
 import com.bizvane.mktcenterservice.models.vo.ActivityVO;
 import com.bizvane.mktcenterservice.models.vo.PageForm;
 import com.bizvane.mktcenterserviceimpl.common.enums.ActivityTypeEnum;
@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.List;
 
 /**
  * @author chen.li
@@ -103,7 +102,7 @@ public class ActivityController {
      * @return
      */
     @RequestMapping("getActivityAnalysisCountpage")
-    public ResponseData<ActivityAnalysisCountBO> getActivityAnalysisCountpage(ActivityAnalysisCountBO bo, PageForm pageForm){
+    public ResponseData<CtivityAnalysisBO> getActivityAnalysisCountpage(ActivityAnalysisCountBO bo, PageForm pageForm){
         return activityService.getActivityAnalysisCountpage(bo,pageForm);
     }
 }
