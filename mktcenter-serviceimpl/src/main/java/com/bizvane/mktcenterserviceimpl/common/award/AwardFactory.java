@@ -14,6 +14,7 @@ import com.bizvane.mktcenterserviceimpl.common.constants.ResponseConstants;
 import com.bizvane.utils.responseinfo.ResponseData;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 
 /**
@@ -46,6 +47,7 @@ public class AwardFactory {
      * @param bo
      * @return
      */
+    @Async("asyncServiceExecutor")
     public ResponseData<Integer> awardCouponSimple(AwardBO bo){
         ResponseData responseData = new ResponseData();
         try {
@@ -54,7 +56,7 @@ public class AwardFactory {
             va.setCouponDefinitionId(bo.getCouponDefinitionId());
             va.setSendBussienId(bo.getSendBussienId());
             va.setSendType("10");
-            sendCouponServiceFeign.simple(va);
+            ResponseData<Object> simple = sendCouponServiceFeign.simple(va);
         } catch (Exception e) {
             log.error("com.bizvane.mktcenterserviceimpl.common.award.AwardFactory.awardCouponSimple error"+ e.getMessage());
             responseData.setCode(ResponseConstants.ERROR);
@@ -68,6 +70,7 @@ public class AwardFactory {
      * @param bo
      * @return
      */
+    @Async("asyncServiceExecutor")
     public ResponseData<Integer> awardCouponBatch(AwardBO bo){
         ResponseData responseData = new ResponseData();
         try {
@@ -76,7 +79,7 @@ public class AwardFactory {
             va.setCouponDefinitionId(bo.getCouponDefinitionId());
             va.setSendBussienId(bo.getSendBussienId());
             va.setSendType("10");
-            sendCouponServiceFeign.simple(va);
+            ResponseData<Object> simple = sendCouponServiceFeign.simple(va);
         } catch (Exception e) {
             log.error("com.bizvane.mktcenterserviceimpl.common.award.AwardFactory.awardCouponBatch error:"+e.getMessage());
             responseData.setCode(ResponseConstants.ERROR);
@@ -90,6 +93,7 @@ public class AwardFactory {
      * @param bo
      * @return
      */
+    @Async("asyncServiceExecutor")
     public ResponseData<Integer> awardIntegral(AwardBO bo){
         ResponseData responseData = new ResponseData();
         try {
@@ -99,7 +103,7 @@ public class AwardFactory {
             var1.setChangeBills(bo.getChangeBills());
             var1.setChangeIntegral(bo.getChangeIntegral());
             var1.setChangeWay(IntegralChangeTypeEnum.INCOME.getCode());
-            integralRecordApiService.updateMemberIntegral(var1);
+            ResponseData responseData1 = integralRecordApiService.updateMemberIntegral(var1);
         } catch (MemberException e) {
             log.error("com.bizvane.mktcenterserviceimpl.common.award.AwardFactory.awardIntegral error:"+e.getMessage());
             responseData.setCode(ResponseConstants.ERROR);
@@ -114,6 +118,7 @@ public class AwardFactory {
      * @param bo
      * @return
      */
+    @Async("asyncServiceExecutor")
     public ResponseData<Integer> sendSms(AwardBO bo){
 
         SysSmsConfigVO msgvo = new SysSmsConfigVO();
@@ -133,6 +138,7 @@ public class AwardFactory {
      * @param bo
      * @return
      */
+    @Async("asyncServiceExecutor")
     public ResponseData<Integer> sendWxTemplateMessage(AwardBO bo){
         ResponseData responseData = new ResponseData();
         return responseData;

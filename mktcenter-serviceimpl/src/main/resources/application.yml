@@ -99,8 +99,9 @@ rocketmq:
 
 threadPool:
   corePoolSize: 16
-  maximumPoolSize: 64
+  maximumPoolSize: 48
   keepAliveTime: 60
+  queueCapacity: 99999
 
 
 
