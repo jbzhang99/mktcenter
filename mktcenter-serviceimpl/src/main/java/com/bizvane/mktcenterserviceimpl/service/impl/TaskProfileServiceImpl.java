@@ -624,14 +624,14 @@ public class TaskProfileServiceImpl implements TaskProfileService {
             Long allPoints = (countMbr*lTaskPoints);
 
 
-            //三、算出赠送总券数
+            //三、算出每个任务赠送总券数
             //根据taskid查出该任务赠送券数
 
             MktCouponPOExample mktCouponPOExample = new MktCouponPOExample();
             MktCouponPOExample.Criteria criteria2 = mktCouponPOExample.createCriteria();
             criteria2.andBizIdEqualTo(mktTaskPO.getMktTaskId()).andValidEqualTo(true);
             Long oneTaskCoupon = mktCouponPOMapper.countByExample(mktCouponPOExample);
-            Long allCountCoupon = countMbr*oneTaskCoupon;
+            /*Long allCountCoupon = countMbr*oneTaskCoupon;*/
 
 
             //四、已被核销的优惠券？todo
@@ -649,6 +649,8 @@ public class TaskProfileServiceImpl implements TaskProfileService {
             Long couponUsedSum = data.getCouponUsedSum();
 
 
+            //赠送总券数
+            Long allCountCoupon = data.getCouponSum();
 
             //五、根据日期查询
 

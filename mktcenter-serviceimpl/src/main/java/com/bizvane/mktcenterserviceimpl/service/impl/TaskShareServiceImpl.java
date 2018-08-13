@@ -995,13 +995,12 @@ public class TaskShareServiceImpl implements TaskShareService {
                 List<MktTaskSharePO> mktTaskSharePOList = mktTaskSharePOMapper.selectByExample(mktTaskSharePOExample);
                 MktTaskSharePO mktTaskSharePO = mktTaskSharePOList.get(0);
 
-                //某个任务的参与人数
+                //某个任务的参与人次
                 Long countPartMbr = mktTaskRecordPOMapper.countPartMbr(mktTaskSharePO);
                 dayTaskRecordVo.setOneTaskCountMbr(countPartMbr);
 
-                //某个任务的发行优惠券
-                Long oneTaskCountCoupon = dayTaskRecordVo.getOneTaskCountCoupon();
-                allCountCoupon = allCountCoupon+oneTaskCountCoupon;
+
+
 
                 //某个任务的完成人数
                 Long oneTaskCountMbr = dayTaskRecordVo.getOneTaskCountMbr();
@@ -1029,9 +1028,15 @@ public class TaskShareServiceImpl implements TaskShareService {
 
                 allinvalidCountCoupon=allinvalidCountCoupon+couponUsedSum;
 
-                //赠送的积分数  todo  调用积分接口
+                //某个任务的发行优惠券 todo  到底是自己的还是调用？
+               /* Long oneTaskCountCoupon = dayTaskRecordVo.getOneTaskCountCoupon();
+                allCountCoupon = allCountCoupon+oneTaskCountCoupon;*/
+                Long oneTaskCountCoupon =data.getCouponSum();
+                allCountCoupon = allCountCoupon+oneTaskCountCoupon;
+                //赠送的积分数
 
-
+                Long oneTaskCountPoints = dayTaskRecordVo.getOneTaskPoints();
+                allPoints = allPoints+oneTaskCountPoints;
 
             }
 
@@ -1041,7 +1046,7 @@ public class TaskShareServiceImpl implements TaskShareService {
             taskRecordVO.setAllCountMbr(allCountMbr);
             taskRecordVO.setAllinvalidCountCoupon(allinvalidCountCoupon);
             taskRecordVO.setAllCountCoupon(allCountCoupon);
-            //taskRecordVO.setAllPoints();todo
+            taskRecordVO.setAllPoints(allPoints);
             taskRecordVO.setDayTaskRecordVoList(pageInfo);
 
 

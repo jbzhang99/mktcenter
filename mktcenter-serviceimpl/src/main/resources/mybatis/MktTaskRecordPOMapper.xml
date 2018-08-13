@@ -510,8 +510,8 @@
        tmtr.task_id AS taskId,
        tmt.task_code AS taskCode,
        tmt.task_name AS taskName,
-      <!-- SUM(tmtr.coupon_num) AS oneTaskCountCoupon,
-       SUM(tmtr.points)  AS oneTaskPoints,-->
+      <!-- SUM(tmtr.coupon_num) AS oneTaskCountCoupon,-->
+       SUM(tmtr.points)  AS oneTaskPoints,
        count(distinct tmtr.member_code) AS oneTaskCompleteCountMbr
        FROM
        t_mkt_task_record tmtr   INNER JOIN t_mkt_task  tmt ON tmtr.task_id=tmt.mkt_task_id
