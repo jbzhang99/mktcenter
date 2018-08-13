@@ -18,6 +18,8 @@ import com.bizvane.members.facade.enums.IntegralChangeTypeEnum;
 import com.bizvane.members.facade.models.IntegralRecordModel;
 import com.bizvane.members.facade.models.MemberInfoModel;
 import com.bizvane.members.facade.service.api.IntegralRecordApiService;
+import com.bizvane.members.facade.service.api.MemberInfoApiService;
+import com.bizvane.messagefacade.interfaces.SendCommonMessageFeign;
 import com.bizvane.mktcenterservice.interfaces.TaskShareService;
 import com.bizvane.mktcenterservice.models.bo.AwardBO;
 import com.bizvane.mktcenterservice.models.bo.TaskBO;
@@ -96,6 +98,12 @@ public class TaskShareServiceImpl implements TaskShareService {
     @Autowired
     private JobClient jobClient;
 
+    @Autowired
+    private SendCommonMessageFeign sendCommonMessageFeign;
+
+    @Autowired
+    private MemberInfoApiService memberInfoApiService;
+
 
     /**
      * 获取任务列表
@@ -163,8 +171,8 @@ public class TaskShareServiceImpl implements TaskShareService {
             sysCheckConfigPo.setFunctionName("会员任务");
             sysCheckConfigPo.setFunctionCode("C0003");//会员任务编号是C0003吗？？？？？
             //1:需要审核 0:不需要
-          // ResponseData<Integer> data = sysCheckConfigServiceRpc.ifCheckConfig(sysCheckConfigPo);
-            Integer i = 3 ;/*data.getData();*/
+          ResponseData<Integer> data = sysCheckConfigServiceRpc.ifCheckConfig(sysCheckConfigPo);
+            Integer i = data.getData();
 
 
             //会员任务需要审核  todo记得把i=1改回来
@@ -193,9 +201,9 @@ public class TaskShareServiceImpl implements TaskShareService {
                 if (taskVO.getStartTime().after(new Date())){
                     //创建调度job  任务状态为待执行
                     //创建job开始时间
-                    jobUtil.addStartTaskJob(stageUser,mktTaskPOWithBLOBs);
+                    jobUtil.addTaskStartJob(stageUser,mktTaskPOWithBLOBs);
                     //创建job结束时间
-                    jobUtil.addEndTaskJob(stageUser,mktTaskPOWithBLOBs);
+                    jobUtil.addTaskEndJob(stageUser,mktTaskPOWithBLOBs);
                 /*//将任务状态设置为待执行,无需手动设置
                 taskVO.setTaskStatus(TaskStatusEnum.TASK_STATUS_PENDING.getCode());*/
                 }//任务时间不滞后
@@ -208,9 +216,9 @@ public class TaskShareServiceImpl implements TaskShareService {
                 //任务时间滞后
                 if(taskVO.getStartTime().after(new Date())){
                     //添加job任务开始时间
-                    //jobUtil
+                    jobUtil.addTaskStartJob(stageUser,mktTaskPOWithBLOBs);
                     //添加job任务结束时间
-                    //jobUtil
+                    jobUtil.addTaskEndJob(stageUser,mktTaskPOWithBLOBs);
                     taskVO.setCheckStatus(CheckStatusEnum.CHECK_STATUS_APPROVED.getCode());
                     taskVO.setTaskStatus(TaskStatusEnum.TASK_STATUS_PENDING.getCode());
                 }
@@ -274,6 +282,14 @@ public class TaskShareServiceImpl implements TaskShareService {
                     mktMessagePOMapper.insertSelective(mktMessagePO);
                 }
             }
+
+            //如果任务状态为执行中  则发送消息
+
+            if (taskVO.getTaskStatus()==TaskStatusEnum.TASK_STATUS_EXECUTING.getCode()){
+                sendMsg(taskVO.getSysBrandId(),bo.getMessagePOList());
+
+            }
+
 
             responseData.setMessage(SysResponseEnum.SUCCESS.getMessage());
             responseData.setCode(SysResponseEnum.SUCCESS.getCode());
@@ -368,15 +384,15 @@ public class TaskShareServiceImpl implements TaskShareService {
                     if (taskVO.getStartTime().after(new Date())){
 
                         //将原job删除  防止冲突
-                       /* XxlJobInfo xxlJobInfo = new XxlJobInfo();
+                       XxlJobInfo xxlJobInfo = new XxlJobInfo();
                         xxlJobInfo.setBizType(BusinessTypeEnum.ACTIVITY_TYPE_TASK.getCode());
                         xxlJobInfo.setBizCode(taskVO.getTaskCode());
                         jobClient.removeByBiz(xxlJobInfo);
 
                         //新建job调度开始时间
-                        jobUtil.addStartTaskJob(stageUser,mktTaskPOWithBLOBs);
+                        jobUtil.addTaskStartJob(stageUser,mktTaskPOWithBLOBs);
                         //结束时间
-                        jobUtil.addEndTaskJob(stageUser,mktTaskPOWithBLOBs);*/
+                        jobUtil.addTaskEndJob(stageUser,mktTaskPOWithBLOBs);
                     }
                 }//原任务时间未开始
                 else{
@@ -385,13 +401,13 @@ public class TaskShareServiceImpl implements TaskShareService {
                         //调整job调度开始时间
 
                         //将原job删除  防止冲突 todo
-                        /*XxlJobInfo xxlJobInfo = new XxlJobInfo();
+                        XxlJobInfo xxlJobInfo = new XxlJobInfo();
                         xxlJobInfo.setBizType(BusinessTypeEnum.ACTIVITY_TYPE_TASK.getCode());
                         xxlJobInfo.setBizCode(taskVO.getTaskCode());
                         jobClient.removeByBiz(xxlJobInfo);
 
-                        jobUtil.addStartTaskJob(stageUser,mktTaskPOWithBLOBs);
-                        jobUtil.addEndTaskJob(stageUser,mktTaskPOWithBLOBs);*/
+                        jobUtil.addTaskStartJob(stageUser,mktTaskPOWithBLOBs);
+                        jobUtil.addTaskEndJob(stageUser,mktTaskPOWithBLOBs);
                     }
 
                 }
@@ -451,6 +467,13 @@ public class TaskShareServiceImpl implements TaskShareService {
 
             //消息时间滞后？todo
 
+            //如果任务状态为执行中  则发送消息
+
+            if (taskVO.getTaskStatus()==TaskStatusEnum.TASK_STATUS_EXECUTING.getCode()){
+                sendMsg(taskVO.getSysBrandId(),bo.getMessagePOList());
+
+            }
+
 
             responseData.setMessage(SysResponseEnum.SUCCESS.getMessage());
             responseData.setCode(SysResponseEnum.SUCCESS.getCode());
@@ -465,6 +488,60 @@ public class TaskShareServiceImpl implements TaskShareService {
 
         return responseData;
     }
+
+    /**
+     * 发送消息
+     * @param brandId
+     * @param list
+     * @return
+     */
+    public ResponseData sendMsg(Long brandId,List<MktMessagePO> list){
+        ResponseData responseData = new ResponseData();
+
+        //获取会员信息
+
+        MemberInfoModel memberInfoModel = new MemberInfoModel();
+        memberInfoModel.setBrandId(brandId);
+        memberInfoModel.setValid(1);
+        ResponseData<List<MemberInfoModel>> memberInfo =memberInfoApiService.getMemberInfo(memberInfoModel);
+        List<MemberInfoModel> memberInfoModelList = memberInfo.getData();
+
+        //创建AwardBO对象
+
+        AwardBO awardBO = new AwardBO();
+        awardBO.setBusinessWay(BusinessTypeEnum.ACTIVITY_TYPE_TASK.getMessage());
+
+        if(!CollectionUtils.isEmpty(list)){
+            //遍历会员信息
+            for (MemberInfoModel memberInfoModel1:memberInfoModelList){
+
+                awardBO.setMemberName(memberInfoModel1.getName());
+                awardBO.setMemberCode(memberInfoModel1.getMemberCode());
+
+                for (MktMessagePO messagePO:list){
+                    //发送短信
+                    if (messagePO.getMsgType()=="2"){
+                        awardBO.setMktSmartType(MktSmartTypeEnum.SMART_TYPE_SMS.getCode());
+                        awardBO.setPhone(memberInfoModel1.getPhone());
+                        //awardBO   消息内容？？？
+                        responseData = award.execute(awardBO);
+                    }
+
+                    //发送微信模板
+
+                    if (messagePO.getMsgType()=="1"){
+                        awardBO.setMktSmartType(MktSmartTypeEnum.SMART_TYPE_WXMESSAGE.getCode());
+
+                        responseData = award.execute(awardBO);
+                    }
+                }
+            }
+        }
+
+
+        return responseData;
+    }
+
 
     /**
      * 查询任务详情
@@ -898,6 +975,14 @@ public class TaskShareServiceImpl implements TaskShareService {
             //根据taskId查询出该任务
 
             MktTaskPOWithBLOBs mktTaskPOWithBLOBs = mktTaskPOMapper.selectByPrimaryKey(taskId);
+
+
+            //根据taskid查出该任务对应的消息
+
+            MktMessagePOExample mktMessagePOExample = new MktMessagePOExample();
+            mktMessagePOExample.createCriteria().andBizIdEqualTo(taskId).andValidEqualTo(true);
+
+            List<MktMessagePO> mktMessagePOList = mktMessagePOMapper.selectByExample(mktMessagePOExample);
             //审核通过
             if (checkStatus==CheckStatusEnum.CHECK_STATUS_APPROVED.getCode()){
                 //调用审核接口修改审核单状态
@@ -914,6 +999,7 @@ public class TaskShareServiceImpl implements TaskShareService {
                     if(new Date().after(mktTaskPOWithBLOBs.getStartTime())){
                         mktTaskPOWithBLOBs.setTaskStatus(TaskStatusEnum.TASK_STATUS_EXECUTING.getCode());
                         //todo 执行发送消息
+                        sendMsg(mktTaskPOWithBLOBs.getSysBrandId(),mktMessagePOList);
                     }//审核时间未超过任务开始时间
                     else{
                         mktTaskPOWithBLOBs.setTaskStatus(TaskStatusEnum.TASK_STATUS_PENDING.getCode());
@@ -988,7 +1074,7 @@ public class TaskShareServiceImpl implements TaskShareService {
             for (DayTaskRecordVo dayTaskRecordVo:dayTaskRecordVoList){
                 Long taskId = dayTaskRecordVo.getTaskId();
 
-                //根据taskid从任务分享表中查出
+                /*//根据taskid从任务分享表中查出
                 MktTaskSharePOExample mktTaskSharePOExample = new MktTaskSharePOExample();
                 mktTaskSharePOExample.createCriteria().andValidEqualTo(true).andMktTaskIdEqualTo(taskId);
 
@@ -996,22 +1082,24 @@ public class TaskShareServiceImpl implements TaskShareService {
                 MktTaskSharePO mktTaskSharePO = mktTaskSharePOList.get(0);
 
                 //某个任务的参与人次
-                Long countPartMbr = mktTaskRecordPOMapper.countPartMbr(mktTaskSharePO);
+                Long countPartMbr = mktTaskRecordPOMapper.countPartMbr(mktTaskSharePO);*/
+
+               //某个任务的参与人次
+
+                MktTaskRecordPOExample mktTaskRecordPOExample = new MktTaskRecordPOExample();
+                mktTaskRecordPOExample.createCriteria().andTaskIdEqualTo(taskId).andValidEqualTo(true);
+               Long countPartMbr= mktTaskRecordPOMapper.countByExample(mktTaskRecordPOExample);
                 dayTaskRecordVo.setOneTaskCountMbr(countPartMbr);
-
-
-
 
                 //某个任务的完成人数
                 Long oneTaskCountMbr = dayTaskRecordVo.getOneTaskCountMbr();
                 allCountMbr = allCountMbr+oneTaskCountMbr;
 
-
                 //根据taskid查出记录条数 即为该任务分享次数
 
-                MktTaskRecordPOExample mktTaskRecordPOExample = new MktTaskRecordPOExample();
-                mktTaskRecordPOExample.createCriteria().andTaskIdEqualTo(taskId).andValidEqualTo(true);
-                Long oneTaskCountShareTimes = mktTaskRecordPOMapper.countByExample(mktTaskRecordPOExample);
+                MktTaskRecordPOExample mktTaskRecordPOExample1 = new MktTaskRecordPOExample();
+                mktTaskRecordPOExample1.createCriteria().andTaskIdEqualTo(taskId).andValidEqualTo(true);
+                Long oneTaskCountShareTimes = mktTaskRecordPOMapper.countByExample(mktTaskRecordPOExample1);
                 dayTaskRecordVo.setOneTaskShareTimes(oneTaskCountShareTimes);
 
 

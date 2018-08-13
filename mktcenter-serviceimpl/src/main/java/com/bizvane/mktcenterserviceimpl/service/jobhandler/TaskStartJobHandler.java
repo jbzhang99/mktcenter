@@ -2,11 +2,9 @@ package com.bizvane.mktcenterserviceimpl.service.jobhandler;
 
 import com.alibaba.fastjson.JSON;
 import com.bizvane.mktcenterservice.interfaces.TaskService;
-import com.bizvane.mktcenterservice.models.po.MktMessagePO;
-import com.bizvane.mktcenterservice.models.po.MktMessagePOExample;
-import com.bizvane.mktcenterservice.models.po.MktTaskPO;
-import com.bizvane.mktcenterservice.models.po.MktTaskPOExample;
+import com.bizvane.mktcenterservice.models.po.*;
 import com.bizvane.mktcenterserviceimpl.common.award.Award;
+import com.bizvane.mktcenterserviceimpl.common.enums.TaskStatusEnum;
 import com.bizvane.mktcenterserviceimpl.mappers.MktMessagePOMapper;
 import com.bizvane.mktcenterserviceimpl.mappers.MktTaskPOMapper;
 import com.xxl.job.core.biz.model.ReturnT;
@@ -34,11 +32,24 @@ public class TaskStartJobHandler extends IJobHandler {
     private Award award;
     @Autowired
     private TaskService taskService;
+
+    @Autowired
+    private MktTaskPOMapper mktTaskPOMapper;
+
     @Override
     public ReturnT<String> execute(String param) throws Exception {
         ReturnT returnT = new ReturnT();
         System.out.println("job执行参数 "+param);
         String[] split = param.split("&");
+
+
+        MktTaskPOWithBLOBs mktTaskPOWithBLOBs = new MktTaskPOWithBLOBs();
+        mktTaskPOWithBLOBs.setTaskStatus(TaskStatusEnum.TASK_STATUS_EXECUTING.getCode());
+        MktTaskPOExample example = new MktTaskPOExample();
+        example.createCriteria().andMktTaskIdEqualTo(Long.valueOf(split[0])).andValidEqualTo(Boolean.TRUE);
+        mktTaskPOMapper.updateByExampleSelective(mktTaskPOWithBLOBs,example);
+
+
         taskService.sendSmg(Long.valueOf(split[3]));
         returnT.setCode(0);
         returnT.setContent("任务执行完毕");

@@ -12,6 +12,7 @@ import com.bizvane.couponfacade.models.vo.CouponEntityVO;
 import com.bizvane.couponfacade.models.vo.CouponFindCouponCountResponseVO;
 import com.bizvane.members.facade.models.MemberInfoModel;
 import com.bizvane.members.facade.service.api.IntegralRecordApiService;
+import com.bizvane.members.facade.service.api.MemberInfoApiService;
 import com.bizvane.mktcenterservice.interfaces.TaskProfileService;
 import com.bizvane.mktcenterservice.models.bo.AwardBO;
 import com.bizvane.mktcenterservice.models.bo.TaskBO;
@@ -89,6 +90,9 @@ public class TaskProfileServiceImpl implements TaskProfileService {
 
     @Autowired
     private CouponQueryServiceFeign couponQueryServiceFeign;
+
+    @Autowired
+    private MemberInfoApiService memberInfoApiService;
 
 
 
@@ -229,7 +233,7 @@ public class TaskProfileServiceImpl implements TaskProfileService {
                 for (MktMessagePO messagePO:bo.getMessagePOList()){
                     MktMessagePO messageVO1 = new MessageVO();
                     messageVO1.setMsgType(messagePO.getMsgType());
-                    messageVO1.setSendTime(new Date());//完善资料任务无开始时间  so……创建任务之后立即发送消息？
+                    //messageVO1.setSendTime(new Date());//完善资料任务无开始时间  so……创建任务之后立即发送消息？
 
                     MktMessagePO mktMessagePO = new MktMessagePO();
                     BeanUtils.copyProperties(messageVO1,mktMessagePO);
@@ -243,7 +247,15 @@ public class TaskProfileServiceImpl implements TaskProfileService {
                 }
             }
 
-            // TODO: 2018/8/7 发送消息 
+            // TODO: 2018/8/7 发送消息
+            //如果任务状态为执行中  则发送消息
+
+            if (taskVO.getTaskStatus()==TaskStatusEnum.TASK_STATUS_EXECUTING.getCode()){
+                sendMsg(taskVO.getSysBrandId(),bo.getMessagePOList());
+
+            }
+
+
             responseData.setCode(SysResponseEnum.SUCCESS.getCode());
             responseData.setMessage(SysResponseEnum.SUCCESS.getMessage());
 
@@ -253,6 +265,60 @@ public class TaskProfileServiceImpl implements TaskProfileService {
             responseData.setMessage(SysResponseEnum.FAILED.getMessage());
             return responseData;
         }
+
+        return responseData;
+    }
+
+
+    /**
+     * 发送消息
+     * @param brandId
+     * @param list
+     * @return
+     */
+    public ResponseData sendMsg(Long brandId,List<MktMessagePO> list){
+        ResponseData responseData = new ResponseData();
+
+        //获取会员信息
+
+        MemberInfoModel memberInfoModel = new MemberInfoModel();
+        memberInfoModel.setBrandId(brandId);
+        memberInfoModel.setValid(1);
+        ResponseData<List<MemberInfoModel>> memberInfo =memberInfoApiService.getMemberInfo(memberInfoModel);
+        List<MemberInfoModel> memberInfoModelList = memberInfo.getData();
+
+        //创建AwardBO对象
+
+        AwardBO awardBO = new AwardBO();
+        awardBO.setBusinessWay(BusinessTypeEnum.ACTIVITY_TYPE_TASK.getMessage());
+
+        if(!CollectionUtils.isEmpty(list)){
+            //遍历会员信息
+            for (MemberInfoModel memberInfoModel1:memberInfoModelList){
+
+                awardBO.setMemberName(memberInfoModel1.getName());
+                awardBO.setMemberCode(memberInfoModel1.getMemberCode());
+
+                for (MktMessagePO messagePO:list){
+                    //发送短信
+                    if (messagePO.getMsgType()=="2"){
+                        awardBO.setMktSmartType(MktSmartTypeEnum.SMART_TYPE_SMS.getCode());
+                        awardBO.setPhone(memberInfoModel1.getPhone());
+                        //awardBO   消息内容？？？
+                         responseData = award.execute(awardBO);
+                    }
+
+                    //发送微信模板
+
+                    if (messagePO.getMsgType()=="1"){
+                        awardBO.setMktSmartType(MktSmartTypeEnum.SMART_TYPE_WXMESSAGE.getCode());
+
+                        responseData = award.execute(awardBO);
+                    }
+                }
+            }
+        }
+
 
         return responseData;
     }
@@ -374,6 +440,12 @@ public class TaskProfileServiceImpl implements TaskProfileService {
             }
             // TODO: 2018/8/7 发送消息
 
+            //如果任务状态为执行中
+            if (taskVO.getTaskStatus()==TaskStatusEnum.TASK_STATUS_EXECUTING.getCode()){
+                sendMsg(taskVO.getSysBrandId(),bo.getMessagePOList());
+
+            }
+
             responseData.setCode(SysResponseEnum.SUCCESS.getCode());
             responseData.setMessage(SysResponseEnum.SUCCESS.getMessage());
 
@@ -428,14 +500,15 @@ public class TaskProfileServiceImpl implements TaskProfileService {
 
 
         List<CouponDefinitionPO> couponDefinitionPOS = new ArrayList<>();
-       /* todo//查询券定义
+        //查询券定义
         for (MktCouponPO mktCouponPO:mktCouponPOList){
             Long couponDefinitionId = mktCouponPO.getCouponDefinitionId();
 
-            ResponseData<CouponDefinitionPO> coupon = couponDefinitionServiceFeign.findRpc(couponDefinitionId);
+            //ResponseData<CouponDefinitionPO> coupon = couponDefinitionServiceFeign.findRpc(couponDefinitionId);
+            ResponseData<CouponDefinitionPO> coupon = couponDefinitionServiceFeign.findByIdRpc(couponDefinitionId);
             CouponDefinitionPO couponDefinitionPO = coupon.getData();
             couponDefinitionPOS.add(couponDefinitionPO);
-        }*/
+        }
 
         if (taskVo!=null){
             taskBO.setTaskVO(taskVo);
@@ -516,7 +589,7 @@ public class TaskProfileServiceImpl implements TaskProfileService {
                 for (MktCouponPO mktCouponPO:mktCouponPOList){
                     Long couponDefId = mktCouponPO.getCouponDefinitionId();
                     bo.setCouponDefinitionId(couponDefId);
-                    //award.execute(bo);todo
+                    award.execute(bo);
                 }
 
             }
@@ -537,7 +610,7 @@ public class TaskProfileServiceImpl implements TaskProfileService {
                 bo2.setMemberName(memberInfoModel.getName());
                 bo2.setMktSmartType(MktSmartTypeEnum.SMART_TYPE_INTEGRAL.getCode());
                 bo2.setChangeIntegral(mktTaskPOWithBLOBs.getPoints());
-                // award.execute(bo2);todo
+                 award.execute(bo2);
             }
 
 
@@ -785,9 +858,17 @@ public class TaskProfileServiceImpl implements TaskProfileService {
 
         try {
 
-//根据taskId查询出该任务
+            //根据taskId查询出该任务
 
             MktTaskPOWithBLOBs mktTaskPOWithBLOBs = mktTaskPOMapper.selectByPrimaryKey(taskId);
+
+            //根据taskid查出该任务对应的消息
+
+            MktMessagePOExample mktMessagePOExample = new MktMessagePOExample();
+            mktMessagePOExample.createCriteria().andBizIdEqualTo(taskId).andValidEqualTo(true);
+
+            List<MktMessagePO> mktMessagePOList = mktMessagePOMapper.selectByExample(mktMessagePOExample);
+
             //审核通过
             if (checkStatus==CheckStatusEnum.CHECK_STATUS_APPROVED.getCode()){
                 mktTaskPOWithBLOBs.setCheckStatus(CheckStatusEnum.CHECK_STATUS_APPROVED.getCode());
@@ -805,6 +886,9 @@ public class TaskProfileServiceImpl implements TaskProfileService {
                     if(new Date().after(mktTaskPOWithBLOBs.getStartTime())){
                         mktTaskPOWithBLOBs.setTaskStatus(TaskStatusEnum.TASK_STATUS_EXECUTING.getCode());
                         //todo 执行发送消息
+                            sendMsg(mktTaskPOWithBLOBs.getSysBrandId(),mktMessagePOList);
+
+
                     }//审核时间未超过任务开始时间
                     else{
                         mktTaskPOWithBLOBs.setTaskStatus(TaskStatusEnum.TASK_STATUS_PENDING.getCode());

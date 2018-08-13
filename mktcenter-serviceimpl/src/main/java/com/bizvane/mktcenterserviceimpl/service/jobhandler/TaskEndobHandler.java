@@ -7,11 +7,14 @@ import com.bizvane.mktcenterservice.models.po.MktMessagePOExample;
 import com.bizvane.mktcenterservice.models.po.MktTaskPOExample;
 import com.bizvane.mktcenterservice.models.po.MktTaskPOWithBLOBs;
 import com.bizvane.mktcenterserviceimpl.common.award.Award;
+import com.bizvane.mktcenterserviceimpl.common.enums.TaskStatusEnum;
 import com.bizvane.mktcenterserviceimpl.mappers.MktMessagePOMapper;
 import com.bizvane.mktcenterserviceimpl.mappers.MktTaskPOMapper;
 import com.xxl.job.core.biz.model.ReturnT;
 import com.xxl.job.core.handler.IJobHandler;
+import com.xxl.job.core.handler.annotation.JobHandler;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 
@@ -19,6 +22,9 @@ import java.util.List;
  * @Author: lijunwei
  * @Time: 2018/8/5 20:33
  */
+
+@JobHandler(value="endTaskJob")
+@Component
 public class TaskEndobHandler extends IJobHandler {
 
     @Autowired
@@ -32,6 +38,7 @@ public class TaskEndobHandler extends IJobHandler {
         System.out.println("job执行参数 " + param);
         String[] split = param.split("&");
         MktTaskPOWithBLOBs mktTaskPOWithBLOBs = new MktTaskPOWithBLOBs();
+        mktTaskPOWithBLOBs.setTaskStatus(TaskStatusEnum.TASK_STATUS_FINISHED.getCode());
         mktTaskPOWithBLOBs.setValid(Boolean.FALSE);
         MktTaskPOExample example = new MktTaskPOExample();
         example.createCriteria().andMktTaskIdEqualTo(Long.valueOf(split[0])).andValidEqualTo(Boolean.TRUE);
