@@ -1,6 +1,8 @@
 package com.bizvane.mktcenterserviceimpl.service.jobhandler;
 
+import com.bizvane.couponfacade.interfaces.CouponEntityServiceFeign;
 import com.bizvane.couponfacade.interfaces.SendCouponServiceFeign;
+import com.bizvane.couponfacade.models.po.CouponEntityPO;
 import com.bizvane.couponfacade.models.vo.SendCouponSimpleRequestVO;
 import com.bizvane.members.facade.enums.IntegralChangeTypeEnum;
 import com.bizvane.members.facade.models.IntegralRecordModel;
@@ -20,6 +22,7 @@ import com.bizvane.utils.responseinfo.ResponseData;
 import com.xxl.job.core.biz.model.ReturnT;
 import com.xxl.job.core.handler.IJobHandler;
 import com.xxl.job.core.handler.annotation.JobHandler;
+import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -41,6 +44,8 @@ public class EveryDayActivityJobHandler extends IJobHandler {
     private SendCouponServiceFeign sendCouponServiceFeign;
     @Autowired
     private MemberInfoApiService memberInfoApiService;
+    @Autowired
+    private CouponEntityServiceFeign couponEntityServiceFeign;
     @Override
     public ReturnT<String> execute(String param) throws Exception {
         System.out.println("job执行参数 "+param);
@@ -63,8 +68,6 @@ public class EveryDayActivityJobHandler extends IJobHandler {
                 ResponseData<List<MemberInfoModel>> memberInfoModelLists =memberInfoApiService.getMemberInfo(memberInfoModel);
                 List<MemberInfoModel> memberInfoModelList = memberInfoModelLists.getData();
                 for (MemberInfoModel memberInfo:memberInfoModelList) {
-                    //拿到会员 在到券那里确认有没有发卷 没有执行发券和积分操作
-
                     //增加积分奖励新增接口
                     IntegralRecordModel var1 = new IntegralRecordModel();
                     var1.setMemberCode(memberInfo.getMemberCode());
@@ -74,10 +77,15 @@ public class EveryDayActivityJobHandler extends IJobHandler {
                     integralRecordApiService.updateMemberIntegral(var1);
                     // 增加卷奖励接口
                     MktCouponPOExample example = new  MktCouponPOExample();
-                    example.createCriteria().andBizIdEqualTo(activityBirthday.getMktActivityId());
-                    example.createCriteria().andValidEqualTo(true);
+                    example.createCriteria().andBizIdEqualTo(activityBirthday.getMktActivityId()).andValidEqualTo(true);
                     List<MktCouponPO> mktCouponPOs= mktCouponPOMapper.selectByExample(example);
                     for (MktCouponPO mktCouponPO:mktCouponPOs) {
+                        //拿到会员 在到券那里确认有没有发卷 没有执行发券和积分操作
+                        ResponseData<List<CouponEntityPO>> CouponEntityPOs = couponEntityServiceFeign.findCouponHave(mktCouponPO.getCouponDefinitionId().toString(),memberInfo.getMemberCode(),activityBirthday.getMktActivityId());
+                        List<CouponEntityPO> couponEntityPOs =CouponEntityPOs.getData();
+                        if (CollectionUtils.isEmpty(couponEntityPOs)){
+                            continue;
+                        }
                         SendCouponSimpleRequestVO va = new SendCouponSimpleRequestVO();
                         va.setMemberCode(memberInfo.getMemberCode());
                         va.setCouponDefinitionId(mktCouponPO.getCouponDefinitionId());

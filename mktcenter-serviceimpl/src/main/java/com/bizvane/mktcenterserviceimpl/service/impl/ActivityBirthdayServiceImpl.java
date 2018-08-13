@@ -6,9 +6,16 @@ import com.bizvane.centerstageservice.models.po.SysCheckPo;
 import com.bizvane.centerstageservice.models.vo.SysCheckConfigVo;
 import com.bizvane.centerstageservice.rpc.SysCheckConfigServiceRpc;
 import com.bizvane.centerstageservice.rpc.SysCheckServiceRpc;
+import com.bizvane.couponfacade.interfaces.CouponEntityServiceFeign;
 import com.bizvane.couponfacade.interfaces.CouponQueryServiceFeign;
+import com.bizvane.couponfacade.interfaces.SendCouponServiceFeign;
 import com.bizvane.couponfacade.models.po.CouponEntityPO;
 import com.bizvane.couponfacade.models.vo.CouponEntityAndDefinitionVO;
+import com.bizvane.couponfacade.models.vo.SendCouponSimpleRequestVO;
+import com.bizvane.members.facade.enums.IntegralChangeTypeEnum;
+import com.bizvane.members.facade.models.IntegralRecordModel;
+import com.bizvane.members.facade.models.MemberInfoModel;
+import com.bizvane.members.facade.service.api.IntegralRecordApiService;
 import com.bizvane.mktcenterservice.interfaces.ActivityBirthdayService;
 import com.bizvane.mktcenterservice.models.bo.ActivityBO;
 import com.bizvane.mktcenterservice.models.po.*;
@@ -35,6 +42,7 @@ import com.github.pagehelper.PageInfo;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
@@ -72,6 +80,12 @@ public class ActivityBirthdayServiceImpl implements ActivityBirthdayService {
     private CouponQueryServiceFeign couponQueryServiceFeign;
     @Autowired
     private JobClient jobClient;
+    @Autowired
+    private IntegralRecordApiService integralRecordApiService;
+    @Autowired
+    private CouponEntityServiceFeign couponEntityServiceFeign;
+    @Autowired
+    private SendCouponServiceFeign sendCouponServiceFeign;
     /**
      * 查询生日活动列表
      * @param vo
@@ -496,5 +510,43 @@ public class ActivityBirthdayServiceImpl implements ActivityBirthdayService {
         responseData.setCode(SysResponseEnum.SUCCESS.getCode());
         responseData.setMessage(SysResponseEnum.SUCCESS.getMessage());
         return responseData;
+    }
+
+    /**
+     * 生日定时发送奖励
+     * @param activityBirthday
+     * @param memberInfoModelList
+     */
+    @Override
+    @Async("asyncServiceExecutor")
+    public void birthdayReward(ActivityVO activityBirthday, List<MemberInfoModel> memberInfoModelList) {
+        for (MemberInfoModel memberInfo:memberInfoModelList) {
+            //增加积分奖励新增接口
+            IntegralRecordModel var1 = new IntegralRecordModel();
+            var1.setMemberCode(memberInfo.getMemberCode());
+            var1.setChangeBills(activityBirthday.getActivityCode());
+            var1.setChangeIntegral(activityBirthday.getPoints());
+            var1.setChangeWay(IntegralChangeTypeEnum.INCOME.getCode());
+            integralRecordApiService.updateMemberIntegral(var1);
+            // 增加卷奖励接口
+            MktCouponPOExample example = new  MktCouponPOExample();
+            example.createCriteria().andBizIdEqualTo(activityBirthday.getMktActivityId()).andValidEqualTo(true);
+            List<MktCouponPO> mktCouponPOs= mktCouponPOMapper.selectByExample(example);
+            for (MktCouponPO mktCouponPO:mktCouponPOs) {
+                //拿到会员 在到券那里确认有没有发卷 没有执行发券和积分操作
+                ResponseData<List<CouponEntityPO>> CouponEntityPOs = couponEntityServiceFeign.findCouponHave(mktCouponPO.getCouponDefinitionId().toString(),memberInfo.getMemberCode(),activityBirthday.getMktActivityId());
+                List<CouponEntityPO> couponEntityPOs =CouponEntityPOs.getData();
+                if (org.apache.commons.collections.CollectionUtils.isEmpty(couponEntityPOs)){
+                    continue;
+                }
+                SendCouponSimpleRequestVO va = new SendCouponSimpleRequestVO();
+                va.setMemberCode(memberInfo.getMemberCode());
+                va.setCouponDefinitionId(mktCouponPO.getCouponDefinitionId());
+                va.setSendBussienId(mktCouponPO.getBizId());
+                va.setSendType("10");
+                sendCouponServiceFeign.simple(va);
+            }
+
+        }
     }
 }
