@@ -8,9 +8,6 @@ import com.bizvane.utils.responseinfo.ResponseData;
 public interface TaskServiceForWX {
 
 
-    //获取该会员未完成的任务
-    public ResponseData getUnCompleteTask(Long brandId,String memberCode);
-
     //获取该会员已完成的任务
     public ResponseData getCompleteTask(Long brandId,String memberCode);
 

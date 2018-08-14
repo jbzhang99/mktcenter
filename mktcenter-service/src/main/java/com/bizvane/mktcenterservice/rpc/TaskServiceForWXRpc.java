@@ -13,11 +13,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public interface TaskServiceForWXRpc {
 
 
-    @RequestMapping("/getUnCompleteTask")
-    @io.swagger.annotations.ApiModelProperty(value = "brandId,memberCode",name = "该会员未完成的任务列表", required = false,example = "")
-    public ResponseData getUnCompleteTask(Long brandId, String memberCode);
 
     @RequestMapping("/getCompleteTask")
-    @io.swagger.annotations.ApiModelProperty(value = "brandId,memberCode",name = "该会员已完成的任务列表", required = false,example = "")
+    @io.swagger.annotations.ApiModelProperty(value = "brandId,memberCode",name = "该会员已完成和未完成的任务列表", required = false,example = "")
     public ResponseData getCompleteTask(Long brandId,String memberCode);
 }

@@ -16,27 +16,8 @@ import java.util.List;
 @Service
 public class TaskServiceForWXImpl implements TaskServiceForWX{
 
-
     @Override
-    //获取该会员未完成的任务
-    public ResponseData getUnCompleteTask(Long brandId, String memberCode){
-
-
-        ResponseData responseData = new ResponseData();
-        List<TaskVO> taskVOList = new ArrayList<>();
-        TaskVO taskVO = new TaskVO();
-        taskVO.setMktTaskId((long)1);
-        taskVO.setTaskType(TaskTypeEnum.TASK_TYPE_PROFILE.getCode());
-        taskVO.setStartTime(new Date());
-
-
-        taskVOList.add(taskVO);
-        responseData.setData(taskVOList);
-        return responseData;
-    }
-
-    @Override
-    //获取该会员已完成的任务
+    //获取该会员已完成和未完成任务的任务
     public ResponseData getCompleteTask(Long brandId,String memberCode){
 
         ResponseData responseData = new ResponseData();
