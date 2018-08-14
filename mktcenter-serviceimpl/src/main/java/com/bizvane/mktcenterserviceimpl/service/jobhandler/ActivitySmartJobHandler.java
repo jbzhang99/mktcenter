@@ -172,7 +172,6 @@ public class ActivitySmartJobHandler extends IJobHandler {
                         break;
                         default:break;
                 }
-                ResponseData<T> execute = activitySmartService.execute(new ActivitySmartBO());
                 returnT.setCode(ResponseConstants.SUCCESS);
                 returnT.setContent(ResponseConstants.SUCCESS_MSG);
                 returnT.setMsg(ResponseConstants.SUCCESS_MSG);
