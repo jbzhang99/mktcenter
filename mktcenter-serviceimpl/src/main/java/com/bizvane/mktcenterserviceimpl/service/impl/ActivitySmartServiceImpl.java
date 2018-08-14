@@ -1,6 +1,7 @@
 package com.bizvane.mktcenterserviceimpl.service.impl;
 
 import com.alibaba.fastjson.JSON;
+import com.bizvane.members.facade.models.MemberInfoModel;
 import com.bizvane.members.facade.service.api.MemberInfoApiService;
 import com.bizvane.mktcenterservice.interfaces.ActivitySmartService;
 import com.bizvane.mktcenterservice.models.bo.ActivitySmartBO;
@@ -219,7 +220,7 @@ public class ActivitySmartServiceImpl implements ActivitySmartService {
         MktCouponPOExample mktCouponPOExample = new MktCouponPOExample();
         mktCouponPOExample.createCriteria().andValidEqualTo(Boolean.TRUE).andBizTypeEqualTo(BusinessTypeEnum.ACTIVITY_TYPE_ACTIVITY.getCode()).andBizIdEqualTo(mktActivityId);
         List<MktCouponPO> mktCouponPOS = mktCouponPOMapper.selectByExample(mktCouponPOExample);
-//        activitySmartVO.setMktCouponPOS(mktCouponPOS);
+        activitySmartVO.setMktCouponPOS(mktCouponPOS);
         responseData.setData(activitySmartVO);
         log.info("com.bizvane.mktcenterserviceimpl.service.impl.ActivitySmartServiceImpl.getCouponActivityDetailById result"+ JSON.toJSONString(responseData));
         return responseData;
@@ -547,11 +548,15 @@ public class ActivitySmartServiceImpl implements ActivitySmartService {
             }
         }
 
-        //执行
-        //根据条件获取人，再遍历
-        AwardBO awardBO = new AwardBO();
-        awardBO.setMktSmartType(MktSmartTypeEnum.SMART_TYPE_COUPON.getCode());
-        award.execute(awardBO);
+        //立即执行
+        if(execute){
+            AwardBO awardBO = new AwardBO();
+            //根据条件获取人，再遍历
+            ResponseData<List<MemberInfoModel>> memberInfo = memberInfoApiService.getMemberInfo(new MemberInfoModel());
+            awardBO.setMemberInfoModelList(memberInfo.getData());
+            awardBO.setMktSmartType(MktSmartTypeEnum.SMART_TYPE_COUPON_BATCH.getCode());
+            award.execute(awardBO);
+        }
 
         responseData.setMessage(ResponseConstants.SUCCESS_MSG);
         log.info("com.bizvane.mktcenterserviceimpl.service.impl.ActivitySmartServiceImpl.addCouponActivity result"+ JSON.toJSONString(responseData));
@@ -633,12 +638,14 @@ public class ActivitySmartServiceImpl implements ActivitySmartService {
         mktActivitySmartPO.setMktSmartType(MktSmartTypeEnum.SMART_TYPE_INTEGRAL.getCode());
         mktActivitySmartPOMapper.insertSelective(mktActivitySmartPO);
 
-        //执行
-        try {
+        //立即执行
+        if(execute){
             AwardBO awardBO = new AwardBO();
+            //根据条件获取人，再遍历
+            ResponseData<List<MemberInfoModel>> memberInfo = memberInfoApiService.getMemberInfo(new MemberInfoModel());
+            awardBO.setMemberInfoModelList(memberInfo.getData());
+            awardBO.setMktSmartType(MktSmartTypeEnum.SMART_TYPE_COUPON_BATCH.getCode());
             award.execute(awardBO);
-        } catch (Exception e) {
-            log.error("com.bizvane.mktcenterserviceimpl.service.impl.ActivitySmartServiceImpl.addCouponActivity error"+ e.getMessage());
         }
 
         responseData.setMessage(ResponseConstants.SUCCESS_MSG);
@@ -730,12 +737,14 @@ public class ActivitySmartServiceImpl implements ActivitySmartService {
         mktMessagePO.setCreateUserName(stageUser.getName());
         mktMessagePOMapper.insertSelective(mktMessagePO);
 
-        //执行
-        try {
+        //立即执行
+        if(execute){
             AwardBO awardBO = new AwardBO();
+            //根据条件获取人，再遍历
+            ResponseData<List<MemberInfoModel>> memberInfo = memberInfoApiService.getMemberInfo(new MemberInfoModel());
+            awardBO.setMemberInfoModelList(memberInfo.getData());
+            awardBO.setMktSmartType(MktSmartTypeEnum.SMART_TYPE_COUPON_BATCH.getCode());
             award.execute(awardBO);
-        } catch (Exception e) {
-            log.error("com.bizvane.mktcenterserviceimpl.service.impl.ActivitySmartServiceImpl.addCouponActivity error"+ e.getMessage());
         }
 
         responseData.setMessage(ResponseConstants.SUCCESS_MSG);
@@ -829,27 +838,18 @@ public class ActivitySmartServiceImpl implements ActivitySmartService {
         mktMessagePO.setCreateUserName(stageUser.getName());
         mktMessagePOMapper.insertSelective(mktMessagePO);
 
-        //执行
-        try {
+        //立即执行
+        if(execute){
             AwardBO awardBO = new AwardBO();
+            //根据条件获取人，再遍历
+            ResponseData<List<MemberInfoModel>> memberInfo = memberInfoApiService.getMemberInfo(new MemberInfoModel());
+            awardBO.setMemberInfoModelList(memberInfo.getData());
+            awardBO.setMktSmartType(MktSmartTypeEnum.SMART_TYPE_COUPON_BATCH.getCode());
             award.execute(awardBO);
-        } catch (Exception e) {
-            log.error("com.bizvane.mktcenterserviceimpl.service.impl.ActivitySmartServiceImpl.addCouponActivity error"+ e.getMessage());
         }
 
         responseData.setMessage(ResponseConstants.SUCCESS_MSG);
         log.info("com.bizvane.mktcenterserviceimpl.service.impl.ActivitySmartServiceImpl.addWxMessageActivity result"+ JSON.toJSONString(responseData));
-        return responseData;
-    }
-
-    /**
-     * 执行智能营销策略
-     * @return
-     */
-    public ResponseData<T> execute(ActivitySmartBO bo){
-        log.info("com.bizvane.mktcenterserviceimpl.service.impl.ActivitySmartServiceImpl.execute param"+"bo:"+ JSON.toJSONString(bo));
-        ResponseData responseData = new ResponseData();
-        log.info("com.bizvane.mktcenterserviceimpl.service.impl.ActivitySmartServiceImpl.execute result"+ JSON.toJSONString(responseData));
         return responseData;
     }
 }

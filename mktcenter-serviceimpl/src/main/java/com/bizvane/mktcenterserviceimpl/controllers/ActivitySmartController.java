@@ -31,7 +31,7 @@ import java.util.List;
  * @description 智能营销
  * @Copyright (c) 2018 上海商帆信息科技有限公司-版权所有
  */
-@Api(description = "会员分组")
+@Api(description = "智能营销")
 @RestController
 @RequestMapping("activitySmart")
 public class ActivitySmartController {

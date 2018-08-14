@@ -1,6 +1,7 @@
 package com.bizvane.mktcenterserviceimpl.common.award;
 
 import com.bizvane.couponfacade.interfaces.SendCouponServiceFeign;
+import com.bizvane.couponfacade.models.vo.SendCouponBatchRequestVO;
 import com.bizvane.couponfacade.models.vo.SendCouponSimpleRequestVO;
 import com.bizvane.members.facade.enums.IntegralChangeTypeEnum;
 import com.bizvane.members.facade.exception.MemberException;
@@ -66,7 +67,7 @@ public class AwardFactory {
     }
 
     /**
-     * 奖励券，批
+     * 奖励券，批量
      * @param bo
      * @return
      */
@@ -74,12 +75,12 @@ public class AwardFactory {
     public ResponseData<Integer> awardCouponBatch(AwardBO bo){
         ResponseData responseData = new ResponseData();
         try {
-            SendCouponSimpleRequestVO va = new SendCouponSimpleRequestVO();
-            va.setMemberCode(bo.getMemberCode());
-            va.setCouponDefinitionId(bo.getCouponDefinitionId());
-            va.setSendBussienId(bo.getSendBussienId());
-            va.setSendType("10");
-            ResponseData<Object> simple = sendCouponServiceFeign.simple(va);
+            SendCouponBatchRequestVO sendCouponBatchRequestVO = new SendCouponBatchRequestVO();
+            sendCouponBatchRequestVO.setMemberList(bo.getMemberInfoModelList());
+            sendCouponBatchRequestVO.setCouponDefinitionId(bo.getCouponDefinitionId());
+            sendCouponBatchRequestVO.setBusinessId(bo.getSendBussienId());
+            sendCouponBatchRequestVO.setSendType((byte) 1);
+            responseData = sendCouponServiceFeign.batchCoupon(sendCouponBatchRequestVO);
         } catch (Exception e) {
             log.error("com.bizvane.mktcenterserviceimpl.common.award.AwardFactory.awardCouponBatch error:"+e.getMessage());
             responseData.setCode(ResponseConstants.ERROR);

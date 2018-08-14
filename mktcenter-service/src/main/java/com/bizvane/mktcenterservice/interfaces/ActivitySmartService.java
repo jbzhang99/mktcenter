@@ -124,5 +124,4 @@ public interface ActivitySmartService {
      */
     public ResponseData<Integer> addWxMessageActivity(ActivitySmartVO vo, MessageVO messageVO, SysAccountPO stageUser);
 
-    public ResponseData<T> execute(ActivitySmartBO bo);
 }
