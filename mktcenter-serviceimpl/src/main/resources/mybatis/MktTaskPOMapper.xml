@@ -1004,7 +1004,7 @@
       tmt.start_time,
       tmt.end_time,
       tmt.points,
-      tmt.remark,
+      tmt.task_info as remark,
       tmc.mkt_coupon_id,
       tmc.coupon_name
       FROM
