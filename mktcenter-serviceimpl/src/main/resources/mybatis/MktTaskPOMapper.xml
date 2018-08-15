@@ -96,6 +96,19 @@
       <result column="mkt_coupon_id" property="mktCouponId"/>
     </collection>
   </resultMap>
+
+  <resultMap id="taskWXDetailMap" type="com.bizvane.mktcenterservice.models.bo.TaskWXDetailBO" autoMapping="true">
+    <id column="mkt_task_id" property="mktTaskId"/>
+    <result column="task_name"  property="taskName" />
+    <result column="start_time"  property="startTime" />
+    <result column="end_time"  property="endTime" />
+    <result column="points"  property="points" />
+    <result column="remark"  property="remark" />
+
+    <collection property="taskCouponWXBOs" javaType="java.util.List" ofType="com.bizvane.mktcenterservice.models.bo.TaskCouponWXBO" autoMapping="true">
+      <result column="mkt_coupon_id" property="mktCouponId"/>
+    </collection>
+  </resultMap>
   <!--&lt;!&ndash; 用于查询邀请奖励的条件&ndash;&gt;-->
   <!--<resultMap id="taskInviteAwardMap" type="com.bizvane.mktcenterservice.models.vo.TaskDetailVO" autoMapping="true">-->
     <!--<id column="mkt_task_id" property="mktTaskId"/>-->
@@ -984,5 +997,22 @@
         HAVING rewarded = #{rewarded}
       </if>
         </select>
-
+  <select id="getTaskWXDetail"  resultMap="taskWXDetailMap">
+      SELECT
+      tmt.mkt_task_id,
+      tmt.task_name,
+      tmt.start_time,
+      tmt.end_time,
+      tmt.points,
+      tmt.remark,
+      tmc.mkt_coupon_id,
+      tmc.coupon_name
+      FROM
+      t_mkt_task  tmt
+      LEFT JOIN  t_mkt_coupon  tmc ON tmt.mkt_task_id = tmc.biz_id
+      WHERE tmt.valid=1 AND tmc.valid=1
+      <if test="taskCode!=null and taskCode!=''">
+        AND tmt.task_code=#{taskCode}
+      </if>
+  </select>
 </mapper>

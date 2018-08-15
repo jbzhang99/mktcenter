@@ -3,6 +3,7 @@ package com.bizvane.mktcenterserviceimpl.mappers;
 import com.bizvane.mktcenterservice.models.bo.TaskInviteAwardBO;
 import com.bizvane.mktcenterservice.models.bo.TaskAwardBO;
 import com.bizvane.mktcenterservice.models.bo.TaskWXBO;
+import com.bizvane.mktcenterservice.models.bo.TaskWXDetailBO;
 import com.bizvane.mktcenterservice.models.po.MktTaskPO;
 import com.bizvane.mktcenterservice.models.po.MktTaskPOExample;
 import com.bizvane.mktcenterservice.models.po.MktTaskPOWithBLOBs;
@@ -128,4 +129,6 @@ public interface MktTaskPOMapper {
 	 * @return
 	 */
 	public List<TaskWXBO> getCompleteTask(TaskForWXVO vo);
+
+	public  List<TaskWXDetailBO>  getTaskWXDetail(@Param("taskCode") String taskCode);
 }
