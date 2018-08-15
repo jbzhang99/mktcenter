@@ -1,6 +1,7 @@
 package com.bizvane.mktcenterservice.models.bo;
 
 import com.bizvane.members.facade.models.MemberInfoModel;
+import com.bizvane.messagefacade.models.vo.MemberMessageVO;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.annotations.ApiModelProperty;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -147,6 +148,8 @@ public class AwardBO {
     private Integer mktSmartType;
 
     private List<MemberInfoModel> memberInfoModelList;
+
+    private MemberMessageVO memberMessageVO;
 
     public String getMemberCode() {
         return memberCode;
@@ -322,5 +325,13 @@ public class AwardBO {
 
     public void setMemberInfoModelList(List<MemberInfoModel> memberInfoModelList) {
         this.memberInfoModelList = memberInfoModelList;
+    }
+
+    public MemberMessageVO getMemberMessageVO() {
+        return memberMessageVO;
+    }
+
+    public void setMemberMessageVO(MemberMessageVO memberMessageVO) {
+        this.memberMessageVO = memberMessageVO;
     }
 }

@@ -8,6 +8,8 @@ import com.bizvane.members.facade.exception.MemberException;
 import com.bizvane.members.facade.models.IntegralRecordModel;
 import com.bizvane.members.facade.service.api.IntegralRecordApiService;
 import com.bizvane.messagefacade.interfaces.SendCommonMessageFeign;
+import com.bizvane.messagefacade.interfaces.TemplateMessageServiceFeign;
+import com.bizvane.messagefacade.models.vo.MemberMessageVO;
 import com.bizvane.messagefacade.models.vo.SysSmsConfigVO;
 import com.bizvane.mktcenterservice.models.bo.AwardBO;
 import com.bizvane.mktcenterservice.models.vo.ActivityVO;
@@ -42,6 +44,9 @@ public class AwardFactory {
 
     @Autowired
     private SendCommonMessageFeign sendCommonMessageFeign;
+
+    @Autowired
+    private TemplateMessageServiceFeign templateMessageServiceFeign;
 
     /**
      * 奖励券，单
@@ -142,6 +147,8 @@ public class AwardFactory {
     @Async("asyncServiceExecutor")
     public ResponseData<Integer> sendWxTemplateMessage(AwardBO bo){
         ResponseData responseData = new ResponseData();
+        MemberMessageVO memberMessageVO = bo.getMemberMessageVO();
+        templateMessageServiceFeign.sendTemplateMessage(memberMessageVO);
         return responseData;
     }
 
