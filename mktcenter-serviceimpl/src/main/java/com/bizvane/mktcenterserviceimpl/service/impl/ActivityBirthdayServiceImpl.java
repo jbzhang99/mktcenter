@@ -275,16 +275,14 @@ public class ActivityBirthdayServiceImpl implements ActivityBirthdayService {
         MktCouponPOExample example = new  MktCouponPOExample();
         example.createCriteria().andBizIdEqualTo(registerList.get(0).getMktActivityId()).andValidEqualTo(true);
         List<MktCouponPO> mktCouponPOs= mktCouponPOMapper.selectByExample(example);
-        /*//查询券接口
+        //查询券接口
         List<CouponEntityAndDefinitionVO> lists = new ArrayList<>();
         if(!CollectionUtils.isEmpty(mktCouponPOs)){
             for (MktCouponPO po:mktCouponPOs) {
-                CouponEntityPO couponEntity = new CouponEntityPO();
-                couponEntity.setCouponEntityId(po.getCouponDefinitionId());
-                ResponseData<CouponEntityAndDefinitionVO>  entityAndDefinition = couponQueryServiceFeign.getCouponDetail(couponEntity);
+                ResponseData<CouponEntityAndDefinitionVO>  entityAndDefinition = couponQueryServiceFeign.getCouponDetail(po.getCouponDefinitionId());
                 lists.add(entityAndDefinition.getData());
             }
-        }*/
+        }
         //查询消息模板
         MktMessagePOExample exampl = new MktMessagePOExample();
         exampl.createCriteria().andBizIdEqualTo(registerList.get(0).getMktActivityId()).andValidEqualTo(true);
@@ -293,9 +291,9 @@ public class ActivityBirthdayServiceImpl implements ActivityBirthdayService {
         if(!CollectionUtils.isEmpty(registerList)){
             bo.setActivityVO(registerList.get(0));
         }
-        /*if(!CollectionUtils.isEmpty(lists)){
+        if(!CollectionUtils.isEmpty(lists)){
             bo.setCouponEntityAndDefinitionVOList(lists);
-        }*/
+        }
         if(!CollectionUtils.isEmpty(listMktMessage)){
             bo.setMessageVOList(listMktMessage);
         }

@@ -213,9 +213,7 @@ public class ActivitySigninServiceImpl implements ActivitySigninService {
         List<CouponEntityAndDefinitionVO> lists = new ArrayList<>();
         if(!CollectionUtils.isEmpty(mktCouponPOs)){
             for (MktCouponPO po:mktCouponPOs) {
-                CouponEntityPO couponEntity = new CouponEntityPO();
-                couponEntity.setCouponEntityId(po.getCouponDefinitionId());
-                ResponseData<CouponEntityAndDefinitionVO>  entityAndDefinition = couponQueryServiceFeign.getCouponDetail(couponEntity);
+                ResponseData<CouponEntityAndDefinitionVO>  entityAndDefinition = couponQueryServiceFeign.getCouponDetail(po.getCouponDefinitionId());
                 lists.add(entityAndDefinition.getData());
             }
         }
