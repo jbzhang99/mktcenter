@@ -175,7 +175,8 @@ public class TaskProfileServiceImpl implements TaskProfileService {
                 sysCheckPo.setBusinessType(BusinessTypeEnum.ACTIVITY_TYPE_TASK.getCode());
                 sysCheckPo.setBusinessId(taskVO.getMktTaskId());
                 sysCheckPo.setBusinessCode(taskVO.getTaskCode());
-               //sysCheckServiceRpc.addCheck(sysCheckPo);
+                sysCheckPo.setValid(true);
+               sysCheckServiceRpc.addCheck(sysCheckPo);
 
 
                 //任务时间不滞后
@@ -192,7 +193,7 @@ public class TaskProfileServiceImpl implements TaskProfileService {
             taskVO.setCreateDate(new Date());
             taskVO.setCreateUserName(stageUser.getName());
             taskVO.setCreateUserId(stageUser.getSysAccountId());
-
+            taskVO.setValid(true);
             MktTaskPOWithBLOBs mktTaskPOWithBLOBs = new MktTaskPOWithBLOBs();
             BeanUtils.copyProperties(taskVO,mktTaskPOWithBLOBs);
             mktTaskPOMapper.insert(mktTaskPOWithBLOBs);
@@ -207,6 +208,7 @@ public class TaskProfileServiceImpl implements TaskProfileService {
             mktTaskProfilePO.setMktTaskId(taskVOId);
             //将客户选择会员需要完善的扩展属性添加进完善资料任务表
             mktTaskProfilePO.setPropertyCode(taskVO.getPropertyCode());
+            mktTaskProfilePO.setValid(true);
             mktTaskProfilePOMapper.insertSelective(mktTaskProfilePO);
 
             //需要发奖励
@@ -221,7 +223,7 @@ public class TaskProfileServiceImpl implements TaskProfileService {
                     mktCouponPO1.setCouponName(mktCouponPO.getCouponName());
                     mktCouponPO1.setCouponDefinitionId(mktCouponPO.getCouponDefinitionId());//是id还是code
                     mktCouponPO1.setBizId(taskVOId);
-
+                    mktCouponPO1.setValid(true);
                     mktCouponPOMapper.insertSelective(mktCouponPO1);
 
                 }
@@ -242,6 +244,7 @@ public class TaskProfileServiceImpl implements TaskProfileService {
                     BeanUtils.copyProperties(mktTaskProfilePO,mktMessagePO);
                     mktMessagePO.setMsgContent(messagePO.getMsgContent());
                     mktMessagePO.setBizId(taskVOId);
+                    mktMessagePO.setValid(true);
                     //模板消息id？哪里的？
                     mktMessagePOMapper.insertSelective(mktMessagePO);
                 }

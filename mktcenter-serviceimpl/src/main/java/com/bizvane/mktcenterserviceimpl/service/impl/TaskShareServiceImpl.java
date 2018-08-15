@@ -197,6 +197,7 @@ public class TaskShareServiceImpl implements TaskShareService {
                 sysCheckPo.setBusinessType(BusinessTypeEnum.ACTIVITY_TYPE_TASK.getCode());
                 sysCheckPo.setBusinessCode(taskVO.getTaskCode());
                 sysCheckPo.setBusinessId(taskVO.getMktTaskId());
+                sysCheckPo.setValid(true);
                 sysCheckServiceRpc.addCheck(sysCheckPo);
             
 
@@ -234,7 +235,7 @@ public class TaskShareServiceImpl implements TaskShareService {
             taskVO.setCreateDate(new Date());
             taskVO.setCreateUserName(stageUser.getName());
             taskVO.setCreateUserId(stageUser.getSysAccountId());
-
+            taskVO.setValid(true);
             BeanUtils.copyProperties(taskVO,mktTaskPOWithBLOBs);
             mktTaskPOMapper.insert(mktTaskPOWithBLOBs);
             Long taskVOId = mktTaskPOWithBLOBs.getMktTaskId();
@@ -249,6 +250,7 @@ public class TaskShareServiceImpl implements TaskShareService {
             mktTaskSharePO.setShareUrl(taskVO.getShareUrl());
             mktTaskSharePO.setShareUrlType(taskVO.getShareUrlType());
 
+            mktTaskSharePO.setValid(true);
             mktTaskSharePOMapper.insertSelective(mktTaskSharePO);
 
 
@@ -264,6 +266,7 @@ public class TaskShareServiceImpl implements TaskShareService {
                     mktCouponPO1.setBizType(BusinessTypeEnum.ACTIVITY_TYPE_TASK.getCode());
                     mktCouponPO1.setCouponName(mktCouponPO.getCouponName());
                     mktCouponPO1.setCouponDefinitionId(mktCouponPO.getCouponDefinitionId());//是id还是code
+                    mktCouponPO1.setValid(true);
                     mktCouponPOMapper.insertSelective(mktCouponPO1);
 
                 }
@@ -280,7 +283,7 @@ public class TaskShareServiceImpl implements TaskShareService {
                     mktMessagePO.setBizType(BusinessTypeEnum.ACTIVITY_TYPE_TASK.getCode());
                     mktMessagePO.setCreateDate(new Date());
                     BeanUtils.copyProperties(mktTaskSharePO,mktMessagePO);
-
+                    mktMessagePO.setValid(true);
                     mktMessagePO.setBizId(taskVOId);
                     mktMessagePOMapper.insertSelective(mktMessagePO);
                 }
