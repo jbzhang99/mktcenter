@@ -2,6 +2,7 @@ package com.bizvane.mktcenterserviceimpl.mappers;
 
 import com.bizvane.mktcenterservice.models.bo.TaskInviteAwardBO;
 import com.bizvane.mktcenterservice.models.bo.TaskAwardBO;
+import com.bizvane.mktcenterservice.models.bo.TaskWXBO;
 import com.bizvane.mktcenterservice.models.po.MktTaskPO;
 import com.bizvane.mktcenterservice.models.po.MktTaskPOExample;
 import com.bizvane.mktcenterservice.models.po.MktTaskPOWithBLOBs;
@@ -10,6 +11,7 @@ import java.util.Date;
 import java.util.List;
 
 import com.bizvane.mktcenterservice.models.vo.TaskDetailVO;
+import com.bizvane.mktcenterservice.models.vo.TaskForWXVO;
 import org.apache.ibatis.annotations.Param;
 
 public interface MktTaskPOMapper {
@@ -119,4 +121,11 @@ public interface MktTaskPOMapper {
 	 * @return
 	 */
 	public List<TaskAwardBO> getTaskInviteAwardList(@Param("sysCompanyId") Long sysCompanyId, @Param("sysBrandId") Long sysBrandId,@Param("placeOrderTime")Date placeOrderTime);
+
+	/**
+	 * 获取会员已完成和未完成任务列表
+	 * @param vo
+	 * @return
+	 */
+	public List<TaskWXBO> getCompleteTask(TaskForWXVO vo);
 }

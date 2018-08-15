@@ -1,5 +1,6 @@
 package com.bizvane.mktcenterservice.interfaces;
 
+import com.bizvane.mktcenterservice.models.vo.TaskForWXVO;
 import com.bizvane.utils.responseinfo.ResponseData;
 
 /**
@@ -9,7 +10,7 @@ public interface TaskServiceForWX {
 
 
     //获取该会员已完成的任务
-    public ResponseData getCompleteTask(Long brandId,String memberCode);
+    public ResponseData getCompleteTask(TaskForWXVO vo);
 
 
 }

@@ -1,7 +1,9 @@
 package com.bizvane.mktcenterservice.rpc;
 
+import com.bizvane.mktcenterservice.models.vo.TaskForWXVO;
 import com.bizvane.utils.responseinfo.ResponseData;
 import org.springframework.cloud.openfeign.FeignClient;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 /**
@@ -16,5 +18,5 @@ public interface TaskServiceForWXRpc {
 
     @RequestMapping("/getCompleteTask")
     @io.swagger.annotations.ApiModelProperty(value = "brandId,memberCode",name = "该会员已完成和未完成的任务列表", required = false,example = "")
-    public ResponseData getCompleteTask(Long brandId,String memberCode);
+    public ResponseData getCompleteTask(@RequestBody TaskForWXVO vo);
 }
