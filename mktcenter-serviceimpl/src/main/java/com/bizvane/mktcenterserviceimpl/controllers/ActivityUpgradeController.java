@@ -46,18 +46,14 @@ public class ActivityUpgradeController {
      * 创建活动
      * @return
      */
-    @RequestMapping("addActivityUpgrade.do")
-    public ResponseData<Integer> addActivityUpgrade(ActivityVO activityVO, List<MktCouponPO> couponCodeList, List<MktMessagePO> messageVOList, HttpServletRequest request){
-        ActivityBO bo = new ActivityBO();
-        bo.setActivityVO(activityVO);
-        bo.setCouponCodeList(couponCodeList);
-        bo.setMessageVOList(messageVOList);
+    @RequestMapping("addActivityUpgrade")
+    public ResponseData<Integer> addActivityUpgrade(ActivityBO bo, HttpServletRequest request){
         //参数校验
-        ResponseData responseData = ActivityParamCheckUtil.checkParam(bo);
+    /*    ResponseData responseData = ActivityParamCheckUtil.checkParam(bo);
         //参数校验不通过
         if(SystemConstants.ERROR_CODE==responseData.getCode()){
             return responseData;
-        }
+        }*/
         //参数校验通过，获取操作人信息
         SysAccountPO stageUser = TokenUtils.getStageUser(request);
         //SysAccountPO stageUser = new SysAccountPO();

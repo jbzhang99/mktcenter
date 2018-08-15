@@ -220,6 +220,8 @@ public class ActivityRegisterServiceImpl implements ActivityRegisterService {
         MktActivityRegisterPO mktActivityRegisterPO = new MktActivityRegisterPO();
         BeanUtils.copyProperties(mktActivityPOWithBLOBs,mktActivityRegisterPO);
         mktActivityRegisterPO.setMktActivityId(mktActivityId);
+        mktActivityRegisterPO.setMbrLevelCode(activityVO.getMbrLevelCode());
+        mktActivityRegisterPO.setMbrLevelName(activityVO.getMbrLevelName());
         log.info("领券活动-创建活动-新增开卡活动表入参:"+ JSON.toJSONString(mktActivityRegisterPO));
         mktActivityRegisterPOMapper.insertSelective(mktActivityRegisterPO);
         log.info("开卡活动-创建开卡活动表活动-成功");
@@ -250,7 +252,7 @@ public class ActivityRegisterServiceImpl implements ActivityRegisterService {
             }
         }
         //如果执行状态为执行中 就要发送消息
-        if(mktActivityPOWithBLOBs.getActivityStatus()==ActivityStatusEnum.ACTIVITY_STATUS_EXECUTING.getCode()){
+       if(mktActivityPOWithBLOBs.getActivityStatus()==ActivityStatusEnum.ACTIVITY_STATUS_EXECUTING.getCode()){
             //查询对应的会员
             MemberInfoModel memberInfoModel= new MemberInfoModel();
             memberInfoModel.setBrandId(activityVO.getSysBrandId());
@@ -559,9 +561,7 @@ public class ActivityRegisterServiceImpl implements ActivityRegisterService {
             //查询券接口
             if(!CollectionUtils.isEmpty(mktCouponPOs)){
                 for (MktCouponPO po:mktCouponPOs) {
-                    CouponEntityPO couponEntity = new CouponEntityPO();
-                    couponEntity.setCouponEntityId(po.getCouponDefinitionId());
-                    ResponseData<CouponEntityAndDefinitionVO>  entityAndDefinition = couponQueryServiceFeign.getCouponDetail(couponEntity);
+                    ResponseData<CouponEntityAndDefinitionVO>  entityAndDefinition = couponQueryServiceFeign.getCouponDetail(po.getCouponDefinitionId());
                     lists.add(entityAndDefinition.getData());
                 }
             }
@@ -570,7 +570,7 @@ public class ActivityRegisterServiceImpl implements ActivityRegisterService {
         //查询消息模板
         MktMessagePOExample exampl = new MktMessagePOExample();
         exampl.createCriteria().andBizIdEqualTo(registerList.get(0).getMktActivityId()).andValidEqualTo(true);
-        List<MktMessagePO> listMktMessage = mktMessagePOMapper.selectByExample(exampl);
+        List<MktMessagePO> listMktMessage = mktMessagePOMapper.selectByExampleWithBLOBs(exampl);
         ActivityBO bo = new ActivityBO();
         if(!CollectionUtils.isEmpty(registerList)){
             bo.setActivityVO(registerList.get(0));
@@ -578,7 +578,7 @@ public class ActivityRegisterServiceImpl implements ActivityRegisterService {
         if(!CollectionUtils.isEmpty(listMktMessage)){
             bo.setMessageVOList(listMktMessage);
         }
-        if(!CollectionUtils.isEmpty(lists)){
+       if(!CollectionUtils.isEmpty(lists)){
             bo.setCouponEntityAndDefinitionVOList(lists);
         }
         responseData.setData(bo);

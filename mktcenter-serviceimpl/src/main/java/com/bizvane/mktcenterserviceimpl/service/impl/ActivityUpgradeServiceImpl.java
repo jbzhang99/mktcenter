@@ -119,6 +119,7 @@ public class ActivityUpgradeServiceImpl implements ActivityUpgradeService {
         ActivityVO activityVO = bo.getActivityVO();
         //工具类生成活动编码
         String activityCode = CodeUtil.getActivityCode();
+        activityVO.setActivityCode(activityCode);
         //增加活动类型是升级活动
         activityVO.setActivityType(ActivityTypeEnum.ACTIVITY_TYPE_UPGRADE.getCode());
         //增加品牌id
@@ -126,7 +127,7 @@ public class ActivityUpgradeServiceImpl implements ActivityUpgradeService {
         MktActivityPOWithBLOBs mktActivityPOWithBLOBs = new MktActivityPOWithBLOBs();
         BeanUtils.copyProperties(activityVO,mktActivityPOWithBLOBs);
         //查询判断长期活动同一会员等级是否有重复
-        if(1 == bo.getActivityVO().getLongTerm()){
+       if(1 == bo.getActivityVO().getLongTerm()){
             ActivityVO vo = new ActivityVO();
             vo.setMbrLevelCode(bo.getActivityVO().getMbrLevelCode());
             vo.setLongTerm(bo.getActivityVO().getLongTerm());
@@ -216,6 +217,8 @@ public class ActivityUpgradeServiceImpl implements ActivityUpgradeService {
         MktActivityUpgradePO mktActivityUpgradePO = new MktActivityUpgradePO();
         BeanUtils.copyProperties(mktActivityPOWithBLOBs,mktActivityUpgradePO);
         mktActivityUpgradePO.setMktActivityId(mktActivityId);
+        mktActivityUpgradePO.setMbrLevelCode(activityVO.getMbrLevelCode());
+        mktActivityUpgradePO.setMbrLevelName(activityVO.getMbrLevelName());
         log.info("新增升级表数据="+ JSON.toJSONString(mktActivityUpgradePO));
         mktActivityUpgradePOMapper.insertSelective(mktActivityUpgradePO);
 
@@ -484,16 +487,14 @@ public class ActivityUpgradeServiceImpl implements ActivityUpgradeService {
         List<CouponEntityAndDefinitionVO> lists = new ArrayList<>();
         if(!CollectionUtils.isEmpty(mktCouponPOs)){
             for (MktCouponPO po:mktCouponPOs) {
-                CouponEntityPO couponEntity = new CouponEntityPO();
-                couponEntity.setCouponEntityId(po.getCouponDefinitionId());
-                ResponseData<CouponEntityAndDefinitionVO>  entityAndDefinition = couponQueryServiceFeign.getCouponDetail(couponEntity);
+                ResponseData<CouponEntityAndDefinitionVO>  entityAndDefinition = couponQueryServiceFeign.getCouponDetail(po.getCouponDefinitionId());
                 lists.add(entityAndDefinition.getData());
             }
         }
         //查询消息模板
         MktMessagePOExample exampl = new MktMessagePOExample();
         exampl.createCriteria().andBizIdEqualTo(upgradeList.get(0).getMktActivityId()).andValidEqualTo(true);
-        List<MktMessagePO> listMktMessage = mktMessagePOMapper.selectByExample(exampl);
+        List<MktMessagePO> listMktMessage = mktMessagePOMapper.selectByExampleWithBLOBs(exampl);
         ActivityBO bo = new ActivityBO();
         if(!CollectionUtils.isEmpty(upgradeList)){
             bo.setActivityVO(upgradeList.get(0));

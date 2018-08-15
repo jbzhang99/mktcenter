@@ -166,7 +166,7 @@ public class ActivityBirthdayServiceImpl implements ActivityBirthdayService {
             //活动状态设置为待执行
             mktActivityPOWithBLOBs.setActivityStatus(ActivityStatusEnum.ACTIVITY_STATUS_PENDING.getCode());
 
-            //如果是待审核数据则需要增加一条审核数据
+            //如果是待审核数据则需要增加一条审核数据l
             SysCheckPo po = new SysCheckPo();
             po.setSysBrandId(mktActivityPOWithBLOBs.getSysBrandId());
             po.setBusinessCode(mktActivityPOWithBLOBs.getActivityCode());
@@ -215,6 +215,9 @@ public class ActivityBirthdayServiceImpl implements ActivityBirthdayService {
         MktActivityBirthdayPO mktActivityBirthdayPO = new MktActivityBirthdayPO();
         BeanUtils.copyProperties(mktActivityPOWithBLOBs,mktActivityBirthdayPO);
         mktActivityBirthdayPO.setMktActivityId(mktActivityId);
+        mktActivityBirthdayPO.setMbrLevelCode(activityVO.getMbrLevelCode());
+        mktActivityBirthdayPO.setMbrLevelName(activityVO.getMbrLevelName());
+        mktActivityBirthdayPO.setDaysAhead(activityVO.getDaysAhead());
         log.info("增加一条数据到生日表参数为："+ JSON.toJSONString(mktActivityBirthdayPO));
         mktActivityBirthdayPOMapper.insertSelective(mktActivityBirthdayPO);
 
@@ -234,7 +237,7 @@ public class ActivityBirthdayServiceImpl implements ActivityBirthdayService {
         }
 
         //新增活动消息
-        List<MktMessagePO> messageVOList = bo.getMessageVOList();
+       /* List<MktMessagePO> messageVOList = bo.getMessageVOList();
         if(!CollectionUtils.isEmpty(messageVOList)){
             for(MktMessagePO messageVO : messageVOList){
                 MktMessagePO mktMessagePO = new MktMessagePO();
@@ -244,7 +247,7 @@ public class ActivityBirthdayServiceImpl implements ActivityBirthdayService {
                 mktMessagePO.setBizId(mktActivityId);
                 mktMessagePOMapper.insertSelective(mktMessagePO);
             }
-        }
+        }*/
         responseData.setCode(SysResponseEnum.SUCCESS.getCode());
         responseData.setMessage(SysResponseEnum.SUCCESS.getMessage());
         return responseData;
@@ -276,9 +279,7 @@ public class ActivityBirthdayServiceImpl implements ActivityBirthdayService {
         List<CouponEntityAndDefinitionVO> lists = new ArrayList<>();
         if(!CollectionUtils.isEmpty(mktCouponPOs)){
             for (MktCouponPO po:mktCouponPOs) {
-                CouponEntityPO couponEntity = new CouponEntityPO();
-                couponEntity.setCouponEntityId(po.getCouponDefinitionId());
-                ResponseData<CouponEntityAndDefinitionVO>  entityAndDefinition = couponQueryServiceFeign.getCouponDetail(couponEntity);
+                ResponseData<CouponEntityAndDefinitionVO>  entityAndDefinition = couponQueryServiceFeign.getCouponDetail(po.getCouponDefinitionId());
                 lists.add(entityAndDefinition.getData());
             }
         }
