@@ -1,5 +1,6 @@
 package com.bizvane.mktcenterserviceimpl.service.impl;
 
+import com.bizvane.appletservice.Rpc.MenberMadeServiceRpc;
 import com.bizvane.centerstageservice.models.po.SysCheckConfigPo;
 import com.bizvane.centerstageservice.models.po.SysCheckPo;
 import com.bizvane.centerstageservice.models.vo.SysCheckConfigVo;
@@ -103,6 +104,8 @@ public class TaskShareServiceImpl implements TaskShareService {
 
     @Autowired
     private MemberInfoApiService memberInfoApiService;
+
+
 
 
     /**
@@ -1074,21 +1077,21 @@ public class TaskShareServiceImpl implements TaskShareService {
             for (DayTaskRecordVo dayTaskRecordVo:dayTaskRecordVoList){
                 Long taskId = dayTaskRecordVo.getTaskId();
 
-                /*//根据taskid从任务分享表中查出
+                //根据taskid从任务分享表中查出
                 MktTaskSharePOExample mktTaskSharePOExample = new MktTaskSharePOExample();
                 mktTaskSharePOExample.createCriteria().andValidEqualTo(true).andMktTaskIdEqualTo(taskId);
 
                 List<MktTaskSharePO> mktTaskSharePOList = mktTaskSharePOMapper.selectByExample(mktTaskSharePOExample);
                 MktTaskSharePO mktTaskSharePO = mktTaskSharePOList.get(0);
 
-                //某个任务的参与人次
-                Long countPartMbr = mktTaskRecordPOMapper.countPartMbr(mktTaskSharePO);*/
+                //某个任务的参与人数
+                Long countPartMbr = mktTaskRecordPOMapper.countPartMbr(mktTaskSharePO);
 
                //某个任务的参与人次
 
-                MktTaskRecordPOExample mktTaskRecordPOExample = new MktTaskRecordPOExample();
+               /* MktTaskRecordPOExample mktTaskRecordPOExample = new MktTaskRecordPOExample();
                 mktTaskRecordPOExample.createCriteria().andTaskIdEqualTo(taskId).andValidEqualTo(true);
-               Long countPartMbr= mktTaskRecordPOMapper.countByExample(mktTaskRecordPOExample);
+               Long countPartMbr= mktTaskRecordPOMapper.countByExample(mktTaskRecordPOExample);*/
                 dayTaskRecordVo.setOneTaskCountMbr(countPartMbr);
 
                 //某个任务的完成人数
@@ -1153,6 +1156,8 @@ public class TaskShareServiceImpl implements TaskShareService {
 
         return responseData;
     }
+
+
 
 
 }
