@@ -1009,8 +1009,8 @@
       tmc.coupon_name
       FROM
       t_mkt_task  tmt
-      LEFT JOIN  t_mkt_coupon  tmc ON tmt.mkt_task_id = tmc.biz_id
-      WHERE tmt.valid=1 AND tmc.valid=1
+      LEFT JOIN  t_mkt_coupon  tmc ON tmt.mkt_task_id = tmc.biz_id AND tmc.valid=1
+      WHERE tmt.valid=1
       <if test="taskCode!=null and taskCode!=''">
         AND tmt.task_code=#{taskCode}
       </if>
