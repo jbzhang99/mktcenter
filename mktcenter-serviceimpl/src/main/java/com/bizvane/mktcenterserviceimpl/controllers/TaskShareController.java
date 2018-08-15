@@ -1,5 +1,6 @@
 package com.bizvane.mktcenterserviceimpl.controllers;
 
+import com.bizvane.appletservice.Rpc.MenberMadeServiceRpc;
 import com.bizvane.members.facade.models.MemberInfoModel;
 import com.bizvane.mktcenterservice.interfaces.TaskShareService;
 import com.bizvane.mktcenterservice.models.bo.TaskBO;
@@ -11,6 +12,7 @@ import com.bizvane.mktcenterservice.models.vo.TaskVO;
 import com.bizvane.mktcenterserviceimpl.common.constants.SystemConstants;
 import com.bizvane.mktcenterserviceimpl.common.enums.TaskTypeEnum;
 import com.bizvane.mktcenterserviceimpl.common.utils.TaskParamCheckUtil;
+import com.bizvane.utils.enumutils.SysResponseEnum;
 import com.bizvane.utils.responseinfo.ResponseData;
 import com.bizvane.utils.tokens.SysAccountPO;
 import com.bizvane.utils.tokens.TokenUtils;
@@ -36,6 +38,9 @@ public class TaskShareController {
 
     @Autowired
     private TaskShareService taskShareService;
+    @Autowired
+    private MenberMadeServiceRpc menberMadeServiceRpc;
+
 
     /**
      * 查询任务列表
@@ -168,6 +173,26 @@ public class TaskShareController {
         SysAccountPO stageUser = TokenUtils.getStageUser(request);
 
         return taskShareService.getTaskShareRecordByTime(date1,date2,stageUser,taskName,pageForm);
+    }
+
+    /**
+     * 查询微信分享链接
+     * @param brandId
+     * @return
+     */
+    @RequestMapping("selectBrandFunction")
+    public ResponseData selectBrandFunction(Long brandId){
+        ResponseData responseData = new ResponseData();
+
+
+        if (brandId==null){
+            responseData.setMessage("品牌Id为空");
+            return responseData;
+        }
+
+        return  menberMadeServiceRpc.selectBrandFunctionRpc(brandId);
+
+
     }
 }
 
