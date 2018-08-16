@@ -1,5 +1,6 @@
 package com.bizvane.mktcenterserviceimpl.service.impl;
 
+import com.alibaba.fastjson.JSON;
 import com.bizvane.mktcenterservice.interfaces.TaskServiceForWX;
 import com.bizvane.mktcenterservice.models.bo.TaskWXBO;
 import com.bizvane.mktcenterservice.models.bo.TaskWXDetailBO;
@@ -48,7 +49,7 @@ public class TaskServiceForWXImpl implements TaskServiceForWX{
     //获取任务的详情
     @Override
     public  ResponseData<TaskWXDetailBO>  getTaskWXDetail(Long taskId){
-
+System.out.println("---------------获取任务的详情----------------"+taskId);
         ResponseData<TaskWXDetailBO> responseData = new ResponseData(SysResponseEnum.FAILED.getCode(),SysResponseEnum.FAILED.getMessage(),null);
         List<TaskWXDetailBO> lists = taskPOMapper.getTaskWXDetail(taskId);
         if (CollectionUtils.isNotEmpty(lists)){
@@ -56,6 +57,7 @@ public class TaskServiceForWXImpl implements TaskServiceForWX{
             responseData.setMessage(SysResponseEnum.SUCCESS.getMessage());
             responseData.setData(lists.get(0));
         }
+        System.out.println("---------------获取任务的详情----------------"+ JSON.toJSONString(responseData));
       return responseData;
     }
 
