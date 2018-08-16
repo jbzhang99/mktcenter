@@ -89,7 +89,7 @@ public class ExecuteParamCheckUtil {
             falg = true;
         } else {
             //判断是否是黑名单
-            if (!StringUtils.isBlank(activityVO.getCommodityBlacklist())) {
+           /* if (!StringUtils.isBlank(activityVO.getCommodityBlacklist())) {
                 String commodityBlacklist = activityVO.getCommodityBlacklist();
                 List<String> result = Arrays.asList(commodityBlacklist.split(","));
                 String productNos = vo.getProductNos();
@@ -111,7 +111,7 @@ public class ExecuteParamCheckUtil {
                 List<String> productNoList = Arrays.asList(productNos.split(","));
                     boolean contains = result.containsAll(productNoList);
                         falg=contains;
-            }
+            }*/
 
         }
         return falg;
@@ -129,7 +129,7 @@ public class ExecuteParamCheckUtil {
             falg = true;
         }else{
             //判断是都是黑名单
-            if (!StringUtils.isBlank(activityVO.getStoreBlacklist())) {
+           /* if (!StringUtils.isBlank(activityVO.getStoreBlacklist())) {
                 String StoreBlacklist = activityVO.getStoreBlacklist();
                 List<String> result = Arrays.asList(StoreBlacklist.split(","));
                  boolean contains  =result.contains(vo.getServiceStoreId());
@@ -145,7 +145,7 @@ public class ExecuteParamCheckUtil {
                 String StoreWhitelist = activityVO.getStoreWhitelist();
                 List<String> result = Arrays.asList(StoreWhitelist.split(","));
                 falg=result.contains(vo.getServiceStoreId());
-            }
+            }*/
 
         }
         return falg;

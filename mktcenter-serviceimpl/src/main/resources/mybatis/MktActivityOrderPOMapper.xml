@@ -645,11 +645,11 @@
     tmao.order_source,
     tmao.order_min_price,
     tmao.is_commodity_limit,
-    tmao.commodity_whitelist,
-    tmao.commodity_blacklist,
+    tmao.commodity_limit_type,
+    tmao.commodity_limit_list,
     tmao.is_store_limit,
-    tmao.store_whitelist,
-    tmao.store_blacklist
+    tmao.store_limit_type,
+    tmao.store_limit_list
     FROM
     `t_mkt_activity` tma
     INNER JOIN t_mkt_activity_order tmao ON tma.mkt_activity_id = tmao.mkt_activity_id

@@ -201,6 +201,17 @@ public class ActivityOrderServiceImpl implements ActivityOrderService {
         MktActivityOrderPOWithBLOBs mktActivityOrderPOWithBLOBs = new MktActivityOrderPOWithBLOBs();
         BeanUtils.copyProperties(mktActivityPOWithBLOBs,mktActivityOrderPOWithBLOBs);
         mktActivityOrderPOWithBLOBs.setMktActivityId(mktActivityId);
+        mktActivityOrderPOWithBLOBs.setMbrLevelCode(activityVO.getMbrLevelCode());
+        mktActivityOrderPOWithBLOBs.setMbrLevelName(activityVO.getMbrLevelName());
+        mktActivityOrderPOWithBLOBs.setIsCommodityLimit(activityVO.getCommodityLimit());
+        mktActivityOrderPOWithBLOBs.setCommodityLimitList(activityVO.getCommodityLimitList());
+        mktActivityOrderPOWithBLOBs.setCommodityLimitType(activityVO.getCommodityLimitType());
+        mktActivityOrderPOWithBLOBs.setStoreLimitList(activityVO.getStoreLimitList());
+        mktActivityOrderPOWithBLOBs.setStoreLimitType(activityVO.getStoreLimitType());
+        mktActivityOrderPOWithBLOBs.setIsStoreLimit(activityVO.getStoreLimit());
+        mktActivityOrderPOWithBLOBs.setMemberType(activityVO.getMemberType());
+        mktActivityOrderPOWithBLOBs.setOrderSource(activityVO.getOrderSource());
+        mktActivityOrderPOWithBLOBs.setOrderMinPrice(activityVO.getOrderMinPrice());
         log.info("生成消费活动消费表参数="+ JSON.toJSONString(mktActivityOrderPOWithBLOBs));
         mktActivityOrderPOMapper.insertSelective(mktActivityOrderPOWithBLOBs);
 

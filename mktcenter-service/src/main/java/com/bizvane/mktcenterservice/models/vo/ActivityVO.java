@@ -65,43 +65,6 @@ public class ActivityVO extends MktActivityPO {
      */
     @io.swagger.annotations.ApiModelProperty(value = "订单最低金额", name = "orderMinPrice", required = false, example = "")
     private String orderMinPrice;
-    /**
-     * 只读. 是否限制商品，0否，1是. is_commodity_limit
-     * @mbg.generated  2018-07-13 10:42:22
-     */
-    @io.swagger.annotations.ApiModelProperty(value = "是否限制商品，0否，1是", name = "isCommodityLimit", required = false, example = "")
-    private Boolean isCommodityLimit;
-    /**
-     * 只读. 是否限制门店，0否，1是. is_store_limit
-     * @mbg.generated  2018-07-13 10:42:22
-     */
-    @io.swagger.annotations.ApiModelProperty(value = "是否限制门店，0否，1是", name = "isStoreLimit", required = false, example = "")
-    private Boolean isStoreLimit;
-
-    /**
-     * 只读. 商品白名单. commodity_whitelist
-     * @mbg.generated  2018-07-13 10:42:22
-     */
-    @io.swagger.annotations.ApiModelProperty(value = "商品白名单", name = "commodityWhitelist", required = false, example = "")
-    private String commodityWhitelist;
-    /**
-     * 只读. 商品黑名单. commodity_blacklist
-     * @mbg.generated  2018-07-13 10:42:22
-     */
-    @io.swagger.annotations.ApiModelProperty(value = "商品黑名单", name = "commodityBlacklist", required = false, example = "")
-    private String commodityBlacklist;
-    /**
-     * 只读. 门店白名单. store_whitelist
-     * @mbg.generated  2018-07-13 10:42:22
-     */
-    @io.swagger.annotations.ApiModelProperty(value = "门店白名单", name = "storeWhitelist", required = false, example = "")
-    private String storeWhitelist;
-    /**
-     * 只读. 门店黑名单. store_blacklist
-     * @mbg.generated  2018-07-13 10:42:22
-     */
-    @io.swagger.annotations.ApiModelProperty(value = "门店黑名单", name = "storeBlacklist", required = false, example = "")
-    private String storeBlacklist;
 
     /**
      * 只读. 签到方式：1连续签到，2累计签到，3单日签到. sign_type
@@ -187,6 +150,93 @@ public class ActivityVO extends MktActivityPO {
      * 会员编号
      */
     private String memberCode;
+
+    /**
+     * 只读. 商品限制名单. commodity_limit_list
+     * @mbg.generated  2018-08-16 16:54:21
+     */
+    @io.swagger.annotations.ApiModelProperty(value = "商品限制名单", name = "commodityLimitList", required = false, example = "")
+    private String commodityLimitList;
+    /**
+     * 只读. 门店限制名单. store_limit_list
+     * @mbg.generated  2018-08-16 16:54:21
+     */
+    @io.swagger.annotations.ApiModelProperty(value = "门店限制名单", name = "storeLimitList", required = false, example = "")
+    private String storeLimitList;
+
+    /**
+     * 只读. 商品限制状态：0不限制，1限制. is_commodity_limit
+     * @mbg.generated  2018-08-16 16:54:21
+     */
+    @io.swagger.annotations.ApiModelProperty(value = "商品限制状态：0不限制，1限制", name = "isCommodityLimit", required = false, example = "")
+    private Boolean isCommodityLimit;
+    /**
+     * 只读. 商品限制类型：1黑名单，2白名单. commodity_limit_type
+     * @mbg.generated  2018-08-16 16:54:21
+     */
+    @io.swagger.annotations.ApiModelProperty(value = "商品限制类型：1黑名单，2白名单", name = "commodityLimitType", required = false, example = "")
+    private Integer commodityLimitType;
+    /**
+     * 只读. 门店限制状态：0不限制，1限制. is_store_limit
+     * @mbg.generated  2018-08-16 16:54:21
+     */
+    @io.swagger.annotations.ApiModelProperty(value = "门店限制状态：0不限制，1限制", name = "isStoreLimit", required = false, example = "")
+    private Boolean isStoreLimit;
+    /**
+     * 只读. 门店限制类型：1黑名单，2白名单. store_limit_type
+     * @mbg.generated  2018-08-16 16:54:21
+     */
+    @io.swagger.annotations.ApiModelProperty(value = "门店限制类型：1黑名单，2白名单", name = "storeLimitType", required = false, example = "")
+    private Integer storeLimitType;
+
+    public String getCommodityLimitList() {
+        return commodityLimitList;
+    }
+
+    public void setCommodityLimitList(String commodityLimitList) {
+        this.commodityLimitList = commodityLimitList;
+    }
+
+    public String getStoreLimitList() {
+        return storeLimitList;
+    }
+
+    public void setStoreLimitList(String storeLimitList) {
+        this.storeLimitList = storeLimitList;
+    }
+
+    public Boolean getCommodityLimit() {
+        return isCommodityLimit;
+    }
+
+    public void setCommodityLimit(Boolean commodityLimit) {
+        isCommodityLimit = commodityLimit;
+    }
+
+    public Integer getCommodityLimitType() {
+        return commodityLimitType;
+    }
+
+    public void setCommodityLimitType(Integer commodityLimitType) {
+        this.commodityLimitType = commodityLimitType;
+    }
+
+    public Boolean getStoreLimit() {
+        return isStoreLimit;
+    }
+
+    public void setStoreLimit(Boolean storeLimit) {
+        isStoreLimit = storeLimit;
+    }
+
+    public Integer getStoreLimitType() {
+        return storeLimitType;
+    }
+
+    public void setStoreLimitType(Integer storeLimitType) {
+        this.storeLimitType = storeLimitType;
+    }
+
     public Integer getOrderSource() {
         return orderSource;
     }
@@ -259,53 +309,6 @@ public class ActivityVO extends MktActivityPO {
         this.orderMinPrice = orderMinPrice;
     }
 
-    public Boolean getCommodityLimit() {
-        return isCommodityLimit;
-    }
-
-    public void setCommodityLimit(Boolean commodityLimit) {
-        isCommodityLimit = commodityLimit;
-    }
-
-    public Boolean getStoreLimit() {
-        return isStoreLimit;
-    }
-
-    public void setStoreLimit(Boolean storeLimit) {
-        isStoreLimit = storeLimit;
-    }
-
-    public String getCommodityWhitelist() {
-        return commodityWhitelist;
-    }
-
-    public void setCommodityWhitelist(String commodityWhitelist) {
-        this.commodityWhitelist = commodityWhitelist;
-    }
-
-    public String getCommodityBlacklist() {
-        return commodityBlacklist;
-    }
-
-    public void setCommodityBlacklist(String commodityBlacklist) {
-        this.commodityBlacklist = commodityBlacklist;
-    }
-
-    public String getStoreWhitelist() {
-        return storeWhitelist;
-    }
-
-    public void setStoreWhitelist(String storeWhitelist) {
-        this.storeWhitelist = storeWhitelist;
-    }
-
-    public String getStoreBlacklist() {
-        return storeBlacklist;
-    }
-
-    public void setStoreBlacklist(String storeBlacklist) {
-        this.storeBlacklist = storeBlacklist;
-    }
 
     public Integer getSignType() {
         return signType;
