@@ -21,7 +21,7 @@ public class TaskWXDetailBO {
     @DateTimeFormat(
             pattern = "yyyy-MM-dd HH:mm:ss"
     )
-    private Date start_time;
+    private Date startTime;
     @JsonFormat(
             pattern = "yyyy-MM-dd HH:mm:ss",
             locale = "zh",
@@ -30,7 +30,7 @@ public class TaskWXDetailBO {
     @DateTimeFormat(
             pattern = "yyyy-MM-dd HH:mm:ss"
     )
-    private Date   end_time;
+    private Date   endTime;
     private  String  taskInfo;
     private Integer points;
     List<TaskCouponWXBO>  taskCouponWXBOs;
@@ -49,22 +49,6 @@ public class TaskWXDetailBO {
 
     public void setTaskName(String taskName) {
         this.taskName = taskName;
-    }
-
-    public Date getStart_time() {
-        return start_time;
-    }
-
-    public void setStart_time(Date start_time) {
-        this.start_time = start_time;
-    }
-
-    public Date getEnd_time() {
-        return end_time;
-    }
-
-    public void setEnd_time(Date end_time) {
-        this.end_time = end_time;
     }
 
     public Integer getPoints() {
@@ -89,5 +73,21 @@ public class TaskWXDetailBO {
 
     public void setTaskInfo(String taskInfo) {
         this.taskInfo = taskInfo;
+    }
+
+    public Date getStartTime() {
+        return startTime;
+    }
+
+    public void setStartTime(Date startTime) {
+        this.startTime = startTime;
+    }
+
+    public Date getEndTime() {
+        return endTime;
+    }
+
+    public void setEndTime(Date endTime) {
+        this.endTime = endTime;
     }
 }
