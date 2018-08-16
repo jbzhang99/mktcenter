@@ -25,7 +25,7 @@ public class Award {
     public ResponseData<T> execute(AwardBO bo){
         ResponseData responseData = new ResponseData();
         try {
-            MktSmartTypeEnum mktSmartTypeEnum = MktSmartTypeEnum.getMktSmartTypeEnumByCode(bo.getMktSmartType());
+            MktSmartTypeEnum mktSmartTypeEnum = MktSmartTypeEnum.getMktSmartTypeEnumByCode(bo.getMktType());
             switch (mktSmartTypeEnum){
                 //券奖励
                 case SMART_TYPE_COUPON:

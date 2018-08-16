@@ -57,10 +57,8 @@ public class AwardFactory {
     public ResponseData<Integer> awardCouponSimple(AwardBO bo){
         ResponseData responseData = new ResponseData();
         try {
-            SendCouponSimpleRequestVO va = new SendCouponSimpleRequestVO();
-            va.setMemberCode(bo.getMemberCode());
-            va.setCouponDefinitionId(bo.getCouponDefinitionId());
-            va.setSendBussienId(bo.getSendBussienId());
+            SendCouponSimpleRequestVO va = bo.getSendCouponSimpleRequestVO();
+            va.setSendBussienId(bo.getBusinessId());
             va.setSendType("10");
             ResponseData<Object> simple = sendCouponServiceFeign.simple(va);
         } catch (Exception e) {
@@ -80,10 +78,7 @@ public class AwardFactory {
     public ResponseData<Integer> awardCouponBatch(AwardBO bo){
         ResponseData responseData = new ResponseData();
         try {
-            SendCouponBatchRequestVO sendCouponBatchRequestVO = new SendCouponBatchRequestVO();
-            sendCouponBatchRequestVO.setMemberList(bo.getMemberInfoModelList());
-            sendCouponBatchRequestVO.setCouponDefinitionId(bo.getCouponDefinitionId());
-            sendCouponBatchRequestVO.setBusinessId(bo.getSendBussienId());
+            SendCouponBatchRequestVO sendCouponBatchRequestVO = bo.getSendCouponBatchRequestVO();
             sendCouponBatchRequestVO.setSendType((byte) 1);
             responseData = sendCouponServiceFeign.batchCoupon(sendCouponBatchRequestVO);
         } catch (Exception e) {
@@ -104,10 +99,7 @@ public class AwardFactory {
         ResponseData responseData = new ResponseData();
         try {
             //增加积分奖励新增接口
-            IntegralRecordModel var1 = new IntegralRecordModel();
-            var1.setMemberCode(bo.getMemberCode());
-            var1.setChangeBills(bo.getChangeBills());
-            var1.setChangeIntegral(bo.getChangeIntegral());
+            IntegralRecordModel var1 = bo.getIntegralRecordModel();
             var1.setChangeWay(IntegralChangeTypeEnum.INCOME.getCode());
             ResponseData responseData1 = integralRecordApiService.updateMemberIntegral(var1);
         } catch (MemberException e) {
@@ -127,13 +119,11 @@ public class AwardFactory {
     @Async("asyncServiceExecutor")
     public ResponseData<Integer> sendSms(AwardBO bo){
 
-        SysSmsConfigVO msgvo = new SysSmsConfigVO();
+        SysSmsConfigVO msgvo = bo.getSysSmsConfigVO();
         msgvo.setChannelName("moments3.4");
         msgvo.setChannelAccount("JJ0253");//账号
         msgvo.setChannelPassword("513678");//密码
         msgvo.setChannelService("http://TSN19.800CT.COM:8901/MWGate/wmgw.asmx/MongateSendSubmit");//路径
-        msgvo.setPhone(bo.getPhone());//手机
-        msgvo.setMsgContent("任务活动发短信!");//内容
       return sendCommonMessageFeign.sendSmg(msgvo);
 
     }

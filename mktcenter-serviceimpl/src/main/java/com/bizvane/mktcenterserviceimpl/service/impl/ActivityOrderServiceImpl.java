@@ -8,7 +8,9 @@ import com.bizvane.centerstageservice.rpc.SysCheckServiceRpc;
 import com.bizvane.couponfacade.interfaces.CouponQueryServiceFeign;
 import com.bizvane.couponfacade.models.po.CouponEntityPO;
 import com.bizvane.couponfacade.models.vo.CouponEntityAndDefinitionVO;
+import com.bizvane.couponfacade.models.vo.SendCouponSimpleRequestVO;
 import com.bizvane.members.facade.enums.IntegralChangeTypeEnum;
+import com.bizvane.members.facade.models.IntegralRecordModel;
 import com.bizvane.members.facade.models.MemberInfoModel;
 import com.bizvane.members.facade.service.api.MemberInfoApiService;
 import com.bizvane.mktcenterservice.interfaces.ActivityOrderService;
@@ -627,11 +629,13 @@ public class ActivityOrderServiceImpl implements ActivityOrderService {
 
             //增加积分奖励新增接口
             AwardBO bo = new AwardBO();
-            bo.setMemberCode(vo.getMemberCode().toString());
-            bo.setChangeBills(activityVO.getActivityCode());
-            bo.setChangeIntegral(activityVO.getPoints());
-            bo.setChangeWay(IntegralChangeTypeEnum.INCOME.getCode());
-            bo.setMktSmartType(MktSmartTypeEnum.SMART_TYPE_INTEGRAL.getCode());
+            IntegralRecordModel integralRecordModel = new IntegralRecordModel();
+            integralRecordModel.setMemberCode(vo.getMemberCode().toString());
+            integralRecordModel.setChangeBills(activityVO.getActivityCode());
+            integralRecordModel.setChangeIntegral(activityVO.getPoints());
+            integralRecordModel.setChangeWay(IntegralChangeTypeEnum.INCOME.getCode());
+            bo.setIntegralRecordModel(integralRecordModel);
+            bo.setMktType(MktSmartTypeEnum.SMART_TYPE_INTEGRAL.getCode());
             log.info("新增积分奖励="+activityVO.getPoints());
             award.execute(bo);
 
@@ -643,10 +647,12 @@ public class ActivityOrderServiceImpl implements ActivityOrderService {
             if (!CollectionUtils.isEmpty(mktCouponPOs)){
                 for (MktCouponPO mktCouponPO:mktCouponPOs) {
                     AwardBO awardBO = new AwardBO();
-                    awardBO.setMemberCode(vo.getMemberCode().toString());
-                    awardBO.setCouponDefinitionId(mktCouponPO.getCouponDefinitionId());
-                    awardBO.setSendBussienId(mktCouponPO.getBizId());
-                    awardBO.setMktSmartType(MktSmartTypeEnum.SMART_TYPE_COUPON.getCode());
+                    SendCouponSimpleRequestVO sendCouponSimpleRequestVO = new SendCouponSimpleRequestVO();
+                    sendCouponSimpleRequestVO.setMemberCode(vo.getMemberCode().toString());
+                    sendCouponSimpleRequestVO.setCouponDefinitionId(mktCouponPO.getCouponDefinitionId());
+                    sendCouponSimpleRequestVO.setSendBussienId(mktCouponPO.getBizId());
+                    awardBO.setSendCouponSimpleRequestVO(sendCouponSimpleRequestVO);
+                    awardBO.setMktType(MktSmartTypeEnum.SMART_TYPE_COUPON.getCode());
                     award.execute(awardBO);
                 }
             }

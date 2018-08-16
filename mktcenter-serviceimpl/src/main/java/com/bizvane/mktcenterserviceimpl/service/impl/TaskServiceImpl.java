@@ -7,8 +7,12 @@ import com.bizvane.centerstageservice.rpc.SysCheckServiceRpc;
 import com.bizvane.couponfacade.enums.SendTypeEnum;
 import com.bizvane.couponfacade.interfaces.CouponQueryServiceFeign;
 import com.bizvane.couponfacade.models.vo.CouponFindCouponCountResponseVO;
+import com.bizvane.couponfacade.models.vo.SendCouponSimpleRequestVO;
+import com.bizvane.members.facade.models.IntegralRecordModel;
 import com.bizvane.members.facade.models.MemberInfoModel;
 import com.bizvane.members.facade.service.api.MemberInfoApiService;
+import com.bizvane.messagefacade.models.vo.MemberMessageVO;
+import com.bizvane.messagefacade.models.vo.SysSmsConfigVO;
 import com.bizvane.mktcenterservice.interfaces.TaskMessageService;
 import com.bizvane.mktcenterservice.interfaces.TaskRecordService;
 import com.bizvane.mktcenterservice.interfaces.TaskService;
@@ -179,17 +183,17 @@ public class TaskServiceImpl implements TaskService {
                         companyMemebers.stream().forEach(
                                 obj -> {
                                     AwardBO bo = new AwardBO();
-                                    //会员code
-                                    bo.setMemberCode(obj.getMemberCode());
-                                    bo.setSendBussienId(message.getBizId());
-                                    bo.setMemberName(obj.getName());
-                                    bo.setCardNo(obj.getCardNo());
                                     //1模板消息，2短信'
                                     if (TaskConstants.FIRST.equals(msgType)) {
                                         //1券，2积分，3短信，4模板消息
-                                        bo.setMktSmartType(MktSmartTypeEnum.SMART_TYPE_SMS.getCode());
+                                        SysSmsConfigVO sysSmsConfigVO = new SysSmsConfigVO();
+                                        sysSmsConfigVO.setPhone(obj.getPhone());
+                                        bo.setSysSmsConfigVO(sysSmsConfigVO);
+                                        bo.setMktType(MktSmartTypeEnum.SMART_TYPE_SMS.getCode());
                                     } else {
-                                        bo.setMktSmartType(MktSmartTypeEnum.SMART_TYPE_WXMESSAGE.getCode());
+                                        MemberMessageVO memberMessageVO = new MemberMessageVO();
+                                        bo.setMemberMessageVO(memberMessageVO);
+                                        bo.setMktType(MktSmartTypeEnum.SMART_TYPE_WXMESSAGE.getCode());
                                     }
 
                                     award.execute(bo);
@@ -213,25 +217,29 @@ public class TaskServiceImpl implements TaskService {
 
         AwardBO bo = new AwardBO();
         //会员code
-        bo.setMemberCode(memberCode);
+//        bo.setMemberCode(memberCode);
         //任务务id
-        bo.setSendBussienId(orderAwardBO.getMktTaskId());
+//        bo.setSendBussienId(orderAwardBO.getMktTaskId());
         //暂定
         //  bo.setMemberName();
-        bo.setCardNo(carNo);
+//        bo.setCardNo(carNo);
 
         if (points!=null && points>0){
             //2=积分营销
-            bo.setChangeIntegral(orderAwardBO.getPoints());
-            bo.setMktSmartType(MktSmartTypeEnum.SMART_TYPE_INTEGRAL.getCode());
+            IntegralRecordModel integralRecordModel = new IntegralRecordModel();
+            integralRecordModel.setChangeIntegral(orderAwardBO.getPoints());
+            bo.setMktType(MktSmartTypeEnum.SMART_TYPE_INTEGRAL.getCode());
+            bo.setIntegralRecordModel(integralRecordModel);
             award.execute(bo);
         }
         if(CollectionUtils.isNotEmpty(mktCouponPOList)){
             //1=优惠券营销
-            bo.setMktSmartType(MktSmartTypeEnum.SMART_TYPE_COUPON.getCode());
+            bo.setMktType(MktSmartTypeEnum.SMART_TYPE_COUPON.getCode());
             mktCouponPOList.stream().forEach(param->{
                 //券id
-                bo.setCouponDefinitionId(param.getCouponDefinitionId());
+                SendCouponSimpleRequestVO sendCouponSimpleRequestVO = new SendCouponSimpleRequestVO();
+                sendCouponSimpleRequestVO.setCouponDefinitionId(param.getCouponDefinitionId());
+                bo.setSendCouponSimpleRequestVO(sendCouponSimpleRequestVO);
                 award.execute(bo);
             });
 

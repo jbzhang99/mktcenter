@@ -3,6 +3,7 @@ package com.bizvane.mktcenterserviceimpl.service.impl;
 import com.alibaba.fastjson.JSON;
 import com.bizvane.members.facade.models.MemberInfoModel;
 import com.bizvane.members.facade.service.api.MemberInfoApiService;
+import com.bizvane.messagefacade.models.vo.SysSmsConfigVO;
 import com.bizvane.mktcenterservice.interfaces.ActivitySmartService;
 import com.bizvane.mktcenterservice.models.bo.ActivitySmartBO;
 import com.bizvane.mktcenterservice.models.bo.AwardBO;
@@ -31,6 +32,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -553,8 +555,7 @@ public class ActivitySmartServiceImpl implements ActivitySmartService {
             AwardBO awardBO = new AwardBO();
             //根据条件获取人，再遍历
             ResponseData<List<MemberInfoModel>> memberInfo = memberInfoApiService.getMemberInfo(new MemberInfoModel());
-            awardBO.setMemberInfoModelList(memberInfo.getData());
-            awardBO.setMktSmartType(MktSmartTypeEnum.SMART_TYPE_COUPON_BATCH.getCode());
+            awardBO.setMktType(MktSmartTypeEnum.SMART_TYPE_COUPON_BATCH.getCode());
             award.execute(awardBO);
         }
 
@@ -643,8 +644,7 @@ public class ActivitySmartServiceImpl implements ActivitySmartService {
             AwardBO awardBO = new AwardBO();
             //根据条件获取人，再遍历
             ResponseData<List<MemberInfoModel>> memberInfo = memberInfoApiService.getMemberInfo(new MemberInfoModel());
-            awardBO.setMemberInfoModelList(memberInfo.getData());
-            awardBO.setMktSmartType(MktSmartTypeEnum.SMART_TYPE_COUPON_BATCH.getCode());
+            awardBO.setMktType(MktSmartTypeEnum.SMART_TYPE_COUPON_BATCH.getCode());
             award.execute(awardBO);
         }
 
@@ -730,6 +730,7 @@ public class ActivitySmartServiceImpl implements ActivitySmartService {
 
         //新增消息表
         MktMessagePO mktMessagePO = new MktMessagePO();
+        BeanUtils.copyProperties(messageVO,mktMessagePO);
         mktMessagePO.setBizType(BusinessTypeEnum.ACTIVITY_TYPE_ACTIVITY.getCode());
         mktMessagePO.setBizId(mktActivityId);
         mktMessagePO.setCreateDate(new Date());
@@ -741,9 +742,12 @@ public class ActivitySmartServiceImpl implements ActivitySmartService {
         if(execute){
             AwardBO awardBO = new AwardBO();
             //根据条件获取人，再遍历
-            ResponseData<List<MemberInfoModel>> memberInfo = memberInfoApiService.getMemberInfo(new MemberInfoModel());
-            awardBO.setMemberInfoModelList(memberInfo.getData());
-            awardBO.setMktSmartType(MktSmartTypeEnum.SMART_TYPE_COUPON_BATCH.getCode());
+//            ResponseData<List<MemberInfoModel>> memberInfo = memberInfoApiService.getMemberInfo(new MemberInfoModel());
+            //构建短信发送对象
+            SysSmsConfigVO sysSmsConfigVO = new SysSmsConfigVO();
+            sysSmsConfigVO.setPhone("13971424232");
+            sysSmsConfigVO.setMsgContent(messageVO.getMsgContent());
+            awardBO.setSysSmsConfigVO(sysSmsConfigVO);
             award.execute(awardBO);
         }
 
@@ -843,8 +847,6 @@ public class ActivitySmartServiceImpl implements ActivitySmartService {
             AwardBO awardBO = new AwardBO();
             //根据条件获取人，再遍历
             ResponseData<List<MemberInfoModel>> memberInfo = memberInfoApiService.getMemberInfo(new MemberInfoModel());
-            awardBO.setMemberInfoModelList(memberInfo.getData());
-            awardBO.setMktSmartType(MktSmartTypeEnum.SMART_TYPE_COUPON_BATCH.getCode());
             award.execute(awardBO);
         }
 

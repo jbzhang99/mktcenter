@@ -12,6 +12,7 @@ import com.bizvane.couponfacade.models.po.CouponDefinitionPO;
 import com.bizvane.couponfacade.models.po.CouponEntityPO;
 import com.bizvane.couponfacade.models.vo.CouponEntityAndDefinitionVO;
 import com.bizvane.couponfacade.models.vo.CouponFindCouponCountResponseVO;
+import com.bizvane.couponfacade.models.vo.SendCouponSimpleRequestVO;
 import com.bizvane.members.facade.models.MemberInfoModel;
 import com.bizvane.mktcenterservice.interfaces.ActivityManualService;
 import com.bizvane.mktcenterservice.models.bo.ActivityBO;
@@ -340,9 +341,11 @@ public class ActivityManualServiceImpl implements ActivityManualService {
 
             //发券
             AwardBO awardBO = new AwardBO();
-            awardBO.setCouponDefinitionId(vo.getCouponDefinitionId());
-            awardBO.setMemberCode(vo.getMemberInfoModel().getMemberCode());
-            awardBO.setSendBussienId(vo.getMktActivityId());
+            SendCouponSimpleRequestVO sendCouponSimpleRequestVO = new SendCouponSimpleRequestVO();
+            sendCouponSimpleRequestVO.setCouponDefinitionId(vo.getCouponDefinitionId());
+            sendCouponSimpleRequestVO.setMemberCode(vo.getMemberInfoModel().getMemberCode());
+            sendCouponSimpleRequestVO.setSendBussienId(vo.getMktActivityId());
+            awardBO.setSendCouponSimpleRequestVO(sendCouponSimpleRequestVO);
             log.info("领券活动执行活动-发券调接口入参:"+JSON.toJSONString(awardBO));
             award.execute(awardBO);
 

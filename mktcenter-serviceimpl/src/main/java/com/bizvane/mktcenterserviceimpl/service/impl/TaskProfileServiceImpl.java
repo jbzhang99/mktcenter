@@ -10,9 +10,13 @@ import com.bizvane.couponfacade.interfaces.SendCouponServiceFeign;
 import com.bizvane.couponfacade.models.po.CouponDefinitionPO;
 import com.bizvane.couponfacade.models.vo.CouponEntityVO;
 import com.bizvane.couponfacade.models.vo.CouponFindCouponCountResponseVO;
+import com.bizvane.couponfacade.models.vo.SendCouponSimpleRequestVO;
+import com.bizvane.members.facade.models.IntegralRecordModel;
 import com.bizvane.members.facade.models.MemberInfoModel;
 import com.bizvane.members.facade.service.api.IntegralRecordApiService;
 import com.bizvane.members.facade.service.api.MemberInfoApiService;
+import com.bizvane.messagefacade.models.vo.MemberMessageVO;
+import com.bizvane.messagefacade.models.vo.SysSmsConfigVO;
 import com.bizvane.mktcenterservice.interfaces.TaskProfileService;
 import com.bizvane.mktcenterservice.models.bo.AwardBO;
 import com.bizvane.mktcenterservice.models.bo.TaskBO;
@@ -292,31 +296,25 @@ public class TaskProfileServiceImpl implements TaskProfileService {
         List<MemberInfoModel> memberInfoModelList = memberInfo.getData();
 
         //创建AwardBO对象
-
         AwardBO awardBO = new AwardBO();
-        awardBO.setBusinessWay(BusinessTypeEnum.ACTIVITY_TYPE_TASK.getMessage());
-
         if(!CollectionUtils.isEmpty(list)){
             //遍历会员信息
             for (MemberInfoModel memberInfoModel1:memberInfoModelList){
-
-                awardBO.setMemberName(memberInfoModel1.getName());
-                awardBO.setMemberCode(memberInfoModel1.getMemberCode());
-
                 for (MktMessagePO messagePO:list){
                     //发送短信
                     if (messagePO.getMsgType()=="2"){
-                        awardBO.setMktSmartType(MktSmartTypeEnum.SMART_TYPE_SMS.getCode());
-                        awardBO.setPhone(memberInfoModel1.getPhone());
+                        SysSmsConfigVO sysSmsConfigVO = new SysSmsConfigVO();
+                        sysSmsConfigVO.setPhone(memberInfoModel1.getPhone());
+                        awardBO.setMktType(MktSmartTypeEnum.SMART_TYPE_SMS.getCode());
+                        awardBO.setSysSmsConfigVO(sysSmsConfigVO);
                         //awardBO   消息内容？？？
                          responseData = award.execute(awardBO);
                     }
 
                     //发送微信模板
-
                     if (messagePO.getMsgType()=="1"){
-                        awardBO.setMktSmartType(MktSmartTypeEnum.SMART_TYPE_WXMESSAGE.getCode());
-
+                        MemberMessageVO memberMessageVO = new MemberMessageVO();
+                        awardBO.setMktType(MktSmartTypeEnum.SMART_TYPE_WXMESSAGE.getCode());
                         responseData = award.execute(awardBO);
                     }
                 }
@@ -585,14 +583,14 @@ public class TaskProfileServiceImpl implements TaskProfileService {
             if (!CollectionUtils.isEmpty(mktCouponPOList)){
                 //2.如果不为空则有券奖励   创建AwardBo对象 添加通用信息 并遍历该业务的券信息添加券的信息
                 AwardBO bo = new AwardBO();
-                bo.setMemberCode(memberInfoModel.getMemberCode());
-                bo.setMemberName(memberInfoModel.getName());
-                bo.setMktSmartType(MktSmartTypeEnum.SMART_TYPE_COUPON.getCode());
-                bo.setBusinessWay(BusinessTypeEnum.ACTIVITY_TYPE_TASK.getMessage());
-                bo.setSendBussienId(vo.getMktTaskId());
+                SendCouponSimpleRequestVO sendCouponSimpleRequestVO = new SendCouponSimpleRequestVO();
+                sendCouponSimpleRequestVO.setMemberCode(memberInfoModel.getMemberCode());
+                sendCouponSimpleRequestVO.setSendBussienId(vo.getMktTaskId());
+                bo.setSendCouponSimpleRequestVO(sendCouponSimpleRequestVO);
+                bo.setMktType(MktSmartTypeEnum.SMART_TYPE_COUPON.getCode());
                 for (MktCouponPO mktCouponPO:mktCouponPOList){
                     Long couponDefId = mktCouponPO.getCouponDefinitionId();
-                    bo.setCouponDefinitionId(couponDefId);
+                    sendCouponSimpleRequestVO.setCouponDefinitionId(couponDefId);
                     award.execute(bo);
                 }
 
@@ -607,14 +605,16 @@ public class TaskProfileServiceImpl implements TaskProfileService {
 
             if (mktTaskPOWithBLOBs.getPoints()!=null){
                 AwardBO bo2 = new AwardBO();
-                bo2.setChangeBills(UUID.randomUUID().toString().replaceAll("-",""));//todo 暂时用uuid生成
-                bo2.setBusinessWay(BusinessTypeEnum.ACTIVITY_TYPE_TASK.getMessage());
-                bo2.setSendBussienId(vo.getMktTaskId());
-                bo2.setMemberCode(memberInfoModel.getMemberCode());
-                bo2.setMemberName(memberInfoModel.getName());
-                bo2.setMktSmartType(MktSmartTypeEnum.SMART_TYPE_INTEGRAL.getCode());
-                bo2.setChangeIntegral(mktTaskPOWithBLOBs.getPoints());
-                 award.execute(bo2);
+                IntegralRecordModel integralRecordModel = new IntegralRecordModel();
+                integralRecordModel.setChangeBills(UUID.randomUUID().toString().replaceAll("-",""));//todo 暂时用uuid生成
+                integralRecordModel.setBusinessWay(BusinessTypeEnum.ACTIVITY_TYPE_TASK.getMessage());
+                integralRecordModel.setMemberCode(memberInfoModel.getMemberCode());
+                integralRecordModel.setMemberName(memberInfoModel.getName());
+                integralRecordModel.setChangeIntegral(mktTaskPOWithBLOBs.getPoints());
+                bo2.setIntegralRecordModel(integralRecordModel);
+                bo2.setBusinessId(vo.getMktTaskId());
+                bo2.setMktType(MktSmartTypeEnum.SMART_TYPE_INTEGRAL.getCode());
+                award.execute(bo2);
             }
 
 

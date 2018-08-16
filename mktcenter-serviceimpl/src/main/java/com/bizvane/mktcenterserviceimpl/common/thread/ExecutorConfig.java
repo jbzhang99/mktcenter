@@ -17,7 +17,6 @@ import java.util.concurrent.ThreadPoolExecutor;
  */
 @Configuration
 @EnableAsync
-@Slf4j
 public class ExecutorConfig {
 
     @Value("${threadPool.corePoolSize}")
@@ -34,7 +33,6 @@ public class ExecutorConfig {
 
     @Bean
     public Executor asyncServiceExecutor() {
-        log.info("start asyncServiceExecutor");
         VisiableThreadPoolTaskExecutor executor = new VisiableThreadPoolTaskExecutor();
         //配置核心线程数
         executor.setCorePoolSize(corePoolSize);
