@@ -7,7 +7,7 @@
       This element was generated on 2018-08-02 14:07:08.
     -->
     <id column="mkt_activity_record_id" jdbcType="BIGINT" property="mktActivityRecordId" />
-    <result column="sys_brand_id" jdbcType="BIGINT" property="sysBrandId" />
+    <result column="sys_brand_id" jdbcType="BIGINT" property="sysBrandgetActivityRecordPOListId" />
     <result column="activity_type" jdbcType="INTEGER" property="activityType" />
     <result column="acitivity_id" jdbcType="BIGINT" property="acitivityId" />
     <result column="member_code" jdbcType="VARCHAR" property="memberCode" />
@@ -506,7 +506,7 @@ WHERE
       and  date_format(participate_date,'%Y-%m')= #{monthDate}
     </if>
 
-    <if test="memberCodev != null andmemberCode!= ''">
+    <if test="memberCode != null and memberCode!= ''">
       and member_code = #{memberCode,jdbcType=VARCHAR}
     </if>
   </select>
