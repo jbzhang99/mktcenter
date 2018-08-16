@@ -13,6 +13,8 @@ import com.bizvane.members.facade.enums.IntegralChangeTypeEnum;
 import com.bizvane.members.facade.models.IntegralRecordModel;
 import com.bizvane.members.facade.models.MemberInfoModel;
 import com.bizvane.members.facade.service.api.MemberInfoApiService;
+import com.bizvane.messagefacade.models.vo.MemberMessageVO;
+import com.bizvane.messagefacade.models.vo.SysSmsConfigVO;
 import com.bizvane.mktcenterservice.interfaces.ActivityOrderService;
 import com.bizvane.mktcenterservice.models.bo.ActivityBO;
 import com.bizvane.mktcenterservice.models.bo.AwardBO;
@@ -245,11 +247,22 @@ public class ActivityOrderServiceImpl implements ActivityOrderService {
                 for (MemberInfoModel memberInfo:memberInfoModelList) {
                     //循环信息类然后发送
                     for (MktMessagePO mktMessagePO:messageVOList) {
+                        AwardBO awardBO = new AwardBO();
                         if (mktMessagePO.getMsgType().equals("1")){
                             //发送微信模板消息
+                            MemberMessageVO memberMessageVO = new MemberMessageVO();
+                            memberMessageVO.setMemberCode(memberInfo.getMemberCode());
+                            awardBO.setMemberMessageVO(memberMessageVO);
+                            awardBO.setMktType(MktSmartTypeEnum.SMART_TYPE_WXMESSAGE.getCode());
+                            award.execute(awardBO);
                         }
                         if (mktMessagePO.getMsgType().equals("2")){
+                            SysSmsConfigVO sysSmsConfigVO = new SysSmsConfigVO();
+                            sysSmsConfigVO.setPhone(memberInfo.getPhone());
+                            awardBO.setSysSmsConfigVO(sysSmsConfigVO);
+                            awardBO.setMktType(MktSmartTypeEnum.SMART_TYPE_SMS.getCode());
                             //发送短信消息
+                            award.execute(awardBO);
                         }
                     }
                 }
@@ -475,11 +488,22 @@ public class ActivityOrderServiceImpl implements ActivityOrderService {
                 for (MemberInfoModel memberInfo:memberInfoModelList) {
                     //循环信息类然后发送
                     for (MktMessagePO mktMessagePO:messageVOList) {
+                        AwardBO awardBO = new AwardBO();
                         if (mktMessagePO.getMsgType().equals("1")){
                             //发送微信模板消息
+                            MemberMessageVO memberMessageVO = new MemberMessageVO();
+                            memberMessageVO.setMemberCode(memberInfo.getMemberCode());
+                            awardBO.setMemberMessageVO(memberMessageVO);
+                            awardBO.setMktType(MktSmartTypeEnum.SMART_TYPE_WXMESSAGE.getCode());
+                            award.execute(awardBO);
                         }
                         if (mktMessagePO.getMsgType().equals("2")){
+                            SysSmsConfigVO sysSmsConfigVO = new SysSmsConfigVO();
+                            sysSmsConfigVO.setPhone(memberInfo.getPhone());
+                            awardBO.setSysSmsConfigVO(sysSmsConfigVO);
+                            awardBO.setMktType(MktSmartTypeEnum.SMART_TYPE_SMS.getCode());
                             //发送短信消息
+                            award.execute(awardBO);
                         }
                     }
                 }
@@ -546,11 +570,22 @@ public class ActivityOrderServiceImpl implements ActivityOrderService {
                     for (MemberInfoModel memberInfo:memberInfoModelList) {
                         //循环信息类然后发送
                         for (MktMessagePO mktMessagePO:ListMktMessage) {
+                            AwardBO awardBO = new AwardBO();
                             if (mktMessagePO.getMsgType().equals("1")){
                                 //发送微信模板消息
+                                MemberMessageVO memberMessageVO = new MemberMessageVO();
+                                memberMessageVO.setMemberCode(memberInfo.getMemberCode());
+                                awardBO.setMemberMessageVO(memberMessageVO);
+                                awardBO.setMktType(MktSmartTypeEnum.SMART_TYPE_WXMESSAGE.getCode());
+                                award.execute(awardBO);
                             }
                             if (mktMessagePO.getMsgType().equals("2")){
+                                SysSmsConfigVO sysSmsConfigVO = new SysSmsConfigVO();
+                                sysSmsConfigVO.setPhone(memberInfo.getPhone());
+                                awardBO.setSysSmsConfigVO(sysSmsConfigVO);
+                                awardBO.setMktType(MktSmartTypeEnum.SMART_TYPE_SMS.getCode());
                                 //发送短信消息
+                                award.execute(awardBO);
                             }
                         }
                     }

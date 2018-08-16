@@ -9,16 +9,17 @@ import com.bizvane.members.facade.models.IntegralRecordModel;
 import com.bizvane.members.facade.models.MemberInfoModel;
 import com.bizvane.members.facade.service.api.IntegralRecordApiService;
 import com.bizvane.members.facade.service.api.MemberInfoApiService;
+import com.bizvane.messagefacade.models.vo.MemberMessageVO;
+import com.bizvane.messagefacade.models.vo.SysSmsConfigVO;
 import com.bizvane.mktcenterservice.interfaces.ActivityService;
 import com.bizvane.mktcenterservice.models.bo.ActivityAnalysisCountBO;
+import com.bizvane.mktcenterservice.models.bo.AwardBO;
 import com.bizvane.mktcenterservice.models.bo.CtivityAnalysisBO;
 import com.bizvane.mktcenterservice.models.po.*;
 import com.bizvane.mktcenterservice.models.vo.ActivityVO;
 import com.bizvane.mktcenterservice.models.vo.PageForm;
-import com.bizvane.mktcenterserviceimpl.common.enums.ActivityStatusEnum;
-import com.bizvane.mktcenterserviceimpl.common.enums.ActivityTypeEnum;
-import com.bizvane.mktcenterserviceimpl.common.enums.CheckStatusEnum;
-import com.bizvane.mktcenterserviceimpl.common.enums.CouponSendTypeEnum;
+import com.bizvane.mktcenterserviceimpl.common.award.Award;
+import com.bizvane.mktcenterserviceimpl.common.enums.*;
 import com.bizvane.mktcenterserviceimpl.mappers.MktActivityPOMapper;
 import com.bizvane.mktcenterserviceimpl.mappers.MktActivityRegisterPOMapper;
 import com.bizvane.mktcenterserviceimpl.mappers.MktMessagePOMapper;
@@ -58,6 +59,8 @@ public class ActivityServiceImpl implements ActivityService {
     private MktActivityRegisterPOMapper mktActivityRegisterPOMapper;
     @Autowired
     private IntegralRecordApiService integralRecordApiService;
+    @Autowired
+    private Award award;
     /**
      * 禁用/启用活动
      * @param vo
@@ -127,11 +130,22 @@ public class ActivityServiceImpl implements ActivityService {
                     for (MemberInfoModel memberInfo:memberInfoModelList) {
                         //循环信息类然后发送
                         for (MktMessagePO mktMessagePO:ListMktMessage) {
+                            AwardBO awardBO = new AwardBO();
                             if (mktMessagePO.getMsgType().equals("1")){
                                 //发送微信模板消息
+                                MemberMessageVO memberMessageVO = new MemberMessageVO();
+                                memberMessageVO.setMemberCode(memberInfo.getMemberCode());
+                                awardBO.setMemberMessageVO(memberMessageVO);
+                                awardBO.setMktType(MktSmartTypeEnum.SMART_TYPE_WXMESSAGE.getCode());
+                                award.execute(awardBO);
                             }
                             if (mktMessagePO.getMsgType().equals("2")){
+                                SysSmsConfigVO sysSmsConfigVO = new SysSmsConfigVO();
+                                sysSmsConfigVO.setPhone(memberInfo.getPhone());
+                                awardBO.setSysSmsConfigVO(sysSmsConfigVO);
+                                awardBO.setMktType(MktSmartTypeEnum.SMART_TYPE_SMS.getCode());
                                 //发送短信消息
+                                award.execute(awardBO);
                             }
                         }
                     }

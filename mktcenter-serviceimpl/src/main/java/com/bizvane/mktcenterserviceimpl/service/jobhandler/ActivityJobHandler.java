@@ -4,14 +4,19 @@ import com.bizvane.members.facade.models.MbrLevelModel;
 import com.bizvane.members.facade.models.MemberInfoModel;
 import com.bizvane.members.facade.service.api.MemberInfoApiService;
 import com.bizvane.members.facade.service.api.MemberLevelApiService;
+import com.bizvane.messagefacade.models.vo.MemberMessageVO;
+import com.bizvane.messagefacade.models.vo.SysSmsConfigVO;
+import com.bizvane.mktcenterservice.models.bo.AwardBO;
 import com.bizvane.mktcenterservice.models.po.MktActivityPO;
 import com.bizvane.mktcenterservice.models.po.MktActivityPOExample;
 import com.bizvane.mktcenterservice.models.po.MktMessagePO;
 import com.bizvane.mktcenterservice.models.po.MktMessagePOExample;
 import com.bizvane.mktcenterservice.models.vo.ActivityVO;
+import com.bizvane.mktcenterserviceimpl.common.award.Award;
 import com.bizvane.mktcenterserviceimpl.common.enums.ActivityStatusEnum;
 import com.bizvane.mktcenterserviceimpl.common.enums.ActivityTypeEnum;
 import com.bizvane.mktcenterserviceimpl.common.enums.CheckStatusEnum;
+import com.bizvane.mktcenterserviceimpl.common.enums.MktSmartTypeEnum;
 import com.bizvane.mktcenterserviceimpl.mappers.MktActivityOrderPOMapper;
 import com.bizvane.mktcenterserviceimpl.mappers.MktActivityPOMapper;
 import com.bizvane.mktcenterserviceimpl.mappers.MktActivityUpgradePOMapper;
@@ -42,6 +47,8 @@ public class ActivityJobHandler extends IJobHandler {
     private MktActivityUpgradePOMapper mktActivityUpgradePOMapper;
     @Autowired
     private MktActivityOrderPOMapper mktActivityOrderPOMapper;
+    @Autowired
+    private Award award;
     @Override
     public ReturnT<String> execute(String param) throws Exception {
 
@@ -104,11 +111,22 @@ public class ActivityJobHandler extends IJobHandler {
                 for (MemberInfoModel memberInfo:memberInfoModelList) {
                     //循环信息类然后发送
                     for (MktMessagePO mktMessagePO:ListMktMessage) {
+                        AwardBO awardBO = new AwardBO();
                         if (mktMessagePO.getMsgType().equals("1")){
                             //发送微信模板消息
+                            MemberMessageVO memberMessageVO = new MemberMessageVO();
+                            memberMessageVO.setMemberCode(memberInfo.getMemberCode());
+                            awardBO.setMemberMessageVO(memberMessageVO);
+                            awardBO.setMktType(MktSmartTypeEnum.SMART_TYPE_WXMESSAGE.getCode());
+                            award.execute(awardBO);
                         }
                         if (mktMessagePO.getMsgType().equals("2")){
+                            SysSmsConfigVO sysSmsConfigVO = new SysSmsConfigVO();
+                            sysSmsConfigVO.setPhone(memberInfo.getPhone());
+                            awardBO.setSysSmsConfigVO(sysSmsConfigVO);
+                            awardBO.setMktType(MktSmartTypeEnum.SMART_TYPE_SMS.getCode());
                             //发送短信消息
+                            award.execute(awardBO);
                         }
                     }
                 }
