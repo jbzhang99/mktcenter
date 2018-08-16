@@ -30,9 +30,9 @@ public class TaskForWXRpcController {
 
     @RequestMapping("/getTaskWXDetail")
     @io.swagger.annotations.ApiModelProperty(value = "brandId,memberCode",name = "该会员已完成的任务列表", required = false,example = "")
-    public  ResponseData<TaskWXDetailBO>  getTaskWXDetail(@RequestParam String taskCode){
+    public  ResponseData<TaskWXDetailBO>  getTaskWXDetail(@RequestParam Long taskId){
 
-        return taskServiceForWX.getTaskWXDetail(taskCode);
+        return taskServiceForWX.getTaskWXDetail(taskId);
     }
 
 }

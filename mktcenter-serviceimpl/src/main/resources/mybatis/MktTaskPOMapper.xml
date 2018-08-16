@@ -103,7 +103,7 @@
     <result column="start_time"  property="startTime" />
     <result column="end_time"  property="endTime" />
     <result column="points"  property="points" />
-    <result column="remark"  property="remark" />
+    <result column="task_info"  property="taskInfo" />
 
     <collection property="taskCouponWXBOs" javaType="java.util.List" ofType="com.bizvane.mktcenterservice.models.bo.TaskCouponWXBO" autoMapping="true">
       <result column="mkt_coupon_id" property="mktCouponId"/>
@@ -1004,7 +1004,7 @@
       tmt.start_time,
       tmt.end_time,
       tmt.points,
-      tmt.task_info as remark,
+      tmt.task_info,
       tmc.mkt_coupon_id,
       tmc.coupon_name
       FROM
@@ -1012,7 +1012,7 @@
       LEFT JOIN  t_mkt_coupon  tmc ON tmt.mkt_task_id = tmc.biz_id AND tmc.valid=1
       WHERE tmt.valid=1
       <if test="taskCode!=null and taskCode!=''">
-        AND tmt.task_code=#{taskCode}
+        AND tmt.mkt_task_id=#{taskId}
       </if>
   </select>
 </mapper>

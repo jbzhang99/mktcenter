@@ -130,5 +130,5 @@ public interface MktTaskPOMapper {
 	 */
 	public List<TaskWXBO> getCompleteTask(TaskForWXVO vo);
 
-	public  List<TaskWXDetailBO>  getTaskWXDetail(@Param("taskCode") String taskCode);
+	public  List<TaskWXDetailBO>  getTaskWXDetail(@Param("taskId") Long taskId);
 }

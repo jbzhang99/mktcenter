@@ -47,10 +47,10 @@ public class TaskServiceForWXImpl implements TaskServiceForWX{
 
     //获取任务的详情
     @Override
-    public  ResponseData<TaskWXDetailBO>  getTaskWXDetail(String taskCode){
+    public  ResponseData<TaskWXDetailBO>  getTaskWXDetail(Long taskId){
 
         ResponseData<TaskWXDetailBO> responseData = new ResponseData(SysResponseEnum.FAILED.getCode(),SysResponseEnum.FAILED.getMessage(),null);
-        List<TaskWXDetailBO> lists = taskPOMapper.getTaskWXDetail(taskCode);
+        List<TaskWXDetailBO> lists = taskPOMapper.getTaskWXDetail(taskId);
         if (CollectionUtils.isNotEmpty(lists)){
             responseData.setCode(SysResponseEnum.SUCCESS.getCode());
             responseData.setMessage(SysResponseEnum.SUCCESS.getMessage());

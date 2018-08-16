@@ -31,7 +31,7 @@ public class TaskWXDetailBO {
             pattern = "yyyy-MM-dd HH:mm:ss"
     )
     private Date   end_time;
-    private  String  remark;
+    private  String  taskInfo;
     private Integer points;
     List<TaskCouponWXBO>  taskCouponWXBOs;
 
@@ -67,14 +67,6 @@ public class TaskWXDetailBO {
         this.end_time = end_time;
     }
 
-    public String getRemark() {
-        return remark;
-    }
-
-    public void setRemark(String remark) {
-        this.remark = remark;
-    }
-
     public Integer getPoints() {
         return points;
     }
@@ -89,5 +81,13 @@ public class TaskWXDetailBO {
 
     public void setTaskCouponWXBOs(List<TaskCouponWXBO> taskCouponWXBOs) {
         this.taskCouponWXBOs = taskCouponWXBOs;
+    }
+
+    public String getTaskInfo() {
+        return taskInfo;
+    }
+
+    public void setTaskInfo(String taskInfo) {
+        this.taskInfo = taskInfo;
     }
 }

@@ -23,6 +23,6 @@ public interface TaskServiceForWXRpc {
     public ResponseData getCompleteTask(@RequestBody TaskForWXVO vo);
 
     @RequestMapping("/getTaskWXDetail")
-    @io.swagger.annotations.ApiModelProperty(value = "taskCode",name = "任务code", required = false,example = "")
-    public  ResponseData<TaskWXDetailBO>  getTaskWXDetail(@RequestParam String taskCode);
+    @io.swagger.annotations.ApiModelProperty(value = "taskId",name = "任务code", required = false,example = "")
+    public  ResponseData<TaskWXDetailBO>  getTaskWXDetail(@RequestParam Long taskId);
 }
