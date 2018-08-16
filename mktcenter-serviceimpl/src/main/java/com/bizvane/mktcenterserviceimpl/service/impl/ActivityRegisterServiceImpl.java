@@ -267,15 +267,12 @@ public class ActivityRegisterServiceImpl implements ActivityRegisterService {
                     //循环信息类然后发送
                     for (MktMessagePO mktMessagePO:messageVOList) {
                         AwardBO awardBO = new AwardBO();
-                        awardBO.setChangeBills(activityVO.getActivityCode());
                         if (mktMessagePO.getMsgType().equals("1")){
                             //发送微信模板消息
-                            awardBO.setMktSmartType(MktSmartTypeEnum.SMART_TYPE_WXMESSAGE.getCode());
                             award.execute(awardBO);
                         }
                         if (mktMessagePO.getMsgType().equals("2")){
                             //发送短信消息
-                            awardBO.setMktSmartType(MktSmartTypeEnum.SMART_TYPE_SMS.getCode());
                             award.execute(awardBO);
                         }
                     }
