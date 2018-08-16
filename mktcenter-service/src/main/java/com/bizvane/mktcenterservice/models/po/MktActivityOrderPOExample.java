@@ -8,28 +8,28 @@ import java.util.List;
 public class MktActivityOrderPOExample implements Serializable {
     /**
 	 * 只读. 
-	 * @mbg.generated  2018-08-16 16:17:49
+	 * @mbg.generated  2018-08-16 16:31:22
 	 */
 	protected String orderByClause;
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-08-16 16:17:49
+	 * @mbg.generated  2018-08-16 16:31:22
 	 */
 	protected boolean distinct;
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-08-16 16:17:49
+	 * @mbg.generated  2018-08-16 16:31:22
 	 */
 	protected List<Criteria> oredCriteria;
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-08-16 16:17:49
+	 * @mbg.generated  2018-08-16 16:31:22
 	 */
 	private static final long serialVersionUID = 1L;
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-08-16 16:17:49
+	 * @mbg.generated  2018-08-16 16:31:22
 	 */
 	public MktActivityOrderPOExample() {
 		oredCriteria = new ArrayList<Criteria>();
@@ -37,7 +37,7 @@ public class MktActivityOrderPOExample implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-08-16 16:17:49
+	 * @mbg.generated  2018-08-16 16:31:22
 	 */
 	public void setOrderByClause(String orderByClause) {
 		this.orderByClause = orderByClause;
@@ -45,7 +45,7 @@ public class MktActivityOrderPOExample implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-08-16 16:17:49
+	 * @mbg.generated  2018-08-16 16:31:22
 	 */
 	public String getOrderByClause() {
 		return orderByClause;
@@ -53,7 +53,7 @@ public class MktActivityOrderPOExample implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-08-16 16:17:49
+	 * @mbg.generated  2018-08-16 16:31:22
 	 */
 	public void setDistinct(boolean distinct) {
 		this.distinct = distinct;
@@ -61,7 +61,7 @@ public class MktActivityOrderPOExample implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-08-16 16:17:49
+	 * @mbg.generated  2018-08-16 16:31:22
 	 */
 	public boolean isDistinct() {
 		return distinct;
@@ -69,7 +69,7 @@ public class MktActivityOrderPOExample implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-08-16 16:17:49
+	 * @mbg.generated  2018-08-16 16:31:22
 	 */
 	public List<Criteria> getOredCriteria() {
 		return oredCriteria;
@@ -77,7 +77,7 @@ public class MktActivityOrderPOExample implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-08-16 16:17:49
+	 * @mbg.generated  2018-08-16 16:31:22
 	 */
 	public void or(Criteria criteria) {
 		oredCriteria.add(criteria);
@@ -85,7 +85,7 @@ public class MktActivityOrderPOExample implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-08-16 16:17:49
+	 * @mbg.generated  2018-08-16 16:31:22
 	 */
 	public Criteria or() {
 		Criteria criteria = createCriteriaInternal();
@@ -95,7 +95,7 @@ public class MktActivityOrderPOExample implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-08-16 16:17:49
+	 * @mbg.generated  2018-08-16 16:31:22
 	 */
 	public Criteria createCriteria() {
 		Criteria criteria = createCriteriaInternal();
@@ -107,7 +107,7 @@ public class MktActivityOrderPOExample implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-08-16 16:17:49
+	 * @mbg.generated  2018-08-16 16:31:22
 	 */
 	protected Criteria createCriteriaInternal() {
 		Criteria criteria = new Criteria();
@@ -116,7 +116,7 @@ public class MktActivityOrderPOExample implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-08-16 16:17:49
+	 * @mbg.generated  2018-08-16 16:31:22
 	 */
 	public void clear() {
 		oredCriteria.clear();
@@ -126,7 +126,7 @@ public class MktActivityOrderPOExample implements Serializable {
 
 	/**
 	 * 只读. t_mkt_activity_order
-	 * @mbg.generated  2018-08-16 16:17:49
+	 * @mbg.generated  2018-08-16 16:31:22
 	 */
 	protected abstract static class GeneratedCriteria implements Serializable {
 		protected List<Criterion> criteria;
@@ -619,63 +619,63 @@ public class MktActivityOrderPOExample implements Serializable {
 			return (Criteria) this;
 		}
 
-		public Criteria andIsCommodityLimitIsNull() {
-			addCriterion("is_commodity_limit is null");
+		public Criteria andCommodityLimitIsNull() {
+			addCriterion("commodity_limit is null");
 			return (Criteria) this;
 		}
 
-		public Criteria andIsCommodityLimitIsNotNull() {
-			addCriterion("is_commodity_limit is not null");
+		public Criteria andCommodityLimitIsNotNull() {
+			addCriterion("commodity_limit is not null");
 			return (Criteria) this;
 		}
 
-		public Criteria andIsCommodityLimitEqualTo(Boolean value) {
-			addCriterion("is_commodity_limit =", value, "isCommodityLimit");
+		public Criteria andCommodityLimitEqualTo(Integer value) {
+			addCriterion("commodity_limit =", value, "commodityLimit");
 			return (Criteria) this;
 		}
 
-		public Criteria andIsCommodityLimitNotEqualTo(Boolean value) {
-			addCriterion("is_commodity_limit <>", value, "isCommodityLimit");
+		public Criteria andCommodityLimitNotEqualTo(Integer value) {
+			addCriterion("commodity_limit <>", value, "commodityLimit");
 			return (Criteria) this;
 		}
 
-		public Criteria andIsCommodityLimitGreaterThan(Boolean value) {
-			addCriterion("is_commodity_limit >", value, "isCommodityLimit");
+		public Criteria andCommodityLimitGreaterThan(Integer value) {
+			addCriterion("commodity_limit >", value, "commodityLimit");
 			return (Criteria) this;
 		}
 
-		public Criteria andIsCommodityLimitGreaterThanOrEqualTo(Boolean value) {
-			addCriterion("is_commodity_limit >=", value, "isCommodityLimit");
+		public Criteria andCommodityLimitGreaterThanOrEqualTo(Integer value) {
+			addCriterion("commodity_limit >=", value, "commodityLimit");
 			return (Criteria) this;
 		}
 
-		public Criteria andIsCommodityLimitLessThan(Boolean value) {
-			addCriterion("is_commodity_limit <", value, "isCommodityLimit");
+		public Criteria andCommodityLimitLessThan(Integer value) {
+			addCriterion("commodity_limit <", value, "commodityLimit");
 			return (Criteria) this;
 		}
 
-		public Criteria andIsCommodityLimitLessThanOrEqualTo(Boolean value) {
-			addCriterion("is_commodity_limit <=", value, "isCommodityLimit");
+		public Criteria andCommodityLimitLessThanOrEqualTo(Integer value) {
+			addCriterion("commodity_limit <=", value, "commodityLimit");
 			return (Criteria) this;
 		}
 
-		public Criteria andIsCommodityLimitIn(List<Boolean> values) {
-			addCriterion("is_commodity_limit in", values, "isCommodityLimit");
+		public Criteria andCommodityLimitIn(List<Integer> values) {
+			addCriterion("commodity_limit in", values, "commodityLimit");
 			return (Criteria) this;
 		}
 
-		public Criteria andIsCommodityLimitNotIn(List<Boolean> values) {
-			addCriterion("is_commodity_limit not in", values, "isCommodityLimit");
+		public Criteria andCommodityLimitNotIn(List<Integer> values) {
+			addCriterion("commodity_limit not in", values, "commodityLimit");
 			return (Criteria) this;
 		}
 
-		public Criteria andIsCommodityLimitBetween(Boolean value1, Boolean value2) {
-			addCriterion("is_commodity_limit between", value1, value2, "isCommodityLimit");
+		public Criteria andCommodityLimitBetween(Integer value1, Integer value2) {
+			addCriterion("commodity_limit between", value1, value2, "commodityLimit");
 			return (Criteria) this;
 		}
 
-		public Criteria andIsCommodityLimitNotBetween(Boolean value1, Boolean value2) {
-			addCriterion("is_commodity_limit not between", value1, value2, "isCommodityLimit");
+		public Criteria andCommodityLimitNotBetween(Integer value1, Integer value2) {
+			addCriterion("commodity_limit not between", value1, value2, "commodityLimit");
 			return (Criteria) this;
 		}
 
@@ -1252,7 +1252,7 @@ public class MktActivityOrderPOExample implements Serializable {
 
 	/**
 	 * 只读. t_mkt_activity_order
-	 * @mbg.generated  2018-08-16 16:17:49
+	 * @mbg.generated  2018-08-16 16:31:22
 	 */
 	public static class Criterion implements Serializable {
 		private String condition;
