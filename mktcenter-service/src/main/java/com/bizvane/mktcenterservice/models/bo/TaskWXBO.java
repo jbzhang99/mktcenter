@@ -7,8 +7,6 @@ import com.fasterxml.jackson.annotation.JsonFormat;
  * @Time: 2018/8/15 10:20
  */
 public class TaskWXBO {
-
-
     private  Long taskId;
     private String   taskCode ;
     private String taskName ;
@@ -21,7 +19,7 @@ public class TaskWXBO {
     @DateTimeFormat(
             pattern = "yyyy-MM-dd HH:mm:ss"
     )
-    private Date start_time;
+    private Date startTime;
     @JsonFormat(
             pattern = "yyyy-MM-dd HH:mm:ss",
             locale = "zh",
@@ -30,9 +28,9 @@ public class TaskWXBO {
     @DateTimeFormat(
             pattern = "yyyy-MM-dd HH:mm:ss"
     )
-    private Date   end_time;
+    private Date   endTime;
     private Integer  rewarded;  // 1=已完成  0未完成
-    private String  task_progress; //进度
+    private String  taskProgress; //进度
 
     public Long getTaskId() {
         return taskId;
@@ -66,20 +64,20 @@ public class TaskWXBO {
         this.taskType = taskType;
     }
 
-    public Date getStart_time() {
-        return start_time;
+    public Date getStartTime() {
+        return startTime;
     }
 
-    public void setStart_time(Date start_time) {
-        this.start_time = start_time;
+    public void setStartTime(Date startTime) {
+        this.startTime = startTime;
     }
 
-    public Date getEnd_time() {
-        return end_time;
+    public Date getEndTime() {
+        return endTime;
     }
 
-    public void setEnd_time(Date end_time) {
-        this.end_time = end_time;
+    public void setEndTime(Date endTime) {
+        this.endTime = endTime;
     }
 
     public Integer getRewarded() {
@@ -90,11 +88,11 @@ public class TaskWXBO {
         this.rewarded = rewarded;
     }
 
-    public String getTask_progress() {
-        return task_progress;
+    public String getTaskProgress() {
+        return taskProgress;
     }
 
-    public void setTask_progress(String task_progress) {
-        this.task_progress = task_progress;
+    public void setTaskProgress(String taskProgress) {
+        this.taskProgress = taskProgress;
     }
 }
