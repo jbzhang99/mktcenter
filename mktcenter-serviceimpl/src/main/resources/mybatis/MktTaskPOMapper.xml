@@ -1011,7 +1011,7 @@
       t_mkt_task  tmt
       LEFT JOIN  t_mkt_coupon  tmc ON tmt.mkt_task_id = tmc.biz_id AND tmc.valid=1
       WHERE tmt.valid=1
-      <if test="taskCode!=null and taskCode!=''">
+      <if test="taskId!=null">
         AND tmt.mkt_task_id=#{taskId}
       </if>
   </select>
