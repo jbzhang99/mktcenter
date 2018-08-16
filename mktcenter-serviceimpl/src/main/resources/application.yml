@@ -92,6 +92,10 @@ feign:
     wechat:
       name: wechat
       path: wechat.api
+    applet:
+      name: applet
+      path: applet.api
+
 rocketmq:
   onsaddr: http://onsaddr-internet.aliyun.com/rocketmq/nsaddr4client-internet
   accessKey: LTAIpoqUHsXq6q7r
