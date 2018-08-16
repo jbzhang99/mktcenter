@@ -1,7 +1,12 @@
 package com.bizvane.mktcenterserviceimpl.service.jobhandler;
 
+import com.bizvane.couponfacade.models.vo.SendCouponBatchRequestVO;
+import com.bizvane.couponfacade.models.vo.SendCouponSimpleRequestVO;
+import com.bizvane.members.facade.models.IntegralRecordModel;
 import com.bizvane.members.facade.models.MemberInfoModel;
 import com.bizvane.members.facade.service.api.MemberInfoApiService;
+import com.bizvane.messagefacade.models.vo.MemberMessageVO;
+import com.bizvane.messagefacade.models.vo.SysSmsConfigVO;
 import com.bizvane.mktcenterservice.interfaces.ActivitySmartService;
 import com.bizvane.mktcenterservice.models.bo.ActivitySmartBO;
 import com.bizvane.mktcenterservice.models.bo.AwardBO;
@@ -116,9 +121,11 @@ public class ActivitySmartJobHandler extends IJobHandler {
                         List<MktCouponPO> mktCouponPOS = mktCouponPOMapper.selectByExample(mktCouponPOExample);
                         //coupon loop
                         for(MktCouponPO mktCouponPO : mktCouponPOS){
-                            awardBO.setMemberInfoModelList(memberInfo.getData());
-                            awardBO.setMktSmartType(MktSmartTypeEnum.SMART_TYPE_COUPON_BATCH.getCode());
-                            awardBO.setCouponDefinitionId(mktCouponPO.getCouponDefinitionId());
+                            SendCouponBatchRequestVO sendCouponBatchRequestVO = new SendCouponBatchRequestVO();
+                            sendCouponBatchRequestVO.setMemberList(memberInfo.getData());
+                            sendCouponBatchRequestVO.setCouponDefinitionId(mktCouponPO.getCouponDefinitionId());
+                            awardBO.setMktType(MktSmartTypeEnum.SMART_TYPE_COUPON_BATCH.getCode());
+                            awardBO.setSendCouponBatchRequestVO(sendCouponBatchRequestVO);
                             award.execute(awardBO);
                         }
                         break;
@@ -126,9 +133,11 @@ public class ActivitySmartJobHandler extends IJobHandler {
                         log.info("match with SMART_TYPE_INTEGRAL");
                         //member loop
                         for(MemberInfoModel memberInfoModel : memberInfoModelList){
-                            awardBO.setMemberCode(memberInfoModel.getMemberCode());
-                            awardBO.setMktSmartType(MktSmartTypeEnum.SMART_TYPE_INTEGRAL.getCode());
-                            awardBO.setChangeIntegral(mktActivityPOWithBLOBs.getPoints());
+                            IntegralRecordModel integralRecordModel = new IntegralRecordModel();
+                            integralRecordModel.setMemberCode(memberInfoModel.getMemberCode());
+                            integralRecordModel.setChangeIntegral(mktActivityPOWithBLOBs.getPoints());
+                            awardBO.setMktType(MktSmartTypeEnum.SMART_TYPE_INTEGRAL.getCode());
+                            awardBO.setIntegralRecordModel(integralRecordModel);
                             award.execute(awardBO);
                         }
                         break;
@@ -145,8 +154,10 @@ public class ActivitySmartJobHandler extends IJobHandler {
                         }
                         //member loop
                         for(MemberInfoModel memberInfoModel : memberInfoModelList){
-                            awardBO.setMemberCode(memberInfoModel.getMemberCode());
-                            awardBO.setMktSmartType(MktSmartTypeEnum.SMART_TYPE_SMS.getCode());
+                            SysSmsConfigVO sysSmsConfigVO = new SysSmsConfigVO();
+                            sysSmsConfigVO.setPhone(memberInfoModel.getPhone());
+                            awardBO.setMktType(MktSmartTypeEnum.SMART_TYPE_SMS.getCode());
+                            awardBO.setSysSmsConfigVO(sysSmsConfigVO);
                             //get sms config
                             award.execute(awardBO);
                         }
@@ -164,8 +175,10 @@ public class ActivitySmartJobHandler extends IJobHandler {
                         }
                         //member loop
                         for(MemberInfoModel memberInfoModel : memberInfoModelList){
-                            awardBO.setMemberCode(memberInfoModel.getMemberCode());
-                            awardBO.setMktSmartType(MktSmartTypeEnum.SMART_TYPE_WXMESSAGE.getCode());
+                            MemberMessageVO memberMessageVO = new MemberMessageVO();
+                            memberMessageVO.setMemberCode(memberInfoModel.getMemberCode());
+                            awardBO.setMktType(MktSmartTypeEnum.SMART_TYPE_WXMESSAGE.getCode());
+                            awardBO.setMemberMessageVO(memberMessageVO);
                             //get WXMESSAGE config
                             award.execute(awardBO);
                         }

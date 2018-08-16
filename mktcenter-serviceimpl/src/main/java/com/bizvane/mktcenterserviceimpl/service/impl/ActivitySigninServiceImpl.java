@@ -263,11 +263,13 @@ public class ActivitySigninServiceImpl implements ActivitySigninService {
         for (ActivityVO activityVO:signinList) {
             //增加积分奖励新增接口
             AwardBO bo = new AwardBO();
-            bo.setMemberCode(vo.getMemberCode());
-            bo.setChangeBills(activityVO.getActivityCode());
-            bo.setChangeIntegral(activityVO.getPoints());
-            bo.setChangeWay(IntegralChangeTypeEnum.INCOME.getCode());
-            bo.setMktSmartType(MktSmartTypeEnum.SMART_TYPE_INTEGRAL.getCode());
+            IntegralRecordModel integralRecordModel = new IntegralRecordModel();
+            integralRecordModel.setMemberCode(vo.getMemberCode());
+            integralRecordModel.setChangeBills(activityVO.getActivityCode());
+            integralRecordModel.setChangeIntegral(activityVO.getPoints());
+            integralRecordModel.setChangeWay(IntegralChangeTypeEnum.INCOME.getCode());
+            bo.setIntegralRecordModel(integralRecordModel);
+            bo.setMktType(MktSmartTypeEnum.SMART_TYPE_INTEGRAL.getCode());
             log.info("新增积分奖励");
             award.execute(bo);
             //新增积分到会员参与活动记录表中数据

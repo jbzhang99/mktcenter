@@ -84,7 +84,7 @@ feign:
       name: coupon-ceshi
       path: coupon.api
     members:
-      name: members-server
+      name: members-test
       path: members.api
     message:
       name: message
