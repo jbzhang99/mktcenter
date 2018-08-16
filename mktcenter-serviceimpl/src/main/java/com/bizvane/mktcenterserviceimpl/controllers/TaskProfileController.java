@@ -142,17 +142,18 @@ public class TaskProfileController {
 
     /**
      * 任务审核
-     * @param taskId
+     * @param businessId
      * @param request
      * @param checkStatus
      * @return
      */
     @RequestMapping("checkTaskProfile")
-    public ResponseData checkTaskprofile(Long taskId,HttpServletRequest request,Integer checkStatus){
+    public ResponseData checkTaskprofile(Long businessId,HttpServletRequest request,Integer checkStatus){
 
         ResponseData responseData = new ResponseData();
         SysAccountPO stageUser = TokenUtils.getStageUser(request);
-        responseData = taskProfileService.checkTaskProfile(taskId,stageUser,checkStatus);
+        //SysAccountPO stageUser =new SysAccountPO();
+                responseData = taskProfileService.checkTaskProfile(businessId,stageUser,checkStatus);
         return responseData;
     }
 

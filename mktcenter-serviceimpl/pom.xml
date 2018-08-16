@@ -154,6 +154,12 @@
 			<artifactId>centerstage-service</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
+		<!--中台模块依赖-->
+		<dependency>
+			<groupId>com.bizvane</groupId>
+			<artifactId>applet-service</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+		</dependency>
 		<!--中控模块依赖-->
 		<dependency>
 			<groupId>com.bizvane</groupId>
@@ -195,6 +201,8 @@
 			<artifactId>fastjson</artifactId>
 			<version>1.2.39</version>
 		</dependency>
+
+
 
 	</dependencies>
 	<dependencyManagement>

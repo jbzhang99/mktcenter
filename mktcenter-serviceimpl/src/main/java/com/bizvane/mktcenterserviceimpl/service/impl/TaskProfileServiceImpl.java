@@ -155,6 +155,7 @@ public class TaskProfileServiceImpl implements TaskProfileService {
                     }
                 }
             }
+            /*int i = 0;*/
             //会员任务需要审核
             if(i>0){
                 //新增审核单  任务状态为：待审核
@@ -463,12 +464,12 @@ public class TaskProfileServiceImpl implements TaskProfileService {
 
     /**
      * 查询任务详情
-     * @param mktTaskId
+     * @param businessId
      * @return
      */
     @Override
     @Transactional
-    public ResponseData<TaskBO> selectTaskById(Long mktTaskId) {
+    public ResponseData<TaskBO> selectTaskById(Long businessId) {
         ResponseData responseData = new ResponseData();
 
 
@@ -486,19 +487,19 @@ public class TaskProfileServiceImpl implements TaskProfileService {
 
         TaskBO taskBO = new TaskBO();
         TaskVO taskVO = new TaskVO();
-        taskVO.setMktTaskId(mktTaskId);
+        taskVO.setMktTaskId(businessId);
         //联表查询查询任务详情
         List<TaskVO> taskVOList = mktTaskProfilePOMapper.getTaskList(taskVO);
         TaskVO taskVo = taskVOList.get(0);
 
         //查询券信息
         MktCouponPOExample example = new MktCouponPOExample();
-        example.createCriteria().andValidEqualTo(true).andBizIdEqualTo(mktTaskId);
+        example.createCriteria().andValidEqualTo(true).andBizIdEqualTo(businessId);
         List<MktCouponPO> mktCouponPOList = mktCouponPOMapper.selectByExample(example);
 
         //查询消息
         MktMessagePOExample mktMessagePOExample = new MktMessagePOExample();
-        mktMessagePOExample.createCriteria().andValidEqualTo(true).andBizIdEqualTo(mktTaskId);
+        mktMessagePOExample.createCriteria().andValidEqualTo(true).andBizIdEqualTo(businessId);
         List<MktMessagePO> mktMessagePOList = mktMessagePOMapper.selectByExample(mktMessagePOExample);
 
 
@@ -882,14 +883,14 @@ public class TaskProfileServiceImpl implements TaskProfileService {
                 sysCheckPo.setBusinessCode(mktTaskPOWithBLOBs.getTaskCode());
                 sysCheckPo.setCheckStatus(CheckStatusEnum.CHECK_STATUS_APPROVED.getCode());
 
-                sysCheckServiceRpc.updateCheck(sysCheckPo);
-                //审核时间未超过任务结束时间
+                //sysCheckServiceRpc.updateCheck(sysCheckPo);
+                /*//审核时间未超过任务结束时间
                 if (new Date().before(mktTaskPOWithBLOBs.getEndTime())){
                     //审核时间超过任务开始时间
                     if(new Date().after(mktTaskPOWithBLOBs.getStartTime())){
                         mktTaskPOWithBLOBs.setTaskStatus(TaskStatusEnum.TASK_STATUS_EXECUTING.getCode());
                         //todo 执行发送消息
-                            sendMsg(mktTaskPOWithBLOBs.getSysBrandId(),mktMessagePOList);
+                            //sendMsg(mktTaskPOWithBLOBs.getSysBrandId(),mktMessagePOList);
 
 
                     }//审核时间未超过任务开始时间
@@ -900,7 +901,10 @@ public class TaskProfileServiceImpl implements TaskProfileService {
                 }//审核时间超过任务结束时间
                 else{
                     mktTaskPOWithBLOBs.setTaskStatus(TaskStatusEnum.TASK_STATUS_FINISHED.getCode());
-                }
+                }*/
+                sendMsg(mktTaskPOWithBLOBs.getSysBrandId(),mktMessagePOList);
+
+                mktTaskPOWithBLOBs.setTaskStatus(TaskStatusEnum.TASK_STATUS_EXECUTING.getCode());
             }//审核驳回
             else{
                 mktTaskPOWithBLOBs.setCheckStatus(CheckStatusEnum.CHECK_STATUS_REJECTED.getCode());

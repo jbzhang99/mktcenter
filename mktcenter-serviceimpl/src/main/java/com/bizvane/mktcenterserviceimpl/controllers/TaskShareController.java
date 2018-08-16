@@ -125,16 +125,17 @@ public class TaskShareController {
 
     /**
      * 审核任务
-     * @param taskId
+     * @param businessId
      * @param checkStatus
      * @param request
      * @return
      */
     @RequestMapping("checkTaskShare")
-    public ResponseData checkTaskShare(Long taskId,Integer checkStatus,HttpServletRequest request){
+    public ResponseData checkTaskShare(Long businessId,Integer checkStatus,HttpServletRequest request){
 
         SysAccountPO stageUser= TokenUtils.getStageUser(request);
-        return taskShareService.checkTaskShare(taskId,stageUser,checkStatus);
+        //SysAccountPO stageUser=new SysAccountPO();
+        return taskShareService.checkTaskShare(businessId,stageUser,checkStatus);
     }
 
 
