@@ -10,7 +10,7 @@ spring:
   swagger:
     show: true
   application:
-    name: mktcenter-wkq
+    name: mktcenter
 #  security:
 #    enabled: false
 #    user:
@@ -87,7 +87,7 @@ feign:
       name: members-test
       path: members.api
     message:
-      name: message
+      name: message-server-test
       path: message.api
     wechat:
       name: wechat

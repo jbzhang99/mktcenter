@@ -745,8 +745,9 @@ public class ActivitySmartServiceImpl implements ActivitySmartService {
 //            ResponseData<List<MemberInfoModel>> memberInfo = memberInfoApiService.getMemberInfo(new MemberInfoModel());
             //构建短信发送对象
             SysSmsConfigVO sysSmsConfigVO = new SysSmsConfigVO();
-            sysSmsConfigVO.setPhone("13971424232");
+            sysSmsConfigVO.setPhone("17621885377");
             sysSmsConfigVO.setMsgContent(messageVO.getMsgContent());
+            awardBO.setMktType(MktSmartTypeEnum.SMART_TYPE_SMS.getCode());
             awardBO.setSysSmsConfigVO(sysSmsConfigVO);
             award.execute(awardBO);
         }

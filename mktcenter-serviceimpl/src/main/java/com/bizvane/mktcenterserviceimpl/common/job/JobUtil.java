@@ -10,8 +10,10 @@ import com.bizvane.utils.jobutils.JobBusinessTypeEnum;
 import com.bizvane.utils.jobutils.JobClient;
 import com.bizvane.utils.jobutils.XxlJobInfo;
 import com.bizvane.utils.tokens.SysAccountPO;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 
 import java.util.Date;
@@ -20,6 +22,7 @@ import java.util.Date;
  * Created by agan on 2018/7/19.
  */
 @Component
+@Slf4j
 public class JobUtil {
     @Autowired
     private XxlJobConfig xxlJobConfig;
@@ -110,7 +113,7 @@ public  void addTaskStartJob(SysAccountPO stageUser, MktTaskPOWithBLOBs po) {
      * @param stageUser
      * @param po
      */
-    public  void addTaskEndJob(SysAccountPO stageUser, MktTaskPOWithBLOBs po) {
+    public void addTaskEndJob(SysAccountPO stageUser, MktTaskPOWithBLOBs po) {
         StringBuilder builder = new StringBuilder();
         builder.append(po.getMktTaskId());
         builder.append("&");
@@ -164,7 +167,8 @@ public  void addTaskStartJob(SysAccountPO stageUser, MktTaskPOWithBLOBs po) {
         //设置任务或活动的Code
         xxlJobInfo.setBizCode(bizCode);
         //添加job
-        jobClient.addJob(xxlJobInfo);
+        ResponseEntity<String> stringResponseEntity = jobClient.addJob(xxlJobInfo);
+        log.info("com.bizvane.mktcenterserviceimpl.common.job.JobUtil.addJob result"+stringResponseEntity);
     }
 
 }

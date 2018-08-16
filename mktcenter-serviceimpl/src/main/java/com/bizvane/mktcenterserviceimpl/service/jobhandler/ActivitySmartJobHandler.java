@@ -146,16 +146,19 @@ public class ActivitySmartJobHandler extends IJobHandler {
                         //get activity message object
                         MktMessagePOExample mktMessagePOExample = new MktMessagePOExample();
                         mktMessagePOExample.createCriteria().andValidEqualTo(Boolean.TRUE).andBizTypeEqualTo(BusinessTypeEnum.ACTIVITY_TYPE_ACTIVITY.getCode()).andBizIdEqualTo(mktActivityPOWithBLOBs.getMktActivityId());
-                        List<MktMessagePO> mktMessagePOS = mktMessagePOMapper.selectByExample(mktMessagePOExample);
+                        List<MktMessagePO> mktMessagePOS = mktMessagePOMapper.selectByExampleWithBLOBs(mktMessagePOExample);
                         if(CollectionUtils.isEmpty(mktMessagePOS)){
                             log.error("mktMessagePOS is empty");
                             returnT.setMsg("mktMessagePOS is empty");
                             return returnT;
                         }
+                        MktMessagePO mktMessagePO = mktMessagePOS.get(0);
                         //member loop
                         for(MemberInfoModel memberInfoModel : memberInfoModelList){
                             SysSmsConfigVO sysSmsConfigVO = new SysSmsConfigVO();
-                            sysSmsConfigVO.setPhone(memberInfoModel.getPhone());
+//                            sysSmsConfigVO.setPhone(memberInfoModel.getPhone());
+                            sysSmsConfigVO.setPhone("17621885377");
+                            sysSmsConfigVO.setMsgContent(mktMessagePO.getMsgContent());
                             awardBO.setMktType(MktSmartTypeEnum.SMART_TYPE_SMS.getCode());
                             awardBO.setSysSmsConfigVO(sysSmsConfigVO);
                             //get sms config
