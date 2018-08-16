@@ -264,11 +264,17 @@ public class ActivityRegisterServiceImpl implements ActivityRegisterService {
                 for (MemberInfoModel memberInfo:memberInfoModelList) {
                     //循环信息类然后发送
                     for (MktMessagePO mktMessagePO:messageVOList) {
+                        AwardBO awardBO = new AwardBO();
+                        awardBO.setChangeBills(activityVO.getActivityCode());
                         if (mktMessagePO.getMsgType().equals("1")){
                             //发送微信模板消息
+                            awardBO.setMktSmartType(MktSmartTypeEnum.SMART_TYPE_WXMESSAGE.getCode());
+                            award.execute(awardBO);
                         }
                         if (mktMessagePO.getMsgType().equals("2")){
                             //发送短信消息
+                            awardBO.setMktSmartType(MktSmartTypeEnum.SMART_TYPE_SMS.getCode());
+                            award.execute(awardBO);
                         }
                     }
                 }
@@ -446,8 +452,6 @@ public class ActivityRegisterServiceImpl implements ActivityRegisterService {
             }else{
                 //活动状态设置为执行中
                 mktActivityPOWithBLOBs.setActivityStatus(ActivityStatusEnum.ACTIVITY_STATUS_EXECUTING.getCode());
-                //发送模板消息和短信消息TODO
-
             }
         }
         //修改活动主表
