@@ -601,6 +601,7 @@ public class ActivitySmartServiceImpl implements ActivitySmartService {
         vo.setCreateUserId(stageUser.getSysAccountId());
         vo.setCreateDate(new Date());
         vo.setCreateUserName(stageUser.getName());
+        vo.setSysBrandId(stageUser.getBrandId());
 
         //生成活动编号
         String activityCode = CodeUtil.getActivityCode();
@@ -690,6 +691,7 @@ public class ActivitySmartServiceImpl implements ActivitySmartService {
         vo.setCreateUserId(stageUser.getSysAccountId());
         vo.setCreateDate(new Date());
         vo.setCreateUserName(stageUser.getName());
+        vo.setSysBrandId(stageUser.getBrandId());
 
         //生成活动编号
         String activityCode = CodeUtil.getActivityCode();
@@ -796,6 +798,7 @@ public class ActivitySmartServiceImpl implements ActivitySmartService {
         vo.setCreateUserId(stageUser.getSysAccountId());
         vo.setCreateDate(new Date());
         vo.setCreateUserName(stageUser.getName());
+        vo.setSysBrandId(stageUser.getBrandId());
 
         //生成活动编号
         String activityCode = CodeUtil.getActivityCode();
