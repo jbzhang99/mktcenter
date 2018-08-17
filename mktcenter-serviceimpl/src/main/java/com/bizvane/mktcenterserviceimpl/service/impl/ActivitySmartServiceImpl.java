@@ -497,6 +497,7 @@ public class ActivitySmartServiceImpl implements ActivitySmartService {
         vo.setCreateUserId(stageUser.getSysAccountId());
         vo.setCreateDate(new Date());
         vo.setCreateUserName(stageUser.getName());
+        vo.setSysBrandId(stageUser.getBrandId());
 
         //生成活动编号
         String activityCode = CodeUtil.getActivityCode();
@@ -546,7 +547,7 @@ public class ActivitySmartServiceImpl implements ActivitySmartService {
 
         //新增奖励券表
         if(!CollectionUtils.isEmpty(vo.getMktCouponPOS())){
-            log.info("vo.getMktCouponPOS()) is empty");
+            log.info("vo.getMktCouponPOS()) is not empty");
             for(MktCouponPO mktCouponPO : vo.getMktCouponPOS()){
                 mktCouponPO.setBizType(BusinessTypeEnum.ACTIVITY_TYPE_ACTIVITY.getCode());
                 mktCouponPO.setBizId(mktActivityId);
