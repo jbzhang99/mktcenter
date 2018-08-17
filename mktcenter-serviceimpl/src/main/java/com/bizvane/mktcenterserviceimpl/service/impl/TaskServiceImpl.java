@@ -365,7 +365,7 @@ public class TaskServiceImpl implements TaskService {
      * @return  todo   审核时间超过任务结束时间
      */
     @Override
-    public ResponseData<Integer> checkTaskById(Long mktTaskId, Integer checkStatus, SysAccountPO sysAccountPO,Date startTime) throws ParseException {
+    public ResponseData<Integer> checkTaskById(Long mktTaskId, Integer checkStatus, SysAccountPO sysAccountPO,Date startTime,Date endTime) throws ParseException {
         ResponseData<Integer> result = new ResponseData<Integer>(SysResponseEnum.FAILED.getCode(), SysResponseEnum.FAILED.getMessage(), null);
         ResponseData responseData = new ResponseData();
         MktTaskPOWithBLOBs mktTaskPOWithBLOBs = new MktTaskPOWithBLOBs();

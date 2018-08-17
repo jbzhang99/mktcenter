@@ -115,7 +115,7 @@ public interface TaskService {
      * @param mktTaskId
      * @return
      */
-    public ResponseData<Integer> checkTaskById(Long mktTaskId,Integer checkStatus, SysAccountPO sysAccountPO,Date startTime) throws ParseException;
+    public ResponseData<Integer> checkTaskById(Long mktTaskId,Integer checkStatus, SysAccountPO sysAccountPO,Date startTime,Date endTime) throws ParseException;
 
     /**
      * 获取公司下的所有会员
