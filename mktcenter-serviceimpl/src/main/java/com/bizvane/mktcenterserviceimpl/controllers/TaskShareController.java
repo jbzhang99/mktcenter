@@ -83,7 +83,7 @@ public class TaskShareController {
      * @return
      */
     @RequestMapping("updateTask")
-    public ResponseData<Integer> updateTask(TaskBO bo, HttpServletRequest request,SysAccountPO stageUser){
+    public ResponseData<Integer> updateTask(TaskBO bo, HttpServletRequest request){
 
         //参数校验
         ResponseData responseData = TaskParamCheckUtil.checkParam(bo);
@@ -92,7 +92,7 @@ public class TaskShareController {
             return responseData;
         }
         //参数校验通过，获取操作人信息
-        //SysAccountPO stageUser=TokenUtils.getStageUser(request);
+        SysAccountPO stageUser=TokenUtils.getStageUser(request);
         //SysAccountPO stageUser = new SysAccountPO();
         //更新活动
         ResponseData<Integer> registerData = taskShareService.updateTask(bo,stageUser);

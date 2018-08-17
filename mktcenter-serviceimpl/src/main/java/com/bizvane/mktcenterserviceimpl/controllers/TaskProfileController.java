@@ -85,7 +85,7 @@ public class TaskProfileController {
      * @return
      */
     @RequestMapping("updateTask")
-    public ResponseData<Integer> updateTask(TaskBO bo, HttpServletRequest request,SysAccountPO stageUser){
+    public ResponseData<Integer> updateTask(TaskBO bo, HttpServletRequest request){
         //参数校验
         ResponseData responseData = TaskParamCheckUtil.checkParam(bo);
         //参数校验不通过
@@ -93,7 +93,7 @@ public class TaskProfileController {
             return responseData;
         }
         //参数校验通过，获取操作人信息
-        //SysAccountPO stageUser = TokenUtils.getStageUser(request);
+        SysAccountPO stageUser = TokenUtils.getStageUser(request);
         //SysAccountPO stageUser = new SysAccountPO();
         //更新活动
         ResponseData<Integer> registerData = taskProfileService.updateTask(bo,stageUser);
