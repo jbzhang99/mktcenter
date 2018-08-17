@@ -32,7 +32,7 @@ public class TaskController {
     @Autowired
     private TaskService taskService;
     /**
-     * 获取任务详情 --通用
+     * 获取任务详情 --通用--已经核对
      */
     @RequestMapping("selectTaskById")
     public ResponseData<TaskBO> selectTaskById(Long businessId){
