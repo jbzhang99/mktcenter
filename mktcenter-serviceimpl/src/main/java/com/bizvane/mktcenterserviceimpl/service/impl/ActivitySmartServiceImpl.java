@@ -374,6 +374,13 @@ public class ActivitySmartServiceImpl implements ActivitySmartService {
     public ResponseData<Integer> updateSmartActivityGroup(ActivitySmartVO vo) {
         log.info("com.bizvane.mktcenterserviceimpl.service.impl.ActivitySmartServiceImpl.updateSmartActivityGroup param"+"vo:"+ JSON.toJSONString(vo));
         ResponseData responseData = new ResponseData();
+
+        if(vo.getMktActivitySmartGroupId()==null){
+            log.warn("vo.getMktActivitySmartGroupId() is null");
+            responseData.setCode(ResponseConstants.ERROR);
+            responseData.setMessage(ActivityConstants.SMART_ACTIVITY_GROUP_ID_EMPTY);
+            return responseData;
+        }
         //营销名称为空
         if(StringUtils.isEmpty(vo.getMemberGroupName())){
             log.warn("vo.getMemberGroupName() is empty");
