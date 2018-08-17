@@ -3,6 +3,7 @@ package com.bizvane.mktcenterservice.interfaces;
 import com.bizvane.centerstageservice.models.po.SysCheckConfigPo;
 import com.bizvane.members.facade.models.MemberInfoModel;
 import com.bizvane.members.facade.models.OrderServeModel;
+import com.bizvane.mktcenterservice.models.bo.TaskBO;
 import com.bizvane.mktcenterservice.models.bo.TaskInviteAwardBO;
 import com.bizvane.mktcenterservice.models.bo.TaskAwardBO;
 import com.bizvane.mktcenterservice.models.po.MktTaskPOWithBLOBs;
@@ -23,6 +24,12 @@ import java.util.List;
  */
 public interface TaskService {
 
+    /**
+     * 查询任务详情
+     * @param mktTaskId
+     * @return
+     */
+    public ResponseData<TaskBO> selectTaskById(Long mktTaskId);
     /**
      * 根据公司id和品牌id查询执行中的消费类任务
      * @param sysCompanyId

@@ -6,6 +6,7 @@ import com.bizvane.centerstageservice.rpc.SysCheckConfigServiceRpc;
 import com.bizvane.centerstageservice.rpc.SysCheckServiceRpc;
 import com.bizvane.couponfacade.enums.SendTypeEnum;
 import com.bizvane.couponfacade.interfaces.CouponQueryServiceFeign;
+import com.bizvane.couponfacade.models.po.CouponDefinitionPO;
 import com.bizvane.couponfacade.models.vo.CouponFindCouponCountResponseVO;
 import com.bizvane.couponfacade.models.vo.SendCouponSimpleRequestVO;
 import com.bizvane.members.facade.models.IntegralRecordModel;
@@ -18,6 +19,7 @@ import com.bizvane.mktcenterservice.interfaces.TaskRecordService;
 import com.bizvane.mktcenterservice.interfaces.TaskService;
 import com.bizvane.mktcenterservice.models.bo.AwardBO;
 import com.bizvane.mktcenterservice.models.bo.TaskAwardBO;
+import com.bizvane.mktcenterservice.models.bo.TaskBO;
 import com.bizvane.mktcenterservice.models.po.*;
 import com.bizvane.mktcenterservice.models.vo.*;
 import com.bizvane.mktcenterserviceimpl.common.award.Award;
@@ -28,6 +30,8 @@ import com.bizvane.mktcenterserviceimpl.common.enums.MktSmartTypeEnum;
 import com.bizvane.mktcenterserviceimpl.common.enums.TaskStatusEnum;
 import com.bizvane.mktcenterserviceimpl.common.job.JobUtil;
 import com.bizvane.mktcenterserviceimpl.common.utils.TimeUtils;
+import com.bizvane.mktcenterserviceimpl.mappers.MktCouponPOMapper;
+import com.bizvane.mktcenterserviceimpl.mappers.MktMessagePOMapper;
 import com.bizvane.mktcenterserviceimpl.mappers.MktTaskPOMapper;
 import com.bizvane.mktcenterserviceimpl.mappers.MktTaskRecordPOMapper;
 import com.bizvane.utils.enumutils.SysResponseEnum;
@@ -41,6 +45,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.text.ParseException;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import com.bizvane.mktcenterserviceimpl.common.enums.TaskTypeEnum;
@@ -72,8 +77,75 @@ public class TaskServiceImpl implements TaskService {
     private CouponQueryServiceFeign couponQueryService;
     @Autowired
     private MktTaskRecordPOMapper mktTaskRecordPOMapper;
-
+    @Autowired
     private   SysCheckServiceRpc sysCheckServiceRpc;
+    @Autowired
+    private MktCouponPOMapper mktCouponPOMapper;
+    @Autowired
+    private MktMessagePOMapper mktMessagePOMapper;
+
+    @Override
+    public ResponseData<TaskBO> selectTaskById(Long mktTaskId) {
+        ResponseData responseData = new ResponseData();
+
+        try {
+
+            TaskBO taskBO = new TaskBO();
+            TaskVO taskVO = new TaskVO();
+            taskVO.setMktTaskId(mktTaskId);
+            //联表查询查询任务详情
+            List<TaskVO> taskVOList = mktTaskPOMapper.getTaskList(mktTaskId);
+            TaskVO taskVo = taskVOList.get(0);
+
+            //查询券信息
+            MktCouponPOExample example = new MktCouponPOExample();
+            example.createCriteria().andValidEqualTo(true).andBizIdEqualTo(mktTaskId);
+            List<MktCouponPO> mktCouponPOList = mktCouponPOMapper.selectByExample(example);
+
+            //查询消息
+            MktMessagePOExample mktMessagePOExample = new MktMessagePOExample();
+            mktMessagePOExample.createCriteria().andValidEqualTo(true).andBizIdEqualTo(mktTaskId);
+            List<MktMessagePO> mktMessagePOList = mktMessagePOMapper.selectByExample(mktMessagePOExample);
+
+
+            List<CouponDefinitionPO> couponDefinitionPOS = new ArrayList<>();
+       /* //查询券定义 todo
+        for (MktCouponPO mktCouponPO:mktCouponPOList){
+            Long couponDefinitionId = mktCouponPO.getCouponDefinitionId();
+
+            ResponseData<CouponDefinitionPO> coupon = couponDefinitionServiceFeign.findRpc(couponDefinitionId);
+            CouponDefinitionPO couponDefinitionPO = coupon.getData();
+            couponDefinitionPOS.add(couponDefinitionPO);
+        }*/
+
+
+
+            if (taskVo!=null){
+                taskBO.setTaskVO(taskVo);
+            }
+            if (!org.springframework.util.CollectionUtils.isEmpty(mktCouponPOList)){
+                taskBO.setMktCouponPOList(mktCouponPOList);
+            }
+            if (!org.springframework.util.CollectionUtils.isEmpty(mktMessagePOList)){
+                taskBO.setMessagePOList(mktMessagePOList);
+            }
+            if (!org.springframework.util.CollectionUtils.isEmpty(couponDefinitionPOS)){
+                taskBO.setCouponDefinitionPOList(couponDefinitionPOS);
+            }
+
+
+            responseData.setData(taskBO);
+            responseData.setMessage(SysResponseEnum.SUCCESS.getMessage());
+            responseData.setCode(SysResponseEnum.SUCCESS.getCode());
+        }catch(Exception e){
+            e.printStackTrace();
+            responseData.setMessage(SysResponseEnum.FAILED.getMessage());
+            responseData.setCode(SysResponseEnum.FAILED.getCode());
+            return responseData;
+        }
+
+        return responseData;
+    }
 
     /**
      * 根据公司id和品牌id查询执行中的消费类任务

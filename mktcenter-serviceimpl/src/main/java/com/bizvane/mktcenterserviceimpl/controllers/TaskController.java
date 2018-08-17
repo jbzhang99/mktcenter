@@ -1,6 +1,7 @@
 package com.bizvane.mktcenterserviceimpl.controllers;
 
 import com.bizvane.mktcenterservice.interfaces.TaskService;
+import com.bizvane.mktcenterservice.models.bo.TaskBO;
 import com.bizvane.mktcenterservice.models.po.MktTaskPOWithBLOBs;
 import com.bizvane.mktcenterservice.models.vo.PageForm;
 import com.bizvane.mktcenterservice.models.vo.TaskAnalysisVo;
@@ -30,6 +31,13 @@ public class TaskController {
 
     @Autowired
     private TaskService taskService;
+    /**
+     * 获取任务详情 --通用
+     */
+    @RequestMapping("selectTaskById")
+    public ResponseData<TaskBO> selectTaskById(Long businessId){
+        return taskService.selectTaskById(businessId);
+    }
     /**
      * 根据任务类型查询任务列表
      */

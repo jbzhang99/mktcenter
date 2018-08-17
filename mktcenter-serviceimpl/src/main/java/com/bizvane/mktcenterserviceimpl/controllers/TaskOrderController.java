@@ -51,9 +51,9 @@ public class TaskOrderController {
      * 查询消费任务详情
      */
     @RequestMapping("getOrderTaskDetails")
-    public  ResponseData<TaskDetailBO> getOrderTaskDetails(Long mktTaskId){
+    public  ResponseData<TaskDetailBO> getOrderTaskDetails(Long businessId){
         ResponseData<TaskDetailBO> result = new ResponseData<TaskDetailBO>(SysResponseEnum.FAILED.getCode(),SysResponseEnum.FAILED.getMessage(),null);
-        List<TaskDetailBO> orderTaskDetails = taskOrderService.getOrderTaskDetails(mktTaskId);
+        List<TaskDetailBO> orderTaskDetails = taskOrderService.getOrderTaskDetails(businessId);
 
         if (CollectionUtils.isNotEmpty(orderTaskDetails)){
             result.setCode(SysResponseEnum.SUCCESS.getCode());

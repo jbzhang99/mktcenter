@@ -507,7 +507,4 @@
           AND tta.mkt_task_id = #{mktTaskId}
         </if>
   </select>
-
-
-
 </mapper>

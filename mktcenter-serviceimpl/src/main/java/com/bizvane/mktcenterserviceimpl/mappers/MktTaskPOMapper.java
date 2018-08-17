@@ -13,6 +13,7 @@ import java.util.List;
 
 import com.bizvane.mktcenterservice.models.vo.TaskDetailVO;
 import com.bizvane.mktcenterservice.models.vo.TaskForWXVO;
+import com.bizvane.mktcenterservice.models.vo.TaskVO;
 import org.apache.ibatis.annotations.Param;
 
 public interface MktTaskPOMapper {
@@ -131,4 +132,11 @@ public interface MktTaskPOMapper {
 	public List<TaskWXBO> getCompleteTask(TaskForWXVO vo);
 
 	public  List<TaskWXDetailBO>  getTaskWXDetail(@Param("taskId") Long taskId);
+
+	/**
+	 * 获取任务的详情通用
+	 * @param taskId
+	 * @return
+	 */
+	public List<TaskVO> getTaskList(@Param("mktTaskId") Long mktTaskId);
 }

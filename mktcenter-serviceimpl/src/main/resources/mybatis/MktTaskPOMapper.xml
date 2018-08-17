@@ -1015,4 +1015,45 @@
         AND tmt.mkt_task_id=#{taskId}
       </if>
   </select>
+
+  <select id="getTaskList" parameterType="com.bizvane.mktcenterservice.models.vo.TaskVO" resultType="com.bizvane.mktcenterservice.models.vo.TaskVO">
+    SELECT
+    tta.mkt_task_id,
+    tta.sys_company_id,
+    tta.sys_brand_id,
+    tta.task_code,
+    tta.task_type,
+    tta.task_name,
+    tta.start_time,
+    tta.end_time,
+    tta.task_info,
+    tta.points,
+    tta.task_list_img,
+    tta.task_detail_img,
+    tta.check_status,
+    tta.task_status,
+    tta.remark,
+    tto.mkt_task_order_id,
+    tto.order_source,
+    tto.consume_amount,
+    tto.consume_times,
+    tmi.invite_num
+    FROM
+    t_mkt_task tta
+    LEFT JOIN t_mkt_task_order tto ON tta.mkt_task_id = tto.mkt_task_id AND tto.valid=1
+    LEFT JOIN t_mkt_task_invite tmi ON tta.mkt_task_id = tmi.mkt_task_id AND tmi.valid=1
+    WHERE  tta.valid=1
+    <!--任务主表ID -->
+    <if test="mktTaskId != null and mktTaskId!= '' ">
+      AND tta.mkt_task_id = #{mktTaskId}
+    </if>
+    <!--<if test="taskStatus != null and taskStatus!=0">-->
+      <!--AND tmt.task_status = #{taskStatus}-->
+    <!--</if>-->
+    <!--&lt;!&ndash;所属品牌id &ndash;&gt;-->
+    <!--<if test="sysBrandId != null and sysBrandId!= ''">-->
+      <!--AND tmt.sys_brand_id = #{sysBrandId}-->
+    <!--</if>-->
+  </select>
+
 </mapper>
