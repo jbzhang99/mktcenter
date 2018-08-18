@@ -687,7 +687,8 @@
   <select id="getActivityAnalysisCountpage" parameterType="com.bizvane.mktcenterservice.models.bo.ActivityAnalysisCountBO" resultType="com.bizvane.mktcenterservice.models.bo.ActivityAnalysisCountBO">
     SELECT t.mkt_activity_id AS mktActivityId,t.activity_name AS activityName,
     t.long_term AS longTerm,t.start_time AS startTime,t.end_time AS endTime,t.activity_code AS activityCode,
-    t.sys_brand_id as sysBrandId,a.su AS participateNumber,a.pointsSum AS pointsSum
+    t.sys_brand_id as sysBrandId,t.activity_type AS activityType,t.create_date AS createDate,
+    a.su AS participateNumber,a.pointsSum AS pointsSum
     FROM t_mkt_activity t
     LEFT JOIN
     (
@@ -706,6 +707,9 @@
     </if>
     <if test="endDate!=null and endDate!=''">
       and t.create_date &lt;= str_to_date(#{endDate},'%Y-%m-%d')
+    </if>
+    <if test="activityName != null and activityName!= ''">
+      AND t.activity_name LIKE "%"#{activityName}"%"
     </if>
   </select>
   <select id="getActivityAnalysisTotal" parameterType="com.bizvane.mktcenterservice.models.bo.ActivityAnalysisCountBO" resultType="com.bizvane.mktcenterservice.models.bo.CtivityAnalysisBO">
