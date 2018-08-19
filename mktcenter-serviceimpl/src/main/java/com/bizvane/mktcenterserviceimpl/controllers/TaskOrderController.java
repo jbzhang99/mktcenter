@@ -1,6 +1,8 @@
 package com.bizvane.mktcenterserviceimpl.controllers;
 
 import com.bizvane.mktcenterservice.interfaces.TaskOrderService;
+import com.bizvane.mktcenterservice.models.bo.AddTaskBO;
+import com.bizvane.mktcenterservice.models.bo.TaskBO;
 import com.bizvane.mktcenterservice.models.bo.TaskDetailBO;
 import com.bizvane.mktcenterservice.models.vo.PageForm;
 import com.bizvane.mktcenterservice.models.vo.TaskDetailVO;
@@ -65,22 +67,23 @@ public class TaskOrderController {
     }
 
     /**
-     * 创建任务
+     * 创建任务  TaskBO bo
      * @return
      */
     @RequestMapping("addTask")
-    public ResponseData<Integer> addTask(TaskDetailVO vo, HttpServletRequest request) throws ParseException {
+    //  public ResponseData<Integer> addTask(TaskDetailVO vo, HttpServletRequest request) throws ParseException {
+    public ResponseData<Integer> addTask(TaskBO bo, HttpServletRequest request) throws ParseException {
         //参数校验通过，获取操作人信息
        SysAccountPO stageUser = TokenUtils.getStageUser(request);
 
-       return  taskOrderService.addTask(vo, stageUser);
+       return  taskOrderService.addTask(bo, stageUser);
     }
 /**
  * 修改任务
  */
-    public ResponseData updateOrderTask(TaskDetailVO vo, HttpServletRequest request){
+    public ResponseData updateOrderTask(TaskBO bo, HttpServletRequest request){
         SysAccountPO stageUser = TokenUtils.getStageUser(request);
 
-        return  taskOrderService.updateOrderTask(vo, stageUser);
+        return  taskOrderService.updateOrderTask(bo, stageUser);
     }
 }

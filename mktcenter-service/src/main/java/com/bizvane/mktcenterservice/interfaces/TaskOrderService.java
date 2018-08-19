@@ -1,5 +1,7 @@
 package com.bizvane.mktcenterservice.interfaces;
 
+import com.bizvane.mktcenterservice.models.bo.AddTaskBO;
+import com.bizvane.mktcenterservice.models.bo.TaskBO;
 import com.bizvane.mktcenterservice.models.bo.TaskDetailBO;
 import com.bizvane.mktcenterservice.models.po.MktTaskOrderPO;
 import com.bizvane.mktcenterservice.models.vo.TaskDetailVO;
@@ -37,13 +39,13 @@ public interface TaskOrderService {
      * 新增任务
      * @return
      */
-    public ResponseData<Integer> addTask(TaskDetailVO vo, SysAccountPO stageUser) throws ParseException;
+    public ResponseData<Integer> addTask(TaskBO bo, SysAccountPO stageUser) throws ParseException;
 
     /**
      * 修改消费任务
      * @return
      */
-    public ResponseData updateOrderTask(TaskDetailVO vo, SysAccountPO stageUser);
+    public ResponseData updateOrderTask(TaskBO bo, SysAccountPO stageUser);
 
     public Integer modifieOrderTask(MktTaskOrderPO po, SysAccountPO stageUser);
 

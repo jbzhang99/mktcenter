@@ -17,6 +17,7 @@ import com.bizvane.messagefacade.models.vo.SysSmsConfigVO;
 import com.bizvane.mktcenterservice.interfaces.TaskMessageService;
 import com.bizvane.mktcenterservice.interfaces.TaskRecordService;
 import com.bizvane.mktcenterservice.interfaces.TaskService;
+import com.bizvane.mktcenterservice.models.bo.AddTaskBO;
 import com.bizvane.mktcenterservice.models.bo.AwardBO;
 import com.bizvane.mktcenterservice.models.bo.TaskAwardBO;
 import com.bizvane.mktcenterservice.models.bo.TaskBO;
@@ -216,20 +217,20 @@ public class TaskServiceImpl implements TaskService {
      * 判断时间是否滞后,已经是否立即执行,还是创建job执行
      */
     @Override
-    public void doOrderTask(TaskDetailVO vo, MktTaskPOWithBLOBs mktTaskPOWithBLOBs, SysAccountPO stageUser) {
+    public void doOrderTask(MktTaskPOWithBLOBs mktTaskPOWithBLOBs, SysAccountPO stageUser) {
+        Long mktTaskId = mktTaskPOWithBLOBs.getMktTaskId();
         //公司id
-        Long sysCompanyId = vo.getSysCompanyId();
+        Long sysCompanyId = mktTaskPOWithBLOBs.getSysCompanyId();
         //审核状态
-        Integer checkStatus = vo.getCheckStatus();
+        Integer checkStatus = mktTaskPOWithBLOBs.getCheckStatus();
         //执行状态
-        Integer taskStatus = vo.getTaskStatus();
+        Integer taskStatus = mktTaskPOWithBLOBs.getTaskStatus();
         //已审核   执行中  执行时间小于当前时间 或等于当前时间
         if (TaskConstants.THREE.equals(checkStatus) && TaskConstants.SECOND.equals(taskStatus)) {
             //判断是否需要发送消息和短信
-            List<MktMessagePO> mktmessagePOList = vo.getMktmessagePOList();
-            this.sendSmg(sysCompanyId);
-
-            jobUtil.addTaskEndJob(stageUser, mktTaskPOWithBLOBs);
+         List<MktMessagePO> mktmessagePOList = taskMessageService.getMktMessagePOS(mktTaskId);
+         this.sendSmg(sysCompanyId);
+         jobUtil.addTaskEndJob(stageUser, mktTaskPOWithBLOBs);
         }
         //已审核   待执行,创建job
         if (TaskConstants.THREE.equals(checkStatus) && TaskConstants.FIRST.equals(taskStatus)) {
@@ -365,7 +366,7 @@ public class TaskServiceImpl implements TaskService {
      * @return  todo   审核时间超过任务结束时间
      */
     @Override
-    public ResponseData<Integer> checkTaskById(Long mktTaskId, Integer checkStatus, SysAccountPO sysAccountPO,Date startTime,Date endTime) throws ParseException {
+    public ResponseData<Integer> checkTaskById(Long mktTaskId, Integer checkStatus,String remark, SysAccountPO sysAccountPO,Date startTime,Date endTime) throws ParseException {
         ResponseData<Integer> result = new ResponseData<Integer>(SysResponseEnum.FAILED.getCode(), SysResponseEnum.FAILED.getMessage(), null);
         ResponseData responseData = new ResponseData();
         MktTaskPOWithBLOBs mktTaskPOWithBLOBs = new MktTaskPOWithBLOBs();
@@ -383,6 +384,7 @@ public class TaskServiceImpl implements TaskService {
         }
         mktTaskPOWithBLOBs.setMktTaskId(mktTaskId);
         mktTaskPOWithBLOBs.setCheckStatus(checkStatus);
+        mktTaskPOWithBLOBs.setRemark(remark);
         mktTaskPOWithBLOBs.setModifiedDate(new Date());
         mktTaskPOWithBLOBs.setModifiedUserId(sysAccountPO.getSysAccountId());
         mktTaskPOWithBLOBs.setModifiedUserName(sysAccountPO.getName());
@@ -399,7 +401,7 @@ public class TaskServiceImpl implements TaskService {
                     TaskDetailVO taskdetailvo = taskDetails.get(0);
                     mktTaskPOWithBLOBs = new MktTaskPOWithBLOBs();
                     BeanUtils.copyProperties(taskdetailvo, mktTaskPOWithBLOBs);
-                    this.doOrderTask(taskdetailvo,mktTaskPOWithBLOBs,sysAccountPO);
+                    this.doOrderTask(mktTaskPOWithBLOBs,sysAccountPO);
                 }
             }
 
@@ -517,9 +519,10 @@ public class TaskServiceImpl implements TaskService {
     public  void updateCheckData(MktTaskPOWithBLOBs po) {
         //已审核=3
         SysCheckPo checkPo = new SysCheckPo();
-        checkPo.setSysBrandId(po.getSysBrandId());
-        checkPo.setBusinessCode(po.getTaskCode());
-        checkPo.setCheckStatus(CheckStatusEnum.CHECK_STATUS_APPROVED.getCode());
+        //checkPo.setSysBrandId(po.getSysBrandId());
+        checkPo.setBusinessId(po.getMktTaskId());
+        checkPo.setCheckStatus(po.getCheckStatus());
+        sysCheckServiceRpc.updateCheck(checkPo);
     }
 
     /**

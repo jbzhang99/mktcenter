@@ -1,6 +1,7 @@
 package com.bizvane.mktcenterserviceimpl.controllers;
 
 import com.bizvane.mktcenterservice.interfaces.TaskAmountService;
+import com.bizvane.mktcenterservice.models.bo.TaskBO;
 import com.bizvane.mktcenterservice.models.bo.TaskDetailBO;
 import com.bizvane.mktcenterservice.models.vo.TaskDetailVO;
 import com.bizvane.mktcenterservice.models.vo.TaskVO;
@@ -62,19 +63,19 @@ public class TaskAmountController {
      * @return
      */
     @RequestMapping("addTask")
-    public ResponseData<Integer> addTask(TaskDetailVO vo, HttpServletRequest request) throws ParseException {
+    public ResponseData<Integer> addTask(TaskBO bo, HttpServletRequest request) throws ParseException {
         //参数校验通过，获取操作人信息
         SysAccountPO stageUser = TokenUtils.getStageUser(request);
 
-        return  taskAmountService.addTask(vo, stageUser);
+        return  taskAmountService.addTask(bo, stageUser);
     }
     /**
      * 修改任务
      */
     @RequestMapping("updateAmountTask")
-    public ResponseData updateAmountTask(TaskDetailVO vo, HttpServletRequest request){
+    public ResponseData updateAmountTask(TaskBO bo, HttpServletRequest request){
         SysAccountPO stageUser = TokenUtils.getStageUser(request);
 
-        return  taskAmountService.updateAmountTask(vo, stageUser);
+        return  taskAmountService.updateAmountTask(bo, stageUser);
     }
 }

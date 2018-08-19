@@ -3,6 +3,7 @@ package com.bizvane.mktcenterservice.interfaces;
 import com.bizvane.centerstageservice.models.po.SysCheckConfigPo;
 import com.bizvane.members.facade.models.MemberInfoModel;
 import com.bizvane.members.facade.models.OrderServeModel;
+import com.bizvane.mktcenterservice.models.bo.AddTaskBO;
 import com.bizvane.mktcenterservice.models.bo.TaskBO;
 import com.bizvane.mktcenterservice.models.bo.TaskInviteAwardBO;
 import com.bizvane.mktcenterservice.models.bo.TaskAwardBO;
@@ -62,11 +63,10 @@ public interface TaskService {
 
     /**
      * 发送任务消息
-     * @param vo
      * @param mktTaskPOWithBLOBs
      * @param stageUser
      */
-    public void doOrderTask(TaskDetailVO vo, MktTaskPOWithBLOBs mktTaskPOWithBLOBs, SysAccountPO stageUser);
+    public void doOrderTask(MktTaskPOWithBLOBs mktTaskPOWithBLOBs, SysAccountPO stageUser);
     /**
      * 发送消息
      * @param sysCompanyId
@@ -115,7 +115,7 @@ public interface TaskService {
      * @param mktTaskId
      * @return
      */
-    public ResponseData<Integer> checkTaskById(Long mktTaskId,Integer checkStatus, SysAccountPO sysAccountPO,Date startTime,Date endTime) throws ParseException;
+    public ResponseData<Integer> checkTaskById(Long mktTaskId,Integer checkStatus,String remark,SysAccountPO sysAccountPO,Date startTime,Date endTime) throws ParseException;
 
     /**
      * 获取公司下的所有会员

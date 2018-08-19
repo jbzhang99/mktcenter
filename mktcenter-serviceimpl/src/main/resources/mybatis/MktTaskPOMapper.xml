@@ -749,7 +749,7 @@
     tti.mkt_task_id,
     tti.invite_num,
     tmc.mkt_coupon_id,
-    tmc.coupon_code,
+    tmc.coupon_definition_id,
     tmc.coupon_name,
     tmm.mkt_msg_id,
     tmm.msg_type,

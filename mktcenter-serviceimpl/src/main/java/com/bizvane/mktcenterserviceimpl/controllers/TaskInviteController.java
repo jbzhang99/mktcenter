@@ -73,19 +73,19 @@ public class TaskInviteController {
      * @return
      */
     @RequestMapping("/addTask")
-    public ResponseData<Integer> addTask(TaskDetailVO vo, HttpServletRequest request) throws ParseException {
+    public ResponseData<Integer> addTask(TaskBO bo , HttpServletRequest request) throws ParseException {
         //参数校验通过，获取操作人信息
         SysAccountPO stageUser = TokenUtils.getStageUser(request);
 
-        return  taskInviteService.addTask(vo, stageUser);
+        return  taskInviteService.addTask(bo, stageUser);
     }
     /**
      * 修改任务
      */
     @RequestMapping("/updateInviteTask")
-    public ResponseData updateInviteTask(TaskDetailVO vo, HttpServletRequest request) throws ParseException {
+    public ResponseData updateInviteTask(TaskBO bo, HttpServletRequest request) throws ParseException {
         SysAccountPO stageUser = TokenUtils.getStageUser(request);
 
-        return  taskInviteService.updateInviteTask(vo, stageUser);
+        return  taskInviteService.updateInviteTask(bo, stageUser);
     }
 }

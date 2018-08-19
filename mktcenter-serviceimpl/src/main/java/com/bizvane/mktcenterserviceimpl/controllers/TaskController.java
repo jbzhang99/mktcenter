@@ -64,17 +64,17 @@ public class TaskController {
     }
 
     /**
-     * 任务审核
+     * 任务审核--已经核对
      * @param request
      * @return
      */
     @RequestMapping("checkTaskById")
-    public ResponseData<Integer> checkTaskById(Long businessId , Integer checkStatus, Date startTime,Date endTime,HttpServletRequest request) throws ParseException {
+    public ResponseData<Integer> checkTaskById(Long businessId , Integer checkStatus,String remark, Date startTime,Date endTime,HttpServletRequest request) throws ParseException {
         //获取操作人信息
         SysAccountPO stageUser =new SysAccountPO();
 //        SysAccountPO stageUser = TokenUtils.getStageUser(request);
         //审核任务
-        ResponseData<Integer> integerResponseData = taskService.checkTaskById(businessId,checkStatus,stageUser,startTime,endTime);
+        ResponseData<Integer> integerResponseData = taskService.checkTaskById(businessId,checkStatus,remark,stageUser,startTime,endTime);
         return integerResponseData;
     }
 

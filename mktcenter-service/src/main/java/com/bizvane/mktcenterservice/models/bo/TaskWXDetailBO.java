@@ -13,23 +13,23 @@ import java.util.List;
 public class TaskWXDetailBO {
     private Long mktTaskId;
     private String taskName ;
-    @JsonFormat(
-            pattern = "yyyy-MM-dd HH:mm:ss",
-            locale = "zh",
-            timezone = "GMT+8"
-    )
-    @DateTimeFormat(
-            pattern = "yyyy-MM-dd HH:mm:ss"
-    )
+//    @JsonFormat(
+//            pattern = "yyyy-MM-dd HH:mm:ss",
+//            locale = "zh",
+//            timezone = "GMT+8"
+//    )
+//    @DateTimeFormat(
+//            pattern = "yyyy-MM-dd HH:mm:ss"
+//    )
     private Date startTime;
-    @JsonFormat(
-            pattern = "yyyy-MM-dd HH:mm:ss",
-            locale = "zh",
-            timezone = "GMT+8"
-    )
-    @DateTimeFormat(
-            pattern = "yyyy-MM-dd HH:mm:ss"
-    )
+//    startTime @JsonFormat(
+//            pattern = "yyyy-MM-dd HH:mm:ss",
+//            locale = "zh",
+//            timezone = "GMT+8"
+//    )
+//    @DateTimeFormat(
+//            pattern = "yyyy-MM-dd HH:mm:ss"
+//    )
     private Date   endTime;
     private  String  taskInfo;
     private Integer points;
@@ -51,30 +51,6 @@ public class TaskWXDetailBO {
         this.taskName = taskName;
     }
 
-    public Integer getPoints() {
-        return points;
-    }
-
-    public void setPoints(Integer points) {
-        this.points = points;
-    }
-
-    public List<TaskCouponWXBO> getTaskCouponWXBOs() {
-        return taskCouponWXBOs;
-    }
-
-    public void setTaskCouponWXBOs(List<TaskCouponWXBO> taskCouponWXBOs) {
-        this.taskCouponWXBOs = taskCouponWXBOs;
-    }
-
-    public String getTaskInfo() {
-        return taskInfo;
-    }
-
-    public void setTaskInfo(String taskInfo) {
-        this.taskInfo = taskInfo;
-    }
-
     public Date getStartTime() {
         return startTime;
     }
@@ -89,5 +65,29 @@ public class TaskWXDetailBO {
 
     public void setEndTime(Date endTime) {
         this.endTime = endTime;
+    }
+
+    public String getTaskInfo() {
+        return taskInfo;
+    }
+
+    public void setTaskInfo(String taskInfo) {
+        this.taskInfo = taskInfo;
+    }
+
+    public Integer getPoints() {
+        return points;
+    }
+
+    public void setPoints(Integer points) {
+        this.points = points;
+    }
+
+    public List<TaskCouponWXBO> getTaskCouponWXBOs() {
+        return taskCouponWXBOs;
+    }
+
+    public void setTaskCouponWXBOs(List<TaskCouponWXBO> taskCouponWXBOs) {
+        this.taskCouponWXBOs = taskCouponWXBOs;
     }
 }

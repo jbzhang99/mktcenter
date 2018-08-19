@@ -42,14 +42,14 @@ public interface TaskInviteService {
      * 新增任务
      * @return
      */
-    public ResponseData<Integer> addTask(TaskDetailVO vo, SysAccountPO stageUser) throws ParseException;
+    public ResponseData<Integer> addTask(TaskBO bo, SysAccountPO stageUser) throws ParseException;
 
     /**
      * 修改任务
      * @param stageUser
      * @return
      */
-    public ResponseData updateInviteTask(TaskDetailVO vo, SysAccountPO stageUser) throws ParseException;
+    public ResponseData updateInviteTask(TaskBO bo, SysAccountPO stageUser) throws ParseException;
     /**
      * 新增具体任务
      */

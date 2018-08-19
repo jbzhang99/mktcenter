@@ -5,6 +5,8 @@ import com.bizvane.mktcenterservice.interfaces.TaskCouponService;
 import com.bizvane.mktcenterservice.interfaces.TaskMessageService;
 import com.bizvane.mktcenterservice.interfaces.TaskOrderService;
 import com.bizvane.mktcenterservice.interfaces.TaskService;
+import com.bizvane.mktcenterservice.models.bo.AddTaskBO;
+import com.bizvane.mktcenterservice.models.bo.TaskBO;
 import com.bizvane.mktcenterservice.models.bo.TaskDetailBO;
 import com.bizvane.mktcenterservice.models.po.*;
 import com.bizvane.mktcenterservice.models.vo.TaskDetailVO;
@@ -17,6 +19,7 @@ import com.bizvane.mktcenterserviceimpl.common.utils.CodeUtil;
 import com.bizvane.mktcenterserviceimpl.common.utils.TaskParamCheckUtil;
 import com.bizvane.mktcenterserviceimpl.common.utils.TimeUtils;
 import com.bizvane.mktcenterserviceimpl.mappers.MktTaskOrderPOMapper;
+import com.bizvane.utils.enumutils.SysResponseEnum;
 import com.bizvane.utils.responseinfo.ResponseData;
 import com.bizvane.utils.tokens.SysAccountPO;
 import org.apache.commons.collections.CollectionUtils;
@@ -62,40 +65,41 @@ public class TaskOrderServiceImpl implements TaskOrderService {
 
     /**
      * 创建任务
-     * @param vo
      * @param stageUser
      * @return
      */
     @Transactional
     @Override
-    public ResponseData<Integer> addTask(TaskDetailVO vo, SysAccountPO stageUser) throws ParseException {
+    public ResponseData<Integer> addTask(TaskBO bo, SysAccountPO stageUser) throws ParseException {
+        ResponseData<Integer> responseData = new ResponseData<Integer>(SysResponseEnum.FAILED.getCode(),SysResponseEnum.FAILED.getMessage(),null);
         //0.参数的检验
-        ResponseData responseData = TaskParamCheckUtil.checkParam(vo);
-        if (responseData.getCode() < 0) {
-            return responseData;
-        }
-        vo.setValid(Boolean.TRUE);
-        vo.setCreateDate(TimeUtils.getNowTime());
-        vo.setCreateUserId(stageUser.getSysAccountId());
-        vo.setCreateUserName(stageUser.getName());
+        //ResponseData responseData = TaskParamCheckUtil.checkParam(vo);
+//        if (responseData.getCode() < 0) {
+//            return responseData;
+//        }
+        TaskVO taskVO = bo.getTaskVO();
+        taskVO.setValid(Boolean.TRUE);
+        taskVO.setCreateDate(TimeUtils.getNowTime());
+        taskVO.setCreateUserId(stageUser.getSysAccountId());
+        taskVO.setCreateUserName(stageUser.getName());
 
         //1.生成任务编号
         String taskCode = CodeUtil.getTaskCode();
         //2.任务主表新增
         MktTaskPOWithBLOBs mktTaskPOWithBLOBs = new MktTaskPOWithBLOBs();
-        BeanUtils.copyProperties(vo, mktTaskPOWithBLOBs);
+        BeanUtils.copyProperties(taskVO, mktTaskPOWithBLOBs);
         mktTaskPOWithBLOBs.setTaskCode(taskCode);
         mktTaskPOWithBLOBs = taskService.isOrNoCheckState(mktTaskPOWithBLOBs);
         Long mktTaskId = taskService.addTask(mktTaskPOWithBLOBs, stageUser);
         taskService.addCheckData(mktTaskPOWithBLOBs);
         //3.任务消费表新增
         MktTaskOrderPO mktTaskOrderPO = new MktTaskOrderPO();
-        BeanUtils.copyProperties(vo, mktTaskOrderPO);
+        BeanUtils.copyProperties(taskVO, mktTaskOrderPO);
         mktTaskOrderPO.setMktTaskId(mktTaskId);
         this.insertOrderTask(mktTaskOrderPO, stageUser);
 
         //4.新增奖励新增  biz_type 活动类型  1=活动
-        List<MktCouponPO> mktCouponPOList = vo.getMktCouponPOList();
+        List<MktCouponPO> mktCouponPOList = bo.getMktCouponPOList();
         if (CollectionUtils.isNotEmpty(mktCouponPOList)) {
             mktCouponPOList.stream().forEach(param -> {
                 param.setBizId(mktTaskId);
@@ -104,7 +108,7 @@ public class TaskOrderServiceImpl implements TaskOrderService {
             });
         }
         //5.新增消息新增
-        List<MktMessagePO> mktmessagePOList = vo.getMktmessagePOList();
+        List<MktMessagePO> mktmessagePOList = bo.getMessagePOList();
         if (CollectionUtils.isNotEmpty(mktmessagePOList)) {
             mktmessagePOList.stream().forEach(param -> {
                         param.setBizId(mktTaskId);
@@ -115,7 +119,7 @@ public class TaskOrderServiceImpl implements TaskOrderService {
         }
 
         //6.处理任务
-        taskService.doOrderTask(vo,mktTaskPOWithBLOBs,stageUser);
+        taskService.doOrderTask(mktTaskPOWithBLOBs,stageUser);
 
         responseData.setCode(SystemConstants.SUCCESS_CODE);
         responseData.setMessage(SystemConstants.SUCCESS_MESSAGE);
@@ -129,13 +133,15 @@ public class TaskOrderServiceImpl implements TaskOrderService {
      */
     @Transactional
     @Override
-    public ResponseData updateOrderTask(TaskDetailVO vo, SysAccountPO stageUser) {
+    public ResponseData updateOrderTask(TaskBO bo, SysAccountPO stageUser) {
+        ResponseData<Integer> responseData = new ResponseData<Integer>(SysResponseEnum.FAILED.getCode(),SysResponseEnum.FAILED.getMessage(),null);
         //        mktTaskOrderPOMapper.updateByPrimaryKeySelective(po);
         //0.参数的检验
-        ResponseData responseData = TaskParamCheckUtil.checkParam(vo);
-        if (responseData.getCode() < 0) {
-            return responseData;
-        }
+//        ResponseData responseData = TaskParamCheckUtil.checkParam(vo);
+//        if (responseData.getCode() < 0) {
+//            return responseData;
+//        }
+        TaskVO vo = bo.getTaskVO();
         vo.setValid(Boolean.TRUE);
         vo.setModifiedDate(TimeUtils.getNowTime());
         vo.setModifiedUserName(stageUser.getName());
@@ -155,7 +161,7 @@ public class TaskOrderServiceImpl implements TaskOrderService {
 
         //4.奖励修改 biz_type 活动类型  1=活动
         taskCouponService.deleteTaskCoupon(mktTaskId, stageUser);
-        List<MktCouponPO> mktCouponPOList = vo.getMktCouponPOList();
+        List<MktCouponPO> mktCouponPOList = bo.getMktCouponPOList();
         if (CollectionUtils.isNotEmpty(mktCouponPOList)) {
             mktCouponPOList.stream().forEach(param -> {
                 param.setBizId(mktTaskId);
@@ -165,7 +171,7 @@ public class TaskOrderServiceImpl implements TaskOrderService {
         }
         //5.修改消息
         taskMessageService.deleteTaskMessage(mktTaskId,stageUser);
-        List<MktMessagePO> mktmessagePOList = vo.getMktmessagePOList();
+        List<MktMessagePO> mktmessagePOList = bo.getMessagePOList();
         if (CollectionUtils.isNotEmpty(mktmessagePOList)) {
             mktmessagePOList.stream().forEach(param -> {
                         param.setBizId(mktTaskId);
@@ -175,7 +181,7 @@ public class TaskOrderServiceImpl implements TaskOrderService {
             );
         }
         //6.处理任务
-        taskService.doOrderTask(vo,mktTaskPOWithBLOBs,stageUser);
+        taskService.doOrderTask(mktTaskPOWithBLOBs,stageUser);
 
         responseData.setCode(SystemConstants.SUCCESS_CODE);
         responseData.setMessage(SystemConstants.SUCCESS_MESSAGE);

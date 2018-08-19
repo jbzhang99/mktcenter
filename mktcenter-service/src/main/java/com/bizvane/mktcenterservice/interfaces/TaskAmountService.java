@@ -1,5 +1,6 @@
 package com.bizvane.mktcenterservice.interfaces;
 
+import com.bizvane.mktcenterservice.models.bo.TaskBO;
 import com.bizvane.mktcenterservice.models.bo.TaskDetailBO;
 import com.bizvane.mktcenterservice.models.po.MktTaskOrderPO;
 import com.bizvane.mktcenterservice.models.vo.TaskDetailVO;
@@ -38,14 +39,14 @@ public interface TaskAmountService {
      * 新增任务
      * @return
      */
-    public ResponseData<Integer> addTask(TaskDetailVO vo, SysAccountPO stageUser) throws ParseException;
+    public ResponseData<Integer> addTask(TaskBO bo, SysAccountPO stageUser) throws ParseException;
 
     /**
      * 修改任务
      * @param stageUser
      * @return
      */
-    public ResponseData updateAmountTask(TaskDetailVO vo, SysAccountPO stageUser);
+    public ResponseData updateAmountTask(TaskBO bo, SysAccountPO stageUser);
     /**
      * 新增具体任务
      */
