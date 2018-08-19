@@ -17,7 +17,7 @@ import java.util.concurrent.ThreadPoolExecutor;
  */
 @Configuration
 @EnableAsync
-public class ExecutorConfig {
+public class MktExecutorConfig {
 
     @Value("${threadPool.corePoolSize}")
     private int corePoolSize;

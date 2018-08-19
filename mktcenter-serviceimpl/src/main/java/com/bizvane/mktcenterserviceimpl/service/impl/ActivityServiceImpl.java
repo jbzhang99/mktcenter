@@ -253,6 +253,7 @@ public class ActivityServiceImpl implements ActivityService {
         ctivityAnalysisBO.setMoneyTotal(couponFindCoupon.getMoney());
         PageInfo<ActivityAnalysisCountBO> pageInfo = new PageInfo<>(activityAnalysisList);
         ctivityAnalysisBO.setActivityAnalysisCountBO(pageInfo.getList());
+        ctivityAnalysisBO.setTotal(pageInfo.getTotal());
         responseData.setData(ctivityAnalysisBO);
         return responseData;
     }

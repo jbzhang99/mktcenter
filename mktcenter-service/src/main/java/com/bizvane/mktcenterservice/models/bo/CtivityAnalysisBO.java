@@ -19,6 +19,16 @@ public class CtivityAnalysisBO {
 
     private int pointsSumTotal;//赠送积分合计
 
+    private Long total;//总数
+
+    public Long getTotal() {
+        return total;
+    }
+
+    public void setTotal(Long total) {
+        this.total = total;
+    }
+
     public List<ActivityAnalysisCountBO> getActivityAnalysisCountBO() {
         return activityAnalysisCountBO;
     }

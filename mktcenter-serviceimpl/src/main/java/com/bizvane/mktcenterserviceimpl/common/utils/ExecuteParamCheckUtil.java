@@ -88,9 +88,9 @@ public class ExecuteParamCheckUtil {
         if (false == activityVO.getCommodityLimit()) {
             falg = true;
         } else {
-            //判断是否是黑名单
-           /* if (!StringUtils.isBlank(activityVO.getCommodityBlacklist())) {
-                String commodityBlacklist = activityVO.getCommodityBlacklist();
+            //判断是否是黑名单\
+            if (activityVO.getCommodityLimitType()==1) {
+                String commodityBlacklist = activityVO.getCommodityLimitList();
                 List<String> result = Arrays.asList(commodityBlacklist.split(","));
                 String productNos = vo.getProductNos();
                 List<String> productNoList = Arrays.asList(productNos.split(","));
@@ -104,14 +104,14 @@ public class ExecuteParamCheckUtil {
 
             }
             //判断是否是白名单
-            if (!StringUtils.isBlank(activityVO.getCommodityWhitelist())) {
-                String commodityWhitelist = activityVO.getCommodityWhitelist();
+            if (activityVO.getCommodityLimitType()==2) {
+                String commodityWhitelist = activityVO.getCommodityLimitList();
                 List<String> result = Arrays.asList(commodityWhitelist.split(","));
                 String productNos = vo.getProductNos();
                 List<String> productNoList = Arrays.asList(productNos.split(","));
                     boolean contains = result.containsAll(productNoList);
                         falg=contains;
-            }*/
+            }
 
         }
         return falg;
@@ -129,8 +129,8 @@ public class ExecuteParamCheckUtil {
             falg = true;
         }else{
             //判断是都是黑名单
-           /* if (!StringUtils.isBlank(activityVO.getStoreBlacklist())) {
-                String StoreBlacklist = activityVO.getStoreBlacklist();
+            if (activityVO.getStoreLimitType()==1) {
+                String StoreBlacklist = activityVO.getStoreLimitList();
                 List<String> result = Arrays.asList(StoreBlacklist.split(","));
                  boolean contains  =result.contains(vo.getServiceStoreId());
                  if (contains==true){
@@ -141,11 +141,11 @@ public class ExecuteParamCheckUtil {
             }
 
             //判断是否是白名单
-            if (!StringUtils.isBlank(activityVO.getStoreWhitelist())) {
-                String StoreWhitelist = activityVO.getStoreWhitelist();
+            if (activityVO.getStoreLimitType()==2) {
+                String StoreWhitelist = activityVO.getStoreLimitList();
                 List<String> result = Arrays.asList(StoreWhitelist.split(","));
                 falg=result.contains(vo.getServiceStoreId());
-            }*/
+            }
 
         }
         return falg;

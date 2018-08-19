@@ -42,6 +42,16 @@ public class ActivityAnalysisCountBO {
 
     private String  activityCode;//活动编号
 
+    private Date createDate;//创建日期
+
+    public Date getCreateDate() {
+        return createDate;
+    }
+
+    public void setCreateDate(Date createDate) {
+        this.createDate = createDate;
+    }
+
     public Long getCouponSum() {
         return couponSum;
     }
