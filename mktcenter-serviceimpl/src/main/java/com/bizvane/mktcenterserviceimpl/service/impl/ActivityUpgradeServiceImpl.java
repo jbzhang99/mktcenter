@@ -280,8 +280,10 @@ public class ActivityUpgradeServiceImpl implements ActivityUpgradeService {
                             award.execute(awardBO);
                         }
                         if (mktMessagePO.getMsgType().equals("2")){
-                            SysSmsConfigVO sysSmsConfigVO = new SysSmsConfigVO();
+                            SysSmsConfigVO  sysSmsConfigVO = new SysSmsConfigVO();
                             sysSmsConfigVO.setPhone(memberInfo.getPhone());
+                            sysSmsConfigVO.setMsgContent(mktMessagePO.getMsgContent());
+                            sysSmsConfigVO.setSysBrandId(activityVO.getSysBrandId());
                             awardBO.setSysSmsConfigVO(sysSmsConfigVO);
                             awardBO.setMktType(MktSmartTypeEnum.SMART_TYPE_SMS.getCode());
                             //发送短信消息
@@ -387,7 +389,6 @@ public class ActivityUpgradeServiceImpl implements ActivityUpgradeService {
             }else{
                 //活动状态设置为执行中
                 mktActivityPOWithBLOBs.setActivityStatus(ActivityStatusEnum.ACTIVITY_STATUS_EXECUTING.getCode());
-                //发送模板消息和短信消息TODO
 
             }
         }
@@ -472,8 +473,10 @@ public class ActivityUpgradeServiceImpl implements ActivityUpgradeService {
                             award.execute(awardBO);
                         }
                         if (mktMessagePO.getMsgType().equals("2")){
-                            SysSmsConfigVO sysSmsConfigVO = new SysSmsConfigVO();
+                            SysSmsConfigVO  sysSmsConfigVO = new SysSmsConfigVO();
                             sysSmsConfigVO.setPhone(memberInfo.getPhone());
+                            sysSmsConfigVO.setMsgContent(mktMessagePO.getMsgContent());
+                            sysSmsConfigVO.setSysBrandId(activityVO.getSysBrandId());
                             awardBO.setSysSmsConfigVO(sysSmsConfigVO);
                             awardBO.setMktType(MktSmartTypeEnum.SMART_TYPE_SMS.getCode());
                             //发送短信消息
@@ -671,8 +674,10 @@ public class ActivityUpgradeServiceImpl implements ActivityUpgradeService {
                                 award.execute(awardBO);
                             }
                             if (mktMessagePO.getMsgType().equals("2")){
-                                SysSmsConfigVO sysSmsConfigVO = new SysSmsConfigVO();
+                                SysSmsConfigVO  sysSmsConfigVO = new SysSmsConfigVO();
                                 sysSmsConfigVO.setPhone(memberInfo.getPhone());
+                                sysSmsConfigVO.setMsgContent(mktMessagePO.getMsgContent());
+                                sysSmsConfigVO.setSysBrandId(activityPO.getSysBrandId());
                                 awardBO.setSysSmsConfigVO(sysSmsConfigVO);
                                 awardBO.setMktType(MktSmartTypeEnum.SMART_TYPE_SMS.getCode());
                                 //发送短信消息

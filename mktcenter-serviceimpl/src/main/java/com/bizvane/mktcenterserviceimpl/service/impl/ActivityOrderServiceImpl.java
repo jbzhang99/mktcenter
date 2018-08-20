@@ -268,8 +268,10 @@ public class ActivityOrderServiceImpl implements ActivityOrderService {
                             award.execute(awardBO);
                         }
                         if (mktMessagePO.getMsgType().equals("2")){
-                            SysSmsConfigVO sysSmsConfigVO = new SysSmsConfigVO();
+                            SysSmsConfigVO  sysSmsConfigVO = new SysSmsConfigVO();
                             sysSmsConfigVO.setPhone(memberInfo.getPhone());
+                            sysSmsConfigVO.setMsgContent(mktMessagePO.getMsgContent());
+                            sysSmsConfigVO.setSysBrandId(activityVO.getSysBrandId());
                             awardBO.setSysSmsConfigVO(sysSmsConfigVO);
                             awardBO.setMktType(MktSmartTypeEnum.SMART_TYPE_SMS.getCode());
                             //发送短信消息
@@ -509,8 +511,10 @@ public class ActivityOrderServiceImpl implements ActivityOrderService {
                             award.execute(awardBO);
                         }
                         if (mktMessagePO.getMsgType().equals("2")){
-                            SysSmsConfigVO sysSmsConfigVO = new SysSmsConfigVO();
+                            SysSmsConfigVO  sysSmsConfigVO = new SysSmsConfigVO();
                             sysSmsConfigVO.setPhone(memberInfo.getPhone());
+                            sysSmsConfigVO.setMsgContent(mktMessagePO.getMsgContent());
+                            sysSmsConfigVO.setSysBrandId(activityVO.getSysBrandId());
                             awardBO.setSysSmsConfigVO(sysSmsConfigVO);
                             awardBO.setMktType(MktSmartTypeEnum.SMART_TYPE_SMS.getCode());
                             //发送短信消息
@@ -594,8 +598,10 @@ public class ActivityOrderServiceImpl implements ActivityOrderService {
                                 award.execute(awardBO);
                             }
                             if (mktMessagePO.getMsgType().equals("2")){
-                                SysSmsConfigVO sysSmsConfigVO = new SysSmsConfigVO();
+                                SysSmsConfigVO  sysSmsConfigVO = new SysSmsConfigVO();
                                 sysSmsConfigVO.setPhone(memberInfo.getPhone());
+                                sysSmsConfigVO.setMsgContent(mktMessagePO.getMsgContent());
+                                sysSmsConfigVO.setSysBrandId(activityPO.getSysBrandId());
                                 awardBO.setSysSmsConfigVO(sysSmsConfigVO);
                                 awardBO.setMktType(MktSmartTypeEnum.SMART_TYPE_SMS.getCode());
                                 //发送短信消息

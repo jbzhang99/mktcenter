@@ -51,7 +51,7 @@ public class ActivityManualController {
    public ResponseData<List<ActivityBO>>getActivityManualEffect(ActivityVO activityVO,HttpServletRequest request){
        // SysAccountPO stageUser = TokenUtils.getStageUser(request);
        SysAccountPO stageUser = new SysAccountPO();
-       activityVO.setSysBrandId(1L);
+      // activityVO.setSysBrandId(1L);
 //       activityVO.setSysBrandId(stageUser.getBrandId());
        return activityManualService.getActivityManualEffect(activityVO);
  }

@@ -82,8 +82,8 @@ public class ActivityJobHandler extends IJobHandler {
                 vo.setActivityCode(param);
                 List<ActivityVO> activityUpgradeList = mktActivityUpgradePOMapper.getActivityUpgradeList(vo);
                 //查询该会员下一个等级
-                ResponseData<MbrLevelModel> MbrLevelModels = memberLevelApiService.queryOnLevel(Long.parseLong(activityUpgradeList.get(0).getMbrLevelCode()));
-                MbrLevelModel  mbrLevel = MbrLevelModels.getData();
+                ResponseData<MbrLevelModel> mbrLevelModels = memberLevelApiService.queryOnLevel(Long.parseLong(activityUpgradeList.get(0).getMbrLevelCode()));
+                MbrLevelModel  mbrLevel = mbrLevelModels.getData();
                 memberInfoModel.setBrandId(mktActivityPO.getSysBrandId());
                 memberInfoModel.setLevelId(mbrLevel.getMbrLevelId());
             }
@@ -124,8 +124,10 @@ public class ActivityJobHandler extends IJobHandler {
                             award.execute(awardBO);
                         }
                         if (mktMessagePO.getMsgType().equals("2")){
-                            SysSmsConfigVO sysSmsConfigVO = new SysSmsConfigVO();
+                            SysSmsConfigVO  sysSmsConfigVO = new SysSmsConfigVO();
                             sysSmsConfigVO.setPhone(memberInfo.getPhone());
+                            sysSmsConfigVO.setMsgContent(mktMessagePO.getMsgContent());
+                            sysSmsConfigVO.setSysBrandId(mktActivityPO.getSysBrandId());
                             awardBO.setSysSmsConfigVO(sysSmsConfigVO);
                             awardBO.setMktType(MktSmartTypeEnum.SMART_TYPE_SMS.getCode());
                             //发送短信消息
