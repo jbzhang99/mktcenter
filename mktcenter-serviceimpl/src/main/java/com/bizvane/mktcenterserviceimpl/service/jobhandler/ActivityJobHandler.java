@@ -116,6 +116,9 @@ public class ActivityJobHandler extends IJobHandler {
                             //发送微信模板消息
                             MemberMessageVO memberMessageVO = new MemberMessageVO();
                             memberMessageVO.setMemberCode(memberInfo.getMemberCode());
+                            memberMessageVO.setActivityName(mktActivityPO.getActivityName());
+                            memberMessageVO.setActivityDate(mktActivityPO.getStartTime());
+                            memberMessageVO.setActivityInterests(mktMessagePO.getMsgContent());
                             awardBO.setMemberMessageVO(memberMessageVO);
                             awardBO.setMktType(MktSmartTypeEnum.SMART_TYPE_WXMESSAGE.getCode());
                             award.execute(awardBO);

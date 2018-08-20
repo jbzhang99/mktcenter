@@ -28,10 +28,7 @@ import com.bizvane.mktcenterserviceimpl.common.enums.BusinessTypeEnum;
 import com.bizvane.mktcenterserviceimpl.common.enums.CheckStatusEnum;
 import com.bizvane.mktcenterserviceimpl.common.job.JobUtil;
 import com.bizvane.mktcenterserviceimpl.common.utils.CodeUtil;
-import com.bizvane.mktcenterserviceimpl.mappers.MktActivityBirthdayPOMapper;
-import com.bizvane.mktcenterserviceimpl.mappers.MktActivityPOMapper;
-import com.bizvane.mktcenterserviceimpl.mappers.MktCouponPOMapper;
-import com.bizvane.mktcenterserviceimpl.mappers.MktMessagePOMapper;
+import com.bizvane.mktcenterserviceimpl.mappers.*;
 import com.bizvane.utils.enumutils.SysResponseEnum;
 import com.bizvane.utils.jobutils.JobClient;
 import com.bizvane.utils.jobutils.XxlJobInfo;
@@ -86,6 +83,8 @@ public class ActivityBirthdayServiceImpl implements ActivityBirthdayService {
     private CouponEntityServiceFeign couponEntityServiceFeign;
     @Autowired
     private SendCouponServiceFeign sendCouponServiceFeign;
+    @Autowired
+    private MktActivityRecordPOMapper mktActivityRecordPOMapper;
     /**
      * 查询生日活动列表
      * @param vo
@@ -547,6 +546,15 @@ public class ActivityBirthdayServiceImpl implements ActivityBirthdayService {
                 va.setSendType("10");
                 sendCouponServiceFeign.simple(va);
             }
+            //新增积分到会员参与活动记录表中数据
+            MktActivityRecordPO po = new MktActivityRecordPO();
+            po.setActivityType(ActivityTypeEnum.ACTIVITY_TYPE_BIRTHDAY.getCode());
+            po.setMemberCode(memberInfo.getMemberCode());
+            po.setParticipateDate(new Date());
+            po.setPoints(activityBirthday.getPoints());
+            po.setAcitivityId(activityBirthday.getMktActivityId());
+            po.setSysBrandId(activityBirthday.getSysBrandId());
+            mktActivityRecordPOMapper.insertSelective(po);
 
         }
     }

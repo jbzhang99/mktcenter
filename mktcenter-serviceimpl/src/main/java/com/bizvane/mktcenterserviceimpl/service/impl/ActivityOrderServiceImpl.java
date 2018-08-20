@@ -567,7 +567,7 @@ public class ActivityOrderServiceImpl implements ActivityOrderService {
                 //查询消息集合
                 MktMessagePOExample example = new MktMessagePOExample();
                 example.createCriteria().andBizIdEqualTo(po.getBusinessId()).andValidEqualTo(true);
-                List<MktMessagePO> ListMktMessage = mktMessagePOMapper.selectByExample(example);
+                List<MktMessagePO> listMktMessage = mktMessagePOMapper.selectByExample(example);
                 //查询对应的会员
                 MemberInfoModel memberInfoModel= new MemberInfoModel();
                 memberInfoModel.setBrandId(activityPO.getSysBrandId());
@@ -580,12 +580,15 @@ public class ActivityOrderServiceImpl implements ActivityOrderService {
                 if (!CollectionUtils.isEmpty(memberInfoModelList)){
                     for (MemberInfoModel memberInfo:memberInfoModelList) {
                         //循环信息类然后发送
-                        for (MktMessagePO mktMessagePO:ListMktMessage) {
+                        for (MktMessagePO mktMessagePO:listMktMessage) {
                             AwardBO awardBO = new AwardBO();
                             if (mktMessagePO.getMsgType().equals("1")){
                                 //发送微信模板消息
                                 MemberMessageVO memberMessageVO = new MemberMessageVO();
                                 memberMessageVO.setMemberCode(memberInfo.getMemberCode());
+                                memberMessageVO.setActivityName(activityPO.getActivityName());
+                                memberMessageVO.setActivityDate(activityPO.getStartTime());
+                                memberMessageVO.setActivityInterests(mktMessagePO.getMsgContent());
                                 awardBO.setMemberMessageVO(memberMessageVO);
                                 awardBO.setMktType(MktSmartTypeEnum.SMART_TYPE_WXMESSAGE.getCode());
                                 award.execute(awardBO);

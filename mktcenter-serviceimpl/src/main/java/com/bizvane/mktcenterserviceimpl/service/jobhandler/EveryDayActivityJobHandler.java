@@ -9,6 +9,7 @@ import com.bizvane.members.facade.models.IntegralRecordModel;
 import com.bizvane.members.facade.models.MemberInfoModel;
 import com.bizvane.members.facade.service.api.IntegralRecordApiService;
 import com.bizvane.members.facade.service.api.MemberInfoApiService;
+import com.bizvane.mktcenterservice.interfaces.ActivityBirthdayService;
 import com.bizvane.mktcenterservice.models.po.MktActivityPO;
 import com.bizvane.mktcenterservice.models.po.MktActivityPOExample;
 import com.bizvane.mktcenterservice.models.po.MktCouponPO;
@@ -46,6 +47,8 @@ public class EveryDayActivityJobHandler extends IJobHandler {
     private MemberInfoApiService memberInfoApiService;
     @Autowired
     private CouponEntityServiceFeign couponEntityServiceFeign;
+    @Autowired
+    private ActivityBirthdayService activityBirthdayService;
     @Override
     public ReturnT<String> execute(String param) throws Exception {
         System.out.println("job执行参数 "+param);
@@ -67,34 +70,7 @@ public class EveryDayActivityJobHandler extends IJobHandler {
                 memberInfoModel.setMemberScope(activityBirthday.getMemberType().toString());
                 ResponseData<List<MemberInfoModel>> memberInfoModelLists =memberInfoApiService.getMemberInfo(memberInfoModel);
                 List<MemberInfoModel> memberInfoModelList = memberInfoModelLists.getData();
-                for (MemberInfoModel memberInfo:memberInfoModelList) {
-                    //增加积分奖励新增接口
-                    IntegralRecordModel var1 = new IntegralRecordModel();
-                    var1.setMemberCode(memberInfo.getMemberCode());
-                    var1.setChangeBills(activityBirthday.getActivityCode());
-                    var1.setChangeIntegral(activityBirthday.getPoints());
-                    var1.setChangeWay(IntegralChangeTypeEnum.INCOME.getCode());
-                    integralRecordApiService.updateMemberIntegral(var1);
-                    // 增加卷奖励接口
-                    MktCouponPOExample example = new  MktCouponPOExample();
-                    example.createCriteria().andBizIdEqualTo(activityBirthday.getMktActivityId()).andValidEqualTo(true);
-                    List<MktCouponPO> mktCouponPOs= mktCouponPOMapper.selectByExample(example);
-                    for (MktCouponPO mktCouponPO:mktCouponPOs) {
-                        //拿到会员 在到券那里确认有没有发卷 没有执行发券和积分操作
-                        ResponseData<List<CouponEntityPO>> CouponEntityPOs = couponEntityServiceFeign.findCouponHave(mktCouponPO.getCouponDefinitionId().toString(),memberInfo.getMemberCode(),activityBirthday.getMktActivityId());
-                        List<CouponEntityPO> couponEntityPOs =CouponEntityPOs.getData();
-                        if (CollectionUtils.isEmpty(couponEntityPOs)){
-                            continue;
-                        }
-                        SendCouponSimpleRequestVO va = new SendCouponSimpleRequestVO();
-                        va.setMemberCode(memberInfo.getMemberCode());
-                        va.setCouponDefinitionId(mktCouponPO.getCouponDefinitionId());
-                        va.setSendBussienId(mktCouponPO.getBizId());
-                        va.setSendType("10");
-                        sendCouponServiceFeign.simple(va);
-                    }
-
-                }
+                activityBirthdayService.birthdayReward(activityBirthday,memberInfoModelList);
 
             }
         returnT.setCode(0);
