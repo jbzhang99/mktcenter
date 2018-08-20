@@ -89,4 +89,12 @@ public interface ActivityServiceRpc {
   */
  @RequestMapping("executeActivitySignin")
  public ResponseData<Integer> executeActivitySignin(@RequestBody MemberInfoModel vo);
+
+ /**
+  * 执行开卡活动
+  * @param vo
+  * @return
+  */
+ @RequestMapping("executeActivity")
+ ResponseData<Integer> executeActivity(@RequestBody MemberInfoModel vo);
 }

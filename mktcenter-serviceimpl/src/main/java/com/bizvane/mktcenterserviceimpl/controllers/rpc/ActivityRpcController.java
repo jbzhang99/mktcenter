@@ -148,12 +148,21 @@ public class ActivityRpcController {
         return activityRecordService.getActivityRecordPOList(vo);
     }
     /**
-     * 执行活动
+     * 执行活动签到
      * @param
      * @return
      */
     @RequestMapping("executeActivitySignin")
     public ResponseData<Integer> executeActivitySignin(@RequestBody MemberInfoModel vo){
         return activitySigninService.executeActivitySignin(vo);
+    }
+    /**
+     * 执行活动开卡
+     * @param
+     * @return
+     */
+    @RequestMapping("executeActivity")
+    public ResponseData<Integer> executeActivity(@RequestBody  MemberInfoModel vo){
+        return activityRegisterService.executeActivity(vo);
     }
 }
