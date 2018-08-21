@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
@@ -181,10 +182,15 @@ public class TaskProfileController {
      * @return
      */
     @RequestMapping("getTaskProfileRecordByTime")
-    public ResponseData getTaskProfileRecordByTime(Date date1, Date date2, HttpServletRequest request, PageForm pageForm){
+    public ResponseData getTaskProfileRecordByTime(String date1, String date2, HttpServletRequest request, PageForm pageForm)throws Exception{
 
         SysAccountPO stageUser = TokenUtils.getStageUser(request);
-        return taskProfileService.getTaskProfileRecordByTime(date1,date2,stageUser,pageForm);
+
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        Date timeStart = simpleDateFormat.parse(date1);
+
+        Date timeEnd = simpleDateFormat.parse(date2);
+        return taskProfileService.getTaskProfileRecordByTime(timeStart,timeEnd,stageUser,pageForm);
     }
 
 }
