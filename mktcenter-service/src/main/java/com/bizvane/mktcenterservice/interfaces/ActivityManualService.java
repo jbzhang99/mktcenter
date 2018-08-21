@@ -19,7 +19,7 @@ public interface ActivityManualService {
 
   ResponseData<ActivityVO> getActivityManualList(ActivityVO vo , PageForm pageForm);
 
-  ResponseData<Integer> addActivityManual(Long couponId, ActivityVO activityVO,SysAccountPO stageUser);
+  ResponseData<Integer> addActivityManual(ActivityBO bo,SysAccountPO stageUser);
 
   ResponseData<Integer> executeActivity(ActivityManualVO vo);
 

@@ -247,6 +247,12 @@ public class ActivityServiceImpl implements ActivityService {
         if(bo.getActivityType()== ActivityTypeEnum.ACTIVITY_TYPE_BIRTHDAY.getCode()){
             activityType = SendTypeEnum.SEND_COUPON_BIRTH_ACTIVITY.getCode();
         }
+        if(bo.getActivityType()== ActivityTypeEnum.ACTIVITY_TYPE_QRCODE.getCode()){
+            activityType = SendTypeEnum.SEND_COUPON_RECEIVE_ACTIVITY.getCode();
+        }
+        if(bo.getActivityType()== ActivityTypeEnum.ACTIVITY_TYPE_MANUAL.getCode()){
+            activityType = SendTypeEnum.SEND_COUPON_RECEIVE_ACTIVITY.getCode();
+        }
         //查询券合计
         ResponseData<CouponFindCouponCountResponseVO> couponFindCouponCountVO =  couponQueryServiceFeign.getCountBySendType(activityType,bo.getSysBrandId());
         CouponFindCouponCountResponseVO couponFindCoupon = couponFindCouponCountVO.getData();

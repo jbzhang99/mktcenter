@@ -5,6 +5,7 @@ import com.bizvane.mktcenterservice.models.bo.ActivityBO;
 import com.bizvane.mktcenterservice.models.vo.ActivityVO;
 import com.bizvane.mktcenterservice.models.vo.PageForm;
 import com.bizvane.utils.tokens.SysAccountPO;
+import com.bizvane.utils.tokens.TokenUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -35,11 +36,11 @@ public class ActivityManualController {
      *创建活动
      */
     @RequestMapping("/addActivity")
-   public  ResponseData<Integer> addActivity(Long couponDefinitionId, ActivityVO activityVO,HttpServletRequest request){
+   public  ResponseData<Integer> addActivity(ActivityBO bo,HttpServletRequest request){
         //取缓存
-        // SysAccountPO stageUser = TokenUtils.getStageUser(request);
-        SysAccountPO stageUser = new SysAccountPO();
-       return  activityManualService.addActivityManual(couponDefinitionId,activityVO,stageUser);
+        SysAccountPO stageUser = TokenUtils.getStageUser(request);
+        //SysAccountPO stageUser = new SysAccountPO();
+       return  activityManualService.addActivityManual(bo,stageUser);
 
    }
 

@@ -112,20 +112,21 @@ public class ActivityManualServiceImpl implements ActivityManualService {
     /**
      * 创建活动
      *
-     * @param couponDefinitionId
-     * @param activityVO
+     * @param
+     * @param
      * @param stageUser
      * @return
      */
     @Override
     @Transactional
-    public ResponseData<Integer> addActivityManual(Long couponDefinitionId, ActivityVO activityVO, SysAccountPO stageUser) {
-        log.info("领券活动-创建活动-入参:couponId:"+couponDefinitionId+",activityVO:"+JSON.toJSONString(activityVO)+",stageUser:"+JSON.toJSONString(stageUser));
+    public ResponseData<Integer> addActivityManual(ActivityBO bo, SysAccountPO stageUser) {
+        ActivityVO activityVO = bo.getActivityVO();
         //1.入参校验
-        ResponseData responseData = ActivityParamCheckUtil.checkManualActivityParams(couponDefinitionId, activityVO);
+        ResponseData responseData = ActivityParamCheckUtil.checkManualActivityParams(bo.getCouponCodeList().get(0).getCouponDefinitionId(),activityVO);
         if(responseData.getCode()==ResponseConstants.ERROR){
             return responseData;
         }
+
         activityVO.setCreateUserName(stageUser.getName());
         activityVO.setCreateUserId(stageUser.getSysAccountId());
         activityVO.setCreateDate(new Date());
@@ -228,7 +229,7 @@ public class ActivityManualServiceImpl implements ActivityManualService {
         mktActivityManualPOMapper.insertSelective(mktActivityManualPO);
         //新增券表,和活动绑定
         MktCouponPO mktCouponPO = new MktCouponPO();
-        mktCouponPO.setCouponDefinitionId(couponDefinitionId);
+        mktCouponPO.setCouponDefinitionId(bo.getCouponCodeList().get(0).getCouponDefinitionId());
         mktCouponPO.setBizId(mktActivityId);//活动id
         mktCouponPO.setBizType(BusinessTypeEnum.ACTIVITY_TYPE_ACTIVITY.getCode());
         mktCouponPO.setModifiedUserId(stageUser.getSysAccountId());
@@ -446,18 +447,18 @@ public class ActivityManualServiceImpl implements ActivityManualService {
             List<MktCouponPO> mktCouponPOs= mktCouponPOMapper.selectByExample(example);
             log.info("领券活动-查询券-出参:"+JSON.toJSONString(mktCouponPOs));
             //查询券接口
-            List<CouponEntityAndDefinitionVO> lists = new ArrayList<>();
+            /*List<CouponEntityAndDefinitionVO> lists = new ArrayList<>();
             if(!CollectionUtils.isEmpty(mktCouponPOs)){
                 for (MktCouponPO po:mktCouponPOs) {
                     ResponseData<CouponEntityAndDefinitionVO>  entityAndDefinition = couponQueryServiceFeign.getCouponDetail(po.getCouponDefinitionId());
                     log.info("领券活动-调券接口-出参:"+JSON.toJSONString(entityAndDefinition));
                     lists.add(entityAndDefinition.getData());
                 }
-            }
+            }*/
 
             ActivityBO bo = new ActivityBO();
             bo.setActivityVO(activityManualList.get(0));
-            bo.setCouponEntityAndDefinitionVOList(lists);
+           // bo.setCouponEntityAndDefinitionVOList(lists);
             responseData.setData(bo);
         }catch (Exception e){
             log.error("领券活动-查询活动详情出错"+e.getMessage());
