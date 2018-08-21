@@ -1,5 +1,7 @@
 package com.bizvane.mktcenterserviceimpl.common.award;
 
+import com.bizvane.centercontrolservice.models.po.SysSmsConfigPo;
+import com.bizvane.centercontrolservice.rpc.SysSmsConfigServiceRpc;
 import com.bizvane.couponfacade.interfaces.SendCouponServiceFeign;
 import com.bizvane.couponfacade.models.vo.SendCouponBatchRequestVO;
 import com.bizvane.couponfacade.models.vo.SendCouponSimpleRequestVO;
@@ -9,6 +11,7 @@ import com.bizvane.members.facade.models.IntegralRecordModel;
 import com.bizvane.members.facade.service.api.IntegralRecordApiService;
 import com.bizvane.messagefacade.interfaces.SendCommonMessageFeign;
 import com.bizvane.messagefacade.interfaces.TemplateMessageServiceFeign;
+import com.bizvane.messagefacade.models.vo.ActivityMessageVO;
 import com.bizvane.messagefacade.models.vo.MemberMessageVO;
 import com.bizvane.messagefacade.models.vo.SysSmsConfigVO;
 import com.bizvane.mktcenterservice.models.bo.AwardBO;
@@ -19,6 +22,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
+
+import java.util.List;
 
 /**
  * @author chen.li
@@ -47,7 +52,8 @@ public class AwardFactory {
 
     @Autowired
     private TemplateMessageServiceFeign templateMessageServiceFeign;
-
+    @Autowired
+    private SysSmsConfigServiceRpc sysSmsConfigServiceRpc;
     /**
      * 奖励券，单
      * @param bo
@@ -117,14 +123,18 @@ public class AwardFactory {
      * @return
      */
     @Async("asyncServiceExecutor")
-    public ResponseData<Integer> sendSms(AwardBO bo){
+    public ResponseData<String> sendSms(AwardBO bo){
 
         SysSmsConfigVO msgvo = bo.getSysSmsConfigVO();
-        msgvo.setChannelName("moments3.4");
+        ActivityMessageVO activityMessageVO = new ActivityMessageVO();
+        activityMessageVO.setSysBrandId(msgvo.getSysBrandId());
+        activityMessageVO.setMemberPhone(msgvo.getPhone());
+        activityMessageVO.setSendWxmember(msgvo.getMsgContent());
+        /*msgvo.setChannelName("moments3.4");//平台
         msgvo.setChannelAccount("JJ0253");//账号
         msgvo.setChannelPassword("513678");//密码
-        msgvo.setChannelService("http://TSN19.800CT.COM:8901/MWGate/wmgw.asmx/MongateSendSubmit");//路径
-      return sendCommonMessageFeign.sendSmg(msgvo);
+        msgvo.setChannelService("http://TSN19.800CT.COM:8901/MWGate/wmgw.asmx/MongateSendSubmit");//路径*/
+      return templateMessageServiceFeign.sendSmsTemplateMessage(activityMessageVO);
 
     }
 
@@ -135,10 +145,16 @@ public class AwardFactory {
      * @return
      */
     @Async("asyncServiceExecutor")
-    public ResponseData<Integer> sendWxTemplateMessage(AwardBO bo){
+    public ResponseData<String> sendWxTemplateMessage(AwardBO bo){
         ResponseData responseData = new ResponseData();
         MemberMessageVO memberMessageVO = bo.getMemberMessageVO();
-        templateMessageServiceFeign.sendTemplateMessage(memberMessageVO);
+        ActivityMessageVO activityMessageVO = new ActivityMessageVO();
+        activityMessageVO.setSysBrandId(memberMessageVO.getSysBrandId());
+        activityMessageVO.setMemberCode(memberMessageVO.getMemberCode());
+        activityMessageVO.setActivityInterests(memberMessageVO.getActivityInterests());
+        activityMessageVO.setActivityName(memberMessageVO.getActivityName());
+        activityMessageVO.setActivityStartDate(memberMessageVO.getActivityDate());
+        templateMessageServiceFeign.sendTemplateMessage(activityMessageVO);
         return responseData;
     }
 
