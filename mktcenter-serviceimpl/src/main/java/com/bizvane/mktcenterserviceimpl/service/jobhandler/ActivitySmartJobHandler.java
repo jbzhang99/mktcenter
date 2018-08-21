@@ -5,6 +5,7 @@ import com.bizvane.couponfacade.models.vo.SendCouponSimpleRequestVO;
 import com.bizvane.members.facade.models.IntegralRecordModel;
 import com.bizvane.members.facade.models.MemberInfoModel;
 import com.bizvane.members.facade.service.api.MemberInfoApiService;
+import com.bizvane.members.facade.vo.MemberInfoApiModel;
 import com.bizvane.messagefacade.models.vo.MemberMessageVO;
 import com.bizvane.messagefacade.models.vo.SysSmsConfigVO;
 import com.bizvane.mktcenterservice.interfaces.ActivitySmartService;
@@ -98,7 +99,7 @@ public class ActivitySmartJobHandler extends IJobHandler {
                 }
                 String targetMbr = mktActivitySmartPO.getTargetMbr();
                 //get member by condition
-                ResponseData<List<MemberInfoModel>> memberInfo = memberInfoApiService.getMemberInfo(new MemberInfoModel());
+                ResponseData<List<MemberInfoModel>> memberInfo = memberInfoApiService.getMemberInfo(new MemberInfoApiModel());
                 List<MemberInfoModel> memberInfoModelList = memberInfo.getData();
                 if(CollectionUtils.isEmpty(memberInfoModelList)){
                     log.error("target member is empty");

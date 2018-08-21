@@ -20,6 +20,7 @@ import com.bizvane.members.facade.models.IntegralRecordModel;
 import com.bizvane.members.facade.models.MemberInfoModel;
 import com.bizvane.members.facade.service.api.IntegralRecordApiService;
 import com.bizvane.members.facade.service.api.MemberInfoApiService;
+import com.bizvane.members.facade.vo.MemberInfoApiModel;
 import com.bizvane.messagefacade.interfaces.SendCommonMessageFeign;
 import com.bizvane.messagefacade.models.vo.MemberMessageVO;
 import com.bizvane.messagefacade.models.vo.SysSmsConfigVO;
@@ -508,7 +509,7 @@ public class TaskShareServiceImpl implements TaskShareService {
 
         //获取会员信息
 
-        MemberInfoModel memberInfoModel = new MemberInfoModel();
+        MemberInfoApiModel memberInfoModel = new MemberInfoApiModel();
         memberInfoModel.setBrandId(brandId);
         memberInfoModel.setValid(1);
         ResponseData<List<MemberInfoModel>> memberInfo =memberInfoApiService.getMemberInfo(memberInfoModel);

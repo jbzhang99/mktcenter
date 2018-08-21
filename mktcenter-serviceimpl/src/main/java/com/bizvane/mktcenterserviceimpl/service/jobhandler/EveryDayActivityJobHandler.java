@@ -9,6 +9,7 @@ import com.bizvane.members.facade.models.IntegralRecordModel;
 import com.bizvane.members.facade.models.MemberInfoModel;
 import com.bizvane.members.facade.service.api.IntegralRecordApiService;
 import com.bizvane.members.facade.service.api.MemberInfoApiService;
+import com.bizvane.members.facade.vo.MemberInfoApiModel;
 import com.bizvane.mktcenterservice.interfaces.ActivityBirthdayService;
 import com.bizvane.mktcenterservice.models.po.MktActivityPO;
 import com.bizvane.mktcenterservice.models.po.MktActivityPOExample;
@@ -61,7 +62,7 @@ public class EveryDayActivityJobHandler extends IJobHandler {
             for (ActivityVO activityBirthday:activityBirthdayList) {
                 //根据品牌id 会员等级 会员范围  时间周期 查询会员信息 循环
                 //查询对应的会员
-                MemberInfoModel memberInfoModel= new MemberInfoModel();
+                MemberInfoApiModel memberInfoModel= new MemberInfoApiModel();
                 memberInfoModel.setBrandId(activityBirthday.getSysBrandId());
                 if (!activityBirthday.getMbrLevelCode().equals("0")){
                     memberInfoModel.setLevelId(Long.parseLong(activityBirthday.getMbrLevelCode()));

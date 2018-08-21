@@ -3,6 +3,7 @@ package com.bizvane.mktcenterserviceimpl.service.impl;
 import com.alibaba.fastjson.JSON;
 import com.bizvane.members.facade.models.MemberInfoModel;
 import com.bizvane.members.facade.service.api.MemberInfoApiService;
+import com.bizvane.members.facade.vo.MemberInfoApiModel;
 import com.bizvane.messagefacade.models.vo.SysSmsConfigVO;
 import com.bizvane.mktcenterservice.interfaces.ActivitySmartService;
 import com.bizvane.mktcenterservice.models.bo.ActivitySmartBO;
@@ -562,7 +563,7 @@ public class ActivitySmartServiceImpl implements ActivitySmartService {
         if(execute){
             AwardBO awardBO = new AwardBO();
             //根据条件获取人，再遍历
-            ResponseData<List<MemberInfoModel>> memberInfo = memberInfoApiService.getMemberInfo(new MemberInfoModel());
+            ResponseData<List<MemberInfoModel>> memberInfo = memberInfoApiService.getMemberInfo(new MemberInfoApiModel());
             awardBO.setMktType(MktSmartTypeEnum.SMART_TYPE_COUPON_BATCH.getCode());
             award.execute(awardBO);
         }
@@ -652,7 +653,7 @@ public class ActivitySmartServiceImpl implements ActivitySmartService {
         if(execute){
             AwardBO awardBO = new AwardBO();
             //根据条件获取人，再遍历
-            ResponseData<List<MemberInfoModel>> memberInfo = memberInfoApiService.getMemberInfo(new MemberInfoModel());
+            ResponseData<List<MemberInfoModel>> memberInfo = memberInfoApiService.getMemberInfo(new MemberInfoApiModel());
             awardBO.setMktType(MktSmartTypeEnum.SMART_TYPE_COUPON_BATCH.getCode());
             award.execute(awardBO);
         }
@@ -858,7 +859,7 @@ public class ActivitySmartServiceImpl implements ActivitySmartService {
         if(execute){
             AwardBO awardBO = new AwardBO();
             //根据条件获取人，再遍历
-            ResponseData<List<MemberInfoModel>> memberInfo = memberInfoApiService.getMemberInfo(new MemberInfoModel());
+            ResponseData<List<MemberInfoModel>> memberInfo = memberInfoApiService.getMemberInfo(new MemberInfoApiModel());
             award.execute(awardBO);
         }
 

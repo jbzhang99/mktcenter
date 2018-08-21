@@ -15,6 +15,7 @@ import com.bizvane.members.facade.models.IntegralRecordModel;
 import com.bizvane.members.facade.models.MemberInfoModel;
 import com.bizvane.members.facade.service.api.IntegralRecordApiService;
 import com.bizvane.members.facade.service.api.MemberInfoApiService;
+import com.bizvane.members.facade.vo.MemberInfoApiModel;
 import com.bizvane.messagefacade.models.vo.MemberMessageVO;
 import com.bizvane.messagefacade.models.vo.SysSmsConfigVO;
 import com.bizvane.mktcenterservice.interfaces.ActivityRegisterService;
@@ -258,7 +259,7 @@ public class ActivityRegisterServiceImpl implements ActivityRegisterService {
         //如果执行状态为执行中 就要发送消息
        if(mktActivityPOWithBLOBs.getActivityStatus()==ActivityStatusEnum.ACTIVITY_STATUS_EXECUTING.getCode()){
             //查询对应的会员
-            MemberInfoModel memberInfoModel= new MemberInfoModel();
+           MemberInfoApiModel memberInfoModel= new MemberInfoApiModel();
             memberInfoModel.setBrandId(activityVO.getSysBrandId());
             memberInfoModel.setLevelId(Long.parseLong(activityVO.getMbrLevelCode()));
             ResponseData<List<MemberInfoModel>> memberInfoModelLists =memberInfoApiService.getMemberInfo(memberInfoModel);
@@ -528,7 +529,7 @@ public class ActivityRegisterServiceImpl implements ActivityRegisterService {
         //如果执行状态为执行中 就要发送消息
         if(mktActivityPOWithBLOBs.getActivityStatus()==ActivityStatusEnum.ACTIVITY_STATUS_EXECUTING.getCode()){
             //查询对应的会员
-            MemberInfoModel memberInfoModel= new MemberInfoModel();
+            MemberInfoApiModel memberInfoModel= new MemberInfoApiModel();
             memberInfoModel.setBrandId(activityVO.getSysBrandId());
             memberInfoModel.setLevelId(Long.parseLong(activityVO.getMbrLevelCode()));
             ResponseData<List<MemberInfoModel>> memberInfoModelLists =memberInfoApiService.getMemberInfo(memberInfoModel);
