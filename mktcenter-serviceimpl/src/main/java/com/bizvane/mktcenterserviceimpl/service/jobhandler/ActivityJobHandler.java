@@ -4,6 +4,7 @@ import com.bizvane.members.facade.models.MbrLevelModel;
 import com.bizvane.members.facade.models.MemberInfoModel;
 import com.bizvane.members.facade.service.api.MemberInfoApiService;
 import com.bizvane.members.facade.service.api.MemberLevelApiService;
+import com.bizvane.members.facade.vo.MemberInfoApiModel;
 import com.bizvane.messagefacade.models.vo.MemberMessageVO;
 import com.bizvane.messagefacade.models.vo.SysSmsConfigVO;
 import com.bizvane.mktcenterservice.models.bo.AwardBO;
@@ -68,7 +69,7 @@ public class ActivityJobHandler extends IJobHandler {
             int sum = mktActivityPOMapper.updateActivityStatus(po);
 
             //判断是什么类型的活动 然后给不同的会员发送消息
-            MemberInfoModel memberInfoModel= new MemberInfoModel();
+            MemberInfoApiModel memberInfoModel= new MemberInfoApiModel();
             //开卡活动的
             if (mktActivityPO.getActivityType()== ActivityTypeEnum.ACTIVITY_TYPE_REGISGER.getCode()){
 

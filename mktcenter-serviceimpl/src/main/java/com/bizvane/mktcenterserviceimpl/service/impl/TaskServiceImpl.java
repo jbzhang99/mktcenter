@@ -12,6 +12,7 @@ import com.bizvane.couponfacade.models.vo.SendCouponSimpleRequestVO;
 import com.bizvane.members.facade.models.IntegralRecordModel;
 import com.bizvane.members.facade.models.MemberInfoModel;
 import com.bizvane.members.facade.service.api.MemberInfoApiService;
+import com.bizvane.members.facade.vo.MemberInfoApiModel;
 import com.bizvane.messagefacade.models.vo.MemberMessageVO;
 import com.bizvane.messagefacade.models.vo.SysSmsConfigVO;
 import com.bizvane.mktcenterservice.interfaces.TaskMessageService;
@@ -530,7 +531,7 @@ public class TaskServiceImpl implements TaskService {
      */
     @Override
     public List<MemberInfoModel> getCompanyMemebers(Long sysCompanyId) {
-        MemberInfoModel members = new MemberInfoModel();
+        MemberInfoApiModel members = new MemberInfoApiModel();
         members.setCompanyId(sysCompanyId);
         ResponseData<List<MemberInfoModel>> memberInfo = memberInfoApiService.getMemberInfo(members);
         List<MemberInfoModel> list = memberInfo.getData();
@@ -542,7 +543,7 @@ public class TaskServiceImpl implements TaskService {
      */
     @Override
     public MemberInfoModel getCompanyMemeberDetail(String  memberCode) {
-        MemberInfoModel members = new MemberInfoModel();
+        MemberInfoApiModel members = new MemberInfoApiModel();
         members.setMemberCode(memberCode);
         ResponseData<List<MemberInfoModel>> memberInfo = memberInfoApiService.getMemberInfo(members);
         List<MemberInfoModel> list = memberInfo.getData();

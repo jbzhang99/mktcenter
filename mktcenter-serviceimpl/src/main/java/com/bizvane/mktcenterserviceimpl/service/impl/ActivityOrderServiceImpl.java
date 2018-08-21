@@ -13,6 +13,7 @@ import com.bizvane.members.facade.enums.IntegralChangeTypeEnum;
 import com.bizvane.members.facade.models.IntegralRecordModel;
 import com.bizvane.members.facade.models.MemberInfoModel;
 import com.bizvane.members.facade.service.api.MemberInfoApiService;
+import com.bizvane.members.facade.vo.MemberInfoApiModel;
 import com.bizvane.messagefacade.models.vo.MemberMessageVO;
 import com.bizvane.messagefacade.models.vo.SysSmsConfigVO;
 import com.bizvane.mktcenterservice.interfaces.ActivityOrderService;
@@ -246,7 +247,7 @@ public class ActivityOrderServiceImpl implements ActivityOrderService {
         //如果执行状态为执行中 就要发送消息
         if(mktActivityPOWithBLOBs.getActivityStatus()==ActivityStatusEnum.ACTIVITY_STATUS_EXECUTING.getCode()){
             //查询对应的会员
-            MemberInfoModel memberInfoModel= new MemberInfoModel();
+            MemberInfoApiModel memberInfoModel= new MemberInfoApiModel();
             memberInfoModel.setBrandId(activityVO.getSysBrandId());
             if (!activityVO.getMbrLevelCode().equals("0")){
                 memberInfoModel.setLevelId(Long.parseLong(activityVO.getMbrLevelCode()));
@@ -489,7 +490,7 @@ public class ActivityOrderServiceImpl implements ActivityOrderService {
         //如果执行状态为执行中 就要发送消息
         if(mktActivityPOWithBLOBs.getActivityStatus()==ActivityStatusEnum.ACTIVITY_STATUS_EXECUTING.getCode()){
             //查询对应的会员
-            MemberInfoModel memberInfoModel= new MemberInfoModel();
+            MemberInfoApiModel memberInfoModel= new MemberInfoApiModel();
             memberInfoModel.setBrandId(activityVO.getSysBrandId());
             if (!activityVO.getMbrLevelCode().equals("0")){
                 memberInfoModel.setLevelId(Long.parseLong(activityVO.getMbrLevelCode()));
@@ -573,7 +574,7 @@ public class ActivityOrderServiceImpl implements ActivityOrderService {
                 example.createCriteria().andBizIdEqualTo(po.getBusinessId()).andValidEqualTo(true);
                 List<MktMessagePO> listMktMessage = mktMessagePOMapper.selectByExample(example);
                 //查询对应的会员
-                MemberInfoModel memberInfoModel= new MemberInfoModel();
+                MemberInfoApiModel memberInfoModel= new MemberInfoApiModel();
                 memberInfoModel.setBrandId(activityPO.getSysBrandId());
                 if (!activityPO.getMbrLevelCode().equals("0")){
                     memberInfoModel.setLevelId(Long.parseLong(activityPO.getMbrLevelCode()));
