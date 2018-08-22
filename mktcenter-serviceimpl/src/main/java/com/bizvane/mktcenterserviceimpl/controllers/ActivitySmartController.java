@@ -11,6 +11,7 @@ import com.bizvane.mktcenterservice.models.vo.PageForm;
 import com.bizvane.mktcenterserviceimpl.common.utils.ActivityParamCheckUtil;
 import com.bizvane.utils.responseinfo.ResponseData;
 import com.bizvane.utils.tokens.SysAccountPO;
+import com.bizvane.utils.tokens.TokenUtils;
 import com.github.pagehelper.PageInfo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -120,8 +121,8 @@ public class ActivitySmartController {
         //参数校验
          ActivityParamCheckUtil.checkSmartActivityParam(vo);
         //参数校验通过，获取操作人信息
-//        SysAccountPO stageUser = TokenUtils.getStageUser(request);
-        SysAccountPO stageUser = new SysAccountPO();
+        SysAccountPO stageUser = TokenUtils.getStageUser(request);
+        //SysAccountPO stageUser = new SysAccountPO();
         ResponseData<Integer> responseData = activitySmartService.addIntegralActivity(vo,stageUser);
         return new ResponseData<>();
     }
@@ -137,8 +138,8 @@ public class ActivitySmartController {
         //参数校验
         ActivityParamCheckUtil.checkSmartActivityParam(vo);
         //参数校验通过，获取操作人信息
-//        SysAccountPO stageUser = TokenUtils.getStageUser(request);
-        SysAccountPO stageUser = new SysAccountPO();
+        SysAccountPO stageUser = TokenUtils.getStageUser(request);
+       // SysAccountPO stageUser = new SysAccountPO();
         ResponseData<Integer> responseData = activitySmartService.addSmsActivity(vo,messageVO,stageUser);
         return new ResponseData<>();
     }
