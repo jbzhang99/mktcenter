@@ -95,6 +95,9 @@ feign:
     applet:
       name: applet
       path: applet.api
+    applet:
+      name: fitment
+      path: fitment.api
 
 rocketmq:
   onsaddr: http://onsaddr-internet.aliyun.com/rocketmq/nsaddr4client-internet
