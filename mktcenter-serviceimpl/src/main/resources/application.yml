@@ -95,7 +95,7 @@ feign:
     applet:
       name: applet
       path: applet.api
-    applet:
+    fitment:
       name: fitment
       path: fitment.api
 
