@@ -474,7 +474,52 @@ public class TaskProfileServiceImpl implements TaskProfileService {
 
         try {
 
+            TaskBO taskBO = new TaskBO();
+            TaskVO taskVO = new TaskVO();
+            taskVO.setMktTaskId(businessId);
+            //联表查询查询任务详情
+            List<TaskVO> taskVOList = mktTaskProfilePOMapper.getTaskList(taskVO);
+            TaskVO taskVo = taskVOList.get(0);
 
+            //查询券信息
+            MktCouponPOExample example = new MktCouponPOExample();
+            example.createCriteria().andValidEqualTo(true).andBizIdEqualTo(businessId);
+            List<MktCouponPO> mktCouponPOList = mktCouponPOMapper.selectByExample(example);
+
+            //查询消息
+            MktMessagePOExample mktMessagePOExample = new MktMessagePOExample();
+            mktMessagePOExample.createCriteria().andValidEqualTo(true).andBizIdEqualTo(businessId);
+            List<MktMessagePO> mktMessagePOList = mktMessagePOMapper.selectByExample(mktMessagePOExample);
+
+
+            List<CouponDefinitionPO> couponDefinitionPOS = new ArrayList<>();
+            //查询券定义
+            for (MktCouponPO mktCouponPO:mktCouponPOList){
+                Long couponDefinitionId = mktCouponPO.getCouponDefinitionId();
+
+                //ResponseData<CouponDefinitionPO> coupon = couponDefinitionServiceFeign.findRpc(couponDefinitionId);
+                ResponseData<CouponDefinitionPO> coupon = couponDefinitionServiceFeign.findByIdRpc(couponDefinitionId);
+                CouponDefinitionPO couponDefinitionPO = coupon.getData();
+                couponDefinitionPOS.add(couponDefinitionPO);
+            }
+
+            if (taskVo!=null){
+                taskBO.setTaskVO(taskVo);
+            }
+            if (!CollectionUtils.isEmpty(mktCouponPOList)){
+                taskBO.setMktCouponPOList(mktCouponPOList);
+            }
+            if (!CollectionUtils.isEmpty(mktMessagePOList)){
+                taskBO.setMessagePOList(mktMessagePOList);
+            }
+            if (!CollectionUtils.isEmpty(couponDefinitionPOS)){
+                taskBO.setCouponDefinitionPOList(couponDefinitionPOS);
+            }
+
+
+            responseData.setData(taskBO);
+            responseData.setMessage(SysResponseEnum.SUCCESS.getMessage());
+            responseData.setCode(SysResponseEnum.SUCCESS.getCode());
 
 
         }catch (Exception e){
@@ -484,52 +529,7 @@ public class TaskProfileServiceImpl implements TaskProfileService {
             return responseData;
         }
 
-        TaskBO taskBO = new TaskBO();
-        TaskVO taskVO = new TaskVO();
-        taskVO.setMktTaskId(businessId);
-        //联表查询查询任务详情
-        List<TaskVO> taskVOList = mktTaskProfilePOMapper.getTaskList(taskVO);
-        TaskVO taskVo = taskVOList.get(0);
 
-        //查询券信息
-        MktCouponPOExample example = new MktCouponPOExample();
-        example.createCriteria().andValidEqualTo(true).andBizIdEqualTo(businessId);
-        List<MktCouponPO> mktCouponPOList = mktCouponPOMapper.selectByExample(example);
-
-        //查询消息
-        MktMessagePOExample mktMessagePOExample = new MktMessagePOExample();
-        mktMessagePOExample.createCriteria().andValidEqualTo(true).andBizIdEqualTo(businessId);
-        List<MktMessagePO> mktMessagePOList = mktMessagePOMapper.selectByExample(mktMessagePOExample);
-
-
-        List<CouponDefinitionPO> couponDefinitionPOS = new ArrayList<>();
-        //查询券定义
-        for (MktCouponPO mktCouponPO:mktCouponPOList){
-            Long couponDefinitionId = mktCouponPO.getCouponDefinitionId();
-
-            //ResponseData<CouponDefinitionPO> coupon = couponDefinitionServiceFeign.findRpc(couponDefinitionId);
-            ResponseData<CouponDefinitionPO> coupon = couponDefinitionServiceFeign.findByIdRpc(couponDefinitionId);
-            CouponDefinitionPO couponDefinitionPO = coupon.getData();
-            couponDefinitionPOS.add(couponDefinitionPO);
-        }
-
-        if (taskVo!=null){
-            taskBO.setTaskVO(taskVo);
-        }
-        if (!CollectionUtils.isEmpty(mktCouponPOList)){
-            taskBO.setMktCouponPOList(mktCouponPOList);
-        }
-        if (!CollectionUtils.isEmpty(mktMessagePOList)){
-            taskBO.setMessagePOList(mktMessagePOList);
-        }
-        if (!CollectionUtils.isEmpty(couponDefinitionPOS)){
-            taskBO.setCouponDefinitionPOList(couponDefinitionPOS);
-        }
-
-
-        responseData.setData(taskBO);
-        responseData.setMessage(SysResponseEnum.SUCCESS.getMessage());
-        responseData.setCode(SysResponseEnum.SUCCESS.getCode());
         return responseData;
     }
 

@@ -77,6 +77,9 @@ xxl:
 
 feign:
   client:
+    centercontrol:
+      name: centercontrol
+      path: centercontrol.api
     centerstage:
       name: centerstage
       path: centerstage.api
@@ -95,6 +98,9 @@ feign:
     applet:
       name: applet
       path: applet.api
+    fitment:
+      name: fitment
+      path: fitment.api
 
 rocketmq:
   onsaddr: http://onsaddr-internet.aliyun.com/rocketmq/nsaddr4client-internet

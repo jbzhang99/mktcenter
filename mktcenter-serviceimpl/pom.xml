@@ -160,6 +160,11 @@
 			<artifactId>applet-service</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
+		<dependency>
+			<groupId>com.bizvane</groupId>
+			<artifactId>fitment-service</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+		</dependency>
 		<!--中控模块依赖-->
 		<dependency>
 			<groupId>com.bizvane</groupId>

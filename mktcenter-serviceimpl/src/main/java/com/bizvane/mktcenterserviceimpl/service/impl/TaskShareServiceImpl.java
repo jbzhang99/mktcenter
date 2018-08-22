@@ -1,6 +1,5 @@
 package com.bizvane.mktcenterserviceimpl.service.impl;
 
-import com.bizvane.appletservice.Rpc.MenberMadeServiceRpc;
 import com.bizvane.centerstageservice.models.po.SysCheckConfigPo;
 import com.bizvane.centerstageservice.models.po.SysCheckPo;
 import com.bizvane.centerstageservice.models.vo.SysCheckConfigVo;
