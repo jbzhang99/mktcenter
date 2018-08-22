@@ -4,7 +4,7 @@ server:
       context-path: /mktcenter.api
 spring:
   redis:
-      database: 7
+    database: 7
   profiles:
     active: basecontroller,commonutilslocal
   swagger:
