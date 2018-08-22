@@ -520,16 +520,16 @@
        AND tmt.valid=1
        AND tmtr.rewarded = 1
 
-       AND tmtr.sys_brand_id = #{sysBrandId}
+       AND tmtr.sys_brand_id = #{brandId}
        AND tmtr.task_type = #{taskType}
        <if test="taskName!=null and taskName!=''">
        AND tmt.task_name like CONCAT('%',#{taskName},'%')
        </if>
-       <if test="endTime!=null and endTime!=''">
-         AND tmt.create_date <![CDATA[<=]]>#{endTime}
+       <if test="date2!=null and date2!=''">
+         AND tmt.create_date <![CDATA[<=]]>#{date2}
        </if>
-       <if test="startTime!=null and startTime!=''">
-         AND tmt.create_date <![CDATA[>=]]> #{startTime}
+       <if test="date1!=null and date1!=''">
+         AND tmt.create_date <![CDATA[>=]]> #{date1}
        </if>
        GROUP BY tmtr.task_id,tmtr.task_type
    </select>

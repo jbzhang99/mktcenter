@@ -35,7 +35,7 @@ public class TaskController {
      * 获取任务详情 --通用--已经核对
      */
     @RequestMapping("selectTaskById")
-    public ResponseData<TaskBO> selectTaskById(Long businessId){
+    public ResponseData<TaskBO> selectTaskById(Long businessId,Integer taskType){
         return taskService.selectTaskById(businessId);
     }
     /**

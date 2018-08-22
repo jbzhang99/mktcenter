@@ -102,7 +102,7 @@ public class TaskAmountServiceImpl implements TaskAmountService {
         MktTaskPOWithBLOBs mktTaskPOWithBLOBs = new MktTaskPOWithBLOBs();
         BeanUtils.copyProperties(vo, mktTaskPOWithBLOBs);
         mktTaskPOWithBLOBs.setTaskCode(taskCode);
-        mktTaskPOWithBLOBs = taskService.isOrNoCheckState(mktTaskPOWithBLOBs);
+       // mktTaskPOWithBLOBs = taskService.isOrNoCheckState(mktTaskPOWithBLOBs);
         Long mktTaskId = taskService.addTask(mktTaskPOWithBLOBs, stageUser);
         taskService.addCheckData(mktTaskPOWithBLOBs);
 
@@ -133,7 +133,7 @@ public class TaskAmountServiceImpl implements TaskAmountService {
         }
 
         //6.处理任务
-        taskService.doOrderTask(mktTaskPOWithBLOBs,stageUser);
+       // taskService.doOrderTask(mktTaskPOWithBLOBs,stageUser);
 
         responseData.setCode(SystemConstants.SUCCESS_CODE);
         responseData.setMessage(SystemConstants.SUCCESS_MESSAGE);

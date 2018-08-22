@@ -16,7 +16,7 @@ public class TaskVO extends MktTaskPO {
      * 2.获取启用的数据
      * 3.获取禁用的数据
      */
-    private  String  showType;
+    private  Integer  showType;
 
     /**
      * 只读. 任务描述. task_info
@@ -177,11 +177,11 @@ public class TaskVO extends MktTaskPO {
         this.shareUrl = shareUrl;
     }
 
-    public String getShowType() {
+    public Integer getShowType() {
         return showType;
     }
 
-    public void setShowType(String showType) {
+    public void setShowType(Integer showType) {
         this.showType = showType;
     }
 }

@@ -1,6 +1,6 @@
 package com.bizvane.mktcenterserviceimpl.controllers;
 
-import com.bizvane.appletservice.Rpc.MenberMadeServiceRpc;
+//import com.bizvane.appletservice.Rpc.MenberMadeServiceRpc;
 import com.bizvane.members.facade.models.MemberInfoModel;
 import com.bizvane.mktcenterservice.interfaces.TaskShareService;
 import com.bizvane.mktcenterservice.models.bo.TaskBO;
@@ -39,8 +39,8 @@ public class TaskShareController {
 
     @Autowired
     private TaskShareService taskShareService;
-    @Autowired
-    private MenberMadeServiceRpc menberMadeServiceRpc;
+//    @Autowired
+//    private MenberMadeServiceRpc menberMadeServiceRpc;
 
 
     /**
@@ -195,9 +195,9 @@ public class TaskShareController {
             return responseData;
         }
 
-        return  menberMadeServiceRpc.selectBrandFunctionRpc(brandId);
+        //return  menberMadeServiceRpc.selectBrandFunctionRpc(brandId);
 
-
+         return  null;
     }
 }
 

@@ -89,7 +89,7 @@ public class TaskOrderServiceImpl implements TaskOrderService {
         MktTaskPOWithBLOBs mktTaskPOWithBLOBs = new MktTaskPOWithBLOBs();
         BeanUtils.copyProperties(taskVO, mktTaskPOWithBLOBs);
         mktTaskPOWithBLOBs.setTaskCode(taskCode);
-        mktTaskPOWithBLOBs = taskService.isOrNoCheckState(mktTaskPOWithBLOBs);
+       // mktTaskPOWithBLOBs = taskService.isOrNoCheckState(mktTaskPOWithBLOBs);
         Long mktTaskId = taskService.addTask(mktTaskPOWithBLOBs, stageUser);
         taskService.addCheckData(mktTaskPOWithBLOBs);
         //3.任务消费表新增
@@ -119,7 +119,7 @@ public class TaskOrderServiceImpl implements TaskOrderService {
         }
 
         //6.处理任务
-        taskService.doOrderTask(mktTaskPOWithBLOBs,stageUser);
+        //taskService.doOrderTask(mktTaskPOWithBLOBs,stageUser);
 
         responseData.setCode(SystemConstants.SUCCESS_CODE);
         responseData.setMessage(SystemConstants.SUCCESS_MESSAGE);

@@ -416,9 +416,9 @@ public class TaskServiceImpl implements TaskService {
     @Override
     public ResponseData<TaskRecordVO> doAnalysis(TaskAnalysisVo vo){
         ResponseData<TaskRecordVO> result = new ResponseData<TaskRecordVO>(SysResponseEnum.SUCCESS.getCode(),SysResponseEnum.SUCCESS.getMessage(),null);
-        Long sysBrandId = vo.getSysBrandId();
+        Long sysBrandId = vo.getBrandId();
         //每个任务的券,积分,会员 总数
-        PageHelper.startPage(vo.getPageNum(),vo.getPageSize());
+        PageHelper.startPage(vo.getPageNumber(),vo.getPageSize());
         List<DayTaskRecordVo> analysisall = mktTaskRecordPOMapper.getAnalysisResult(vo);
         PageInfo<DayTaskRecordVo> dayTaskRecordVoPage = new PageInfo<>(analysisall);
         List<DayTaskRecordVo> analysislists = dayTaskRecordVoPage.getList();
@@ -431,36 +431,36 @@ public class TaskServiceImpl implements TaskService {
         //被核销优惠券总数
         Long allinvalidCountCoupon=0L;
 
-        if (CollectionUtils.isNotEmpty(analysislists)){
-            for (DayTaskRecordVo task: analysislists) {
-                TaskTypeEnum taskTypeEnum = TaskTypeEnum.getTaskTypeEnumByCode(vo.getTaskType());
-                String sendType=null;
-                switch (taskTypeEnum){
-                    case TASK_TYPE_CONSUME_TIMES:
-                        // 累计消费次数
-                        sendType=SendTypeEnum.SEND_COUPON_COUSUME_TIMES_TASK.getCode();
-                        break;
-                    case TASK_TYPE_CONSUME_AMOUNT:
-                        //累计消费金额
-                        sendType=SendTypeEnum.SEND_COUPON_COUSUME_MONEY_TASK.getCode();
-                        break;
-
-                    case TASK_TYPE_INVITE:
-                        //邀请注册
-                        sendType=SendTypeEnum.SEND_COUPON_INVITE_OPENCARD_TASK.getCode();
-                        break;
-                }
-                ResponseData<CouponFindCouponCountResponseVO> couponCount= couponQueryService.findCouponCountBySendBusinessId(task.getTaskId(), sendType, sysBrandId);
-                CouponFindCouponCountResponseVO data = couponCount.getData();
-                Long couponSum = data.getCouponSum();
-                task.setOneTaskInvalidCountCoupon(couponSum);
-
-                allPoints=allPoints+task.getOneTaskPoints();
-                allCountCoupon= allCountCoupon+task.getOneTaskCountCoupon();
-                allCountMbr=allCountMbr+task.getOneTaskCountMbr();
-                allinvalidCountCoupon = allinvalidCountCoupon+Long.valueOf(couponSum);
-            }
-        }
+//        if (CollectionUtils.isNotEmpty(analysislists)){
+//            for (DayTaskRecordVo task: analysislists) {
+//                TaskTypeEnum taskTypeEnum = TaskTypeEnum.getTaskTypeEnumByCode(vo.getTaskType());
+//                String sendType=null;
+//                switch (taskTypeEnum){
+//                    case TASK_TYPE_CONSUME_TIMES:
+//                        // 累计消费次数
+//                        sendType=SendTypeEnum.SEND_COUPON_COUSUME_TIMES_TASK.getCode();
+//                        break;
+//                    case TASK_TYPE_CONSUME_AMOUNT:
+//                        //累计消费金额
+//                        sendType=SendTypeEnum.SEND_COUPON_COUSUME_MONEY_TASK.getCode();
+//                        break;
+//
+//                    case TASK_TYPE_INVITE:
+//                        //邀请注册
+//                        sendType=SendTypeEnum.SEND_COUPON_INVITE_OPENCARD_TASK.getCode();
+//                        break;
+//                }
+//                ResponseData<CouponFindCouponCountResponseVO> couponCount= couponQueryService.findCouponCountBySendBusinessId(task.getTaskId(), sendType, sysBrandId);
+//                CouponFindCouponCountResponseVO data = couponCount.getData();
+//                Long couponSum = data.getCouponSum();
+//                task.setOneTaskInvalidCountCoupon(couponSum);
+//
+//                allPoints=allPoints+task.getOneTaskPoints();
+//                allCountCoupon= allCountCoupon+task.getOneTaskCountCoupon();
+//                allCountMbr=allCountMbr+task.getOneTaskCountMbr();
+//                allinvalidCountCoupon = allinvalidCountCoupon+Long.valueOf(couponSum);
+//            }
+//        }
         TaskRecordVO taskRecordVO = new TaskRecordVO();
         taskRecordVO.setAllPoints(allPoints);
         taskRecordVO.setAllCountCoupon(allCountCoupon);
@@ -556,12 +556,12 @@ public class TaskServiceImpl implements TaskService {
     }
 
     /**
-     * 根据任务类型查询任务
+     * 根据任务类型查询任务-已起用
      */
     @Override
     public ResponseData<PageInfo<MktTaskPOWithBLOBs>> getTaskByTaskType(TaskVO vo, PageForm pageForm) {
         ResponseData<PageInfo<MktTaskPOWithBLOBs>> result = new ResponseData<PageInfo<MktTaskPOWithBLOBs>>(SysResponseEnum.FAILED.getCode(), SysResponseEnum.FAILED.getMessage(), null);
-        String showType = vo.getShowType();
+        Integer showType = vo.getShowType();
         //1完善资料，2分享任务，3邀请注册，4累计消费次数，5累计消费金额',
         PageHelper.startPage(pageForm.getPageNumber(), pageForm.getPageSize());
 
@@ -573,7 +573,7 @@ public class TaskServiceImpl implements TaskService {
             //查询已启用
             mktTaskPOExample.createCriteria().andTaskTypeEqualTo(vo.getTaskType()).andValidEqualTo(Boolean.TRUE);
         } else if (TaskConstants.THREE.equals(showType)) {
-            //查询已启用
+            //查询已禁用
             mktTaskPOExample.createCriteria().andTaskTypeEqualTo(vo.getTaskType()).andValidEqualTo(Boolean.FALSE);
         }
         mktTaskPOExample.setOrderByClause("create_date desc");
@@ -581,7 +581,7 @@ public class TaskServiceImpl implements TaskService {
         List<MktTaskPOWithBLOBs> lists = mktTaskPOMapper.selectByExampleWithBLOBs(mktTaskPOExample);
 
         if (CollectionUtils.isNotEmpty(lists)) {
-            PageInfo<MktTaskPOWithBLOBs> pageInfo = new PageInfo<MktTaskPOWithBLOBs>();
+            PageInfo<MktTaskPOWithBLOBs> pageInfo = new PageInfo<MktTaskPOWithBLOBs>(lists);
             result.setData(pageInfo);
             result.setCode(SysResponseEnum.SUCCESS.getCode());
             result.setMessage(SysResponseEnum.SUCCESS.getMessage());

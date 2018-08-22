@@ -9,19 +9,36 @@ import java.util.Date;
  */
 public class TaskAnalysisVo {
     private Integer pageSize=10;
-    private Integer pageNum=1;
+    private Integer pageNumber=1;
 
-    private  Long sysBrandId;
+    private  Long brandId;
     private  Integer taskType;
-    private String  taskName;
-    private Date endTime;
-    private Date  startTime;
-    public Long getSysBrandId() {
-        return sysBrandId;
+    private String taskName;
+    private Date date1;
+    private Date  date2;
+
+    public Integer getPageSize() {
+        return pageSize;
     }
 
-    public void setSysBrandId(Long sysBrandId) {
-        this.sysBrandId = sysBrandId;
+    public void setPageSize(Integer pageSize) {
+        this.pageSize = pageSize;
+    }
+
+    public Integer getPageNumber() {
+        return pageNumber;
+    }
+
+    public void setPageNumber(Integer pageNumber) {
+        this.pageNumber = pageNumber;
+    }
+
+    public Long getBrandId() {
+        return brandId;
+    }
+
+    public void setBrandId(Long brandId) {
+        this.brandId = brandId;
     }
 
     public Integer getTaskType() {
@@ -40,35 +57,19 @@ public class TaskAnalysisVo {
         this.taskName = taskName;
     }
 
-    public Date getEndTime() {
-        return endTime;
+    public Date getDate1() {
+        return date1;
     }
 
-    public void setEndTime(Date endTime) {
-        this.endTime = endTime;
+    public void setDate1(Date date1) {
+        this.date1 = date1;
     }
 
-    public Date getStartTime() {
-        return startTime;
+    public Date getDate2() {
+        return date2;
     }
 
-    public void setStartTime(Date startTime) {
-        this.startTime = startTime;
-    }
-
-    public Integer getPageSize() {
-        return pageSize;
-    }
-
-    public void setPageSize(Integer pageSize) {
-        this.pageSize = pageSize;
-    }
-
-    public Integer getPageNum() {
-        return pageNum;
-    }
-
-    public void setPageNum(Integer pageNum) {
-        this.pageNum = pageNum;
+    public void setDate2(Date date2) {
+        this.date2 = date2;
     }
 }

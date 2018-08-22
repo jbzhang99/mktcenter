@@ -1,6 +1,6 @@
 package com.bizvane.mktcenterserviceimpl.service.impl;
 
-import com.bizvane.appletservice.Rpc.MenberMadeServiceRpc;
+//import com.bizvane.appletservice.Rpc.MenberMadeServiceRpc;
 import com.bizvane.centerstageservice.models.po.SysCheckConfigPo;
 import com.bizvane.centerstageservice.models.po.SysCheckPo;
 import com.bizvane.centerstageservice.models.vo.SysCheckConfigVo;
@@ -1080,9 +1080,9 @@ public class TaskShareServiceImpl implements TaskShareService {
             //查出每个任务的一个list集合 根据任务名称 任务创建时间 任务类型 品牌id
 
             TaskAnalysisVo taskAnalysisVo = new TaskAnalysisVo();
-            taskAnalysisVo.setEndTime(date2);
-            taskAnalysisVo.setStartTime(date1);
-            taskAnalysisVo.setSysBrandId(stageUser.getBrandId());
+            taskAnalysisVo.setDate2(date2);
+            taskAnalysisVo.setDate1(date1);
+            taskAnalysisVo.setBrandId(stageUser.getBrandId());
             taskAnalysisVo.setTaskName(taskName);
             taskAnalysisVo.setTaskType(TaskTypeEnum.TASK_TYPE_SHARE.getCode());
             List<DayTaskRecordVo> dayTaskRecordVoList = mktTaskRecordPOMapper.getAnalysisResult(taskAnalysisVo);

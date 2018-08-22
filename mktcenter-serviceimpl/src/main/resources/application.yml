@@ -10,7 +10,7 @@ spring:
   swagger:
     show: true
   application:
-    name: mktcenter
+    name: mktcenter-ljw
 #  security:
 #    enabled: false
 #    user:
@@ -95,6 +95,9 @@ feign:
     applet:
       name: applet
       path: applet.api
+    centercontrol:
+      name: centercontrol-test
+      path: centercontrol.api
 
 rocketmq:
   onsaddr: http://onsaddr-internet.aliyun.com/rocketmq/nsaddr4client-internet
