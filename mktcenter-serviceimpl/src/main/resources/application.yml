@@ -77,6 +77,9 @@ xxl:
 
 feign:
   client:
+    centercontrol:
+      name: centercontrol
+      path: centercontrol.api
     centerstage:
       name: centerstage
       path: centerstage.api
