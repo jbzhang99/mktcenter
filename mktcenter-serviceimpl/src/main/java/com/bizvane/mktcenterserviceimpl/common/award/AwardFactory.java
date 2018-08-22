@@ -1,6 +1,5 @@
 package com.bizvane.mktcenterserviceimpl.common.award;
 
-import com.bizvane.centercontrolservice.models.po.SysSmsConfigPo;
 import com.bizvane.centercontrolservice.rpc.SysSmsConfigServiceRpc;
 import com.bizvane.couponfacade.interfaces.SendCouponServiceFeign;
 import com.bizvane.couponfacade.models.vo.SendCouponBatchRequestVO;
@@ -15,7 +14,6 @@ import com.bizvane.messagefacade.models.vo.ActivityMessageVO;
 import com.bizvane.messagefacade.models.vo.MemberMessageVO;
 import com.bizvane.messagefacade.models.vo.SysSmsConfigVO;
 import com.bizvane.mktcenterservice.models.bo.AwardBO;
-import com.bizvane.mktcenterservice.models.vo.ActivityVO;
 import com.bizvane.mktcenterserviceimpl.common.constants.ResponseConstants;
 import com.bizvane.utils.responseinfo.ResponseData;
 import lombok.extern.slf4j.Slf4j;
@@ -52,8 +50,6 @@ public class AwardFactory {
 
     @Autowired
     private TemplateMessageServiceFeign templateMessageServiceFeign;
-    @Autowired
-    private SysSmsConfigServiceRpc sysSmsConfigServiceRpc;
     /**
      * 奖励券，单
      * @param bo

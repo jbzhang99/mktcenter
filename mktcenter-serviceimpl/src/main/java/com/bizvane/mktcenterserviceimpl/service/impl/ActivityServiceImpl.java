@@ -209,18 +209,20 @@ public class ActivityServiceImpl implements ActivityService {
                 ResponseData<CouponFindCouponCountResponseVO> couponFindCouponCountResponseVODate = couponQueryServiceFeign.findCouponCountBySendBusinessId(activityAnalysisCount.getMktActivityId(), CouponSendTypeEnum.getCouponSendTypeEnumByMktModuleCode(bo.getActivityType()).getCouponModuleCode(),activityAnalysisCount.getSysBrandId());
                 CouponFindCouponCountResponseVO couponFindCouponCountResponseVO = couponFindCouponCountResponseVODate.getData();
                 //券数量
-               activityAnalysisCount.setCouponSum(couponFindCouponCountResponseVO.getCouponSum());
+                activityAnalysisCount.setCouponSum(couponFindCouponCountResponseVO.getCouponSum());
                 //核销券数量
                 activityAnalysisCount.setCouponUsedSum(couponFindCouponCountResponseVO.getCouponUsedSum());
                 //收益
                 activityAnalysisCount.setMoney(couponFindCouponCountResponseVO.getMoney());
                 //核销率
-                // 创建一个数值格式化对象
-                NumberFormat numberFormat = NumberFormat.getInstance();
-                // 设置精确到小数点后2位
-                numberFormat.setMaximumFractionDigits(2);
-                String result = numberFormat.format((float)couponFindCouponCountResponseVO.getCouponUsedSum()/(float)couponFindCouponCountResponseVO.getCouponSum()*100);
-                activityAnalysisCount.setCouponUsedSumPercentage(result+"%");
+                if (null!=couponFindCouponCountResponseVO.getCouponUsedSum() && null!=couponFindCouponCountResponseVO.getCouponSum()) {
+                    // 创建一个数值格式化对象
+                    NumberFormat numberFormat = NumberFormat.getInstance();
+                    // 设置精确到小数点后2位
+                    numberFormat.setMaximumFractionDigits(2);
+                    String result = numberFormat.format((float) couponFindCouponCountResponseVO.getCouponUsedSum() / (float) couponFindCouponCountResponseVO.getCouponSum() * 100);
+                    activityAnalysisCount.setCouponUsedSumPercentage(result + "%");
+                }
 
             }
 
