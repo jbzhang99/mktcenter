@@ -256,7 +256,7 @@ public class ActivityUpgradeServiceImpl implements ActivityUpgradeService {
             }
         }
         //如果执行状态为执行中 就要发送消息
-        if(mktActivityPOWithBLOBs.getActivityStatus()==ActivityStatusEnum.ACTIVITY_STATUS_EXECUTING.getCode()){
+        if(!CollectionUtils.isEmpty(messageVOList) && mktActivityPOWithBLOBs.getActivityStatus()==ActivityStatusEnum.ACTIVITY_STATUS_EXECUTING.getCode()){
             //查询该会员下一个等级
             ResponseData<MbrLevelModel> MbrLevelModels = memberLevelApiService.queryOnLevel(Long.parseLong(activityVO.getMbrLevelCode()));
             MbrLevelModel  mbrLevel = MbrLevelModels.getData();
@@ -449,7 +449,7 @@ public class ActivityUpgradeServiceImpl implements ActivityUpgradeService {
             }
         }
         //如果执行状态为执行中 就要发送消息
-        if(mktActivityPOWithBLOBs.getActivityStatus()==ActivityStatusEnum.ACTIVITY_STATUS_EXECUTING.getCode()){
+        if(!CollectionUtils.isEmpty(messageVOList) && mktActivityPOWithBLOBs.getActivityStatus()==ActivityStatusEnum.ACTIVITY_STATUS_EXECUTING.getCode()){
             //查询该会员下一个等级
             ResponseData<MbrLevelModel> MbrLevelModels = memberLevelApiService.queryOnLevel(Long.parseLong(activityVO.getMbrLevelCode()));
             MbrLevelModel  mbrLevel = MbrLevelModels.getData();

@@ -104,8 +104,8 @@ public class ActivitySmartController {
     @PostMapping("addCouponActivity")
     public ResponseData<Integer> addCouponActivity(ActivitySmartVO vo, HttpServletRequest request){
         //获取操作人信息
-//        SysAccountPO stageUser = TokenUtils.getStageUser(request);
-        SysAccountPO stageUser = new SysAccountPO();
+        SysAccountPO stageUser = TokenUtils.getStageUser(request);
+        //SysAccountPO stageUser = new SysAccountPO();
         ResponseData<Integer> responseData = activitySmartService.addCouponActivity(vo, stageUser);
         return responseData;
     }

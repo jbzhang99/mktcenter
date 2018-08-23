@@ -245,7 +245,7 @@ public class ActivityOrderServiceImpl implements ActivityOrderService {
         }
         //发送模板消息和短信消息
         //如果执行状态为执行中 就要发送消息
-        if(mktActivityPOWithBLOBs.getActivityStatus()==ActivityStatusEnum.ACTIVITY_STATUS_EXECUTING.getCode()){
+        if(!CollectionUtils.isEmpty(messageVOList) && mktActivityPOWithBLOBs.getActivityStatus()==ActivityStatusEnum.ACTIVITY_STATUS_EXECUTING.getCode()){
             //查询对应的会员
             MemberInfoApiModel memberInfoModel= new MemberInfoApiModel();
             memberInfoModel.setBrandId(activityVO.getSysBrandId());
@@ -488,7 +488,7 @@ public class ActivityOrderServiceImpl implements ActivityOrderService {
         }
         //发送模板消息和短信消息
         //如果执行状态为执行中 就要发送消息
-        if(mktActivityPOWithBLOBs.getActivityStatus()==ActivityStatusEnum.ACTIVITY_STATUS_EXECUTING.getCode()){
+        if(!CollectionUtils.isEmpty(messageVOList) && mktActivityPOWithBLOBs.getActivityStatus()==ActivityStatusEnum.ACTIVITY_STATUS_EXECUTING.getCode()){
             //查询对应的会员
             MemberInfoApiModel memberInfoModel= new MemberInfoApiModel();
             memberInfoModel.setBrandId(activityVO.getSysBrandId());

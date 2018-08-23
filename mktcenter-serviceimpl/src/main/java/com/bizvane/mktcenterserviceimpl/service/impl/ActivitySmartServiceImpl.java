@@ -70,6 +70,8 @@ public class ActivitySmartServiceImpl implements ActivitySmartService {
 
     @Autowired
     private MemberInfoApiService memberInfoApiService;
+  /*  @Autowired
+    private MembersAdvancedSearchApiService MembersAdvancedSearchApiService;*/
 
     /**
      * 查询智能营销分组列表(方块)
@@ -560,13 +562,13 @@ public class ActivitySmartServiceImpl implements ActivitySmartService {
         }
 
         //立即执行
-        if(execute){
+      /*  if(execute){
             AwardBO awardBO = new AwardBO();
             //根据条件获取人，再遍历
             ResponseData<List<MemberInfoModel>> memberInfo = memberInfoApiService.getMemberInfo(new MemberInfoApiModel());
             awardBO.setMktType(MktSmartTypeEnum.SMART_TYPE_COUPON_BATCH.getCode());
             award.execute(awardBO);
-        }
+        }*/
 
         responseData.setMessage(ResponseConstants.SUCCESS_MSG);
         log.info("com.bizvane.mktcenterserviceimpl.service.impl.ActivitySmartServiceImpl.addCouponActivity result"+ JSON.toJSONString(responseData));
@@ -650,13 +652,13 @@ public class ActivitySmartServiceImpl implements ActivitySmartService {
         mktActivitySmartPOMapper.insertSelective(mktActivitySmartPO);
 
         //立即执行
-        if(execute){
+        /*if(execute){
             AwardBO awardBO = new AwardBO();
             //根据条件获取人，再遍历
             ResponseData<List<MemberInfoModel>> memberInfo = memberInfoApiService.getMemberInfo(new MemberInfoApiModel());
             awardBO.setMktType(MktSmartTypeEnum.SMART_TYPE_COUPON_BATCH.getCode());
             award.execute(awardBO);
-        }
+        }*/
 
         responseData.setMessage(ResponseConstants.SUCCESS_MSG);
         log.info("com.bizvane.mktcenterserviceimpl.service.impl.ActivitySmartServiceImpl.addIntegralActivity result"+ JSON.toJSONString(responseData));
@@ -750,7 +752,7 @@ public class ActivitySmartServiceImpl implements ActivitySmartService {
         mktMessagePOMapper.insertSelective(mktMessagePO);
 
         //立即执行
-        if(execute){
+      /*  if(execute){
             AwardBO awardBO = new AwardBO();
             //根据条件获取人，再遍历
 //            ResponseData<List<MemberInfoModel>> memberInfo = memberInfoApiService.getMemberInfo(new MemberInfoModel());
@@ -761,7 +763,7 @@ public class ActivitySmartServiceImpl implements ActivitySmartService {
             awardBO.setMktType(MktSmartTypeEnum.SMART_TYPE_SMS.getCode());
             awardBO.setSysSmsConfigVO(sysSmsConfigVO);
             award.execute(awardBO);
-        }
+        }*/
 
         responseData.setMessage(ResponseConstants.SUCCESS_MSG);
         log.info("com.bizvane.mktcenterserviceimpl.service.impl.ActivitySmartServiceImpl.addSmsActivity result"+ JSON.toJSONString(responseData));
@@ -848,6 +850,7 @@ public class ActivitySmartServiceImpl implements ActivitySmartService {
 
         //新增消息表
         MktMessagePO mktMessagePO = new MktMessagePO();
+        BeanUtils.copyProperties(messageVO,mktMessagePO);
         mktMessagePO.setBizType(BusinessTypeEnum.ACTIVITY_TYPE_ACTIVITY.getCode());
         mktMessagePO.setBizId(mktActivityId);
         mktMessagePO.setCreateDate(new Date());
@@ -856,12 +859,12 @@ public class ActivitySmartServiceImpl implements ActivitySmartService {
         mktMessagePOMapper.insertSelective(mktMessagePO);
 
         //立即执行
-        if(execute){
+     /*   if(execute){
             AwardBO awardBO = new AwardBO();
             //根据条件获取人，再遍历
             ResponseData<List<MemberInfoModel>> memberInfo = memberInfoApiService.getMemberInfo(new MemberInfoApiModel());
             award.execute(awardBO);
-        }
+        }*/
 
         responseData.setMessage(ResponseConstants.SUCCESS_MSG);
         log.info("com.bizvane.mktcenterserviceimpl.service.impl.ActivitySmartServiceImpl.addWxMessageActivity result"+ JSON.toJSONString(responseData));

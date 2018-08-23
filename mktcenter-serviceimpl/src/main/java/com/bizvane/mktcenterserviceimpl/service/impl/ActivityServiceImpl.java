@@ -5,11 +5,15 @@ import com.bizvane.centerstageservice.rpc.SysCheckServiceRpc;
 import com.bizvane.couponfacade.enums.SendTypeEnum;
 import com.bizvane.couponfacade.interfaces.CouponQueryServiceFeign;
 import com.bizvane.couponfacade.models.vo.CouponFindCouponCountResponseVO;
+import com.bizvane.members.facade.es.vo.MembersInfoSearchVo;
 import com.bizvane.members.facade.models.IntegralRecordModel;
 import com.bizvane.members.facade.models.MemberInfoModel;
 import com.bizvane.members.facade.service.api.IntegralRecordApiService;
 import com.bizvane.members.facade.service.api.MemberInfoApiService;
+import com.bizvane.members.facade.service.api.MembersAdvancedSearchApiService;
 import com.bizvane.members.facade.vo.MemberInfoApiModel;
+import com.bizvane.members.facade.vo.MemberInfoVo;
+import com.bizvane.members.facade.vo.PageVo;
 import com.bizvane.messagefacade.models.vo.MemberMessageVO;
 import com.bizvane.messagefacade.models.vo.SysSmsConfigVO;
 import com.bizvane.mktcenterservice.interfaces.ActivityService;
@@ -62,6 +66,8 @@ public class ActivityServiceImpl implements ActivityService {
     private IntegralRecordApiService integralRecordApiService;
     @Autowired
     private Award award;
+    @Autowired
+    private MembersAdvancedSearchApiService membersAdvancedSearchApiService;
     /**
      * 禁用/启用活动
      * @param vo
@@ -115,46 +121,51 @@ public class ActivityServiceImpl implements ActivityService {
                 //将活动状态变更为执行中 并且发送消息
                 bs.setActivityStatus(ActivityStatusEnum.ACTIVITY_STATUS_EXECUTING.getCode());
                 int i = mktActivityPOMapper.updateByPrimaryKeySelective(bs);
-                //发送模板消息TODO
                 //查询消息集合
                 MktMessagePOExample example = new MktMessagePOExample();
                 example.createCriteria().andBizIdEqualTo(po.getBusinessId()).andValidEqualTo(true);
                 List<MktMessagePO> listMktMessage = mktMessagePOMapper.selectByExample(example);
-                //查询对应的会员
-                MemberInfoApiModel memberInfoModel= new MemberInfoApiModel();
-                memberInfoModel.setBrandId(activityPO.getSysBrandId());
-                memberInfoModel.setLevelId(Long.parseLong(activityPO.getMbrLevelCode()));
-                ResponseData<List<MemberInfoModel>> memberInfoModelLists =memberInfoApiService.getMemberInfo(memberInfoModel);
-                List<MemberInfoModel> memberInfoModelList = memberInfoModelLists.getData();
-                //循环发送
-                if (!org.springframework.util.CollectionUtils.isEmpty(memberInfoModelList)){
-                    for (MemberInfoModel memberInfo:memberInfoModelList) {
-                        //循环信息类然后发送
-                        for (MktMessagePO mktMessagePO:listMktMessage) {
-                            AwardBO awardBO = new AwardBO();
-                            if (mktMessagePO.getMsgType().equals("1")){
-                                //发送微信模板消息
-                                MemberMessageVO memberMessageVO = new MemberMessageVO();
-                                memberMessageVO.setMemberCode(memberInfo.getMemberCode());
-                                memberMessageVO.setActivityName(activityPO.getActivityName());
-                                memberMessageVO.setActivityDate(activityPO.getStartTime());
-                                memberMessageVO.setActivityInterests(mktMessagePO.getMsgContent());
-                                awardBO.setMemberMessageVO(memberMessageVO);
-                                awardBO.setMktType(MktSmartTypeEnum.SMART_TYPE_WXMESSAGE.getCode());
-                                award.execute(awardBO);
-                            }
-                            if (mktMessagePO.getMsgType().equals("2")){
-                                SysSmsConfigVO  sysSmsConfigVO = new SysSmsConfigVO();
-                                sysSmsConfigVO.setPhone(memberInfo.getPhone());
-                                sysSmsConfigVO.setMsgContent(mktMessagePO.getMsgContent());
-                                sysSmsConfigVO.setSysBrandId(activityPO.getSysBrandId());
-                                awardBO.setSysSmsConfigVO(sysSmsConfigVO);
-                                awardBO.setMktType(MktSmartTypeEnum.SMART_TYPE_SMS.getCode());
-                                //发送短信消息
-                                award.execute(awardBO);
+                if(!CollectionUtils.isEmpty(listMktMessage) ){
+                    //分页查询会员信息发送短信
+                    MembersInfoSearchVo membersInfoSearchVo = new MembersInfoSearchVo();
+                    PageVo pageVo = new PageVo();
+                    pageVo.setPageNum(1);
+                    pageVo.setPageSize(10000);
+                    membersInfoSearchVo.setCardStatus(1);
+                    ResponseData<com.bizvane.utils.responseinfo.PageInfo<MemberInfoVo>> memberInfoVoPage = membersAdvancedSearchApiService.search(membersInfoSearchVo,pageVo);
+                    //循环分页条件查询会员信息发送短信信息
+                    for (int a =1;i<=memberInfoVoPage.getData().getPages();a++){
+                        pageVo.setPageNum(a);
+                        ResponseData<com.bizvane.utils.responseinfo.PageInfo<MemberInfoVo>> memberInfoVoPages = membersAdvancedSearchApiService.search(membersInfoSearchVo,pageVo);
+                        List<MemberInfoVo> memberInfoModelList = memberInfoVoPages.getData().getList();
+                        //循环发送
+                        if (!org.springframework.util.CollectionUtils.isEmpty(memberInfoModelList)){
+                            for (MemberInfoModel memberInfo:memberInfoModelList) {
+                                //循环信息类然后发送
+                                for (MktMessagePO mktMessagePO:listMktMessage) {
+                                    AwardBO awardBO = new AwardBO();
+                                    if (mktMessagePO.getMsgType().equals("1")){
+                                        //发送微信模板消息
+                                        MemberMessageVO memberMessageVO = new MemberMessageVO();
+                                        memberMessageVO.setMemberCode(memberInfo.getMemberCode());
+                                        awardBO.setMemberMessageVO(memberMessageVO);
+                                        awardBO.setMktType(MktSmartTypeEnum.SMART_TYPE_WXMESSAGE.getCode());
+                                        award.execute(awardBO);
+                                    }
+                                    if (mktMessagePO.getMsgType().equals("2")){
+                                        SysSmsConfigVO sysSmsConfigVO = new SysSmsConfigVO();
+                                        sysSmsConfigVO.setPhone(memberInfo.getPhone());
+                                        awardBO.setSysSmsConfigVO(sysSmsConfigVO);
+                                        awardBO.setMktType(MktSmartTypeEnum.SMART_TYPE_SMS.getCode());
+                                        //发送短信消息
+                                        award.execute(awardBO);
+                                    }
+                                }
                             }
                         }
                     }
+                    //查询对应的会员  TODO 发送微信模板消息
+
                 }
 
             }
@@ -234,28 +245,29 @@ public class ActivityServiceImpl implements ActivityService {
         //积分总数
         ctivityAnalysisBO.setPointsSumTotal(ctivityAnalysis.getPointsSumTotal());
         //积分 合计 券收益合计
-        String activityType="";
-        if(bo.getActivityType()== ActivityTypeEnum.ACTIVITY_TYPE_REGISGER.getCode()){
-            activityType = SendTypeEnum.SEND_COUPON_ONLINE_ACTIVITY.getCode();
-        }
-        if(bo.getActivityType()== ActivityTypeEnum.ACTIVITY_TYPE_UPGRADE.getCode()){
-            activityType = SendTypeEnum.SEND_COUPON_UPGRADE_ACTIVITY.getCode();
-        }
-        if(bo.getActivityType()== ActivityTypeEnum.ACTIVITY_TYPE_ORDER.getCode()){
-            activityType = SendTypeEnum.SEND_COUPON_COUSUME_ACTIVITY.getCode();
-        }
-        if(bo.getActivityType()== ActivityTypeEnum.ACTIVITY_TYPE_SIGNIN.getCode()){
-            activityType = SendTypeEnum.SEND_COUPON_SIGN_ACTIVITY.getCode();
-        }
-        if(bo.getActivityType()== ActivityTypeEnum.ACTIVITY_TYPE_BIRTHDAY.getCode()){
-            activityType = SendTypeEnum.SEND_COUPON_BIRTH_ACTIVITY.getCode();
-        }
-        if(bo.getActivityType()== ActivityTypeEnum.ACTIVITY_TYPE_QRCODE.getCode()){
-            activityType = SendTypeEnum.SEND_COUPON_RECEIVE_ACTIVITY.getCode();
-        }
-        if(bo.getActivityType()== ActivityTypeEnum.ACTIVITY_TYPE_MANUAL.getCode()){
-            activityType = SendTypeEnum.SEND_COUPON_RECEIVE_ACTIVITY.getCode();
-        }
+        ActivityConvertCouponTypeEnum activityConvertCouponTypeEnumByCode = ActivityConvertCouponTypeEnum.getActivityConvertCouponTypeEnumByCode(bo.getActivityType());
+        String activityType = activityConvertCouponTypeEnumByCode.getCouponCode();
+//        if(bo.getActivityType()== ){
+//            activityType = SendTypeEnum.SEND_COUPON_ONLINE_ACTIVITY.getCode();
+//        }
+//        if(bo.getActivityType()== ActivityTypeEnum.ACTIVITY_TYPE_UPGRADE.getCode()){
+//            activityType = SendTypeEnum.SEND_COUPON_UPGRADE_ACTIVITY.getCode();
+//        }
+//        if(bo.getActivityType()== ActivityTypeEnum.ACTIVITY_TYPE_ORDER.getCode()){
+//            activityType = SendTypeEnum.SEND_COUPON_COUSUME_ACTIVITY.getCode();
+//        }
+//        if(bo.getActivityType()== ActivityTypeEnum.ACTIVITY_TYPE_SIGNIN.getCode()){
+//            activityType = SendTypeEnum.SEND_COUPON_SIGN_ACTIVITY.getCode();
+//        }
+//        if(bo.getActivityType()== ActivityTypeEnum.ACTIVITY_TYPE_BIRTHDAY.getCode()){
+//            activityType = SendTypeEnum.SEND_COUPON_BIRTH_ACTIVITY.getCode();
+//        }
+//        if(bo.getActivityType()== ActivityTypeEnum.ACTIVITY_TYPE_QRCODE.getCode()){
+//            activityType = SendTypeEnum.SEND_COUPON_RECEIVE_ACTIVITY.getCode();
+//        }
+//        if(bo.getActivityType()== ActivityTypeEnum.ACTIVITY_TYPE_MANUAL.getCode()){
+//            activityType = SendTypeEnum.SEND_COUPON_RECEIVE_ACTIVITY.getCode();
+//        }
         //查询券合计
         ResponseData<CouponFindCouponCountResponseVO> couponFindCouponCountVO =  couponQueryServiceFeign.getCountBySendType(activityType,bo.getSysBrandId());
         CouponFindCouponCountResponseVO couponFindCoupon = couponFindCouponCountVO.getData();
