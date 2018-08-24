@@ -266,12 +266,11 @@ public class ActivityUpgradeServiceImpl implements ActivityUpgradeService {
             MbrLevelModel  mbrLevel = MbrLevelModels.getData();
             //分页查询会员信息发送短信
             MembersInfoSearchVo membersInfoSearchVo = new MembersInfoSearchVo();
-            PageVo pageVo = new PageVo();
-            pageVo.setPageNum(1);
-            pageVo.setPageSize(10000);
+            membersInfoSearchVo.setPageNumber(1);
+            membersInfoSearchVo.setPageSize(10000);
             membersInfoSearchVo.setBrandId(activityVO.getSysBrandId());
             membersInfoSearchVo.setLevelId(mbrLevel.getMbrLevelId());
-            memberMessage.getMemberList(messageVOList, membersInfoSearchVo, pageVo);
+            memberMessage.getMemberList(messageVOList, membersInfoSearchVo);
         }
         //结束
         log.info("创建升级活动结束");
@@ -639,12 +638,11 @@ public class ActivityUpgradeServiceImpl implements ActivityUpgradeService {
                     MbrLevelModel  mbrLevel = mbrLevelModels.getData();
                     //分页查询会员信息发送短信
                     MembersInfoSearchVo membersInfoSearchVo = new MembersInfoSearchVo();
-                    PageVo pageVo = new PageVo();
-                    pageVo.setPageNum(1);
-                    pageVo.setPageSize(10000);
+                    membersInfoSearchVo.setPageNumber(1);
+                    membersInfoSearchVo.setPageSize(10000);
                     membersInfoSearchVo.setBrandId(activityPO.getSysBrandId());
                     membersInfoSearchVo.setLevelId(mbrLevel.getMbrLevelId());
-                    memberMessage.getMemberList(listMktMessage, membersInfoSearchVo, pageVo);
+                    memberMessage.getMemberList(listMktMessage, membersInfoSearchVo);
                 }
 
             }

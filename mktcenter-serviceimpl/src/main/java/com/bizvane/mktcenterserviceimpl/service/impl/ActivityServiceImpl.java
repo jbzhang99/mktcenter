@@ -24,6 +24,7 @@ import com.bizvane.mktcenterservice.models.po.*;
 import com.bizvane.mktcenterservice.models.vo.ActivityVO;
 import com.bizvane.mktcenterservice.models.vo.PageForm;
 import com.bizvane.mktcenterserviceimpl.common.award.Award;
+import com.bizvane.mktcenterserviceimpl.common.award.MemberMessageSend;
 import com.bizvane.mktcenterserviceimpl.common.enums.*;
 import com.bizvane.mktcenterserviceimpl.mappers.MktActivityPOMapper;
 import com.bizvane.mktcenterserviceimpl.mappers.MktActivityRegisterPOMapper;
@@ -68,6 +69,8 @@ public class ActivityServiceImpl implements ActivityService {
     private Award award;
     @Autowired
     private MembersAdvancedSearchApiService membersAdvancedSearchApiService;
+    @Autowired
+    private MemberMessageSend memberMessage;
     /**
      * 禁用/启用活动
      * @param vo
@@ -128,43 +131,11 @@ public class ActivityServiceImpl implements ActivityService {
                 if(!CollectionUtils.isEmpty(listMktMessage) ){
                     //分页查询会员信息发送短信
                     MembersInfoSearchVo membersInfoSearchVo = new MembersInfoSearchVo();
-                    PageVo pageVo = new PageVo();
-                    pageVo.setPageNum(1);
-                    pageVo.setPageSize(10000);
+                    membersInfoSearchVo.setPageNumber(1);
+                    membersInfoSearchVo.setPageSize(10000);
                     membersInfoSearchVo.setCardStatus(1);
                     membersInfoSearchVo.setBrandId(activityPO.getSysBrandId());
-                    ResponseData<com.bizvane.utils.responseinfo.PageInfo<MemberInfoVo>> memberInfoVoPage = membersAdvancedSearchApiService.search(membersInfoSearchVo,pageVo);
-                    //循环分页条件查询会员信息发送短信信息
-                    for (int a =1;i<=memberInfoVoPage.getData().getPages();a++){
-                        pageVo.setPageNum(a);
-                        ResponseData<com.bizvane.utils.responseinfo.PageInfo<MemberInfoVo>> memberInfoVoPages = membersAdvancedSearchApiService.search(membersInfoSearchVo,pageVo);
-                        List<MemberInfoVo> memberInfoModelList = memberInfoVoPages.getData().getList();
-                        //循环发送
-                        if (!org.springframework.util.CollectionUtils.isEmpty(memberInfoModelList)){
-                            for (MemberInfoModel memberInfo:memberInfoModelList) {
-                                //循环信息类然后发送
-                                for (MktMessagePO mktMessagePO:listMktMessage) {
-                                    AwardBO awardBO = new AwardBO();
-                                    if (mktMessagePO.getMsgType().equals("1")){
-                                        //发送微信模板消息
-                                        MemberMessageVO memberMessageVO = new MemberMessageVO();
-                                        memberMessageVO.setMemberCode(memberInfo.getMemberCode());
-                                        awardBO.setMemberMessageVO(memberMessageVO);
-                                        awardBO.setMktType(MktSmartTypeEnum.SMART_TYPE_WXMESSAGE.getCode());
-                                        award.execute(awardBO);
-                                    }
-                                    if (mktMessagePO.getMsgType().equals("2")){
-                                        SysSmsConfigVO sysSmsConfigVO = new SysSmsConfigVO();
-                                        sysSmsConfigVO.setPhone(memberInfo.getPhone());
-                                        awardBO.setSysSmsConfigVO(sysSmsConfigVO);
-                                        awardBO.setMktType(MktSmartTypeEnum.SMART_TYPE_SMS.getCode());
-                                        //发送短信消息
-                                        award.execute(awardBO);
-                                    }
-                                }
-                            }
-                        }
-                    }
+                    memberMessage.getMemberList(listMktMessage, membersInfoSearchVo);
                     //查询对应的会员  TODO 发送微信模板消息
 
                 }

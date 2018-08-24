@@ -256,14 +256,13 @@ public class ActivityOrderServiceImpl implements ActivityOrderService {
 
             //分页查询会员信息发送短信
             MembersInfoSearchVo membersInfoSearchVo = new MembersInfoSearchVo();
-            PageVo pageVo = new PageVo();
-            pageVo.setPageNum(1);
-            pageVo.setPageSize(10000);
+            membersInfoSearchVo.setPageNumber(1);
+            membersInfoSearchVo.setPageSize(10000);
             if (!activityVO.getMbrLevelCode().equals("0")){
                 membersInfoSearchVo.setLevelId(Long.parseLong(activityVO.getMbrLevelCode()));
             }
             membersInfoSearchVo.setBrandId(activityVO.getSysBrandId());
-            memberMessage.getMemberList(messageVOList, membersInfoSearchVo, pageVo);
+            memberMessage.getMemberList(messageVOList, membersInfoSearchVo);
 
         }
         log.info("消费活动创建结束");
@@ -561,14 +560,13 @@ public class ActivityOrderServiceImpl implements ActivityOrderService {
 
                     //分页查询会员信息发送短信
                     MembersInfoSearchVo membersInfoSearchVo = new MembersInfoSearchVo();
-                    PageVo pageVo = new PageVo();
-                    pageVo.setPageNum(1);
-                    pageVo.setPageSize(10000);
+                    membersInfoSearchVo.setPageNumber(1);
+                    membersInfoSearchVo.setPageSize(10000);
                     if (!activityPO.getMbrLevelCode().equals("0")){
                         membersInfoSearchVo.setLevelId(Long.parseLong(activityPO.getMbrLevelCode()));
                     }
                     membersInfoSearchVo.setBrandId(activityPO.getSysBrandId());
-                    memberMessage.getMemberList(listMktMessage, membersInfoSearchVo, pageVo);
+                    memberMessage.getMemberList(listMktMessage, membersInfoSearchVo);
 
                 }
 

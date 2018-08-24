@@ -20,6 +20,7 @@ import org.springframework.util.StringUtils;
 import java.util.List;
 
 /**
+ * 查询会员发送消息
  * Created by agan on 2018/8/24.
  */
 @Component
@@ -28,12 +29,12 @@ public class MemberMessageSend {
     private MembersAdvancedSearchApiService membersAdvancedSearchApiService;
     @Autowired
     private Award award;
-    public void getMemberList(List<MktMessagePO> messageVOList, MembersInfoSearchVo membersInfoSearchVo, PageVo pageVo) {
-        ResponseData<PageInfo<MemberInfoVo>> memberInfoVoPage = membersAdvancedSearchApiService.search(membersInfoSearchVo,pageVo);
+    public void getMemberList(List<MktMessagePO> messageVOList, MembersInfoSearchVo membersInfoSearchVo) {
+        ResponseData<PageInfo<MemberInfoVo>> memberInfoVoPage = membersAdvancedSearchApiService.search(membersInfoSearchVo);
         //循环分页条件查询会员信息发送短信信息
         for (int a =1;a<=memberInfoVoPage.getData().getPages();a++){
-            pageVo.setPageNum(a);
-            ResponseData<com.bizvane.utils.responseinfo.PageInfo<MemberInfoVo>> memberInfoVoPages = membersAdvancedSearchApiService.search(membersInfoSearchVo,pageVo);
+            membersInfoSearchVo.setPageNumber(a);
+            ResponseData<com.bizvane.utils.responseinfo.PageInfo<MemberInfoVo>> memberInfoVoPages = membersAdvancedSearchApiService.search(membersInfoSearchVo);
             List<MemberInfoVo> memberInfoModelList = memberInfoVoPages.getData().getList();
             //循环发送
             if (!CollectionUtils.isEmpty(memberInfoModelList)){
