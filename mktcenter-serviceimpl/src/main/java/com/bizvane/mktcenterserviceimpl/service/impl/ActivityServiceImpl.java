@@ -132,6 +132,7 @@ public class ActivityServiceImpl implements ActivityService {
                     pageVo.setPageNum(1);
                     pageVo.setPageSize(10000);
                     membersInfoSearchVo.setCardStatus(1);
+                    membersInfoSearchVo.setBrandId(activityPO.getSysBrandId());
                     ResponseData<com.bizvane.utils.responseinfo.PageInfo<MemberInfoVo>> memberInfoVoPage = membersAdvancedSearchApiService.search(membersInfoSearchVo,pageVo);
                     //循环分页条件查询会员信息发送短信信息
                     for (int a =1;i<=memberInfoVoPage.getData().getPages();a++){
