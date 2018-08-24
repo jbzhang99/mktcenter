@@ -16,10 +16,12 @@ import com.bizvane.mktcenterservice.models.po.MktActivityPOExample;
 import com.bizvane.mktcenterservice.models.po.MktCouponPO;
 import com.bizvane.mktcenterservice.models.po.MktCouponPOExample;
 import com.bizvane.mktcenterservice.models.vo.ActivityVO;
+import com.bizvane.mktcenterserviceimpl.common.award.MemberMessageSend;
 import com.bizvane.mktcenterserviceimpl.common.enums.ActivityTypeEnum;
 import com.bizvane.mktcenterserviceimpl.mappers.MktActivityBirthdayPOMapper;
 import com.bizvane.mktcenterserviceimpl.mappers.MktActivityPOMapper;
 import com.bizvane.mktcenterserviceimpl.mappers.MktCouponPOMapper;
+import com.bizvane.utils.responseinfo.PageInfo;
 import com.bizvane.utils.responseinfo.ResponseData;
 import com.xxl.job.core.biz.model.ReturnT;
 import com.xxl.job.core.handler.IJobHandler;
@@ -39,17 +41,7 @@ public class EveryDayActivityJobHandler extends IJobHandler {
     @Autowired
     private MktActivityBirthdayPOMapper mktActivityBirthdayPOMapper;
     @Autowired
-    private IntegralRecordApiService integralRecordApiService;
-    @Autowired
-    private MktCouponPOMapper mktCouponPOMapper;
-    @Autowired
-    private SendCouponServiceFeign sendCouponServiceFeign;
-    @Autowired
-    private MemberInfoApiService memberInfoApiService;
-    @Autowired
-    private CouponEntityServiceFeign couponEntityServiceFeign;
-    @Autowired
-    private ActivityBirthdayService activityBirthdayService;
+    private MemberMessageSend memberMessage;
     @Override
     public ReturnT<String> execute(String param) throws Exception {
         System.out.println("job执行参数 "+param);
@@ -59,24 +51,11 @@ public class EveryDayActivityJobHandler extends IJobHandler {
         ActivityVO vo = new ActivityVO();
         vo.setActivityType(ActivityTypeEnum.ACTIVITY_TYPE_BIRTHDAY.getCode());
         List<ActivityVO> activityBirthdayList = mktActivityBirthdayPOMapper.getActivityBirthdayList(vo);
-            for (ActivityVO activityBirthday:activityBirthdayList) {
-                //根据品牌id 会员等级 会员范围  时间周期 查询会员信息 循环
-                //查询对应的会员
-                MemberInfoApiModel memberInfoModel= new MemberInfoApiModel();
-                memberInfoModel.setBrandId(activityBirthday.getSysBrandId());
-                if (!activityBirthday.getMbrLevelCode().equals("0")){
-                    memberInfoModel.setLevelId(Long.parseLong(activityBirthday.getMbrLevelCode()));
-                }
-                memberInfoModel.setBirthdayLine(activityBirthday.getDaysAhead());
-                memberInfoModel.setMemberScope(activityBirthday.getMemberType().toString());
-                ResponseData<List<MemberInfoModel>> memberInfoModelLists =memberInfoApiService.getMemberInfo(memberInfoModel);
-                List<MemberInfoModel> memberInfoModelList = memberInfoModelLists.getData();
-                activityBirthdayService.birthdayReward(activityBirthday,memberInfoModelList);
-
-            }
+        memberMessage.sendBirthdayCoupon(activityBirthdayList);
         returnT.setCode(0);
         returnT.setContent("活动执行完毕");
         returnT.setMsg("success");
         return returnT;
     }
+
 }

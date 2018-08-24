@@ -1,9 +1,16 @@
 package com.bizvane.mktcenterserviceimpl.service.impl;
 
 import com.alibaba.fastjson.JSON;
+import com.bizvane.couponfacade.models.vo.SendCouponSimpleRequestVO;
+import com.bizvane.members.facade.enums.IntegralChangeTypeEnum;
+import com.bizvane.members.facade.es.vo.MembersInfoSearchVo;
+import com.bizvane.members.facade.models.IntegralRecordModel;
 import com.bizvane.members.facade.models.MemberInfoModel;
 import com.bizvane.members.facade.service.api.MemberInfoApiService;
+import com.bizvane.members.facade.service.api.MembersAdvancedSearchApiService;
 import com.bizvane.members.facade.vo.MemberInfoApiModel;
+import com.bizvane.members.facade.vo.MemberInfoVo;
+import com.bizvane.messagefacade.models.vo.MemberMessageVO;
 import com.bizvane.messagefacade.models.vo.SysSmsConfigVO;
 import com.bizvane.mktcenterservice.interfaces.ActivitySmartService;
 import com.bizvane.mktcenterservice.models.bo.ActivitySmartBO;
@@ -13,6 +20,7 @@ import com.bizvane.mktcenterservice.models.vo.ActivitySmartVO;
 import com.bizvane.mktcenterservice.models.vo.MessageVO;
 import com.bizvane.mktcenterservice.models.vo.PageForm;
 import com.bizvane.mktcenterserviceimpl.common.award.Award;
+import com.bizvane.mktcenterserviceimpl.common.award.MemberMessageSend;
 import com.bizvane.mktcenterserviceimpl.common.constants.ActivityConstants;
 import com.bizvane.mktcenterserviceimpl.common.constants.ResponseConstants;
 import com.bizvane.mktcenterserviceimpl.common.constants.SystemConstants;
@@ -70,8 +78,10 @@ public class ActivitySmartServiceImpl implements ActivitySmartService {
 
     @Autowired
     private MemberInfoApiService memberInfoApiService;
-  /*  @Autowired
-    private MembersAdvancedSearchApiService MembersAdvancedSearchApiService;*/
+    @Autowired
+    private MembersAdvancedSearchApiService membersAdvancedSearchApiService;
+    @Autowired
+    private MemberMessageSend memberMessageSend;
 
     /**
      * 查询智能营销分组列表(方块)
@@ -562,18 +572,17 @@ public class ActivitySmartServiceImpl implements ActivitySmartService {
         }
 
         //立即执行
-      /*  if(execute){
-            AwardBO awardBO = new AwardBO();
-            //根据条件获取人，再遍历
-            ResponseData<List<MemberInfoModel>> memberInfo = memberInfoApiService.getMemberInfo(new MemberInfoApiModel());
-            awardBO.setMktType(MktSmartTypeEnum.SMART_TYPE_COUPON_BATCH.getCode());
-            award.execute(awardBO);
-        }*/
-
+        if(execute) {
+            MembersInfoSearchVo membersInfoSearchVo = new MembersInfoSearchVo();
+            membersInfoSearchVo.setPageNumber(1);
+            membersInfoSearchVo.setPageSize(1000);
+            memberMessageSend.sendMemberCoupon(vo, membersInfoSearchVo);
+        }
         responseData.setMessage(ResponseConstants.SUCCESS_MSG);
         log.info("com.bizvane.mktcenterserviceimpl.service.impl.ActivitySmartServiceImpl.addCouponActivity result"+ JSON.toJSONString(responseData));
         return responseData;
     }
+
 
     /**
      * 对某个智能营销组创建任务
@@ -652,18 +661,20 @@ public class ActivitySmartServiceImpl implements ActivitySmartService {
         mktActivitySmartPOMapper.insertSelective(mktActivitySmartPO);
 
         //立即执行
-        /*if(execute){
-            AwardBO awardBO = new AwardBO();
+        if(execute){
             //根据条件获取人，再遍历
-            ResponseData<List<MemberInfoModel>> memberInfo = memberInfoApiService.getMemberInfo(new MemberInfoApiModel());
-            awardBO.setMktType(MktSmartTypeEnum.SMART_TYPE_COUPON_BATCH.getCode());
-            award.execute(awardBO);
-        }*/
+            MembersInfoSearchVo membersInfoSearchVo = new MembersInfoSearchVo();
+            membersInfoSearchVo.setPageNumber(1);
+            membersInfoSearchVo.setPageSize(1000);
+            memberMessageSend.sendMemberPoints(vo, activityCode, membersInfoSearchVo);
+
+        }
 
         responseData.setMessage(ResponseConstants.SUCCESS_MSG);
         log.info("com.bizvane.mktcenterserviceimpl.service.impl.ActivitySmartServiceImpl.addIntegralActivity result"+ JSON.toJSONString(responseData));
         return responseData;
     }
+
 
     /**
      * 对某个智能营销组创建任务
@@ -752,23 +763,18 @@ public class ActivitySmartServiceImpl implements ActivitySmartService {
         mktMessagePOMapper.insertSelective(mktMessagePO);
 
         //立即执行
-      /*  if(execute){
-            AwardBO awardBO = new AwardBO();
-            //根据条件获取人，再遍历
-//            ResponseData<List<MemberInfoModel>> memberInfo = memberInfoApiService.getMemberInfo(new MemberInfoModel());
-            //构建短信发送对象
-            SysSmsConfigVO sysSmsConfigVO = new SysSmsConfigVO();
-            sysSmsConfigVO.setPhone("17621885377");
-            sysSmsConfigVO.setMsgContent(messageVO.getMsgContent());
-            awardBO.setMktType(MktSmartTypeEnum.SMART_TYPE_SMS.getCode());
-            awardBO.setSysSmsConfigVO(sysSmsConfigVO);
-            award.execute(awardBO);
-        }*/
+        if(execute){
+            MembersInfoSearchVo membersInfoSearchVo = new MembersInfoSearchVo();
+            membersInfoSearchVo.setPageNumber(1);
+            membersInfoSearchVo.setPageSize(1000);
+            memberMessageSend.sendShortMessage(mktMessagePO, membersInfoSearchVo);
+        }
 
         responseData.setMessage(ResponseConstants.SUCCESS_MSG);
         log.info("com.bizvane.mktcenterserviceimpl.service.impl.ActivitySmartServiceImpl.addSmsActivity result"+ JSON.toJSONString(responseData));
         return responseData;
     }
+
 
     /**
      * 对某个智能营销组创建任务
@@ -859,12 +865,12 @@ public class ActivitySmartServiceImpl implements ActivitySmartService {
         mktMessagePOMapper.insertSelective(mktMessagePO);
 
         //立即执行
-     /*   if(execute){
-            AwardBO awardBO = new AwardBO();
-            //根据条件获取人，再遍历
-            ResponseData<List<MemberInfoModel>> memberInfo = memberInfoApiService.getMemberInfo(new MemberInfoApiModel());
-            award.execute(awardBO);
-        }*/
+        if(execute){
+            MembersInfoSearchVo membersInfoSearchVo = new MembersInfoSearchVo();
+            membersInfoSearchVo.setPageNumber(1);
+            membersInfoSearchVo.setPageSize(1000);
+            memberMessageSend.sendWxMessage(mktMessagePO, membersInfoSearchVo);
+        }
 
         responseData.setMessage(ResponseConstants.SUCCESS_MSG);
         log.info("com.bizvane.mktcenterserviceimpl.service.impl.ActivitySmartServiceImpl.addWxMessageActivity result"+ JSON.toJSONString(responseData));
