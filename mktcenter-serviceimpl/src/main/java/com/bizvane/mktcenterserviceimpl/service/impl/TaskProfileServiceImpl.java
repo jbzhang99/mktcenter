@@ -32,9 +32,11 @@ import com.bizvane.mktcenterserviceimpl.common.utils.TimeUtils;
 import com.bizvane.mktcenterserviceimpl.mappers.*;
 //import com.bizvane.utils.commonutils.PageForm;
 import com.bizvane.utils.enumutils.SysResponseEnum;
+
 import com.bizvane.utils.responseinfo.ResponseData;
 import com.bizvane.utils.tokens.SysAccountPO;
 import com.github.pagehelper.PageHelper;
+
 import com.github.pagehelper.PageInfo;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
@@ -288,13 +290,13 @@ public class TaskProfileServiceImpl implements TaskProfileService {
     public ResponseData sendMsg(Long brandId,List<MktMessagePO> list){
         ResponseData responseData = new ResponseData();
 
-        //获取会员信息
+        /*//获取会员信息
 
         MemberInfoApiModel memberInfoModel = new MemberInfoApiModel();
         memberInfoModel.setBrandId(brandId);
         memberInfoModel.setValid(1);
-        ResponseData<List<MemberInfoModel>> memberInfo =memberInfoApiService.getMemberInfo(memberInfoModel);
-        List<MemberInfoModel> memberInfoModelList = memberInfo.getData();
+        ResponseData<PageInfo<MemberInfoModel>> memberInfo =memberInfoApiService.getMemberInfo(memberInfoModel);
+        PageInfo<MemberInfoModel> memberInfoModelList = memberInfo.getData();
 
         //创建AwardBO对象
         AwardBO awardBO = new AwardBO();
@@ -322,7 +324,7 @@ public class TaskProfileServiceImpl implements TaskProfileService {
             }
         }
 
-
+*/
         return responseData;
     }
 

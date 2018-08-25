@@ -507,7 +507,7 @@ public class TaskShareServiceImpl implements TaskShareService {
     public ResponseData sendMsg(Long brandId,List<MktMessagePO> list){
         ResponseData responseData = new ResponseData();
 
-        //获取会员信息
+        /*//获取会员信息
 
         MemberInfoApiModel memberInfoModel = new MemberInfoApiModel();
         memberInfoModel.setBrandId(brandId);
@@ -550,7 +550,7 @@ public class TaskShareServiceImpl implements TaskShareService {
                 }
             }
         }
-
+*/
 
         return responseData;
     }

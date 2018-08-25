@@ -527,31 +527,31 @@ public class TaskServiceImpl implements TaskService {
     }
 
     /**
-     * 查询公司下的所有会员
+     * 查询公司下的所有会员  todo  注释掉
      */
     @Override
     public List<MemberInfoModel> getCompanyMemebers(Long sysCompanyId) {
         MemberInfoApiModel members = new MemberInfoApiModel();
         members.setCompanyId(sysCompanyId);
-        ResponseData<List<MemberInfoModel>> memberInfo = memberInfoApiService.getMemberInfo(members);
-        List<MemberInfoModel> list = memberInfo.getData();
-        return list;
+       /* ResponseData<List<MemberInfoModel>> memberInfo = memberInfoApiService.getMemberInfo(members);
+        List<MemberInfoModel> list = memberInfo.getData();*/
+        return null;//list;
 
     }
     /**
-     * 查询公司下的某一会员的详情
+     * 查询公司下的某一会员的详情 todo  注释掉不报错
      */
     @Override
     public MemberInfoModel getCompanyMemeberDetail(String  memberCode) {
         MemberInfoApiModel members = new MemberInfoApiModel();
         members.setMemberCode(memberCode);
-        ResponseData<List<MemberInfoModel>> memberInfo = memberInfoApiService.getMemberInfo(members);
+       /* ResponseData<List<MemberInfoModel>> memberInfo = memberInfoApiService.getMemberInfo(members);
         List<MemberInfoModel> list = memberInfo.getData();
         MemberInfoModel memberInfoModel=null;
         if (CollectionUtils.isNotEmpty(list)){
             memberInfoModel=list.get(0);
-        }
-        return memberInfoModel;
+        }*/
+        return null;//memberInfoModel;
 
     }
 
