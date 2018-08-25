@@ -2,10 +2,13 @@ package com.bizvane.mktcenterserviceimpl.service.jobhandler;
 
 import com.bizvane.couponfacade.models.vo.SendCouponBatchRequestVO;
 import com.bizvane.couponfacade.models.vo.SendCouponSimpleRequestVO;
+import com.bizvane.members.facade.es.vo.MembersInfoSearchVo;
 import com.bizvane.members.facade.models.IntegralRecordModel;
 import com.bizvane.members.facade.models.MemberInfoModel;
 import com.bizvane.members.facade.service.api.MemberInfoApiService;
+import com.bizvane.members.facade.service.api.MembersAdvancedSearchApiService;
 import com.bizvane.members.facade.vo.MemberInfoApiModel;
+import com.bizvane.members.facade.vo.MemberInfoVo;
 import com.bizvane.messagefacade.models.vo.MemberMessageVO;
 import com.bizvane.messagefacade.models.vo.SysSmsConfigVO;
 import com.bizvane.mktcenterservice.interfaces.ActivitySmartService;
@@ -63,6 +66,8 @@ public class ActivitySmartJobHandler extends IJobHandler {
 
     @Autowired
     private MemberInfoApiService memberInfoApiService;
+    @Autowired
+    private MembersAdvancedSearchApiService membersAdvancedSearchApiService;
 
     @Override
     public ReturnT<String> execute(String param) throws Exception {
@@ -99,8 +104,10 @@ public class ActivitySmartJobHandler extends IJobHandler {
                 }
                 String targetMbr = mktActivitySmartPO.getTargetMbr();
                 //get member by condition
-                ResponseData<List<MemberInfoModel>> memberInfo = memberInfoApiService.getMemberInfo(new MemberInfoApiModel());
-                List<MemberInfoModel> memberInfoModelList = memberInfo.getData();
+                ////分页查询会员信息
+                MembersInfoSearchVo membersInfoSearchVo = new MembersInfoSearchVo();
+                ResponseData<com.bizvane.utils.responseinfo.PageInfo<MemberInfoVo>> memberInfoVoPages = membersAdvancedSearchApiService.search(membersInfoSearchVo);
+                List<MemberInfoVo> memberInfoModelList = memberInfoVoPages.getData().getList();
                 if(CollectionUtils.isEmpty(memberInfoModelList)){
                     log.error("target member is empty");
                     returnT.setMsg("target member is empty");
@@ -123,7 +130,7 @@ public class ActivitySmartJobHandler extends IJobHandler {
                         //coupon loop
                         for(MktCouponPO mktCouponPO : mktCouponPOS){
                             SendCouponBatchRequestVO sendCouponBatchRequestVO = new SendCouponBatchRequestVO();
-                            sendCouponBatchRequestVO.setMemberList(memberInfo.getData());
+                            sendCouponBatchRequestVO.setMemberList(memberInfoVoPages.getData().getList());
                             sendCouponBatchRequestVO.setCouponDefinitionId(mktCouponPO.getCouponDefinitionId());
                             awardBO.setMktType(MktSmartTypeEnum.SMART_TYPE_COUPON_BATCH.getCode());
                             awardBO.setSendCouponBatchRequestVO(sendCouponBatchRequestVO);
