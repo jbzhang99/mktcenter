@@ -515,37 +515,14 @@ public class ActivityRegisterServiceImpl implements ActivityRegisterService {
         }
         //如果执行状态为执行中 就要发送消息
         if(mktActivityPOWithBLOBs.getActivityStatus()==ActivityStatusEnum.ACTIVITY_STATUS_EXECUTING.getCode()){
-            //查询对应的会员
-            MemberInfoApiModel memberInfoModel= new MemberInfoApiModel();
-            memberInfoModel.setBrandId(activityVO.getSysBrandId());
-            memberInfoModel.setLevelId(Long.parseLong(activityVO.getMbrLevelCode()));
-            ResponseData<List<MemberInfoModel>> memberInfoModelLists =memberInfoApiService.getMemberInfo(memberInfoModel);
-            List<MemberInfoModel> memberInfoModelList = memberInfoModelLists.getData();
-            //循环发送
-            if (!CollectionUtils.isEmpty(memberInfoModelList)){
-                for (MemberInfoModel memberInfo:memberInfoModelList) {
-                    //循环信息类然后发送
-                    for (MktMessagePO mktMessagePO:messageVOList) {
-                        AwardBO awardBO = new AwardBO();
-                        if (mktMessagePO.getMsgType().equals("1")){
-                            //发送微信模板消息
-                            MemberMessageVO memberMessageVO = new MemberMessageVO();
-                            memberMessageVO.setMemberCode(memberInfo.getMemberCode());
-                            awardBO.setMemberMessageVO(memberMessageVO);
-                            awardBO.setMktType(MktSmartTypeEnum.SMART_TYPE_WXMESSAGE.getCode());
-                            award.execute(awardBO);
-                        }
-                        if (mktMessagePO.getMsgType().equals("2")){
-                            SysSmsConfigVO sysSmsConfigVO = new SysSmsConfigVO();
-                            sysSmsConfigVO.setPhone(memberInfo.getPhone());
-                            awardBO.setSysSmsConfigVO(sysSmsConfigVO);
-                            awardBO.setMktType(MktSmartTypeEnum.SMART_TYPE_SMS.getCode());
-                            //发送短信消息
-                            award.execute(awardBO);
-                        }
-                    }
-                }
-            }
+            //分页查询会员信息发送短信
+            MembersInfoSearchVo membersInfoSearchVo = new MembersInfoSearchVo();
+            membersInfoSearchVo.setPageNumber(1);
+            membersInfoSearchVo.setPageSize(10000);
+            membersInfoSearchVo.setCardStatus(1);
+            membersInfoSearchVo.setBrandId(activityVO.getSysBrandId());
+            memberMessage.getMemberList(messageVOList, membersInfoSearchVo);
+            //查询对应的会员  TODO 发送微信模板消息
         }
         responseData.setCode(SysResponseEnum.SUCCESS.getCode());
         responseData.setMessage(SysResponseEnum.SUCCESS.getMessage());
