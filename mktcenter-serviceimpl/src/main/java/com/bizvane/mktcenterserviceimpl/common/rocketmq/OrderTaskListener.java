@@ -5,6 +5,7 @@ import com.aliyun.openservices.ons.api.Action;
 import com.aliyun.openservices.ons.api.ConsumeContext;
 import com.aliyun.openservices.ons.api.Message;
 import com.aliyun.openservices.ons.api.MessageListener;
+import com.bizvane.members.facade.models.OrderModel;
 import com.bizvane.members.facade.models.OrderServeModel;
 import com.bizvane.mktcenterservice.interfaces.TaskRecordService;
 import com.bizvane.mktcenterservice.interfaces.TaskService;
@@ -40,7 +41,7 @@ public class OrderTaskListener implements MessageListener {
         //获取订单信息
         String modelStr= new String(message.getBody());
 
-        OrderServeModel model = JSONObject.parseObject(modelStr, OrderServeModel.class);
+        OrderModel model = JSONObject.parseObject(modelStr, OrderModel.class);
         Long companyId = model.getCompanyId();
         Long brandId = model.getBrandId();
         Date placeOrderTime = model.getPlaceOrderTime();
@@ -51,15 +52,15 @@ public class OrderTaskListener implements MessageListener {
             });
         }
         //如果想测试消息重投的功能,可以将Action.CommitMessage 替换成Action.ReconsumeLater
-        return Action.CommitMessage;
-    }
+      return Action.CommitMessage;
+  }
 
     //任务类型：1完善资料，2分享任务，3邀请注册，4累计消费次数，5累计消费金额',
-    private void doExecuteTask(OrderServeModel model, TaskAwardBO obj,Date placeOrderTime) {
+    private void doExecuteTask(OrderModel model, TaskAwardBO obj,Date placeOrderTime) {
         BigDecimal tradeAmount = model.getTradeAmount();//订单金额
         Long brandId = model.getBrandId();
         String memberCode = model.getMemberCode();
-        String carNo = model.getCarNo();
+       // String carNo = model.getCarNo();
         Integer taskType = obj.getTaskType();
         Long mktTaskId = obj.getMktTaskId();
         BigDecimal consumeAmount = obj.getConsumeAmount();//累计金额
@@ -92,7 +93,7 @@ public class OrderTaskListener implements MessageListener {
                             recordPO.setPoints(points);
                             recordPO.setRewarded(Integer.valueOf(1));
                             taskRecordService.updateTaskRecord(recordPO);
-                            taskService.sendCouponAndPoint(memberCode,carNo,obj);
+                            taskService.sendCouponAndPoint(memberCode,obj);
                     }
                 }
 
@@ -101,14 +102,14 @@ public class OrderTaskListener implements MessageListener {
                     if(totalBO!=null && totalBO.getTotalConsume()!=null && totalBO.getTotalConsume().compareTo(consumeAmount) == 1){
                             recordPO.setRewarded(Integer.valueOf(1));
                             taskRecordService.updateTaskRecord(recordPO);
-                            taskService.sendCouponAndPoint(memberCode,carNo,obj);
+                            taskService.sendCouponAndPoint(memberCode,obj);
 
                     }
                 }
 
 
         }
-    }
+   }
 
 }
 

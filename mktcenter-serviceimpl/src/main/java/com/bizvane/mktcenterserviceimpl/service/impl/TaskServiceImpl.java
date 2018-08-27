@@ -347,7 +347,7 @@ public class TaskServiceImpl implements TaskService {
      */
     @Override
     @Async
-    public void sendCouponAndPoint(String memberCode,String carNo,TaskAwardBO orderAwardBO){
+    public void sendCouponAndPoint(String memberCode,TaskAwardBO orderAwardBO){
         Long mktTaskId = orderAwardBO.getMktTaskId();
         String taskCode = orderAwardBO.getTaskCode();
         Integer taskType = orderAwardBO.getTaskType();

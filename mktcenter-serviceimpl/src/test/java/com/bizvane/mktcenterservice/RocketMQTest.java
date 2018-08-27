@@ -33,6 +33,7 @@
 //        String tag = "register_tag";
 //        String content = "lichen";
 //        byte[] bytes = content.getBytes();
+//        //  public static final String ROCKET_CONFIG_BUSINESS_TYPE_REGISTER_SIMPLE_MESSAGE = "memberRegisterListener";`
 //        Producer producer = RocketMQManager.getProducer(RocketConstants.ROCKET_CONFIG_BUSINESS_TYPE_REGISTER_SIMPLE_MESSAGE);
 //        rocketMQProducerService.sendMessage(producer,topic,tag,bytes);
 //    }

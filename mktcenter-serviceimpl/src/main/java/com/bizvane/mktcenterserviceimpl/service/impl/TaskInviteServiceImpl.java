@@ -279,7 +279,7 @@ public class TaskInviteServiceImpl implements TaskInviteService {
                     if (totalBO!=null && totalBO.getTotalTimes()!=null &&  totalBO.getTotalTimes().equals(inviteNum)){
                         recordPO.setRewarded(Integer.valueOf(1));
                         taskRecordService.updateTaskRecord(recordPO);
-                        taskService.sendCouponAndPoint(memberCode,cardNo,obj);
+                        taskService.sendCouponAndPoint(memberCode,obj);
                     }
 
                 }

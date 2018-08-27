@@ -36,7 +36,7 @@ public class RocketMQManager implements ApplicationRunner {
   @Value("${rocketmq.secretKey}")
   private String secretKey;
 
-  @Value("${spring.application.name}")
+  @Value("${spring.application.name}")//mktcenter
   private String modelName;
   
   @Autowired
@@ -55,6 +55,7 @@ public class RocketMQManager implements ApplicationRunner {
   public void initMQ() {
     
     RocketConfigPOExample example = new RocketConfigPOExample();
+    //mktcenter
     example.createCriteria().andModelNameEqualTo(modelName).andValidEqualTo(Boolean.TRUE);
     
     List<RocketConfigPO> rocketConfigPOList = rocketConfigPOMapper.selectByExample(example);

@@ -74,7 +74,7 @@ public interface TaskService {
      * 发送券和积分
      * @param orderAwardBO
      */
-    public void sendCouponAndPoint(String memberCode,String carNo,TaskAwardBO orderAwardBO);
+    public void sendCouponAndPoint(String memberCode,TaskAwardBO orderAwardBO);
     /**
      * 根据品牌id查询任务是否需要审核
      */
