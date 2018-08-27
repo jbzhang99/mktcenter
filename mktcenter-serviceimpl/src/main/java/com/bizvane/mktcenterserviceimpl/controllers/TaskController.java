@@ -9,6 +9,7 @@ import com.bizvane.mktcenterservice.models.vo.TaskRecordVO;
 import com.bizvane.mktcenterservice.models.vo.TaskVO;
 import com.bizvane.utils.responseinfo.ResponseData;
 import com.bizvane.utils.tokens.SysAccountPO;
+import com.bizvane.utils.tokens.TokenUtils;
 import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -36,18 +37,8 @@ public class TaskController {
      */
     @RequestMapping("selectTaskById")
     public ResponseData<TaskBO> selectTaskById(Long businessId,Integer taskType){
-        return taskService.selectTaskById(businessId);
+        return taskService.selectTaskById(businessId,taskType);
     }
-    /**
-     * 根据任务类型查询任务列表
-     */
-    @RequestMapping("getTaskByTaskType")
-    public ResponseData<PageInfo<MktTaskPOWithBLOBs>> getTaskByTaskType(TaskVO vo, PageForm pageForm){
-        return  taskService.getTaskByTaskType(vo,pageForm);
-    }
-
-
-
     /**
      * 禁用任务
      * @param mktTaskId
@@ -56,13 +47,11 @@ public class TaskController {
     @RequestMapping("stopTaskById")
     public ResponseData<Integer> stopTaskById(Long mktTaskId, HttpServletRequest request){
         //获取操作人信息
-        SysAccountPO stageUser =new SysAccountPO();
-//        SysAccountPO stageUser = TokenUtils.getStageUser(request);
+        SysAccountPO stageUser = TokenUtils.getStageUser(request);
         //禁用任务
         ResponseData<Integer> integerResponseData = taskService.stopTaskById(mktTaskId, stageUser);
         return integerResponseData;
     }
-
     /**
      * 任务审核--已经核对
      * @param request
@@ -71,8 +60,7 @@ public class TaskController {
     @RequestMapping("checkTaskById")
     public ResponseData<Integer> checkTaskById(Long businessId , Integer checkStatus,String remark, Date startTime,Date endTime,HttpServletRequest request) throws ParseException {
         //获取操作人信息
-        SysAccountPO stageUser =new SysAccountPO();
-//        SysAccountPO stageUser = TokenUtils.getStageUser(request);
+        SysAccountPO stageUser = TokenUtils.getStageUser(request);
         //审核任务
         ResponseData<Integer> integerResponseData = taskService.checkTaskById(businessId,checkStatus,remark,stageUser,startTime,endTime);
         return integerResponseData;
@@ -85,6 +73,6 @@ public class TaskController {
      */
     @RequestMapping("doAnalysis")
     public ResponseData<TaskRecordVO> doAnalysis(TaskAnalysisVo vo){
-       return taskService.doAnalysis(vo);
+        return taskService.doAnalysis(vo);
     }
 }

@@ -2,17 +2,15 @@ package com.bizvane.mktcenterservice.interfaces;
 
 import com.bizvane.centerstageservice.models.po.SysCheckConfigPo;
 import com.bizvane.members.facade.models.MemberInfoModel;
-import com.bizvane.members.facade.models.OrderServeModel;
-import com.bizvane.mktcenterservice.models.bo.AddTaskBO;
+import com.bizvane.members.facade.vo.WxChannelInfoVo;
 import com.bizvane.mktcenterservice.models.bo.TaskBO;
-import com.bizvane.mktcenterservice.models.bo.TaskInviteAwardBO;
 import com.bizvane.mktcenterservice.models.bo.TaskAwardBO;
+import com.bizvane.mktcenterservice.models.po.MktMessagePO;
 import com.bizvane.mktcenterservice.models.po.MktTaskPOWithBLOBs;
 import com.bizvane.mktcenterservice.models.vo.*;
+import com.bizvane.utils.responseinfo.PageInfo;
 import com.bizvane.utils.responseinfo.ResponseData;
 import com.bizvane.utils.tokens.SysAccountPO;
-import com.github.pagehelper.PageInfo;
-
 import java.text.ParseException;
 import java.util.Date;
 import java.util.List;
@@ -30,7 +28,7 @@ public interface TaskService {
      * @param mktTaskId
      * @return
      */
-    public ResponseData<TaskBO> selectTaskById(Long mktTaskId);
+    public ResponseData<TaskBO> selectTaskById(Long mktTaskId,Integer taskType);
     /**
      * 根据公司id和品牌id查询执行中的消费类任务
      * @param sysCompanyId
@@ -66,12 +64,11 @@ public interface TaskService {
      * @param mktTaskPOWithBLOBs
      * @param stageUser
      */
-    public void doOrderTask(MktTaskPOWithBLOBs mktTaskPOWithBLOBs, SysAccountPO stageUser);
+    public void doOrderTask(MktTaskPOWithBLOBs mktTaskPOWithBLOBs, List<MktMessagePO> mktmessagePOList, SysAccountPO stageUser);
     /**
-     * 发送消息
-     * @param sysCompanyId
+     * 发送消息--已经核对
      */
-    public  void  sendSmg(Long sysCompanyId);
+    public  void  sendSmg(MktTaskPOWithBLOBs mktTaskPOWithBLOBs,List<MktMessagePO> mktmessagePOList);
 
     /**
      * 发送券和积分
@@ -88,7 +85,7 @@ public interface TaskService {
      * @param vo
      * @return
      */
-    public ResponseData<PageInfo<MktTaskPOWithBLOBs>> getTaskByTaskType(TaskVO vo, PageForm pageForm);
+    public ResponseData<com.github.pagehelper.PageInfo<MktTaskPOWithBLOBs>> getTaskByTaskType(TaskVO vo, PageForm pageForm);
 
     /**
      * 新增
@@ -118,14 +115,18 @@ public interface TaskService {
     public ResponseData<Integer> checkTaskById(Long mktTaskId,Integer checkStatus,String remark,SysAccountPO sysAccountPO,Date startTime,Date endTime) throws ParseException;
 
     /**
-     * 获取公司下的所有会员
-     * @param sysCompanyId
+     * 获取品牌下的所有会员
      * @return
      */
-    public  List<MemberInfoModel>  getCompanyMemebers(Long sysCompanyId);
+    public  PageInfo<MemberInfoModel> getCompanyMemebers(Long sysBrandId,Integer pageNumber,Integer pageSize);
 
     /**
-     * 查询公司下的某一会员的详情
+     * 获取品牌下的所有粉丝
+     */
+    public  com.bizvane.utils.responseinfo.PageInfo<WxChannelInfoVo>  getCompanyFans(Long sysBrandId, Integer pageNumber, Integer pageSize);
+
+    /**
+     * 根据会员Code的某一会员的详情
      */
     public MemberInfoModel getCompanyMemeberDetail(String  memberCode);
 

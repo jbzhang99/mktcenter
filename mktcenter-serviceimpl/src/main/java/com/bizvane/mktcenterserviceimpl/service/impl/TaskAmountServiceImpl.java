@@ -68,7 +68,6 @@ public class TaskAmountServiceImpl implements TaskAmountService {
     }
     /**
      * 查询任务列表
-     *
      * @return
      */
     @Override
@@ -84,12 +83,12 @@ public class TaskAmountServiceImpl implements TaskAmountService {
     @Transactional
     @Override
     public ResponseData<Integer> addTask(TaskBO bo, SysAccountPO stageUser) throws ParseException {
-        ResponseData<Integer> responseData = new ResponseData<Integer>(SysResponseEnum.FAILED.getCode(),SysResponseEnum.FAILED.getMessage(),null);
         //0.参数的检验
-//        ResponseData responseData = TaskParamCheckUtil.checkParam(vo);
-//        if (responseData.getCode() < 0) {
-//            return responseData;
-//        }
+        ResponseData responseData = TaskParamCheckUtil.checkParam(bo);
+        //参数校验不通过
+        if(responseData.getCode()>0){
+            return responseData;
+        }
         TaskVO vo = bo.getTaskVO();
         vo.setValid(Boolean.TRUE);
         vo.setCreateDate(TimeUtils.getNowTime());
@@ -102,7 +101,7 @@ public class TaskAmountServiceImpl implements TaskAmountService {
         MktTaskPOWithBLOBs mktTaskPOWithBLOBs = new MktTaskPOWithBLOBs();
         BeanUtils.copyProperties(vo, mktTaskPOWithBLOBs);
         mktTaskPOWithBLOBs.setTaskCode(taskCode);
-       // mktTaskPOWithBLOBs = taskService.isOrNoCheckState(mktTaskPOWithBLOBs);
+        // mktTaskPOWithBLOBs = taskService.isOrNoCheckState(mktTaskPOWithBLOBs);
         Long mktTaskId = taskService.addTask(mktTaskPOWithBLOBs, stageUser);
         taskService.addCheckData(mktTaskPOWithBLOBs);
 
@@ -133,7 +132,7 @@ public class TaskAmountServiceImpl implements TaskAmountService {
         }
 
         //6.处理任务
-       // taskService.doOrderTask(mktTaskPOWithBLOBs,stageUser);
+        taskService.doOrderTask(mktTaskPOWithBLOBs,mktmessagePOList,stageUser);
 
         responseData.setCode(SystemConstants.SUCCESS_CODE);
         responseData.setMessage(SystemConstants.SUCCESS_MESSAGE);
@@ -149,13 +148,12 @@ public class TaskAmountServiceImpl implements TaskAmountService {
     @Transactional
     @Override
     public ResponseData updateAmountTask(TaskBO bo, SysAccountPO stageUser) {
-        ResponseData<Integer> responseData = new ResponseData<Integer>(SysResponseEnum.FAILED.getCode(),SysResponseEnum.FAILED.getMessage(),null);
-        //        mktTaskOrderPOMapper.updateByPrimaryKeySelective(po);
         //0.参数的检验
-//        ResponseData responseData = TaskParamCheckUtil.checkParam(vo);
-//        if (responseData.getCode() < 0) {
-//            return responseData;
-//        }
+        ResponseData responseData = TaskParamCheckUtil.checkParam(bo);
+        //参数校验不通过
+        if(responseData.getCode()>0){
+            return responseData;
+        }
         TaskVO vo = bo.getTaskVO();
         vo.setValid(Boolean.TRUE);
         vo.setModifiedDate(TimeUtils.getNowTime());
@@ -196,7 +194,7 @@ public class TaskAmountServiceImpl implements TaskAmountService {
             );
         }
         //6.处理任务
-        taskService.doOrderTask(mktTaskPOWithBLOBs,stageUser);
+        taskService.doOrderTask(mktTaskPOWithBLOBs,mktmessagePOList,stageUser);
 
         responseData.setCode(SystemConstants.SUCCESS_CODE);
         responseData.setMessage(SystemConstants.SUCCESS_MESSAGE);
@@ -223,7 +221,6 @@ public class TaskAmountServiceImpl implements TaskAmountService {
     public Integer modifieAmoutTask(MktTaskOrderPO po, SysAccountPO stageUser) {
         MktTaskOrderPOExample example = new MktTaskOrderPOExample();
         example.createCriteria().andMktTaskIdEqualTo(po.getMktTaskId()).andValidEqualTo(Boolean.TRUE);
-
         return mktTaskOrderPOMapper.updateByExample(po, example);
     }
 }

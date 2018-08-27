@@ -141,7 +141,7 @@ public class TaskInviteServiceImpl implements TaskInviteService {
         }
 
         //6.处理任务
-       // taskService.doOrderTask(mktTaskPOWithBLOBs,stageUser);
+        taskService.doOrderTask(mktTaskPOWithBLOBs,mktmessagePOList,stageUser);
 
         responseData.setCode(SystemConstants.SUCCESS_CODE);
         responseData.setMessage(SystemConstants.SUCCESS_MESSAGE);
@@ -157,13 +157,12 @@ public class TaskInviteServiceImpl implements TaskInviteService {
     @Transactional
     @Override
     public ResponseData updateInviteTask(TaskBO bo, SysAccountPO stageUser) throws ParseException {
-        ResponseData<Integer> responseData = new ResponseData<Integer>(SysResponseEnum.FAILED.getCode(),SysResponseEnum.FAILED.getMessage(),null);
-        //        mktTaskOrderPOMapper.updateByPrimaryKeySelective(po);
         //0.参数的检验
-      /*  ResponseData responseData = TaskParamCheckUtil.checkParam(vo);
-        if (responseData.getCode() < 0) {
+        ResponseData responseData = TaskParamCheckUtil.checkParam(bo);
+        //参数校验不通过
+        if(responseData.getCode()>0){
             return responseData;
-        }*/
+        }
         TaskVO taskVO = bo.getTaskVO();
         taskVO.setValid(Boolean.TRUE);
         taskVO.setModifiedDate(TimeUtils.getNowTime());
@@ -206,7 +205,7 @@ public class TaskInviteServiceImpl implements TaskInviteService {
             );
         }
         //6.处理任务
-        taskService.doOrderTask(mktTaskPOWithBLOBs,stageUser);
+        taskService.doOrderTask(mktTaskPOWithBLOBs,mktmessagePOList,stageUser);
 
         responseData.setCode(SystemConstants.SUCCESS_CODE);
         responseData.setMessage(SystemConstants.SUCCESS_MESSAGE);

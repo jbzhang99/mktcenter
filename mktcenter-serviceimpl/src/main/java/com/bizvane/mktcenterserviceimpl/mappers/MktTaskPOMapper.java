@@ -134,9 +134,11 @@ public interface MktTaskPOMapper {
 	public  List<TaskWXDetailBO>  getTaskWXDetail(@Param("taskId") Long taskId);
 
 	/**
-	 * 获取任务的详情通用
-	 * @param taskId
+	 * 获取任务的详情
 	 * @return
 	 */
-	public List<TaskVO> getTaskList(@Param("mktTaskId") Long mktTaskId);
+	public List<TaskVO> getOrderTaskList(@Param("mktTaskId") Long mktTaskId);
+	public List<TaskVO> getInviteTaskList(@Param("mktTaskId") Long mktTaskId);
+	public List<TaskVO> getShareTaskList(@Param("mktTaskId") Long mktTaskId);
+	public List<TaskVO> getProfileTaskList(@Param("mktTaskId") Long mktTaskId);
 }

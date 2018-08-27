@@ -32,7 +32,6 @@ public class TaskStartJobHandler extends IJobHandler {
     private Award award;
     @Autowired
     private TaskService taskService;
-
     @Autowired
     private MktTaskPOMapper mktTaskPOMapper;
 
@@ -42,20 +41,22 @@ public class TaskStartJobHandler extends IJobHandler {
         System.out.println("job执行参数 "+param);
         String[] split = param.split("&");
 
-
         MktTaskPOWithBLOBs mktTaskPOWithBLOBs = new MktTaskPOWithBLOBs();
         mktTaskPOWithBLOBs.setTaskStatus(TaskStatusEnum.TASK_STATUS_EXECUTING.getCode());
         MktTaskPOExample example = new MktTaskPOExample();
         example.createCriteria().andMktTaskIdEqualTo(Long.valueOf(split[0])).andValidEqualTo(Boolean.TRUE);
         mktTaskPOMapper.updateByExampleSelective(mktTaskPOWithBLOBs,example);
 
+        MktTaskPOWithBLOBs mktTaskparam = mktTaskPOMapper.selectByPrimaryKey(Long.valueOf(split[0]));
 
-        taskService.sendSmg(Long.valueOf(split[3]));
+        MktMessagePOExample exampleMSG = new MktMessagePOExample();
+        exampleMSG.createCriteria().andBizIdEqualTo(Long.valueOf(split[0])).andValidEqualTo(Boolean.TRUE);
+        List<MktMessagePO> mktMessagePOS = mktMessagePOMapper.selectByExample(exampleMSG);
+
+        taskService.sendSmg(mktTaskparam,mktMessagePOS);
         returnT.setCode(0);
         returnT.setContent("任务执行完毕");
         returnT.setMsg("success");
         return returnT;
     }
-
-
 }
