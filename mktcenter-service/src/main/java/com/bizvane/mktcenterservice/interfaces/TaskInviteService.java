@@ -4,6 +4,7 @@ import com.bizvane.mktcenterservice.models.bo.TaskBO;
 import com.bizvane.mktcenterservice.models.bo.TaskDetailBO;
 import com.bizvane.mktcenterservice.models.po.MktTaskInvitePO;
 import com.bizvane.mktcenterservice.models.po.MktTaskOrderPO;
+import com.bizvane.mktcenterservice.models.vo.InviteSuccessVO;
 import com.bizvane.mktcenterservice.models.vo.PageForm;
 import com.bizvane.mktcenterservice.models.vo.TaskDetailVO;
 import com.bizvane.mktcenterservice.models.vo.TaskVO;
@@ -44,6 +45,11 @@ public interface TaskInviteService {
      */
     public ResponseData<Integer> addTask(TaskBO bo, SysAccountPO stageUser) throws ParseException;
 
+    /**
+     * 执行任务奖励
+     * @param vo
+     */
+    public  void   doAwardInvite(InviteSuccessVO vo);
     /**
      * 修改任务
      * @param stageUser
