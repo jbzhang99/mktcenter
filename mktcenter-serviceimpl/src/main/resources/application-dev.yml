@@ -4,6 +4,7 @@ server:
     context-path: /mktcenter.api
 spring:
   redis:
+    host: 47.97.50.134
     database: 7
   profiles:
     active: basecontroller,commonutilslocal
@@ -24,6 +25,7 @@ spring:
   data:
     mongodb:
       database: "7"
+      uri: "mongodb://bizvane:bizvane@47.97.50.134:7974/?AutoConnectRetry=true"
   jackson:
     date-format: yyyy-MM-dd HH:mm:ss
     time-zone: GMT+8
