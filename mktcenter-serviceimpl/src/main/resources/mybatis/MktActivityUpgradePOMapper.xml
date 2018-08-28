@@ -4,13 +4,15 @@
   <resultMap id="BaseResultMap" type="com.bizvane.mktcenterservice.models.po.MktActivityUpgradePO">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-14 13:26:02.
+      This element was generated on 2018-08-28 18:01:34.
     -->
     <id column="mkt_activity_upgrade_id" jdbcType="BIGINT" property="mktActivityUpgradeId" />
     <result column="mkt_activity_id" jdbcType="BIGINT" property="mktActivityId" />
     <result column="mbr_level_code" jdbcType="VARCHAR" property="mbrLevelCode" />
     <result column="mbr_level_name" jdbcType="VARCHAR" property="mbrLevelName" />
     <result column="member_type" jdbcType="INTEGER" property="memberType" />
+    <result column="is_store_limit" jdbcType="BIT" property="isStoreLimit" />
+    <result column="store_limit_type" jdbcType="INTEGER" property="storeLimitType" />
     <result column="remark" jdbcType="VARCHAR" property="remark" />
     <result column="create_user_id" jdbcType="BIGINT" property="createUserId" />
     <result column="create_user_name" jdbcType="VARCHAR" property="createUserName" />
@@ -20,10 +22,17 @@
     <result column="modified_date" jdbcType="TIMESTAMP" property="modifiedDate" />
     <result column="valid" jdbcType="BIT" property="valid" />
   </resultMap>
+  <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.bizvane.mktcenterservice.models.po.MktActivityUpgradePO">
+    <!--
+      WARNING - 只读 - @mbg.generated
+      This element was generated on 2018-08-28 18:01:34.
+    -->
+    <result column="store_limit_list" jdbcType="LONGVARCHAR" property="storeLimitList" />
+  </resultMap>
   <sql id="Example_Where_Clause">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-14 13:26:02.
+      This element was generated on 2018-08-28 18:01:34.
     -->
     <where>
       <foreach collection="oredCriteria" item="criteria" separator="or">
@@ -56,7 +65,7 @@
   <sql id="Update_By_Example_Where_Clause">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-14 13:26:02.
+      This element was generated on 2018-08-28 18:01:34.
     -->
     <where>
       <foreach collection="example.oredCriteria" item="criteria" separator="or">
@@ -89,16 +98,43 @@
   <sql id="Base_Column_List">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-14 13:26:02.
+      This element was generated on 2018-08-28 18:01:34.
     -->
     mkt_activity_upgrade_id, mkt_activity_id, mbr_level_code, mbr_level_name, member_type, 
-    remark, create_user_id, create_user_name, create_date, modified_user_id, modified_user_name, 
-    modified_date, valid
+    is_store_limit, store_limit_type, remark, create_user_id, create_user_name, create_date, 
+    modified_user_id, modified_user_name, modified_date, valid
   </sql>
+  <sql id="Blob_Column_List">
+    <!--
+      WARNING - 只读 - @mbg.generated
+      This element was generated on 2018-08-28 18:01:34.
+    -->
+    store_limit_list
+  </sql>
+  <select id="selectByExampleWithBLOBs" parameterType="com.bizvane.mktcenterservice.models.po.MktActivityUpgradePOExample" resultMap="ResultMapWithBLOBs">
+    <!--
+      WARNING - 只读 - @mbg.generated
+      This element was generated on 2018-08-28 18:01:34.
+    -->
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from t_mkt_activity_upgrade
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
   <select id="selectByExample" parameterType="com.bizvane.mktcenterservice.models.po.MktActivityUpgradePOExample" resultMap="BaseResultMap">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-14 13:26:02.
+      This element was generated on 2018-08-28 18:01:34.
     -->
     select
     <if test="distinct">
@@ -113,20 +149,22 @@
       order by ${orderByClause}
     </if>
   </select>
-  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="ResultMapWithBLOBs">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-14 13:26:02.
+      This element was generated on 2018-08-28 18:01:34.
     -->
     select 
     <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
     from t_mkt_activity_upgrade
     where mkt_activity_upgrade_id = #{mktActivityUpgradeId,jdbcType=BIGINT}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-14 13:26:02.
+      This element was generated on 2018-08-28 18:01:34.
     -->
     delete from t_mkt_activity_upgrade
     where mkt_activity_upgrade_id = #{mktActivityUpgradeId,jdbcType=BIGINT}
@@ -134,7 +172,7 @@
   <delete id="deleteByExample" parameterType="com.bizvane.mktcenterservice.models.po.MktActivityUpgradePOExample">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-14 13:26:02.
+      This element was generated on 2018-08-28 18:01:34.
     -->
     delete from t_mkt_activity_upgrade
     <if test="_parameter != null">
@@ -144,26 +182,28 @@
   <insert id="insert" parameterType="com.bizvane.mktcenterservice.models.po.MktActivityUpgradePO">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-14 13:26:02.
+      This element was generated on 2018-08-28 18:01:34.
     -->
     <selectKey keyProperty="mktActivityUpgradeId" order="AFTER" resultType="java.lang.Long">
       SELECT LAST_INSERT_ID()
     </selectKey>
     insert into t_mkt_activity_upgrade (mkt_activity_id, mbr_level_code, mbr_level_name, 
-      member_type, remark, create_user_id, 
-      create_user_name, create_date, modified_user_id, 
-      modified_user_name, modified_date, valid
+      member_type, is_store_limit, store_limit_type, 
+      remark, create_user_id, create_user_name, 
+      create_date, modified_user_id, modified_user_name, 
+      modified_date, valid, store_limit_list
       )
     values (#{mktActivityId,jdbcType=BIGINT}, #{mbrLevelCode,jdbcType=VARCHAR}, #{mbrLevelName,jdbcType=VARCHAR}, 
-      #{memberType,jdbcType=INTEGER}, #{remark,jdbcType=VARCHAR}, #{createUserId,jdbcType=BIGINT}, 
-      #{createUserName,jdbcType=VARCHAR}, #{createDate,jdbcType=TIMESTAMP}, #{modifiedUserId,jdbcType=BIGINT}, 
-      #{modifiedUserName,jdbcType=VARCHAR}, #{modifiedDate,jdbcType=TIMESTAMP}, #{valid,jdbcType=BIT}
+      #{memberType,jdbcType=INTEGER}, #{isStoreLimit,jdbcType=BIT}, #{storeLimitType,jdbcType=INTEGER}, 
+      #{remark,jdbcType=VARCHAR}, #{createUserId,jdbcType=BIGINT}, #{createUserName,jdbcType=VARCHAR}, 
+      #{createDate,jdbcType=TIMESTAMP}, #{modifiedUserId,jdbcType=BIGINT}, #{modifiedUserName,jdbcType=VARCHAR}, 
+      #{modifiedDate,jdbcType=TIMESTAMP}, #{valid,jdbcType=BIT}, #{storeLimitList,jdbcType=LONGVARCHAR}
       )
   </insert>
   <insert id="insertSelective" parameterType="com.bizvane.mktcenterservice.models.po.MktActivityUpgradePO">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-14 13:26:02.
+      This element was generated on 2018-08-28 18:01:34.
     -->
     <selectKey keyProperty="mktActivityUpgradeId" order="AFTER" resultType="java.lang.Long">
       SELECT LAST_INSERT_ID()
@@ -181,6 +221,12 @@
       </if>
       <if test="memberType != null">
         member_type,
+      </if>
+      <if test="isStoreLimit != null">
+        is_store_limit,
+      </if>
+      <if test="storeLimitType != null">
+        store_limit_type,
       </if>
       <if test="remark != null">
         remark,
@@ -206,6 +252,9 @@
       <if test="valid != null">
         valid,
       </if>
+      <if test="storeLimitList != null">
+        store_limit_list,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="mktActivityId != null">
@@ -219,6 +268,12 @@
       </if>
       <if test="memberType != null">
         #{memberType,jdbcType=INTEGER},
+      </if>
+      <if test="isStoreLimit != null">
+        #{isStoreLimit,jdbcType=BIT},
+      </if>
+      <if test="storeLimitType != null">
+        #{storeLimitType,jdbcType=INTEGER},
       </if>
       <if test="remark != null">
         #{remark,jdbcType=VARCHAR},
@@ -244,12 +299,15 @@
       <if test="valid != null">
         #{valid,jdbcType=BIT},
       </if>
+      <if test="storeLimitList != null">
+        #{storeLimitList,jdbcType=LONGVARCHAR},
+      </if>
     </trim>
   </insert>
   <select id="countByExample" parameterType="com.bizvane.mktcenterservice.models.po.MktActivityUpgradePOExample" resultType="java.lang.Long">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-14 13:26:02.
+      This element was generated on 2018-08-28 18:01:34.
     -->
     select count(*) from t_mkt_activity_upgrade
     <if test="_parameter != null">
@@ -259,7 +317,7 @@
   <update id="updateByExampleSelective" parameterType="map">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-14 13:26:02.
+      This element was generated on 2018-08-28 18:01:34.
     -->
     update t_mkt_activity_upgrade
     <set>
@@ -277,6 +335,12 @@
       </if>
       <if test="record.memberType != null">
         member_type = #{record.memberType,jdbcType=INTEGER},
+      </if>
+      <if test="record.isStoreLimit != null">
+        is_store_limit = #{record.isStoreLimit,jdbcType=BIT},
+      </if>
+      <if test="record.storeLimitType != null">
+        store_limit_type = #{record.storeLimitType,jdbcType=INTEGER},
       </if>
       <if test="record.remark != null">
         remark = #{record.remark,jdbcType=VARCHAR},
@@ -302,15 +366,18 @@
       <if test="record.valid != null">
         valid = #{record.valid,jdbcType=BIT},
       </if>
+      <if test="record.storeLimitList != null">
+        store_limit_list = #{record.storeLimitList,jdbcType=LONGVARCHAR},
+      </if>
     </set>
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
-  <update id="updateByExample" parameterType="map">
+  <update id="updateByExampleWithBLOBs" parameterType="map">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-14 13:26:02.
+      This element was generated on 2018-08-28 18:01:34.
     -->
     update t_mkt_activity_upgrade
     set mkt_activity_upgrade_id = #{record.mktActivityUpgradeId,jdbcType=BIGINT},
@@ -318,6 +385,34 @@
       mbr_level_code = #{record.mbrLevelCode,jdbcType=VARCHAR},
       mbr_level_name = #{record.mbrLevelName,jdbcType=VARCHAR},
       member_type = #{record.memberType,jdbcType=INTEGER},
+      is_store_limit = #{record.isStoreLimit,jdbcType=BIT},
+      store_limit_type = #{record.storeLimitType,jdbcType=INTEGER},
+      remark = #{record.remark,jdbcType=VARCHAR},
+      create_user_id = #{record.createUserId,jdbcType=BIGINT},
+      create_user_name = #{record.createUserName,jdbcType=VARCHAR},
+      create_date = #{record.createDate,jdbcType=TIMESTAMP},
+      modified_user_id = #{record.modifiedUserId,jdbcType=BIGINT},
+      modified_user_name = #{record.modifiedUserName,jdbcType=VARCHAR},
+      modified_date = #{record.modifiedDate,jdbcType=TIMESTAMP},
+      valid = #{record.valid,jdbcType=BIT},
+      store_limit_list = #{record.storeLimitList,jdbcType=LONGVARCHAR}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    <!--
+      WARNING - 只读 - @mbg.generated
+      This element was generated on 2018-08-28 18:01:34.
+    -->
+    update t_mkt_activity_upgrade
+    set mkt_activity_upgrade_id = #{record.mktActivityUpgradeId,jdbcType=BIGINT},
+      mkt_activity_id = #{record.mktActivityId,jdbcType=BIGINT},
+      mbr_level_code = #{record.mbrLevelCode,jdbcType=VARCHAR},
+      mbr_level_name = #{record.mbrLevelName,jdbcType=VARCHAR},
+      member_type = #{record.memberType,jdbcType=INTEGER},
+      is_store_limit = #{record.isStoreLimit,jdbcType=BIT},
+      store_limit_type = #{record.storeLimitType,jdbcType=INTEGER},
       remark = #{record.remark,jdbcType=VARCHAR},
       create_user_id = #{record.createUserId,jdbcType=BIGINT},
       create_user_name = #{record.createUserName,jdbcType=VARCHAR},
@@ -333,7 +428,7 @@
   <update id="updateByPrimaryKeySelective" parameterType="com.bizvane.mktcenterservice.models.po.MktActivityUpgradePO">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-14 13:26:02.
+      This element was generated on 2018-08-28 18:01:34.
     -->
     update t_mkt_activity_upgrade
     <set>
@@ -348,6 +443,12 @@
       </if>
       <if test="memberType != null">
         member_type = #{memberType,jdbcType=INTEGER},
+      </if>
+      <if test="isStoreLimit != null">
+        is_store_limit = #{isStoreLimit,jdbcType=BIT},
+      </if>
+      <if test="storeLimitType != null">
+        store_limit_type = #{storeLimitType,jdbcType=INTEGER},
       </if>
       <if test="remark != null">
         remark = #{remark,jdbcType=VARCHAR},
@@ -373,19 +474,47 @@
       <if test="valid != null">
         valid = #{valid,jdbcType=BIT},
       </if>
+      <if test="storeLimitList != null">
+        store_limit_list = #{storeLimitList,jdbcType=LONGVARCHAR},
+      </if>
     </set>
     where mkt_activity_upgrade_id = #{mktActivityUpgradeId,jdbcType=BIGINT}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.bizvane.mktcenterservice.models.po.MktActivityUpgradePO">
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.bizvane.mktcenterservice.models.po.MktActivityUpgradePO">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-14 13:26:02.
+      This element was generated on 2018-08-28 18:01:34.
     -->
     update t_mkt_activity_upgrade
     set mkt_activity_id = #{mktActivityId,jdbcType=BIGINT},
       mbr_level_code = #{mbrLevelCode,jdbcType=VARCHAR},
       mbr_level_name = #{mbrLevelName,jdbcType=VARCHAR},
       member_type = #{memberType,jdbcType=INTEGER},
+      is_store_limit = #{isStoreLimit,jdbcType=BIT},
+      store_limit_type = #{storeLimitType,jdbcType=INTEGER},
+      remark = #{remark,jdbcType=VARCHAR},
+      create_user_id = #{createUserId,jdbcType=BIGINT},
+      create_user_name = #{createUserName,jdbcType=VARCHAR},
+      create_date = #{createDate,jdbcType=TIMESTAMP},
+      modified_user_id = #{modifiedUserId,jdbcType=BIGINT},
+      modified_user_name = #{modifiedUserName,jdbcType=VARCHAR},
+      modified_date = #{modifiedDate,jdbcType=TIMESTAMP},
+      valid = #{valid,jdbcType=BIT},
+      store_limit_list = #{storeLimitList,jdbcType=LONGVARCHAR}
+    where mkt_activity_upgrade_id = #{mktActivityUpgradeId,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.bizvane.mktcenterservice.models.po.MktActivityUpgradePO">
+    <!--
+      WARNING - 只读 - @mbg.generated
+      This element was generated on 2018-08-28 18:01:34.
+    -->
+    update t_mkt_activity_upgrade
+    set mkt_activity_id = #{mktActivityId,jdbcType=BIGINT},
+      mbr_level_code = #{mbrLevelCode,jdbcType=VARCHAR},
+      mbr_level_name = #{mbrLevelName,jdbcType=VARCHAR},
+      member_type = #{memberType,jdbcType=INTEGER},
+      is_store_limit = #{isStoreLimit,jdbcType=BIT},
+      store_limit_type = #{storeLimitType,jdbcType=INTEGER},
       remark = #{remark,jdbcType=VARCHAR},
       create_user_id = #{createUserId,jdbcType=BIGINT},
       create_user_name = #{createUserName,jdbcType=VARCHAR},

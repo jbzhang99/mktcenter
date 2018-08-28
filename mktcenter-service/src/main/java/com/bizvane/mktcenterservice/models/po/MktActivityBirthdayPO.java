@@ -7,97 +7,115 @@ public class MktActivityBirthdayPO implements Serializable {
 
 	/**
 	 * 只读. pkid. mkt_activity_birthday_id
-	 * @mbg.generated  2018-07-14 13:26:02
+	 * @mbg.generated  2018-08-28 18:01:34
 	 */
 	@io.swagger.annotations.ApiModelProperty(value = "pkid", name = "mktActivityBirthdayId", required = false, example = "")
 	private Long mktActivityBirthdayId;
 	/**
 	 * 只读. 关联活动id. mkt_activity_id
-	 * @mbg.generated  2018-07-14 13:26:02
+	 * @mbg.generated  2018-08-28 18:01:34
 	 */
 	@io.swagger.annotations.ApiModelProperty(value = "关联活动id", name = "mktActivityId", required = false, example = "")
 	private Long mktActivityId;
 	/**
 	 * 只读. 活动限制的参与会员等级编号. mbr_level_code
-	 * @mbg.generated  2018-07-14 13:26:02
+	 * @mbg.generated  2018-08-28 18:01:34
 	 */
 	@io.swagger.annotations.ApiModelProperty(value = "活动限制的参与会员等级编号", name = "mbrLevelCode", required = false, example = "")
 	private String mbrLevelCode;
 	/**
 	 * 只读. 活动限制的参与会员等级名称. mbr_level_name
-	 * @mbg.generated  2018-07-14 13:26:02
+	 * @mbg.generated  2018-08-28 18:01:34
 	 */
 	@io.swagger.annotations.ApiModelProperty(value = "活动限制的参与会员等级名称", name = "mbrLevelName", required = false, example = "")
 	private String mbrLevelName;
 	/**
 	 * 只读. 针对的会员类型：0,所有类型，1微信会员. member_type
-	 * @mbg.generated  2018-07-14 13:26:02
+	 * @mbg.generated  2018-08-28 18:01:34
 	 */
 	@io.swagger.annotations.ApiModelProperty(value = "针对的会员类型：0,所有类型，1微信会员", name = "memberType", required = false, example = "")
 	private Integer memberType;
 	/**
 	 * 只读. 提前多少日进行. days_ahead
-	 * @mbg.generated  2018-07-14 13:26:02
+	 * @mbg.generated  2018-08-28 18:01:34
 	 */
 	@io.swagger.annotations.ApiModelProperty(value = "提前多少日进行", name = "daysAhead", required = false, example = "")
 	private Integer daysAhead;
 	/**
+	 * 只读. 门店限制状态：0不限制，1限制. is_store_limit
+	 * @mbg.generated  2018-08-28 18:01:34
+	 */
+	@io.swagger.annotations.ApiModelProperty(value = "门店限制状态：0不限制，1限制", name = "isStoreLimit", required = false, example = "")
+	private Boolean isStoreLimit;
+	/**
+	 * 只读. 门店限制类型：1黑名单，2白名单. store_limit_type
+	 * @mbg.generated  2018-08-28 18:01:34
+	 */
+	@io.swagger.annotations.ApiModelProperty(value = "门店限制类型：1黑名单，2白名单", name = "storeLimitType", required = false, example = "")
+	private Integer storeLimitType;
+	/**
 	 * 只读. 备注. remark
-	 * @mbg.generated  2018-07-14 13:26:02
+	 * @mbg.generated  2018-08-28 18:01:34
 	 */
 	@io.swagger.annotations.ApiModelProperty(value = "备注", name = "remark", required = false, example = "")
 	private String remark;
 	/**
 	 * 只读. 创建人id. create_user_id
-	 * @mbg.generated  2018-07-14 13:26:02
+	 * @mbg.generated  2018-08-28 18:01:34
 	 */
 	@io.swagger.annotations.ApiModelProperty(value = "创建人id", name = "createUserId", required = false, example = "")
 	private Long createUserId;
 	/**
 	 * 只读. 创建人. create_user_name
-	 * @mbg.generated  2018-07-14 13:26:02
+	 * @mbg.generated  2018-08-28 18:01:34
 	 */
 	@io.swagger.annotations.ApiModelProperty(value = "创建人", name = "createUserName", required = false, example = "")
 	private String createUserName;
 	/**
 	 * 只读. 创建日期. create_date
-	 * @mbg.generated  2018-07-14 13:26:02
+	 * @mbg.generated  2018-08-28 18:01:34
 	 */
 	@io.swagger.annotations.ApiModelProperty(value = "创建日期", name = "createDate", required = false, example = "")
 	private Date createDate;
 	/**
 	 * 只读. 修改人id. modified_user_id
-	 * @mbg.generated  2018-07-14 13:26:02
+	 * @mbg.generated  2018-08-28 18:01:34
 	 */
 	@io.swagger.annotations.ApiModelProperty(value = "修改人id", name = "modifiedUserId", required = false, example = "")
 	private Long modifiedUserId;
 	/**
 	 * 只读. 修改人. modified_user_name
-	 * @mbg.generated  2018-07-14 13:26:02
+	 * @mbg.generated  2018-08-28 18:01:34
 	 */
 	@io.swagger.annotations.ApiModelProperty(value = "修改人", name = "modifiedUserName", required = false, example = "")
 	private String modifiedUserName;
 	/**
 	 * 只读. 修改时间. modified_date
-	 * @mbg.generated  2018-07-14 13:26:02
+	 * @mbg.generated  2018-08-28 18:01:34
 	 */
 	@io.swagger.annotations.ApiModelProperty(value = "修改时间", name = "modifiedDate", required = false, example = "")
 	private Date modifiedDate;
 	/**
 	 * 只读. 数据有效性：1=有效；0=无效. valid
-	 * @mbg.generated  2018-07-14 13:26:02
+	 * @mbg.generated  2018-08-28 18:01:34
 	 */
 	@io.swagger.annotations.ApiModelProperty(value = "数据有效性：1=有效；0=无效", name = "valid", required = false, example = "")
 	private Boolean valid;
 	/**
+	 * 只读. 门店限制名单. store_limit_list
+	 * @mbg.generated  2018-08-28 18:01:34
+	 */
+	@io.swagger.annotations.ApiModelProperty(value = "门店限制名单", name = "storeLimitList", required = false, example = "")
+	private String storeLimitList;
+	/**
 	 * 只读. 
-	 * @mbg.generated  2018-07-14 13:26:02
+	 * @mbg.generated  2018-08-28 18:01:34
 	 */
 	private static final long serialVersionUID = 1L;
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-07-14 13:26:02
+	 * @mbg.generated  2018-08-28 18:01:34
 	 */
 	public Long getMktActivityBirthdayId() {
 		return mktActivityBirthdayId;
@@ -105,7 +123,7 @@ public class MktActivityBirthdayPO implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-07-14 13:26:02
+	 * @mbg.generated  2018-08-28 18:01:34
 	 */
 	public void setMktActivityBirthdayId(Long mktActivityBirthdayId) {
 		this.mktActivityBirthdayId = mktActivityBirthdayId;
@@ -113,7 +131,7 @@ public class MktActivityBirthdayPO implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-07-14 13:26:02
+	 * @mbg.generated  2018-08-28 18:01:34
 	 */
 	public Long getMktActivityId() {
 		return mktActivityId;
@@ -121,7 +139,7 @@ public class MktActivityBirthdayPO implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-07-14 13:26:02
+	 * @mbg.generated  2018-08-28 18:01:34
 	 */
 	public void setMktActivityId(Long mktActivityId) {
 		this.mktActivityId = mktActivityId;
@@ -129,7 +147,7 @@ public class MktActivityBirthdayPO implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-07-14 13:26:02
+	 * @mbg.generated  2018-08-28 18:01:34
 	 */
 	public String getMbrLevelCode() {
 		return mbrLevelCode;
@@ -137,7 +155,7 @@ public class MktActivityBirthdayPO implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-07-14 13:26:02
+	 * @mbg.generated  2018-08-28 18:01:34
 	 */
 	public void setMbrLevelCode(String mbrLevelCode) {
 		this.mbrLevelCode = mbrLevelCode == null ? null : mbrLevelCode.trim();
@@ -145,7 +163,7 @@ public class MktActivityBirthdayPO implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-07-14 13:26:02
+	 * @mbg.generated  2018-08-28 18:01:34
 	 */
 	public String getMbrLevelName() {
 		return mbrLevelName;
@@ -153,7 +171,7 @@ public class MktActivityBirthdayPO implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-07-14 13:26:02
+	 * @mbg.generated  2018-08-28 18:01:34
 	 */
 	public void setMbrLevelName(String mbrLevelName) {
 		this.mbrLevelName = mbrLevelName == null ? null : mbrLevelName.trim();
@@ -161,7 +179,7 @@ public class MktActivityBirthdayPO implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-07-14 13:26:02
+	 * @mbg.generated  2018-08-28 18:01:34
 	 */
 	public Integer getMemberType() {
 		return memberType;
@@ -169,7 +187,7 @@ public class MktActivityBirthdayPO implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-07-14 13:26:02
+	 * @mbg.generated  2018-08-28 18:01:34
 	 */
 	public void setMemberType(Integer memberType) {
 		this.memberType = memberType;
@@ -177,7 +195,7 @@ public class MktActivityBirthdayPO implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-07-14 13:26:02
+	 * @mbg.generated  2018-08-28 18:01:34
 	 */
 	public Integer getDaysAhead() {
 		return daysAhead;
@@ -185,7 +203,7 @@ public class MktActivityBirthdayPO implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-07-14 13:26:02
+	 * @mbg.generated  2018-08-28 18:01:34
 	 */
 	public void setDaysAhead(Integer daysAhead) {
 		this.daysAhead = daysAhead;
@@ -193,7 +211,39 @@ public class MktActivityBirthdayPO implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-07-14 13:26:02
+	 * @mbg.generated  2018-08-28 18:01:34
+	 */
+	public Boolean getIsStoreLimit() {
+		return isStoreLimit;
+	}
+
+	/**
+	 * 只读. 
+	 * @mbg.generated  2018-08-28 18:01:34
+	 */
+	public void setIsStoreLimit(Boolean isStoreLimit) {
+		this.isStoreLimit = isStoreLimit;
+	}
+
+	/**
+	 * 只读. 
+	 * @mbg.generated  2018-08-28 18:01:34
+	 */
+	public Integer getStoreLimitType() {
+		return storeLimitType;
+	}
+
+	/**
+	 * 只读. 
+	 * @mbg.generated  2018-08-28 18:01:34
+	 */
+	public void setStoreLimitType(Integer storeLimitType) {
+		this.storeLimitType = storeLimitType;
+	}
+
+	/**
+	 * 只读. 
+	 * @mbg.generated  2018-08-28 18:01:34
 	 */
 	public String getRemark() {
 		return remark;
@@ -201,7 +251,7 @@ public class MktActivityBirthdayPO implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-07-14 13:26:02
+	 * @mbg.generated  2018-08-28 18:01:34
 	 */
 	public void setRemark(String remark) {
 		this.remark = remark == null ? null : remark.trim();
@@ -209,7 +259,7 @@ public class MktActivityBirthdayPO implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-07-14 13:26:02
+	 * @mbg.generated  2018-08-28 18:01:34
 	 */
 	public Long getCreateUserId() {
 		return createUserId;
@@ -217,7 +267,7 @@ public class MktActivityBirthdayPO implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-07-14 13:26:02
+	 * @mbg.generated  2018-08-28 18:01:34
 	 */
 	public void setCreateUserId(Long createUserId) {
 		this.createUserId = createUserId;
@@ -225,7 +275,7 @@ public class MktActivityBirthdayPO implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-07-14 13:26:02
+	 * @mbg.generated  2018-08-28 18:01:34
 	 */
 	public String getCreateUserName() {
 		return createUserName;
@@ -233,7 +283,7 @@ public class MktActivityBirthdayPO implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-07-14 13:26:02
+	 * @mbg.generated  2018-08-28 18:01:34
 	 */
 	public void setCreateUserName(String createUserName) {
 		this.createUserName = createUserName == null ? null : createUserName.trim();
@@ -241,7 +291,7 @@ public class MktActivityBirthdayPO implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-07-14 13:26:02
+	 * @mbg.generated  2018-08-28 18:01:34
 	 */
 	public Date getCreateDate() {
 		return createDate;
@@ -249,7 +299,7 @@ public class MktActivityBirthdayPO implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-07-14 13:26:02
+	 * @mbg.generated  2018-08-28 18:01:34
 	 */
 	public void setCreateDate(Date createDate) {
 		this.createDate = createDate;
@@ -257,7 +307,7 @@ public class MktActivityBirthdayPO implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-07-14 13:26:02
+	 * @mbg.generated  2018-08-28 18:01:34
 	 */
 	public Long getModifiedUserId() {
 		return modifiedUserId;
@@ -265,7 +315,7 @@ public class MktActivityBirthdayPO implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-07-14 13:26:02
+	 * @mbg.generated  2018-08-28 18:01:34
 	 */
 	public void setModifiedUserId(Long modifiedUserId) {
 		this.modifiedUserId = modifiedUserId;
@@ -273,7 +323,7 @@ public class MktActivityBirthdayPO implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-07-14 13:26:02
+	 * @mbg.generated  2018-08-28 18:01:34
 	 */
 	public String getModifiedUserName() {
 		return modifiedUserName;
@@ -281,7 +331,7 @@ public class MktActivityBirthdayPO implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-07-14 13:26:02
+	 * @mbg.generated  2018-08-28 18:01:34
 	 */
 	public void setModifiedUserName(String modifiedUserName) {
 		this.modifiedUserName = modifiedUserName == null ? null : modifiedUserName.trim();
@@ -289,7 +339,7 @@ public class MktActivityBirthdayPO implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-07-14 13:26:02
+	 * @mbg.generated  2018-08-28 18:01:34
 	 */
 	public Date getModifiedDate() {
 		return modifiedDate;
@@ -297,7 +347,7 @@ public class MktActivityBirthdayPO implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-07-14 13:26:02
+	 * @mbg.generated  2018-08-28 18:01:34
 	 */
 	public void setModifiedDate(Date modifiedDate) {
 		this.modifiedDate = modifiedDate;
@@ -305,7 +355,7 @@ public class MktActivityBirthdayPO implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-07-14 13:26:02
+	 * @mbg.generated  2018-08-28 18:01:34
 	 */
 	public Boolean getValid() {
 		return valid;
@@ -313,9 +363,25 @@ public class MktActivityBirthdayPO implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-07-14 13:26:02
+	 * @mbg.generated  2018-08-28 18:01:34
 	 */
 	public void setValid(Boolean valid) {
 		this.valid = valid;
+	}
+
+	/**
+	 * 只读. 
+	 * @mbg.generated  2018-08-28 18:01:34
+	 */
+	public String getStoreLimitList() {
+		return storeLimitList;
+	}
+
+	/**
+	 * 只读. 
+	 * @mbg.generated  2018-08-28 18:01:34
+	 */
+	public void setStoreLimitList(String storeLimitList) {
+		this.storeLimitList = storeLimitList == null ? null : storeLimitList.trim();
 	}
 }
