@@ -1,6 +1,7 @@
 package com.bizvane.mktcenterservice.interfaces;
 
 import com.bizvane.members.facade.models.MemberInfoModel;
+import com.bizvane.members.facade.vo.ExtendPropertyVO;
 import com.bizvane.mktcenterservice.models.bo.TaskBO;
 import com.bizvane.mktcenterservice.models.po.MktMessagePOExample;
 import com.bizvane.mktcenterservice.models.po.MktTaskRecordPO;
@@ -10,6 +11,7 @@ import com.bizvane.mktcenterservice.models.vo.TaskVO;
 import com.bizvane.utils.responseinfo.ResponseData;
 import com.bizvane.utils.tokens.SysAccountPO;
 
+import java.text.ParseException;
 import java.util.Date;
 import java.util.List;
 
@@ -21,13 +23,19 @@ import java.util.List;
  */
 public interface TaskProfileService {
     /**
+     * 获取完善资料的字段code和名称
+     * @param sysBrandId
+     * @return
+     */
+    public  ResponseData<List<ExtendPropertyVO>> getMemberField(Long sysBrandId);
+    /**
      * 添加完善资料任务
      * @param bo
      * @param stageUser
      * @return
      */
 
-    public ResponseData<Integer> addTask(TaskBO bo, SysAccountPO stageUser);
+    public ResponseData<Integer> addTask(TaskBO bo, SysAccountPO stageUser) throws ParseException;
 
     /**
      * 执行任务
@@ -45,19 +53,6 @@ public interface TaskProfileService {
      */
     public ResponseData<Integer> updateTask(TaskBO bo,SysAccountPO stageUser);
 
-    /**
-     * 查询任务详情
-     * @param taskId
-     * @return
-     */
-    public ResponseData<TaskBO> selectTaskById(Long taskId);
-
-//    /**
-//     * 查询商家选择出的让会员完善的扩展信息字段
-//     * @param brandId
-//     * @return
-//     */
-//    public ResponseData getChosenExtendProperty(Long brandId);
 
     /**
      * 完善资料任务效果分析
@@ -77,21 +72,6 @@ public interface TaskProfileService {
      */
     public ResponseData addToRecord(TaskVO vo, MemberInfoModel memberInfoModel);
 
-    /**
-     * 禁用任务
-     * @param taskId
-     * @param stageUser
-     * @return
-     */
-    public ResponseData stopTask(Long taskId,SysAccountPO stageUser);
 
-    /**
-     * 任务审核
-     * @param taskId
-     * @param stageUser
-     * @param checkStatus
-     * @return
-     */
-    public ResponseData checkTaskProfile(Long taskId,SysAccountPO stageUser,Integer checkStatus);
 
 }

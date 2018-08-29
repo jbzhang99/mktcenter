@@ -5,6 +5,7 @@ import com.bizvane.members.facade.models.MemberInfoModel;
 import com.bizvane.members.facade.service.api.ExtendPropertyApiService;
 import com.bizvane.members.facade.service.api.MemberInfoApiService;
 import com.bizvane.members.facade.service.api.MemberLevelApiService;
+import com.bizvane.members.facade.vo.ExtendPropertyVO;
 import com.bizvane.mktcenterservice.interfaces.TaskProfileService;
 import com.bizvane.mktcenterservice.models.bo.TaskBO;
 import com.bizvane.mktcenterservice.models.po.MktCouponPO;
@@ -24,6 +25,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -37,46 +39,34 @@ import java.util.List;
 @RestController
 @RequestMapping("taskProfile")
 public class TaskProfileController {
-
     @Autowired
     private TaskProfileService taskProfileService;
-
     @Autowired
     private MemberLevelApiService memberLevelApiService;
-
     @Autowired
     private MemberInfoApiService memberInfoApiService;
-
     @Autowired
     private ExtendPropertyApiService extendPropertyApiService;
 
-
+    /**
+     * 获取品牌下 完善资料的字段code和名称
+     * @param sysBrandId
+     * @return
+     */
+    @RequestMapping("getMemberField")
+    public  ResponseData<List<ExtendPropertyVO>> getMemberField(Long sysBrandId){
+        return taskProfileService.getMemberField(sysBrandId);
+    }
 
     /**
      * 创建任务
      * @return
      */
     @RequestMapping("addTask")
-    public ResponseData<Integer> addTask(TaskBO bo, HttpServletRequest request,SysAccountPO stageUser){
+    public ResponseData<Integer> addTask(TaskBO bo, HttpServletRequest request) throws ParseException {
+        SysAccountPO stageUser = TokenUtils.getStageUser(request);
+        return  taskProfileService.addTask(bo, stageUser);
 
-        //获取操作人信息
-        //SysAccountPO stageUser = TokenUtils.getStageUser(request);
-        //SysAccountPO stageUser = new SysAccountPO();
-
-        bo.getTaskVO().setTaskType(TaskTypeEnum.TASK_TYPE_PROFILE.getCode());
-        //todo  将propertyCode传给我
-        //参数校验
-        ResponseData responseData =  TaskParamCheckUtil.checkParam(bo);
-        //参数校验不通过
-        if (responseData.getCode()==SystemConstants.ERROR_CODE){
-            return responseData;
-        }
-
-        //新增任务
-        ResponseData<Integer> integerResponseData = taskProfileService.addTask(bo, stageUser);
-
-        //返回
-        return integerResponseData;
     }
 
     /**
@@ -87,91 +77,9 @@ public class TaskProfileController {
      */
     @RequestMapping("updateTask")
     public ResponseData<Integer> updateTask(TaskBO bo, HttpServletRequest request){
-        //参数校验
-        ResponseData responseData = TaskParamCheckUtil.checkParam(bo);
-        //参数校验不通过
-        if(SystemConstants.ERROR_CODE==responseData.getCode()){
-            return responseData;
-        }
-        //参数校验通过，获取操作人信息
         SysAccountPO stageUser = TokenUtils.getStageUser(request);
-        //SysAccountPO stageUser = new SysAccountPO();
-        //更新活动
-        ResponseData<Integer> registerData = taskProfileService.updateTask(bo,stageUser);
-
-        //返回
-
-        return registerData;
+        return taskProfileService.updateTask(bo,stageUser);
     }
-
-    /**
-     * 执行任务
-     * @param
-     * @return
-     */
-    @RequestMapping("executeTask")
-    public ResponseData<Integer> executeTask(TaskVO vo,MemberInfoModel memberInfoModel){
-
-        return taskProfileService.executeTask(vo,memberInfoModel);
-    }
-
-    /**
-     * 查询任务详情
-     * @param businessId
-     * @return
-     */
-    @RequestMapping("selectTaskById")
-    public ResponseData<TaskBO> selectTaskById(Long businessId){
-        return taskProfileService.selectTaskById(businessId);
-    }
-
-
-    /**
-     * 查询商家自定义扩展信息
-     * @param
-     * @return
-     */
-    //前端传回的是品牌id还是ExtendPropertyModel？？？？
-    @RequestMapping("getExtendProperty")
-    public ResponseData getExtendProperty(Long brandId){
-
-        ExtendPropertyModel extendPropertyModel = new ExtendPropertyModel();
-        extendPropertyModel.setBrandId(brandId);
-        return extendPropertyApiService.getExtendProperty(extendPropertyModel);
-
-    }
-
-    /**
-     * 任务审核
-     * @param businessId
-     * @param request
-     * @param checkStatus
-     * @return
-     */
-    @RequestMapping("checkTaskProfile")
-    public ResponseData checkTaskprofile(Long businessId,HttpServletRequest request,Integer checkStatus){
-
-        ResponseData responseData = new ResponseData();
-        SysAccountPO stageUser = TokenUtils.getStageUser(request);
-        //SysAccountPO stageUser =new SysAccountPO();
-                responseData = taskProfileService.checkTaskProfile(businessId,stageUser,checkStatus);
-        return responseData;
-    }
-
-
-    /**
-     * 禁用任务
-     * @param taskId
-     * @param request
-     * @return
-     */
-    @RequestMapping("stopTask")
-    public ResponseData stopTask(Long taskId,HttpServletRequest request){
-
-        SysAccountPO stageUser = TokenUtils.getStageUser(request);
-        return taskProfileService.stopTask(taskId, stageUser);
-    }
-
 
     /**
      * 效果分析
