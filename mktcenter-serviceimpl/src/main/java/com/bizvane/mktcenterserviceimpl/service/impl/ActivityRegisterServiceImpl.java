@@ -152,12 +152,14 @@ public class ActivityRegisterServiceImpl implements ActivityRegisterService {
             vo.setMbrLevelCode(bo.getActivityVO().getMbrLevelCode());
             vo.setLongTerm(bo.getActivityVO().getLongTerm());
             vo.setSysBrandId(activityVO.getSysBrandId());
+            vo.setActivityType(ActivityTypeEnum.ACTIVITY_TYPE_REGISGER.getCode());
             List<ActivityVO> registerList = mktActivityRegisterPOMapper.getActivityList(vo);
             if(!CollectionUtils.isEmpty(registerList)){
                 responseData.setCode(SysResponseEnum.FAILED.getCode());
                 responseData.setMessage("已存在同一类型的长期活动!");
                 return responseData;
             }
+
         }
 
         //查询审核配置，是否需要审核然后判断

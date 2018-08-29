@@ -57,6 +57,7 @@ public class ActivitySigninController {
         }*/
         //参数校验通过，获取操作人信息
         SysAccountPO stageUser = TokenUtils.getStageUser(request);
+        System.out.println("=============="+stageUser);
         //SysAccountPO stageUser = new SysAccountPO();
 
         //新增活动
