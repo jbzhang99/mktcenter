@@ -571,7 +571,10 @@
     tmab.member_type,
     tmab.mbr_level_code,
     tmab.mbr_level_name,
-    tmab.days_ahead
+    tmab.days_ahead,
+    tmab.is_store_limit,
+    tmab.store_limit_type,
+    tmab.store_limit_list
     FROM
     `t_mkt_activity` tma
     INNER JOIN t_mkt_activity_birthday tmab ON tma.mkt_activity_id = tmab.mkt_activity_id

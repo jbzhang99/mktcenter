@@ -553,7 +553,10 @@
     tmau.mkt_activity_id,
     tmau.member_type,
     tmau.mbr_level_code,
-    tmau.mbr_level_name
+    tmau.mbr_level_name,
+    tmau.is_store_limit,
+    tmau.store_limit_type,
+    tmau.store_limit_list
     FROM
     `t_mkt_activity` tma
     INNER JOIN t_mkt_activity_upgrade tmau ON tma.mkt_activity_id = tmau.mkt_activity_id

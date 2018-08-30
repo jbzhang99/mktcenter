@@ -28,6 +28,7 @@ import com.bizvane.mktcenterserviceimpl.common.enums.BusinessTypeEnum;
 import com.bizvane.mktcenterserviceimpl.common.enums.CheckStatusEnum;
 import com.bizvane.mktcenterserviceimpl.common.job.JobUtil;
 import com.bizvane.mktcenterserviceimpl.common.utils.CodeUtil;
+import com.bizvane.mktcenterserviceimpl.common.utils.ExecuteParamCheckUtil;
 import com.bizvane.mktcenterserviceimpl.mappers.*;
 import com.bizvane.utils.enumutils.SysResponseEnum;
 import com.bizvane.utils.jobutils.JobClient;
@@ -134,12 +135,19 @@ public class ActivityBirthdayServiceImpl implements ActivityBirthdayService {
             vo.setMbrLevelCode(bo.getActivityVO().getMbrLevelCode());
             vo.setLongTerm(bo.getActivityVO().getLongTerm());
             vo.setSysBrandId(activityVO.getSysBrandId());
+            vo.setSysBrandId(activityVO.getSysBrandId());
+            vo.setActivityType(ActivityTypeEnum.ACTIVITY_TYPE_BIRTHDAY.getCode());
             List<ActivityVO> registerList = mktActivityBirthdayPOMapper.getActivityBirthdayList(vo);
             if(!CollectionUtils.isEmpty(registerList)){
-                log.warn("已存在同一类型的长期活动");
-                responseData.setCode(SysResponseEnum.FAILED.getCode());
-                responseData.setMessage("已存在同一类型的长期活动!");
-                return responseData;
+                for (ActivityVO activity:registerList) {
+                    //判断适用商品
+                    if (!ExecuteParamCheckUtil.addActivitCheck(bo,activity)){
+                        responseData.setCode(SysResponseEnum.FAILED.getCode());
+                        responseData.setMessage("已存在同一类型的长期活动!");
+                        return responseData;
+                    }
+                }
+
             }
         }
 
@@ -217,6 +225,11 @@ public class ActivityBirthdayServiceImpl implements ActivityBirthdayService {
         mktActivityBirthdayPO.setMbrLevelCode(activityVO.getMbrLevelCode());
         mktActivityBirthdayPO.setMbrLevelName(activityVO.getMbrLevelName());
         mktActivityBirthdayPO.setDaysAhead(activityVO.getDaysAhead());
+        mktActivityBirthdayPO.setIsStoreLimit(activityVO.getStoreLimit());
+        if (false==activityVO.getStoreLimit()){
+            mktActivityBirthdayPO.setStoreLimitList(activityVO.getStoreLimitList());
+            mktActivityBirthdayPO.setStoreLimitType(activityVO.getStoreLimitType());
+        }
         log.info("增加一条数据到生日表参数为："+ JSON.toJSONString(mktActivityBirthdayPO));
         mktActivityBirthdayPOMapper.insertSelective(mktActivityBirthdayPO);
 

@@ -553,7 +553,10 @@
         tmar.mkt_activity_id,
         tmar.offline_card_status,
         tmar.mbr_level_code,
-        tmar.mbr_level_name
+        tmar.mbr_level_name,
+        tmar.is_store_limit,
+        tmar.store_limit_type,
+        tmar.store_limit_list
     FROM
         `t_mkt_activity` tma
     INNER JOIN t_mkt_activity_register tmar ON tma.mkt_activity_id = tmar.mkt_activity_id

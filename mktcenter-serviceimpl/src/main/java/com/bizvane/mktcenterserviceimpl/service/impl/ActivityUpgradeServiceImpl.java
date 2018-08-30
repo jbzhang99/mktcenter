@@ -32,6 +32,7 @@ import com.bizvane.mktcenterserviceimpl.common.award.MemberMessageSend;
 import com.bizvane.mktcenterserviceimpl.common.enums.*;
 import com.bizvane.mktcenterserviceimpl.common.utils.CodeUtil;
 import com.bizvane.mktcenterserviceimpl.common.job.JobUtil;
+import com.bizvane.mktcenterserviceimpl.common.utils.ExecuteParamCheckUtil;
 import com.bizvane.mktcenterserviceimpl.mappers.*;
 import com.bizvane.utils.enumutils.SysResponseEnum;
 import com.bizvane.utils.jobutils.JobClient;
@@ -140,13 +141,20 @@ public class ActivityUpgradeServiceImpl implements ActivityUpgradeService {
             ActivityVO vo = new ActivityVO();
             vo.setMbrLevelCode(bo.getActivityVO().getMbrLevelCode());
             vo.setLongTerm(bo.getActivityVO().getLongTerm());
+           vo.setSysBrandId(activityVO.getSysBrandId());
+           vo.setActivityType(ActivityTypeEnum.ACTIVITY_TYPE_UPGRADE.getCode());
             List<ActivityVO> activityUpgradeList = mktActivityUpgradePOMapper.getActivityUpgradeList(vo);
-            if(!CollectionUtils.isEmpty(activityUpgradeList)){
-                responseData.setCode(SysResponseEnum.FAILED.getCode());
-                responseData.setMessage("已存在同一类型的长期活动!");
-                return responseData;
+           if(!CollectionUtils.isEmpty(activityUpgradeList)){
+               for (ActivityVO activity:activityUpgradeList) {
+                   //判断适用商品
+                   if (!ExecuteParamCheckUtil.addActivitCheck(bo,activity)){
+                       responseData.setCode(SysResponseEnum.FAILED.getCode());
+                       responseData.setMessage("已存在同一类型的长期活动!");
+                       return responseData;
+                   }
+               }
 
-            }
+           }
         }
 
 
@@ -228,6 +236,11 @@ public class ActivityUpgradeServiceImpl implements ActivityUpgradeService {
         mktActivityUpgradePO.setMktActivityId(mktActivityId);
         mktActivityUpgradePO.setMbrLevelCode(activityVO.getMbrLevelCode());
         mktActivityUpgradePO.setMbrLevelName(activityVO.getMbrLevelName());
+        mktActivityUpgradePO.setIsStoreLimit(activityVO.getStoreLimit());
+        if (false==activityVO.getStoreLimit()){
+            mktActivityUpgradePO.setStoreLimitList(activityVO.getStoreLimitList());
+            mktActivityUpgradePO.setStoreLimitType(activityVO.getStoreLimitType());
+        }
         log.info("新增升级表数据="+ JSON.toJSONString(mktActivityUpgradePO));
         mktActivityUpgradePOMapper.insertSelective(mktActivityUpgradePO);
 
