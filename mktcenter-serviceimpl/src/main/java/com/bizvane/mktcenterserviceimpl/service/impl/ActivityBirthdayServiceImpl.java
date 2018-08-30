@@ -534,6 +534,10 @@ public class ActivityBirthdayServiceImpl implements ActivityBirthdayService {
     @Async("asyncServiceExecutor")
     public void birthdayReward(ActivityVO activityBirthday, List<MemberInfoModel> memberInfoModelList) {
         for (MemberInfoModel memberInfo:memberInfoModelList) {
+            //判断生日适用门店信息
+            if (!ExecuteParamCheckUtil.implementActivitCheck(memberInfo,activityBirthday)){
+                continue;
+            }
             //增加积分奖励新增接口
             IntegralRecordModel var1 = new IntegralRecordModel();
             var1.setMemberCode(memberInfo.getMemberCode());

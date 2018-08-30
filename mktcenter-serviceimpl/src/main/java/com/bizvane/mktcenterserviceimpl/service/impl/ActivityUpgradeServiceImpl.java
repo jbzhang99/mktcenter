@@ -531,6 +531,9 @@ public class ActivityUpgradeServiceImpl implements ActivityUpgradeService {
             return responseData;
         }
         for (ActivityVO activityVO:upgradeList) {
+            if (!ExecuteParamCheckUtil.implementActivitCheck(vo,activity)){
+                continue;
+            }
             ////增加积分奖励新增接口
             if (null!=activityVO.getPoints()){
                 AwardBO bo = new AwardBO();
