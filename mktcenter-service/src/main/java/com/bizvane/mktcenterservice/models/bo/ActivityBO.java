@@ -1,5 +1,6 @@
 package com.bizvane.mktcenterservice.models.bo;
 
+import com.bizvane.couponfacade.models.vo.CouponDetailResponseVO;
 import com.bizvane.couponfacade.models.vo.CouponEntityAndDefinitionVO;
 import com.bizvane.mktcenterservice.models.po.MktCouponPO;
 import com.bizvane.mktcenterservice.models.po.MktMessagePO;
@@ -34,13 +35,13 @@ public class ActivityBO {
     /**
      * 调用券接口的券对象
      */
-    private List<CouponEntityAndDefinitionVO> couponEntityAndDefinitionVOList;
+    private List<CouponDetailResponseVO> couponEntityAndDefinitionVOList;
 
-    public List<CouponEntityAndDefinitionVO> getCouponEntityAndDefinitionVOList() {
+    public List<CouponDetailResponseVO> getCouponEntityAndDefinitionVOList() {
         return couponEntityAndDefinitionVOList;
     }
 
-    public void setCouponEntityAndDefinitionVOList(List<CouponEntityAndDefinitionVO> couponEntityAndDefinitionVOList) {
+    public void setCouponEntityAndDefinitionVOList(List<CouponDetailResponseVO> couponEntityAndDefinitionVOList) {
         this.couponEntityAndDefinitionVOList = couponEntityAndDefinitionVOList;
     }
 
