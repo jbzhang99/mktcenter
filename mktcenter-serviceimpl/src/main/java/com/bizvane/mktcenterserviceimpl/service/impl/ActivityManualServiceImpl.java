@@ -93,7 +93,7 @@ public class ActivityManualServiceImpl implements ActivityManualService {
     public ResponseData<ActivityVO> getActivityManualList(ActivityVO vo, PageForm pageForm) {
         ResponseData responseData = new ResponseData();
         log.info("领券活动查询活动列表入参:ActivityVO:"+JSON.toJSONString(vo));
-        PageHelper.startPage(pageForm.getPageNum(), pageForm.getPageSize());
+        PageHelper.startPage(pageForm.getPageNumber(), pageForm.getPageSize());
         List<ActivityVO> activityManualList = new ArrayList<>();
         try {
             log.info("查询领券活动列表开始");

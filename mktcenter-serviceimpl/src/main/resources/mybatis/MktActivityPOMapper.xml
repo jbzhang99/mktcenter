@@ -711,6 +711,10 @@
     <if test="activityName != null and activityName!= ''">
       AND t.activity_name LIKE "%"#{activityName}"%"
     </if>
+    <!-- 适用领券活动-->
+    <if test="activityTypeExtend != null and activityTypeExtend!= ''">
+      AND t.activity_type IN (3,4)
+    </if>
   </select>
   <select id="getActivityAnalysisTotal" parameterType="com.bizvane.mktcenterservice.models.bo.ActivityAnalysisCountBO" resultType="com.bizvane.mktcenterservice.models.bo.CtivityAnalysisBO">
     SELECT COUNT(1)participateTotal, SUM(points)pointsSumTotal
@@ -721,6 +725,10 @@
     </if>
     <if test="activityType != null and activityType!= ''">
       AND t.activity_type = #{activityType}
+    </if>
+    <!-- 适用领券活动-->
+    <if test="activityTypeExtend != null and activityTypeExtend!= ''">
+      AND t.activity_type IN (3,4)
     </if>
   </select>
   <!--查询同一种类型积分总数量和总参与人数 -->

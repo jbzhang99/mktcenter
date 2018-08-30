@@ -44,6 +44,16 @@ public class ActivityAnalysisCountBO {
 
     private Date createDate;//创建日期
 
+    private Integer activityTypeExtend;//活动类型(适用领券活动)
+
+    public Integer getActivityTypeExtend() {
+        return activityTypeExtend;
+    }
+
+    public void setActivityTypeExtend(Integer activityTypeExtend) {
+        this.activityTypeExtend = activityTypeExtend;
+    }
+
     public Date getCreateDate() {
         return createDate;
     }
