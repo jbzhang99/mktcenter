@@ -31,6 +31,7 @@ public class TaskWXBO {
     private Date   endTime;
     private Integer  rewarded;  // 1=已完成  0未完成
     private String  taskProgress; //进度
+    private Integer sourceType;//1=线下   2=线上
 
     public Long getTaskId() {
         return taskId;
@@ -94,5 +95,13 @@ public class TaskWXBO {
 
     public void setTaskProgress(String taskProgress) {
         this.taskProgress = taskProgress;
+    }
+
+    public Integer getSourceType() {
+        return sourceType;
+    }
+
+    public void setSourceType(Integer sourceType) {
+        this.sourceType = sourceType;
     }
 }

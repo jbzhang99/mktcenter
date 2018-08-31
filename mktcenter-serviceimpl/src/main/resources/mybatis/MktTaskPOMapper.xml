@@ -862,139 +862,144 @@
   </select>
 <!-- 查询 会员已完成任务列表和未完成列表-->
   <select id="getCompleteTask" parameterType="com.bizvane.mktcenterservice.models.vo.TaskForWXVO" resultType="com.bizvane.mktcenterservice.models.bo.TaskWXBO">
-      SELECT
-      tmtr.task_id,
-      tmt.task_code,
-      tmt.task_name,
-      tmtr.task_type,
-      tmt.start_time,
-      tmt.end_time,
-       "1/1" AS task_progress ,
-      1 AS rewarded
-      FROM
-          t_mkt_task_record tmtr
-      INNER JOIN t_mkt_task  tmt ON tmtr.task_id=tmt.mkt_task_id
-      INNER JOIN  t_mkt_task_order tmto ON tmto.mkt_task_id=tmt.mkt_task_id
-      WHERE
-          tmtr.valid = 1
-      AND tmt.valid=1
-      AND  tmtr.task_type =1
-      AND tmto.valid=1
-      AND tmtr.rewarded=1
-      AND tmtr.sys_brand_id=#{brandId}
-      AND tmtr.member_code=#{memberCode}
-      GROUP BY tmtr.task_id,tmtr.task_type,tmtr.sys_brand_id,tmtr.member_code
-      <if test="rewarded!=null">
-        HAVING rewarded = #{rewarded}
-      </if>
-
-      UNION
-
-      SELECT
-      tmtr.task_id,
-      tmt.task_code,
-      tmt.task_name,
-      tmtr.task_type,
-      tmt.start_time,
-      tmt.end_time,
-      CONCAT(count(tmtr.member_code),'/',tmto.share_times) AS task_progress,
-      IF(count(tmtr.member_code)&gt;=tmto.share_times,1,0) AS rewarded
-      FROM
-          t_mkt_task_record tmtr
-      INNER JOIN t_mkt_task  tmt ON tmtr.task_id=tmt.mkt_task_id
-      INNER JOIN  t_mkt_task_share tmto ON tmto.mkt_task_id=tmt.mkt_task_id
-      WHERE
-          tmtr.valid = 1
-      AND tmt.valid=1
-      AND tmto.valid=1
-      AND  tmtr.task_type =2
-      AND tmtr.sys_brand_id=#{brandId}
-      AND tmtr.member_code=#{memberCode}
-      GROUP BY tmtr.task_id,tmtr.task_type,tmtr.sys_brand_id,tmtr.member_code
+    SELECT
+    tmtr.task_id,
+    tmt.task_code,
+    tmt.task_name,
+    tmtr.task_type,
+    tmt.start_time,
+    tmt.end_time,
+    "1/1" AS task_progress ,
+    rewarded,
+    2 as sourceType
+    FROM
+    t_mkt_task_record tmtr
+    INNER JOIN t_mkt_task  tmt ON tmtr.task_id=tmt.mkt_task_id
+    INNER JOIN  t_mkt_task_profile tmto ON tmto.mkt_task_id=tmt.mkt_task_id
+    WHERE
+    tmtr.valid = 1
+    AND tmt.valid=1
+    AND  tmtr.task_type =1
+    AND tmto.valid=1
+    AND tmtr.rewarded=1
+    AND tmtr.sys_brand_id=#{brandId}
+    AND tmtr.member_code=#{memberCode}
+    GROUP BY tmtr.task_id,tmtr.task_type,tmtr.sys_brand_id,tmtr.member_code
     <if test="rewarded!=null">
       HAVING rewarded = #{rewarded}
     </if>
 
-      UNION
+    UNION
 
-      SELECT
-      tmtr.task_id,
-      tmt.task_code,
-      tmt.task_name,
-      tmtr.task_type,
-      tmt.start_time,
-      tmt.end_time,
-      CONCAT(count(tmtr.member_code),'/',tmto.invite_num) AS task_progress ,
-      IF(count(tmtr.member_code)&gt;=tmto.invite_num,1,0) AS rewarded
-      FROM
-          t_mkt_task_record tmtr
-      INNER JOIN t_mkt_task  tmt ON tmtr.task_id=tmt.mkt_task_id
-      INNER JOIN  t_mkt_task_invite tmto ON tmto.mkt_task_id=tmt.mkt_task_id
-      WHERE
-          tmtr.valid = 1
-      AND tmt.valid=1
-      AND tmto.valid=1
-      AND  tmtr.task_type =3
-      AND tmtr.sys_brand_id=#{brandId}
-      AND tmtr.member_code=#{memberCode}
-      GROUP BY tmtr.task_id,tmtr.task_type,tmtr.sys_brand_id,tmtr.member_code
+    SELECT
+    tmtr.task_id,
+    tmt.task_code,
+    tmt.task_name,
+    tmtr.task_type,
+    tmt.start_time,
+    tmt.end_time,
+    CONCAT(count(tmtr.member_code),'/',tmto.share_times) AS task_progress,
+    IF(count(tmtr.member_code)&gt;=tmto.share_times,1,0) AS rewarded,
+    2 as sourceType
+    FROM
+    t_mkt_task_record tmtr
+    INNER JOIN t_mkt_task  tmt ON tmtr.task_id=tmt.mkt_task_id
+    INNER JOIN  t_mkt_task_share tmto ON tmto.mkt_task_id=tmt.mkt_task_id
+    WHERE
+    tmtr.valid = 1
+    AND tmt.valid=1
+    AND tmto.valid=1
+    AND  tmtr.task_type =2
+    AND tmtr.sys_brand_id=#{brandId}
+    AND tmtr.member_code=#{memberCode}
+    GROUP BY tmtr.task_id,tmtr.task_type,tmtr.sys_brand_id,tmtr.member_code
     <if test="rewarded!=null">
       HAVING rewarded = #{rewarded}
     </if>
 
-      UNION
+    UNION
 
-      SELECT
-      tmtr.task_id,
-      tmt.task_code,
-      tmt.task_name,
-      tmtr.task_type,
-      tmt.start_time,
-      tmt.end_time,
-      CONCAT(count(tmtr.member_code),'/',tmto.consume_times) AS task_progress ,
-      IF(count(tmtr.member_code)&gt;=tmto.consume_times,1,0) AS rewarded
-      FROM
-          t_mkt_task_record tmtr
-      INNER JOIN t_mkt_task  tmt ON tmtr.task_id=tmt.mkt_task_id
-      INNER JOIN  t_mkt_task_order tmto ON tmto.mkt_task_id=tmt.mkt_task_id
-      WHERE
-          tmtr.valid = 1
-      AND tmt.valid=1
-      AND  tmtr.task_type =4
-      AND tmto.valid=1
-      AND tmtr.sys_brand_id=#{brandId}
-      AND tmtr.member_code=#{memberCode}
-      GROUP BY tmtr.task_id,tmtr.task_type,tmtr.sys_brand_id,tmtr.member_code
+    SELECT
+    tmtr.task_id,
+    tmt.task_code,
+    tmt.task_name,
+    tmtr.task_type,
+    tmt.start_time,
+    tmt.end_time,
+    CONCAT(count(tmtr.member_code),'/',tmto.invite_num) AS task_progress ,
+    IF(count(tmtr.member_code)&gt;=tmto.invite_num,1,0) AS rewarded,
+    2 as sourceType
+    FROM
+    t_mkt_task_record tmtr
+    INNER JOIN t_mkt_task  tmt ON tmtr.task_id=tmt.mkt_task_id
+    INNER JOIN  t_mkt_task_invite tmto ON tmto.mkt_task_id=tmt.mkt_task_id
+    WHERE
+    tmtr.valid = 1
+    AND tmt.valid=1
+    AND tmto.valid=1
+    AND  tmtr.task_type =3
+    AND tmtr.sys_brand_id=#{brandId}
+    AND tmtr.member_code=#{memberCode}
+    GROUP BY tmtr.task_id,tmtr.task_type,tmtr.sys_brand_id,tmtr.member_code
     <if test="rewarded!=null">
       HAVING rewarded = #{rewarded}
     </if>
 
-      UNION
+    UNION
 
-      SELECT
-      tmtr.task_id,
-      tmt.task_code,
-      tmt.task_name,
-      tmtr.task_type,
-      tmt.start_time,
-      tmt.end_time,
-      IF(count(tmtr.consume_amount)&gt;=tmto.consume_amount,'1/1','0/1') AS task_progress,
-      IF(count(tmtr.consume_amount)&gt;=tmto.consume_amount,1,0) AS rewarded
-      FROM
-          t_mkt_task_record tmtr
-      INNER JOIN t_mkt_task  tmt ON tmtr.task_id=tmt.mkt_task_id
-      INNER JOIN  t_mkt_task_order tmto ON tmto.mkt_task_id=tmt.mkt_task_id
-      WHERE
-          tmtr.valid = 1
-      AND tmt.valid=1
-      AND  tmtr.task_type =1
-      AND tmto.valid=5
-      AND tmtr.sys_brand_id=#{brandId}
-      AND tmtr.member_code=#{memberCode}
-      GROUP BY tmtr.task_id,tmtr.task_type,tmtr.sys_brand_id,tmtr.member_code
-      <if test="rewarded!=null">
-        HAVING rewarded = #{rewarded}
-      </if>
+    SELECT
+    tmtr.task_id,
+    tmt.task_code,
+    tmt.task_name,
+    tmtr.task_type,
+    tmt.start_time,
+    tmt.end_time,
+    CONCAT(count(tmtr.member_code),'/',tmto.consume_times) AS task_progress ,
+    IF(count(tmtr.member_code)&gt;=tmto.consume_times,1,0) AS rewarded,
+    IF(tmto.order_source &lt;&gt;1, 2,1,) as sourceType
+    FROM
+    t_mkt_task_record tmtr
+    INNER JOIN t_mkt_task  tmt ON tmtr.task_id=tmt.mkt_task_id
+    INNER JOIN  t_mkt_task_order tmto ON tmto.mkt_task_id=tmt.mkt_task_id
+    WHERE
+    tmtr.valid = 1
+    AND tmt.valid=1
+    AND  tmtr.task_type =4
+    AND tmto.valid=1
+    AND tmtr.sys_brand_id=#{brandId}
+    AND tmtr.member_code=#{memberCode}
+    GROUP BY tmtr.task_id,tmtr.task_type,tmtr.sys_brand_id,tmtr.member_code
+    <if test="rewarded!=null">
+      HAVING rewarded = #{rewarded}
+    </if>
+
+    UNION
+
+    SELECT
+    tmtr.task_id,
+    tmt.task_code,
+    tmt.task_name,
+    tmtr.task_type,
+    tmt.start_time,
+    tmt.end_time,
+    IF(count(tmtr.consume_amount)&gt;=tmto.consume_amount,'1/1','0/1') AS task_progress,
+    IF(count(tmtr.consume_amount)&gt;=tmto.consume_amount,1,0) AS rewarded,
+    IF(tmto.order_source &lt;&gt;1, 2,1,) as sourceType
+    FROM
+    t_mkt_task_record tmtr
+    INNER JOIN t_mkt_task  tmt ON tmtr.task_id=tmt.mkt_task_id
+    INNER JOIN  t_mkt_task_order tmto ON tmto.mkt_task_id=tmt.mkt_task_id
+    WHERE
+    tmtr.valid = 1
+    AND tmt.valid=1
+    AND  tmtr.task_type =1
+    AND tmto.valid=5
+    AND tmtr.sys_brand_id=#{brandId}
+    AND tmtr.member_code=#{memberCode}
+    GROUP BY tmtr.task_id,tmtr.task_type,tmtr.sys_brand_id,tmtr.member_code
+    <if test="rewarded!=null">
+      HAVING rewarded = #{rewarded}
+    </if>
         </select>
   <select id="getTaskWXDetail" resultMap="taskWXDetailMap">
       SELECT
