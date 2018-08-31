@@ -956,7 +956,7 @@
     tmt.end_time,
     CONCAT(count(tmtr.member_code),'/',tmto.consume_times) AS task_progress ,
     IF(count(tmtr.member_code)&gt;=tmto.consume_times,1,0) AS rewarded,
-    IF(tmto.order_source &lt;&gt;1, 2,1,) as sourceType
+    IF(tmto.order_source <![CDATA[ <> ]]>1, 2,1) as sourceType
     FROM
     t_mkt_task_record tmtr
     INNER JOIN t_mkt_task  tmt ON tmtr.task_id=tmt.mkt_task_id
@@ -984,7 +984,7 @@
     tmt.end_time,
     IF(count(tmtr.consume_amount)&gt;=tmto.consume_amount,'1/1','0/1') AS task_progress,
     IF(count(tmtr.consume_amount)&gt;=tmto.consume_amount,1,0) AS rewarded,
-    IF(tmto.order_source &lt;&gt;1, 2,1,) as sourceType
+    IF(tmto.order_source <![CDATA[ <> ]]>1, 2,1) as sourceType
     FROM
     t_mkt_task_record tmtr
     INNER JOIN t_mkt_task  tmt ON tmtr.task_id=tmt.mkt_task_id
@@ -1000,7 +1000,7 @@
     <if test="rewarded!=null">
       HAVING rewarded = #{rewarded}
     </if>
-        </select>
+   </select>
   <select id="getTaskWXDetail" resultMap="taskWXDetailMap">
       SELECT
       tmt.mkt_task_id,
