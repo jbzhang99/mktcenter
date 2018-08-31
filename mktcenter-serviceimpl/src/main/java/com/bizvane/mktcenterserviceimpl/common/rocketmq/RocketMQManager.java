@@ -26,7 +26,7 @@ import java.util.Properties;
  * 2018年5月21日下午2:01:31
  */
 @Component
-@EnableApolloConfig({"RocketMQManager"})
+//@EnableApolloConfig({"RocketMQManager"})
 public class RocketMQManager implements ApplicationRunner {
 
   @Value("${rocketmq.onsaddr}")
