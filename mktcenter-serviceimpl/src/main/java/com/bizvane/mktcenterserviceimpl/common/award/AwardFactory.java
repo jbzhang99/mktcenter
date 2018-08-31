@@ -7,7 +7,9 @@ import com.bizvane.couponfacade.models.vo.SendCouponSimpleRequestVO;
 import com.bizvane.members.facade.enums.IntegralChangeTypeEnum;
 import com.bizvane.members.facade.exception.MemberException;
 import com.bizvane.members.facade.models.IntegralRecordModel;
+import com.bizvane.members.facade.service.api.IntegralChangeApiService;
 import com.bizvane.members.facade.service.api.IntegralRecordApiService;
+import com.bizvane.members.facade.service.card.request.IntegralChangeRequestModel;
 import com.bizvane.messagefacade.interfaces.SendCommonMessageFeign;
 import com.bizvane.messagefacade.interfaces.TemplateMessageServiceFeign;
 import com.bizvane.messagefacade.models.vo.ActivityMessageVO;
@@ -50,6 +52,8 @@ public class AwardFactory {
 
     @Autowired
     private TemplateMessageServiceFeign templateMessageServiceFeign;
+    @Autowired
+    private IntegralChangeApiService integralChangeApiService;
     /**
      * 奖励券，单
      * @param bo
@@ -104,6 +108,7 @@ public class AwardFactory {
             IntegralRecordModel var1 = bo.getIntegralRecordModel();
             var1.setChangeWay(IntegralChangeTypeEnum.INCOME.getCode());
             ResponseData responseData1 = integralRecordApiService.updateMemberIntegral(var1);
+           // integralChangeApiService.integralChangeOperate();
         } catch (MemberException e) {
             log.error("com.bizvane.mktcenterserviceimpl.common.award.AwardFactory.awardIntegral error:"+e.getMessage());
             responseData.setCode(ResponseConstants.ERROR);

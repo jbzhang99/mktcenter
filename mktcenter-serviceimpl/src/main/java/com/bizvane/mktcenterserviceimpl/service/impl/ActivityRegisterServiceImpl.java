@@ -17,6 +17,7 @@ import com.bizvane.members.facade.models.MemberInfoModel;
 import com.bizvane.members.facade.service.api.IntegralRecordApiService;
 import com.bizvane.members.facade.service.api.MemberInfoApiService;
 import com.bizvane.members.facade.service.api.MembersAdvancedSearchApiService;
+import com.bizvane.members.facade.service.card.request.IntegralChangeRequestModel;
 import com.bizvane.members.facade.vo.MemberInfoApiModel;
 import com.bizvane.members.facade.vo.MemberInfoVo;
 import com.bizvane.members.facade.vo.PageVo;
@@ -142,6 +143,13 @@ public class ActivityRegisterServiceImpl implements ActivityRegisterService {
         //增加活动类型是开卡活动
         activityVO.setActivityType(ActivityTypeEnum.ACTIVITY_TYPE_REGISGER.getCode());
         //增加品牌id
+        log.info("获取的品牌id是="+stageUser.getBrandId());
+        if(null==stageUser.getBrandId()){
+            log.error("token没有获取到品牌id");
+            responseData.setCode(SysResponseEnum.FAILED.getCode());
+            responseData.setMessage("Token没有获取到品牌id!");
+            return responseData;
+        }
         activityVO.setSysBrandId(stageUser.getBrandId());
         MktActivityPOWithBLOBs mktActivityPOWithBLOBs = new MktActivityPOWithBLOBs();
         BeanUtils.copyProperties(activityVO,mktActivityPOWithBLOBs);
@@ -340,6 +348,8 @@ public class ActivityRegisterServiceImpl implements ActivityRegisterService {
                    if(null!=activityVO.getPoints()){
                        AwardBO bo = new AwardBO();
                        IntegralRecordModel integralRecordModel = new IntegralRecordModel();
+                       //用这个实体类
+                       IntegralChangeRequestModel IntegralChangeRequestModel =new IntegralChangeRequestModel();
                        integralRecordModel.setMemberCode(vo.getMemberCode());
                        integralRecordModel.setChangeBills(activityVO.getActivityCode());
                        integralRecordModel.setChangeIntegral(activityVO.getPoints());

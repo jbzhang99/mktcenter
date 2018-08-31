@@ -132,6 +132,13 @@ public class ActivityOrderServiceImpl implements ActivityOrderService {
         //增加活动类型是消费活动
         activityVO.setActivityType(ActivityTypeEnum.ACTIVITY_TYPE_ORDER.getCode());
         //增加品牌id
+        log.info("获取的品牌id是="+stageUser.getBrandId());
+        if(null==stageUser.getBrandId()){
+            log.error("token没有获取到品牌id");
+            responseData.setCode(SysResponseEnum.FAILED.getCode());
+            responseData.setMessage("Token没有获取到品牌id!");
+            return responseData;
+        }
         activityVO.setSysBrandId(stageUser.getBrandId());
         MktActivityPOWithBLOBs mktActivityPOWithBLOBs = new MktActivityPOWithBLOBs();
         BeanUtils.copyProperties(activityVO,mktActivityPOWithBLOBs);
