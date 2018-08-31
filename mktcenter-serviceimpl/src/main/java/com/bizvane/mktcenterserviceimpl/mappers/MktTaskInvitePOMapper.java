@@ -13,68 +13,68 @@ public interface MktTaskInvitePOMapper {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-07-25 16:02:16
+	 * @mbg.generated  2018-08-31 12:40:26
 	 */
 	long countByExample(MktTaskInvitePOExample example);
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-07-25 16:02:16
+	 * @mbg.generated  2018-08-31 12:40:26
 	 */
 	int deleteByExample(MktTaskInvitePOExample example);
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-07-25 16:02:16
+	 * @mbg.generated  2018-08-31 12:40:26
 	 */
 	int deleteByPrimaryKey(Long mktTaskInviteId);
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-07-25 16:02:16
+	 * @mbg.generated  2018-08-31 12:40:26
 	 */
 	int insert(MktTaskInvitePO record);
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-07-25 16:02:16
+	 * @mbg.generated  2018-08-31 12:40:26
 	 */
 	int insertSelective(MktTaskInvitePO record);
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-07-25 16:02:16
+	 * @mbg.generated  2018-08-31 12:40:26
 	 */
 	List<MktTaskInvitePO> selectByExample(MktTaskInvitePOExample example);
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-07-25 16:02:16
+	 * @mbg.generated  2018-08-31 12:40:26
 	 */
 	MktTaskInvitePO selectByPrimaryKey(Long mktTaskInviteId);
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-07-25 16:02:16
+	 * @mbg.generated  2018-08-31 12:40:26
 	 */
 	int updateByExampleSelective(@Param("record") MktTaskInvitePO record,
 			@Param("example") MktTaskInvitePOExample example);
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-07-25 16:02:16
+	 * @mbg.generated  2018-08-31 12:40:26
 	 */
 	int updateByExample(@Param("record") MktTaskInvitePO record, @Param("example") MktTaskInvitePOExample example);
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-07-25 16:02:16
+	 * @mbg.generated  2018-08-31 12:40:26
 	 */
 	int updateByPrimaryKeySelective(MktTaskInvitePO record);
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-07-25 16:02:16
+	 * @mbg.generated  2018-08-31 12:40:26
 	 */
 	int updateByPrimaryKey(MktTaskInvitePO record);
 

@@ -4,7 +4,7 @@
   <resultMap id="BaseResultMap" type="com.bizvane.mktcenterservice.models.po.RocketLogPO">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-17 10:38:52.
+      This element was generated on 2018-08-31 12:40:26.
     -->
     <id column="rocket_log_id" jdbcType="BIGINT" property="rocketLogId" />
     <result column="message_id" jdbcType="VARCHAR" property="messageId" />
@@ -21,7 +21,7 @@
   <sql id="Example_Where_Clause">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-17 10:38:52.
+      This element was generated on 2018-08-31 12:40:26.
     -->
     <where>
       <foreach collection="oredCriteria" item="criteria" separator="or">
@@ -54,7 +54,7 @@
   <sql id="Update_By_Example_Where_Clause">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-17 10:38:52.
+      This element was generated on 2018-08-31 12:40:26.
     -->
     <where>
       <foreach collection="example.oredCriteria" item="criteria" separator="or">
@@ -87,7 +87,7 @@
   <sql id="Base_Column_List">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-17 10:38:52.
+      This element was generated on 2018-08-31 12:40:26.
     -->
     rocket_log_id, message_id, bussiness_id, bussiness_module_code, data_body, result_info, 
     send_state, update_user_id, update_date, create_user_id, create_date
@@ -95,7 +95,7 @@
   <select id="selectByExample" parameterType="com.bizvane.mktcenterservice.models.po.RocketLogPOExample" resultMap="BaseResultMap">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-17 10:38:52.
+      This element was generated on 2018-08-31 12:40:26.
     -->
     select
     <if test="distinct">
@@ -113,7 +113,7 @@
   <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-17 10:38:52.
+      This element was generated on 2018-08-31 12:40:26.
     -->
     select 
     <include refid="Base_Column_List" />
@@ -123,7 +123,7 @@
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-17 10:38:52.
+      This element was generated on 2018-08-31 12:40:26.
     -->
     delete from t_rocket_log
     where rocket_log_id = #{rocketLogId,jdbcType=BIGINT}
@@ -131,7 +131,7 @@
   <delete id="deleteByExample" parameterType="com.bizvane.mktcenterservice.models.po.RocketLogPOExample">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-17 10:38:52.
+      This element was generated on 2018-08-31 12:40:26.
     -->
     delete from t_rocket_log
     <if test="_parameter != null">
@@ -141,7 +141,7 @@
   <insert id="insert" parameterType="com.bizvane.mktcenterservice.models.po.RocketLogPO">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-17 10:38:52.
+      This element was generated on 2018-08-31 12:40:26.
     -->
     <selectKey keyProperty="rocketLogId" order="AFTER" resultType="java.lang.Long">
       SELECT LAST_INSERT_ID()
@@ -158,7 +158,7 @@
   <insert id="insertSelective" parameterType="com.bizvane.mktcenterservice.models.po.RocketLogPO">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-17 10:38:52.
+      This element was generated on 2018-08-31 12:40:26.
     -->
     <selectKey keyProperty="rocketLogId" order="AFTER" resultType="java.lang.Long">
       SELECT LAST_INSERT_ID()
@@ -232,7 +232,7 @@
   <select id="countByExample" parameterType="com.bizvane.mktcenterservice.models.po.RocketLogPOExample" resultType="java.lang.Long">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-17 10:38:52.
+      This element was generated on 2018-08-31 12:40:26.
     -->
     select count(*) from t_rocket_log
     <if test="_parameter != null">
@@ -242,7 +242,7 @@
   <update id="updateByExampleSelective" parameterType="map">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-17 10:38:52.
+      This element was generated on 2018-08-31 12:40:26.
     -->
     update t_rocket_log
     <set>
@@ -287,7 +287,7 @@
   <update id="updateByExample" parameterType="map">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-17 10:38:52.
+      This element was generated on 2018-08-31 12:40:26.
     -->
     update t_rocket_log
     set rocket_log_id = #{record.rocketLogId,jdbcType=BIGINT},
@@ -308,7 +308,7 @@
   <update id="updateByPrimaryKeySelective" parameterType="com.bizvane.mktcenterservice.models.po.RocketLogPO">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-17 10:38:52.
+      This element was generated on 2018-08-31 12:40:26.
     -->
     update t_rocket_log
     <set>
@@ -348,7 +348,7 @@
   <update id="updateByPrimaryKey" parameterType="com.bizvane.mktcenterservice.models.po.RocketLogPO">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-17 10:38:52.
+      This element was generated on 2018-08-31 12:40:26.
     -->
     update t_rocket_log
     set message_id = #{messageId,jdbcType=VARCHAR},

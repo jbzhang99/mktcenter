@@ -4,9 +4,10 @@
   <resultMap id="BaseResultMap" type="com.bizvane.mktcenterservice.models.po.MktActivityMqLogPO">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-14 13:26:02.
+      This element was generated on 2018-08-31 12:40:26.
     -->
     <id column="mkt_activity_mq_log_id" jdbcType="BIGINT" property="mktActivityMqLogId" />
+    <result column="sys_company_id" jdbcType="BIGINT" property="sysCompanyId" />
     <result column="mkt_activity_id" jdbcType="VARCHAR" property="mktActivityId" />
     <result column="partition" jdbcType="INTEGER" property="partition" />
     <result column="offset" jdbcType="INTEGER" property="offset" />
@@ -24,7 +25,7 @@
   <sql id="Example_Where_Clause">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-14 13:26:02.
+      This element was generated on 2018-08-31 12:40:26.
     -->
     <where>
       <foreach collection="oredCriteria" item="criteria" separator="or">
@@ -57,7 +58,7 @@
   <sql id="Update_By_Example_Where_Clause">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-14 13:26:02.
+      This element was generated on 2018-08-31 12:40:26.
     -->
     <where>
       <foreach collection="example.oredCriteria" item="criteria" separator="or">
@@ -90,16 +91,16 @@
   <sql id="Base_Column_List">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-14 13:26:02.
+      This element was generated on 2018-08-31 12:40:26.
     -->
-    mkt_activity_mq_log_id, mkt_activity_id, partition, offset, type, value, remark, 
-    create_user_id, create_user_name, create_date, modified_user_id, modified_user_name, 
+    mkt_activity_mq_log_id, sys_company_id, mkt_activity_id, partition, offset, type, 
+    value, remark, create_user_id, create_user_name, create_date, modified_user_id, modified_user_name, 
     modified_date, valid
   </sql>
   <select id="selectByExample" parameterType="com.bizvane.mktcenterservice.models.po.MktActivityMqLogPOExample" resultMap="BaseResultMap">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-14 13:26:02.
+      This element was generated on 2018-08-31 12:40:26.
     -->
     select
     <if test="distinct">
@@ -117,7 +118,7 @@
   <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-14 13:26:02.
+      This element was generated on 2018-08-31 12:40:26.
     -->
     select 
     <include refid="Base_Column_List" />
@@ -127,7 +128,7 @@
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-14 13:26:02.
+      This element was generated on 2018-08-31 12:40:26.
     -->
     delete from t_mkt_activity_mq_log
     where mkt_activity_mq_log_id = #{mktActivityMqLogId,jdbcType=BIGINT}
@@ -135,7 +136,7 @@
   <delete id="deleteByExample" parameterType="com.bizvane.mktcenterservice.models.po.MktActivityMqLogPOExample">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-14 13:26:02.
+      This element was generated on 2018-08-31 12:40:26.
     -->
     delete from t_mkt_activity_mq_log
     <if test="_parameter != null">
@@ -145,32 +146,35 @@
   <insert id="insert" parameterType="com.bizvane.mktcenterservice.models.po.MktActivityMqLogPO">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-14 13:26:02.
+      This element was generated on 2018-08-31 12:40:26.
     -->
     <selectKey keyProperty="mktActivityMqLogId" order="AFTER" resultType="java.lang.Long">
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into t_mkt_activity_mq_log (mkt_activity_id, partition, offset, 
-      type, value, remark, 
-      create_user_id, create_user_name, create_date, 
-      modified_user_id, modified_user_name, modified_date, 
-      valid)
-    values (#{mktActivityId,jdbcType=VARCHAR}, #{partition,jdbcType=INTEGER}, #{offset,jdbcType=INTEGER}, 
-      #{type,jdbcType=BIGINT}, #{value,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}, 
-      #{createUserId,jdbcType=BIGINT}, #{createUserName,jdbcType=VARCHAR}, #{createDate,jdbcType=TIMESTAMP}, 
-      #{modifiedUserId,jdbcType=BIGINT}, #{modifiedUserName,jdbcType=VARCHAR}, #{modifiedDate,jdbcType=TIMESTAMP}, 
-      #{valid,jdbcType=BIT})
+    insert into t_mkt_activity_mq_log (sys_company_id, mkt_activity_id, partition, 
+      offset, type, value, 
+      remark, create_user_id, create_user_name, 
+      create_date, modified_user_id, modified_user_name, 
+      modified_date, valid)
+    values (#{sysCompanyId,jdbcType=BIGINT}, #{mktActivityId,jdbcType=VARCHAR}, #{partition,jdbcType=INTEGER}, 
+      #{offset,jdbcType=INTEGER}, #{type,jdbcType=BIGINT}, #{value,jdbcType=VARCHAR}, 
+      #{remark,jdbcType=VARCHAR}, #{createUserId,jdbcType=BIGINT}, #{createUserName,jdbcType=VARCHAR}, 
+      #{createDate,jdbcType=TIMESTAMP}, #{modifiedUserId,jdbcType=BIGINT}, #{modifiedUserName,jdbcType=VARCHAR}, 
+      #{modifiedDate,jdbcType=TIMESTAMP}, #{valid,jdbcType=BIT})
   </insert>
   <insert id="insertSelective" parameterType="com.bizvane.mktcenterservice.models.po.MktActivityMqLogPO">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-14 13:26:02.
+      This element was generated on 2018-08-31 12:40:26.
     -->
     <selectKey keyProperty="mktActivityMqLogId" order="AFTER" resultType="java.lang.Long">
       SELECT LAST_INSERT_ID()
     </selectKey>
     insert into t_mkt_activity_mq_log
     <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="sysCompanyId != null">
+        sys_company_id,
+      </if>
       <if test="mktActivityId != null">
         mkt_activity_id,
       </if>
@@ -212,6 +216,9 @@
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="sysCompanyId != null">
+        #{sysCompanyId,jdbcType=BIGINT},
+      </if>
       <if test="mktActivityId != null">
         #{mktActivityId,jdbcType=VARCHAR},
       </if>
@@ -256,7 +263,7 @@
   <select id="countByExample" parameterType="com.bizvane.mktcenterservice.models.po.MktActivityMqLogPOExample" resultType="java.lang.Long">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-14 13:26:02.
+      This element was generated on 2018-08-31 12:40:26.
     -->
     select count(*) from t_mkt_activity_mq_log
     <if test="_parameter != null">
@@ -266,12 +273,15 @@
   <update id="updateByExampleSelective" parameterType="map">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-14 13:26:02.
+      This element was generated on 2018-08-31 12:40:26.
     -->
     update t_mkt_activity_mq_log
     <set>
       <if test="record.mktActivityMqLogId != null">
         mkt_activity_mq_log_id = #{record.mktActivityMqLogId,jdbcType=BIGINT},
+      </if>
+      <if test="record.sysCompanyId != null">
+        sys_company_id = #{record.sysCompanyId,jdbcType=BIGINT},
       </if>
       <if test="record.mktActivityId != null">
         mkt_activity_id = #{record.mktActivityId,jdbcType=VARCHAR},
@@ -320,10 +330,11 @@
   <update id="updateByExample" parameterType="map">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-14 13:26:02.
+      This element was generated on 2018-08-31 12:40:26.
     -->
     update t_mkt_activity_mq_log
     set mkt_activity_mq_log_id = #{record.mktActivityMqLogId,jdbcType=BIGINT},
+      sys_company_id = #{record.sysCompanyId,jdbcType=BIGINT},
       mkt_activity_id = #{record.mktActivityId,jdbcType=VARCHAR},
       partition = #{record.partition,jdbcType=INTEGER},
       offset = #{record.offset,jdbcType=INTEGER},
@@ -344,10 +355,13 @@
   <update id="updateByPrimaryKeySelective" parameterType="com.bizvane.mktcenterservice.models.po.MktActivityMqLogPO">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-14 13:26:02.
+      This element was generated on 2018-08-31 12:40:26.
     -->
     update t_mkt_activity_mq_log
     <set>
+      <if test="sysCompanyId != null">
+        sys_company_id = #{sysCompanyId,jdbcType=BIGINT},
+      </if>
       <if test="mktActivityId != null">
         mkt_activity_id = #{mktActivityId,jdbcType=VARCHAR},
       </if>
@@ -393,10 +407,11 @@
   <update id="updateByPrimaryKey" parameterType="com.bizvane.mktcenterservice.models.po.MktActivityMqLogPO">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-14 13:26:02.
+      This element was generated on 2018-08-31 12:40:26.
     -->
     update t_mkt_activity_mq_log
-    set mkt_activity_id = #{mktActivityId,jdbcType=VARCHAR},
+    set sys_company_id = #{sysCompanyId,jdbcType=BIGINT},
+      mkt_activity_id = #{mktActivityId,jdbcType=VARCHAR},
       partition = #{partition,jdbcType=INTEGER},
       offset = #{offset,jdbcType=INTEGER},
       type = #{type,jdbcType=BIGINT},

@@ -4,9 +4,10 @@
   <resultMap id="BaseResultMap" type="com.bizvane.mktcenterservice.models.po.MktActivitySignin">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-14 13:26:02.
+      This element was generated on 2018-08-31 12:40:26.
     -->
     <id column="mkt_activity_sign_in_id" jdbcType="BIGINT" property="mktActivitySignInId" />
+    <result column="sys_company_id" jdbcType="BIGINT" property="sysCompanyId" />
     <result column="mkt_activity_id" jdbcType="BIGINT" property="mktActivityId" />
     <result column="sign_type" jdbcType="INTEGER" property="signType" />
     <result column="integral_type" jdbcType="VARCHAR" property="integralType" />
@@ -25,7 +26,7 @@
   <sql id="Example_Where_Clause">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-14 13:26:02.
+      This element was generated on 2018-08-31 12:40:26.
     -->
     <where>
       <foreach collection="oredCriteria" item="criteria" separator="or">
@@ -58,7 +59,7 @@
   <sql id="Update_By_Example_Where_Clause">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-14 13:26:02.
+      This element was generated on 2018-08-31 12:40:26.
     -->
     <where>
       <foreach collection="example.oredCriteria" item="criteria" separator="or">
@@ -91,16 +92,16 @@
   <sql id="Base_Column_List">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-14 13:26:02.
+      This element was generated on 2018-08-31 12:40:26.
     -->
-    mkt_activity_sign_in_id, mkt_activity_id, sign_type, integral_type, integral_basis, 
-    integral_addend, integral_max, remark, create_user_id, create_user_name, create_date, 
-    modified_user_id, modified_user_name, modified_date, valid
+    mkt_activity_sign_in_id, sys_company_id, mkt_activity_id, sign_type, integral_type, 
+    integral_basis, integral_addend, integral_max, remark, create_user_id, create_user_name, 
+    create_date, modified_user_id, modified_user_name, modified_date, valid
   </sql>
   <select id="selectByExample" parameterType="com.bizvane.mktcenterservice.models.po.MktActivitySigninExample" resultMap="BaseResultMap">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-14 13:26:02.
+      This element was generated on 2018-08-31 12:40:26.
     -->
     select
     <if test="distinct">
@@ -118,7 +119,7 @@
   <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-14 13:26:02.
+      This element was generated on 2018-08-31 12:40:26.
     -->
     select 
     <include refid="Base_Column_List" />
@@ -128,7 +129,7 @@
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-14 13:26:02.
+      This element was generated on 2018-08-31 12:40:26.
     -->
     delete from t_mkt_activity_signin
     where mkt_activity_sign_in_id = #{mktActivitySignInId,jdbcType=BIGINT}
@@ -136,7 +137,7 @@
   <delete id="deleteByExample" parameterType="com.bizvane.mktcenterservice.models.po.MktActivitySigninExample">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-14 13:26:02.
+      This element was generated on 2018-08-31 12:40:26.
     -->
     delete from t_mkt_activity_signin
     <if test="_parameter != null">
@@ -146,30 +147,33 @@
   <insert id="insert" parameterType="com.bizvane.mktcenterservice.models.po.MktActivitySignin">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-14 13:26:02.
+      This element was generated on 2018-08-31 12:40:26.
     -->
-    insert into t_mkt_activity_signin (mkt_activity_sign_in_id, mkt_activity_id, 
-      sign_type, integral_type, integral_basis, 
-      integral_addend, integral_max, remark, 
-      create_user_id, create_user_name, create_date, 
-      modified_user_id, modified_user_name, modified_date, 
-      valid)
-    values (#{mktActivitySignInId,jdbcType=BIGINT}, #{mktActivityId,jdbcType=BIGINT}, 
-      #{signType,jdbcType=INTEGER}, #{integralType,jdbcType=VARCHAR}, #{integralBasis,jdbcType=BIGINT}, 
-      #{integralAddend,jdbcType=BIGINT}, #{integralMax,jdbcType=BIGINT}, #{remark,jdbcType=VARCHAR}, 
-      #{createUserId,jdbcType=BIGINT}, #{createUserName,jdbcType=VARCHAR}, #{createDate,jdbcType=TIMESTAMP}, 
-      #{modifiedUserId,jdbcType=BIGINT}, #{modifiedUserName,jdbcType=VARCHAR}, #{modifiedDate,jdbcType=TIMESTAMP}, 
-      #{valid,jdbcType=BIT})
+    insert into t_mkt_activity_signin (mkt_activity_sign_in_id, sys_company_id, 
+      mkt_activity_id, sign_type, integral_type, 
+      integral_basis, integral_addend, integral_max, 
+      remark, create_user_id, create_user_name, 
+      create_date, modified_user_id, modified_user_name, 
+      modified_date, valid)
+    values (#{mktActivitySignInId,jdbcType=BIGINT}, #{sysCompanyId,jdbcType=BIGINT}, 
+      #{mktActivityId,jdbcType=BIGINT}, #{signType,jdbcType=INTEGER}, #{integralType,jdbcType=VARCHAR}, 
+      #{integralBasis,jdbcType=BIGINT}, #{integralAddend,jdbcType=BIGINT}, #{integralMax,jdbcType=BIGINT}, 
+      #{remark,jdbcType=VARCHAR}, #{createUserId,jdbcType=BIGINT}, #{createUserName,jdbcType=VARCHAR}, 
+      #{createDate,jdbcType=TIMESTAMP}, #{modifiedUserId,jdbcType=BIGINT}, #{modifiedUserName,jdbcType=VARCHAR}, 
+      #{modifiedDate,jdbcType=TIMESTAMP}, #{valid,jdbcType=BIT})
   </insert>
   <insert id="insertSelective" parameterType="com.bizvane.mktcenterservice.models.po.MktActivitySignin">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-14 13:26:02.
+      This element was generated on 2018-08-31 12:40:26.
     -->
     insert into t_mkt_activity_signin
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="mktActivitySignInId != null">
         mkt_activity_sign_in_id,
+      </if>
+      <if test="sysCompanyId != null">
+        sys_company_id,
       </if>
       <if test="mktActivityId != null">
         mkt_activity_id,
@@ -218,6 +222,9 @@
       <if test="mktActivitySignInId != null">
         #{mktActivitySignInId,jdbcType=BIGINT},
       </if>
+      <if test="sysCompanyId != null">
+        #{sysCompanyId,jdbcType=BIGINT},
+      </if>
       <if test="mktActivityId != null">
         #{mktActivityId,jdbcType=BIGINT},
       </if>
@@ -265,7 +272,7 @@
   <select id="countByExample" parameterType="com.bizvane.mktcenterservice.models.po.MktActivitySigninExample" resultType="java.lang.Long">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-14 13:26:02.
+      This element was generated on 2018-08-31 12:40:26.
     -->
     select count(*) from t_mkt_activity_signin
     <if test="_parameter != null">
@@ -275,12 +282,15 @@
   <update id="updateByExampleSelective" parameterType="map">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-14 13:26:02.
+      This element was generated on 2018-08-31 12:40:26.
     -->
     update t_mkt_activity_signin
     <set>
       <if test="record.mktActivitySignInId != null">
         mkt_activity_sign_in_id = #{record.mktActivitySignInId,jdbcType=BIGINT},
+      </if>
+      <if test="record.sysCompanyId != null">
+        sys_company_id = #{record.sysCompanyId,jdbcType=BIGINT},
       </if>
       <if test="record.mktActivityId != null">
         mkt_activity_id = #{record.mktActivityId,jdbcType=BIGINT},
@@ -332,10 +342,11 @@
   <update id="updateByExample" parameterType="map">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-14 13:26:02.
+      This element was generated on 2018-08-31 12:40:26.
     -->
     update t_mkt_activity_signin
     set mkt_activity_sign_in_id = #{record.mktActivitySignInId,jdbcType=BIGINT},
+      sys_company_id = #{record.sysCompanyId,jdbcType=BIGINT},
       mkt_activity_id = #{record.mktActivityId,jdbcType=BIGINT},
       sign_type = #{record.signType,jdbcType=INTEGER},
       integral_type = #{record.integralType,jdbcType=VARCHAR},
@@ -357,10 +368,13 @@
   <update id="updateByPrimaryKeySelective" parameterType="com.bizvane.mktcenterservice.models.po.MktActivitySignin">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-14 13:26:02.
+      This element was generated on 2018-08-31 12:40:26.
     -->
     update t_mkt_activity_signin
     <set>
+      <if test="sysCompanyId != null">
+        sys_company_id = #{sysCompanyId,jdbcType=BIGINT},
+      </if>
       <if test="mktActivityId != null">
         mkt_activity_id = #{mktActivityId,jdbcType=BIGINT},
       </if>
@@ -409,10 +423,11 @@
   <update id="updateByPrimaryKey" parameterType="com.bizvane.mktcenterservice.models.po.MktActivitySignin">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-14 13:26:02.
+      This element was generated on 2018-08-31 12:40:26.
     -->
     update t_mkt_activity_signin
-    set mkt_activity_id = #{mktActivityId,jdbcType=BIGINT},
+    set sys_company_id = #{sysCompanyId,jdbcType=BIGINT},
+      mkt_activity_id = #{mktActivityId,jdbcType=BIGINT},
       sign_type = #{signType,jdbcType=INTEGER},
       integral_type = #{integralType,jdbcType=VARCHAR},
       integral_basis = #{integralBasis,jdbcType=BIGINT},

@@ -4,9 +4,10 @@
   <resultMap id="BaseResultMap" type="com.bizvane.mktcenterservice.models.po.MktMessagePO">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-27 19:30:17.
+      This element was generated on 2018-08-31 12:40:26.
     -->
     <id column="mkt_msg_id" jdbcType="BIGINT" property="mktMsgId" />
+    <result column="sys_company_id" jdbcType="BIGINT" property="sysCompanyId" />
     <result column="biz_type" jdbcType="INTEGER" property="bizType" />
     <result column="biz_id" jdbcType="BIGINT" property="bizId" />
     <result column="msg_type" jdbcType="VARCHAR" property="msgType" />
@@ -25,14 +26,14 @@
   <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.bizvane.mktcenterservice.models.po.MktMessagePO">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-27 19:30:17.
+      This element was generated on 2018-08-31 12:40:26.
     -->
     <result column="msg_content" jdbcType="LONGVARCHAR" property="msgContent" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-27 19:30:17.
+      This element was generated on 2018-08-31 12:40:26.
     -->
     <where>
       <foreach collection="oredCriteria" item="criteria" separator="or">
@@ -65,7 +66,7 @@
   <sql id="Update_By_Example_Where_Clause">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-27 19:30:17.
+      This element was generated on 2018-08-31 12:40:26.
     -->
     <where>
       <foreach collection="example.oredCriteria" item="criteria" separator="or">
@@ -98,23 +99,23 @@
   <sql id="Base_Column_List">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-27 19:30:17.
+      This element was generated on 2018-08-31 12:40:26.
     -->
-    mkt_msg_id, biz_type, biz_id, msg_type, msg_code, template_msg_id, send_time, remark, 
-    create_user_id, create_user_name, create_date, modified_user_id, modified_user_name, 
-    modified_date, valid
+    mkt_msg_id, sys_company_id, biz_type, biz_id, msg_type, msg_code, template_msg_id, 
+    send_time, remark, create_user_id, create_user_name, create_date, modified_user_id, 
+    modified_user_name, modified_date, valid
   </sql>
   <sql id="Blob_Column_List">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-27 19:30:17.
+      This element was generated on 2018-08-31 12:40:26.
     -->
     msg_content
   </sql>
   <select id="selectByExampleWithBLOBs" parameterType="com.bizvane.mktcenterservice.models.po.MktMessagePOExample" resultMap="ResultMapWithBLOBs">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-27 19:30:17.
+      This element was generated on 2018-08-31 12:40:26.
     -->
     select
     <if test="distinct">
@@ -134,7 +135,7 @@
   <select id="selectByExample" parameterType="com.bizvane.mktcenterservice.models.po.MktMessagePOExample" resultMap="BaseResultMap">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-27 19:30:17.
+      This element was generated on 2018-08-31 12:40:26.
     -->
     select
     <if test="distinct">
@@ -152,7 +153,7 @@
   <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="ResultMapWithBLOBs">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-27 19:30:17.
+      This element was generated on 2018-08-31 12:40:26.
     -->
     select 
     <include refid="Base_Column_List" />
@@ -164,7 +165,7 @@
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-27 19:30:17.
+      This element was generated on 2018-08-31 12:40:26.
     -->
     delete from t_mkt_message
     where mkt_msg_id = #{mktMsgId,jdbcType=BIGINT}
@@ -172,7 +173,7 @@
   <delete id="deleteByExample" parameterType="com.bizvane.mktcenterservice.models.po.MktMessagePOExample">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-27 19:30:17.
+      This element was generated on 2018-08-31 12:40:26.
     -->
     delete from t_mkt_message
     <if test="_parameter != null">
@@ -182,34 +183,37 @@
   <insert id="insert" parameterType="com.bizvane.mktcenterservice.models.po.MktMessagePO">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-27 19:30:17.
+      This element was generated on 2018-08-31 12:40:26.
     -->
     <selectKey keyProperty="mktMsgId" order="AFTER" resultType="java.lang.Long">
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into t_mkt_message (biz_type, biz_id, msg_type, 
-      msg_code, template_msg_id, send_time, 
-      remark, create_user_id, create_user_name, 
-      create_date, modified_user_id, modified_user_name, 
-      modified_date, valid, msg_content
-      )
-    values (#{bizType,jdbcType=INTEGER}, #{bizId,jdbcType=BIGINT}, #{msgType,jdbcType=VARCHAR}, 
-      #{msgCode,jdbcType=VARCHAR}, #{templateMsgId,jdbcType=VARCHAR}, #{sendTime,jdbcType=TIMESTAMP}, 
-      #{remark,jdbcType=VARCHAR}, #{createUserId,jdbcType=BIGINT}, #{createUserName,jdbcType=VARCHAR}, 
-      #{createDate,jdbcType=TIMESTAMP}, #{modifiedUserId,jdbcType=BIGINT}, #{modifiedUserName,jdbcType=VARCHAR}, 
-      #{modifiedDate,jdbcType=TIMESTAMP}, #{valid,jdbcType=BIT}, #{msgContent,jdbcType=LONGVARCHAR}
-      )
+    insert into t_mkt_message (sys_company_id, biz_type, biz_id, 
+      msg_type, msg_code, template_msg_id, 
+      send_time, remark, create_user_id, 
+      create_user_name, create_date, modified_user_id, 
+      modified_user_name, modified_date, valid, 
+      msg_content)
+    values (#{sysCompanyId,jdbcType=BIGINT}, #{bizType,jdbcType=INTEGER}, #{bizId,jdbcType=BIGINT}, 
+      #{msgType,jdbcType=VARCHAR}, #{msgCode,jdbcType=VARCHAR}, #{templateMsgId,jdbcType=VARCHAR}, 
+      #{sendTime,jdbcType=TIMESTAMP}, #{remark,jdbcType=VARCHAR}, #{createUserId,jdbcType=BIGINT}, 
+      #{createUserName,jdbcType=VARCHAR}, #{createDate,jdbcType=TIMESTAMP}, #{modifiedUserId,jdbcType=BIGINT}, 
+      #{modifiedUserName,jdbcType=VARCHAR}, #{modifiedDate,jdbcType=TIMESTAMP}, #{valid,jdbcType=BIT}, 
+      #{msgContent,jdbcType=LONGVARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.bizvane.mktcenterservice.models.po.MktMessagePO">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-27 19:30:17.
+      This element was generated on 2018-08-31 12:40:26.
     -->
     <selectKey keyProperty="mktMsgId" order="AFTER" resultType="java.lang.Long">
       SELECT LAST_INSERT_ID()
     </selectKey>
     insert into t_mkt_message
     <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="sysCompanyId != null">
+        sys_company_id,
+      </if>
       <if test="bizType != null">
         biz_type,
       </if>
@@ -257,6 +261,9 @@
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="sysCompanyId != null">
+        #{sysCompanyId,jdbcType=BIGINT},
+      </if>
       <if test="bizType != null">
         #{bizType,jdbcType=INTEGER},
       </if>
@@ -307,7 +314,7 @@
   <select id="countByExample" parameterType="com.bizvane.mktcenterservice.models.po.MktMessagePOExample" resultType="java.lang.Long">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-27 19:30:17.
+      This element was generated on 2018-08-31 12:40:26.
     -->
     select count(*) from t_mkt_message
     <if test="_parameter != null">
@@ -317,12 +324,15 @@
   <update id="updateByExampleSelective" parameterType="map">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-27 19:30:17.
+      This element was generated on 2018-08-31 12:40:26.
     -->
     update t_mkt_message
     <set>
       <if test="record.mktMsgId != null">
         mkt_msg_id = #{record.mktMsgId,jdbcType=BIGINT},
+      </if>
+      <if test="record.sysCompanyId != null">
+        sys_company_id = #{record.sysCompanyId,jdbcType=BIGINT},
       </if>
       <if test="record.bizType != null">
         biz_type = #{record.bizType,jdbcType=INTEGER},
@@ -377,10 +387,11 @@
   <update id="updateByExampleWithBLOBs" parameterType="map">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-27 19:30:17.
+      This element was generated on 2018-08-31 12:40:26.
     -->
     update t_mkt_message
     set mkt_msg_id = #{record.mktMsgId,jdbcType=BIGINT},
+      sys_company_id = #{record.sysCompanyId,jdbcType=BIGINT},
       biz_type = #{record.bizType,jdbcType=INTEGER},
       biz_id = #{record.bizId,jdbcType=BIGINT},
       msg_type = #{record.msgType,jdbcType=VARCHAR},
@@ -403,10 +414,11 @@
   <update id="updateByExample" parameterType="map">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-27 19:30:17.
+      This element was generated on 2018-08-31 12:40:26.
     -->
     update t_mkt_message
     set mkt_msg_id = #{record.mktMsgId,jdbcType=BIGINT},
+      sys_company_id = #{record.sysCompanyId,jdbcType=BIGINT},
       biz_type = #{record.bizType,jdbcType=INTEGER},
       biz_id = #{record.bizId,jdbcType=BIGINT},
       msg_type = #{record.msgType,jdbcType=VARCHAR},
@@ -428,10 +440,13 @@
   <update id="updateByPrimaryKeySelective" parameterType="com.bizvane.mktcenterservice.models.po.MktMessagePO">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-27 19:30:17.
+      This element was generated on 2018-08-31 12:40:26.
     -->
     update t_mkt_message
     <set>
+      <if test="sysCompanyId != null">
+        sys_company_id = #{sysCompanyId,jdbcType=BIGINT},
+      </if>
       <if test="bizType != null">
         biz_type = #{bizType,jdbcType=INTEGER},
       </if>
@@ -483,10 +498,11 @@
   <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.bizvane.mktcenterservice.models.po.MktMessagePO">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-27 19:30:17.
+      This element was generated on 2018-08-31 12:40:26.
     -->
     update t_mkt_message
-    set biz_type = #{bizType,jdbcType=INTEGER},
+    set sys_company_id = #{sysCompanyId,jdbcType=BIGINT},
+      biz_type = #{bizType,jdbcType=INTEGER},
       biz_id = #{bizId,jdbcType=BIGINT},
       msg_type = #{msgType,jdbcType=VARCHAR},
       msg_code = #{msgCode,jdbcType=VARCHAR},
@@ -506,10 +522,11 @@
   <update id="updateByPrimaryKey" parameterType="com.bizvane.mktcenterservice.models.po.MktMessagePO">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-07-27 19:30:17.
+      This element was generated on 2018-08-31 12:40:26.
     -->
     update t_mkt_message
-    set biz_type = #{bizType,jdbcType=INTEGER},
+    set sys_company_id = #{sysCompanyId,jdbcType=BIGINT},
+      biz_type = #{bizType,jdbcType=INTEGER},
       biz_id = #{bizId,jdbcType=BIGINT},
       msg_type = #{msgType,jdbcType=VARCHAR},
       msg_code = #{msgCode,jdbcType=VARCHAR},

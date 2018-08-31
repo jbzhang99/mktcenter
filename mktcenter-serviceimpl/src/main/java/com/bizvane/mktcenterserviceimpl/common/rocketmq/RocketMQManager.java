@@ -6,6 +6,7 @@ import com.bizvane.mktcenterservice.models.po.RocketConfigPOExample;
 import com.bizvane.mktcenterserviceimpl.common.constants.RocketConstants;
 import com.bizvane.mktcenterserviceimpl.common.utils.SpringContextUtil;
 import com.bizvane.mktcenterserviceimpl.mappers.RocketConfigPOMapper;
+import com.ctrip.framework.apollo.spring.annotation.EnableApolloConfig;
 import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -25,6 +26,7 @@ import java.util.Properties;
  * 2018年5月21日下午2:01:31
  */
 @Component
+@EnableApolloConfig({"RocketMQManager"})
 public class RocketMQManager implements ApplicationRunner {
 
   @Value("${rocketmq.onsaddr}")

@@ -4,9 +4,10 @@
   <resultMap id="BaseResultMap" type="com.bizvane.mktcenterservice.models.po.MktActivityBirthdayPO">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-08-28 18:01:34.
+      This element was generated on 2018-08-31 12:40:26.
     -->
     <id column="mkt_activity_birthday_id" jdbcType="BIGINT" property="mktActivityBirthdayId" />
+    <result column="sys_company_id" jdbcType="BIGINT" property="sysCompanyId" />
     <result column="mkt_activity_id" jdbcType="BIGINT" property="mktActivityId" />
     <result column="mbr_level_code" jdbcType="VARCHAR" property="mbrLevelCode" />
     <result column="mbr_level_name" jdbcType="VARCHAR" property="mbrLevelName" />
@@ -26,14 +27,14 @@
   <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.bizvane.mktcenterservice.models.po.MktActivityBirthdayPO">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-08-28 18:01:34.
+      This element was generated on 2018-08-31 12:40:26.
     -->
     <result column="store_limit_list" jdbcType="LONGVARCHAR" property="storeLimitList" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-08-28 18:01:34.
+      This element was generated on 2018-08-31 12:40:26.
     -->
     <where>
       <foreach collection="oredCriteria" item="criteria" separator="or">
@@ -66,7 +67,7 @@
   <sql id="Update_By_Example_Where_Clause">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-08-28 18:01:34.
+      This element was generated on 2018-08-31 12:40:26.
     -->
     <where>
       <foreach collection="example.oredCriteria" item="criteria" separator="or">
@@ -99,23 +100,24 @@
   <sql id="Base_Column_List">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-08-28 18:01:34.
+      This element was generated on 2018-08-31 12:40:26.
     -->
-    mkt_activity_birthday_id, mkt_activity_id, mbr_level_code, mbr_level_name, member_type, 
-    days_ahead, is_store_limit, store_limit_type, remark, create_user_id, create_user_name, 
-    create_date, modified_user_id, modified_user_name, modified_date, valid
+    mkt_activity_birthday_id, sys_company_id, mkt_activity_id, mbr_level_code, mbr_level_name, 
+    member_type, days_ahead, is_store_limit, store_limit_type, remark, create_user_id, 
+    create_user_name, create_date, modified_user_id, modified_user_name, modified_date, 
+    valid
   </sql>
   <sql id="Blob_Column_List">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-08-28 18:01:34.
+      This element was generated on 2018-08-31 12:40:26.
     -->
     store_limit_list
   </sql>
   <select id="selectByExampleWithBLOBs" parameterType="com.bizvane.mktcenterservice.models.po.MktActivityBirthdayPOExample" resultMap="ResultMapWithBLOBs">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-08-28 18:01:34.
+      This element was generated on 2018-08-31 12:40:26.
     -->
     select
     <if test="distinct">
@@ -135,7 +137,7 @@
   <select id="selectByExample" parameterType="com.bizvane.mktcenterservice.models.po.MktActivityBirthdayPOExample" resultMap="BaseResultMap">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-08-28 18:01:34.
+      This element was generated on 2018-08-31 12:40:26.
     -->
     select
     <if test="distinct">
@@ -153,7 +155,7 @@
   <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="ResultMapWithBLOBs">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-08-28 18:01:34.
+      This element was generated on 2018-08-31 12:40:26.
     -->
     select 
     <include refid="Base_Column_List" />
@@ -165,7 +167,7 @@
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-08-28 18:01:34.
+      This element was generated on 2018-08-31 12:40:26.
     -->
     delete from t_mkt_activity_birthday
     where mkt_activity_birthday_id = #{mktActivityBirthdayId,jdbcType=BIGINT}
@@ -173,7 +175,7 @@
   <delete id="deleteByExample" parameterType="com.bizvane.mktcenterservice.models.po.MktActivityBirthdayPOExample">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-08-28 18:01:34.
+      This element was generated on 2018-08-31 12:40:26.
     -->
     delete from t_mkt_activity_birthday
     <if test="_parameter != null">
@@ -183,34 +185,37 @@
   <insert id="insert" parameterType="com.bizvane.mktcenterservice.models.po.MktActivityBirthdayPO">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-08-28 18:01:34.
+      This element was generated on 2018-08-31 12:40:26.
     -->
     <selectKey keyProperty="mktActivityBirthdayId" order="AFTER" resultType="java.lang.Long">
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into t_mkt_activity_birthday (mkt_activity_id, mbr_level_code, mbr_level_name, 
-      member_type, days_ahead, is_store_limit, 
-      store_limit_type, remark, create_user_id, 
-      create_user_name, create_date, modified_user_id, 
-      modified_user_name, modified_date, valid, 
-      store_limit_list)
-    values (#{mktActivityId,jdbcType=BIGINT}, #{mbrLevelCode,jdbcType=VARCHAR}, #{mbrLevelName,jdbcType=VARCHAR}, 
-      #{memberType,jdbcType=INTEGER}, #{daysAhead,jdbcType=INTEGER}, #{isStoreLimit,jdbcType=BIT}, 
-      #{storeLimitType,jdbcType=INTEGER}, #{remark,jdbcType=VARCHAR}, #{createUserId,jdbcType=BIGINT}, 
-      #{createUserName,jdbcType=VARCHAR}, #{createDate,jdbcType=TIMESTAMP}, #{modifiedUserId,jdbcType=BIGINT}, 
-      #{modifiedUserName,jdbcType=VARCHAR}, #{modifiedDate,jdbcType=TIMESTAMP}, #{valid,jdbcType=BIT}, 
-      #{storeLimitList,jdbcType=LONGVARCHAR})
+    insert into t_mkt_activity_birthday (sys_company_id, mkt_activity_id, mbr_level_code, 
+      mbr_level_name, member_type, days_ahead, 
+      is_store_limit, store_limit_type, remark, 
+      create_user_id, create_user_name, create_date, 
+      modified_user_id, modified_user_name, modified_date, 
+      valid, store_limit_list)
+    values (#{sysCompanyId,jdbcType=BIGINT}, #{mktActivityId,jdbcType=BIGINT}, #{mbrLevelCode,jdbcType=VARCHAR}, 
+      #{mbrLevelName,jdbcType=VARCHAR}, #{memberType,jdbcType=INTEGER}, #{daysAhead,jdbcType=INTEGER}, 
+      #{isStoreLimit,jdbcType=BIT}, #{storeLimitType,jdbcType=INTEGER}, #{remark,jdbcType=VARCHAR}, 
+      #{createUserId,jdbcType=BIGINT}, #{createUserName,jdbcType=VARCHAR}, #{createDate,jdbcType=TIMESTAMP}, 
+      #{modifiedUserId,jdbcType=BIGINT}, #{modifiedUserName,jdbcType=VARCHAR}, #{modifiedDate,jdbcType=TIMESTAMP}, 
+      #{valid,jdbcType=BIT}, #{storeLimitList,jdbcType=LONGVARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.bizvane.mktcenterservice.models.po.MktActivityBirthdayPO">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-08-28 18:01:34.
+      This element was generated on 2018-08-31 12:40:26.
     -->
     <selectKey keyProperty="mktActivityBirthdayId" order="AFTER" resultType="java.lang.Long">
       SELECT LAST_INSERT_ID()
     </selectKey>
     insert into t_mkt_activity_birthday
     <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="sysCompanyId != null">
+        sys_company_id,
+      </if>
       <if test="mktActivityId != null">
         mkt_activity_id,
       </if>
@@ -261,6 +266,9 @@
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="sysCompanyId != null">
+        #{sysCompanyId,jdbcType=BIGINT},
+      </if>
       <if test="mktActivityId != null">
         #{mktActivityId,jdbcType=BIGINT},
       </if>
@@ -314,7 +322,7 @@
   <select id="countByExample" parameterType="com.bizvane.mktcenterservice.models.po.MktActivityBirthdayPOExample" resultType="java.lang.Long">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-08-28 18:01:34.
+      This element was generated on 2018-08-31 12:40:26.
     -->
     select count(*) from t_mkt_activity_birthday
     <if test="_parameter != null">
@@ -324,12 +332,15 @@
   <update id="updateByExampleSelective" parameterType="map">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-08-28 18:01:34.
+      This element was generated on 2018-08-31 12:40:26.
     -->
     update t_mkt_activity_birthday
     <set>
       <if test="record.mktActivityBirthdayId != null">
         mkt_activity_birthday_id = #{record.mktActivityBirthdayId,jdbcType=BIGINT},
+      </if>
+      <if test="record.sysCompanyId != null">
+        sys_company_id = #{record.sysCompanyId,jdbcType=BIGINT},
       </if>
       <if test="record.mktActivityId != null">
         mkt_activity_id = #{record.mktActivityId,jdbcType=BIGINT},
@@ -387,10 +398,11 @@
   <update id="updateByExampleWithBLOBs" parameterType="map">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-08-28 18:01:34.
+      This element was generated on 2018-08-31 12:40:26.
     -->
     update t_mkt_activity_birthday
     set mkt_activity_birthday_id = #{record.mktActivityBirthdayId,jdbcType=BIGINT},
+      sys_company_id = #{record.sysCompanyId,jdbcType=BIGINT},
       mkt_activity_id = #{record.mktActivityId,jdbcType=BIGINT},
       mbr_level_code = #{record.mbrLevelCode,jdbcType=VARCHAR},
       mbr_level_name = #{record.mbrLevelName,jdbcType=VARCHAR},
@@ -414,10 +426,11 @@
   <update id="updateByExample" parameterType="map">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-08-28 18:01:34.
+      This element was generated on 2018-08-31 12:40:26.
     -->
     update t_mkt_activity_birthday
     set mkt_activity_birthday_id = #{record.mktActivityBirthdayId,jdbcType=BIGINT},
+      sys_company_id = #{record.sysCompanyId,jdbcType=BIGINT},
       mkt_activity_id = #{record.mktActivityId,jdbcType=BIGINT},
       mbr_level_code = #{record.mbrLevelCode,jdbcType=VARCHAR},
       mbr_level_name = #{record.mbrLevelName,jdbcType=VARCHAR},
@@ -440,10 +453,13 @@
   <update id="updateByPrimaryKeySelective" parameterType="com.bizvane.mktcenterservice.models.po.MktActivityBirthdayPO">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-08-28 18:01:34.
+      This element was generated on 2018-08-31 12:40:26.
     -->
     update t_mkt_activity_birthday
     <set>
+      <if test="sysCompanyId != null">
+        sys_company_id = #{sysCompanyId,jdbcType=BIGINT},
+      </if>
       <if test="mktActivityId != null">
         mkt_activity_id = #{mktActivityId,jdbcType=BIGINT},
       </if>
@@ -498,10 +514,11 @@
   <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.bizvane.mktcenterservice.models.po.MktActivityBirthdayPO">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-08-28 18:01:34.
+      This element was generated on 2018-08-31 12:40:26.
     -->
     update t_mkt_activity_birthday
-    set mkt_activity_id = #{mktActivityId,jdbcType=BIGINT},
+    set sys_company_id = #{sysCompanyId,jdbcType=BIGINT},
+      mkt_activity_id = #{mktActivityId,jdbcType=BIGINT},
       mbr_level_code = #{mbrLevelCode,jdbcType=VARCHAR},
       mbr_level_name = #{mbrLevelName,jdbcType=VARCHAR},
       member_type = #{memberType,jdbcType=INTEGER},
@@ -522,10 +539,11 @@
   <update id="updateByPrimaryKey" parameterType="com.bizvane.mktcenterservice.models.po.MktActivityBirthdayPO">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-08-28 18:01:34.
+      This element was generated on 2018-08-31 12:40:26.
     -->
     update t_mkt_activity_birthday
-    set mkt_activity_id = #{mktActivityId,jdbcType=BIGINT},
+    set sys_company_id = #{sysCompanyId,jdbcType=BIGINT},
+      mkt_activity_id = #{mktActivityId,jdbcType=BIGINT},
       mbr_level_code = #{mbrLevelCode,jdbcType=VARCHAR},
       mbr_level_name = #{mbrLevelName,jdbcType=VARCHAR},
       member_type = #{memberType,jdbcType=INTEGER},

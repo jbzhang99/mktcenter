@@ -10,43 +10,43 @@ public class MktTaskPO implements Serializable {
 
 	/**
 	 * 只读. pkid. mkt_task_id
-	 * @mbg.generated  2018-07-14 13:26:02
+	 * @mbg.generated  2018-08-31 12:40:26
 	 */
 	@io.swagger.annotations.ApiModelProperty(value = "pkid", name = "mktTaskId", required = false, example = "")
 	private Long mktTaskId;
 	/**
 	 * 只读. 所属企业id. sys_company_id
-	 * @mbg.generated  2018-07-14 13:26:02
+	 * @mbg.generated  2018-08-31 12:40:26
 	 */
 	@io.swagger.annotations.ApiModelProperty(value = "所属企业id", name = "sysCompanyId", required = false, example = "")
 	private Long sysCompanyId;
 	/**
 	 * 只读. 所属品牌id. sys_brand_id
-	 * @mbg.generated  2018-07-14 13:26:02
+	 * @mbg.generated  2018-08-31 12:40:26
 	 */
 	@io.swagger.annotations.ApiModelProperty(value = "所属品牌id", name = "sysBrandId", required = false, example = "")
 	private Long sysBrandId;
 	/**
 	 * 只读. 任务编号. task_code
-	 * @mbg.generated  2018-07-14 13:26:02
+	 * @mbg.generated  2018-08-31 12:40:26
 	 */
 	@io.swagger.annotations.ApiModelProperty(value = "任务编号", name = "taskCode", required = false, example = "")
 	private String taskCode;
 	/**
 	 * 只读. 任务类型：1完善资料，2分享任务，3邀请注册，4累计消费次数，5累计消费金额. task_type
-	 * @mbg.generated  2018-07-14 13:26:02
+	 * @mbg.generated  2018-08-31 12:40:26
 	 */
 	@io.swagger.annotations.ApiModelProperty(value = "任务类型：1完善资料，2分享任务，3邀请注册，4累计消费次数，5累计消费金额", name = "taskType", required = false, example = "")
 	private Integer taskType;
 	/**
 	 * 只读. 任务名称. task_name
-	 * @mbg.generated  2018-07-14 13:26:02
+	 * @mbg.generated  2018-08-31 12:40:26
 	 */
 	@io.swagger.annotations.ApiModelProperty(value = "任务名称", name = "taskName", required = false, example = "")
 	private String taskName;
 	/**
 	 * 只读. 任务开始时间. start_time
-	 * @mbg.generated  2018-07-14 13:26:02
+	 * @mbg.generated  2018-08-31 12:40:26
 	 */
 	@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
 	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", locale = "zh", timezone = "GMT+8")
@@ -54,7 +54,7 @@ public class MktTaskPO implements Serializable {
 	private Date startTime;
 	/**
 	 * 只读. 任务结束时间. end_time
-	 * @mbg.generated  2018-07-14 13:26:02
+	 * @mbg.generated  2018-08-31 12:40:26
 	 */
 	@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
 	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", locale = "zh", timezone = "GMT+8")
@@ -62,43 +62,43 @@ public class MktTaskPO implements Serializable {
 	private Date endTime;
 	/**
 	 * 只读. 赠送积分数值. points
-	 * @mbg.generated  2018-07-14 13:26:02
+	 * @mbg.generated  2018-08-31 12:40:26
 	 */
 	@io.swagger.annotations.ApiModelProperty(value = "赠送积分数值", name = "points", required = false, example = "")
 	private Integer points;
 	/**
 	 * 只读. 审核状态：1未审核，2审核中，3已审核，4已驳回. check_status
-	 * @mbg.generated  2018-07-14 13:26:02
+	 * @mbg.generated  2018-08-31 12:40:26
 	 */
 	@io.swagger.annotations.ApiModelProperty(value = "审核状态：1未审核，2审核中，3已审核，4已驳回", name = "checkStatus", required = false, example = "")
 	private Integer checkStatus;
 	/**
-	 * 只读. 任务状态：1待执行，2执行中，3已结束. task_status
-	 * @mbg.generated  2018-07-14 13:26:02
+	 * 只读. 任务状态：1待执行，2执行中，3已禁用，4已结束. task_status
+	 * @mbg.generated  2018-08-31 12:40:26
 	 */
-	@io.swagger.annotations.ApiModelProperty(value = "任务状态：1待执行，2执行中，3已结束", name = "taskStatus", required = false, example = "")
+	@io.swagger.annotations.ApiModelProperty(value = "任务状态：1待执行，2执行中，3已禁用，4已结束", name = "taskStatus", required = false, example = "")
 	private Integer taskStatus;
 	/**
 	 * 只读. 备注. remark
-	 * @mbg.generated  2018-07-14 13:26:02
+	 * @mbg.generated  2018-08-31 12:40:26
 	 */
 	@io.swagger.annotations.ApiModelProperty(value = "备注", name = "remark", required = false, example = "")
 	private String remark;
 	/**
 	 * 只读. 创建人id. create_user_id
-	 * @mbg.generated  2018-07-14 13:26:02
+	 * @mbg.generated  2018-08-31 12:40:26
 	 */
 	@io.swagger.annotations.ApiModelProperty(value = "创建人id", name = "createUserId", required = false, example = "")
 	private Long createUserId;
 	/**
 	 * 只读. 创建人. create_user_name
-	 * @mbg.generated  2018-07-14 13:26:02
+	 * @mbg.generated  2018-08-31 12:40:26
 	 */
 	@io.swagger.annotations.ApiModelProperty(value = "创建人", name = "createUserName", required = false, example = "")
 	private String createUserName;
 	/**
 	 * 只读. 创建日期. create_date
-	 * @mbg.generated  2018-07-14 13:26:02
+	 * @mbg.generated  2018-08-31 12:40:26
 	 */
 	@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
 	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", locale = "zh", timezone = "GMT+8")
@@ -106,19 +106,19 @@ public class MktTaskPO implements Serializable {
 	private Date createDate;
 	/**
 	 * 只读. 修改人id. modified_user_id
-	 * @mbg.generated  2018-07-14 13:26:02
+	 * @mbg.generated  2018-08-31 12:40:26
 	 */
 	@io.swagger.annotations.ApiModelProperty(value = "修改人id", name = "modifiedUserId", required = false, example = "")
 	private Long modifiedUserId;
 	/**
 	 * 只读. 修改人. modified_user_name
-	 * @mbg.generated  2018-07-14 13:26:02
+	 * @mbg.generated  2018-08-31 12:40:26
 	 */
 	@io.swagger.annotations.ApiModelProperty(value = "修改人", name = "modifiedUserName", required = false, example = "")
 	private String modifiedUserName;
 	/**
 	 * 只读. 修改时间. modified_date
-	 * @mbg.generated  2018-07-14 13:26:02
+	 * @mbg.generated  2018-08-31 12:40:26
 	 */
 	@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
 	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", locale = "zh", timezone = "GMT+8")
@@ -126,19 +126,19 @@ public class MktTaskPO implements Serializable {
 	private Date modifiedDate;
 	/**
 	 * 只读. 数据有效性：1=有效；0=无效. valid
-	 * @mbg.generated  2018-07-14 13:26:02
+	 * @mbg.generated  2018-08-31 12:40:26
 	 */
 	@io.swagger.annotations.ApiModelProperty(value = "数据有效性：1=有效；0=无效", name = "valid", required = false, example = "")
 	private Boolean valid;
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-07-14 13:26:02
+	 * @mbg.generated  2018-08-31 12:40:26
 	 */
 	private static final long serialVersionUID = 1L;
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-07-14 13:26:02
+	 * @mbg.generated  2018-08-31 12:40:26
 	 */
 	public Long getMktTaskId() {
 		return mktTaskId;
@@ -146,7 +146,7 @@ public class MktTaskPO implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-07-14 13:26:02
+	 * @mbg.generated  2018-08-31 12:40:26
 	 */
 	public void setMktTaskId(Long mktTaskId) {
 		this.mktTaskId = mktTaskId;
@@ -154,7 +154,7 @@ public class MktTaskPO implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-07-14 13:26:02
+	 * @mbg.generated  2018-08-31 12:40:26
 	 */
 	public Long getSysCompanyId() {
 		return sysCompanyId;
@@ -162,7 +162,7 @@ public class MktTaskPO implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-07-14 13:26:02
+	 * @mbg.generated  2018-08-31 12:40:26
 	 */
 	public void setSysCompanyId(Long sysCompanyId) {
 		this.sysCompanyId = sysCompanyId;
@@ -170,7 +170,7 @@ public class MktTaskPO implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-07-14 13:26:02
+	 * @mbg.generated  2018-08-31 12:40:26
 	 */
 	public Long getSysBrandId() {
 		return sysBrandId;
@@ -178,7 +178,7 @@ public class MktTaskPO implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-07-14 13:26:02
+	 * @mbg.generated  2018-08-31 12:40:26
 	 */
 	public void setSysBrandId(Long sysBrandId) {
 		this.sysBrandId = sysBrandId;
@@ -186,7 +186,7 @@ public class MktTaskPO implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-07-14 13:26:02
+	 * @mbg.generated  2018-08-31 12:40:26
 	 */
 	public String getTaskCode() {
 		return taskCode;
@@ -194,7 +194,7 @@ public class MktTaskPO implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-07-14 13:26:02
+	 * @mbg.generated  2018-08-31 12:40:26
 	 */
 	public void setTaskCode(String taskCode) {
 		this.taskCode = taskCode == null ? null : taskCode.trim();
@@ -202,7 +202,7 @@ public class MktTaskPO implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-07-14 13:26:02
+	 * @mbg.generated  2018-08-31 12:40:26
 	 */
 	public Integer getTaskType() {
 		return taskType;
@@ -210,7 +210,7 @@ public class MktTaskPO implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-07-14 13:26:02
+	 * @mbg.generated  2018-08-31 12:40:26
 	 */
 	public void setTaskType(Integer taskType) {
 		this.taskType = taskType;
@@ -218,7 +218,7 @@ public class MktTaskPO implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-07-14 13:26:02
+	 * @mbg.generated  2018-08-31 12:40:26
 	 */
 	public String getTaskName() {
 		return taskName;
@@ -226,7 +226,7 @@ public class MktTaskPO implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-07-14 13:26:02
+	 * @mbg.generated  2018-08-31 12:40:26
 	 */
 	public void setTaskName(String taskName) {
 		this.taskName = taskName == null ? null : taskName.trim();
@@ -234,7 +234,7 @@ public class MktTaskPO implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-07-14 13:26:02
+	 * @mbg.generated  2018-08-31 12:40:26
 	 */
 	public Date getStartTime() {
 		return startTime;
@@ -242,7 +242,7 @@ public class MktTaskPO implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-07-14 13:26:02
+	 * @mbg.generated  2018-08-31 12:40:26
 	 */
 	public void setStartTime(Date startTime) {
 		this.startTime = startTime;
@@ -250,7 +250,7 @@ public class MktTaskPO implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-07-14 13:26:02
+	 * @mbg.generated  2018-08-31 12:40:26
 	 */
 	public Date getEndTime() {
 		return endTime;
@@ -258,7 +258,7 @@ public class MktTaskPO implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-07-14 13:26:02
+	 * @mbg.generated  2018-08-31 12:40:26
 	 */
 	public void setEndTime(Date endTime) {
 		this.endTime = endTime;
@@ -266,7 +266,7 @@ public class MktTaskPO implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-07-14 13:26:02
+	 * @mbg.generated  2018-08-31 12:40:26
 	 */
 	public Integer getPoints() {
 		return points;
@@ -274,7 +274,7 @@ public class MktTaskPO implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-07-14 13:26:02
+	 * @mbg.generated  2018-08-31 12:40:26
 	 */
 	public void setPoints(Integer points) {
 		this.points = points;
@@ -282,7 +282,7 @@ public class MktTaskPO implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-07-14 13:26:02
+	 * @mbg.generated  2018-08-31 12:40:26
 	 */
 	public Integer getCheckStatus() {
 		return checkStatus;
@@ -290,7 +290,7 @@ public class MktTaskPO implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-07-14 13:26:02
+	 * @mbg.generated  2018-08-31 12:40:26
 	 */
 	public void setCheckStatus(Integer checkStatus) {
 		this.checkStatus = checkStatus;
@@ -298,7 +298,7 @@ public class MktTaskPO implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-07-14 13:26:02
+	 * @mbg.generated  2018-08-31 12:40:26
 	 */
 	public Integer getTaskStatus() {
 		return taskStatus;
@@ -306,7 +306,7 @@ public class MktTaskPO implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-07-14 13:26:02
+	 * @mbg.generated  2018-08-31 12:40:26
 	 */
 	public void setTaskStatus(Integer taskStatus) {
 		this.taskStatus = taskStatus;
@@ -314,7 +314,7 @@ public class MktTaskPO implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-07-14 13:26:02
+	 * @mbg.generated  2018-08-31 12:40:26
 	 */
 	public String getRemark() {
 		return remark;
@@ -322,7 +322,7 @@ public class MktTaskPO implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-07-14 13:26:02
+	 * @mbg.generated  2018-08-31 12:40:26
 	 */
 	public void setRemark(String remark) {
 		this.remark = remark == null ? null : remark.trim();
@@ -330,7 +330,7 @@ public class MktTaskPO implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-07-14 13:26:02
+	 * @mbg.generated  2018-08-31 12:40:26
 	 */
 	public Long getCreateUserId() {
 		return createUserId;
@@ -338,7 +338,7 @@ public class MktTaskPO implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-07-14 13:26:02
+	 * @mbg.generated  2018-08-31 12:40:26
 	 */
 	public void setCreateUserId(Long createUserId) {
 		this.createUserId = createUserId;
@@ -346,7 +346,7 @@ public class MktTaskPO implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-07-14 13:26:02
+	 * @mbg.generated  2018-08-31 12:40:26
 	 */
 	public String getCreateUserName() {
 		return createUserName;
@@ -354,7 +354,7 @@ public class MktTaskPO implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-07-14 13:26:02
+	 * @mbg.generated  2018-08-31 12:40:26
 	 */
 	public void setCreateUserName(String createUserName) {
 		this.createUserName = createUserName == null ? null : createUserName.trim();
@@ -362,7 +362,7 @@ public class MktTaskPO implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-07-14 13:26:02
+	 * @mbg.generated  2018-08-31 12:40:26
 	 */
 	public Date getCreateDate() {
 		return createDate;
@@ -370,7 +370,7 @@ public class MktTaskPO implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-07-14 13:26:02
+	 * @mbg.generated  2018-08-31 12:40:26
 	 */
 	public void setCreateDate(Date createDate) {
 		this.createDate = createDate;
@@ -378,7 +378,7 @@ public class MktTaskPO implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-07-14 13:26:02
+	 * @mbg.generated  2018-08-31 12:40:26
 	 */
 	public Long getModifiedUserId() {
 		return modifiedUserId;
@@ -386,7 +386,7 @@ public class MktTaskPO implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-07-14 13:26:02
+	 * @mbg.generated  2018-08-31 12:40:26
 	 */
 	public void setModifiedUserId(Long modifiedUserId) {
 		this.modifiedUserId = modifiedUserId;
@@ -394,7 +394,7 @@ public class MktTaskPO implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-07-14 13:26:02
+	 * @mbg.generated  2018-08-31 12:40:26
 	 */
 	public String getModifiedUserName() {
 		return modifiedUserName;
@@ -402,7 +402,7 @@ public class MktTaskPO implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-07-14 13:26:02
+	 * @mbg.generated  2018-08-31 12:40:26
 	 */
 	public void setModifiedUserName(String modifiedUserName) {
 		this.modifiedUserName = modifiedUserName == null ? null : modifiedUserName.trim();
@@ -410,7 +410,7 @@ public class MktTaskPO implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-07-14 13:26:02
+	 * @mbg.generated  2018-08-31 12:40:26
 	 */
 	public Date getModifiedDate() {
 		return modifiedDate;
@@ -418,7 +418,7 @@ public class MktTaskPO implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-07-14 13:26:02
+	 * @mbg.generated  2018-08-31 12:40:26
 	 */
 	public void setModifiedDate(Date modifiedDate) {
 		this.modifiedDate = modifiedDate;
@@ -426,7 +426,7 @@ public class MktTaskPO implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-07-14 13:26:02
+	 * @mbg.generated  2018-08-31 12:40:26
 	 */
 	public Boolean getValid() {
 		return valid;
@@ -434,7 +434,7 @@ public class MktTaskPO implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-07-14 13:26:02
+	 * @mbg.generated  2018-08-31 12:40:26
 	 */
 	public void setValid(Boolean valid) {
 		this.valid = valid;
