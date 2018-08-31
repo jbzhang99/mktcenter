@@ -26,6 +26,7 @@ import com.bizvane.mktcenterservice.models.vo.PageForm;
 import com.bizvane.mktcenterserviceimpl.common.award.Award;
 import com.bizvane.mktcenterserviceimpl.common.award.MemberMessageSend;
 import com.bizvane.mktcenterserviceimpl.common.enums.*;
+import com.bizvane.mktcenterserviceimpl.common.utils.DateUtil;
 import com.bizvane.mktcenterserviceimpl.mappers.MktActivityPOMapper;
 import com.bizvane.mktcenterserviceimpl.mappers.MktActivityRegisterPOMapper;
 import com.bizvane.mktcenterserviceimpl.mappers.MktMessagePOMapper;
@@ -188,6 +189,18 @@ public class ActivityServiceImpl implements ActivityService {
         List<ActivityAnalysisCountBO> activityAnalysisList = mktActivityPOMapper.getActivityAnalysisCountpage(bo);
         if (!CollectionUtils.isEmpty(activityAnalysisList)){
             for (ActivityAnalysisCountBO activityAnalysisCount:activityAnalysisList) {
+                if (activityAnalysisCount.getActivityStatus().equals(ActivityStatusEnum.ACTIVITY_STATUS_PENDING)){
+                    activityAnalysisCount.setDays("0天");
+                }
+                if (activityAnalysisCount.getActivityStatus().equals(ActivityStatusEnum.ACTIVITY_STATUS_EXECUTING)){
+                    activityAnalysisCount.setDays(DateUtil.getIntervalBetweenTwoDate(activityAnalysisCount.getStartTime(),new Date()));
+                }
+                if (activityAnalysisCount.getActivityStatus().equals(ActivityStatusEnum.ACTIVITY_STATUS_FINISHED)){
+                    activityAnalysisCount.setDays(DateUtil.getIntervalBetweenTwoDate(activityAnalysisCount.getStartTime(),activityAnalysisCount.getEndTime()));
+                }
+                if (activityAnalysisCount.getActivityStatus()==4){
+                    activityAnalysisCount.setDays("0天");
+                }
                 //查询券统计
                 ResponseData<CouponFindCouponCountResponseVO> couponFindCouponCountResponseVODate = couponQueryServiceFeign.findCouponCountBySendBusinessId(activityAnalysisCount.getMktActivityId(), CouponSendTypeEnum.getCouponSendTypeEnumByMktModuleCode(bo.getActivityType()).getCouponModuleCode(),activityAnalysisCount.getSysBrandId());
                 CouponFindCouponCountResponseVO couponFindCouponCountResponseVO = couponFindCouponCountResponseVODate.getData();

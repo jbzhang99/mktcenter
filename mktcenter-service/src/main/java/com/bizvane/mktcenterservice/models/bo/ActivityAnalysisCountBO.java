@@ -46,6 +46,26 @@ public class ActivityAnalysisCountBO {
 
     private Integer activityTypeExtend;//活动类型(适用领券活动)
 
+    private Integer activityStatus;//活动状态
+
+    private String days;//进行天数
+
+    public Integer getActivityStatus() {
+        return activityStatus;
+    }
+
+    public void setActivityStatus(Integer activityStatus) {
+        this.activityStatus = activityStatus;
+    }
+
+    public String getDays() {
+        return days;
+    }
+
+    public void setDays(String days) {
+        this.days = days;
+    }
+
     public Integer getActivityTypeExtend() {
         return activityTypeExtend;
     }

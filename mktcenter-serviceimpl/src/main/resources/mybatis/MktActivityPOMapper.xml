@@ -687,7 +687,7 @@
   <select id="getActivityAnalysisCountpage" parameterType="com.bizvane.mktcenterservice.models.bo.ActivityAnalysisCountBO" resultType="com.bizvane.mktcenterservice.models.bo.ActivityAnalysisCountBO">
     SELECT t.mkt_activity_id AS mktActivityId,t.activity_name AS activityName,
     t.long_term AS longTerm,t.start_time AS startTime,t.end_time AS endTime,t.activity_code AS activityCode,
-    t.sys_brand_id as sysBrandId,t.activity_type AS activityType,t.create_date AS createDate,
+    t.sys_brand_id as sysBrandId,t.activity_type AS activityType,t.create_date AS createDate,t.activity_status AS activityStatus,
     a.su AS participateNumber,a.pointsSum AS pointsSum
     FROM t_mkt_activity t
     LEFT JOIN
