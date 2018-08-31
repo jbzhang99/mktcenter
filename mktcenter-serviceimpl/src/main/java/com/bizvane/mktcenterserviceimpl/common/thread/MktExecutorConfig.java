@@ -1,5 +1,6 @@
 package com.bizvane.mktcenterserviceimpl.common.thread;
 
+import com.ctrip.framework.apollo.spring.annotation.EnableApolloConfig;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -16,6 +17,7 @@ import java.util.concurrent.ThreadPoolExecutor;
  * @Copyright (c) 2018 上海商帆信息科技有限公司-版权所有
  */
 @Configuration
+@EnableApolloConfig({"TTTT"})
 @EnableAsync
 public class MktExecutorConfig {
 

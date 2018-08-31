@@ -16,11 +16,11 @@ spring:
 #    user:
 #      name: root
 #      password: root
-  datasource:
-    url: jdbc:mysql://bizvane-2018.mysql.polardb.rds.aliyuncs.com:3306/bizvane3?useUnicode=true&characterEncoding=utf-8
-    username: bizvane_2018
-    password: SF_bizvane20180613
-    driver-class-name: com.mysql.jdbc.Driver
+#  datasource:
+#    url: jdbc:mysql://bizvane-2018.mysql.polardb.rds.aliyuncs.com:3306/bizvane3?useUnicode=true&characterEncoding=utf-8
+#    username: bizvane_2018
+#    password: SF_bizvane20180613
+#    driver-class-name: com.mysql.jdbc.Driver
   data:
     mongodb:
       database: "7"
@@ -99,16 +99,16 @@ feign:
       name: centercontrol-test
       path: centercontrol.api
 
-rocketmq:
-  onsaddr: http://onsaddr-internet.aliyun.com/rocketmq/nsaddr4client-internet
-  accessKey: LTAIpoqUHsXq6q7r
-  secretKey: 0ZJ7bfxXJLT8TpOKvZU3i4YWuhvJzs
+#rocketmq:
+#  onsaddr: http://onsaddr-internet.aliyun.com/rocketmq/nsaddr4client-internet
+#  accessKey: LTAIpoqUHsXq6q7r
+#  secretKey: 0ZJ7bfxXJLT8TpOKvZU3i4YWuhvJzs
 
-threadPool:
-  corePoolSize: 16
-  maximumPoolSize: 48
-  keepAliveTime: 60
-  queueCapacity: 99999
+#threadPool:
+#  corePoolSize: 16
+#  maximumPoolSize: 48
+#  keepAliveTime: 60
+#  queueCapacity: 99999
 
 
 
