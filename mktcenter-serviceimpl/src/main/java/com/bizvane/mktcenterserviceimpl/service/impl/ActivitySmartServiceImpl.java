@@ -97,6 +97,7 @@ public class ActivitySmartServiceImpl implements ActivitySmartService {
         MktActivitySmartGroupPOExample example = new MktActivitySmartGroupPOExample();
         MktActivitySmartGroupPOExample.Criteria criteria = example.createCriteria();
         criteria.andValidEqualTo(Boolean.TRUE);
+        criteria.andStatusEqualTo(Boolean.FALSE);
 
         if(!StringUtils.isEmpty(vo.getMemberGroupName())){
             log.warn("vo.getMemberGroupName()) is empty");

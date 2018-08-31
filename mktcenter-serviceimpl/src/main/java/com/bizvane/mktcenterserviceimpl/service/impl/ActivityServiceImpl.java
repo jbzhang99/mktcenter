@@ -202,7 +202,14 @@ public class ActivityServiceImpl implements ActivityService {
                     activityAnalysisCount.setDays("0天");
                 }
                 //查询券统计
-                ResponseData<CouponFindCouponCountResponseVO> couponFindCouponCountResponseVODate = couponQueryServiceFeign.findCouponCountBySendBusinessId(activityAnalysisCount.getMktActivityId(), CouponSendTypeEnum.getCouponSendTypeEnumByMktModuleCode(bo.getActivityType()).getCouponModuleCode(),activityAnalysisCount.getSysBrandId());
+                //判断是不是领券
+                String sendType ="";
+                if (null==bo.getActivityType()){
+                    sendType = CouponSendTypeEnum.getCouponSendTypeEnumByMktModuleCode(bo.getActivityTypeExtend()).getCouponModuleCode();
+                }else{
+                    sendType = CouponSendTypeEnum.getCouponSendTypeEnumByMktModuleCode(bo.getActivityType()).getCouponModuleCode();
+                }
+                ResponseData<CouponFindCouponCountResponseVO> couponFindCouponCountResponseVODate = couponQueryServiceFeign.findCouponCountBySendBusinessId(activityAnalysisCount.getMktActivityId(),sendType,activityAnalysisCount.getSysBrandId());
                 CouponFindCouponCountResponseVO couponFindCouponCountResponseVO = couponFindCouponCountResponseVODate.getData();
                 //券数量
                 activityAnalysisCount.setCouponSum(couponFindCouponCountResponseVO.getCouponSum());
