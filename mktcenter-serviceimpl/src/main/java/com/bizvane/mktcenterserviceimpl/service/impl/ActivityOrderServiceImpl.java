@@ -176,7 +176,7 @@ public class ActivityOrderServiceImpl implements ActivityOrderService {
             po.setCreateUserName(stageUser.getName());
             sysCheckServiceRpc.addCheck(po);
             //getStartTime 开始时间>当前时间增加job
-            if( new Date().before(activityVO.getStartTime())){
+            if( 1 != bo.getActivityVO().getLongTerm() && new Date().before(activityVO.getStartTime())){
                 //创建任务调度任务开始时间
                 jobUtil.addJob(stageUser,activityVO,activityCode);
                 //创建任务调度任务结束时间
@@ -186,7 +186,7 @@ public class ActivityOrderServiceImpl implements ActivityOrderService {
             //查询结果如果不需要审核审核状态为已审核
             mktActivityPOWithBLOBs.setCheckStatus(CheckStatusEnum.CHECK_STATUS_APPROVED.getCode());
             //getStartTime 开始时间>当前时间增加job
-            if(new Date().before(activityVO.getStartTime())){
+            if(1 != bo.getActivityVO().getLongTerm() && new Date().before(activityVO.getStartTime())){
                 //活动状态设置为待执行
                 mktActivityPOWithBLOBs.setActivityStatus(ActivityStatusEnum.ACTIVITY_STATUS_PENDING.getCode());
                 //创建任务调度任务开始时间
@@ -529,7 +529,7 @@ public class ActivityOrderServiceImpl implements ActivityOrderService {
         //判断是审核通过还是审核驳回
         if(bs.getCheckStatus()==CheckStatusEnum.CHECK_STATUS_APPROVED.getCode()){
             //活动开始时间<当前时间<活动结束时间  或者长期活动 也就是StartTime=null
-            if(new Date().after(activityPO.getStartTime()) && new Date().before(activityPO.getEndTime())){
+            if(1== activityPO.getLongTerm() ||(new Date().after(activityPO.getStartTime()) && new Date().before(activityPO.getEndTime()))){
                 //将活动状态变更为执行中 并且发送消息（当前活动适用会员）
                 bs.setActivityStatus(ActivityStatusEnum.ACTIVITY_STATUS_EXECUTING.getCode());
                 int i = mktActivityPOMapper.updateByPrimaryKeySelective(bs);
