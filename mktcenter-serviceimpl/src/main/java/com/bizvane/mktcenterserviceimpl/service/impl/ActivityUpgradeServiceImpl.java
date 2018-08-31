@@ -134,6 +134,13 @@ public class ActivityUpgradeServiceImpl implements ActivityUpgradeService {
         //增加活动类型是升级活动
         activityVO.setActivityType(ActivityTypeEnum.ACTIVITY_TYPE_UPGRADE.getCode());
         //增加品牌id
+        log.info("获取的品牌id是="+stageUser.getBrandId());
+        if(null==stageUser.getBrandId()){
+            log.error("token没有获取到品牌id");
+            responseData.setCode(SysResponseEnum.FAILED.getCode());
+            responseData.setMessage("Token没有获取到品牌id!");
+            return responseData;
+        }
         activityVO.setSysBrandId(stageUser.getBrandId());
         MktActivityPOWithBLOBs mktActivityPOWithBLOBs = new MktActivityPOWithBLOBs();
         BeanUtils.copyProperties(activityVO,mktActivityPOWithBLOBs);
