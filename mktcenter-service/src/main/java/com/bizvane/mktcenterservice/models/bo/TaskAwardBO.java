@@ -26,6 +26,21 @@ public class TaskAwardBO extends MktTaskPOWithBLOBs {
     //邀请开卡人数
     private Integer inviteNum;
 
+   //完善资料任务id
+    private Long mktTaskProfileId;
+    //完善资料的字段code
+    private String propertyCode;
+
+    //分享任务id
+    private Long mktTaskShareId;
+    //分享任务类型
+    private Integer shareUrlType;
+    //分享人任务的次数
+    private Integer shareTimes;
+    //分享内容
+    private String shareUrl;
+
+
     //券奖励
     private List<MktCouponPO> mktCouponPOList;
 
@@ -83,5 +98,45 @@ public class TaskAwardBO extends MktTaskPOWithBLOBs {
 
     public void setInviteNum(Integer inviteNum) {
         this.inviteNum = inviteNum;
+    }
+
+    public Long getMktTaskProfileId() {
+        return mktTaskProfileId;
+    }
+
+    public void setMktTaskProfileId(Long mktTaskProfileId) {
+        this.mktTaskProfileId = mktTaskProfileId;
+    }
+
+    public String getPropertyCode() {
+        return propertyCode;
+    }
+
+    public void setPropertyCode(String propertyCode) {
+        this.propertyCode = propertyCode;
+    }
+
+    public Long getMktTaskShareId() {
+        return mktTaskShareId;
+    }
+
+    public void setMktTaskShareId(Long mktTaskShareId) {
+        this.mktTaskShareId = mktTaskShareId;
+    }
+
+    public Integer getShareUrlType() {
+        return shareUrlType;
+    }
+
+    public void setShareUrlType(Integer shareUrlType) {
+        this.shareUrlType = shareUrlType;
+    }
+
+    public Integer getShareTimes() {
+        return shareTimes;
+    }
+
+    public void setShareTimes(Integer shareTimes) {
+        this.shareTimes = shareTimes;
     }
 }

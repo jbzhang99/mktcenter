@@ -6,6 +6,7 @@ import com.bizvane.mktcenterservice.models.bo.TaskBO;
 import com.bizvane.mktcenterservice.models.po.MktMessagePOExample;
 import com.bizvane.mktcenterservice.models.po.MktTaskRecordPO;
 import com.bizvane.mktcenterservice.models.vo.PageForm;
+import com.bizvane.mktcenterservice.models.vo.ProfileSuccessVO;
 import com.bizvane.mktcenterservice.models.vo.TaskRecordVO;
 import com.bizvane.mktcenterservice.models.vo.TaskVO;
 import com.bizvane.utils.responseinfo.ResponseData;
@@ -72,6 +73,10 @@ public interface TaskProfileService {
      */
     public ResponseData addToRecord(TaskVO vo, MemberInfoModel memberInfoModel);
 
-
+    /**
+     * 执行完成任务的奖励
+     * @param vo
+     */
+    public  void   doAwardProfile(ProfileSuccessVO vo);
 
 }

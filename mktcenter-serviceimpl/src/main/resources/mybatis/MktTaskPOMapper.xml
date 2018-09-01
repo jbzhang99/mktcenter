@@ -684,6 +684,14 @@
     <result column="mkt_task_invite_id" property="mktTaskInviteId" />
     <result column="invite_num" property="inviteNum" />
 
+    <result column="mkt_task_profile_id" property="mktTaskProfileId" />
+    <result column="property_code" property="propertyCode" />
+
+    <result column="mkt_task_share_id" property="mktTaskShareId" />
+    <result column="share_times" property="shareTimes" />
+    <result column="share_url" property="shareUrl" />
+    <result column="share_url_type" property="shareUrlType" />
+
     <collection autoMapping="true" javaType="java.util.List" ofType="com.bizvane.mktcenterservice.models.po.MktCouponPO" property="mktCouponPOList">
       <result column="mkt_coupon_id" property="mktCouponId" />
     </collection>
@@ -836,7 +844,7 @@
     tti.mkt_task_id,
     tti.invite_num,
     tmc.mkt_coupon_id,
-    tmc.coupon_code,
+    tmc.coupon_definition_id,
     tmc.coupon_name
     FROM
     t_mkt_task tta
@@ -858,6 +866,98 @@
     <if test="placeOrderTime!=null and placeOrderTime!=''">
       AND tta.start_time <![CDATA[<=]]>#{placeOrderTime}
       AND tta.end_time <![CDATA[>=]]> #{placeOrderTime}
+    </if>
+  </select>
+
+  <select id="getTaskProfileAwardList" resultMap="taskAwardMap">
+    SELECT
+    tta.mkt_task_id,
+    tta.sys_company_id,
+    tta.sys_brand_id,
+    tta.task_code,
+    tta.task_type,
+    tta.task_name,
+    tta.start_time,
+    tta.end_time,
+    tta.task_info,
+    tta.points,
+    tta.task_list_img,
+    tta.task_detail_img,
+    tta.check_status,
+    tta.task_status,
+    tta.remark,
+    ttp.mkt_task_profile_id,
+    ttp.property_code,
+    tmc.mkt_coupon_id,
+    tmc.coupon_definition_id,
+    tmc.coupon_name
+    FROM
+    t_mkt_task tta
+    INNER JOIN t_mkt_task_profile ttp ON tta.mkt_task_id = ttp.mkt_task_id
+    LEFT JOIN t_mkt_coupon tmc ON tta.mkt_task_id = tmc.biz_id
+    WHERE
+    tta.valid = 1
+    AND ttp.valid = 1
+    AND tmc.valid = 1
+    AND  tta.check_status=3
+    AND  tta.task_status=2
+    AND tta.task_type =1
+    <if test="sysCompanyId != null and sysCompanyId!= '' ">
+      AND  tta.sys_company_id=#{sysCompanyId}
+    </if>
+    <if test="sysBrandId != null and sysBrandId!= '' ">
+      AND tta.sys_brand_id=#{sysBrandId}
+    </if>
+    <if test="profileDate!=null and profileDate!=''">
+      AND tta.start_time <![CDATA[<=]]>#{profileDate}
+      AND tta.end_time <![CDATA[>=]]> #{profileDate}
+    </if>
+  </select>
+
+  <select id="getTaskShareAwardList" resultMap="taskAwardMap">
+    SELECT
+    tta.mkt_task_id,
+    tta.sys_company_id,
+    tta.sys_brand_id,
+    tta.task_code,
+    tta.task_type,
+    tta.task_name,
+    tta.start_time,
+    tta.end_time,
+    tta.task_info,
+    tta.points,
+    tta.task_list_img,
+    tta.task_detail_img,
+    tta.check_status,
+    tta.task_status,
+    tta.remark,
+    share_url,
+    tts.mkt_task_share_id,
+    tts.share_times,
+    tts.share_url_type,
+    tmc.mkt_coupon_id,
+    tmc.coupon_definition_id,
+    tmc.coupon_name
+    FROM
+    t_mkt_task tta
+    INNER JOIN t_mkt_task_share tts ON tta.mkt_task_id = tts.mkt_task_id
+    LEFT JOIN t_mkt_coupon tmc ON tta.mkt_task_id = tmc.biz_id
+    WHERE
+    tta.valid = 1
+    AND tts.valid = 1
+    AND tmc.valid = 1
+    AND  tta.check_status=3
+    AND  tta.task_status=2
+    AND tta.task_type =2
+    <if test="sysCompanyId != null and sysCompanyId!= '' ">
+      AND  tta.sys_company_id=#{sysCompanyId}
+    </if>
+    <if test="sysBrandId != null and sysBrandId!= '' ">
+      AND tta.sys_brand_id=#{sysBrandId}
+    </if>
+    <if test="shareDate!=null and shareDate!=''">
+      AND tta.start_time <![CDATA[<=]]>#{shareDate}
+      AND tta.end_time <![CDATA[>=]]> #{shareDate}
     </if>
   </select>
 <!-- 查询 会员已完成任务列表和未完成列表-->

@@ -12,6 +12,7 @@ import com.bizvane.mktcenterservice.models.po.MktCouponPO;
 import com.bizvane.mktcenterservice.models.po.MktMessagePO;
 import com.bizvane.mktcenterservice.models.vo.MessageVO;
 import com.bizvane.mktcenterservice.models.vo.PageForm;
+import com.bizvane.mktcenterservice.models.vo.ProfileSuccessVO;
 import com.bizvane.mktcenterservice.models.vo.TaskVO;
 import com.bizvane.mktcenterserviceimpl.common.constants.SystemConstants;
 import com.bizvane.mktcenterserviceimpl.common.enums.TaskTypeEnum;
@@ -100,6 +101,12 @@ public class TaskProfileController {
         Date timeEnd = simpleDateFormat.parse(date2);
         return taskProfileService.getTaskProfileRecordByTime(timeStart,timeEnd,stageUser,pageForm);
     }
-
+    /**
+     * 执行完善资料的任务奖励
+     */
+    @RequestMapping("doAwardProfile")
+    public  void   doAwardProfile(ProfileSuccessVO vo){
+        taskProfileService.doAwardProfile(vo);
+    }
 }
 

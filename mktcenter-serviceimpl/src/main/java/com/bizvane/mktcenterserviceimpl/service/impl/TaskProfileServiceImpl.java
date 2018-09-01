@@ -1,13 +1,11 @@
 package com.bizvane.mktcenterserviceimpl.service.impl;
 
 import com.bizvane.centerstageservice.models.po.SysCheckPo;
-import com.bizvane.centerstageservice.models.vo.SysCheckConfigVo;
 import com.bizvane.centerstageservice.rpc.SysCheckConfigServiceRpc;
 import com.bizvane.centerstageservice.rpc.SysCheckServiceRpc;
 import com.bizvane.couponfacade.interfaces.CouponDefinitionServiceFeign;
 import com.bizvane.couponfacade.interfaces.CouponQueryServiceFeign;
 import com.bizvane.couponfacade.interfaces.SendCouponServiceFeign;
-import com.bizvane.couponfacade.models.po.CouponDefinitionPO;
 import com.bizvane.couponfacade.models.vo.CouponEntityVO;
 import com.bizvane.couponfacade.models.vo.CouponFindCouponCountResponseVO;
 import com.bizvane.couponfacade.models.vo.SendCouponSimpleRequestVO;
@@ -17,14 +15,9 @@ import com.bizvane.members.facade.service.api.IntegralRecordApiService;
 import com.bizvane.members.facade.service.api.MemberInfoApiService;
 import com.bizvane.members.facade.service.api.WxAppletApiService;
 import com.bizvane.members.facade.vo.ExtendPropertyVO;
-import com.bizvane.members.facade.vo.MemberInfoApiModel;
-import com.bizvane.messagefacade.models.vo.MemberMessageVO;
-import com.bizvane.messagefacade.models.vo.SysSmsConfigVO;
-import com.bizvane.mktcenterservice.interfaces.TaskCouponService;
-import com.bizvane.mktcenterservice.interfaces.TaskMessageService;
-import com.bizvane.mktcenterservice.interfaces.TaskProfileService;
-import com.bizvane.mktcenterservice.interfaces.TaskService;
+import com.bizvane.mktcenterservice.interfaces.*;
 import com.bizvane.mktcenterservice.models.bo.AwardBO;
+import com.bizvane.mktcenterservice.models.bo.TaskAwardBO;
 import com.bizvane.mktcenterservice.models.bo.TaskBO;
 import com.bizvane.mktcenterservice.models.po.*;
 import com.bizvane.mktcenterservice.models.vo.*;
@@ -38,21 +31,18 @@ import com.bizvane.mktcenterserviceimpl.common.job.JobUtil;
 import com.bizvane.mktcenterserviceimpl.common.utils.TaskParamCheckUtil;
 import com.bizvane.mktcenterserviceimpl.common.utils.TimeUtils;
 import com.bizvane.mktcenterserviceimpl.mappers.*;
-//import com.bizvane.utils.commonutils.PageForm;
 import com.bizvane.utils.enumutils.SysResponseEnum;
-
 import com.bizvane.utils.responseinfo.ResponseData;
 import com.bizvane.utils.tokens.SysAccountPO;
 import com.github.pagehelper.PageHelper;
-
 import com.github.pagehelper.PageInfo;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.CollectionUtils;
-
 import java.text.ParseException;
 import java.util.*;
 
@@ -102,6 +92,8 @@ public class TaskProfileServiceImpl implements TaskProfileService {
     private TaskCouponService taskCouponService;
     @Autowired
     private TaskMessageService taskMessageService;
+    @Autowired
+    private TaskRecordService taskRecordService;
 
 /**
  * 查询完善资料的字段
@@ -284,6 +276,60 @@ public  ResponseData<List<ExtendPropertyVO>> getMemberField(Long sysBrandId){
         }
         return result;
     }
+
+    /**
+     * 执行完善任务的奖励
+     */
+    @Async
+    @Override
+    public  void   doAwardProfile(ProfileSuccessVO vo){
+        //完善资料时间
+        Date profileDate = vo.getProfileDate();
+        //完善者的code
+        String memberCode = vo.getMemberCode();
+        MemberInfoModel memeberDetail = taskService.getCompanyMemeberDetail(memberCode);
+        Long companyId = memeberDetail.getCompanyId();
+        Long brandId = memeberDetail.getBrandId();
+        String cardNo = memeberDetail.getCardNo();
+
+        //符合条件的任务列表
+        List<TaskAwardBO> taskInviteAwardList = taskService.getTaskInviteAwardList(companyId, brandId, profileDate);
+
+        if (CollectionUtils.isNotEmpty(taskInviteAwardList)){
+            taskInviteAwardList.stream().forEach(obj->{
+                MktTaskRecordVO recordVO = new MktTaskRecordVO();
+                recordVO.setSysBrandId(brandId);
+                recordVO.setTaskType(obj.getTaskType());
+                recordVO.setTaskId(obj.getMktTaskId());
+                recordVO.setMemberCode(memberCode);
+
+                // 获取会员是否已经成功参与过某一活动
+                Boolean isOrNoAward = taskRecordService.getIsOrNoAward(recordVO);
+                if (!isOrNoAward){
+                    MktTaskRecordPO recordPO = new MktTaskRecordPO();
+                    BeanUtils.copyProperties(recordVO,recordPO);
+                    recordPO.setParticipateDate(profileDate);
+                    recordPO.setRewarded(Integer.valueOf(1));
+                    taskRecordService.addTaskRecord(recordPO);
+                    taskService.sendCouponAndPoint(memberCode,obj);
+                }
+
+            });
+        }
+
+    }
+
+
+
+
+
+
+
+
+
+
+
+
     /**
      * 查询商家选择出的让会员完善的扩展信息字段   用不到了！！！！！
      * @param brandId

@@ -8,6 +8,7 @@ import com.bizvane.mktcenterservice.models.po.MktCouponPO;
 import com.bizvane.mktcenterservice.models.po.MktMessagePO;
 import com.bizvane.mktcenterservice.models.vo.MessageVO;
 import com.bizvane.mktcenterservice.models.vo.PageForm;
+import com.bizvane.mktcenterservice.models.vo.ShareSuccessVO;
 import com.bizvane.mktcenterservice.models.vo.TaskVO;
 import com.bizvane.mktcenterserviceimpl.common.constants.SystemConstants;
 import com.bizvane.mktcenterserviceimpl.common.enums.TaskTypeEnum;
@@ -23,6 +24,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -36,48 +38,17 @@ import java.util.List;
 @RestController
 @RequestMapping("taskShare")
 public class TaskShareController {
-
     @Autowired
     private TaskShareService taskShareService;
-//    @Autowired
-//    private MenberMadeServiceRpc menberMadeServiceRpc;
-
-
-    /**
-     * 查询任务列表
-     * @return
-     */
-    @RequestMapping("getTaskList")
-    public ResponseData<PageInfo<TaskVO>> getTaskList(TaskVO vo, PageForm pageForm){
-        ResponseData<PageInfo<TaskVO>> taskVOResponseData = taskShareService.getTaskList(vo, pageForm);
-        return taskVOResponseData;
-    }
-
     /**
      * 创建任务
      * @return
      */
     @RequestMapping("addTask")
-    public ResponseData<Integer> addTask(TaskBO bo,HttpServletRequest request){
-
-        //参数校验
-        bo.getTaskVO().setTaskType(TaskTypeEnum.TASK_TYPE_SHARE.getCode());
-        ResponseData responseData = TaskParamCheckUtil.checkParam(bo);
-        //参数校验不通过
-        if(SystemConstants.ERROR_CODE==responseData.getCode()){
-            return responseData;
-        }
-        //参数校验通过，获取操作人信息
-        //SysAccountPO stageUser = TokenUtils.getStageUser(request);
-        SysAccountPO stageUser = new SysAccountPO();
-
-        //新增活动
-        ResponseData<Integer> integerResponseData = taskShareService.addTask(bo, stageUser);
-
-        //返回
-        return integerResponseData;
+    public ResponseData<Integer> addTask(TaskBO bo,HttpServletRequest request) throws ParseException {
+        SysAccountPO stageUser = TokenUtils.getStageUser(request);
+        return taskShareService.addTask(bo, stageUser);
     }
-
     /**
      * 修改任务
      * @param
@@ -85,81 +56,18 @@ public class TaskShareController {
      */
     @RequestMapping("updateTask")
     public ResponseData<Integer> updateTask(TaskBO bo, HttpServletRequest request){
-
-        //参数校验
-        ResponseData responseData = TaskParamCheckUtil.checkParam(bo);
-        //参数校验不通过
-        if(SystemConstants.ERROR_CODE==responseData.getCode()){
-            return responseData;
-        }
         //参数校验通过，获取操作人信息
         SysAccountPO stageUser=TokenUtils.getStageUser(request);
-        //SysAccountPO stageUser = new SysAccountPO();
-        //更新活动
-        ResponseData<Integer> registerData = taskShareService.updateTask(bo,stageUser);
-
-        //返回
-
-        return registerData;
+        return taskShareService.updateTask(bo,stageUser);
     }
-
     /**
-     * 执行任务
-     * @param
-     * @return
+     * 执行分享任务的奖励
+     * @param vo
      */
-    @RequestMapping("executeTask")
-    public ResponseData<Integer> executeTask(TaskVO vo,MemberInfoModel memberInfoModel){
-
-        return taskShareService.executeTask(vo,memberInfoModel);
+    @RequestMapping("doAwardShare")
+    public  void   doAwardShare(ShareSuccessVO vo){
+        taskShareService.doAwardShare(vo);
     }
-
-    /**
-     * 查询任务详情
-     * @param businessId
-     * @return
-     */
-    @RequestMapping("selectTaskById")
-    public ResponseData<TaskBO> selectTaskById(Long businessId){
-        return taskShareService.selectTaskById(businessId);
-    }
-
-    /**
-     * 审核任务
-     * @param businessId
-     * @param checkStatus
-     * @param request
-     * @return
-     */
-    @RequestMapping("checkTaskShare")
-    public ResponseData checkTaskShare(Long businessId,Integer checkStatus,HttpServletRequest request){
-
-        SysAccountPO stageUser= TokenUtils.getStageUser(request);
-        //SysAccountPO stageUser=new SysAccountPO();
-        return taskShareService.checkTaskShare(businessId,stageUser,checkStatus);
-    }
-
-
-    /**
-     * 禁用任务
-     * @param taskId
-     * @param request
-     * @return
-     */
-    @RequestMapping("stopTask")
-    public ResponseData stopTask(Long taskId,HttpServletRequest request){
-
-        SysAccountPO stageUser = TokenUtils.getStageUser(request);
-
-        return taskShareService.stopTask(taskId, stageUser);
-    }
-
-   /* public ResponseData getTaskShareRecordByTime(Date date1, Date date2,HttpServletRequest request , String taskName, PageForm pageForm){
-        SysAccountPO stageUser=TokenUtils.getStageUser(request);
-        return taskShareService.getTaskShareRecordByTime(date1,date2,stageUser,taskName,pageForm);
-    }*/
-
-
     /**
      * 效果分析
      * @param date1
@@ -181,23 +89,6 @@ public class TaskShareController {
         return taskShareService.getTaskShareRecordByTime(timeStart,timeEnd,stageUser,taskName,pageForm);
     }
 
-    /**
-     * 查询微信分享链接
-     * @param brandId
-     * @return
-     */
-    @RequestMapping("selectBrandFunction")
-    public ResponseData selectBrandFunction(Long brandId){
-        ResponseData responseData = new ResponseData();
 
-        if (brandId==null){
-            responseData.setMessage("品牌Id为空");
-            return responseData;
-        }
-
-        //return  menberMadeServiceRpc.selectBrandFunctionRpc(brandId);
-
-         return  null;
-    }
 }
 

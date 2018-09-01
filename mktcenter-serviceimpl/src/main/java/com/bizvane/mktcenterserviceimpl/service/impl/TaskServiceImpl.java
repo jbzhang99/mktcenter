@@ -191,6 +191,24 @@ public class TaskServiceImpl implements TaskService {
     }
 
     /**
+     * 完善资料任务的奖励与详情
+     * @return
+     */
+    @Override
+    public List<TaskAwardBO> getTaskProfileAwardList(Long sysCompanyId, Long sysBrandId,Date profileDate){
+        return mktTaskPOMapper.getTaskProfileAwardList(sysCompanyId, sysBrandId,profileDate);
+    }
+
+    /**
+     * 分享任务的奖励与详情
+     * @return
+     */
+    @Override
+    public List<TaskAwardBO> getTaskShareAwardList(Long sysCompanyId, Long sysBrandId,Date shareDate){
+        return mktTaskPOMapper.getTaskShareAwardList(sysCompanyId, sysBrandId,shareDate);
+    }
+
+    /**
      * 消费  邀请任务都可使用,查询任务详情(TaskDetailVO)
      *
      * @param mktTaskId
