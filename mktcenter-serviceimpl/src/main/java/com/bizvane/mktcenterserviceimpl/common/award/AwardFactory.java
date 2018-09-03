@@ -105,10 +105,8 @@ public class AwardFactory {
         ResponseData responseData = new ResponseData();
         try {
             //增加积分奖励新增接口
-            IntegralRecordModel var1 = bo.getIntegralRecordModel();
-            var1.setChangeWay(IntegralChangeTypeEnum.INCOME.getCode());
-            ResponseData responseData1 = integralRecordApiService.updateMemberIntegral(var1);
-           // integralChangeApiService.integralChangeOperate();
+            IntegralChangeRequestModel var1 = bo.getIntegralRecordModel();
+            integralChangeApiService.integralChangeOperate(var1);
         } catch (MemberException e) {
             log.error("com.bizvane.mktcenterserviceimpl.common.award.AwardFactory.awardIntegral error:"+e.getMessage());
             responseData.setCode(ResponseConstants.ERROR);

@@ -8,6 +8,7 @@ import com.bizvane.members.facade.models.IntegralRecordModel;
 import com.bizvane.members.facade.models.MemberInfoModel;
 import com.bizvane.members.facade.service.api.MemberInfoApiService;
 import com.bizvane.members.facade.service.api.MembersAdvancedSearchApiService;
+import com.bizvane.members.facade.service.card.request.IntegralChangeRequestModel;
 import com.bizvane.members.facade.vo.MemberInfoApiModel;
 import com.bizvane.members.facade.vo.MemberInfoVo;
 import com.bizvane.members.facade.vo.PageVo;
@@ -112,11 +113,14 @@ public class MemberMessageSend {
             ResponseData<com.bizvane.utils.responseinfo.PageInfo<MemberInfoVo>> memberInfoVoPages = membersAdvancedSearchApiService.search(membersInfoSearchVo);
             List<MemberInfoVo> memberInfoModelList = memberInfoVoPages.getData().getList();
             for (MemberInfoModel memberInfo:memberInfoModelList) {
-                integralRecordModel.setMemberCode(memberInfo.getMemberCode());
-                integralRecordModel.setChangeBills(activityCode);
-                integralRecordModel.setChangeIntegral(vo.getPoints());
-                integralRecordModel.setChangeWay(IntegralChangeTypeEnum.INCOME.getCode());
-                awardBO.setIntegralRecordModel(integralRecordModel);
+                IntegralChangeRequestModel integralChangeRequestModel =new IntegralChangeRequestModel();
+                integralChangeRequestModel.setBrandId(vo.getSysBrandId().toString());
+                integralChangeRequestModel.setMemberCode(memberInfo.getMemberCode());
+                integralChangeRequestModel.setChangeBills(vo.getActivityCode());
+                integralChangeRequestModel.setChangeIntegral(vo.getPoints());
+                integralChangeRequestModel.setChangeType(IntegralChangeTypeEnum.INCOME.getCode());
+                integralChangeRequestModel.setBusinessType(String.valueOf(BusinessTypeEnum.ACTIVITY_TYPE_ACTIVITY.getCode()));
+                awardBO.setIntegralRecordModel(integralChangeRequestModel);
                 awardBO.setMktType(MktSmartTypeEnum.SMART_TYPE_INTEGRAL.getCode());
                 award.execute(awardBO);
             }
@@ -276,13 +280,15 @@ public class MemberMessageSend {
                     log.info("match with SMART_TYPE_INTEGRAL");
                     //member loop
                     for(MemberInfoModel memberInfoModel : memberInfoModelList){
-                        IntegralRecordModel integralRecordModel = new IntegralRecordModel();
-                        integralRecordModel.setMemberCode(memberInfoModel.getMemberCode());
-                        integralRecordModel.setChangeIntegral(mktActivityPOWithBLOBs.getPoints());
-                        integralRecordModel.setChangeWay(IntegralChangeTypeEnum.INCOME.getCode());
-                        integralRecordModel.setChangeBills(mktActivityPOWithBLOBs.getActivityCode());
+                        IntegralChangeRequestModel integralChangeRequestModel =new IntegralChangeRequestModel();
+                        integralChangeRequestModel.setBrandId(mktActivityPOWithBLOBs.getSysBrandId().toString());
+                        integralChangeRequestModel.setMemberCode(memberInfoModel.getMemberCode());
+                        integralChangeRequestModel.setChangeBills(mktActivityPOWithBLOBs.getActivityCode());
+                        integralChangeRequestModel.setChangeIntegral(mktActivityPOWithBLOBs.getPoints());
+                        integralChangeRequestModel.setChangeType(IntegralChangeTypeEnum.INCOME.getCode());
+                        integralChangeRequestModel.setBusinessType(String.valueOf(BusinessTypeEnum.ACTIVITY_TYPE_ACTIVITY.getCode()));
+                        awardBO.setIntegralRecordModel(integralChangeRequestModel);
                         awardBO.setMktType(MktSmartTypeEnum.SMART_TYPE_INTEGRAL.getCode());
-                        awardBO.setIntegralRecordModel(integralRecordModel);
                         award.execute(awardBO);
                     }
                     break;

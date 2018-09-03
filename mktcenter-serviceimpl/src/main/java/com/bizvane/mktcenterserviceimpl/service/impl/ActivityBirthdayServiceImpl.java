@@ -16,7 +16,9 @@ import com.bizvane.couponfacade.models.vo.SendCouponSimpleRequestVO;
 import com.bizvane.members.facade.enums.IntegralChangeTypeEnum;
 import com.bizvane.members.facade.models.IntegralRecordModel;
 import com.bizvane.members.facade.models.MemberInfoModel;
+import com.bizvane.members.facade.service.api.IntegralChangeApiService;
 import com.bizvane.members.facade.service.api.IntegralRecordApiService;
+import com.bizvane.members.facade.service.card.request.IntegralChangeRequestModel;
 import com.bizvane.mktcenterservice.interfaces.ActivityBirthdayService;
 import com.bizvane.mktcenterservice.models.bo.ActivityBO;
 import com.bizvane.mktcenterservice.models.po.*;
@@ -87,6 +89,8 @@ public class ActivityBirthdayServiceImpl implements ActivityBirthdayService {
     private SendCouponServiceFeign sendCouponServiceFeign;
     @Autowired
     private MktActivityRecordPOMapper mktActivityRecordPOMapper;
+    @Autowired
+    private IntegralChangeApiService integralChangeApiService;
     /**
      * 查询生日活动列表
      * @param vo
@@ -134,6 +138,7 @@ public class ActivityBirthdayServiceImpl implements ActivityBirthdayService {
             return responseData;
         }
         activityVO.setSysBrandId(stageUser.getBrandId());
+        activityVO.setSysCompanyId(stageUser.getSysCompanyId());
         MktActivityPOWithBLOBs mktActivityPOWithBLOBs = new MktActivityPOWithBLOBs();
         BeanUtils.copyProperties(activityVO,mktActivityPOWithBLOBs);
 
@@ -548,12 +553,14 @@ public class ActivityBirthdayServiceImpl implements ActivityBirthdayService {
                 continue;
             }
             //增加积分奖励新增接口
-            IntegralRecordModel var1 = new IntegralRecordModel();
-            var1.setMemberCode(memberInfo.getMemberCode());
-            var1.setChangeBills(activityBirthday.getActivityCode());
-            var1.setChangeIntegral(activityBirthday.getPoints());
-            var1.setChangeWay(IntegralChangeTypeEnum.INCOME.getCode());
-            integralRecordApiService.updateMemberIntegral(var1);
+            IntegralChangeRequestModel integralChangeRequestModel =new IntegralChangeRequestModel();
+            integralChangeRequestModel.setBrandId(activityBirthday.getSysBrandId().toString());
+            integralChangeRequestModel.setMemberCode(memberInfo.getMemberCode());
+            integralChangeRequestModel.setChangeBills(activityBirthday.getActivityCode());
+            integralChangeRequestModel.setChangeIntegral(activityBirthday.getPoints());
+            integralChangeRequestModel.setChangeType(IntegralChangeTypeEnum.INCOME.getCode());
+            integralChangeRequestModel.setBusinessType(String.valueOf(BusinessTypeEnum.ACTIVITY_TYPE_ACTIVITY.getCode()));
+            integralChangeApiService.integralChangeOperate(integralChangeRequestModel);
             // 增加卷奖励接口
             MktCouponPOExample example = new  MktCouponPOExample();
             example.createCriteria().andBizIdEqualTo(activityBirthday.getMktActivityId()).andValidEqualTo(true);

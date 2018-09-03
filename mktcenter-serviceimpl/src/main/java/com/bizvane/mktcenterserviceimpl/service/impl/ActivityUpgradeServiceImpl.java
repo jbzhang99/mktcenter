@@ -18,6 +18,7 @@ import com.bizvane.members.facade.models.MemberInfoModel;
 import com.bizvane.members.facade.service.api.IntegralRecordApiService;
 import com.bizvane.members.facade.service.api.MemberInfoApiService;
 import com.bizvane.members.facade.service.api.MemberLevelApiService;
+import com.bizvane.members.facade.service.card.request.IntegralChangeRequestModel;
 import com.bizvane.members.facade.vo.MemberInfoApiModel;
 import com.bizvane.members.facade.vo.PageVo;
 import com.bizvane.messagefacade.models.vo.MemberMessageVO;
@@ -142,6 +143,7 @@ public class ActivityUpgradeServiceImpl implements ActivityUpgradeService {
             return responseData;
         }
         activityVO.setSysBrandId(stageUser.getBrandId());
+        activityVO.setSysCompanyId(stageUser.getSysCompanyId());
         MktActivityPOWithBLOBs mktActivityPOWithBLOBs = new MktActivityPOWithBLOBs();
         BeanUtils.copyProperties(activityVO,mktActivityPOWithBLOBs);
         //查询判断长期活动同一会员等级是否有重复
@@ -290,7 +292,8 @@ public class ActivityUpgradeServiceImpl implements ActivityUpgradeService {
             membersInfoSearchVo.setPageNumber(1);
             membersInfoSearchVo.setPageSize(10000);
             membersInfoSearchVo.setBrandId(activityVO.getSysBrandId());
-            membersInfoSearchVo.setLevelId(mbrLevel.getMbrLevelId());
+            //TODO
+            //membersInfoSearchVo.setLevelId(mbrLevel.getMbrLevelId());
             memberMessage.getMemberList(messageVOList, membersInfoSearchVo);
         }
         //结束
@@ -457,7 +460,8 @@ public class ActivityUpgradeServiceImpl implements ActivityUpgradeService {
             membersInfoSearchVo.setPageNumber(1);
             membersInfoSearchVo.setPageSize(10000);
             membersInfoSearchVo.setBrandId(activityVO.getSysBrandId());
-            membersInfoSearchVo.setLevelId(mbrLevel.getMbrLevelId());
+            //TODO
+            //membersInfoSearchVo.setLevelId(mbrLevel.getMbrLevelId());
             memberMessage.getMemberList(messageVOList, membersInfoSearchVo);
         }
         responseData.setCode(SysResponseEnum.SUCCESS.getCode());
@@ -546,12 +550,14 @@ public class ActivityUpgradeServiceImpl implements ActivityUpgradeService {
             ////增加积分奖励新增接口
             if (null!=activityVO.getPoints()){
                 AwardBO bo = new AwardBO();
-                IntegralRecordModel integralRecordModel = new IntegralRecordModel();
-                integralRecordModel.setMemberCode(vo.getMemberCode());
-                integralRecordModel.setChangeBills(activityVO.getActivityCode());
-                integralRecordModel.setChangeIntegral(activityVO.getPoints());
-                integralRecordModel.setChangeWay(IntegralChangeTypeEnum.INCOME.getCode());
-                bo.setIntegralRecordModel(integralRecordModel);
+                IntegralChangeRequestModel integralChangeRequestModel =new IntegralChangeRequestModel();
+                integralChangeRequestModel.setBrandId(activityVO.getSysBrandId().toString());
+                integralChangeRequestModel.setMemberCode(vo.getMemberCode());
+                integralChangeRequestModel.setChangeBills(activityVO.getActivityCode());
+                integralChangeRequestModel.setChangeIntegral(activityVO.getPoints());
+                integralChangeRequestModel.setChangeType(IntegralChangeTypeEnum.INCOME.getCode());
+                integralChangeRequestModel.setBusinessType(String.valueOf(BusinessTypeEnum.ACTIVITY_TYPE_ACTIVITY.getCode()));
+                bo.setIntegralRecordModel(integralChangeRequestModel);
                 bo.setMktType(MktSmartTypeEnum.SMART_TYPE_INTEGRAL.getCode());
                 log.info("新增积分奖励");
                 award.execute(bo);
@@ -640,7 +646,8 @@ public class ActivityUpgradeServiceImpl implements ActivityUpgradeService {
                     membersInfoSearchVo.setPageNumber(1);
                     membersInfoSearchVo.setPageSize(10000);
                     membersInfoSearchVo.setBrandId(activityPO.getSysBrandId());
-                    membersInfoSearchVo.setLevelId(mbrLevel.getMbrLevelId());
+                    //TODO
+                    //membersInfoSearchVo.setLevelId(mbrLevel.getMbrLevelId());
                     memberMessage.getMemberList(listMktMessage, membersInfoSearchVo);
                 }
 

@@ -15,6 +15,7 @@ import com.bizvane.members.facade.models.IntegralRecordModel;
 import com.bizvane.members.facade.models.MemberInfoModel;
 import com.bizvane.members.facade.service.api.MemberInfoApiService;
 import com.bizvane.members.facade.service.api.MembersAdvancedSearchApiService;
+import com.bizvane.members.facade.service.card.request.IntegralChangeRequestModel;
 import com.bizvane.members.facade.vo.MemberInfoApiModel;
 import com.bizvane.members.facade.vo.PageVo;
 import com.bizvane.messagefacade.models.vo.MemberMessageVO;
@@ -140,6 +141,7 @@ public class ActivityOrderServiceImpl implements ActivityOrderService {
             return responseData;
         }
         activityVO.setSysBrandId(stageUser.getBrandId());
+        activityVO.setSysCompanyId(stageUser.getSysCompanyId());
         MktActivityPOWithBLOBs mktActivityPOWithBLOBs = new MktActivityPOWithBLOBs();
         BeanUtils.copyProperties(activityVO,mktActivityPOWithBLOBs);
 
@@ -267,7 +269,8 @@ public class ActivityOrderServiceImpl implements ActivityOrderService {
             membersInfoSearchVo.setPageNumber(1);
             membersInfoSearchVo.setPageSize(10000);
             if (!activityVO.getMbrLevelCode().equals("0")){
-                membersInfoSearchVo.setLevelId(Long.parseLong(activityVO.getMbrLevelCode()));
+                //TODO
+               // membersInfoSearchVo.setLevelId(Long.parseLong(activityVO.getMbrLevelCode()));
             }
             membersInfoSearchVo.setBrandId(activityVO.getSysBrandId());
             memberMessage.getMemberList(messageVOList, membersInfoSearchVo);
@@ -486,7 +489,8 @@ public class ActivityOrderServiceImpl implements ActivityOrderService {
             membersInfoSearchVo.setPageNumber(1);
             membersInfoSearchVo.setPageSize(10000);
             if (!activityVO.getMbrLevelCode().equals("0")){
-                membersInfoSearchVo.setLevelId(Long.parseLong(activityVO.getMbrLevelCode()));
+                //TODO
+               // membersInfoSearchVo.setLevelId(Long.parseLong(activityVO.getMbrLevelCode()));
             }
             membersInfoSearchVo.setBrandId(activityVO.getSysBrandId());
             memberMessage.getMemberList(messageVOList, membersInfoSearchVo);
@@ -546,7 +550,8 @@ public class ActivityOrderServiceImpl implements ActivityOrderService {
                     membersInfoSearchVo.setPageNumber(1);
                     membersInfoSearchVo.setPageSize(10000);
                     if (!activityPO.getMbrLevelCode().equals("0")){
-                        membersInfoSearchVo.setLevelId(Long.parseLong(activityPO.getMbrLevelCode()));
+                        //TODO
+                        //membersInfoSearchVo.setLevelId(Long.parseLong(activityPO.getMbrLevelCode()));
                     }
                     membersInfoSearchVo.setBrandId(activityPO.getSysBrandId());
                     memberMessage.getMemberList(listMktMessage, membersInfoSearchVo);
@@ -627,12 +632,14 @@ public class ActivityOrderServiceImpl implements ActivityOrderService {
             //增加积分奖励新增接口
             if (null!=activityVO.getPoints()){
                 AwardBO bo = new AwardBO();
-                IntegralRecordModel integralRecordModel = new IntegralRecordModel();
-                integralRecordModel.setMemberCode(vo.getMemberCode().toString());
-                integralRecordModel.setChangeBills(activityVO.getActivityCode());
-                integralRecordModel.setChangeIntegral(activityVO.getPoints());
-                integralRecordModel.setChangeWay(IntegralChangeTypeEnum.INCOME.getCode());
-                bo.setIntegralRecordModel(integralRecordModel);
+                IntegralChangeRequestModel integralChangeRequestModel =new IntegralChangeRequestModel();
+                integralChangeRequestModel.setBrandId(activityVO.getSysBrandId().toString());
+                integralChangeRequestModel.setMemberCode(vo.getMemberCode().toString());
+                integralChangeRequestModel.setChangeBills(activityVO.getActivityCode());
+                integralChangeRequestModel.setChangeIntegral(activityVO.getPoints());
+                integralChangeRequestModel.setChangeType(IntegralChangeTypeEnum.INCOME.getCode());
+                integralChangeRequestModel.setBusinessType(String.valueOf(BusinessTypeEnum.ACTIVITY_TYPE_ACTIVITY.getCode()));
+                bo.setIntegralRecordModel(integralChangeRequestModel);
                 bo.setMktType(MktSmartTypeEnum.SMART_TYPE_INTEGRAL.getCode());
                 log.info("新增积分奖励="+activityVO.getPoints());
                 award.execute(bo);

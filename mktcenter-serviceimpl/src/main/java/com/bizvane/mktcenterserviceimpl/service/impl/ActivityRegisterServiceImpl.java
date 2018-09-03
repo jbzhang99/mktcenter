@@ -150,6 +150,7 @@ public class ActivityRegisterServiceImpl implements ActivityRegisterService {
             responseData.setMessage("Token没有获取到品牌id!");
             return responseData;
         }
+        activityVO.setSysCompanyId(stageUser.getSysCompanyId());
         activityVO.setSysBrandId(stageUser.getBrandId());
         MktActivityPOWithBLOBs mktActivityPOWithBLOBs = new MktActivityPOWithBLOBs();
         BeanUtils.copyProperties(activityVO,mktActivityPOWithBLOBs);
@@ -347,14 +348,15 @@ public class ActivityRegisterServiceImpl implements ActivityRegisterService {
                 //增加积分奖励新增接口
                    if(null!=activityVO.getPoints()){
                        AwardBO bo = new AwardBO();
-                       IntegralRecordModel integralRecordModel = new IntegralRecordModel();
                        //用这个实体类
-                       IntegralChangeRequestModel IntegralChangeRequestModel =new IntegralChangeRequestModel();
-                       integralRecordModel.setMemberCode(vo.getMemberCode());
-                       integralRecordModel.setChangeBills(activityVO.getActivityCode());
-                       integralRecordModel.setChangeIntegral(activityVO.getPoints());
-                       integralRecordModel.setChangeWay(IntegralChangeTypeEnum.INCOME.getCode());
-                       bo.setIntegralRecordModel(integralRecordModel);
+                       IntegralChangeRequestModel integralChangeRequestModel =new IntegralChangeRequestModel();
+                       integralChangeRequestModel.setBrandId(activityVO.getSysBrandId().toString());
+                       integralChangeRequestModel.setMemberCode(vo.getMemberCode());
+                       integralChangeRequestModel.setChangeBills(activityVO.getActivityCode());
+                       integralChangeRequestModel.setChangeIntegral(activityVO.getPoints());
+                       integralChangeRequestModel.setChangeType(IntegralChangeTypeEnum.INCOME.getCode());
+                       integralChangeRequestModel.setBusinessType(String.valueOf(BusinessTypeEnum.ACTIVITY_TYPE_ACTIVITY.getCode()));
+                       bo.setIntegralRecordModel(integralChangeRequestModel);
                        bo.setMktType(MktSmartTypeEnum.SMART_TYPE_INTEGRAL.getCode());
                        award.execute(bo);
 

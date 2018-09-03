@@ -97,7 +97,8 @@ public class ActivityJobHandler extends IJobHandler {
                     //查询该会员下一个等级
                     ResponseData<MbrLevelModel> mbrLevelModels = memberLevelApiService.queryOnLevel(Long.parseLong(activityUpgradeList.get(0).getMbrLevelCode()));
                     MbrLevelModel  mbrLevel = mbrLevelModels.getData();
-                    membersInfoSearchVo.setLevelId(mbrLevel.getMbrLevelId());
+                    //TODO
+                    //membersInfoSearchVo.setLevelId(mbrLevel.getMbrLevelId());
                 }
                 //消费活动的
                 if (mktActivityPO.getActivityType()== ActivityTypeEnum.ACTIVITY_TYPE_ORDER.getCode()){
@@ -106,7 +107,8 @@ public class ActivityJobHandler extends IJobHandler {
                     List<ActivityVO> activityOrderList = mktActivityOrderPOMapper.getActivityOrderList(vo);
 
                     if (!activityOrderList.get(0).getMbrLevelCode().equals("0")){
-                        membersInfoSearchVo.setLevelId(Long.parseLong(activityOrderList.get(0).getMbrLevelCode()));
+                        //TODO
+                        //membersInfoSearchVo.setLevelId(Long.parseLong(activityOrderList.get(0).getMbrLevelCode()));
                     }
                 }
                 memberMessage.getMemberList(ListMktMessage, membersInfoSearchVo);

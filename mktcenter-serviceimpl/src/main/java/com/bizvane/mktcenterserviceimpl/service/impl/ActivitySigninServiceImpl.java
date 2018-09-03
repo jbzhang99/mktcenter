@@ -14,6 +14,7 @@ import com.bizvane.members.facade.enums.IntegralChangeTypeEnum;
 import com.bizvane.members.facade.models.IntegralRecordModel;
 import com.bizvane.members.facade.models.MemberInfoModel;
 import com.bizvane.members.facade.service.api.IntegralRecordApiService;
+import com.bizvane.members.facade.service.card.request.IntegralChangeRequestModel;
 import com.bizvane.mktcenterservice.interfaces.ActivitySigninService;
 import com.bizvane.mktcenterservice.models.bo.ActivityBO;
 import com.bizvane.mktcenterservice.models.bo.AwardBO;
@@ -21,10 +22,7 @@ import com.bizvane.mktcenterservice.models.po.*;
 import com.bizvane.mktcenterservice.models.vo.ActivityVO;
 import com.bizvane.mktcenterservice.models.vo.PageForm;
 import com.bizvane.mktcenterserviceimpl.common.award.Award;
-import com.bizvane.mktcenterserviceimpl.common.enums.ActivityStatusEnum;
-import com.bizvane.mktcenterserviceimpl.common.enums.ActivityTypeEnum;
-import com.bizvane.mktcenterserviceimpl.common.enums.CheckStatusEnum;
-import com.bizvane.mktcenterserviceimpl.common.enums.MktSmartTypeEnum;
+import com.bizvane.mktcenterserviceimpl.common.enums.*;
 import com.bizvane.mktcenterserviceimpl.common.utils.CodeUtil;
 import com.bizvane.mktcenterserviceimpl.mappers.*;
 import com.bizvane.utils.enumutils.SysResponseEnum;
@@ -121,6 +119,7 @@ public class ActivitySigninServiceImpl implements ActivitySigninService {
             return responseData;
         }
         activityVO.setSysBrandId(stageUser.getBrandId());
+        activityVO.setSysCompanyId(stageUser.getSysCompanyId());
         MktActivityPOWithBLOBs mktActivityPOWithBLOBs = new MktActivityPOWithBLOBs();
         BeanUtils.copyProperties(activityVO,mktActivityPOWithBLOBs);
         //查询看是否已存在签到活动
@@ -272,12 +271,14 @@ public class ActivitySigninServiceImpl implements ActivitySigninService {
         for (ActivityVO activityVO:signinList) {
             //增加积分奖励新增接口
             AwardBO bo = new AwardBO();
-            IntegralRecordModel integralRecordModel = new IntegralRecordModel();
-            integralRecordModel.setMemberCode(vo.getMemberCode());
-            integralRecordModel.setChangeBills(activityVO.getActivityCode());
-            integralRecordModel.setChangeIntegral(activityVO.getPoints());
-            integralRecordModel.setChangeWay(IntegralChangeTypeEnum.INCOME.getCode());
-            bo.setIntegralRecordModel(integralRecordModel);
+            IntegralChangeRequestModel integralChangeRequestModel =new IntegralChangeRequestModel();
+            integralChangeRequestModel.setBrandId(activityVO.getSysBrandId().toString());
+            integralChangeRequestModel.setMemberCode(vo.getMemberCode());
+            integralChangeRequestModel.setChangeBills(activityVO.getActivityCode());
+            integralChangeRequestModel.setChangeIntegral(activityVO.getPoints());
+            integralChangeRequestModel.setChangeType(IntegralChangeTypeEnum.INCOME.getCode());
+            integralChangeRequestModel.setBusinessType(String.valueOf(BusinessTypeEnum.ACTIVITY_TYPE_ACTIVITY.getCode()));
+            bo.setIntegralRecordModel(integralChangeRequestModel);
             bo.setMktType(MktSmartTypeEnum.SMART_TYPE_INTEGRAL.getCode());
             log.info("新增积分奖励");
             award.execute(bo);

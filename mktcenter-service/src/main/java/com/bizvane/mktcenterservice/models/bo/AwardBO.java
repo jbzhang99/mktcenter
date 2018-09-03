@@ -5,6 +5,7 @@ import com.bizvane.couponfacade.models.vo.SendCouponBatchRequestVO;
 import com.bizvane.couponfacade.models.vo.SendCouponSimpleRequestVO;
 import com.bizvane.members.facade.models.IntegralRecordModel;
 import com.bizvane.members.facade.models.MemberInfoModel;
+import com.bizvane.members.facade.service.card.request.IntegralChangeRequestModel;
 import com.bizvane.messagefacade.models.vo.MemberMessageVO;
 import com.bizvane.messagefacade.models.vo.SysSmsConfigVO;
 import com.bizvane.mktcenterservice.models.vo.MessageVO;
@@ -50,7 +51,7 @@ public class AwardBO {
     /**
      * 积分奖励对象
      */
-    private IntegralRecordModel integralRecordModel;
+    private IntegralChangeRequestModel integralRecordModel;
 
     /**
      * 模板消息对象
@@ -61,6 +62,14 @@ public class AwardBO {
      * 短信
      */
     private SysSmsConfigVO sysSmsConfigVO;
+
+    public IntegralChangeRequestModel getIntegralRecordModel() {
+        return integralRecordModel;
+    }
+
+    public void setIntegralRecordModel(IntegralChangeRequestModel integralRecordModel) {
+        this.integralRecordModel = integralRecordModel;
+    }
 
     public SendCouponSimpleRequestVO getSendCouponSimpleRequestVO() {
         return sendCouponSimpleRequestVO;
@@ -76,14 +85,6 @@ public class AwardBO {
 
     public void setSendCouponBatchRequestVO(SendCouponBatchRequestVO sendCouponBatchRequestVO) {
         this.sendCouponBatchRequestVO = sendCouponBatchRequestVO;
-    }
-
-    public IntegralRecordModel getIntegralRecordModel() {
-        return integralRecordModel;
-    }
-
-    public void setIntegralRecordModel(IntegralRecordModel integralRecordModel) {
-        this.integralRecordModel = integralRecordModel;
     }
 
     public MemberMessageVO getMemberMessageVO() {
