@@ -39,14 +39,6 @@ public interface TaskProfileService {
     public ResponseData<Integer> addTask(TaskBO bo, SysAccountPO stageUser) throws ParseException;
 
     /**
-     * 执行任务
-     * @param vo
-     * @param memberInfoModel
-     * @return
-     */
-    public ResponseData<Integer> executeTask(TaskVO vo, MemberInfoModel memberInfoModel);
-
-    /**
      * 修改任务
      * @param bo
      * @param stageUser
@@ -63,15 +55,6 @@ public interface TaskProfileService {
      * @return
      */
     public ResponseData<TaskRecordVO> getTaskProfileRecordByTime(Date date1, Date date2,SysAccountPO stageUser,PageForm pageForm);
-
-
-    /**
-     * 添加任务记录
-     * @param vo
-     * @param memberInfoModel
-     * @return
-     */
-    public ResponseData addToRecord(TaskVO vo, MemberInfoModel memberInfoModel);
 
     /**
      * 执行完成任务的奖励

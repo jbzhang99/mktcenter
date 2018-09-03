@@ -43,5 +43,6 @@ public class TaskConstants {
     public  final static Integer   SECOND=2;//启用的
     public  final static Integer   THREE=3;//已禁用的
     public  final static Integer   FOUR = 4;
+    public  final static Integer   FIVE = 5;
 
 }

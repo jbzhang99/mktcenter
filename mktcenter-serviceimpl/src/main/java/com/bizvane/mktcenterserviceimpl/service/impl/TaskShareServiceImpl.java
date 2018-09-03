@@ -267,7 +267,7 @@ public class TaskShareServiceImpl implements TaskShareService {
         //邀请人的信息
         String memberCode = vo.getMemberCode();
         MemberInfoModel memeberDetail = taskService.getCompanyMemeberDetail(memberCode);
-        Long companyId = memeberDetail.getCompanyId();
+        Long companyId = memeberDetail.getSysCompanyId();
         Long brandId = memeberDetail.getBrandId();
         String cardNo = memeberDetail.getCardNo();
 

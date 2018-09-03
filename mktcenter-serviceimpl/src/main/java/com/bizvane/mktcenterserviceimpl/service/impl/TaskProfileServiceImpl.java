@@ -288,7 +288,7 @@ public  ResponseData<List<ExtendPropertyVO>> getMemberField(Long sysBrandId){
         //完善者的code
         String memberCode = vo.getMemberCode();
         MemberInfoModel memeberDetail = taskService.getCompanyMemeberDetail(memberCode);
-        Long companyId = memeberDetail.getCompanyId();
+        Long companyId = memeberDetail.getSysCompanyId();
         Long brandId = memeberDetail.getBrandId();
         String cardNo = memeberDetail.getCardNo();
 
@@ -354,95 +354,6 @@ public  ResponseData<List<ExtendPropertyVO>> getMemberField(Long sysBrandId){
 
 
     /**
-     * 执行任务
-     * @param vo 或者传回的是任务编号？
-     * @param memberInfoModel 或者传回的是会员编号？
-     * @return
-     */
-    @Override
-    @Transactional
-    public ResponseData executeTask(TaskVO vo, MemberInfoModel memberInfoModel) {
-        ResponseData responseData = new ResponseData();
-
-        try {
-
-            //一、券
-
-            //1.从coupon表中查出该业务单号对应的券的id（可能多张，所以遍历添加）
-            MktCouponPOExample mktCouponPOExample = new MktCouponPOExample();
-            MktCouponPOExample.Criteria criteria = mktCouponPOExample.createCriteria();
-            criteria.andBizIdEqualTo(vo.getMktTaskId()).andBizTypeEqualTo(BusinessTypeEnum.ACTIVITY_TYPE_TASK.getCode()).andValidEqualTo(true);
-
-            List<MktCouponPO> mktCouponPOList = mktCouponPOMapper.selectByExample(mktCouponPOExample);
-
-            //判断一下是否为空
-            if (!CollectionUtils.isEmpty(mktCouponPOList)){
-                //2.如果不为空则有券奖励   创建AwardBo对象 添加通用信息 并遍历该业务的券信息添加券的信息
-                AwardBO bo = new AwardBO();
-                SendCouponSimpleRequestVO sendCouponSimpleRequestVO = new SendCouponSimpleRequestVO();
-                sendCouponSimpleRequestVO.setMemberCode(memberInfoModel.getMemberCode());
-                sendCouponSimpleRequestVO.setSendBussienId(vo.getMktTaskId());
-                bo.setSendCouponSimpleRequestVO(sendCouponSimpleRequestVO);
-                bo.setMktType(MktSmartTypeEnum.SMART_TYPE_COUPON.getCode());
-                for (MktCouponPO mktCouponPO:mktCouponPOList){
-                    Long couponDefId = mktCouponPO.getCouponDefinitionId();
-                    sendCouponSimpleRequestVO.setCouponDefinitionId(couponDefId);
-                    award.execute(bo);
-                }
-
-            }
-
-
-            //二、积分
-
-            ////根据taskid从任务主表中查出该task
-
-            MktTaskPOWithBLOBs mktTaskPOWithBLOBs =  mktTaskPOMapper.selectByPrimaryKey(vo.getMktTaskId());
-
-            if (mktTaskPOWithBLOBs.getPoints()!=null){
-                AwardBO bo2 = new AwardBO();
-                IntegralRecordModel integralRecordModel = new IntegralRecordModel();
-                integralRecordModel.setChangeBills(UUID.randomUUID().toString().replaceAll("-",""));//todo 暂时用uuid生成
-                integralRecordModel.setBusinessWay(BusinessTypeEnum.ACTIVITY_TYPE_TASK.getMessage());
-                integralRecordModel.setMemberCode(memberInfoModel.getMemberCode());
-                integralRecordModel.setMemberName(memberInfoModel.getName());
-                integralRecordModel.setChangeIntegral(mktTaskPOWithBLOBs.getPoints());
-                bo2.setIntegralRecordModel(integralRecordModel);
-                bo2.setBusinessId(vo.getMktTaskId());
-                bo2.setMktType(MktSmartTypeEnum.SMART_TYPE_INTEGRAL.getCode());
-                award.execute(bo2);
-            }
-
-
-            //三、将完成任务的信息添加进taskrecord表中
-            MktTaskPO mktTaskPO = mktTaskPOMapper.selectByPrimaryKey(vo.getMktTaskId());
-
-            MktTaskRecordPO mktTaskRecordPO = new MktTaskRecordPO();
-
-            mktTaskRecordPO.setTaskType(TaskTypeEnum.TASK_TYPE_PROFILE.getCode());
-            mktTaskRecordPO.setTaskId(vo.getMktTaskId());
-            mktTaskRecordPO.setMemberCode(memberInfoModel.getMemberCode());
-            mktTaskRecordPO.setPoints(mktTaskPOWithBLOBs.getPoints());//奖励积分是不是也该去掉？？Todo
-            mktTaskRecordPO.setParticipateDate(new Date());
-            BeanUtils.copyProperties(mktTaskPO,mktTaskRecordPO);
-            //是否奖励过 奖励次数？
-            mktTaskRecordPO.setRewarded(1);
-            mktTaskRecordPO.setCouponNum(mktCouponPOList.size());
-            mktTaskRecordPOMapper.insertSelective(mktTaskRecordPO);
-
-            responseData.setMessage(SysResponseEnum.SUCCESS.getMessage());
-            responseData.setCode(SysResponseEnum.SUCCESS.getCode());
-
-        }catch(Exception e){
-            e.printStackTrace();
-            responseData.setCode(SysResponseEnum.FAILED.getCode());
-            responseData.setMessage(SysResponseEnum.FAILED.getMessage());
-            return responseData;
-
-        }
-
-        return responseData;
-    }
 
     /**
      * 效果分析
@@ -573,47 +484,6 @@ public  ResponseData<List<ExtendPropertyVO>> getMemberField(Long sysBrandId){
         return responseData;
     }
 
-
-
-    /**
-     * 添加任务记录
-     * @param vo
-     * @param memberInfoModel
-     * @return
-     */
-    @Override
-    @Transactional
-    public ResponseData addToRecord(TaskVO vo, MemberInfoModel memberInfoModel){
-        ResponseData responseData = new ResponseData();
-        try {
-            //在添加记录之前判断是否此次分享完成之后就会完成该任务
-
-            //将完成任务的信息添加进taskrecord表中
-            MktTaskPO mktTaskPO = mktTaskPOMapper.selectByPrimaryKey(vo.getMktTaskId());
-
-            MktTaskRecordPO mktTaskRecordPO = new MktTaskRecordPO();
-
-            mktTaskRecordPO.setTaskType(TaskTypeEnum.TASK_TYPE_PROFILE.getCode());
-            mktTaskRecordPO.setTaskId(vo.getMktTaskId());
-            mktTaskRecordPO.setMemberCode(memberInfoModel.getMemberCode());
-            mktTaskRecordPO.setPoints(vo.getPoints());//奖励积分是不是也该去掉？？
-            mktTaskRecordPO.setParticipateDate(new Date());
-            BeanUtils.copyProperties(mktTaskPO,mktTaskRecordPO);
-            //是否奖励过 奖励次数？
-            mktTaskRecordPOMapper.insertSelective(mktTaskRecordPO);
-            responseData.setMessage(SysResponseEnum.SUCCESS.getMessage());
-            responseData.setCode(SysResponseEnum.SUCCESS.getCode());
-
-        }catch (Exception e){
-            e.printStackTrace();
-            responseData.setMessage(SysResponseEnum.FAILED.getMessage());
-            responseData.setCode(SysResponseEnum.FAILED.getCode());
-            return responseData;
-        }
-
-
-        return responseData;
-    }
 
     /**
      * 禁用任务

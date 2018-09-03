@@ -88,6 +88,13 @@ public interface TaskService {
      */
     public void sendCouponAndPoint(String memberCode,TaskAwardBO orderAwardBO);
     /**
+     * 发券和修改积分时的任务类型转换
+     * 任务类型：1完善资料，2分享任务，3邀请注册，4累计消费次数，5累计消费金额
+     * @param taskType
+     * @return
+     */
+    public  ChangeTaskTypeVO  changeTaskType(Integer taskType);
+    /**
      * 根据品牌id查询任务是否需要审核
      */
 

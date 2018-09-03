@@ -245,7 +245,7 @@ public class TaskInviteServiceImpl implements TaskInviteService {
         //邀请人的信息
         String inviteMemberCode = vo.getInviteMemberCode();
         MemberInfoModel memeberDetail = taskService.getCompanyMemeberDetail(inviteMemberCode);
-        Long companyId = memeberDetail.getCompanyId();
+        Long companyId = memeberDetail.getSysCompanyId();
         Long brandId = memeberDetail.getBrandId();
         String memberCode = memeberDetail.getMemberCode();
         String cardNo = memeberDetail.getCardNo();

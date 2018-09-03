@@ -42,7 +42,7 @@ public class OrderTaskListener implements MessageListener {
         String modelStr= new String(message.getBody());
 
         OrderModel model = JSONObject.parseObject(modelStr, OrderModel.class);
-        Long companyId = model.getCompanyId();
+        Long companyId = model.getSysCompanyId();
         Long brandId = model.getBrandId();
         Date placeOrderTime = model.getPlaceOrderTime();
         List<TaskAwardBO> taskOrderAwardList = taskService.getTaskOrderAwardList(companyId, brandId, placeOrderTime);

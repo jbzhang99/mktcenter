@@ -13,10 +13,13 @@ import com.bizvane.couponfacade.interfaces.CouponQueryServiceFeign;
 import com.bizvane.couponfacade.models.po.CouponDefinitionPO;
 import com.bizvane.couponfacade.models.vo.CouponFindCouponCountResponseVO;
 import com.bizvane.couponfacade.models.vo.SendCouponSimpleRequestVO;
+import com.bizvane.members.facade.enums.BusinessTypeEnum;
+import com.bizvane.members.facade.enums.IntegralChangeTypeEnum;
 import com.bizvane.members.facade.models.IntegralRecordModel;
 import com.bizvane.members.facade.models.MemberInfoModel;
 import com.bizvane.members.facade.service.api.MemberInfoApiService;
 import com.bizvane.members.facade.service.api.WxChannelInfoApiService;
+import com.bizvane.members.facade.service.card.request.IntegralChangeRequestModel;
 import com.bizvane.members.facade.vo.MemberInfoApiModel;
 import com.bizvane.members.facade.vo.PageVo;
 import com.bizvane.members.facade.vo.WxChannelInfoVo;
@@ -368,19 +371,25 @@ public class TaskServiceImpl implements TaskService {
     public void sendCouponAndPoint(String memberCode,TaskAwardBO orderAwardBO){
         Long mktTaskId = orderAwardBO.getMktTaskId();
         String taskCode = orderAwardBO.getTaskCode();
-        Integer taskType = orderAwardBO.getTaskType();
         List<MktCouponPO> mktCouponPOList = orderAwardBO.getMktCouponPOList();
         Integer points = orderAwardBO.getPoints();
+        ChangeTaskTypeVO changeTaskTypeVO = this.changeTaskType(orderAwardBO.getTaskType());
 
         if (points!=null && points>0){
             AwardBO  bo = new AwardBO();
-            bo.setMktType(MktSmartTypeEnum.SMART_TYPE_INTEGRAL.getCode());
             //2=积分营销
-            IntegralRecordModel integralRecordModel = new IntegralRecordModel();
+            IntegralChangeRequestModel integralRecordModel = new IntegralChangeRequestModel();
+            integralRecordModel.setSysCompanyId(orderAwardBO.getSysCompanyId());
+            integralRecordModel.setBrandId(orderAwardBO.getSysBrandId());
             integralRecordModel.setMemberCode(memberCode);
-            integralRecordModel.setBusinessWay(String.valueOf(taskType));
+            //BusinessTypeEnum  会员定义的任务类型
+            String memberTaskType = changeTaskTypeVO.getMemberTaskType();
+            integralRecordModel.setBusinessType(memberTaskType);
+            //2=收入积分(新增积分)      1=支出积分(减少积分)
+            integralRecordModel.setChangeType(IntegralChangeTypeEnum.INCOME.getCode());
             integralRecordModel.setChangeBills(taskCode);
             integralRecordModel.setChangeIntegral(orderAwardBO.getPoints());
+
             bo.setMktType(MktSmartTypeEnum.SMART_TYPE_INTEGRAL.getCode());
             bo.setIntegralRecordModel(integralRecordModel);
             award.execute(bo);
@@ -396,14 +405,7 @@ public class TaskServiceImpl implements TaskService {
                 SendCouponSimpleRequestVO onecouponVO = new SendCouponSimpleRequestVO();
                 onecouponVO.setMemberCode(memberCode);
                 onecouponVO.setSendBussienId(mktTaskId);
-
-                if (TaskConstants.THREE.equals(bizType)){
-                    onecouponVO.setSendType( SendTypeEnum. SEND_COUPON_INVITE_OPENCARD_TASK.getCode());
-                }else if (TaskConstants.FOUR.equals(bizType)){
-                    onecouponVO.setSendType( SendTypeEnum. SEND_COUPON_COUSUME_MONEY_TASK.getCode());
-                }else if (TaskConstants.FIRST.equals(bizType)){
-                    onecouponVO.setSendType( SendTypeEnum. SEND_COUPON_COUSUME_MONEY_TASK.getCode());
-                }
+                onecouponVO.setSendType(changeTaskTypeVO.getCouponTaskType());
                 onecouponVO.setCouponDefinitionId(coupon.getCouponDefinitionId());
                 bo.setSendCouponSimpleRequestVO(onecouponVO);
                 award.execute(bo);
@@ -411,8 +413,35 @@ public class TaskServiceImpl implements TaskService {
 
 
         }
-
-
+    }
+    //发券和修改积分时的任务类型转换
+   // 任务类型：1完善资料，2分享任务，3邀请注册，4累计消费次数，5累计消费金额
+    @Override
+    public  ChangeTaskTypeVO  changeTaskType(Integer taskType){
+        ChangeTaskTypeVO vo = new ChangeTaskTypeVO();
+        switch(taskType){
+            case 1:
+                vo.setMemberTaskType(BusinessTypeEnum.TASK_TYPE_PREFECT.getCode());
+                vo.setCouponTaskType(SendTypeEnum.SEND_COUPON_INFORM_TASK.getCode());
+                break;
+            case 2:
+                vo.setMemberTaskType(BusinessTypeEnum.TASK_TYPE_SHARE.getCode());
+                vo.setCouponTaskType(SendTypeEnum.SEND_COUPON_WX_SHARE_TASK.getCode());
+                break;
+            case 3:
+                vo.setMemberTaskType(BusinessTypeEnum.TASK_TYPE_INVITATION_OPENCARD.getCode());
+                vo.setCouponTaskType(SendTypeEnum.SEND_COUPON_INVITE_OPENCARD_TASK.getCode());
+                break;
+            case 4:
+                vo.setMemberTaskType(BusinessTypeEnum.TASK_TYPE_COMSUMPTION_COUNT.getCode());
+                vo.setCouponTaskType(SendTypeEnum.SEND_COUPON_COUSUME_TIMES_TASK.getCode());
+                break;
+            case 5:
+                vo.setMemberTaskType(BusinessTypeEnum.TASK_TYPE_COMSUMPTION_MONEY.getCode());
+                vo.setCouponTaskType(SendTypeEnum.SEND_COUPON_COUSUME_MONEY_TASK.getCode());
+                break;
+        }
+        return vo;
     }
     /**
      * 根据品牌Id 查询审核配置，是否需要审核然后判断
