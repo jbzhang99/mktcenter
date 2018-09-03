@@ -6,7 +6,7 @@ import com.bizvane.couponfacade.interfaces.CouponQueryServiceFeign;
 import com.bizvane.couponfacade.interfaces.SendCouponServiceFeign;
 import com.bizvane.couponfacade.models.vo.CouponEntityVO;
 import com.bizvane.couponfacade.models.vo.CouponFindCouponCountResponseVO;
-import com.bizvane.fitmentservice.models.Rpc.MenberMadeServiceRpc;
+/*import com.bizvane.fitmentservice.models.Rpc.MenberMadeServiceRpc;*/
 import com.bizvane.fitmentservice.models.bo.AppletBrandFunctionRpcBo;
 import com.bizvane.members.facade.models.MemberInfoModel;
 import com.bizvane.members.facade.service.api.IntegralRecordApiService;
@@ -80,8 +80,8 @@ public class TaskShareServiceImpl implements TaskShareService {
     private SendCommonMessageFeign sendCommonMessageFeign;
     @Autowired
     private MemberInfoApiService memberInfoApiService;
-    @Autowired
-    private  MenberMadeServiceRpc menberMadeServiceRpc;
+/*    @Autowired
+    private  MenberMadeServiceRpc menberMadeServiceRpc;*/
     @Autowired
     private TaskService taskService;
     @Autowired
@@ -95,7 +95,8 @@ public class TaskShareServiceImpl implements TaskShareService {
      */
     @Override
     public ResponseData<List<AppletBrandFunctionRpcBo>>  getURLList(Long brandId){
-        return  menberMadeServiceRpc.selectBrandFunctionRpc(brandId);
+        //return  menberMadeServiceRpc.selectBrandFunctionRpc(brandId);
+        return  null;
     }
     /**
      * 添加微信分享任务
