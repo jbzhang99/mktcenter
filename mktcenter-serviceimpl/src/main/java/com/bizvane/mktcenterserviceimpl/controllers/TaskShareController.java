@@ -77,17 +77,17 @@ public class TaskShareController {
      * @param pageForm
      * @return
      */
-    @RequestMapping("getTaskProfileRecordByTime")
-    public ResponseData getTaskProfileRecordByTime(String date1, String date2,HttpServletRequest request ,String taskName, PageForm pageForm)throws Exception{
-
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        Date timeStart = simpleDateFormat.parse(date1);
-
-        Date timeEnd = simpleDateFormat.parse(date2);
-        SysAccountPO stageUser = TokenUtils.getStageUser(request);
-
-        return taskShareService.getTaskShareRecordByTime(timeStart,timeEnd,stageUser,taskName,pageForm);
-    }
+//    @RequestMapping("getTaskProfileRecordByTime")
+//    public ResponseData getTaskProfileRecordByTime(String date1, String date2,HttpServletRequest request ,String taskName, PageForm pageForm)throws Exception{
+//
+//        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+//        Date timeStart = simpleDateFormat.parse(date1);
+//
+//        Date timeEnd = simpleDateFormat.parse(date2);
+//        SysAccountPO stageUser = TokenUtils.getStageUser(request);
+//
+//        return taskShareService.getTaskShareRecordByTime(timeStart,timeEnd,stageUser,taskName,pageForm);
+//    }
 
 
 }

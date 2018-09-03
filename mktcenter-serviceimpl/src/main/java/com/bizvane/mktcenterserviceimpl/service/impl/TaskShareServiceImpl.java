@@ -319,105 +319,105 @@ public class TaskShareServiceImpl implements TaskShareService {
      * @param pageForm
      * @return
      */
-    @Transactional
-    @Override
-    public ResponseData<TaskRecordVO> getTaskShareRecordByTime(Date date1, Date date2, SysAccountPO stageUser,String taskName,PageForm pageForm){
-        ResponseData responseData = new ResponseData();
-        TaskRecordVO taskRecordVO = new TaskRecordVO();
-
-        Long allPoints=0L;
-        Long allCountCoupon=0L;
-        Long allCountMbr=0L;
-        Long allinvalidCountCoupon=0L;
-
-
-        try {
-
-            //查出每个任务的一个list集合 根据任务名称 任务创建时间 任务类型 品牌id
-
-            TaskAnalysisVo taskAnalysisVo = new TaskAnalysisVo();
-            taskAnalysisVo.setDate2(date2);
-            taskAnalysisVo.setDate1(date1);
-            taskAnalysisVo.setBrandId(stageUser.getBrandId());
-            taskAnalysisVo.setTaskName(taskName);
-            taskAnalysisVo.setTaskType(TaskTypeEnum.TASK_TYPE_SHARE.getCode());
-            List<DayTaskRecordVo> dayTaskRecordVoList = mktTaskRecordPOMapper.getAnalysisResult(taskAnalysisVo);
-
-            //遍历dayTaskrecordVo  添加核销优惠券、任务参与人数、分享次数、
-            for (DayTaskRecordVo dayTaskRecordVo:dayTaskRecordVoList){
-                Long taskId = dayTaskRecordVo.getTaskId();
-
-                //根据taskid从任务分享表中查出
-                MktTaskSharePOExample mktTaskSharePOExample = new MktTaskSharePOExample();
-                mktTaskSharePOExample.createCriteria().andValidEqualTo(true).andMktTaskIdEqualTo(taskId);
-
-                List<MktTaskSharePO> mktTaskSharePOList = mktTaskSharePOMapper.selectByExample(mktTaskSharePOExample);
-                MktTaskSharePO mktTaskSharePO = mktTaskSharePOList.get(0);
-
-                //某个任务的参与人数
-                Long countPartMbr = mktTaskRecordPOMapper.countPartMbr(mktTaskSharePO);
-
-                //某个任务的参与人次
-
-               /* MktTaskRecordPOExample mktTaskRecordPOExample = new MktTaskRecordPOExample();
-                mktTaskRecordPOExample.createCriteria().andTaskIdEqualTo(taskId).andValidEqualTo(true);
-               Long countPartMbr= mktTaskRecordPOMapper.countByExample(mktTaskRecordPOExample);*/
-                dayTaskRecordVo.setOneTaskCountMbr(countPartMbr);
-
-                //某个任务的完成人数
-                Long oneTaskCountMbr = dayTaskRecordVo.getOneTaskCountMbr();
-                allCountMbr = allCountMbr+oneTaskCountMbr;
-
-                //根据taskid查出记录条数 即为该任务分享次数
-
-                MktTaskRecordPOExample mktTaskRecordPOExample1 = new MktTaskRecordPOExample();
-                mktTaskRecordPOExample1.createCriteria().andTaskIdEqualTo(taskId).andValidEqualTo(true);
-                Long oneTaskCountShareTimes = mktTaskRecordPOMapper.countByExample(mktTaskRecordPOExample1);
-                dayTaskRecordVo.setOneTaskShareTimes(oneTaskCountShareTimes);
-
-
-                //核销的优惠券
-
-                CouponEntityVO couponEntityVO = new CouponEntityVO();
-                couponEntityVO.setSendBusinessId(taskId);
-                couponEntityVO.setSendType("65");
-                couponEntityVO.setSysBrandId(stageUser.getBrandId());
-                ResponseData<CouponFindCouponCountResponseVO> responseVOResponseData = couponQueryService.findCouponCountByDate(couponEntityVO);
-                CouponFindCouponCountResponseVO data = responseVOResponseData.getData();
-                Long couponUsedSum = data.getCouponUsedSum();
-                dayTaskRecordVo.setOneTaskInvalidCountCoupon(couponUsedSum);
-
-                allinvalidCountCoupon=allinvalidCountCoupon+couponUsedSum;
-
-                //某个任务的发行优惠券 todo  到底是自己的还是调用？
-               /* Long oneTaskCountCoupon = dayTaskRecordVo.getOneTaskCountCoupon();
-                allCountCoupon = allCountCoupon+oneTaskCountCoupon;*/
-                Long oneTaskCountCoupon =data.getCouponSum();
-                allCountCoupon = allCountCoupon+oneTaskCountCoupon;
-                //赠送的积分数
-
-                Long oneTaskCountPoints = dayTaskRecordVo.getOneTaskPoints();
-                allPoints = allPoints+oneTaskCountPoints;
-
-            }
-
-            PageHelper.startPage(pageForm.getPageNum(),pageForm.getPageSize());
-            PageInfo<DayTaskRecordVo> pageInfo = new PageInfo<>(dayTaskRecordVoList);
-
-            taskRecordVO.setAllCountMbr(allCountMbr);
-            taskRecordVO.setAllinvalidCountCoupon(allinvalidCountCoupon);
-            taskRecordVO.setAllCountCoupon(allCountCoupon);
-            taskRecordVO.setAllPoints(allPoints);
-            taskRecordVO.setDayTaskRecordVoList(pageInfo);
-            responseData.setData(taskRecordVO);
-            responseData.setMessage(SysResponseEnum.SUCCESS.getMessage());
-            responseData.setCode(SysResponseEnum.SUCCESS.getCode());
-        }catch(Exception e){
-            e.printStackTrace();
-            responseData.setMessage(SysResponseEnum.FAILED.getMessage());
-            responseData.setCode(SysResponseEnum.FAILED.getCode());
-            return responseData;
-        }
-        return responseData;
-    }
+//    @Transactional
+//    @Override
+//    public ResponseData<TaskRecordVO> getTaskShareRecordByTime(Date date1, Date date2, SysAccountPO stageUser,String taskName,PageForm pageForm){
+//        ResponseData responseData = new ResponseData();
+//        TaskRecordVO taskRecordVO = new TaskRecordVO();
+//
+//        Long allPoints=0L;
+//        Long allCountCoupon=0L;
+//        Long allCountMbr=0L;
+//        Long allinvalidCountCoupon=0L;
+//
+//
+//        try {
+//
+//            //查出每个任务的一个list集合 根据任务名称 任务创建时间 任务类型 品牌id
+//
+//            TaskAnalysisVo taskAnalysisVo = new TaskAnalysisVo();
+//            taskAnalysisVo.setDate2(date2);
+//            taskAnalysisVo.setDate1(date1);
+//            taskAnalysisVo.setBrandId(stageUser.getBrandId());
+//            taskAnalysisVo.setTaskName(taskName);
+//            taskAnalysisVo.setTaskType(TaskTypeEnum.TASK_TYPE_SHARE.getCode());
+//            List<DayTaskRecordVo> dayTaskRecordVoList = mktTaskRecordPOMapper.getAnalysisResult(taskAnalysisVo);
+//
+//            //遍历dayTaskrecordVo  添加核销优惠券、任务参与人数、分享次数、
+//            for (DayTaskRecordVo dayTaskRecordVo:dayTaskRecordVoList){
+//                Long taskId = dayTaskRecordVo.getTaskId();
+//
+//                //根据taskid从任务分享表中查出
+//                MktTaskSharePOExample mktTaskSharePOExample = new MktTaskSharePOExample();
+//                mktTaskSharePOExample.createCriteria().andValidEqualTo(true).andMktTaskIdEqualTo(taskId);
+//
+//                List<MktTaskSharePO> mktTaskSharePOList = mktTaskSharePOMapper.selectByExample(mktTaskSharePOExample);
+//                MktTaskSharePO mktTaskSharePO = mktTaskSharePOList.get(0);
+//
+//                //某个任务的参与人数
+//                Long countPartMbr = mktTaskRecordPOMapper.countPartMbr(mktTaskSharePO);
+//
+//                //某个任务的参与人次
+//
+//               /* MktTaskRecordPOExample mktTaskRecordPOExample = new MktTaskRecordPOExample();
+//                mktTaskRecordPOExample.createCriteria().andTaskIdEqualTo(taskId).andValidEqualTo(true);
+//               Long countPartMbr= mktTaskRecordPOMapper.countByExample(mktTaskRecordPOExample);*/
+//                dayTaskRecordVo.setOneTaskCountMbr(countPartMbr);
+//
+//                //某个任务的完成人数
+//                Long oneTaskCountMbr = dayTaskRecordVo.getOneTaskCountMbr();
+//                allCountMbr = allCountMbr+oneTaskCountMbr;
+//
+//                //根据taskid查出记录条数 即为该任务分享次数
+//
+//                MktTaskRecordPOExample mktTaskRecordPOExample1 = new MktTaskRecordPOExample();
+//                mktTaskRecordPOExample1.createCriteria().andTaskIdEqualTo(taskId).andValidEqualTo(true);
+//                Long oneTaskCountShareTimes = mktTaskRecordPOMapper.countByExample(mktTaskRecordPOExample1);
+//                dayTaskRecordVo.setOneTaskShareTimes(oneTaskCountShareTimes);
+//
+//
+//                //核销的优惠券
+//
+//                CouponEntityVO couponEntityVO = new CouponEntityVO();
+//                couponEntityVO.setSendBusinessId(taskId);
+//                couponEntityVO.setSendType("65");
+//                couponEntityVO.setSysBrandId(stageUser.getBrandId());
+//                ResponseData<CouponFindCouponCountResponseVO> responseVOResponseData = couponQueryService.findCouponCountByDate(couponEntityVO);
+//                CouponFindCouponCountResponseVO data = responseVOResponseData.getData();
+//                Long couponUsedSum = data.getCouponUsedSum();
+//                dayTaskRecordVo.setOneTaskInvalidCountCoupon(couponUsedSum);
+//
+//                allinvalidCountCoupon=allinvalidCountCoupon+couponUsedSum;
+//
+//                //某个任务的发行优惠券 todo  到底是自己的还是调用？
+//               /* Long oneTaskCountCoupon = dayTaskRecordVo.getOneTaskCountCoupon();
+//                allCountCoupon = allCountCoupon+oneTaskCountCoupon;*/
+//                Long oneTaskCountCoupon =data.getCouponSum();
+//                allCountCoupon = allCountCoupon+oneTaskCountCoupon;
+//                //赠送的积分数
+//
+//                Long oneTaskCountPoints = dayTaskRecordVo.getOneTaskPoints();
+//                allPoints = allPoints+oneTaskCountPoints;
+//
+//            }
+//
+//            PageHelper.startPage(pageForm.getPageNum(),pageForm.getPageSize());
+//            PageInfo<DayTaskRecordVo> pageInfo = new PageInfo<>(dayTaskRecordVoList);
+//
+//            taskRecordVO.setAllCountMbr(allCountMbr);
+//            taskRecordVO.setAllinvalidCountCoupon(allinvalidCountCoupon);
+//            taskRecordVO.setAllCountCoupon(allCountCoupon);
+//            taskRecordVO.setAllPoints(allPoints);
+//            taskRecordVO.setDayTaskRecordVoList(pageInfo);
+//            responseData.setData(taskRecordVO);
+//            responseData.setMessage(SysResponseEnum.SUCCESS.getMessage());
+//            responseData.setCode(SysResponseEnum.SUCCESS.getCode());
+//        }catch(Exception e){
+//            e.printStackTrace();
+//            responseData.setMessage(SysResponseEnum.FAILED.getMessage());
+//            responseData.setCode(SysResponseEnum.FAILED.getCode());
+//            return responseData;
+//        }
+//        return responseData;
+//    }
 }
