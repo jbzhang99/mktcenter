@@ -272,7 +272,7 @@ public class ActivitySigninServiceImpl implements ActivitySigninService {
             //增加积分奖励新增接口
             AwardBO bo = new AwardBO();
             IntegralChangeRequestModel integralChangeRequestModel =new IntegralChangeRequestModel();
-            integralChangeRequestModel.setBrandId(activityVO.getSysBrandId().toString());
+            integralChangeRequestModel.setBrandId(activityVO.getSysBrandId());
             integralChangeRequestModel.setMemberCode(vo.getMemberCode());
             integralChangeRequestModel.setChangeBills(activityVO.getActivityCode());
             integralChangeRequestModel.setChangeIntegral(activityVO.getPoints());

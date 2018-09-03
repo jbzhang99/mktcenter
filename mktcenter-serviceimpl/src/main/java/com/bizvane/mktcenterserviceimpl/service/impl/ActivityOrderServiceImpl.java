@@ -633,7 +633,7 @@ public class ActivityOrderServiceImpl implements ActivityOrderService {
             if (null!=activityVO.getPoints()){
                 AwardBO bo = new AwardBO();
                 IntegralChangeRequestModel integralChangeRequestModel =new IntegralChangeRequestModel();
-                integralChangeRequestModel.setBrandId(activityVO.getSysBrandId().toString());
+                integralChangeRequestModel.setBrandId(activityVO.getSysBrandId());
                 integralChangeRequestModel.setMemberCode(vo.getMemberCode().toString());
                 integralChangeRequestModel.setChangeBills(activityVO.getActivityCode());
                 integralChangeRequestModel.setChangeIntegral(activityVO.getPoints());

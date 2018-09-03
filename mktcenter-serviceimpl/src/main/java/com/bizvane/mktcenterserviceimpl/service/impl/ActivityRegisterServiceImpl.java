@@ -350,7 +350,7 @@ public class ActivityRegisterServiceImpl implements ActivityRegisterService {
                        AwardBO bo = new AwardBO();
                        //用这个实体类
                        IntegralChangeRequestModel integralChangeRequestModel =new IntegralChangeRequestModel();
-                       integralChangeRequestModel.setBrandId(activityVO.getSysBrandId().toString());
+                       integralChangeRequestModel.setBrandId(activityVO.getSysBrandId());
                        integralChangeRequestModel.setMemberCode(vo.getMemberCode());
                        integralChangeRequestModel.setChangeBills(activityVO.getActivityCode());
                        integralChangeRequestModel.setChangeIntegral(activityVO.getPoints());

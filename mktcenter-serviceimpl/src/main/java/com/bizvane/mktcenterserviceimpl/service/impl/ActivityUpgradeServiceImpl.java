@@ -551,7 +551,7 @@ public class ActivityUpgradeServiceImpl implements ActivityUpgradeService {
             if (null!=activityVO.getPoints()){
                 AwardBO bo = new AwardBO();
                 IntegralChangeRequestModel integralChangeRequestModel =new IntegralChangeRequestModel();
-                integralChangeRequestModel.setBrandId(activityVO.getSysBrandId().toString());
+                integralChangeRequestModel.setBrandId(activityVO.getSysBrandId());
                 integralChangeRequestModel.setMemberCode(vo.getMemberCode());
                 integralChangeRequestModel.setChangeBills(activityVO.getActivityCode());
                 integralChangeRequestModel.setChangeIntegral(activityVO.getPoints());

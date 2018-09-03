@@ -114,7 +114,7 @@ public class MemberMessageSend {
             List<MemberInfoVo> memberInfoModelList = memberInfoVoPages.getData().getList();
             for (MemberInfoModel memberInfo:memberInfoModelList) {
                 IntegralChangeRequestModel integralChangeRequestModel =new IntegralChangeRequestModel();
-                integralChangeRequestModel.setBrandId(vo.getSysBrandId().toString());
+                integralChangeRequestModel.setBrandId(vo.getSysBrandId());
                 integralChangeRequestModel.setMemberCode(memberInfo.getMemberCode());
                 integralChangeRequestModel.setChangeBills(vo.getActivityCode());
                 integralChangeRequestModel.setChangeIntegral(vo.getPoints());
@@ -281,7 +281,7 @@ public class MemberMessageSend {
                     //member loop
                     for(MemberInfoModel memberInfoModel : memberInfoModelList){
                         IntegralChangeRequestModel integralChangeRequestModel =new IntegralChangeRequestModel();
-                        integralChangeRequestModel.setBrandId(mktActivityPOWithBLOBs.getSysBrandId().toString());
+                        integralChangeRequestModel.setBrandId(mktActivityPOWithBLOBs.getSysBrandId());
                         integralChangeRequestModel.setMemberCode(memberInfoModel.getMemberCode());
                         integralChangeRequestModel.setChangeBills(mktActivityPOWithBLOBs.getActivityCode());
                         integralChangeRequestModel.setChangeIntegral(mktActivityPOWithBLOBs.getPoints());
