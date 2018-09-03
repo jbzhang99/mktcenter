@@ -2,6 +2,7 @@ package com.bizvane.mktcenterservice.models.vo;
 
 import com.bizvane.couponfacade.models.po.CouponDefinitionPO;
 import com.bizvane.couponfacade.models.po.CouponEntityPO;
+import com.bizvane.couponfacade.models.vo.CouponDetailResponseVO;
 import com.bizvane.couponfacade.models.vo.CouponFindCouponCountResponseVO;
 import com.bizvane.mktcenterservice.models.po.MktActivityPO;
 import com.bizvane.mktcenterservice.models.po.MktActivityRegisterPO;
@@ -142,6 +143,10 @@ public class ActivityVO extends MktActivityPO {
     private CouponDefinitionPO couponDefinitionPO;
 
     private CouponFindCouponCountResponseVO couponFindCouponCountResponseVO;
+    /**
+     * 通过id查询券实例
+     */
+    private CouponDetailResponseVO couponDetailResponseVO;
 
     /**核销率
      * */
@@ -191,6 +196,14 @@ public class ActivityVO extends MktActivityPO {
 
     public String getCommodityLimitList() {
         return commodityLimitList;
+    }
+
+    public CouponDetailResponseVO getCouponDetailResponseVO() {
+        return couponDetailResponseVO;
+    }
+
+    public void setCouponDetailResponseVO(CouponDetailResponseVO couponDetailResponseVO) {
+        this.couponDetailResponseVO = couponDetailResponseVO;
     }
 
     public void setCommodityLimitList(String commodityLimitList) {
