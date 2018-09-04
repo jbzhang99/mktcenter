@@ -99,7 +99,7 @@ public class ActivitySmartServiceImpl implements ActivitySmartService {
         criteria.andValidEqualTo(Boolean.TRUE);
         //判断是中控列表还是营销列表
         if (null==vo.getType()){
-            criteria.andStatusEqualTo(Boolean.FALSE);
+            criteria.andStatusEqualTo(Boolean.TRUE);
         }
 
 
