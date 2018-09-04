@@ -6,7 +6,7 @@ spring:
   redis:
     database: 7
   profiles:
-    active: basecontroller,commonutilslocal
+    active: basecontroller,commonutilslocal,log
   swagger:
     show: true
   application:
@@ -49,6 +49,7 @@ mybatis:
 logging:
   config: classpath:logback-local.xml
   level:
+    root: info
     com.bizvane.mktcenterserviceimpl.mappers: debug
 
 # pagehelper
