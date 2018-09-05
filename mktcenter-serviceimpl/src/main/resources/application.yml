@@ -99,7 +99,9 @@ feign:
     centercontrol:
       name: centercontrol-test
       path: centercontrol.api
-
+    fitment:
+      name: fitment-test
+      path: fitment.api
 rocketmq:
   onsaddr: http://onsaddr-internet.aliyun.com/rocketmq/nsaddr4client-internet
   accessKey: LTAIpoqUHsXq6q7r
