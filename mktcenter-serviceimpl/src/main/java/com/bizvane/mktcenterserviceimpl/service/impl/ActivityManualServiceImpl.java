@@ -10,6 +10,7 @@ import com.bizvane.couponfacade.interfaces.CouponDefinitionServiceFeign;
 import com.bizvane.couponfacade.interfaces.CouponQueryServiceFeign;
 import com.bizvane.couponfacade.models.po.CouponDefinitionPO;
 import com.bizvane.couponfacade.models.po.CouponEntityPO;
+import com.bizvane.couponfacade.models.vo.CouponDetailResponseVO;
 import com.bizvane.couponfacade.models.vo.CouponEntityAndDefinitionVO;
 import com.bizvane.couponfacade.models.vo.CouponFindCouponCountResponseVO;
 import com.bizvane.couponfacade.models.vo.SendCouponSimpleRequestVO;
@@ -311,7 +312,8 @@ public class ActivityManualServiceImpl implements ActivityManualService {
             long countToday = mktActivityRecordPOMapper.countByExample(mktActivityRecordPOExample);
 
             log.info("couponQueryServiceFeign.findCouponByCouponCode：入参:"+vo.getCouponCode());
-            ResponseData<CouponDefinitionPO> couponDefinitionPOResponseData = couponDefinitionServiceFeign.findByIdRpc(vo.getCouponDefinitionId());
+            //ResponseData<CouponDefinitionPO> couponDefinitionPOResponseData = couponDefinitionServiceFeign.findByIdRpc(vo.getCouponDefinitionId());
+            ResponseData<CouponDetailResponseVO>  couponDefinitionPOResponseData = couponQueryServiceFeign.getCouponDefinition(vo.getCouponDefinitionId());
             log.info("couponQueryServiceFeign.findCouponByCouponCode：出参:"+JSON.toJSONString(couponDefinitionPOResponseData));
 
             if(!ResponseConstants.SUCCESS.equals(couponDefinitionPOResponseData.getCode())){
@@ -515,7 +517,8 @@ public class ActivityManualServiceImpl implements ActivityManualService {
             for (ActivityVO activityVO1 : activityList) {
                 //2.查询活动对应的所有券
                 log.info("couponQueryServiceFeign.findCouponByCouponCode--->入参为:"+activityVO1.getCouponDefinitionId());
-                ResponseData<CouponDefinitionPO> couponDefinitionPOResponseData  = couponDefinitionServiceFeign.findByIdRpc(activityVO1.getCouponDefinitionId());
+                //ResponseData<CouponDefinitionPO> couponDefinitionPOResponseData  = couponDefinitionServiceFeign.findByIdRpc(activityVO1.getCouponDefinitionId());
+                ResponseData<CouponDetailResponseVO>  couponDefinitionPOResponseData = couponQueryServiceFeign.getCouponDefinition(activityVO1.getCouponDefinitionId());
                 log.info("couponQueryServiceFeign.findCouponByCouponCode--->出参为:"+JSON.toJSONString(couponDefinitionPOResponseData));
                 if(!ResponseConstants.SUCCESS.equals(couponDefinitionPOResponseData.getCode())){
                     log.warn("couponQueryServiceFeign.findCouponByCouponCode--->出错:"+couponDefinitionPOResponseData.getMessage());
@@ -541,7 +544,7 @@ public class ActivityManualServiceImpl implements ActivityManualService {
 
                 //默认设置可领取
                 activityVO1.setCanReceive(Boolean.TRUE);
-                activityVO1.setCouponDefinitionPO(couponDefinitionPOResponseData.getData());
+                activityVO1.setCouponDetailResponseVO(couponDefinitionPOResponseData.getData());
 
                 //今日领取已达上限
                 if (countToday >= activityVO1.getPerPersonPerDayMax()) {
@@ -603,7 +606,8 @@ public class ActivityManualServiceImpl implements ActivityManualService {
             activityVO = activityVOList1.get(0);//只有一个对象
             //2.查询活动对应的所有券
             log.info("couponQueryServiceFeign.findCouponByCouponCode---入参:"+activityVO.getCouponDefinitionId());
-            ResponseData<CouponDefinitionPO> couponDefinitionPOResponseData = couponDefinitionServiceFeign.findByIdRpc(activityVO.getCouponDefinitionId());
+            //ResponseData<CouponDefinitionPO> couponDefinitionPOResponseData = couponDefinitionServiceFeign.findByIdRpc(activityVO.getCouponDefinitionId());
+            ResponseData<CouponDetailResponseVO>  couponDefinitionPOResponseData = couponQueryServiceFeign.getCouponDefinition(activityVO.getCouponDefinitionId());
             log.info("couponQueryServiceFeign.findCouponByCouponCode---出参:"+JSON.toJSONString(couponDefinitionPOResponseData));
             //3.校验是否满足规则
             MktActivityRecordPOExample mktActivityRecordPOExample = new MktActivityRecordPOExample();
@@ -618,7 +622,7 @@ public class ActivityManualServiceImpl implements ActivityManualService {
 
             //默认设置可领取
             activityVO.setCanReceive(Boolean.TRUE);
-            activityVO.setCouponDefinitionPO(couponDefinitionPOResponseData.getData());
+            activityVO.setCouponDetailResponseVO(couponDefinitionPOResponseData.getData());
 
             //今日领取已达上限
             if (countToday >= activityVO.getPerPersonPerDayMax()) {

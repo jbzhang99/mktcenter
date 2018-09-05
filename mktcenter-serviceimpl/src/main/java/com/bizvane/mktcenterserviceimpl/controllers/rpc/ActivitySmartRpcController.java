@@ -40,6 +40,7 @@ public class ActivitySmartRpcController {
         PageForm pageForm = new PageForm();
         pageForm.setPageNumber(vo.getPageNumber());
         pageForm.setPageSize(vo.getPageSize());
+        vo.setType(0);
         return activitySmartService.getSmartActivityGroupList(vo,pageForm);
     }
 

@@ -133,7 +133,7 @@ public class ActivityOrderServiceImpl implements ActivityOrderService {
         //增加活动类型是消费活动
         activityVO.setActivityType(ActivityTypeEnum.ACTIVITY_TYPE_ORDER.getCode());
         //增加品牌id
-        log.info("获取的品牌id是="+stageUser.getBrandId());
+        log.info("获取的品牌id是="+stageUser.getBrandId()+"企业id="+stageUser.getSysCompanyId()+"创建人id 名称="+stageUser.getCreateUserId()+""+stageUser.getCreateUserName());
         if(null==stageUser.getBrandId()){
             log.error("token没有获取到品牌id");
             responseData.setCode(SysResponseEnum.FAILED.getCode());

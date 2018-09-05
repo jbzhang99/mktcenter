@@ -237,7 +237,13 @@ public class ActivityServiceImpl implements ActivityService {
         //积分总数
         ctivityAnalysisBO.setPointsSumTotal(ctivityAnalysis.getPointsSumTotal());
         //积分 合计 券收益合计
-        ActivityConvertCouponTypeEnum activityConvertCouponTypeEnumByCode = ActivityConvertCouponTypeEnum.getActivityConvertCouponTypeEnumByCode(bo.getActivityType());
+        Integer type =null;
+        if (null==bo.getActivityType()){
+            type=bo.getActivityTypeExtend();
+        }else{
+            type=bo.getActivityType();
+        }
+        ActivityConvertCouponTypeEnum activityConvertCouponTypeEnumByCode = ActivityConvertCouponTypeEnum.getActivityConvertCouponTypeEnumByCode(type);
         String activityType = activityConvertCouponTypeEnumByCode.getCouponCode();
 //        if(bo.getActivityType()== ){
 //            activityType = SendTypeEnum.SEND_COUPON_ONLINE_ACTIVITY.getCode();

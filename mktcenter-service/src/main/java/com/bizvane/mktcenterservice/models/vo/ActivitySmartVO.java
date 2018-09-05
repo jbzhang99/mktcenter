@@ -88,12 +88,6 @@ public class ActivitySmartVO extends MktActivitySmartPO {
     private List<MktCouponPO> mktCouponPOS;
 
     /**
-     * 只读. 所属企业id. sys_company_id
-     * @mbg.generated  2018-08-02 20:38:44
-     */
-    @io.swagger.annotations.ApiModelProperty(value = "所属企业id", name = "sysCompanyId", required = false, example = "")
-    private Long sysCompanyId;
-    /**
      * 只读. 所属品牌id. sys_brand_id
      * @mbg.generated  2018-08-02 20:38:44
      */
@@ -156,6 +150,19 @@ public class ActivitySmartVO extends MktActivitySmartPO {
      * 消息对象
      */
     private MktMessagePO mktMessagePO;
+
+    /**
+     * 区分是中控调用还是营销模块列表
+     */
+    private Integer type;
+
+    public Integer getType() {
+        return type;
+    }
+
+    public void setType(Integer type) {
+        this.type = type;
+    }
 
     public Date getCreateDateStart() {
         return createDateStart;
@@ -243,14 +250,6 @@ public class ActivitySmartVO extends MktActivitySmartPO {
 
     public void setMktCouponPOS(List<MktCouponPO> mktCouponPOS) {
         this.mktCouponPOS = mktCouponPOS;
-    }
-
-    public Long getSysCompanyId() {
-        return sysCompanyId;
-    }
-
-    public void setSysCompanyId(Long sysCompanyId) {
-        this.sysCompanyId = sysCompanyId;
     }
 
     public Long getSysBrandId() {
