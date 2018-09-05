@@ -29,6 +29,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.text.ParseException;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -71,6 +72,7 @@ public class TaskOrderServiceImpl implements TaskOrderService {
     @Transactional
     @Override
     public ResponseData<Integer> addTask(TaskBO bo, SysAccountPO stageUser) throws ParseException {
+        bo.getTaskVO().setTaskType(4);
         //0.参数的检验
         ResponseData responseData = TaskParamCheckUtil.checkParam(bo);
         //参数校验不通过
@@ -89,13 +91,20 @@ public class TaskOrderServiceImpl implements TaskOrderService {
         MktTaskPOWithBLOBs mktTaskPOWithBLOBs = new MktTaskPOWithBLOBs();
         BeanUtils.copyProperties(taskVO, mktTaskPOWithBLOBs);
         mktTaskPOWithBLOBs.setTaskCode(taskCode);
+
         mktTaskPOWithBLOBs = taskService.isOrNoCheckState(mktTaskPOWithBLOBs);
         Long mktTaskId = taskService.addTask(mktTaskPOWithBLOBs, stageUser);
         taskService.addCheckData(mktTaskPOWithBLOBs);
+
         //3.任务消费表新增
         MktTaskOrderPO mktTaskOrderPO = new MktTaskOrderPO();
         BeanUtils.copyProperties(taskVO, mktTaskOrderPO);
         mktTaskOrderPO.setMktTaskId(mktTaskId);
+
+        mktTaskOrderPO.setSysCompanyId(stageUser.getSysCompanyId());
+        mktTaskOrderPO.setCreateDate(new Date());
+        mktTaskOrderPO.setCreateUserId(stageUser.getCreateUserId());
+        mktTaskOrderPO.setCreateUserName(stageUser.getCreateUserName());
         this.insertOrderTask(mktTaskOrderPO, stageUser);
 
         //4.新增奖励新增   业务类型：1活动，2任务
@@ -134,6 +143,7 @@ public class TaskOrderServiceImpl implements TaskOrderService {
     @Transactional
     @Override
     public ResponseData updateOrderTask(TaskBO bo, SysAccountPO stageUser) {
+        bo.getTaskVO().setTaskType(4);
        //0.参数的检验
         ResponseData responseData = TaskParamCheckUtil.checkParam(bo);
         //参数校验不通过
@@ -208,9 +218,13 @@ public class TaskOrderServiceImpl implements TaskOrderService {
         return mktTaskOrderPOMapper.getOrderTaskDetails(mktTaskId);
     }
     /**
-     * 新增消费任务
+     * 新增消费任务 todo   品牌  公司   创建人  创建时间
      */
     public Integer insertOrderTask(MktTaskOrderPO po, SysAccountPO stageUser) {
+        po.setSysCompanyId(stageUser.getSysCompanyId());
+        po.setCreateUserName(stageUser.getName());
+        po.setCreateUserId(stageUser.getSysAccountId());
+        po.setCreateDate(new Date());
         return mktTaskOrderPOMapper.insertSelective(po);
     }
 

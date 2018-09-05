@@ -1,5 +1,6 @@
 package com.bizvane.mktcenterserviceimpl.controllers;
 
+import com.bizvane.centerstageservice.models.po.SysAccountPo;
 import com.bizvane.mktcenterservice.interfaces.TaskOrderService;
 import com.bizvane.mktcenterservice.models.bo.AddTaskBO;
 import com.bizvane.mktcenterservice.models.bo.TaskBO;
@@ -44,8 +45,17 @@ public class TaskOrderController {
     @RequestMapping("addTask")
     public ResponseData<Integer> addTask(TaskBO bo, HttpServletRequest request) throws ParseException {
         //参数校验通过，获取操作人信息
-        SysAccountPO stageUser = TokenUtils.getStageUser(request);
-        return  taskOrderService.addTask(bo, stageUser);
+        SysAccountPO sysAccountPo = TokenUtils.getStageUser(request);
+//        SysAccountPO sysAccountPo = new SysAccountPO();
+//        sysAccountPo.setSysAccountId(26L);
+//        sysAccountPo.setSysCompanyId(2L);
+//        sysAccountPo.setBrandId(4L);
+//        sysAccountPo.setAccountCode("15328634678");
+//        sysAccountPo.setName("不啊哟删除");
+
+        bo.getTaskVO().setSysBrandId(sysAccountPo.getBrandId());
+
+        return  taskOrderService.addTask(bo, sysAccountPo);
     }
     /**
      * 修改任务

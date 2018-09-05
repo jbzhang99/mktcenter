@@ -95,7 +95,7 @@ public class TaskShareServiceImpl implements TaskShareService {
      */
     @Override
     public ResponseData<List<AppletBrandFunctionRpcBo>>  getURLList(Long brandId){
-        return  menberMadeServiceRpc.selectBrandFunctionRpc(brandId);
+        return  menberMadeServiceRpc.selectBrandFunctionRpc(brandId,1);
     }
     /**
      * 添加微信分享任务
@@ -238,6 +238,7 @@ public class TaskShareServiceImpl implements TaskShareService {
      * @return
      */
     public  Integer  insertShareTask(MktTaskSharePO po,SysAccountPO stageUser){
+        po.setSysCompanyId(stageUser.getSysCompanyId());
         po.setCreateUserId(stageUser.getSysAccountId());
         po.setCreateUserName(stageUser.getName());
         po.setCreateDate(new Date());

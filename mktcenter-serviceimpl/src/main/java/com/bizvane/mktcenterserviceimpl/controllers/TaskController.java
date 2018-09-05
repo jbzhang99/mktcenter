@@ -72,7 +72,21 @@ public class TaskController {
      * @return
      */
     @RequestMapping("doAnalysis")
-    public ResponseData<TaskRecordVO> doAnalysis(TaskAnalysisVo vo){
-        return taskService.doAnalysis(vo);
+    public ResponseData<TaskRecordVO> doAnalysis(TaskAnalysisVo vo,HttpServletRequest request){
+        SysAccountPO sysAccountPo = TokenUtils.getStageUser(request);
+
+//        SysAccountPO sysAccountPo = new SysAccountPO();
+//        sysAccountPo.setSysAccountId(26L);
+//        sysAccountPo.setSysCompanyId(2L);
+//        sysAccountPo.setBrandId(4L);
+//        sysAccountPo.setAccountCode("15328634678");
+//        sysAccountPo.setName("不啊哟删除");
+
+        return taskService.doAnalysis(vo,sysAccountPo);
     }
+    @RequestMapping("getTaskByTaskType")
+    public ResponseData<com.github.pagehelper.PageInfo<MktTaskPOWithBLOBs>> getTaskByTaskType(TaskVO vo, PageForm pageForm){
+       return taskService.getTaskByTaskType(vo,pageForm);
+    }
+
 }

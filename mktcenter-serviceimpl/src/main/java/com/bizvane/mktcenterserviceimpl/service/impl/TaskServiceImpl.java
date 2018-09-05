@@ -533,12 +533,13 @@ public class TaskServiceImpl implements TaskService {
     }
 
     /**
-     * 效果分析的明细--已经审核
+     * 效果分析的明细--已经审核(除了完善资料任务)
      */
     @Override
-    public ResponseData<TaskRecordVO> doAnalysis(TaskAnalysisVo vo){
+    public ResponseData<TaskRecordVO> doAnalysis(TaskAnalysisVo vo,SysAccountPO sysAccountPo){
         ResponseData<TaskRecordVO> result = new ResponseData<TaskRecordVO>(SysResponseEnum.SUCCESS.getCode(),SysResponseEnum.SUCCESS.getMessage(),null);
-        Long sysBrandId = vo.getBrandId();
+        Long sysBrandId = sysAccountPo.getBrandId();
+        vo.setBrandId(sysBrandId);
         //每个任务的券,积分,会员 总数
         PageHelper.startPage(vo.getPageNumber(),vo.getPageSize());
         List<DayTaskRecordVo> analysisall = mktTaskRecordPOMapper.getAnalysisResult(vo);
@@ -556,22 +557,7 @@ public class TaskServiceImpl implements TaskService {
         if (CollectionUtils.isNotEmpty(analysislists)){
             for (DayTaskRecordVo task: analysislists) {
                 TaskTypeEnum taskTypeEnum = TaskTypeEnum.getTaskTypeEnumByCode(vo.getTaskType());
-                String sendType=null;
-                switch (taskTypeEnum){
-                    case TASK_TYPE_CONSUME_TIMES:
-                        // 累计消费次数
-                        sendType=SendTypeEnum.SEND_COUPON_COUSUME_TIMES_TASK.getCode();
-                        break;
-                    case TASK_TYPE_CONSUME_AMOUNT:
-                        //累计消费金额
-                        sendType=SendTypeEnum.SEND_COUPON_COUSUME_MONEY_TASK.getCode();
-                        break;
-
-                    case TASK_TYPE_INVITE:
-                        //邀请注册
-                        sendType=SendTypeEnum.SEND_COUPON_INVITE_OPENCARD_TASK.getCode();
-                        break;
-                }
+                String sendType = this.changeTaskType(vo.getTaskType()).getCouponTaskType();
                 ResponseData<CouponFindCouponCountResponseVO> couponCount= couponQueryService.findCouponCountBySendBusinessId(task.getTaskId(), sendType, sysBrandId);
                 CouponFindCouponCountResponseVO data = couponCount.getData();
                 //任务的券总数量
@@ -584,7 +570,7 @@ public class TaskServiceImpl implements TaskService {
 
                 allPoints=allPoints+task.getOneTaskPoints();
                 allCountCoupon= allCountCoupon+task.getOneTaskCountCoupon();
-                allCountMbr=allCountMbr+task.getOneTaskCountMbr();
+                allCountMbr=allCountMbr+task.getOneTaskCompleteCountMbr();
                 allinvalidCountCoupon = allinvalidCountCoupon+Long.valueOf(couponSum);
             }
         }
@@ -602,11 +588,16 @@ public class TaskServiceImpl implements TaskService {
      * 新增任务主表任务数据
      *
      * @param task
-     * @param stageUser
+     * @param stageUser    todo   品牌  公司   创建人  创建时间
      * @return
      */
     @Override
     public Long addTask(MktTaskPOWithBLOBs task, SysAccountPO stageUser) {
+        task.setSysCompanyId(stageUser.getSysCompanyId());
+        task.setSysBrandId(stageUser.getBrandId());
+        task.setCreateUserName(stageUser.getName());
+        task.setCreateUserId(stageUser.getSysAccountId());
+        task.setCreateDate(new Date());
         mktTaskPOMapper.insertSelective(task);
         return task.getMktTaskId();
     }

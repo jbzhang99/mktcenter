@@ -1,5 +1,8 @@
 package com.bizvane.mktcenterservice.models.vo;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import org.springframework.format.annotation.DateTimeFormat;
+
 import java.util.Date;
 
 /**
@@ -9,47 +12,46 @@ public class DayTaskRecordVo {
    private Long taskId;
     private String taskCode;
     //参与日期
-
     private Date partDate;
 
     //某天的赠送总积分数
-    private Long dayPoints;
+    private Long dayPoints=0L;
 
     //某天的发行券总张数
-    private Long dayCountCoupon;
+    private Long dayCountCoupon=0L;
 
     //某天参与活动的会员人数
-    private Long dayCountMbr;
+    private Long dayCountMbr=0L;
 
     //某天完成任务的会员人数
-    private Long dayCompleteCountMbr;
+    private Long dayCompleteCountMbr=0L;
 
     //任务名称
     private String taskName;
 
     //某天被核销的优惠券
-    private Long dayInvalidCountCoupon;
+    private Long dayInvalidCountCoupon=0L;
 
     //某任务的分享总次数
-    private Long oneTaskShareTimes;
+    private Long oneTaskShareTimes=0L;
 
     //参与时间
     private Date participateDay;
 
     //某任务获得的总积分
-    private Long oneTaskPoints;
+    private Long oneTaskPoints=0L;
 
     //某任务发行的总券数
-    private Long oneTaskCountCoupon;
+    private Long oneTaskCountCoupon=0L;
 
     //某任务完成的会员总人数
-    private Long oneTaskCompleteCountMbr;
+    private Long oneTaskCompleteCountMbr=0L;
 
     //某任务被核销的优惠券
-    private Long oneTaskInvalidCountCoupon;
+    private Long oneTaskInvalidCountCoupon=0L;
 
     //某任务参与的会员总人数
-    private Long oneTaskCountMbr;
+    private Long oneTaskCountMbr=0L;
 
 
 

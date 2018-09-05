@@ -28,6 +28,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.text.ParseException;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -101,7 +102,7 @@ public class TaskAmountServiceImpl implements TaskAmountService {
         MktTaskPOWithBLOBs mktTaskPOWithBLOBs = new MktTaskPOWithBLOBs();
         BeanUtils.copyProperties(vo, mktTaskPOWithBLOBs);
         mktTaskPOWithBLOBs.setTaskCode(taskCode);
-        // mktTaskPOWithBLOBs = taskService.isOrNoCheckState(mktTaskPOWithBLOBs);
+        mktTaskPOWithBLOBs = taskService.isOrNoCheckState(mktTaskPOWithBLOBs);
         Long mktTaskId = taskService.addTask(mktTaskPOWithBLOBs, stageUser);
         taskService.addCheckData(mktTaskPOWithBLOBs);
 
@@ -109,7 +110,9 @@ public class TaskAmountServiceImpl implements TaskAmountService {
         MktTaskOrderPO mktTaskOrderPO = new MktTaskOrderPO();
         BeanUtils.copyProperties(vo, mktTaskOrderPO);
         mktTaskOrderPO.setMktTaskId(mktTaskId);
+        mktTaskPOWithBLOBs = taskService.isOrNoCheckState(mktTaskPOWithBLOBs);
         this.insertAmoutTask(mktTaskOrderPO, stageUser);
+        taskService.addCheckData(mktTaskPOWithBLOBs);
 
         //4.新增奖励新增  biz_type 活动类型  1=活动
         List<MktCouponPO> mktCouponPOList = bo.getMktCouponPOList();
@@ -208,6 +211,10 @@ public class TaskAmountServiceImpl implements TaskAmountService {
      */
     @Override
     public Integer insertAmoutTask(MktTaskOrderPO po, SysAccountPO stageUser) {
+        po.setSysCompanyId(stageUser.getSysCompanyId());
+        po.setCreateUserName(stageUser.getName());
+        po.setCreateUserId(stageUser.getSysAccountId());
+        po.setCreateDate(new Date());
         return mktTaskOrderPOMapper.insertSelective(po);
     }
 

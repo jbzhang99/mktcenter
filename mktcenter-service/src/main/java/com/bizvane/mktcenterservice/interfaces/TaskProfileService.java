@@ -1,19 +1,11 @@
 package com.bizvane.mktcenterservice.interfaces;
 
-import com.bizvane.members.facade.models.MemberInfoModel;
 import com.bizvane.members.facade.vo.ExtendPropertyVO;
 import com.bizvane.mktcenterservice.models.bo.TaskBO;
-import com.bizvane.mktcenterservice.models.po.MktMessagePOExample;
-import com.bizvane.mktcenterservice.models.po.MktTaskRecordPO;
-import com.bizvane.mktcenterservice.models.vo.PageForm;
-import com.bizvane.mktcenterservice.models.vo.ProfileSuccessVO;
-import com.bizvane.mktcenterservice.models.vo.TaskRecordVO;
-import com.bizvane.mktcenterservice.models.vo.TaskVO;
+import com.bizvane.mktcenterservice.models.vo.*;
 import com.bizvane.utils.responseinfo.ResponseData;
 import com.bizvane.utils.tokens.SysAccountPO;
-
 import java.text.ParseException;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -49,12 +41,9 @@ public interface TaskProfileService {
 
     /**
      * 完善资料任务效果分析
-     * @param date1
-     * @param date2
-     * @param stageUser
      * @return
      */
-    public ResponseData<TaskRecordVO> getTaskProfileRecordByTime(Date date1, Date date2,SysAccountPO stageUser,PageForm pageForm);
+    public ResponseData<TaskRecordVO> getTaskProfileRecordByTime(TaskAnalysisVo vo);
 
     /**
      * 执行完成任务的奖励

@@ -110,7 +110,7 @@ public class TaskInviteServiceImpl implements TaskInviteService {
         //状态的设置
         MktTaskPOWithBLOBs mktTaskPOWithBLOBs = new MktTaskPOWithBLOBs();
         BeanUtils.copyProperties(taskVO, mktTaskPOWithBLOBs);
-        //mktTaskPOWithBLOBs = taskService.isOrNoCheckState(mktTaskPOWithBLOBs);
+        mktTaskPOWithBLOBs = taskService.isOrNoCheckState(mktTaskPOWithBLOBs);
         Long mktTaskId = taskService.addTask(mktTaskPOWithBLOBs, stageUser);
         taskService.addCheckData(mktTaskPOWithBLOBs);
 
@@ -219,6 +219,11 @@ public class TaskInviteServiceImpl implements TaskInviteService {
      */
     @Override
     public Integer insertInviteTask(MktTaskInvitePO po, SysAccountPO stageUser) {
+        po.setSysCompanyId(stageUser.getSysCompanyId());
+        po.setCreateUserName(stageUser.getName());
+        po.setCreateUserId(stageUser.getSysAccountId());
+        po.setCreateDate(new Date());
+
         return mktTaskInvitePOMapper.insertSelective(po);
     }
 

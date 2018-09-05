@@ -152,7 +152,7 @@ public interface TaskService {
     /**
      * 效果分析的明细
      */
-    public ResponseData<TaskRecordVO> doAnalysis(TaskAnalysisVo vo);
+    public ResponseData<TaskRecordVO> doAnalysis(TaskAnalysisVo vo,SysAccountPO sysAccountPo);
     /**
      * 将需要审核的任务添加到中台
      * @param po

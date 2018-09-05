@@ -508,4 +508,27 @@
     </where>
 
   </select>
+
+  <select id="getPrifleAnalysisResult" resultType="com.bizvane.mktcenterservice.models.vo.DayTaskRecordVo">
+       SELECT
+       SUM(tmtr.points)  AS oneTaskPoints,
+       count(distinct tmtr.member_code) AS dayCompleteCountMbr,
+       tmtr.participate_date as partDate
+       FROM
+       t_mkt_task_record tmtr   INNER JOIN t_mkt_task  tmt ON tmtr.task_id=tmt.mkt_task_id
+       WHERE
+       tmtr.valid = 1
+       AND tmt.valid=1
+       AND tmtr.rewarded = 1
+       AND tmtr.sys_brand_id =#{brandId}
+       AND tmtr.task_type = 1
+      <if test="date2!=null and date2!=''">
+        AND tmt.create_date <![CDATA[<=]]>#{date2}
+      </if>
+      <if test="date1!=null and date1!=''">
+        AND tmt.create_date <![CDATA[>=]]> #{date1}
+      </if>
+       GROUP BY  date_format(tmtr.participate_date,'%Y-%m-%d')
+
+  </select>
 </mapper>

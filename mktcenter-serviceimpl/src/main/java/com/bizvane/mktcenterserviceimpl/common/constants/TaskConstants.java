@@ -3,6 +3,8 @@ package com.bizvane.mktcenterserviceimpl.common.constants;
 import com.bizvane.utils.enumutils.SysResponseEnum;
 import com.bizvane.utils.responseinfo.ResponseData;
 
+import java.text.SimpleDateFormat;
+
 /**
  * @author chen.li
  * @date on 2018/7/13 10:13
@@ -10,7 +12,7 @@ import com.bizvane.utils.responseinfo.ResponseData;
  * @Copyright (c) 2018 上海商帆信息科技有限公司-版权所有
  */
 public class TaskConstants {
-
+    public final  static SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
     //任务主体
     public final  static String ERROR_MSG_TASK_NAME_EMPTY ="任务名称为空";
     public final static String ERROR_MSG_TASK_DATE_EMPTY ="活动起止日期为空";

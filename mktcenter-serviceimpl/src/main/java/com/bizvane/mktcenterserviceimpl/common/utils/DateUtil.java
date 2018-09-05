@@ -2,6 +2,7 @@ package com.bizvane.mktcenterserviceimpl.common.utils;
 
 
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -28,7 +29,15 @@ public class DateUtil {
         }
         return formatTimeStr;
     }
-
+    public static Date formatDateByPattern(Date date, SimpleDateFormat dateFormat) throws ParseException {
+        Date parse=null;
+        if (date != null) {
+          String  formatTimeStr = dateFormat.format(date);
+          parse = dateFormat.parse(formatTimeStr);
+        }
+        System.out.println("---"+parse);
+        return parse;
+    }
     /**
      * 获取cron表达式
      * @param date

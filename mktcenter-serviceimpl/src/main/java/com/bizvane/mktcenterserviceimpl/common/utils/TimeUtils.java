@@ -27,6 +27,11 @@ public class TimeUtils {
         return currentTime_2;
 
     }
+    public  static Date  formatDateByPattern(Date currentTime) throws ParseException {
+        String dateString = formatter.format(currentTime);
+        return formatter.parse(dateString);
+
+    }
     /**
      * 判断任务是否滞后执行
      *

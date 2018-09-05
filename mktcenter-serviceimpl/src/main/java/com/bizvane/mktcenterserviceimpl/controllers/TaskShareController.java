@@ -1,6 +1,7 @@
 package com.bizvane.mktcenterserviceimpl.controllers;
 
 //import com.bizvane.appletservice.Rpc.MenberMadeServiceRpc;
+import com.bizvane.fitmentservice.models.bo.AppletBrandFunctionRpcBo;
 import com.bizvane.members.facade.models.MemberInfoModel;
 import com.bizvane.mktcenterservice.interfaces.TaskShareService;
 import com.bizvane.mktcenterservice.models.bo.TaskBO;
@@ -40,14 +41,27 @@ import java.util.List;
 public class TaskShareController {
     @Autowired
     private TaskShareService taskShareService;
+
+    @RequestMapping("getURLList")
+    public ResponseData<List<AppletBrandFunctionRpcBo>>  getURLList(Long brandId){
+        return taskShareService.getURLList(brandId);
+    }
     /**
      * 创建任务
      * @return
      */
     @RequestMapping("addTask")
     public ResponseData<Integer> addTask(TaskBO bo,HttpServletRequest request) throws ParseException {
-        SysAccountPO stageUser = TokenUtils.getStageUser(request);
-        return taskShareService.addTask(bo, stageUser);
+        SysAccountPO sysAccountPo = TokenUtils.getStageUser(request);
+//        SysAccountPO sysAccountPo = new SysAccountPO();
+//        sysAccountPo.setSysAccountId(26L);
+//        sysAccountPo.setSysCompanyId(2L);
+//        sysAccountPo.setBrandId(4L);
+//        sysAccountPo.setAccountCode("15328634678");
+//        sysAccountPo.setName("不啊哟删除");
+
+        bo.getTaskVO().setTaskType(2);
+        return taskShareService.addTask(bo, sysAccountPo);
     }
     /**
      * 修改任务

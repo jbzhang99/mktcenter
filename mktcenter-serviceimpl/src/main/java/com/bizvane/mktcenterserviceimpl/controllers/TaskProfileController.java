@@ -10,16 +10,15 @@ import com.bizvane.mktcenterservice.interfaces.TaskProfileService;
 import com.bizvane.mktcenterservice.models.bo.TaskBO;
 import com.bizvane.mktcenterservice.models.po.MktCouponPO;
 import com.bizvane.mktcenterservice.models.po.MktMessagePO;
-import com.bizvane.mktcenterservice.models.vo.MessageVO;
-import com.bizvane.mktcenterservice.models.vo.PageForm;
-import com.bizvane.mktcenterservice.models.vo.ProfileSuccessVO;
-import com.bizvane.mktcenterservice.models.vo.TaskVO;
+import com.bizvane.mktcenterservice.models.vo.*;
 import com.bizvane.mktcenterserviceimpl.common.constants.SystemConstants;
+import com.bizvane.mktcenterserviceimpl.common.constants.TaskConstants;
 import com.bizvane.mktcenterserviceimpl.common.enums.TaskTypeEnum;
 import com.bizvane.mktcenterserviceimpl.common.utils.TaskParamCheckUtil;
 import com.bizvane.utils.responseinfo.ResponseData;
 import com.bizvane.utils.tokens.SysAccountPO;
 import com.bizvane.utils.tokens.TokenUtils;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -40,6 +39,7 @@ import java.util.List;
 @RestController
 @RequestMapping("taskProfile")
 public class TaskProfileController {
+
     @Autowired
     private TaskProfileService taskProfileService;
     @Autowired
@@ -54,7 +54,7 @@ public class TaskProfileController {
      * @param sysBrandId
      * @return
      */
-    @RequestMapping("getMemberField")
+    @RequestMapping("getExtendProperty")
     public  ResponseData<List<ExtendPropertyVO>> getMemberField(Long sysBrandId){
         return taskProfileService.getMemberField(sysBrandId);
     }
@@ -65,8 +65,16 @@ public class TaskProfileController {
      */
     @RequestMapping("addTask")
     public ResponseData<Integer> addTask(TaskBO bo, HttpServletRequest request) throws ParseException {
-        SysAccountPO stageUser = TokenUtils.getStageUser(request);
-        return  taskProfileService.addTask(bo, stageUser);
+        SysAccountPO sysAccountPo = TokenUtils.getStageUser(request);
+//        SysAccountPO sysAccountPo = new SysAccountPO();
+//        sysAccountPo.setSysAccountId(26L);
+//        sysAccountPo.setSysCompanyId(2L);
+//        sysAccountPo.setBrandId(4L);
+//        sysAccountPo.setAccountCode("15328634678");
+//        sysAccountPo.setName("不啊哟删除");
+
+        bo.getTaskVO().setTaskType(1);
+        return  taskProfileService.addTask(bo, sysAccountPo);
 
     }
 
@@ -84,23 +92,29 @@ public class TaskProfileController {
 
     /**
      * 效果分析
-     * @param date1
-     * @param date2
-     * @param request
-     * @param pageForm
-     * @return
+     * @return  TaskAnalysisVo vo
      */
     @RequestMapping("getTaskProfileRecordByTime")
-    public ResponseData getTaskProfileRecordByTime(String date1, String date2, HttpServletRequest request, PageForm pageForm)throws Exception{
+  //  public ResponseData getTaskProfileRecordByTime(String date1, String date2, HttpServletRequest request, PageForm pageForm)throws Exception{
+    public ResponseData getTaskProfileRecordByTime(TaskAnalysisVo vo,HttpServletRequest request)throws Exception{
 
-        SysAccountPO stageUser = TokenUtils.getStageUser(request);
-
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        Date timeStart = simpleDateFormat.parse(date1);
-
-        Date timeEnd = simpleDateFormat.parse(date2);
-        return taskProfileService.getTaskProfileRecordByTime(timeStart,timeEnd,stageUser,pageForm);
+       // SysAccountPO stageUser = TokenUtils.getStageUser(request);
+        SysAccountPO sysAccountPo = new SysAccountPO();
+        sysAccountPo.setSysAccountId(26L);
+        sysAccountPo.setSysCompanyId(2L);
+        sysAccountPo.setBrandId(4L);
+        sysAccountPo.setAccountCode("15328634678");
+        sysAccountPo.setName("不啊哟删除");
+//      Date timeStart=null;
+//      Date timeEnd=null;
+//       if (StringUtils.isNotBlank(date1)&&StringUtils.isNotBlank(date2)){
+//            timeStart = TaskConstants.DATE_FORMAT.parse(date1);
+//            timeEnd = TaskConstants.DATE_FORMAT.parse(date2);
+//       }
+        vo.setBrandId(sysAccountPo.getBrandId());
+        return taskProfileService.getTaskProfileRecordByTime(vo);
     }
+
     /**
      * 执行完善资料的任务奖励
      */
