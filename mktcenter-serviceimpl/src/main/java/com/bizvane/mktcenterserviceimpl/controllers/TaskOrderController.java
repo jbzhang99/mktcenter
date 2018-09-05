@@ -53,8 +53,8 @@ public class TaskOrderController {
 //        sysAccountPo.setAccountCode("15328634678");
 //        sysAccountPo.setName("不啊哟删除");
 
-        bo.getTaskVO().setSysBrandId(sysAccountPo.getBrandId());
-
+       // bo.getTaskVO().setSysBrandId(sysAccountPo.getBrandId());
+        bo.getTaskVO().setTaskType(4);
         return  taskOrderService.addTask(bo, sysAccountPo);
     }
     /**

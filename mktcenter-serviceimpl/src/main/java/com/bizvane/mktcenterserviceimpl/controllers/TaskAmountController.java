@@ -72,7 +72,7 @@ public class TaskAmountController {
 //        sysAccountPo.setBrandId(4L);
 //        sysAccountPo.setAccountCode("15328634678");
 //        sysAccountPo.setName("不啊哟删除");
-//        bo.getTaskVO().setTaskType(5);
+        bo.getTaskVO().setTaskType(5);
         return  taskAmountService.addTask(bo, sysAccountPo);
     }
     /**

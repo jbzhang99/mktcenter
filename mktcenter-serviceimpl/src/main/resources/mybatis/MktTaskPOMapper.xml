@@ -1141,12 +1141,7 @@
     tto.mkt_task_order_id,
     tto.order_source,
     tto.consume_amount,
-    tto.consume_times,
-    tmi.invite_num,
-    tmts.share_times,
-    tmts.share_url_type,
-    tmts.share_url,
-    tmp.property_code
+    tto.consume_times
     FROM
     t_mkt_task tta
     LEFT JOIN t_mkt_task_order tto ON tta.mkt_task_id = tto.mkt_task_id AND tto.valid=1

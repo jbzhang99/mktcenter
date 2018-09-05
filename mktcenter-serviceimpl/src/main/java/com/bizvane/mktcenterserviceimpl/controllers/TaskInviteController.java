@@ -82,7 +82,7 @@ public class TaskInviteController {
 //        sysAccountPo.setBrandId(4L);
 //        sysAccountPo.setAccountCode("15328634678");
 //        sysAccountPo.setName("不啊哟删除");
-//        bo.getTaskVO().setTaskType(3);
+        bo.getTaskVO().setTaskType(3);
         return  taskInviteService.addTask(bo, sysAccountPo);
     }
     /**
