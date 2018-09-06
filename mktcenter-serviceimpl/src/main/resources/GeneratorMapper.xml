@@ -89,9 +89,9 @@
         <!--<table tableName="t_mkt_coupon" domainObjectName="MktCouponPO">-->
             <!--<generatedKey column="mkt_coupon_id" sqlStatement="MySql" identity="true"/>-->
         <!--</table>-->
-        <table tableName="t_mkt_message" domainObjectName="MktMessagePO">
+      <!--   <table tableName="t_mkt_message" domainObjectName="MktMessagePO">
         <generatedKey column="mkt_msg_id" sqlStatement="MySql" identity="true"/>
-    </table>
+    </table> -->
         <!--<table tableName="t_mkt_task" domainObjectName="MktTaskPO">-->
             <!--<generatedKey column="mkt_task_id" sqlStatement="MySql" identity="true"/>-->
         <!--</table>-->
@@ -118,6 +118,13 @@
         <!--<table tableName="t_rocket_config" domainObjectName="RocketConfigPO">-->
             <!--<generatedKey column="rocket_config_id" sqlStatement="MySql" identity="true"/>-->
         <!--</table>-->
+        
+          <table tableName="t_mkt_activity_evaluation" domainObjectName="MktActivityEvaluationPO">
+            <generatedKey column="mkt_activity_evaluation_id" sqlStatement="MySql" identity="true"/>
+        </table>
+          <table tableName="t_mkt_activity_vip_aniversary" domainObjectName="MktActivityVipAniversaryPO">
+            <generatedKey column="mkt_activity_vip_aniversary_id" sqlStatement="MySql" identity="true"/>
+        </table>
 
 
     </context>
