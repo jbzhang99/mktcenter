@@ -299,7 +299,8 @@ public class ActivityUpgradeServiceImpl implements ActivityUpgradeService {
                 //membersInfoSearchVo.setLevelId(mbrLevel.getMbrLevelId());
                 memberMessage.getMemberList(messageVOList, membersInfoSearchVo);
             }else{
-                //自定义时间发送 加人job任务 TODO
+                //自定义时间发送 加人job任务
+                jobUtil.addSendMessageJob(stageUser,activityVO,activityCode);
             }
 
         }

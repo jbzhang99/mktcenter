@@ -124,6 +124,18 @@ public  void addTaskStartJob(SysAccountPO stageUser, MktTaskPOWithBLOBs po) {
         String param =builder.toString();
         addJob(po.getStartTime(),po.getTaskName(),param,stageUser.getName(),JobHandlerConstants.END_TASK,JobBusinessTypeEnum.ACTIVITY_TYPE_TASK.getCode(),po.getTaskCode());
     }
+
+    /**
+     * 发送信息job
+     * @param stageUser
+     * @param activityVO
+     * @param activityCode
+     */
+    public  void addSendMessageJob(SysAccountPO stageUser, ActivityVO activityVO,String activityCode) {
+        String activityJobType = JobHandlerConstants.sendMessageActivity;
+        int businessType = JobBusinessTypeEnum.ACTIVITY_TYPE_ACTIVITY.getCode();
+        addJob(activityVO.getSendTime(),activityVO.getActivityInfo(),activityCode,stageUser.getName(),activityJobType,businessType,activityCode);
+    }
     /**
      * 通用job添加方法
      * @param execuDate

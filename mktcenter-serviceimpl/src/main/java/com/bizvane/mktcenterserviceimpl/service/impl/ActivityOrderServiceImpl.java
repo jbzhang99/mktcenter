@@ -276,7 +276,8 @@ public class ActivityOrderServiceImpl implements ActivityOrderService {
                 membersInfoSearchVo.setBrandId(activityVO.getSysBrandId());
                 memberMessage.getMemberList(messageVOList, membersInfoSearchVo);
             }else{
-                //自定义时间发送 加人job任务 TODO
+                //自定义时间发送 加人job任务
+                jobUtil.addSendMessageJob(stageUser,activityVO,activityCode);
             }
 
 

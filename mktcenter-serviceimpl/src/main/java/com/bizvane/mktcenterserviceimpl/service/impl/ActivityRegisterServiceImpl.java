@@ -302,8 +302,8 @@ public class ActivityRegisterServiceImpl implements ActivityRegisterService {
                 memberMessage.getMemberList(messageVOList, membersInfoSearchVo);
                 //查询对应的会员  TODO 发送微信模板消息
             }else{
-                //自定义时间发送 加人job任务 TODO
-
+                //自定义时间发送 加人job任务
+                jobUtil.addSendMessageJob(stageUser,activityVO,activityCode);
             }
 
 

@@ -23,4 +23,6 @@ public class JobHandlerConstants {
     public  static String everyDayActivityBirthday = "everyDayActivityBirthday";
 
     public static String smartActivity = "smartActivity";
+
+    public static String sendMessageActivity = "sendMessageActivity";
 }
