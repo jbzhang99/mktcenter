@@ -295,8 +295,9 @@ public class ActivityUpgradeServiceImpl implements ActivityUpgradeService {
                 membersInfoSearchVo.setPageNumber(1);
                 membersInfoSearchVo.setPageSize(10000);
                 membersInfoSearchVo.setBrandId(activityVO.getSysBrandId());
-                //TODO
-                //membersInfoSearchVo.setLevelId(mbrLevel.getMbrLevelId());
+                List<Long> level = new ArrayList<>();
+                level.add(mbrLevel.getMbrLevelId());
+                membersInfoSearchVo.setLevelId(level);
                 memberMessage.getMemberList(messageVOList, membersInfoSearchVo);
             }else{
                 //自定义时间发送 加人job任务
@@ -468,8 +469,9 @@ public class ActivityUpgradeServiceImpl implements ActivityUpgradeService {
             membersInfoSearchVo.setPageNumber(1);
             membersInfoSearchVo.setPageSize(10000);
             membersInfoSearchVo.setBrandId(activityVO.getSysBrandId());
-            //TODO
-            //membersInfoSearchVo.setLevelId(mbrLevel.getMbrLevelId());
+            List<Long> level = new ArrayList<>();
+            level.add(mbrLevel.getMbrLevelId());
+            membersInfoSearchVo.setLevelId(level);
             memberMessage.getMemberList(messageVOList, membersInfoSearchVo);
         }
         responseData.setCode(SysResponseEnum.SUCCESS.getCode());
@@ -559,6 +561,7 @@ public class ActivityUpgradeServiceImpl implements ActivityUpgradeService {
             if (null!=activityVO.getPoints()){
                 AwardBO bo = new AwardBO();
                 IntegralChangeRequestModel integralChangeRequestModel =new IntegralChangeRequestModel();
+                integralChangeRequestModel.setSysCompanyId(activityVO.getSysCompanyId());
                 integralChangeRequestModel.setBrandId(activityVO.getSysBrandId());
                 integralChangeRequestModel.setMemberCode(vo.getMemberCode());
                 integralChangeRequestModel.setChangeBills(activityVO.getActivityCode());

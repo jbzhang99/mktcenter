@@ -170,7 +170,6 @@ public class ActivitySigninServiceImpl implements ActivitySigninService {
             mktActivityPOWithBLOBs.setCheckStatus(CheckStatusEnum.CHECK_STATUS_APPROVED.getCode());
             //活动状态设置为执行中
             mktActivityPOWithBLOBs.setActivityStatus(ActivityStatusEnum.ACTIVITY_STATUS_EXECUTING.getCode());
-            //发送模板消息和短信消息TODO
 
         }
 
@@ -272,6 +271,7 @@ public class ActivitySigninServiceImpl implements ActivitySigninService {
             //增加积分奖励新增接口
             AwardBO bo = new AwardBO();
             IntegralChangeRequestModel integralChangeRequestModel =new IntegralChangeRequestModel();
+            integralChangeRequestModel.setSysCompanyId(activityVO.getSysCompanyId());
             integralChangeRequestModel.setBrandId(activityVO.getSysBrandId());
             integralChangeRequestModel.setMemberCode(vo.getMemberCode());
             integralChangeRequestModel.setChangeBills(activityVO.getActivityCode());

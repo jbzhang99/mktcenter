@@ -472,7 +472,6 @@ public class ActivityBirthdayServiceImpl implements ActivityBirthdayService {
             }else{
                 //活动状态设置为执行中
                 mktActivityPOWithBLOBs.setActivityStatus(ActivityStatusEnum.ACTIVITY_STATUS_EXECUTING.getCode());
-                //发送模板消息和短信消息TODO
 
             }
         }

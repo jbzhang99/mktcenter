@@ -26,6 +26,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -84,8 +85,9 @@ public class ActivitySendMessageJobHandler extends IJobHandler {
                     //查询该会员下一个等级
                     ResponseData<MbrLevelModel> mbrLevelModels = memberLevelApiService.queryOnLevel(Long.parseLong(activityUpgradeList.get(0).getMbrLevelCode()));
                     MbrLevelModel  mbrLevel = mbrLevelModels.getData();
-                    //TODO
-                    //membersInfoSearchVo.setLevelId(mbrLevel.getMbrLevelId());
+                    List<Long> level = new ArrayList<>();
+                    level.add(mbrLevel.getMbrLevelId());
+                    membersInfoSearchVo.setLevelId(level);
                 }
                 //消费活动的
                 if (mktActivityPO.getActivityType()== ActivityTypeEnum.ACTIVITY_TYPE_ORDER.getCode()){
@@ -94,8 +96,9 @@ public class ActivitySendMessageJobHandler extends IJobHandler {
                     List<ActivityVO> activityOrderList = mktActivityOrderPOMapper.getActivityOrderList(vo);
 
                     if (!activityOrderList.get(0).getMbrLevelCode().equals("0")){
-                        //TODO
-                        //membersInfoSearchVo.setLevelId(Long.parseLong(activityOrderList.get(0).getMbrLevelCode()));
+                        List<Long> level = new ArrayList<>();
+                        level.add(Long.parseLong(activityOrderList.get(0).getMbrLevelCode()));
+                       membersInfoSearchVo.setLevelId(level);
                     }
                 }
                 memberMessage.getMemberList(ListMktMessage, membersInfoSearchVo);

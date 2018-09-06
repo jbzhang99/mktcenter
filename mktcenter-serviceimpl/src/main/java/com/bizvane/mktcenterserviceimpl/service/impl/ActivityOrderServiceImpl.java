@@ -270,8 +270,9 @@ public class ActivityOrderServiceImpl implements ActivityOrderService {
                 membersInfoSearchVo.setPageNumber(1);
                 membersInfoSearchVo.setPageSize(10000);
                 if (!activityVO.getMbrLevelCode().equals("0")){
-                    //TODO
-                    // membersInfoSearchVo.setLevelId(Long.parseLong(activityVO.getMbrLevelCode()));
+                   List<Long> level = new ArrayList<>();
+                    level.add(Long.parseLong(activityVO.getMbrLevelCode()));
+                    membersInfoSearchVo.setLevelId(level);
                 }
                 membersInfoSearchVo.setBrandId(activityVO.getSysBrandId());
                 memberMessage.getMemberList(messageVOList, membersInfoSearchVo);
@@ -495,7 +496,6 @@ public class ActivityOrderServiceImpl implements ActivityOrderService {
             membersInfoSearchVo.setPageNumber(1);
             membersInfoSearchVo.setPageSize(10000);
             if (!activityVO.getMbrLevelCode().equals("0")){
-                //TODO
                // membersInfoSearchVo.setLevelId(Long.parseLong(activityVO.getMbrLevelCode()));
             }
             membersInfoSearchVo.setBrandId(activityVO.getSysBrandId());
@@ -619,6 +619,7 @@ public class ActivityOrderServiceImpl implements ActivityOrderService {
             if (null!=activityVO.getPoints()){
                 AwardBO bo = new AwardBO();
                 IntegralChangeRequestModel integralChangeRequestModel =new IntegralChangeRequestModel();
+                integralChangeRequestModel.setSysCompanyId(activityVO.getSysCompanyId());
                 integralChangeRequestModel.setBrandId(activityVO.getSysBrandId());
                 integralChangeRequestModel.setMemberCode(vo.getMemberCode().toString());
                 integralChangeRequestModel.setChangeBills(activityVO.getActivityCode());

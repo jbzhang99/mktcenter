@@ -281,6 +281,7 @@ public class MemberMessageSend {
                     //member loop
                     for(MemberInfoModel memberInfoModel : memberInfoModelList){
                         IntegralChangeRequestModel integralChangeRequestModel =new IntegralChangeRequestModel();
+                        integralChangeRequestModel.setSysCompanyId(mktActivityPOWithBLOBs.getSysCompanyId());
                         integralChangeRequestModel.setBrandId(mktActivityPOWithBLOBs.getSysBrandId());
                         integralChangeRequestModel.setMemberCode(memberInfoModel.getMemberCode());
                         integralChangeRequestModel.setChangeBills(mktActivityPOWithBLOBs.getActivityCode());

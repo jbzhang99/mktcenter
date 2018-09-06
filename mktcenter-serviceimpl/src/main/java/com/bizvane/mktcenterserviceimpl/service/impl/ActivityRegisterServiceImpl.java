@@ -12,15 +12,18 @@ import com.bizvane.couponfacade.models.vo.CouponEntityAndDefinitionVO;
 import com.bizvane.couponfacade.models.vo.SendCouponSimpleRequestVO;
 import com.bizvane.members.facade.enums.IntegralChangeTypeEnum;
 import com.bizvane.members.facade.es.vo.MembersInfoSearchVo;
+import com.bizvane.members.facade.es.vo.WxChannelInfoSearchVo;
 import com.bizvane.members.facade.models.IntegralRecordModel;
 import com.bizvane.members.facade.models.MemberInfoModel;
 import com.bizvane.members.facade.service.api.IntegralRecordApiService;
 import com.bizvane.members.facade.service.api.MemberInfoApiService;
 import com.bizvane.members.facade.service.api.MembersAdvancedSearchApiService;
+import com.bizvane.members.facade.service.api.WxChannelInfoAdvancedSearchApiService;
 import com.bizvane.members.facade.service.card.request.IntegralChangeRequestModel;
 import com.bizvane.members.facade.vo.MemberInfoApiModel;
 import com.bizvane.members.facade.vo.MemberInfoVo;
 import com.bizvane.members.facade.vo.PageVo;
+import com.bizvane.members.facade.vo.WxChannelInfoVo;
 import com.bizvane.messagefacade.models.vo.MemberMessageVO;
 import com.bizvane.messagefacade.models.vo.SysSmsConfigVO;
 import com.bizvane.mktcenterservice.interfaces.ActivityRegisterService;
@@ -49,6 +52,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
+import org.springframework.util.StringUtils;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -81,10 +85,6 @@ public class ActivityRegisterServiceImpl implements ActivityRegisterService {
     @Autowired
     private SysCheckConfigServiceRpc sysCheckConfigServiceRpc;
     @Autowired
-    private IntegralRecordApiService integralRecordApiService;
-    @Autowired
-    private SendCouponServiceFeign sendCouponServiceFeign;
-    @Autowired
     private JobClient jobClient;
     @Autowired
     private SysCheckServiceRpc sysCheckServiceRpc;
@@ -95,11 +95,9 @@ public class ActivityRegisterServiceImpl implements ActivityRegisterService {
     @Autowired
     private MktActivityRecordPOMapper mktActivityRecordPOMapper;
     @Autowired
-    private MemberInfoApiService memberInfoApiService;
-    @Autowired
-    private MembersAdvancedSearchApiService membersAdvancedSearchApiService;
-    @Autowired
     private MemberMessageSend memberMessage;
+    @Autowired
+    private WxChannelInfoAdvancedSearchApiService wxChannelInfoAdvancedSearchApiServic;
     /**
      * 查询活动列表
      * @param vo
@@ -301,6 +299,36 @@ public class ActivityRegisterServiceImpl implements ActivityRegisterService {
                 membersInfoSearchVo.setBrandId(activityVO.getSysBrandId());
                 memberMessage.getMemberList(messageVOList, membersInfoSearchVo);
                 //查询对应的会员  TODO 发送微信模板消息
+                WxChannelInfoSearchVo wxChannelInfoSearchVo = new WxChannelInfoSearchVo();
+                wxChannelInfoSearchVo.setPageNum(1);
+                wxChannelInfoSearchVo.setPageSize(10000);
+                wxChannelInfoSearchVo.setFocus(2);
+                wxChannelInfoSearchVo.setCardStatus(2);
+                wxChannelInfoSearchVo.setMiniProgram((byte) 1);
+                ResponseData<com.bizvane.utils.responseinfo.PageInfo<WxChannelInfoVo>> wxChannelInfoVos =  wxChannelInfoAdvancedSearchApiServic.queryAdvancedChannelInfoList(wxChannelInfoSearchVo);
+               //查询到页数循环
+                for (int a = 1;a<=wxChannelInfoVos.getData().getPages();a++){
+                    wxChannelInfoSearchVo.setPageNum(a);
+                    ResponseData<com.bizvane.utils.responseinfo.PageInfo<WxChannelInfoVo>> wxChannelInfoVolist =  wxChannelInfoAdvancedSearchApiServic.queryAdvancedChannelInfoList(wxChannelInfoSearchVo);
+                    List<WxChannelInfoVo>  wxChannelInfoVoAll = wxChannelInfoVolist.getData().getList();
+                    //循环发送
+                    if (!CollectionUtils.isEmpty(wxChannelInfoVoAll)){
+                        for (WxChannelInfoVo wxChannelInfoVo:wxChannelInfoVoAll) {
+                            for (MktMessagePO mktMessagePO:messageVOList) {
+                                AwardBO awardBO = new AwardBO();
+                                if (mktMessagePO.getMsgType().equals("1") && !StringUtils.isEmpty(wxChannelInfoVo.getWxOpenId())){
+                                    //发送微信模板消息
+                                    MemberMessageVO memberMessageVO = new MemberMessageVO();
+                                    memberMessageVO.setMemberCode(wxChannelInfoVo.getMemberCode());
+                                    memberMessageVO.setOpenId(wxChannelInfoVo.getWxOpenId());
+                                    awardBO.setMemberMessageVO(memberMessageVO);
+                                    awardBO.setMktType(MktSmartTypeEnum.SMART_TYPE_WXMESSAGE.getCode());
+                                    award.execute(awardBO);
+                                }
+                            }
+                        }
+                    }
+                }
             }else{
                 //自定义时间发送 加人job任务
                 jobUtil.addSendMessageJob(stageUser,activityVO,activityCode);
@@ -360,6 +388,7 @@ public class ActivityRegisterServiceImpl implements ActivityRegisterService {
                        AwardBO bo = new AwardBO();
                        //用这个实体类
                        IntegralChangeRequestModel integralChangeRequestModel =new IntegralChangeRequestModel();
+                       integralChangeRequestModel.setSysCompanyId(activityVO.getSysCompanyId());
                        integralChangeRequestModel.setBrandId(activityVO.getSysBrandId());
                        integralChangeRequestModel.setMemberCode(vo.getMemberCode());
                        integralChangeRequestModel.setChangeBills(activityVO.getActivityCode());
@@ -563,7 +592,7 @@ public class ActivityRegisterServiceImpl implements ActivityRegisterService {
             membersInfoSearchVo.setCardStatus(1);
             membersInfoSearchVo.setBrandId(activityVO.getSysBrandId());
             memberMessage.getMemberList(messageVOList, membersInfoSearchVo);
-            //查询对应的会员  TODO 发送微信模板消息
+            //查询对应的会员   发送微信模板消息
         }
         responseData.setCode(SysResponseEnum.SUCCESS.getCode());
         responseData.setMessage(SysResponseEnum.SUCCESS.getMessage());
