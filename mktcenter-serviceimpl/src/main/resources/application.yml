@@ -36,7 +36,7 @@ eureka:
       lease-renewal-interval-in-seconds: 10
   client:
     service-url:
-      defaultZone: http://192.168.1.46:8761
+      defaultZone: http://192.168.1.46:8761/eureka/
 management:
   endpoints:
     web.exposure.include: "*"
