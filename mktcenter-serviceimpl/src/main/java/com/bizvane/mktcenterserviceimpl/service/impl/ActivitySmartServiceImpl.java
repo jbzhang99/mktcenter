@@ -287,7 +287,7 @@ public class ActivitySmartServiceImpl implements ActivitySmartService {
 
         //智能营销规则表
         MktActivitySmartPOExample mktActivitySmartPOExample = new MktActivitySmartPOExample();
-        mktActivitySmartPOExample.createCriteria().andValidEqualTo(Boolean.TRUE).andMktActivityIdEqualTo(mktActivityId).andMktSmartTypeEqualTo(MktSmartTypeEnum.SMART_TYPE_WXMESSAGE.getCode());
+        mktActivitySmartPOExample.createCriteria().andValidEqualTo(Boolean.TRUE).andMktActivityIdEqualTo(mktActivityId).andMktSmartTypeEqualTo(MktSmartTypeEnum.SMART_TYPE_SMS.getCode());
         List<MktActivitySmartPO> mktActivitySmartPOS = mktActivitySmartPOMapper.selectByExample(mktActivitySmartPOExample);
         if(CollectionUtils.isEmpty(mktActivitySmartPOS)){
             log.warn("mktActivitySmartPOS is empty");
@@ -323,7 +323,7 @@ public class ActivitySmartServiceImpl implements ActivitySmartService {
 
         //智能营销规则表
         MktActivitySmartPOExample mktActivitySmartPOExample = new MktActivitySmartPOExample();
-        mktActivitySmartPOExample.createCriteria().andValidEqualTo(Boolean.TRUE).andMktActivityIdEqualTo(mktActivityId).andMktSmartTypeEqualTo(MktSmartTypeEnum.SMART_TYPE_SMS.getCode());
+        mktActivitySmartPOExample.createCriteria().andValidEqualTo(Boolean.TRUE).andMktActivityIdEqualTo(mktActivityId).andMktSmartTypeEqualTo(MktSmartTypeEnum.SMART_TYPE_WXMESSAGE.getCode());
         List<MktActivitySmartPO> mktActivitySmartPOS = mktActivitySmartPOMapper.selectByExample(mktActivitySmartPOExample);
         if(CollectionUtils.isEmpty(mktActivitySmartPOS)){
             log.warn("mktActivitySmartPOS is empty");

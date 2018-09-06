@@ -194,6 +194,28 @@ public class ActivityVO extends MktActivityPO {
     @io.swagger.annotations.ApiModelProperty(value = "门店限制类型：1黑名单，2白名单", name = "storeLimitType", required = false, example = "")
     private Integer storeLimitType;
 
+    @io.swagger.annotations.ApiModelProperty(value = "立即发送：1是，0否", name = "sendImmediately", required = false, example = "")
+    private Boolean sendImmediately;
+
+    @io.swagger.annotations.ApiModelProperty(value = "开始发送时间", name = "sendTime", required = false, example = "")
+    private Date sendTime;
+
+    public Boolean getSendImmediately() {
+        return sendImmediately;
+    }
+
+    public void setSendImmediately(Boolean sendImmediately) {
+        this.sendImmediately = sendImmediately;
+    }
+
+    public Date getSendTime() {
+        return sendTime;
+    }
+
+    public void setSendTime(Date sendTime) {
+        this.sendTime = sendTime;
+    }
+
     public String getCommodityLimitList() {
         return commodityLimitList;
     }

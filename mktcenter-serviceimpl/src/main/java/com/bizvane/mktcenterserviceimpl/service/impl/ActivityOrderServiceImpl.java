@@ -257,23 +257,28 @@ public class ActivityOrderServiceImpl implements ActivityOrderService {
                 BeanUtils.copyProperties(messageVO,mktMessagePO);
                 mktMessagePO.setBizType(BusinessTypeEnum.ACTIVITY_TYPE_ACTIVITY.getCode());
                 mktMessagePO.setBizId(mktActivityId);
+                mktMessagePO.setSendImmediately(activityVO.getSendImmediately());
+                mktMessagePO.setSendTime(activityVO.getSendTime());
                 mktMessagePOMapper.insertSelective(mktMessagePO);
             }
         }
-        //发送模板消息和短信消息
-        //如果执行状态为执行中 就要发送消息
-        if(!CollectionUtils.isEmpty(messageVOList) && mktActivityPOWithBLOBs.getActivityStatus()==ActivityStatusEnum.ACTIVITY_STATUS_EXECUTING.getCode()){
-
-            //分页查询会员信息发送短信
-            MembersInfoSearchVo membersInfoSearchVo = new MembersInfoSearchVo();
-            membersInfoSearchVo.setPageNumber(1);
-            membersInfoSearchVo.setPageSize(10000);
-            if (!activityVO.getMbrLevelCode().equals("0")){
-                //TODO
-               // membersInfoSearchVo.setLevelId(Long.parseLong(activityVO.getMbrLevelCode()));
+        ////如果是立即发送 则发送短息
+        if(!CollectionUtils.isEmpty(messageVOList) ){
+            if(true==activityVO.getSendImmediately()){
+                //分页查询会员信息发送短信
+                MembersInfoSearchVo membersInfoSearchVo = new MembersInfoSearchVo();
+                membersInfoSearchVo.setPageNumber(1);
+                membersInfoSearchVo.setPageSize(10000);
+                if (!activityVO.getMbrLevelCode().equals("0")){
+                    //TODO
+                    // membersInfoSearchVo.setLevelId(Long.parseLong(activityVO.getMbrLevelCode()));
+                }
+                membersInfoSearchVo.setBrandId(activityVO.getSysBrandId());
+                memberMessage.getMemberList(messageVOList, membersInfoSearchVo);
+            }else{
+                //自定义时间发送 加人job任务 TODO
             }
-            membersInfoSearchVo.setBrandId(activityVO.getSysBrandId());
-            memberMessage.getMemberList(messageVOList, membersInfoSearchVo);
+
 
         }
         log.info("消费活动创建结束");
@@ -537,26 +542,6 @@ public class ActivityOrderServiceImpl implements ActivityOrderService {
                 //将活动状态变更为执行中 并且发送消息（当前活动适用会员）
                 bs.setActivityStatus(ActivityStatusEnum.ACTIVITY_STATUS_EXECUTING.getCode());
                 int i = mktActivityPOMapper.updateByPrimaryKeySelective(bs);
-                log.info("发送模板消息和短信消息");
-                //发送模板消息
-                //查询消息集合
-                MktMessagePOExample example = new MktMessagePOExample();
-                example.createCriteria().andBizIdEqualTo(po.getBusinessId()).andValidEqualTo(true);
-                List<MktMessagePO> listMktMessage = mktMessagePOMapper.selectByExample(example);
-                if(!CollectionUtils.isEmpty(listMktMessage)){
-
-                    //分页查询会员信息发送短信
-                    MembersInfoSearchVo membersInfoSearchVo = new MembersInfoSearchVo();
-                    membersInfoSearchVo.setPageNumber(1);
-                    membersInfoSearchVo.setPageSize(10000);
-                    if (!activityPO.getMbrLevelCode().equals("0")){
-                        //TODO
-                        //membersInfoSearchVo.setLevelId(Long.parseLong(activityPO.getMbrLevelCode()));
-                    }
-                    membersInfoSearchVo.setBrandId(activityPO.getSysBrandId());
-                    memberMessage.getMemberList(listMktMessage, membersInfoSearchVo);
-
-                }
 
             }
             //判断审核时间 >活动结束时间  将活动状态变为已结束

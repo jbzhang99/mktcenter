@@ -284,21 +284,31 @@ public class ActivityRegisterServiceImpl implements ActivityRegisterService {
                 BeanUtils.copyProperties(messageVO,mktMessagePO);
                 mktMessagePO.setBizType(BusinessTypeEnum.ACTIVITY_TYPE_ACTIVITY.getCode());
                 mktMessagePO.setBizId(mktActivityId);
+                mktMessagePO.setSendImmediately(activityVO.getSendImmediately());
+                mktMessagePO.setSendTime(activityVO.getSendTime());
                 mktMessagePOMapper.insertSelective(mktMessagePO);
             }
         }
-        //如果执行状态为执行中 就要发送消息
-       if(!CollectionUtils.isEmpty(messageVOList) && mktActivityPOWithBLOBs.getActivityStatus()==ActivityStatusEnum.ACTIVITY_STATUS_EXECUTING.getCode()){
-            //分页查询会员信息发送短信
-           MembersInfoSearchVo membersInfoSearchVo = new MembersInfoSearchVo();
-           membersInfoSearchVo.setPageNumber(1);
-           membersInfoSearchVo.setPageSize(10000);
-           membersInfoSearchVo.setCardStatus(1);
-           membersInfoSearchVo.setBrandId(activityVO.getSysBrandId());
-           memberMessage.getMemberList(messageVOList, membersInfoSearchVo);
-           //查询对应的会员  TODO 发送微信模板消息
+        //判断信息类是否为空
+       if(!CollectionUtils.isEmpty(messageVOList) ){
+            //如果是立即发送 则发送短息
+            if(true==activityVO.getSendImmediately()){
+                //分页查询会员信息发送短信
+                MembersInfoSearchVo membersInfoSearchVo = new MembersInfoSearchVo();
+                membersInfoSearchVo.setPageNumber(1);
+                membersInfoSearchVo.setPageSize(10000);
+                membersInfoSearchVo.setCardStatus(1);
+                membersInfoSearchVo.setBrandId(activityVO.getSysBrandId());
+                memberMessage.getMemberList(messageVOList, membersInfoSearchVo);
+                //查询对应的会员  TODO 发送微信模板消息
+            }else{
+                //自定义时间发送 加人job任务 TODO
+
+            }
+
 
         }
+
                  //结束
                  responseData.setCode(SysResponseEnum.SUCCESS.getCode());
                  responseData.setMessage(SysResponseEnum.SUCCESS.getMessage());

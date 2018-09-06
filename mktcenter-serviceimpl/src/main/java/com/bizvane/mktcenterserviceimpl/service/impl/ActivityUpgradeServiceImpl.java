@@ -279,22 +279,29 @@ public class ActivityUpgradeServiceImpl implements ActivityUpgradeService {
                 BeanUtils.copyProperties(messageVO,mktMessagePO);
                 mktMessagePO.setBizType(BusinessTypeEnum.ACTIVITY_TYPE_ACTIVITY.getCode());
                 mktMessagePO.setBizId(mktActivityId);
+                mktMessagePO.setSendImmediately(activityVO.getSendImmediately());
+                mktMessagePO.setSendTime(activityVO.getSendTime());
                 mktMessagePOMapper.insertSelective(mktMessagePO);
             }
         }
-        //如果执行状态为执行中 就要发送消息
-        if(!CollectionUtils.isEmpty(messageVOList) && mktActivityPOWithBLOBs.getActivityStatus()==ActivityStatusEnum.ACTIVITY_STATUS_EXECUTING.getCode()){
-            //查询该会员下一个等级
-            ResponseData<MbrLevelModel> MbrLevelModels = memberLevelApiService.queryOnLevel(Long.parseLong(activityVO.getMbrLevelCode()));
-            MbrLevelModel  mbrLevel = MbrLevelModels.getData();
-            //分页查询会员信息发送短信
-            MembersInfoSearchVo membersInfoSearchVo = new MembersInfoSearchVo();
-            membersInfoSearchVo.setPageNumber(1);
-            membersInfoSearchVo.setPageSize(10000);
-            membersInfoSearchVo.setBrandId(activityVO.getSysBrandId());
-            //TODO
-            //membersInfoSearchVo.setLevelId(mbrLevel.getMbrLevelId());
-            memberMessage.getMemberList(messageVOList, membersInfoSearchVo);
+        ////如果是立即发送 则发送短息
+        if(!CollectionUtils.isEmpty(messageVOList) ){
+            if(true==activityVO.getSendImmediately()){
+                //查询该会员下一个等级
+                ResponseData<MbrLevelModel> MbrLevelModels = memberLevelApiService.queryOnLevel(Long.parseLong(activityVO.getMbrLevelCode()));
+                MbrLevelModel  mbrLevel = MbrLevelModels.getData();
+                //分页查询会员信息发送短信
+                MembersInfoSearchVo membersInfoSearchVo = new MembersInfoSearchVo();
+                membersInfoSearchVo.setPageNumber(1);
+                membersInfoSearchVo.setPageSize(10000);
+                membersInfoSearchVo.setBrandId(activityVO.getSysBrandId());
+                //TODO
+                //membersInfoSearchVo.setLevelId(mbrLevel.getMbrLevelId());
+                memberMessage.getMemberList(messageVOList, membersInfoSearchVo);
+            }else{
+                //自定义时间发送 加人job任务 TODO
+            }
+
         }
         //结束
         log.info("创建升级活动结束");
@@ -632,25 +639,6 @@ public class ActivityUpgradeServiceImpl implements ActivityUpgradeService {
                 //将活动状态变更为执行中 并且发送消息
                 bs.setActivityStatus(ActivityStatusEnum.ACTIVITY_STATUS_EXECUTING.getCode());
                 int i = mktActivityPOMapper.updateByPrimaryKeySelective(bs);
-                //发送模板消息
-                //查询消息集合
-                MktMessagePOExample example = new MktMessagePOExample();
-                example.createCriteria().andBizIdEqualTo(po.getBusinessId()).andValidEqualTo(true);
-                List<MktMessagePO> listMktMessage = mktMessagePOMapper.selectByExample(example);
-                if(!CollectionUtils.isEmpty(listMktMessage) ){
-                    //查询该会员下一个等级
-                    ResponseData<MbrLevelModel> mbrLevelModels = memberLevelApiService.queryOnLevel(Long.parseLong(activityPO.getMbrLevelCode()));
-                    MbrLevelModel  mbrLevel = mbrLevelModels.getData();
-                    //分页查询会员信息发送短信
-                    MembersInfoSearchVo membersInfoSearchVo = new MembersInfoSearchVo();
-                    membersInfoSearchVo.setPageNumber(1);
-                    membersInfoSearchVo.setPageSize(10000);
-                    membersInfoSearchVo.setBrandId(activityPO.getSysBrandId());
-                    //TODO
-                    //membersInfoSearchVo.setLevelId(mbrLevel.getMbrLevelId());
-                    memberMessage.getMemberList(listMktMessage, membersInfoSearchVo);
-                }
-
             }
             //判断审核时间 >活动结束时间  将活动状态变为已结束
             if(new Date().after(activityPO.getEndTime())){

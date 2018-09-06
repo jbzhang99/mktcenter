@@ -125,21 +125,6 @@ public class ActivityServiceImpl implements ActivityService {
                 //将活动状态变更为执行中 并且发送消息
                 bs.setActivityStatus(ActivityStatusEnum.ACTIVITY_STATUS_EXECUTING.getCode());
                 int i = mktActivityPOMapper.updateByPrimaryKeySelective(bs);
-                //查询消息集合
-                MktMessagePOExample example = new MktMessagePOExample();
-                example.createCriteria().andBizIdEqualTo(po.getBusinessId()).andValidEqualTo(true);
-                List<MktMessagePO> listMktMessage = mktMessagePOMapper.selectByExample(example);
-                if(!CollectionUtils.isEmpty(listMktMessage) ){
-                    //分页查询会员信息发送短信
-                    MembersInfoSearchVo membersInfoSearchVo = new MembersInfoSearchVo();
-                    membersInfoSearchVo.setPageNumber(1);
-                    membersInfoSearchVo.setPageSize(10000);
-                    membersInfoSearchVo.setCardStatus(1);
-                    membersInfoSearchVo.setBrandId(activityPO.getSysBrandId());
-                    memberMessage.getMemberList(listMktMessage, membersInfoSearchVo);
-                    //查询对应的会员  TODO 发送微信模板消息
-
-                }
 
             }
             //判断审核时间 >活动结束时间  将活动状态变为已结束
