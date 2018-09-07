@@ -156,6 +156,28 @@ public class ActivitySmartVO extends MktActivitySmartPO {
      */
     private Integer type;
 
+    @io.swagger.annotations.ApiModelProperty(value = "立即发送：1是，0否", name = "sendImmediately", required = false, example = "")
+    private Boolean sendImmediately;
+
+    @io.swagger.annotations.ApiModelProperty(value = "开始发送时间", name = "sendTime", required = false, example = "")
+    private Date sendTime;
+
+    public Boolean getSendImmediately() {
+        return sendImmediately;
+    }
+
+    public void setSendImmediately(Boolean sendImmediately) {
+        this.sendImmediately = sendImmediately;
+    }
+
+    public Date getSendTime() {
+        return sendTime;
+    }
+
+    public void setSendTime(Date sendTime) {
+        this.sendTime = sendTime;
+    }
+
     public Integer getType() {
         return type;
     }

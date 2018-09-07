@@ -1,6 +1,7 @@
 package com.bizvane.mktcenterserviceimpl.service.jobhandler;
 
 import com.bizvane.members.facade.es.vo.MembersInfoSearchVo;
+import com.bizvane.members.facade.es.vo.WxChannelInfoSearchVo;
 import com.bizvane.members.facade.models.MbrLevelModel;
 import com.bizvane.members.facade.service.api.MemberInfoApiService;
 import com.bizvane.members.facade.service.api.MemberLevelApiService;
@@ -101,7 +102,21 @@ public class ActivitySendMessageJobHandler extends IJobHandler {
                        membersInfoSearchVo.setLevelId(level);
                     }
                 }
-                memberMessage.getMemberList(ListMktMessage, membersInfoSearchVo);
+                //如果是开卡活动
+                if (mktActivityPO.getActivityType()== ActivityTypeEnum.ACTIVITY_TYPE_REGISGER.getCode()){
+                    memberMessage.sendDXmessage(ListMktMessage, membersInfoSearchVo);
+                    //查询对应的会员  发送微信模板消息
+                    WxChannelInfoSearchVo wxChannelInfoSearchVo = new WxChannelInfoSearchVo();
+                    wxChannelInfoSearchVo.setPageNum(1);
+                    wxChannelInfoSearchVo.setPageSize(10000);
+                    wxChannelInfoSearchVo.setFocus(2);
+                    wxChannelInfoSearchVo.setCardStatus(2);
+                    wxChannelInfoSearchVo.setMiniProgram((byte) 1);
+                    memberMessage.sendWXmessage(ListMktMessage, wxChannelInfoSearchVo);
+                }else{
+                    memberMessage.getMemberList(ListMktMessage, membersInfoSearchVo);
+                }
+
             }
 
         returnT.setCode(0);

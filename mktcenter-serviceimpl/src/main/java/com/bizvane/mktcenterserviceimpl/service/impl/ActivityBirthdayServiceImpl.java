@@ -553,6 +553,7 @@ public class ActivityBirthdayServiceImpl implements ActivityBirthdayService {
             }
             //增加积分奖励新增接口
             IntegralChangeRequestModel integralChangeRequestModel =new IntegralChangeRequestModel();
+            integralChangeRequestModel.setSysCompanyId(activityBirthday.getSysCompanyId());
             integralChangeRequestModel.setBrandId(activityBirthday.getSysBrandId());
             integralChangeRequestModel.setMemberCode(memberInfo.getMemberCode());
             integralChangeRequestModel.setChangeBills(activityBirthday.getActivityCode());

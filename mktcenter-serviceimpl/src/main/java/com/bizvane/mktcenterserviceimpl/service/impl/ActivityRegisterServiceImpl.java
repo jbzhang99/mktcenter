@@ -297,38 +297,15 @@ public class ActivityRegisterServiceImpl implements ActivityRegisterService {
                 membersInfoSearchVo.setPageSize(10000);
                 membersInfoSearchVo.setCardStatus(1);
                 membersInfoSearchVo.setBrandId(activityVO.getSysBrandId());
-                memberMessage.getMemberList(messageVOList, membersInfoSearchVo);
-                //查询对应的会员  TODO 发送微信模板消息
+                memberMessage.sendDXmessage(messageVOList, membersInfoSearchVo);
+                //查询对应的会员  发送微信模板消息
                 WxChannelInfoSearchVo wxChannelInfoSearchVo = new WxChannelInfoSearchVo();
                 wxChannelInfoSearchVo.setPageNum(1);
                 wxChannelInfoSearchVo.setPageSize(10000);
                 wxChannelInfoSearchVo.setFocus(2);
                 wxChannelInfoSearchVo.setCardStatus(2);
                 wxChannelInfoSearchVo.setMiniProgram((byte) 1);
-                ResponseData<com.bizvane.utils.responseinfo.PageInfo<WxChannelInfoVo>> wxChannelInfoVos =  wxChannelInfoAdvancedSearchApiServic.queryAdvancedChannelInfoList(wxChannelInfoSearchVo);
-               //查询到页数循环
-                for (int a = 1;a<=wxChannelInfoVos.getData().getPages();a++){
-                    wxChannelInfoSearchVo.setPageNum(a);
-                    ResponseData<com.bizvane.utils.responseinfo.PageInfo<WxChannelInfoVo>> wxChannelInfoVolist =  wxChannelInfoAdvancedSearchApiServic.queryAdvancedChannelInfoList(wxChannelInfoSearchVo);
-                    List<WxChannelInfoVo>  wxChannelInfoVoAll = wxChannelInfoVolist.getData().getList();
-                    //循环发送
-                    if (!CollectionUtils.isEmpty(wxChannelInfoVoAll)){
-                        for (WxChannelInfoVo wxChannelInfoVo:wxChannelInfoVoAll) {
-                            for (MktMessagePO mktMessagePO:messageVOList) {
-                                AwardBO awardBO = new AwardBO();
-                                if (mktMessagePO.getMsgType().equals("1") && !StringUtils.isEmpty(wxChannelInfoVo.getWxOpenId())){
-                                    //发送微信模板消息
-                                    MemberMessageVO memberMessageVO = new MemberMessageVO();
-                                    memberMessageVO.setMemberCode(wxChannelInfoVo.getMemberCode());
-                                    memberMessageVO.setOpenId(wxChannelInfoVo.getWxOpenId());
-                                    awardBO.setMemberMessageVO(memberMessageVO);
-                                    awardBO.setMktType(MktSmartTypeEnum.SMART_TYPE_WXMESSAGE.getCode());
-                                    award.execute(awardBO);
-                                }
-                            }
-                        }
-                    }
-                }
+                memberMessage.sendWXmessage(messageVOList, wxChannelInfoSearchVo);
             }else{
                 //自定义时间发送 加人job任务
                 jobUtil.addSendMessageJob(stageUser,activityVO,activityCode);

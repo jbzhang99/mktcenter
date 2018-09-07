@@ -81,7 +81,7 @@ public class JobUtil {
      */
     public  void addSmartActivityJob(SysAccountPO stageUser, ActivitySmartVO vo) {
         String param =vo.getMktSmartType()+"&"+vo.getActivityCode();
-        addJob(vo.getStartTime(),vo.getActivityName(),param,stageUser.getName(),JobHandlerConstants.smartActivity,JobBusinessTypeEnum.ACTIVITY_TYPE_ACTIVITY.getCode(),vo.getActivityCode());
+        addJob(vo.getSendTime(),vo.getActivityName(),param,stageUser.getName(),JobHandlerConstants.smartActivity,JobBusinessTypeEnum.ACTIVITY_TYPE_ACTIVITY.getCode(),vo.getActivityCode());
     }
 /**
  * 添加任务开始job
