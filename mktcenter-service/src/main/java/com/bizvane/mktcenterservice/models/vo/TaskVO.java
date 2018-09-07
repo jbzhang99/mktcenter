@@ -17,7 +17,7 @@ public class TaskVO extends MktTaskPO {
      * 3.获取禁用的数据
      */
     private  Integer  showType;
-
+    private  Long  brandId;
     /**
      * 只读. 任务描述. task_info
      * @mbg.generated  2018-07-14 13:26:02
@@ -183,5 +183,13 @@ public class TaskVO extends MktTaskPO {
 
     public void setShowType(Integer showType) {
         this.showType = showType;
+    }
+
+    public Long getBrandId() {
+        return brandId;
+    }
+
+    public void setBrandId(Long brandId) {
+        this.brandId = brandId;
     }
 }

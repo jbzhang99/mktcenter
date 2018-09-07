@@ -699,13 +699,13 @@ public class TaskServiceImpl implements TaskService {
         MktTaskPOExample mktTaskPOExample = new MktTaskPOExample();
         //查询所有
         if (TaskConstants.FIRST.equals(showType)) {
-            mktTaskPOExample.createCriteria().andTaskTypeEqualTo(vo.getTaskType());
+            mktTaskPOExample.createCriteria().andTaskTypeEqualTo(vo.getTaskType()).andSysBrandIdEqualTo(vo.getBrandId());
         } else if (TaskConstants.SECOND.equals(showType)) {
             //查询已启用
-            mktTaskPOExample.createCriteria().andTaskTypeEqualTo(vo.getTaskType()).andValidEqualTo(Boolean.TRUE);
+            mktTaskPOExample.createCriteria().andTaskTypeEqualTo(vo.getTaskType()).andSysBrandIdEqualTo(vo.getBrandId()).andValidEqualTo(Boolean.TRUE);
         } else if (TaskConstants.THREE.equals(showType)) {
             //查询已禁用
-            mktTaskPOExample.createCriteria().andTaskTypeEqualTo(vo.getTaskType()).andValidEqualTo(Boolean.FALSE);
+            mktTaskPOExample.createCriteria().andTaskTypeEqualTo(vo.getTaskType()).andSysBrandIdEqualTo(vo.getBrandId()).andValidEqualTo(Boolean.FALSE);
         }
         mktTaskPOExample.setOrderByClause("create_date desc");
 
