@@ -55,8 +55,20 @@ public class JobUtil {
         int businessType =JobBusinessTypeEnum.ACTIVITY_TYPE_ACTIVITY.getCode();
         addJob(activityVO.getStartTime(),activityVO.getActivityInfo(),activityCode,stageUser.getName(),activityJobType,businessType,activityCode);
     }
+    //新增纪念日开始job
+    public  void addStratAniversaryJob(SysAccountPO stageUser, ActivityVO activityVO, String activityCode) {
+        String activityJobType = JobHandlerConstants.startActivityAniversary;
+        int businessType =JobBusinessTypeEnum.ACTIVITY_TYPE_ACTIVITY.getCode();
+        addJob(activityVO.getStartTime(),activityVO.getActivityInfo(),activityCode,stageUser.getName(),activityJobType,businessType,activityCode);
+    }
     //新增生日结束job
     public  void addEndBirthdayJob(SysAccountPO stageUser, ActivityVO activityVO, String activityCode) {
+        String activityJobType = JobHandlerConstants.endActivityAniversary;
+        int businessType =JobBusinessTypeEnum.ACTIVITY_TYPE_ACTIVITY.getCode();
+        addJob(activityVO.getEndTime(),activityVO.getActivityInfo(),activityCode,stageUser.getName(),activityJobType,businessType,activityCode);
+    }
+    //新增纪念日结束job
+    public  void addEndAniversaryJob(SysAccountPO stageUser, ActivityVO activityVO, String activityCode) {
         String activityJobType = JobHandlerConstants.endActivityBirthday;
         int businessType =JobBusinessTypeEnum.ACTIVITY_TYPE_ACTIVITY.getCode();
         addJob(activityVO.getEndTime(),activityVO.getActivityInfo(),activityCode,stageUser.getName(),activityJobType,businessType,activityCode);

@@ -3,7 +3,6 @@ package com.bizvane.mktcenterservice.rpc;
 import com.bizvane.centerstageservice.models.po.SysCheckPo;
 import com.bizvane.members.facade.models.MemberInfoModel;
 import com.bizvane.mktcenterservice.models.bo.ActivityBO;
-import com.bizvane.mktcenterservice.models.po.MktActivityPOWithBLOBs;
 import com.bizvane.mktcenterservice.models.po.MktActivityRecordPO;
 import com.bizvane.mktcenterservice.models.vo.ActivityVO;
 import com.bizvane.mktcenterservice.models.vo.MktActivityRecordVO;
@@ -89,6 +88,14 @@ public interface ActivityServiceRpc {
   */
  @RequestMapping("executeActivitySignin")
  public ResponseData<Integer> executeActivitySignin(@RequestBody MemberInfoModel vo);
+
+ /**
+  * 执行评价奖励活动
+  * @param vo
+  * @return
+  */
+ @RequestMapping("executeEvaluationActivity")
+ public ResponseData<Integer> executeActivityEvaluation(@RequestBody MemberInfoModel vo);
 
  /**
   * 执行开卡活动

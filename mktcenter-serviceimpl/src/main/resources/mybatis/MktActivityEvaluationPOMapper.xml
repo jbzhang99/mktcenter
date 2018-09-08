@@ -506,4 +506,61 @@
       valid = #{valid,jdbcType=BIT}
     where mkt_activity_evaluation_id = #{mktActivityEvaluationId,jdbcType=BIGINT}
   </update>
+
+
+  <select id="getActivityVOList" parameterType="com.bizvane.mktcenterservice.models.vo.ActivityVO" resultType="com.bizvane.mktcenterservice.models.vo.ActivityVO">
+    SELECT
+    tma.mkt_activity_id,
+    tma.sys_company_id,
+    tma.sys_brand_id,
+    tma.activity_code,
+    tma.activity_type,
+    tma.activity_name,
+    tma.start_time,
+    tma.end_time,
+    tma.long_term,
+    tma.points,
+    tma.check_status,
+    tma.activity_status,
+    tma.remark,
+    tma.create_user_id,
+    tma.create_user_name,
+    tma.create_date,
+    tma.modified_user_id,
+    tma.modified_user_name,
+    tma.modified_date,
+    tma.valid,
+
+    tmas.mkt_activity_evaluation_id,
+    tmas.mkt_activity_id
+    FROM
+    `t_mkt_activity` tma
+    INNER JOIN t_mkt_activity_evaluation tmas ON tma.mkt_activity_id = tmas.mkt_activity_id
+    and tma.valid=1
+    and tmas.valid=1
+    <!--活动主表ID -->
+    <if test="mktActivityId != null and mktActivityId!= '' ">
+      AND tma.mkt_activity_id = #{mktActivityId}
+    </if>
+    <if test="activityStatus != null and activityStatus!=0">
+      AND tma.activity_status = #{activityStatus}
+    </if>
+    <!--是否是长期活动 -->
+    <if test="longTerm != null and longTerm!= '' ">
+      AND tma.long_term = #{longTerm}
+    </if>
+    <!--开卡时等级编号 -->
+    <!--所属品牌id -->
+    <if test="sysBrandId != null and sysBrandId!= ''">
+      AND tma.sys_brand_id = #{sysBrandId}
+    </if>
+    <!--活动类型-->
+    <if test="activityType != null and activityType!= ''">
+      AND tma.activity_type = #{activityType}
+    </if>
+    <!--活动编号-->
+    <if test="activityCode != null and activityCode!= ''">
+      AND tma.activity_code = #{activityCode}
+    </if>
+  </select>
 </mapper>

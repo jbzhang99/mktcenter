@@ -2,8 +2,10 @@ package com.bizvane.mktcenterserviceimpl.mappers;
 
 import com.bizvane.mktcenterservice.models.po.MktActivityVipAniversaryPO;
 import com.bizvane.mktcenterservice.models.po.MktActivityVipAniversaryPOExample;
-import java.util.List;
+import com.bizvane.mktcenterservice.models.vo.ActivityVO;
 import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 public interface MktActivityVipAniversaryPOMapper {
     /**
@@ -103,4 +105,6 @@ public interface MktActivityVipAniversaryPOMapper {
      * @mbg.generated 2018-09-06 10:48:57
      */
     int updateByPrimaryKey(MktActivityVipAniversaryPO record);
+
+    List<ActivityVO> getActivityAniversaryList(ActivityVO vo);
 }

@@ -2,8 +2,10 @@ package com.bizvane.mktcenterserviceimpl.mappers;
 
 import com.bizvane.mktcenterservice.models.po.MktActivityEvaluationPO;
 import com.bizvane.mktcenterservice.models.po.MktActivityEvaluationPOExample;
-import java.util.List;
+import com.bizvane.mktcenterservice.models.vo.ActivityVO;
 import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 public interface MktActivityEvaluationPOMapper {
     /**
@@ -103,4 +105,8 @@ public interface MktActivityEvaluationPOMapper {
      * @mbg.generated 2018-09-06 10:48:57
      */
     int updateByPrimaryKey(MktActivityEvaluationPO record);
+
+
+    //查询品牌下是否存在该活动
+    List<ActivityVO> getActivityVOList(ActivityVO vo);
 }

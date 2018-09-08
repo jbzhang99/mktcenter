@@ -19,6 +19,7 @@ import com.bizvane.members.facade.vo.WxChannelInfoVo;
 import com.bizvane.messagefacade.models.vo.MemberMessageVO;
 import com.bizvane.messagefacade.models.vo.SysSmsConfigVO;
 import com.bizvane.mktcenterservice.interfaces.ActivityBirthdayService;
+import com.bizvane.mktcenterservice.interfaces.ActivityVipAniversaryService;
 import com.bizvane.mktcenterservice.models.bo.AwardBO;
 import com.bizvane.mktcenterservice.models.po.*;
 import com.bizvane.mktcenterservice.models.vo.ActivitySmartVO;
@@ -33,7 +34,6 @@ import com.bizvane.utils.responseinfo.ResponseData;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
-import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
@@ -55,6 +55,10 @@ public class MemberMessageSend {
     private MemberInfoApiService memberInfoApiService;
     @Autowired
     private ActivityBirthdayService activityBirthdayService;
+
+    @Autowired
+    private ActivityVipAniversaryService activityVipAniversaryService;
+
     @Autowired
     private MktCouponPOMapper mktCouponPOMapper;
 
@@ -240,6 +244,33 @@ public class MemberMessageSend {
             }
 
 
+        }
+    }
+
+    /**
+     * 纪念日活动发送奖励券
+     * @param activityAniversaryList
+     */
+    @Async("asyncServiceExecutor")
+    public void sendAniversaryCoupon(List<ActivityVO> activityAniversaryList) {
+        for (ActivityVO activityAniversary:activityAniversaryList) {
+            //根据品牌id 会员等级 会员范围  时间周期 查询会员信息 循环
+            //查询对应的会员
+            MemberInfoApiModel memberInfoModel= new MemberInfoApiModel();
+            memberInfoModel.setBrandId(activityAniversary.getSysBrandId());
+            if (!activityAniversary.getMbrLevelCode().equals("0")){
+                memberInfoModel.setLevelId(Long.parseLong(activityAniversary.getMbrLevelCode()));
+            }
+            memberInfoModel.setBirthdayLine(activityAniversary.getDaysAhead());
+            memberInfoModel.setMemberScope(activityAniversary.getMemberType().toString());
+            memberInfoModel.setPageNumber(1);
+            memberInfoModel.setPageSize(10000);
+            ResponseData<PageInfo<MemberInfoModel>> memberInfoModelLists =memberInfoApiService.getMemberInfo(memberInfoModel);
+            for (int a=1;a<=memberInfoModelLists.getData().getPages();a++){
+                ResponseData<PageInfo<MemberInfoModel>> memberInfoModelListss =memberInfoApiService.getMemberInfo(memberInfoModel);
+                List<MemberInfoModel> memberInfoModelList = memberInfoModelListss.getData().getList();
+                activityVipAniversaryService.AniversaryReward(activityAniversary,memberInfoModelList);
+            }
         }
     }
 

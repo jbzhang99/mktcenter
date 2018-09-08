@@ -4,7 +4,6 @@ import com.bizvane.centerstageservice.models.po.SysCheckPo;
 import com.bizvane.members.facade.models.MemberInfoModel;
 import com.bizvane.mktcenterservice.interfaces.*;
 import com.bizvane.mktcenterservice.models.bo.ActivityBO;
-import com.bizvane.mktcenterservice.models.po.MktActivityPOWithBLOBs;
 import com.bizvane.mktcenterservice.models.po.MktActivityRecordPO;
 import com.bizvane.mktcenterservice.models.vo.ActivityVO;
 import com.bizvane.mktcenterservice.models.vo.MktActivityRecordVO;
@@ -46,6 +45,12 @@ public class ActivityRpcController {
     private ActivityRecordService activityRecordService;
     @Autowired
     private ActivityManualService activityManualService;
+    @Autowired
+    private ActivityEvaluationService activityEvaluationService;
+    @Autowired
+    private ActivityVipAniversaryService activityVipAniversaryService;
+
+
     /**
      * 禁用/启用活动
      * @param vo
@@ -99,6 +104,15 @@ public class ActivityRpcController {
             responseData = activityManualService.checkActivity(po,stageUser);
 
         }
+        //入会纪念日活动审核
+        if(po.getBusinessType()==ActivityTypeEnum.ACTIVITY_TYPE_ANNIVERSARY.getCode()){
+            responseData = activityVipAniversaryService.checkActivityVipAniversary(po,stageUser);
+        }
+        //评价奖励活动审核
+        if(po.getBusinessType()==ActivityTypeEnum.ACTIVITY_TYPE_EVALUATION.getCode()){
+            responseData = activityEvaluationService.checkActivityEvaluation(po,stageUser);
+        }
+
         return responseData;
     }
     /**
@@ -156,6 +170,18 @@ public class ActivityRpcController {
     public ResponseData<Integer> executeActivitySignin(@RequestBody MemberInfoModel vo){
         return activitySigninService.executeActivitySignin(vo);
     }
+
+    /**
+     * 执行评价奖励活动
+     * @param
+     * @return
+     */
+    @RequestMapping("/executeEvaluationActivity")
+    @io.swagger.annotations.ApiModelProperty(value = "",name = "执行评价送积分活动", required = false,example = "")
+    public ResponseData<Integer> executeEvaluationActivity(@RequestBody MemberInfoModel vo){
+        return activityEvaluationService.executeActivityEvaluation(vo);
+    }
+
     /**
      * 执行活动开卡
      * @param

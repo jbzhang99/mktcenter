@@ -19,6 +19,10 @@ public class JobHandlerConstants {
     public static String startActivityBirthday = "startActivityBirthday";
     //生日活动结束
     public static String endActivityBirthday = "endActivityBirthday";
+    //纪念日活动开始
+    public static String startActivityAniversary = "startActivityAniversary";
+    //纪念日活动结束
+    public static String endActivityAniversary = "endActivityAniversary";
     //每日执行的生日活动
     public  static String everyDayActivityBirthday = "everyDayActivityBirthday";
 
