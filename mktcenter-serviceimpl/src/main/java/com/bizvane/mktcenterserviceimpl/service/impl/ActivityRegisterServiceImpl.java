@@ -306,6 +306,7 @@ public class ActivityRegisterServiceImpl implements ActivityRegisterService {
                 wxChannelInfoSearchVo.setFocus(2);
                 wxChannelInfoSearchVo.setCardStatus(2);
                 wxChannelInfoSearchVo.setMiniProgram((byte) 1);
+                wxChannelInfoSearchVo.setBrandId(activityVO.getSysBrandId());
                 memberMessage.sendWXmessage(messageVOList, wxChannelInfoSearchVo);
             }else{
                 //自定义时间发送 加人job任务
