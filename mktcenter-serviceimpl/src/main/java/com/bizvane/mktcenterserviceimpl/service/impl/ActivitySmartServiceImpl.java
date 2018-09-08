@@ -1,6 +1,8 @@
 package com.bizvane.mktcenterserviceimpl.service.impl;
 
 import com.alibaba.fastjson.JSON;
+import com.bizvane.couponfacade.interfaces.CouponQueryServiceFeign;
+import com.bizvane.couponfacade.models.vo.CouponDetailResponseVO;
 import com.bizvane.couponfacade.models.vo.SendCouponSimpleRequestVO;
 import com.bizvane.members.facade.enums.IntegralChangeTypeEnum;
 import com.bizvane.members.facade.es.vo.MembersInfoSearchVo;
@@ -82,7 +84,8 @@ public class ActivitySmartServiceImpl implements ActivitySmartService {
     private MembersAdvancedSearchApiService membersAdvancedSearchApiService;
     @Autowired
     private MemberMessageSend memberMessageSend;
-
+    @Autowired
+    private CouponQueryServiceFeign couponQueryServiceFeign;
     /**
      * 查询智能营销分组列表(方块)
      * @param vo
@@ -240,7 +243,18 @@ public class ActivitySmartServiceImpl implements ActivitySmartService {
         MktCouponPOExample mktCouponPOExample = new MktCouponPOExample();
         mktCouponPOExample.createCriteria().andValidEqualTo(Boolean.TRUE).andBizTypeEqualTo(BusinessTypeEnum.ACTIVITY_TYPE_ACTIVITY.getCode()).andBizIdEqualTo(mktActivityId);
         List<MktCouponPO> mktCouponPOS = mktCouponPOMapper.selectByExample(mktCouponPOExample);
-        activitySmartVO.setMktCouponPOS(mktCouponPOS);
+        //拿到发送时间和是否时是立即发送
+        activitySmartVO.setSendImmediately(mktCouponPOS.get(0).getSendImmediately());
+        activitySmartVO.setSendTime(mktCouponPOS.get(0).getSendTime());
+        List<CouponDetailResponseVO> lists = new ArrayList<>();
+        //通过券定义id查询券详细信息
+        if(!CollectionUtils.isEmpty(mktCouponPOS)){
+            for (MktCouponPO po:mktCouponPOS) {
+                ResponseData<CouponDetailResponseVO>  entityAndDefinition = couponQueryServiceFeign.getCouponDefinition(po.getCouponDefinitionId());
+                lists.add(entityAndDefinition.getData());
+            }
+        }
+        activitySmartVO.setCouponDetailResponseVOList(lists);
         responseData.setData(activitySmartVO);
         log.info("com.bizvane.mktcenterserviceimpl.service.impl.ActivitySmartServiceImpl.getCouponActivityDetailById result"+ JSON.toJSONString(responseData));
         return responseData;
@@ -579,6 +593,8 @@ public class ActivitySmartServiceImpl implements ActivitySmartService {
                 mktCouponPO.setCreateDate(new Date());
                 mktCouponPO.setCreateUserId(stageUser.getSysAccountId());
                 mktCouponPO.setCreateUserName(stageUser.getName());
+                mktCouponPO.setSendImmediately(vo.getSendImmediately());
+                mktCouponPO.setSendTime(vo.getSendTime());
                 mktCouponPOMapper.insertSelective(mktCouponPO);
             }
         }

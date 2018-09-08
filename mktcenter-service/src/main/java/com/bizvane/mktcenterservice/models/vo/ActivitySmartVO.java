@@ -1,5 +1,6 @@
 package com.bizvane.mktcenterservice.models.vo;
 
+import com.bizvane.couponfacade.models.vo.CouponDetailResponseVO;
 import com.bizvane.mktcenterservice.models.po.MktActivityPO;
 import com.bizvane.mktcenterservice.models.po.MktActivitySmartPO;
 import com.bizvane.mktcenterservice.models.po.MktCouponPO;
@@ -161,6 +162,29 @@ public class ActivitySmartVO extends MktActivitySmartPO {
 
     @io.swagger.annotations.ApiModelProperty(value = "开始发送时间", name = "sendTime", required = false, example = "")
     private Date sendTime;
+
+    /**
+     * 通过id查询券实例
+     */
+    private CouponDetailResponseVO couponDetailResponseVO;
+
+    private List<CouponDetailResponseVO> couponDetailResponseVOList;
+
+    public List<CouponDetailResponseVO> getCouponDetailResponseVOList() {
+        return couponDetailResponseVOList;
+    }
+
+    public void setCouponDetailResponseVOList(List<CouponDetailResponseVO> couponDetailResponseVOList) {
+        this.couponDetailResponseVOList = couponDetailResponseVOList;
+    }
+
+    public CouponDetailResponseVO getCouponDetailResponseVO() {
+        return couponDetailResponseVO;
+    }
+
+    public void setCouponDetailResponseVO(CouponDetailResponseVO couponDetailResponseVO) {
+        this.couponDetailResponseVO = couponDetailResponseVO;
+    }
 
     public Boolean getSendImmediately() {
         return sendImmediately;
