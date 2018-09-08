@@ -16,6 +16,7 @@ public class TaskAnalysisVo {
     private String taskName;
     private Date date1;
     private Date  date2;
+    private Integer memberLevel;
 
     public Integer getPageSize() {
         return pageSize;
@@ -71,5 +72,13 @@ public class TaskAnalysisVo {
 
     public void setDate2(Date date2) {
         this.date2 = date2;
+    }
+
+    public Integer getMemberLevel() {
+        return memberLevel;
+    }
+
+    public void setMemberLevel(Integer memberLevel) {
+        this.memberLevel = memberLevel;
     }
 }

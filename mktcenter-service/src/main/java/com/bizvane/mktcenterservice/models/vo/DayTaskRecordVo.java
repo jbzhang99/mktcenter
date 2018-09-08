@@ -52,7 +52,11 @@ public class DayTaskRecordVo {
 
     //某任务参与的会员总人数
     private Long oneTaskCountMbr=0L;
+   //任务天数
+    private Integer taskDates;
 
+    //任务开始时间
+    private  Date  startTime;
 
 
 
@@ -182,5 +186,21 @@ public class DayTaskRecordVo {
 
     public void setPartDate(Date partDate) {
         this.partDate = partDate;
+    }
+
+    public Integer getTaskDates() {
+        return taskDates;
+    }
+
+    public void setTaskDates(Integer taskDates) {
+        this.taskDates = taskDates;
+    }
+
+    public Date getStartTime() {
+        return startTime;
+    }
+
+    public void setStartTime(Date startTime) {
+        this.startTime = startTime;
     }
 }

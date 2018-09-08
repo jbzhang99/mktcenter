@@ -539,6 +539,7 @@ public class TaskServiceImpl implements TaskService {
         ResponseData<TaskRecordVO> result = new ResponseData<TaskRecordVO>(SysResponseEnum.SUCCESS.getCode(),SysResponseEnum.SUCCESS.getMessage(),null);
         Long sysBrandId = sysAccountPo.getBrandId();
         vo.setBrandId(sysBrandId);
+        Integer taskType = vo.getTaskType();
         //每个任务的券,积分,会员 总数
         PageHelper.startPage(vo.getPageNumber(),vo.getPageSize());
         List<DayTaskRecordVo> analysisall = mktTaskRecordPOMapper.getAnalysisResult(vo);
@@ -555,8 +556,9 @@ public class TaskServiceImpl implements TaskService {
 
         if (CollectionUtils.isNotEmpty(analysislists)){
             for (DayTaskRecordVo task: analysislists) {
-                TaskTypeEnum taskTypeEnum = TaskTypeEnum.getTaskTypeEnumByCode(vo.getTaskType());
-                String sendType = this.changeTaskType(vo.getTaskType()).getCouponTaskType();
+                //
+             
+                String sendType = this.changeTaskType(taskType).getCouponTaskType();
                 //查询券模块的统计出的相关数量
                 ResponseData<CouponFindCouponCountResponseVO> couponCount= couponQueryService.findCouponCountBySendBusinessId(task.getTaskId(), sendType, sysBrandId);
                 CouponFindCouponCountResponseVO data = couponCount.getData();

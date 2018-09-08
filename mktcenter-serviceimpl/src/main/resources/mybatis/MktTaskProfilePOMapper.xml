@@ -528,6 +528,9 @@
       <if test="date1!=null and date1!=''">
         AND tmt.create_date <![CDATA[>=]]> #{date1}
       </if>
+      <if test="memberLevel!=null">
+        tmtr.member_level=#{memberLevel}
+      </if>
        GROUP BY  date_format(tmtr.participate_date,'%Y-%m-%d')
 
   </select>
