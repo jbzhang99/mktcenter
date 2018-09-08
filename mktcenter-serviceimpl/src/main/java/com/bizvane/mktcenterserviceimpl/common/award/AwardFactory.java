@@ -64,8 +64,6 @@ public class AwardFactory {
         ResponseData responseData = new ResponseData();
         try {
             SendCouponSimpleRequestVO va = bo.getSendCouponSimpleRequestVO();
-            va.setSendBussienId(bo.getBusinessId());
-            va.setSendType("10");
             ResponseData<Object> simple = sendCouponServiceFeign.simple(va);
         } catch (Exception e) {
             log.error("com.bizvane.mktcenterserviceimpl.common.award.AwardFactory.awardCouponSimple error"+ e.getMessage());

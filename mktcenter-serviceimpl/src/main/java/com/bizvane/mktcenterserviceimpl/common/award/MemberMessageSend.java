@@ -1,5 +1,6 @@
 package com.bizvane.mktcenterserviceimpl.common.award;
 
+import com.bizvane.couponfacade.enums.SendTypeEnum;
 import com.bizvane.couponfacade.models.vo.SendCouponBatchRequestVO;
 import com.bizvane.couponfacade.models.vo.SendCouponSimpleRequestVO;
 import com.bizvane.members.facade.enums.IntegralChangeTypeEnum;
@@ -23,6 +24,7 @@ import com.bizvane.mktcenterservice.models.po.*;
 import com.bizvane.mktcenterservice.models.vo.ActivitySmartVO;
 import com.bizvane.mktcenterservice.models.vo.ActivityVO;
 import com.bizvane.mktcenterserviceimpl.common.enums.BusinessTypeEnum;
+import com.bizvane.mktcenterserviceimpl.common.enums.CouponSendTypeEnum;
 import com.bizvane.mktcenterserviceimpl.common.enums.MktSmartTypeEnum;
 import com.bizvane.mktcenterserviceimpl.mappers.MktCouponPOMapper;
 import com.bizvane.mktcenterserviceimpl.mappers.MktMessagePOMapper;
@@ -202,6 +204,7 @@ public class MemberMessageSend {
                         sendCouponSimpleRequestVO.setMemberCode(memberInfo.getMemberCode().toString());
                         sendCouponSimpleRequestVO.setCouponDefinitionId(mktCouponPO.getCouponDefinitionId());
                         sendCouponSimpleRequestVO.setSendBussienId(mktCouponPO.getBizId());
+                        sendCouponSimpleRequestVO.setSendType(SendTypeEnum.SEND_COUPON_ORIENT_MARKET.getCode());
                         awardBO.setSendCouponSimpleRequestVO(sendCouponSimpleRequestVO);
                         awardBO.setMktType(MktSmartTypeEnum.SMART_TYPE_COUPON.getCode());
                         award.execute(awardBO);

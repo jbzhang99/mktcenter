@@ -6,6 +6,7 @@ import com.bizvane.centerstageservice.models.po.SysCheckPo;
 import com.bizvane.centerstageservice.models.vo.SysCheckConfigVo;
 import com.bizvane.centerstageservice.rpc.SysCheckConfigServiceRpc;
 import com.bizvane.centerstageservice.rpc.SysCheckServiceRpc;
+import com.bizvane.couponfacade.enums.SendTypeEnum;
 import com.bizvane.couponfacade.interfaces.CouponDefinitionServiceFeign;
 import com.bizvane.couponfacade.interfaces.CouponQueryServiceFeign;
 import com.bizvane.couponfacade.models.po.CouponDefinitionPO;
@@ -348,6 +349,7 @@ public class ActivityManualServiceImpl implements ActivityManualService {
             sendCouponSimpleRequestVO.setCouponDefinitionId(vo.getCouponDefinitionId());
             sendCouponSimpleRequestVO.setMemberCode(vo.getMemberInfoModel().getMemberCode());
             sendCouponSimpleRequestVO.setSendBussienId(vo.getMktActivityId());
+            sendCouponSimpleRequestVO.setSendType(SendTypeEnum.SEND_COUPON_RECEIVE_ACTIVITY.getCode());
             awardBO.setSendCouponSimpleRequestVO(sendCouponSimpleRequestVO);
             log.info("领券活动执行活动-发券调接口入参:"+JSON.toJSONString(awardBO));
             award.execute(awardBO);
