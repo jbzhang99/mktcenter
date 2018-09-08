@@ -86,9 +86,9 @@
         <!--<table tableName="t_mkt_activity_upgrade" domainObjectName="MktActivityUpgradePO">-->
             <!--<generatedKey column="mkt_activity_upgrade_id" sqlStatement="MySql" identity="true"/>-->
         <!--</table>-->
-        <!--<table tableName="t_mkt_coupon" domainObjectName="MktCouponPO">-->
-            <!--<generatedKey column="mkt_coupon_id" sqlStatement="MySql" identity="true"/>-->
-        <!--</table>-->
+        <table tableName="t_mkt_coupon" domainObjectName="MktCouponPO">
+            <generatedKey column="mkt_coupon_id" sqlStatement="MySql" identity="true"/>
+        </table>
       <!--   <table tableName="t_mkt_message" domainObjectName="MktMessagePO">
         <generatedKey column="mkt_msg_id" sqlStatement="MySql" identity="true"/>
     </table> -->
@@ -104,9 +104,9 @@
         <!--<table tableName="t_mkt_task_profile" domainObjectName="MktTaskProfilePO">-->
             <!--<generatedKey column="mkt_task_profile_id" sqlStatement="MySql" identity="true"/>-->
         <!--</table>-->
-        <!--<table tableName="t_mkt_task_record" domainObjectName="MktTaskRecordPO">-->
-            <!--<generatedKey column="mkt_task_record_id" sqlStatement="MySql" identity="true"/>-->
-        <!--</table>-->
+        <table tableName="t_mkt_task_record" domainObjectName="MktTaskRecordPO">
+            <generatedKey column="mkt_task_record_id" sqlStatement="MySql" identity="true"/>
+        </table>
         <!--<table tableName="t_mkt_task_share" domainObjectName="MktTaskSharePO">-->
             <!--<generatedKey column="mkt_task_share_id" sqlStatement="MySql" identity="true"/>-->
         <!--</table>-->
@@ -119,12 +119,12 @@
             <!--<generatedKey column="rocket_config_id" sqlStatement="MySql" identity="true"/>-->
         <!--</table>-->
         
-          <table tableName="t_mkt_activity_evaluation" domainObjectName="MktActivityEvaluationPO">
+        <!--   <table tableName="t_mkt_activity_evaluation" domainObjectName="MktActivityEvaluationPO">
             <generatedKey column="mkt_activity_evaluation_id" sqlStatement="MySql" identity="true"/>
         </table>
           <table tableName="t_mkt_activity_vip_aniversary" domainObjectName="MktActivityVipAniversaryPO">
             <generatedKey column="mkt_activity_vip_aniversary_id" sqlStatement="MySql" identity="true"/>
-        </table>
+        </table> -->
 
 
     </context>
