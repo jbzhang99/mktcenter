@@ -16,6 +16,7 @@ public class TaskAnalysisVo {
     private String taskName;
     private Date date1;
     private Date  date2;
+    //1=普通  2=银卡  3=金卡
     private Integer memberLevel;
 
     public Integer getPageSize() {
