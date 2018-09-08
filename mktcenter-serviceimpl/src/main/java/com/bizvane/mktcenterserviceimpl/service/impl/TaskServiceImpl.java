@@ -414,8 +414,9 @@ public class TaskServiceImpl implements TaskService {
 
         }
     }
+
     //发券和修改积分时的任务类型转换
-   // 任务类型：1完善资料，2分享任务，3邀请注册，4累计消费次数，5累计消费金额
+    // 任务类型：1完善资料，2分享任务，3邀请注册，4累计消费次数，5累计消费金额
     @Override
     public  ChangeTaskTypeVO  changeTaskType(Integer taskType){
         ChangeTaskTypeVO vo = new ChangeTaskTypeVO();
@@ -443,6 +444,7 @@ public class TaskServiceImpl implements TaskService {
         }
         return vo;
     }
+
     /**
      * 根据品牌Id 查询审核配置，是否需要审核然后判断
      * 1:需要审核 0:不需要
@@ -508,17 +510,14 @@ public class TaskServiceImpl implements TaskService {
         mktTaskPOWithBLOBs.setModifiedUserName(sysAccountPO.getName());
         int i = mktTaskPOMapper.updateByPrimaryKeySelective(mktTaskPOWithBLOBs);
         this.updateCheckData(mktTaskPOWithBLOBs);
-
         if (i > 0) {
             result.setCode(SysResponseEnum.SUCCESS.getCode());
             result.setMessage(SysResponseEnum.SUCCESS.getMessage());
             //3=已审核
             if (TaskConstants.THREE.equals(checkStatus)) {
-
                 MktMessagePOExample exampleMSG = new MktMessagePOExample();
                 exampleMSG.createCriteria().andBizIdEqualTo(mktTaskId).andValidEqualTo(Boolean.TRUE);
                 List<MktMessagePO> mktMessagePOS = mktMessagePOMapper.selectByExample(exampleMSG);
-
                 List<TaskDetailVO> taskDetails = this.getTaskDetailByTaskId(mktTaskId);
                 if (CollectionUtils.isNotEmpty(taskDetails)) {
                     TaskDetailVO taskdetailvo = taskDetails.get(0);
@@ -558,16 +557,18 @@ public class TaskServiceImpl implements TaskService {
             for (DayTaskRecordVo task: analysislists) {
                 TaskTypeEnum taskTypeEnum = TaskTypeEnum.getTaskTypeEnumByCode(vo.getTaskType());
                 String sendType = this.changeTaskType(vo.getTaskType()).getCouponTaskType();
+                //查询券模块的统计出的相关数量
                 ResponseData<CouponFindCouponCountResponseVO> couponCount= couponQueryService.findCouponCountBySendBusinessId(task.getTaskId(), sendType, sysBrandId);
                 CouponFindCouponCountResponseVO data = couponCount.getData();
-                //任务的券总数量
+                //一个任务的券总数量
                 Long couponSum = data.getCouponSum();
-                //任务的券核销总数量
+                //一个任务的券核销总数量
                 Long couponUsedSum = data.getCouponUsedSum();
-
+                //一个任务的券数量
                 task.setOneTaskInvalidCountCoupon(couponUsedSum);
-                task.setDayCountCoupon(couponUsedSum);
-
+                //某任务的发行券总张数
+               // task.setDayCountCoupon(couponUsedSum);
+                task.setOneTaskCountCoupon(couponSum);
                 allPoints=allPoints+task.getOneTaskPoints();
                 allCountCoupon= allCountCoupon+task.getOneTaskCountCoupon();
                 allCountMbr=allCountMbr+task.getOneTaskCompleteCountMbr();
@@ -575,10 +576,15 @@ public class TaskServiceImpl implements TaskService {
             }
         }
         TaskRecordVO taskRecordVO = new TaskRecordVO();
+        //所有积分和
         taskRecordVO.setAllPoints(allPoints);
+        //所有券数量和
         taskRecordVO.setAllCountCoupon(allCountCoupon);
+        //所有参数人数和
         taskRecordVO.setAllCountMbr(allCountMbr);
+        //被核销优惠券总数
         taskRecordVO.setAllinvalidCountCoupon(allinvalidCountCoupon);
+        //每天或每条记录 的分页结果
         taskRecordVO.setDayTaskRecordVoList(dayTaskRecordVoPage);
 
         result.setData(taskRecordVO);

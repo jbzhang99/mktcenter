@@ -82,27 +82,6 @@ public class TaskShareController {
     public  void   doAwardShare(ShareSuccessVO vo){
         taskShareService.doAwardShare(vo);
     }
-    /**
-     * 效果分析
-     * @param date1
-     * @param date2
-     * @param request
-     * @param taskName
-     * @param pageForm
-     * @return
-     */
-//    @RequestMapping("getTaskProfileRecordByTime")
-//    public ResponseData getTaskProfileRecordByTime(String date1, String date2,HttpServletRequest request ,String taskName, PageForm pageForm)throws Exception{
-//
-//        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-//        Date timeStart = simpleDateFormat.parse(date1);
-//
-//        Date timeEnd = simpleDateFormat.parse(date2);
-//        SysAccountPO stageUser = TokenUtils.getStageUser(request);
-//
-//        return taskShareService.getTaskShareRecordByTime(timeStart,timeEnd,stageUser,taskName,pageForm);
-//    }
-
 
 }
 

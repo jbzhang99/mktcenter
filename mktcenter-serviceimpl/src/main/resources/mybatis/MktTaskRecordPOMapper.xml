@@ -545,7 +545,9 @@
        tmt.task_name AS taskName,
       <!-- SUM(tmtr.coupon_num) AS oneTaskCountCoupon,-->
        SUM(tmtr.points)  AS oneTaskPoints,
-       count(distinct tmtr.member_code) AS oneTaskCompleteCountMbr
+       count(distinct tmtr.member_code) AS oneTaskCompleteCountMbr,
+       tmt.start_time,
+       ROUND(TIMESTAMPDIFF(HOUR,tmt.start_time,tmt.end_time)/24,1) as taskDates
        FROM
        t_mkt_task_record tmtr   INNER JOIN t_mkt_task  tmt ON tmtr.task_id=tmt.mkt_task_id
        WHERE

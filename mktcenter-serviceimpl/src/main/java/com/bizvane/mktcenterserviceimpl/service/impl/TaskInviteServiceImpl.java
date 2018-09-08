@@ -54,17 +54,6 @@ public class TaskInviteServiceImpl implements TaskInviteService {
 
     @Autowired
     private JobUtil  jobUtil;
-    /**
-     * 审核任务:任务id   任务状态
-     * 审核状态：1未审核，2审核中，3已审核，4已驳回',
-     */
-    @Override
-    public Integer checkInviteTask(TaskVO vo) {
-        MktTaskInvitePO po = new MktTaskInvitePO();
-        BeanUtils.copyProperties(vo, po);
-        return mktTaskInvitePOMapper.updateByPrimaryKeySelective(po);
-
-    }
 
     /**
      * 根据任务Id查询任务详情
@@ -206,14 +195,10 @@ public class TaskInviteServiceImpl implements TaskInviteService {
         }
         //6.处理任务
         taskService.doOrderTask(mktTaskPOWithBLOBs,mktmessagePOList,stageUser);
-
         responseData.setCode(SystemConstants.SUCCESS_CODE);
         responseData.setMessage(SystemConstants.SUCCESS_MESSAGE);
         return responseData;
-
-
     }
-
     /**
      * 新增消费任务
      */
@@ -223,7 +208,6 @@ public class TaskInviteServiceImpl implements TaskInviteService {
         po.setCreateUserName(stageUser.getName());
         po.setCreateUserId(stageUser.getSysAccountId());
         po.setCreateDate(new Date());
-
         return mktTaskInvitePOMapper.insertSelective(po);
     }
 
@@ -246,7 +230,6 @@ public class TaskInviteServiceImpl implements TaskInviteService {
     public  void   doAwardInvite(InviteSuccessVO vo){
         //被邀请人信息
         Date openCardTime = vo.getOpenCardTime();
-
         //邀请人的信息
         String inviteMemberCode = vo.getInviteMemberCode();
         MemberInfoModel memeberDetail = taskService.getCompanyMemeberDetail(inviteMemberCode);
@@ -254,23 +237,19 @@ public class TaskInviteServiceImpl implements TaskInviteService {
         Long brandId = memeberDetail.getBrandId();
         String memberCode = memeberDetail.getMemberCode();
         String cardNo = memeberDetail.getCardNo();
-
         //符合条件的任务列表
         List<TaskAwardBO> taskInviteAwardList = taskService.getTaskInviteAwardList(companyId, brandId, openCardTime);
-
         if (CollectionUtils.isNotEmpty(taskInviteAwardList)){
             taskInviteAwardList.stream().forEach(obj->{
                 Integer taskType = obj.getTaskType();
                 Long mktTaskId = obj.getMktTaskId();
                 //邀请开卡人数
                 Integer inviteNum = obj.getInviteNum();
-
                 MktTaskRecordVO recordVO = new MktTaskRecordVO();
                 recordVO.setSysBrandId(brandId);
                 recordVO.setTaskType(taskType);
                 recordVO.setTaskId(mktTaskId);
                 recordVO.setMemberCode(inviteMemberCode);
-
                 // 获取会员是否已经成功参与过某一活动
                 Boolean isOrNoAward = taskRecordService.getIsOrNoAward(recordVO);
                 if (!isOrNoAward){
@@ -278,7 +257,6 @@ public class TaskInviteServiceImpl implements TaskInviteService {
                     BeanUtils.copyProperties(recordVO,recordPO);
                     recordPO.setParticipateDate(openCardTime);
                     taskRecordService.addTaskRecord(recordPO);
-
                     //获取会员参与某一活动放总金额和总次数
                     TotalStatisticsBO totalBO = taskRecordService.getTotalStatistics(recordVO);
                     if (totalBO!=null && totalBO.getTotalTimes()!=null &&  totalBO.getTotalTimes().equals(inviteNum)){
@@ -286,12 +264,9 @@ public class TaskInviteServiceImpl implements TaskInviteService {
                         taskRecordService.updateTaskRecord(recordPO);
                         taskService.sendCouponAndPoint(memberCode,obj);
                     }
-
                 }
-
             });
         }
-
     }
 }
 
