@@ -9,28 +9,28 @@ import java.util.List;
 public class MktTaskRecordPOExample implements Serializable {
     /**
 	 * 只读. 
-	 * @mbg.generated  2018-09-08 11:41:35
+	 * @mbg.generated  2018-09-08 16:26:55
 	 */
 	protected String orderByClause;
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-09-08 11:41:35
+	 * @mbg.generated  2018-09-08 16:26:55
 	 */
 	protected boolean distinct;
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-09-08 11:41:35
+	 * @mbg.generated  2018-09-08 16:26:55
 	 */
 	protected List<Criteria> oredCriteria;
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-09-08 11:41:35
+	 * @mbg.generated  2018-09-08 16:26:55
 	 */
 	private static final long serialVersionUID = 1L;
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-09-08 11:41:35
+	 * @mbg.generated  2018-09-08 16:26:55
 	 */
 	public MktTaskRecordPOExample() {
 		oredCriteria = new ArrayList<Criteria>();
@@ -38,7 +38,7 @@ public class MktTaskRecordPOExample implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-09-08 11:41:35
+	 * @mbg.generated  2018-09-08 16:26:55
 	 */
 	public void setOrderByClause(String orderByClause) {
 		this.orderByClause = orderByClause;
@@ -46,7 +46,7 @@ public class MktTaskRecordPOExample implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-09-08 11:41:35
+	 * @mbg.generated  2018-09-08 16:26:55
 	 */
 	public String getOrderByClause() {
 		return orderByClause;
@@ -54,7 +54,7 @@ public class MktTaskRecordPOExample implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-09-08 11:41:35
+	 * @mbg.generated  2018-09-08 16:26:55
 	 */
 	public void setDistinct(boolean distinct) {
 		this.distinct = distinct;
@@ -62,7 +62,7 @@ public class MktTaskRecordPOExample implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-09-08 11:41:35
+	 * @mbg.generated  2018-09-08 16:26:55
 	 */
 	public boolean isDistinct() {
 		return distinct;
@@ -70,7 +70,7 @@ public class MktTaskRecordPOExample implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-09-08 11:41:35
+	 * @mbg.generated  2018-09-08 16:26:55
 	 */
 	public List<Criteria> getOredCriteria() {
 		return oredCriteria;
@@ -78,7 +78,7 @@ public class MktTaskRecordPOExample implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-09-08 11:41:35
+	 * @mbg.generated  2018-09-08 16:26:55
 	 */
 	public void or(Criteria criteria) {
 		oredCriteria.add(criteria);
@@ -86,7 +86,7 @@ public class MktTaskRecordPOExample implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-09-08 11:41:35
+	 * @mbg.generated  2018-09-08 16:26:55
 	 */
 	public Criteria or() {
 		Criteria criteria = createCriteriaInternal();
@@ -96,7 +96,7 @@ public class MktTaskRecordPOExample implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-09-08 11:41:35
+	 * @mbg.generated  2018-09-08 16:26:55
 	 */
 	public Criteria createCriteria() {
 		Criteria criteria = createCriteriaInternal();
@@ -108,7 +108,7 @@ public class MktTaskRecordPOExample implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-09-08 11:41:35
+	 * @mbg.generated  2018-09-08 16:26:55
 	 */
 	protected Criteria createCriteriaInternal() {
 		Criteria criteria = new Criteria();
@@ -117,7 +117,7 @@ public class MktTaskRecordPOExample implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-09-08 11:41:35
+	 * @mbg.generated  2018-09-08 16:26:55
 	 */
 	public void clear() {
 		oredCriteria.clear();
@@ -127,7 +127,7 @@ public class MktTaskRecordPOExample implements Serializable {
 
 	/**
 	 * 只读. t_mkt_task_record
-	 * @mbg.generated  2018-09-08 11:41:35
+	 * @mbg.generated  2018-09-08 16:26:55
 	 */
 	protected abstract static class GeneratedCriteria implements Serializable {
 		protected List<Criterion> criteria;
@@ -840,6 +840,66 @@ public class MktTaskRecordPOExample implements Serializable {
 			return (Criteria) this;
 		}
 
+		public Criteria andMemberLevelIsNull() {
+			addCriterion("member_level is null");
+			return (Criteria) this;
+		}
+
+		public Criteria andMemberLevelIsNotNull() {
+			addCriterion("member_level is not null");
+			return (Criteria) this;
+		}
+
+		public Criteria andMemberLevelEqualTo(Integer value) {
+			addCriterion("member_level =", value, "memberLevel");
+			return (Criteria) this;
+		}
+
+		public Criteria andMemberLevelNotEqualTo(Integer value) {
+			addCriterion("member_level <>", value, "memberLevel");
+			return (Criteria) this;
+		}
+
+		public Criteria andMemberLevelGreaterThan(Integer value) {
+			addCriterion("member_level >", value, "memberLevel");
+			return (Criteria) this;
+		}
+
+		public Criteria andMemberLevelGreaterThanOrEqualTo(Integer value) {
+			addCriterion("member_level >=", value, "memberLevel");
+			return (Criteria) this;
+		}
+
+		public Criteria andMemberLevelLessThan(Integer value) {
+			addCriterion("member_level <", value, "memberLevel");
+			return (Criteria) this;
+		}
+
+		public Criteria andMemberLevelLessThanOrEqualTo(Integer value) {
+			addCriterion("member_level <=", value, "memberLevel");
+			return (Criteria) this;
+		}
+
+		public Criteria andMemberLevelIn(List<Integer> values) {
+			addCriterion("member_level in", values, "memberLevel");
+			return (Criteria) this;
+		}
+
+		public Criteria andMemberLevelNotIn(List<Integer> values) {
+			addCriterion("member_level not in", values, "memberLevel");
+			return (Criteria) this;
+		}
+
+		public Criteria andMemberLevelBetween(Integer value1, Integer value2) {
+			addCriterion("member_level between", value1, value2, "memberLevel");
+			return (Criteria) this;
+		}
+
+		public Criteria andMemberLevelNotBetween(Integer value1, Integer value2) {
+			addCriterion("member_level not between", value1, value2, "memberLevel");
+			return (Criteria) this;
+		}
+
 		public Criteria andShareNumIsNull() {
 			addCriterion("share_num is null");
 			return (Criteria) this;
@@ -1413,7 +1473,7 @@ public class MktTaskRecordPOExample implements Serializable {
 
 	/**
 	 * 只读. t_mkt_task_record
-	 * @mbg.generated  2018-09-08 11:41:35
+	 * @mbg.generated  2018-09-08 16:26:55
 	 */
 	public static class Criterion implements Serializable {
 		private String condition;

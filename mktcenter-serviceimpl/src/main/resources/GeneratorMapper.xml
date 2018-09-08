@@ -53,9 +53,9 @@
             <!--<generatedKey column="def_dictionary_id" sqlStatement="MySql" identity="true"/>-->
         <!--</table>-->
 
-        <table tableName="t_mkt_activity" domainObjectName="MktActivityPO">
+     <!--    <table tableName="t_mkt_activity" domainObjectName="MktActivityPO">
             <generatedKey column="mkt_activity_id" sqlStatement="MySql" identity="true"/>
-        </table>
+        </table> -->
         <!--<table tableName="t_mkt_activity_birthday" domainObjectName="MktActivityBirthdayPO">-->
             <!--<generatedKey column="mkt_activity_birthday_id" sqlStatement="MySql" identity="true"/>-->
         <!--</table>-->
@@ -104,9 +104,9 @@
         <!--<table tableName="t_mkt_task_profile" domainObjectName="MktTaskProfilePO">-->
             <!--<generatedKey column="mkt_task_profile_id" sqlStatement="MySql" identity="true"/>-->
         <!--</table>-->
-      <!--   <table tableName="t_mkt_task_record" domainObjectName="MktTaskRecordPO">
+        <table tableName="t_mkt_task_record" domainObjectName="MktTaskRecordPO">
             <generatedKey column="mkt_task_record_id" sqlStatement="MySql" identity="true"/>
-        </table> -->
+        </table>
         <!--<table tableName="t_mkt_task_share" domainObjectName="MktTaskSharePO">-->
             <!--<generatedKey column="mkt_task_share_id" sqlStatement="MySql" identity="true"/>-->
         <!--</table>-->
