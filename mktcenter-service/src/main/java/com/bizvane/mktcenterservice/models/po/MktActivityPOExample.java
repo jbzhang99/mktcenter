@@ -8,28 +8,28 @@ import java.util.List;
 public class MktActivityPOExample implements Serializable {
     /**
 	 * 只读. 
-	 * @mbg.generated  2018-08-31 12:40:26
+	 * @mbg.generated  2018-09-08 13:49:38
 	 */
 	protected String orderByClause;
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-08-31 12:40:26
+	 * @mbg.generated  2018-09-08 13:49:38
 	 */
 	protected boolean distinct;
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-08-31 12:40:26
+	 * @mbg.generated  2018-09-08 13:49:38
 	 */
 	protected List<Criteria> oredCriteria;
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-08-31 12:40:26
+	 * @mbg.generated  2018-09-08 13:49:38
 	 */
 	private static final long serialVersionUID = 1L;
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-08-31 12:40:26
+	 * @mbg.generated  2018-09-08 13:49:38
 	 */
 	public MktActivityPOExample() {
 		oredCriteria = new ArrayList<Criteria>();
@@ -37,7 +37,7 @@ public class MktActivityPOExample implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-08-31 12:40:26
+	 * @mbg.generated  2018-09-08 13:49:38
 	 */
 	public void setOrderByClause(String orderByClause) {
 		this.orderByClause = orderByClause;
@@ -45,7 +45,7 @@ public class MktActivityPOExample implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-08-31 12:40:26
+	 * @mbg.generated  2018-09-08 13:49:38
 	 */
 	public String getOrderByClause() {
 		return orderByClause;
@@ -53,7 +53,7 @@ public class MktActivityPOExample implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-08-31 12:40:26
+	 * @mbg.generated  2018-09-08 13:49:38
 	 */
 	public void setDistinct(boolean distinct) {
 		this.distinct = distinct;
@@ -61,7 +61,7 @@ public class MktActivityPOExample implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-08-31 12:40:26
+	 * @mbg.generated  2018-09-08 13:49:38
 	 */
 	public boolean isDistinct() {
 		return distinct;
@@ -69,7 +69,7 @@ public class MktActivityPOExample implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-08-31 12:40:26
+	 * @mbg.generated  2018-09-08 13:49:38
 	 */
 	public List<Criteria> getOredCriteria() {
 		return oredCriteria;
@@ -77,7 +77,7 @@ public class MktActivityPOExample implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-08-31 12:40:26
+	 * @mbg.generated  2018-09-08 13:49:38
 	 */
 	public void or(Criteria criteria) {
 		oredCriteria.add(criteria);
@@ -85,7 +85,7 @@ public class MktActivityPOExample implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-08-31 12:40:26
+	 * @mbg.generated  2018-09-08 13:49:38
 	 */
 	public Criteria or() {
 		Criteria criteria = createCriteriaInternal();
@@ -95,7 +95,7 @@ public class MktActivityPOExample implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-08-31 12:40:26
+	 * @mbg.generated  2018-09-08 13:49:38
 	 */
 	public Criteria createCriteria() {
 		Criteria criteria = createCriteriaInternal();
@@ -107,7 +107,7 @@ public class MktActivityPOExample implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-08-31 12:40:26
+	 * @mbg.generated  2018-09-08 13:49:38
 	 */
 	protected Criteria createCriteriaInternal() {
 		Criteria criteria = new Criteria();
@@ -116,7 +116,7 @@ public class MktActivityPOExample implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-08-31 12:40:26
+	 * @mbg.generated  2018-09-08 13:49:38
 	 */
 	public void clear() {
 		oredCriteria.clear();
@@ -126,7 +126,7 @@ public class MktActivityPOExample implements Serializable {
 
 	/**
 	 * 只读. t_mkt_activity
-	 * @mbg.generated  2018-08-31 12:40:26
+	 * @mbg.generated  2018-09-08 13:49:38
 	 */
 	protected abstract static class GeneratedCriteria implements Serializable {
 		protected List<Criterion> criteria;
@@ -786,6 +786,126 @@ public class MktActivityPOExample implements Serializable {
 
 		public Criteria andLongTermNotBetween(Integer value1, Integer value2) {
 			addCriterion("long_term not between", value1, value2, "longTerm");
+			return (Criteria) this;
+		}
+
+		public Criteria andSendImmediatelyIsNull() {
+			addCriterion("send_immediately is null");
+			return (Criteria) this;
+		}
+
+		public Criteria andSendImmediatelyIsNotNull() {
+			addCriterion("send_immediately is not null");
+			return (Criteria) this;
+		}
+
+		public Criteria andSendImmediatelyEqualTo(Boolean value) {
+			addCriterion("send_immediately =", value, "sendImmediately");
+			return (Criteria) this;
+		}
+
+		public Criteria andSendImmediatelyNotEqualTo(Boolean value) {
+			addCriterion("send_immediately <>", value, "sendImmediately");
+			return (Criteria) this;
+		}
+
+		public Criteria andSendImmediatelyGreaterThan(Boolean value) {
+			addCriterion("send_immediately >", value, "sendImmediately");
+			return (Criteria) this;
+		}
+
+		public Criteria andSendImmediatelyGreaterThanOrEqualTo(Boolean value) {
+			addCriterion("send_immediately >=", value, "sendImmediately");
+			return (Criteria) this;
+		}
+
+		public Criteria andSendImmediatelyLessThan(Boolean value) {
+			addCriterion("send_immediately <", value, "sendImmediately");
+			return (Criteria) this;
+		}
+
+		public Criteria andSendImmediatelyLessThanOrEqualTo(Boolean value) {
+			addCriterion("send_immediately <=", value, "sendImmediately");
+			return (Criteria) this;
+		}
+
+		public Criteria andSendImmediatelyIn(List<Boolean> values) {
+			addCriterion("send_immediately in", values, "sendImmediately");
+			return (Criteria) this;
+		}
+
+		public Criteria andSendImmediatelyNotIn(List<Boolean> values) {
+			addCriterion("send_immediately not in", values, "sendImmediately");
+			return (Criteria) this;
+		}
+
+		public Criteria andSendImmediatelyBetween(Boolean value1, Boolean value2) {
+			addCriterion("send_immediately between", value1, value2, "sendImmediately");
+			return (Criteria) this;
+		}
+
+		public Criteria andSendImmediatelyNotBetween(Boolean value1, Boolean value2) {
+			addCriterion("send_immediately not between", value1, value2, "sendImmediately");
+			return (Criteria) this;
+		}
+
+		public Criteria andSendTimeIsNull() {
+			addCriterion("send_time is null");
+			return (Criteria) this;
+		}
+
+		public Criteria andSendTimeIsNotNull() {
+			addCriterion("send_time is not null");
+			return (Criteria) this;
+		}
+
+		public Criteria andSendTimeEqualTo(Date value) {
+			addCriterion("send_time =", value, "sendTime");
+			return (Criteria) this;
+		}
+
+		public Criteria andSendTimeNotEqualTo(Date value) {
+			addCriterion("send_time <>", value, "sendTime");
+			return (Criteria) this;
+		}
+
+		public Criteria andSendTimeGreaterThan(Date value) {
+			addCriterion("send_time >", value, "sendTime");
+			return (Criteria) this;
+		}
+
+		public Criteria andSendTimeGreaterThanOrEqualTo(Date value) {
+			addCriterion("send_time >=", value, "sendTime");
+			return (Criteria) this;
+		}
+
+		public Criteria andSendTimeLessThan(Date value) {
+			addCriterion("send_time <", value, "sendTime");
+			return (Criteria) this;
+		}
+
+		public Criteria andSendTimeLessThanOrEqualTo(Date value) {
+			addCriterion("send_time <=", value, "sendTime");
+			return (Criteria) this;
+		}
+
+		public Criteria andSendTimeIn(List<Date> values) {
+			addCriterion("send_time in", values, "sendTime");
+			return (Criteria) this;
+		}
+
+		public Criteria andSendTimeNotIn(List<Date> values) {
+			addCriterion("send_time not in", values, "sendTime");
+			return (Criteria) this;
+		}
+
+		public Criteria andSendTimeBetween(Date value1, Date value2) {
+			addCriterion("send_time between", value1, value2, "sendTime");
+			return (Criteria) this;
+		}
+
+		public Criteria andSendTimeNotBetween(Date value1, Date value2) {
+			addCriterion("send_time not between", value1, value2, "sendTime");
 			return (Criteria) this;
 		}
 
@@ -1482,7 +1602,7 @@ public class MktActivityPOExample implements Serializable {
 
 	/**
 	 * 只读. t_mkt_activity
-	 * @mbg.generated  2018-08-31 12:40:26
+	 * @mbg.generated  2018-09-08 13:49:38
 	 */
 	public static class Criterion implements Serializable {
 		private String condition;

@@ -4,7 +4,7 @@
   <resultMap id="BaseResultMap" type="com.bizvane.mktcenterservice.models.po.MktActivityPO">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-08-31 12:40:26.
+      This element was generated on 2018-09-08 13:49:38.
     -->
     <id column="mkt_activity_id" jdbcType="BIGINT" property="mktActivityId" />
     <result column="sys_company_id" jdbcType="BIGINT" property="sysCompanyId" />
@@ -16,6 +16,8 @@
     <result column="start_time" jdbcType="TIMESTAMP" property="startTime" />
     <result column="end_time" jdbcType="TIMESTAMP" property="endTime" />
     <result column="long_term" jdbcType="INTEGER" property="longTerm" />
+    <result column="send_immediately" jdbcType="BIT" property="sendImmediately" />
+    <result column="send_time" jdbcType="TIMESTAMP" property="sendTime" />
     <result column="points" jdbcType="INTEGER" property="points" />
     <result column="check_status" jdbcType="INTEGER" property="checkStatus" />
     <result column="activity_status" jdbcType="INTEGER" property="activityStatus" />
@@ -31,7 +33,7 @@
   <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.bizvane.mktcenterservice.models.po.MktActivityPOWithBLOBs">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-08-31 12:40:26.
+      This element was generated on 2018-09-08 13:49:38.
     -->
     <result column="activity_info" jdbcType="LONGVARCHAR" property="activityInfo" />
     <result column="activity_list_img" jdbcType="LONGVARCHAR" property="activityListImg" />
@@ -40,7 +42,7 @@
   <sql id="Example_Where_Clause">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-08-31 12:40:26.
+      This element was generated on 2018-09-08 13:49:38.
     -->
     <where>
       <foreach collection="oredCriteria" item="criteria" separator="or">
@@ -73,7 +75,7 @@
   <sql id="Update_By_Example_Where_Clause">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-08-31 12:40:26.
+      This element was generated on 2018-09-08 13:49:38.
     -->
     <where>
       <foreach collection="example.oredCriteria" item="criteria" separator="or">
@@ -106,24 +108,24 @@
   <sql id="Base_Column_List">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-08-31 12:40:26.
+      This element was generated on 2018-09-08 13:49:38.
     -->
     mkt_activity_id, sys_company_id, sys_brand_id, mkt_activity_smart_group_id, activity_code, 
-    activity_type, activity_name, start_time, end_time, long_term, points, check_status, 
-    activity_status, remark, create_user_id, create_user_name, create_date, modified_user_id, 
-    modified_user_name, modified_date, valid
+    activity_type, activity_name, start_time, end_time, long_term, send_immediately, 
+    send_time, points, check_status, activity_status, remark, create_user_id, create_user_name, 
+    create_date, modified_user_id, modified_user_name, modified_date, valid
   </sql>
   <sql id="Blob_Column_List">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-08-31 12:40:26.
+      This element was generated on 2018-09-08 13:49:38.
     -->
     activity_info, activity_list_img, activity_detail_img
   </sql>
   <select id="selectByExampleWithBLOBs" parameterType="com.bizvane.mktcenterservice.models.po.MktActivityPOExample" resultMap="ResultMapWithBLOBs">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-08-31 12:40:26.
+      This element was generated on 2018-09-08 13:49:38.
     -->
     select
     <if test="distinct">
@@ -143,7 +145,7 @@
   <select id="selectByExample" parameterType="com.bizvane.mktcenterservice.models.po.MktActivityPOExample" resultMap="BaseResultMap">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-08-31 12:40:26.
+      This element was generated on 2018-09-08 13:49:38.
     -->
     select
     <if test="distinct">
@@ -161,7 +163,7 @@
   <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="ResultMapWithBLOBs">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-08-31 12:40:26.
+      This element was generated on 2018-09-08 13:49:38.
     -->
     select 
     <include refid="Base_Column_List" />
@@ -173,7 +175,7 @@
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-08-31 12:40:26.
+      This element was generated on 2018-09-08 13:49:38.
     -->
     delete from t_mkt_activity
     where mkt_activity_id = #{mktActivityId,jdbcType=BIGINT}
@@ -181,7 +183,7 @@
   <delete id="deleteByExample" parameterType="com.bizvane.mktcenterservice.models.po.MktActivityPOExample">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-08-31 12:40:26.
+      This element was generated on 2018-09-08 13:49:38.
     -->
     delete from t_mkt_activity
     <if test="_parameter != null">
@@ -191,7 +193,7 @@
   <insert id="insert" parameterType="com.bizvane.mktcenterservice.models.po.MktActivityPOWithBLOBs">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-08-31 12:40:26.
+      This element was generated on 2018-09-08 13:49:38.
     -->
     <selectKey keyProperty="mktActivityId" order="AFTER" resultType="java.lang.Long">
       SELECT LAST_INSERT_ID()
@@ -199,26 +201,26 @@
     insert into t_mkt_activity (sys_company_id, sys_brand_id, mkt_activity_smart_group_id, 
       activity_code, activity_type, activity_name, 
       start_time, end_time, long_term, 
-      points, check_status, activity_status, 
-      remark, create_user_id, create_user_name, 
-      create_date, modified_user_id, modified_user_name, 
-      modified_date, valid, activity_info, 
-      activity_list_img, activity_detail_img
-      )
+      send_immediately, send_time, points, 
+      check_status, activity_status, remark, 
+      create_user_id, create_user_name, create_date, 
+      modified_user_id, modified_user_name, modified_date, 
+      valid, activity_info, activity_list_img, 
+      activity_detail_img)
     values (#{sysCompanyId,jdbcType=BIGINT}, #{sysBrandId,jdbcType=BIGINT}, #{mktActivitySmartGroupId,jdbcType=BIGINT}, 
       #{activityCode,jdbcType=VARCHAR}, #{activityType,jdbcType=INTEGER}, #{activityName,jdbcType=VARCHAR}, 
       #{startTime,jdbcType=TIMESTAMP}, #{endTime,jdbcType=TIMESTAMP}, #{longTerm,jdbcType=INTEGER}, 
-      #{points,jdbcType=INTEGER}, #{checkStatus,jdbcType=INTEGER}, #{activityStatus,jdbcType=INTEGER}, 
-      #{remark,jdbcType=VARCHAR}, #{createUserId,jdbcType=BIGINT}, #{createUserName,jdbcType=VARCHAR}, 
-      #{createDate,jdbcType=TIMESTAMP}, #{modifiedUserId,jdbcType=BIGINT}, #{modifiedUserName,jdbcType=VARCHAR}, 
-      #{modifiedDate,jdbcType=TIMESTAMP}, #{valid,jdbcType=BIT}, #{activityInfo,jdbcType=LONGVARCHAR}, 
-      #{activityListImg,jdbcType=LONGVARCHAR}, #{activityDetailImg,jdbcType=LONGVARCHAR}
-      )
+      #{sendImmediately,jdbcType=BIT}, #{sendTime,jdbcType=TIMESTAMP}, #{points,jdbcType=INTEGER}, 
+      #{checkStatus,jdbcType=INTEGER}, #{activityStatus,jdbcType=INTEGER}, #{remark,jdbcType=VARCHAR}, 
+      #{createUserId,jdbcType=BIGINT}, #{createUserName,jdbcType=VARCHAR}, #{createDate,jdbcType=TIMESTAMP}, 
+      #{modifiedUserId,jdbcType=BIGINT}, #{modifiedUserName,jdbcType=VARCHAR}, #{modifiedDate,jdbcType=TIMESTAMP}, 
+      #{valid,jdbcType=BIT}, #{activityInfo,jdbcType=LONGVARCHAR}, #{activityListImg,jdbcType=LONGVARCHAR}, 
+      #{activityDetailImg,jdbcType=LONGVARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.bizvane.mktcenterservice.models.po.MktActivityPOWithBLOBs">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-08-31 12:40:26.
+      This element was generated on 2018-09-08 13:49:38.
     -->
     <selectKey keyProperty="mktActivityId" order="AFTER" resultType="java.lang.Long">
       SELECT LAST_INSERT_ID()
@@ -251,6 +253,12 @@
       </if>
       <if test="longTerm != null">
         long_term,
+      </if>
+      <if test="sendImmediately != null">
+        send_immediately,
+      </if>
+      <if test="sendTime != null">
+        send_time,
       </if>
       <if test="points != null">
         points,
@@ -323,6 +331,12 @@
       <if test="longTerm != null">
         #{longTerm,jdbcType=INTEGER},
       </if>
+      <if test="sendImmediately != null">
+        #{sendImmediately,jdbcType=BIT},
+      </if>
+      <if test="sendTime != null">
+        #{sendTime,jdbcType=TIMESTAMP},
+      </if>
       <if test="points != null">
         #{points,jdbcType=INTEGER},
       </if>
@@ -370,7 +384,7 @@
   <select id="countByExample" parameterType="com.bizvane.mktcenterservice.models.po.MktActivityPOExample" resultType="java.lang.Long">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-08-31 12:40:26.
+      This element was generated on 2018-09-08 13:49:38.
     -->
     select count(*) from t_mkt_activity
     <if test="_parameter != null">
@@ -380,7 +394,7 @@
   <update id="updateByExampleSelective" parameterType="map">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-08-31 12:40:26.
+      This element was generated on 2018-09-08 13:49:38.
     -->
     update t_mkt_activity
     <set>
@@ -413,6 +427,12 @@
       </if>
       <if test="record.longTerm != null">
         long_term = #{record.longTerm,jdbcType=INTEGER},
+      </if>
+      <if test="record.sendImmediately != null">
+        send_immediately = #{record.sendImmediately,jdbcType=BIT},
+      </if>
+      <if test="record.sendTime != null">
+        send_time = #{record.sendTime,jdbcType=TIMESTAMP},
       </if>
       <if test="record.points != null">
         points = #{record.points,jdbcType=INTEGER},
@@ -464,7 +484,7 @@
   <update id="updateByExampleWithBLOBs" parameterType="map">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-08-31 12:40:26.
+      This element was generated on 2018-09-08 13:49:38.
     -->
     update t_mkt_activity
     set mkt_activity_id = #{record.mktActivityId,jdbcType=BIGINT},
@@ -477,6 +497,8 @@
       start_time = #{record.startTime,jdbcType=TIMESTAMP},
       end_time = #{record.endTime,jdbcType=TIMESTAMP},
       long_term = #{record.longTerm,jdbcType=INTEGER},
+      send_immediately = #{record.sendImmediately,jdbcType=BIT},
+      send_time = #{record.sendTime,jdbcType=TIMESTAMP},
       points = #{record.points,jdbcType=INTEGER},
       check_status = #{record.checkStatus,jdbcType=INTEGER},
       activity_status = #{record.activityStatus,jdbcType=INTEGER},
@@ -498,7 +520,7 @@
   <update id="updateByExample" parameterType="map">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-08-31 12:40:26.
+      This element was generated on 2018-09-08 13:49:38.
     -->
     update t_mkt_activity
     set mkt_activity_id = #{record.mktActivityId,jdbcType=BIGINT},
@@ -511,6 +533,8 @@
       start_time = #{record.startTime,jdbcType=TIMESTAMP},
       end_time = #{record.endTime,jdbcType=TIMESTAMP},
       long_term = #{record.longTerm,jdbcType=INTEGER},
+      send_immediately = #{record.sendImmediately,jdbcType=BIT},
+      send_time = #{record.sendTime,jdbcType=TIMESTAMP},
       points = #{record.points,jdbcType=INTEGER},
       check_status = #{record.checkStatus,jdbcType=INTEGER},
       activity_status = #{record.activityStatus,jdbcType=INTEGER},
@@ -529,7 +553,7 @@
   <update id="updateByPrimaryKeySelective" parameterType="com.bizvane.mktcenterservice.models.po.MktActivityPOWithBLOBs">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-08-31 12:40:26.
+      This element was generated on 2018-09-08 13:49:38.
     -->
     update t_mkt_activity
     <set>
@@ -559,6 +583,12 @@
       </if>
       <if test="longTerm != null">
         long_term = #{longTerm,jdbcType=INTEGER},
+      </if>
+      <if test="sendImmediately != null">
+        send_immediately = #{sendImmediately,jdbcType=BIT},
+      </if>
+      <if test="sendTime != null">
+        send_time = #{sendTime,jdbcType=TIMESTAMP},
       </if>
       <if test="points != null">
         points = #{points,jdbcType=INTEGER},
@@ -608,7 +638,7 @@
   <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.bizvane.mktcenterservice.models.po.MktActivityPOWithBLOBs">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-08-31 12:40:26.
+      This element was generated on 2018-09-08 13:49:38.
     -->
     update t_mkt_activity
     set sys_company_id = #{sysCompanyId,jdbcType=BIGINT},
@@ -620,6 +650,8 @@
       start_time = #{startTime,jdbcType=TIMESTAMP},
       end_time = #{endTime,jdbcType=TIMESTAMP},
       long_term = #{longTerm,jdbcType=INTEGER},
+      send_immediately = #{sendImmediately,jdbcType=BIT},
+      send_time = #{sendTime,jdbcType=TIMESTAMP},
       points = #{points,jdbcType=INTEGER},
       check_status = #{checkStatus,jdbcType=INTEGER},
       activity_status = #{activityStatus,jdbcType=INTEGER},
@@ -639,7 +671,7 @@
   <update id="updateByPrimaryKey" parameterType="com.bizvane.mktcenterservice.models.po.MktActivityPO">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-08-31 12:40:26.
+      This element was generated on 2018-09-08 13:49:38.
     -->
     update t_mkt_activity
     set sys_company_id = #{sysCompanyId,jdbcType=BIGINT},
@@ -651,6 +683,8 @@
       start_time = #{startTime,jdbcType=TIMESTAMP},
       end_time = #{endTime,jdbcType=TIMESTAMP},
       long_term = #{longTerm,jdbcType=INTEGER},
+      send_immediately = #{sendImmediately,jdbcType=BIT},
+      send_time = #{sendTime,jdbcType=TIMESTAMP},
       points = #{points,jdbcType=INTEGER},
       check_status = #{checkStatus,jdbcType=INTEGER},
       activity_status = #{activityStatus,jdbcType=INTEGER},
