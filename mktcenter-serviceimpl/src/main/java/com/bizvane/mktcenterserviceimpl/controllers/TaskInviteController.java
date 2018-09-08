@@ -34,23 +34,8 @@ import java.util.List;
 @RestController
 @RequestMapping("/taskInvite")
 public class TaskInviteController {
-
     @Autowired
     private TaskInviteService taskInviteService;
-
-    /**
-     * 任务审核
-     */
-    @RequestMapping("/checkInviteTask")
-    public  ResponseData<Integer>  checkInviteTask(TaskVO vo){
-        ResponseData<Integer> result = new ResponseData<Integer>(SysResponseEnum.FAILED.getCode(),SysResponseEnum.FAILED.getMessage(),null);
-        Integer data = taskInviteService.checkInviteTask(vo);
-        if (data>0){
-            result.setCode(SysResponseEnum.SUCCESS.getCode());
-            result.setMessage(SysResponseEnum.SUCCESS.getMessage());
-        }
-        return result;
-    }
     /**
      * 查询消费任务详情
      */
@@ -58,13 +43,11 @@ public class TaskInviteController {
     public  ResponseData<TaskDetailBO> getInviteTaskDetails(Long mktTaskId){
         ResponseData<TaskDetailBO> result = new ResponseData<TaskDetailBO>(SysResponseEnum.FAILED.getCode(),SysResponseEnum.FAILED.getMessage(),null);
         List<TaskDetailBO> lists = taskInviteService.getInviteTaskDetails(mktTaskId);
-
         if (CollectionUtils.isNotEmpty(lists)){
             result.setCode(SysResponseEnum.SUCCESS.getCode());
             result.setMessage(SysResponseEnum.SUCCESS.getMessage());
             result.setData(lists.get(0));
         }
-
         return  result;
     }
 
@@ -91,7 +74,6 @@ public class TaskInviteController {
     @RequestMapping("/updateInviteTask")
     public ResponseData updateInviteTask(TaskBO bo, HttpServletRequest request) throws ParseException {
         SysAccountPO stageUser = TokenUtils.getStageUser(request);
-
         return  taskInviteService.updateInviteTask(bo, stageUser);
     }
 }

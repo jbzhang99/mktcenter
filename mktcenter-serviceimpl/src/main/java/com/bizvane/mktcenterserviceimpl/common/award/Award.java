@@ -47,6 +47,11 @@ public class Award {
                 case SMART_TYPE_COUPON_BATCH:
                     responseData =awardFactory.awardCouponBatch(bo);
                     break;
+                    //批量发短信
+                case  SMART_TYPE_MESSAGE_BATCH:
+                    //接口未定义
+                    //responseData =awardFactory.awardCouponBatch(bo);
+                    break;
                 default:break;
             }
         } catch (Exception e) {
