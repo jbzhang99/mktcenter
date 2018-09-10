@@ -298,7 +298,7 @@ public class ActivityUpgradeServiceImpl implements ActivityUpgradeService {
                 membersInfoSearchVo.setBrandId(activityVO.getSysBrandId());
                 List<Long> level = new ArrayList<>();
                 level.add(mbrLevel.getMbrLevelId());
-                membersInfoSearchVo.setLevelId(level);
+                membersInfoSearchVo.setLevelID(level);
                 memberMessage.getMemberList(messageVOList, membersInfoSearchVo);
             }else{
                 //自定义时间发送 加人job任务
@@ -472,7 +472,7 @@ public class ActivityUpgradeServiceImpl implements ActivityUpgradeService {
             membersInfoSearchVo.setBrandId(activityVO.getSysBrandId());
             List<Long> level = new ArrayList<>();
             level.add(mbrLevel.getMbrLevelId());
-            membersInfoSearchVo.setLevelId(level);
+            membersInfoSearchVo.setLevelID(level);
             memberMessage.getMemberList(messageVOList, membersInfoSearchVo);
         }
         responseData.setCode(SysResponseEnum.SUCCESS.getCode());

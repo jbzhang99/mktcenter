@@ -88,7 +88,7 @@ public class ActivitySendMessageJobHandler extends IJobHandler {
                     MbrLevelModel  mbrLevel = mbrLevelModels.getData();
                     List<Long> level = new ArrayList<>();
                     level.add(mbrLevel.getMbrLevelId());
-                    membersInfoSearchVo.setLevelId(level);
+                    membersInfoSearchVo.setLevelID(level);
                 }
                 //消费活动的
                 if (mktActivityPO.getActivityType()== ActivityTypeEnum.ACTIVITY_TYPE_ORDER.getCode()){
@@ -99,7 +99,7 @@ public class ActivitySendMessageJobHandler extends IJobHandler {
                     if (!activityOrderList.get(0).getMbrLevelCode().equals("0")){
                         List<Long> level = new ArrayList<>();
                         level.add(Long.parseLong(activityOrderList.get(0).getMbrLevelCode()));
-                       membersInfoSearchVo.setLevelId(level);
+                       membersInfoSearchVo.setLevelID(level);
                     }
                 }
                 //如果是开卡活动

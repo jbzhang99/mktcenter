@@ -273,7 +273,7 @@ public class ActivityOrderServiceImpl implements ActivityOrderService {
                 if (!activityVO.getMbrLevelCode().equals("0")){
                    List<Long> level = new ArrayList<>();
                     level.add(Long.parseLong(activityVO.getMbrLevelCode()));
-                    membersInfoSearchVo.setLevelId(level);
+                    membersInfoSearchVo.setLevelID(level);
                 }
                 membersInfoSearchVo.setBrandId(activityVO.getSysBrandId());
                 memberMessage.getMemberList(messageVOList, membersInfoSearchVo);
