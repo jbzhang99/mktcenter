@@ -317,7 +317,7 @@ public class ActivitySmartServiceImpl implements ActivitySmartService {
         //消息表
         MktMessagePOExample mktMessagePOExample = new MktMessagePOExample();
         mktMessagePOExample.createCriteria().andValidEqualTo(Boolean.TRUE).andBizTypeEqualTo(BusinessTypeEnum.ACTIVITY_TYPE_ACTIVITY.getCode()).andBizIdEqualTo(mktActivityId);
-        List<MktMessagePO> mktMessagePOS = mktMessagePOMapper.selectByExample(mktMessagePOExample);
+        List<MktMessagePO> mktMessagePOS = mktMessagePOMapper.selectByExampleWithBLOBs(mktMessagePOExample);
         if(!CollectionUtils.isEmpty(mktMessagePOS)){
             activitySmartVO.setMktMessagePO(mktMessagePOS.get(0));
         }
@@ -353,7 +353,7 @@ public class ActivitySmartServiceImpl implements ActivitySmartService {
         //消息表
         MktMessagePOExample mktMessagePOExample = new MktMessagePOExample();
         mktMessagePOExample.createCriteria().andValidEqualTo(Boolean.TRUE).andBizTypeEqualTo(BusinessTypeEnum.ACTIVITY_TYPE_ACTIVITY.getCode()).andBizIdEqualTo(mktActivityId);
-        List<MktMessagePO> mktMessagePOS = mktMessagePOMapper.selectByExample(mktMessagePOExample);
+        List<MktMessagePO> mktMessagePOS = mktMessagePOMapper.selectByExampleWithBLOBs(mktMessagePOExample);
         if(!CollectionUtils.isEmpty(mktMessagePOS)){
             activitySmartVO.setMktMessagePO(mktMessagePOS.get(0));
         }

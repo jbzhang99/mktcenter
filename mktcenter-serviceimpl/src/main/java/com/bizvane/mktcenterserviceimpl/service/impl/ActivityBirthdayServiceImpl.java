@@ -38,6 +38,7 @@ import com.bizvane.utils.responseinfo.ResponseData;
 import com.bizvane.utils.tokens.SysAccountPO;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.sun.xml.internal.rngom.dt.CachedDatatypeLibraryFactory;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,10 +47,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 /**
  * @author chen.li
@@ -538,12 +536,16 @@ public class ActivityBirthdayServiceImpl implements ActivityBirthdayService {
 
     /**
      * 生日定时发送奖励
+     * 1. 获取提前多少天执行
+     * 2. 提前的天数最大值还没到第二年，判断今年这个会员是否收到过此券
+     * 3. 否则，判断会员生日有没有到明年，如果到了明年，再看明年的券是否发过
      * @param activityBirthday
      * @param memberInfoModelList
      */
     @Override
     @Async("asyncServiceExecutor")
     public void birthdayReward(ActivityVO activityBirthday, List<MemberInfoModel> memberInfoModelList) {
+        //Calendar calendar
         for (MemberInfoModel memberInfo:memberInfoModelList) {
             //判断生日适用门店信息
             if (!ExecuteParamCheckUtil.implementActivitCheck(memberInfo,activityBirthday)){
