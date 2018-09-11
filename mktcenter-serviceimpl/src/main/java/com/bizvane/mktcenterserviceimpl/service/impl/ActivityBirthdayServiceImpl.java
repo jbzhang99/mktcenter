@@ -584,11 +584,11 @@ public class ActivityBirthdayServiceImpl implements ActivityBirthdayService {
             List<MktCouponPO> mktCouponPOs= mktCouponPOMapper.selectByExample(example);
             for (MktCouponPO mktCouponPO:mktCouponPOs) {
                 //拿到会员 在到券那里确认有没有发卷 没有执行发券和积分操作
-                ResponseData<List<CouponEntityPO>> CouponEntityPOs = couponEntityServiceFeign.findCouponHave(mktCouponPO.getCouponDefinitionId().toString(),memberInfo.getMemberCode(),activityBirthday.getMktActivityId());
+                /*ResponseData<List<CouponEntityPO>> CouponEntityPOs = couponEntityServiceFeign.findCouponHave(mktCouponPO.getCouponDefinitionId().toString(),memberInfo.getMemberCode(),activityBirthday.getMktActivityId());
                 List<CouponEntityPO> couponEntityPOs =CouponEntityPOs.getData();
                 if (CollectionUtils.isEmpty(couponEntityPOs)){
                     continue;
-                }
+                }*/
                 SendCouponSimpleRequestVO va = new SendCouponSimpleRequestVO();
                 va.setMemberCode(memberInfo.getMemberCode());
                 va.setCouponDefinitionId(mktCouponPO.getCouponDefinitionId());
