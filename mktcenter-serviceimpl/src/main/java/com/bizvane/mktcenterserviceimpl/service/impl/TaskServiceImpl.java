@@ -699,7 +699,7 @@ public class TaskServiceImpl implements TaskService {
      */
     @Override
     public ResponseData<PageInfo<MktTaskPOWithBLOBs>> getTaskByTaskType(TaskVO vo, PageForm pageForm) {
-        ResponseData<PageInfo<MktTaskPOWithBLOBs>> result = new ResponseData<PageInfo<MktTaskPOWithBLOBs>>(SysResponseEnum.FAILED.getCode(), SysResponseEnum.FAILED.getMessage(), null);
+        ResponseData<PageInfo<MktTaskPOWithBLOBs>> result = new ResponseData<PageInfo<MktTaskPOWithBLOBs>>(SysResponseEnum.SUCCESS.getCode(), TaskConstants.NO_RESPONSE, null);
         Integer showType = vo.getShowType();
         //1完善资料，2分享任务，3邀请注册，4累计消费次数，5累计消费金额',
         PageHelper.startPage(pageForm.getPageNumber(), pageForm.getPageSize());
@@ -722,7 +722,7 @@ public class TaskServiceImpl implements TaskService {
         if (CollectionUtils.isNotEmpty(lists)) {
             PageInfo<MktTaskPOWithBLOBs> pageInfo = new PageInfo<MktTaskPOWithBLOBs>(lists);
             result.setData(pageInfo);
-            result.setCode(SysResponseEnum.SUCCESS.getCode());
+           // result.setCode(SysResponseEnum.SUCCESS.getCode());
             result.setMessage(SysResponseEnum.SUCCESS.getMessage());
         }
         return result;
