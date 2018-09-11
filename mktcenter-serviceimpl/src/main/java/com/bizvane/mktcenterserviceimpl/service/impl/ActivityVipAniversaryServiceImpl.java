@@ -108,6 +108,12 @@ public class ActivityVipAniversaryServiceImpl implements ActivityVipAniversarySe
     @Override
     @Transactional
     public ResponseData<Integer> addActivityVipAniversary(ActivityBO bo, SysAccountPO stageUser) {
+/*        SysAccountPO stageUser1=new SysAccountPO();
+        stageUser1.setBrandId(2l);
+        stageUser1.setSysCompanyId(2l);
+        stageUser1.setCreateUserId(26l);
+        stageUser1.setCreateUserName("zjw");*/
+
         log.info("创建纪念日活动开始");
         //返回对象
         ResponseData responseData = new ResponseData();
@@ -116,7 +122,7 @@ public class ActivityVipAniversaryServiceImpl implements ActivityVipAniversarySe
         //工具类生成活动编码
         String activityCode = CodeUtil.getActivityCode();
         activityVO.setActivityCode(activityCode);
-        //增加活动类型是消费活动
+        //增加活动类型是纪念日活动
         activityVO.setActivityType(ActivityTypeEnum.ACTIVITY_TYPE_ANNIVERSARY.getCode());
         //增加品牌id
         log.info("获取的品牌id是="+stageUser.getBrandId());
@@ -167,7 +173,8 @@ public class ActivityVipAniversaryServiceImpl implements ActivityVipAniversarySe
             log.info("增加一条数据到审核中心");
             sysCheckServiceRpc.addCheck(po);
             //getStartTime 开始时间>当前时间增加job
-            if(1 != bo.getActivityVO().getLongTerm() && new Date().before(activityVO.getStartTime())){
+            System.out.println("time======"+activityVO.getStartTime());
+            if( new Date().before(activityVO.getStartTime())){
                 //创建任务调度任务开始时间
                 jobUtil.addStratAniversaryJob(stageUser,activityVO,activityCode);
                 //创建任务调度任务结束时间
@@ -208,6 +215,7 @@ public class ActivityVipAniversaryServiceImpl implements ActivityVipAniversarySe
         mktActivityVipAniversaryPO.setMbrLevelName(activityVO.getMbrLevelName());
         mktActivityVipAniversaryPO.setDaysAhead(activityVO.getDaysAhead());
         mktActivityVipAniversaryPO.setIsStoreLimit(activityVO.getStoreLimit());
+        System.out.println("StoreLimit===="+activityVO.getStoreLimit());
         if (false==activityVO.getStoreLimit()){
             mktActivityVipAniversaryPO.setStoreLimitList(activityVO.getStoreLimitList());
             mktActivityVipAniversaryPO.setStoreLimitType(activityVO.getStoreLimitType());

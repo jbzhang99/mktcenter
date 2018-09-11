@@ -76,7 +76,12 @@ public class ActivityEvaluationServiceImpl implements ActivityEvaluationService 
 
     @Override
     @Transactional
-    public ResponseData<Integer> addActivityEvaluation(ActivityBO bo, SysAccountPO stageUser) {
+    public ResponseData<Integer> addActivityEvaluation(ActivityBO bo,SysAccountPO stageUser) {
+       /*  SysAccountPO stageUser1=new SysAccountPO();
+        stageUser1.setBrandId(1l);
+        stageUser1.setSysCompanyId(2l);
+        stageUser1.setCreateUserId(26l);
+        stageUser1.setCreateUserName("zjw");*/
         log.info("创建评价奖励活动开始");
         //返回对象
         ResponseData responseData = new ResponseData();
@@ -99,8 +104,11 @@ public class ActivityEvaluationServiceImpl implements ActivityEvaluationService 
         activityVO.setSysCompanyId(stageUser.getSysCompanyId());
         MktActivityPOWithBLOBs mktActivityPOWithBLOBs = new MktActivityPOWithBLOBs();
         BeanUtils.copyProperties(activityVO,mktActivityPOWithBLOBs);
-        //查询看是否已存在签到活动
+        //查询看是否已存在评价奖励活动
         ActivityVO vo= new ActivityVO();
+        vo.setSysBrandId(stageUser.getBrandId());
+        vo.setActivityType(ActivityTypeEnum.ACTIVITY_TYPE_EVALUATION.getCode());
+        //根据品牌id和活动类型判断该品牌下是否存在该类型的活动，一个品牌下面只能有一个评价奖励的活动
         List<ActivityVO> activityEvaluationList = mktActivityEvaluationPOMapper.getActivityVOList(vo);
         //判断集合是否有值
         if(!CollectionUtils.isEmpty(activityEvaluationList)){
