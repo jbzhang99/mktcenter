@@ -1,6 +1,7 @@
 package com.bizvane.mktcenterserviceimpl.controllers;
 
 //import com.bizvane.appletservice.Rpc.MenberMadeServiceRpc;
+import com.bizvane.centercontrolservice.models.po.AppletRoutePO;
 import com.bizvane.fitmentservice.models.bo.AppletBrandFunctionRpcBo;
 import com.bizvane.members.facade.models.MemberInfoModel;
 import com.bizvane.mktcenterservice.interfaces.TaskShareService;
@@ -43,8 +44,10 @@ public class TaskShareController {
     private TaskShareService taskShareService;
 
     @RequestMapping("getURLList")
-    public ResponseData<List<AppletBrandFunctionRpcBo>>  getURLList(Long brandId){
-        return taskShareService.getURLList(brandId);
+    public ResponseData<List<AppletRoutePO>> getURLList(){
+        ResponseData<List<AppletRoutePO>> responseData = new ResponseData<>();
+        responseData.setData(taskShareService.getURLList());
+        return responseData;
     }
     /**
      * 创建任务

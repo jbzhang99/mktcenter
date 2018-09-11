@@ -3,8 +3,13 @@ package com.bizvane.mktcenterserviceimpl.service.impl;
 import com.bizvane.centercontrolservice.models.po.SysSmsConfigPo;
 import com.bizvane.centercontrolservice.models.vo.SmsConfigVo;
 import com.bizvane.centercontrolservice.rpc.SysSmsConfigServiceRpc;
+import com.bizvane.centerstageservice.models.po.SysAccountPo;
+import com.bizvane.utils.tokens.SysAccountPO;
+import com.bizvane.utils.tokens.SysAccountPO;
 import com.bizvane.centerstageservice.models.po.SysCheckConfigPo;
 import com.bizvane.centerstageservice.models.po.SysCheckPo;
+import com.bizvane.centerstageservice.models.vo.SysStoreVo;
+import com.bizvane.centerstageservice.rpc.StoreServiceRpc;
 import com.bizvane.centerstageservice.rpc.SysCheckConfigServiceRpc;
 import com.bizvane.centerstageservice.rpc.SysCheckServiceRpc;
 import com.bizvane.couponfacade.enums.SendTypeEnum;
@@ -15,7 +20,6 @@ import com.bizvane.couponfacade.models.vo.CouponFindCouponCountResponseVO;
 import com.bizvane.couponfacade.models.vo.SendCouponSimpleRequestVO;
 import com.bizvane.members.facade.enums.BusinessTypeEnum;
 import com.bizvane.members.facade.enums.IntegralChangeTypeEnum;
-import com.bizvane.members.facade.models.IntegralRecordModel;
 import com.bizvane.members.facade.models.MemberInfoModel;
 import com.bizvane.members.facade.service.api.MemberInfoApiService;
 import com.bizvane.members.facade.service.api.WxChannelInfoApiService;
@@ -40,7 +44,6 @@ import com.bizvane.mktcenterserviceimpl.common.constants.TaskConstants;
 import com.bizvane.mktcenterserviceimpl.common.enums.CheckStatusEnum;
 import com.bizvane.mktcenterserviceimpl.common.enums.MktSmartTypeEnum;
 import com.bizvane.mktcenterserviceimpl.common.enums.TaskStatusEnum;
-import com.bizvane.mktcenterserviceimpl.common.enums.TaskTypeEnum;
 import com.bizvane.mktcenterserviceimpl.common.job.JobUtil;
 import com.bizvane.mktcenterserviceimpl.common.utils.TimeUtils;
 import com.bizvane.mktcenterserviceimpl.mappers.MktCouponPOMapper;
@@ -49,17 +52,15 @@ import com.bizvane.mktcenterserviceimpl.mappers.MktTaskPOMapper;
 import com.bizvane.mktcenterserviceimpl.mappers.MktTaskRecordPOMapper;
 import com.bizvane.utils.enumutils.SysResponseEnum;
 import com.bizvane.utils.responseinfo.ResponseData;
-import com.bizvane.utils.tokens.SysAccountPO;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
-
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Date;
@@ -72,6 +73,7 @@ import java.util.stream.Collectors;
  * @description
  * @Copyright (c) 2018 上海商帆信息科技有限公司-版权所有
  */
+@Slf4j
 @Service
 public class TaskServiceImpl implements TaskService {
 
@@ -107,6 +109,25 @@ public class TaskServiceImpl implements TaskService {
     private SendCommonMessageFeign sendCommonMessageFeign;
     @Autowired
     private CouponDefinitionServiceFeign couponDefinitionServiceFeign;
+    @Autowired
+    private StoreServiceRpc  storeServiceRpc;
+    /**
+     * 查询店铺列表
+     */
+    @Override
+    public ResponseData<List<SysStoreVo>> getWhiteStoreList(SysStoreVo vo,SysAccountPO sysAccountPo){
+        ResponseData<List<SysStoreVo>> responseData = new ResponseData<>();
+        List<SysStoreVo> list=null;
+        vo.setSysAccountId(sysAccountPo.getSysAccountId());
+        vo.setSysCompanyId(sysAccountPo.getSysCompanyId());
+        ResponseData<com.bizvane.utils.responseinfo.PageInfo<SysStoreVo>> returnData = storeServiceRpc.getSysStoreList(vo);
+        com.bizvane.utils.responseinfo.PageInfo<SysStoreVo> data = returnData.getData();
+        if (data!=null){
+           list = data.getList();
+        }
+        responseData.setMessage("没有相关的店铺列表!");
+        return responseData;
+    }
 
     /**
      * '任务类型：1完善资料，2分享任务，3邀请注册，4累计消费次数，5累计消费金额'
@@ -557,7 +578,7 @@ public class TaskServiceImpl implements TaskService {
         if (CollectionUtils.isNotEmpty(analysislists)){
             for (DayTaskRecordVo task: analysislists) {
                 //
-             
+
                 String sendType = this.changeTaskType(taskType).getCouponTaskType();
                 //查询券模块的统计出的相关数量
                 ResponseData<CouponFindCouponCountResponseVO> couponCount= couponQueryService.findCouponCountBySendBusinessId(task.getTaskId(), sendType, sysBrandId);
@@ -569,7 +590,7 @@ public class TaskServiceImpl implements TaskService {
                 //一个任务的券数量
                 task.setOneTaskInvalidCountCoupon(couponUsedSum);
                 //某任务的发行券总张数
-               // task.setDayCountCoupon(couponUsedSum);
+                // task.setDayCountCoupon(couponUsedSum);
                 task.setOneTaskCountCoupon(couponSum);
                 allPoints=allPoints+task.getOneTaskPoints();
                 allCountCoupon= allCountCoupon+task.getOneTaskCountCoupon();
@@ -722,7 +743,7 @@ public class TaskServiceImpl implements TaskService {
         if (CollectionUtils.isNotEmpty(lists)) {
             PageInfo<MktTaskPOWithBLOBs> pageInfo = new PageInfo<MktTaskPOWithBLOBs>(lists);
             result.setData(pageInfo);
-           // result.setCode(SysResponseEnum.SUCCESS.getCode());
+            // result.setCode(SysResponseEnum.SUCCESS.getCode());
             result.setMessage(SysResponseEnum.SUCCESS.getMessage());
         }
         return result;
