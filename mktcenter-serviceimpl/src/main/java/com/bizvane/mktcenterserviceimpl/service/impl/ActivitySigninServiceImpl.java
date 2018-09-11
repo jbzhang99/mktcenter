@@ -124,6 +124,8 @@ public class ActivitySigninServiceImpl implements ActivitySigninService {
         BeanUtils.copyProperties(activityVO,mktActivityPOWithBLOBs);
         //查询看是否已存在签到活动
         ActivityVO vo= new ActivityVO();
+        vo.setSysBrandId(stageUser.getBrandId());
+        vo.setActivityType(ActivityTypeEnum.ACTIVITY_TYPE_SIGNIN.getCode());
         List<ActivityVO> activitySigninList = mktActivitySigninMapper.getActivitySigninList(vo);
         if(!CollectionUtils.isEmpty(activitySigninList)){
             responseData.setCode(SysResponseEnum.FAILED.getCode());
