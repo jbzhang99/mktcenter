@@ -47,6 +47,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 /**
@@ -545,12 +547,26 @@ public class ActivityBirthdayServiceImpl implements ActivityBirthdayService {
     @Override
     @Async("asyncServiceExecutor")
     public void birthdayReward(ActivityVO activityBirthday, List<MemberInfoModel> memberInfoModelList) {
-        //Calendar calendar
         for (MemberInfoModel memberInfo:memberInfoModelList) {
             //判断生日适用门店信息
             if (!ExecuteParamCheckUtil.implementActivitCheck(memberInfo,activityBirthday)){
                 continue;
             }
+            //判断当前时间加上发送天数是都是今年还是明年
+            //如果为true 说明是今年
+            if (true==dateSize(activityBirthday)){
+
+            }else{
+                //说明是明年 判断生日加上提前发送天数有没到明年
+                //true 说明是到了明年
+                if (true==dateMonth(activityBirthday,memberInfo)){
+
+                }else{
+
+                }
+
+            }
+
             //增加积分奖励新增接口
             IntegralChangeRequestModel integralChangeRequestModel =new IntegralChangeRequestModel();
             integralChangeRequestModel.setSysCompanyId(activityBirthday.getSysCompanyId());
@@ -560,6 +576,7 @@ public class ActivityBirthdayServiceImpl implements ActivityBirthdayService {
             integralChangeRequestModel.setChangeIntegral(activityBirthday.getPoints());
             integralChangeRequestModel.setChangeType(IntegralChangeTypeEnum.INCOME.getCode());
             integralChangeRequestModel.setBusinessType(String.valueOf(BusinessTypeEnum.ACTIVITY_TYPE_ACTIVITY.getCode()));
+            integralChangeRequestModel.setChangeDate(new Date());
             integralChangeApiService.integralChangeOperate(integralChangeRequestModel);
             // 增加卷奖励接口
             MktCouponPOExample example = new  MktCouponPOExample();
@@ -590,5 +607,82 @@ public class ActivityBirthdayServiceImpl implements ActivityBirthdayService {
             mktActivityRecordPOMapper.insertSelective(po);
 
         }
+    }
+
+    private Boolean dateMonth(ActivityVO activityBirthday,MemberInfoModel memberInfo) {
+        boolean  falg;
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        Date birthday = memberInfo.getBirthday();
+        Calendar ca = Calendar.getInstance();
+        ca.add(Calendar.DATE, activityBirthday.getDaysAhead());// num为增加的天数，可以改变的
+        birthday = ca.getTime();
+        String enddate = format.format(birthday);
+        System.out.println("增加天数以后的日期：" + enddate);
+
+        //获取生日月份和增加天数后的月份
+        SimpleDateFormat sdf = new SimpleDateFormat("MM");
+        String s1 = sdf.format(memberInfo.getBirthday());
+        String s2 = sdf.format(birthday);
+        System.out.println("日期1：" + s1);
+        System.out.println("日期1：" + s2);
+        if (Integer.parseInt(s1) > Integer.parseInt(s2)){
+            falg=true;
+        }else{
+            falg=false;
+        }
+        return falg;
+    }
+
+    private Boolean dateSize(ActivityVO activityBirthday) {
+        boolean  falg;
+        Date d = new Date();
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        //得到当年日期
+        String currdate = format.format(d);
+        System.out.println("现在的日期是：" + currdate);
+        //获取增加天数后得到的日期
+        Calendar ca = Calendar.getInstance();
+        ca.add(Calendar.DATE, activityBirthday.getDaysAhead());// num为增加的天数，可以改变的
+        d = ca.getTime();
+        String enddate = format.format(d);
+        System.out.println("增加天数以后的日期：" + enddate);
+
+
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy");
+        //获取当前年份
+        String date = sdf.format(new Date());
+        System.out.println("获取当前年份：" + date);
+        //获取增加日期后得到的年份
+        Date today = null;
+        try {
+            today = format.parse(enddate);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        String formatDate = sdf.format(today);
+        System.out.println("增加天数以后的日期得到的年份：" + formatDate);
+        if (Integer.parseInt(date)>=Integer.parseInt(formatDate)){
+            falg=true;
+        }else{
+            falg=false;
+        }
+        return falg;
+    }
+
+    public static void main(String[] args) throws ParseException {
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        Date birthday = new Date();
+        Calendar ca = Calendar.getInstance();
+        ca.add(Calendar.DATE, 60);// num为增加的天数，可以改变的
+        birthday = ca.getTime();
+        String enddate = format.format(birthday);
+        System.out.println("增加天数以后的日期：" + enddate);
+
+        //获取生日月份和增加天数后的月份
+        SimpleDateFormat sdf = new SimpleDateFormat("MM");
+        String s1 = sdf.format(new Date());
+        String s2 = sdf.format(birthday);
+        System.out.println("日期1：" + s1);
+        System.out.println("日期1：" + s2);
     }
 }

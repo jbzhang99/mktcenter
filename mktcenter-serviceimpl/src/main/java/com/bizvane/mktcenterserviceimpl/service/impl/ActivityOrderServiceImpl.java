@@ -627,6 +627,7 @@ public class ActivityOrderServiceImpl implements ActivityOrderService {
                 integralChangeRequestModel.setChangeIntegral(activityVO.getPoints());
                 integralChangeRequestModel.setChangeType(IntegralChangeTypeEnum.INCOME.getCode());
                 integralChangeRequestModel.setBusinessType(String.valueOf(BusinessTypeEnum.ACTIVITY_TYPE_ACTIVITY.getCode()));
+                integralChangeRequestModel.setChangeDate(new Date());
                 bo.setIntegralRecordModel(integralChangeRequestModel);
                 bo.setMktType(MktSmartTypeEnum.SMART_TYPE_INTEGRAL.getCode());
                 log.info("新增积分奖励="+activityVO.getPoints());

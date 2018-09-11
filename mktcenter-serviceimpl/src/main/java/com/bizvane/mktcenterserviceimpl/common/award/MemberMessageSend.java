@@ -38,6 +38,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -329,6 +330,7 @@ public class MemberMessageSend {
                         integralChangeRequestModel.setChangeIntegral(mktActivityPOWithBLOBs.getPoints());
                         integralChangeRequestModel.setChangeType(IntegralChangeTypeEnum.INCOME.getCode());
                         integralChangeRequestModel.setBusinessType(String.valueOf(BusinessTypeEnum.ACTIVITY_TYPE_ACTIVITY.getCode()));
+                        integralChangeRequestModel.setChangeDate(new Date());
                         awardBO.setIntegralRecordModel(integralChangeRequestModel);
                         awardBO.setMktType(MktSmartTypeEnum.SMART_TYPE_INTEGRAL.getCode());
                         award.execute(awardBO);
