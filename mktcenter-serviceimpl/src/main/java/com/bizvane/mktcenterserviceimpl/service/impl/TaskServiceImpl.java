@@ -3,8 +3,6 @@ package com.bizvane.mktcenterserviceimpl.service.impl;
 import com.bizvane.centercontrolservice.models.po.SysSmsConfigPo;
 import com.bizvane.centercontrolservice.models.vo.SmsConfigVo;
 import com.bizvane.centercontrolservice.rpc.SysSmsConfigServiceRpc;
-import com.bizvane.centerstageservice.models.po.SysAccountPo;
-import com.bizvane.utils.tokens.SysAccountPO;
 import com.bizvane.utils.tokens.SysAccountPO;
 import com.bizvane.centerstageservice.models.po.SysCheckConfigPo;
 import com.bizvane.centerstageservice.models.po.SysCheckPo;
@@ -123,9 +121,11 @@ public class TaskServiceImpl implements TaskService {
         ResponseData<com.bizvane.utils.responseinfo.PageInfo<SysStoreVo>> returnData = storeServiceRpc.getSysStoreList(vo);
         com.bizvane.utils.responseinfo.PageInfo<SysStoreVo> data = returnData.getData();
         if (data!=null){
-           list = data.getList();
+            list = data.getList();
+            responseData.setData(list);
+        }else{
+            responseData.setMessage("没有相关的店铺列表!");
         }
-        responseData.setMessage("没有相关的店铺列表!");
         return responseData;
     }
 
