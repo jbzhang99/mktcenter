@@ -51,7 +51,7 @@ public class ActivityEvaluationController {
         //SysAccountPO stageUser = new SysAccountPO();
 
         //新增活动
-        ResponseData<Integer> integerResponseData = activityEvaluationService.addActivityEvaluation(bo, stageUser);
+        ResponseData<Integer> integerResponseData = activityEvaluationService.addActivityEvaluation(bo,stageUser);
 
         //返回
         return integerResponseData;

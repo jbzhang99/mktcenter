@@ -26,7 +26,7 @@ public class ActivityAniversaryController {
      * 查询评价奖励活动列表
      * @param vo
      * @return
-     */
+     */ 
     @RequestMapping("getActivityAniversaryList")
     public ResponseData<ActivityVO> getActivityAniversary(ActivityVO vo, PageForm pageForm){
         ResponseData<ActivityVO> activityAniversaryList=activityVipAniversaryService.getActivityVipAniversaryList(vo,pageForm);
