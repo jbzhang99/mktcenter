@@ -47,4 +47,6 @@ public class TaskConstants {
     public  final static Integer   FOUR = 4;
     public  final static Integer   FIVE = 5;
 
+    public final static String NO_RESPONSE="没有相关数据!";
+
 }
