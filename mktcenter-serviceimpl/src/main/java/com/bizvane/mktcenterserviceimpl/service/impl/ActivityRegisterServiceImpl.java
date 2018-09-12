@@ -2,7 +2,9 @@ package com.bizvane.mktcenterserviceimpl.service.impl;
 
 import com.alibaba.fastjson.JSON;
 import com.bizvane.centerstageservice.models.po.SysCheckPo;
+import com.bizvane.centerstageservice.models.po.SysStorePo;
 import com.bizvane.centerstageservice.models.vo.SysCheckConfigVo;
+import com.bizvane.centerstageservice.rpc.StoreServiceRpc;
 import com.bizvane.centerstageservice.rpc.SysCheckConfigServiceRpc;
 import com.bizvane.centerstageservice.rpc.SysCheckServiceRpc;
 import com.bizvane.couponfacade.enums.SendTypeEnum;
@@ -56,8 +58,10 @@ import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @author chen.li
@@ -99,6 +103,8 @@ public class ActivityRegisterServiceImpl implements ActivityRegisterService {
     private MemberMessageSend memberMessage;
     @Autowired
     private WxChannelInfoAdvancedSearchApiService wxChannelInfoAdvancedSearchApiServic;
+    @Autowired
+    private StoreServiceRpc storeServiceRpc;
     /**
      * 查询活动列表
      * @param vo
@@ -587,6 +593,7 @@ public class ActivityRegisterServiceImpl implements ActivityRegisterService {
      */
     @Override
     public ResponseData<ActivityBO> selectActivityRegisterById(String businessCode) {
+        ActivityBO bo = new ActivityBO();
         log.info("查询开卡活动详情="+businessCode);
         ResponseData responseData = new ResponseData();
         ActivityVO vo= new ActivityVO();
@@ -597,6 +604,16 @@ public class ActivityRegisterServiceImpl implements ActivityRegisterService {
             responseData.setMessage(SysResponseEnum.OPERATE_FAILED_DATA_NOT_EXISTS.getMessage());
             return responseData;
         }
+        if (!StringUtils.isEmpty(registerList.get(0).getStoreLimitList())){
+            String ids =registerList.get(0).getStoreLimitList();
+            //查询适用门店
+            List<Long> listIds = Arrays.asList(ids.split(",")).stream().map(s -> Long.parseLong(s.trim())).collect(Collectors.toList());
+            List<SysStorePo> sysStorePOs = (List<SysStorePo>) storeServiceRpc.getIdStoreList(listIds,null,null,null,null);
+            if(!CollectionUtils.isEmpty(sysStorePOs)){
+                bo.getActivityVO().setSysStorePos(sysStorePOs);
+            }
+        }
+
         //查询活动卷
         MktCouponPOExample example = new  MktCouponPOExample();
         example.createCriteria().andBizIdEqualTo(registerList.get(0).getMktActivityId()).andValidEqualTo(true);
@@ -615,7 +632,6 @@ public class ActivityRegisterServiceImpl implements ActivityRegisterService {
         MktMessagePOExample exampl = new MktMessagePOExample();
         exampl.createCriteria().andBizIdEqualTo(registerList.get(0).getMktActivityId()).andValidEqualTo(true);
         List<MktMessagePO> listMktMessage = mktMessagePOMapper.selectByExampleWithBLOBs(exampl);
-        ActivityBO bo = new ActivityBO();
         if(!CollectionUtils.isEmpty(registerList)){
             bo.setActivityVO(registerList.get(0));
         }

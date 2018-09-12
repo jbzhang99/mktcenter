@@ -1,5 +1,7 @@
 package com.bizvane.mktcenterservice.models.vo;
 
+import com.bizvane.centerstageservice.models.po.SysDimSkuPo;
+import com.bizvane.centerstageservice.models.po.SysStorePo;
 import com.bizvane.couponfacade.models.po.CouponDefinitionPO;
 import com.bizvane.couponfacade.models.po.CouponEntityPO;
 import com.bizvane.couponfacade.models.vo.CouponDetailResponseVO;
@@ -10,6 +12,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
 
 /**
  * @author chen.li
@@ -199,6 +202,27 @@ public class ActivityVO extends MktActivityPO {
 
     @io.swagger.annotations.ApiModelProperty(value = "开始发送时间", name = "sendTime", required = false, example = "")
     private Date sendTime;
+    //门店实体类
+    private List<SysStorePo> sysStorePos;
+    //商品实体类
+    private List<SysDimSkuPo> sysDimSkuPos;
+
+    public List<SysDimSkuPo> getSysDimSkuPos() {
+        return sysDimSkuPos;
+    }
+
+    public void setSysDimSkuPos(List<SysDimSkuPo> sysDimSkuPos) {
+        this.sysDimSkuPos = sysDimSkuPos;
+    }
+
+    public List<SysStorePo> getSysStorePos() {
+        return sysStorePos;
+    }
+
+    public void setSysStorePos(List<SysStorePo> sysStorePos) {
+        this.sysStorePos = sysStorePos;
+    }
+
 
     public Boolean getSendImmediately() {
         return sendImmediately;

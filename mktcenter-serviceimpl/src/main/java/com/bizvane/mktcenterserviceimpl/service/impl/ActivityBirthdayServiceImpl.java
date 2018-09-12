@@ -3,9 +3,12 @@ package com.bizvane.mktcenterserviceimpl.service.impl;
 import com.alibaba.fastjson.JSON;
 import com.bizvane.centerstageservice.models.po.SysCheckConfigPo;
 import com.bizvane.centerstageservice.models.po.SysCheckPo;
+import com.bizvane.centerstageservice.models.po.SysStorePo;
 import com.bizvane.centerstageservice.models.vo.SysCheckConfigVo;
+import com.bizvane.centerstageservice.rpc.StoreServiceRpc;
 import com.bizvane.centerstageservice.rpc.SysCheckConfigServiceRpc;
 import com.bizvane.centerstageservice.rpc.SysCheckServiceRpc;
+import com.bizvane.centerstageservice.rpc.SysDimSkuServiceRpc;
 import com.bizvane.couponfacade.enums.SendTypeEnum;
 import com.bizvane.couponfacade.interfaces.CouponEntityServiceFeign;
 import com.bizvane.couponfacade.interfaces.CouponQueryServiceFeign;
@@ -20,6 +23,7 @@ import com.bizvane.members.facade.models.MemberInfoModel;
 import com.bizvane.members.facade.service.api.IntegralChangeApiService;
 import com.bizvane.members.facade.service.api.IntegralRecordApiService;
 import com.bizvane.members.facade.service.card.request.IntegralChangeRequestModel;
+import com.bizvane.members.facade.vo.IntegralRecordVo;
 import com.bizvane.mktcenterservice.interfaces.ActivityBirthdayService;
 import com.bizvane.mktcenterservice.models.bo.ActivityBO;
 import com.bizvane.mktcenterservice.models.po.*;
@@ -40,16 +44,19 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.sun.xml.internal.rngom.dt.CachedDatatypeLibraryFactory;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.poi.util.StringUtil;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
+import org.springframework.util.StringUtils;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * @author chen.li
@@ -80,8 +87,6 @@ public class ActivityBirthdayServiceImpl implements ActivityBirthdayService {
     @Autowired
     private JobClient jobClient;
     @Autowired
-    private IntegralRecordApiService integralRecordApiService;
-    @Autowired
     private CouponEntityServiceFeign couponEntityServiceFeign;
     @Autowired
     private SendCouponServiceFeign sendCouponServiceFeign;
@@ -89,6 +94,12 @@ public class ActivityBirthdayServiceImpl implements ActivityBirthdayService {
     private MktActivityRecordPOMapper mktActivityRecordPOMapper;
     @Autowired
     private IntegralChangeApiService integralChangeApiService;
+    @Autowired
+    private IntegralRecordApiService integralRecordApiService;
+    @Autowired
+    private SysDimSkuServiceRpc sysDimSkuServiceRpc;
+    @Autowired
+    private StoreServiceRpc storeServiceRpc;
     /**
      * 查询生日活动列表
      * @param vo
@@ -283,6 +294,7 @@ public class ActivityBirthdayServiceImpl implements ActivityBirthdayService {
      */
     @Override
     public ResponseData<ActivityBO> selectActivityBirthdayById(String businessCode) {
+        ActivityBO bo = new ActivityBO();
         log.info("查询生日详情参数="+businessCode);
         ResponseData responseData = new ResponseData();
         ActivityVO vo= new ActivityVO();
@@ -294,6 +306,16 @@ public class ActivityBirthdayServiceImpl implements ActivityBirthdayService {
             responseData.setMessage(SysResponseEnum.OPERATE_FAILED_DATA_NOT_EXISTS.getMessage());
             return responseData;
         }
+        if (!StringUtils.isEmpty(registerList.get(0).getStoreLimitList())){
+            String ids =registerList.get(0).getStoreLimitList();
+            //查询适用门店
+            List<Long> listIds = Arrays.asList(ids.split(",")).stream().map(s -> Long.parseLong(s.trim())).collect(Collectors.toList());
+            List<SysStorePo> sysStorePOs = (List<SysStorePo>) storeServiceRpc.getIdStoreList(listIds,null,null,null,null);
+            if(!CollectionUtils.isEmpty(sysStorePOs)){
+                bo.getActivityVO().setSysStorePos(sysStorePOs);
+            }
+        }
+
         //查询活动卷
         MktCouponPOExample example = new  MktCouponPOExample();
         example.createCriteria().andBizIdEqualTo(registerList.get(0).getMktActivityId()).andValidEqualTo(true);
@@ -311,7 +333,6 @@ public class ActivityBirthdayServiceImpl implements ActivityBirthdayService {
         MktMessagePOExample exampl = new MktMessagePOExample();
         exampl.createCriteria().andBizIdEqualTo(registerList.get(0).getMktActivityId()).andValidEqualTo(true);
         List<MktMessagePO> listMktMessage = mktMessagePOMapper.selectByExample(exampl);
-        ActivityBO bo = new ActivityBO();
         if(!CollectionUtils.isEmpty(registerList)){
             bo.setActivityVO(registerList.get(0));
         }
@@ -552,17 +573,84 @@ public class ActivityBirthdayServiceImpl implements ActivityBirthdayService {
             if (!ExecuteParamCheckUtil.implementActivitCheck(memberInfo,activityBirthday)){
                 continue;
             }
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy");
+            Date date = new Date();// 取时间
+            Calendar calendar = new GregorianCalendar();
+            calendar.setTime(date);
+            calendar.add(Calendar.YEAR, 1);// 把日期往后增加一年.整数往后推,负数往前移动
+            date = calendar.getTime();
+            //明年
+            String s1 =sdf.format(date);
+            Date toyear = null;
+            try {
+                 toyear = sdf.parse(s1);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+            //今年
+            String s2 =sdf.format(new Date());
+            Date year = null;
+            try {
+                year = sdf.parse(s2);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
             //判断当前时间加上发送天数是都是今年还是明年
             //如果为true 说明是今年
             if (true==dateSize(activityBirthday)){
-
+                //判断今年有没有发券
+                ResponseData<List<CouponEntityPO>> couponEntityPOs = couponEntityServiceFeign.findCouponHave(memberInfo.getMemberCode(),activityBirthday.getMktActivityId(),year);
+                List<CouponEntityPO> couponEntityPO =couponEntityPOs.getData();
+                if (!CollectionUtils.isEmpty(couponEntityPO)){
+                    continue;
+                }
+                //判断今年有没有发积分
+                IntegralRecordVo vs = new IntegralRecordVo();
+                vs.setMemberCode(memberInfo.getMemberCode());
+                vs.setChangeBills(activityBirthday.getActivityCode());
+                vs.setYear(s2);
+                ResponseData<List<IntegralRecordModel>> integralRecordModels = integralRecordApiService.queryIntegralRecord(vs);
+                List<IntegralRecordModel> integralRecordModel = integralRecordModels.getData();
+                if (!CollectionUtils.isEmpty(integralRecordModel)){
+                    continue;
+                }
             }else{
                 //说明是明年 判断生日加上提前发送天数有没到明年
                 //true 说明是到了明年
                 if (true==dateMonth(activityBirthday,memberInfo)){
-
+                    //判断明年有没有发券
+                    ResponseData<List<CouponEntityPO>> couponEntityPOs = couponEntityServiceFeign.findCouponHave(memberInfo.getMemberCode(),activityBirthday.getMktActivityId(),toyear);
+                    List<CouponEntityPO> couponEntityPO =couponEntityPOs.getData();
+                    if (!CollectionUtils.isEmpty(couponEntityPO)){
+                        continue;
+                    }
+                    //判断明年有没有发积分
+                    IntegralRecordVo vs = new IntegralRecordVo();
+                    vs.setMemberCode(memberInfo.getMemberCode());
+                    vs.setChangeBills(activityBirthday.getActivityCode());
+                    vs.setYear(s1);
+                    ResponseData<List<IntegralRecordModel>> integralRecordModels = integralRecordApiService.queryIntegralRecord(vs);
+                    List<IntegralRecordModel> integralRecordModel = integralRecordModels.getData();
+                    if (!CollectionUtils.isEmpty(integralRecordModel)){
+                        continue;
+                    }
                 }else{
-
+                    //判断今年有没有发券
+                    ResponseData<List<CouponEntityPO>> couponEntityPOs = couponEntityServiceFeign.findCouponHave(memberInfo.getMemberCode(),activityBirthday.getMktActivityId(),year);
+                    List<CouponEntityPO> couponEntityPO =couponEntityPOs.getData();
+                    if (!CollectionUtils.isEmpty(couponEntityPO)){
+                        continue;
+                    }
+                    //判断今年有没有发积分
+                    IntegralRecordVo vs = new IntegralRecordVo();
+                    vs.setMemberCode(memberInfo.getMemberCode());
+                    vs.setChangeBills(activityBirthday.getActivityCode());
+                    vs.setYear(s2);
+                    ResponseData<List<IntegralRecordModel>> integralRecordModels = integralRecordApiService.queryIntegralRecord(vs);
+                    List<IntegralRecordModel> integralRecordModel = integralRecordModels.getData();
+                    if (!CollectionUtils.isEmpty(integralRecordModel)){
+                        continue;
+                    }
                 }
 
             }
@@ -583,12 +671,6 @@ public class ActivityBirthdayServiceImpl implements ActivityBirthdayService {
             example.createCriteria().andBizIdEqualTo(activityBirthday.getMktActivityId()).andValidEqualTo(true);
             List<MktCouponPO> mktCouponPOs= mktCouponPOMapper.selectByExample(example);
             for (MktCouponPO mktCouponPO:mktCouponPOs) {
-                //拿到会员 在到券那里确认有没有发卷 没有执行发券和积分操作
-                /*ResponseData<List<CouponEntityPO>> CouponEntityPOs = couponEntityServiceFeign.findCouponHave(mktCouponPO.getCouponDefinitionId().toString(),memberInfo.getMemberCode(),activityBirthday.getMktActivityId());
-                List<CouponEntityPO> couponEntityPOs =CouponEntityPOs.getData();
-                if (CollectionUtils.isEmpty(couponEntityPOs)){
-                    continue;
-                }*/
                 SendCouponSimpleRequestVO va = new SendCouponSimpleRequestVO();
                 va.setMemberCode(memberInfo.getMemberCode());
                 va.setCouponDefinitionId(mktCouponPO.getCouponDefinitionId());
@@ -668,21 +750,9 @@ public class ActivityBirthdayServiceImpl implements ActivityBirthdayService {
         }
         return falg;
     }
-
-    public static void main(String[] args) throws ParseException {
-        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        Date birthday = new Date();
-        Calendar ca = Calendar.getInstance();
-        ca.add(Calendar.DATE, 60);// num为增加的天数，可以改变的
-        birthday = ca.getTime();
-        String enddate = format.format(birthday);
-        System.out.println("增加天数以后的日期：" + enddate);
-
-        //获取生日月份和增加天数后的月份
-        SimpleDateFormat sdf = new SimpleDateFormat("MM");
-        String s1 = sdf.format(new Date());
-        String s2 = sdf.format(birthday);
-        System.out.println("日期1：" + s1);
-        System.out.println("日期1：" + s2);
+    public static void main(String[] args){
+        String ids= "1,2,3,4,5,6";
+        List<Long> listIds = Arrays.asList(ids.split(",")).stream().map(s -> Long.parseLong(s.trim())).collect(Collectors.toList());
+        System.out.println(Arrays.toString(listIds .toArray()));//[1,2,3,3,4,5,6]
     }
 }
