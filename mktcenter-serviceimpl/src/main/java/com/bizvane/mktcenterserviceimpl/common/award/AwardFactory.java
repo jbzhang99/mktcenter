@@ -12,9 +12,7 @@ import com.bizvane.members.facade.service.api.IntegralRecordApiService;
 import com.bizvane.members.facade.service.card.request.IntegralChangeRequestModel;
 import com.bizvane.messagefacade.interfaces.SendCommonMessageFeign;
 import com.bizvane.messagefacade.interfaces.TemplateMessageServiceFeign;
-import com.bizvane.messagefacade.models.vo.ActivityMessageVO;
-import com.bizvane.messagefacade.models.vo.MemberMessageVO;
-import com.bizvane.messagefacade.models.vo.SysSmsConfigVO;
+import com.bizvane.messagefacade.models.vo.*;
 import com.bizvane.mktcenterservice.models.bo.AwardBO;
 import com.bizvane.mktcenterserviceimpl.common.constants.ResponseConstants;
 import com.bizvane.utils.responseinfo.ResponseData;
@@ -153,6 +151,13 @@ public class AwardFactory {
         activityMessageVO.setActivityStartDate(memberMessageVO.getActivityDate());
         templateMessageServiceFeign.sendTemplateMessage(activityMessageVO);
         return responseData;
+    }
+
+    //发送批量短信
+    @Async("asyncServiceExecutor")
+    public ResponseData<String> sendBantchSms(AwardBO bo){
+        GenrealSendMessageVO vo = bo.getGenrealSendMessageVO();
+        return templateMessageServiceFeign.sendGenrealBatch(vo);
     }
 
 }

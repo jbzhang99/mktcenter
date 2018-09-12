@@ -1,8 +1,12 @@
 package com.bizvane.mktcenterserviceimpl.service.impl;
 
+import com.alibaba.fastjson.JSON;
 import com.bizvane.centercontrolservice.models.po.SysSmsConfigPo;
 import com.bizvane.centercontrolservice.models.vo.SmsConfigVo;
 import com.bizvane.centercontrolservice.rpc.SysSmsConfigServiceRpc;
+import com.bizvane.messagefacade.interfaces.TemplateMessageServiceFeign;
+import com.bizvane.messagefacade.models.vo.GenrealGetMessageVO;
+import com.bizvane.messagefacade.models.vo.SmsStatisticsVO;
 import com.bizvane.utils.tokens.SysAccountPO;
 import com.bizvane.centerstageservice.models.po.SysCheckConfigPo;
 import com.bizvane.centerstageservice.models.po.SysCheckPo;
@@ -109,6 +113,35 @@ public class TaskServiceImpl implements TaskService {
     private CouponDefinitionServiceFeign couponDefinitionServiceFeign;
     @Autowired
     private StoreServiceRpc  storeServiceRpc;
+    @Autowired
+    private TemplateMessageServiceFeign templateMessageServiceFeign;
+
+    /**
+     * 查询短信数量
+     */
+    @Override
+    public String searchSmsNum(GenrealGetMessageVO vo){
+        log.info("获取短信接口参数===="+JSON.toJSONString(vo));
+        String result="0/0";
+        try{
+            ResponseData<SmsStatisticsVO> returnData = templateMessageServiceFeign.getReturnMessage(vo);
+            SmsStatisticsVO data = returnData.getData();
+            if (data!=null){
+                Long allCountSms = data.getAllCountSms();
+                Long failedSms = data.getFailedSms();
+                StringBuilder builder = new StringBuilder();
+                builder.append(failedSms);
+                builder.append("/");
+                builder.append(allCountSms);
+                result=builder.toString();
+            }
+        }catch (Exception e){
+            log.info("获取短信接口异常!");
+            e.printStackTrace();
+        }finally {
+            return  result;
+        }
+    }
     /**
      * 查询店铺列表
      */
@@ -558,9 +591,19 @@ public class TaskServiceImpl implements TaskService {
     @Override
     public ResponseData<TaskRecordVO> doAnalysis(TaskAnalysisVo vo,SysAccountPO sysAccountPo){
         ResponseData<TaskRecordVO> result = new ResponseData<TaskRecordVO>(SysResponseEnum.SUCCESS.getCode(),SysResponseEnum.SUCCESS.getMessage(),null);
+        String date1 = vo.getDate1();
+        if (StringUtils.isNotBlank(date1)){
+            vo.setStartDate(TimeUtils.getDateByPattern(date1));
+        }
         Long sysBrandId = sysAccountPo.getBrandId();
         vo.setBrandId(sysBrandId);
+        //任务类型
         Integer taskType = vo.getTaskType();
+        
+        GenrealGetMessageVO genrealGetMessageVO=new  GenrealGetMessageVO();
+        genrealGetMessageVO.setSysBrandId(sysBrandId);
+        genrealGetMessageVO.setTemplateType(String.valueOf(taskType));
+
         //每个任务的券,积分,会员 总数
         PageHelper.startPage(vo.getPageNumber(),vo.getPageSize());
         List<DayTaskRecordVo> analysisall = mktTaskRecordPOMapper.getAnalysisResult(vo);
@@ -577,11 +620,16 @@ public class TaskServiceImpl implements TaskService {
 
         if (CollectionUtils.isNotEmpty(analysislists)){
             for (DayTaskRecordVo task: analysislists) {
-                //
-
+                Long taskId = task.getTaskId();
+                //查询短信数量
+                genrealGetMessageVO.setTaskId(taskId);
+                String msgNUM = this.searchSmsNum(genrealGetMessageVO);
+                log.info("----短信统计------"+msgNUM);
+                task.setMsgNUM(msgNUM);
+                //转换任务类型
                 String sendType = this.changeTaskType(taskType).getCouponTaskType();
                 //查询券模块的统计出的相关数量
-                ResponseData<CouponFindCouponCountResponseVO> couponCount= couponQueryService.findCouponCountBySendBusinessId(task.getTaskId(), sendType, sysBrandId);
+                ResponseData<CouponFindCouponCountResponseVO> couponCount= couponQueryService.findCouponCountBySendBusinessId(taskId, sendType, sysBrandId);
                 CouponFindCouponCountResponseVO data = couponCount.getData();
                 //一个任务的券总数量
                 Long couponSum = data.getCouponSum();
@@ -720,7 +768,7 @@ public class TaskServiceImpl implements TaskService {
      */
     @Override
     public ResponseData<PageInfo<MktTaskPOWithBLOBs>> getTaskByTaskType(TaskVO vo, PageForm pageForm) {
-        ResponseData<PageInfo<MktTaskPOWithBLOBs>> result = new ResponseData<PageInfo<MktTaskPOWithBLOBs>>(SysResponseEnum.SUCCESS.getCode(), TaskConstants.NO_RESPONSE, null);
+        ResponseData<PageInfo<MktTaskPOWithBLOBs>> result = new ResponseData<PageInfo<MktTaskPOWithBLOBs>>(SysResponseEnum.OPERATE_FAILED_DATA_NOT_EXISTS.getCode(), SysResponseEnum.OPERATE_FAILED_DATA_NOT_EXISTS.getMessage(), null);
         Integer showType = vo.getShowType();
         //1完善资料，2分享任务，3邀请注册，4累计消费次数，5累计消费金额',
         PageHelper.startPage(pageForm.getPageNumber(), pageForm.getPageSize());
@@ -743,7 +791,7 @@ public class TaskServiceImpl implements TaskService {
         if (CollectionUtils.isNotEmpty(lists)) {
             PageInfo<MktTaskPOWithBLOBs> pageInfo = new PageInfo<MktTaskPOWithBLOBs>(lists);
             result.setData(pageInfo);
-            // result.setCode(SysResponseEnum.SUCCESS.getCode());
+            result.setCode(SysResponseEnum.SUCCESS.getCode());
             result.setMessage(SysResponseEnum.SUCCESS.getMessage());
         }
         return result;

@@ -6,10 +6,7 @@ import com.bizvane.centerstageservice.rpc.SysCheckServiceRpc;
 import com.bizvane.couponfacade.interfaces.CouponDefinitionServiceFeign;
 import com.bizvane.couponfacade.interfaces.CouponQueryServiceFeign;
 import com.bizvane.couponfacade.interfaces.SendCouponServiceFeign;
-import com.bizvane.couponfacade.models.vo.CouponEntityVO;
-import com.bizvane.couponfacade.models.vo.CouponFindCouponCountResponseVO;
 import com.bizvane.fitmentservice.models.Rpc.MenberMadeServiceRpc;
-import com.bizvane.fitmentservice.models.bo.AppletBrandFunctionRpcBo;
 import com.bizvane.members.facade.models.MemberInfoModel;
 import com.bizvane.members.facade.service.api.IntegralRecordApiService;
 import com.bizvane.members.facade.service.api.MemberInfoApiService;
@@ -136,7 +133,7 @@ public class TaskShareServiceImpl implements TaskShareService {
         Long mktTaskId = taskService.addTask(mktTaskPOWithBLOBs, stageUser);
         taskService.addCheckData(mktTaskPOWithBLOBs);
         //3.任务消费表新增
-        MktTaskSharePO mktTaskSharePO = new MktTaskSharePO();
+        MktTaskSharePOWithBLOBs mktTaskSharePO = new MktTaskSharePOWithBLOBs();
         BeanUtils.copyProperties(taskVO, mktTaskSharePO);
         mktTaskSharePO.setMktTaskId(mktTaskId);
         this.insertShareTask(mktTaskSharePO,stageUser);
@@ -205,7 +202,7 @@ public class TaskShareServiceImpl implements TaskShareService {
         taskService.updateTask(mktTaskPOWithBLOBs, stageUser);
 
         //3.任务消费表修改
-        MktTaskSharePO mktTaskSharePO = new MktTaskSharePO();
+        MktTaskSharePOWithBLOBs mktTaskSharePO = new MktTaskSharePOWithBLOBs();
         BeanUtils.copyProperties(taskVO, mktTaskSharePO);
         mktTaskSharePO.setMktTaskId(mktTaskId);
         this.updateShareTask(mktTaskSharePO, stageUser);
@@ -243,7 +240,7 @@ public class TaskShareServiceImpl implements TaskShareService {
      * @param po
      * @return
      */
-    public  Integer  insertShareTask(MktTaskSharePO po,SysAccountPO stageUser){
+    public  Integer  insertShareTask(MktTaskSharePOWithBLOBs po,SysAccountPO stageUser){
         po.setSysCompanyId(stageUser.getSysCompanyId());
         po.setCreateUserId(stageUser.getSysAccountId());
         po.setCreateUserName(stageUser.getName());
@@ -254,7 +251,7 @@ public class TaskShareServiceImpl implements TaskShareService {
      * 修改分享任务数据 单表
      * @return
      */
-    public  Integer  updateShareTask(MktTaskSharePO po,SysAccountPO stageUser){
+    public  Integer  updateShareTask(MktTaskSharePOWithBLOBs po,SysAccountPO stageUser){
         po.setModifiedUserId(stageUser.getSysAccountId());
         po.setModifiedUserName(stageUser.getName());
         po.setModifiedDate(new Date());

@@ -136,7 +136,7 @@ public  ResponseData<List<ExtendPropertyVO>> getMemberField(Long sysBrandId){
         Long mktTaskId = taskService.addTask(mktTaskPOWithBLOBs, stageUser);
         taskService.addCheckData(mktTaskPOWithBLOBs);
         //3.任务消费表新增
-        MktTaskProfilePO mktTaskProfilePO = new MktTaskProfilePO();
+        MktTaskProfilePOWithBLOBs mktTaskProfilePO = new MktTaskProfilePOWithBLOBs();
         BeanUtils.copyProperties(taskVO, mktTaskProfilePO);
         mktTaskProfilePO.setMktTaskId(mktTaskId);
         this.insertProfileTask(mktTaskProfilePO,stageUser);
@@ -198,7 +198,7 @@ public  ResponseData<List<ExtendPropertyVO>> getMemberField(Long sysBrandId){
     /**
      * 新增完善资料的单表信息
      */
-      public  ResponseData<Integer> insertProfileTask(MktTaskProfilePO po,SysAccountPO stageUser){
+      public  ResponseData<Integer> insertProfileTask(MktTaskProfilePOWithBLOBs po,SysAccountPO stageUser){
           ResponseData<Integer> result = new ResponseData<Integer>(SysResponseEnum.FAILED.getCode(),SysResponseEnum.FAILED.getMessage(),null);
           po.setSysCompanyId(stageUser.getSysCompanyId());
           po.setCreateUserId(stageUser.getSysAccountId());
@@ -251,7 +251,7 @@ public  ResponseData<List<ExtendPropertyVO>> getMemberField(Long sysBrandId){
         taskService.updateTask(mktTaskPOWithBLOBs, stageUser);
 
         //3.任务消费表修改
-        MktTaskProfilePO mktTaskProfilePO = new MktTaskProfilePO();
+        MktTaskProfilePOWithBLOBs mktTaskProfilePO = new MktTaskProfilePOWithBLOBs();
         BeanUtils.copyProperties(taskVO, mktTaskProfilePO);
         mktTaskProfilePO.setMktTaskId(mktTaskId);
         this.updateProfileTask(mktTaskProfilePO, stageUser);
@@ -288,7 +288,7 @@ public  ResponseData<List<ExtendPropertyVO>> getMemberField(Long sysBrandId){
     /**
      * 修改完善资料的单表信息
      */
-    public  ResponseData<Integer> updateProfileTask(MktTaskProfilePO po,SysAccountPO stageUser){
+    public  ResponseData<Integer> updateProfileTask(MktTaskProfilePOWithBLOBs po,SysAccountPO stageUser){
         ResponseData<Integer> result = new ResponseData<Integer>(SysResponseEnum.FAILED.getCode(),SysResponseEnum.FAILED.getMessage(),null);
         po.setModifiedUserId(stageUser.getSysAccountId());
         po.setModifiedUserName(stageUser.getName());
