@@ -84,7 +84,7 @@ public class ActivityController {
         }
         //入会纪念日活动
         if(po.getBusinessType()==ActivityTypeEnum.ACTIVITY_TYPE_ANNIVERSARY.getCode()){
-            responseData = activityEvaluationService.checkActivityEvaluation(po,stageUser);
+            responseData = activityVipAniversaryService.checkActivityVipAniversary(po,stageUser);
         }
         //会员消费活动审核
         if(po.getBusinessType()==ActivityTypeEnum.ACTIVITY_TYPE_ORDER.getCode()){
@@ -97,7 +97,7 @@ public class ActivityController {
         }
         //评价奖励活动审核
         if(po.getBusinessType()==ActivityTypeEnum.ACTIVITY_TYPE_EVALUATION.getCode()){
-            responseData = activityVipAniversaryService.checkActivityVipAniversary(po,stageUser);
+            responseData = activityEvaluationService.checkActivityEvaluation(po,stageUser);
 
         }
         //扫码领券&手动领券审核
