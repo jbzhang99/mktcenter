@@ -38,6 +38,10 @@ public class ActivityController {
 
     @Autowired
     private ActivityManualService activityManualService;
+    @Autowired
+    private ActivityEvaluationService activityEvaluationService;
+    @Autowired
+    private ActivityVipAniversaryService activityVipAniversaryService;
 
     /**
      * 禁用/启用活动
@@ -78,6 +82,10 @@ public class ActivityController {
         if(po.getBusinessType()==ActivityTypeEnum.ACTIVITY_TYPE_BIRTHDAY.getCode()){
             responseData = activityBirthdayService.checkActivityBirthday(po,stageUser);
         }
+        //入会纪念日活动
+        if(po.getBusinessType()==ActivityTypeEnum.ACTIVITY_TYPE_ANNIVERSARY.getCode()){
+            responseData = activityEvaluationService.checkActivityEvaluation(po,stageUser);
+        }
         //会员消费活动审核
         if(po.getBusinessType()==ActivityTypeEnum.ACTIVITY_TYPE_ORDER.getCode()){
             responseData =activityOrderService.checkActivityOrder(po,stageUser);
@@ -85,6 +93,11 @@ public class ActivityController {
         //会员签到活动审核
         if(po.getBusinessType()==ActivityTypeEnum.ACTIVITY_TYPE_SIGNIN.getCode()){
             responseData = activitySigninService.checkActivitySignin(po,stageUser);
+
+        }
+        //评价奖励活动审核
+        if(po.getBusinessType()==ActivityTypeEnum.ACTIVITY_TYPE_EVALUATION.getCode()){
+            responseData = activityVipAniversaryService.checkActivityVipAniversary(po,stageUser);
 
         }
         //扫码领券&手动领券审核
