@@ -505,13 +505,16 @@ public class ActivityUpgradeServiceImpl implements ActivityUpgradeService {
             responseData.setMessage(SysResponseEnum.OPERATE_FAILED_DATA_NOT_EXISTS.getMessage());
             return responseData;
         }
-        if (!StringUtils.isEmpty(upgradeList.get(0).getStoreLimitList())){
-            String ids =upgradeList.get(0).getStoreLimitList();
-            //查询适用门店
-            List<Long> listIds = Arrays.asList(ids.split(",")).stream().map(s -> Long.parseLong(s.trim())).collect(Collectors.toList());
-            ResponseData<List<SysStorePo>> sysStorePOs = storeServiceRpc.getIdStoreLists(listIds);
-            if(!CollectionUtils.isEmpty(sysStorePOs.getData())){
-                bo.getActivityVO().setSysStorePos(sysStorePOs.getData());
+        if(!CollectionUtils.isEmpty(upgradeList)){
+            bo.setActivityVO(upgradeList.get(0));
+            if (!StringUtils.isEmpty(upgradeList.get(0).getStoreLimitList())){
+                String ids =upgradeList.get(0).getStoreLimitList();
+                //查询适用门店
+                List<Long> listIds = Arrays.asList(ids.split(",")).stream().map(s -> Long.parseLong(s.trim())).collect(Collectors.toList());
+                ResponseData<List<SysStorePo>> sysStorePOs = storeServiceRpc.getIdStoreLists(listIds);
+                if(!CollectionUtils.isEmpty(sysStorePOs.getData())){
+                    bo.getActivityVO().setSysStorePos(sysStorePOs.getData());
+                }
             }
         }
 
@@ -532,9 +535,6 @@ public class ActivityUpgradeServiceImpl implements ActivityUpgradeService {
         MktMessagePOExample exampl = new MktMessagePOExample();
         exampl.createCriteria().andBizIdEqualTo(upgradeList.get(0).getMktActivityId()).andValidEqualTo(true);
         List<MktMessagePO> listMktMessage = mktMessagePOMapper.selectByExampleWithBLOBs(exampl);
-        if(!CollectionUtils.isEmpty(upgradeList)){
-            bo.setActivityVO(upgradeList.get(0));
-        }
        if(!CollectionUtils.isEmpty(lists)){
             bo.setCouponEntityAndDefinitionVOList(lists);
         }
