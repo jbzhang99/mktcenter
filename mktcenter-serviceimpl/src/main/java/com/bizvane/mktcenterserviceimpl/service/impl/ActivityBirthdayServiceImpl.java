@@ -248,7 +248,7 @@ public class ActivityBirthdayServiceImpl implements ActivityBirthdayService {
         mktActivityBirthdayPO.setMbrLevelName(activityVO.getMbrLevelName());
         mktActivityBirthdayPO.setDaysAhead(activityVO.getDaysAhead());
         mktActivityBirthdayPO.setIsStoreLimit(activityVO.getStoreLimit());
-        if (false==activityVO.getStoreLimit()){
+        if (true==activityVO.getStoreLimit()){
             mktActivityBirthdayPO.setStoreLimitList(activityVO.getStoreLimitList());
             mktActivityBirthdayPO.setStoreLimitType(activityVO.getStoreLimitType());
         }

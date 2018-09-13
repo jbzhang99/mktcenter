@@ -259,7 +259,7 @@ public class ActivityRegisterServiceImpl implements ActivityRegisterService {
         mktActivityRegisterPO.setMbrLevelCode(activityVO.getMbrLevelCode());
         mktActivityRegisterPO.setMbrLevelName(activityVO.getMbrLevelName());
         mktActivityRegisterPO.setIsStoreLimit(activityVO.getStoreLimit());
-        if (false==activityVO.getStoreLimit()){
+        if (true==activityVO.getStoreLimit()){
                 mktActivityRegisterPO.setStoreLimitList(activityVO.getStoreLimitList());
                 mktActivityRegisterPO.setStoreLimitType(activityVO.getStoreLimitType());
             }
