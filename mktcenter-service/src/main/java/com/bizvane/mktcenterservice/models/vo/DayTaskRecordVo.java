@@ -32,7 +32,7 @@ public class DayTaskRecordVo {
     //某天被核销的优惠券
     private Long dayInvalidCountCoupon=0L;
 
-    //某任务的分享总次数
+    //某任务的分享总次数    邀请开卡次数
     private Long oneTaskShareTimes=0L;
 
     //参与时间

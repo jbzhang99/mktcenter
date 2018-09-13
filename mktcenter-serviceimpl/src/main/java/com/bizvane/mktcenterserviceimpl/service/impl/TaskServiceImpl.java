@@ -591,10 +591,10 @@ public class TaskServiceImpl implements TaskService {
     @Override
     public ResponseData<TaskRecordVO> doAnalysis(TaskAnalysisVo vo,SysAccountPO sysAccountPo){
         ResponseData<TaskRecordVO> result = new ResponseData<TaskRecordVO>(SysResponseEnum.SUCCESS.getCode(),SysResponseEnum.SUCCESS.getMessage(),null);
-        String date1 = vo.getDate1();
-        if (StringUtils.isNotBlank(date1)){
-            vo.setStartDate(TimeUtils.getDateByPattern(date1));
-        }
+//        String date1 = vo.getDate1();
+//        if (StringUtils.isNotBlank(date1)){
+//            vo.setStartDate(TimeUtils.getDateByPattern(date1));
+//        }
         Long sysBrandId = sysAccountPo.getBrandId();
         vo.setBrandId(sysBrandId);
         //任务类型
