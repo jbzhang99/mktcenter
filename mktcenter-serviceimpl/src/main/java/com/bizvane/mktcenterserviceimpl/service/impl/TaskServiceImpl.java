@@ -5,8 +5,8 @@ import com.bizvane.centercontrolservice.models.po.SysSmsConfigPo;
 import com.bizvane.centercontrolservice.models.vo.SmsConfigVo;
 import com.bizvane.centercontrolservice.rpc.SysSmsConfigServiceRpc;
 import com.bizvane.messagefacade.interfaces.TemplateMessageServiceFeign;
-import com.bizvane.messagefacade.models.vo.GenrealGetMessageVO;
-import com.bizvane.messagefacade.models.vo.SmsStatisticsVO;
+import com.bizvane.messagefacade.models.vo.*;
+import com.bizvane.mktcenterservice.models.vo.PageForm;
 import com.bizvane.utils.tokens.SysAccountPO;
 import com.bizvane.centerstageservice.models.po.SysCheckConfigPo;
 import com.bizvane.centerstageservice.models.po.SysCheckPo;
@@ -30,8 +30,6 @@ import com.bizvane.members.facade.vo.MemberInfoApiModel;
 import com.bizvane.members.facade.vo.PageVo;
 import com.bizvane.members.facade.vo.WxChannelInfoVo;
 import com.bizvane.messagefacade.interfaces.SendCommonMessageFeign;
-import com.bizvane.messagefacade.models.vo.MemberMessageVO;
-import com.bizvane.messagefacade.models.vo.SysSmsConfigVO;
 import com.bizvane.mktcenterservice.interfaces.TaskMessageService;
 import com.bizvane.mktcenterservice.interfaces.TaskRecordService;
 import com.bizvane.mktcenterservice.interfaces.TaskService;
@@ -345,8 +343,11 @@ public class TaskServiceImpl implements TaskService {
     @Override
     @Async
     public void sendSmg(MktTaskPOWithBLOBs mktTaskPOWithBLOBs,List<MktMessagePO> mktmessagePOList) {
+        Long sysCompanyId = mktTaskPOWithBLOBs.getSysCompanyId();
         Long sysBrandId = mktTaskPOWithBLOBs.getSysBrandId();
+        Long mktTaskId = mktTaskPOWithBLOBs.getMktTaskId();
         Integer taskType = mktTaskPOWithBLOBs.getTaskType();
+
         if (CollectionUtils.isNotEmpty(mktmessagePOList)) {
             mktmessagePOList.stream().forEach(
                     message -> {
@@ -362,7 +363,7 @@ public class TaskServiceImpl implements TaskService {
                                     com.bizvane.utils.responseinfo.PageInfo<MemberInfoModel> pagesdata= this.getCompanyMemebers(sysBrandId, i, 10000);
                                     List<MemberInfoModel> list = pagesdata.getList();
                                     AwardBO memberBO = new AwardBO();
-                                    //4=微信模板消息营销
+                                    //4=微信模板消息  营销
                                     memberBO.setMktType(MktSmartTypeEnum.SMART_TYPE_WXMESSAGE.getCode());
                                     list.stream().forEach(member->{
                                         MemberMessageVO memberMessageVO = new MemberMessageVO();
@@ -391,20 +392,26 @@ public class TaskServiceImpl implements TaskService {
                             List<WxChannelInfoVo> list = fanspage.getList();
                             int pages = fanspage.getPages();
 
-                            SysSmsConfigVO sysSmsConfigVO = new SysSmsConfigVO();
-                            BeanUtils.copyProperties(smsConfigPo,sysSmsConfigVO);
-                            sysSmsConfigVO.setMsgContent(msgContent);
+//                            SysSmsConfigVO sysSmsConfigVO = new SysSmsConfigVO();
+//                            BeanUtils.copyProperties(smsConfigPo,sysSmsConfigVO);
+//                            sysSmsConfigVO.setMsgContent(msgContent);
                             AwardBO fanBO = new AwardBO();
-                            //3=短信
-                            fanBO.setMktType(MktSmartTypeEnum.SMART_TYPE_SMS.getCode());
+                            //7=批量短信
+                            fanBO.setMktType(MktSmartTypeEnum.SMART_TYPE_MESSAGE_BATCH.getCode());
+                            GenrealSendMessageVO messageVO = new GenrealSendMessageVO();
+                            messageVO.setSysBrandId(sysBrandId);
+                            messageVO.setSysCompanyId(sysCompanyId);
+                            messageVO.setMessageBody(msgContent);
+                            messageVO.setTaskId(mktTaskId);
+                            messageVO.setTemplateType(String.valueOf(taskType));
 
                             if (CollectionUtils.isNotEmpty(list)){
                                 for (int i=1;i<pages;i++){
                                     com.bizvane.utils.responseinfo.PageInfo<WxChannelInfoVo> companyFans = this.getCompanyFans(sysBrandId, i, batchNum);
                                     List<WxChannelInfoVo> listData = companyFans.getList();
                                     String pnones = listData.stream().filter(fan -> StringUtils.isNotBlank(fan.getPhone())).map(fan -> fan.getPhone()).collect(Collectors.joining(","));
-                                    sysSmsConfigVO.setPhones(pnones);
-                                    fanBO.setSysSmsConfigVO(sysSmsConfigVO);
+                                    messageVO.setPhoneStr(pnones);
+                                    fanBO.setGenrealSendMessageVO(messageVO);
                                     award.execute(fanBO);
                                 }
 
@@ -599,7 +606,7 @@ public class TaskServiceImpl implements TaskService {
         vo.setBrandId(sysBrandId);
         //任务类型
         Integer taskType = vo.getTaskType();
-        
+
         GenrealGetMessageVO genrealGetMessageVO=new  GenrealGetMessageVO();
         genrealGetMessageVO.setSysBrandId(sysBrandId);
         genrealGetMessageVO.setTemplateType(String.valueOf(taskType));
