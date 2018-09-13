@@ -10,7 +10,7 @@ spring:
   swagger:
     show: true
   application:
-    name: mktcenter
+    name: mktcenter-wkq
 #  security:
 #    enabled: false
 #    user:
@@ -79,22 +79,22 @@ xxl:
 feign:
   client:
     centerstage:
-      name: centerstage
+      name: centerstage-test
       path: centerstage.api
     coupon:
-      name: coupon-ceshi
+      name: coupon--test
       path: coupon.api
     members:
       name: members-test
       path: members.api
     message:
-      name: message-server-test
+      name: message-test
       path: message.api
     wechat:
-      name: wechat
+      name: wechat-test
       path: wechat.api
     applet:
-      name: applet
+      name: applet-test
       path: applet.api
     centercontrol:
       name: centercontrol-test
@@ -117,3 +117,5 @@ threadPool:
 
 activity:
   qrcodeurl: http://www.xxx.bizvane.com/qrcode?activityCode=
+tenant:
+    isEnabledTenantInterceptor: false

@@ -325,7 +325,7 @@ public class ActivityOrderServiceImpl implements ActivityOrderService {
             String ids =orderList.get(0).getStoreLimitList();
             //查询适用门店
             List<Long> listIds = Arrays.asList(ids.split(",")).stream().map(s -> Long.parseLong(s.trim())).collect(Collectors.toList());
-            List<SysStorePo> sysStorePOs = (List<SysStorePo>) storeServiceRpc.getIdStoreList(listIds,null,null,null,null);
+            List<SysStorePo> sysStorePOs = (List<SysStorePo>) storeServiceRpc.getIdStoreList(listIds,null,null,null,null).getData();
             if(!CollectionUtils.isEmpty(sysStorePOs)){
                 bo.getActivityVO().setSysStorePos(sysStorePOs);
             }
@@ -334,7 +334,7 @@ public class ActivityOrderServiceImpl implements ActivityOrderService {
             //查询适用商品
             String cos =orderList.get(0).getCommodityLimitList();
             List<Long> listId = Arrays.asList(cos.split(",")).stream().map(s -> Long.parseLong(s.trim())).collect(Collectors.toList());
-            List<SysDimSkuPo> sysDimSkuPos = (List<SysDimSkuPo>) sysDimSkuServiceRpc.getIdSysDimSkuList(listId,null,null,null,null);
+            List<SysDimSkuPo> sysDimSkuPos = (List<SysDimSkuPo>) sysDimSkuServiceRpc.getIdSysDimSkuList(listId,null,null,null,null).getData();
             if(!CollectionUtils.isEmpty(sysDimSkuPos)){
                 bo.getActivityVO().setSysDimSkuPos(sysDimSkuPos);
             }
