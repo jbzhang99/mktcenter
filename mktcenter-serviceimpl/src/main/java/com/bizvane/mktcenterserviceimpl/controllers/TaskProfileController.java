@@ -98,13 +98,13 @@ public class TaskProfileController {
   //  public ResponseData getTaskProfileRecordByTime(String date1, String date2, HttpServletRequest request, PageForm pageForm)throws Exception{
     public ResponseData getTaskProfileRecordByTime(TaskAnalysisVo vo,HttpServletRequest request)throws Exception{
 
-       // SysAccountPO stageUser = TokenUtils.getStageUser(request);
-        SysAccountPO sysAccountPo = new SysAccountPO();
-        sysAccountPo.setSysAccountId(26L);
-        sysAccountPo.setSysCompanyId(2L);
-        sysAccountPo.setBrandId(4L);
-        sysAccountPo.setAccountCode("15328634678");
-        sysAccountPo.setName("不啊哟删除");
+       SysAccountPO sysAccountPo = TokenUtils.getStageUser(request);
+//        SysAccountPO sysAccountPo = new SysAccountPO();
+//        sysAccountPo.setSysAccountId(26L);
+//        sysAccountPo.setSysCompanyId(2L);
+//        sysAccountPo.setBrandId(4L);
+//        sysAccountPo.setAccountCode("15328634678");
+//        sysAccountPo.setName("不啊哟删除");
 //      Date timeStart=null;
 //      Date timeEnd=null;
 //       if (StringUtils.isNotBlank(date1)&&StringUtils.isNotBlank(date2)){

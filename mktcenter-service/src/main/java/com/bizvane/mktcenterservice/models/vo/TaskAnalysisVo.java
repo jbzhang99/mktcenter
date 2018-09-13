@@ -14,8 +14,27 @@ public class TaskAnalysisVo {
     private  Long brandId;
     private  Integer taskType;
     private String taskName;
-    private Date date1;
-    private Date  date2;
+    private String date1;
+    private String  date2;
+    private Date startDate;
+    private Date endDate;
+
+    public Date getStartDate() {
+        return startDate;
+    }
+
+    public void setStartDate(Date startDate) {
+        this.startDate = startDate;
+    }
+
+    public Date getEndDate() {
+        return endDate;
+    }
+
+    public void setEndDate(Date endDate) {
+        this.endDate = endDate;
+    }
+
     //1=普通  2=银卡  3=金卡
     private Integer memberLevel;
 
@@ -59,19 +78,19 @@ public class TaskAnalysisVo {
         this.taskName = taskName;
     }
 
-    public Date getDate1() {
+    public String getDate1() {
         return date1;
     }
 
-    public void setDate1(Date date1) {
+    public void setDate1(String date1) {
         this.date1 = date1;
     }
 
-    public Date getDate2() {
+    public String getDate2() {
         return date2;
     }
 
-    public void setDate2(Date date2) {
+    public void setDate2(String date2) {
         this.date2 = date2;
     }
 

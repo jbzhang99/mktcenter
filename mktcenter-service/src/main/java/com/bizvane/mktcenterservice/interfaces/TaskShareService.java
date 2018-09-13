@@ -1,5 +1,6 @@
 package com.bizvane.mktcenterservice.interfaces;
 
+import com.bizvane.centercontrolservice.models.po.AppletRoutePO;
 import com.bizvane.fitmentservice.models.bo.AppletBrandFunctionRpcBo;
 import com.bizvane.members.facade.models.MemberInfoModel;
 import com.bizvane.mktcenterservice.models.bo.TaskBO;
@@ -23,11 +24,10 @@ import java.util.List;
  */
 public interface TaskShareService {
     /**
-     * 获取站内链接列表
-     * @param brandId
+     * 从中控获取站内链接列表
      * @return
      */
-    public ResponseData<List<AppletBrandFunctionRpcBo>>  getURLList(Long brandId);
+    public List<AppletRoutePO>  getURLList();
 
     /**
      * 新增任务

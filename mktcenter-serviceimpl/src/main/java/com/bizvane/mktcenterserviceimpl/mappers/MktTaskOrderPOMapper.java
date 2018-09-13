@@ -11,68 +11,87 @@ public interface MktTaskOrderPOMapper {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-08-31 12:40:26
+	 * @mbg.generated  2018-09-12 11:00:25
 	 */
 	long countByExample(MktTaskOrderPOExample example);
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-08-31 12:40:26
+	 * @mbg.generated  2018-09-12 11:00:25
 	 */
 	int deleteByExample(MktTaskOrderPOExample example);
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-08-31 12:40:26
+	 * @mbg.generated  2018-09-12 11:00:25
 	 */
 	int deleteByPrimaryKey(Long mktTaskOrderId);
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-08-31 12:40:26
+	 * @mbg.generated  2018-09-12 11:00:25
 	 */
 	int insert(MktTaskOrderPO record);
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-08-31 12:40:26
+	 * @mbg.generated  2018-09-12 11:00:25
 	 */
 	int insertSelective(MktTaskOrderPO record);
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-08-31 12:40:26
+	 * @mbg.generated  2018-09-12 11:00:25
+	 */
+	List<MktTaskOrderPO> selectByExampleWithBLOBs(MktTaskOrderPOExample example);
+
+	/**
+	 * 只读. 
+	 * @mbg.generated  2018-09-12 11:00:25
 	 */
 	List<MktTaskOrderPO> selectByExample(MktTaskOrderPOExample example);
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-08-31 12:40:26
+	 * @mbg.generated  2018-09-12 11:00:25
 	 */
 	MktTaskOrderPO selectByPrimaryKey(Long mktTaskOrderId);
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-08-31 12:40:26
+	 * @mbg.generated  2018-09-12 11:00:25
 	 */
 	int updateByExampleSelective(@Param("record") MktTaskOrderPO record,
 			@Param("example") MktTaskOrderPOExample example);
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-08-31 12:40:26
+	 * @mbg.generated  2018-09-12 11:00:25
+	 */
+	int updateByExampleWithBLOBs(@Param("record") MktTaskOrderPO record,
+			@Param("example") MktTaskOrderPOExample example);
+
+	/**
+	 * 只读. 
+	 * @mbg.generated  2018-09-12 11:00:25
 	 */
 	int updateByExample(@Param("record") MktTaskOrderPO record, @Param("example") MktTaskOrderPOExample example);
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-08-31 12:40:26
+	 * @mbg.generated  2018-09-12 11:00:25
 	 */
 	int updateByPrimaryKeySelective(MktTaskOrderPO record);
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-08-31 12:40:26
+	 * @mbg.generated  2018-09-12 11:00:25
+	 */
+	int updateByPrimaryKeyWithBLOBs(MktTaskOrderPO record);
+
+	/**
+	 * 只读. 
+	 * @mbg.generated  2018-09-12 11:00:25
 	 */
 	int updateByPrimaryKey(MktTaskOrderPO record);
 

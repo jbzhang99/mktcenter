@@ -1,6 +1,10 @@
 package com.bizvane.mktcenterservice.interfaces;
 
+import com.bizvane.centerstageservice.models.po.SysAccountPo;
+import com.bizvane.messagefacade.models.vo.GenrealGetMessageVO;
+import com.bizvane.utils.tokens.SysAccountPO;
 import com.bizvane.centerstageservice.models.po.SysCheckConfigPo;
+import com.bizvane.centerstageservice.models.vo.SysStoreVo;
 import com.bizvane.members.facade.models.MemberInfoModel;
 import com.bizvane.members.facade.vo.WxChannelInfoVo;
 import com.bizvane.mktcenterservice.models.bo.TaskBO;
@@ -22,7 +26,19 @@ import java.util.List;
  * @Copyright (c) 2018 上海商帆信息科技有限公司-版权所有
  */
 public interface TaskService {
-
+    /**
+     * 获取短信的数量 失败/总数
+     * @param vo
+     * @return
+     */
+    public String searchSmsNum(GenrealGetMessageVO vo);
+    /**
+     * 获取店铺列表
+     * @param vo
+     * @param sysAccountPo
+     * @return
+     */
+    public ResponseData<List<SysStoreVo>> getWhiteStoreList(SysStoreVo vo,SysAccountPO sysAccountPo);
     /**
      * 查询任务详情
      * @param mktTaskId

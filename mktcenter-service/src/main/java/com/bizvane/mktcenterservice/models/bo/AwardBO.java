@@ -6,6 +6,8 @@ import com.bizvane.couponfacade.models.vo.SendCouponSimpleRequestVO;
 import com.bizvane.members.facade.models.IntegralRecordModel;
 import com.bizvane.members.facade.models.MemberInfoModel;
 import com.bizvane.members.facade.service.card.request.IntegralChangeRequestModel;
+import com.bizvane.messagefacade.models.vo.GenrealGetMessageVO;
+import com.bizvane.messagefacade.models.vo.GenrealSendMessageVO;
 import com.bizvane.messagefacade.models.vo.MemberMessageVO;
 import com.bizvane.messagefacade.models.vo.SysSmsConfigVO;
 import com.bizvane.mktcenterservice.models.vo.MessageVO;
@@ -62,6 +64,14 @@ public class AwardBO {
      * 短信
      */
     private SysSmsConfigVO sysSmsConfigVO;
+    /**
+     * 批量短信
+     */
+    private GenrealSendMessageVO genrealSendMessageVO;
+    /**
+     * 查询短信数量
+     */
+    private GenrealGetMessageVO  genrealGetMessageVO;
 
     public IntegralChangeRequestModel getIntegralRecordModel() {
         return integralRecordModel;
@@ -125,5 +135,21 @@ public class AwardBO {
 
     public void setMktType(Integer mktType) {
         this.mktType = mktType;
+    }
+
+    public GenrealSendMessageVO getGenrealSendMessageVO() {
+        return genrealSendMessageVO;
+    }
+
+    public void setGenrealSendMessageVO(GenrealSendMessageVO genrealSendMessageVO) {
+        this.genrealSendMessageVO = genrealSendMessageVO;
+    }
+
+    public GenrealGetMessageVO getGenrealGetMessageVO() {
+        return genrealGetMessageVO;
+    }
+
+    public void setGenrealGetMessageVO(GenrealGetMessageVO genrealGetMessageVO) {
+        this.genrealGetMessageVO = genrealGetMessageVO;
     }
 }

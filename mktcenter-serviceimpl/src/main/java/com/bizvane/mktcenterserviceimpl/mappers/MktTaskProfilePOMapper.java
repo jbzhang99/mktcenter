@@ -11,92 +11,93 @@ import com.bizvane.mktcenterservice.models.vo.DayTaskRecordVo;
 import com.bizvane.mktcenterservice.models.vo.TaskAnalysisVo;
 import com.bizvane.mktcenterservice.models.vo.TaskVO;
 import org.apache.ibatis.annotations.Param;
+import com.bizvane.mktcenterservice.models.po.MktTaskProfilePOWithBLOBs;
 
 public interface MktTaskProfilePOMapper {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-08-31 12:40:26
+	 * @mbg.generated  2018-09-12 11:00:25
 	 */
 	long countByExample(MktTaskProfilePOExample example);
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-08-31 12:40:26
+	 * @mbg.generated  2018-09-12 11:00:25
 	 */
 	int deleteByExample(MktTaskProfilePOExample example);
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-08-31 12:40:26
+	 * @mbg.generated  2018-09-12 11:00:25
 	 */
 	int deleteByPrimaryKey(Long mktTaskProfileId);
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-08-31 12:40:26
+	 * @mbg.generated  2018-09-12 11:00:25
 	 */
-	int insert(MktTaskProfilePO record);
+	int insert(MktTaskProfilePOWithBLOBs record);
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-08-31 12:40:26
+	 * @mbg.generated  2018-09-12 11:00:25
 	 */
-	int insertSelective(MktTaskProfilePO record);
+	int insertSelective(MktTaskProfilePOWithBLOBs record);
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-08-31 12:40:26
+	 * @mbg.generated  2018-09-12 11:00:25
 	 */
-	List<MktTaskProfilePO> selectByExampleWithBLOBs(MktTaskProfilePOExample example);
+	List<MktTaskProfilePOWithBLOBs> selectByExampleWithBLOBs(MktTaskProfilePOExample example);
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-08-31 12:40:26
+	 * @mbg.generated  2018-09-12 11:00:25
 	 */
 	List<MktTaskProfilePO> selectByExample(MktTaskProfilePOExample example);
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-08-31 12:40:26
+	 * @mbg.generated  2018-09-12 11:00:25
 	 */
-	MktTaskProfilePO selectByPrimaryKey(Long mktTaskProfileId);
+	MktTaskProfilePOWithBLOBs selectByPrimaryKey(Long mktTaskProfileId);
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-08-31 12:40:26
+	 * @mbg.generated  2018-09-12 11:00:25
 	 */
-	int updateByExampleSelective(@Param("record") MktTaskProfilePO record,
+	int updateByExampleSelective(@Param("record") MktTaskProfilePOWithBLOBs record,
 			@Param("example") MktTaskProfilePOExample example);
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-08-31 12:40:26
+	 * @mbg.generated  2018-09-12 11:00:25
 	 */
-	int updateByExampleWithBLOBs(@Param("record") MktTaskProfilePO record,
+	int updateByExampleWithBLOBs(@Param("record") MktTaskProfilePOWithBLOBs record,
 			@Param("example") MktTaskProfilePOExample example);
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-08-31 12:40:26
+	 * @mbg.generated  2018-09-12 11:00:25
 	 */
 	int updateByExample(@Param("record") MktTaskProfilePO record, @Param("example") MktTaskProfilePOExample example);
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-08-31 12:40:26
+	 * @mbg.generated  2018-09-12 11:00:25
 	 */
-	int updateByPrimaryKeySelective(MktTaskProfilePO record);
+	int updateByPrimaryKeySelective(MktTaskProfilePOWithBLOBs record);
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-08-31 12:40:26
+	 * @mbg.generated  2018-09-12 11:00:25
 	 */
-	int updateByPrimaryKeyWithBLOBs(MktTaskProfilePO record);
+	int updateByPrimaryKeyWithBLOBs(MktTaskProfilePOWithBLOBs record);
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-08-31 12:40:26
+	 * @mbg.generated  2018-09-12 11:00:25
 	 */
 	int updateByPrimaryKey(MktTaskProfilePO record);
 

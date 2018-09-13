@@ -1,5 +1,6 @@
 package com.bizvane.mktcenterserviceimpl.common.award;
 
+import com.bizvane.messagefacade.interfaces.TemplateMessageServiceFeign;
 import com.bizvane.mktcenterservice.models.bo.AwardBO;
 import com.bizvane.mktcenterserviceimpl.common.enums.MktSmartTypeEnum;
 import com.bizvane.utils.responseinfo.ResponseData;
@@ -50,7 +51,7 @@ public class Award {
                     //批量发短信
                 case  SMART_TYPE_MESSAGE_BATCH:
                     //接口未定义
-                    //responseData =awardFactory.awardCouponBatch(bo);
+                    responseData = awardFactory.sendBantchSms(bo);
                     break;
                 default:break;
             }

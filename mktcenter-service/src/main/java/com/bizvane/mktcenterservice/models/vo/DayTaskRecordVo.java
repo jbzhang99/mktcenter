@@ -32,7 +32,7 @@ public class DayTaskRecordVo {
     //某天被核销的优惠券
     private Long dayInvalidCountCoupon=0L;
 
-    //某任务的分享总次数
+    //某任务的分享总次数    邀请开卡次数
     private Long oneTaskShareTimes=0L;
 
     //参与时间
@@ -57,7 +57,8 @@ public class DayTaskRecordVo {
 
     //任务开始时间
     private  Date  startTime;
-
+    //短信数量
+    private  String  msgNUM;
 
 
     public Long getDayPoints() {
@@ -202,5 +203,13 @@ public class DayTaskRecordVo {
 
     public void setStartTime(Date startTime) {
         this.startTime = startTime;
+    }
+
+    public String getMsgNUM() {
+        return msgNUM;
+    }
+
+    public void setMsgNUM(String msgNUM) {
+        this.msgNUM = msgNUM;
     }
 }

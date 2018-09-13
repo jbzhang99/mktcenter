@@ -2,9 +2,13 @@ package com.bizvane.mktcenterserviceimpl.service.impl;
 
 import com.alibaba.fastjson.JSON;
 import com.bizvane.centerstageservice.models.po.SysCheckPo;
+import com.bizvane.centerstageservice.models.po.SysDimSkuPo;
+import com.bizvane.centerstageservice.models.po.SysStorePo;
 import com.bizvane.centerstageservice.models.vo.SysCheckConfigVo;
+import com.bizvane.centerstageservice.rpc.StoreServiceRpc;
 import com.bizvane.centerstageservice.rpc.SysCheckConfigServiceRpc;
 import com.bizvane.centerstageservice.rpc.SysCheckServiceRpc;
+import com.bizvane.centerstageservice.rpc.SysDimSkuServiceRpc;
 import com.bizvane.couponfacade.enums.SendTypeEnum;
 import com.bizvane.couponfacade.interfaces.CouponQueryServiceFeign;
 import com.bizvane.couponfacade.models.vo.CouponDetailResponseVO;
@@ -49,11 +53,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
+import org.springframework.util.StringUtils;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @author chen.li
@@ -95,6 +102,10 @@ public class ActivityOrderServiceImpl implements ActivityOrderService {
     private MembersAdvancedSearchApiService membersAdvancedSearchApiService;
     @Autowired
     private MemberMessageSend memberMessage;
+    @Autowired
+    private StoreServiceRpc storeServiceRpc;
+    @Autowired
+    private SysDimSkuServiceRpc sysDimSkuServiceRpc;
     /**
      * 查询消费活动列表
      * @param vo
@@ -298,6 +309,7 @@ public class ActivityOrderServiceImpl implements ActivityOrderService {
      */
     @Override
     public ResponseData<ActivityBO> selectActivityOrderById(String businessCode) {
+        ActivityBO bo = new ActivityBO();
         log.info("查询消费活动详情开始参数="+businessCode);
         ResponseData responseData = new ResponseData();
         ActivityVO vo= new ActivityVO();
@@ -308,6 +320,24 @@ public class ActivityOrderServiceImpl implements ActivityOrderService {
             responseData.setCode(SysResponseEnum.OPERATE_FAILED_DATA_NOT_EXISTS.getCode());
             responseData.setMessage(SysResponseEnum.OPERATE_FAILED_DATA_NOT_EXISTS.getMessage());
             return responseData;
+        }
+        if (!StringUtils.isEmpty(orderList.get(0).getStoreLimitList())){
+            String ids =orderList.get(0).getStoreLimitList();
+            //查询适用门店
+            List<Long> listIds = Arrays.asList(ids.split(",")).stream().map(s -> Long.parseLong(s.trim())).collect(Collectors.toList());
+            ResponseData<List<SysStorePo>> sysStorePOs = ( ResponseData<List<SysStorePo>>) storeServiceRpc.getIdStoreList(listIds,null,null,null,null);
+            if(!CollectionUtils.isEmpty(sysStorePOs.getData())){
+                bo.getActivityVO().setSysStorePos(sysStorePOs.getData());
+            }
+        }
+        if (!StringUtils.isEmpty(orderList.get(0).getCommodityLimitList())){
+            //查询适用商品
+            String cos =orderList.get(0).getCommodityLimitList();
+            List<Long> listId = Arrays.asList(cos.split(",")).stream().map(s -> Long.parseLong(s.trim())).collect(Collectors.toList());
+            ResponseData<List<SysDimSkuPo>> sysDimSkuPos = (ResponseData<List<SysDimSkuPo>>) sysDimSkuServiceRpc.getIdSysDimSkuList(listId,null,null,null,null);
+            if(!CollectionUtils.isEmpty(sysDimSkuPos.getData())){
+                bo.getActivityVO().setSysDimSkuPos(sysDimSkuPos.getData());
+            }
         }
         //查询活动卷
         MktCouponPOExample example = new  MktCouponPOExample();
@@ -326,7 +356,6 @@ public class ActivityOrderServiceImpl implements ActivityOrderService {
         MktMessagePOExample exampl = new MktMessagePOExample();
         exampl.createCriteria().andBizIdEqualTo(orderList.get(0).getMktActivityId()).andValidEqualTo(true);
         List<MktMessagePO> listMktMessage = mktMessagePOMapper.selectByExample(exampl);
-        ActivityBO bo = new ActivityBO();
         if(!CollectionUtils.isEmpty(orderList)){
             bo.setActivityVO(orderList.get(0));
         }
@@ -627,6 +656,7 @@ public class ActivityOrderServiceImpl implements ActivityOrderService {
                 integralChangeRequestModel.setChangeIntegral(activityVO.getPoints());
                 integralChangeRequestModel.setChangeType(IntegralChangeTypeEnum.INCOME.getCode());
                 integralChangeRequestModel.setBusinessType(String.valueOf(BusinessTypeEnum.ACTIVITY_TYPE_ACTIVITY.getCode()));
+                integralChangeRequestModel.setChangeDate(new Date());
                 bo.setIntegralRecordModel(integralChangeRequestModel);
                 bo.setMktType(MktSmartTypeEnum.SMART_TYPE_INTEGRAL.getCode());
                 log.info("新增积分奖励="+activityVO.getPoints());

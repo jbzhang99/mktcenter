@@ -4,11 +4,13 @@
   <resultMap id="BaseResultMap" type="com.bizvane.mktcenterservice.models.po.MktTaskProfilePO">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-08-31 12:40:26.
+      This element was generated on 2018-09-12 11:00:25.
     -->
     <id column="mkt_task_profile_id" jdbcType="BIGINT" property="mktTaskProfileId" />
     <result column="sys_company_id" jdbcType="BIGINT" property="sysCompanyId" />
     <result column="mkt_task_id" jdbcType="BIGINT" property="mktTaskId" />
+    <result column="is_store_limit" jdbcType="BIT" property="isStoreLimit" />
+    <result column="store_limit_type" jdbcType="INTEGER" property="storeLimitType" />
     <result column="remark" jdbcType="VARCHAR" property="remark" />
     <result column="create_user_id" jdbcType="BIGINT" property="createUserId" />
     <result column="create_user_name" jdbcType="VARCHAR" property="createUserName" />
@@ -18,17 +20,18 @@
     <result column="modified_date" jdbcType="TIMESTAMP" property="modifiedDate" />
     <result column="valid" jdbcType="BIT" property="valid" />
   </resultMap>
-  <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.bizvane.mktcenterservice.models.po.MktTaskProfilePO">
+  <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.bizvane.mktcenterservice.models.po.MktTaskProfilePOWithBLOBs">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-08-31 12:40:26.
+      This element was generated on 2018-09-12 11:00:25.
     -->
     <result column="property_code" jdbcType="LONGVARCHAR" property="propertyCode" />
+    <result column="store_limit_list" jdbcType="LONGVARCHAR" property="storeLimitList" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-08-31 12:40:26.
+      This element was generated on 2018-09-12 11:00:25.
     -->
     <where>
       <foreach collection="oredCriteria" item="criteria" separator="or">
@@ -61,7 +64,7 @@
   <sql id="Update_By_Example_Where_Clause">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-08-31 12:40:26.
+      This element was generated on 2018-09-12 11:00:25.
     -->
     <where>
       <foreach collection="example.oredCriteria" item="criteria" separator="or">
@@ -94,22 +97,23 @@
   <sql id="Base_Column_List">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-08-31 12:40:26.
+      This element was generated on 2018-09-12 11:00:25.
     -->
-    mkt_task_profile_id, sys_company_id, mkt_task_id, remark, create_user_id, create_user_name, 
-    create_date, modified_user_id, modified_user_name, modified_date, valid
+    mkt_task_profile_id, sys_company_id, mkt_task_id, is_store_limit, store_limit_type, 
+    remark, create_user_id, create_user_name, create_date, modified_user_id, modified_user_name, 
+    modified_date, valid
   </sql>
   <sql id="Blob_Column_List">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-08-31 12:40:26.
+      This element was generated on 2018-09-12 11:00:25.
     -->
-    property_code
+    property_code, store_limit_list
   </sql>
   <select id="selectByExampleWithBLOBs" parameterType="com.bizvane.mktcenterservice.models.po.MktTaskProfilePOExample" resultMap="ResultMapWithBLOBs">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-08-31 12:40:26.
+      This element was generated on 2018-09-12 11:00:25.
     -->
     select
     <if test="distinct">
@@ -129,7 +133,7 @@
   <select id="selectByExample" parameterType="com.bizvane.mktcenterservice.models.po.MktTaskProfilePOExample" resultMap="BaseResultMap">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-08-31 12:40:26.
+      This element was generated on 2018-09-12 11:00:25.
     -->
     select
     <if test="distinct">
@@ -147,7 +151,7 @@
   <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="ResultMapWithBLOBs">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-08-31 12:40:26.
+      This element was generated on 2018-09-12 11:00:25.
     -->
     select 
     <include refid="Base_Column_List" />
@@ -159,7 +163,7 @@
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-08-31 12:40:26.
+      This element was generated on 2018-09-12 11:00:25.
     -->
     delete from t_mkt_task_profile
     where mkt_task_profile_id = #{mktTaskProfileId,jdbcType=BIGINT}
@@ -167,34 +171,36 @@
   <delete id="deleteByExample" parameterType="com.bizvane.mktcenterservice.models.po.MktTaskProfilePOExample">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-08-31 12:40:26.
+      This element was generated on 2018-09-12 11:00:25.
     -->
     delete from t_mkt_task_profile
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insert" parameterType="com.bizvane.mktcenterservice.models.po.MktTaskProfilePO">
+  <insert id="insert" parameterType="com.bizvane.mktcenterservice.models.po.MktTaskProfilePOWithBLOBs">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-08-31 12:40:26.
+      This element was generated on 2018-09-12 11:00:25.
     -->
     <selectKey keyProperty="mktTaskProfileId" order="AFTER" resultType="java.lang.Long">
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into t_mkt_task_profile (sys_company_id, mkt_task_id, remark, 
-      create_user_id, create_user_name, create_date, 
-      modified_user_id, modified_user_name, modified_date, 
-      valid, property_code)
-    values (#{sysCompanyId,jdbcType=BIGINT}, #{mktTaskId,jdbcType=BIGINT}, #{remark,jdbcType=VARCHAR}, 
-      #{createUserId,jdbcType=BIGINT}, #{createUserName,jdbcType=VARCHAR}, #{createDate,jdbcType=TIMESTAMP}, 
-      #{modifiedUserId,jdbcType=BIGINT}, #{modifiedUserName,jdbcType=VARCHAR}, #{modifiedDate,jdbcType=TIMESTAMP}, 
-      #{valid,jdbcType=BIT}, #{propertyCode,jdbcType=LONGVARCHAR})
+    insert into t_mkt_task_profile (sys_company_id, mkt_task_id, is_store_limit, 
+      store_limit_type, remark, create_user_id, 
+      create_user_name, create_date, modified_user_id, 
+      modified_user_name, modified_date, valid, 
+      property_code, store_limit_list)
+    values (#{sysCompanyId,jdbcType=BIGINT}, #{mktTaskId,jdbcType=BIGINT}, #{isStoreLimit,jdbcType=BIT}, 
+      #{storeLimitType,jdbcType=INTEGER}, #{remark,jdbcType=VARCHAR}, #{createUserId,jdbcType=BIGINT}, 
+      #{createUserName,jdbcType=VARCHAR}, #{createDate,jdbcType=TIMESTAMP}, #{modifiedUserId,jdbcType=BIGINT}, 
+      #{modifiedUserName,jdbcType=VARCHAR}, #{modifiedDate,jdbcType=TIMESTAMP}, #{valid,jdbcType=BIT}, 
+      #{propertyCode,jdbcType=LONGVARCHAR}, #{storeLimitList,jdbcType=LONGVARCHAR})
   </insert>
-  <insert id="insertSelective" parameterType="com.bizvane.mktcenterservice.models.po.MktTaskProfilePO">
+  <insert id="insertSelective" parameterType="com.bizvane.mktcenterservice.models.po.MktTaskProfilePOWithBLOBs">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-08-31 12:40:26.
+      This element was generated on 2018-09-12 11:00:25.
     -->
     <selectKey keyProperty="mktTaskProfileId" order="AFTER" resultType="java.lang.Long">
       SELECT LAST_INSERT_ID()
@@ -206,6 +212,12 @@
       </if>
       <if test="mktTaskId != null">
         mkt_task_id,
+      </if>
+      <if test="isStoreLimit != null">
+        is_store_limit,
+      </if>
+      <if test="storeLimitType != null">
+        store_limit_type,
       </if>
       <if test="remark != null">
         remark,
@@ -234,6 +246,9 @@
       <if test="propertyCode != null">
         property_code,
       </if>
+      <if test="storeLimitList != null">
+        store_limit_list,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="sysCompanyId != null">
@@ -241,6 +256,12 @@
       </if>
       <if test="mktTaskId != null">
         #{mktTaskId,jdbcType=BIGINT},
+      </if>
+      <if test="isStoreLimit != null">
+        #{isStoreLimit,jdbcType=BIT},
+      </if>
+      <if test="storeLimitType != null">
+        #{storeLimitType,jdbcType=INTEGER},
       </if>
       <if test="remark != null">
         #{remark,jdbcType=VARCHAR},
@@ -269,12 +290,15 @@
       <if test="propertyCode != null">
         #{propertyCode,jdbcType=LONGVARCHAR},
       </if>
+      <if test="storeLimitList != null">
+        #{storeLimitList,jdbcType=LONGVARCHAR},
+      </if>
     </trim>
   </insert>
   <select id="countByExample" parameterType="com.bizvane.mktcenterservice.models.po.MktTaskProfilePOExample" resultType="java.lang.Long">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-08-31 12:40:26.
+      This element was generated on 2018-09-12 11:00:25.
     -->
     select count(*) from t_mkt_task_profile
     <if test="_parameter != null">
@@ -284,7 +308,7 @@
   <update id="updateByExampleSelective" parameterType="map">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-08-31 12:40:26.
+      This element was generated on 2018-09-12 11:00:25.
     -->
     update t_mkt_task_profile
     <set>
@@ -296,6 +320,12 @@
       </if>
       <if test="record.mktTaskId != null">
         mkt_task_id = #{record.mktTaskId,jdbcType=BIGINT},
+      </if>
+      <if test="record.isStoreLimit != null">
+        is_store_limit = #{record.isStoreLimit,jdbcType=BIT},
+      </if>
+      <if test="record.storeLimitType != null">
+        store_limit_type = #{record.storeLimitType,jdbcType=INTEGER},
       </if>
       <if test="record.remark != null">
         remark = #{record.remark,jdbcType=VARCHAR},
@@ -324,6 +354,9 @@
       <if test="record.propertyCode != null">
         property_code = #{record.propertyCode,jdbcType=LONGVARCHAR},
       </if>
+      <if test="record.storeLimitList != null">
+        store_limit_list = #{record.storeLimitList,jdbcType=LONGVARCHAR},
+      </if>
     </set>
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
@@ -332,12 +365,14 @@
   <update id="updateByExampleWithBLOBs" parameterType="map">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-08-31 12:40:26.
+      This element was generated on 2018-09-12 11:00:25.
     -->
     update t_mkt_task_profile
     set mkt_task_profile_id = #{record.mktTaskProfileId,jdbcType=BIGINT},
       sys_company_id = #{record.sysCompanyId,jdbcType=BIGINT},
       mkt_task_id = #{record.mktTaskId,jdbcType=BIGINT},
+      is_store_limit = #{record.isStoreLimit,jdbcType=BIT},
+      store_limit_type = #{record.storeLimitType,jdbcType=INTEGER},
       remark = #{record.remark,jdbcType=VARCHAR},
       create_user_id = #{record.createUserId,jdbcType=BIGINT},
       create_user_name = #{record.createUserName,jdbcType=VARCHAR},
@@ -346,7 +381,8 @@
       modified_user_name = #{record.modifiedUserName,jdbcType=VARCHAR},
       modified_date = #{record.modifiedDate,jdbcType=TIMESTAMP},
       valid = #{record.valid,jdbcType=BIT},
-      property_code = #{record.propertyCode,jdbcType=LONGVARCHAR}
+      property_code = #{record.propertyCode,jdbcType=LONGVARCHAR},
+      store_limit_list = #{record.storeLimitList,jdbcType=LONGVARCHAR}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -354,12 +390,14 @@
   <update id="updateByExample" parameterType="map">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-08-31 12:40:26.
+      This element was generated on 2018-09-12 11:00:25.
     -->
     update t_mkt_task_profile
     set mkt_task_profile_id = #{record.mktTaskProfileId,jdbcType=BIGINT},
       sys_company_id = #{record.sysCompanyId,jdbcType=BIGINT},
       mkt_task_id = #{record.mktTaskId,jdbcType=BIGINT},
+      is_store_limit = #{record.isStoreLimit,jdbcType=BIT},
+      store_limit_type = #{record.storeLimitType,jdbcType=INTEGER},
       remark = #{record.remark,jdbcType=VARCHAR},
       create_user_id = #{record.createUserId,jdbcType=BIGINT},
       create_user_name = #{record.createUserName,jdbcType=VARCHAR},
@@ -372,10 +410,10 @@
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
-  <update id="updateByPrimaryKeySelective" parameterType="com.bizvane.mktcenterservice.models.po.MktTaskProfilePO">
+  <update id="updateByPrimaryKeySelective" parameterType="com.bizvane.mktcenterservice.models.po.MktTaskProfilePOWithBLOBs">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-08-31 12:40:26.
+      This element was generated on 2018-09-12 11:00:25.
     -->
     update t_mkt_task_profile
     <set>
@@ -384,6 +422,12 @@
       </if>
       <if test="mktTaskId != null">
         mkt_task_id = #{mktTaskId,jdbcType=BIGINT},
+      </if>
+      <if test="isStoreLimit != null">
+        is_store_limit = #{isStoreLimit,jdbcType=BIT},
+      </if>
+      <if test="storeLimitType != null">
+        store_limit_type = #{storeLimitType,jdbcType=INTEGER},
       </if>
       <if test="remark != null">
         remark = #{remark,jdbcType=VARCHAR},
@@ -412,17 +456,22 @@
       <if test="propertyCode != null">
         property_code = #{propertyCode,jdbcType=LONGVARCHAR},
       </if>
+      <if test="storeLimitList != null">
+        store_limit_list = #{storeLimitList,jdbcType=LONGVARCHAR},
+      </if>
     </set>
     where mkt_task_profile_id = #{mktTaskProfileId,jdbcType=BIGINT}
   </update>
-  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.bizvane.mktcenterservice.models.po.MktTaskProfilePO">
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.bizvane.mktcenterservice.models.po.MktTaskProfilePOWithBLOBs">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-08-31 12:40:26.
+      This element was generated on 2018-09-12 11:00:25.
     -->
     update t_mkt_task_profile
     set sys_company_id = #{sysCompanyId,jdbcType=BIGINT},
       mkt_task_id = #{mktTaskId,jdbcType=BIGINT},
+      is_store_limit = #{isStoreLimit,jdbcType=BIT},
+      store_limit_type = #{storeLimitType,jdbcType=INTEGER},
       remark = #{remark,jdbcType=VARCHAR},
       create_user_id = #{createUserId,jdbcType=BIGINT},
       create_user_name = #{createUserName,jdbcType=VARCHAR},
@@ -431,17 +480,20 @@
       modified_user_name = #{modifiedUserName,jdbcType=VARCHAR},
       modified_date = #{modifiedDate,jdbcType=TIMESTAMP},
       valid = #{valid,jdbcType=BIT},
-      property_code = #{propertyCode,jdbcType=LONGVARCHAR}
+      property_code = #{propertyCode,jdbcType=LONGVARCHAR},
+      store_limit_list = #{storeLimitList,jdbcType=LONGVARCHAR}
     where mkt_task_profile_id = #{mktTaskProfileId,jdbcType=BIGINT}
   </update>
   <update id="updateByPrimaryKey" parameterType="com.bizvane.mktcenterservice.models.po.MktTaskProfilePO">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-08-31 12:40:26.
+      This element was generated on 2018-09-12 11:00:25.
     -->
     update t_mkt_task_profile
     set sys_company_id = #{sysCompanyId,jdbcType=BIGINT},
       mkt_task_id = #{mktTaskId,jdbcType=BIGINT},
+      is_store_limit = #{isStoreLimit,jdbcType=BIT},
+      store_limit_type = #{storeLimitType,jdbcType=INTEGER},
       remark = #{remark,jdbcType=VARCHAR},
       create_user_id = #{createUserId,jdbcType=BIGINT},
       create_user_name = #{createUserName,jdbcType=VARCHAR},

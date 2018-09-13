@@ -1,5 +1,6 @@
 package com.bizvane.mktcenterserviceimpl.controllers;
 
+import com.bizvane.centerstageservice.models.vo.SysStoreVo;
 import com.bizvane.mktcenterservice.interfaces.TaskService;
 import com.bizvane.mktcenterservice.models.bo.TaskBO;
 import com.bizvane.mktcenterservice.models.po.MktTaskPOWithBLOBs;
@@ -10,7 +11,7 @@ import com.bizvane.mktcenterservice.models.vo.TaskVO;
 import com.bizvane.utils.responseinfo.ResponseData;
 import com.bizvane.utils.tokens.SysAccountPO;
 import com.bizvane.utils.tokens.TokenUtils;
-import com.github.pagehelper.PageInfo;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -26,12 +27,27 @@ import java.util.List;
  * @description 任务
  * @Copyright (c) 2018 上海商帆信息科技有限公司-版权所有
  */
+@Slf4j
 @RestController
 @RequestMapping("task")
 public class TaskController {
-
     @Autowired
     private TaskService taskService;
+    /**
+     * 根据tonken中登录人的账号id和公司id获取店铺列表
+     */
+    @RequestMapping("getWhiteStoreList")
+    public ResponseData<List<SysStoreVo>> getWhiteStoreList(SysStoreVo vo,HttpServletRequest request){
+        ResponseData<List<SysStoreVo>> responseData=null;
+        SysAccountPO sysAccountPo = TokenUtils.getStageUser(request);
+        if (sysAccountPo!=null){
+            responseData = taskService.getWhiteStoreList(vo, sysAccountPo);
+        }else{
+            responseData=new ResponseData<List<SysStoreVo>>();
+            responseData.setMessage("无法获取登录者数据!");
+        }
+        return responseData;
+    }
     /**
      * 获取任务详情 --通用--已经核对
      */
