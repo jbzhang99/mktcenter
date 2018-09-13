@@ -509,7 +509,7 @@ public class ActivityUpgradeServiceImpl implements ActivityUpgradeService {
             String ids =upgradeList.get(0).getStoreLimitList();
             //查询适用门店
             List<Long> listIds = Arrays.asList(ids.split(",")).stream().map(s -> Long.parseLong(s.trim())).collect(Collectors.toList());
-            ResponseData<List<SysStorePo>> sysStorePOs = ( ResponseData<List<SysStorePo>>) storeServiceRpc.getIdStoreList(listIds,null,null,null,null);
+            ResponseData<List<SysStorePo>> sysStorePOs = storeServiceRpc.getIdStoreLists(listIds);
             if(!CollectionUtils.isEmpty(sysStorePOs.getData())){
                 bo.getActivityVO().setSysStorePos(sysStorePOs.getData());
             }
