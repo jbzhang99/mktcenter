@@ -215,8 +215,6 @@ public class TaskServiceImpl implements TaskService {
                 couponDefinitionPOS.add(couponDefinitionPO);
             }
 
-
-
             if (CollectionUtils.isNotEmpty(taskVOList)){
                 TaskVO taskVO = taskVOList.get(0);
                 taskBO.setTaskVO(taskVO);
