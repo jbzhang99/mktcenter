@@ -1,6 +1,7 @@
 package com.bizvane.mktcenterservice.interfaces;
 
 import com.bizvane.centerstageservice.models.po.SysAccountPo;
+import com.bizvane.centerstageservice.models.po.SysStorePo;
 import com.bizvane.messagefacade.models.vo.GenrealGetMessageVO;
 import com.bizvane.utils.tokens.SysAccountPO;
 import com.bizvane.centerstageservice.models.po.SysCheckConfigPo;
@@ -26,6 +27,12 @@ import java.util.List;
  * @Copyright (c) 2018 上海商帆信息科技有限公司-版权所有
  */
 public interface TaskService {
+    /**
+     * 通过storeid获取店铺列表
+     * @param sysStoreIdList
+     * @return
+     */
+    public List<SysStorePo> getStoreListByIds(List<Long> sysStoreIdList);
     /**
      * 获取短信的数量 失败/总数
      * @param vo

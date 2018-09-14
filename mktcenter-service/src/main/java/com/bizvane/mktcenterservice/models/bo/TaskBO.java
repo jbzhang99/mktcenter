@@ -1,5 +1,6 @@
 package com.bizvane.mktcenterservice.models.bo;
 
+import com.bizvane.centerstageservice.models.po.SysStorePo;
 import com.bizvane.couponfacade.models.po.CouponDefinitionPO;
 import com.bizvane.mktcenterservice.models.po.MktCouponPO;
 import com.bizvane.mktcenterservice.models.po.MktMessagePO;
@@ -35,16 +36,26 @@ public class TaskBO {
      * 券Defination
      * @return
      */
-
-
-
     private List<CouponDefinitionPO> couponDefinitionPOList;
+    /**
+     * 店铺列表
+     */
+    List<SysStorePo> storeList;
 
     public TaskVO getTaskVO() {
         return taskVO;
     }
 
+    public List<SysStorePo> getStoreList() {
+        return storeList;
+    }
+
+    public void setStoreList(List<SysStorePo> storeList) {
+        this.storeList = storeList;
+    }
+
     public void setTaskVO(TaskVO taskVO) {
+
         this.taskVO = taskVO;
     }
 

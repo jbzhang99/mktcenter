@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.bizvane.centercontrolservice.models.po.SysSmsConfigPo;
 import com.bizvane.centercontrolservice.models.vo.SmsConfigVo;
 import com.bizvane.centercontrolservice.rpc.SysSmsConfigServiceRpc;
+import com.bizvane.centerstageservice.models.po.SysStorePo;
 import com.bizvane.messagefacade.interfaces.TemplateMessageServiceFeign;
 import com.bizvane.messagefacade.models.vo.*;
 import com.bizvane.mktcenterservice.models.vo.PageForm;
@@ -62,9 +63,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import java.text.ParseException;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -113,7 +112,23 @@ public class TaskServiceImpl implements TaskService {
     private StoreServiceRpc  storeServiceRpc;
     @Autowired
     private TemplateMessageServiceFeign templateMessageServiceFeign;
+    /**
+     * 通过id查询店铺列表
+     */
+    @Override
+    public List<SysStorePo> getStoreListByIds(List<Long> sysStoreIdList){
+        List<SysStorePo> data=null;
+        try{
+            ResponseData<List<SysStorePo>> storeLists = storeServiceRpc.getIdStoreLists(sysStoreIdList);
+            data = storeLists.getData();
+        }catch (Exception e){
+            log.info("通过storeId查询中台店铺列表异常!---getStoreListByIds方法");
+            e.printStackTrace();
+        }finally {
+            return data;
+        }
 
+    }
     /**
      * 查询短信数量
      */
@@ -200,8 +215,19 @@ public class TaskServiceImpl implements TaskService {
                 couponDefinitionPOS.add(couponDefinitionPO);
             }
 
+
+
             if (CollectionUtils.isNotEmpty(taskVOList)){
-                taskBO.setTaskVO(taskVOList.get(0));
+                TaskVO taskVO = taskVOList.get(0);
+                taskBO.setTaskVO(taskVO);
+                String storeLimitList = taskVO.getStoreLimitList();
+                if (taskVO!=null && StringUtils.isNotBlank(storeLimitList)){
+                    String[] storeArr = storeLimitList.split(",");
+                    List<Long> storeIdList = Arrays.asList(storeArr).stream().map(element -> Long.valueOf(element)).collect(Collectors.toList());
+                    //查询店铺列表
+                    List<SysStorePo> storeList = this.getStoreListByIds(storeIdList);
+                    taskBO.setStoreList(storeList);
+                }
             }
             if (CollectionUtils.isNotEmpty(mktCouponPOList)){
                 taskBO.setMktCouponPOList(mktCouponPOList);
