@@ -2,7 +2,9 @@ package com.bizvane.mktcenterserviceimpl.controllers;
 
 import com.bizvane.members.facade.models.MemberInfoModel;
 import com.bizvane.mktcenterservice.interfaces.ActivityEvaluationService;
+import com.bizvane.mktcenterservice.models.bo.ActivityAnalysisCountBO;
 import com.bizvane.mktcenterservice.models.bo.ActivityBO;
+import com.bizvane.mktcenterservice.models.bo.CtivityAnalysisBO;
 import com.bizvane.mktcenterservice.models.vo.ActivityVO;
 import com.bizvane.mktcenterservice.models.vo.PageForm;
 import com.bizvane.utils.responseinfo.ResponseData;
@@ -75,5 +77,16 @@ public class ActivityEvaluationController {
     @RequestMapping("executeActivityEvaluation")
     public ResponseData<Integer> executeActivityEvaluation(MemberInfoModel vo){
         return activityEvaluationService.executeActivityEvaluation(vo);
+    }
+
+    /**
+     * 查询效果分析统计
+     * @param bo
+     * @param pageForm
+     * @return
+     */
+    @RequestMapping("getEvaluationAnalysisCountpage")
+    public ResponseData<CtivityAnalysisBO> getEvaluationAnalysisCountpage(ActivityAnalysisCountBO bo, PageForm pageForm){
+        return activityEvaluationService.getActivityAnalysisCountpage(bo,pageForm);
     }
 }

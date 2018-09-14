@@ -8,7 +8,6 @@ import com.bizvane.centerstageservice.rpc.SysCheckServiceRpc;
 import com.bizvane.couponfacade.interfaces.CouponEntityServiceFeign;
 import com.bizvane.couponfacade.interfaces.CouponQueryServiceFeign;
 import com.bizvane.couponfacade.interfaces.SendCouponServiceFeign;
-import com.bizvane.couponfacade.models.po.CouponEntityPO;
 import com.bizvane.couponfacade.models.vo.CouponDetailResponseVO;
 import com.bizvane.couponfacade.models.vo.SendCouponSimpleRequestVO;
 import com.bizvane.members.facade.enums.IntegralChangeTypeEnum;
@@ -108,6 +107,7 @@ public class ActivityVipAniversaryServiceImpl implements ActivityVipAniversarySe
     @Override
     @Transactional
     public ResponseData<Integer> addActivityVipAniversary(ActivityBO bo, SysAccountPO stageUser) {
+        //本地测试时使用
 /*        SysAccountPO stageUser1=new SysAccountPO();
         stageUser1.setBrandId(2l);
         stageUser1.setSysCompanyId(2l);
@@ -153,6 +153,8 @@ public class ActivityVipAniversaryServiceImpl implements ActivityVipAniversarySe
             }
         }
 
+        //调用rpc的返回结果
+        ResponseData<Long> rpcResponse=new ResponseData<>();
         if(i>0){
             //查询结果如果需要审核审核状态为待审核
             mktActivityPOWithBLOBs.setCheckStatus(CheckStatusEnum.CHECK_STATUS_PENDING.getCode());
@@ -170,8 +172,9 @@ public class ActivityVipAniversaryServiceImpl implements ActivityVipAniversarySe
             po.setCreateDate(new Date());
             po.setCreateUserId(stageUser.getSysAccountId());
             po.setCreateUserName(stageUser.getName());
+            po.setBizName("入会纪念日活动");
             log.info("增加一条数据到审核中心");
-            sysCheckServiceRpc.addCheck(po);
+            rpcResponse=sysCheckServiceRpc.addCheck(po);
             //getStartTime 开始时间>当前时间增加job
             System.out.println("time======"+activityVO.getStartTime());
             if( new Date().before(activityVO.getStartTime())){
@@ -215,7 +218,6 @@ public class ActivityVipAniversaryServiceImpl implements ActivityVipAniversarySe
         mktActivityVipAniversaryPO.setMbrLevelName(activityVO.getMbrLevelName());
         mktActivityVipAniversaryPO.setDaysAhead(activityVO.getDaysAhead());
         mktActivityVipAniversaryPO.setIsStoreLimit(activityVO.getStoreLimit());
-        System.out.println("StoreLimit===="+activityVO.getStoreLimit());
         if (false==activityVO.getStoreLimit()){
             mktActivityVipAniversaryPO.setStoreLimitList(activityVO.getStoreLimitList());
             mktActivityVipAniversaryPO.setStoreLimitType(activityVO.getStoreLimitType());
@@ -240,6 +242,7 @@ public class ActivityVipAniversaryServiceImpl implements ActivityVipAniversarySe
 
         responseData.setCode(SysResponseEnum.SUCCESS.getCode());
         responseData.setMessage(SysResponseEnum.SUCCESS.getMessage());
+        responseData.setData(rpcResponse.getData());
         return responseData;
     }
 
@@ -315,8 +318,8 @@ public class ActivityVipAniversaryServiceImpl implements ActivityVipAniversarySe
         MktActivityPO activityPO = mktActivityPO.get(0);
         //判断是审核通过还是审核驳回
         if(bs.getCheckStatus()==CheckStatusEnum.CHECK_STATUS_APPROVED.getCode()){
-            //活动开始时间<当前时间<活动结束时间  或者长期活动 也就是StartTime=null
-            if(1== activityPO.getLongTerm() ||(new Date().after(activityPO.getStartTime()) && new Date().before(activityPO.getEndTime()))){
+            //活动开始时间<当前时间<活动结束时间   也就是StartTime=null
+            if((new Date().after(activityPO.getStartTime()) && new Date().before(activityPO.getEndTime()))){
                 //将活动状态变更为执行中 并且发送消息
                 bs.setActivityStatus(ActivityStatusEnum.ACTIVITY_STATUS_EXECUTING.getCode());
                 int i = mktActivityPOMapper.updateByPrimaryKeySelective(bs);
