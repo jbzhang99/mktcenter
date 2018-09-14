@@ -3,6 +3,7 @@ package com.bizvane.mktcenterservice.models.vo;
 import com.bizvane.mktcenterservice.models.po.MktTaskPO;
 
 import java.math.BigDecimal;
+import java.util.Date;
 
 /**
  * @author chen.li
@@ -18,6 +19,16 @@ public class TaskVO extends MktTaskPO {
      */
     private  Integer  showType;
     private  Long  brandId;
+//    //立即发送：1是，0否
+//    private Boolean sendImmediately;
+//    //开始发送时间
+//    private Date sendTime;
+    //门店限制名单
+    private String storeLimitList;
+    //门店限制类型：1黑名单，2白名单
+    private Integer storeLimitType;
+    //门店限制状态：0不限制，1限制
+    private Boolean isStoreLimit;
     /**
      * 只读. 任务描述. task_info
      * @mbg.generated  2018-07-14 13:26:02
@@ -191,5 +202,29 @@ public class TaskVO extends MktTaskPO {
 
     public void setBrandId(Long brandId) {
         this.brandId = brandId;
+    }
+
+    public String getStoreLimitList() {
+        return storeLimitList;
+    }
+
+    public void setStoreLimitList(String storeLimitList) {
+        this.storeLimitList = storeLimitList;
+    }
+
+    public Integer getStoreLimitType() {
+        return storeLimitType;
+    }
+
+    public void setStoreLimitType(Integer storeLimitType) {
+        this.storeLimitType = storeLimitType;
+    }
+
+    public Boolean getStoreLimit() {
+        return isStoreLimit;
+    }
+
+    public void setStoreLimit(Boolean storeLimit) {
+        isStoreLimit = storeLimit;
     }
 }

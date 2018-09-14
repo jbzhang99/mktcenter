@@ -321,24 +321,28 @@ public class ActivityOrderServiceImpl implements ActivityOrderService {
             responseData.setMessage(SysResponseEnum.OPERATE_FAILED_DATA_NOT_EXISTS.getMessage());
             return responseData;
         }
-        if (!StringUtils.isEmpty(orderList.get(0).getStoreLimitList())){
-            String ids =orderList.get(0).getStoreLimitList();
-            //查询适用门店
-            List<Long> listIds = Arrays.asList(ids.split(",")).stream().map(s -> Long.parseLong(s.trim())).collect(Collectors.toList());
-            ResponseData<List<SysStorePo>> sysStorePOs = storeServiceRpc.getIdStoreLists(listIds);
-            if(!CollectionUtils.isEmpty(sysStorePOs.getData())){
-                bo.getActivityVO().setSysStorePos(sysStorePOs.getData());
+        if(!CollectionUtils.isEmpty(orderList)){
+            bo.setActivityVO(orderList.get(0));
+            if (!StringUtils.isEmpty(orderList.get(0).getStoreLimitList())){
+                String ids =orderList.get(0).getStoreLimitList();
+                //查询适用门店
+                List<Long> listIds = Arrays.asList(ids.split(",")).stream().map(s -> Long.parseLong(s.trim())).collect(Collectors.toList());
+                ResponseData<List<SysStorePo>> sysStorePOs = storeServiceRpc.getIdStoreLists(listIds);
+                if(!CollectionUtils.isEmpty(sysStorePOs.getData())){
+                    bo.getActivityVO().setSysStorePos(sysStorePOs.getData());
+                }
+            }
+            if (!StringUtils.isEmpty(orderList.get(0).getCommodityLimitList())){
+                //查询适用商品
+                String cos =orderList.get(0).getCommodityLimitList();
+                List<Long> listId = Arrays.asList(cos.split(",")).stream().map(s -> Long.parseLong(s.trim())).collect(Collectors.toList());
+                ResponseData<List<SysDimSkuPo>> sysDimSkuPos = sysDimSkuServiceRpc.getIdSysDimSkuLists(listId);
+                if(!CollectionUtils.isEmpty(sysDimSkuPos.getData())){
+                    bo.getActivityVO().setSysDimSkuPos(sysDimSkuPos.getData());
+                }
             }
         }
-        if (!StringUtils.isEmpty(orderList.get(0).getCommodityLimitList())){
-            //查询适用商品
-            String cos =orderList.get(0).getCommodityLimitList();
-            List<Long> listId = Arrays.asList(cos.split(",")).stream().map(s -> Long.parseLong(s.trim())).collect(Collectors.toList());
-            ResponseData<List<SysDimSkuPo>> sysDimSkuPos = sysDimSkuServiceRpc.getIdSysDimSkuLists(listId);
-            if(!CollectionUtils.isEmpty(sysDimSkuPos.getData())){
-                bo.getActivityVO().setSysDimSkuPos(sysDimSkuPos.getData());
-            }
-        }
+
         //查询活动卷
         MktCouponPOExample example = new  MktCouponPOExample();
         example.createCriteria().andBizIdEqualTo(orderList.get(0).getMktActivityId()).andValidEqualTo(true);
@@ -356,9 +360,6 @@ public class ActivityOrderServiceImpl implements ActivityOrderService {
         MktMessagePOExample exampl = new MktMessagePOExample();
         exampl.createCriteria().andBizIdEqualTo(orderList.get(0).getMktActivityId()).andValidEqualTo(true);
         List<MktMessagePO> listMktMessage = mktMessagePOMapper.selectByExample(exampl);
-        if(!CollectionUtils.isEmpty(orderList)){
-            bo.setActivityVO(orderList.get(0));
-        }
         if(!CollectionUtils.isEmpty(lists)){
             bo.setCouponEntityAndDefinitionVOList(lists);
         }

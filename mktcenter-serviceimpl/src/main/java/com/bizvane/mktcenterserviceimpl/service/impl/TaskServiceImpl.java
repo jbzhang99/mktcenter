@@ -5,8 +5,8 @@ import com.bizvane.centercontrolservice.models.po.SysSmsConfigPo;
 import com.bizvane.centercontrolservice.models.vo.SmsConfigVo;
 import com.bizvane.centercontrolservice.rpc.SysSmsConfigServiceRpc;
 import com.bizvane.messagefacade.interfaces.TemplateMessageServiceFeign;
-import com.bizvane.messagefacade.models.vo.GenrealGetMessageVO;
-import com.bizvane.messagefacade.models.vo.SmsStatisticsVO;
+import com.bizvane.messagefacade.models.vo.*;
+import com.bizvane.mktcenterservice.models.vo.PageForm;
 import com.bizvane.utils.tokens.SysAccountPO;
 import com.bizvane.centerstageservice.models.po.SysCheckConfigPo;
 import com.bizvane.centerstageservice.models.po.SysCheckPo;
@@ -30,8 +30,6 @@ import com.bizvane.members.facade.vo.MemberInfoApiModel;
 import com.bizvane.members.facade.vo.PageVo;
 import com.bizvane.members.facade.vo.WxChannelInfoVo;
 import com.bizvane.messagefacade.interfaces.SendCommonMessageFeign;
-import com.bizvane.messagefacade.models.vo.MemberMessageVO;
-import com.bizvane.messagefacade.models.vo.SysSmsConfigVO;
 import com.bizvane.mktcenterservice.interfaces.TaskMessageService;
 import com.bizvane.mktcenterservice.interfaces.TaskRecordService;
 import com.bizvane.mktcenterservice.interfaces.TaskService;
@@ -345,74 +343,91 @@ public class TaskServiceImpl implements TaskService {
     @Override
     @Async
     public void sendSmg(MktTaskPOWithBLOBs mktTaskPOWithBLOBs,List<MktMessagePO> mktmessagePOList) {
+        Long sysCompanyId = mktTaskPOWithBLOBs.getSysCompanyId();
         Long sysBrandId = mktTaskPOWithBLOBs.getSysBrandId();
+        Long mktTaskId = mktTaskPOWithBLOBs.getMktTaskId();
         Integer taskType = mktTaskPOWithBLOBs.getTaskType();
+
         if (CollectionUtils.isNotEmpty(mktmessagePOList)) {
             mktmessagePOList.stream().forEach(
                     message -> {
                         String msgType = message.getMsgType();
                         //1=模板消息   所有的会员
                         if (TaskConstants.FIRST.equals(msgType)) {
-                            //查询短信通道
-                            com.bizvane.utils.responseinfo.PageInfo<MemberInfoModel> memeberspage = this.getCompanyMemebers(sysBrandId, 1, 10000);
-                            List<MemberInfoModel> maemberlist = memeberspage.getList();
-                            int pages = memeberspage.getPages();
-                            if (CollectionUtils.isNotEmpty(maemberlist)){
-                                for (int i=1;i<pages;i++){
-                                    com.bizvane.utils.responseinfo.PageInfo<MemberInfoModel> pagesdata= this.getCompanyMemebers(sysBrandId, i, 10000);
-                                    List<MemberInfoModel> list = pagesdata.getList();
-                                    AwardBO memberBO = new AwardBO();
-                                    //4=微信模板消息营销
-                                    memberBO.setMktType(MktSmartTypeEnum.SMART_TYPE_WXMESSAGE.getCode());
-                                    list.stream().forEach(member->{
-                                        MemberMessageVO memberMessageVO = new MemberMessageVO();
-                                        memberMessageVO.setMemberCode(member.getMemberCode());
-                                        memberMessageVO.setOpenId(member.getWxOpenId());
-                                        memberMessageVO.setSysBrandId(sysBrandId);
-                                        memberBO.setMemberMessageVO(memberMessageVO);
-                                        award.execute(memberBO);
-                                    });
-                                }
-
-                            }
+                            sendMemberMessage(sysBrandId);
                         }
                         //2=短信     所有粉丝
                         if (TaskConstants.SECOND.equals(msgType)){
-                            String msgContent = message.getMsgContent();
-                            //获取营销短信通道
-                            SmsConfigVo smsConfigVo = new SmsConfigVo();
-                            smsConfigVo.setSysBrandId(sysBrandId);
-                            smsConfigVo.setChannelType(Integer.valueOf(10));
-                            smsConfigVo.setCompanyChannel(Boolean.FALSE);
-                            SysSmsConfigPo smsConfigPo = sysSmsConfigServiceRpc.getCenterControlChannel(smsConfigVo);
-                            Integer batchNum = smsConfigPo.getBatchNum();
-
-                            com.bizvane.utils.responseinfo.PageInfo<WxChannelInfoVo> fanspage = this.getCompanyFans(sysBrandId, 1, batchNum);
-                            List<WxChannelInfoVo> list = fanspage.getList();
-                            int pages = fanspage.getPages();
-
-                            SysSmsConfigVO sysSmsConfigVO = new SysSmsConfigVO();
-                            BeanUtils.copyProperties(smsConfigPo,sysSmsConfigVO);
-                            sysSmsConfigVO.setMsgContent(msgContent);
-                            AwardBO fanBO = new AwardBO();
-                            //3=短信
-                            fanBO.setMktType(MktSmartTypeEnum.SMART_TYPE_SMS.getCode());
-
-                            if (CollectionUtils.isNotEmpty(list)){
-                                for (int i=1;i<pages;i++){
-                                    com.bizvane.utils.responseinfo.PageInfo<WxChannelInfoVo> companyFans = this.getCompanyFans(sysBrandId, i, batchNum);
-                                    List<WxChannelInfoVo> listData = companyFans.getList();
-                                    String pnones = listData.stream().filter(fan -> StringUtils.isNotBlank(fan.getPhone())).map(fan -> fan.getPhone()).collect(Collectors.joining(","));
-                                    sysSmsConfigVO.setPhones(pnones);
-                                    fanBO.setSysSmsConfigVO(sysSmsConfigVO);
-                                    award.execute(fanBO);
-                                }
-
-                            }
+                            sendBachMSM(sysCompanyId, sysBrandId, mktTaskId, taskType, message);
                         }
 
                     }
             );
+        }
+    }
+    //给会员发送消息
+    private void sendMemberMessage(Long sysBrandId) {
+        com.bizvane.utils.responseinfo.PageInfo<MemberInfoModel> memeberspage = this.getCompanyMemebers(sysBrandId, 1, 10000);
+        List<MemberInfoModel> maemberlist = memeberspage.getList();
+        int pages = memeberspage.getPages();
+        if (CollectionUtils.isNotEmpty(maemberlist)){
+            for (int i=1;i<pages;i++){
+                com.bizvane.utils.responseinfo.PageInfo<MemberInfoModel> pagesdata= this.getCompanyMemebers(sysBrandId, i, 10000);
+                List<MemberInfoModel> list = pagesdata.getList();
+                AwardBO memberBO = new AwardBO();
+                //4=微信模板消息  营销
+                memberBO.setMktType(MktSmartTypeEnum.SMART_TYPE_WXMESSAGE.getCode());
+                list.stream().forEach(member->{
+                    MemberMessageVO memberMessageVO = new MemberMessageVO();
+                    memberMessageVO.setMemberCode(member.getMemberCode());
+                    memberMessageVO.setOpenId(member.getWxOpenId());
+                    memberMessageVO.setSysBrandId(sysBrandId);
+                    memberBO.setMemberMessageVO(memberMessageVO);
+                    award.execute(memberBO);
+                });
+            }
+
+        }
+    }
+
+    //给粉丝 批量发送短信
+    private void sendBachMSM(Long sysCompanyId, Long sysBrandId, Long mktTaskId, Integer taskType, MktMessagePO message) {
+        String msgContent = message.getMsgContent();
+        //获取营销短信通道
+        SmsConfigVo smsConfigVo = new SmsConfigVo();
+        smsConfigVo.setSysBrandId(sysBrandId);
+        smsConfigVo.setChannelType(Integer.valueOf(10));
+        smsConfigVo.setCompanyChannel(Boolean.FALSE);
+        SysSmsConfigPo smsConfigPo = sysSmsConfigServiceRpc.getCenterControlChannel(smsConfigVo);
+        Integer batchNum = smsConfigPo.getBatchNum();
+
+        com.bizvane.utils.responseinfo.PageInfo<WxChannelInfoVo> fanspage = this.getCompanyFans(sysBrandId, 1, batchNum);
+        List<WxChannelInfoVo> list = fanspage.getList();
+        int pages = fanspage.getPages();
+
+//                            SysSmsConfigVO sysSmsConfigVO = new SysSmsConfigVO();
+//                            BeanUtils.copyProperties(smsConfigPo,sysSmsConfigVO);
+//                            sysSmsConfigVO.setMsgContent(msgContent);
+        AwardBO fanBO = new AwardBO();
+        //7=批量短信
+        fanBO.setMktType(MktSmartTypeEnum.SMART_TYPE_MESSAGE_BATCH.getCode());
+        GenrealSendMessageVO messageVO = new GenrealSendMessageVO();
+        messageVO.setSysBrandId(sysBrandId);
+        messageVO.setSysCompanyId(sysCompanyId);
+        messageVO.setMessageBody(msgContent);
+        messageVO.setTaskId(mktTaskId);
+        messageVO.setTemplateType(String.valueOf(taskType));
+
+        if (CollectionUtils.isNotEmpty(list)){
+            for (int i=1;i<pages;i++){
+                com.bizvane.utils.responseinfo.PageInfo<WxChannelInfoVo> companyFans = this.getCompanyFans(sysBrandId, i, batchNum);
+                List<WxChannelInfoVo> listData = companyFans.getList();
+                String pnones = listData.stream().filter(fan -> StringUtils.isNotBlank(fan.getPhone())).map(fan -> fan.getPhone()).collect(Collectors.joining(","));
+                messageVO.setPhoneStr(pnones);
+                fanBO.setGenrealSendMessageVO(messageVO);
+                award.execute(fanBO);
+            }
+
         }
     }
 
@@ -599,7 +614,7 @@ public class TaskServiceImpl implements TaskService {
         vo.setBrandId(sysBrandId);
         //任务类型
         Integer taskType = vo.getTaskType();
-        
+
         GenrealGetMessageVO genrealGetMessageVO=new  GenrealGetMessageVO();
         genrealGetMessageVO.setSysBrandId(sysBrandId);
         genrealGetMessageVO.setTemplateType(String.valueOf(taskType));
