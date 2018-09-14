@@ -2,7 +2,9 @@ package com.bizvane.mktcenterservice.interfaces;
 
 import com.bizvane.centerstageservice.models.po.SysCheckPo;
 import com.bizvane.members.facade.models.MemberInfoModel;
+import com.bizvane.mktcenterservice.models.bo.ActivityAnalysisCountBO;
 import com.bizvane.mktcenterservice.models.bo.ActivityBO;
+import com.bizvane.mktcenterservice.models.bo.CtivityAnalysisBO;
 import com.bizvane.mktcenterservice.models.vo.ActivityVO;
 import com.bizvane.mktcenterservice.models.vo.PageForm;
 import com.bizvane.utils.responseinfo.ResponseData;
@@ -50,4 +52,12 @@ public interface ActivityEvaluationService {
      * @return
      */
     public ResponseData<Integer> checkActivityEvaluation(SysCheckPo po, SysAccountPO sysAccountPO);
+
+    /**
+     * 查询效果分析统计
+     * @param bo
+     * @return
+     */
+    public ResponseData<CtivityAnalysisBO> getActivityAnalysisCountpage(ActivityAnalysisCountBO bo, PageForm pageForm);
+
 }
