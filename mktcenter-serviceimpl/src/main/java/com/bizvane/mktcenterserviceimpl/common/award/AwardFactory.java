@@ -1,5 +1,6 @@
 package com.bizvane.mktcenterserviceimpl.common.award;
 
+import com.alibaba.fastjson.JSON;
 import com.bizvane.centercontrolservice.rpc.SysSmsConfigServiceRpc;
 import com.bizvane.couponfacade.interfaces.SendCouponServiceFeign;
 import com.bizvane.couponfacade.models.vo.SendCouponBatchRequestVO;
@@ -62,7 +63,9 @@ public class AwardFactory {
         ResponseData responseData = new ResponseData();
         try {
             SendCouponSimpleRequestVO va = bo.getSendCouponSimpleRequestVO();
+            log.info("开始执行发券操作参数="+ JSON.toJSONString(va));
             ResponseData<Object> simple = sendCouponServiceFeign.simple(va);
+            log.info("发券操作完成完成了完成了完成了完成了");
         } catch (Exception e) {
             log.error("com.bizvane.mktcenterserviceimpl.common.award.AwardFactory.awardCouponSimple error"+ e.getMessage());
             responseData.setCode(ResponseConstants.ERROR);
@@ -82,7 +85,9 @@ public class AwardFactory {
         try {
             SendCouponBatchRequestVO sendCouponBatchRequestVO = bo.getSendCouponBatchRequestVO();
             sendCouponBatchRequestVO.setSendType((byte) 1);
+            log.info("开始执行批量发券操作参数="+ JSON.toJSONString(sendCouponBatchRequestVO));
             responseData = sendCouponServiceFeign.batchCoupon(sendCouponBatchRequestVO);
+            log.info("发券操作完成完成了完成了完成了完成了");
         } catch (Exception e) {
             log.error("com.bizvane.mktcenterserviceimpl.common.award.AwardFactory.awardCouponBatch error:"+e.getMessage());
             responseData.setCode(ResponseConstants.ERROR);
@@ -102,7 +107,9 @@ public class AwardFactory {
         try {
             //增加积分奖励新增接口
             IntegralChangeRequestModel var1 = bo.getIntegralRecordModel();
+            log.info("开始执行新增积分操作参数="+ JSON.toJSONString(var1));
             integralChangeApiService.integralChangeOperate(var1);
+            log.info("积分增加操作完成完成了完成了完成了完成了");
         } catch (MemberException e) {
             log.error("com.bizvane.mktcenterserviceimpl.common.award.AwardFactory.awardIntegral error:"+e.getMessage());
             responseData.setCode(ResponseConstants.ERROR);
@@ -129,6 +136,7 @@ public class AwardFactory {
         msgvo.setChannelAccount("JJ0253");//账号
         msgvo.setChannelPassword("513678");//密码
         msgvo.setChannelService("http://TSN19.800CT.COM:8901/MWGate/wmgw.asmx/MongateSendSubmit");//路径*/
+        log.info("开始执行发送短信操作参数="+ JSON.toJSONString(activityMessageVO));
       return templateMessageServiceFeign.sendSmsTemplateMessage(activityMessageVO);
 
     }
@@ -149,7 +157,9 @@ public class AwardFactory {
         activityMessageVO.setActivityInterests(memberMessageVO.getActivityInterests());
         activityMessageVO.setActivityName(memberMessageVO.getActivityName());
         activityMessageVO.setActivityStartDate(memberMessageVO.getActivityDate());
+        log.info("开始执行发送模板消息操作参数="+ JSON.toJSONString(activityMessageVO));
         templateMessageServiceFeign.sendTemplateMessage(activityMessageVO);
+        log.info("发送模板消息操作完成完成了完成了完成了完成了");
         return responseData;
     }
 

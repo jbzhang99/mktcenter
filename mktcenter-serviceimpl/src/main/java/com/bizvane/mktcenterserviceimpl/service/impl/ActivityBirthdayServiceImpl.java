@@ -194,20 +194,6 @@ public class ActivityBirthdayServiceImpl implements ActivityBirthdayService {
             mktActivityPOWithBLOBs.setCheckStatus(CheckStatusEnum.CHECK_STATUS_PENDING.getCode());
             //活动状态设置为待执行
             mktActivityPOWithBLOBs.setActivityStatus(ActivityStatusEnum.ACTIVITY_STATUS_PENDING.getCode());
-
-            //如果是待审核数据则需要增加一条审核数据l
-            SysCheckPo po = new SysCheckPo();
-            po.setSysBrandId(mktActivityPOWithBLOBs.getSysBrandId());
-            po.setBusinessCode(mktActivityPOWithBLOBs.getActivityCode());
-            po.setBusinessName(mktActivityPOWithBLOBs.getActivityName());
-            po.setBusinessType(ActivityTypeEnum.ACTIVITY_TYPE_BIRTHDAY.getCode());
-            po.setFunctionCode("C0002");
-            po.setCheckStatus(CheckStatusEnum.CHECK_STATUS_PENDING.getCode());
-            po.setCreateDate(new Date());
-            po.setCreateUserId(stageUser.getSysAccountId());
-            po.setCreateUserName(stageUser.getName());
-            log.info("增加一条数据到审核中心");
-            sysCheckServiceRpc.addCheck(po);
             //getStartTime 开始时间>当前时间增加job
             if(1 != bo.getActivityVO().getLongTerm() && new Date().before(activityVO.getStartTime())){
                 //创建任务调度任务开始时间
@@ -239,7 +225,23 @@ public class ActivityBirthdayServiceImpl implements ActivityBirthdayService {
         mktActivityPOMapper.insertSelective(mktActivityPOWithBLOBs);
         //获取新增后数据id
         Long mktActivityId = mktActivityPOWithBLOBs.getMktActivityId();
-
+        if (i>0){
+            //如果是待审核数据则需要增加一条审核数据l
+            SysCheckPo po = new SysCheckPo();
+            po.setSysBrandId(mktActivityPOWithBLOBs.getSysBrandId());
+            po.setBusinessCode(mktActivityPOWithBLOBs.getActivityCode());
+            po.setBusinessName(mktActivityPOWithBLOBs.getActivityName());
+            po.setBusinessType(ActivityTypeEnum.ACTIVITY_TYPE_BIRTHDAY.getCode());
+            po.setFunctionCode("C0002");
+            po.setCheckStatus(CheckStatusEnum.CHECK_STATUS_PENDING.getCode());
+            po.setBizName(mktActivityPOWithBLOBs.getActivityName());
+            po.setBusinessId(mktActivityId);
+            po.setCreateDate(new Date());
+            po.setCreateUserId(stageUser.getSysAccountId());
+            po.setCreateUserName(stageUser.getName());
+            log.info("增加一条数据到审核中心");
+            sysCheckServiceRpc.addCheck(po);
+        }
         //新增生日活动表
         MktActivityBirthdayPO mktActivityBirthdayPO = new MktActivityBirthdayPO();
         BeanUtils.copyProperties(mktActivityPOWithBLOBs,mktActivityBirthdayPO);
