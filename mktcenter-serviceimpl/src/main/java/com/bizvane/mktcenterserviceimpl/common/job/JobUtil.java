@@ -1,5 +1,6 @@
 package com.bizvane.mktcenterserviceimpl.common.job;
 
+import com.bizvane.mktcenterservice.models.po.MktMessagePO;
 import com.bizvane.mktcenterservice.models.po.MktTaskPOWithBLOBs;
 import com.bizvane.mktcenterservice.models.vo.ActivitySmartVO;
 import com.bizvane.mktcenterservice.models.vo.ActivityVO;
@@ -95,48 +96,133 @@ public class JobUtil {
         String param =vo.getMktSmartType()+"&"+vo.getActivityCode();
         addJob(vo.getSendTime(),vo.getActivityName(),param,stageUser.getName(),JobHandlerConstants.smartActivity,JobBusinessTypeEnum.ACTIVITY_TYPE_ACTIVITY.getCode(),vo.getActivityCode());
     }
-/**
- * 添加任务开始job
- */
-public  void addTaskStartJob(SysAccountPO stageUser, MktTaskPOWithBLOBs po) {
-    //2=任务
-    int bizType = JobBusinessTypeEnum.ACTIVITY_TYPE_TASK.getCode();
-    //任务code
-    String taskCode = po.getTaskCode();
-    XxlJobInfo xxlJobInfo = new XxlJobInfo();
-    xxlJobInfo.setBizCode(taskCode);
-    xxlJobInfo.setBizType(bizType);
-    jobClient.removeByBiz(xxlJobInfo);
-
-    //添加任务
-    StringBuilder builder = new StringBuilder();
-    builder.append(po.getMktTaskId());
-    builder.append("&");
-    //任务=2
-    builder.append(JobBusinessTypeEnum.ACTIVITY_TYPE_TASK.getCode());
-    builder.append("&");
-    builder.append(po.getSysCompanyId());
-    String param =builder.toString();
-    addJob(po.getStartTime(),po.getTaskName(),param,stageUser.getName(),JobHandlerConstants.START_TASK,JobBusinessTypeEnum.ACTIVITY_TYPE_TASK.getCode(),po.getTaskCode());
-}
-
+    /**
+     * 添加任务开始job
+     */
+    public  void addTaskStartJob(SysAccountPO stageUser, MktTaskPOWithBLOBs po) {
+        //2=任务
+        int bizType = JobBusinessTypeEnum.ACTIVITY_TYPE_TASK.getCode();
+        //任务code
+        String taskCode = po.getTaskCode();
+        //任务id
+        Long mktTaskId = po.getMktTaskId();
+        //创建人
+        String name = stageUser.getName();
+        //公司id
+        Long sysCompanyId = po.getSysCompanyId();
+        //任务开始时间
+        Date startTime = po.getStartTime();
+        //拼接参数放入job,用于执行job  任务id&任务类型=2&公司id
+        String param = this.getTaskJobParam(bizType, mktTaskId, sysCompanyId,JobHandlerConstants.START_TASK);
+        //清除一下job
+        doRemoveJobe(bizType, taskCode, param);
+        //添加任务
+        addJob(startTime,po.getTaskName(),param,stageUser.getName(),JobHandlerConstants.START_TASK,bizType,taskCode);
+    }
     /**
      * 添加任务结束job
      * @param stageUser
      * @param po
      */
     public void addTaskEndJob(SysAccountPO stageUser, MktTaskPOWithBLOBs po) {
-        StringBuilder builder = new StringBuilder();
-        builder.append(po.getMktTaskId());
-        builder.append("&");
-        //2="营销任务"
-        builder.append(JobBusinessTypeEnum.ACTIVITY_TYPE_TASK.getCode());
-        builder.append("&");
-        builder.append(po.getSysCompanyId());
-        String param =builder.toString();
-        addJob(po.getStartTime(),po.getTaskName(),param,stageUser.getName(),JobHandlerConstants.END_TASK,JobBusinessTypeEnum.ACTIVITY_TYPE_TASK.getCode(),po.getTaskCode());
+        //拼接任务job中的
+        int bizType = JobBusinessTypeEnum.ACTIVITY_TYPE_TASK.getCode();
+        Long mktTaskId = po.getMktTaskId();
+        String taskName = po.getTaskName();
+        String name = stageUser.getName();
+        String taskCode = po.getTaskCode();
+        Long sysCompanyId = po.getSysCompanyId();
+        Date endTime = po.getEndTime();
+        String param = this.getTaskJobParam(bizType,mktTaskId,sysCompanyId,JobHandlerConstants.END_TASK);
+        //清除一下job
+        doRemoveJobe(bizType, taskCode, param);
+        //添加job
+        this.addJob(endTime,taskName,param,name,JobHandlerConstants.END_TASK,bizType,taskCode);
     }
 
+    /**
+     * 给粉丝发送短息时,添加定时任务数据
+     * @param stageUser
+     * @param po
+     * @param messagePO
+     */
+    public void addMessageXXTaskJob(SysAccountPO stageUser, MktTaskPOWithBLOBs po, MktMessagePO messagePO){
+        int bizType = JobBusinessTypeEnum.ACTIVITY_TYPE_TASK.getCode();
+        Long mktTaskId = po.getMktTaskId();
+        String taskCode = po.getTaskCode();
+        String taskName = po.getTaskName();
+        String name = stageUser.getName();
+        String msgContent = messagePO.getMsgContent();
+        Date sendTime = messagePO.getSendTime();
+        Long sysBrandId = po.getSysBrandId();
+        StringBuilder builder = new StringBuilder();
+        String param = this.getMessageJobParam(sysBrandId, msgContent);
+        //清除一下job
+        this.doRemoveJobe(bizType, taskCode, param);
+        //添加job
+        this.addJob(sendTime,taskName,param,name,JobHandlerConstants.MESSAGE_SEND_XX,bizType,taskCode);
+    }
+    public void addMessageDXTaskJob(SysAccountPO stageUser, MktTaskPOWithBLOBs po, MktMessagePO messagePO){
+        int bizType = JobBusinessTypeEnum.ACTIVITY_TYPE_TASK.getCode();
+        Long mktTaskId = po.getMktTaskId();
+        Integer taskType = po.getTaskType();
+        String taskCode = po.getTaskCode();
+        String taskName = po.getTaskName();
+        Long sysCompanyId = po.getSysCompanyId();
+        Long sysBrandId = po.getSysBrandId();
+        String name = stageUser.getName();
+        String msgContent = messagePO.getMsgContent();
+        Date sendTime = messagePO.getSendTime();
+        String param = this.getMessageJobParam(mktTaskId, taskType, sysCompanyId, sysBrandId, msgContent);
+        //清除一下job
+        this.doRemoveJobe(bizType, taskCode, param);
+        //添加job
+        this.addJob(sendTime,taskName,param,name,JobHandlerConstants.MESSAGE_SEND_DX,bizType,taskCode);
+    }
+
+    //任务清除一下job
+    private void doRemoveJobe(int bizType, String taskCode, String param) {
+        XxlJobInfo xxlJobInfo = new XxlJobInfo();
+        xxlJobInfo.setBizCode(taskCode);
+        xxlJobInfo.setBizType(bizType);
+        xxlJobInfo.setExecutorParam(param);
+        jobClient.removeByBiz(xxlJobInfo);
+    }
+
+    //任务  拼接参数放入job,用于执行job  任务id&任务类型=2&公司id
+    private String getTaskJobParam(int bizType, Long mktTaskId, Long sysCompanyId,String taskJobStyle) {
+        StringBuilder builder = new StringBuilder();
+        builder.append(mktTaskId);
+        builder.append("&");
+        builder.append(bizType);
+        builder.append("&");
+        builder.append(sysCompanyId);
+        builder.append("&");
+        builder.append(taskJobStyle);
+        return builder.toString();
+    }
+    //消息或短信类业务的参数拼接
+    //(Long mktTaskId, Integer taskType,Long sysCompanyId,Long sysBrandId,String msgContent)
+    private String getMessageJobParam(Long mktTaskId, Integer taskType,Long sysCompanyId,Long sysBrandId,String msgContent) {
+        StringBuilder builder = new StringBuilder();
+        builder.append(mktTaskId);
+        builder.append("&");
+        builder.append(taskType);
+        builder.append("&");
+        builder.append(sysCompanyId);
+        builder.append("&");
+        builder.append(sysBrandId);
+        builder.append("&");
+        builder.append(msgContent);
+        return builder.toString();
+    }
+    private String getMessageJobParam(long sysBrandId, String msgContent){
+        StringBuilder builder = new StringBuilder();
+        builder.append(sysBrandId);
+        builder.append("&");
+        builder.append(msgContent);
+        return builder.toString();
+    }
     /**
      * 发送信息job
      * @param stageUser

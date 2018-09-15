@@ -350,7 +350,8 @@ public class TaskServiceImpl implements TaskService {
         //已审核   执行中  执行时间小于当前时间 或等于当前时间
         if (TaskConstants.THREE.equals(checkStatus) && TaskConstants.SECOND.equals(taskStatus)) {
             //判断是否需要发送消息和短信 业务类型：1活动，2任务
-            this.sendSmg(mktTaskPOWithBLOBs,mktmessagePOList);
+            this.sendSmg(mktTaskPOWithBLOBs,mktmessagePOList,stageUser);
+            //任务到期置为无效
             jobUtil.addTaskEndJob(stageUser, mktTaskPOWithBLOBs);
         }
         //已审核   待执行,创建job
@@ -364,9 +365,9 @@ public class TaskServiceImpl implements TaskService {
     /**
      * 发送消息和短信 -已经核对
      */
-    @Override
     @Async
-    public void sendSmg(MktTaskPOWithBLOBs mktTaskPOWithBLOBs,List<MktMessagePO> mktmessagePOList) {
+    @Override
+    public void sendSmg(MktTaskPOWithBLOBs mktTaskPOWithBLOBs,List<MktMessagePO> mktmessagePOList,SysAccountPO stageUser) {
         Long sysCompanyId = mktTaskPOWithBLOBs.getSysCompanyId();
         Long sysBrandId = mktTaskPOWithBLOBs.getSysBrandId();
         Long mktTaskId = mktTaskPOWithBLOBs.getMktTaskId();
@@ -376,21 +377,35 @@ public class TaskServiceImpl implements TaskService {
             mktmessagePOList.stream().forEach(
                     message -> {
                         String msgType = message.getMsgType();
+                        String msgContent = message.getMsgContent();
+                        //true=立刻   false=定时发送
+                        Boolean sendImmediately = message.getSendImmediately();
                         //1=模板消息   所有的会员
                         if (TaskConstants.FIRST.equals(msgType)) {
-                            sendMemberMessage(sysBrandId);
+                            //立即发送
+                            if (sendImmediately){
+                                this.sendMemberMessage(sysBrandId,msgContent);
+                            }else{
+                                jobUtil.addMessageXXTaskJob(stageUser, mktTaskPOWithBLOBs,message);
+                            }
                         }
                         //2=短信     所有粉丝
                         if (TaskConstants.SECOND.equals(msgType)){
-                            sendBachMSM(sysCompanyId, sysBrandId, mktTaskId, taskType, message);
+                            if (sendImmediately){
+                                this.sendBachMSM(mktTaskId, taskType,sysCompanyId, sysBrandId,  msgContent);
+                            }else{
+                                jobUtil.addMessageDXTaskJob(stageUser, mktTaskPOWithBLOBs,message);
+                            }
                         }
 
                     }
             );
         }
     }
-    //给会员发送消息
-    private void sendMemberMessage(Long sysBrandId) {
+    //给会员发送微信消息
+    @Async
+    @Override
+    public  void sendMemberMessage(Long sysBrandId,String msgContent) {
         com.bizvane.utils.responseinfo.PageInfo<MemberInfoModel> memeberspage = this.getCompanyMemebers(sysBrandId, 1, 10000);
         List<MemberInfoModel> maemberlist = memeberspage.getList();
         int pages = memeberspage.getPages();
@@ -406,6 +421,7 @@ public class TaskServiceImpl implements TaskService {
                     memberMessageVO.setMemberCode(member.getMemberCode());
                     memberMessageVO.setOpenId(member.getWxOpenId());
                     memberMessageVO.setSysBrandId(sysBrandId);
+                    memberMessageVO.setSendWxmember(msgContent);
                     memberBO.setMemberMessageVO(memberMessageVO);
                     award.execute(memberBO);
                 });
@@ -415,8 +431,9 @@ public class TaskServiceImpl implements TaskService {
     }
 
     //给粉丝 批量发送短信
-    private void sendBachMSM(Long sysCompanyId, Long sysBrandId, Long mktTaskId, Integer taskType, MktMessagePO message) {
-        String msgContent = message.getMsgContent();
+    @Override
+    public void sendBachMSM(Long mktTaskId, Integer taskType,Long sysCompanyId,Long sysBrandId,String msgContent) {
+        // String msgContent = message.getMsgContent();
         //获取营销短信通道
         SmsConfigVo smsConfigVo = new SmsConfigVo();
         smsConfigVo.setSysBrandId(sysBrandId);

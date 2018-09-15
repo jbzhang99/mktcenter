@@ -28,6 +28,20 @@ import java.util.List;
  */
 public interface TaskService {
     /**
+     * 给会员发送消息
+     * @param sysBrandId
+     */
+    public  void sendMemberMessage(Long sysBrandId,String msgContent);
+    /**
+     * 批量给粉丝发送短信
+     * @param sysCompanyId
+     * @param sysBrandId
+     * @param mktTaskId
+     * @param taskType
+     * @param msgContent
+     */
+    public void sendBachMSM(Long mktTaskId,Integer taskType,Long sysCompanyId,Long sysBrandId,String msgContent);
+    /**
      * 通过storeid获取店铺列表
      * @param sysStoreIdList
      * @return
@@ -103,7 +117,7 @@ public interface TaskService {
     /**
      * 发送消息--已经核对
      */
-    public  void  sendSmg(MktTaskPOWithBLOBs mktTaskPOWithBLOBs,List<MktMessagePO> mktmessagePOList);
+    public  void  sendSmg(MktTaskPOWithBLOBs mktTaskPOWithBLOBs,List<MktMessagePO> mktmessagePOList,SysAccountPO stageUser);
 
     /**
      * 发送券和积分
