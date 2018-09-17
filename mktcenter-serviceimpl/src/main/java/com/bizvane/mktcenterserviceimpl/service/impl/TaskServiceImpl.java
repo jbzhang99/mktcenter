@@ -824,7 +824,8 @@ public class TaskServiceImpl implements TaskService {
      */
     @Override
     public ResponseData<PageInfo<MktTaskPOWithBLOBs>> getTaskByTaskType(TaskVO vo, PageForm pageForm) {
-        ResponseData<PageInfo<MktTaskPOWithBLOBs>> result = new ResponseData<PageInfo<MktTaskPOWithBLOBs>>(SysResponseEnum.OPERATE_FAILED_DATA_NOT_EXISTS.getCode(), SysResponseEnum.OPERATE_FAILED_DATA_NOT_EXISTS.getMessage(), null);
+        List<MktTaskPOWithBLOBs> lists=new  ArrayList<MktTaskPOWithBLOBs>();
+        ResponseData<PageInfo<MktTaskPOWithBLOBs>> result = new ResponseData<PageInfo<MktTaskPOWithBLOBs>>(SysResponseEnum.SUCCESS.getCode(), SysResponseEnum.OPERATE_FAILED_DATA_NOT_EXISTS.getMessage(), null);
         Integer showType = vo.getShowType();
         //1完善资料，2分享任务，3邀请注册，4累计消费次数，5累计消费金额',
         PageHelper.startPage(pageForm.getPageNumber(), pageForm.getPageSize());
@@ -842,7 +843,7 @@ public class TaskServiceImpl implements TaskService {
         }
         mktTaskPOExample.setOrderByClause("create_date desc");
 
-        List<MktTaskPOWithBLOBs> lists = mktTaskPOMapper.selectByExampleWithBLOBs(mktTaskPOExample);
+        lists = mktTaskPOMapper.selectByExampleWithBLOBs(mktTaskPOExample);
 
         if (CollectionUtils.isNotEmpty(lists)) {
             PageInfo<MktTaskPOWithBLOBs> pageInfo = new PageInfo<MktTaskPOWithBLOBs>(lists);
