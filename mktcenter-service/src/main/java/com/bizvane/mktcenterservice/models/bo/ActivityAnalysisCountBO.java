@@ -50,6 +50,16 @@ public class ActivityAnalysisCountBO {
 
     private String days;//进行天数
 
+    private BigDecimal  orderAmountSum;//会员参与活动金额
+
+    public BigDecimal getOrderAmountSum() {
+        return orderAmountSum;
+    }
+
+    public void setOrderAmountSum(BigDecimal orderAmountSum) {
+        this.orderAmountSum = orderAmountSum;
+    }
+
     public Integer getActivityStatus() {
         return activityStatus;
     }
