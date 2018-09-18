@@ -1,10 +1,12 @@
 package com.bizvane.mktcenterserviceimpl.common.rocketmq;
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.aliyun.openservices.ons.api.Action;
 import com.aliyun.openservices.ons.api.ConsumeContext;
 import com.aliyun.openservices.ons.api.Message;
 import com.aliyun.openservices.ons.api.MessageListener;
+import com.bizvane.members.facade.models.MemberInfoModel;
 import com.bizvane.members.facade.models.OrderModel;
 import com.bizvane.members.facade.models.OrderServeModel;
 import com.bizvane.mktcenterservice.interfaces.TaskRecordService;
@@ -15,7 +17,9 @@ import com.bizvane.mktcenterservice.models.po.MktCouponPO;
 import com.bizvane.mktcenterservice.models.po.MktTaskRecordPO;
 import com.bizvane.mktcenterservice.models.vo.MktTaskRecordVO;
 import com.bizvane.mktcenterserviceimpl.common.enums.TaskTypeEnum;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -29,6 +33,7 @@ import java.util.List;
  * @Time: 2018/8/5 23:15
  * 监控订单
  */
+@Slf4j
 @Component
 public class OrderTaskListener implements MessageListener {
 
@@ -40,16 +45,28 @@ public class OrderTaskListener implements MessageListener {
     public Action consume(Message message, ConsumeContext consumeContext) {
         //获取订单信息
         String modelStr= new String(message.getBody());
-
+        log.info("订单信息--OrderTaskListener--"+modelStr);
         OrderModel model = JSONObject.parseObject(modelStr, OrderModel.class);
+        //根据会员code获取会员详情
+        String memberCode = model.getMemberCode();
+        MemberInfoModel memeberDetail = taskService.getCompanyMemeberDetail(memberCode);
+        Long serviceStoreId = memeberDetail.getServiceStoreId();
+        //订单列表
+        //订单来源 1=线下   2=微商城
+        Integer orderSource = model.getOrderFrom();
         Long companyId = model.getSysCompanyId();
         Long brandId = model.getBrandId();
         Date placeOrderTime = model.getPlaceOrderTime();
-        List<TaskAwardBO> taskOrderAwardList = taskService.getTaskOrderAwardList(companyId, brandId, placeOrderTime);
+        List<TaskAwardBO> taskOrderAwardList = taskService.getTaskOrderAwardList(companyId, brandId, placeOrderTime, orderSource);
+        log.info("根据订单信息 获取的任务列表----"+ JSON.toJSONString(taskOrderAwardList));
         if (CollectionUtils.isNotEmpty(taskOrderAwardList)){
-            taskOrderAwardList.stream().forEach(obj->{
-                this.doExecuteTask(model, obj,placeOrderTime);
-            });
+            taskOrderAwardList.stream()
+               .filter(obj->{
+               Boolean isStoreLimit = obj.getStoreLimit();
+               String  StoreLimitList=obj.getStoreLimitList();
+               return isStoreLimit || (serviceStoreId!=null && StringUtils.isNotBlank(StoreLimitList) &&  obj.getStoreLimitList().contains(String.valueOf(serviceStoreId)));})
+               .forEach(obj->{
+               this.doExecuteTask(model, obj,placeOrderTime); });
         }
         //如果想测试消息重投的功能,可以将Action.CommitMessage 替换成Action.ReconsumeLater
       return Action.CommitMessage;

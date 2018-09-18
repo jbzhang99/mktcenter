@@ -32,6 +32,7 @@ import com.bizvane.utils.responseinfo.ResponseData;
 import com.bizvane.utils.tokens.SysAccountPO;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -267,47 +268,50 @@ public class TaskShareServiceImpl implements TaskShareService {
     public  void   doAwardShare(ShareSuccessVO vo){
         //被邀请人信息
         Date shareDate = vo.getShareDate();
-
         //邀请人的信息
         String memberCode = vo.getMemberCode();
         MemberInfoModel memeberDetail = taskService.getCompanyMemeberDetail(memberCode);
         Long companyId = memeberDetail.getSysCompanyId();
         Long brandId = memeberDetail.getBrandId();
         String cardNo = memeberDetail.getCardNo();
-
+        Long serviceStoreId = memeberDetail.getServiceStoreId();
         //符合条件的任务列表
         List<TaskAwardBO> taskAwardList = taskService.getTaskShareAwardList(companyId, brandId, shareDate);
-
         if (CollectionUtils.isNotEmpty(taskAwardList)){
-            taskAwardList.stream().forEach(obj->{
-                Integer taskType = obj.getTaskType();
-                Long mktTaskId = obj.getMktTaskId();
-                //邀请开卡人数
-                Integer shareTimes = obj.getShareTimes();
+            taskAwardList.stream().
+                filter(obj->{
+                     Boolean isStoreLimit = obj.getStoreLimit();
+                     String  StoreLimitList=obj.getStoreLimitList();
+                     return isStoreLimit || (serviceStoreId!=null && StringUtils.isNotBlank(StoreLimitList) &&  obj.getStoreLimitList().contains(String.valueOf(serviceStoreId)));}).
+                forEach(obj->{
+                    Integer taskType = obj.getTaskType();
+                    Long mktTaskId = obj.getMktTaskId();
+                    //邀请开卡人数
+                    Integer shareTimes = obj.getShareTimes();
 
-                MktTaskRecordVO recordVO = new MktTaskRecordVO();
-                recordVO.setSysBrandId(brandId);
-                recordVO.setTaskType(taskType);
-                recordVO.setTaskId(mktTaskId);
-                recordVO.setMemberCode(memberCode);
+                    MktTaskRecordVO recordVO = new MktTaskRecordVO();
+                    recordVO.setSysBrandId(brandId);
+                    recordVO.setTaskType(taskType);
+                    recordVO.setTaskId(mktTaskId);
+                    recordVO.setMemberCode(memberCode);
 
-                // 获取会员是否已经成功参与过某一活动
-                Boolean isOrNoAward = taskRecordService.getIsOrNoAward(recordVO);
-                if (!isOrNoAward){
-                    MktTaskRecordPO recordPO = new MktTaskRecordPO();
-                    BeanUtils.copyProperties(recordVO,recordPO);
-                    recordPO.setParticipateDate(shareDate);
-                    taskRecordService.addTaskRecord(recordPO);
+                    // 获取会员是否已经成功参与过某一活动
+                    Boolean isOrNoAward = taskRecordService.getIsOrNoAward(recordVO);
+                    if (!isOrNoAward){
+                        MktTaskRecordPO recordPO = new MktTaskRecordPO();
+                        BeanUtils.copyProperties(recordVO,recordPO);
+                        recordPO.setParticipateDate(shareDate);
+                        taskRecordService.addTaskRecord(recordPO);
 
-                    //获取会员参与某一活动总次数
-                    TotalStatisticsBO totalBO = taskRecordService.getTotalStatistics(recordVO);
-                    if (totalBO!=null && totalBO.getTotalTimes()!=null &&  totalBO.getTotalTimes().equals(shareTimes)){
-                        recordPO.setRewarded(Integer.valueOf(1));
-                        taskRecordService.updateTaskRecord(recordPO);
-                        taskService.sendCouponAndPoint(memberCode,obj);
+                        //获取会员参与某一活动总次数
+                        TotalStatisticsBO totalBO = taskRecordService.getTotalStatistics(recordVO);
+                        if (totalBO!=null && totalBO.getTotalTimes()!=null &&  totalBO.getTotalTimes().equals(shareTimes)){
+                            recordPO.setRewarded(Integer.valueOf(1));
+                            taskRecordService.updateTaskRecord(recordPO);
+                            taskService.sendCouponAndPoint(memberCode,obj);
+                        }
+
                     }
-
-                }
 
             });
         }

@@ -798,8 +798,11 @@
           tto.order_source,
           tto.consume_amount,
           tto.consume_times,
+          tto.is_store_limit,
+          tto.store_limit_type,
+          tto.store_limit_list,
           tmc.mkt_coupon_id,
-          tmc.coupon_code,
+          tmc.coupon_definition_id,
           tmc.coupon_name
       FROM
           t_mkt_task tta
@@ -821,6 +824,9 @@
     <if test="placeOrderTime!=null and placeOrderTime!=''">
       AND tta.start_time <![CDATA[<=]]>#{placeOrderTime}
       AND tta.end_time <![CDATA[>=]]> #{placeOrderTime}
+    </if>
+    <if test="orderSource != null and orderSource!= '' ">
+      AND (order_source=#{orderSource} or order_source=0)
     </if>
   </select>
 

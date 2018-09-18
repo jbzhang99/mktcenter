@@ -40,6 +40,12 @@ public class TaskAwardBO extends MktTaskPOWithBLOBs {
     //分享内容
     private String shareUrl;
 
+    //门店限制状态：0不限制，1限制
+    private Boolean isStoreLimit;
+    //门店限制类型：1黑名单，2白名单
+    private Integer storeLimitType;
+    //白名单店铺list
+    private String storeLimitList;
 
     //券奖励
     private List<MktCouponPO> mktCouponPOList;
@@ -139,4 +145,37 @@ public class TaskAwardBO extends MktTaskPOWithBLOBs {
     public void setShareTimes(Integer shareTimes) {
         this.shareTimes = shareTimes;
     }
+
+    public String getShareUrl() {
+        return shareUrl;
+    }
+
+    public void setShareUrl(String shareUrl) {
+        this.shareUrl = shareUrl;
+    }
+
+    public Boolean getStoreLimit() {
+        return isStoreLimit;
+    }
+
+    public void setStoreLimit(Boolean storeLimit) {
+        isStoreLimit = storeLimit;
+    }
+
+    public Integer getStoreLimitType() {
+        return storeLimitType;
+    }
+
+    public void setStoreLimitType(Integer storeLimitType) {
+        this.storeLimitType = storeLimitType;
+    }
+
+    public String getStoreLimitList() {
+        return storeLimitList;
+    }
+
+    public void setStoreLimitList(String storeLimitList) {
+        this.storeLimitList = storeLimitList;
+    }
+
 }

@@ -255,8 +255,8 @@ public class TaskServiceImpl implements TaskService {
      * @return
      */
     @Override
-    public List<TaskAwardBO> getTaskOrderAwardList(Long sysCompanyId, Long sysBrandId, Date placeOrderTime){
-        return mktTaskPOMapper.getTaskOrderAwardList(sysCompanyId,sysBrandId,placeOrderTime);
+    public List<TaskAwardBO> getTaskOrderAwardList(Long sysCompanyId, Long sysBrandId, Date placeOrderTime,Integer orderSource){
+        return mktTaskPOMapper.getTaskOrderAwardList(sysCompanyId,sysBrandId,placeOrderTime,orderSource);
     }
     /**
      * 根据公司id和品牌id查询执行中的邀请类任务
@@ -824,7 +824,7 @@ public class TaskServiceImpl implements TaskService {
      */
     @Override
     public ResponseData<PageInfo<MktTaskPOWithBLOBs>> getTaskByTaskType(TaskVO vo, PageForm pageForm) {
-        List<MktTaskPOWithBLOBs> lists=new  ArrayList<MktTaskPOWithBLOBs>();
+        List<MktTaskPOWithBLOBs> lists=null;
         ResponseData<PageInfo<MktTaskPOWithBLOBs>> result = new ResponseData<PageInfo<MktTaskPOWithBLOBs>>(SysResponseEnum.SUCCESS.getCode(), SysResponseEnum.OPERATE_FAILED_DATA_NOT_EXISTS.getMessage(), null);
         Integer showType = vo.getShowType();
         //1完善资料，2分享任务，3邀请注册，4累计消费次数，5累计消费金额',
@@ -846,11 +846,13 @@ public class TaskServiceImpl implements TaskService {
         lists = mktTaskPOMapper.selectByExampleWithBLOBs(mktTaskPOExample);
 
         if (CollectionUtils.isNotEmpty(lists)) {
-            PageInfo<MktTaskPOWithBLOBs> pageInfo = new PageInfo<MktTaskPOWithBLOBs>(lists);
-            result.setData(pageInfo);
             result.setCode(SysResponseEnum.SUCCESS.getCode());
             result.setMessage(SysResponseEnum.SUCCESS.getMessage());
+        }else{
+            lists=new  ArrayList<MktTaskPOWithBLOBs>();
         }
+        PageInfo<MktTaskPOWithBLOBs> pageInfo = new PageInfo<MktTaskPOWithBLOBs>(lists);
+        result.setData(pageInfo);
         return result;
     }
 }

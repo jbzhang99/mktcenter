@@ -36,6 +36,7 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
@@ -315,12 +316,16 @@ public  ResponseData<List<ExtendPropertyVO>> getMemberField(Long sysBrandId){
         Long companyId = memeberDetail.getSysCompanyId();
         Long brandId = memeberDetail.getBrandId();
         String cardNo = memeberDetail.getCardNo();
-
+        Long serviceStoreId = memeberDetail.getServiceStoreId();
         //符合条件的任务列表
         List<TaskAwardBO> taskInviteAwardList = taskService.getTaskInviteAwardList(companyId, brandId, profileDate);
-
         if (CollectionUtils.isNotEmpty(taskInviteAwardList)){
-            taskInviteAwardList.stream().forEach(obj->{
+            taskInviteAwardList.stream().
+            filter(obj->{
+                Boolean isStoreLimit = obj.getStoreLimit();
+                String  StoreLimitList=obj.getStoreLimitList();
+                return isStoreLimit || (serviceStoreId!=null && StringUtils.isNotBlank(StoreLimitList) &&  obj.getStoreLimitList().contains(String.valueOf(serviceStoreId)));}).
+            forEach(obj->{
                 MktTaskRecordVO recordVO = new MktTaskRecordVO();
                 recordVO.setSysBrandId(brandId);
                 recordVO.setTaskType(obj.getTaskType());

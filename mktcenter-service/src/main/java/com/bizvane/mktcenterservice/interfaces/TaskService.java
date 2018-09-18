@@ -72,7 +72,7 @@ public interface TaskService {
      * @param sysBrandId
      * @return
      */
-    public List<TaskAwardBO> getTaskOrderAwardList(Long sysCompanyId, Long sysBrandId, Date placeOrderTime);
+    public List<TaskAwardBO> getTaskOrderAwardList(Long sysCompanyId, Long sysBrandId, Date placeOrderTime, Integer orderSource);
     /**
      * 根据公司id和品牌id查询执行中的邀请类任务
      * @param sysCompanyId
