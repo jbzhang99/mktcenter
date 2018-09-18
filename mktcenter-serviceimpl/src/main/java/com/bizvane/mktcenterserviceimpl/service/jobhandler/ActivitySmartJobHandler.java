@@ -1,5 +1,6 @@
 package com.bizvane.mktcenterserviceimpl.service.jobhandler;
 
+import com.alibaba.fastjson.JSON;
 import com.aliyun.openservices.shade.com.alibaba.fastjson.JSONObject;
 import com.bizvane.couponfacade.models.vo.SendCouponBatchRequestVO;
 import com.bizvane.couponfacade.models.vo.SendCouponSimpleRequestVO;
@@ -108,11 +109,11 @@ public class ActivitySmartJobHandler extends IJobHandler {
                     return returnT;
                 }
                 String targetMbr = mktActivitySmartPO.getTargetMbr();
-                //get member by condition
                 ////分页查询会员信息
                 //把高级搜索的条件转换成对象
-                JSONObject jsonObject=JSONObject.parseObject(targetMbr);
-                MembersInfoSearchVo membersInfoSearchVo=jsonObject.toJavaObject(MembersInfoSearchVo.class);
+                // JSONObject jsonObject=JSONObject.parseObject(targetMbr);
+                // MembersInfoSearchVo membersInfoSearchVo=jsonObject.toJavaObject(MembersInfoSearchVo.class);
+                MembersInfoSearchVo membersInfoSearchVo= JSON.parseObject(targetMbr,MembersInfoSearchVo.class);
                 membersInfoSearchVo.setPageNumber(1);
                 membersInfoSearchVo.setPageSize(10000);
                 memberMessage.sendSmart(mktSmartType, mktActivityPOWithBLOBs, membersInfoSearchVo);
