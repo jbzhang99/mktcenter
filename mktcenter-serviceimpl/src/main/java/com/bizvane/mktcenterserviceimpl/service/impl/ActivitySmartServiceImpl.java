@@ -124,6 +124,7 @@ public class ActivitySmartServiceImpl implements ActivitySmartService {
                 MembersInfoSearchVo membersInfoSearchVo=JSON.parseObject(targetMbr,MembersInfoSearchVo.class);
                 membersInfoSearchVo.setPageNumber(1);
                 membersInfoSearchVo.setPageSize(1);
+                membersInfoSearchVo.setBrandId(vo.getSysBrandId());
                 ResponseData<com.bizvane.utils.responseinfo.PageInfo<MemberInfoVo>> memberInfoVoPages = membersAdvancedSearchApiService.search(membersInfoSearchVo);
                 mktActivitySmartGroupPO.setTargetMbrCount((int) memberInfoVoPages.getData().getTotal());
             }
@@ -627,6 +628,7 @@ public class ActivitySmartServiceImpl implements ActivitySmartService {
             MembersInfoSearchVo membersInfoSearchVo=JSON.parseObject(targetMbr,MembersInfoSearchVo.class);
             membersInfoSearchVo.setPageNumber(1);
             membersInfoSearchVo.setPageSize(1000);
+            membersInfoSearchVo.setBrandId(stageUser.getBrandId());
             memberMessageSend.sendMemberCoupon(vo, membersInfoSearchVo);
         }
         responseData.setMessage(ResponseConstants.SUCCESS_MSG);
@@ -728,6 +730,7 @@ public class ActivitySmartServiceImpl implements ActivitySmartService {
             MembersInfoSearchVo membersInfoSearchVo=JSON.parseObject(targetMbr,MembersInfoSearchVo.class);
             membersInfoSearchVo.setPageNumber(1);
             membersInfoSearchVo.setPageSize(1000);
+            membersInfoSearchVo.setBrandId(stageUser.getBrandId());
             memberMessageSend.sendMemberPoints(vo, activityCode, membersInfoSearchVo);
 
         }
@@ -842,6 +845,7 @@ public class ActivitySmartServiceImpl implements ActivitySmartService {
             MembersInfoSearchVo membersInfoSearchVo=JSON.parseObject(targetMbr,MembersInfoSearchVo.class);
             membersInfoSearchVo.setPageNumber(1);
             membersInfoSearchVo.setPageSize(1000);
+            membersInfoSearchVo.setBrandId(stageUser.getBrandId());
             memberMessageSend.sendShortMessage(mktMessagePO, membersInfoSearchVo);
         }
 
@@ -958,6 +962,7 @@ public class ActivitySmartServiceImpl implements ActivitySmartService {
             MembersInfoSearchVo membersInfoSearchVo=JSON.parseObject(targetMbr,MembersInfoSearchVo.class);
             membersInfoSearchVo.setPageNumber(1);
             membersInfoSearchVo.setPageSize(1000);
+            membersInfoSearchVo.setBrandId(stageUser.getBrandId());
             memberMessageSend.sendWxMessage(mktMessagePO, membersInfoSearchVo);
         }
 
