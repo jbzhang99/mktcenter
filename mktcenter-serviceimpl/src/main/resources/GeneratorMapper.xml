@@ -4,7 +4,7 @@
         "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
 
 <generatorConfiguration>
-    <!--<classPathEntry location="E:\Program File\mysql-jdbc\mysql-connector-java-5.1.22-bin.jar"/>-->
+    <classPathEntry location="E:\Program File\mysql-jdbc\mysql-connector-java-5.1.22-bin.jar"/>
     <context id="testTables" targetRuntime="MyBatis3">
     
         <plugin type="com.bizvane.mktcenterserviceimpl.common.utils.SerializablePlugin" />
@@ -95,20 +95,24 @@
         <!--<table tableName="t_mkt_task" domainObjectName="MktTaskPO">-->
             <!--<generatedKey column="mkt_task_id" sqlStatement="MySql" identity="true"/>-->
         <!--</table>-->
-        <table tableName="t_mkt_task_invite" domainObjectName="MktTaskInvitePO">
-            <generatedKey column="mkt_task_invite_id" sqlStatement="MySql" identity="true"/>
-        </table>
-        <table tableName="t_mkt_task_order" domainObjectName="MktTaskOrderPO">
-            <generatedKey column="mkt_task_order_id" sqlStatement="MySql" identity="true"/>
-        </table>
-        <table tableName="t_mkt_task_profile" domainObjectName="MktTaskProfilePO">
-            <generatedKey column="mkt_task_profile_id" sqlStatement="MySql" identity="true"/>
-        </table>
-        <table tableName="t_mkt_task_record" domainObjectName="MktTaskRecordPO">
-            <generatedKey column="mkt_task_record_id" sqlStatement="MySql" identity="true"/>
-        </table>
-        <table tableName="t_mkt_task_share" domainObjectName="MktTaskSharePO">
-            <generatedKey column="mkt_task_share_id" sqlStatement="MySql" identity="true"/>
+<!--         <table tableName="t_mkt_task_invite" domainObjectName="MktTaskInvitePO"> -->
+<!--             <generatedKey column="mkt_task_invite_id" sqlStatement="MySql" identity="true"/> -->
+<!--         </table> -->
+<!--         <table tableName="t_mkt_task_order" domainObjectName="MktTaskOrderPO"> -->
+<!--             <generatedKey column="mkt_task_order_id" sqlStatement="MySql" identity="true"/> -->
+<!--         </table> -->
+<!--         <table tableName="t_mkt_task_profile" domainObjectName="MktTaskProfilePO"> -->
+<!--             <generatedKey column="mkt_task_profile_id" sqlStatement="MySql" identity="true"/> -->
+<!--         </table> -->
+<!--         <table tableName="t_mkt_task_record" domainObjectName="MktTaskRecordPO"> -->
+<!--             <generatedKey column="mkt_task_record_id" sqlStatement="MySql" identity="true"/> -->
+<!--         </table> -->
+<!--         <table tableName="t_mkt_task_share" domainObjectName="MktTaskSharePO"> -->
+<!--             <generatedKey column="mkt_task_share_id" sqlStatement="MySql" identity="true"/> -->
+<!--         </table> -->
+
+        <table tableName="t_file_report_temp" domainObjectName="FileReportTempPO">
+            <generatedKey column="file_report_temp_id" sqlStatement="MySql" identity="true"/>
         </table>
 
 
