@@ -72,7 +72,7 @@ public class ActivityEvaluationServiceImpl implements ActivityEvaluationService 
     public ResponseData<ActivityVO> getActivityEvaluationList(ActivityVO vo, PageForm pageForm) {
         log.info("查询评价奖励活动开始");
         ResponseData responseData = new ResponseData();
-        PageHelper.startPage(pageForm.getPageNumber(),pageForm.getPageSize());
+        PageHelper.startPage(pageForm.getPageNumber(), pageForm.getPageSize());
         List<ActivityVO> activityEvaluation = mktActivityEvaluationPOMapper.getActivityVOList(vo);
         PageInfo<ActivityVO> pageInfo = new PageInfo<>(activityEvaluation);
         responseData.setData(pageInfo);
@@ -83,7 +83,7 @@ public class ActivityEvaluationServiceImpl implements ActivityEvaluationService 
 
     @Override
     @Transactional
-    public ResponseData<Integer> addActivityEvaluation(ActivityBO bo,SysAccountPO stageUser) {
+    public ResponseData<Integer> addActivityEvaluation(ActivityBO bo, SysAccountPO stageUser) {
         //本地测试时使用
 /*         SysAccountPO stageUser1=new SysAccountPO();
         stageUser1.setBrandId(2l);
@@ -101,8 +101,8 @@ public class ActivityEvaluationServiceImpl implements ActivityEvaluationService 
         //增加活动类型是评价奖励活动
         activityVO.setActivityType(ActivityTypeEnum.ACTIVITY_TYPE_EVALUATION.getCode());
         //增加品牌id
-        log.info("获取的品牌id是="+stageUser.getBrandId());
-        if(null==stageUser.getBrandId()){
+        log.info("获取的品牌id是=" + stageUser.getBrandId());
+        if (null == stageUser.getBrandId()) {
             log.error("token没有获取到品牌id");
             responseData.setCode(SysResponseEnum.FAILED.getCode());
             responseData.setMessage("Token没有获取到品牌id!");
@@ -111,15 +111,15 @@ public class ActivityEvaluationServiceImpl implements ActivityEvaluationService 
         activityVO.setSysBrandId(stageUser.getBrandId());
         activityVO.setSysCompanyId(stageUser.getSysCompanyId());
         MktActivityPOWithBLOBs mktActivityPOWithBLOBs = new MktActivityPOWithBLOBs();
-        BeanUtils.copyProperties(activityVO,mktActivityPOWithBLOBs);
+        BeanUtils.copyProperties(activityVO, mktActivityPOWithBLOBs);
         //查询看是否已存在评价奖励活动
-        ActivityVO vo= new ActivityVO();
+        ActivityVO vo = new ActivityVO();
         vo.setSysBrandId(stageUser.getBrandId());
         vo.setActivityType(ActivityTypeEnum.ACTIVITY_TYPE_EVALUATION.getCode());
         //根据品牌id和活动类型判断该品牌下是否存在该类型的活动，一个品牌下面只能有一个评价奖励的活动
         List<ActivityVO> activityEvaluationList = mktActivityEvaluationPOMapper.getActivityVOList(vo);
         //判断集合是否有值
-        if(!CollectionUtils.isEmpty(activityEvaluationList)){
+        if (!CollectionUtils.isEmpty(activityEvaluationList)) {
             responseData.setCode(SysResponseEnum.FAILED.getCode());
             responseData.setMessage("已存在评价奖励活动!");
             return responseData;
@@ -127,28 +127,28 @@ public class ActivityEvaluationServiceImpl implements ActivityEvaluationService 
         //根据该企业id查询该企业下是否存在审核配置，是否需要审核然后判断
         SysCheckConfigVo so = new SysCheckConfigVo();
         so.setSysBrandId(activityVO.getSysBrandId());
-        ResponseData<List<SysCheckConfigVo>> sysCheckConfigVo =sysCheckConfigServiceRpc.getCheckConfigListAll(so);
+        ResponseData<List<SysCheckConfigVo>> sysCheckConfigVo = sysCheckConfigServiceRpc.getCheckConfigListAll(so);
         List<SysCheckConfigVo> sysCheckConfigVoList = sysCheckConfigVo.getData();
 
         //判断是否有审核配置
         int i = 0;
-        if(!CollectionUtils.isEmpty(sysCheckConfigVoList)){
-            for (SysCheckConfigVo sysCheckConfig:sysCheckConfigVoList) {
+        if (!CollectionUtils.isEmpty(sysCheckConfigVoList)) {
+            for (SysCheckConfigVo sysCheckConfig : sysCheckConfigVoList) {
                 //判断是否需要审核  暂时先写这三个审核类型 后期确定下来写成枚举类
-                if(sysCheckConfig.getFunctionCode().equals("C0001") || sysCheckConfig.getFunctionCode().equals("C0002") || sysCheckConfig.getFunctionCode().equals("C0003")){
-                    i+=1;
+                if (sysCheckConfig.getFunctionCode().equals("C0001") || sysCheckConfig.getFunctionCode().equals("C0002") || sysCheckConfig.getFunctionCode().equals("C0003")) {
+                    i += 1;
                 }
             }
         }
 
-        if(i>0){
+        if (i > 0) {
             //查询结果如果需要审核审核状态为待审核
             mktActivityPOWithBLOBs.setCheckStatus(CheckStatusEnum.CHECK_STATUS_PENDING.getCode());
             //活动状态设置为待执行
             mktActivityPOWithBLOBs.setActivityStatus(ActivityStatusEnum.ACTIVITY_STATUS_PENDING.getCode());
             //如果是待审核数据则需要增加一条审核数据
 
-        }else{
+        } else {
             //查询结果如果不需要审核审核状态为已审核
             mktActivityPOWithBLOBs.setCheckStatus(CheckStatusEnum.CHECK_STATUS_APPROVED.getCode());
             //活动状态设置为执行中
@@ -159,13 +159,13 @@ public class ActivityEvaluationServiceImpl implements ActivityEvaluationService 
         mktActivityPOWithBLOBs.setCreateDate(new Date());
         mktActivityPOWithBLOBs.setCreateUserId(stageUser.getSysAccountId());
         mktActivityPOWithBLOBs.setCreateUserName(stageUser.getName());
-        log.info("新增主表数据="+ JSON.toJSONString(mktActivityPOWithBLOBs));
+        log.info("新增主表数据=" + JSON.toJSONString(mktActivityPOWithBLOBs));
         mktActivityPOMapper.insertSelective(mktActivityPOWithBLOBs);
         //获取新增后数据id
         Long mktActivityId = mktActivityPOWithBLOBs.getMktActivityId();
         //调用rpc返回的结果
-        ResponseData<Long> rpcResponse=new ResponseData<>();
-        if(i>0){
+        ResponseData<Long> rpcResponse = new ResponseData<>();
+        if (i > 0) {
 
             //如果是待审核数据则需要增加一条审核数据
             log.info("增加审核中心一条数据");
@@ -180,17 +180,25 @@ public class ActivityEvaluationServiceImpl implements ActivityEvaluationService 
             po.setCreateDate(new Date());
             po.setCreateUserId(stageUser.getCreateUserId());
             po.setCreateUserName(stageUser.getCreateUserName());
-            po.setBizName("评价活动");
-            log.info("请求sysCheckServiceRpc时的参数"+JSON.toJSONString(po));
-             rpcResponse=sysCheckServiceRpc.addCheck(po);
+            po.setBizName(mktActivityPOWithBLOBs.getActivityName());
+            log.info("请求sysCheckServiceRpc时的参数" + JSON.toJSONString(po));
+            rpcResponse = sysCheckServiceRpc.addCheck(po);
+            log.info("sysCheckServiceRpc添加评价奖励活动到审核中心的返回结果是:" + rpcResponse.getData());
         }
 
 
         //新增评价奖励活动表
         MktActivityEvaluationPO mktActivityEvaluationPO = new MktActivityEvaluationPO();
-        BeanUtils.copyProperties(mktActivityPOWithBLOBs,mktActivityEvaluationPO);
+        BeanUtils.copyProperties(mktActivityPOWithBLOBs, mktActivityEvaluationPO);
         mktActivityEvaluationPO.setMktActivityId(mktActivityId);
-        log.info("评价奖励活动表数据="+ JSON.toJSONString(mktActivityEvaluationPO));
+        mktActivityEvaluationPO.setIsStoreLimit(activityVO.getStoreLimit());
+        if (true==activityVO.getStoreLimit()){
+            mktActivityEvaluationPO.setStoreLimitList(activityVO.getStoreLimitList());
+            mktActivityEvaluationPO.setStoreLimitType(activityVO.getStoreLimitType());
+        }
+        //评价奖励活动和签到活动是没有名字，但是审核活动时需要显示活动的名字，这里给一个固定的。
+        mktActivityPOWithBLOBs.setActivityName("评价奖励活动");
+        log.info("评价奖励活动表数据=" + JSON.toJSONString(mktActivityEvaluationPO));
         mktActivityEvaluationPOMapper.insertSelective(mktActivityEvaluationPO);
         responseData.setCode(SysResponseEnum.SUCCESS.getCode());
         responseData.setMessage(SysResponseEnum.SUCCESS.getMessage());
@@ -202,10 +210,10 @@ public class ActivityEvaluationServiceImpl implements ActivityEvaluationService 
     public ResponseData<ActivityBO> selectActivityEvaluationById(String businessCode) {
         log.info("查询评价奖励活动详情");
         ResponseData responseData = new ResponseData();
-        ActivityVO vo= new ActivityVO();
+        ActivityVO vo = new ActivityVO();
         vo.setActivityCode(businessCode);
         List<ActivityVO> evaluationList = mktActivityEvaluationPOMapper.getActivityVOList(vo);
-        if (CollectionUtils.isEmpty(evaluationList)){
+        if (CollectionUtils.isEmpty(evaluationList)) {
             responseData.setCode(SysResponseEnum.OPERATE_FAILED_DATA_NOT_EXISTS.getCode());
             responseData.setMessage(SysResponseEnum.OPERATE_FAILED_DATA_NOT_EXISTS.getMessage());
             return responseData;
@@ -219,7 +227,7 @@ public class ActivityEvaluationServiceImpl implements ActivityEvaluationService 
     @Override
     @Transactional
     public ResponseData<Integer> executeActivityEvaluation(MemberInfoModel vo) {
-        log.info("执行评价送积分活动="+vo.getBrandId()+"="+vo.getMemberCode());
+        log.info("执行评价送积分活动=" + vo.getBrandId() + "=" + vo.getMemberCode());
         //返回对象
         ResponseData responseData = new ResponseData();
         //查询品牌下所有执行中的活动
@@ -228,15 +236,15 @@ public class ActivityEvaluationServiceImpl implements ActivityEvaluationService 
         activity.setSysBrandId(vo.getBrandId());
         activity.setActivityType(ActivityTypeEnum.ACTIVITY_TYPE_EVALUATION.getCode());
         List<ActivityVO> evaluationList = mktActivityEvaluationPOMapper.getActivityVOList(activity);
-        if (CollectionUtils.isEmpty(evaluationList)){
+        if (CollectionUtils.isEmpty(evaluationList)) {
             responseData.setCode(SysResponseEnum.OPERATE_FAILED_DATA_NOT_EXISTS.getCode());
             responseData.setMessage(SysResponseEnum.OPERATE_FAILED_DATA_NOT_EXISTS.getMessage());
             return responseData;
         }
-        for (ActivityVO activityVO:evaluationList) {
+        for (ActivityVO activityVO : evaluationList) {
             //增加积分奖励新增接口
             AwardBO bo = new AwardBO();
-            IntegralChangeRequestModel integralChangeRequestModel =new IntegralChangeRequestModel();
+            IntegralChangeRequestModel integralChangeRequestModel = new IntegralChangeRequestModel();
             integralChangeRequestModel.setBrandId(activityVO.getSysBrandId());
             integralChangeRequestModel.setMemberCode(vo.getMemberCode());
             integralChangeRequestModel.setChangeBills(activityVO.getActivityCode());
@@ -277,24 +285,24 @@ public class ActivityEvaluationServiceImpl implements ActivityEvaluationService 
         bs.setActivityCode(po.getBusinessCode());
         bs.setMktActivityId(po.getBusinessId());
         //判断是审核通过还是审核驳回
-        if(bs.getCheckStatus()==CheckStatusEnum.CHECK_STATUS_APPROVED.getCode()){
+        if (bs.getCheckStatus() == CheckStatusEnum.CHECK_STATUS_APPROVED.getCode()) {
             //将活动状态变更为执行中
             log.info("更新活动状态");
             bs.setActivityStatus(ActivityStatusEnum.ACTIVITY_STATUS_EXECUTING.getCode());
             int i = mktActivityPOMapper.updateByPrimaryKeySelective(bs);
-        }else{
+        } else {
             log.info("更新活动状态");
             bs.setActivityStatus(ActivityStatusEnum.ACTIVITY_STATUS_FINISHED.getCode());
             int i = mktActivityPOMapper.updateByPrimaryKeySelective(bs);
 
         }
-        ResponseData<Integer> rpcResponse=new ResponseData<>();
+        ResponseData<Integer> rpcResponse = new ResponseData<>();
         //更新审核中心状态
-        rpcResponse=sysCheckServiceRpc.updateCheck(po);
-        System.out.println("+++++++++++"+responseData.getCode()+responseData.getMessage()+rpcResponse.getData());
+        rpcResponse = sysCheckServiceRpc.updateCheck(po);
+        //审核中心返回的结果，1是成功
+        log.info("sysCheckServiceRpc返回的结果是:" + rpcResponse.getData());
         responseData.setCode(SysResponseEnum.SUCCESS.getCode());
         responseData.setMessage(SysResponseEnum.SUCCESS.getMessage());
-        responseData.setData(rpcResponse.getData());
         return responseData;
     }
 
@@ -303,21 +311,21 @@ public class ActivityEvaluationServiceImpl implements ActivityEvaluationService 
         //如果是评价奖励活动,则只有积分记录
         ResponseData responseData = new ResponseData();
         CtivityAnalysisBO ctivityAnalysisBO = new CtivityAnalysisBO();
-        PageHelper.startPage(pageForm.getPageNumber(),pageForm.getPageSize());
+        PageHelper.startPage(pageForm.getPageNumber(), pageForm.getPageSize());
 
-        if(bo.getActivityType()==9){
+        if (bo.getActivityType() == 9) {
             //分页查询出主表信息
             List<ActivityAnalysisCountBO> activityAnalysisList = mktActivityPOMapper.getActivityAnalysisCountpage(bo);
-            for (ActivityAnalysisCountBO activityAnalysisCountBO:activityAnalysisList) {
-                System.out.println(activityAnalysisCountBO.getMktActivityId()+activityAnalysisCountBO.getActivityName()+activityAnalysisCountBO.getParticipateNumber()+activityAnalysisCountBO.getPointsSum());
+            for (ActivityAnalysisCountBO activityAnalysisCountBO : activityAnalysisList) {
+                System.out.println(activityAnalysisCountBO.getMktActivityId() + activityAnalysisCountBO.getActivityName() + activityAnalysisCountBO.getParticipateNumber() + activityAnalysisCountBO.getPointsSum());
             }
             ctivityAnalysisBO.setActivityAnalysisCountBO(activityAnalysisList);
             responseData.setData(ctivityAnalysisBO);
             //如果是入会纪念日活动，那么除了有积分奖励之外，还有券奖励
-        }else{
+        } else {
             List<ActivityAnalysisCountBO> activityAnalysisList = mktActivityPOMapper.getActivityAnalysisCountpage(bo);
-            for (ActivityAnalysisCountBO activityAnalysisCountBO:activityAnalysisList) {
-                System.out.println(activityAnalysisCountBO.getMktActivityId()+activityAnalysisCountBO.getActivityName()+activityAnalysisCountBO.getParticipateNumber()+activityAnalysisCountBO.getPointsSum());
+            for (ActivityAnalysisCountBO activityAnalysisCountBO : activityAnalysisList) {
+                System.out.println(activityAnalysisCountBO.getMktActivityId() + activityAnalysisCountBO.getActivityName() + activityAnalysisCountBO.getParticipateNumber() + activityAnalysisCountBO.getPointsSum());
             }
             //合计积分总数 和参与人数总数
             CtivityAnalysisBO ctivityAnalysis = mktActivityPOMapper.getActivityAnalysisTotal(bo);
@@ -327,10 +335,10 @@ public class ActivityEvaluationServiceImpl implements ActivityEvaluationService 
             ctivityAnalysisBO.setPointsSumTotal(ctivityAnalysis.getPointsSumTotal());
 
             //查询券合计
-            ResponseData<CouponFindCouponCountResponseVO> couponFindCouponCountVO =  couponQueryServiceFeign.getCountBySendType("90",bo.getSysBrandId());
-            System.out.println("couponFindCouponCountVO====="+couponFindCouponCountVO);
-            System.out.println("========="+couponFindCouponCountVO.getData().getMoney()+"=========="+couponFindCouponCountVO.getData().getCouponSum());
-            System.out.println("couponFindCouponCountVO====="+couponFindCouponCountVO.toString());
+            ResponseData<CouponFindCouponCountResponseVO> couponFindCouponCountVO = couponQueryServiceFeign.getCountBySendType("90", bo.getSysBrandId());
+            System.out.println("couponFindCouponCountVO=====" + couponFindCouponCountVO);
+            System.out.println("=========" + couponFindCouponCountVO.getData().getMoney() + "==========" + couponFindCouponCountVO.getData().getCouponSum());
+            System.out.println("couponFindCouponCountVO=====" + couponFindCouponCountVO.toString());
 
             //System.out.println("couponFindCouponCountVO========="+couponFindCouponCountVO.getData().getMoney());
             CouponFindCouponCountResponseVO couponFindCoupon = couponFindCouponCountVO.getData();

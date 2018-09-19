@@ -21,7 +21,9 @@ public enum CouponSendTypeEnum {
     SEND_COUPON_WX_SHARE_TASK("65",2,"微信分享"),
     SEND_COUPON_COUSUME_TIMES_TASK("70",4,"消费次数"),
     SEND_COUPON_COUSUME_MONEY_TASK("75",5,"消费金额"),
-    SEND_COUPON_INVITE_OPENCARD_TASK("80",3,"邀请注册");
+    SEND_COUPON_INVITE_OPENCARD_TASK("80",3,"邀请注册"),
+    SEND_COUPON_Aniversary("90",10,"入会纪念日活动"),
+    SEND_COUPON_Evaluation("100",9,"评价奖励活动");
 
     private String couponModuleCode;
     private String message;

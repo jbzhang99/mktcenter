@@ -172,9 +172,10 @@ public class ActivityVipAniversaryServiceImpl implements ActivityVipAniversarySe
             po.setCreateDate(new Date());
             po.setCreateUserId(stageUser.getSysAccountId());
             po.setCreateUserName(stageUser.getName());
-            po.setBizName("入会纪念日活动");
+            po.setBizName(mktActivityPOWithBLOBs.getActivityName());
             log.info("增加一条数据到审核中心");
             rpcResponse=sysCheckServiceRpc.addCheck(po);
+            log.info("sysCheckServiceRpc添加入会纪念日活动到审核中心的返回结果是:" + rpcResponse.getData());
             //getStartTime 开始时间>当前时间增加job
             System.out.println("time======"+activityVO.getStartTime());
             if( new Date().before(activityVO.getStartTime())){
@@ -222,7 +223,7 @@ public class ActivityVipAniversaryServiceImpl implements ActivityVipAniversarySe
             mktActivityVipAniversaryPO.setStoreLimitList(activityVO.getStoreLimitList());
             mktActivityVipAniversaryPO.setStoreLimitType(activityVO.getStoreLimitType());
         }
-        log.info("增加一条数据到纪念日活动参数为："+ JSON.toJSONString(mktActivityVipAniversaryPO));
+        log.info("增加一条数据到纪念日活动,参数为："+ JSON.toJSONString(mktActivityVipAniversaryPO));
         mktActivityVipAniversaryPOMapper.insertSelective(mktActivityVipAniversaryPO);
 
         //新增券奖励
@@ -335,7 +336,9 @@ public class ActivityVipAniversaryServiceImpl implements ActivityVipAniversarySe
             int i = mktActivityPOMapper.updateByPrimaryKeySelective(bs);
         }
         //更新审核中心状态
-        sysCheckServiceRpc.updateCheck(po);
+        ResponseData<Integer> rpcResponse=sysCheckServiceRpc.updateCheck(po);
+        //审核中心返回的结果，1是成功
+        log.info("sysCheckServiceRpc返回的结果是:"+rpcResponse.getData());
         responseData.setCode(SysResponseEnum.SUCCESS.getCode());
         responseData.setMessage(SysResponseEnum.SUCCESS.getMessage());
         return responseData;
