@@ -154,19 +154,7 @@ public class ActivitySigninServiceImpl implements ActivitySigninService {
             //活动状态设置为待执行
             mktActivityPOWithBLOBs.setActivityStatus(ActivityStatusEnum.ACTIVITY_STATUS_PENDING.getCode());
 
-            //如果是待审核数据则需要增加一条审核数据
-            log.info("增加审核中心一条数据");
-            SysCheckPo po = new SysCheckPo();
-            po.setSysBrandId(mktActivityPOWithBLOBs.getSysBrandId());
-            po.setBusinessCode(mktActivityPOWithBLOBs.getActivityCode());
-            po.setBusinessName(mktActivityPOWithBLOBs.getActivityName());
-            po.setBusinessType(ActivityTypeEnum.ACTIVITY_TYPE_SIGNIN.getCode());
-            po.setFunctionCode("C0002");
-            po.setCheckStatus(CheckStatusEnum.CHECK_STATUS_PENDING.getCode());
-            po.setCreateDate(new Date());
-            po.setCreateUserId(stageUser.getSysAccountId());
-            po.setCreateUserName(stageUser.getName());
-            sysCheckServiceRpc.addCheck(po);
+
         }else{
             //查询结果如果不需要审核审核状态为已审核
             mktActivityPOWithBLOBs.setCheckStatus(CheckStatusEnum.CHECK_STATUS_APPROVED.getCode());
@@ -184,7 +172,24 @@ public class ActivitySigninServiceImpl implements ActivitySigninService {
 
         //获取新增后数据id
         Long mktActivityId = mktActivityPOWithBLOBs.getMktActivityId();
-
+        if (i>0){
+            //如果是待审核数据则需要增加一条审核数据
+            log.info("增加审核中心一条数据");
+            SysCheckPo po = new SysCheckPo();
+            po.setSysBrandId(mktActivityPOWithBLOBs.getSysBrandId());
+            po.setSysCompanyId(mktActivityPOWithBLOBs.getSysCompanyId());
+            po.setBusinessCode(mktActivityPOWithBLOBs.getActivityCode());
+            po.setBusinessName(mktActivityPOWithBLOBs.getActivityName());
+            po.setBusinessType(ActivityTypeEnum.ACTIVITY_TYPE_SIGNIN.getCode());
+            po.setFunctionCode("C0002");
+            po.setCheckStatus(CheckStatusEnum.CHECK_STATUS_PENDING.getCode());
+            po.setBizName(mktActivityPOWithBLOBs.getActivityName());
+            po.setBusinessId(mktActivityId);
+            po.setCreateDate(new Date());
+            po.setCreateUserId(stageUser.getSysAccountId());
+            po.setCreateUserName(stageUser.getName());
+            sysCheckServiceRpc.addCheck(po);
+        }
         //新增会员签到活动表
         MktActivitySignin mktActivitySignin = new MktActivitySignin();
         BeanUtils.copyProperties(mktActivityPOWithBLOBs,mktActivitySignin);

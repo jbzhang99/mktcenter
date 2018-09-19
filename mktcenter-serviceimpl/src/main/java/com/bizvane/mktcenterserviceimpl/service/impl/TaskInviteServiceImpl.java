@@ -17,6 +17,7 @@ import com.bizvane.utils.enumutils.SysResponseEnum;
 import com.bizvane.utils.responseinfo.ResponseData;
 import com.bizvane.utils.tokens.SysAccountPO;
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -237,34 +238,40 @@ public class TaskInviteServiceImpl implements TaskInviteService {
         Long brandId = memeberDetail.getBrandId();
         String memberCode = memeberDetail.getMemberCode();
         String cardNo = memeberDetail.getCardNo();
+        Long serviceStoreId = memeberDetail.getServiceStoreId();
         //符合条件的任务列表
         List<TaskAwardBO> taskInviteAwardList = taskService.getTaskInviteAwardList(companyId, brandId, openCardTime);
         if (CollectionUtils.isNotEmpty(taskInviteAwardList)){
-            taskInviteAwardList.stream().forEach(obj->{
-                Integer taskType = obj.getTaskType();
-                Long mktTaskId = obj.getMktTaskId();
-                //邀请开卡人数
-                Integer inviteNum = obj.getInviteNum();
-                MktTaskRecordVO recordVO = new MktTaskRecordVO();
-                recordVO.setSysBrandId(brandId);
-                recordVO.setTaskType(taskType);
-                recordVO.setTaskId(mktTaskId);
-                recordVO.setMemberCode(inviteMemberCode);
-                // 获取会员是否已经成功参与过某一活动
-                Boolean isOrNoAward = taskRecordService.getIsOrNoAward(recordVO);
-                if (!isOrNoAward){
-                    MktTaskRecordPO recordPO = new MktTaskRecordPO();
-                    BeanUtils.copyProperties(recordVO,recordPO);
-                    recordPO.setParticipateDate(openCardTime);
-                    taskRecordService.addTaskRecord(recordPO);
-                    //获取会员参与某一活动放总金额和总次数
-                    TotalStatisticsBO totalBO = taskRecordService.getTotalStatistics(recordVO);
-                    if (totalBO!=null && totalBO.getTotalTimes()!=null &&  totalBO.getTotalTimes().equals(inviteNum)){
-                        recordPO.setRewarded(Integer.valueOf(1));
-                        taskRecordService.updateTaskRecord(recordPO);
-                        taskService.sendCouponAndPoint(memberCode,obj);
+            taskInviteAwardList.stream().
+                filter(obj->{
+                    Boolean isStoreLimit = obj.getStoreLimit();
+                    String  StoreLimitList=obj.getStoreLimitList();
+                    return isStoreLimit || (serviceStoreId!=null && StringUtils.isNotBlank(StoreLimitList) &&  obj.getStoreLimitList().contains(String.valueOf(serviceStoreId)));}).
+                forEach(obj->{
+                    Integer taskType = obj.getTaskType();
+                    Long mktTaskId = obj.getMktTaskId();
+                    //邀请开卡人数
+                    Integer inviteNum = obj.getInviteNum();
+                    MktTaskRecordVO recordVO = new MktTaskRecordVO();
+                    recordVO.setSysBrandId(brandId);
+                    recordVO.setTaskType(taskType);
+                    recordVO.setTaskId(mktTaskId);
+                    recordVO.setMemberCode(inviteMemberCode);
+                    // 获取会员是否已经成功参与过某一活动
+                    Boolean isOrNoAward = taskRecordService.getIsOrNoAward(recordVO);
+                    if (!isOrNoAward){
+                        MktTaskRecordPO recordPO = new MktTaskRecordPO();
+                        BeanUtils.copyProperties(recordVO,recordPO);
+                        recordPO.setParticipateDate(openCardTime);
+                        taskRecordService.addTaskRecord(recordPO);
+                        //获取会员参与某一活动放总金额和总次数
+                        TotalStatisticsBO totalBO = taskRecordService.getTotalStatistics(recordVO);
+                        if (totalBO!=null && totalBO.getTotalTimes()!=null &&  totalBO.getTotalTimes().equals(inviteNum)){
+                            recordPO.setRewarded(Integer.valueOf(1));
+                            taskRecordService.updateTaskRecord(recordPO);
+                            taskService.sendCouponAndPoint(memberCode,obj);
+                        }
                     }
-                }
             });
         }
     }

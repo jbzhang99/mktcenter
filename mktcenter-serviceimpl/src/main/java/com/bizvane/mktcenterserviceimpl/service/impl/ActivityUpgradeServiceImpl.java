@@ -198,19 +198,6 @@ public class ActivityUpgradeServiceImpl implements ActivityUpgradeService {
             //活动状态设置为待执行
             mktActivityPOWithBLOBs.setActivityStatus(ActivityStatusEnum.ACTIVITY_STATUS_PENDING.getCode());
 
-            //如果是待审核数据则需要增加一条审核数据
-            SysCheckPo po = new SysCheckPo();
-            po.setSysBrandId(mktActivityPOWithBLOBs.getSysBrandId());
-            po.setBusinessCode(mktActivityPOWithBLOBs.getActivityCode());
-            po.setBusinessName(mktActivityPOWithBLOBs.getActivityName());
-            po.setBusinessType(ActivityTypeEnum.ACTIVITY_TYPE_UPGRADE.getCode());
-            po.setFunctionCode("C0002");
-            po.setCheckStatus(CheckStatusEnum.CHECK_STATUS_PENDING.getCode());
-            po.setCreateDate(new Date());
-            po.setCreateUserId(stageUser.getSysAccountId());
-            po.setCreateUserName(stageUser.getName());
-            log.info("新增一条审核中心数据="+ JSON.toJSONString(po));
-            sysCheckServiceRpc.addCheck(po);
             //getStartTime 开始时间>当前时间增加job
             if(1 != bo.getActivityVO().getLongTerm() && new Date().before(activityVO.getStartTime())){
                 log.info("新增job任务");
@@ -247,7 +234,24 @@ public class ActivityUpgradeServiceImpl implements ActivityUpgradeService {
         //获取新增后数据id
         Long mktActivityId = mktActivityPOWithBLOBs.getMktActivityId();
 
-
+        if (i>0){
+            //如果是待审核数据则需要增加一条审核数据
+            SysCheckPo po = new SysCheckPo();
+            po.setSysBrandId(mktActivityPOWithBLOBs.getSysBrandId());
+            po.setSysCompanyId(mktActivityPOWithBLOBs.getSysCompanyId());
+            po.setBusinessCode(mktActivityPOWithBLOBs.getActivityCode());
+            po.setBusinessName(mktActivityPOWithBLOBs.getActivityName());
+            po.setBusinessType(ActivityTypeEnum.ACTIVITY_TYPE_UPGRADE.getCode());
+            po.setFunctionCode("C0002");
+            po.setCheckStatus(CheckStatusEnum.CHECK_STATUS_PENDING.getCode());
+            po.setBusinessId(mktActivityId);
+            po.setBizName(mktActivityPOWithBLOBs.getActivityName());
+            po.setCreateDate(new Date());
+            po.setCreateUserId(stageUser.getSysAccountId());
+            po.setCreateUserName(stageUser.getName());
+            log.info("新增一条审核中心数据="+ JSON.toJSONString(po));
+            sysCheckServiceRpc.addCheck(po);
+        }
         //新增升级活动表
         MktActivityUpgradePO mktActivityUpgradePO = new MktActivityUpgradePO();
         BeanUtils.copyProperties(mktActivityPOWithBLOBs,mktActivityUpgradePO);

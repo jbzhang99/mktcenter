@@ -722,11 +722,11 @@
     SELECT t.mkt_activity_id AS mktActivityId,t.activity_name AS activityName,
     t.long_term AS longTerm,t.start_time AS startTime,t.end_time AS endTime,t.activity_code AS activityCode,
     t.sys_brand_id as sysBrandId,t.activity_type AS activityType,t.create_date AS createDate,t.activity_status AS activityStatus,
-    a.su AS participateNumber,a.pointsSum AS pointsSum
+    a.su AS participateNumber,a.pointsSum AS pointsSum,a.orderAmount AS orderAmountSum
     FROM t_mkt_activity t
     LEFT JOIN
     (
-    SELECT acitivity_id, COUNT(1)su,sum(points)pointsSum
+    SELECT acitivity_id, COUNT(1)su,sum(points)pointsSum,sum(order_amount)orderAmount
     FROM t_mkt_activity_record
     GROUP BY acitivity_id) a ON a.acitivity_id=t.mkt_activity_id
     WHERE t.valid=1

@@ -13,6 +13,11 @@ public class JobHandlerConstants {
     public static String task = "task";
     public static String START_TASK = "startTaskJob";
     public static String END_TASK = "endTaskJob";
+    //短信
+    public static String MESSAGE_SEND_DX= "messageDXTaskJob";
+    //消息
+    public static String MESSAGE_SEND_XX= "messageXXTaskJob";
+
     //结束活动
     public static String endActivity = "endActivity";
     //生日活动开始

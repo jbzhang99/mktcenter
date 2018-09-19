@@ -177,18 +177,6 @@ public class ActivityOrderServiceImpl implements ActivityOrderService {
             mktActivityPOWithBLOBs.setCheckStatus(CheckStatusEnum.CHECK_STATUS_PENDING.getCode());
             //活动状态设置为待执行
             mktActivityPOWithBLOBs.setActivityStatus(ActivityStatusEnum.ACTIVITY_STATUS_PENDING.getCode());
-            //新增审核
-            SysCheckPo po = new SysCheckPo();
-            po.setSysBrandId(mktActivityPOWithBLOBs.getSysBrandId());
-            po.setFunctionCode(mktActivityPOWithBLOBs.getActivityCode());
-            po.setBusinessName(mktActivityPOWithBLOBs.getActivityName());
-            po.setBusinessType(ActivityTypeEnum.ACTIVITY_TYPE_ORDER.getCode());
-            po.setFunctionCode("C0002");
-            po.setCheckStatus(CheckStatusEnum.CHECK_STATUS_PENDING.getCode());
-            po.setCreateDate(new Date());
-            po.setCreateUserId(stageUser.getSysAccountId());
-            po.setCreateUserName(stageUser.getName());
-            sysCheckServiceRpc.addCheck(po);
             //getStartTime 开始时间>当前时间增加job
             if( 1 != bo.getActivityVO().getLongTerm() && new Date().before(activityVO.getStartTime())){
                 //创建任务调度任务开始时间
@@ -225,7 +213,23 @@ public class ActivityOrderServiceImpl implements ActivityOrderService {
 
         //获取新增后数据id
         Long mktActivityId = mktActivityPOWithBLOBs.getMktActivityId();
-
+        if (i>0){
+            //新增审核
+            SysCheckPo po = new SysCheckPo();
+            po.setSysBrandId(mktActivityPOWithBLOBs.getSysBrandId());
+            po.setSysCompanyId(mktActivityPOWithBLOBs.getSysCompanyId());
+            po.setFunctionCode(mktActivityPOWithBLOBs.getActivityCode());
+            po.setBusinessName(mktActivityPOWithBLOBs.getActivityName());
+            po.setBusinessType(ActivityTypeEnum.ACTIVITY_TYPE_ORDER.getCode());
+            po.setFunctionCode("C0002");
+            po.setCheckStatus(CheckStatusEnum.CHECK_STATUS_PENDING.getCode());
+            po.setBizName(mktActivityPOWithBLOBs.getActivityName());
+            po.setBusinessId(mktActivityId);
+            po.setCreateDate(new Date());
+            po.setCreateUserId(stageUser.getSysAccountId());
+            po.setCreateUserName(stageUser.getName());
+            sysCheckServiceRpc.addCheck(po);
+        }
 
         //新增会员消费活动表
         MktActivityOrderPOWithBLOBs mktActivityOrderPOWithBLOBs = new MktActivityOrderPOWithBLOBs();
@@ -691,6 +695,8 @@ public class ActivityOrderServiceImpl implements ActivityOrderService {
             po.setPoints(activityVO.getPoints());
             po.setAcitivityId(activityVO.getMktActivityId());
             po.setSysBrandId(activityVO.getSysBrandId());
+            po.setSysCompanyId(activityVO.getSysCompanyId());
+            po.setOrderAmount(new BigDecimal(activityVO.getOrderMinPrice()));
             log.info("新增积分记录表");
             mktActivityRecordPOMapper.insertSelective(po);
 

@@ -1,6 +1,7 @@
 package com.bizvane.mktcenterserviceimpl.service.impl;
 
 import com.alibaba.fastjson.JSON;
+import com.aliyun.openservices.shade.com.alibaba.fastjson.JSONObject;
 import com.bizvane.couponfacade.interfaces.CouponQueryServiceFeign;
 import com.bizvane.couponfacade.models.vo.CouponDetailResponseVO;
 import com.bizvane.couponfacade.models.vo.SendCouponSimpleRequestVO;
@@ -112,6 +113,23 @@ public class ActivitySmartServiceImpl implements ActivitySmartService {
         }
 
         List<MktActivitySmartGroupPO> mktActivitySmartGroupPOS = mktActivitySmartGroupPOMapper.selectByExampleWithBLOBs(example);
+        if(!CollectionUtils.isEmpty(mktActivitySmartGroupPOS)){
+            //查询数量这个分组会员数量
+            for (MktActivitySmartGroupPO mktActivitySmartGroupPO:mktActivitySmartGroupPOS) {
+                String targetMbr = mktActivitySmartGroupPO.getTargetMbr();
+                ////分页查询会员信息
+                //把高级搜索的条件转换成对象
+                // JSONObject jsonObject=JSONObject.parseObject(targetMbr);
+                // MembersInfoSearchVo membersInfoSearchVo=jsonObject.toJavaObject(MembersInfoSearchVo.class);
+                MembersInfoSearchVo membersInfoSearchVo=JSON.parseObject(targetMbr,MembersInfoSearchVo.class);
+                membersInfoSearchVo.setPageNumber(1);
+                membersInfoSearchVo.setPageSize(1);
+                ResponseData<com.bizvane.utils.responseinfo.PageInfo<MemberInfoVo>> memberInfoVoPages = membersAdvancedSearchApiService.search(membersInfoSearchVo);
+                mktActivitySmartGroupPO.setTargetMbrCount((int) memberInfoVoPages.getData().getTotal());
+            }
+        }
+
+
         PageInfo<MktActivitySmartGroupPO> pageInfo = new PageInfo<>(mktActivitySmartGroupPOS);
         responseData.setData(pageInfo);
         log.info("com.bizvane.mktcenterserviceimpl.service.impl.ActivitySmartServiceImpl.getSmartActivityGroupList result"+ JSON.toJSONString(responseData));
@@ -601,7 +619,12 @@ public class ActivitySmartServiceImpl implements ActivitySmartService {
 
         //立即执行
         if(execute) {
-            MembersInfoSearchVo membersInfoSearchVo = new MembersInfoSearchVo();
+            String targetMbr = vo.getTargetMbr();
+            ////分页查询会员信息
+            //把高级搜索的条件转换成对象
+            // JSONObject jsonObject=JSONObject.parseObject(targetMbr);
+            // MembersInfoSearchVo membersInfoSearchVo=jsonObject.toJavaObject(MembersInfoSearchVo.class);
+            MembersInfoSearchVo membersInfoSearchVo=JSON.parseObject(targetMbr,MembersInfoSearchVo.class);
             membersInfoSearchVo.setPageNumber(1);
             membersInfoSearchVo.setPageSize(1000);
             memberMessageSend.sendMemberCoupon(vo, membersInfoSearchVo);
@@ -697,7 +720,12 @@ public class ActivitySmartServiceImpl implements ActivitySmartService {
         //立即执行
         if(execute){
             //根据条件获取人，再遍历
-            MembersInfoSearchVo membersInfoSearchVo = new MembersInfoSearchVo();
+            String targetMbr = vo.getTargetMbr();
+            ////分页查询会员信息
+            //把高级搜索的条件转换成对象
+            // JSONObject jsonObject=JSONObject.parseObject(targetMbr);
+            // MembersInfoSearchVo membersInfoSearchVo=jsonObject.toJavaObject(MembersInfoSearchVo.class);
+            MembersInfoSearchVo membersInfoSearchVo=JSON.parseObject(targetMbr,MembersInfoSearchVo.class);
             membersInfoSearchVo.setPageNumber(1);
             membersInfoSearchVo.setPageSize(1000);
             memberMessageSend.sendMemberPoints(vo, activityCode, membersInfoSearchVo);
@@ -806,7 +834,12 @@ public class ActivitySmartServiceImpl implements ActivitySmartService {
 
         //立即执行
         if(execute){
-            MembersInfoSearchVo membersInfoSearchVo = new MembersInfoSearchVo();
+            String targetMbr = vo.getTargetMbr();
+            ////分页查询会员信息
+            //把高级搜索的条件转换成对象
+            // JSONObject jsonObject=JSONObject.parseObject(targetMbr);
+            // MembersInfoSearchVo membersInfoSearchVo=jsonObject.toJavaObject(MembersInfoSearchVo.class);
+            MembersInfoSearchVo membersInfoSearchVo=JSON.parseObject(targetMbr,MembersInfoSearchVo.class);
             membersInfoSearchVo.setPageNumber(1);
             membersInfoSearchVo.setPageSize(1000);
             memberMessageSend.sendShortMessage(mktMessagePO, membersInfoSearchVo);
@@ -917,7 +950,12 @@ public class ActivitySmartServiceImpl implements ActivitySmartService {
 
         //立即执行
         if(execute){
-            MembersInfoSearchVo membersInfoSearchVo = new MembersInfoSearchVo();
+            String targetMbr = vo.getTargetMbr();
+            ////分页查询会员信息
+            //把高级搜索的条件转换成对象
+            // JSONObject jsonObject=JSONObject.parseObject(targetMbr);
+            // MembersInfoSearchVo membersInfoSearchVo=jsonObject.toJavaObject(MembersInfoSearchVo.class);
+            MembersInfoSearchVo membersInfoSearchVo=JSON.parseObject(targetMbr,MembersInfoSearchVo.class);
             membersInfoSearchVo.setPageNumber(1);
             membersInfoSearchVo.setPageSize(1000);
             memberMessageSend.sendWxMessage(mktMessagePO, membersInfoSearchVo);

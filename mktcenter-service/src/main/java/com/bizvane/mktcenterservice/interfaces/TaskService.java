@@ -1,6 +1,7 @@
 package com.bizvane.mktcenterservice.interfaces;
 
 import com.bizvane.centerstageservice.models.po.SysAccountPo;
+import com.bizvane.centerstageservice.models.po.SysStorePo;
 import com.bizvane.messagefacade.models.vo.GenrealGetMessageVO;
 import com.bizvane.utils.tokens.SysAccountPO;
 import com.bizvane.centerstageservice.models.po.SysCheckConfigPo;
@@ -27,6 +28,26 @@ import java.util.List;
  */
 public interface TaskService {
     /**
+     * 给会员发送消息
+     * @param sysBrandId
+     */
+    public  void sendMemberMessage(Long sysBrandId,String msgContent);
+    /**
+     * 批量给粉丝发送短信
+     * @param sysCompanyId
+     * @param sysBrandId
+     * @param mktTaskId
+     * @param taskType
+     * @param msgContent
+     */
+    public void sendBachMSM(Long mktTaskId,Integer taskType,Long sysCompanyId,Long sysBrandId,String msgContent);
+    /**
+     * 通过storeid获取店铺列表
+     * @param sysStoreIdList
+     * @return
+     */
+    public List<SysStorePo> getStoreListByIds(List<Long> sysStoreIdList);
+    /**
      * 获取短信的数量 失败/总数
      * @param vo
      * @return
@@ -51,7 +72,7 @@ public interface TaskService {
      * @param sysBrandId
      * @return
      */
-    public List<TaskAwardBO> getTaskOrderAwardList(Long sysCompanyId, Long sysBrandId, Date placeOrderTime);
+    public List<TaskAwardBO> getTaskOrderAwardList(Long sysCompanyId, Long sysBrandId, Date placeOrderTime, Integer orderSource);
     /**
      * 根据公司id和品牌id查询执行中的邀请类任务
      * @param sysCompanyId
@@ -96,7 +117,7 @@ public interface TaskService {
     /**
      * 发送消息--已经核对
      */
-    public  void  sendSmg(MktTaskPOWithBLOBs mktTaskPOWithBLOBs,List<MktMessagePO> mktmessagePOList);
+    public  void  sendSmg(MktTaskPOWithBLOBs mktTaskPOWithBLOBs,List<MktMessagePO> mktmessagePOList,SysAccountPO stageUser);
 
     /**
      * 发送券和积分

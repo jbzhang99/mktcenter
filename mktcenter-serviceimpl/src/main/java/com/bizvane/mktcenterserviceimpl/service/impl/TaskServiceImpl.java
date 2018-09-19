@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.bizvane.centercontrolservice.models.po.SysSmsConfigPo;
 import com.bizvane.centercontrolservice.models.vo.SmsConfigVo;
 import com.bizvane.centercontrolservice.rpc.SysSmsConfigServiceRpc;
+import com.bizvane.centerstageservice.models.po.SysStorePo;
 import com.bizvane.messagefacade.interfaces.TemplateMessageServiceFeign;
 import com.bizvane.messagefacade.models.vo.*;
 import com.bizvane.mktcenterservice.models.vo.PageForm;
@@ -62,9 +63,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import java.text.ParseException;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -113,7 +112,23 @@ public class TaskServiceImpl implements TaskService {
     private StoreServiceRpc  storeServiceRpc;
     @Autowired
     private TemplateMessageServiceFeign templateMessageServiceFeign;
+    /**
+     * 通过id查询店铺列表
+     */
+    @Override
+    public List<SysStorePo> getStoreListByIds(List<Long> sysStoreIdList){
+        List<SysStorePo> data=null;
+        try{
+            ResponseData<List<SysStorePo>> storeLists = storeServiceRpc.getIdStoreLists(sysStoreIdList);
+            data = storeLists.getData();
+        }catch (Exception e){
+            log.info("通过storeId查询中台店铺列表异常!---getStoreListByIds方法");
+            e.printStackTrace();
+        }finally {
+            return data;
+        }
 
+    }
     /**
      * 查询短信数量
      */
@@ -201,7 +216,16 @@ public class TaskServiceImpl implements TaskService {
             }
 
             if (CollectionUtils.isNotEmpty(taskVOList)){
-                taskBO.setTaskVO(taskVOList.get(0));
+                TaskVO taskVO = taskVOList.get(0);
+                taskBO.setTaskVO(taskVO);
+                String storeLimitList = taskVO.getStoreLimitList();
+                if (taskVO!=null && StringUtils.isNotBlank(storeLimitList)){
+                    String[] storeArr = storeLimitList.split(",");
+                    List<Long> storeIdList = Arrays.asList(storeArr).stream().map(element -> Long.valueOf(element)).collect(Collectors.toList());
+                    //查询店铺列表
+                    List<SysStorePo> storeList = this.getStoreListByIds(storeIdList);
+                    taskBO.setStoreList(storeList);
+                }
             }
             if (CollectionUtils.isNotEmpty(mktCouponPOList)){
                 taskBO.setMktCouponPOList(mktCouponPOList);
@@ -231,8 +255,8 @@ public class TaskServiceImpl implements TaskService {
      * @return
      */
     @Override
-    public List<TaskAwardBO> getTaskOrderAwardList(Long sysCompanyId, Long sysBrandId, Date placeOrderTime){
-        return mktTaskPOMapper.getTaskOrderAwardList(sysCompanyId,sysBrandId,placeOrderTime);
+    public List<TaskAwardBO> getTaskOrderAwardList(Long sysCompanyId, Long sysBrandId, Date placeOrderTime,Integer orderSource){
+        return mktTaskPOMapper.getTaskOrderAwardList(sysCompanyId,sysBrandId,placeOrderTime,orderSource);
     }
     /**
      * 根据公司id和品牌id查询执行中的邀请类任务
@@ -326,7 +350,8 @@ public class TaskServiceImpl implements TaskService {
         //已审核   执行中  执行时间小于当前时间 或等于当前时间
         if (TaskConstants.THREE.equals(checkStatus) && TaskConstants.SECOND.equals(taskStatus)) {
             //判断是否需要发送消息和短信 业务类型：1活动，2任务
-            this.sendSmg(mktTaskPOWithBLOBs,mktmessagePOList);
+            this.sendSmg(mktTaskPOWithBLOBs,mktmessagePOList,stageUser);
+            //任务到期置为无效
             jobUtil.addTaskEndJob(stageUser, mktTaskPOWithBLOBs);
         }
         //已审核   待执行,创建job
@@ -340,9 +365,9 @@ public class TaskServiceImpl implements TaskService {
     /**
      * 发送消息和短信 -已经核对
      */
-    @Override
     @Async
-    public void sendSmg(MktTaskPOWithBLOBs mktTaskPOWithBLOBs,List<MktMessagePO> mktmessagePOList) {
+    @Override
+    public void sendSmg(MktTaskPOWithBLOBs mktTaskPOWithBLOBs,List<MktMessagePO> mktmessagePOList,SysAccountPO stageUser) {
         Long sysCompanyId = mktTaskPOWithBLOBs.getSysCompanyId();
         Long sysBrandId = mktTaskPOWithBLOBs.getSysBrandId();
         Long mktTaskId = mktTaskPOWithBLOBs.getMktTaskId();
@@ -352,21 +377,35 @@ public class TaskServiceImpl implements TaskService {
             mktmessagePOList.stream().forEach(
                     message -> {
                         String msgType = message.getMsgType();
+                        String msgContent = message.getMsgContent();
+                        //true=立刻   false=定时发送
+                        Boolean sendImmediately = message.getSendImmediately();
                         //1=模板消息   所有的会员
                         if (TaskConstants.FIRST.equals(msgType)) {
-                            sendMemberMessage(sysBrandId);
+                            //立即发送
+                            if (sendImmediately){
+                                this.sendMemberMessage(sysBrandId,msgContent);
+                            }else{
+                                jobUtil.addMessageXXTaskJob(stageUser, mktTaskPOWithBLOBs,message);
+                            }
                         }
                         //2=短信     所有粉丝
                         if (TaskConstants.SECOND.equals(msgType)){
-                            sendBachMSM(sysCompanyId, sysBrandId, mktTaskId, taskType, message);
+                            if (sendImmediately){
+                                this.sendBachMSM(mktTaskId, taskType,sysCompanyId, sysBrandId,  msgContent);
+                            }else{
+                                jobUtil.addMessageDXTaskJob(stageUser, mktTaskPOWithBLOBs,message);
+                            }
                         }
 
                     }
             );
         }
     }
-    //给会员发送消息
-    private void sendMemberMessage(Long sysBrandId) {
+    //给会员发送微信消息
+    @Async
+    @Override
+    public  void sendMemberMessage(Long sysBrandId,String msgContent) {
         com.bizvane.utils.responseinfo.PageInfo<MemberInfoModel> memeberspage = this.getCompanyMemebers(sysBrandId, 1, 10000);
         List<MemberInfoModel> maemberlist = memeberspage.getList();
         int pages = memeberspage.getPages();
@@ -382,6 +421,7 @@ public class TaskServiceImpl implements TaskService {
                     memberMessageVO.setMemberCode(member.getMemberCode());
                     memberMessageVO.setOpenId(member.getWxOpenId());
                     memberMessageVO.setSysBrandId(sysBrandId);
+                    memberMessageVO.setSendWxmember(msgContent);
                     memberBO.setMemberMessageVO(memberMessageVO);
                     award.execute(memberBO);
                 });
@@ -391,8 +431,9 @@ public class TaskServiceImpl implements TaskService {
     }
 
     //给粉丝 批量发送短信
-    private void sendBachMSM(Long sysCompanyId, Long sysBrandId, Long mktTaskId, Integer taskType, MktMessagePO message) {
-        String msgContent = message.getMsgContent();
+    @Override
+    public void sendBachMSM(Long mktTaskId, Integer taskType,Long sysCompanyId,Long sysBrandId,String msgContent) {
+        // String msgContent = message.getMsgContent();
         //获取营销短信通道
         SmsConfigVo smsConfigVo = new SmsConfigVo();
         smsConfigVo.setSysBrandId(sysBrandId);
@@ -783,7 +824,8 @@ public class TaskServiceImpl implements TaskService {
      */
     @Override
     public ResponseData<PageInfo<MktTaskPOWithBLOBs>> getTaskByTaskType(TaskVO vo, PageForm pageForm) {
-        ResponseData<PageInfo<MktTaskPOWithBLOBs>> result = new ResponseData<PageInfo<MktTaskPOWithBLOBs>>(SysResponseEnum.OPERATE_FAILED_DATA_NOT_EXISTS.getCode(), SysResponseEnum.OPERATE_FAILED_DATA_NOT_EXISTS.getMessage(), null);
+        List<MktTaskPOWithBLOBs> lists=null;
+        ResponseData<PageInfo<MktTaskPOWithBLOBs>> result = new ResponseData<PageInfo<MktTaskPOWithBLOBs>>(SysResponseEnum.SUCCESS.getCode(), SysResponseEnum.OPERATE_FAILED_DATA_NOT_EXISTS.getMessage(), null);
         Integer showType = vo.getShowType();
         //1完善资料，2分享任务，3邀请注册，4累计消费次数，5累计消费金额',
         PageHelper.startPage(pageForm.getPageNumber(), pageForm.getPageSize());
@@ -801,14 +843,16 @@ public class TaskServiceImpl implements TaskService {
         }
         mktTaskPOExample.setOrderByClause("create_date desc");
 
-        List<MktTaskPOWithBLOBs> lists = mktTaskPOMapper.selectByExampleWithBLOBs(mktTaskPOExample);
+        lists = mktTaskPOMapper.selectByExampleWithBLOBs(mktTaskPOExample);
 
         if (CollectionUtils.isNotEmpty(lists)) {
-            PageInfo<MktTaskPOWithBLOBs> pageInfo = new PageInfo<MktTaskPOWithBLOBs>(lists);
-            result.setData(pageInfo);
             result.setCode(SysResponseEnum.SUCCESS.getCode());
             result.setMessage(SysResponseEnum.SUCCESS.getMessage());
+        }else{
+            lists=new  ArrayList<MktTaskPOWithBLOBs>();
         }
+        PageInfo<MktTaskPOWithBLOBs> pageInfo = new PageInfo<MktTaskPOWithBLOBs>(lists);
+        result.setData(pageInfo);
         return result;
     }
 }
