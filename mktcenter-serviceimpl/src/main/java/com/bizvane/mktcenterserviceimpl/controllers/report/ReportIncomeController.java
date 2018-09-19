@@ -208,7 +208,7 @@ public class ReportIncomeController {
    public ResponseData<List<BackData>> vipNum( VipNum sendVO, HttpServletRequest request){
 	   sendVO.setCorpId("C10153");
 	     FileReportTempPOExample example = new FileReportTempPOExample();
-	     example.createCriteria().andTemplateTypeEqualTo("incomeTotalList").andValidEqualTo(Boolean.TRUE);
+	     example.createCriteria().andTemplateTypeEqualTo("vipNum").andValidEqualTo(Boolean.TRUE);
 	     List<FileReportTempPO>  FileReportTempPOlist = fileReportTempPOMapper.selectByExample(example);
    	 return sendpost(BaseUrl.getLoadUrl("vipNum"),sendVO,FileReportTempPOlist);
    }
@@ -218,7 +218,7 @@ public class ReportIncomeController {
    public ResponseData<List<BackData>> increaseVip( IncreaseVip sendVO, HttpServletRequest request){
 	   sendVO.setCorpId("C10153");
 	     FileReportTempPOExample example = new FileReportTempPOExample();
-	     example.createCriteria().andTemplateTypeEqualTo("incomeTotalList").andValidEqualTo(Boolean.TRUE);
+	     example.createCriteria().andTemplateTypeEqualTo("increaseVip").andValidEqualTo(Boolean.TRUE);
 	     List<FileReportTempPO>  FileReportTempPOlist = fileReportTempPOMapper.selectByExample(example);
    	 return sendpost(BaseUrl.getLoadUrl("increaseVip"),sendVO,FileReportTempPOlist);
    }
@@ -227,7 +227,7 @@ public class ReportIncomeController {
    public ResponseData<List<BackData>> increaseVipNum( IncreaseVipNum sendVO, HttpServletRequest request){
 	   sendVO.setCorpId("C10153");
 	     FileReportTempPOExample example = new FileReportTempPOExample();
-	     example.createCriteria().andTemplateTypeEqualTo("incomeTotalList").andValidEqualTo(Boolean.TRUE);
+	     example.createCriteria().andTemplateTypeEqualTo("increaseVipNum").andValidEqualTo(Boolean.TRUE);
 	     List<FileReportTempPO>  FileReportTempPOlist = fileReportTempPOMapper.selectByExample(example);
    	 return sendpost(BaseUrl.getLoadUrl("increaseVipNum"),sendVO,FileReportTempPOlist);
    }
@@ -250,7 +250,7 @@ public class ReportIncomeController {
    public ResponseData<List<BackData>> newOldMemberInterface( NewOldMemberInterface sendVO, HttpServletRequest request){
 	   sendVO.setCorpId("C10153");
 	     FileReportTempPOExample example = new FileReportTempPOExample();
-	     example.createCriteria().andTemplateTypeEqualTo("incomeTotalList").andValidEqualTo(Boolean.TRUE);
+	     example.createCriteria().andTemplateTypeEqualTo("newOldMemberInterface").andValidEqualTo(Boolean.TRUE);
 	     List<FileReportTempPO>  FileReportTempPOlist = fileReportTempPOMapper.selectByExample(example);
    	 return sendpost(BaseUrl.getLoadUrl("newOldMemberInterface"),sendVO,FileReportTempPOlist);
    }
@@ -260,7 +260,7 @@ public class ReportIncomeController {
    public ResponseData<List<BackData>> activeMemberAllInterface( ActiveMemberAllInterface sendVO, HttpServletRequest request){
 	   sendVO.setCorpId("C10153");
 	     FileReportTempPOExample example = new FileReportTempPOExample();
-	     example.createCriteria().andTemplateTypeEqualTo("incomeTotalList").andValidEqualTo(Boolean.TRUE);
+	     example.createCriteria().andTemplateTypeEqualTo("activeMemberAllInterface").andValidEqualTo(Boolean.TRUE);
 	     List<FileReportTempPO>  FileReportTempPOlist = fileReportTempPOMapper.selectByExample(example);
    	 return sendpost(BaseUrl.getLoadUrl("activeMemberAllInterface"),sendVO,FileReportTempPOlist);
    }
@@ -270,7 +270,7 @@ public class ReportIncomeController {
    public ResponseData<List<BackData>> rePurchaseMemberAllInterface( RePurchaseMemberAllInterface sendVO, HttpServletRequest request){
 	   sendVO.setCorpId("C10153");
 	     FileReportTempPOExample example = new FileReportTempPOExample();
-	     example.createCriteria().andTemplateTypeEqualTo("incomeTotalList").andValidEqualTo(Boolean.TRUE);
+	     example.createCriteria().andTemplateTypeEqualTo("rePurchaseMemberAllInterface").andValidEqualTo(Boolean.TRUE);
 	     List<FileReportTempPO>  FileReportTempPOlist = fileReportTempPOMapper.selectByExample(example);
    	 return sendpost(BaseUrl.getLoadUrl("rePurchaseMemberAllInterface"),sendVO,FileReportTempPOlist);
    }
