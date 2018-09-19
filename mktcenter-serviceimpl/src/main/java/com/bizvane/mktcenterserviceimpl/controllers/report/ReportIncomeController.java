@@ -2,10 +2,8 @@ package com.bizvane.mktcenterserviceimpl.controllers.report;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -13,12 +11,10 @@ import org.codehaus.jettison.json.JSONArray;
 import org.codehaus.jettison.json.JSONException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
-import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.bizvane.mktcenterservice.models.requestvo.BackData;
 import com.bizvane.mktcenterservice.models.requestvo.BaseUrl;
@@ -53,9 +49,10 @@ public class ReportIncomeController {
 	private RestTemplate restTemplate;
 
     @RequestMapping("vipIncomeAnalysis")
-    public ResponseData<List<BackData>> vipIncomeAnalysis( VipIncomeAnalysis vipIncomeAnalysis, HttpServletRequest request){
-         vipIncomeAnalysis.setCorpId(TokenUtils.getStageUser(request).getCompanyCode());
-    	 return sendpost(BaseUrl.getLoadUrl("vipIncomeAnalysis"),vipIncomeAnalysis);
+    public ResponseData<List<BackData>> vipIncomeAnalysis( VipIncomeAnalysis sendVO, HttpServletRequest request){
+    	sendVO.setCorpId(TokenUtils.getStageUser(request).getCompanyCode());
+//         TokenUtils.getStageUser(request).getCompanyCode()
+    	 return sendpost(BaseUrl.getLoadUrl("vipIncomeAnalysis"),sendVO);
     } 
     
 
@@ -102,14 +99,14 @@ public class ReportIncomeController {
 // 收入01- 收入总表
    @RequestMapping("incomeTotalList")
    public ResponseData<List<BackData>> incomeTotalListGroup( IncomeTotalList sendVO, HttpServletRequest request){
-	   sendVO.setCorpId(TokenUtils.getStageUser(request).getCompanyCode());
+	   sendVO.setCorpId("C10153");
    	 return sendpost(BaseUrl.getLoadUrl("incomeTotalList"),sendVO);
    }
    
 // 收入01- 会销收入表汇总
    @RequestMapping("incomeVip")
    public ResponseData<List<BackData>> incomeVip( IncomeVip sendVO, HttpServletRequest request){
-	   sendVO.setCorpId(TokenUtils.getStageUser(request).getCompanyCode());
+	   sendVO.setCorpId("C10153");
    	 return sendpost(BaseUrl.getLoadUrl("incomeVip"),sendVO);
    }
    
@@ -118,96 +115,96 @@ public class ReportIncomeController {
 // 收入01- 游客收入表汇总
    @RequestMapping("touristIncome")
    public ResponseData<List<BackData>> touristIncome( TouristIncome sendVO, HttpServletRequest request){
-	   sendVO.setCorpId(TokenUtils.getStageUser(request).getCompanyCode());
+	   sendVO.setCorpId("C10153");
    	 return sendpost(BaseUrl.getLoadUrl("touristIncome"),sendVO);
    }
    
 // 02渠道-线上会销收入表汇总
    @RequestMapping("onlineVipIncome")
    public ResponseData<List<BackData>> onlineVipIncome( OnlineVipIncome sendVO, HttpServletRequest request){
-	   sendVO.setCorpId(TokenUtils.getStageUser(request).getCompanyCode());
+	   sendVO.setCorpId("C10153");
    	 return sendpost(BaseUrl.getLoadUrl("onlineVipIncome"),sendVO);
    }
    
 // 02渠道-线下
    @RequestMapping("offlineVipIncome")
    public ResponseData<List<BackData>> offlineVipIncome( OfflineVipIncome sendVO, HttpServletRequest request){
-	   sendVO.setCorpId(TokenUtils.getStageUser(request).getCompanyCode());
+	   sendVO.setCorpId("C10153");
    	 return sendpost(BaseUrl.getLoadUrl("offlineVipIncome"),sendVO);
    }
    
 // 03开绑卡分析-开卡
 //   @RequestMapping("offlineVipIncome")
 //   public ResponseData<List<BackData>> offlineVipIncome(OfflineVipIncome sendVO, HttpServletRequest request){
-//	   sendVO.setCorpId(TokenUtils.getStageUser(request).getCompanyCode());
+//	   sendVO.setCorpId("C10153");
 //   	 return sendpost(BaseUrl.getLoadUrl("offlineVipIncome"),sendVO);
 //   }
    
 // 03开绑卡分析-绑卡
 // @RequestMapping("offlineVipIncome")
 // public ResponseData<List<BackData>> offlineVipIncome(OfflineVipIncome sendVO, HttpServletRequest request){
-//	   sendVO.setCorpId(TokenUtils.getStageUser(request).getCompanyCode());
+//	   sendVO.setCorpId("C10153");
 // 	 return sendpost(BaseUrl.getLoadUrl("offlineVipIncome"),sendVO);
 // }
    
 // 04会员数量
    @RequestMapping("vipNum")
    public ResponseData<List<BackData>> vipNum( VipNum sendVO, HttpServletRequest request){
-	   sendVO.setCorpId(TokenUtils.getStageUser(request).getCompanyCode());
+	   sendVO.setCorpId("C10153");
    	 return sendpost(BaseUrl.getLoadUrl("vipNum"),sendVO);
    }
    
 // 05新增会员-新增会员收入
    @RequestMapping("increaseVip")
    public ResponseData<List<BackData>> increaseVip( IncreaseVip sendVO, HttpServletRequest request){
-	   sendVO.setCorpId(TokenUtils.getStageUser(request).getCompanyCode());
+	   sendVO.setCorpId("C10153");
    	 return sendpost(BaseUrl.getLoadUrl("increaseVip"),sendVO);
    }
 // 05新增会员-新增会员数量
    @RequestMapping("increaseVipNum")
    public ResponseData<List<BackData>> increaseVipNum( IncreaseVipNum sendVO, HttpServletRequest request){
-	   sendVO.setCorpId(TokenUtils.getStageUser(request).getCompanyCode());
+	   sendVO.setCorpId("C10153");
    	 return sendpost(BaseUrl.getLoadUrl("increaseVipNum"),sendVO);
    }
    
 // 06会员卡分析-类型1
 //   @RequestMapping("increaseVipNum")
 //   public ResponseData<List<BackData>> increaseVipNum(IncreaseVipNum sendVO, HttpServletRequest request){
-//	   sendVO.setCorpId(TokenUtils.getStageUser(request).getCompanyCode());
+//	   sendVO.setCorpId("C10153");
 //   	 return sendpost(BaseUrl.getLoadUrl("increaseVipNum"),sendVO);
 //   }
 // 06会员卡分析-类型2
 // @RequestMapping("increaseVipNum")
 // public ResponseData<List<BackData>> increaseVipNum(IncreaseVipNum sendVO, HttpServletRequest request){
-//	   sendVO.setCorpId(TokenUtils.getStageUser(request).getCompanyCode());
+//	   sendVO.setCorpId("C10153");
 // 	 return sendpost(BaseUrl.getLoadUrl("increaseVipNum"),sendVO);
 // }
    
 // 07新老会员分析-新会员
    @RequestMapping("newOldMemberInterface")
    public ResponseData<List<BackData>> newOldMemberInterface( NewOldMemberInterface sendVO, HttpServletRequest request){
-	   sendVO.setCorpId(TokenUtils.getStageUser(request).getCompanyCode());
+	   sendVO.setCorpId("C10153");
    	 return sendpost(BaseUrl.getLoadUrl("newOldMemberInterface"),sendVO);
    }
    
 // 08活跃会员表汇总
    @RequestMapping("activeMemberAllInterface")
    public ResponseData<List<BackData>> activeMemberAllInterface( ActiveMemberAllInterface sendVO, HttpServletRequest request){
-	   sendVO.setCorpId(TokenUtils.getStageUser(request).getCompanyCode());
+	   sendVO.setCorpId("C10153");
    	 return sendpost(BaseUrl.getLoadUrl("activeMemberAllInterface"),sendVO);
    }
    
 // 09复购-会员表汇总
    @RequestMapping("rePurchaseMemberAllInterface")
    public ResponseData<List<BackData>> rePurchaseMemberAllInterface( RePurchaseMemberAllInterface sendVO, HttpServletRequest request){
-	   sendVO.setCorpId(TokenUtils.getStageUser(request).getCompanyCode());
+	   sendVO.setCorpId("C10153");
    	 return sendpost(BaseUrl.getLoadUrl("rePurchaseMemberAllInterface"),sendVO);
    }
    
 // 10回购-会员表汇总
 //   @RequestMapping("activeMemberAllInterface")
 //   public ResponseData<List<BackData>> activeMemberAllInterface(ActiveMemberAllInterface sendVO, HttpServletRequest request){
-//	   sendVO.setCorpId(TokenUtils.getStageUser(request).getCompanyCode());
+//	   sendVO.setCorpId("C10153");
 //   	 return sendpost(BaseUrl.getLoadUrl("activeMemberAllInterface"),sendVO);
 //   }
 
