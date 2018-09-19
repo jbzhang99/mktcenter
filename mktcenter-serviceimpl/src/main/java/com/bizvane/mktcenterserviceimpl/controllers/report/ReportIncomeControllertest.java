@@ -47,13 +47,13 @@ import lombok.extern.slf4j.Slf4j;
  */
 @Slf4j
 @RestController
-@RequestMapping("report")
-public class ReportIncomeController {
+@RequestMapping("reportest")
+public class ReportIncomeControllertest {
 	@Autowired
 	private RestTemplate restTemplate;
 
     @RequestMapping("vipIncomeAnalysis")
-    public ResponseData<List<BackData>> vipIncomeAnalysis( VipIncomeAnalysis vipIncomeAnalysis, HttpServletRequest request){
+    public ResponseData<List<BackData>> vipIncomeAnalysis(@RequestBody VipIncomeAnalysis vipIncomeAnalysis, HttpServletRequest request){
          vipIncomeAnalysis.setCorpId(TokenUtils.getStageUser(request).getCompanyCode());
     	 return sendpost(BaseUrl.getLoadUrl("vipIncomeAnalysis"),vipIncomeAnalysis);
     } 
@@ -101,14 +101,14 @@ public class ReportIncomeController {
     
 // 收入01- 收入总表
    @RequestMapping("incomeTotalList")
-   public ResponseData<List<BackData>> incomeTotalListGroup( IncomeTotalList sendVO, HttpServletRequest request){
+   public ResponseData<List<BackData>> incomeTotalListGroup(@RequestBody IncomeTotalList sendVO, HttpServletRequest request){
 	   sendVO.setCorpId(TokenUtils.getStageUser(request).getCompanyCode());
    	 return sendpost(BaseUrl.getLoadUrl("incomeTotalList"),sendVO);
    }
    
 // 收入01- 会销收入表汇总
    @RequestMapping("incomeVip")
-   public ResponseData<List<BackData>> incomeVip( IncomeVip sendVO, HttpServletRequest request){
+   public ResponseData<List<BackData>> incomeVip(@RequestBody IncomeVip sendVO, HttpServletRequest request){
 	   sendVO.setCorpId(TokenUtils.getStageUser(request).getCompanyCode());
    	 return sendpost(BaseUrl.getLoadUrl("incomeVip"),sendVO);
    }
@@ -117,21 +117,21 @@ public class ReportIncomeController {
    
 // 收入01- 游客收入表汇总
    @RequestMapping("touristIncome")
-   public ResponseData<List<BackData>> touristIncome( TouristIncome sendVO, HttpServletRequest request){
+   public ResponseData<List<BackData>> touristIncome(@RequestBody TouristIncome sendVO, HttpServletRequest request){
 	   sendVO.setCorpId(TokenUtils.getStageUser(request).getCompanyCode());
    	 return sendpost(BaseUrl.getLoadUrl("touristIncome"),sendVO);
    }
    
 // 02渠道-线上会销收入表汇总
    @RequestMapping("onlineVipIncome")
-   public ResponseData<List<BackData>> onlineVipIncome( OnlineVipIncome sendVO, HttpServletRequest request){
+   public ResponseData<List<BackData>> onlineVipIncome(@RequestBody OnlineVipIncome sendVO, HttpServletRequest request){
 	   sendVO.setCorpId(TokenUtils.getStageUser(request).getCompanyCode());
    	 return sendpost(BaseUrl.getLoadUrl("onlineVipIncome"),sendVO);
    }
    
 // 02渠道-线下
    @RequestMapping("offlineVipIncome")
-   public ResponseData<List<BackData>> offlineVipIncome( OfflineVipIncome sendVO, HttpServletRequest request){
+   public ResponseData<List<BackData>> offlineVipIncome(@RequestBody OfflineVipIncome sendVO, HttpServletRequest request){
 	   sendVO.setCorpId(TokenUtils.getStageUser(request).getCompanyCode());
    	 return sendpost(BaseUrl.getLoadUrl("offlineVipIncome"),sendVO);
    }
@@ -152,20 +152,20 @@ public class ReportIncomeController {
    
 // 04会员数量
    @RequestMapping("vipNum")
-   public ResponseData<List<BackData>> vipNum( VipNum sendVO, HttpServletRequest request){
+   public ResponseData<List<BackData>> vipNum(@RequestBody VipNum sendVO, HttpServletRequest request){
 	   sendVO.setCorpId(TokenUtils.getStageUser(request).getCompanyCode());
    	 return sendpost(BaseUrl.getLoadUrl("vipNum"),sendVO);
    }
    
 // 05新增会员-新增会员收入
    @RequestMapping("increaseVip")
-   public ResponseData<List<BackData>> increaseVip( IncreaseVip sendVO, HttpServletRequest request){
+   public ResponseData<List<BackData>> increaseVip(@RequestBody IncreaseVip sendVO, HttpServletRequest request){
 	   sendVO.setCorpId(TokenUtils.getStageUser(request).getCompanyCode());
    	 return sendpost(BaseUrl.getLoadUrl("increaseVip"),sendVO);
    }
 // 05新增会员-新增会员数量
    @RequestMapping("increaseVipNum")
-   public ResponseData<List<BackData>> increaseVipNum( IncreaseVipNum sendVO, HttpServletRequest request){
+   public ResponseData<List<BackData>> increaseVipNum(@RequestBody IncreaseVipNum sendVO, HttpServletRequest request){
 	   sendVO.setCorpId(TokenUtils.getStageUser(request).getCompanyCode());
    	 return sendpost(BaseUrl.getLoadUrl("increaseVipNum"),sendVO);
    }
@@ -185,21 +185,21 @@ public class ReportIncomeController {
    
 // 07新老会员分析-新会员
    @RequestMapping("newOldMemberInterface")
-   public ResponseData<List<BackData>> newOldMemberInterface( NewOldMemberInterface sendVO, HttpServletRequest request){
+   public ResponseData<List<BackData>> newOldMemberInterface(@RequestBody NewOldMemberInterface sendVO, HttpServletRequest request){
 	   sendVO.setCorpId(TokenUtils.getStageUser(request).getCompanyCode());
    	 return sendpost(BaseUrl.getLoadUrl("newOldMemberInterface"),sendVO);
    }
    
 // 08活跃会员表汇总
    @RequestMapping("activeMemberAllInterface")
-   public ResponseData<List<BackData>> activeMemberAllInterface( ActiveMemberAllInterface sendVO, HttpServletRequest request){
+   public ResponseData<List<BackData>> activeMemberAllInterface(@RequestBody ActiveMemberAllInterface sendVO, HttpServletRequest request){
 	   sendVO.setCorpId(TokenUtils.getStageUser(request).getCompanyCode());
    	 return sendpost(BaseUrl.getLoadUrl("activeMemberAllInterface"),sendVO);
    }
    
 // 09复购-会员表汇总
    @RequestMapping("rePurchaseMemberAllInterface")
-   public ResponseData<List<BackData>> rePurchaseMemberAllInterface( RePurchaseMemberAllInterface sendVO, HttpServletRequest request){
+   public ResponseData<List<BackData>> rePurchaseMemberAllInterface(@RequestBody RePurchaseMemberAllInterface sendVO, HttpServletRequest request){
 	   sendVO.setCorpId(TokenUtils.getStageUser(request).getCompanyCode());
    	 return sendpost(BaseUrl.getLoadUrl("rePurchaseMemberAllInterface"),sendVO);
    }
