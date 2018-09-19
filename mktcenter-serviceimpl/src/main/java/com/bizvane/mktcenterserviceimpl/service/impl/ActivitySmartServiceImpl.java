@@ -113,19 +113,22 @@ public class ActivitySmartServiceImpl implements ActivitySmartService {
         }
 
         List<MktActivitySmartGroupPO> mktActivitySmartGroupPOS = mktActivitySmartGroupPOMapper.selectByExampleWithBLOBs(example);
-        //查询数量这个分组会员数量
-        for (MktActivitySmartGroupPO mktActivitySmartGroupPO:mktActivitySmartGroupPOS) {
-            String targetMbr = mktActivitySmartGroupPO.getTargetMbr();
-            ////分页查询会员信息
-            //把高级搜索的条件转换成对象
-           // JSONObject jsonObject=JSONObject.parseObject(targetMbr);
-           // MembersInfoSearchVo membersInfoSearchVo=jsonObject.toJavaObject(MembersInfoSearchVo.class);
-            MembersInfoSearchVo membersInfoSearchVo=JSON.parseObject(targetMbr,MembersInfoSearchVo.class);
-            membersInfoSearchVo.setPageNumber(1);
-            membersInfoSearchVo.setPageSize(1);
-            ResponseData<com.bizvane.utils.responseinfo.PageInfo<MemberInfoVo>> memberInfoVoPages = membersAdvancedSearchApiService.search(membersInfoSearchVo);
-            mktActivitySmartGroupPO.setTargetMbrCount((int) memberInfoVoPages.getData().getTotal());
+        if(!CollectionUtils.isEmpty(mktActivitySmartGroupPOS)){
+            //查询数量这个分组会员数量
+            for (MktActivitySmartGroupPO mktActivitySmartGroupPO:mktActivitySmartGroupPOS) {
+                String targetMbr = mktActivitySmartGroupPO.getTargetMbr();
+                ////分页查询会员信息
+                //把高级搜索的条件转换成对象
+                // JSONObject jsonObject=JSONObject.parseObject(targetMbr);
+                // MembersInfoSearchVo membersInfoSearchVo=jsonObject.toJavaObject(MembersInfoSearchVo.class);
+                MembersInfoSearchVo membersInfoSearchVo=JSON.parseObject(targetMbr,MembersInfoSearchVo.class);
+                membersInfoSearchVo.setPageNumber(1);
+                membersInfoSearchVo.setPageSize(1);
+                ResponseData<com.bizvane.utils.responseinfo.PageInfo<MemberInfoVo>> memberInfoVoPages = membersAdvancedSearchApiService.search(membersInfoSearchVo);
+                mktActivitySmartGroupPO.setTargetMbrCount((int) memberInfoVoPages.getData().getTotal());
+            }
         }
+
 
         PageInfo<MktActivitySmartGroupPO> pageInfo = new PageInfo<>(mktActivitySmartGroupPOS);
         responseData.setData(pageInfo);
