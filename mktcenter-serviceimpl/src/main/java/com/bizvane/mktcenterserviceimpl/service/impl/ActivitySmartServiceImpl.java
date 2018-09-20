@@ -124,7 +124,11 @@ public class ActivitySmartServiceImpl implements ActivitySmartService {
                 MembersInfoSearchVo membersInfoSearchVo=JSON.parseObject(targetMbr,MembersInfoSearchVo.class);
                 membersInfoSearchVo.setPageNumber(1);
                 membersInfoSearchVo.setPageSize(1);
-                membersInfoSearchVo.setBrandId(stageUser.getBrandId());
+                //判断是中控调用的还是中台
+                if (null!=stageUser.getBrandId()){
+                    membersInfoSearchVo.setBrandId(stageUser.getBrandId());
+                }
+
                 ResponseData<com.bizvane.utils.responseinfo.PageInfo<MemberInfoVo>> memberInfoVoPages = membersAdvancedSearchApiService.search(membersInfoSearchVo);
                 mktActivitySmartGroupPO.setTargetMbrCount((int) memberInfoVoPages.getData().getTotal());
             }

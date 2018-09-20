@@ -8,12 +8,15 @@ import com.bizvane.mktcenterservice.models.vo.ActivitySmartVO;
 import com.bizvane.mktcenterservice.models.vo.PageForm;
 import com.bizvane.utils.responseinfo.ResponseData;
 import com.bizvane.utils.tokens.SysAccountPO;
+import com.bizvane.utils.tokens.TokenUtils;
 import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
+import javax.servlet.http.HttpServletRequest;
 
 /**
  * @author chen.li
@@ -41,7 +44,8 @@ public class ActivitySmartRpcController {
         pageForm.setPageNumber(vo.getPageNumber());
         pageForm.setPageSize(vo.getPageSize());
         vo.setType(0);
-        return activitySmartService.getSmartActivityGroupList(vo,pageForm);
+        SysAccountPO stageUser = new SysAccountPO();
+        return activitySmartService.getSmartActivityGroupList(vo,pageForm,stageUser);
     }
 
     @RequestMapping("addSmartActivityGroup")
