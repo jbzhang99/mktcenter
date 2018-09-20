@@ -102,7 +102,9 @@ public class TaskAmountServiceImpl implements TaskAmountService {
         MktTaskPOWithBLOBs mktTaskPOWithBLOBs = new MktTaskPOWithBLOBs();
         BeanUtils.copyProperties(vo, mktTaskPOWithBLOBs);
         mktTaskPOWithBLOBs.setTaskCode(taskCode);
-        mktTaskPOWithBLOBs = taskService.isOrNoCheckState(mktTaskPOWithBLOBs);
+        //1.判断是否需要审核  1=需要审核   0=不需要
+        Integer StagecheckStatus = taskService.getCenterStageCheckStage(mktTaskPOWithBLOBs);
+        mktTaskPOWithBLOBs = taskService.isOrNoCheckState(mktTaskPOWithBLOBs,StagecheckStatus);
         Long mktTaskId = taskService.addTask(mktTaskPOWithBLOBs, stageUser);
         taskService.addCheckData(mktTaskPOWithBLOBs);
 
@@ -110,7 +112,7 @@ public class TaskAmountServiceImpl implements TaskAmountService {
         MktTaskOrderPO mktTaskOrderPO = new MktTaskOrderPO();
         BeanUtils.copyProperties(vo, mktTaskOrderPO);
         mktTaskOrderPO.setMktTaskId(mktTaskId);
-        mktTaskPOWithBLOBs = taskService.isOrNoCheckState(mktTaskPOWithBLOBs);
+        //mktTaskPOWithBLOBs = taskService.isOrNoCheckState(mktTaskPOWithBLOBs);
         this.insertAmoutTask(mktTaskOrderPO, stageUser);
         taskService.addCheckData(mktTaskPOWithBLOBs);
 

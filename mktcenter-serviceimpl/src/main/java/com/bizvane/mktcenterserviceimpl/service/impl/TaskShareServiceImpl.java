@@ -128,11 +128,14 @@ public class TaskShareServiceImpl implements TaskShareService {
         MktTaskPOWithBLOBs mktTaskPOWithBLOBs = new MktTaskPOWithBLOBs();
         BeanUtils.copyProperties(taskVO, mktTaskPOWithBLOBs);
         mktTaskPOWithBLOBs.setTaskCode(taskCode);
-
-        mktTaskPOWithBLOBs = taskService.isOrNoCheckState(mktTaskPOWithBLOBs);
-
+        //1.判断是否需要审核  1=需要审核   0=不需要
+        Integer StagecheckStatus = taskService.getCenterStageCheckStage(mktTaskPOWithBLOBs);
+        mktTaskPOWithBLOBs = taskService.isOrNoCheckState(mktTaskPOWithBLOBs,StagecheckStatus);
         Long mktTaskId = taskService.addTask(mktTaskPOWithBLOBs, stageUser);
-        taskService.addCheckData(mktTaskPOWithBLOBs);
+        //将需要审核的任务添加到审核中心
+        if(TaskConstants.FIRST.equals(StagecheckStatus)){
+            taskService.addCheckData(mktTaskPOWithBLOBs);
+        }
         //3.任务消费表新增
         MktTaskSharePOWithBLOBs mktTaskSharePO = new MktTaskSharePOWithBLOBs();
         BeanUtils.copyProperties(taskVO, mktTaskSharePO);

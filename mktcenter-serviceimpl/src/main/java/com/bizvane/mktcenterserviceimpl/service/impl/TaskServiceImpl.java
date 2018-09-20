@@ -304,15 +304,13 @@ public class TaskServiceImpl implements TaskService {
      * 设置审核和执行状态
      */
     @Override
-    public MktTaskPOWithBLOBs isOrNoCheckState(MktTaskPOWithBLOBs po) throws ParseException {
+    public MktTaskPOWithBLOBs isOrNoCheckState(MktTaskPOWithBLOBs po,Integer centeStagecheckStatus) throws ParseException {
         //1.判断是否需要审核  1=需要审核   0=不需要
-        SysCheckConfigPo sysCheckConfigPo = new SysCheckConfigPo();
-        sysCheckConfigPo.setSysBrandId(po.getSysBrandId());
-        Integer checkStatus = this.getCheckStatus(sysCheckConfigPo);
+       // Integer checkStatus = this.getCenterStageCheckStage(po);
         //判断时间是否滞后   2=滞后执行    1=立即执行
         Integer ImmediatelyRunStatus = TimeUtils.IsImmediatelyRun(po.getStartTime());
         // checkStatus=1=需要审核
-        if (TaskConstants.FIRST.equals(checkStatus)) {
+        if (TaskConstants.FIRST.equals(centeStagecheckStatus)) {
             //待审核=1
             po.setCheckStatus(CheckStatusEnum.CHECK_STATUS_PENDING.getCode());
             //待执行=1
@@ -330,6 +328,19 @@ public class TaskServiceImpl implements TaskService {
             }
         }
         return po;
+    }
+
+    /**
+     * 在中台通过品牌Id查询任务是否需要审核
+     * @param po
+     * @return
+     */
+    @Override
+    public Integer getCenterStageCheckStage(MktTaskPOWithBLOBs po) {
+        SysCheckConfigPo sysCheckConfigPo = new SysCheckConfigPo();
+        sysCheckConfigPo.setSysBrandId(po.getSysBrandId());
+        sysCheckConfigPo.setFunctionCode("C0003");
+        return this.getCheckStatus(sysCheckConfigPo);
     }
 
 
@@ -755,12 +766,14 @@ public class TaskServiceImpl implements TaskService {
         //待审核=1
         if(TaskConstants.FIRST.equals(taskType)) {
             SysCheckPo checkPo = new SysCheckPo();
+            checkPo.setSysCompanyId(po.getSysCompanyId());
             checkPo.setSysBrandId(po.getSysBrandId());
             checkPo.setBusinessType(taskType);
             checkPo.setBusinessId(po.getMktTaskId());
             checkPo.setBusinessCode(po.getTaskCode());
             checkPo.setBusinessName(po.getTaskName());
             checkPo.setCheckStatus(CheckStatusEnum.CHECK_STATUS_PENDING.getCode());
+            checkPo.setFunctionCode("C0003");
             sysCheckServiceRpc.addCheck(checkPo);
         }
 

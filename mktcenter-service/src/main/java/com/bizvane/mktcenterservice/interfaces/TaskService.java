@@ -106,7 +106,7 @@ public interface TaskService {
      * @return
      * @throws ParseException
      */
-    public MktTaskPOWithBLOBs isOrNoCheckState(MktTaskPOWithBLOBs po)throws ParseException;
+    public MktTaskPOWithBLOBs isOrNoCheckState(MktTaskPOWithBLOBs po,Integer centeStagecheckStatus)throws ParseException;
 
     /**
      * 发送任务消息
@@ -200,4 +200,11 @@ public interface TaskService {
      * @param po
      */
     public  void updateCheckData(MktTaskPOWithBLOBs po);
+
+    /**
+     * 中台通过品牌Id查询任务是否需要审核
+     * @param po
+     * @return
+     */
+    public Integer getCenterStageCheckStage(MktTaskPOWithBLOBs po);
 }
