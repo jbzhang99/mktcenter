@@ -4,12 +4,13 @@ import java.util.List;
 
 import com.alibaba.fastjson.JSONObject;
 
-public class BackData {
+public class BackDataTime {
+	private String time;
 	private List<BackDataBiaotou>  header ;
-	private JSONObject JosonData;
 	private int  totalNumber ;
+	private JSONObject JosonData;
 	
-	
+
 
 	public int getTotalNumber() {
 		return totalNumber;
@@ -27,6 +28,13 @@ public class BackData {
 		this.header = header;
 	}
 
+	 
+	public String getTime() {
+		return time;
+	}
+	public void setTime(String time) {
+		this.time = time;
+	}
 	public JSONObject getJosonData() {
 		return JosonData;
 	}
@@ -35,7 +43,6 @@ public class BackData {
 		JosonData = json;// TODO Auto-generated method stub
 		
 	}
-
 
 	
 

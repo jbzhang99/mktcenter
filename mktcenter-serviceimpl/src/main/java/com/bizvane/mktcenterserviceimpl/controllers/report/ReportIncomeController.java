@@ -22,6 +22,7 @@ import com.bizvane.mktcenterservice.models.po.FileReportTempPOExample;
 import com.bizvane.mktcenterservice.models.po.MktCouponPOExample;
 import com.bizvane.mktcenterservice.models.requestvo.BackData;
 import com.bizvane.mktcenterservice.models.requestvo.BackDataBiaotou;
+import com.bizvane.mktcenterservice.models.requestvo.BackDataTime;
 import com.bizvane.mktcenterservice.models.requestvo.BaseUrl;
 import com.bizvane.mktcenterservice.models.requestvo.postvo.ActiveMemberAllInterface;
 import com.bizvane.mktcenterservice.models.requestvo.postvo.IncomeTotalList;
@@ -35,6 +36,7 @@ import com.bizvane.mktcenterservice.models.requestvo.postvo.RePurchaseMemberAllI
 import com.bizvane.mktcenterservice.models.requestvo.postvo.TouristIncome;
 import com.bizvane.mktcenterservice.models.requestvo.postvo.VipIncomeAnalysis;
 import com.bizvane.mktcenterservice.models.requestvo.postvo.VipNum;
+import com.bizvane.mktcenterserviceimpl.common.utils.FigureUtil;
 import com.bizvane.mktcenterserviceimpl.mappers.FileReportTempPOMapper;
 import com.bizvane.utils.responseinfo.ResponseData;
 import com.bizvane.utils.tokens.TokenUtils;
@@ -66,75 +68,8 @@ public class ReportIncomeController {
     	 return sendpost(BaseUrl.getLoadUrl("vipIncomeAnalysis"),sendVO,FileReportTempPOlist);
     } 
     
+    
 
-    public ResponseData<List<BackData>> sendpost(String url,Object vipIncomeAnalysis,List<FileReportTempPO> fileReportTempPOlist){
-    log.info("报表查询ReportIncomeController："+url+vipIncomeAnalysis.toString());
-		 ResponseEntity<String> response = this.restTemplate.postForEntity(url, vipIncomeAnalysis,String.class, new Object[0]);
-	     ResponseData<List<BackData>> ResponseData =new ResponseData<List<BackData>>();
-	     JSONObject job = JSONObject.parseObject(response.getBody());
-	     
-	     if(job.get("successFlag").equals("1")) {
-	    	 ResponseData.setCode(0);
-	  	    ResponseData.setMessage(job.get("message").toString());
-		    ResponseData.setData(parseJSON2Map(job.get("data").toString(),fileReportTempPOlist));
-	     }else {
-	    	 ResponseData.setCode(1);
-	  	    ResponseData.setMessage(job.get("message").toString());
-	  	    List<BackData> listdata =new ArrayList<BackData>();
-	  	  ResponseData.setData(parseJSON2Map("false",fileReportTempPOlist));
-	    	 
-	     }
-
-        return ResponseData;
-    }
-    
-    
-    
-    public static  List<BackData> parseJSON2Map(String jsonStr,List<FileReportTempPO> fileReportTempPOlist){  
-    	 List<BackData> listdata =new ArrayList<BackData>();
-    	try {
-    		
-    		//查询表头
-    		BackData backDataOne =new BackData();
-    		if(null!=fileReportTempPOlist&&fileReportTempPOlist.size()>0) {
-    			
-    			List<BackDataBiaotou> biaotoulist =new ArrayList<BackDataBiaotou>();
-    			
-    			Map<Integer,String> map=new HashMap<Integer,String>();
-    			int i=1;
-    			for(String string :fileReportTempPOlist.get(0).getReportData().split(",")) {
-    				map.put(i++, string);
-    			}
-    			 i=1;
-    			for(String string :fileReportTempPOlist.get(0).getReportDataName().split(",")) {
-    				BackDataBiaotou biaotou= new BackDataBiaotou();
-    				biaotou.setHeaderType(string);
-    				biaotou.setHeaderName(map.get(i++));
-    				biaotoulist.add(biaotou);
-   
-    			}
-    			
-    			backDataOne.setHeader(biaotoulist);
-    			listdata.add(backDataOne);
-    		}
-    		//查询表头
-    		
-    		
-    		if(jsonStr.equals("false")) {
-    			 return listdata;  
-    		}
-			JSONArray arr=new JSONArray(jsonStr);
-			for(int i=0;i<arr.length();i++){
-				BackData backData =new BackData();
-				  backData.setJosonData(JSONObject.parseObject(arr.getJSONObject(i).toString()));
-				  listdata.add(backData);
-			}
-		} catch (JSONException e) {
-			e.printStackTrace();
-		}
-            return listdata;  
-    
-    } 
     
 // 收入01- 收入总表
    @RequestMapping("incomeTotalList")
@@ -282,29 +217,51 @@ public class ReportIncomeController {
 //   	 return sendpost(BaseUrl.getLoadUrl("activeMemberAllInterface"),sendVO,FileReportTempPOlist);
 //   }
 
+//   请求放回数据
+   public ResponseData<List<BackData>> sendpost(String url,Object vipIncomeAnalysis,List<FileReportTempPO> fileReportTempPOlist){
+   log.info("报表查询ReportIncomeController："+url+vipIncomeAnalysis.toString());
+		 ResponseEntity<String> response = this.restTemplate.postForEntity(url, vipIncomeAnalysis,String.class, new Object[0]);
+	     ResponseData<List<BackData>> ResponseData =new ResponseData<List<BackData>>();
+	     JSONObject job = JSONObject.parseObject(response.getBody());
+	     
+	     if(job.get("successFlag").equals("1")) {
+	    	 ResponseData.setCode(0);
+	  	    ResponseData.setMessage(job.get("message").toString());
+		    ResponseData.setData(FigureUtil.parseJSON2Map(job.get("data").toString(),fileReportTempPOlist));
+	     }else {
+	    	 ResponseData.setCode(1);
+	  	    ResponseData.setMessage(job.get("message").toString());
+	  	  ResponseData.setData(FigureUtil.parseJSON2Map("false",fileReportTempPOlist));
+	    	 
+	     }
 
+       return ResponseData;
+   }
+   
+// 请求放回数据带时间格式的json
+ public ResponseData<List<BackDataTime>> sendpostHaveTime(String url,Object vipIncomeAnalysis,List<FileReportTempPO> fileReportTempPOlist){
+ log.info("报表查询ReportIncomeController："+url+vipIncomeAnalysis.toString());
+		 ResponseEntity<String> response = this.restTemplate.postForEntity(url, vipIncomeAnalysis,String.class, new Object[0]);
+	     ResponseData<List<BackDataTime>> ResponseData =new ResponseData<List<BackDataTime>>();
+	     JSONObject job = JSONObject.parseObject(response.getBody());
+	     
+	     if(job.get("successFlag").equals("1")) {
+	    	 ResponseData.setCode(0);
+	  	    ResponseData.setMessage(job.get("message").toString());
+		    ResponseData.setData(FigureUtil.parseJSON2MapTime(job.get("data").toString(),fileReportTempPOlist));
+	     }else {
+	    	 ResponseData.setCode(1);
+	  	    ResponseData.setMessage(job.get("message").toString());
+	  	  ResponseData.setData(FigureUtil.parseJSON2MapTime("false",fileReportTempPOlist));
+	    	 
+	     }
+
+     return ResponseData;
+ }
+   
 
     
-   public static  List<BackData> parseJSON2MapTime(String jsonStr){  
-
-       //最外层解析  
-       if(jsonStr!=null&&jsonStr.startsWith("{")&&jsonStr.endsWith("}")){
-           Map<String, Object> map = new HashMap<String, Object>();  
-           
-           JSONObject json = JSONObject.parseObject(jsonStr);  
-           List<BackData> listdata =new ArrayList<BackData>();
-           for(Object k : json.keySet()){
-           	BackData backData =new BackData();
-//               backData.setTime(k.toString());
-//               backData.setJosonData(json.get(k).toString());
-               listdata.add(backData);
-           }  
-//           JSON.toJSON(listdata).toString()
-           return listdata;  
-       }else{
-           return null;
-       }
-   }    
+  
  
 
 
