@@ -220,13 +220,15 @@ public class TaskServiceImpl implements TaskService {
                 taskBO.setTaskVO(taskVO);
                 String storeLimitList = taskVO.getStoreLimitList();
                 if (taskVO!=null && StringUtils.isNotBlank(storeLimitList)){
-                    String[] storeArr = storeLimitList.split(",");
-                    List<Long> storeIdList = Arrays.asList(storeArr).stream().map(element -> Long.valueOf(element)).collect(Collectors.toList());
+                    List<Long> storeIdList = Arrays.asList(storeLimitList.split(",")).stream().map(element -> Long.valueOf(element)).collect(Collectors.toList());
                     //查询店铺列表
                     List<SysStorePo> storeList = this.getStoreListByIds(storeIdList);
                     taskBO.setStoreList(storeList);
                 }
             }
+
+
+
             if (CollectionUtils.isNotEmpty(mktCouponPOList)){
                 taskBO.setMktCouponPOList(mktCouponPOList);
             }
