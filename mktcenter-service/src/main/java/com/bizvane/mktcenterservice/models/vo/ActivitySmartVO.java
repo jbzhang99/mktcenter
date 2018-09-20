@@ -163,12 +163,31 @@ public class ActivitySmartVO extends MktActivitySmartPO {
     @io.swagger.annotations.ApiModelProperty(value = "开始发送时间", name = "sendTime", required = false, example = "")
     private Date sendTime;
 
+    private Long mbrGroupDefId;//管理会员分组id
+
+    private Integer smartType;//判断是会员分组还是智能营销分组
     /**
      * 通过id查询券实例
      */
     private CouponDetailResponseVO couponDetailResponseVO;
 
     private List<CouponDetailResponseVO> couponDetailResponseVOList;
+
+    public Integer getSmartType() {
+        return smartType;
+    }
+
+    public void setSmartType(Integer smartType) {
+        this.smartType = smartType;
+    }
+
+    public Long getMbrGroupDefId() {
+        return mbrGroupDefId;
+    }
+
+    public void setMbrGroupDefId(Long mbrGroupDefId) {
+        this.mbrGroupDefId = mbrGroupDefId;
+    }
 
     public List<CouponDetailResponseVO> getCouponDetailResponseVOList() {
         return couponDetailResponseVOList;

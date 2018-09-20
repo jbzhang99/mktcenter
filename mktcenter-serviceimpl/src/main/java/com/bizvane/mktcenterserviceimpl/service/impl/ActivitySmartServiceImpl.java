@@ -93,7 +93,7 @@ public class ActivitySmartServiceImpl implements ActivitySmartService {
      * @return
      */
     @Override
-    public ResponseData<PageInfo<MktActivitySmartGroupPO>> getSmartActivityGroupList(ActivitySmartVO vo, PageForm pageForm) {
+    public ResponseData<PageInfo<MktActivitySmartGroupPO>> getSmartActivityGroupList(ActivitySmartVO vo, PageForm pageForm,SysAccountPO stageUser) {
         log.info("com.bizvane.mktcenterserviceimpl.service.impl.ActivitySmartServiceImpl.getSmartActivityGroupList param"+"vo:"+ JSON.toJSONString(vo)+"pageForm"+ JSON.toJSONString(pageForm));
         ResponseData responseData = new ResponseData();
         PageHelper.startPage(pageForm.getPageNumber(),pageForm.getPageSize());
@@ -124,7 +124,7 @@ public class ActivitySmartServiceImpl implements ActivitySmartService {
                 MembersInfoSearchVo membersInfoSearchVo=JSON.parseObject(targetMbr,MembersInfoSearchVo.class);
                 membersInfoSearchVo.setPageNumber(1);
                 membersInfoSearchVo.setPageSize(1);
-                membersInfoSearchVo.setBrandId(vo.getSysBrandId());
+                membersInfoSearchVo.setBrandId(stageUser.getBrandId());
                 ResponseData<com.bizvane.utils.responseinfo.PageInfo<MemberInfoVo>> memberInfoVoPages = membersAdvancedSearchApiService.search(membersInfoSearchVo);
                 mktActivitySmartGroupPO.setTargetMbrCount((int) memberInfoVoPages.getData().getTotal());
             }
@@ -538,7 +538,7 @@ public class ActivitySmartServiceImpl implements ActivitySmartService {
         }
 
         //关联的智能营销分组不能为空
-        if(vo.getMktActivitySmartGroupId()==null){
+        if(vo.getMktActivitySmartGroupId()==null  && vo.getSmartType()==1){
             log.warn("vo.getMktActivitySmartGroupId() is null");
             responseData.setCode(SysResponseEnum.FAILED.getCode());
             responseData.setMessage(SysResponseEnum.MODEL_FAILED_VALIDATION.getMessage());
@@ -656,7 +656,7 @@ public class ActivitySmartServiceImpl implements ActivitySmartService {
         }
 
         //关联的智能营销分组不能为空
-        if(vo.getMktActivitySmartGroupId()==null){
+        if(vo.getMktActivitySmartGroupId()==null  && vo.getSmartType()==1){
             log.warn("vo.getMktActivitySmartGroupId() is null");
             responseData.setCode(SysResponseEnum.FAILED.getCode());
             responseData.setMessage(SysResponseEnum.MODEL_FAILED_VALIDATION.getMessage());
@@ -760,7 +760,7 @@ public class ActivitySmartServiceImpl implements ActivitySmartService {
         }
 
         //关联的智能营销分组不能为空
-        if(vo.getMktActivitySmartGroupId()==null){
+        if(vo.getMktActivitySmartGroupId()==null  && vo.getSmartType()==1){
             log.warn("vo.getMktActivitySmartGroupId() is null");
             responseData.setCode(SysResponseEnum.FAILED.getCode());
             responseData.setMessage(SysResponseEnum.MODEL_FAILED_VALIDATION.getMessage());
@@ -876,7 +876,7 @@ public class ActivitySmartServiceImpl implements ActivitySmartService {
         }
 
         //关联的智能营销分组不能为空
-        if(vo.getMktActivitySmartGroupId()==null){
+        if(vo.getMktActivitySmartGroupId()==null && vo.getSmartType()==1){
             log.warn("vo.getMktActivitySmartGroupId() is null");
             responseData.setCode(SysResponseEnum.FAILED.getCode());
             responseData.setMessage(SysResponseEnum.MODEL_FAILED_VALIDATION.getMessage());

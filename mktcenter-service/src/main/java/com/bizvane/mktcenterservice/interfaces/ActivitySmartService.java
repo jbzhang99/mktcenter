@@ -30,7 +30,7 @@ public interface ActivitySmartService {
      * @param vo
      * @return
      */
-    public ResponseData<PageInfo<MktActivitySmartGroupPO>> getSmartActivityGroupList(ActivitySmartVO vo, PageForm pageForm);
+    public ResponseData<PageInfo<MktActivitySmartGroupPO>> getSmartActivityGroupList(ActivitySmartVO vo, PageForm pageForm,SysAccountPO stageUser);
 
     /**
      * 查询历史营销活动列表

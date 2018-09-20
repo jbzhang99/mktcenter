@@ -49,8 +49,9 @@ public class ActivitySmartController {
             @ApiImplicitParam(name = "memberGroupName", dataType = "String", value = "智能营销会员分组名称", paramType = "query", required = true),
     })
     @PostMapping("getSmartActivityGroupList")
-    public ResponseData<PageInfo<MktActivitySmartGroupPO>> getSmartActivityGroupList(ActivitySmartVO vo, PageForm pageForm){
-        return activitySmartService.getSmartActivityGroupList(vo,pageForm);
+    public ResponseData<PageInfo<MktActivitySmartGroupPO>> getSmartActivityGroupList(ActivitySmartVO vo, PageForm pageForm,HttpServletRequest request){
+        SysAccountPO stageUser = TokenUtils.getStageUser(request);
+        return activitySmartService.getSmartActivityGroupList(vo,pageForm,stageUser);
     }
 
     /**
@@ -105,7 +106,6 @@ public class ActivitySmartController {
     public ResponseData<Integer> addCouponActivity(ActivitySmartVO vo, HttpServletRequest request){
         //获取操作人信息
         SysAccountPO stageUser = TokenUtils.getStageUser(request);
-        //SysAccountPO stageUser = new SysAccountPO();
         ResponseData<Integer> responseData = activitySmartService.addCouponActivity(vo, stageUser);
         return responseData;
     }
@@ -122,7 +122,6 @@ public class ActivitySmartController {
          ActivityParamCheckUtil.checkSmartActivityParam(vo);
         //参数校验通过，获取操作人信息
         SysAccountPO stageUser = TokenUtils.getStageUser(request);
-        //SysAccountPO stageUser = new SysAccountPO();
         ResponseData<Integer> responseData = activitySmartService.addIntegralActivity(vo,stageUser);
         return new ResponseData<>();
     }
@@ -139,7 +138,6 @@ public class ActivitySmartController {
         ActivityParamCheckUtil.checkSmartActivityParam(vo);
         //参数校验通过，获取操作人信息
         SysAccountPO stageUser = TokenUtils.getStageUser(request);
-       // SysAccountPO stageUser = new SysAccountPO();
         ResponseData<Integer> responseData = activitySmartService.addSmsActivity(vo,messageVO,stageUser);
         return new ResponseData<>();
     }
@@ -155,8 +153,7 @@ public class ActivitySmartController {
         //参数校验
         ActivityParamCheckUtil.checkSmartActivityParam(vo);
         //参数校验通过，获取操作人信息
-//        SysAccountPO stageUser = TokenUtils.getStageUser(request);
-        SysAccountPO stageUser = new SysAccountPO();
+       SysAccountPO stageUser = TokenUtils.getStageUser(request);
         ResponseData<Integer> responseData = activitySmartService.addWxMessageActivity(vo,messageVO,stageUser);
         return new ResponseData<>();
     }
