@@ -128,7 +128,7 @@ public class ActivityServiceImpl implements ActivityService {
 
             }
             //判断审核时间 >活动结束时间  将活动状态变为已结束
-            if(new Date().after(activityPO.getEndTime())){
+            if(null!=activityPO.getEndTime() && new Date().after(activityPO.getEndTime())){
                 bs.setActivityStatus(ActivityStatusEnum.ACTIVITY_STATUS_FINISHED.getCode());
                 int i = mktActivityPOMapper.updateByPrimaryKeySelective(bs);
             }
