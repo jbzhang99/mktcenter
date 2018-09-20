@@ -8,28 +8,28 @@ import java.util.List;
 public class MktActivityPOExample implements Serializable {
     /**
 	 * 只读. 
-	 * @mbg.generated  2018-09-08 13:49:38
+	 * @mbg.generated  2018-09-20 09:44:33
 	 */
 	protected String orderByClause;
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-09-08 13:49:38
+	 * @mbg.generated  2018-09-20 09:44:33
 	 */
 	protected boolean distinct;
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-09-08 13:49:38
+	 * @mbg.generated  2018-09-20 09:44:33
 	 */
 	protected List<Criteria> oredCriteria;
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-09-08 13:49:38
+	 * @mbg.generated  2018-09-20 09:44:33
 	 */
 	private static final long serialVersionUID = 1L;
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-09-08 13:49:38
+	 * @mbg.generated  2018-09-20 09:44:33
 	 */
 	public MktActivityPOExample() {
 		oredCriteria = new ArrayList<Criteria>();
@@ -37,7 +37,7 @@ public class MktActivityPOExample implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-09-08 13:49:38
+	 * @mbg.generated  2018-09-20 09:44:33
 	 */
 	public void setOrderByClause(String orderByClause) {
 		this.orderByClause = orderByClause;
@@ -45,7 +45,7 @@ public class MktActivityPOExample implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-09-08 13:49:38
+	 * @mbg.generated  2018-09-20 09:44:33
 	 */
 	public String getOrderByClause() {
 		return orderByClause;
@@ -53,7 +53,7 @@ public class MktActivityPOExample implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-09-08 13:49:38
+	 * @mbg.generated  2018-09-20 09:44:33
 	 */
 	public void setDistinct(boolean distinct) {
 		this.distinct = distinct;
@@ -61,7 +61,7 @@ public class MktActivityPOExample implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-09-08 13:49:38
+	 * @mbg.generated  2018-09-20 09:44:33
 	 */
 	public boolean isDistinct() {
 		return distinct;
@@ -69,7 +69,7 @@ public class MktActivityPOExample implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-09-08 13:49:38
+	 * @mbg.generated  2018-09-20 09:44:33
 	 */
 	public List<Criteria> getOredCriteria() {
 		return oredCriteria;
@@ -77,7 +77,7 @@ public class MktActivityPOExample implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-09-08 13:49:38
+	 * @mbg.generated  2018-09-20 09:44:33
 	 */
 	public void or(Criteria criteria) {
 		oredCriteria.add(criteria);
@@ -85,7 +85,7 @@ public class MktActivityPOExample implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-09-08 13:49:38
+	 * @mbg.generated  2018-09-20 09:44:33
 	 */
 	public Criteria or() {
 		Criteria criteria = createCriteriaInternal();
@@ -95,7 +95,7 @@ public class MktActivityPOExample implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-09-08 13:49:38
+	 * @mbg.generated  2018-09-20 09:44:33
 	 */
 	public Criteria createCriteria() {
 		Criteria criteria = createCriteriaInternal();
@@ -107,7 +107,7 @@ public class MktActivityPOExample implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-09-08 13:49:38
+	 * @mbg.generated  2018-09-20 09:44:33
 	 */
 	protected Criteria createCriteriaInternal() {
 		Criteria criteria = new Criteria();
@@ -116,7 +116,7 @@ public class MktActivityPOExample implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-09-08 13:49:38
+	 * @mbg.generated  2018-09-20 09:44:33
 	 */
 	public void clear() {
 		oredCriteria.clear();
@@ -126,7 +126,7 @@ public class MktActivityPOExample implements Serializable {
 
 	/**
 	 * 只读. t_mkt_activity
-	 * @mbg.generated  2018-09-08 13:49:38
+	 * @mbg.generated  2018-09-20 09:44:33
 	 */
 	protected abstract static class GeneratedCriteria implements Serializable {
 		protected List<Criterion> criteria;
@@ -346,6 +346,66 @@ public class MktActivityPOExample implements Serializable {
 
 		public Criteria andSysBrandIdNotBetween(Long value1, Long value2) {
 			addCriterion("sys_brand_id not between", value1, value2, "sysBrandId");
+			return (Criteria) this;
+		}
+
+		public Criteria andMbrGroupDefIdIsNull() {
+			addCriterion("mbr_group_def_id is null");
+			return (Criteria) this;
+		}
+
+		public Criteria andMbrGroupDefIdIsNotNull() {
+			addCriterion("mbr_group_def_id is not null");
+			return (Criteria) this;
+		}
+
+		public Criteria andMbrGroupDefIdEqualTo(Long value) {
+			addCriterion("mbr_group_def_id =", value, "mbrGroupDefId");
+			return (Criteria) this;
+		}
+
+		public Criteria andMbrGroupDefIdNotEqualTo(Long value) {
+			addCriterion("mbr_group_def_id <>", value, "mbrGroupDefId");
+			return (Criteria) this;
+		}
+
+		public Criteria andMbrGroupDefIdGreaterThan(Long value) {
+			addCriterion("mbr_group_def_id >", value, "mbrGroupDefId");
+			return (Criteria) this;
+		}
+
+		public Criteria andMbrGroupDefIdGreaterThanOrEqualTo(Long value) {
+			addCriterion("mbr_group_def_id >=", value, "mbrGroupDefId");
+			return (Criteria) this;
+		}
+
+		public Criteria andMbrGroupDefIdLessThan(Long value) {
+			addCriterion("mbr_group_def_id <", value, "mbrGroupDefId");
+			return (Criteria) this;
+		}
+
+		public Criteria andMbrGroupDefIdLessThanOrEqualTo(Long value) {
+			addCriterion("mbr_group_def_id <=", value, "mbrGroupDefId");
+			return (Criteria) this;
+		}
+
+		public Criteria andMbrGroupDefIdIn(List<Long> values) {
+			addCriterion("mbr_group_def_id in", values, "mbrGroupDefId");
+			return (Criteria) this;
+		}
+
+		public Criteria andMbrGroupDefIdNotIn(List<Long> values) {
+			addCriterion("mbr_group_def_id not in", values, "mbrGroupDefId");
+			return (Criteria) this;
+		}
+
+		public Criteria andMbrGroupDefIdBetween(Long value1, Long value2) {
+			addCriterion("mbr_group_def_id between", value1, value2, "mbrGroupDefId");
+			return (Criteria) this;
+		}
+
+		public Criteria andMbrGroupDefIdNotBetween(Long value1, Long value2) {
+			addCriterion("mbr_group_def_id not between", value1, value2, "mbrGroupDefId");
 			return (Criteria) this;
 		}
 
@@ -1602,7 +1662,7 @@ public class MktActivityPOExample implements Serializable {
 
 	/**
 	 * 只读. t_mkt_activity
-	 * @mbg.generated  2018-09-08 13:49:38
+	 * @mbg.generated  2018-09-20 09:44:33
 	 */
 	public static class Criterion implements Serializable {
 		private String condition;

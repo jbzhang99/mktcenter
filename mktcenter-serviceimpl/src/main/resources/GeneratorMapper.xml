@@ -53,9 +53,9 @@
             <!--<generatedKey column="def_dictionary_id" sqlStatement="MySql" identity="true"/>-->
         <!--</table>-->
 
-     <!--    <table tableName="t_mkt_activity" domainObjectName="MktActivityPO">
+        <table tableName="t_mkt_activity" domainObjectName="MktActivityPO">
             <generatedKey column="mkt_activity_id" sqlStatement="MySql" identity="true"/>
-        </table> -->
+        </table>
         <!--<table tableName="t_mkt_activity_birthday" domainObjectName="MktActivityBirthdayPO">-->
             <!--<generatedKey column="mkt_activity_birthday_id" sqlStatement="MySql" identity="true"/>-->
         <!--</table>-->
@@ -111,9 +111,9 @@
 <!--             <generatedKey column="mkt_task_share_id" sqlStatement="MySql" identity="true"/> -->
 <!--         </table> -->
 
-        <table tableName="t_file_report_temp" domainObjectName="FileReportTempPO">
+     <!--    <table tableName="t_file_report_temp" domainObjectName="FileReportTempPO">
             <generatedKey column="file_report_temp_id" sqlStatement="MySql" identity="true"/>
-        </table>
+        </table> -->
 
 
         <!--<table tableName="t_rocket_log" domainObjectName="RocketLogPO">-->
