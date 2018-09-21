@@ -4,6 +4,7 @@ import com.bizvane.couponfacade.enums.SendTypeEnum;
 import com.bizvane.couponfacade.models.vo.SendCouponBatchRequestVO;
 import com.bizvane.couponfacade.models.vo.SendCouponSimpleRequestVO;
 import com.bizvane.members.facade.enums.IntegralChangeTypeEnum;
+import com.bizvane.members.facade.es.pojo.MembersInfoSearchPojo;
 import com.bizvane.members.facade.es.vo.MembersInfoSearchVo;
 import com.bizvane.members.facade.es.vo.WxChannelInfoSearchVo;
 import com.bizvane.members.facade.models.IntegralRecordModel;
@@ -49,8 +50,6 @@ import java.util.List;
 @Slf4j
 public class MemberMessageSend {
     @Autowired
-    private MembersAdvancedSearchApiService membersAdvancedSearchApiService;
-    @Autowired
     private Award award;
     @Autowired
     private MemberInfoApiService memberInfoApiService;
@@ -68,6 +67,8 @@ public class MemberMessageSend {
 
     @Autowired
     private WxChannelInfoAdvancedSearchApiService wxChannelInfoAdvancedSearchApiServic;
+    @Autowired
+    private MembersAdvancedSearchApiService membersAdvancedSearchApiService;
     /**
      * 查询会员信息发送你个短信和微信消息
      * @param messageVOList
@@ -285,9 +286,11 @@ public class MemberMessageSend {
     @Async("asyncServiceExecutor")
     public void sendSmart(Integer mktSmartType, MktActivityPOWithBLOBs mktActivityPOWithBLOBs, MembersInfoSearchVo membersInfoSearchVo) {
         ResponseData<PageInfo<MemberInfoVo>> memberInfoVoPage = membersAdvancedSearchApiService.search(membersInfoSearchVo);
+        //ResponseData<PageInfo<MembersInfoSearchPojo>> memberInfoVoPage =membersAdvancedSearchApiService.advancedSearch(membersInfoSearchVo);
         for (int a =0;a<memberInfoVoPage.getData().getPages();a++){
             membersInfoSearchVo.setPageNumber(a);
             ResponseData<PageInfo<MemberInfoVo>> memberInfoVoPages = membersAdvancedSearchApiService.search(membersInfoSearchVo);
+            //ResponseData<PageInfo<MembersInfoSearchPojo>> memberInfoVoPages =membersAdvancedSearchApiService.advancedSearch(membersInfoSearchVo);
             List<MemberInfoVo> memberInfoModelList = memberInfoVoPages.getData().getList();
             /*if(CollectionUtils.isEmpty(memberInfoModelList)){
                 log.error("target member is empty");
@@ -311,7 +314,7 @@ public class MemberMessageSend {
                     //coupon loop
                     for(MktCouponPO mktCouponPO : mktCouponPOS){
                         SendCouponBatchRequestVO sendCouponBatchRequestVO = new SendCouponBatchRequestVO();
-                        sendCouponBatchRequestVO.setMemberList(memberInfoVoPages.getData().getList());
+                        //sendCouponBatchRequestVO.setMemberList(memberInfoVoPages.getData().getList());
                         sendCouponBatchRequestVO.setCouponDefinitionId(mktCouponPO.getCouponDefinitionId());
                         awardBO.setMktType(MktSmartTypeEnum.SMART_TYPE_COUPON_BATCH.getCode());
                         awardBO.setSendCouponBatchRequestVO(sendCouponBatchRequestVO);

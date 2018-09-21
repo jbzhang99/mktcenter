@@ -542,7 +542,7 @@ public class ActivitySmartServiceImpl implements ActivitySmartService {
         }
 
         //关联的智能营销分组不能为空
-        if(vo.getMktActivitySmartGroupId()==null  && vo.getSmartType()==1){
+        if(null==vo.getMktActivitySmartGroupId()  && vo.getSmartType()==1){
             log.warn("vo.getMktActivitySmartGroupId() is null");
             responseData.setCode(SysResponseEnum.FAILED.getCode());
             responseData.setMessage(SysResponseEnum.MODEL_FAILED_VALIDATION.getMessage());
@@ -570,12 +570,12 @@ public class ActivitySmartServiceImpl implements ActivitySmartService {
 
         Boolean execute = Boolean.FALSE;
 
-        if(vo.getSendTime()==null){
+      /*  if(vo.getSendTime()==null){
             log.warn("vo.getSendTime() is null");
             responseData.setCode(SysResponseEnum.FAILED.getCode());
             responseData.setMessage(SysResponseEnum.MODEL_FAILED_VALIDATION.getMessage());
             return responseData;
-        }
+        }*/
 
         if (false==vo.getSendImmediately()){
             //如果活动时间滞后
@@ -660,7 +660,7 @@ public class ActivitySmartServiceImpl implements ActivitySmartService {
         }
 
         //关联的智能营销分组不能为空
-        if(vo.getMktActivitySmartGroupId()==null  && vo.getSmartType()==1){
+        if(null==vo.getMktActivitySmartGroupId()  && vo.getSmartType()==1){
             log.warn("vo.getMktActivitySmartGroupId() is null");
             responseData.setCode(SysResponseEnum.FAILED.getCode());
             responseData.setMessage(SysResponseEnum.MODEL_FAILED_VALIDATION.getMessage());
@@ -764,7 +764,7 @@ public class ActivitySmartServiceImpl implements ActivitySmartService {
         }
 
         //关联的智能营销分组不能为空
-        if(vo.getMktActivitySmartGroupId()==null  && vo.getSmartType()==1){
+        if(null==vo.getMktActivitySmartGroupId()  && vo.getSmartType()==1){
             log.warn("vo.getMktActivitySmartGroupId() is null");
             responseData.setCode(SysResponseEnum.FAILED.getCode());
             responseData.setMessage(SysResponseEnum.MODEL_FAILED_VALIDATION.getMessage());
@@ -880,7 +880,7 @@ public class ActivitySmartServiceImpl implements ActivitySmartService {
         }
 
         //关联的智能营销分组不能为空
-        if(vo.getMktActivitySmartGroupId()==null && vo.getSmartType()==1){
+        if(null==vo.getMktActivitySmartGroupId() && vo.getSmartType()==1){
             log.warn("vo.getMktActivitySmartGroupId() is null");
             responseData.setCode(SysResponseEnum.FAILED.getCode());
             responseData.setMessage(SysResponseEnum.MODEL_FAILED_VALIDATION.getMessage());
