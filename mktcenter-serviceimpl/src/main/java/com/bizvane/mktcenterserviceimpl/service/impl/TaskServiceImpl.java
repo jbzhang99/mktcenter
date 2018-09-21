@@ -607,15 +607,28 @@ public class TaskServiceImpl implements TaskService {
     /**
      * 任务审核:通过/驳回
      * 需要传递任务开始时间,修改执行状态
-     *
-     * @param mktTaskId
+
      * @param sysAccountPO
-     * @return  todo   审核时间超过任务结束时间
+     * @return
+     *   `checkStatus` '审核状态：1未审核，2审核中，3已审核，4已驳回',
+     *   `taskStatus` '任务状态：1待执行，2执行中，3已禁用，4已结束',
      */
     @Override
-    public ResponseData<Integer> checkTaskById(Long mktTaskId, Integer checkStatus,String remark, SysAccountPO sysAccountPO,Date startTime,Date endTime) throws ParseException {
-        ResponseData<Integer> result = new ResponseData<Integer>(SysResponseEnum.FAILED.getCode(), SysResponseEnum.FAILED.getMessage(), null);
-        ResponseData responseData = new ResponseData();
+    public ResponseData<Integer> checkTaskById(CheckTaskVO vo,SysAccountPO sysAccountPO) throws ParseException {
+        ResponseData<Integer> responseData = new ResponseData<Integer>();
+        Long mktTaskId = vo.getBusinessId();
+        Integer businessType = vo.getBusinessType();
+        Integer checkStatus = vo.getCheckStatus();
+        String remark = vo.getRemark();
+        Date startTime = vo.getStartTime();
+        Date endTime = vo.getEndTime();
+        Long sysCheckId = vo.getSysCheckId();
+        String functionCode = vo.getFunctionCode();
+        //审核时间超过任务结束时间
+        if (endTime!=null && endTime.before(new Date())){
+            responseData.setMessage("审核时间超过了任务的结束时间,已经无法审核!");
+            return responseData;
+        }
         MktTaskPOWithBLOBs mktTaskPOWithBLOBs = new MktTaskPOWithBLOBs();
         //判断时间是否滞后   2=滞后执行    1=立即执行
         Integer ImmediatelyRunStatus = TimeUtils.IsImmediatelyRun(startTime);
@@ -628,7 +641,11 @@ public class TaskServiceImpl implements TaskService {
                 //2.执行中
                 mktTaskPOWithBLOBs.setTaskStatus(TaskStatusEnum.TASK_STATUS_EXECUTING.getCode());
             }
+        }else{
+            // 已驳回   待执行
+            mktTaskPOWithBLOBs.setTaskStatus(TaskStatusEnum.TASK_STATUS_PENDING.getCode());
         }
+
         mktTaskPOWithBLOBs.setMktTaskId(mktTaskId);
         mktTaskPOWithBLOBs.setCheckStatus(checkStatus);
         mktTaskPOWithBLOBs.setRemark(remark);
@@ -636,10 +653,10 @@ public class TaskServiceImpl implements TaskService {
         mktTaskPOWithBLOBs.setModifiedUserId(sysAccountPO.getSysAccountId());
         mktTaskPOWithBLOBs.setModifiedUserName(sysAccountPO.getName());
         int i = mktTaskPOMapper.updateByPrimaryKeySelective(mktTaskPOWithBLOBs);
-        this.updateCheckData(mktTaskPOWithBLOBs);
+        //修改中台审核表的数据
+        this.updateCheckData(sysCheckId,checkStatus,sysAccountPO);
+
         if (i > 0) {
-            result.setCode(SysResponseEnum.SUCCESS.getCode());
-            result.setMessage(SysResponseEnum.SUCCESS.getMessage());
             //3=已审核
             if (TaskConstants.THREE.equals(checkStatus)) {
                 MktMessagePOExample exampleMSG = new MktMessagePOExample();
@@ -784,16 +801,17 @@ public class TaskServiceImpl implements TaskService {
     }
     /**
      *修改添加到中台任务的状态--已经审核
-     * @param po
      */
     @Override
-    public  void updateCheckData(MktTaskPOWithBLOBs po) {
+    public   ResponseData<Integer> updateCheckData(Long sysCheckId ,Integer checkStatus,SysAccountPO sysAccountPO) {
         //已审核=3
         SysCheckPo checkPo = new SysCheckPo();
-        //checkPo.setSysBrandId(po.getSysBrandId());
-        checkPo.setBusinessId(po.getMktTaskId());
-        checkPo.setCheckStatus(po.getCheckStatus());
-        sysCheckServiceRpc.updateCheck(checkPo);
+        checkPo.setSysCheckId(sysCheckId);
+        checkPo.setCheckStatus(checkStatus);
+        checkPo.setModifiedDate(new Date());
+        checkPo.setModifiedUserId(sysAccountPO.getCtrlAccountId());
+        checkPo.setModifiedUserName(sysAccountPO.getName());
+       return sysCheckServiceRpc.updateCheck(checkPo);
     }
 
     /**

@@ -48,7 +48,6 @@ public class TimeUtils {
     public static Integer  IsImmediatelyRun(Date timeparam) throws ParseException {
         timeparam=sdf.parse(sdf.format(timeparam));
         Date dateNow = sdf.parse(sdf.format(new Date()));
-
         if (timeparam.before(dateNow)) {
             //小于当前时间
         return Integer.valueOf(1);

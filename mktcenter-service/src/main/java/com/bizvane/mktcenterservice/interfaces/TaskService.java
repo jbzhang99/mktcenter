@@ -165,10 +165,9 @@ public interface TaskService {
 
     /**
      * 任务审核
-     * @param mktTaskId
      * @return
      */
-    public ResponseData<Integer> checkTaskById(Long mktTaskId,Integer checkStatus,String remark,SysAccountPO sysAccountPO,Date startTime,Date endTime) throws ParseException;
+    public ResponseData<Integer> checkTaskById(CheckTaskVO vo,SysAccountPO sysAccountPO) throws ParseException;
 
     /**
      * 获取品牌下的所有会员
@@ -197,9 +196,8 @@ public interface TaskService {
     public  void addCheckData(MktTaskPOWithBLOBs po);
     /**
      *修改添加到中台任务的状态
-     * @param po
      */
-    public  void updateCheckData(MktTaskPOWithBLOBs po);
+    public  ResponseData<Integer>  updateCheckData(Long sysCheckId ,Integer checkStatus,SysAccountPO sysAccountPO);
 
     /**
      * 中台通过品牌Id查询任务是否需要审核

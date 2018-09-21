@@ -4,10 +4,7 @@ import com.bizvane.centerstageservice.models.vo.SysStoreVo;
 import com.bizvane.mktcenterservice.interfaces.TaskService;
 import com.bizvane.mktcenterservice.models.bo.TaskBO;
 import com.bizvane.mktcenterservice.models.po.MktTaskPOWithBLOBs;
-import com.bizvane.mktcenterservice.models.vo.PageForm;
-import com.bizvane.mktcenterservice.models.vo.TaskAnalysisVo;
-import com.bizvane.mktcenterservice.models.vo.TaskRecordVO;
-import com.bizvane.mktcenterservice.models.vo.TaskVO;
+import com.bizvane.mktcenterservice.models.vo.*;
 import com.bizvane.utils.responseinfo.ResponseData;
 import com.bizvane.utils.tokens.SysAccountPO;
 import com.bizvane.utils.tokens.TokenUtils;
@@ -72,13 +69,14 @@ public class TaskController {
      * 任务审核--已经核对
      * @param request
      * @return
+     * Long businessId , Integer checkStatus,String remark, Date startTime,Date endTime,
      */
     @RequestMapping("checkTaskById")
-    public ResponseData<Integer> checkTaskById(Long businessId , Integer checkStatus,String remark, Date startTime,Date endTime,HttpServletRequest request) throws ParseException {
+    public ResponseData<Integer> checkTaskById(CheckTaskVO vo,HttpServletRequest request) throws ParseException {
         //获取操作人信息
         SysAccountPO stageUser = TokenUtils.getStageUser(request);
         //审核任务
-        ResponseData<Integer> integerResponseData = taskService.checkTaskById(businessId,checkStatus,remark,stageUser,startTime,endTime);
+        ResponseData<Integer> integerResponseData = taskService.checkTaskById(vo,stageUser);
         return integerResponseData;
     }
 
