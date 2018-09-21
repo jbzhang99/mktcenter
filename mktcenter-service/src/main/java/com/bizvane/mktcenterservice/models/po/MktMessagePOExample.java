@@ -8,28 +8,28 @@ import java.util.List;
 public class MktMessagePOExample implements Serializable {
     /**
 	 * 只读. 
-	 * @mbg.generated  2018-09-05 15:24:26
+	 * @mbg.generated  2018-09-21 14:49:26
 	 */
 	protected String orderByClause;
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-09-05 15:24:26
+	 * @mbg.generated  2018-09-21 14:49:26
 	 */
 	protected boolean distinct;
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-09-05 15:24:26
+	 * @mbg.generated  2018-09-21 14:49:26
 	 */
 	protected List<Criteria> oredCriteria;
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-09-05 15:24:26
+	 * @mbg.generated  2018-09-21 14:49:26
 	 */
 	private static final long serialVersionUID = 1L;
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-09-05 15:24:26
+	 * @mbg.generated  2018-09-21 14:49:26
 	 */
 	public MktMessagePOExample() {
 		oredCriteria = new ArrayList<Criteria>();
@@ -37,7 +37,7 @@ public class MktMessagePOExample implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-09-05 15:24:26
+	 * @mbg.generated  2018-09-21 14:49:26
 	 */
 	public void setOrderByClause(String orderByClause) {
 		this.orderByClause = orderByClause;
@@ -45,7 +45,7 @@ public class MktMessagePOExample implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-09-05 15:24:26
+	 * @mbg.generated  2018-09-21 14:49:26
 	 */
 	public String getOrderByClause() {
 		return orderByClause;
@@ -53,7 +53,7 @@ public class MktMessagePOExample implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-09-05 15:24:26
+	 * @mbg.generated  2018-09-21 14:49:26
 	 */
 	public void setDistinct(boolean distinct) {
 		this.distinct = distinct;
@@ -61,7 +61,7 @@ public class MktMessagePOExample implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-09-05 15:24:26
+	 * @mbg.generated  2018-09-21 14:49:26
 	 */
 	public boolean isDistinct() {
 		return distinct;
@@ -69,7 +69,7 @@ public class MktMessagePOExample implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-09-05 15:24:26
+	 * @mbg.generated  2018-09-21 14:49:26
 	 */
 	public List<Criteria> getOredCriteria() {
 		return oredCriteria;
@@ -77,7 +77,7 @@ public class MktMessagePOExample implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-09-05 15:24:26
+	 * @mbg.generated  2018-09-21 14:49:26
 	 */
 	public void or(Criteria criteria) {
 		oredCriteria.add(criteria);
@@ -85,7 +85,7 @@ public class MktMessagePOExample implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-09-05 15:24:26
+	 * @mbg.generated  2018-09-21 14:49:26
 	 */
 	public Criteria or() {
 		Criteria criteria = createCriteriaInternal();
@@ -95,7 +95,7 @@ public class MktMessagePOExample implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-09-05 15:24:26
+	 * @mbg.generated  2018-09-21 14:49:26
 	 */
 	public Criteria createCriteria() {
 		Criteria criteria = createCriteriaInternal();
@@ -107,7 +107,7 @@ public class MktMessagePOExample implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-09-05 15:24:26
+	 * @mbg.generated  2018-09-21 14:49:26
 	 */
 	protected Criteria createCriteriaInternal() {
 		Criteria criteria = new Criteria();
@@ -116,7 +116,7 @@ public class MktMessagePOExample implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-09-05 15:24:26
+	 * @mbg.generated  2018-09-21 14:49:26
 	 */
 	public void clear() {
 		oredCriteria.clear();
@@ -126,7 +126,7 @@ public class MktMessagePOExample implements Serializable {
 
 	/**
 	 * 只读. t_mkt_message
-	 * @mbg.generated  2018-09-05 15:24:26
+	 * @mbg.generated  2018-09-21 14:49:26
 	 */
 	protected abstract static class GeneratedCriteria implements Serializable {
 		protected List<Criterion> criteria;
@@ -739,6 +739,66 @@ public class MktMessagePOExample implements Serializable {
 			return (Criteria) this;
 		}
 
+		public Criteria andExceptWechatIsNull() {
+			addCriterion("except_wechat is null");
+			return (Criteria) this;
+		}
+
+		public Criteria andExceptWechatIsNotNull() {
+			addCriterion("except_wechat is not null");
+			return (Criteria) this;
+		}
+
+		public Criteria andExceptWechatEqualTo(Boolean value) {
+			addCriterion("except_wechat =", value, "exceptWechat");
+			return (Criteria) this;
+		}
+
+		public Criteria andExceptWechatNotEqualTo(Boolean value) {
+			addCriterion("except_wechat <>", value, "exceptWechat");
+			return (Criteria) this;
+		}
+
+		public Criteria andExceptWechatGreaterThan(Boolean value) {
+			addCriterion("except_wechat >", value, "exceptWechat");
+			return (Criteria) this;
+		}
+
+		public Criteria andExceptWechatGreaterThanOrEqualTo(Boolean value) {
+			addCriterion("except_wechat >=", value, "exceptWechat");
+			return (Criteria) this;
+		}
+
+		public Criteria andExceptWechatLessThan(Boolean value) {
+			addCriterion("except_wechat <", value, "exceptWechat");
+			return (Criteria) this;
+		}
+
+		public Criteria andExceptWechatLessThanOrEqualTo(Boolean value) {
+			addCriterion("except_wechat <=", value, "exceptWechat");
+			return (Criteria) this;
+		}
+
+		public Criteria andExceptWechatIn(List<Boolean> values) {
+			addCriterion("except_wechat in", values, "exceptWechat");
+			return (Criteria) this;
+		}
+
+		public Criteria andExceptWechatNotIn(List<Boolean> values) {
+			addCriterion("except_wechat not in", values, "exceptWechat");
+			return (Criteria) this;
+		}
+
+		public Criteria andExceptWechatBetween(Boolean value1, Boolean value2) {
+			addCriterion("except_wechat between", value1, value2, "exceptWechat");
+			return (Criteria) this;
+		}
+
+		public Criteria andExceptWechatNotBetween(Boolean value1, Boolean value2) {
+			addCriterion("except_wechat not between", value1, value2, "exceptWechat");
+			return (Criteria) this;
+		}
+
 		public Criteria andRemarkIsNull() {
 			addCriterion("remark is null");
 			return (Criteria) this;
@@ -1252,7 +1312,7 @@ public class MktMessagePOExample implements Serializable {
 
 	/**
 	 * 只读. t_mkt_message
-	 * @mbg.generated  2018-09-05 15:24:26
+	 * @mbg.generated  2018-09-21 14:49:26
 	 */
 	public static class Criterion implements Serializable {
 		private String condition;

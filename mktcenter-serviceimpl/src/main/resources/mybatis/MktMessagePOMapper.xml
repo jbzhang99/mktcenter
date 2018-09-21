@@ -4,7 +4,7 @@
   <resultMap id="BaseResultMap" type="com.bizvane.mktcenterservice.models.po.MktMessagePO">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-09-05 15:24:26.
+      This element was generated on 2018-09-21 14:49:26.
     -->
     <id column="mkt_msg_id" jdbcType="BIGINT" property="mktMsgId" />
     <result column="sys_company_id" jdbcType="BIGINT" property="sysCompanyId" />
@@ -15,6 +15,7 @@
     <result column="template_msg_id" jdbcType="VARCHAR" property="templateMsgId" />
     <result column="send_immediately" jdbcType="BIT" property="sendImmediately" />
     <result column="send_time" jdbcType="TIMESTAMP" property="sendTime" />
+    <result column="except_wechat" jdbcType="BIT" property="exceptWechat" />
     <result column="remark" jdbcType="VARCHAR" property="remark" />
     <result column="create_user_id" jdbcType="BIGINT" property="createUserId" />
     <result column="create_user_name" jdbcType="VARCHAR" property="createUserName" />
@@ -27,14 +28,14 @@
   <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.bizvane.mktcenterservice.models.po.MktMessagePO">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-09-05 15:24:26.
+      This element was generated on 2018-09-21 14:49:26.
     -->
     <result column="msg_content" jdbcType="LONGVARCHAR" property="msgContent" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-09-05 15:24:26.
+      This element was generated on 2018-09-21 14:49:26.
     -->
     <where>
       <foreach collection="oredCriteria" item="criteria" separator="or">
@@ -67,7 +68,7 @@
   <sql id="Update_By_Example_Where_Clause">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-09-05 15:24:26.
+      This element was generated on 2018-09-21 14:49:26.
     -->
     <where>
       <foreach collection="example.oredCriteria" item="criteria" separator="or">
@@ -100,23 +101,23 @@
   <sql id="Base_Column_List">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-09-05 15:24:26.
+      This element was generated on 2018-09-21 14:49:26.
     -->
     mkt_msg_id, sys_company_id, biz_type, biz_id, msg_type, msg_code, template_msg_id, 
-    send_immediately, send_time, remark, create_user_id, create_user_name, create_date, 
-    modified_user_id, modified_user_name, modified_date, valid
+    send_immediately, send_time, except_wechat, remark, create_user_id, create_user_name, 
+    create_date, modified_user_id, modified_user_name, modified_date, valid
   </sql>
   <sql id="Blob_Column_List">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-09-05 15:24:26.
+      This element was generated on 2018-09-21 14:49:26.
     -->
     msg_content
   </sql>
   <select id="selectByExampleWithBLOBs" parameterType="com.bizvane.mktcenterservice.models.po.MktMessagePOExample" resultMap="ResultMapWithBLOBs">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-09-05 15:24:26.
+      This element was generated on 2018-09-21 14:49:26.
     -->
     select
     <if test="distinct">
@@ -136,7 +137,7 @@
   <select id="selectByExample" parameterType="com.bizvane.mktcenterservice.models.po.MktMessagePOExample" resultMap="BaseResultMap">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-09-05 15:24:26.
+      This element was generated on 2018-09-21 14:49:26.
     -->
     select
     <if test="distinct">
@@ -154,7 +155,7 @@
   <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="ResultMapWithBLOBs">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-09-05 15:24:26.
+      This element was generated on 2018-09-21 14:49:26.
     -->
     select 
     <include refid="Base_Column_List" />
@@ -166,7 +167,7 @@
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-09-05 15:24:26.
+      This element was generated on 2018-09-21 14:49:26.
     -->
     delete from t_mkt_message
     where mkt_msg_id = #{mktMsgId,jdbcType=BIGINT}
@@ -174,7 +175,7 @@
   <delete id="deleteByExample" parameterType="com.bizvane.mktcenterservice.models.po.MktMessagePOExample">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-09-05 15:24:26.
+      This element was generated on 2018-09-21 14:49:26.
     -->
     delete from t_mkt_message
     <if test="_parameter != null">
@@ -184,28 +185,30 @@
   <insert id="insert" parameterType="com.bizvane.mktcenterservice.models.po.MktMessagePO">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-09-05 15:24:26.
+      This element was generated on 2018-09-21 14:49:26.
     -->
     <selectKey keyProperty="mktMsgId" order="AFTER" resultType="java.lang.Long">
       SELECT LAST_INSERT_ID()
     </selectKey>
     insert into t_mkt_message (sys_company_id, biz_type, biz_id, 
       msg_type, msg_code, template_msg_id, 
-      send_immediately, send_time, remark, 
-      create_user_id, create_user_name, create_date, 
-      modified_user_id, modified_user_name, modified_date, 
-      valid, msg_content)
+      send_immediately, send_time, except_wechat, 
+      remark, create_user_id, create_user_name, 
+      create_date, modified_user_id, modified_user_name, 
+      modified_date, valid, msg_content
+      )
     values (#{sysCompanyId,jdbcType=BIGINT}, #{bizType,jdbcType=INTEGER}, #{bizId,jdbcType=BIGINT}, 
       #{msgType,jdbcType=VARCHAR}, #{msgCode,jdbcType=VARCHAR}, #{templateMsgId,jdbcType=VARCHAR}, 
-      #{sendImmediately,jdbcType=BIT}, #{sendTime,jdbcType=TIMESTAMP}, #{remark,jdbcType=VARCHAR}, 
-      #{createUserId,jdbcType=BIGINT}, #{createUserName,jdbcType=VARCHAR}, #{createDate,jdbcType=TIMESTAMP}, 
-      #{modifiedUserId,jdbcType=BIGINT}, #{modifiedUserName,jdbcType=VARCHAR}, #{modifiedDate,jdbcType=TIMESTAMP}, 
-      #{valid,jdbcType=BIT}, #{msgContent,jdbcType=LONGVARCHAR})
+      #{sendImmediately,jdbcType=BIT}, #{sendTime,jdbcType=TIMESTAMP}, #{exceptWechat,jdbcType=BIT}, 
+      #{remark,jdbcType=VARCHAR}, #{createUserId,jdbcType=BIGINT}, #{createUserName,jdbcType=VARCHAR}, 
+      #{createDate,jdbcType=TIMESTAMP}, #{modifiedUserId,jdbcType=BIGINT}, #{modifiedUserName,jdbcType=VARCHAR}, 
+      #{modifiedDate,jdbcType=TIMESTAMP}, #{valid,jdbcType=BIT}, #{msgContent,jdbcType=LONGVARCHAR}
+      )
   </insert>
   <insert id="insertSelective" parameterType="com.bizvane.mktcenterservice.models.po.MktMessagePO">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-09-05 15:24:26.
+      This element was generated on 2018-09-21 14:49:26.
     -->
     <selectKey keyProperty="mktMsgId" order="AFTER" resultType="java.lang.Long">
       SELECT LAST_INSERT_ID()
@@ -235,6 +238,9 @@
       </if>
       <if test="sendTime != null">
         send_time,
+      </if>
+      <if test="exceptWechat != null">
+        except_wechat,
       </if>
       <if test="remark != null">
         remark,
@@ -289,6 +295,9 @@
       <if test="sendTime != null">
         #{sendTime,jdbcType=TIMESTAMP},
       </if>
+      <if test="exceptWechat != null">
+        #{exceptWechat,jdbcType=BIT},
+      </if>
       <if test="remark != null">
         #{remark,jdbcType=VARCHAR},
       </if>
@@ -321,7 +330,7 @@
   <select id="countByExample" parameterType="com.bizvane.mktcenterservice.models.po.MktMessagePOExample" resultType="java.lang.Long">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-09-05 15:24:26.
+      This element was generated on 2018-09-21 14:49:26.
     -->
     select count(*) from t_mkt_message
     <if test="_parameter != null">
@@ -331,7 +340,7 @@
   <update id="updateByExampleSelective" parameterType="map">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-09-05 15:24:26.
+      This element was generated on 2018-09-21 14:49:26.
     -->
     update t_mkt_message
     <set>
@@ -361,6 +370,9 @@
       </if>
       <if test="record.sendTime != null">
         send_time = #{record.sendTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.exceptWechat != null">
+        except_wechat = #{record.exceptWechat,jdbcType=BIT},
       </if>
       <if test="record.remark != null">
         remark = #{record.remark,jdbcType=VARCHAR},
@@ -397,7 +409,7 @@
   <update id="updateByExampleWithBLOBs" parameterType="map">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-09-05 15:24:26.
+      This element was generated on 2018-09-21 14:49:26.
     -->
     update t_mkt_message
     set mkt_msg_id = #{record.mktMsgId,jdbcType=BIGINT},
@@ -409,6 +421,7 @@
       template_msg_id = #{record.templateMsgId,jdbcType=VARCHAR},
       send_immediately = #{record.sendImmediately,jdbcType=BIT},
       send_time = #{record.sendTime,jdbcType=TIMESTAMP},
+      except_wechat = #{record.exceptWechat,jdbcType=BIT},
       remark = #{record.remark,jdbcType=VARCHAR},
       create_user_id = #{record.createUserId,jdbcType=BIGINT},
       create_user_name = #{record.createUserName,jdbcType=VARCHAR},
@@ -425,7 +438,7 @@
   <update id="updateByExample" parameterType="map">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-09-05 15:24:26.
+      This element was generated on 2018-09-21 14:49:26.
     -->
     update t_mkt_message
     set mkt_msg_id = #{record.mktMsgId,jdbcType=BIGINT},
@@ -437,6 +450,7 @@
       template_msg_id = #{record.templateMsgId,jdbcType=VARCHAR},
       send_immediately = #{record.sendImmediately,jdbcType=BIT},
       send_time = #{record.sendTime,jdbcType=TIMESTAMP},
+      except_wechat = #{record.exceptWechat,jdbcType=BIT},
       remark = #{record.remark,jdbcType=VARCHAR},
       create_user_id = #{record.createUserId,jdbcType=BIGINT},
       create_user_name = #{record.createUserName,jdbcType=VARCHAR},
@@ -452,7 +466,7 @@
   <update id="updateByPrimaryKeySelective" parameterType="com.bizvane.mktcenterservice.models.po.MktMessagePO">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-09-05 15:24:26.
+      This element was generated on 2018-09-21 14:49:26.
     -->
     update t_mkt_message
     <set>
@@ -479,6 +493,9 @@
       </if>
       <if test="sendTime != null">
         send_time = #{sendTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="exceptWechat != null">
+        except_wechat = #{exceptWechat,jdbcType=BIT},
       </if>
       <if test="remark != null">
         remark = #{remark,jdbcType=VARCHAR},
@@ -513,7 +530,7 @@
   <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.bizvane.mktcenterservice.models.po.MktMessagePO">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-09-05 15:24:26.
+      This element was generated on 2018-09-21 14:49:26.
     -->
     update t_mkt_message
     set sys_company_id = #{sysCompanyId,jdbcType=BIGINT},
@@ -524,6 +541,7 @@
       template_msg_id = #{templateMsgId,jdbcType=VARCHAR},
       send_immediately = #{sendImmediately,jdbcType=BIT},
       send_time = #{sendTime,jdbcType=TIMESTAMP},
+      except_wechat = #{exceptWechat,jdbcType=BIT},
       remark = #{remark,jdbcType=VARCHAR},
       create_user_id = #{createUserId,jdbcType=BIGINT},
       create_user_name = #{createUserName,jdbcType=VARCHAR},
@@ -538,7 +556,7 @@
   <update id="updateByPrimaryKey" parameterType="com.bizvane.mktcenterservice.models.po.MktMessagePO">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-09-05 15:24:26.
+      This element was generated on 2018-09-21 14:49:26.
     -->
     update t_mkt_message
     set sys_company_id = #{sysCompanyId,jdbcType=BIGINT},
@@ -549,6 +567,7 @@
       template_msg_id = #{templateMsgId,jdbcType=VARCHAR},
       send_immediately = #{sendImmediately,jdbcType=BIT},
       send_time = #{sendTime,jdbcType=TIMESTAMP},
+      except_wechat = #{exceptWechat,jdbcType=BIT},
       remark = #{remark,jdbcType=VARCHAR},
       create_user_id = #{createUserId,jdbcType=BIGINT},
       create_user_name = #{createUserName,jdbcType=VARCHAR},
