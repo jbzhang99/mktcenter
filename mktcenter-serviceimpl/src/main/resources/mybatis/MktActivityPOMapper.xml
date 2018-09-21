@@ -728,13 +728,12 @@
   </update>
 
   <select id="getActivityList" parameterType="com.bizvane.mktcenterservice.models.vo.ActivityVO" resultType="com.bizvane.mktcenterservice.models.vo.ActivityVO">
-  select t.activity_type asactivityType,t.activity_code as activityCode,t.activity_name as activityName,t.end_time as endTime, group_concat(c.coupon_name separator ',') as couponName
-  from t_mkt_activity t INNER JOIN t_mkt_coupon c on t.mkt_activity_id=c.biz_id
+  select t.activity_type asactivityType,t.activity_code as activityCode,t.activity_name as activityName,t.mkt_activity_id as mktActivityId
+  from t_mkt_activity t
   where t.valid=1 and c.valid=1 and t.activity_status=2
     <if test="sysBrandId != null and sysBrandId!= ''">
       AND t.sys_brand_id = #{sysBrandId}
     </if>
-    Group by c.biz_id
   </select>
   <!-- 活动效果分析-->
   <select id="getActivityAnalysisCountpage" parameterType="com.bizvane.mktcenterservice.models.bo.ActivityAnalysisCountBO" resultType="com.bizvane.mktcenterservice.models.bo.ActivityAnalysisCountBO">
