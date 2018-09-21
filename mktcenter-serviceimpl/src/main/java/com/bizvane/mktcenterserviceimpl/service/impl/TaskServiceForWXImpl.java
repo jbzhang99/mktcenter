@@ -12,6 +12,7 @@ import com.bizvane.utils.enumutils.SysResponseEnum;
 import com.bizvane.utils.responseinfo.ResponseData;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,40 +26,43 @@ import java.util.List;
  * Created by Geng on 2018/8/9.
  */
 @Service
-public class TaskServiceForWXImpl implements TaskServiceForWX{
+@Slf4j
+public class TaskServiceForWXImpl implements TaskServiceForWX {
 
     @Autowired
-    private MktTaskPOMapper  taskPOMapper;
+    private MktTaskPOMapper taskPOMapper;
 
     @Override
     //获取该会员已完成和未完成任务的任务
-    public ResponseData getCompleteTask(TaskForWXVO vo){
-        ResponseData<PageInfo<TaskWXBO>> responseData = new ResponseData(SysResponseEnum.FAILED.getCode(),SysResponseEnum.FAILED.getMessage(),null);
-        PageHelper.startPage(vo.getPageNumber(),vo.getPageSize());
+    public ResponseData getCompleteTask(TaskForWXVO vo) {
+        ArrayList<Object> objects = new ArrayList<>();
+        PageInfo<TaskWXBO> taskWXBOPageInfo1 = new PageInfo<>();
+        ResponseData<PageInfo<TaskWXBO>> responseData = new ResponseData();
+        PageHelper.startPage(vo.getPageNumber(), vo.getPageSize());
         List<TaskWXBO> lists = taskPOMapper.getCompleteTask(vo);
-        if (CollectionUtils.isEmpty(lists)){
-        return  responseData;
+        if (CollectionUtils.isEmpty(lists)) {
+         PageInfo<TaskWXBO> taskWXBOPageInfoEmpt = new PageInfo<>(new ArrayList<TaskWXBO>());
+         responseData.setData(taskWXBOPageInfoEmpt);
+         return responseData;
+        }else{
+         PageInfo<TaskWXBO> taskWXBOPageInfo = new PageInfo<>(lists);
+         responseData.setData(taskWXBOPageInfo);
         }
-        PageInfo<TaskWXBO> taskWXBOPageInfo = new PageInfo<>(lists);
-        responseData.setCode(SysResponseEnum.SUCCESS.getCode());
-        responseData.setMessage(SysResponseEnum.SUCCESS.getMessage());
-        responseData.setData(taskWXBOPageInfo);
         return responseData;
     }
 
     //获取任务的详情
     @Override
-    public  ResponseData<TaskWXDetailBO>  getTaskWXDetail(Long taskId){
-System.out.println("---------------获取任务的详情----------------"+taskId);
-        ResponseData<TaskWXDetailBO> responseData = new ResponseData(SysResponseEnum.FAILED.getCode(),SysResponseEnum.FAILED.getMessage(),null);
+    public ResponseData<TaskWXDetailBO> getTaskWXDetail(Long taskId) {
+        System.out.println("---------------获取任务的详情----------------" + taskId);
+        ResponseData<TaskWXDetailBO> responseData = new ResponseData();
         List<TaskWXDetailBO> lists = taskPOMapper.getTaskWXDetail(taskId);
-        if (CollectionUtils.isNotEmpty(lists)){
-            responseData.setCode(SysResponseEnum.SUCCESS.getCode());
-            responseData.setMessage(SysResponseEnum.SUCCESS.getMessage());
+        System.out.println("---------------获取任务的详情----------------" + JSON.toJSONString(lists));
+        if (CollectionUtils.isNotEmpty(lists)) {
             responseData.setData(lists.get(0));
+        }else{
+            responseData.setData(new  TaskWXDetailBO());
         }
-        System.out.println("---------------获取任务的详情----------------"+ JSON.toJSONString(responseData));
-      return responseData;
+        return responseData;
     }
-
 }
