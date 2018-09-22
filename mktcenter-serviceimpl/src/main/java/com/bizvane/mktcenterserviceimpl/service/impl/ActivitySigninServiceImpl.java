@@ -179,11 +179,11 @@ public class ActivitySigninServiceImpl implements ActivitySigninService {
             po.setSysBrandId(mktActivityPOWithBLOBs.getSysBrandId());
             po.setSysCompanyId(mktActivityPOWithBLOBs.getSysCompanyId());
             po.setBusinessCode(mktActivityPOWithBLOBs.getActivityCode());
-            po.setBusinessName(mktActivityPOWithBLOBs.getActivityName());
+            po.setBusinessName("签到活动");
             po.setBusinessType(ActivityTypeEnum.ACTIVITY_TYPE_SIGNIN.getCode());
             po.setFunctionCode("C0002");
             po.setCheckStatus(CheckStatusEnum.CHECK_STATUS_PENDING.getCode());
-            po.setBizName(mktActivityPOWithBLOBs.getActivityName());
+            po.setBizName("签到活动");
             po.setBusinessId(mktActivityId);
             po.setCreateDate(new Date());
             po.setCreateUserId(stageUser.getSysAccountId());
