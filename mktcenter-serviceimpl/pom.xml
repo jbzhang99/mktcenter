@@ -219,7 +219,18 @@
 			<version>1.0.24</version>
 		</dependency>
 
-
+       <dependency>
+			<groupId>com.qiniu</groupId>
+			<artifactId>qiniu-java-sdk</artifactId>
+			<version>7.2.14</version>
+		</dependency>
+		<dependency>
+			<groupId>com.qiniu</groupId>
+			<artifactId>happy-dns-java</artifactId>
+			<version>0.1.4</version>
+			<scope>compile</scope>
+		</dependency>
+		
 		<!-- https://mvnrepository.com/artifact/com.ctrip.framework.apollo/apollo-client -->
 		<dependency>
 			<groupId>com.ctrip.framework.apollo</groupId>

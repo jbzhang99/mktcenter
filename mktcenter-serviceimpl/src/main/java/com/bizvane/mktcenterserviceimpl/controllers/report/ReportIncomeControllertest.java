@@ -1,12 +1,19 @@
 package com.bizvane.mktcenterserviceimpl.controllers.report;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.OutputStream;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.ss.formula.functions.T;
 import org.codehaus.jettison.json.JSONArray;
 import org.codehaus.jettison.json.JSONException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +26,7 @@ import org.springframework.web.client.RestTemplate;
 import com.alibaba.fastjson.JSONObject;
 import com.bizvane.mktcenterservice.models.requestvo.BackData;
 import com.bizvane.mktcenterservice.models.requestvo.BaseUrl;
+import com.bizvane.mktcenterservice.models.requestvo.exvo.ExportStoreVo;
 import com.bizvane.mktcenterservice.models.requestvo.postvo.ActiveMemberAllInterface;
 import com.bizvane.mktcenterservice.models.requestvo.postvo.IncomeTotalList;
 import com.bizvane.mktcenterservice.models.requestvo.postvo.IncomeVip;
@@ -31,6 +39,8 @@ import com.bizvane.mktcenterservice.models.requestvo.postvo.RePurchaseMemberAllI
 import com.bizvane.mktcenterservice.models.requestvo.postvo.TouristIncome;
 import com.bizvane.mktcenterservice.models.requestvo.postvo.VipIncomeAnalysis;
 import com.bizvane.mktcenterservice.models.requestvo.postvo.VipNum;
+import com.bizvane.mktcenterserviceimpl.common.utils.POIUtil;
+import com.bizvane.mktcenterserviceimpl.common.utils.QiNiuUtil;
 import com.bizvane.utils.responseinfo.ResponseData;
 import com.bizvane.utils.tokens.TokenUtils;
 
@@ -51,10 +61,10 @@ public class ReportIncomeControllertest {
 
     @RequestMapping("vipIncomeAnalysis")
     public ResponseData<List<BackData>> vipIncomeAnalysis(@RequestBody VipIncomeAnalysis vipIncomeAnalysis, HttpServletRequest request){
-         vipIncomeAnalysis.setCorpId(TokenUtils.getStageUser(request).getCompanyCode());
+//         vipIncomeAnalysis.setCorpId(TokenUtils.getStageUser(request).getCompanyCode());
+    	
     	 return sendpost(BaseUrl.getLoadUrl("vipIncomeAnalysis"),vipIncomeAnalysis);
     } 
-    
 
     public ResponseData<List<BackData>> sendpost(String url,Object vipIncomeAnalysis){
     log.info("报表查询ReportIncomeController："+url+vipIncomeAnalysis.toString());
