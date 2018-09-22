@@ -355,28 +355,36 @@ public class TaskServiceImpl implements TaskService {
     @Async
     public void doOrderTask(MktTaskPOWithBLOBs mktTaskPOWithBLOBs,List<MktMessagePO> mktmessagePOList, SysAccountPO stageUser) {
         //任务Id
-        Long mktTaskId = mktTaskPOWithBLOBs.getMktTaskId();
-        //品牌id
-        Long sysBrandId = mktTaskPOWithBLOBs.getSysBrandId();
-        //公司id
-        Long sysCompanyId = mktTaskPOWithBLOBs.getSysCompanyId();
+//        Long mktTaskId = mktTaskPOWithBLOBs.getMktTaskId();
+//        //品牌id
+//        Long sysBrandId = mktTaskPOWithBLOBs.getSysBrandId();
+//        //公司id
+//        Long sysCompanyId = mktTaskPOWithBLOBs.getSysCompanyId();
         //审核状态:1未审核，2审核中，3已审核，4已驳回',
         Integer checkStatus = mktTaskPOWithBLOBs.getCheckStatus();
         //执行状态:1待执行，2执行中，3已禁用，4已结束',
         Integer taskStatus = mktTaskPOWithBLOBs.getTaskStatus();
-        //已审核   执行中  执行时间小于当前时间 或等于当前时间
-        if (TaskConstants.THREE.equals(checkStatus) && TaskConstants.SECOND.equals(taskStatus)) {
-            //判断是否需要发送消息和短信 业务类型：1活动，2任务
-            this.sendSmg(mktTaskPOWithBLOBs,mktmessagePOList,stageUser);
-            //任务到期置为无效
-            jobUtil.addTaskEndJob(stageUser, mktTaskPOWithBLOBs);
-        }
-        //已审核   待执行,创建job
+
+//        if (TaskConstants.THREE.equals(checkStatus) && TaskConstants.SECOND.equals(taskStatus)) {
+//            //已审核   执行中  执行时间小于当前时间 或等于当前时间
+//            //判断是否需要发送消息和短信 业务类型：1活动，2任务
+//            this.sendSmg(mktTaskPOWithBLOBs,mktmessagePOList,stageUser);
+//            //任务到期置为无效
+//            jobUtil.addTaskEndJob(stageUser, mktTaskPOWithBLOBs);
+//        } else if (TaskConstants.THREE.equals(checkStatus) && TaskConstants.FIRST.equals(taskStatus)) {
+//            //已审核   待执行,创建job
+//            //判断是否需要发送消息和短信,创建job
+//            jobUtil.addTaskStartJob(stageUser, mktTaskPOWithBLOBs);
+//            jobUtil.addTaskEndJob(stageUser, mktTaskPOWithBLOBs);
+//        }
         if (TaskConstants.THREE.equals(checkStatus) && TaskConstants.FIRST.equals(taskStatus)) {
+            //已审核   待执行,创建job
             //判断是否需要发送消息和短信,创建job
             jobUtil.addTaskStartJob(stageUser, mktTaskPOWithBLOBs);
-            jobUtil.addTaskEndJob(stageUser, mktTaskPOWithBLOBs);
         }
+        jobUtil.addTaskEndJob(stageUser, mktTaskPOWithBLOBs);
+        this.sendSmg(mktTaskPOWithBLOBs,mktmessagePOList,stageUser);
+
     }
 
     /**
@@ -397,20 +405,23 @@ public class TaskServiceImpl implements TaskService {
                         String msgContent = message.getMsgContent();
                         //true=立刻   false=定时发送
                         Boolean sendImmediately = message.getSendImmediately();
+                        //发送时间
+                        Date sendTime = message.getSendTime();
                         //1=模板消息   所有的会员
                         if (TaskConstants.FIRST.equals(msgType)) {
                             //立即发送
                             if (sendImmediately){
                                 this.sendMemberMessage(sysBrandId,msgContent);
-                            }else{
+                            }else if (!sendImmediately && sendTime!=null){
                                 jobUtil.addMessageXXTaskJob(stageUser, mktTaskPOWithBLOBs,message);
                             }
                         }
+
                         //2=短信     所有粉丝
                         if (TaskConstants.SECOND.equals(msgType)){
                             if (sendImmediately){
                                 this.sendBachMSM(mktTaskId, taskType,sysCompanyId, sysBrandId,  msgContent);
-                            }else{
+                            }else if (!sendImmediately && sendTime!=null){
                                 jobUtil.addMessageDXTaskJob(stageUser, mktTaskPOWithBLOBs,message);
                             }
                         }
@@ -463,9 +474,9 @@ public class TaskServiceImpl implements TaskService {
         List<WxChannelInfoVo> list = fanspage.getList();
         int pages = fanspage.getPages();
 
-//                            SysSmsConfigVO sysSmsConfigVO = new SysSmsConfigVO();
-//                            BeanUtils.copyProperties(smsConfigPo,sysSmsConfigVO);
-//                            sysSmsConfigVO.setMsgContent(msgContent);
+//  SysSmsConfigVO sysSmsConfigVO = new SysSmsConfigVO();
+//  BeanUtils.copyProperties(smsConfigPo,sysSmsConfigVO);
+//  sysSmsConfigVO.setMsgContent(msgContent);
         AwardBO fanBO = new AwardBO();
         //7=批量短信
         fanBO.setMktType(MktSmartTypeEnum.SMART_TYPE_MESSAGE_BATCH.getCode());
@@ -610,8 +621,8 @@ public class TaskServiceImpl implements TaskService {
 
      * @param sysAccountPO
      * @return
-     *   `checkStatus` '审核状态：1未审核，2审核中，3已审核，4已驳回',
-     *   `taskStatus` '任务状态：1待执行，2执行中，3已禁用，4已结束',
+     *   `checkStatus` '审核状态：1未审核，2审核中，3已审核，4已驳回'
+     *   `taskStatus` '任务状态：1待执行，2执行中，3已禁用，4已结束'
      */
     @Override
     public ResponseData<Integer> checkTaskById(CheckTaskVO vo,SysAccountPO sysAccountPO) throws ParseException {
