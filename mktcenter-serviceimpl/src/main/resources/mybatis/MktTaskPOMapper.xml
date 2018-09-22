@@ -988,6 +988,8 @@
     tmt.valid=1
     AND  tmt.task_type =1
     AND tmto.valid=1
+    AND tmt.check_status=3
+    AND tmt.task_status=2
     AND tmt.sys_brand_id=#{brandId}
     GROUP BY tmt.mkt_task_id,tmt.task_type,tmt.sys_brand_id,tmtr.member_code
     <if test="rewarded!=null">
@@ -1016,6 +1018,8 @@
     tmt.valid=1
     AND tmto.valid=1
     AND tmt.task_type =2
+    AND tmt.check_status=3
+    AND tmt.task_status=2
     AND tmt.sys_brand_id=#{brandId}
     GROUP BY tmt.mkt_task_id,tmt.task_type,tmt.sys_brand_id,tmtr.member_code
     <if test="rewarded!=null">
@@ -1044,6 +1048,8 @@
     tmt.valid=1
     AND tmto.valid=1
     AND tmt.task_type =3
+    AND tmt.check_status=3
+    AND tmt.task_status=2
     AND tmt.sys_brand_id=#{brandId}
     GROUP BY tmt.mkt_task_id,tmt.task_type,tmt.sys_brand_id,tmtr.member_code
     <if test="rewarded!=null">
@@ -1072,6 +1078,8 @@
     tmt.valid=1
     AND  tmt.task_type =4
     AND tmto.valid=1
+    AND tmt.check_status=3
+    AND tmt.task_status=2
     AND tmt.sys_brand_id=#{brandId}
     GROUP BY tmt.mkt_task_id,tmt.task_type,tmt.sys_brand_id,tmtr.member_code
     <if test="rewarded!=null">
@@ -1100,6 +1108,8 @@
     tmt.valid=1
     AND  tmt.task_type =5
     AND tmto.valid=1
+    AND tmt.check_status=3
+    AND tmt.task_status=2
     AND tmt.sys_brand_id=#{brandId}
     GROUP BY tmt.mkt_task_id,tmt.task_type,tmt.sys_brand_id,tmtr.member_code
     <if test="rewarded!=null">
