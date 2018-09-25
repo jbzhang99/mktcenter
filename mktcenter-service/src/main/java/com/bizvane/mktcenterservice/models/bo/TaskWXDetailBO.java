@@ -13,23 +13,23 @@ import java.util.List;
 public class TaskWXDetailBO {
     private Long mktTaskId;
     private String taskName ;
-//    @JsonFormat(
-//            pattern = "yyyy-MM-dd HH:mm:ss",
-//            locale = "zh",
-//            timezone = "GMT+8"
-//    )
-//    @DateTimeFormat(
-//            pattern = "yyyy-MM-dd HH:mm:ss"
-//    )
+    @JsonFormat(
+            pattern = "yyyy-MM-dd",
+            locale = "zh",
+            timezone = "GMT+8"
+    )
+    @DateTimeFormat(
+            pattern = "yyyy-MM-dd"
+    )
     private Date startTime;
-//    startTime @JsonFormat(
-//            pattern = "yyyy-MM-dd HH:mm:ss",
-//            locale = "zh",
-//            timezone = "GMT+8"
-//    )
-//    @DateTimeFormat(
-//            pattern = "yyyy-MM-dd HH:mm:ss"
-//    )
+  @JsonFormat(
+            pattern = "yyyy-MM-dd",
+            locale = "zh",
+            timezone = "GMT+8"
+    )
+    @DateTimeFormat(
+            pattern = "yyyy-MM-dd"
+    )
     private Date   endTime;
     private  String  taskInfo;
     private Integer points;

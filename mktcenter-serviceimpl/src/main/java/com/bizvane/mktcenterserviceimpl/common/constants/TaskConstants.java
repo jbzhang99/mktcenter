@@ -49,4 +49,9 @@ public class TaskConstants {
 
     public final static String NO_RESPONSE="没有相关数据!";
 
+
+    public  final static String  WEXIN_MEMBER="1";//微信会员
+    public  final static String  ALL_MEMBER="2";//所有会员
+
+
 }
