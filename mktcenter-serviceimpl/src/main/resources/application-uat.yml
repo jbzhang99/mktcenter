@@ -5,25 +5,59 @@ server:
 spring:
   redis:
     database: 7
+    host: 192.168.1.50
+    port: 6379
+    password: bizvane
+    jedis:
+      pool:
+        max-active: 100
+        max-idle: 8
+        max-wait: 2000ms
+        min-idle: 0
   profiles:
     active: basecontroller,commonutilslocal,log
   swagger:
     show: true
   application:
-    name: mktcenter-uat
+    name: mktcenter-test
   #  security:
   #    enabled: false
   #    user:
   #      name: root
   #      password: root
   datasource:
-    url: jdbc:mysql://192.168.2.25:3306/julu-uat?useUnicode=true&characterEncoding=utf-8
-    username: root
-    password: bizvane
+    url: jdbc:mysql://bizvane-2018.mysql.polardb.rds.aliyuncs.com:3306/bizvane3?useUnicode=true&characterEncoding=utf-8
+    username: bizvane_2018
+    password: SF_bizvane20180613
     driver-class-name: com.mysql.jdbc.Driver
   data:
     mongodb:
       database: "7"
+      uri: "mongodb://192.168.1.51:27017/?AutoConnectRetry=true"
+  elasticsearch:
+    cluster-name: my-esLearn
+    cluster-nodes: 192.168.1.45:9300
+    repositories:
+      enabled: true
+  kafka:
+    producer:
+      bootstrap-servers: "192.168.1.50:9092"
+      key-serializer: "org.apache.kafka.common.serialization.StringSerializer"
+      value-serializer: "org.apache.kafka.common.serialization.StringSerializer"
+      batch-size: 16384
+      buffer-memory: 33554432
+      retries: 0
+      acks: "1"
+    consumer:
+      bootstrap-servers: "192.168.1.50:9092"
+      enable-auto-commit: false
+      auto-offset-reset: "earliest"
+      key-deserializer: "org.apache.kafka.common.serialization.StringDeserializer"
+      value-deserializer: "org.apache.kafka.common.serialization.StringDeserializer"
+      session-timeout: 30000
+      request-timeout: 40000
+      heartbeat-interval: 29000ms
+      max-partition-fetch-bytes: 524288
   jackson:
     date-format: yyyy-MM-dd HH:mm:ss
     time-zone: GMT+8
@@ -36,7 +70,7 @@ eureka:
       lease-renewal-interval-in-seconds: 10
   client:
     service-url:
-      defaultZone: http://192.168.2.20:8761/eureka/
+      defaultZone: http://192.168.1.46:8761/eureka/
 management:
   endpoints:
     web.exposure.include: "*"
@@ -63,7 +97,7 @@ xxl:
   job:
     admin:
       ### xxl-job admin address list, such as "http://address" or "http://address01,http://address02"
-      addresses: http://192.168.2.11:8080
+      addresses: http://192.168.1.49:8080
     ### xxl-job executor address
     executor:
       appname: ${spring.application.name}
@@ -79,29 +113,30 @@ xxl:
 feign:
   client:
     centerstage:
-      name: centerstage-uat
+      name: centerstage-test
       path: centerstage.api
     coupon:
-      name: coupon--uat
+      name: coupon-test
       path: coupon.api
     members:
-      name: members-uat
+      name: members-test
       path: members.api
     message:
-      name: message-uat
+      name: message-server-test
       path: message.api
     wechat:
-      name: wechat-uat
+      name: wechat-test
       path: wechat.api
     applet:
-      name: applet-uat
+      name: applet-test
       path: applet.api
     centercontrol:
-      name: centercontrol-uat
+      name: centercontrol-test
       path: centercontrol.api
     fitment:
-      name: fitment-uat
+      name: fitment-test
       path: fitment.api
+
 rocketmq:
   onsaddr: http://onsaddr-internet.aliyun.com/rocketmq/nsaddr4client-internet
   accessKey: LTAIpoqUHsXq6q7r
@@ -116,10 +151,11 @@ threadPool:
 qiniu:
   accessKey: Jv79lFtLNDBj1XJ6vkXkemnRN5LIOSXMeDOvW35n
   secretKey: HIKXNXr12qRhpIAsdI8xTaX87LeTqqLGjXB_RgDf
-  bucketNm: bizvane-uat
-  domain: https://resource.uat.bizvane.cn
+  bucketNm: bizvane01
+  domain: https://qi.test.bizvane.cn
 
 activity:
   qrcodeurl: http://www.xxx.bizvane.com/qrcode?activityCode=
+
 tenant:
   isEnabledTenantInterceptor: false
