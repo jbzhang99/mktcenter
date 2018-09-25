@@ -260,9 +260,19 @@ public class ActivitySigninServiceImpl implements ActivitySigninService {
     @Override
     @Transactional
     public ResponseData<Integer> executeActivitySignin(MemberInfoModel vo) {
-        log.info("执行签到活动="+vo.getBrandId()+"="+vo.getMemberCode());
         //返回对象
         ResponseData responseData = new ResponseData();
+        log.info("执行签到活动="+vo.getBrandId()+"="+vo.getMemberCode());
+        //判断今天是否是执行过签到活动
+        MktActivityRecordPOExample example = new MktActivityRecordPOExample();
+        example.createCriteria().andMemberCodeEqualTo(vo.getMemberCode()).andParticipateDateEqualTo(new Date()).andSysBrandIdEqualTo(vo.getBrandId())
+                .andValidEqualTo(Boolean.TRUE);
+        List<MktActivityRecordPO> lists =mktActivityRecordPOMapper.selectByExample(example);
+        if (!CollectionUtils.isEmpty(lists)){
+            responseData.setCode(SysResponseEnum.OPERATE_FAILED_ADD_ERROR.getCode());
+            responseData.setMessage("该会员已经今天已经签到!");
+            return responseData;
+        }
         //查询品牌下所有执行中的活动
         ActivityVO activity = new ActivityVO();
         activity.setActivityStatus(ActivityStatusEnum.ACTIVITY_STATUS_EXECUTING.getCode());
