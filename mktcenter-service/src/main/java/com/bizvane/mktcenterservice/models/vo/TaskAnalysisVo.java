@@ -18,6 +18,8 @@ public class TaskAnalysisVo {
     private String  date2;
     private Date startDate;
     private Date endDate;
+    //,每个品牌下的会员等级都是不一样的
+    private Integer memberLevel;
 
     public Date getStartDate() {
         return startDate;
@@ -34,9 +36,6 @@ public class TaskAnalysisVo {
     public void setEndDate(Date endDate) {
         this.endDate = endDate;
     }
-
-    //1=普通  2=银卡  3=金卡
-    private Integer memberLevel;
 
     public Integer getPageSize() {
         return pageSize;
@@ -101,4 +100,5 @@ public class TaskAnalysisVo {
     public void setMemberLevel(Integer memberLevel) {
         this.memberLevel = memberLevel;
     }
+
 }

@@ -896,16 +896,38 @@ public class TaskServiceImpl implements TaskService {
         PageHelper.startPage(pageForm.getPageNumber(), pageForm.getPageSize());
 
         MktTaskPOExample mktTaskPOExample = new MktTaskPOExample();
+        MktTaskPOExample.Criteria criteria = mktTaskPOExample.createCriteria();
         //查询所有
         if (TaskConstants.FIRST.equals(showType)) {
-            mktTaskPOExample.createCriteria().andTaskTypeEqualTo(vo.getTaskType()).andSysBrandIdEqualTo(vo.getBrandId());
+            criteria.andTaskTypeEqualTo(vo.getTaskType()).andSysBrandIdEqualTo(vo.getBrandId());
         } else if (TaskConstants.SECOND.equals(showType)) {
             //查询已启用
-            mktTaskPOExample.createCriteria().andTaskTypeEqualTo(vo.getTaskType()).andSysBrandIdEqualTo(vo.getBrandId()).andValidEqualTo(Boolean.TRUE);
+            criteria.andTaskTypeEqualTo(vo.getTaskType()).andSysBrandIdEqualTo(vo.getBrandId()).andValidEqualTo(Boolean.TRUE);
         } else if (TaskConstants.THREE.equals(showType)) {
             //查询已禁用
-            mktTaskPOExample.createCriteria().andTaskTypeEqualTo(vo.getTaskType()).andSysBrandIdEqualTo(vo.getBrandId()).andValidEqualTo(Boolean.FALSE);
+            criteria.andTaskTypeEqualTo(vo.getTaskType()).andSysBrandIdEqualTo(vo.getBrandId()).andValidEqualTo(Boolean.FALSE);
         }
+
+        //时间
+        Date startTime = vo.getStartTime();
+        Date endTime = vo.getEndTime();
+        if (startTime!=null){
+            criteria.andStartTimeGreaterThanOrEqualTo(startTime);
+        }
+        if (endTime!=null){
+            criteria.andEndTimeLessThanOrEqualTo(endTime);
+        }
+       //状态
+        //"审核状态：1未审核，2审核中，3已审核，4已驳回"
+        Integer checkStatus = vo.getCheckStatus();
+        //1待执行，2执行中，3已禁用，4已结束
+        Integer taskStatus = vo.getTaskStatus();
+       if (checkStatus!=null){
+           criteria.andCheckStatusEqualTo(checkStatus);
+       }
+       if (taskStatus!=null){
+           criteria.andTaskStatusEqualTo(taskStatus);
+       }
         mktTaskPOExample.setOrderByClause("create_date desc");
 
         lists = mktTaskPOMapper.selectByExampleWithBLOBs(mktTaskPOExample);

@@ -135,7 +135,7 @@ public  ResponseData<List<ExtendPropertyVO>> getMemberField(Long sysBrandId){
         mktTaskPOWithBLOBs.setTaskCode(taskCode);
         //1.判断是否需要审核  1=需要审核   0=不需要
         Integer stagecheckStatus = taskService.getCenterStageCheckStage(mktTaskPOWithBLOBs);
-        mktTaskPOWithBLOBs = taskService.isOrNoCheckState(mktTaskPOWithBLOBs,stagecheckStatus);
+        mktTaskPOWithBLOBs = this.isOrNoCheckState(mktTaskPOWithBLOBs,stagecheckStatus);
         Long mktTaskId = taskService.addTask(mktTaskPOWithBLOBs, stageUser);
         //将需要审核的任务添加到审核中心
         if(TaskConstants.FIRST.equals(stagecheckStatus)){
@@ -176,12 +176,12 @@ public  ResponseData<List<ExtendPropertyVO>> getMemberField(Long sysBrandId){
     }
 
     /**
-     * 完善任务的审核状态和执行状态的确认
+     * 完善任务的审核状态和执行状态的确认(完善资料任务使用)
      * @param po
      * @return
      * @throws ParseException
      */
-    public MktTaskPOWithBLOBs isOrNoCheckState(MktTaskPOWithBLOBs po) throws ParseException {
+    public MktTaskPOWithBLOBs isOrNoCheckState(MktTaskPOWithBLOBs po,Integer stagecheckStatus) throws ParseException {
         //1.判断是否需要审核  1=需要审核   0=不需要
         SysCheckConfigPo sysCheckConfigPo = new SysCheckConfigPo();
         sysCheckConfigPo.setSysBrandId(po.getSysBrandId());
@@ -190,15 +190,13 @@ public  ResponseData<List<ExtendPropertyVO>> getMemberField(Long sysBrandId){
         if (TaskConstants.FIRST.equals(checkStatus)) {
             //待审核=1
             po.setCheckStatus(CheckStatusEnum.CHECK_STATUS_PENDING.getCode());
-            //待执行=1
-            po.setTaskStatus(TaskStatusEnum.TASK_STATUS_PENDING.getCode());
         } else {
             // checkStatus=0=不需要审核
             //已审核=3
             po.setCheckStatus(CheckStatusEnum.CHECK_STATUS_APPROVED.getCode());
-            //2.执行中
-            po.setTaskStatus(TaskStatusEnum.TASK_STATUS_EXECUTING.getCode());
         }
+        //待执行=1  2.执行中
+        po.setTaskStatus(po.getCheckStatus());
         return po;
     }
     /**
