@@ -197,7 +197,7 @@ public interface TaskService {
     /**
      *修改添加到中台任务的状态
      */
-    public  ResponseData<Integer>  updateCheckData(Long sysCheckId ,Integer checkStatus,SysAccountPO sysAccountPO);
+    public  ResponseData<Integer>  updateCheckData(Long mktTaskId ,Integer checkStatus,String functionCode,SysAccountPO sysAccountPO);
 
     /**
      * 中台通过品牌Id查询任务是否需要审核

@@ -633,6 +633,7 @@ public class TaskServiceImpl implements TaskService {
      */
     @Override
     public ResponseData<Integer> checkTaskById(CheckTaskVO vo,SysAccountPO sysAccountPO) throws ParseException {
+        log.info("修改中台审核配置-----"+JSON.toJSONString(vo));
         ResponseData<Integer> responseData = new ResponseData<Integer>();
         Long mktTaskId = vo.getBusinessId();
         Integer businessType = vo.getBusinessType();
@@ -672,7 +673,7 @@ public class TaskServiceImpl implements TaskService {
         mktTaskPOWithBLOBs.setModifiedUserName(sysAccountPO.getName());
         int i = mktTaskPOMapper.updateByPrimaryKeySelective(mktTaskPOWithBLOBs);
         //修改中台审核表的数据
-        this.updateCheckData(sysCheckId,checkStatus,sysAccountPO);
+        this.updateCheckData(mktTaskId,checkStatus,functionCode,sysAccountPO);
 
         if (i > 0) {
             //3=已审核
@@ -821,11 +822,13 @@ public class TaskServiceImpl implements TaskService {
      *修改添加到中台任务的状态--已经审核
      */
     @Override
-    public   ResponseData<Integer> updateCheckData(Long sysCheckId ,Integer checkStatus,SysAccountPO sysAccountPO) {
+    public   ResponseData<Integer> updateCheckData(Long mktTaskId ,Integer checkStatus,String functionCode,SysAccountPO sysAccountPO) {
+        log.info("修改中台审核配置---updateCheckData--"+mktTaskId+"----"+checkStatus);
         //已审核=3
         SysCheckPo checkPo = new SysCheckPo();
-        checkPo.setSysCheckId(sysCheckId);
+        checkPo.setBusinessId(mktTaskId);
         checkPo.setCheckStatus(checkStatus);
+        checkPo.setFunctionCode(functionCode);
         checkPo.setModifiedDate(new Date());
         checkPo.setModifiedUserId(sysAccountPO.getCtrlAccountId());
         checkPo.setModifiedUserName(sysAccountPO.getName());
