@@ -24,7 +24,8 @@ public class MessageXXTaskJob extends IJobHandler {
         //品牌id
         Long sysbrandId = Long.valueOf(split[0]);
         String msgContent=split[1];
-        taskService.sendMemberMessage(sysbrandId,msgContent);
+        Boolean exceptWechat=Boolean.valueOf(split[2]);
+        taskService.sendMemberMessage(sysbrandId,msgContent,exceptWechat);
 
         returnT.setCode(0);
         returnT.setContent("任务执行完毕");

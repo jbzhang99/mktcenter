@@ -81,12 +81,11 @@ public class FigureController {
 		     if(job.get("successFlag").equals("1")) {
 		    	 ResponseData.setCode(0);
 		  	    ResponseData.setMessage(job.get("message").toString());
-			    ResponseData.setData(FigureUtil.parseJSON2Map(job.get("data").toString(),fileReportTempPOlist));
+//			    ResponseData.setData(FigureUtil.parseJSON2Map(job.get("data").toString(),fileReportTempPOlist));
 		     }else {
 		    	 ResponseData.setCode(1);
 		  	    ResponseData.setMessage(job.get("message").toString());
-		  	    List<BackData> listdata =new ArrayList<BackData>();
-		  	  ResponseData.setData(FigureUtil.parseJSON2Map("false",fileReportTempPOlist));
+//		  	  ResponseData.setData(FigureUtil.parseJSON2Map("false",fileReportTempPOlist));
 		    	 
 		     }
 	

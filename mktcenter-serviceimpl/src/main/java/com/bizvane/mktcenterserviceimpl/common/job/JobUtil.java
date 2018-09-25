@@ -155,8 +155,9 @@ public class JobUtil {
         String msgContent = messagePO.getMsgContent();
         Date sendTime = messagePO.getSendTime();
         Long sysBrandId = po.getSysBrandId();
+        Boolean exceptWechat = messagePO.getExceptWechat();
         StringBuilder builder = new StringBuilder();
-        String param = this.getMessageJobParam(sysBrandId, msgContent);
+        String param = this.getMessageJobParam(sysBrandId, msgContent,exceptWechat);
         //清除一下job
         this.doRemoveJobe(bizType, taskCode, param);
         //添加job
@@ -173,7 +174,8 @@ public class JobUtil {
         String name = stageUser.getName();
         String msgContent = messagePO.getMsgContent();
         Date sendTime = messagePO.getSendTime();
-        String param = this.getMessageJobParam(mktTaskId, taskType, sysCompanyId, sysBrandId, msgContent);
+        Boolean exceptWechat = messagePO.getExceptWechat();
+        String param = this.getMessageJobParam(mktTaskId, taskType, sysCompanyId, sysBrandId, msgContent,exceptWechat);
         //清除一下job
         this.doRemoveJobe(bizType, taskCode, param);
         //添加job
@@ -203,7 +205,7 @@ public class JobUtil {
     }
     //消息或短信类业务的参数拼接
     //(Long mktTaskId, Integer taskType,Long sysCompanyId,Long sysBrandId,String msgContent)
-    private String getMessageJobParam(Long mktTaskId, Integer taskType,Long sysCompanyId,Long sysBrandId,String msgContent) {
+    private String getMessageJobParam(Long mktTaskId, Integer taskType,Long sysCompanyId,Long sysBrandId,String msgContent,Boolean exceptWechat) {
         StringBuilder builder = new StringBuilder();
         builder.append(mktTaskId);
         builder.append("&");
@@ -214,13 +216,17 @@ public class JobUtil {
         builder.append(sysBrandId);
         builder.append("&");
         builder.append(msgContent);
+        builder.append("&");
+        builder.append(exceptWechat);
         return builder.toString();
     }
-    private String getMessageJobParam(long sysBrandId, String msgContent){
+    private String getMessageJobParam(long sysBrandId, String msgContent,Boolean exceptWechat){
         StringBuilder builder = new StringBuilder();
         builder.append(sysBrandId);
         builder.append("&");
         builder.append(msgContent);
+        builder.append("&");
+        builder.append(exceptWechat);
         return builder.toString();
     }
     /**

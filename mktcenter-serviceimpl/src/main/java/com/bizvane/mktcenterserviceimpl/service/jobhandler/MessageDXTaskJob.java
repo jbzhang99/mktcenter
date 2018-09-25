@@ -23,12 +23,12 @@ public class MessageDXTaskJob extends IJobHandler {
         ReturnT returnT = new ReturnT();
         String[] split = param.split("&");
         Long mktTaskId=Long.valueOf(split[0]);
-        Integer taskType=Integer.valueOf(split[0]);
-        Long sysCompanyId=Long.valueOf(split[0]);
-        Long sysBrandId=Long.valueOf(split[0]);
-        String messageContent=split[0];
-
-        taskService.sendBachMSM(mktTaskId,taskType,sysCompanyId,sysBrandId,messageContent);
+        Integer taskType=Integer.valueOf(split[1]);
+        Long sysCompanyId=Long.valueOf(split[2]);
+        Long sysBrandId=Long.valueOf(split[3]);
+        String messageContent=split[4];
+        Boolean exceptWechat = Boolean.valueOf(split[5]);
+        taskService.sendBachMSM(mktTaskId,taskType,sysCompanyId,sysBrandId,messageContent,exceptWechat);
 
         returnT.setCode(0);
         returnT.setContent("任务执行完毕");

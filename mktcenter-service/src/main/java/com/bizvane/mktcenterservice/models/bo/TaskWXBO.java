@@ -12,21 +12,21 @@ public class TaskWXBO {
     private String taskName ;
     private Integer  taskType ;
     @JsonFormat(
-            pattern = "yyyy-MM-dd HH:mm:ss",
+            pattern = "yyyy-MM-dd",
             locale = "zh",
             timezone = "GMT+8"
     )
     @DateTimeFormat(
-            pattern = "yyyy-MM-dd HH:mm:ss"
+            pattern = "yyyy-MM-dd"
     )
     private Date startTime;
     @JsonFormat(
-            pattern = "yyyy-MM-dd HH:mm:ss",
+            pattern = "yyyy-MM-dd",
             locale = "zh",
             timezone = "GMT+8"
     )
     @DateTimeFormat(
-            pattern = "yyyy-MM-dd HH:mm:ss"
+            pattern = "yyyy-MM-dd"
     )
     private Date   endTime;
     private Integer  rewarded;  // 1=已完成  0未完成
