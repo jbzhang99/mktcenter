@@ -111,7 +111,14 @@ threadPool:
   keepAliveTime: 60
   queueCapacity: 99999
 
-
+qiniu:
+  accessKey: Jv79lFtLNDBj1XJ6vkXkemnRN5LIOSXMeDOvW35n
+  secretKey: HIKXNXr12qRhpIAsdI8xTaX87LeTqqLGjXB_RgDf
+  bucketNm: bizvane01
+  domain: https://qi.test.bizvane.cn
 
 activity:
   qrcodeurl: http://www.xxx.bizvane.com/qrcode?activityCode=
+
+tenant:
+  isEnabledTenantInterceptor: false
