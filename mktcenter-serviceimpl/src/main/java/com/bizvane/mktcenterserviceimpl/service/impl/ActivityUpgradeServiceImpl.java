@@ -539,9 +539,7 @@ public class ActivityUpgradeServiceImpl implements ActivityUpgradeService {
         MktMessagePOExample exampl = new MktMessagePOExample();
         exampl.createCriteria().andBizIdEqualTo(upgradeList.get(0).getMktActivityId()).andValidEqualTo(true);
         List<MktMessagePO> listMktMessage = mktMessagePOMapper.selectByExampleWithBLOBs(exampl);
-       if(!CollectionUtils.isEmpty(lists)){
             bo.setCouponEntityAndDefinitionVOList(lists);
-        }
         if(!CollectionUtils.isEmpty(listMktMessage)){
             bo.setMessageVOList(listMktMessage);
         }

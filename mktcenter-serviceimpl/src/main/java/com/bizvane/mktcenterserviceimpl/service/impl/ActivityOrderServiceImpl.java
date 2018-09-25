@@ -218,8 +218,8 @@ public class ActivityOrderServiceImpl implements ActivityOrderService {
             SysCheckPo po = new SysCheckPo();
             po.setSysBrandId(mktActivityPOWithBLOBs.getSysBrandId());
             po.setSysCompanyId(mktActivityPOWithBLOBs.getSysCompanyId());
-            po.setFunctionCode(mktActivityPOWithBLOBs.getActivityCode());
             po.setBusinessName(mktActivityPOWithBLOBs.getActivityName());
+            po.setBusinessCode(mktActivityPOWithBLOBs.getActivityCode());
             po.setBusinessType(ActivityTypeEnum.ACTIVITY_TYPE_ORDER.getCode());
             po.setFunctionCode("C0002");
             po.setCheckStatus(CheckStatusEnum.CHECK_STATUS_PENDING.getCode());
@@ -364,9 +364,7 @@ public class ActivityOrderServiceImpl implements ActivityOrderService {
         MktMessagePOExample exampl = new MktMessagePOExample();
         exampl.createCriteria().andBizIdEqualTo(orderList.get(0).getMktActivityId()).andValidEqualTo(true);
         List<MktMessagePO> listMktMessage = mktMessagePOMapper.selectByExample(exampl);
-        if(!CollectionUtils.isEmpty(lists)){
             bo.setCouponEntityAndDefinitionVOList(lists);
-        }
         if(!CollectionUtils.isEmpty(listMktMessage)){
             bo.setMessageVOList(listMktMessage);
         }

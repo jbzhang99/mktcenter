@@ -240,9 +240,7 @@ public class ActivitySigninServiceImpl implements ActivitySigninService {
         if(!CollectionUtils.isEmpty(signinList)){
             bo.setActivityVO(signinList.get(0));
         }
-        if(!CollectionUtils.isEmpty(lists)){
             bo.setCouponEntityAndDefinitionVOList(lists);
-        }
         if(!CollectionUtils.isEmpty(listMktMessage)){
             bo.setMessageVOList(listMktMessage);
         }
