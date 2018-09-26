@@ -81,4 +81,5 @@ public interface MktActivityRecordPOMapper {
 
 	List<MktActivityRecordPO>  selectActivityRecordPOList(MktActivityRecordPO mktActivityRecordPO);
 	List<MktActivityRecordPO>  getActivityRecordPOList(MktActivityRecordVO vo);
+	List<MktActivityRecordPO> selectRecordPOList(MktActivityRecordPO mktActivityRecordPO);
 }
