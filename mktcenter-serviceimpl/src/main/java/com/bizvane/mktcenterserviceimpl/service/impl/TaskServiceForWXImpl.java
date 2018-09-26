@@ -38,35 +38,35 @@ public class TaskServiceForWXImpl implements TaskServiceForWX {
     @Override
     //获取该会员已完成和未完成任务的任务
     public ResponseData getCompleteTask(TaskForWXVO vo) {
+        ResponseData<PageInfo<TaskWXBO>> responseData = new ResponseData(new PageInfo<TaskWXBO>(new ArrayList<TaskWXBO>()));
         ResponseData<Long> resultData = wxAppletApiService.getServiceStoreId(vo.getMemberCode());
         Long storeId = resultData.getData();
-
         vo.setStoreIdStyleOne(new StringBuilder().append(storeId).append(",%").toString());
         vo.setStoreIdStyleTwo(new StringBuilder().append("%,").append(storeId).append(",%").toString());
         vo.setStoreIdStyleThree(new StringBuilder().append("%,").append(storeId).toString());
-        ArrayList<Object> objects = new ArrayList<>();
-        PageInfo<TaskWXBO> taskWXBOPageInfo1 = new PageInfo<>();
-        ResponseData<PageInfo<TaskWXBO>> responseData = new ResponseData();
-        PageHelper.startPage(vo.getPageNumber(), vo.getPageSize());
-        List<TaskWXBO> lists = taskPOMapper.getCompleteTask(vo);
-        if (CollectionUtils.isEmpty(lists)) {
-         PageInfo<TaskWXBO> taskWXBOPageInfoEmpt = new PageInfo<>(new ArrayList<TaskWXBO>());
-         responseData.setData(taskWXBOPageInfoEmpt);
-         return responseData;
-        }else{
-         PageInfo<TaskWXBO> taskWXBOPageInfo = new PageInfo<>(lists);
-         responseData.setData(taskWXBOPageInfo);
+        log.info("----获取已完成和未完成任务列表----getCompleteTask---参数-------"+JSON.toJSONString(vo));
+
+        try{
+            PageHelper.startPage(vo.getPageNumber(), vo.getPageSize());
+            List<TaskWXBO> lists = taskPOMapper.getCompleteTask(vo);
+            if (CollectionUtils.isNotEmpty(lists)) {
+                PageInfo<TaskWXBO> taskWXBOPageInfo = new PageInfo<>(lists);
+                responseData.setData(taskWXBOPageInfo);
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }finally {
+            return responseData;
         }
-        return responseData;
     }
 
     //获取任务的详情
     @Override
     public ResponseData<TaskWXDetailBO> getTaskWXDetail(Long taskId) {
-        System.out.println("---------------获取任务的详情----------------" + taskId);
+        log.info("---------------获取任务的详情----------------" + taskId);
         ResponseData<TaskWXDetailBO> responseData = new ResponseData();
         List<TaskWXDetailBO> lists = taskPOMapper.getTaskWXDetail(taskId);
-        System.out.println("---------------获取任务的详情----------------" + JSON.toJSONString(lists));
+        log.info("---------------获取任务的详情----------------" + JSON.toJSONString(lists));
         if (CollectionUtils.isNotEmpty(lists)) {
             responseData.setData(lists.get(0));
         }else{
