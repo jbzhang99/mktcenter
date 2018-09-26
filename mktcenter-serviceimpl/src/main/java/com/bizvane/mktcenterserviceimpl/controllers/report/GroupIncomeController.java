@@ -283,6 +283,24 @@ public class GroupIncomeController {
 //   	 return sendpost(BaseUrl.getLoadUrl("activeMemberAllInterface"),sendVO,FileReportTempPOlist,sysAccountPO);
 //   }
 
+   
+   @RequestMapping("genderGroup")
+   public ResponseData<List<BackData>> genderGroup( IncomeTotalListGroup sendVO, HttpServletRequest request){
+	   sendVO.setCorpId("C10153");  SysAccountPO sysAccountPO =TokenUtils.getStageUser(request);
+	     FileReportTempPOExample example = new FileReportTempPOExample();
+	     example.createCriteria().andTemplateTypeEqualTo("genderGroup").andValidEqualTo(Boolean.TRUE);
+	     List<FileReportTempPO>  FileReportTempPOlist = fileReportTempPOMapper.selectByExample(example);
+   	 return sendpost(BaseUrl.getLoadUrl("genderGroup"),sendVO,FileReportTempPOlist,sysAccountPO);
+   }
+   
+   @RequestMapping("ageAnalysisGroup")
+   public ResponseData<List<BackData>> ageAnalysisGroup( IncomeTotalListGroup sendVO, HttpServletRequest request){
+	   sendVO.setCorpId("C10153");  SysAccountPO sysAccountPO =TokenUtils.getStageUser(request);
+	     FileReportTempPOExample example = new FileReportTempPOExample();
+	     example.createCriteria().andTemplateTypeEqualTo("ageAnalysisGroup").andValidEqualTo(Boolean.TRUE);
+	     List<FileReportTempPO>  FileReportTempPOlist = fileReportTempPOMapper.selectByExample(example);
+   	 return sendpost(BaseUrl.getLoadUrl("ageAnalysisGroup"),sendVO,FileReportTempPOlist,sysAccountPO);
+   }
 
    
 // 请求放回数据带时间格式的json
