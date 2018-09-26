@@ -11,6 +11,24 @@ public class IncomeTotalList  extends ReBase  {
 	private String	startRecord	;//	起始条目（分页）	String	8	Y
 	private String	queryNum	;//	查询数量（分页）	String	8	Y
 	private String	fuzzyQueryContent	;//	模糊查询内容	String	12	N
+	
+//	性别表汇总
+	private String	gender;//
+	
+	private String	 ageGroup;//如："20-30"
+	
+	public String getAgeGroup() {
+		return ageGroup;
+	}
+	public void setAgeGroup(String ageGroup) {
+		this.ageGroup = ageGroup;
+	}
+	public String getGender() {
+		return gender;
+	}
+	public void setGender(String gender) {
+		this.gender = gender;
+	}
 	public String getDimension() {
 		return dimension;
 	}
