@@ -11,16 +11,26 @@ public class ReBase {
     
     private String organizationContentStr;
     
+    private String  fuzzyQueryContent;
     
 	private String	dimension	;//	维度	String	1	Y
 	private String	organization	;//	组织	String	1	Y
 	private String[]	organizationAngle	;//	选择组织维度	String[]	1024	Y
 	private String	startDate	;//	起始时间	String	20	Y
 	private String	endDate	;//	截止时间	String	20	Y
+	
     
-    
-    
-    public String getDimension() {
+    public String getFuzzyQueryContent() {
+		return fuzzyQueryContent;
+	}
+
+
+	public void setFuzzyQueryContent(String fuzzyQueryContent) {
+		this.fuzzyQueryContent = fuzzyQueryContent;
+	}
+
+
+	public String getDimension() {
 		return dimension;
 	}
 
