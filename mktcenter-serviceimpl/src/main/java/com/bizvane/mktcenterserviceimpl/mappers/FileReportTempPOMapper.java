@@ -8,69 +8,69 @@ import org.apache.ibatis.annotations.Param;
 public interface FileReportTempPOMapper {
 
 	/**
-	 * 只读. 
-	 * @mbg.generated  2018-09-19 18:34:41
+	 *
+	 * @mbg.generated  2018-09-26 11:14:00
 	 */
 	long countByExample(FileReportTempPOExample example);
 
 	/**
-	 * 只读. 
-	 * @mbg.generated  2018-09-19 18:34:41
+	 *
+	 * @mbg.generated  2018-09-26 11:14:00
 	 */
 	int deleteByExample(FileReportTempPOExample example);
 
 	/**
-	 * 只读. 
-	 * @mbg.generated  2018-09-19 18:34:41
+	 *
+	 * @mbg.generated  2018-09-26 11:14:00
 	 */
 	int deleteByPrimaryKey(Long fileReportTempId);
 
 	/**
-	 * 只读. 
-	 * @mbg.generated  2018-09-19 18:34:41
+	 *
+	 * @mbg.generated  2018-09-26 11:14:00
 	 */
 	int insert(FileReportTempPO record);
 
 	/**
-	 * 只读. 
-	 * @mbg.generated  2018-09-19 18:34:41
+	 *
+	 * @mbg.generated  2018-09-26 11:14:00
 	 */
 	int insertSelective(FileReportTempPO record);
 
 	/**
-	 * 只读. 
-	 * @mbg.generated  2018-09-19 18:34:41
+	 *
+	 * @mbg.generated  2018-09-26 11:14:00
 	 */
 	List<FileReportTempPO> selectByExample(FileReportTempPOExample example);
 
 	/**
-	 * 只读. 
-	 * @mbg.generated  2018-09-19 18:34:41
+	 *
+	 * @mbg.generated  2018-09-26 11:14:00
 	 */
 	FileReportTempPO selectByPrimaryKey(Long fileReportTempId);
 
 	/**
-	 * 只读. 
-	 * @mbg.generated  2018-09-19 18:34:41
+	 *
+	 * @mbg.generated  2018-09-26 11:14:00
 	 */
 	int updateByExampleSelective(@Param("record") FileReportTempPO record,
 			@Param("example") FileReportTempPOExample example);
 
 	/**
-	 * 只读. 
-	 * @mbg.generated  2018-09-19 18:34:41
+	 *
+	 * @mbg.generated  2018-09-26 11:14:00
 	 */
 	int updateByExample(@Param("record") FileReportTempPO record, @Param("example") FileReportTempPOExample example);
 
 	/**
-	 * 只读. 
-	 * @mbg.generated  2018-09-19 18:34:41
+	 *
+	 * @mbg.generated  2018-09-26 11:14:00
 	 */
 	int updateByPrimaryKeySelective(FileReportTempPO record);
 
 	/**
-	 * 只读. 
-	 * @mbg.generated  2018-09-19 18:34:41
+	 *
+	 * @mbg.generated  2018-09-26 11:14:00
 	 */
 	int updateByPrimaryKey(FileReportTempPO record);
 }
