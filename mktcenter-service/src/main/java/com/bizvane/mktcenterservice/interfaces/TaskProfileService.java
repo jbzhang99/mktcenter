@@ -15,19 +15,13 @@ import java.util.List;
  * @Copyright (c) 2018 上海商帆信息科技有限公司-版权所有
  */
 public interface TaskProfileService {
-    /**
-     * 获取完善资料的字段code和名称
-     * @param sysBrandId
-     * @return
-     */
-    public  ResponseData<List<ExtendPropertyVO>> getMemberField(Long sysBrandId);
+
     /**
      * 添加完善资料任务
      * @param bo
      * @param stageUser
      * @return
      */
-
     public ResponseData<Integer> addTask(TaskBO bo, SysAccountPO stageUser) throws ParseException;
 
     /**
@@ -37,7 +31,6 @@ public interface TaskProfileService {
      * @return
      */
     public ResponseData<Integer> updateTask(TaskBO bo,SysAccountPO stageUser);
-
 
     /**
      * 完善资料任务效果分析
@@ -50,5 +43,12 @@ public interface TaskProfileService {
      * @param vo
      */
     public  void   doAwardProfile(ProfileSuccessVO vo);
+
+    /**
+     * 获取完善资料的字段code和名称
+     * @param sysBrandId
+     * @return
+     */
+    public  ResponseData<List<ExtendPropertyVO>> getMemberField(Long sysBrandId);
 
 }
