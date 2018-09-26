@@ -54,35 +54,20 @@ import java.util.*;
 @Service
 @Slf4j
 public class TaskProfileServiceImpl implements TaskProfileService {
-
     @Autowired
-    private MktTaskProfilePOMapper mktTaskProfilePOMapper;
-    @Autowired
-    private SysCheckConfigServiceRpc sysCheckConfigServiceRpc;
+    private Award award;
     @Autowired
     private JobUtil jobUtil;
     @Autowired
     private MktTaskPOMapper mktTaskPOMapper;
     @Autowired
-    private MktMessagePOMapper mktMessagePOMapper;
+    private MktCouponPOMapper mktCouponPOMapper;
     @Autowired
-    private SysCheckServiceRpc sysCheckServiceRpc;
+    private MktMessagePOMapper mktMessagePOMapper;
     @Autowired
     private MktTaskRecordPOMapper mktTaskRecordPOMapper;
     @Autowired
-    private IntegralRecordApiService integralRecordApiService;
-    @Autowired
-    private SendCouponServiceFeign sendCouponServiceFeign;
-    @Autowired
-    private MktCouponPOMapper mktCouponPOMapper;
-    @Autowired
-    private Award award;
-    @Autowired
-    private CouponDefinitionServiceFeign couponDefinitionServiceFeign;
-    @Autowired
-    private MemberInfoApiService memberInfoApiService;
-    @Autowired
-    private WxAppletApiService wxAppletApiService;
+    private MktTaskProfilePOMapper mktTaskProfilePOMapper;
     @Autowired
     protected TaskService taskService;
     @Autowired
@@ -90,21 +75,21 @@ public class TaskProfileServiceImpl implements TaskProfileService {
     @Autowired
     private TaskMessageService taskMessageService;
     @Autowired
+    private WxAppletApiService wxAppletApiService;
+    @Autowired
     private TaskRecordService taskRecordService;
     @Autowired
     private CouponQueryServiceFeign couponQueryService;
-
-/**
- * 查询完善资料的字段
- * 微信小程序端是否可见,1=不可见,2=可见
- */
-@Override
-public  ResponseData<List<ExtendPropertyVO>> getMemberField(Long sysBrandId){
-    ExtendPropertyVO extendPropertyVO = new ExtendPropertyVO();
-    extendPropertyVO.setWxVisible("2");
-    extendPropertyVO.setBrandId(sysBrandId);
-    return  wxAppletApiService.getBaseAndExtendPropertyList(extendPropertyVO);
-}
+    @Autowired
+    private IntegralRecordApiService integralRecordApiService;
+    @Autowired
+    private SysCheckServiceRpc sysCheckServiceRpc;
+    @Autowired
+    private SendCouponServiceFeign sendCouponServiceFeign;
+    @Autowired
+    private SysCheckConfigServiceRpc sysCheckConfigServiceRpc;
+    @Autowired
+    private CouponDefinitionServiceFeign couponDefinitionServiceFeign;
 
     /**
      * 新建完善资料任务
@@ -122,19 +107,14 @@ public  ResponseData<List<ExtendPropertyVO>> getMemberField(Long sysBrandId){
             return responseData;
         }
         TaskVO taskVO = bo.getTaskVO();
-        taskVO.setValid(Boolean.TRUE);
-        taskVO.setCreateDate(TimeUtils.getNowTime());
-        taskVO.setCreateUserId(stageUser.getSysAccountId());
-        taskVO.setCreateUserName(stageUser.getName());
-
-        //1.生成任务编号
-        String taskCode = CodeUtil.getTaskCode();
-        //2.任务主表新增
+        //1.任务主表新增
         MktTaskPOWithBLOBs mktTaskPOWithBLOBs = new MktTaskPOWithBLOBs();
         BeanUtils.copyProperties(taskVO, mktTaskPOWithBLOBs);
-        mktTaskPOWithBLOBs.setTaskCode(taskCode);
-        //1.判断是否需要审核  1=需要审核   0=不需要
+        //任务编号
+        mktTaskPOWithBLOBs.setTaskCode(CodeUtil.getTaskCode());
+        //调用中台的审核配置,判断是否需要审核  1=需要审核   0=不需要
         Integer stagecheckStatus = taskService.getCenterStageCheckStage(mktTaskPOWithBLOBs);
+        //设置相应的任务状态和任务状态
         mktTaskPOWithBLOBs = this.isOrNoCheckState(mktTaskPOWithBLOBs,stagecheckStatus);
         Long mktTaskId = taskService.addTask(mktTaskPOWithBLOBs, stageUser);
         //将需要审核的任务添加到审核中心
@@ -182,11 +162,7 @@ public  ResponseData<List<ExtendPropertyVO>> getMemberField(Long sysBrandId){
      * @throws ParseException
      */
     public MktTaskPOWithBLOBs isOrNoCheckState(MktTaskPOWithBLOBs po,Integer stagecheckStatus) throws ParseException {
-        //1.判断是否需要审核  1=需要审核   0=不需要
-//        SysCheckConfigPo sysCheckConfigPo = new SysCheckConfigPo();
-//        sysCheckConfigPo.setSysBrandId(po.getSysBrandId());
-//        Integer checkStatus = taskService.getCheckStatus(sysCheckConfigPo);
-        // checkStatus=1=需要审核
+        // stagecheckStatus判断是否需要审核  1=需要审核   0=不需要
         if (TaskConstants.FIRST.equals(stagecheckStatus)) {
             //待审核=1
             po.setCheckStatus(CheckStatusEnum.CHECK_STATUS_PENDING.getCode());
@@ -202,21 +178,20 @@ public  ResponseData<List<ExtendPropertyVO>> getMemberField(Long sysBrandId){
     /**
      * 新增完善资料的单表信息
      */
-      public  ResponseData<Integer> insertProfileTask(MktTaskProfilePOWithBLOBs po,SysAccountPO stageUser){
-          ResponseData<Integer> result = new ResponseData<Integer>(SysResponseEnum.FAILED.getCode(),SysResponseEnum.FAILED.getMessage(),null);
-          po.setSysCompanyId(stageUser.getSysCompanyId());
-          po.setCreateUserId(stageUser.getSysAccountId());
-          po.setCreateUserName(stageUser.getName());
-          po.setCreateDate(new Date());
-          int i = mktTaskProfilePOMapper.insertSelective(po);
-          MktTaskProfilePOExample mktTaskProfilePOExample = new MktTaskProfilePOExample();
-          if (i>0){
-              result.setCode(SysResponseEnum.SUCCESS.getCode());
-              result.setMessage(SysResponseEnum.SUCCESS.getMessage());
-          }
-      return result;
-      }
-
+    public  ResponseData<Integer> insertProfileTask(MktTaskProfilePOWithBLOBs po,SysAccountPO stageUser){
+        ResponseData<Integer> result = new ResponseData<Integer>(SysResponseEnum.FAILED.getCode(),SysResponseEnum.FAILED.getMessage(),null);
+        po.setSysCompanyId(stageUser.getSysCompanyId());
+        po.setCreateUserId(stageUser.getSysAccountId());
+        po.setCreateUserName(stageUser.getName());
+        po.setCreateDate(new Date());
+        int i = mktTaskProfilePOMapper.insertSelective(po);
+        MktTaskProfilePOExample mktTaskProfilePOExample = new MktTaskProfilePOExample();
+        if (i>0){
+            result.setCode(SysResponseEnum.SUCCESS.getCode());
+            result.setMessage(SysResponseEnum.SUCCESS.getMessage());
+        }
+        return result;
+    }
 
     /**
      * 修改任务
@@ -227,41 +202,26 @@ public  ResponseData<List<ExtendPropertyVO>> getMemberField(Long sysBrandId){
     @Override
     @Transactional
     public ResponseData updateTask(TaskBO bo, SysAccountPO stageUser) {
-        ResponseData responseData = new ResponseData();
-        TaskVO taskVO = bo.getTaskVO();
-        //接收需要修改的任务vo对象判断是否状态为待审核
-        //状态为待审核或者被驳回时才可修改,其他状态为不可修改
-        if (taskVO.getCheckStatus()!=CheckStatusEnum.CHECK_STATUS_PENDING.getCode()&&taskVO.getCheckStatus()!=CheckStatusEnum.CHECK_STATUS_REJECTED.getCode()){
-            responseData.setCode(SysResponseEnum.FAILED.getCode());
-            responseData.setMessage("该任务不可修改");
-            return responseData;
-        }
-      //0.参数的检验
-        responseData = TaskParamCheckUtil.checkParam(bo);
+        //0.参数的检验
+        ResponseData responseData = TaskParamCheckUtil.checkParam(bo);
         //参数校验不通过
         if(responseData.getCode()>0){
             return responseData;
         }
-        TaskVO vo = bo.getTaskVO();
-        vo.setValid(Boolean.TRUE);
-        vo.setModifiedDate(TimeUtils.getNowTime());
-        vo.setModifiedUserName(stageUser.getName());
-        vo.setModifiedUserId(stageUser.getSysAccountId());
-        Long mktTaskId = vo.getMktTaskId();
-        // String taskCode = vo.getTaskCode();
+        TaskVO taskVO = bo.getTaskVO();
+        Long mktTaskId = taskVO.getMktTaskId();
         //1.任务主表修改
         MktTaskPOWithBLOBs mktTaskPOWithBLOBs = new MktTaskPOWithBLOBs();
-        BeanUtils.copyProperties(vo, mktTaskPOWithBLOBs);
+        BeanUtils.copyProperties(taskVO, mktTaskPOWithBLOBs);
         taskService.updateTask(mktTaskPOWithBLOBs, stageUser);
-
         //3.任务消费表修改
         MktTaskProfilePOWithBLOBs mktTaskProfilePO = new MktTaskProfilePOWithBLOBs();
         BeanUtils.copyProperties(taskVO, mktTaskProfilePO);
         mktTaskProfilePO.setMktTaskId(mktTaskId);
         this.updateProfileTask(mktTaskProfilePO, stageUser);
-
         //4.奖励修改 biz_type 活动类型  1=活动
         taskCouponService.deleteTaskCoupon(mktTaskId, stageUser);
+
         List<MktCouponPO> mktCouponPOList = bo.getMktCouponPOList();
         if (org.apache.commons.collections.CollectionUtils.isNotEmpty(mktCouponPOList)) {
             mktCouponPOList.stream().forEach(param -> {
@@ -324,29 +284,29 @@ public  ResponseData<List<ExtendPropertyVO>> getMemberField(Long sysBrandId){
         List<TaskAwardBO> taskInviteAwardList = taskService.getTaskInviteAwardList(companyId, brandId, null);
         if (CollectionUtils.isNotEmpty(taskInviteAwardList)){
             taskInviteAwardList.stream().
-            filter(obj->{
-                Boolean isStoreLimit = obj.getStoreLimit();
-                String  StoreLimitList=obj.getStoreLimitList();
-                return isStoreLimit || (serviceStoreId!=null && StringUtils.isNotBlank(StoreLimitList) &&  obj.getStoreLimitList().contains(String.valueOf(serviceStoreId)));}).
-            forEach(obj->{
-                MktTaskRecordVO recordVO = new MktTaskRecordVO();
-                recordVO.setSysBrandId(brandId);
-                recordVO.setTaskType(obj.getTaskType());
-                recordVO.setTaskId(obj.getMktTaskId());
-                recordVO.setMemberCode(memberCode);
+                    filter(obj->{
+                        Boolean isStoreLimit = obj.getStoreLimit();
+                        String  StoreLimitList=obj.getStoreLimitList();
+                        return isStoreLimit || (serviceStoreId!=null && StringUtils.isNotBlank(StoreLimitList) &&  obj.getStoreLimitList().contains(String.valueOf(serviceStoreId)));}).
+                    forEach(obj->{
+                        MktTaskRecordVO recordVO = new MktTaskRecordVO();
+                        recordVO.setSysBrandId(brandId);
+                        recordVO.setTaskType(obj.getTaskType());
+                        recordVO.setTaskId(obj.getMktTaskId());
+                        recordVO.setMemberCode(memberCode);
 
-                // 获取会员是否已经成功参与过某一活动
-                Boolean isOrNoAward = taskRecordService.getIsOrNoAward(recordVO);
-                if (!isOrNoAward){
-                    MktTaskRecordPO recordPO = new MktTaskRecordPO();
-                    BeanUtils.copyProperties(recordVO,recordPO);
-                    recordPO.setParticipateDate(profileDate);
-                    recordPO.setRewarded(Integer.valueOf(1));
-                    taskRecordService.addTaskRecord(recordPO);
-                    taskService.sendCouponAndPoint(memberCode,obj);
-                }
+                        // 获取会员是否已经成功参与过某一活动
+                        Boolean isOrNoAward = taskRecordService.getIsOrNoAward(recordVO);
+                        if (!isOrNoAward){
+                            MktTaskRecordPO recordPO = new MktTaskRecordPO();
+                            BeanUtils.copyProperties(recordVO,recordPO);
+                            recordPO.setParticipateDate(profileDate);
+                            recordPO.setRewarded(Integer.valueOf(1));
+                            taskRecordService.addTaskRecord(recordPO);
+                            taskService.sendCouponAndPoint(memberCode,obj);
+                        }
 
-            });
+                    });
         }
 
     }
@@ -360,13 +320,13 @@ public  ResponseData<List<ExtendPropertyVO>> getMemberField(Long sysBrandId){
     public ResponseData<TaskRecordVO> getTaskProfileRecordByTime(TaskAnalysisVo vo){
         ResponseData<TaskRecordVO> responseData = new ResponseData<TaskRecordVO>();
         //赠送总积分数
-         Long allPoints =0L;
-            //发行券总张数
-         Long allCountCoupon=0L;
-            //参与任务总人数
-         Long allCountMbr=0L;
-            //被核销优惠券总数
-         Long allinvalidCountCoupon=0L;
+        Long allPoints =0L;
+        //发行券总张数
+        Long allCountCoupon=0L;
+        //参与任务总人数
+        Long allCountMbr=0L;
+        //被核销优惠券总数
+        Long allinvalidCountCoupon=0L;
 
         try {
             Long sysBrandId = vo.getBrandId();
@@ -379,7 +339,7 @@ public  ResponseData<List<ExtendPropertyVO>> getMemberField(Long sysBrandId){
                 for (DayTaskRecordVo task: analysislists) {
                     String sendType = taskService.changeTaskType(taskType).getCouponTaskType();
                     //参与日期
-                   String createDate = TaskConstants.DATE_FORMAT.format(task.getPartDate());
+                    String createDate = TaskConstants.DATE_FORMAT.format(task.getPartDate());
                     ResponseData<CouponFindCouponCountResponseVO> couponCount= couponQueryService.findCountBySendType(sendType,createDate,sysBrandId);
                     CouponFindCouponCountResponseVO data = couponCount.getData();
                     //任务的券总数量
@@ -413,5 +373,17 @@ public  ResponseData<List<ExtendPropertyVO>> getMemberField(Long sysBrandId){
         }
 
         return responseData;
+    }
+
+    /**
+     * 查询完善资料的字段
+     * 微信小程序端是否可见,1=不可见,2=可见
+     */
+    @Override
+    public  ResponseData<List<ExtendPropertyVO>> getMemberField(Long sysBrandId){
+        ExtendPropertyVO extendPropertyVO = new ExtendPropertyVO();
+        extendPropertyVO.setWxVisible("2");
+        extendPropertyVO.setBrandId(sysBrandId);
+        return  wxAppletApiService.getBaseAndExtendPropertyList(extendPropertyVO);
     }
 }

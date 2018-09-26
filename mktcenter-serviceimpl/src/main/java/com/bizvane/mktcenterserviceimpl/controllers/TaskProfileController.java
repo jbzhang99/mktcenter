@@ -29,7 +29,6 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
-
 /**
  * @author gengxiaoyu
  * @date on 2018/7/13 13:39
@@ -39,7 +38,6 @@ import java.util.List;
 @RestController
 @RequestMapping("taskProfile")
 public class TaskProfileController {
-
     @Autowired
     private TaskProfileService taskProfileService;
     @Autowired
@@ -49,15 +47,6 @@ public class TaskProfileController {
     @Autowired
     private ExtendPropertyApiService extendPropertyApiService;
 
-    /**
-     * 获取品牌下 完善资料的字段code和名称
-     * @param sysBrandId
-     * @return
-     */
-    @RequestMapping("getExtendProperty")
-    public  ResponseData<List<ExtendPropertyVO>> getMemberField(Long sysBrandId){
-        return taskProfileService.getMemberField(sysBrandId);
-    }
 
     /**
      * 创建任务
@@ -66,16 +55,8 @@ public class TaskProfileController {
     @RequestMapping("addTask")
     public ResponseData<Integer> addTask(TaskBO bo, HttpServletRequest request) throws ParseException {
         SysAccountPO sysAccountPo = TokenUtils.getStageUser(request);
-//        SysAccountPO sysAccountPo = new SysAccountPO();
-//        sysAccountPo.setSysAccountId(26L);
-//        sysAccountPo.setSysCompanyId(2L);
-//        sysAccountPo.setBrandId(4L);
-//        sysAccountPo.setAccountCode("15328634678");
-//        sysAccountPo.setName("不啊哟删除");
-
         bo.getTaskVO().setTaskType(1);
         return  taskProfileService.addTask(bo, sysAccountPo);
-
     }
 
     /**
@@ -95,22 +76,8 @@ public class TaskProfileController {
      * @return  TaskAnalysisVo vo
      */
     @RequestMapping("getTaskProfileRecordByTime")
-  //  public ResponseData getTaskProfileRecordByTime(String date1, String date2, HttpServletRequest request, PageForm pageForm)throws Exception{
     public ResponseData getTaskProfileRecordByTime(TaskAnalysisVo vo,HttpServletRequest request)throws Exception{
-
-       SysAccountPO sysAccountPo = TokenUtils.getStageUser(request);
-//        SysAccountPO sysAccountPo = new SysAccountPO();
-//        sysAccountPo.setSysAccountId(26L);
-//        sysAccountPo.setSysCompanyId(2L);
-//        sysAccountPo.setBrandId(4L);
-//        sysAccountPo.setAccountCode("15328634678");
-//        sysAccountPo.setName("不啊哟删除");
-//      Date timeStart=null;
-//      Date timeEnd=null;
-//       if (StringUtils.isNotBlank(date1)&&StringUtils.isNotBlank(date2)){
-//            timeStart = TaskConstants.DATE_FORMAT.parse(date1);
-//            timeEnd = TaskConstants.DATE_FORMAT.parse(date2);
-//       }
+        SysAccountPO sysAccountPo = TokenUtils.getStageUser(request);
         vo.setBrandId(sysAccountPo.getBrandId());
         return taskProfileService.getTaskProfileRecordByTime(vo);
     }
@@ -121,6 +88,16 @@ public class TaskProfileController {
     @RequestMapping("doAwardProfile")
     public  void   doAwardProfile(ProfileSuccessVO vo){
         taskProfileService.doAwardProfile(vo);
+    }
+
+    /**
+     * 获取品牌下 完善资料的字段code和名称
+     * @param sysBrandId
+     * @return
+     */
+    @RequestMapping("getExtendProperty")
+    public  ResponseData<List<ExtendPropertyVO>> getMemberField(Long sysBrandId){
+        return taskProfileService.getMemberField(sysBrandId);
     }
 }
 
