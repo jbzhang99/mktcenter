@@ -125,10 +125,10 @@ public class ActivitySmartServiceImpl implements ActivitySmartService {
                 membersInfoSearchVo.setPageNumber(1);
                 membersInfoSearchVo.setPageSize(1);
                 //判断是中控调用的还是中台
-                if (null!=stageUser.getBrandId()){
+                if (null==vo.getType()){
                     membersInfoSearchVo.setBrandId(stageUser.getBrandId());
                 }
-
+                log.info("调用高级搜索的参数列表=================="+ JSON.toJSONString(membersInfoSearchVo)+"分页参数++"+membersInfoSearchVo.getPageNumber()+"分页参数2++"+membersInfoSearchVo.getPageSize()+"品牌id+====="+membersInfoSearchVo.getBrandId());
                 ResponseData<com.bizvane.utils.responseinfo.PageInfo<MemberInfoVo>> memberInfoVoPages = membersAdvancedSearchApiService.search(membersInfoSearchVo);
                 mktActivitySmartGroupPO.setTargetMbrCount((int) memberInfoVoPages.getData().getTotal());
             }
