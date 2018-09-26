@@ -262,13 +262,13 @@ public class ActivitySigninServiceImpl implements ActivitySigninService {
         ResponseData responseData = new ResponseData();
         log.info("执行签到活动="+vo.getBrandId()+"="+vo.getMemberCode());
         //判断今天是否是执行过签到活动
-        MktActivityRecordPOExample example = new MktActivityRecordPOExample();
-        example.createCriteria().andMemberCodeEqualTo(vo.getMemberCode()).andParticipateDateEqualTo(new Date()).andSysBrandIdEqualTo(vo.getBrandId())
-                .andValidEqualTo(Boolean.TRUE);
-        List<MktActivityRecordPO> lists =mktActivityRecordPOMapper.selectByExample(example);
-        if (!CollectionUtils.isEmpty(lists)){
+        MktActivityRecordPO example = new MktActivityRecordPO();
+        example.setMemberCode(vo.getMemberCode());
+        example.setSysBrandId(vo.getBrandId());
+        List<MktActivityRecordPO> lists =mktActivityRecordPOMapper.selectRecordPOList(example);
+        if (lists.size()>1){
             responseData.setCode(SysResponseEnum.OPERATE_FAILED_ADD_ERROR.getCode());
-            responseData.setMessage("该会员已经今天已经签到!");
+            responseData.setMessage("该会员今天已经签到!");
             return responseData;
         }
         //查询品牌下所有执行中的活动
