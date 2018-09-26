@@ -1,6 +1,7 @@
 package com.bizvane.mktcenterserviceimpl.service.impl;
 
 import com.alibaba.fastjson.JSON;
+import com.bizvane.members.facade.service.api.WxAppletApiService;
 import com.bizvane.mktcenterservice.interfaces.TaskServiceForWX;
 import com.bizvane.mktcenterservice.models.bo.TaskWXBO;
 import com.bizvane.mktcenterservice.models.bo.TaskWXDetailBO;
@@ -31,10 +32,18 @@ public class TaskServiceForWXImpl implements TaskServiceForWX {
 
     @Autowired
     private MktTaskPOMapper taskPOMapper;
+    @Autowired
+    private  WxAppletApiService wxAppletApiService;
 
     @Override
     //获取该会员已完成和未完成任务的任务
     public ResponseData getCompleteTask(TaskForWXVO vo) {
+        ResponseData<Long> resultData = wxAppletApiService.getServiceStoreId(vo.getMemberCode());
+        Long storeId = resultData.getData();
+
+        vo.setStoreIdStyleOne(new StringBuilder().append(storeId).append(",%").toString());
+        vo.setStoreIdStyleTwo(new StringBuilder().append("%,").append(storeId).append(",%").toString());
+        vo.setStoreIdStyleThree(new StringBuilder().append("%,").append(storeId).toString());
         ArrayList<Object> objects = new ArrayList<>();
         PageInfo<TaskWXBO> taskWXBOPageInfo1 = new PageInfo<>();
         ResponseData<PageInfo<TaskWXBO>> responseData = new ResponseData();
