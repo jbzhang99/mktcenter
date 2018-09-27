@@ -6,380 +6,380 @@ import java.util.Date;
 public class FileReportTempPO implements Serializable {
 
 	/**
-	 * Ö»¶Á. Ö÷¼ü×ÔÔö. file_report_temp_id
-	 * @mbg.generated  2018-09-19 18:34:41
+	 * åªè¯». ä¸»é”®è‡ªå¢. file_report_temp_id
+	 * @mbg.generated  2018-09-26 11:14:00
 	 */
-	@io.swagger.annotations.ApiModelProperty(value = "Ö÷¼ü×ÔÔö", name = "fileReportTempId", required = false, example = "")
+	@io.swagger.annotations.ApiModelProperty(value = "ä¸»é”®è‡ªå¢", name = "fileReportTempId", required = false, example = "")
 	private Long fileReportTempId;
 	/**
-	 * Ö»¶Á. ËùÊôÆóÒµid. sys_company_id
-	 * @mbg.generated  2018-09-19 18:34:41
+	 * åªè¯». æ‰€å±ä¼ä¸šid. sys_company_id
+	 * @mbg.generated  2018-09-26 11:14:00
 	 */
-	@io.swagger.annotations.ApiModelProperty(value = "ËùÊôÆóÒµid", name = "sysCompanyId", required = false, example = "")
+	@io.swagger.annotations.ApiModelProperty(value = "æ‰€å±ä¼ä¸šid", name = "sysCompanyId", required = false, example = "")
 	private Long sysCompanyId;
 	/**
-	 * Ö»¶Á. ËùÊôÆ·ÅÆid. sys_brand_id
-	 * @mbg.generated  2018-09-19 18:34:41
+	 * åªè¯». æ‰€å±å“ç‰Œid. sys_brand_id
+	 * @mbg.generated  2018-09-26 11:14:00
 	 */
-	@io.swagger.annotations.ApiModelProperty(value = "ËùÊôÆ·ÅÆid", name = "sysBrandId", required = false, example = "")
+	@io.swagger.annotations.ApiModelProperty(value = "æ‰€å±å“ç‰Œid", name = "sysBrandId", required = false, example = "")
 	private Long sysBrandId;
 	/**
-	 * Ö»¶Á. Ä£°åÃû³Æ. template_name
-	 * @mbg.generated  2018-09-19 18:34:41
+	 * åªè¯». æ¨¡æ¿åç§°. template_name
+	 * @mbg.generated  2018-09-26 11:14:00
 	 */
-	@io.swagger.annotations.ApiModelProperty(value = "Ä£°åÃû³Æ", name = "templateName", required = false, example = "")
+	@io.swagger.annotations.ApiModelProperty(value = "æ¨¡æ¿åç§°", name = "templateName", required = false, example = "")
 	private String templateName;
 	/**
-	 * Ö»¶Á. Ä£°åÀàĞÍ. template_type
-	 * @mbg.generated  2018-09-19 18:34:41
+	 * åªè¯». æ¨¡æ¿ç±»å‹. template_type
+	 * @mbg.generated  2018-09-26 11:14:00
 	 */
-	@io.swagger.annotations.ApiModelProperty(value = "Ä£°åÀàĞÍ", name = "templateType", required = false, example = "")
+	@io.swagger.annotations.ApiModelProperty(value = "æ¨¡æ¿ç±»å‹", name = "templateType", required = false, example = "")
 	private String templateType;
 	/**
-	 * Ö»¶Á. Î¬¶È. template_dimension
-	 * @mbg.generated  2018-09-19 18:34:41
+	 * åªè¯». ç»´åº¦. template_dimension
+	 * @mbg.generated  2018-09-26 11:14:00
 	 */
-	@io.swagger.annotations.ApiModelProperty(value = "Î¬¶È", name = "templateDimension", required = false, example = "")
+	@io.swagger.annotations.ApiModelProperty(value = "ç»´åº¦", name = "templateDimension", required = false, example = "")
 	private String templateDimension;
 	/**
-	 * Ö»¶Á. ±íÍ·Ãû³Æ. report_data_name
-	 * @mbg.generated  2018-09-19 18:34:41
+	 * åªè¯». è¡¨å¤´åç§°. report_data_name
+	 * @mbg.generated  2018-09-26 11:14:00
 	 */
-	@io.swagger.annotations.ApiModelProperty(value = "±íÍ·Ãû³Æ", name = "reportDataName", required = false, example = "")
+	@io.swagger.annotations.ApiModelProperty(value = "è¡¨å¤´åç§°", name = "reportDataName", required = false, example = "")
 	private String reportDataName;
 	/**
-	 * Ö»¶Á. ±íÍ·×Ö¶Î. report_data
-	 * @mbg.generated  2018-09-19 18:34:41
+	 * åªè¯». è¡¨å¤´å­—æ®µ. report_data
+	 * @mbg.generated  2018-09-26 11:14:00
 	 */
-	@io.swagger.annotations.ApiModelProperty(value = "±íÍ·×Ö¶Î", name = "reportData", required = false, example = "")
+	@io.swagger.annotations.ApiModelProperty(value = "è¡¨å¤´å­—æ®µ", name = "reportData", required = false, example = "")
 	private String reportData;
 	/**
-	 * Ö»¶Á. ×éÖ¯. template_organization
-	 * @mbg.generated  2018-09-19 18:34:41
+	 * åªè¯». ç»„ç»‡. template_organization
+	 * @mbg.generated  2018-09-26 11:14:00
 	 */
-	@io.swagger.annotations.ApiModelProperty(value = "×éÖ¯", name = "templateOrganization", required = false, example = "")
+	@io.swagger.annotations.ApiModelProperty(value = "ç»„ç»‡", name = "templateOrganization", required = false, example = "")
 	private String templateOrganization;
 	/**
-	 * Ö»¶Á. ±¸×¢. remark
-	 * @mbg.generated  2018-09-19 18:34:41
+	 * åªè¯». å¤‡æ³¨. remark
+	 * @mbg.generated  2018-09-26 11:14:00
 	 */
-	@io.swagger.annotations.ApiModelProperty(value = "±¸×¢", name = "remark", required = false, example = "")
+	@io.swagger.annotations.ApiModelProperty(value = "å¤‡æ³¨", name = "remark", required = false, example = "")
 	private String remark;
 	/**
-	 * Ö»¶Á. ´´½¨ÈËid. create_user_id
-	 * @mbg.generated  2018-09-19 18:34:41
+	 * åªè¯». åˆ›å»ºäººid. create_user_id
+	 * @mbg.generated  2018-09-26 11:14:00
 	 */
-	@io.swagger.annotations.ApiModelProperty(value = "´´½¨ÈËid", name = "createUserId", required = false, example = "")
+	@io.swagger.annotations.ApiModelProperty(value = "åˆ›å»ºäººid", name = "createUserId", required = false, example = "")
 	private Long createUserId;
 	/**
-	 * Ö»¶Á. ´´½¨ÈË. create_user_name
-	 * @mbg.generated  2018-09-19 18:34:41
+	 * åªè¯». åˆ›å»ºäºº. create_user_name
+	 * @mbg.generated  2018-09-26 11:14:00
 	 */
-	@io.swagger.annotations.ApiModelProperty(value = "´´½¨ÈË", name = "createUserName", required = false, example = "")
+	@io.swagger.annotations.ApiModelProperty(value = "åˆ›å»ºäºº", name = "createUserName", required = false, example = "")
 	private String createUserName;
 	/**
-	 * Ö»¶Á. ´´½¨Ê±¼ä. create_date
-	 * @mbg.generated  2018-09-19 18:34:41
+	 * åªè¯». åˆ›å»ºæ—¶é—´. create_date
+	 * @mbg.generated  2018-09-26 11:14:00
 	 */
-	@io.swagger.annotations.ApiModelProperty(value = "´´½¨Ê±¼ä", name = "createDate", required = false, example = "")
+	@io.swagger.annotations.ApiModelProperty(value = "åˆ›å»ºæ—¶é—´", name = "createDate", required = false, example = "")
 	private Date createDate;
 	/**
-	 * Ö»¶Á. ĞŞ¸ÄÈËid. modified_user_id
-	 * @mbg.generated  2018-09-19 18:34:41
+	 * åªè¯». ä¿®æ”¹äººid. modified_user_id
+	 * @mbg.generated  2018-09-26 11:14:00
 	 */
-	@io.swagger.annotations.ApiModelProperty(value = "ĞŞ¸ÄÈËid", name = "modifiedUserId", required = false, example = "")
+	@io.swagger.annotations.ApiModelProperty(value = "ä¿®æ”¹äººid", name = "modifiedUserId", required = false, example = "")
 	private Long modifiedUserId;
 	/**
-	 * Ö»¶Á. ĞŞ¸ÄÈË. modified_user_name
-	 * @mbg.generated  2018-09-19 18:34:41
+	 * åªè¯». ä¿®æ”¹äºº. modified_user_name
+	 * @mbg.generated  2018-09-26 11:14:00
 	 */
-	@io.swagger.annotations.ApiModelProperty(value = "ĞŞ¸ÄÈË", name = "modifiedUserName", required = false, example = "")
+	@io.swagger.annotations.ApiModelProperty(value = "ä¿®æ”¹äºº", name = "modifiedUserName", required = false, example = "")
 	private String modifiedUserName;
 	/**
-	 * Ö»¶Á. ĞŞ¸ÄÊ±¼ä. modified_date
-	 * @mbg.generated  2018-09-19 18:34:41
+	 * åªè¯». ä¿®æ”¹æ—¶é—´. modified_date
+	 * @mbg.generated  2018-09-26 11:14:00
 	 */
-	@io.swagger.annotations.ApiModelProperty(value = "ĞŞ¸ÄÊ±¼ä", name = "modifiedDate", required = false, example = "")
+	@io.swagger.annotations.ApiModelProperty(value = "ä¿®æ”¹æ—¶é—´", name = "modifiedDate", required = false, example = "")
 	private Date modifiedDate;
 	/**
-	 * Ö»¶Á. Êı¾İÓĞĞ§ĞÔ£¨1ÓĞĞ§£¬0ÎŞĞ§£©. valid
-	 * @mbg.generated  2018-09-19 18:34:41
+	 * åªè¯». æ•°æ®æœ‰æ•ˆæ€§ï¼ˆ1æœ‰æ•ˆï¼Œ0æ— æ•ˆï¼‰. valid
+	 * @mbg.generated  2018-09-26 11:14:00
 	 */
-	@io.swagger.annotations.ApiModelProperty(value = "Êı¾İÓĞĞ§ĞÔ£¨1ÓĞĞ§£¬0ÎŞĞ§£©", name = "valid", required = false, example = "")
+	@io.swagger.annotations.ApiModelProperty(value = "æ•°æ®æœ‰æ•ˆæ€§ï¼ˆ1æœ‰æ•ˆï¼Œ0æ— æ•ˆï¼‰", name = "valid", required = false, example = "")
 	private Boolean valid;
 	/**
-	 * Ö»¶Á. 
-	 * @mbg.generated  2018-09-19 18:34:41
+	 * åªè¯». 
+	 * @mbg.generated  2018-09-26 11:14:00
 	 */
 	private static final long serialVersionUID = 1L;
 
 	/**
-	 * Ö»¶Á. 
-	 * @mbg.generated  2018-09-19 18:34:41
+	 * åªè¯». 
+	 * @mbg.generated  2018-09-26 11:14:00
 	 */
 	public Long getFileReportTempId() {
 		return fileReportTempId;
 	}
 
 	/**
-	 * Ö»¶Á. 
-	 * @mbg.generated  2018-09-19 18:34:41
+	 * åªè¯». 
+	 * @mbg.generated  2018-09-26 11:14:00
 	 */
 	public void setFileReportTempId(Long fileReportTempId) {
 		this.fileReportTempId = fileReportTempId;
 	}
 
 	/**
-	 * Ö»¶Á. 
-	 * @mbg.generated  2018-09-19 18:34:41
+	 * åªè¯». 
+	 * @mbg.generated  2018-09-26 11:14:00
 	 */
 	public Long getSysCompanyId() {
 		return sysCompanyId;
 	}
 
 	/**
-	 * Ö»¶Á. 
-	 * @mbg.generated  2018-09-19 18:34:41
+	 * åªè¯». 
+	 * @mbg.generated  2018-09-26 11:14:00
 	 */
 	public void setSysCompanyId(Long sysCompanyId) {
 		this.sysCompanyId = sysCompanyId;
 	}
 
 	/**
-	 * Ö»¶Á. 
-	 * @mbg.generated  2018-09-19 18:34:41
+	 * åªè¯». 
+	 * @mbg.generated  2018-09-26 11:14:00
 	 */
 	public Long getSysBrandId() {
 		return sysBrandId;
 	}
 
 	/**
-	 * Ö»¶Á. 
-	 * @mbg.generated  2018-09-19 18:34:41
+	 * åªè¯». 
+	 * @mbg.generated  2018-09-26 11:14:00
 	 */
 	public void setSysBrandId(Long sysBrandId) {
 		this.sysBrandId = sysBrandId;
 	}
 
 	/**
-	 * Ö»¶Á. 
-	 * @mbg.generated  2018-09-19 18:34:41
+	 * åªè¯». 
+	 * @mbg.generated  2018-09-26 11:14:00
 	 */
 	public String getTemplateName() {
 		return templateName;
 	}
 
 	/**
-	 * Ö»¶Á. 
-	 * @mbg.generated  2018-09-19 18:34:41
+	 * åªè¯». 
+	 * @mbg.generated  2018-09-26 11:14:00
 	 */
 	public void setTemplateName(String templateName) {
 		this.templateName = templateName == null ? null : templateName.trim();
 	}
 
 	/**
-	 * Ö»¶Á. 
-	 * @mbg.generated  2018-09-19 18:34:41
+	 * åªè¯». 
+	 * @mbg.generated  2018-09-26 11:14:00
 	 */
 	public String getTemplateType() {
 		return templateType;
 	}
 
 	/**
-	 * Ö»¶Á. 
-	 * @mbg.generated  2018-09-19 18:34:41
+	 * åªè¯». 
+	 * @mbg.generated  2018-09-26 11:14:00
 	 */
 	public void setTemplateType(String templateType) {
 		this.templateType = templateType == null ? null : templateType.trim();
 	}
 
 	/**
-	 * Ö»¶Á. 
-	 * @mbg.generated  2018-09-19 18:34:41
+	 * åªè¯». 
+	 * @mbg.generated  2018-09-26 11:14:00
 	 */
 	public String getTemplateDimension() {
 		return templateDimension;
 	}
 
 	/**
-	 * Ö»¶Á. 
-	 * @mbg.generated  2018-09-19 18:34:41
+	 * åªè¯». 
+	 * @mbg.generated  2018-09-26 11:14:00
 	 */
 	public void setTemplateDimension(String templateDimension) {
 		this.templateDimension = templateDimension == null ? null : templateDimension.trim();
 	}
 
 	/**
-	 * Ö»¶Á. 
-	 * @mbg.generated  2018-09-19 18:34:41
+	 * åªè¯». 
+	 * @mbg.generated  2018-09-26 11:14:00
 	 */
 	public String getReportDataName() {
 		return reportDataName;
 	}
 
 	/**
-	 * Ö»¶Á. 
-	 * @mbg.generated  2018-09-19 18:34:41
+	 * åªè¯». 
+	 * @mbg.generated  2018-09-26 11:14:00
 	 */
 	public void setReportDataName(String reportDataName) {
 		this.reportDataName = reportDataName == null ? null : reportDataName.trim();
 	}
 
 	/**
-	 * Ö»¶Á. 
-	 * @mbg.generated  2018-09-19 18:34:41
+	 * åªè¯». 
+	 * @mbg.generated  2018-09-26 11:14:00
 	 */
 	public String getReportData() {
 		return reportData;
 	}
 
 	/**
-	 * Ö»¶Á. 
-	 * @mbg.generated  2018-09-19 18:34:41
+	 * åªè¯». 
+	 * @mbg.generated  2018-09-26 11:14:00
 	 */
 	public void setReportData(String reportData) {
 		this.reportData = reportData == null ? null : reportData.trim();
 	}
 
 	/**
-	 * Ö»¶Á. 
-	 * @mbg.generated  2018-09-19 18:34:41
+	 * åªè¯». 
+	 * @mbg.generated  2018-09-26 11:14:00
 	 */
 	public String getTemplateOrganization() {
 		return templateOrganization;
 	}
 
 	/**
-	 * Ö»¶Á. 
-	 * @mbg.generated  2018-09-19 18:34:41
+	 * åªè¯». 
+	 * @mbg.generated  2018-09-26 11:14:00
 	 */
 	public void setTemplateOrganization(String templateOrganization) {
 		this.templateOrganization = templateOrganization == null ? null : templateOrganization.trim();
 	}
 
 	/**
-	 * Ö»¶Á. 
-	 * @mbg.generated  2018-09-19 18:34:41
+	 * åªè¯». 
+	 * @mbg.generated  2018-09-26 11:14:00
 	 */
 	public String getRemark() {
 		return remark;
 	}
 
 	/**
-	 * Ö»¶Á. 
-	 * @mbg.generated  2018-09-19 18:34:41
+	 * åªè¯». 
+	 * @mbg.generated  2018-09-26 11:14:00
 	 */
 	public void setRemark(String remark) {
 		this.remark = remark == null ? null : remark.trim();
 	}
 
 	/**
-	 * Ö»¶Á. 
-	 * @mbg.generated  2018-09-19 18:34:41
+	 * åªè¯». 
+	 * @mbg.generated  2018-09-26 11:14:00
 	 */
 	public Long getCreateUserId() {
 		return createUserId;
 	}
 
 	/**
-	 * Ö»¶Á. 
-	 * @mbg.generated  2018-09-19 18:34:41
+	 * åªè¯». 
+	 * @mbg.generated  2018-09-26 11:14:00
 	 */
 	public void setCreateUserId(Long createUserId) {
 		this.createUserId = createUserId;
 	}
 
 	/**
-	 * Ö»¶Á. 
-	 * @mbg.generated  2018-09-19 18:34:41
+	 * åªè¯». 
+	 * @mbg.generated  2018-09-26 11:14:00
 	 */
 	public String getCreateUserName() {
 		return createUserName;
 	}
 
 	/**
-	 * Ö»¶Á. 
-	 * @mbg.generated  2018-09-19 18:34:41
+	 * åªè¯». 
+	 * @mbg.generated  2018-09-26 11:14:00
 	 */
 	public void setCreateUserName(String createUserName) {
 		this.createUserName = createUserName == null ? null : createUserName.trim();
 	}
 
 	/**
-	 * Ö»¶Á. 
-	 * @mbg.generated  2018-09-19 18:34:41
+	 * åªè¯». 
+	 * @mbg.generated  2018-09-26 11:14:00
 	 */
 	public Date getCreateDate() {
 		return createDate;
 	}
 
 	/**
-	 * Ö»¶Á. 
-	 * @mbg.generated  2018-09-19 18:34:41
+	 * åªè¯». 
+	 * @mbg.generated  2018-09-26 11:14:00
 	 */
 	public void setCreateDate(Date createDate) {
 		this.createDate = createDate;
 	}
 
 	/**
-	 * Ö»¶Á. 
-	 * @mbg.generated  2018-09-19 18:34:41
+	 * åªè¯». 
+	 * @mbg.generated  2018-09-26 11:14:00
 	 */
 	public Long getModifiedUserId() {
 		return modifiedUserId;
 	}
 
 	/**
-	 * Ö»¶Á. 
-	 * @mbg.generated  2018-09-19 18:34:41
+	 * åªè¯». 
+	 * @mbg.generated  2018-09-26 11:14:00
 	 */
 	public void setModifiedUserId(Long modifiedUserId) {
 		this.modifiedUserId = modifiedUserId;
 	}
 
 	/**
-	 * Ö»¶Á. 
-	 * @mbg.generated  2018-09-19 18:34:41
+	 * åªè¯». 
+	 * @mbg.generated  2018-09-26 11:14:00
 	 */
 	public String getModifiedUserName() {
 		return modifiedUserName;
 	}
 
 	/**
-	 * Ö»¶Á. 
-	 * @mbg.generated  2018-09-19 18:34:41
+	 * åªè¯». 
+	 * @mbg.generated  2018-09-26 11:14:00
 	 */
 	public void setModifiedUserName(String modifiedUserName) {
 		this.modifiedUserName = modifiedUserName == null ? null : modifiedUserName.trim();
 	}
 
 	/**
-	 * Ö»¶Á. 
-	 * @mbg.generated  2018-09-19 18:34:41
+	 * åªè¯». 
+	 * @mbg.generated  2018-09-26 11:14:00
 	 */
 	public Date getModifiedDate() {
 		return modifiedDate;
 	}
 
 	/**
-	 * Ö»¶Á. 
-	 * @mbg.generated  2018-09-19 18:34:41
+	 * åªè¯». 
+	 * @mbg.generated  2018-09-26 11:14:00
 	 */
 	public void setModifiedDate(Date modifiedDate) {
 		this.modifiedDate = modifiedDate;
 	}
 
 	/**
-	 * Ö»¶Á. 
-	 * @mbg.generated  2018-09-19 18:34:41
+	 * åªè¯». 
+	 * @mbg.generated  2018-09-26 11:14:00
 	 */
 	public Boolean getValid() {
 		return valid;
 	}
 
 	/**
-	 * Ö»¶Á. 
-	 * @mbg.generated  2018-09-19 18:34:41
+	 * åªè¯». 
+	 * @mbg.generated  2018-09-26 11:14:00
 	 */
 	public void setValid(Boolean valid) {
 		this.valid = valid;

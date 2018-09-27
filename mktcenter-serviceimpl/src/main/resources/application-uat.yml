@@ -5,8 +5,17 @@ server:
 spring:
   redis:
     database: 7
-  profiles:
-    active: basecontroller,commonutilslocal,log
+    host: 192.168.2.18
+    port: 6379
+    password: bizvane
+    jedis:
+      pool:
+        max-active: 100
+        max-idle: 8
+        max-wait: 2000ms
+        min-idle: 0
+#  profiles:
+#    active: basecontroller,commonutilslocal,log
   swagger:
     show: true
   application:
@@ -24,6 +33,31 @@ spring:
   data:
     mongodb:
       database: "7"
+      uri: "mongodb://192.168.2.18:27017/?AutoConnectRetry=true"
+  elasticsearch:
+    cluster-name: uat-es
+    cluster-nodes: 192.168.2.22:9300,192.168.2.23:9300,192.168.2.24:9300
+    repositories:
+      enabled: true
+  kafka:
+    producer:
+      bootstrap-servers: "192.168.2.18:9092"
+      key-serializer: "org.apache.kafka.common.serialization.StringSerializer"
+      value-serializer: "org.apache.kafka.common.serialization.StringSerializer"
+      batch-size: 16384
+      buffer-memory: 33554432
+      retries: 0
+      acks: "1"
+    consumer:
+      bootstrap-servers: "192.168.2.18:9092"
+      enable-auto-commit: false
+      auto-offset-reset: "earliest"
+      key-deserializer: "org.apache.kafka.common.serialization.StringDeserializer"
+      value-deserializer: "org.apache.kafka.common.serialization.StringDeserializer"
+      session-timeout: 30000
+      request-timeout: 40000
+      heartbeat-interval: 29000ms
+      max-partition-fetch-bytes: 524288
   jackson:
     date-format: yyyy-MM-dd HH:mm:ss
     time-zone: GMT+8
@@ -82,13 +116,13 @@ feign:
       name: centerstage-uat
       path: centerstage.api
     coupon:
-      name: coupon--uat
+      name: coupon-uat
       path: coupon.api
     members:
       name: members-uat
       path: members.api
     message:
-      name: message-uat
+      name: message-server-uat
       path: message.api
     wechat:
       name: wechat-uat
@@ -102,6 +136,7 @@ feign:
     fitment:
       name: fitment-uat
       path: fitment.api
+
 rocketmq:
   onsaddr: http://onsaddr-internet.aliyun.com/rocketmq/nsaddr4client-internet
   accessKey: LTAIpoqUHsXq6q7r
@@ -121,5 +156,6 @@ qiniu:
 
 activity:
   qrcodeurl: http://www.xxx.bizvane.com/qrcode?activityCode=
+
 tenant:
   isEnabledTenantInterceptor: false

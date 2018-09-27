@@ -7,7 +7,7 @@ public class VipIncomeAnalysis extends ReBase  {
 	
 	  private String  	indicators	;//	指标	String	1	Y
 	  private String  	organization	;//	组织	String	1	Y
-	  private String[]  	organizationContent	;//	组织内容	String[]	1024	N
+	  private String 	organizationContent	;//	组织内容	String[]	1024	N
 	  private String  	startDate	;//	起始时间	String	20	Y
 	  private String  	endDate	;//	截止时间	String	20	Y
 	  private String  	particleSize	;//	报表粒度	String	1	Y
@@ -26,10 +26,11 @@ public class VipIncomeAnalysis extends ReBase  {
 		this.organization = organization;
 	}
 
-	public String[] getOrganizationContent() {
+
+	public String getOrganizationContent() {
 		return organizationContent;
 	}
-	public void setOrganizationContent(String[] organizationContent) {
+	public void setOrganizationContent(String organizationContent) {
 		this.organizationContent = organizationContent;
 	}
 	public String getStartDate() {

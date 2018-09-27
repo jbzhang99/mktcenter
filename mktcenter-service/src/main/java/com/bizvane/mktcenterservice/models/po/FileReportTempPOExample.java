@@ -7,85 +7,85 @@ import java.util.List;
 
 public class FileReportTempPOExample implements Serializable {
     /**
-	 * 只读. 
-	 * @mbg.generated  2018-09-19 18:34:41
+	 *
+	 * @mbg.generated  2018-09-26 11:14:00
 	 */
 	protected String orderByClause;
 	/**
-	 * 只读. 
-	 * @mbg.generated  2018-09-19 18:34:41
+	 *
+	 * @mbg.generated  2018-09-26 11:14:00
 	 */
 	protected boolean distinct;
 	/**
-	 * 只读. 
-	 * @mbg.generated  2018-09-19 18:34:41
+	 *
+	 * @mbg.generated  2018-09-26 11:14:00
 	 */
 	protected List<Criteria> oredCriteria;
 	/**
-	 * 只读. 
-	 * @mbg.generated  2018-09-19 18:34:41
+	 *
+	 * @mbg.generated  2018-09-26 11:14:00
 	 */
 	private static final long serialVersionUID = 1L;
 
 	/**
-	 * 只读. 
-	 * @mbg.generated  2018-09-19 18:34:41
+	 *
+	 * @mbg.generated  2018-09-26 11:14:00
 	 */
 	public FileReportTempPOExample() {
 		oredCriteria = new ArrayList<Criteria>();
 	}
 
 	/**
-	 * 只读. 
-	 * @mbg.generated  2018-09-19 18:34:41
+	 *
+	 * @mbg.generated  2018-09-26 11:14:00
 	 */
 	public void setOrderByClause(String orderByClause) {
 		this.orderByClause = orderByClause;
 	}
 
 	/**
-	 * 只读. 
-	 * @mbg.generated  2018-09-19 18:34:41
+	 *
+	 * @mbg.generated  2018-09-26 11:14:00
 	 */
 	public String getOrderByClause() {
 		return orderByClause;
 	}
 
 	/**
-	 * 只读. 
-	 * @mbg.generated  2018-09-19 18:34:41
+	 *
+	 * @mbg.generated  2018-09-26 11:14:00
 	 */
 	public void setDistinct(boolean distinct) {
 		this.distinct = distinct;
 	}
 
 	/**
-	 * 只读. 
-	 * @mbg.generated  2018-09-19 18:34:41
+	 *
+	 * @mbg.generated  2018-09-26 11:14:00
 	 */
 	public boolean isDistinct() {
 		return distinct;
 	}
 
 	/**
-	 * 只读. 
-	 * @mbg.generated  2018-09-19 18:34:41
+	 *
+	 * @mbg.generated  2018-09-26 11:14:00
 	 */
 	public List<Criteria> getOredCriteria() {
 		return oredCriteria;
 	}
 
 	/**
-	 * 只读. 
-	 * @mbg.generated  2018-09-19 18:34:41
+	 *
+	 * @mbg.generated  2018-09-26 11:14:00
 	 */
 	public void or(Criteria criteria) {
 		oredCriteria.add(criteria);
 	}
 
 	/**
-	 * 只读. 
-	 * @mbg.generated  2018-09-19 18:34:41
+	 *
+	 * @mbg.generated  2018-09-26 11:14:00
 	 */
 	public Criteria or() {
 		Criteria criteria = createCriteriaInternal();
@@ -94,8 +94,8 @@ public class FileReportTempPOExample implements Serializable {
 	}
 
 	/**
-	 * 只读. 
-	 * @mbg.generated  2018-09-19 18:34:41
+	 *
+	 * @mbg.generated  2018-09-26 11:14:00
 	 */
 	public Criteria createCriteria() {
 		Criteria criteria = createCriteriaInternal();
@@ -106,8 +106,8 @@ public class FileReportTempPOExample implements Serializable {
 	}
 
 	/**
-	 * 只读. 
-	 * @mbg.generated  2018-09-19 18:34:41
+	 *
+	 * @mbg.generated  2018-09-26 11:14:00
 	 */
 	protected Criteria createCriteriaInternal() {
 		Criteria criteria = new Criteria();
@@ -115,8 +115,8 @@ public class FileReportTempPOExample implements Serializable {
 	}
 
 	/**
-	 * 只读. 
-	 * @mbg.generated  2018-09-19 18:34:41
+	 *
+	 * @mbg.generated  2018-09-26 11:14:00
 	 */
 	public void clear() {
 		oredCriteria.clear();
@@ -125,8 +125,8 @@ public class FileReportTempPOExample implements Serializable {
 	}
 
 	/**
-	 * 只读. t_file_report_temp
-	 * @mbg.generated  2018-09-19 18:34:41
+	 *t_file_report_temp
+	 * @mbg.generated  2018-09-26 11:14:00
 	 */
 	protected abstract static class GeneratedCriteria implements Serializable {
 		protected List<Criterion> criteria;
@@ -1281,8 +1281,8 @@ public class FileReportTempPOExample implements Serializable {
 	}
 
 	/**
-	 * 只读. t_file_report_temp
-	 * @mbg.generated  2018-09-19 18:34:41
+	 *t_file_report_temp
+	 * @mbg.generated  2018-09-26 11:14:00
 	 */
 	public static class Criterion implements Serializable {
 		private String condition;

@@ -1,5 +1,9 @@
 package com.bizvane.mktcenterserviceimpl.controllers.report;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -18,9 +22,11 @@ import com.bizvane.members.facade.service.inner.MemberLifecycleParameterService;
 import com.bizvane.mktcenterservice.interfaces.ReportTempService;
 import com.bizvane.mktcenterservice.models.po.FileReportTempPO;
 import com.bizvane.mktcenterservice.models.po.FileReportTempPOExample;
+import com.bizvane.mktcenterservice.models.requestvo.BackData;
 import com.bizvane.mktcenterservice.models.requestvo.BackDataTime;
 import com.bizvane.mktcenterservice.models.requestvo.BaseUrl;
 import com.bizvane.mktcenterservice.models.requestvo.postvo.IncomeTotalListGroup;
+import com.bizvane.mktcenterservice.models.requestvo.postvo.VipIncomeAnalysis;
 import com.bizvane.mktcenterserviceimpl.common.utils.FigureUtilGroup;
 import com.bizvane.mktcenterserviceimpl.mappers.FileReportTempPOMapper;
 import com.bizvane.utils.responseinfo.ResponseData;
@@ -51,7 +57,49 @@ public class ReportGroupController {
 //	private  MemberLifecycleParameterService memberLifecycleParameterService;
 
     
+	
+    @RequestMapping("vipIncomeAnalysis")
+    public ResponseData<List<BackDataTime>> vipIncomeAnalysis( IncomeTotalListGroup sendVO, HttpServletRequest request){
+ 	   sendVO.setCorpId("C10153");  SysAccountPO sysAccountPO =TokenUtils.getStageUser(request);
+	     FileReportTempPOExample example = new FileReportTempPOExample();
+	     example.createCriteria().andTemplateTypeEqualTo("vipIncomeAnalysis").andValidEqualTo(Boolean.TRUE);
+	     List<FileReportTempPO>  FileReportTempPOlist = fileReportTempPOMapper.selectByExample(example);
+	     
+//	     选择周期后，时间范围无论怎么选，不改变折线图的周期。
+		  if(sendVO.getParticleSize()!=null&&sendVO.getCycle()!=null&&!sendVO.getCycle().equals("1")) {
+					SimpleDateFormat sdf  = new SimpleDateFormat("yyyy-MM-dd");
+					String minDateStr = "";
+					Calendar calc =Calendar.getInstance();
+					    calc.setTime(new Date());
+					    sendVO.setEndDate(sdf.format(new Date())+" 00:00:00");
+			   if(sendVO.getParticleSize().endsWith("1")){
+					calc.add(Calendar.DATE, -30);
+					SimpleDateFormat sdfdate  = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+					sendVO.setEndDate(sdfdate.format(new Date()));
+			   }else if(sendVO.getParticleSize().endsWith("2")) {
+				   calc.add(Calendar.DATE, -210);
+			   }else if(sendVO.getParticleSize().endsWith("3")) {
+				   calc.add(Calendar.DATE, -365);
+			   }else if(sendVO.getParticleSize().endsWith("4")) {
+				   calc.add(Calendar.DATE, -2555);
+			   }
+				Date minDate = calc.getTime();
+				minDateStr = sdf.format(minDate);
+				sendVO.setStartDate(minDateStr+" 00:00:00");
+		  }
+	     
+ 	 return sendpostHaveTime(BaseUrl.getLoadUrl("vipIncomeAnalysis"),sendVO,FileReportTempPOlist,sysAccountPO);
+   }
 
+    @RequestMapping("operatingIncomeAnalysis")
+    public ResponseData<List<BackDataTime>> operatingIncomeAnalysis( IncomeTotalListGroup sendVO, HttpServletRequest request){
+ 	   sendVO.setCorpId("C10153");  SysAccountPO sysAccountPO =TokenUtils.getStageUser(request);
+	     FileReportTempPOExample example = new FileReportTempPOExample();
+	     example.createCriteria().andTemplateTypeEqualTo("operatingIncomeAnalysis").andValidEqualTo(Boolean.TRUE);
+	     List<FileReportTempPO>  FileReportTempPOlist = fileReportTempPOMapper.selectByExample(example);
+ 	 return sendpostHaveTime(BaseUrl.getLoadUrl("operatingIncomeAnalysis"),sendVO,FileReportTempPOlist,sysAccountPO);
+   }
+    
     
 // 收入01- 收入总表
    @RequestMapping("incomeTotalListGroup")
@@ -199,6 +247,25 @@ public class ReportGroupController {
 //   	 return sendpostHaveTime(BaseUrl.getLoadUrl("activeMemberAllInterface"),sendVO,FileReportTempPOlist,sysAccountPO);
 //   }
 
+   
+   @RequestMapping("genderGroup")
+   public ResponseData<List<BackDataTime>> genderGroup( IncomeTotalListGroup sendVO, HttpServletRequest request){
+	   sendVO.setCorpId("C10153");  SysAccountPO sysAccountPO =TokenUtils.getStageUser(request);
+	     FileReportTempPOExample example = new FileReportTempPOExample();
+	     example.createCriteria().andTemplateTypeEqualTo("genderGroup").andValidEqualTo(Boolean.TRUE);
+	     List<FileReportTempPO>  FileReportTempPOlist = fileReportTempPOMapper.selectByExample(example);
+   	 return sendpostHaveTime(BaseUrl.getLoadUrl("genderGroup"),sendVO,FileReportTempPOlist,sysAccountPO);
+   }
+   
+   @RequestMapping("ageAnalysisGroup")
+   public ResponseData<List<BackDataTime>> ageAnalysisGroup( IncomeTotalListGroup sendVO, HttpServletRequest request){
+	   sendVO.setCorpId("C10153");  SysAccountPO sysAccountPO =TokenUtils.getStageUser(request);
+	     FileReportTempPOExample example = new FileReportTempPOExample();
+	     example.createCriteria().andTemplateTypeEqualTo("ageAnalysisGroup").andValidEqualTo(Boolean.TRUE);
+	     List<FileReportTempPO>  FileReportTempPOlist = fileReportTempPOMapper.selectByExample(example);
+   	 return sendpostHaveTime(BaseUrl.getLoadUrl("ageAnalysisGroup"),sendVO,FileReportTempPOlist,sysAccountPO);
+   }
+   
 
    
 // 请求放回数据带时间格式的json

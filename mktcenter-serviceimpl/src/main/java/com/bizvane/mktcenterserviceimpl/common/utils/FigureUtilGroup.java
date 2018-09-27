@@ -81,8 +81,9 @@ public class FigureUtilGroup {
 //		        	   分页显示，如[10,25），则从第10条查询出25条数据
 		        	   if(vipIncomeAnalysis.getStartRecord()<=ino&&ino<(vipIncomeAnalysis.getStartRecord()+vipIncomeAnalysis.getQueryNum())) {
 			        	   BackDataTime backData =new BackDataTime();
-			               backData.setTime(k.toString());
-			               backData.setJosonData(JSONObject.parseObject(json.get(k).toString()));
+			        	   JSONObject  jsonObje= JSONObject.parseObject(json.get(k).toString());
+			        	   jsonObje.put("time", k.toString());
+			               backData.setJosonData(jsonObje);
 			               listdata2.add(backData); 
 		        	   }
 

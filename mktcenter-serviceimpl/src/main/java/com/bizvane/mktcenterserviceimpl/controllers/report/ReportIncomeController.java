@@ -127,6 +127,8 @@ public class ReportIncomeController {
 				     JSONObject jsonall = JSONObject.parseObject(responseall.getBody());
 					 JSONArray arr=new JSONArray(jsonall.get("data").toString());
 					 tiaoshu=arr.length();
+					 
+					 
 				  } catch (JSONException e) {
 					  System.out.println("查询条数报错！");
 					}
@@ -281,7 +283,57 @@ public class ReportIncomeController {
 //	   sendVO.setCorpId("C10153");  SysAccountPO sysAccountPO =TokenUtils.getStageUser(request);
 //   	 return sendpost(BaseUrl.getLoadUrl("activeMemberAllInterface"),sendVO,FileReportTempPOlist,sysAccountPO);
 //   }
+   
+   
+   
+// 收入01- 性别表汇总
+   @RequestMapping("gender")
+   public ResponseData<List<BackData>> gender( IncomeTotalList sendVO, HttpServletRequest request){
+	   sendVO.setCorpId("C10153");  SysAccountPO sysAccountPO =TokenUtils.getStageUser(request);
+	     FileReportTempPOExample example = new FileReportTempPOExample();
+	     example.createCriteria().andTemplateTypeEqualTo("gender").andValidEqualTo(Boolean.TRUE);
+	     List<FileReportTempPO>  FileReportTempPOlist = fileReportTempPOMapper.selectByExample(example);
+	     
+   	 return sendpost(BaseUrl.getLoadUrl("gender"),sendVO,FileReportTempPOlist,sysAccountPO);
+   }
+   
+// 收入01- 年龄分析
+   @RequestMapping("ageAnalysis")
+   public ResponseData<List<BackData>> ageAnalysis( IncomeTotalList sendVO, HttpServletRequest request){
+	   sendVO.setCorpId("C10153");  SysAccountPO sysAccountPO =TokenUtils.getStageUser(request);
+	     FileReportTempPOExample example = new FileReportTempPOExample();
+	     example.createCriteria().andTemplateTypeEqualTo("ageAnalysis").andValidEqualTo(Boolean.TRUE);
+	     List<FileReportTempPO>  FileReportTempPOlist = fileReportTempPOMapper.selectByExample(example);
+	     
+   	 return sendpost(BaseUrl.getLoadUrl("ageAnalysis"),sendVO,FileReportTempPOlist,sysAccountPO);
+   }
+   
+   
+////收入01- 生日分析
+// @RequestMapping("gender")
+// public ResponseData<List<BackData>> gender( IncomeTotalList sendVO, HttpServletRequest request){
+//	   sendVO.setCorpId("C10153");  SysAccountPO sysAccountPO =TokenUtils.getStageUser(request);
+//	     FileReportTempPOExample example = new FileReportTempPOExample();
+//	     example.createCriteria().andTemplateTypeEqualTo("gender").andValidEqualTo(Boolean.TRUE);
+//	     List<FileReportTempPO>  FileReportTempPOlist = fileReportTempPOMapper.selectByExample(example);
+//	     
+// 	 return sendpost(BaseUrl.getLoadUrl("gender"),sendVO,FileReportTempPOlist,sysAccountPO);
+// }
 
+   
+////收入01- 线上渠道分析
+//@RequestMapping("gender")
+//public ResponseData<List<BackData>> gender( IncomeTotalList sendVO, HttpServletRequest request){
+//	   sendVO.setCorpId("C10153");  SysAccountPO sysAccountPO =TokenUtils.getStageUser(request);
+//	     FileReportTempPOExample example = new FileReportTempPOExample();
+//	     example.createCriteria().andTemplateTypeEqualTo("gender").andValidEqualTo(Boolean.TRUE);
+//	     List<FileReportTempPO>  FileReportTempPOlist = fileReportTempPOMapper.selectByExample(example);
+//	     
+//	 return sendpost(BaseUrl.getLoadUrl("gender"),sendVO,FileReportTempPOlist,sysAccountPO);
+//}
+
+   
+   
 
    
 // 请求放回数据带时间格式的json

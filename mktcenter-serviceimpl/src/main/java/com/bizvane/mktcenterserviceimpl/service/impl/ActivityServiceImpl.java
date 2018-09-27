@@ -26,11 +26,14 @@ import com.bizvane.mktcenterservice.models.vo.PageForm;
 import com.bizvane.mktcenterserviceimpl.common.award.Award;
 import com.bizvane.mktcenterserviceimpl.common.award.MemberMessageSend;
 import com.bizvane.mktcenterserviceimpl.common.enums.*;
+import com.bizvane.mktcenterserviceimpl.common.job.JobUtil;
 import com.bizvane.mktcenterserviceimpl.common.utils.DateUtil;
 import com.bizvane.mktcenterserviceimpl.mappers.MktActivityPOMapper;
 import com.bizvane.mktcenterserviceimpl.mappers.MktActivityRegisterPOMapper;
 import com.bizvane.mktcenterserviceimpl.mappers.MktMessagePOMapper;
 import com.bizvane.utils.enumutils.SysResponseEnum;
+import com.bizvane.utils.jobutils.JobClient;
+import com.bizvane.utils.jobutils.XxlJobInfo;
 import com.bizvane.utils.responseinfo.ResponseData;
 import com.bizvane.utils.tokens.SysAccountPO;
 import com.github.pagehelper.PageHelper;
@@ -65,13 +68,7 @@ public class ActivityServiceImpl implements ActivityService {
     @Autowired
     private MktActivityRegisterPOMapper mktActivityRegisterPOMapper;
     @Autowired
-    private IntegralRecordApiService integralRecordApiService;
-    @Autowired
-    private Award award;
-    @Autowired
-    private MembersAdvancedSearchApiService membersAdvancedSearchApiService;
-    @Autowired
-    private MemberMessageSend memberMessage;
+    private JobClient jobClient;
     /**
      * 禁用/启用活动
      * @param vo
@@ -87,6 +84,16 @@ public class ActivityServiceImpl implements ActivityService {
         mktActivityPOWithBLOBs.setModifiedDate(new Date());
         mktActivityPOWithBLOBs.setModifiedUserName(sysAccountPO.getName());
         int i = mktActivityPOMapper.updateByPrimaryKeySelective(mktActivityPOWithBLOBs);
+        //job类
+        XxlJobInfo xxlJobInfo = new XxlJobInfo();
+        xxlJobInfo.setExecutorParam(vo.getActivityCode());
+        xxlJobInfo.setBizType(BusinessTypeEnum.ACTIVITY_TYPE_ACTIVITY.getCode());
+        //先删除原来创建的job任务
+        jobClient.removeByBiz(xxlJobInfo);
+        //删除审核中心数据
+        SysCheckPo po = new SysCheckPo();
+        po.setBusinessId(vo.getMktActivityId());
+        sysCheckServiceRpc.deleteByBusinessId(po);
         responseData.setCode(SysResponseEnum.SUCCESS.getCode());
         responseData.setMessage(SysResponseEnum.SUCCESS.getMessage());
         return responseData;
