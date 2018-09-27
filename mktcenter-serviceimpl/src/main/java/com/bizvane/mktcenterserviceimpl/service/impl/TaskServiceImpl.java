@@ -793,6 +793,9 @@ public class TaskServiceImpl implements TaskService {
      */
     @Override
     public Integer updateTask(MktTaskPOWithBLOBs task, SysAccountPO stageUser) {
+        task.setModifiedDate(TimeUtils.getNowTime());
+        task.setModifiedUserId(stageUser.getSysAccountId());
+        task.setModifiedUserName(stageUser.getName());
         return mktTaskPOMapper.updateByPrimaryKeySelective(task);
     }
 

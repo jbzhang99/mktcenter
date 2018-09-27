@@ -22,11 +22,6 @@ import java.util.List;
  */
 public interface TaskInviteService {
     /**
-     * 查询任务详情
-     */
-    public List<TaskDetailBO> getInviteTaskDetails(Long mktTaskId);
-
-    /**
      * 查询任务列表
      * @return
      */

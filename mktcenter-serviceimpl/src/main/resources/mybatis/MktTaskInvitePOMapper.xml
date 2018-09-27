@@ -571,44 +571,4 @@
       AND tmt.sys_brand_id = #{sysBrandId}
     </if>
   </select>
-
-  <select id="getInviteTaskDetails" parameterType="java.lang.Long" resultMap="taskInviteDetailsMap">
-    SELECT
-    tta.mkt_task_id,
-    tta.sys_company_id,
-    tta.sys_brand_id,
-    tta.task_code,
-    tta.task_type,
-    tta.task_name,
-    tta.start_time,
-    tta.end_time,
-    tta.task_info,
-    tta.points,
-    tta.task_list_img,
-    tta.task_detail_img,
-    tta.check_status,
-    tta.task_status,
-    tta.remark,
-    tti.mkt_task_id,
-    tti.invite_num,
-    tmc.mkt_coupon_id,
-    tmc.coupon_code,
-    tmc.coupon_name,
-    tmm.mkt_msg_id,
-    tmm.msg_type,
-    tmm.msg_code,
-    tmm.template_msg_id,
-    tmm.send_time,
-    tmm.msg_content
-    FROM
-    t_mkt_task tta
-    INNER JOIN t_mkt_task_invite tti ON tta.mkt_task_id = tti.mkt_task_id
-    LEFT JOIN t_mkt_coupon tmc ON tti.mkt_task_id = tmc.biz_id
-    LEFT JOIN t_mkt_message tmm ON tmc.biz_id = tmm.biz_id
-    WHERE
-    1 = 1
-    <if test="mktTaskId != null and mktTaskId!= '' ">
-      AND tta.mkt_task_id = #{mktTaskId}
-    </if>
-  </select>
 </mapper>

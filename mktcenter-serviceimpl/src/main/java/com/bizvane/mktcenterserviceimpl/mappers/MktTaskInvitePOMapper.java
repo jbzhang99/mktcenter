@@ -98,6 +98,4 @@ public interface MktTaskInvitePOMapper {
 	int updateByPrimaryKey(MktTaskInvitePO record);
 
 	List<TaskVO> getTaskList(TaskVO vo);
-	
-	public  List<TaskDetailBO> getInviteTaskDetails(@Param("mktTaskId") Long mktTaskId);
 }
