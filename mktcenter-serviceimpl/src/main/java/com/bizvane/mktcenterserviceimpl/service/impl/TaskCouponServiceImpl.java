@@ -20,7 +20,12 @@ public class TaskCouponServiceImpl implements TaskCouponService {
     @Autowired
     private MktCouponPOMapper mktCouponPOMapper;
 
-
+    /**
+     * 新增券
+     * @param po
+     * @param stageUser
+     * @return
+     */
     @Override
     public Integer addTaskCoupon(MktCouponPO po,SysAccountPO stageUser) {
 
@@ -31,6 +36,12 @@ public class TaskCouponServiceImpl implements TaskCouponService {
 
     }
 
+    /**
+     * 修改券
+     * @param po
+     * @param stageUser
+     * @return
+     */
     @Override
     public Integer updateTaskCoupon(MktCouponPO po,SysAccountPO stageUser) {
         po.setModifiedDate(TimeUtils.getNowTime());
@@ -40,6 +51,12 @@ public class TaskCouponServiceImpl implements TaskCouponService {
         return mktCouponPOMapper.updateByPrimaryKeySelective(po);
     }
 
+    /**
+     *  删除券
+     * @param bizId
+     * @param stageUser
+     * @return
+     */
     @Override
     public Integer deleteTaskCoupon(Long  bizId,SysAccountPO stageUser) {
         MktCouponPO po = new MktCouponPO();
