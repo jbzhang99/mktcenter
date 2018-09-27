@@ -10,6 +10,7 @@ import com.bizvane.couponfacade.interfaces.CouponQueryServiceFeign;
 import com.bizvane.couponfacade.models.po.CouponEntityPO;
 import com.bizvane.couponfacade.models.vo.CouponDetailResponseVO;
 import com.bizvane.couponfacade.models.vo.CouponEntityAndDefinitionVO;
+import com.bizvane.members.facade.enums.BusinessTypeEnum;
 import com.bizvane.members.facade.enums.IntegralChangeTypeEnum;
 import com.bizvane.members.facade.models.IntegralRecordModel;
 import com.bizvane.members.facade.models.MemberInfoModel;
@@ -36,6 +37,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
+
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -292,7 +294,7 @@ public class ActivitySigninServiceImpl implements ActivitySigninService {
             integralChangeRequestModel.setChangeBills(activityVO.getActivityCode());
             integralChangeRequestModel.setChangeIntegral(activityVO.getPoints());
             integralChangeRequestModel.setChangeType(IntegralChangeTypeEnum.INCOME.getCode());
-            integralChangeRequestModel.setBusinessType(String.valueOf(BusinessTypeEnum.ACTIVITY_TYPE_ACTIVITY.getCode()));
+            integralChangeRequestModel.setBusinessType(BusinessTypeEnum.ACTIVITY_TYPE_SIGNIN.getCode());
             integralChangeRequestModel.setChangeDate(new Date());
             bo.setIntegralRecordModel(integralChangeRequestModel);
             bo.setMktType(MktSmartTypeEnum.SMART_TYPE_INTEGRAL.getCode());

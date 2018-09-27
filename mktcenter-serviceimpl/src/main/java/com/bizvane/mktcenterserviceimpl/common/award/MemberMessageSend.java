@@ -332,7 +332,7 @@ public class MemberMessageSend {
                         integralChangeRequestModel.setChangeBills(mktActivityPOWithBLOBs.getActivityCode());
                         integralChangeRequestModel.setChangeIntegral(mktActivityPOWithBLOBs.getPoints());
                         integralChangeRequestModel.setChangeType(IntegralChangeTypeEnum.INCOME.getCode());
-                        integralChangeRequestModel.setBusinessType(String.valueOf(BusinessTypeEnum.ACTIVITY_TYPE_ACTIVITY.getCode()));
+                        integralChangeRequestModel.setBusinessType(com.bizvane.members.facade.enums.BusinessTypeEnum.ACTIVITY_TYPE_SMART.getCode());
                         integralChangeRequestModel.setChangeDate(new Date());
                         awardBO.setIntegralRecordModel(integralChangeRequestModel);
                         awardBO.setMktType(MktSmartTypeEnum.SMART_TYPE_INTEGRAL.getCode());

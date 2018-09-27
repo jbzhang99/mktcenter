@@ -84,14 +84,16 @@ public class ActivityServiceImpl implements ActivityService {
         mktActivityPOWithBLOBs.setModifiedDate(new Date());
         mktActivityPOWithBLOBs.setModifiedUserName(sysAccountPO.getName());
         int i = mktActivityPOMapper.updateByPrimaryKeySelective(mktActivityPOWithBLOBs);
-     /*   //job类
+        //job类
         XxlJobInfo xxlJobInfo = new XxlJobInfo();
         xxlJobInfo.setExecutorParam(vo.getActivityCode());
         xxlJobInfo.setBizType(BusinessTypeEnum.ACTIVITY_TYPE_ACTIVITY.getCode());
         //先删除原来创建的job任务
         jobClient.removeByBiz(xxlJobInfo);
-        //删除审核中心数据*/
-
+        //删除审核中心数据
+        SysCheckPo po = new SysCheckPo();
+        po.setBusinessId(vo.getMktActivityId());
+        sysCheckServiceRpc.deleteByBusinessId(po);
         responseData.setCode(SysResponseEnum.SUCCESS.getCode());
         responseData.setMessage(SysResponseEnum.SUCCESS.getMessage());
         return responseData;
