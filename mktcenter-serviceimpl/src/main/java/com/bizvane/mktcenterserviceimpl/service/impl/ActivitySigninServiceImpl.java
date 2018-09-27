@@ -266,7 +266,7 @@ public class ActivitySigninServiceImpl implements ActivitySigninService {
         example.setMemberCode(vo.getMemberCode());
         example.setSysBrandId(vo.getBrandId());
         List<MktActivityRecordPO> lists =mktActivityRecordPOMapper.selectRecordPOList(example);
-        if (lists.size()>1){
+        if (lists.size()>=1){
             responseData.setCode(SysResponseEnum.OPERATE_FAILED_ADD_ERROR.getCode());
             responseData.setMessage("该会员今天已经签到!");
             return responseData;
