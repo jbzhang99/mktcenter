@@ -249,7 +249,7 @@ public class TaskInviteServiceImpl implements TaskInviteService {
         String cardNo = memeberDetail.getCardNo();
         Long serviceStoreId = memeberDetail.getServiceStoreId();
         //符合条件的任务列表
-        List<TaskAwardBO> taskInviteAwardList = taskService.getTaskInviteAwardList(companyId, brandId, openCardTime);
+        List<TaskAwardBO> taskInviteAwardList = taskService.getTaskInviteAwardList(companyId, brandId,openCardTime);
         if (CollectionUtils.isNotEmpty(taskInviteAwardList)){
             taskInviteAwardList.stream().
                 filter(obj->{

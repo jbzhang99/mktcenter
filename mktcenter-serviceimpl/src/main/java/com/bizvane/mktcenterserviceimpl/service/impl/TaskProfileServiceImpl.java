@@ -182,12 +182,9 @@ public  ResponseData<List<ExtendPropertyVO>> getMemberField(Long sysBrandId){
      * @throws ParseException
      */
     public MktTaskPOWithBLOBs isOrNoCheckState(MktTaskPOWithBLOBs po,Integer stagecheckStatus) throws ParseException {
-        //1.判断是否需要审核  1=需要审核   0=不需要
-        SysCheckConfigPo sysCheckConfigPo = new SysCheckConfigPo();
-        sysCheckConfigPo.setSysBrandId(po.getSysBrandId());
-        Integer checkStatus = taskService.getCheckStatus(sysCheckConfigPo);
+        //1.stagecheckStatus 判断是否需要审核  1=需要审核   0=不需要
         // checkStatus=1=需要审核
-        if (TaskConstants.FIRST.equals(checkStatus)) {
+        if (TaskConstants.FIRST.equals(stagecheckStatus)) {
             //待审核=1
             po.setCheckStatus(CheckStatusEnum.CHECK_STATUS_PENDING.getCode());
         } else {

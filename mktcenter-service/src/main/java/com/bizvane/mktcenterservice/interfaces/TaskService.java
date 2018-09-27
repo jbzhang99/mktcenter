@@ -80,7 +80,7 @@ public interface TaskService {
      * @return
      *
      */
-    public List<TaskAwardBO> getTaskInviteAwardList(Long sysCompanyId, Long sysBrandId,Date placeOrderTime);
+    public List<TaskAwardBO> getTaskInviteAwardList(Long sysCompanyId, Long sysBrandId,Date date);
 
     /**
      * 完善资料任务的奖励查询
