@@ -893,24 +893,19 @@ public class TaskServiceImpl implements TaskService {
     @Override
     public ResponseData<PageInfo<MktTaskPOWithBLOBs>> getTaskByTaskType(TaskVO vo, PageForm pageForm) {
         List<MktTaskPOWithBLOBs> lists=null;
-        ResponseData<PageInfo<MktTaskPOWithBLOBs>> result = new ResponseData<PageInfo<MktTaskPOWithBLOBs>>(SysResponseEnum.SUCCESS.getCode(), SysResponseEnum.OPERATE_FAILED_DATA_NOT_EXISTS.getMessage(), null);
-        Integer showType = vo.getShowType();
+        ResponseData<PageInfo<MktTaskPOWithBLOBs>> result = new ResponseData<PageInfo<MktTaskPOWithBLOBs>>();
+
         //1完善资料，2分享任务，3邀请注册，4累计消费次数，5累计消费金额',
         PageHelper.startPage(pageForm.getPageNumber(), pageForm.getPageSize());
 
         MktTaskPOExample mktTaskPOExample = new MktTaskPOExample();
         MktTaskPOExample.Criteria criteria = mktTaskPOExample.createCriteria();
-        //查询所有
-        if (TaskConstants.FIRST.equals(showType)) {
-            criteria.andTaskTypeEqualTo(vo.getTaskType()).andSysBrandIdEqualTo(vo.getBrandId());
-        } else if (TaskConstants.SECOND.equals(showType)) {
-            //查询已启用
-            criteria.andTaskTypeEqualTo(vo.getTaskType()).andSysBrandIdEqualTo(vo.getBrandId()).andValidEqualTo(Boolean.TRUE);
-        } else if (TaskConstants.THREE.equals(showType)) {
-            //查询已禁用
-            criteria.andTaskTypeEqualTo(vo.getTaskType()).andSysBrandIdEqualTo(vo.getBrandId()).andValidEqualTo(Boolean.FALSE);
-        }
+        criteria.andTaskTypeEqualTo(vo.getTaskType()).andSysBrandIdEqualTo(vo.getBrandId()).andValidEqualTo(Boolean.TRUE);
 
+        String taskName = vo.getTaskName();
+        if (StringUtils.isNotBlank(taskName)){
+          criteria.andTaskNameLike(new StringBuilder().append("%").append(taskName).append("%").toString());
+        }
         //时间
         Date startTime = vo.getStartTime();
         Date endTime = vo.getEndTime();
@@ -935,10 +930,7 @@ public class TaskServiceImpl implements TaskService {
 
         lists = mktTaskPOMapper.selectByExampleWithBLOBs(mktTaskPOExample);
 
-        if (CollectionUtils.isNotEmpty(lists)) {
-            result.setCode(SysResponseEnum.SUCCESS.getCode());
-            result.setMessage(SysResponseEnum.SUCCESS.getMessage());
-        }else{
+        if (CollectionUtils.isEmpty(lists)) {
             lists=new  ArrayList<MktTaskPOWithBLOBs>();
         }
         PageInfo<MktTaskPOWithBLOBs> pageInfo = new PageInfo<MktTaskPOWithBLOBs>(lists);
