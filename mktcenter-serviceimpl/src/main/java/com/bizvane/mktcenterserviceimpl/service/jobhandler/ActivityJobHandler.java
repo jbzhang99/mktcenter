@@ -65,18 +65,15 @@ public class ActivityJobHandler extends IJobHandler {
         examplem.createCriteria().andActivityCodeEqualTo(param).andValidEqualTo(true);
         List<MktActivityPO> mktActivityPOs = mktActivityPOMapper.selectByExample(examplem);
         MktActivityPO mktActivityPO = mktActivityPOs.get(0);
-        if(mktActivityPO.getCheckStatus()==CheckStatusEnum.CHECK_STATUS_APPROVED.getCode()){
-            MktActivityPO po = new MktActivityPO();
-            po.setActivityCode(param);
-            po.setActivityStatus(ActivityStatusEnum.ACTIVITY_STATUS_EXECUTING.getCode());
-            //把活动状态改成执行中
-            int sum = mktActivityPOMapper.updateActivityStatus(po);
-        }else{
-            returnT.setCode(1);
-            returnT.setContent("该活动未审核");
-            returnT.setMsg("FAILED");
-            return returnT;
-        }
+           //如果是审核通过把活动状态置为执行中
+            if (mktActivityPO.getCheckStatus()==CheckStatusEnum.CHECK_STATUS_APPROVED.getCode()){
+                MktActivityPO po = new MktActivityPO();
+                po.setActivityCode(param);
+                po.setActivityStatus(ActivityStatusEnum.ACTIVITY_STATUS_EXECUTING.getCode());
+                //把活动状态改成执行中
+                int sum = mktActivityPOMapper.updateActivityStatus(po);
+            }
+
 
         returnT.setCode(0);
         returnT.setContent("活动执行完毕");
