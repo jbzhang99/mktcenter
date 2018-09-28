@@ -1,5 +1,6 @@
 package com.bizvane.mktcenterserviceimpl.common.award;
 
+import com.alibaba.fastjson.JSON;
 import com.bizvane.couponfacade.enums.SendTypeEnum;
 import com.bizvane.couponfacade.models.vo.SendCouponBatchRequestVO;
 import com.bizvane.couponfacade.models.vo.SendCouponSimpleRequestVO;
@@ -431,9 +432,11 @@ public class MemberMessageSend {
             membersInfoSearchVo.setPageNumber(a);
             ResponseData<com.bizvane.utils.responseinfo.PageInfo<MemberInfoVo>> memberInfoVoPages = membersAdvancedSearchApiService.search(membersInfoSearchVo);
             List<MemberInfoVo> memberInfoModelList = memberInfoVoPages.getData().getList();
+            log.info("开始循环发送短信");
             //循环发送
             if (!CollectionUtils.isEmpty(memberInfoModelList)){
                 for (MemberInfoModel memberInfo:memberInfoModelList) {
+                    log.info("循环信息类然后发送短信+");
                     //循环信息类然后发送
                     for (MktMessagePO mktMessagePO:messageVOList) {
                         AwardBO awardBO = new AwardBO();
