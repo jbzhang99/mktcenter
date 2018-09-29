@@ -27,4 +27,8 @@ public interface TaskServiceForWXRpc {
     @RequestMapping("/getTaskWXDetail")
     @io.swagger.annotations.ApiModelProperty(value = "taskId",name = "任务code", required = false,example = "")
     public  ResponseData<TaskWXDetailBO>  getTaskWXDetail(@RequestParam Long taskId);
+
+    @RequestMapping("/getURLDetail")
+    @io.swagger.annotations.ApiModelProperty(value = "TaskForWXVO",name = "获取url链接详情", required = false,example = "")
+    public  ResponseData<TaskWXDetailBO>  getURLDetail(@RequestBody TaskForWXVO vo);
 }
