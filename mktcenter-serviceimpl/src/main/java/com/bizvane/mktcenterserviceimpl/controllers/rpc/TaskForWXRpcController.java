@@ -1,5 +1,6 @@
 package com.bizvane.mktcenterserviceimpl.controllers.rpc;
 
+import com.bizvane.centercontrolservice.models.bo.AppletFunctionBO;
 import com.bizvane.centercontrolservice.models.po.AppletFunctionPO;
 import com.bizvane.mktcenterservice.interfaces.TaskServiceForWX;
 import com.bizvane.mktcenterservice.models.bo.TaskWXBO;
@@ -40,7 +41,7 @@ public class TaskForWXRpcController {
 
     @RequestMapping("/getURLDetail")
     @io.swagger.annotations.ApiModelProperty(value = "TaskForWXVO",name = "获取url链接详情", required = false,example = "")
-    public ResponseData<AppletFunctionPO>  getURLDetail(TaskForWXVO vo){
+    public ResponseData<AppletFunctionBO>  getURLDetail(TaskForWXVO vo){
       return taskServiceForWX.getURLDetail(vo);
     }
 }

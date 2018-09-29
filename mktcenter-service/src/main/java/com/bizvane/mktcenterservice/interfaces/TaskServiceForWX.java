@@ -1,5 +1,6 @@
 package com.bizvane.mktcenterservice.interfaces;
 
+import com.bizvane.centercontrolservice.models.bo.AppletFunctionBO;
 import com.bizvane.centercontrolservice.models.po.AppletFunctionPO;
 import com.bizvane.mktcenterservice.models.bo.TaskWXBO;
 import com.bizvane.mktcenterservice.models.bo.TaskWXDetailBO;
@@ -18,7 +19,7 @@ public interface TaskServiceForWX {
    //获取任务详情
     public  ResponseData<TaskWXDetailBO>  getTaskWXDetail(Long taskId);
     //获取链接详情
-    public ResponseData<AppletFunctionPO>  getURLDetail(TaskForWXVO vo);
+    public ResponseData<AppletFunctionBO>  getURLDetail(TaskForWXVO vo);
 
 
 }

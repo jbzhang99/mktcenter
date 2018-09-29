@@ -1,6 +1,7 @@
 package com.bizvane.mktcenterserviceimpl.service.impl;
 
 import com.alibaba.fastjson.JSON;
+import com.bizvane.centercontrolservice.models.bo.AppletFunctionBO;
 import com.bizvane.centercontrolservice.models.po.AppletFunctionPO;
 import com.bizvane.centercontrolservice.rpc.AppletRouteServiceRpc;
 import com.bizvane.members.facade.service.api.WxAppletApiService;
@@ -87,9 +88,9 @@ public class TaskServiceForWXImpl implements TaskServiceForWX {
      * 获取链接详情
      */
     @Override
-    public ResponseData<AppletFunctionPO>  getURLDetail(TaskForWXVO vo){
-        ResponseData<AppletFunctionPO> responseData = new ResponseData<>();
-        AppletFunctionPO urlPO = new AppletFunctionPO();
+    public ResponseData<AppletFunctionBO>  getURLDetail(TaskForWXVO vo){
+        ResponseData<AppletFunctionBO> responseData = new ResponseData<>();
+        AppletFunctionBO urlBO = new AppletFunctionBO();
         MktTaskSharePOExample mktTaskSharePOExample = new MktTaskSharePOExample();
         mktTaskSharePOExample.createCriteria().andMktTaskIdEqualTo(vo.getMktTaskId()).andValidEqualTo(Boolean.TRUE);
         List<MktTaskSharePOWithBLOBs> sharePOlist = mktTaskSharePOMapper.selectByExampleWithBLOBs(mktTaskSharePOExample);
@@ -99,14 +100,15 @@ public class TaskServiceForWXImpl implements TaskServiceForWX {
             // 1站内链接，2自定义链接',
             Integer shareUrlType = sharePOWithBLOBs.getShareUrlType();
             if (TaskConstants.SECOND.equals(shareUrlType)) {
-                urlPO = appletRouteServiceRpc.getAllAppletFunctionByUrl(shareUrl).getData();
-                appletRouteServiceRpc.getAllAppletFunctionByUrl(shareUrl).getData();
+                urlBO = appletRouteServiceRpc.getAllAppletFunctionByUrl(shareUrl).getData();
+                urlBO.setType(1);
             }else {
-                urlPO.setFunctionUrl(shareUrl);
-                urlPO.setFunctionName("站外链接");
+                urlBO.setFunctionUrl(shareUrl);
+                urlBO.setFunctionName("站外链接");
+                urlBO.setType(2);
             }
         }
-        responseData.setData(urlPO);
+        responseData.setData(urlBO);
         return responseData;
     }
 }
