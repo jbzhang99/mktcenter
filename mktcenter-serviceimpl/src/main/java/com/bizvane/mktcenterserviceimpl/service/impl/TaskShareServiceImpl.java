@@ -98,10 +98,6 @@ public class TaskShareServiceImpl implements TaskShareService {
      */
     @Override
     public ResponseData<List<AppletFunctionPO>>  getURLList(){
-        //return  menberMadeServiceRpc.selectBrandFunctionRpc(brandId,1);
-        //ResponseData<List<AppletRoutePO>> returnData = appletRouteServiceRpc.getAllAppletRoute();
-        //return  returnData.getData();
-       //ResponseData<List<AppletFunctionPO>> allAppletFunction =
        return appletRouteServiceRpc.getAllAppletFunction();
 
     }

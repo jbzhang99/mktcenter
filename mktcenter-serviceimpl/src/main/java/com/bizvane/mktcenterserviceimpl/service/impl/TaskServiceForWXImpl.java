@@ -1,14 +1,20 @@
 package com.bizvane.mktcenterserviceimpl.service.impl;
 
 import com.alibaba.fastjson.JSON;
+import com.bizvane.centercontrolservice.models.po.AppletFunctionPO;
+import com.bizvane.centercontrolservice.rpc.AppletRouteServiceRpc;
 import com.bizvane.members.facade.service.api.WxAppletApiService;
 import com.bizvane.mktcenterservice.interfaces.TaskServiceForWX;
 import com.bizvane.mktcenterservice.models.bo.TaskWXBO;
 import com.bizvane.mktcenterservice.models.bo.TaskWXDetailBO;
+import com.bizvane.mktcenterservice.models.po.MktTaskSharePOExample;
+import com.bizvane.mktcenterservice.models.po.MktTaskSharePOWithBLOBs;
 import com.bizvane.mktcenterservice.models.vo.TaskForWXVO;
 import com.bizvane.mktcenterservice.models.vo.TaskVO;
+import com.bizvane.mktcenterserviceimpl.common.constants.TaskConstants;
 import com.bizvane.mktcenterserviceimpl.common.enums.TaskTypeEnum;
 import com.bizvane.mktcenterserviceimpl.mappers.MktTaskPOMapper;
+import com.bizvane.mktcenterserviceimpl.mappers.MktTaskSharePOMapper;
 import com.bizvane.utils.enumutils.SysResponseEnum;
 import com.bizvane.utils.responseinfo.ResponseData;
 import com.github.pagehelper.PageHelper;
@@ -34,6 +40,10 @@ public class TaskServiceForWXImpl implements TaskServiceForWX {
     private MktTaskPOMapper taskPOMapper;
     @Autowired
     private  WxAppletApiService wxAppletApiService;
+    @Autowired
+    private MktTaskSharePOMapper mktTaskSharePOMapper;
+    @Autowired
+    private AppletRouteServiceRpc appletRouteServiceRpc;
 
     @Override
     //获取该会员已完成和未完成任务的任务
@@ -72,6 +82,32 @@ public class TaskServiceForWXImpl implements TaskServiceForWX {
         }else{
             responseData.setData(new  TaskWXDetailBO());
         }
+        return responseData;
+    }
+    /**
+     * 获取链接详情
+     */
+    @Override
+    public ResponseData<AppletFunctionPO>  getURLDetail(TaskForWXVO vo){
+        ResponseData<AppletFunctionPO> responseData = new ResponseData<>();
+        AppletFunctionPO urlPO = new AppletFunctionPO();
+        MktTaskSharePOExample mktTaskSharePOExample = new MktTaskSharePOExample();
+        mktTaskSharePOExample.createCriteria().andMktTaskIdEqualTo(vo.getMktTaskId()).andValidEqualTo(Boolean.TRUE);
+        List<MktTaskSharePOWithBLOBs> sharePOlist = mktTaskSharePOMapper.selectByExampleWithBLOBs(mktTaskSharePOExample);
+        if (CollectionUtils.isNotEmpty(sharePOlist)){
+            MktTaskSharePOWithBLOBs sharePOWithBLOBs = sharePOlist.get(0);
+            String shareUrl = sharePOWithBLOBs.getShareUrl();
+            // 1站内链接，2自定义链接',
+            Integer shareUrlType = sharePOWithBLOBs.getShareUrlType();
+            if (TaskConstants.SECOND.equals(shareUrlType)) {
+                urlPO = appletRouteServiceRpc.getAllAppletFunctionByUrl(shareUrl).getData();
+                appletRouteServiceRpc.getAllAppletFunctionByUrl(shareUrl).getData();
+            }else {
+                urlPO.setFunctionUrl(shareUrl);
+                urlPO.setFunctionName("站外链接");
+            }
+        }
+        responseData.setData(urlPO);
         return responseData;
     }
 }

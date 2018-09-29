@@ -20,6 +20,9 @@ public class TaskForWXVO {
     //%,2
     private  String storeIdStyleThree;
 
+    private Long mktTaskId;
+    private Integer taskType;
+
     public Long getBrandId() {
         return brandId;
     }
@@ -90,5 +93,21 @@ public class TaskForWXVO {
 
     public void setStoreIdStyleThree(String storeIdStyleThree) {
         this.storeIdStyleThree = storeIdStyleThree;
+    }
+
+    public Long getMktTaskId() {
+        return mktTaskId;
+    }
+
+    public void setMktTaskId(Long mktTaskId) {
+        this.mktTaskId = mktTaskId;
+    }
+
+    public Integer getTaskType() {
+        return taskType;
+    }
+
+    public void setTaskType(Integer taskType) {
+        this.taskType = taskType;
     }
 }
