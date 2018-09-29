@@ -37,7 +37,7 @@ public class TaskServiceForWXImpl implements TaskServiceForWX {
 
     @Override
     //获取该会员已完成和未完成任务的任务
-    public ResponseData getCompleteTask(TaskForWXVO vo) {
+    public ResponseData<PageInfo<TaskWXBO>> getCompleteTask(TaskForWXVO vo) {
         ResponseData<PageInfo<TaskWXBO>> responseData = new ResponseData(new PageInfo<TaskWXBO>(new ArrayList<TaskWXBO>()));
         ResponseData<Long> resultData = wxAppletApiService.getServiceStoreId(vo.getMemberCode());
         Long storeId = resultData.getData();

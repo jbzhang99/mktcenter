@@ -1,9 +1,11 @@
 package com.bizvane.mktcenterserviceimpl.controllers.rpc;
 
 import com.bizvane.mktcenterservice.interfaces.TaskServiceForWX;
+import com.bizvane.mktcenterservice.models.bo.TaskWXBO;
 import com.bizvane.mktcenterservice.models.bo.TaskWXDetailBO;
 import com.bizvane.mktcenterservice.models.vo.TaskForWXVO;
 import com.bizvane.utils.responseinfo.ResponseData;
+import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -23,7 +25,7 @@ public class TaskForWXRpcController {
 
     @RequestMapping("/getCompleteTask")
     @io.swagger.annotations.ApiModelProperty(value = "brandId,memberCode",name = "该会员已完成的任务列表", required = false,example = "")
-    public ResponseData getCompleteTask(@RequestBody TaskForWXVO vo){
+    public ResponseData<PageInfo<TaskWXBO>> getCompleteTask(@RequestBody TaskForWXVO vo){
 
         return taskServiceForWX.getCompleteTask(vo);
     }
