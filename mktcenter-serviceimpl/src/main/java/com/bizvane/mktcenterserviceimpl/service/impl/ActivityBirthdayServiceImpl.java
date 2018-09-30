@@ -678,6 +678,8 @@ public class ActivityBirthdayServiceImpl implements ActivityBirthdayService {
                 va.setCouponDefinitionId(mktCouponPO.getCouponDefinitionId());
                 va.setSendBussienId(mktCouponPO.getBizId());
                 va.setSendType(SendTypeEnum.SEND_COUPON_BIRTH.getCode());
+                va.setBrandId(activityBirthday.getSysBrandId());
+                va.setCompanyId(activityBirthday.getSysCompanyId());
                 sendCouponServiceFeign.simple(va);
             }
             //新增积分到会员参与活动记录表中数据

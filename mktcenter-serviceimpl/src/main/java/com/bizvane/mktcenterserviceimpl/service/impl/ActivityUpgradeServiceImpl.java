@@ -608,6 +608,8 @@ public class ActivityUpgradeServiceImpl implements ActivityUpgradeService {
                     sendCouponSimpleRequestVO.setCouponDefinitionId(mktCouponPO.getCouponDefinitionId());
                     sendCouponSimpleRequestVO.setSendBussienId(mktCouponPO.getBizId());
                     sendCouponSimpleRequestVO.setSendType(SendTypeEnum.SEND_COUPON_UPGRADE_ACTIVITY.getCode());
+                    sendCouponSimpleRequestVO.setCompanyId(vo.getSysCompanyId());
+                    sendCouponSimpleRequestVO.setBrandId(vo.getBrandId());
                     awardBO.setSendCouponSimpleRequestVO(sendCouponSimpleRequestVO);
                     awardBO.setMktType(MktSmartTypeEnum.SMART_TYPE_COUPON.getCode());
                     log.info("新增券奖励");

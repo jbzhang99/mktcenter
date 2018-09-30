@@ -15,6 +15,15 @@ public class OrderModelBo {
     private Long levelId;//会员等级id
     private Integer memberType;//会员范围
 
+    private Long companyId;//企业id
+    public Long getCompanyId() {
+        return companyId;
+    }
+
+    public void setCompanyId(Long companyId) {
+        this.companyId = companyId;
+    }
+
     public String getProductNos() {
         return productNos;
     }

@@ -402,6 +402,8 @@ public class ActivityRegisterServiceImpl implements ActivityRegisterService {
                                sendCouponSimpleRequestVO.setCouponDefinitionId(mktCouponPO.getCouponDefinitionId());
                                sendCouponSimpleRequestVO.setSendBussienId(mktCouponPO.getBizId());
                                sendCouponSimpleRequestVO.setSendType(SendTypeEnum.SEND_COUPON_OPNE_CARD.getCode());
+                               sendCouponSimpleRequestVO.setCompanyId(vo.getSysCompanyId());
+                               sendCouponSimpleRequestVO.setBrandId(vo.getBrandId());
                                awardBO.setSendCouponSimpleRequestVO(sendCouponSimpleRequestVO);
                                awardBO.setMktType(MktSmartTypeEnum.SMART_TYPE_COUPON.getCode());
                                award.execute(awardBO);

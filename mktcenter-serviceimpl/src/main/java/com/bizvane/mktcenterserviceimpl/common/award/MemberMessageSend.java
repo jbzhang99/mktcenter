@@ -212,6 +212,8 @@ public class MemberMessageSend {
                         sendCouponSimpleRequestVO.setCouponDefinitionId(mktCouponPO.getCouponDefinitionId());
                         sendCouponSimpleRequestVO.setSendBussienId(mktCouponPO.getBizId());
                         sendCouponSimpleRequestVO.setSendType(SendTypeEnum.SEND_COUPON_ORIENT_MARKET.getCode());
+                        sendCouponSimpleRequestVO.setBrandId(vo.getSysBrandId());
+                        sendCouponSimpleRequestVO.setCompanyId(vo.getSysCompanyId());
                         awardBO.setSendCouponSimpleRequestVO(sendCouponSimpleRequestVO);
                         awardBO.setMktType(MktSmartTypeEnum.SMART_TYPE_COUPON.getCode());
                         award.execute(awardBO);
