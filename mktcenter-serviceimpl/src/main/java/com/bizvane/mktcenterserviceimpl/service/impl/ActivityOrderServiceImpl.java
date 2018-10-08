@@ -608,6 +608,7 @@ public class ActivityOrderServiceImpl implements ActivityOrderService {
     public ResponseData<Integer> executeOrder(OrderModelBo vo) {
         log.info("执行消费活动开始");
         //返回对象
+        log.info("执行消费活动+======="+ JSON.toJSONString(vo));
         ResponseData responseData = new ResponseData();
         //查询品牌下所有执行中的活动
         ActivityVO activity = new ActivityVO();
@@ -651,6 +652,7 @@ public class ActivityOrderServiceImpl implements ActivityOrderService {
 
             //增加积分奖励新增接口
             if (null!=activityVO.getPoints()){
+                log.info("新增消费活动积分奖励奖励");
                 AwardBO bo = new AwardBO();
                 IntegralChangeRequestModel integralChangeRequestModel =new IntegralChangeRequestModel();
                 integralChangeRequestModel.setSysCompanyId(activityVO.getSysCompanyId());
@@ -669,7 +671,7 @@ public class ActivityOrderServiceImpl implements ActivityOrderService {
 
 
             // 增加卷奖励接口
-            log.info("新增券奖励");
+            log.info("新增消费活动券奖励券奖励");
             MktCouponPOExample example = new  MktCouponPOExample();
             example.createCriteria().andBizIdEqualTo(activityVO.getMktActivityId()).andValidEqualTo(true);
             List<MktCouponPO> mktCouponPOs= mktCouponPOMapper.selectByExample(example);
