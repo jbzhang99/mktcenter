@@ -295,7 +295,6 @@ public class TaskServiceImpl implements TaskService {
 
     /**
      * 消费  邀请任务都可使用,查询任务详情(TaskDetailVO)
-     *
      * @param mktTaskId
      * @return
      */
@@ -364,7 +363,7 @@ public class TaskServiceImpl implements TaskService {
              jobUtil.addTaskStartJob(stageUser, mktTaskPOWithBLOBs);
              jobUtil.addTaskEndJob(stageUser, mktTaskPOWithBLOBs);
              this.sendSmg(mktTaskPOWithBLOBs,mktmessagePOList,stageUser);
-        }else if (TaskConstants.THREE.equals(checkStatus) && TaskConstants.FIRST.equals(taskStatus)){
+        }else if (TaskConstants.THREE.equals(checkStatus) && TaskConstants.SECOND.equals(taskStatus)){
             //已审核 执中中, 创建结束任务job,并且对发送短信和消息进行判断
             jobUtil.addTaskEndJob(stageUser, mktTaskPOWithBLOBs);
             this.sendSmg(mktTaskPOWithBLOBs,mktmessagePOList,stageUser);

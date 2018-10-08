@@ -81,11 +81,6 @@ public class TaskInviteServiceImpl implements TaskInviteService {
             return responseData;
         }
         TaskVO taskVO = bo.getTaskVO();
-        taskVO.setValid(Boolean.TRUE);
-        taskVO.setCreateDate(TimeUtils.getNowTime());
-        taskVO.setCreateUserId(stageUser.getSysAccountId());
-        taskVO.setCreateUserName(stageUser.getName());
-
         //1.生成任务编号
         String taskCode = CodeUtil.getTaskCode();
         //2.任务主表新增
