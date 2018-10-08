@@ -13,7 +13,7 @@ import com.bizvane.couponfacade.interfaces.SendCouponServiceFeign;
 import com.bizvane.couponfacade.models.vo.CouponDetailResponseVO;
 import com.bizvane.couponfacade.models.vo.CouponEntityAndDefinitionVO;
 import com.bizvane.couponfacade.models.vo.SendCouponSimpleRequestVO;
-import com.bizvane.members.facade.enums.IntegralChangeTypeEnum;
+import com.bizvane.members.facade.enums.*;
 import com.bizvane.members.facade.es.vo.MembersInfoSearchVo;
 import com.bizvane.members.facade.es.vo.WxChannelInfoSearchVo;
 import com.bizvane.members.facade.models.IntegralRecordModel;
@@ -38,6 +38,7 @@ import com.bizvane.mktcenterservice.models.vo.PageForm;
 import com.bizvane.mktcenterserviceimpl.common.award.Award;
 import com.bizvane.mktcenterserviceimpl.common.award.MemberMessageSend;
 import com.bizvane.mktcenterserviceimpl.common.enums.*;
+import com.bizvane.mktcenterserviceimpl.common.enums.BusinessTypeEnum;
 import com.bizvane.mktcenterserviceimpl.common.utils.CodeUtil;
 import com.bizvane.mktcenterserviceimpl.common.job.JobUtil;
 import com.bizvane.mktcenterserviceimpl.common.utils.ExecuteParamCheckUtil;
@@ -161,7 +162,7 @@ public class ActivityRegisterServiceImpl implements ActivityRegisterService {
         BeanUtils.copyProperties(activityVO,mktActivityPOWithBLOBs);
         //活动状态设置为待执行
         mktActivityPOWithBLOBs.setActivityStatus(ActivityStatusEnum.ACTIVITY_STATUS_PENDING.getCode());
-        try{
+        /*try{*/
         //查询判断长期活动同一会员等级是否有重复
         if(1 == bo.getActivityVO().getLongTerm()){
             ActivityVO vo = new ActivityVO();
@@ -306,6 +307,7 @@ public class ActivityRegisterServiceImpl implements ActivityRegisterService {
                 membersInfoSearchVo.setPageSize(10000);
                 membersInfoSearchVo.setCardStatus(1);
                 membersInfoSearchVo.setBrandId(activityVO.getSysBrandId());
+                log.info("开卡活动-查询发送短信高级搜索参数+=====："+JSON.toJSONString(membersInfoSearchVo));
                 memberMessage.sendDXmessage(messageVOList, membersInfoSearchVo);
                 //查询对应的会员  发送微信模板消息
                 WxChannelInfoSearchVo wxChannelInfoSearchVo = new WxChannelInfoSearchVo();
@@ -315,6 +317,7 @@ public class ActivityRegisterServiceImpl implements ActivityRegisterService {
                 wxChannelInfoSearchVo.setCardStatus(2);
                 wxChannelInfoSearchVo.setMiniProgram((byte) 1);
                 wxChannelInfoSearchVo.setBrandId(activityVO.getSysBrandId());
+                log.info("开卡活动-查询发送微信模板高级搜索参数+=====："+JSON.toJSONString(wxChannelInfoSearchVo));
                 memberMessage.sendWXmessage(messageVOList, wxChannelInfoSearchVo);
             }else{
                 //自定义时间发送 加人job任务
@@ -329,13 +332,13 @@ public class ActivityRegisterServiceImpl implements ActivityRegisterService {
                  responseData.setMessage(SysResponseEnum.SUCCESS.getMessage());
                  log.info("开卡活动-创建活动-成功");
                  return responseData;
-            }catch (Exception e){
+            /*}catch (Exception e){
                  //结束
                  log.error("开卡活动-创建活动-出错");
                  responseData.setCode(SysResponseEnum.FAILED.getCode());
                  responseData.setMessage(SysResponseEnum.FAILED.getMessage());
                  return responseData;
-        }
+        }*/
 
     }
 
@@ -381,7 +384,7 @@ public class ActivityRegisterServiceImpl implements ActivityRegisterService {
                        integralChangeRequestModel.setChangeBills(activityVO.getActivityCode());
                        integralChangeRequestModel.setChangeIntegral(activityVO.getPoints());
                        integralChangeRequestModel.setChangeType(IntegralChangeTypeEnum.INCOME.getCode());
-                       integralChangeRequestModel.setBusinessType(String.valueOf(BusinessTypeEnum.ACTIVITY_TYPE_ACTIVITY.getCode()));
+                       integralChangeRequestModel.setBusinessType(com.bizvane.members.facade.enums.BusinessTypeEnum.ACTIVITY_TYPE_REGISGER.getCode());
                        integralChangeRequestModel.setChangeDate(new Date());
                        bo.setIntegralRecordModel(integralChangeRequestModel);
                        bo.setMktType(MktSmartTypeEnum.SMART_TYPE_INTEGRAL.getCode());
@@ -399,6 +402,8 @@ public class ActivityRegisterServiceImpl implements ActivityRegisterService {
                                sendCouponSimpleRequestVO.setCouponDefinitionId(mktCouponPO.getCouponDefinitionId());
                                sendCouponSimpleRequestVO.setSendBussienId(mktCouponPO.getBizId());
                                sendCouponSimpleRequestVO.setSendType(SendTypeEnum.SEND_COUPON_OPNE_CARD.getCode());
+                               sendCouponSimpleRequestVO.setCompanyId(vo.getSysCompanyId());
+                               sendCouponSimpleRequestVO.setBrandId(vo.getBrandId());
                                awardBO.setSendCouponSimpleRequestVO(sendCouponSimpleRequestVO);
                                awardBO.setMktType(MktSmartTypeEnum.SMART_TYPE_COUPON.getCode());
                                award.execute(awardBO);

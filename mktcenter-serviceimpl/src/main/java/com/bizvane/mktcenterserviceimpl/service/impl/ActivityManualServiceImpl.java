@@ -357,7 +357,10 @@ public class ActivityManualServiceImpl implements ActivityManualService {
             sendCouponSimpleRequestVO.setMemberCode(vo.getMemberInfoModel().getMemberCode());
             sendCouponSimpleRequestVO.setSendBussienId(vo.getMktActivityId());
             sendCouponSimpleRequestVO.setSendType(SendTypeEnum.SEND_COUPON_RECEIVE_ACTIVITY.getCode());
+            sendCouponSimpleRequestVO.setBrandId(memberInfoModel.getBrandId());
+            sendCouponSimpleRequestVO.setCompanyId(memberInfoModel.getSysCompanyId());
             awardBO.setSendCouponSimpleRequestVO(sendCouponSimpleRequestVO);
+            awardBO.setMktType(MktSmartTypeEnum.SMART_TYPE_COUPON.getCode());
             log.info("领券活动执行活动-发券调接口入参:"+JSON.toJSONString(awardBO));
             award.execute(awardBO);
 
@@ -676,18 +679,24 @@ public class ActivityManualServiceImpl implements ActivityManualService {
         vo.setActivityCode(bs.getActivityCode());
         List<ActivityVO> activityManualList = mktActivityManualPOMapper.getActivityManualList(vo);
         ActivityVO activityVO = activityManualList.get(0);
-       // 活动开始时间<当前时间<活动结束时间  变为执行中
-        if(new Date().after(activityVO.getStartTime()) && new Date().before(activityVO.getEndTime())){
-            bs.setActivityStatus(ActivityStatusEnum.ACTIVITY_STATUS_EXECUTING.getCode());
-            mktActivityPOMapper.updateByPrimaryKeySelective(bs);
-        }
-        //判断审核时间 >活动结束时间  将活动状态变为已结束
-        if(new Date().after(activityVO.getEndTime())){
+        if(bs.getCheckStatus()==CheckStatusEnum.CHECK_STATUS_APPROVED.getCode()){
+           // 活动开始时间<当前时间<活动结束时间  变为执行中
+            if(new Date().after(activityVO.getStartTime()) && new Date().before(activityVO.getEndTime())){
+                bs.setActivityStatus(ActivityStatusEnum.ACTIVITY_STATUS_EXECUTING.getCode());
+            }
+            //判断审核时间 >活动结束时间  将活动状态变为已结束
+            if(new Date().after(activityVO.getEndTime())){
+                bs.setActivityStatus(ActivityStatusEnum.ACTIVITY_STATUS_FINISHED.getCode());
+            }
+        }else{
             bs.setActivityStatus(ActivityStatusEnum.ACTIVITY_STATUS_FINISHED.getCode());
-            mktActivityPOMapper.updateByPrimaryKeySelective(bs);
-        }
 
+        }
+        log.info("更新审核状态的参数是+======="+ JSON.toJSONString(bs));
+        int i = mktActivityPOMapper.updateByPrimaryKeySelective(bs);
+        log.info("更新审核状态完成");
         //更新审核中心状态
+        log.info("更新审核中心check的参数是+======="+ JSON.toJSONString(po));
         sysCheckServiceRpc.updateCheck(po);
         responseData.setCode(SystemConstants.SUCCESS_CODE);
         responseData.setMessage(SystemConstants.SUCCESS_MESSAGE);

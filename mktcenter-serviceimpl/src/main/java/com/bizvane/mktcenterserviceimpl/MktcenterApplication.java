@@ -8,6 +8,7 @@ import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.cloud.client.loadbalancer.LoadBalanced;
 import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.context.annotation.Bean;
+import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.web.client.RestTemplate;
 
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
@@ -15,6 +16,7 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 @SpringBootApplication(scanBasePackages = "com.bizvane")
 @EnableDiscoveryClient
 @EnableSwagger2
+@EnableScheduling
 @EnableFeignClients(basePackages={"com.bizvane.centerstageservice.rpc","com.bizvane.members.facade.service.api",
 "com.bizvane.couponfacade.interfaces","com.bizvane.messagefacade.interfaces",
 "com.bizvane.wechatfacade.interfaces","com.bizvane.appletservice.Rpc","com.bizvane.centercontrolservice.rpc","com.bizvane.fitmentservice.models.Rpc"})

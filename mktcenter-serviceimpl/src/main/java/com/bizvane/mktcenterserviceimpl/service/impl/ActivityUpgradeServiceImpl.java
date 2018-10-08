@@ -13,7 +13,7 @@ import com.bizvane.couponfacade.interfaces.SendCouponServiceFeign;
 import com.bizvane.couponfacade.models.vo.CouponDetailResponseVO;
 import com.bizvane.couponfacade.models.vo.CouponEntityAndDefinitionVO;
 import com.bizvane.couponfacade.models.vo.SendCouponSimpleRequestVO;
-import com.bizvane.members.facade.enums.IntegralChangeTypeEnum;
+import com.bizvane.members.facade.enums.*;
 import com.bizvane.members.facade.es.vo.MembersInfoSearchVo;
 import com.bizvane.members.facade.models.IntegralRecordModel;
 import com.bizvane.members.facade.models.MbrLevelModel;
@@ -35,6 +35,7 @@ import com.bizvane.mktcenterservice.models.vo.PageForm;
 import com.bizvane.mktcenterserviceimpl.common.award.Award;
 import com.bizvane.mktcenterserviceimpl.common.award.MemberMessageSend;
 import com.bizvane.mktcenterserviceimpl.common.enums.*;
+import com.bizvane.mktcenterserviceimpl.common.enums.BusinessTypeEnum;
 import com.bizvane.mktcenterserviceimpl.common.utils.CodeUtil;
 import com.bizvane.mktcenterserviceimpl.common.job.JobUtil;
 import com.bizvane.mktcenterserviceimpl.common.utils.ExecuteParamCheckUtil;
@@ -587,7 +588,7 @@ public class ActivityUpgradeServiceImpl implements ActivityUpgradeService {
                 integralChangeRequestModel.setChangeBills(activityVO.getActivityCode());
                 integralChangeRequestModel.setChangeIntegral(activityVO.getPoints());
                 integralChangeRequestModel.setChangeType(IntegralChangeTypeEnum.INCOME.getCode());
-                integralChangeRequestModel.setBusinessType(String.valueOf(BusinessTypeEnum.ACTIVITY_TYPE_ACTIVITY.getCode()));
+                integralChangeRequestModel.setBusinessType(com.bizvane.members.facade.enums.BusinessTypeEnum.ACTIVITY_TYPE_UPGRADE.getCode());
                 integralChangeRequestModel.setChangeDate(new Date());
                 bo.setIntegralRecordModel(integralChangeRequestModel);
                 bo.setMktType(MktSmartTypeEnum.SMART_TYPE_INTEGRAL.getCode());
@@ -607,6 +608,8 @@ public class ActivityUpgradeServiceImpl implements ActivityUpgradeService {
                     sendCouponSimpleRequestVO.setCouponDefinitionId(mktCouponPO.getCouponDefinitionId());
                     sendCouponSimpleRequestVO.setSendBussienId(mktCouponPO.getBizId());
                     sendCouponSimpleRequestVO.setSendType(SendTypeEnum.SEND_COUPON_UPGRADE_ACTIVITY.getCode());
+                    sendCouponSimpleRequestVO.setCompanyId(vo.getSysCompanyId());
+                    sendCouponSimpleRequestVO.setBrandId(vo.getBrandId());
                     awardBO.setSendCouponSimpleRequestVO(sendCouponSimpleRequestVO);
                     awardBO.setMktType(MktSmartTypeEnum.SMART_TYPE_COUPON.getCode());
                     log.info("新增券奖励");
@@ -664,18 +667,18 @@ public class ActivityUpgradeServiceImpl implements ActivityUpgradeService {
             if(1== activityPO.getLongTerm() ||(new Date().after(activityPO.getStartTime()) && new Date().before(activityPO.getEndTime()))){
                 //将活动状态变更为执行中 并且发送消息
                 bs.setActivityStatus(ActivityStatusEnum.ACTIVITY_STATUS_EXECUTING.getCode());
-                int i = mktActivityPOMapper.updateByPrimaryKeySelective(bs);
             }
             //判断审核时间 >活动结束时间  将活动状态变为已结束
             if(null!=activityPO.getEndTime()&&new Date().after(activityPO.getEndTime())){
                 bs.setActivityStatus(ActivityStatusEnum.ACTIVITY_STATUS_FINISHED.getCode());
-                int i = mktActivityPOMapper.updateByPrimaryKeySelective(bs);
             }
 
         }else{
             bs.setActivityStatus(ActivityStatusEnum.ACTIVITY_STATUS_FINISHED.getCode());
-            int i = mktActivityPOMapper.updateByPrimaryKeySelective(bs);
+
         }
+        log.info("更新审核状态的参数是+======="+ JSON.toJSONString(bs));
+        int i = mktActivityPOMapper.updateByPrimaryKeySelective(bs);
         //更新审核中心状态
         sysCheckServiceRpc.updateCheck(po);
         responseData.setCode(SysResponseEnum.SUCCESS.getCode());

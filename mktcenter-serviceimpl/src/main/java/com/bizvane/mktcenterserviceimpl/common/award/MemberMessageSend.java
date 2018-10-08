@@ -1,5 +1,6 @@
 package com.bizvane.mktcenterserviceimpl.common.award;
 
+import com.alibaba.fastjson.JSON;
 import com.bizvane.couponfacade.enums.SendTypeEnum;
 import com.bizvane.couponfacade.models.vo.SendCouponBatchRequestVO;
 import com.bizvane.couponfacade.models.vo.SendCouponSimpleRequestVO;
@@ -211,6 +212,8 @@ public class MemberMessageSend {
                         sendCouponSimpleRequestVO.setCouponDefinitionId(mktCouponPO.getCouponDefinitionId());
                         sendCouponSimpleRequestVO.setSendBussienId(mktCouponPO.getBizId());
                         sendCouponSimpleRequestVO.setSendType(SendTypeEnum.SEND_COUPON_ORIENT_MARKET.getCode());
+                        sendCouponSimpleRequestVO.setBrandId(vo.getSysBrandId());
+                        sendCouponSimpleRequestVO.setCompanyId(vo.getSysCompanyId());
                         awardBO.setSendCouponSimpleRequestVO(sendCouponSimpleRequestVO);
                         awardBO.setMktType(MktSmartTypeEnum.SMART_TYPE_COUPON.getCode());
                         award.execute(awardBO);
@@ -332,7 +335,7 @@ public class MemberMessageSend {
                         integralChangeRequestModel.setChangeBills(mktActivityPOWithBLOBs.getActivityCode());
                         integralChangeRequestModel.setChangeIntegral(mktActivityPOWithBLOBs.getPoints());
                         integralChangeRequestModel.setChangeType(IntegralChangeTypeEnum.INCOME.getCode());
-                        integralChangeRequestModel.setBusinessType(String.valueOf(BusinessTypeEnum.ACTIVITY_TYPE_ACTIVITY.getCode()));
+                        integralChangeRequestModel.setBusinessType(com.bizvane.members.facade.enums.BusinessTypeEnum.ACTIVITY_TYPE_SMART.getCode());
                         integralChangeRequestModel.setChangeDate(new Date());
                         awardBO.setIntegralRecordModel(integralChangeRequestModel);
                         awardBO.setMktType(MktSmartTypeEnum.SMART_TYPE_INTEGRAL.getCode());
@@ -431,9 +434,11 @@ public class MemberMessageSend {
             membersInfoSearchVo.setPageNumber(a);
             ResponseData<com.bizvane.utils.responseinfo.PageInfo<MemberInfoVo>> memberInfoVoPages = membersAdvancedSearchApiService.search(membersInfoSearchVo);
             List<MemberInfoVo> memberInfoModelList = memberInfoVoPages.getData().getList();
+            log.info("开始循环发送短信");
             //循环发送
             if (!CollectionUtils.isEmpty(memberInfoModelList)){
                 for (MemberInfoModel memberInfo:memberInfoModelList) {
+                    log.info("循环信息类然后发送短信+");
                     //循环信息类然后发送
                     for (MktMessagePO mktMessagePO:messageVOList) {
                         AwardBO awardBO = new AwardBO();

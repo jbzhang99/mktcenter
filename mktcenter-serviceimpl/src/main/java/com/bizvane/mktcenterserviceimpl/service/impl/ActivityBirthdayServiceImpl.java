@@ -17,7 +17,7 @@ import com.bizvane.couponfacade.models.po.CouponEntityPO;
 import com.bizvane.couponfacade.models.vo.CouponDetailResponseVO;
 import com.bizvane.couponfacade.models.vo.CouponEntityAndDefinitionVO;
 import com.bizvane.couponfacade.models.vo.SendCouponSimpleRequestVO;
-import com.bizvane.members.facade.enums.IntegralChangeTypeEnum;
+import com.bizvane.members.facade.enums.*;
 import com.bizvane.members.facade.models.IntegralRecordModel;
 import com.bizvane.members.facade.models.MemberInfoModel;
 import com.bizvane.members.facade.service.api.IntegralChangeApiService;
@@ -31,6 +31,7 @@ import com.bizvane.mktcenterservice.models.vo.ActivityVO;
 import com.bizvane.mktcenterservice.models.vo.MessageVO;
 import com.bizvane.mktcenterservice.models.vo.PageForm;
 import com.bizvane.mktcenterserviceimpl.common.enums.*;
+import com.bizvane.mktcenterserviceimpl.common.enums.BusinessTypeEnum;
 import com.bizvane.mktcenterserviceimpl.common.job.JobUtil;
 import com.bizvane.mktcenterserviceimpl.common.utils.CodeUtil;
 import com.bizvane.mktcenterserviceimpl.common.utils.ExecuteParamCheckUtil;
@@ -384,18 +385,18 @@ public class ActivityBirthdayServiceImpl implements ActivityBirthdayService {
             if(1== activityPO.getLongTerm() ||(new Date().after(activityPO.getStartTime()) && new Date().before(activityPO.getEndTime()))){
                 //将活动状态变更为执行中 并且发送消息
                 bs.setActivityStatus(ActivityStatusEnum.ACTIVITY_STATUS_EXECUTING.getCode());
-                int i = mktActivityPOMapper.updateByPrimaryKeySelective(bs);
             }
             //判断审核时间 >活动结束时间  将活动状态变为已结束
             if(null!=activityPO.getEndTime()&&new Date().after(activityPO.getEndTime())){
                 bs.setActivityStatus(ActivityStatusEnum.ACTIVITY_STATUS_FINISHED.getCode());
-                int i = mktActivityPOMapper.updateByPrimaryKeySelective(bs);
             }
 
         }else{
             bs.setActivityStatus(ActivityStatusEnum.ACTIVITY_STATUS_FINISHED.getCode());
-            int i = mktActivityPOMapper.updateByPrimaryKeySelective(bs);
         }
+        log.info("更新审核状态的参数是+======="+ JSON.toJSONString(bs));
+        int i = mktActivityPOMapper.updateByPrimaryKeySelective(bs);
+        log.info("更新审核状态完成");
         //更新审核中心状态
         sysCheckServiceRpc.updateCheck(po);
         responseData.setCode(SysResponseEnum.SUCCESS.getCode());
@@ -664,7 +665,7 @@ public class ActivityBirthdayServiceImpl implements ActivityBirthdayService {
             integralChangeRequestModel.setChangeBills(activityBirthday.getActivityCode());
             integralChangeRequestModel.setChangeIntegral(activityBirthday.getPoints());
             integralChangeRequestModel.setChangeType(IntegralChangeTypeEnum.INCOME.getCode());
-            integralChangeRequestModel.setBusinessType(String.valueOf(BusinessTypeEnum.ACTIVITY_TYPE_ACTIVITY.getCode()));
+            integralChangeRequestModel.setBusinessType(com.bizvane.members.facade.enums.BusinessTypeEnum.ACTIVITY_TYPE_BIRTHDAY.getCode());
             integralChangeRequestModel.setChangeDate(new Date());
             integralChangeApiService.integralChangeOperate(integralChangeRequestModel);
             // 增加卷奖励接口
@@ -677,6 +678,8 @@ public class ActivityBirthdayServiceImpl implements ActivityBirthdayService {
                 va.setCouponDefinitionId(mktCouponPO.getCouponDefinitionId());
                 va.setSendBussienId(mktCouponPO.getBizId());
                 va.setSendType(SendTypeEnum.SEND_COUPON_BIRTH.getCode());
+                va.setBrandId(activityBirthday.getSysBrandId());
+                va.setCompanyId(activityBirthday.getSysCompanyId());
                 sendCouponServiceFeign.simple(va);
             }
             //新增积分到会员参与活动记录表中数据

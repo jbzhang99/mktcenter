@@ -57,13 +57,6 @@ public class TaskInviteServiceImpl implements TaskInviteService {
     private JobUtil  jobUtil;
 
     /**
-     * 根据任务Id查询任务详情
-     */
-    @Override
-    public List<TaskDetailBO> getInviteTaskDetails(Long mktTaskId) {
-        return mktTaskInvitePOMapper.getInviteTaskDetails(mktTaskId);
-    }
-    /**
      * 查询任务列表
      *
      * @return
@@ -161,13 +154,7 @@ public class TaskInviteServiceImpl implements TaskInviteService {
             return responseData;
         }
         TaskVO taskVO = bo.getTaskVO();
-        taskVO.setValid(Boolean.TRUE);
-        taskVO.setModifiedDate(TimeUtils.getNowTime());
-        taskVO.setModifiedUserName(stageUser.getName());
-        taskVO.setModifiedUserId(stageUser.getSysAccountId());
-
         Long mktTaskId = taskVO.getMktTaskId();
-        // String taskCode = vo.getTaskCode();
         //1.任务主表修改
         MktTaskPOWithBLOBs mktTaskPOWithBLOBs = new MktTaskPOWithBLOBs();
         BeanUtils.copyProperties(taskVO, mktTaskPOWithBLOBs);
@@ -177,7 +164,7 @@ public class TaskInviteServiceImpl implements TaskInviteService {
         mktTaskPOWithBLOBs = taskService.isOrNoCheckState(mktTaskPOWithBLOBs,StagecheckStatus);
         taskService.updateTask(mktTaskPOWithBLOBs, stageUser);
 
-        //3.任务消费表修改
+        //3.任务邀请表修改
         MktTaskInvitePO mktTaskInvitePO = new MktTaskInvitePO();
         BeanUtils.copyProperties(taskVO, mktTaskInvitePO);
         this.modifieInviteTask(mktTaskInvitePO, stageUser);
@@ -223,12 +210,15 @@ public class TaskInviteServiceImpl implements TaskInviteService {
 
     /**
      * 修改
-     *
      * @param stageUser
      * @return
      */
     @Override
     public Integer modifieInviteTask(MktTaskInvitePO po, SysAccountPO stageUser) {
+        po.setModifiedDate(TimeUtils.getNowTime());
+        po.setModifiedUserId(stageUser.getSysAccountId());
+        po.setModifiedUserName(stageUser.getName());
+
         MktTaskInvitePOExample example = new MktTaskInvitePOExample();
         example.createCriteria().andMktTaskIdEqualTo(po.getMktTaskId()).andValidEqualTo(Boolean.TRUE);
         return mktTaskInvitePOMapper.updateByExample(po, example);
@@ -249,7 +239,7 @@ public class TaskInviteServiceImpl implements TaskInviteService {
         String cardNo = memeberDetail.getCardNo();
         Long serviceStoreId = memeberDetail.getServiceStoreId();
         //符合条件的任务列表
-        List<TaskAwardBO> taskInviteAwardList = taskService.getTaskInviteAwardList(companyId, brandId, openCardTime);
+        List<TaskAwardBO> taskInviteAwardList = taskService.getTaskInviteAwardList(companyId, brandId,openCardTime);
         if (CollectionUtils.isNotEmpty(taskInviteAwardList)){
             taskInviteAwardList.stream().
                 filter(obj->{

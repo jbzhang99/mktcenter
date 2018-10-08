@@ -1,5 +1,6 @@
 package com.bizvane.mktcenterserviceimpl.service.impl;
 
+import com.alibaba.fastjson.JSON;
 import com.bizvane.centerstageservice.models.po.SysCheckPo;
 import com.bizvane.centerstageservice.rpc.SysCheckServiceRpc;
 import com.bizvane.couponfacade.enums.SendTypeEnum;
@@ -38,6 +39,7 @@ import com.bizvane.utils.responseinfo.ResponseData;
 import com.bizvane.utils.tokens.SysAccountPO;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -53,6 +55,7 @@ import java.util.List;
  * @Copyright (c) 2018 上海商帆信息科技有限公司-版权所有
  */
 @Service
+@Slf4j
 public class ActivityServiceImpl implements ActivityService {
 
     @Autowired
@@ -84,14 +87,16 @@ public class ActivityServiceImpl implements ActivityService {
         mktActivityPOWithBLOBs.setModifiedDate(new Date());
         mktActivityPOWithBLOBs.setModifiedUserName(sysAccountPO.getName());
         int i = mktActivityPOMapper.updateByPrimaryKeySelective(mktActivityPOWithBLOBs);
-     /*   //job类
+        //job类
         XxlJobInfo xxlJobInfo = new XxlJobInfo();
         xxlJobInfo.setExecutorParam(vo.getActivityCode());
         xxlJobInfo.setBizType(BusinessTypeEnum.ACTIVITY_TYPE_ACTIVITY.getCode());
         //先删除原来创建的job任务
         jobClient.removeByBiz(xxlJobInfo);
-        //删除审核中心数据*/
-
+        //删除审核中心数据
+        SysCheckPo po = new SysCheckPo();
+        po.setBusinessId(vo.getMktActivityId());
+        sysCheckServiceRpc.deleteByBusinessId(po);
         responseData.setCode(SysResponseEnum.SUCCESS.getCode());
         responseData.setMessage(SysResponseEnum.SUCCESS.getMessage());
         return responseData;
@@ -129,19 +134,18 @@ public class ActivityServiceImpl implements ActivityService {
             if(1== activityPO.getLongTerm() ||(new Date().after(activityPO.getStartTime()) && new Date().before(activityPO.getEndTime()))){
                 //将活动状态变更为执行中 并且发送消息
                 bs.setActivityStatus(ActivityStatusEnum.ACTIVITY_STATUS_EXECUTING.getCode());
-                int i = mktActivityPOMapper.updateByPrimaryKeySelective(bs);
 
             }
             //判断审核时间 >活动结束时间  将活动状态变为已结束
             if(null!=activityPO.getEndTime() && new Date().after(activityPO.getEndTime())){
                 bs.setActivityStatus(ActivityStatusEnum.ACTIVITY_STATUS_FINISHED.getCode());
-                int i = mktActivityPOMapper.updateByPrimaryKeySelective(bs);
             }
 
         }else{
             bs.setActivityStatus(ActivityStatusEnum.ACTIVITY_STATUS_FINISHED.getCode());
-            int i = mktActivityPOMapper.updateByPrimaryKeySelective(bs);
         }
+        log.info("更新审核状态的参数是+======="+ JSON.toJSONString(bs));
+        int i = mktActivityPOMapper.updateByPrimaryKeySelective(bs);
         //更新审核中心状态
         sysCheckServiceRpc.updateCheck(po);
         responseData.setCode(SysResponseEnum.SUCCESS.getCode());

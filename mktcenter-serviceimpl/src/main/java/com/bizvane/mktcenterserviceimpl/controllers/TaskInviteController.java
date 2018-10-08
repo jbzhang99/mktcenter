@@ -37,21 +37,6 @@ public class TaskInviteController {
     @Autowired
     private TaskInviteService taskInviteService;
     /**
-     * 查询消费任务详情
-     */
-    @RequestMapping("/getInviteTaskDetails")
-    public  ResponseData<TaskDetailBO> getInviteTaskDetails(Long mktTaskId){
-        ResponseData<TaskDetailBO> result = new ResponseData<TaskDetailBO>(SysResponseEnum.FAILED.getCode(),SysResponseEnum.FAILED.getMessage(),null);
-        List<TaskDetailBO> lists = taskInviteService.getInviteTaskDetails(mktTaskId);
-        if (CollectionUtils.isNotEmpty(lists)){
-            result.setCode(SysResponseEnum.SUCCESS.getCode());
-            result.setMessage(SysResponseEnum.SUCCESS.getMessage());
-            result.setData(lists.get(0));
-        }
-        return  result;
-    }
-
-    /**
      * 创建任务
      * @return
      */
@@ -59,12 +44,6 @@ public class TaskInviteController {
     public ResponseData<Integer> addTask(TaskBO bo , HttpServletRequest request) throws ParseException {
         //参数校验通过，获取操作人信息
         SysAccountPO sysAccountPo = TokenUtils.getStageUser(request);
-//        SysAccountPO sysAccountPo = new SysAccountPO();
-//        sysAccountPo.setSysAccountId(26L);
-//        sysAccountPo.setSysCompanyId(2L);
-//        sysAccountPo.setBrandId(4L);
-//        sysAccountPo.setAccountCode("15328634678");
-//        sysAccountPo.setName("不啊哟删除");
         bo.getTaskVO().setTaskType(3);
         return  taskInviteService.addTask(bo, sysAccountPo);
     }

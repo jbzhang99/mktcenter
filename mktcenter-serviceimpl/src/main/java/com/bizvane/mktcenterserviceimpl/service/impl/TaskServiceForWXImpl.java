@@ -1,14 +1,21 @@
 package com.bizvane.mktcenterserviceimpl.service.impl;
 
 import com.alibaba.fastjson.JSON;
+import com.bizvane.centercontrolservice.models.bo.AppletFunctionBO;
+import com.bizvane.centercontrolservice.models.po.AppletFunctionPO;
+import com.bizvane.centercontrolservice.rpc.AppletRouteServiceRpc;
 import com.bizvane.members.facade.service.api.WxAppletApiService;
 import com.bizvane.mktcenterservice.interfaces.TaskServiceForWX;
 import com.bizvane.mktcenterservice.models.bo.TaskWXBO;
 import com.bizvane.mktcenterservice.models.bo.TaskWXDetailBO;
+import com.bizvane.mktcenterservice.models.po.MktTaskSharePOExample;
+import com.bizvane.mktcenterservice.models.po.MktTaskSharePOWithBLOBs;
 import com.bizvane.mktcenterservice.models.vo.TaskForWXVO;
 import com.bizvane.mktcenterservice.models.vo.TaskVO;
+import com.bizvane.mktcenterserviceimpl.common.constants.TaskConstants;
 import com.bizvane.mktcenterserviceimpl.common.enums.TaskTypeEnum;
 import com.bizvane.mktcenterserviceimpl.mappers.MktTaskPOMapper;
+import com.bizvane.mktcenterserviceimpl.mappers.MktTaskSharePOMapper;
 import com.bizvane.utils.enumutils.SysResponseEnum;
 import com.bizvane.utils.responseinfo.ResponseData;
 import com.github.pagehelper.PageHelper;
@@ -29,15 +36,18 @@ import java.util.List;
 @Service
 @Slf4j
 public class TaskServiceForWXImpl implements TaskServiceForWX {
-
     @Autowired
     private MktTaskPOMapper taskPOMapper;
     @Autowired
     private  WxAppletApiService wxAppletApiService;
+    @Autowired
+    private MktTaskSharePOMapper mktTaskSharePOMapper;
+    @Autowired
+    private AppletRouteServiceRpc appletRouteServiceRpc;
 
     @Override
     //获取该会员已完成和未完成任务的任务
-    public ResponseData getCompleteTask(TaskForWXVO vo) {
+    public ResponseData<PageInfo<TaskWXBO>> getCompleteTask(TaskForWXVO vo) {
         ResponseData<PageInfo<TaskWXBO>> responseData = new ResponseData(new PageInfo<TaskWXBO>(new ArrayList<TaskWXBO>()));
         ResponseData<Long> resultData = wxAppletApiService.getServiceStoreId(vo.getMemberCode());
         Long storeId = resultData.getData();
@@ -72,6 +82,33 @@ public class TaskServiceForWXImpl implements TaskServiceForWX {
         }else{
             responseData.setData(new  TaskWXDetailBO());
         }
+        return responseData;
+    }
+    /**
+     * 获取链接详情
+     */
+    @Override
+    public ResponseData<AppletFunctionBO>  getURLDetail(TaskForWXVO vo){
+        ResponseData<AppletFunctionBO> responseData = new ResponseData<>();
+        AppletFunctionBO urlBO = new AppletFunctionBO();
+        MktTaskSharePOExample mktTaskSharePOExample = new MktTaskSharePOExample();
+        mktTaskSharePOExample.createCriteria().andMktTaskIdEqualTo(vo.getMktTaskId()).andValidEqualTo(Boolean.TRUE);
+        List<MktTaskSharePOWithBLOBs> sharePOlist = mktTaskSharePOMapper.selectByExampleWithBLOBs(mktTaskSharePOExample);
+        if (CollectionUtils.isNotEmpty(sharePOlist)){
+            MktTaskSharePOWithBLOBs sharePOWithBLOBs = sharePOlist.get(0);
+            String shareUrl = sharePOWithBLOBs.getShareUrl();
+            // 1站内链接，2自定义链接',
+            Integer shareUrlType = sharePOWithBLOBs.getShareUrlType();
+            if (TaskConstants.SECOND.equals(shareUrlType)) {
+                urlBO = appletRouteServiceRpc.getAllAppletFunctionByUrl(shareUrl).getData();
+                urlBO.setType(1);
+            }else {
+                urlBO.setFunctionUrl(shareUrl);
+                urlBO.setFunctionName("站外链接");
+                urlBO.setType(2);
+            }
+        }
+        responseData.setData(urlBO);
         return responseData;
     }
 }

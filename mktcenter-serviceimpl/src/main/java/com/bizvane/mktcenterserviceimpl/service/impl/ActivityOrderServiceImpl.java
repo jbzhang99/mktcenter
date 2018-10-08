@@ -14,7 +14,7 @@ import com.bizvane.couponfacade.interfaces.CouponQueryServiceFeign;
 import com.bizvane.couponfacade.models.vo.CouponDetailResponseVO;
 import com.bizvane.couponfacade.models.vo.CouponEntityAndDefinitionVO;
 import com.bizvane.couponfacade.models.vo.SendCouponSimpleRequestVO;
-import com.bizvane.members.facade.enums.IntegralChangeTypeEnum;
+import com.bizvane.members.facade.enums.*;
 import com.bizvane.members.facade.es.vo.MembersInfoSearchVo;
 import com.bizvane.members.facade.models.IntegralRecordModel;
 import com.bizvane.members.facade.models.MemberInfoModel;
@@ -35,6 +35,7 @@ import com.bizvane.mktcenterservice.models.vo.PageForm;
 import com.bizvane.mktcenterserviceimpl.common.award.Award;
 import com.bizvane.mktcenterserviceimpl.common.award.MemberMessageSend;
 import com.bizvane.mktcenterserviceimpl.common.enums.*;
+import com.bizvane.mktcenterserviceimpl.common.enums.BusinessTypeEnum;
 import com.bizvane.mktcenterserviceimpl.common.job.XxlJobConfig;
 import com.bizvane.mktcenterserviceimpl.common.utils.CodeUtil;
 import com.bizvane.mktcenterserviceimpl.common.utils.ExecuteParamCheckUtil;
@@ -575,20 +576,20 @@ public class ActivityOrderServiceImpl implements ActivityOrderService {
             if(new Date().after(activityPO.getStartTime()) && new Date().before(activityPO.getEndTime())){
                 //将活动状态变更为执行中 并且发送消息（当前活动适用会员）
                 bs.setActivityStatus(ActivityStatusEnum.ACTIVITY_STATUS_EXECUTING.getCode());
-                int i = mktActivityPOMapper.updateByPrimaryKeySelective(bs);
 
             }
             //判断审核时间 >活动结束时间  将活动状态变为已结束
             if(null!=activityPO.getEndTime() && new Date().after(activityPO.getEndTime())){
                 bs.setActivityStatus(ActivityStatusEnum.ACTIVITY_STATUS_FINISHED.getCode());
-                int i = mktActivityPOMapper.updateByPrimaryKeySelective(bs);
             }
 
         }else{
             bs.setActivityStatus(ActivityStatusEnum.ACTIVITY_STATUS_FINISHED.getCode());
-            int i = mktActivityPOMapper.updateByPrimaryKeySelective(bs);
-            log.info("更新审核状态");
         }
+        //更新审核状态
+        log.info("更新审核状态的参数是+======="+ JSON.toJSONString(bs));
+        int i = mktActivityPOMapper.updateByPrimaryKeySelective(bs);
+        log.info("更新审核状态");
         //更新审核中心状态
         sysCheckServiceRpc.updateCheck(po);
         log.info("审核消费活动结束");
@@ -658,7 +659,7 @@ public class ActivityOrderServiceImpl implements ActivityOrderService {
                 integralChangeRequestModel.setChangeBills(activityVO.getActivityCode());
                 integralChangeRequestModel.setChangeIntegral(activityVO.getPoints());
                 integralChangeRequestModel.setChangeType(IntegralChangeTypeEnum.INCOME.getCode());
-                integralChangeRequestModel.setBusinessType(String.valueOf(BusinessTypeEnum.ACTIVITY_TYPE_ACTIVITY.getCode()));
+                integralChangeRequestModel.setBusinessType(com.bizvane.members.facade.enums.BusinessTypeEnum.ACTIVITY_TYPE_ORDER.getCode());
                 integralChangeRequestModel.setChangeDate(new Date());
                 bo.setIntegralRecordModel(integralChangeRequestModel);
                 bo.setMktType(MktSmartTypeEnum.SMART_TYPE_INTEGRAL.getCode());
@@ -680,6 +681,8 @@ public class ActivityOrderServiceImpl implements ActivityOrderService {
                     sendCouponSimpleRequestVO.setCouponDefinitionId(mktCouponPO.getCouponDefinitionId());
                     sendCouponSimpleRequestVO.setSendBussienId(mktCouponPO.getBizId());
                     sendCouponSimpleRequestVO.setSendType(SendTypeEnum.SEND_COUPON_COUSUME_ACTIVITY.getCode());
+                    sendCouponSimpleRequestVO.setBrandId(vo.getBrandId().longValue());
+                    sendCouponSimpleRequestVO.setCompanyId(vo.getCompanyId());
                     awardBO.setSendCouponSimpleRequestVO(sendCouponSimpleRequestVO);
                     awardBO.setMktType(MktSmartTypeEnum.SMART_TYPE_COUPON.getCode());
                     award.execute(awardBO);

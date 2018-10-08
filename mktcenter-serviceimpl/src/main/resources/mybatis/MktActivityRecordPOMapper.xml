@@ -526,4 +526,22 @@ WHERE
       and member_code = #{memberCode,jdbcType=VARCHAR}
     </if>
   </select>
+  <select id="selectRecordPOList" parameterType="com.bizvane.mktcenterservice.models.po.MktActivityRecordPO" resultType="com.bizvane.mktcenterservice.models.po.MktActivityRecordPO">
+    SELECT
+   *
+    FROM
+    t_mkt_activity_record
+    WHERE
+    valid = 1 AND to_days(participate_date) = to_days(now())
+    AND activity_type=6
+    <if test="acitivityId != null">
+      and  acitivity_id = #{acitivityId,jdbcType=BIGINT}
+    </if>
+    <if test="sysBrandId != null">
+      and  sys_brand_id = #{sysBrandId,jdbcType=BIGINT}
+    </if>
+    <if test="memberCode != null">
+      and member_code = #{memberCode,jdbcType=VARCHAR}
+    </if>
+  </select>
 </mapper>

@@ -1,4 +1,5 @@
 package com.bizvane.mktcenterserviceimpl.service.impl;
+import com.bizvane.centercontrolservice.models.po.AppletFunctionPO;
 import com.bizvane.centercontrolservice.models.po.AppletRoutePO;
 import com.bizvane.centercontrolservice.rpc.AppletRouteServiceRpc;
 import com.bizvane.centerstageservice.rpc.SysCheckConfigServiceRpc;
@@ -96,10 +97,9 @@ public class TaskShareServiceImpl implements TaskShareService {
      * 获取站内链接 列表
      */
     @Override
-    public List<AppletRoutePO>  getURLList(){
-        //return  menberMadeServiceRpc.selectBrandFunctionRpc(brandId,1);
-        ResponseData<List<AppletRoutePO>> returnData = appletRouteServiceRpc.getAllAppletRoute();
-        return  returnData.getData();
+    public ResponseData<List<AppletFunctionPO>>  getURLList(){
+       return appletRouteServiceRpc.getAllAppletFunction();
+
     }
     /**
      * 添加微信分享任务

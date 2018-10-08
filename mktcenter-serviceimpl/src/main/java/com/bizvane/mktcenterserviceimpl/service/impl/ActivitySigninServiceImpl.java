@@ -10,6 +10,7 @@ import com.bizvane.couponfacade.interfaces.CouponQueryServiceFeign;
 import com.bizvane.couponfacade.models.po.CouponEntityPO;
 import com.bizvane.couponfacade.models.vo.CouponDetailResponseVO;
 import com.bizvane.couponfacade.models.vo.CouponEntityAndDefinitionVO;
+import com.bizvane.members.facade.enums.BusinessTypeEnum;
 import com.bizvane.members.facade.enums.IntegralChangeTypeEnum;
 import com.bizvane.members.facade.models.IntegralRecordModel;
 import com.bizvane.members.facade.models.MemberInfoModel;
@@ -36,6 +37,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
+
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -262,13 +264,13 @@ public class ActivitySigninServiceImpl implements ActivitySigninService {
         ResponseData responseData = new ResponseData();
         log.info("执行签到活动="+vo.getBrandId()+"="+vo.getMemberCode());
         //判断今天是否是执行过签到活动
-        MktActivityRecordPOExample example = new MktActivityRecordPOExample();
-        example.createCriteria().andMemberCodeEqualTo(vo.getMemberCode()).andParticipateDateEqualTo(new Date()).andSysBrandIdEqualTo(vo.getBrandId())
-                .andValidEqualTo(Boolean.TRUE);
-        List<MktActivityRecordPO> lists =mktActivityRecordPOMapper.selectByExample(example);
-        if (!CollectionUtils.isEmpty(lists)){
+        MktActivityRecordPO example = new MktActivityRecordPO();
+        example.setMemberCode(vo.getMemberCode());
+        example.setSysBrandId(vo.getBrandId());
+        List<MktActivityRecordPO> lists =mktActivityRecordPOMapper.selectRecordPOList(example);
+        if (lists.size()>=1){
             responseData.setCode(SysResponseEnum.OPERATE_FAILED_ADD_ERROR.getCode());
-            responseData.setMessage("该会员已经今天已经签到!");
+            responseData.setMessage("该会员今天已经签到!");
             return responseData;
         }
         //查询品牌下所有执行中的活动
@@ -292,7 +294,7 @@ public class ActivitySigninServiceImpl implements ActivitySigninService {
             integralChangeRequestModel.setChangeBills(activityVO.getActivityCode());
             integralChangeRequestModel.setChangeIntegral(activityVO.getPoints());
             integralChangeRequestModel.setChangeType(IntegralChangeTypeEnum.INCOME.getCode());
-            integralChangeRequestModel.setBusinessType(String.valueOf(BusinessTypeEnum.ACTIVITY_TYPE_ACTIVITY.getCode()));
+            integralChangeRequestModel.setBusinessType(BusinessTypeEnum.ACTIVITY_TYPE_SIGNIN.getCode());
             integralChangeRequestModel.setChangeDate(new Date());
             bo.setIntegralRecordModel(integralChangeRequestModel);
             bo.setMktType(MktSmartTypeEnum.SMART_TYPE_INTEGRAL.getCode());
@@ -336,13 +338,13 @@ public class ActivitySigninServiceImpl implements ActivitySigninService {
                 //将活动状态变更为执行中
                  log.info("更新活动状态");
                 bs.setActivityStatus(ActivityStatusEnum.ACTIVITY_STATUS_EXECUTING.getCode());
-                int i = mktActivityPOMapper.updateByPrimaryKeySelective(bs);
         }else{
             log.info("更新活动状态");
             bs.setActivityStatus(ActivityStatusEnum.ACTIVITY_STATUS_FINISHED.getCode());
-            int i = mktActivityPOMapper.updateByPrimaryKeySelective(bs);
 
         }
+        log.info("更新审核状态的参数是+======="+ JSON.toJSONString(bs));
+        int i = mktActivityPOMapper.updateByPrimaryKeySelective(bs);
         //更新审核中心状态
         sysCheckServiceRpc.updateCheck(po);
         responseData.setCode(SysResponseEnum.SUCCESS.getCode());

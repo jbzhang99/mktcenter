@@ -16,7 +16,11 @@
     <appender name="file" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <file>${log.path}</file>
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <fileNamePattern>${log.path}.%d{yyyy-MM-dd}.zip</fileNamePattern>
+            <fileNamePattern>${log.path}.%d.%i.log.zip</fileNamePattern>
+            <maxHistory>30</maxHistory>
+            <timeBasedFileNamingAndTriggeringPolicy  class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                <maxFileSize>128MB</maxFileSize>
+            </timeBasedFileNamingAndTriggeringPolicy>
         </rollingPolicy>
 
         <encoder>
@@ -33,8 +37,7 @@
     <Logger name="org.apache.catalina.util.LifecycleBase" level="error" />
     <Logger name="org.apache.coyote.http11.Http11NioProtocol" level="warn" />
     <Logger name="org.apache.tomcat.util.net.NioSelectorPool" level="warn" />
-    <Logger name="org.springframework" level="debug" />
-    <logger name="com.lzw" level="debug" />
+    <Logger name="org.springframework" level="info" />
     <logger name="org.mybatis" level="debug" />
     <logger name="java.sql" level="error" />
     <logger name="java.sql.Connection" level="error" />
