@@ -354,38 +354,21 @@ public class TaskServiceImpl implements TaskService {
     @Override
     @Async
     public void doOrderTask(MktTaskPOWithBLOBs mktTaskPOWithBLOBs,List<MktMessagePO> mktmessagePOList, SysAccountPO stageUser) {
-        //任务Id
-//        Long mktTaskId = mktTaskPOWithBLOBs.getMktTaskId();
-//        //品牌id
-//        Long sysBrandId = mktTaskPOWithBLOBs.getSysBrandId();
-//        //公司id
-//        Long sysCompanyId = mktTaskPOWithBLOBs.getSysCompanyId();
         //审核状态:1未审核，2审核中，3已审核，4已驳回',
         Integer checkStatus = mktTaskPOWithBLOBs.getCheckStatus();
         //执行状态:1待执行，2执行中，3已禁用，4已结束',
         Integer taskStatus = mktTaskPOWithBLOBs.getTaskStatus();
 
-//        if (TaskConstants.THREE.equals(checkStatus) && TaskConstants.SECOND.equals(taskStatus)) {
-//            //已审核   执行中  执行时间小于当前时间 或等于当前时间
-//            //判断是否需要发送消息和短信 业务类型：1活动，2任务
-//            this.sendSmg(mktTaskPOWithBLOBs,mktmessagePOList,stageUser);
-//            //任务到期置为无效
-//            jobUtil.addTaskEndJob(stageUser, mktTaskPOWithBLOBs);
-//        } else if (TaskConstants.THREE.equals(checkStatus) && TaskConstants.FIRST.equals(taskStatus)) {
-//            //已审核   待执行,创建job
-//            //判断是否需要发送消息和短信,创建job
-//            jobUtil.addTaskStartJob(stageUser, mktTaskPOWithBLOBs);
-//            jobUtil.addTaskEndJob(stageUser, mktTaskPOWithBLOBs);
-//        }
         if (TaskConstants.THREE.equals(checkStatus) && TaskConstants.FIRST.equals(taskStatus)) {
-            //已审核   待执行,创建开始任务job
-            jobUtil.addTaskStartJob(stageUser, mktTaskPOWithBLOBs);
+            //已审核 待执行,创建开始任务job和结束任务job,并且对发送短信和消息进行判断
+             jobUtil.addTaskStartJob(stageUser, mktTaskPOWithBLOBs);
+             jobUtil.addTaskEndJob(stageUser, mktTaskPOWithBLOBs);
+             this.sendSmg(mktTaskPOWithBLOBs,mktmessagePOList,stageUser);
+        }else if (TaskConstants.THREE.equals(checkStatus) && TaskConstants.FIRST.equals(taskStatus)){
+            //已审核 执中中, 创建结束任务job,并且对发送短信和消息进行判断
+            jobUtil.addTaskEndJob(stageUser, mktTaskPOWithBLOBs);
+            this.sendSmg(mktTaskPOWithBLOBs,mktmessagePOList,stageUser);
         }
-        //创建结束任务的job
-        jobUtil.addTaskEndJob(stageUser, mktTaskPOWithBLOBs);
-         //判断是否需要发送消息和短信,立刻发送或创建job创建job
-        this.sendSmg(mktTaskPOWithBLOBs,mktmessagePOList,stageUser);
-
     }
 
     /**
@@ -398,7 +381,16 @@ public class TaskServiceImpl implements TaskService {
         Long sysBrandId = mktTaskPOWithBLOBs.getSysBrandId();
         Long mktTaskId = mktTaskPOWithBLOBs.getMktTaskId();
         Integer taskType = mktTaskPOWithBLOBs.getTaskType();
+        if (TaskConstants.FIRST.equals(taskType)){
+            this.doSendprofilMsg(mktTaskPOWithBLOBs, mktmessagePOList, stageUser, sysCompanyId, sysBrandId, mktTaskId, taskType);
+        }else{
+            this.doSendNoprofilMsg(mktTaskPOWithBLOBs, mktmessagePOList, stageUser, sysCompanyId, sysBrandId, mktTaskId, taskType);
+        }
 
+    }
+    //除了完善资料之外的其他任务发送消息和短信逻辑判断
+    @Async
+    public  void doSendNoprofilMsg(MktTaskPOWithBLOBs mktTaskPOWithBLOBs, List<MktMessagePO> mktmessagePOList, SysAccountPO stageUser, Long sysCompanyId, Long sysBrandId, Long mktTaskId, Integer taskType) {
         if (CollectionUtils.isNotEmpty(mktmessagePOList)) {
             mktmessagePOList.stream().forEach(
                     message -> {
@@ -413,7 +405,7 @@ public class TaskServiceImpl implements TaskService {
                         if (TaskConstants.FIRST.equals(msgType)) {
                             //立即发送
                             if (sendImmediately){
-                                this.sendMemberMessage(sysBrandId,msgContent,exceptWechat);
+                                this.sendMemberMessage(sysBrandId,taskType,msgContent,exceptWechat);
                             }else if (!sendImmediately && sendTime!=null){
                                 jobUtil.addMessageXXTaskJob(stageUser, mktTaskPOWithBLOBs,message);
                             }
@@ -422,7 +414,7 @@ public class TaskServiceImpl implements TaskService {
                         //2=短信     所有粉丝
                         if (TaskConstants.SECOND.equals(msgType)){
                             if (sendImmediately){
-                                this.sendBachMSM(mktTaskId, taskType,sysCompanyId, sysBrandId,  msgContent,exceptWechat);
+                                this.sendBachMSM(mktTaskId,taskType,sysCompanyId,sysBrandId,msgContent,exceptWechat);
                             }else if (!sendImmediately && sendTime!=null){
                                 jobUtil.addMessageDXTaskJob(stageUser, mktTaskPOWithBLOBs,message);
                             }
@@ -432,16 +424,39 @@ public class TaskServiceImpl implements TaskService {
             );
         }
     }
+    //完善资料任务发送短信和消息任务的逻辑判断
+    @Async
+    public  void doSendprofilMsg(MktTaskPOWithBLOBs mktTaskPOWithBLOBs, List<MktMessagePO> mktmessagePOList, SysAccountPO stageUser, Long sysCompanyId, Long sysBrandId, Long mktTaskId, Integer taskType) {
+        if (CollectionUtils.isNotEmpty(mktmessagePOList)) {
+            mktmessagePOList.stream().forEach(
+                    message -> {
+                        Boolean exceptWechat = message.getExceptWechat();
+                        String msgType = message.getMsgType();
+                        String msgContent = message.getMsgContent();
+                        //1=模板消息   所有的会员
+                        if (TaskConstants.FIRST.equals(msgType)) {
+                         //立即发送
+                         this.sendMemberMessage(sysBrandId,taskType,msgContent,exceptWechat);
+                        }
+                        //2=短信     所有粉丝
+                        if (TaskConstants.SECOND.equals(msgType)){
+                           this.sendBachMSM(mktTaskId,taskType,sysCompanyId,sysBrandId,msgContent,exceptWechat);
+                        }
+
+                    }
+            );
+        }
+    }
     //给会员发送微信消息
     @Async
     @Override
-    public  void sendMemberMessage(Long sysBrandId,String msgContent,Boolean exceptWechat) {
-        com.bizvane.utils.responseinfo.PageInfo<MemberInfoModel> memeberspage = this.getCompanyMemebers(sysBrandId,exceptWechat, 1, 10000);
+    public  void sendMemberMessage(Long sysBrandId,Integer taskType,String msgContent,Boolean exceptWechat) {
+        com.bizvane.utils.responseinfo.PageInfo<MemberInfoModel> memeberspage = this.getCompanyMemebers(sysBrandId,taskType,exceptWechat,1,10000);
         List<MemberInfoModel> maemberlist = memeberspage.getList();
         int pages = memeberspage.getPages();
         if (CollectionUtils.isNotEmpty(maemberlist)){
             for (int i=1;i<pages;i++){
-                com.bizvane.utils.responseinfo.PageInfo<MemberInfoModel> pagesdata= this.getCompanyMemebers(sysBrandId,exceptWechat, i, 10000);
+                com.bizvane.utils.responseinfo.PageInfo<MemberInfoModel> pagesdata= this.getCompanyMemebers(sysBrandId,taskType,exceptWechat,i, 10000);
                 List<MemberInfoModel> list = pagesdata.getList();
                 AwardBO memberBO = new AwardBO();
                 //4=微信模板消息  营销
@@ -462,8 +477,7 @@ public class TaskServiceImpl implements TaskService {
 
     //给粉丝 批量发送短信
     @Override
-    public void sendBachMSM(Long mktTaskId, Integer taskType,Long sysCompanyId,Long sysBrandId,String msgContent,Boolean exceptWechat) {
-        // String msgContent = message.getMsgContent();
+    public void sendBachMSM(Long mktTaskId,Integer taskType,Long sysCompanyId,Long sysBrandId,String msgContent,Boolean exceptWechat) {
         //获取营销短信通道
         SmsConfigVo smsConfigVo = new SmsConfigVo();
         smsConfigVo.setSysBrandId(sysBrandId);
@@ -472,17 +486,9 @@ public class TaskServiceImpl implements TaskService {
         SysSmsConfigPo smsConfigPo = sysSmsConfigServiceRpc.getCenterControlChannel(smsConfigVo);
         Integer batchNum = smsConfigPo.getBatchNum();
 
-//        com.bizvane.utils.responseinfo.PageInfo<WxChannelInfoVo> fanspage = this.getCompanyFans(sysBrandId, 1, batchNum);
-//        List<WxChannelInfoVo> list = fanspage.getList();
-//        int pages = fanspage.getPages();
-
-        com.bizvane.utils.responseinfo.PageInfo<MemberInfoModel> memeberspage = this.getCompanyMemebers(sysBrandId,exceptWechat, 1, batchNum);
+        com.bizvane.utils.responseinfo.PageInfo<MemberInfoModel> memeberspage = this.getCompanyMemebers(sysBrandId,taskType,exceptWechat,1,batchNum);
         List<MemberInfoModel> memberlist = memeberspage.getList();
         int pages = memeberspage.getPages();
-
-        //  SysSmsConfigVO sysSmsConfigVO = new SysSmsConfigVO();
-        //  BeanUtils.copyProperties(smsConfigPo,sysSmsConfigVO);
-        //  sysSmsConfigVO.setMsgContent(msgContent);
 
         AwardBO fanBO = new AwardBO();
         //7=批量短信
@@ -496,7 +502,7 @@ public class TaskServiceImpl implements TaskService {
 
         if (CollectionUtils.isNotEmpty(memberlist)){
             for (int i=1;i<pages;i++){
-                com.bizvane.utils.responseinfo.PageInfo<MemberInfoModel> onepagememebers = this.getCompanyMemebers(sysBrandId,exceptWechat, i, batchNum);
+                com.bizvane.utils.responseinfo.PageInfo<MemberInfoModel> onepagememebers = this.getCompanyMemebers(sysBrandId,taskType,exceptWechat,i,batchNum);
                 List<MemberInfoModel> onelist = onepagememebers.getList();
                 String pnones = onelist.stream().filter(fan -> StringUtils.isNotBlank(fan.getPhone())).map(fan -> fan.getPhone()).collect(Collectors.joining(","));
                 messageVO.setPhoneStr(pnones);
@@ -842,17 +848,21 @@ public class TaskServiceImpl implements TaskService {
      * 查询品牌下的所有会员,分页-已经审核
      */
     @Override
-    public com.bizvane.utils.responseinfo.PageInfo<MemberInfoModel> getCompanyMemebers(Long sysBrandId, Boolean exceptWechat,Integer pageNumber,Integer pageSize) {
+    public com.bizvane.utils.responseinfo.PageInfo<MemberInfoModel> getCompanyMemebers(Long sysBrandId,Integer taskType,Boolean exceptWechat,Integer pageNumber,Integer pageSize) {
         MemberInfoApiModel members = new MemberInfoApiModel();
         members.setBrandId(sysBrandId);
         members.setPageNumber(pageNumber);
         members.setPageSize(pageSize);
-        //'消息发送是否排除微信会员，1是，0否',
         // "会员范围:1微信会员，2全部会员"
+        members.setMemberScope(TaskConstants.ALL_MEMBER);
+       // 当except_wechat==true时,需要排除微信会员
         if (exceptWechat){
-            members.setMemberScope(TaskConstants.WEXIN_MEMBER);
-        }else{
-            members.setMemberScope(TaskConstants.ALL_MEMBER);
+            members.setMemberScope(TaskConstants.NO_WEXIN_MEMBER);
+        }
+        //当是完善资料任务时,查询完善资料和未完善资料的任务
+        // '消息类型，1模板消息，2短信',
+        if (TaskConstants.FIRST.equals(taskType)){
+            members.setDataIntegrityPercentage(0);
         }
         ResponseData<com.bizvane.utils.responseinfo.PageInfo<MemberInfoModel>> memberInfo = memberInfoApiService.getMemberInfo(members);
         com.bizvane.utils.responseinfo.PageInfo<MemberInfoModel> data = memberInfo.getData();

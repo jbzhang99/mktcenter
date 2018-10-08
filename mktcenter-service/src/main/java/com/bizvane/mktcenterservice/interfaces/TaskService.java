@@ -31,14 +31,9 @@ public interface TaskService {
      * 给会员发送消息
      * @param sysBrandId
      */
-    public  void sendMemberMessage(Long sysBrandId,String msgContent,Boolean exceptWechat);
+    public  void sendMemberMessage(Long sysBrandId,Integer taskType,String msgContent,Boolean exceptWechat);
     /**
      * 批量给粉丝发送短信
-     * @param sysCompanyId
-     * @param sysBrandId
-     * @param mktTaskId
-     * @param taskType
-     * @param msgContent
      */
     public void sendBachMSM(Long mktTaskId,Integer taskType,Long sysCompanyId,Long sysBrandId,String msgContent,Boolean exceptWechat);
     /**
@@ -173,7 +168,7 @@ public interface TaskService {
      * 获取品牌下的所有会员
      * @return
      */
-    public  PageInfo<MemberInfoModel> getCompanyMemebers(Long sysBrandId,Boolean exceptWechat,Integer pageNumber,Integer pageSize);
+    public  PageInfo<MemberInfoModel> getCompanyMemebers(Long sysBrandId,Integer taskType,Boolean exceptWechat,Integer pageNumber,Integer pageSize);
 
     /**
      * 获取品牌下的所有粉丝

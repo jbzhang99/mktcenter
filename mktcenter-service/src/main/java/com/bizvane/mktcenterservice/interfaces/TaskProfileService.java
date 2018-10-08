@@ -2,6 +2,8 @@ package com.bizvane.mktcenterservice.interfaces;
 
 import com.bizvane.members.facade.vo.ExtendPropertyVO;
 import com.bizvane.mktcenterservice.models.bo.TaskBO;
+import com.bizvane.mktcenterservice.models.po.MktMessagePO;
+import com.bizvane.mktcenterservice.models.po.MktTaskPOWithBLOBs;
 import com.bizvane.mktcenterservice.models.vo.*;
 import com.bizvane.utils.responseinfo.ResponseData;
 import com.bizvane.utils.tokens.SysAccountPO;
@@ -24,6 +26,10 @@ public interface TaskProfileService {
      */
     public ResponseData<Integer> addTask(TaskBO bo, SysAccountPO stageUser) throws ParseException;
 
+    /**
+     * 完善资料任务,没有开始时间和结束时间.根据任务状态和执行状态来发送消息和短信
+     */
+    public void doProfileTask(MktTaskPOWithBLOBs mktTaskPOWithBLOBs, List<MktMessagePO> mktmessagePOList, SysAccountPO stageUser);
     /**
      * 修改任务
      * @param bo
