@@ -1,5 +1,6 @@
 package com.bizvane.mktcenterserviceimpl.service.impl;
 
+import com.alibaba.fastjson.JSON;
 import com.bizvane.centerstageservice.models.po.SysCheckConfigPo;
 import com.bizvane.centerstageservice.models.po.SysCheckPo;
 import com.bizvane.centerstageservice.rpc.SysCheckConfigServiceRpc;
@@ -148,7 +149,7 @@ public class TaskProfileServiceImpl implements TaskProfileService {
         }
 
         //6.处理任务
-        taskService.doOrderTask(mktTaskPOWithBLOBs,mktmessagePOList,stageUser);
+        this.doProfileTask(mktTaskPOWithBLOBs,mktmessagePOList,stageUser);
 
         responseData.setCode(SystemConstants.SUCCESS_CODE);
         responseData.setMessage(SystemConstants.SUCCESS_MESSAGE);
@@ -175,6 +176,10 @@ public class TaskProfileServiceImpl implements TaskProfileService {
         po.setTaskStatus(po.getCheckStatus());
         return po;
     }
+
+    /**
+     * 执行完善资料任务相关功能
+     */
     @Override
     @Async
     public void doProfileTask(MktTaskPOWithBLOBs mktTaskPOWithBLOBs,List<MktMessagePO> mktmessagePOList, SysAccountPO stageUser) {
@@ -226,14 +231,14 @@ public class TaskProfileServiceImpl implements TaskProfileService {
         MktTaskPOWithBLOBs mktTaskPOWithBLOBs = new MktTaskPOWithBLOBs();
         BeanUtils.copyProperties(taskVO, mktTaskPOWithBLOBs);
         taskService.updateTask(mktTaskPOWithBLOBs, stageUser);
-        //3.任务消费表修改
+        //3.任务完善资料表修改
         MktTaskProfilePOWithBLOBs mktTaskProfilePO = new MktTaskProfilePOWithBLOBs();
         BeanUtils.copyProperties(taskVO, mktTaskProfilePO);
         mktTaskProfilePO.setMktTaskId(mktTaskId);
         this.updateProfileTask(mktTaskProfilePO, stageUser);
+
         //4.奖励修改 biz_type 活动类型  1=活动
         taskCouponService.deleteTaskCoupon(mktTaskId, stageUser);
-
         List<MktCouponPO> mktCouponPOList = bo.getMktCouponPOList();
         if (org.apache.commons.collections.CollectionUtils.isNotEmpty(mktCouponPOList)) {
             mktCouponPOList.stream().forEach(param -> {
@@ -254,7 +259,7 @@ public class TaskProfileServiceImpl implements TaskProfileService {
             );
         }
         //6.处理任务
-        taskService.doOrderTask(mktTaskPOWithBLOBs,mktmessagePOList,stageUser);
+        this.doProfileTask(mktTaskPOWithBLOBs,mktmessagePOList,stageUser);
 
         responseData.setCode(SystemConstants.SUCCESS_CODE);
         responseData.setMessage(SystemConstants.SUCCESS_MESSAGE);
@@ -283,19 +288,22 @@ public class TaskProfileServiceImpl implements TaskProfileService {
     @Async
     @Override
     public  void   doAwardProfile(ProfileSuccessVO vo){
+        log.info("执行完善资料任务--参数---"+ JSON.toJSONString(vo));
         //完善资料时间
         Date profileDate = vo.getProfileDate();
         //完善者的code
         String memberCode = vo.getMemberCode();
         MemberInfoModel memeberDetail = taskService.getCompanyMemeberDetail(memberCode);
+        log.info("完善资料任务--获取会员详情---"+ JSON.toJSONString(memeberDetail));
         Long companyId = memeberDetail.getSysCompanyId();
         Long brandId = memeberDetail.getBrandId();
         String cardNo = memeberDetail.getCardNo();
         Long serviceStoreId = memeberDetail.getServiceStoreId();
         //符合条件的任务列表
-        List<TaskAwardBO> taskInviteAwardList = taskService.getTaskInviteAwardList(companyId, brandId, null);
-        if (CollectionUtils.isNotEmpty(taskInviteAwardList)){
-            taskInviteAwardList.stream().
+        List<TaskAwardBO> taskAwardList = taskService.getTaskProfileAwardList(companyId, brandId, null);
+        log.info("完善资料任务--任务列表---"+ JSON.toJSONString(taskAwardList));
+        if (CollectionUtils.isNotEmpty(taskAwardList)){
+            taskAwardList.stream().
                     filter(obj->{
                         Boolean isStoreLimit = obj.getStoreLimit();
                         String  StoreLimitList=obj.getStoreLimitList();
@@ -309,6 +317,7 @@ public class TaskProfileServiceImpl implements TaskProfileService {
 
                         // 获取会员是否已经成功参与过某一活动
                         Boolean isOrNoAward = taskRecordService.getIsOrNoAward(recordVO);
+                        log.info("完善资料任务--符合条件的任务---"+ isOrNoAward+"---"+JSON.toJSONString(obj));
                         if (!isOrNoAward){
                             MktTaskRecordPO recordPO = new MktTaskRecordPO();
                             BeanUtils.copyProperties(recordVO,recordPO);

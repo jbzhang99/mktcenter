@@ -19,7 +19,7 @@ public class TaskConstants {
     public final static String ERROR_MSG_TASK_INFO_EMPTY ="任务说明为空";
     public final static String ERROR_MSG_TASK_TYPE_EMPTY ="任务类型为空";
     public final static String ERROR_MSG_TASK_TYPE_NOT_EXISTS ="任务类型不存在";
-
+    public final static String ERROR_MSG_TASK_INFO_IS_CHECK ="任务已经审核通过,不能修改";
     //分享任务
     public final static String ERROR_MSG_SHARE_TIMES_EMPTY ="分享次数为空";
     public final static String ERROR_MSG_SHARE_URL_TYPE_EMPTY ="分享链接类型为空";

@@ -93,8 +93,12 @@ public class TaskParamCheckUtil {
             }
 
         }
-
-
+        //任务审核通过,不能修改
+        Integer checkStatus = vo.getCheckStatus();
+        if (TaskConstants.THREE.equals(checkStatus)){
+            responseData.setMessage(TaskConstants.ERROR_MSG_TASK_INFO_IS_CHECK);
+            return responseData;
+        }
 
 
         if(responseData.getCode()==SystemConstants.ERROR_CODE){

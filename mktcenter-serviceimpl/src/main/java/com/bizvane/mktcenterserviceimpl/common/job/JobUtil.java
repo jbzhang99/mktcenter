@@ -161,6 +161,7 @@ public class JobUtil {
         String param = this.getMessageJobParam(sysBrandId,taskType, msgContent,exceptWechat);
         //清除一下job
         this.doRemoveJobe(bizType, taskCode, param);
+        log.info("添加消息的job--addMessageXXTaskJob--"+sendTime+"--"+taskName+"--"+param+"--"+name+"--"+JobHandlerConstants.MESSAGE_SEND_XX+"--"+bizType+"--"+taskCode);
         //添加job
         this.addJob(sendTime,taskName,param,name,JobHandlerConstants.MESSAGE_SEND_XX,bizType,taskCode);
     }
@@ -179,6 +180,7 @@ public class JobUtil {
         String param = this.getMessageJobParam(mktTaskId, taskType, sysCompanyId, sysBrandId, msgContent,exceptWechat);
         //清除一下job
         this.doRemoveJobe(bizType, taskCode, param);
+        log.info("添加短信的job--addMessageDXTaskJob--"+sendTime+"--"+taskName+"--"+param+"--"+name+"--"+JobHandlerConstants.MESSAGE_SEND_DX+"--"+bizType+"--"+taskCode);
         //添加job
         this.addJob(sendTime,taskName,param,name,JobHandlerConstants.MESSAGE_SEND_DX,bizType,taskCode);
     }
