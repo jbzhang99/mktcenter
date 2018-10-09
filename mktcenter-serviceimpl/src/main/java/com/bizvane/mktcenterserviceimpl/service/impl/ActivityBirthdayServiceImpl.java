@@ -602,7 +602,7 @@ public class ActivityBirthdayServiceImpl implements ActivityBirthdayService {
             //如果为true 说明是今年
             if (true==dateSize(activityBirthday)){
                 //判断今年有没有发券
-                ResponseData<List<CouponEntityPO>> couponEntityPOs = couponEntityServiceFeign.findCouponHave(memberInfo.getMemberCode(),activityBirthday.getMktActivityId(),year);
+                ResponseData<List<CouponEntityPO>> couponEntityPOs = couponEntityServiceFeign.findCouponHave(memberInfo.getMemberCode(),activityBirthday.getMktActivityId(),s2);
                 List<CouponEntityPO> couponEntityPO =couponEntityPOs.getData();
                 if (!CollectionUtils.isEmpty(couponEntityPO)){
                     continue;
@@ -622,7 +622,7 @@ public class ActivityBirthdayServiceImpl implements ActivityBirthdayService {
                 //true 说明是到了明年
                 if (true==dateMonth(activityBirthday,memberInfo)){
                     //判断明年有没有发券
-                    ResponseData<List<CouponEntityPO>> couponEntityPOs = couponEntityServiceFeign.findCouponHave(memberInfo.getMemberCode(),activityBirthday.getMktActivityId(),toyear);
+                    ResponseData<List<CouponEntityPO>> couponEntityPOs = couponEntityServiceFeign.findCouponHave(memberInfo.getMemberCode(),activityBirthday.getMktActivityId(),s1);
                     List<CouponEntityPO> couponEntityPO =couponEntityPOs.getData();
                     if (!CollectionUtils.isEmpty(couponEntityPO)){
                         continue;
@@ -639,7 +639,7 @@ public class ActivityBirthdayServiceImpl implements ActivityBirthdayService {
                     }
                 }else{
                     //判断今年有没有发券
-                    ResponseData<List<CouponEntityPO>> couponEntityPOs = couponEntityServiceFeign.findCouponHave(memberInfo.getMemberCode(),activityBirthday.getMktActivityId(),year);
+                    ResponseData<List<CouponEntityPO>> couponEntityPOs = couponEntityServiceFeign.findCouponHave(memberInfo.getMemberCode(),activityBirthday.getMktActivityId(),s2);
                     List<CouponEntityPO> couponEntityPO =couponEntityPOs.getData();
                     if (!CollectionUtils.isEmpty(couponEntityPO)){
                         continue;

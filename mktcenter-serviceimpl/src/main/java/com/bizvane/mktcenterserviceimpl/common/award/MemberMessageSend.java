@@ -123,6 +123,7 @@ public class MemberMessageSend {
         ResponseData<com.bizvane.utils.responseinfo.PageInfo<MemberInfoVo>> memberInfoVoPage = membersAdvancedSearchApiService.search(membersInfoSearchVo);
         AwardBO awardBO = new AwardBO();
         IntegralRecordModel integralRecordModel = new IntegralRecordModel();
+        log.info("已经查询到相应的会员一共多少页++++++++++="+memberInfoVoPage.getData().getPages());
         for (int a =1;a<=memberInfoVoPage.getData().getPages();a++) {
             membersInfoSearchVo.setPageNumber(a);
             ResponseData<com.bizvane.utils.responseinfo.PageInfo<MemberInfoVo>> memberInfoVoPages = membersAdvancedSearchApiService.search(membersInfoSearchVo);
@@ -135,7 +136,7 @@ public class MemberMessageSend {
                 integralChangeRequestModel.setChangeBills(vo.getActivityCode());
                 integralChangeRequestModel.setChangeIntegral(vo.getPoints());
                 integralChangeRequestModel.setChangeType(IntegralChangeTypeEnum.INCOME.getCode());
-                integralChangeRequestModel.setBusinessType(String.valueOf(BusinessTypeEnum.ACTIVITY_TYPE_ACTIVITY.getCode()));
+                integralChangeRequestModel.setBusinessType(com.bizvane.members.facade.enums.BusinessTypeEnum.ACTIVITY_TYPE_SMART.getCode());
                 awardBO.setIntegralRecordModel(integralChangeRequestModel);
                 awardBO.setMktType(MktSmartTypeEnum.SMART_TYPE_INTEGRAL.getCode());
                 award.execute(awardBO);
