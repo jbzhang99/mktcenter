@@ -19,6 +19,8 @@ import com.bizvane.mktcenterservice.interfaces.ReportTempService;
 import com.bizvane.mktcenterservice.models.po.FileReportTempPO;
 import com.bizvane.mktcenterservice.models.po.FileReportTempPOExample;
 import com.bizvane.mktcenterservice.models.requestvo.BackDataTime;
+import com.bizvane.mktcenterservice.models.requestvo.BackDataTimeDtail;
+import com.bizvane.mktcenterservice.models.requestvo.BackDataTimeDtailtu;
 import com.bizvane.mktcenterservice.models.requestvo.postvo.IncomeTotalListGroup;
 import com.bizvane.mktcenterserviceimpl.common.report.BaseUrl;
 import com.bizvane.mktcenterserviceimpl.common.utils.FigureUtilGroupFigure;
@@ -54,7 +56,7 @@ public class FigureController {
     
 	
     @RequestMapping("vipIncomeAnalysis")
-    public ResponseData<List<BackDataTime>> vipIncomeAnalysis( IncomeTotalListGroup sendVO, HttpServletRequest request){
+    public ResponseData<BackDataTimeDtail> vipIncomeAnalysis( IncomeTotalListGroup sendVO, HttpServletRequest request){
  	   sendVO.setCorpId("C10153");  SysAccountPO sysAccountPO =TokenUtils.getStageUser(request);
 	     FileReportTempPOExample example = new FileReportTempPOExample();
 	     example.createCriteria().andTemplateTypeEqualTo("vipIncomeAnalysis").andValidEqualTo(Boolean.TRUE);
@@ -87,7 +89,7 @@ public class FigureController {
    }
 
     @RequestMapping("operatingIncomeAnalysis")
-    public ResponseData<List<BackDataTime>> operatingIncomeAnalysis( IncomeTotalListGroup sendVO, HttpServletRequest request){
+    public ResponseData<BackDataTimeDtailtu> operatingIncomeAnalysis( IncomeTotalListGroup sendVO, HttpServletRequest request){
  	   sendVO.setCorpId("C10153");  SysAccountPO sysAccountPO =TokenUtils.getStageUser(request);
 	     FileReportTempPOExample example = new FileReportTempPOExample();
 	     example.createCriteria().andTemplateTypeEqualTo("operatingIncomeAnalysis").andValidEqualTo(Boolean.TRUE);
@@ -125,7 +127,7 @@ public class FigureController {
 
    
 // 请求放回数据带时间格式的json
- public ResponseData<List<BackDataTime>> sendpostHaveTime(String url,IncomeTotalListGroup vipIncomeAnalysis,List<FileReportTempPO> fileReportTempPOlist,SysAccountPO sysAccountPO){
+ public ResponseData<BackDataTimeDtail> sendpostHaveTime(String url,IncomeTotalListGroup vipIncomeAnalysis,List<FileReportTempPO> fileReportTempPOlist,SysAccountPO sysAccountPO){
  log.info("报表查询ReportIncomeController："+url+vipIncomeAnalysis.toString());
  
             //TODO 获取活跃度
@@ -144,7 +146,7 @@ public class FigureController {
 	    	}
 			 
 		 ResponseEntity<String> response = this.restTemplate.postForEntity(url, jsonObject,String.class, new Object[0]);
-	     ResponseData<List<BackDataTime>> ResponseData =new ResponseData<List<BackDataTime>>();
+	     ResponseData<BackDataTimeDtail> ResponseData =new ResponseData<BackDataTimeDtail>();
 	     JSONObject job = JSONObject.parseObject(response.getBody());
 	     
 	     if(job.get("successFlag").equals("1")) {
@@ -171,7 +173,7 @@ public class FigureController {
      return ResponseData;
  }
 //请求放回数据带时间格式的json
-public ResponseData<List<BackDataTime>> sendpostHaveTimeOpera(String url,IncomeTotalListGroup vipIncomeAnalysis,List<FileReportTempPO> fileReportTempPOlist,SysAccountPO sysAccountPO){
+public ResponseData<BackDataTimeDtailtu> sendpostHaveTimeOpera(String url,IncomeTotalListGroup vipIncomeAnalysis,List<FileReportTempPO> fileReportTempPOlist,SysAccountPO sysAccountPO){
 log.info("报表查询ReportIncomeController："+url+vipIncomeAnalysis.toString());
 
           //TODO 获取活跃度
@@ -190,7 +192,7 @@ log.info("报表查询ReportIncomeController："+url+vipIncomeAnalysis.toString(
 	    	}
 			 
 		 ResponseEntity<String> response = this.restTemplate.postForEntity(url, jsonObject,String.class, new Object[0]);
-	     ResponseData<List<BackDataTime>> ResponseData =new ResponseData<List<BackDataTime>>();
+	     ResponseData<BackDataTimeDtailtu> ResponseData =new ResponseData<BackDataTimeDtailtu>();
 	     JSONObject job = JSONObject.parseObject(response.getBody());
 	     
 	     if(job.get("successFlag").equals("1")) {

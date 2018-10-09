@@ -68,15 +68,17 @@ public class FigureUtilGroupFigure {
  
  } 
    
-  public static  List<BackDataTime> parseJSON2MapTime(String jsonStr,List<FileReportTempPO> fileReportTempPOlist,IncomeTotalListGroup vipIncomeAnalysis){  
+  public static  BackDataTimeDtail parseJSON2MapTime(String jsonStr,List<FileReportTempPO> fileReportTempPOlist,IncomeTotalListGroup vipIncomeAnalysis){  
 	   List<BackDataTime> listdata =new ArrayList<BackDataTime>();
 	   List<BackDataTime> listdata2 =new ArrayList<BackDataTime>();
+	   BackDataTimeDtail backDataTimeDtail =new BackDataTimeDtail();
+	   List<JSONObject> JSONObjectlist =new ArrayList<JSONObject>();
 	   
 	   try {
 		   int ino=0;
 			//查询表头
 			BackDataTime backDataOne =new BackDataTime();
-			BackDataTimeDtail backDataTimeDtail =new BackDataTimeDtail();
+			
       //解析带时间的json数据，
 		//	   最外层解析  
 		       if(jsonStr!=null&&jsonStr.startsWith("{")&&jsonStr.endsWith("}")){
@@ -106,11 +108,15 @@ public class FigureUtilGroupFigure {
 				               offlineData=  new BigDecimal(backData.getJosonData().getString("offlineData"));
 			        		   
 			        	   }else {
-				               listdata2.add(backData); 
+			        		   
+			        		   JSONObject  jsonObje= JSONObject.parseObject(json.get(k).toString());
+				        	   jsonObje.put("time", k.toString());
+				        	   JSONObjectlist.add(jsonObje);
+//				               listdata2.add(backData); 
 			        	   }
 				               
 			           } 
-			           
+			           backDataTimeDtail.setJosonData(JSONObjectlist);
 
 			           backDataTimeDtail.setTotal(total.toString());
 			           backDataTimeDtail.setVipData(vipData.toString());
@@ -169,19 +175,21 @@ public class FigureUtilGroupFigure {
 		} catch (Exception e) {
 		}
 	   
-	   return listdata; 
+	   return backDataTimeDtail; 
   }   
   
   
-  public static  List<BackDataTime> parseJSON2MapTimeOpera(String jsonStr,List<FileReportTempPO> fileReportTempPOlist,IncomeTotalListGroup vipIncomeAnalysis){  
+  public static  BackDataTimeDtailtu parseJSON2MapTimeOpera(String jsonStr,List<FileReportTempPO> fileReportTempPOlist,IncomeTotalListGroup vipIncomeAnalysis){  
 	   List<BackDataTime> listdata =new ArrayList<BackDataTime>();
 	   List<BackDataTime> listdata2 =new ArrayList<BackDataTime>();
+	   List<JSONObject> JSONObjectlist =new ArrayList<JSONObject>();
 	   
+	   BackDataTimeDtailtu backDataTimeDtail =new BackDataTimeDtailtu();
 	   try {
 		   int ino=0;
 			//查询表头
 			BackDataTime backDataOne =new BackDataTime();
-			BackDataTimeDtailtu backDataTimeDtail =new BackDataTimeDtailtu();
+			
      //解析带时间的json数据，
 		//	   最外层解析  
 		       if(jsonStr!=null&&jsonStr.startsWith("{")&&jsonStr.endsWith("}")){
@@ -210,14 +218,18 @@ public class FigureUtilGroupFigure {
 					               newVipData =  newVipData.add(new BigDecimal(backData.getJosonData().getString("newVipData")));
 				        		   
 				        	   }else {
-					               listdata2.add(backData); 
+				        		   JSONObject  jsonObje= JSONObject.parseObject(json.get(k).toString());
+					        	   jsonObje.put("time", k.toString());
+					        	   JSONObjectlist.add(jsonObje);
+				        		   
+//					               listdata2.add(backData); 
 				        	   } 
 				               
 				               
 				               
 			           } 
 			           
-//V
+                      backDataTimeDtail.setJosonData(JSONObjectlist);
 			           backDataTimeDtail.setVipData(vipData.toString());
 			           backDataTimeDtail.setInactivityVipData(inactivityVipData.toString());
 			           backDataTimeDtail.setActivityVipData(activityVipData.toString());
@@ -263,7 +275,7 @@ public class FigureUtilGroupFigure {
 			System.out.println("报表解析异常");
 		}
 	   
-	   return listdata; 
+	   return backDataTimeDtail; 
  }  
 
 }
