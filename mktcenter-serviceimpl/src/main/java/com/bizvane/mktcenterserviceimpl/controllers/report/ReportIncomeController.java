@@ -1,20 +1,14 @@
 package com.bizvane.mktcenterserviceimpl.controllers.report;
 
-import java.lang.reflect.Field;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.apache.commons.collections.map.MultiValueMap;
 import org.apache.commons.lang3.StringUtils;
 import org.codehaus.jettison.json.JSONArray;
 import org.codehaus.jettison.json.JSONException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
@@ -23,12 +17,8 @@ import com.alibaba.fastjson.JSONObject;
 import com.bizvane.mktcenterservice.interfaces.ReportTempService;
 import com.bizvane.mktcenterservice.models.po.FileReportTempPO;
 import com.bizvane.mktcenterservice.models.po.FileReportTempPOExample;
-import com.bizvane.mktcenterservice.models.po.MktCouponPOExample;
 import com.bizvane.mktcenterservice.models.requestvo.BackData;
-import com.bizvane.mktcenterservice.models.requestvo.BackDataBiaotou;
 import com.bizvane.mktcenterservice.models.requestvo.BackDataTime;
-import com.bizvane.mktcenterservice.models.requestvo.BaseUrl;
-import com.bizvane.mktcenterservice.models.requestvo.ReBase;
 import com.bizvane.mktcenterservice.models.requestvo.postvo.ActiveMemberAllInterface;
 import com.bizvane.mktcenterservice.models.requestvo.postvo.IncomeTotalList;
 import com.bizvane.mktcenterservice.models.requestvo.postvo.IncomeVip;
@@ -39,8 +29,8 @@ import com.bizvane.mktcenterservice.models.requestvo.postvo.OfflineVipIncome;
 import com.bizvane.mktcenterservice.models.requestvo.postvo.OnlineVipIncome;
 import com.bizvane.mktcenterservice.models.requestvo.postvo.RePurchaseMemberAllInterface;
 import com.bizvane.mktcenterservice.models.requestvo.postvo.TouristIncome;
-import com.bizvane.mktcenterservice.models.requestvo.postvo.VipIncomeAnalysis;
 import com.bizvane.mktcenterservice.models.requestvo.postvo.VipNum;
+import com.bizvane.mktcenterserviceimpl.common.report.BaseUrl;
 import com.bizvane.mktcenterserviceimpl.common.utils.FigureUtil;
 import com.bizvane.mktcenterserviceimpl.mappers.FileReportTempPOMapper;
 import com.bizvane.utils.responseinfo.ResponseData;
@@ -67,9 +57,8 @@ public class ReportIncomeController {
 	@Autowired
 	private  ReportTempService reportTempService;
 
-
     
-
+	BaseUrl BaseUrl =new BaseUrl();
     
 // 收入01- 收入总表
    @RequestMapping("incomeTotalList")
@@ -97,6 +86,8 @@ public class ReportIncomeController {
 	    		 //组织转换
 	    		 
 		    	    String organizationContentStr = jsonObject.getString("organizationContentStr");
+		    	    String dimension = jsonObject.getString("dimension");
+		    	    
 		    		 if(StringUtils.isNotBlank(organizationContentStr)){
 //		    			 ["12","33","56"]
 		    		 String[] al= organizationContentStr.toString().split(",");
@@ -133,14 +124,14 @@ public class ReportIncomeController {
 					  System.out.println("查询条数报错！");
 					}
 			     
-			     ResponseData.setData(FigureUtil.parseJSON2Map(job.get("data").toString(),tiaoshu,fileReportTempPOlist));
+			     ResponseData.setData(FigureUtil.parseJSON2Map(job.get("data").toString(),dimension,tiaoshu,fileReportTempPOlist));
 	             ResponseData.setCode(0);
 	  	     
 
 	     }else {
 	      ResponseData.setCode(0);
 	  	  ResponseData.setMessage(job.get("message").toString());
-	  	  ResponseData.setData(FigureUtil.parseJSON2Map("false",0,fileReportTempPOlist));
+	  	  ResponseData.setData(FigureUtil.parseJSON2Map("false",dimension,0,fileReportTempPOlist));
 	    	 
 	     }
 

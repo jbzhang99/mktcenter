@@ -1,6 +1,5 @@
 package com.bizvane.mktcenterserviceimpl.controllers.report;
 
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -9,7 +8,6 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.lang3.StringUtils;
-import org.codehaus.jettison.json.JSONArray;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,16 +15,12 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
 import com.alibaba.fastjson.JSONObject;
-import com.bizvane.centerstageservice.models.po.SysAccountPo;
-import com.bizvane.members.facade.service.inner.MemberLifecycleParameterService;
 import com.bizvane.mktcenterservice.interfaces.ReportTempService;
 import com.bizvane.mktcenterservice.models.po.FileReportTempPO;
 import com.bizvane.mktcenterservice.models.po.FileReportTempPOExample;
-import com.bizvane.mktcenterservice.models.requestvo.BackData;
 import com.bizvane.mktcenterservice.models.requestvo.BackDataTime;
-import com.bizvane.mktcenterservice.models.requestvo.BaseUrl;
 import com.bizvane.mktcenterservice.models.requestvo.postvo.IncomeTotalListGroup;
-import com.bizvane.mktcenterservice.models.requestvo.postvo.VipIncomeAnalysis;
+import com.bizvane.mktcenterserviceimpl.common.report.BaseUrl;
 import com.bizvane.mktcenterserviceimpl.common.utils.FigureUtilGroup;
 import com.bizvane.mktcenterserviceimpl.mappers.FileReportTempPOMapper;
 import com.bizvane.utils.responseinfo.ResponseData;
@@ -52,6 +46,9 @@ public class ReportGroupController {
 	
 	@Autowired
 	private ReportTempService  reportTempService;
+	
+	@Autowired
+	private BaseUrl BaseUrl;
 	
 //	@Autowired
 //	private  MemberLifecycleParameterService memberLifecycleParameterService;

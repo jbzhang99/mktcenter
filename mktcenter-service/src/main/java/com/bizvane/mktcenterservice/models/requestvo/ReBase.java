@@ -104,9 +104,8 @@ public class ReBase {
 
 
 	public ReBase() {  
-    	this.businessNum=BaseUrl.businessNum;
-    	this.apiKey=BaseUrl.apiKey;
-    	
+    	this.businessNum="testbz";
+    	this.apiKey="4199454b3cac0c02b48fd5a9c67c00c0";
     }
 
 

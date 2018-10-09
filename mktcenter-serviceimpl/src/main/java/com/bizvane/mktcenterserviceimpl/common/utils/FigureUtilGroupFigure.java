@@ -93,16 +93,21 @@ public class FigureUtilGroupFigure {
 
 			           for(Object k : json.keySet()){
 			        	   ino++;
-				        	   BackDataTime backData =new BackDataTime();
-				               backData.setTime(k.toString());
-				               backData.setJosonData(JSONObject.parseObject(json.get(k).toString()));
-				               listdata2.add(backData); 
+			        	   BackDataTime backData =new BackDataTime();
+				        	
+			               backData.setTime(k.toString());
+			               backData.setJosonData(JSONObject.parseObject(json.get(k).toString()));
+			        	   if(k.toString().equals("all")) {
 				               //计算总数
-				               total=   total.add(new BigDecimal(backData.getJosonData().getString("total")));
-				               vipData=  vipData.add(new BigDecimal(backData.getJosonData().getString("vipData")));
-				               touristsData=  touristsData.add(new BigDecimal(backData.getJosonData().getString("touristsData")));
-				               onlineData=  onlineData.add(new BigDecimal(backData.getJosonData().getString("onlineData")));
-				               offlineData=  offlineData.add(new BigDecimal(backData.getJosonData().getString("offlineData")));
+				               total=   new BigDecimal(backData.getJosonData().getString("total"));
+				               vipData=  new BigDecimal(backData.getJosonData().getString("vipData"));
+				               touristsData=  new BigDecimal(backData.getJosonData().getString("touristsData"));
+				               onlineData=  new BigDecimal(backData.getJosonData().getString("onlineData"));
+				               offlineData=  new BigDecimal(backData.getJosonData().getString("offlineData"));
+			        		   
+			        	   }else {
+				               listdata2.add(backData); 
+			        	   }
 				               
 			           } 
 			           
@@ -195,13 +200,20 @@ public class FigureUtilGroupFigure {
 				        	   BackDataTime backData =new BackDataTime();
 				               backData.setTime(k.toString());
 				               backData.setJosonData(JSONObject.parseObject(json.get(k).toString()));
-				               listdata2.add(backData); 
-				               //计算总数
-				               vipData =  vipData.add(new BigDecimal(backData.getJosonData().getString("vipData")));
-				               inactivityVipData =  inactivityVipData.add(new BigDecimal(backData.getJosonData().getString("inactivityVipData")));
-				               activityVipData =  activityVipData.add(new BigDecimal(backData.getJosonData().getString("activityVipData")));
-				               oldVipData =  oldVipData.add(new BigDecimal(backData.getJosonData().getString("oldVipData")));
-				               newVipData =  newVipData.add(new BigDecimal(backData.getJosonData().getString("newVipData")));
+				               
+				        	   if(k.toString().equals("all")) {
+					               //计算总数
+					               vipData =  vipData.add(new BigDecimal(backData.getJosonData().getString("vipData")));
+					               inactivityVipData =  inactivityVipData.add(new BigDecimal(backData.getJosonData().getString("inactivityVipData")));
+					               activityVipData =  activityVipData.add(new BigDecimal(backData.getJosonData().getString("activityVipData")));
+					               oldVipData =  oldVipData.add(new BigDecimal(backData.getJosonData().getString("oldVipData")));
+					               newVipData =  newVipData.add(new BigDecimal(backData.getJosonData().getString("newVipData")));
+				        		   
+				        	   }else {
+					               listdata2.add(backData); 
+				        	   } 
+				               
+				               
 				               
 			           } 
 			           

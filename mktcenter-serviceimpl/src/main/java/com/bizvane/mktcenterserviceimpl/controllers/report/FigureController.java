@@ -1,18 +1,13 @@
 package com.bizvane.mktcenterserviceimpl.controllers.report;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.lang3.StringUtils;
-import org.codehaus.jettison.json.JSONArray;
-import org.codehaus.jettison.json.JSONException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -23,26 +18,9 @@ import com.alibaba.fastjson.JSONObject;
 import com.bizvane.mktcenterservice.interfaces.ReportTempService;
 import com.bizvane.mktcenterservice.models.po.FileReportTempPO;
 import com.bizvane.mktcenterservice.models.po.FileReportTempPOExample;
-import com.bizvane.mktcenterservice.models.po.MktCouponPOExample;
-import com.bizvane.mktcenterservice.models.requestvo.BackData;
-import com.bizvane.mktcenterservice.models.requestvo.BackDataBiaotou;
 import com.bizvane.mktcenterservice.models.requestvo.BackDataTime;
-import com.bizvane.mktcenterservice.models.requestvo.BaseUrl;
-import com.bizvane.mktcenterservice.models.requestvo.postvo.ActiveMemberAllInterface;
-import com.bizvane.mktcenterservice.models.requestvo.postvo.IncomeTotalList;
 import com.bizvane.mktcenterservice.models.requestvo.postvo.IncomeTotalListGroup;
-import com.bizvane.mktcenterservice.models.requestvo.postvo.IncomeVip;
-import com.bizvane.mktcenterservice.models.requestvo.postvo.IncreaseVip;
-import com.bizvane.mktcenterservice.models.requestvo.postvo.IncreaseVipNum;
-import com.bizvane.mktcenterservice.models.requestvo.postvo.NewOldMemberInterface;
-import com.bizvane.mktcenterservice.models.requestvo.postvo.OfflineVipIncome;
-import com.bizvane.mktcenterservice.models.requestvo.postvo.OnlineVipIncome;
-import com.bizvane.mktcenterservice.models.requestvo.postvo.RePurchaseMemberAllInterface;
-import com.bizvane.mktcenterservice.models.requestvo.postvo.TouristIncome;
-import com.bizvane.mktcenterservice.models.requestvo.postvo.VipIncomeAnalysis;
-import com.bizvane.mktcenterservice.models.requestvo.postvo.VipNum;
-import com.bizvane.mktcenterserviceimpl.common.utils.FigureUtil;
-import com.bizvane.mktcenterserviceimpl.common.utils.FigureUtilGroup;
+import com.bizvane.mktcenterserviceimpl.common.report.BaseUrl;
 import com.bizvane.mktcenterserviceimpl.common.utils.FigureUtilGroupFigure;
 import com.bizvane.mktcenterserviceimpl.mappers.FileReportTempPOMapper;
 import com.bizvane.utils.responseinfo.ResponseData;
@@ -71,7 +49,8 @@ public class FigureController {
 	
 //	@Autowired
 //	private  MemberLifecycleParameterService memberLifecycleParameterService;
-
+	@Autowired
+	private BaseUrl BaseUrl; 
     
 	
     @RequestMapping("vipIncomeAnalysis")
