@@ -1,5 +1,6 @@
 package com.bizvane.mktcenterserviceimpl.service.jobhandler;
 
+import com.alibaba.fastjson.JSON;
 import com.bizvane.couponfacade.interfaces.CouponEntityServiceFeign;
 import com.bizvane.couponfacade.interfaces.SendCouponServiceFeign;
 import com.bizvane.couponfacade.models.po.CouponEntityPO;
@@ -26,6 +27,7 @@ import com.bizvane.utils.responseinfo.ResponseData;
 import com.xxl.job.core.biz.model.ReturnT;
 import com.xxl.job.core.handler.IJobHandler;
 import com.xxl.job.core.handler.annotation.JobHandler;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -37,6 +39,7 @@ import java.util.List;
  */
 @JobHandler(value="everyDayActivityBirthday")
 @Component
+@Slf4j
 public class EveryDayActivityJobHandler extends IJobHandler {
     @Autowired
     private MktActivityBirthdayPOMapper mktActivityBirthdayPOMapper;
@@ -51,6 +54,7 @@ public class EveryDayActivityJobHandler extends IJobHandler {
         ActivityVO vo = new ActivityVO();
         vo.setActivityType(ActivityTypeEnum.ACTIVITY_TYPE_BIRTHDAY.getCode());
         List<ActivityVO> activityBirthdayList = mktActivityBirthdayPOMapper.getActivityBirthdayList(vo);
+        log.info("定时器开始执行生日活动+++++====="+ JSON.toJSONString(activityBirthdayList));
         memberMessage.sendBirthdayCoupon(activityBirthdayList);
         returnT.setCode(0);
         returnT.setContent("活动执行完毕");

@@ -229,6 +229,7 @@ public class MemberMessageSend {
      */
     @Async("asyncServiceExecutor")
     public void sendBirthdayCoupon(List<ActivityVO> activityBirthdayList) {
+        log.info("开始执行发送生日活动");
         for (ActivityVO activityBirthday:activityBirthdayList) {
             //根据品牌id 会员等级 会员范围  时间周期 查询会员信息 循环
             //查询对应的会员
@@ -241,10 +242,13 @@ public class MemberMessageSend {
             memberInfoModel.setMemberScope(activityBirthday.getMemberType().toString());
             memberInfoModel.setPageNumber(1);
             memberInfoModel.setPageSize(10000);
+            log.info("开始查询相应的会员++++++++++=");
             ResponseData<PageInfo<MemberInfoModel>> memberInfoModelLists =memberInfoApiService.getMemberInfo(memberInfoModel);
             for (int a=1;a<=memberInfoModelLists.getData().getPages();a++){
+                memberInfoModel.setPageNumber(a);
                 ResponseData<PageInfo<MemberInfoModel>> memberInfoModelListss =memberInfoApiService.getMemberInfo(memberInfoModel);
                 List<MemberInfoModel> memberInfoModelList = memberInfoModelListss.getData().getList();
+                log.info("已经查询到相应的会员++++++++++=");
                 activityBirthdayService.birthdayReward(activityBirthday,memberInfoModelList);
             }
 

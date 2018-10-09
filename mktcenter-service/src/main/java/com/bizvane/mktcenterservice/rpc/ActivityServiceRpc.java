@@ -104,4 +104,12 @@ public interface ActivityServiceRpc {
   */
  @RequestMapping("executeActivity")
  ResponseData<Integer> executeActivity(@RequestBody MemberInfoModel vo);
+
+ /**
+  * 升级活动
+  * @param vo
+  * @return
+  */
+ @RequestMapping("executeUpgrades")
+ ResponseData<Integer> executeUpgrades(@RequestBody MemberInfoModel vo);
 }
