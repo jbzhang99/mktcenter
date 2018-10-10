@@ -2,8 +2,10 @@ package com.bizvane.mktcenterserviceimpl.common.utils;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -120,11 +122,16 @@ public class FigureUtilGroupFigure {
 			        		   JSONObject  jsonObje= JSONObject.parseObject(json.get(k).toString());
 				        	   jsonObje.put("time", k.toString());
 //				        	   JSONObjectlist.add(jsonObje);
-				        	   mapjsonObje.put(k.toString(), jsonObje);
+				        	   
+				               SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+				               Date date = simpleDateFormat.parse(k.toString());
+				               long ts = date.getTime();
+				               
+				        	   mapjsonObje.put(String.valueOf(ts), jsonObje);
 			        	   }
 				               
 			           } 
-			           //
+			                 //排序
 			                 for (String key : mapjsonObje.keySet()) {
 			                	 JSONObjectlist.add(mapjsonObje.get(key));
 			                 }
@@ -218,7 +225,7 @@ public class FigureUtilGroupFigure {
 		        	   BigDecimal activityVipData= new BigDecimal(0.00);
 		        	   BigDecimal oldVipData= new BigDecimal(0.00);
 		        	   BigDecimal newVipData= new BigDecimal(0.00);
-
+		        	   Map<String,JSONObject> mapjsonObje=new TreeMap<String,JSONObject>();
 			           for(Object k : json.keySet()){
 			        	   ino++;
 				        	   BackDataTime backData =new BackDataTime();
@@ -239,14 +246,23 @@ public class FigureUtilGroupFigure {
 				        	   }else {
 				        		   JSONObject  jsonObje= JSONObject.parseObject(json.get(k).toString());
 					        	   jsonObje.put("time", k.toString());
-					        	   JSONObjectlist.add(jsonObje);
+//					        	   JSONObjectlist.add(jsonObje);
 				        		   
-//					               listdata2.add(backData); 
+					               SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+					               Date date = simpleDateFormat.parse(k.toString());
+					               long ts = date.getTime();
+					        	   mapjsonObje.put(String.valueOf(ts), jsonObje);
+					        	   
 				        	   } 
 				               
 				               
 				               
 			           } 
+			           
+		                 //排序
+		                 for (String key : mapjsonObje.keySet()) {
+		                	 JSONObjectlist.add(mapjsonObje.get(key));
+		                 }
 			           
                       backDataTimeDtail.setJosonData(JSONObjectlist);
 			           backDataTimeDtail.setVipData(vipData.toString());
