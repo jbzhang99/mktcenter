@@ -149,7 +149,7 @@ public class TaskProfileServiceImpl implements TaskProfileService {
         }
 
         //6.处理任务
-        this.doProfileTask(mktTaskPOWithBLOBs,mktmessagePOList,stageUser);
+        taskService.doProfileTask(mktTaskPOWithBLOBs,mktmessagePOList,stageUser);
 
         responseData.setCode(SystemConstants.SUCCESS_CODE);
         responseData.setMessage(SystemConstants.SUCCESS_MESSAGE);
@@ -177,21 +177,7 @@ public class TaskProfileServiceImpl implements TaskProfileService {
         return po;
     }
 
-    /**
-     * 执行完善资料任务相关功能
-     */
-    @Override
-    @Async
-    public void doProfileTask(MktTaskPOWithBLOBs mktTaskPOWithBLOBs,List<MktMessagePO> mktmessagePOList, SysAccountPO stageUser) {
-        //审核状态:1未审核，2审核中，3已审核，4已驳回',
-        Integer checkStatus = mktTaskPOWithBLOBs.getCheckStatus();
-        //执行状态:1待执行，2执行中，3已禁用，4已结束',
-        Integer taskStatus = mktTaskPOWithBLOBs.getTaskStatus();
 
-        if (TaskConstants.THREE.equals(checkStatus) && TaskConstants.SECOND.equals(taskStatus)) {
-            taskService.sendSmg(mktTaskPOWithBLOBs,mktmessagePOList,stageUser);
-        }
-    }
     /**
      * 新增完善资料的单表信息
      */
@@ -259,7 +245,7 @@ public class TaskProfileServiceImpl implements TaskProfileService {
             );
         }
         //6.处理任务
-        this.doProfileTask(mktTaskPOWithBLOBs,mktmessagePOList,stageUser);
+        taskService.doProfileTask(mktTaskPOWithBLOBs,mktmessagePOList,stageUser);
 
         responseData.setCode(SystemConstants.SUCCESS_CODE);
         responseData.setMessage(SystemConstants.SUCCESS_MESSAGE);
