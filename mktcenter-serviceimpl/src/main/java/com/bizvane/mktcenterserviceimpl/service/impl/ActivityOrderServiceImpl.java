@@ -260,7 +260,7 @@ public class ActivityOrderServiceImpl implements ActivityOrderService {
                 mktCouponPO.setBizId(mktActivityId);
                 mktCouponPO.setCouponName(couponCode.getCouponName());
                 mktCouponPO.setCouponDefinitionId(couponCode.getCouponDefinitionId());
-                mktCouponPO.setBizId(couponCode.getBizId());
+                //mktCouponPO.setBizId(couponCode.getBizId());
                 mktCouponPOMapper.insertSelective(mktCouponPO);
             }
         }
