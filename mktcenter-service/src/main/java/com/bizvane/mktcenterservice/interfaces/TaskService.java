@@ -102,7 +102,10 @@ public interface TaskService {
      * @throws ParseException
      */
     public MktTaskPOWithBLOBs isOrNoCheckState(MktTaskPOWithBLOBs po,Integer centeStagecheckStatus)throws ParseException;
-
+    /**
+     * 完善资料任务,没有开始时间和结束时间.根据任务状态和执行状态来发送消息和短信
+     */
+    public void doProfileTask(MktTaskPOWithBLOBs mktTaskPOWithBLOBs, List<MktMessagePO> mktmessagePOList, SysAccountPO stageUser);
     /**
      * 发送任务消息
      * @param mktTaskPOWithBLOBs

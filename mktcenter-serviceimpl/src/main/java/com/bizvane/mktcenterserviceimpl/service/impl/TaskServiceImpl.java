@@ -345,7 +345,21 @@ public class TaskServiceImpl implements TaskService {
         sysCheckConfigPo.setFunctionCode("C0003");
         return this.getCheckStatus(sysCheckConfigPo);
     }
+    /**
+     * 执行完善资料任务相关功能
+     */
+    @Override
+    @Async
+    public void doProfileTask(MktTaskPOWithBLOBs mktTaskPOWithBLOBs,List<MktMessagePO> mktmessagePOList, SysAccountPO stageUser) {
+        //审核状态:1未审核，2审核中，3已审核，4已驳回',
+        Integer checkStatus = mktTaskPOWithBLOBs.getCheckStatus();
+        //执行状态:1待执行，2执行中，3已禁用，4已结束',
+        Integer taskStatus = mktTaskPOWithBLOBs.getTaskStatus();
 
+        if (TaskConstants.THREE.equals(checkStatus) && TaskConstants.SECOND.equals(taskStatus)) {
+            this.sendSmg(mktTaskPOWithBLOBs,mktmessagePOList,stageUser);
+        }
+    }
 
     /**
      * 判断时间是否滞后,已经是否立即执行,还是创建job执行-已经核对
@@ -359,11 +373,13 @@ public class TaskServiceImpl implements TaskService {
         Integer taskStatus = mktTaskPOWithBLOBs.getTaskStatus();
 
         if (TaskConstants.THREE.equals(checkStatus) && TaskConstants.FIRST.equals(taskStatus)) {
+            log.info("doOrderTask 已审核 待执行--"+checkStatus+"--"+taskStatus);
             //已审核 待执行,创建开始任务job和结束任务job,并且对发送短信和消息进行判断
              jobUtil.addTaskStartJob(stageUser, mktTaskPOWithBLOBs);
              jobUtil.addTaskEndJob(stageUser, mktTaskPOWithBLOBs);
              this.sendSmg(mktTaskPOWithBLOBs,mktmessagePOList,stageUser);
         }else if (TaskConstants.THREE.equals(checkStatus) && TaskConstants.SECOND.equals(taskStatus)){
+            log.info("doOrderTask 已审核 执中中--"+checkStatus+"--"+taskStatus);
             //已审核 执中中, 创建结束任务job,并且对发送短信和消息进行判断
             jobUtil.addTaskEndJob(stageUser, mktTaskPOWithBLOBs);
             this.sendSmg(mktTaskPOWithBLOBs,mktmessagePOList,stageUser);
@@ -693,7 +709,7 @@ public class TaskServiceImpl implements TaskService {
         int i = mktTaskPOMapper.updateByPrimaryKeySelective(mktTaskPOWithBLOBs);
         //修改中台审核表的数据
         this.updateCheckData(mktTaskId,checkStatus,functionCode,sysAccountPO);
-
+        log.info("审核通过后的任务状态---checkStatus--"+checkStatus+"--TaskStatus--"+mktTaskPOWithBLOBs.getTaskStatus());
         if (i > 0) {
             //3=已审核
             if (TaskConstants.THREE.equals(checkStatus)) {
@@ -705,7 +721,11 @@ public class TaskServiceImpl implements TaskService {
                     TaskDetailVO taskdetailvo = taskDetails.get(0);
                     mktTaskPOWithBLOBs = new MktTaskPOWithBLOBs();
                     BeanUtils.copyProperties(taskdetailvo, mktTaskPOWithBLOBs);
-                    this.doOrderTask(mktTaskPOWithBLOBs,mktMessagePOS,sysAccountPO);
+                    if (TaskConstants.FIRST.equals(businessType)){
+                        this.doProfileTask(mktTaskPOWithBLOBs,mktMessagePOS,sysAccountPO);
+                    }else{
+                        this.doOrderTask(mktTaskPOWithBLOBs,mktMessagePOS,sysAccountPO);
+                    }
                 }
             }
 

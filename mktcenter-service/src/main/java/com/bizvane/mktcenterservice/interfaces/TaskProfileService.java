@@ -26,10 +26,7 @@ public interface TaskProfileService {
      */
     public ResponseData<Integer> addTask(TaskBO bo, SysAccountPO stageUser) throws ParseException;
 
-    /**
-     * 完善资料任务,没有开始时间和结束时间.根据任务状态和执行状态来发送消息和短信
-     */
-    public void doProfileTask(MktTaskPOWithBLOBs mktTaskPOWithBLOBs, List<MktMessagePO> mktmessagePOList, SysAccountPO stageUser);
+
     /**
      * 修改任务
      * @param bo
