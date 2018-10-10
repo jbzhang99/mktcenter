@@ -236,18 +236,18 @@ public class MemberMessageSend {
             //查询对应的会员
             MemberInfoApiModel memberInfoModel= new MemberInfoApiModel();
             memberInfoModel.setBrandId(activityBirthday.getSysBrandId());
-            if (!activityBirthday.getMbrLevelCode().equals("0")){
+            if (!activityBirthday.getMbrLevelCode().equals(0)){
                 memberInfoModel.setLevelId(Long.parseLong(activityBirthday.getMbrLevelCode()));
             }
             memberInfoModel.setBirthdayLine(activityBirthday.getDaysAhead());
             memberInfoModel.setMemberScope(activityBirthday.getMemberType().toString());
             memberInfoModel.setPageNumber(1);
             memberInfoModel.setPageSize(10000);
-            log.info("开始查询相应的会员++++++++++=");
             ResponseData<PageInfo<MemberInfoModel>> memberInfoModelLists =memberInfoApiService.getMemberInfo(memberInfoModel);
             //循环页数
             for (int a=1;a<=memberInfoModelLists.getData().getPages();a++){
                 memberInfoModel.setPageNumber(a);
+                log.info("开始查询相应的会员参数++++++++++=+=============+"+ JSON.toJSONString(memberInfoModel));
                 ResponseData<PageInfo<MemberInfoModel>> memberInfoModelListss =memberInfoApiService.getMemberInfo(memberInfoModel);
                 List<MemberInfoModel> memberInfoModelList = memberInfoModelListss.getData().getList();
                 log.info("已经查询到相应的会员++++++++++=");

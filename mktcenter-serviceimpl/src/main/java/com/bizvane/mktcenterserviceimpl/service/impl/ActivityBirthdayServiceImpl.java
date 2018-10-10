@@ -657,7 +657,7 @@ public class ActivityBirthdayServiceImpl implements ActivityBirthdayService {
                 }
 
             }
-            log.info("执行生日活动通过验证通过验证通过验证");
+            log.info("执行生日活动通过验证通过验证通过验证========");
             //增加积分奖励新增接口
             IntegralChangeRequestModel integralChangeRequestModel =new IntegralChangeRequestModel();
             integralChangeRequestModel.setSysCompanyId(activityBirthday.getSysCompanyId());
@@ -668,7 +668,7 @@ public class ActivityBirthdayServiceImpl implements ActivityBirthdayService {
             integralChangeRequestModel.setChangeType(IntegralChangeTypeEnum.INCOME.getCode());
             integralChangeRequestModel.setBusinessType(com.bizvane.members.facade.enums.BusinessTypeEnum.ACTIVITY_TYPE_BIRTHDAY.getCode());
             integralChangeRequestModel.setChangeDate(new Date());
-            log.info("执行升级活动开始开始增加积分增加积分");
+            log.info("执行升级活动开始开始增加积分增加积分++++++");
             integralChangeApiService.integralChangeOperate(integralChangeRequestModel);
             // 增加卷奖励接口
             MktCouponPOExample example = new  MktCouponPOExample();
@@ -682,7 +682,7 @@ public class ActivityBirthdayServiceImpl implements ActivityBirthdayService {
                 va.setSendType(SendTypeEnum.SEND_COUPON_BIRTH.getCode());
                 va.setBrandId(activityBirthday.getSysBrandId());
                 va.setCompanyId(activityBirthday.getSysCompanyId());
-                log.info("执行升级活动开始开始增加券增加券");
+                log.info("执行升级活动开始开始增加券增加券~~~~~~~~~~");
                 sendCouponServiceFeign.simple(va);
             }
             //新增积分到会员参与活动记录表中数据
