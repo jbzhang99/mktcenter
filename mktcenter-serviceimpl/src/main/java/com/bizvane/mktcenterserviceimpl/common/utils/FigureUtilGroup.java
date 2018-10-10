@@ -114,6 +114,7 @@ public class FigureUtilGroup {
 				}
 				listdata.addAll(listdata2);
 		} catch (Exception e) {
+			System.out.println("报表解析异常");
 		}
 	   
 	   return listdata; 

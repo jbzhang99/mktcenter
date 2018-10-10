@@ -57,7 +57,7 @@ public class FigureController {
 	
     @RequestMapping("vipIncomeAnalysis")
     public ResponseData<BackDataTimeDtail> vipIncomeAnalysis( IncomeTotalListGroup sendVO, HttpServletRequest request){
- 	   sendVO.setCorpId("C10153");  SysAccountPO sysAccountPO =TokenUtils.getStageUser(request);
+ 	   sendVO.setCorpId("C10291");  SysAccountPO sysAccountPO =TokenUtils.getStageUser(request);
 	     FileReportTempPOExample example = new FileReportTempPOExample();
 	     example.createCriteria().andTemplateTypeEqualTo("vipIncomeAnalysis").andValidEqualTo(Boolean.TRUE);
 	     List<FileReportTempPO>  FileReportTempPOlist = fileReportTempPOMapper.selectByExample(example);
@@ -90,7 +90,7 @@ public class FigureController {
 
     @RequestMapping("operatingIncomeAnalysis")
     public ResponseData<BackDataTimeDtailtu> operatingIncomeAnalysis( IncomeTotalListGroup sendVO, HttpServletRequest request){
- 	   sendVO.setCorpId("C10153");  SysAccountPO sysAccountPO =TokenUtils.getStageUser(request);
+ 	   sendVO.setCorpId("C10291");  SysAccountPO sysAccountPO =TokenUtils.getStageUser(request);
 	     FileReportTempPOExample example = new FileReportTempPOExample();
 	     example.createCriteria().andTemplateTypeEqualTo("operatingIncomeAnalysis").andValidEqualTo(Boolean.TRUE);
 	     List<FileReportTempPO>  FileReportTempPOlist = fileReportTempPOMapper.selectByExample(example);

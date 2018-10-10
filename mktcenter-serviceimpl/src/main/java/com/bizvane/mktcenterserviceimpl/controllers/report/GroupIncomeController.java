@@ -55,7 +55,7 @@ import lombok.extern.slf4j.Slf4j;
 //// 收入01- 收入总表
 //   @RequestMapping("incomeTotalListGroup")
 //   public ResponseData<List<BackData>> incomeTotalListGroup( IncomeTotalListGroup sendVO, HttpServletRequest request){
-//	   sendVO.setCorpId("C10153");  SysAccountPO sysAccountPO =TokenUtils.getStageUser(request);
+//	   sendVO.setCorpId("C10291");  SysAccountPO sysAccountPO =TokenUtils.getStageUser(request);
 //	     FileReportTempPOExample example = new FileReportTempPOExample();
 //	     example.createCriteria().andTemplateTypeEqualTo("incomeTotalListGroup").andValidEqualTo(Boolean.TRUE);
 //	     List<FileReportTempPO>  FileReportTempPOlist = fileReportTempPOMapper.selectByExample(example);
@@ -131,7 +131,7 @@ import lombok.extern.slf4j.Slf4j;
 //// 收入01- 会销收入表汇总
 //   @RequestMapping("incomeVipGroup")
 //   public ResponseData<List<BackData>> incomeVip( IncomeTotalListGroup sendVO, HttpServletRequest request){
-//	   sendVO.setCorpId("C10153");  SysAccountPO sysAccountPO =TokenUtils.getStageUser(request);
+//	   sendVO.setCorpId("C10291");  SysAccountPO sysAccountPO =TokenUtils.getStageUser(request);
 //	     FileReportTempPOExample example = new FileReportTempPOExample();
 //	     example.createCriteria().andTemplateTypeEqualTo("incomeVipGroup").andValidEqualTo(Boolean.TRUE);
 //	     List<FileReportTempPO>  FileReportTempPOlist = fileReportTempPOMapper.selectByExample(example);
@@ -143,7 +143,7 @@ import lombok.extern.slf4j.Slf4j;
 //// 收入01- 游客收入表汇总
 //   @RequestMapping("touristIncomeGroup")
 //   public ResponseData<List<BackData>> touristIncome( IncomeTotalListGroup sendVO, HttpServletRequest request){
-//	   sendVO.setCorpId("C10153");  SysAccountPO sysAccountPO =TokenUtils.getStageUser(request);
+//	   sendVO.setCorpId("C10291");  SysAccountPO sysAccountPO =TokenUtils.getStageUser(request);
 //	     FileReportTempPOExample example = new FileReportTempPOExample();
 //	     example.createCriteria().andTemplateTypeEqualTo("touristIncomeGroup").andValidEqualTo(Boolean.TRUE);
 //	     List<FileReportTempPO>  FileReportTempPOlist = fileReportTempPOMapper.selectByExample(example);
@@ -153,7 +153,7 @@ import lombok.extern.slf4j.Slf4j;
 //// 02渠道-线上会销收入表汇总
 //   @RequestMapping("onlineVipIncomeGroup")
 //   public ResponseData<List<BackData>> onlineVipIncome( IncomeTotalListGroup sendVO, HttpServletRequest request){
-//	   sendVO.setCorpId("C10153");  SysAccountPO sysAccountPO =TokenUtils.getStageUser(request);
+//	   sendVO.setCorpId("C10291");  SysAccountPO sysAccountPO =TokenUtils.getStageUser(request);
 //	     FileReportTempPOExample example = new FileReportTempPOExample();
 //	     example.createCriteria().andTemplateTypeEqualTo("onlineVipIncomeGroup").andValidEqualTo(Boolean.TRUE);
 //	     List<FileReportTempPO>  FileReportTempPOlist = fileReportTempPOMapper.selectByExample(example);
@@ -163,7 +163,7 @@ import lombok.extern.slf4j.Slf4j;
 //// 02渠道-线下
 //   @RequestMapping("offlineVipIncomeGroup")
 //   public ResponseData<List<BackData>> offlineVipIncome( IncomeTotalListGroup sendVO, HttpServletRequest request){
-//	   sendVO.setCorpId("C10153");  SysAccountPO sysAccountPO =TokenUtils.getStageUser(request);
+//	   sendVO.setCorpId("C10291");  SysAccountPO sysAccountPO =TokenUtils.getStageUser(request);
 //	     FileReportTempPOExample example = new FileReportTempPOExample();
 //	     example.createCriteria().andTemplateTypeEqualTo("offlineVipIncomeGroup").andValidEqualTo(Boolean.TRUE);
 //	     List<FileReportTempPO>  FileReportTempPOlist = fileReportTempPOMapper.selectByExample(example);
@@ -173,21 +173,21 @@ import lombok.extern.slf4j.Slf4j;
 //// 03开绑卡分析-开卡
 ////   @RequestMapping("offlineVipIncome")
 ////   public ResponseData<List<BackData>> offlineVipIncome(OfflineVipIncome sendVO, HttpServletRequest request){
-////	   sendVO.setCorpId("C10153");  SysAccountPO sysAccountPO =TokenUtils.getStageUser(request);
+////	   sendVO.setCorpId("C10291");  SysAccountPO sysAccountPO =TokenUtils.getStageUser(request);
 ////   	 return sendpost(BaseUrl.getLoadUrl("offlineVipIncome"),sendVO,FileReportTempPOlist,sysAccountPO);
 ////   }
 //   
 //// 03开绑卡分析-绑卡
 //// @RequestMapping("offlineVipIncome")
 //// public ResponseData<List<BackData>> offlineVipIncome(OfflineVipIncome sendVO, HttpServletRequest request){
-////	   sendVO.setCorpId("C10153");  SysAccountPO sysAccountPO =TokenUtils.getStageUser(request);
+////	   sendVO.setCorpId("C10291");  SysAccountPO sysAccountPO =TokenUtils.getStageUser(request);
 //// 	 return sendpost(BaseUrl.getLoadUrl("offlineVipIncome"),sendVO,FileReportTempPOlist,sysAccountPO);
 //// }
 //   
 //// 04会员数量
 //   @RequestMapping("vipNumGroup")
 //   public ResponseData<List<BackData>> vipNum( IncomeTotalListGroup sendVO, HttpServletRequest request){
-//	   sendVO.setCorpId("C10153");  SysAccountPO sysAccountPO =TokenUtils.getStageUser(request);
+//	   sendVO.setCorpId("C10291");  SysAccountPO sysAccountPO =TokenUtils.getStageUser(request);
 //	     FileReportTempPOExample example = new FileReportTempPOExample();
 //	     example.createCriteria().andTemplateTypeEqualTo("vipNumGroup").andValidEqualTo(Boolean.TRUE);
 //	     List<FileReportTempPO>  FileReportTempPOlist = fileReportTempPOMapper.selectByExample(example);
@@ -197,7 +197,7 @@ import lombok.extern.slf4j.Slf4j;
 //// 05新增会员-新增会员收入
 //   @RequestMapping("increaseVipGroup")
 //   public ResponseData<List<BackData>> increaseVip( IncomeTotalListGroup sendVO, HttpServletRequest request){
-//	   sendVO.setCorpId("C10153");  SysAccountPO sysAccountPO =TokenUtils.getStageUser(request);
+//	   sendVO.setCorpId("C10291");  SysAccountPO sysAccountPO =TokenUtils.getStageUser(request);
 //	     FileReportTempPOExample example = new FileReportTempPOExample();
 //	     example.createCriteria().andTemplateTypeEqualTo("increaseVipGroup").andValidEqualTo(Boolean.TRUE);
 //	     List<FileReportTempPO>  FileReportTempPOlist = fileReportTempPOMapper.selectByExample(example);
@@ -206,7 +206,7 @@ import lombok.extern.slf4j.Slf4j;
 //// 05新增会员-新增会员数量
 //   @RequestMapping("increaseVipNumGroup")
 //   public ResponseData<List<BackData>> increaseVipNum( IncomeTotalListGroup sendVO, HttpServletRequest request){
-//	   sendVO.setCorpId("C10153");  SysAccountPO sysAccountPO =TokenUtils.getStageUser(request);
+//	   sendVO.setCorpId("C10291");  SysAccountPO sysAccountPO =TokenUtils.getStageUser(request);
 //	     FileReportTempPOExample example = new FileReportTempPOExample();
 //	     example.createCriteria().andTemplateTypeEqualTo("increaseVipNumGroup").andValidEqualTo(Boolean.TRUE);
 //	     List<FileReportTempPO>  FileReportTempPOlist = fileReportTempPOMapper.selectByExample(example);
@@ -216,20 +216,20 @@ import lombok.extern.slf4j.Slf4j;
 //// 06会员卡分析-类型1
 ////   @RequestMapping("increaseVipNum")
 ////   public ResponseData<List<BackData>> increaseVipNum(IncreaseVipNum sendVO, HttpServletRequest request){
-////	   sendVO.setCorpId("C10153");  SysAccountPO sysAccountPO =TokenUtils.getStageUser(request);
+////	   sendVO.setCorpId("C10291");  SysAccountPO sysAccountPO =TokenUtils.getStageUser(request);
 ////   	 return sendpost(BaseUrl.getLoadUrl("increaseVipNum"),sendVO,FileReportTempPOlist,sysAccountPO);
 ////   }
 //// 06会员卡分析-类型2
 //// @RequestMapping("increaseVipNum")
 //// public ResponseData<List<BackData>> increaseVipNum(IncreaseVipNum sendVO, HttpServletRequest request){
-////	   sendVO.setCorpId("C10153");  SysAccountPO sysAccountPO =TokenUtils.getStageUser(request);
+////	   sendVO.setCorpId("C10291");  SysAccountPO sysAccountPO =TokenUtils.getStageUser(request);
 //// 	 return sendpost(BaseUrl.getLoadUrl("increaseVipNum"),sendVO,FileReportTempPOlist,sysAccountPO);
 //// }
 //   
 //// 07新老会员分析-新会员
 //   @RequestMapping("newOldMemberInterfaceGroup")
 //   public ResponseData<List<BackData>> newOldMemberInterface( IncomeTotalListGroup sendVO, HttpServletRequest request){
-//	   sendVO.setCorpId("C10153");  SysAccountPO sysAccountPO =TokenUtils.getStageUser(request);
+//	   sendVO.setCorpId("C10291");  SysAccountPO sysAccountPO =TokenUtils.getStageUser(request);
 //	     FileReportTempPOExample example = new FileReportTempPOExample();
 //	     example.createCriteria().andTemplateTypeEqualTo("newOldMemberInterfaceGroup").andValidEqualTo(Boolean.TRUE);
 //	     List<FileReportTempPO>  FileReportTempPOlist = fileReportTempPOMapper.selectByExample(example);
@@ -239,7 +239,7 @@ import lombok.extern.slf4j.Slf4j;
 //// 08活跃会员表汇总
 //   @RequestMapping("activeMemberAllInterfaceGroup")
 //   public ResponseData<List<BackData>> activeMemberAllInterface( IncomeTotalListGroup sendVO, HttpServletRequest request){
-//	   sendVO.setCorpId("C10153");  SysAccountPO sysAccountPO =TokenUtils.getStageUser(request);
+//	   sendVO.setCorpId("C10291");  SysAccountPO sysAccountPO =TokenUtils.getStageUser(request);
 //	     FileReportTempPOExample example = new FileReportTempPOExample();
 //	     example.createCriteria().andTemplateTypeEqualTo("activeMemberAllInterfaceGroup").andValidEqualTo(Boolean.TRUE);
 //	     List<FileReportTempPO>  FileReportTempPOlist = fileReportTempPOMapper.selectByExample(example);
@@ -249,7 +249,7 @@ import lombok.extern.slf4j.Slf4j;
 //// 09复购-会员表汇总
 //   @RequestMapping("rePurchaseMemberAllInterfaceGroup")
 //   public ResponseData<List<BackData>> rePurchaseMemberAllInterface( IncomeTotalListGroup sendVO, HttpServletRequest request){
-//	   sendVO.setCorpId("C10153");  SysAccountPO sysAccountPO =TokenUtils.getStageUser(request);
+//	   sendVO.setCorpId("C10291");  SysAccountPO sysAccountPO =TokenUtils.getStageUser(request);
 //	     FileReportTempPOExample example = new FileReportTempPOExample();
 //	     example.createCriteria().andTemplateTypeEqualTo("rePurchaseMemberAllInterfaceGroup").andValidEqualTo(Boolean.TRUE);
 //	     List<FileReportTempPO>  FileReportTempPOlist = fileReportTempPOMapper.selectByExample(example);
@@ -259,14 +259,14 @@ import lombok.extern.slf4j.Slf4j;
 //// 10回购-会员表汇总
 ////   @RequestMapping("activeMemberAllInterface")
 ////   public ResponseData<List<BackData>> activeMemberAllInterface(ActiveMemberAllInterface sendVO, HttpServletRequest request){
-////	   sendVO.setCorpId("C10153");  SysAccountPO sysAccountPO =TokenUtils.getStageUser(request);
+////	   sendVO.setCorpId("C10291");  SysAccountPO sysAccountPO =TokenUtils.getStageUser(request);
 ////   	 return sendpost(BaseUrl.getLoadUrl("activeMemberAllInterface"),sendVO,FileReportTempPOlist,sysAccountPO);
 ////   }
 //
 //   
 //   @RequestMapping("genderGroup")
 //   public ResponseData<List<BackData>> genderGroup( IncomeTotalListGroup sendVO, HttpServletRequest request){
-//	   sendVO.setCorpId("C10153");  SysAccountPO sysAccountPO =TokenUtils.getStageUser(request);
+//	   sendVO.setCorpId("C10291");  SysAccountPO sysAccountPO =TokenUtils.getStageUser(request);
 //	     FileReportTempPOExample example = new FileReportTempPOExample();
 //	     example.createCriteria().andTemplateTypeEqualTo("genderGroup").andValidEqualTo(Boolean.TRUE);
 //	     List<FileReportTempPO>  FileReportTempPOlist = fileReportTempPOMapper.selectByExample(example);
@@ -275,7 +275,7 @@ import lombok.extern.slf4j.Slf4j;
 //   
 //   @RequestMapping("ageAnalysisGroup")
 //   public ResponseData<List<BackData>> ageAnalysisGroup( IncomeTotalListGroup sendVO, HttpServletRequest request){
-//	   sendVO.setCorpId("C10153");  SysAccountPO sysAccountPO =TokenUtils.getStageUser(request);
+//	   sendVO.setCorpId("C10291");  SysAccountPO sysAccountPO =TokenUtils.getStageUser(request);
 //	     FileReportTempPOExample example = new FileReportTempPOExample();
 //	     example.createCriteria().andTemplateTypeEqualTo("ageAnalysisGroup").andValidEqualTo(Boolean.TRUE);
 //	     List<FileReportTempPO>  FileReportTempPOlist = fileReportTempPOMapper.selectByExample(example);
