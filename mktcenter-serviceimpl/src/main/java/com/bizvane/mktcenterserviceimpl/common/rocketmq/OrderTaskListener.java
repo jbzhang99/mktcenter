@@ -50,6 +50,7 @@ public class OrderTaskListener implements MessageListener {
         //根据会员code获取会员详情
         String memberCode = model.getMemberCode();
         MemberInfoModel memeberDetail = taskService.getCompanyMemeberDetail(memberCode);
+        log.info("订单信息--会员详情--------"+modelStr);
         Long serviceStoreId = memeberDetail.getServiceStoreId();
         //订单列表
         //订单来源 1=线下   2=微商城
