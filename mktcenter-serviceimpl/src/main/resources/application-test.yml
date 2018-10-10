@@ -159,3 +159,6 @@ activity:
 
 tenant:
   isEnabledTenantInterceptor: false
+ribbon:
+  ConnectTimeout: 60000
+  ReadTimeout: 60000
