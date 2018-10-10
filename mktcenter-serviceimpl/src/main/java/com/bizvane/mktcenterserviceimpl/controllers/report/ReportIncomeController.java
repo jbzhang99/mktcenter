@@ -18,6 +18,7 @@ import com.bizvane.mktcenterservice.interfaces.ReportTempService;
 import com.bizvane.mktcenterservice.models.po.FileReportTempPO;
 import com.bizvane.mktcenterservice.models.po.FileReportTempPOExample;
 import com.bizvane.mktcenterservice.models.requestvo.BackData;
+import com.bizvane.mktcenterservice.models.requestvo.BackDataBiaotou;
 import com.bizvane.mktcenterservice.models.requestvo.BackDataTime;
 import com.bizvane.mktcenterservice.models.requestvo.postvo.ActiveMemberAllInterface;
 import com.bizvane.mktcenterservice.models.requestvo.postvo.IncomeTotalList;
@@ -87,9 +88,7 @@ public class ReportIncomeController {
 	    		 
 		    	    String organizationContentStr = jsonObject.getString("organizationContentStr");
 		    	    String dimension = jsonObject.getString("dimension");
-		    	    
 		    		 if(StringUtils.isNotBlank(organizationContentStr)){
-//		    			 ["12","33","56"]
 		    		 String[] al= organizationContentStr.toString().split(",");
 		    		  jsonObject.put("organizationContent", al); // 直接put相同的key
 		    		 }
@@ -101,7 +100,50 @@ public class ReportIncomeController {
 	     if(job.get("successFlag").equals("1")) {
 	             // 导出表格
 		    	 if(StringUtils.isNotBlank(postTem)&&postTem.equals("export")){
-		    		 reportTempService.Export(sysAccountPO,"_summary",job.get("data").toString(), fileReportTempPOlist.get(0));
+		    		 
+		    		 //表头字段
+		    		 FileReportTempPO fileReportTempPO=fileReportTempPOlist.get(0);
+		    		 
+					 if(dimension.equals("0")) {
+						 fileReportTempPO.setReportDataName("storeId,"+fileReportTempPO.getReportDataName());
+						 fileReportTempPO.setReportData("所属店铺,"+fileReportTempPO.getReportData());
+						 
+						 fileReportTempPO.setReportDataName("empName,"+fileReportTempPO.getReportDataName());
+						 fileReportTempPO.setReportData("员工姓名,"+fileReportTempPO.getReportData());
+						 
+						 fileReportTempPO.setReportDataName("empCode,"+fileReportTempPO.getReportDataName());
+						 fileReportTempPO.setReportData("员工编号,"+fileReportTempPO.getReportData());
+
+					 }else if(dimension.equals("1")) {
+						 fileReportTempPO.setReportDataName("groupId,"+fileReportTempPO.getReportDataName());
+						 fileReportTempPO.setReportData("所属群组,"+fileReportTempPO.getReportData());
+						 
+						 fileReportTempPO.setReportDataName("storeName,"+fileReportTempPO.getReportDataName());
+						 fileReportTempPO.setReportData("店铺名称,"+fileReportTempPO.getReportData());
+						 
+						 fileReportTempPO.setReportDataName("storeCode,"+fileReportTempPO.getReportDataName());
+						 fileReportTempPO.setReportData("店铺编号,"+fileReportTempPO.getReportData());
+						 
+					 }else if(dimension.equals("2")) {
+						 
+						 fileReportTempPO.setReportDataName("brandCode,"+fileReportTempPO.getReportDataName());
+						 fileReportTempPO.setReportData("品牌编号,"+fileReportTempPO.getReportData());
+						 
+						 fileReportTempPO.setReportDataName("brandName,"+fileReportTempPO.getReportDataName());
+						 fileReportTempPO.setReportData("品牌名称,"+fileReportTempPO.getReportData());
+						 
+						 
+					 }else if(dimension.equals("3")) {
+						 fileReportTempPO.setReportDataName("groupName,"+fileReportTempPO.getReportDataName());
+						 fileReportTempPO.setReportData("群组名称,"+fileReportTempPO.getReportData());
+						 
+						 fileReportTempPO.setReportDataName("groupCode,"+fileReportTempPO.getReportDataName());
+						 fileReportTempPO.setReportData("群组编号,"+fileReportTempPO.getReportData());
+						 
+						 
+					 }
+		    		 
+		    		 reportTempService.Export(sysAccountPO,"_summary",job.get("data").toString(), fileReportTempPO);
 		    		 ResponseData.setMessage("导出中");
 		    	 }else {
 		    		 ResponseData.setMessage(job.get("message").toString());
