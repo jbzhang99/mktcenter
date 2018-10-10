@@ -18,6 +18,7 @@ import com.bizvane.mktcenterservice.models.po.MktCouponPO;
 import com.bizvane.mktcenterservice.models.po.MktCouponPOExample;
 import com.bizvane.mktcenterservice.models.vo.ActivityVO;
 import com.bizvane.mktcenterserviceimpl.common.award.MemberMessageSend;
+import com.bizvane.mktcenterserviceimpl.common.enums.ActivityStatusEnum;
 import com.bizvane.mktcenterserviceimpl.common.enums.ActivityTypeEnum;
 import com.bizvane.mktcenterserviceimpl.mappers.MktActivityBirthdayPOMapper;
 import com.bizvane.mktcenterserviceimpl.mappers.MktActivityPOMapper;
@@ -53,6 +54,7 @@ public class EveryDayActivityJobHandler extends IJobHandler {
         //查询所有的执行中的生日活动
         ActivityVO vo = new ActivityVO();
         vo.setActivityType(ActivityTypeEnum.ACTIVITY_TYPE_BIRTHDAY.getCode());
+        vo.setActivityStatus(ActivityStatusEnum.ACTIVITY_STATUS_EXECUTING.getCode());
         List<ActivityVO> activityBirthdayList = mktActivityBirthdayPOMapper.getActivityBirthdayList(vo);
         log.info("定时器开始执行生日活动+++++====="+ JSON.toJSONString(activityBirthdayList));
         memberMessage.sendBirthdayCoupon(activityBirthdayList);
