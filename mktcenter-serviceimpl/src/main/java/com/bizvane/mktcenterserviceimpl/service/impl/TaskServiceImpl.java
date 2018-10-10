@@ -359,11 +359,13 @@ public class TaskServiceImpl implements TaskService {
         Integer taskStatus = mktTaskPOWithBLOBs.getTaskStatus();
 
         if (TaskConstants.THREE.equals(checkStatus) && TaskConstants.FIRST.equals(taskStatus)) {
+            log.info("doOrderTask 已审核 待执行--"+checkStatus+"--"+taskStatus);
             //已审核 待执行,创建开始任务job和结束任务job,并且对发送短信和消息进行判断
              jobUtil.addTaskStartJob(stageUser, mktTaskPOWithBLOBs);
              jobUtil.addTaskEndJob(stageUser, mktTaskPOWithBLOBs);
              this.sendSmg(mktTaskPOWithBLOBs,mktmessagePOList,stageUser);
         }else if (TaskConstants.THREE.equals(checkStatus) && TaskConstants.SECOND.equals(taskStatus)){
+            log.info("doOrderTask 已审核 执中中--"+checkStatus+"--"+taskStatus);
             //已审核 执中中, 创建结束任务job,并且对发送短信和消息进行判断
             jobUtil.addTaskEndJob(stageUser, mktTaskPOWithBLOBs);
             this.sendSmg(mktTaskPOWithBLOBs,mktmessagePOList,stageUser);
