@@ -245,12 +245,16 @@ public class MemberMessageSend {
             memberInfoModel.setPageSize(10000);
             log.info("开始查询相应的会员++++++++++=");
             ResponseData<PageInfo<MemberInfoModel>> memberInfoModelLists =memberInfoApiService.getMemberInfo(memberInfoModel);
+            //循环页数
             for (int a=1;a<=memberInfoModelLists.getData().getPages();a++){
                 memberInfoModel.setPageNumber(a);
                 ResponseData<PageInfo<MemberInfoModel>> memberInfoModelListss =memberInfoApiService.getMemberInfo(memberInfoModel);
                 List<MemberInfoModel> memberInfoModelList = memberInfoModelListss.getData().getList();
                 log.info("已经查询到相应的会员++++++++++=");
-                activityBirthdayService.birthdayReward(activityBirthday,memberInfoModelList);
+                //循环每一页的人数
+                for (MemberInfoModel memberInfo:memberInfoModelList) {
+                    activityBirthdayService.birthdayReward(activityBirthday, memberInfo);
+                }
             }
 
 
