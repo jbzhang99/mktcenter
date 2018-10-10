@@ -21,6 +21,7 @@ import com.bizvane.members.facade.vo.WxChannelInfoVo;
 import com.bizvane.messagefacade.models.vo.MemberMessageVO;
 import com.bizvane.messagefacade.models.vo.SysSmsConfigVO;
 import com.bizvane.mktcenterservice.interfaces.ActivityBirthdayService;
+import com.bizvane.mktcenterservice.interfaces.ActivityService;
 import com.bizvane.mktcenterservice.interfaces.ActivityVipAniversaryService;
 import com.bizvane.mktcenterservice.models.bo.AwardBO;
 import com.bizvane.mktcenterservice.models.po.*;
@@ -70,6 +71,8 @@ public class MemberMessageSend {
     private WxChannelInfoAdvancedSearchApiService wxChannelInfoAdvancedSearchApiServic;
     @Autowired
     private MembersAdvancedSearchApiService membersAdvancedSearchApiService;
+    @Autowired
+    private ActivityService activityService;
     /**
      * 查询会员信息发送你个短信和微信消息
      * @param messageVOList
@@ -86,27 +89,8 @@ public class MemberMessageSend {
             //循环发送
             if (!CollectionUtils.isEmpty(memberInfoModelList)){
                 for (MemberInfoModel memberInfo:memberInfoModelList) {
-                    //循环信息类然后发送
-                    for (MktMessagePO mktMessagePO:messageVOList) {
-                        AwardBO awardBO = new AwardBO();
-                        if (mktMessagePO.getMsgType().equals("1") && !StringUtils.isEmpty(memberInfo.getWxOpenId())){
-                            //发送微信模板消息
-                            MemberMessageVO memberMessageVO = new MemberMessageVO();
-                            memberMessageVO.setMemberCode(memberInfo.getMemberCode());
-                            memberMessageVO.setOpenId(memberInfo.getWxOpenId());
-                            awardBO.setMemberMessageVO(memberMessageVO);
-                            awardBO.setMktType(MktSmartTypeEnum.SMART_TYPE_WXMESSAGE.getCode());
-                            award.execute(awardBO);
-                        }
-                        if (mktMessagePO.getMsgType().equals("2")){
-                            SysSmsConfigVO sysSmsConfigVO = new SysSmsConfigVO();
-                            sysSmsConfigVO.setPhone(memberInfo.getPhone());
-                            awardBO.setSysSmsConfigVO(sysSmsConfigVO);
-                            awardBO.setMktType(MktSmartTypeEnum.SMART_TYPE_SMS.getCode());
-                            //发送短信消息
-                            award.execute(awardBO);
-                        }
-                    }
+                    activityService.sendMessage(messageVOList, memberInfo);
+
                 }
             }
         }
@@ -236,21 +220,21 @@ public class MemberMessageSend {
             //查询对应的会员
             MemberInfoApiModel memberInfoModel= new MemberInfoApiModel();
             memberInfoModel.setBrandId(activityBirthday.getSysBrandId());
-            if (!activityBirthday.getMbrLevelCode().equals("0")){
+            if (!activityBirthday.getMbrLevelCode().equals(0)){
                 memberInfoModel.setLevelId(Long.parseLong(activityBirthday.getMbrLevelCode()));
             }
             memberInfoModel.setBirthdayLine(activityBirthday.getDaysAhead());
             memberInfoModel.setMemberScope(activityBirthday.getMemberType().toString());
             memberInfoModel.setPageNumber(1);
             memberInfoModel.setPageSize(10000);
-            log.info("开始查询相应的会员++++++++++=");
             ResponseData<PageInfo<MemberInfoModel>> memberInfoModelLists =memberInfoApiService.getMemberInfo(memberInfoModel);
             //循环页数
             for (int a=1;a<=memberInfoModelLists.getData().getPages();a++){
                 memberInfoModel.setPageNumber(a);
+                log.info("开始查询相应的会员参数++++++++++=+=============+"+ JSON.toJSONString(memberInfoModel));
                 ResponseData<PageInfo<MemberInfoModel>> memberInfoModelListss =memberInfoApiService.getMemberInfo(memberInfoModel);
                 List<MemberInfoModel> memberInfoModelList = memberInfoModelListss.getData().getList();
-                log.info("已经查询到相应的会员++++++++++=");
+                log.info("已经查询到相应的会员总数量是++++++++++="+memberInfoModelListss.getData().getTotal());
                 //循环每一页的人数
                 for (MemberInfoModel memberInfo:memberInfoModelList) {
                     activityBirthdayService.birthdayReward(activityBirthday, memberInfo);

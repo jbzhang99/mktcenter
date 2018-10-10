@@ -42,7 +42,9 @@ import com.github.pagehelper.PageInfo;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import java.text.NumberFormat;
 import java.util.Date;
@@ -72,6 +74,8 @@ public class ActivityServiceImpl implements ActivityService {
     private MktActivityRegisterPOMapper mktActivityRegisterPOMapper;
     @Autowired
     private JobClient jobClient;
+    @Autowired
+    private Award award;
     /**
      * 禁用/启用活动
      * @param vo
@@ -314,5 +318,30 @@ public class ActivityServiceImpl implements ActivityService {
     public ResponseData<Integer> sendWxTemplateMessage(String activityCode){
         ResponseData responseData = new ResponseData();
         return responseData;
+    }
+    @Override
+    @Async("asyncServiceExecutor")
+    public void sendMessage(List<MktMessagePO> messageVOList, MemberInfoModel memberInfo) {
+        //循环信息类然后发送
+        for (MktMessagePO mktMessagePO:messageVOList) {
+            AwardBO awardBO = new AwardBO();
+            if (mktMessagePO.getMsgType().equals("1") && !StringUtils.isEmpty(memberInfo.getWxOpenId())){
+                //发送微信模板消息
+                MemberMessageVO memberMessageVO = new MemberMessageVO();
+                memberMessageVO.setMemberCode(memberInfo.getMemberCode());
+                memberMessageVO.setOpenId(memberInfo.getWxOpenId());
+                awardBO.setMemberMessageVO(memberMessageVO);
+                awardBO.setMktType(MktSmartTypeEnum.SMART_TYPE_WXMESSAGE.getCode());
+                award.execute(awardBO);
+            }
+            if (mktMessagePO.getMsgType().equals("2")){
+                SysSmsConfigVO sysSmsConfigVO = new SysSmsConfigVO();
+                sysSmsConfigVO.setPhone(memberInfo.getPhone());
+                awardBO.setSysSmsConfigVO(sysSmsConfigVO);
+                awardBO.setMktType(MktSmartTypeEnum.SMART_TYPE_SMS.getCode());
+                //发送短信消息
+                award.execute(awardBO);
+            }
+        }
     }
 }

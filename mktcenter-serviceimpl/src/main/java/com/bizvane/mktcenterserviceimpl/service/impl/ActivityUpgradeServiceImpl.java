@@ -279,7 +279,7 @@ public class ActivityUpgradeServiceImpl implements ActivityUpgradeService {
                 mktCouponPO.setBizId(mktActivityId);
                 mktCouponPO.setCouponName(couponCode.getCouponName());
                 mktCouponPO.setCouponDefinitionId(couponCode.getCouponDefinitionId());
-                mktCouponPO.setBizId(couponCode.getBizId());
+               // mktCouponPO.setBizId(couponCode.getBizId());
                 mktCouponPOMapper.insertSelective(mktCouponPO);
             }
         }
