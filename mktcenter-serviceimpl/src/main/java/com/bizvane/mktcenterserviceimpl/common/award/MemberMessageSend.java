@@ -250,7 +250,7 @@ public class MemberMessageSend {
                 log.info("开始查询相应的会员参数++++++++++=+=============+"+ JSON.toJSONString(memberInfoModel));
                 ResponseData<PageInfo<MemberInfoModel>> memberInfoModelListss =memberInfoApiService.getMemberInfo(memberInfoModel);
                 List<MemberInfoModel> memberInfoModelList = memberInfoModelListss.getData().getList();
-                log.info("已经查询到相应的会员++++++++++=");
+                log.info("已经查询到相应的会员总数量是++++++++++="+memberInfoModelListss.getData().getTotal());
                 //循环每一页的人数
                 for (MemberInfoModel memberInfo:memberInfoModelList) {
                     activityBirthdayService.birthdayReward(activityBirthday, memberInfo);
