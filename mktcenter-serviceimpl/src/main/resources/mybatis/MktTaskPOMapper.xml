@@ -816,10 +816,10 @@
       AND  tta.task_status=2
       AND tta.task_type  BETWEEN 4  AND 5
     <if test="sysCompanyId != null and sysCompanyId!= '' ">
-      AND  sys_company_id=#{sysCompanyId}
+      AND  tta.sys_company_id=#{sysCompanyId}
     </if>
     <if test="sysBrandId != null and sysBrandId!= '' ">
-      AND sys_brand_id=#{sysBrandId}
+      AND tta.sys_brand_id=#{sysBrandId}
     </if>
     <if test="placeOrderTime!=null and placeOrderTime!=''">
       AND tta.start_time <![CDATA[<=]]>#{placeOrderTime}

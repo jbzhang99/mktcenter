@@ -114,7 +114,7 @@ public interface MktTaskPOMapper {
 	 * @return
 	 */
 
-	public List<TaskAwardBO> getTaskOrderAwardList(@Param("sysCompanyId") Long sysCompanyId, @Param("sysBrandId") Long sysBrandId, @Param("placeOrderTime")Date placeOrderTime,@Param("orderSource")Integer orderSource);
+	public List<TaskAwardBO> getTaskOrderAwardList(@Param("sysCompanyId") Long sysCompanyId, @Param("sysBrandId") Long sysBrandId, @Param("placeOrderTime")String placeOrderTime,@Param("orderSource")Integer orderSource);
 	/**
 	 * 获取邀请开卡任务的奖励条件
 	 * @param sysCompanyId

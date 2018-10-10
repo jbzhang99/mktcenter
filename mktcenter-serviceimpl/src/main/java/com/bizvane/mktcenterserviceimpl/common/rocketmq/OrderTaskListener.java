@@ -23,6 +23,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.util.Date;
@@ -41,6 +42,7 @@ public class OrderTaskListener implements MessageListener {
     private TaskService taskService;
     @Autowired
     private TaskRecordService taskRecordService;
+
     @Override
     public Action consume(Message message, ConsumeContext consumeContext) {
         //获取订单信息
@@ -49,15 +51,16 @@ public class OrderTaskListener implements MessageListener {
         OrderModel model = JSONObject.parseObject(modelStr, OrderModel.class);
         //根据会员code获取会员详情
         String memberCode = model.getMemberCode();
-        MemberInfoModel memeberDetail = taskService.getCompanyMemeberDetail(memberCode);
-        log.info("订单信息--会员详情--------"+modelStr);
-        Long serviceStoreId = memeberDetail.getServiceStoreId();
         //订单列表
         //订单来源 1=线下   2=微商城
         Integer orderSource = model.getOrderFrom();
         Long companyId = model.getSysCompanyId();
         Long brandId = model.getBrandId();
         Date placeOrderTime = model.getPlaceOrderTime();
+
+        MemberInfoModel memeberDetail = taskService.getCompanyMemeberDetail(memberCode);
+        log.info("订单信息--会员详情--------"+memeberDetail);
+        Long serviceStoreId = memeberDetail.getServiceStoreId();
         List<TaskAwardBO> taskOrderAwardList = taskService.getTaskOrderAwardList(companyId, brandId, placeOrderTime, orderSource);
         log.info("根据订单信息 获取的任务列表----"+ JSON.toJSONString(taskOrderAwardList));
         if (CollectionUtils.isNotEmpty(taskOrderAwardList)){
@@ -65,7 +68,7 @@ public class OrderTaskListener implements MessageListener {
                .filter(obj->{
                Boolean isStoreLimit = obj.getStoreLimit();
                String  StoreLimitList=obj.getStoreLimitList();
-               return isStoreLimit || (serviceStoreId!=null && StringUtils.isNotBlank(StoreLimitList) &&  obj.getStoreLimitList().contains(String.valueOf(serviceStoreId)));})
+               return !isStoreLimit || (serviceStoreId==null) ||(StringUtils.isNotBlank(StoreLimitList) &&  obj.getStoreLimitList().contains(String.valueOf(serviceStoreId)));})
                .forEach(obj->{
                this.doExecuteTask(model, obj,placeOrderTime); });
         }
@@ -103,7 +106,7 @@ public class OrderTaskListener implements MessageListener {
             taskRecordService.addTaskRecord(recordPO);
 
             //获取会员参与某一活动放总金额和总次数
-            TotalStatisticsBO totalBO = taskRecordService.getTotalStatistics(recordVO);
+             TotalStatisticsBO totalBO = taskRecordService.getTotalStatistics(recordVO);
 
                //累计消费次数任务=4
                 if (TaskTypeEnum.TASK_TYPE_CONSUME_TIMES.getCode()==taskType){

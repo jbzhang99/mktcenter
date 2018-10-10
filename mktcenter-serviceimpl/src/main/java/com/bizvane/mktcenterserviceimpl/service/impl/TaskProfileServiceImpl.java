@@ -279,6 +279,7 @@ public class TaskProfileServiceImpl implements TaskProfileService {
         Date profileDate = vo.getProfileDate();
         //完善者的code
         String memberCode = vo.getMemberCode();
+
         MemberInfoModel memeberDetail = taskService.getCompanyMemeberDetail(memberCode);
         log.info("完善资料任务--获取会员详情---"+ JSON.toJSONString(memeberDetail));
         Long companyId = memeberDetail.getSysCompanyId();

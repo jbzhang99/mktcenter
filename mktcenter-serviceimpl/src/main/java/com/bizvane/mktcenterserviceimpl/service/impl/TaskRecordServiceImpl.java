@@ -1,5 +1,6 @@
 package com.bizvane.mktcenterserviceimpl.service.impl;
 
+import com.alibaba.fastjson.JSON;
 import com.bizvane.mktcenterservice.interfaces.TaskRecordService;
 import com.bizvane.mktcenterservice.models.bo.TotalStatisticsBO;
 import com.bizvane.mktcenterservice.models.po.MktTaskRecordPO;
@@ -11,6 +12,7 @@ import com.bizvane.mktcenterserviceimpl.common.constants.TaskConstants;
 import com.bizvane.mktcenterserviceimpl.common.utils.TimeUtils;
 import com.bizvane.mktcenterserviceimpl.mappers.MktTaskRecordPOMapper;
 import com.bizvane.utils.tokens.SysAccountPO;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -23,6 +25,7 @@ import java.util.List;
  * @Author: lijunwei
  * @Time: 2018/8/6 23:43
  */
+@Slf4j
 @Service
 public class TaskRecordServiceImpl implements TaskRecordService {
 
@@ -50,12 +53,13 @@ public class TaskRecordServiceImpl implements TaskRecordService {
     }
 
     /**
-     * 获取会员参与某一活动的总金额和总次数
+     * 获取会员参与某一任务的总金额和总次数
      * @param vo
      * @return
      */
     @Override
     public TotalStatisticsBO getTotalStatistics(MktTaskRecordVO vo) {
+        log.info("TotalStatisticsBO任务的总金额和总次数--参数--"+ JSON.toJSONString(vo));
         TotalStatisticsBO bo= null;
         List<TotalStatisticsBO> totalStatistics = mktTaskRecordPOMapper.getTotalStatistics(vo);
         if (CollectionUtils.isNotEmpty(totalStatistics)){

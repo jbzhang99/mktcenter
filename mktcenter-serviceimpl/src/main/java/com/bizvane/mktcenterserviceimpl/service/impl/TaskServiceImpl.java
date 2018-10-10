@@ -62,6 +62,8 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import java.text.ParseException;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -262,7 +264,13 @@ public class TaskServiceImpl implements TaskService {
      */
     @Override
     public List<TaskAwardBO> getTaskOrderAwardList(Long sysCompanyId, Long sysBrandId, Date placeOrderTime,Integer orderSource){
-        return mktTaskPOMapper.getTaskOrderAwardList(sysCompanyId,sysBrandId,placeOrderTime,orderSource);
+        String orderTime="";
+        if (placeOrderTime!=null){
+            orderTime = TimeUtils.formatter.format(placeOrderTime);
+        }
+        List<TaskAwardBO> taskOrderAwardList = mktTaskPOMapper.getTaskOrderAwardList(sysCompanyId, sysBrandId, orderTime, orderSource);
+        log.info("--getTaskOrderAwardList订单奖励列表--"+sysCompanyId+"--"+sysBrandId+"--"+orderTime+"--"+orderSource+JSON.toJSONString(taskOrderAwardList));
+        return taskOrderAwardList;
     }
     /**
      * 根据公司id和品牌id查询执行中的邀请类任务
@@ -918,15 +926,12 @@ public class TaskServiceImpl implements TaskService {
      */
     @Override
     public MemberInfoModel getCompanyMemeberDetail(String  memberCode) {
+        log.info("getCompanyMemeberDetail会员详情--参数--"+JSON.toJSONString(memberCode));
         MemberInfoApiModel members = new MemberInfoApiModel();
         members.setMemberCode(memberCode);
-        ResponseData<com.bizvane.utils.responseinfo.PageInfo<MemberInfoModel>> memberInfo = memberInfoApiService.getMemberInfo(members);
-        com.bizvane.utils.responseinfo.PageInfo<MemberInfoModel> data = memberInfo.getData();
-        List<MemberInfoModel> list = data.getList();
-        MemberInfoModel memberInfoModel=null;
-        if (CollectionUtils.isNotEmpty(list)){
-            memberInfoModel=list.get(0);
-        }
+        ResponseData<MemberInfoModel> memberModel = memberInfoApiService.getMemberModel(members);
+        MemberInfoModel memberInfoModel = memberModel.getData();
+        log.info("getCompanyMemeberDetail会员详情--出参--"+JSON.toJSONString(memberInfoModel));
         return memberInfoModel;
     }
 

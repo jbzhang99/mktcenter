@@ -15,6 +15,8 @@ public class ProfileSuccessVO {
     //完善时间
     private Date profileDate;
 
+    private Long brandId;
+
     public String getMemberCode() {
         return memberCode;
     }
@@ -37,5 +39,13 @@ public class ProfileSuccessVO {
 
     public void setProfileDate(Date profileDate) {
         this.profileDate = profileDate;
+    }
+
+    public Long getBrandId() {
+        return brandId;
+    }
+
+    public void setBrandId(Long brandId) {
+        this.brandId = brandId;
     }
 }
