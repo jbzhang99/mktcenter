@@ -469,6 +469,7 @@ public class TaskServiceImpl implements TaskService {
     //完善资料任务发送短信和消息任务的逻辑判断
     @Async
     public  void doSendprofilMsg(MktTaskPOWithBLOBs mktTaskPOWithBLOBs, List<MktMessagePO> mktmessagePOList, SysAccountPO stageUser, Integer taskType) {
+        log.info("---完善资料任务doSendprofilMsg---"+JSON.toJSONString(mktTaskPOWithBLOBs)+"--"+JSON.toJSONString(mktmessagePOList));
         if (CollectionUtils.isNotEmpty(mktmessagePOList)) {
             Long sysCompanyId = mktTaskPOWithBLOBs.getSysCompanyId();
             Long sysBrandId = mktTaskPOWithBLOBs.getSysBrandId();
