@@ -444,7 +444,7 @@ public class TaskServiceImpl implements TaskService {
                         //发送时间
                         Date sendTime = message.getSendTime();
                         //1=模板消息   所有的会员
-                        if (TaskConstants.FIRST.equals(msgType)) {
+                        if (TaskConstants.FIRST_STR.equals(msgType)) {
                             //立即发送
                             if (sendImmediately){
                                 this.sendMemberMessage(sysBrandId,taskType,msgContent,exceptWechat);
@@ -454,7 +454,7 @@ public class TaskServiceImpl implements TaskService {
                         }
 
                         //2=短信     所有粉丝
-                        if (TaskConstants.SECOND.equals(msgType)){
+                        if (TaskConstants.SECOND_STR.equals(msgType)){
                             if (sendImmediately){
                                 this.sendBachMSM(mktTaskId,taskType,sysCompanyId,sysBrandId,msgContent,exceptWechat);
                             }else if (!sendImmediately && sendTime!=null){
@@ -481,13 +481,13 @@ public class TaskServiceImpl implements TaskService {
                         String msgType = message.getMsgType();
                         String msgContent = message.getMsgContent();
                         //1=模板消息   所有的会员
-                        if (TaskConstants.FIRST.equals(msgType)) {
+                        if (TaskConstants.FIRST_STR.equals(msgType)) {
                          //立即发送
                          log.info("完善资料 模板消息---"+sysBrandId+"--"+taskType+"--"+msgContent+"--"+exceptWechat);
                          this.sendMemberMessage(sysBrandId,taskType,msgContent,exceptWechat);
                         }
                         //2=短信     所有粉丝
-                        if (TaskConstants.SECOND.equals(msgType)){
+                        if (TaskConstants.SECOND_STR.equals(msgType)){
                             log.info("完善资料 模板消息---"+mktTaskId+"--"+taskType+"--"+sysCompanyId+"--"+sysBrandId+"--"+msgContent+"--"+exceptWechat);
                            this.sendBachMSM(mktTaskId,taskType,sysCompanyId,sysBrandId,msgContent,exceptWechat);
                         }

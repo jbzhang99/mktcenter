@@ -62,7 +62,8 @@ public class TaskConstants {
     public  final static String  NO_WEXIN_MEMBER="2";//不是微信会员
 
 
-
+    public  final static String   FIRST_STR="1";
+    public  final static String   SECOND_STR="2";
 
 
 }
