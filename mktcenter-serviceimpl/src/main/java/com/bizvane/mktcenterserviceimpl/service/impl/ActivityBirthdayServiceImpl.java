@@ -136,7 +136,7 @@ public class ActivityBirthdayServiceImpl implements ActivityBirthdayService {
         //工具类生成活动编码
         String activityCode = CodeUtil.getActivityCode();
         activityVO.setActivityCode(activityCode);
-        //增加活动类型是消费活动
+        //增加活动类型是生日活动
         activityVO.setActivityType(ActivityTypeEnum.ACTIVITY_TYPE_BIRTHDAY.getCode());
         //增加品牌id
         log.info("获取的品牌id是="+stageUser.getBrandId());
@@ -156,7 +156,6 @@ public class ActivityBirthdayServiceImpl implements ActivityBirthdayService {
             ActivityVO vo = new ActivityVO();
             vo.setMbrLevelCode(bo.getActivityVO().getMbrLevelCode());
             vo.setLongTerm(bo.getActivityVO().getLongTerm());
-            vo.setSysBrandId(activityVO.getSysBrandId());
             vo.setSysBrandId(activityVO.getSysBrandId());
             vo.setActivityType(ActivityTypeEnum.ACTIVITY_TYPE_BIRTHDAY.getCode());
             List<ActivityVO> registerList = mktActivityBirthdayPOMapper.getActivityBirthdayList(vo);
@@ -267,7 +266,7 @@ public class ActivityBirthdayServiceImpl implements ActivityBirthdayService {
                 mktCouponPO.setBizId(mktActivityId);
                 mktCouponPO.setCouponName(couponCode.getCouponName());
                 mktCouponPO.setCouponDefinitionId(couponCode.getCouponDefinitionId());
-                mktCouponPO.setBizId(couponCode.getBizId());
+                //mktCouponPO.setBizId(couponCode.getBizId());
                 mktCouponPOMapper.insertSelective(mktCouponPO);
             }
         }
@@ -565,15 +564,16 @@ public class ActivityBirthdayServiceImpl implements ActivityBirthdayService {
      * 2. 提前的天数最大值还没到第二年，判断今年这个会员是否收到过此券
      * 3. 否则，判断会员生日有没有到明年，如果到了明年，再看明年的券是否发过
      * @param activityBirthday
-     * @param memberInfoModelList
+     * @param memberInfo
      */
     @Override
     @Async("asyncServiceExecutor")
-    public void birthdayReward(ActivityVO activityBirthday, List<MemberInfoModel> memberInfoModelList) {
-        for (MemberInfoModel memberInfo:memberInfoModelList) {
+    public void birthdayReward(ActivityVO activityBirthday, MemberInfoModel memberInfo) {
+        log.info("执行生日活动开始开始了开始了开始了开始了开始了");
+//        for (MemberInfoModel memberInfo:memberInfoModelList) {
             //判断生日适用门店信息
             if (!ExecuteParamCheckUtil.implementActivitCheck(memberInfo,activityBirthday)){
-                continue;
+                return;
             }
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy");
             Date date = new Date();// 取时间
@@ -601,10 +601,10 @@ public class ActivityBirthdayServiceImpl implements ActivityBirthdayService {
             //如果为true 说明是今年
             if (true==dateSize(activityBirthday)){
                 //判断今年有没有发券
-                ResponseData<List<CouponEntityPO>> couponEntityPOs = couponEntityServiceFeign.findCouponHave(memberInfo.getMemberCode(),activityBirthday.getMktActivityId(),year);
+                ResponseData<List<CouponEntityPO>> couponEntityPOs = couponEntityServiceFeign.findCouponHave(memberInfo.getMemberCode(),activityBirthday.getMktActivityId(),s2);
                 List<CouponEntityPO> couponEntityPO =couponEntityPOs.getData();
                 if (!CollectionUtils.isEmpty(couponEntityPO)){
-                    continue;
+                    return;
                 }
                 //判断今年有没有发积分
                 IntegralRecordVo vs = new IntegralRecordVo();
@@ -614,17 +614,17 @@ public class ActivityBirthdayServiceImpl implements ActivityBirthdayService {
                 ResponseData<List<IntegralRecordModel>> integralRecordModels = integralRecordApiService.queryIntegralRecord(vs);
                 List<IntegralRecordModel> integralRecordModel = integralRecordModels.getData();
                 if (!CollectionUtils.isEmpty(integralRecordModel)){
-                    continue;
+                    return;
                 }
             }else{
                 //说明是明年 判断生日加上提前发送天数有没到明年
                 //true 说明是到了明年
                 if (true==dateMonth(activityBirthday,memberInfo)){
                     //判断明年有没有发券
-                    ResponseData<List<CouponEntityPO>> couponEntityPOs = couponEntityServiceFeign.findCouponHave(memberInfo.getMemberCode(),activityBirthday.getMktActivityId(),toyear);
+                    ResponseData<List<CouponEntityPO>> couponEntityPOs = couponEntityServiceFeign.findCouponHave(memberInfo.getMemberCode(),activityBirthday.getMktActivityId(),s1);
                     List<CouponEntityPO> couponEntityPO =couponEntityPOs.getData();
                     if (!CollectionUtils.isEmpty(couponEntityPO)){
-                        continue;
+                        return;
                     }
                     //判断明年有没有发积分
                     IntegralRecordVo vs = new IntegralRecordVo();
@@ -634,14 +634,14 @@ public class ActivityBirthdayServiceImpl implements ActivityBirthdayService {
                     ResponseData<List<IntegralRecordModel>> integralRecordModels = integralRecordApiService.queryIntegralRecord(vs);
                     List<IntegralRecordModel> integralRecordModel = integralRecordModels.getData();
                     if (!CollectionUtils.isEmpty(integralRecordModel)){
-                        continue;
+                        return;
                     }
                 }else{
                     //判断今年有没有发券
-                    ResponseData<List<CouponEntityPO>> couponEntityPOs = couponEntityServiceFeign.findCouponHave(memberInfo.getMemberCode(),activityBirthday.getMktActivityId(),year);
+                    ResponseData<List<CouponEntityPO>> couponEntityPOs = couponEntityServiceFeign.findCouponHave(memberInfo.getMemberCode(),activityBirthday.getMktActivityId(),s2);
                     List<CouponEntityPO> couponEntityPO =couponEntityPOs.getData();
                     if (!CollectionUtils.isEmpty(couponEntityPO)){
-                        continue;
+                        return;
                     }
                     //判断今年有没有发积分
                     IntegralRecordVo vs = new IntegralRecordVo();
@@ -651,12 +651,12 @@ public class ActivityBirthdayServiceImpl implements ActivityBirthdayService {
                     ResponseData<List<IntegralRecordModel>> integralRecordModels = integralRecordApiService.queryIntegralRecord(vs);
                     List<IntegralRecordModel> integralRecordModel = integralRecordModels.getData();
                     if (!CollectionUtils.isEmpty(integralRecordModel)){
-                        continue;
+                        return;
                     }
                 }
 
             }
-
+            log.info("执行生日活动通过验证通过验证通过验证========");
             //增加积分奖励新增接口
             IntegralChangeRequestModel integralChangeRequestModel =new IntegralChangeRequestModel();
             integralChangeRequestModel.setSysCompanyId(activityBirthday.getSysCompanyId());
@@ -667,6 +667,7 @@ public class ActivityBirthdayServiceImpl implements ActivityBirthdayService {
             integralChangeRequestModel.setChangeType(IntegralChangeTypeEnum.INCOME.getCode());
             integralChangeRequestModel.setBusinessType(com.bizvane.members.facade.enums.BusinessTypeEnum.ACTIVITY_TYPE_BIRTHDAY.getCode());
             integralChangeRequestModel.setChangeDate(new Date());
+            log.info("执行升级活动开始开始增加积分增加积分++++++");
             integralChangeApiService.integralChangeOperate(integralChangeRequestModel);
             // 增加卷奖励接口
             MktCouponPOExample example = new  MktCouponPOExample();
@@ -680,6 +681,7 @@ public class ActivityBirthdayServiceImpl implements ActivityBirthdayService {
                 va.setSendType(SendTypeEnum.SEND_COUPON_BIRTH.getCode());
                 va.setBrandId(activityBirthday.getSysBrandId());
                 va.setCompanyId(activityBirthday.getSysCompanyId());
+                log.info("执行升级活动开始开始增加券增加券~~~~~~~~~~");
                 sendCouponServiceFeign.simple(va);
             }
             //新增积分到会员参与活动记录表中数据
@@ -692,7 +694,7 @@ public class ActivityBirthdayServiceImpl implements ActivityBirthdayService {
             po.setSysBrandId(activityBirthday.getSysBrandId());
             mktActivityRecordPOMapper.insertSelective(po);
 
-        }
+//        }
     }
 
     private Boolean dateMonth(ActivityVO activityBirthday,MemberInfoModel memberInfo) {

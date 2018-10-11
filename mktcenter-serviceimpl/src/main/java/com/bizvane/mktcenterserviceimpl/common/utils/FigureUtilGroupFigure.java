@@ -2,10 +2,14 @@ package com.bizvane.mktcenterserviceimpl.common.utils;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
 
 import org.codehaus.jettison.json.JSONArray;
 import org.codehaus.jettison.json.JSONException;
@@ -68,15 +72,17 @@ public class FigureUtilGroupFigure {
  
  } 
    
-  public static  List<BackDataTime> parseJSON2MapTime(String jsonStr,List<FileReportTempPO> fileReportTempPOlist,IncomeTotalListGroup vipIncomeAnalysis){  
+  public static  BackDataTimeDtail parseJSON2MapTime(String jsonStr,List<FileReportTempPO> fileReportTempPOlist,IncomeTotalListGroup vipIncomeAnalysis){  
 	   List<BackDataTime> listdata =new ArrayList<BackDataTime>();
 	   List<BackDataTime> listdata2 =new ArrayList<BackDataTime>();
+	   BackDataTimeDtail backDataTimeDtail =new BackDataTimeDtail();
+	   List<JSONObject> JSONObjectlist =new ArrayList<JSONObject>();
 	   
 	   try {
 		   int ino=0;
 			//查询表头
 			BackDataTime backDataOne =new BackDataTime();
-			BackDataTimeDtail backDataTimeDtail =new BackDataTimeDtail();
+			
       //解析带时间的json数据，
 		//	   最外层解析  
 		       if(jsonStr!=null&&jsonStr.startsWith("{")&&jsonStr.endsWith("}")){
@@ -91,21 +97,47 @@ public class FigureUtilGroupFigure {
 		        	   BigDecimal onlineData= new BigDecimal(0.00);
 		        	   BigDecimal offlineData= new BigDecimal(0.00);
 
+		        	   
+		        	   Map<String,JSONObject> mapjsonObje=new TreeMap<String,JSONObject>();
 			           for(Object k : json.keySet()){
 			        	   ino++;
-				        	   BackDataTime backData =new BackDataTime();
-				               backData.setTime(k.toString());
-				               backData.setJosonData(JSONObject.parseObject(json.get(k).toString()));
-				               listdata2.add(backData); 
+			        	   BackDataTime backData =new BackDataTime();
+			               backData.setTime(k.toString());
+			               backData.setJosonData(JSONObject.parseObject(json.get(k).toString()));
+			        	   if(k.toString().equals("all")) {
 				               //计算总数
-				               total=   total.add(new BigDecimal(backData.getJosonData().getString("total")));
-				               vipData=  vipData.add(new BigDecimal(backData.getJosonData().getString("vipData")));
-				               touristsData=  touristsData.add(new BigDecimal(backData.getJosonData().getString("touristsData")));
-				               onlineData=  onlineData.add(new BigDecimal(backData.getJosonData().getString("onlineData")));
-				               offlineData=  offlineData.add(new BigDecimal(backData.getJosonData().getString("offlineData")));
+			        		   try {
+			        			   total=   new BigDecimal(backData.getJosonData().getString("total"));
+					               vipData=  new BigDecimal(backData.getJosonData().getString("vipData"));
+					               touristsData=  new BigDecimal(backData.getJosonData().getString("touristsData"));
+					               onlineData=  new BigDecimal(backData.getJosonData().getString("onlineData"));
+					               offlineData=  new BigDecimal(backData.getJosonData().getString("offlineData"));
+							   } catch (Exception e) {
+								// TODO: handle exception
+							  }
+				               
+			        		   
+			        	   }else {
+			        		   
+			        		   JSONObject  jsonObje= JSONObject.parseObject(json.get(k).toString());
+				        	   jsonObje.put("time", k.toString());
+//				        	   JSONObjectlist.add(jsonObje);
+				        	   
+				               SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+				               Date date = simpleDateFormat.parse(k.toString());
+				               long ts = date.getTime();
+				               
+				        	   mapjsonObje.put(String.valueOf(ts), jsonObje);
+			        	   }
 				               
 			           } 
+			                 //排序
+			                 for (String key : mapjsonObje.keySet()) {
+			                	 JSONObjectlist.add(mapjsonObje.get(key));
+			                 }
+			                 
 			           
+			           backDataTimeDtail.setJosonData(JSONObjectlist);
 
 			           backDataTimeDtail.setTotal(total.toString());
 			           backDataTimeDtail.setVipData(vipData.toString());
@@ -162,21 +194,25 @@ public class FigureUtilGroupFigure {
 				}
 				listdata.addAll(listdata2);
 		} catch (Exception e) {
+			//解析异常
+			System.out.println("报表解析异常"+e);
 		}
 	   
-	   return listdata; 
+	   return backDataTimeDtail; 
   }   
   
   
-  public static  List<BackDataTime> parseJSON2MapTimeOpera(String jsonStr,List<FileReportTempPO> fileReportTempPOlist,IncomeTotalListGroup vipIncomeAnalysis){  
+  public static  BackDataTimeDtailtu parseJSON2MapTimeOpera(String jsonStr,List<FileReportTempPO> fileReportTempPOlist,IncomeTotalListGroup vipIncomeAnalysis){  
 	   List<BackDataTime> listdata =new ArrayList<BackDataTime>();
 	   List<BackDataTime> listdata2 =new ArrayList<BackDataTime>();
+	   List<JSONObject> JSONObjectlist =new ArrayList<JSONObject>();
 	   
+	   BackDataTimeDtailtu backDataTimeDtail =new BackDataTimeDtailtu();
 	   try {
 		   int ino=0;
 			//查询表头
 			BackDataTime backDataOne =new BackDataTime();
-			BackDataTimeDtailtu backDataTimeDtail =new BackDataTimeDtailtu();
+			
      //解析带时间的json数据，
 		//	   最外层解析  
 		       if(jsonStr!=null&&jsonStr.startsWith("{")&&jsonStr.endsWith("}")){
@@ -189,23 +225,46 @@ public class FigureUtilGroupFigure {
 		        	   BigDecimal activityVipData= new BigDecimal(0.00);
 		        	   BigDecimal oldVipData= new BigDecimal(0.00);
 		        	   BigDecimal newVipData= new BigDecimal(0.00);
-
+		        	   Map<String,JSONObject> mapjsonObje=new TreeMap<String,JSONObject>();
 			           for(Object k : json.keySet()){
 			        	   ino++;
 				        	   BackDataTime backData =new BackDataTime();
 				               backData.setTime(k.toString());
 				               backData.setJosonData(JSONObject.parseObject(json.get(k).toString()));
-				               listdata2.add(backData); 
-				               //计算总数
-				               vipData =  vipData.add(new BigDecimal(backData.getJosonData().getString("vipData")));
-				               inactivityVipData =  inactivityVipData.add(new BigDecimal(backData.getJosonData().getString("inactivityVipData")));
-				               activityVipData =  activityVipData.add(new BigDecimal(backData.getJosonData().getString("activityVipData")));
-				               oldVipData =  oldVipData.add(new BigDecimal(backData.getJosonData().getString("oldVipData")));
-				               newVipData =  newVipData.add(new BigDecimal(backData.getJosonData().getString("newVipData")));
+				               
+				        	   if(k.toString().equals("all")) {
+					               //计算总数
+				        		   try {
+							               vipData =  vipData.add(new BigDecimal(backData.getJosonData().getString("vipData")));
+							               inactivityVipData =  inactivityVipData.add(new BigDecimal(backData.getJosonData().getString("inactivityVipData")));
+							               activityVipData =  activityVipData.add(new BigDecimal(backData.getJosonData().getString("activityVipData")));
+							               oldVipData =  oldVipData.add(new BigDecimal(backData.getJosonData().getString("oldVipData")));
+							               newVipData =  newVipData.add(new BigDecimal(backData.getJosonData().getString("newVipData")));
+									} catch (Exception e) {
+										// TODO: handle exception
+									}
+				        	   }else {
+				        		   JSONObject  jsonObje= JSONObject.parseObject(json.get(k).toString());
+					        	   jsonObje.put("time", k.toString());
+//					        	   JSONObjectlist.add(jsonObje);
+				        		   
+					               SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+					               Date date = simpleDateFormat.parse(k.toString());
+					               long ts = date.getTime();
+					        	   mapjsonObje.put(String.valueOf(ts), jsonObje);
+					        	   
+				        	   } 
+				               
+				               
 				               
 			           } 
 			           
-//V
+		                 //排序
+		                 for (String key : mapjsonObje.keySet()) {
+		                	 JSONObjectlist.add(mapjsonObje.get(key));
+		                 }
+			           
+                      backDataTimeDtail.setJosonData(JSONObjectlist);
 			           backDataTimeDtail.setVipData(vipData.toString());
 			           backDataTimeDtail.setInactivityVipData(inactivityVipData.toString());
 			           backDataTimeDtail.setActivityVipData(activityVipData.toString());
@@ -251,7 +310,7 @@ public class FigureUtilGroupFigure {
 			System.out.println("报表解析异常");
 		}
 	   
-	   return listdata; 
+	   return backDataTimeDtail; 
  }  
 
 }

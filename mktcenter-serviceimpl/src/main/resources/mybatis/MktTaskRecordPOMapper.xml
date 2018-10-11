@@ -694,7 +694,7 @@
     AND sys_brand_id =#{sysBrandId}
     AND task_type =#{taskType}
     AND member_code =#{memberCode}
-    AND task_id=#{taskIds}
+    AND task_id=#{taskId}
   </select>
 
   <!--效果分析-->

@@ -191,4 +191,14 @@ public class ActivityRpcController {
     public ResponseData<Integer> executeActivity(@RequestBody  MemberInfoModel vo){
         return activityRegisterService.executeActivity(vo);
     }
+
+    /**
+     * 执行活动
+     * @param vo
+     * @return
+     */
+    @RequestMapping("executeUpgrades")
+    public ResponseData<Integer> executeUpgrades(@RequestBody MemberInfoModel vo){
+        return activityUpgradeService.executeUpgrades(vo);
+    }
 }

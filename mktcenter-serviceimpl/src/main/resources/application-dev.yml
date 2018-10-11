@@ -19,7 +19,7 @@ spring:
   swagger:
     show: true
   application:
-    name: mktcenter-test
+    name: mktcenter-dev
   #  security:
   #    enabled: false
   #    user:
@@ -61,6 +61,13 @@ spring:
   jackson:
     date-format: yyyy-MM-dd HH:mm:ss
     time-zone: GMT+8
+  zipkin:
+    base-url-url: http://192.168.2.15:9411
+  sleuth:
+    sampler:
+      percentage: 1
+    scheduled:
+      enabled: false
 eureka:
   instance:
     metadata-map:
@@ -159,3 +166,7 @@ activity:
 
 tenant:
   isEnabledTenantInterceptor: false
+
+  spring.zipkin.base-url-url =  = http://192.168.2.119:9411
+  spring.sleuth.sampler.percentage = e = 1
+  spring.sleuth.scheduled.enabled = false

@@ -52,7 +52,7 @@ public interface ActivityBirthdayService {
     /**
      * 生日活动定时发送奖励
      * @param activityBirthday
-     * @param memberInfoModelList
+     * @param memberInfo
      */
-    public void birthdayReward(ActivityVO activityBirthday, List<MemberInfoModel> memberInfoModelList);
+    public void birthdayReward(ActivityVO activityBirthday, MemberInfoModel memberInfo);
 }

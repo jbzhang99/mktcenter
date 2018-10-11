@@ -6,15 +6,19 @@ import com.bizvane.centerstageservice.rpc.SysCheckServiceRpc;
 import com.bizvane.couponfacade.enums.SendTypeEnum;
 import com.bizvane.couponfacade.interfaces.CouponQueryServiceFeign;
 import com.bizvane.couponfacade.models.vo.CouponFindCouponCountResponseVO;
+import com.bizvane.couponfacade.models.vo.SendCouponSimpleRequestVO;
+import com.bizvane.members.facade.enums.IntegralChangeTypeEnum;
 import com.bizvane.members.facade.es.vo.MembersInfoSearchVo;
 import com.bizvane.members.facade.models.IntegralRecordModel;
 import com.bizvane.members.facade.models.MemberInfoModel;
 import com.bizvane.members.facade.service.api.IntegralRecordApiService;
 import com.bizvane.members.facade.service.api.MemberInfoApiService;
 import com.bizvane.members.facade.service.api.MembersAdvancedSearchApiService;
+import com.bizvane.members.facade.service.card.request.IntegralChangeRequestModel;
 import com.bizvane.members.facade.vo.MemberInfoApiModel;
 import com.bizvane.members.facade.vo.MemberInfoVo;
 import com.bizvane.members.facade.vo.PageVo;
+import com.bizvane.members.facade.vo.WxChannelInfoVo;
 import com.bizvane.messagefacade.models.vo.MemberMessageVO;
 import com.bizvane.messagefacade.models.vo.SysSmsConfigVO;
 import com.bizvane.mktcenterservice.interfaces.ActivityService;
@@ -22,6 +26,7 @@ import com.bizvane.mktcenterservice.models.bo.ActivityAnalysisCountBO;
 import com.bizvane.mktcenterservice.models.bo.AwardBO;
 import com.bizvane.mktcenterservice.models.bo.CtivityAnalysisBO;
 import com.bizvane.mktcenterservice.models.po.*;
+import com.bizvane.mktcenterservice.models.vo.ActivitySmartVO;
 import com.bizvane.mktcenterservice.models.vo.ActivityVO;
 import com.bizvane.mktcenterservice.models.vo.PageForm;
 import com.bizvane.mktcenterserviceimpl.common.award.Award;
@@ -42,7 +47,9 @@ import com.github.pagehelper.PageInfo;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import java.text.NumberFormat;
 import java.util.Date;
@@ -72,6 +79,8 @@ public class ActivityServiceImpl implements ActivityService {
     private MktActivityRegisterPOMapper mktActivityRegisterPOMapper;
     @Autowired
     private JobClient jobClient;
+    @Autowired
+    private Award award;
     /**
      * 禁用/启用活动
      * @param vo
@@ -314,5 +323,114 @@ public class ActivityServiceImpl implements ActivityService {
     public ResponseData<Integer> sendWxTemplateMessage(String activityCode){
         ResponseData responseData = new ResponseData();
         return responseData;
+    }
+    @Override
+    @Async("asyncServiceExecutor")
+    public void sendMessage(List<MktMessagePO> messageVOList, MemberInfoModel memberInfo) {
+        //循环信息类然后发送
+        for (MktMessagePO mktMessagePO:messageVOList) {
+            AwardBO awardBO = new AwardBO();
+            if (mktMessagePO.getMsgType().equals("1") && !StringUtils.isEmpty(memberInfo.getWxOpenId())){
+                //发送微信模板消息
+                MemberMessageVO memberMessageVO = new MemberMessageVO();
+                memberMessageVO.setMemberCode(memberInfo.getMemberCode());
+                memberMessageVO.setOpenId(memberInfo.getWxOpenId());
+                awardBO.setMemberMessageVO(memberMessageVO);
+                awardBO.setMktType(MktSmartTypeEnum.SMART_TYPE_WXMESSAGE.getCode());
+                award.execute(awardBO);
+            }
+            if (mktMessagePO.getMsgType().equals("2")){
+                SysSmsConfigVO sysSmsConfigVO = new SysSmsConfigVO();
+                sysSmsConfigVO.setPhone(memberInfo.getPhone());
+                awardBO.setSysSmsConfigVO(sysSmsConfigVO);
+                awardBO.setMktType(MktSmartTypeEnum.SMART_TYPE_SMS.getCode());
+                //发送短信消息
+                award.execute(awardBO);
+            }
+        }
+    }
+    @Override
+    @Async("asyncServiceExecutor")
+    public void sendPoints(ActivitySmartVO vo, AwardBO awardBO, MemberInfoModel memberInfo) {
+        IntegralChangeRequestModel integralChangeRequestModel =new IntegralChangeRequestModel();
+        integralChangeRequestModel.setSysCompanyId(vo.getSysCompanyId());
+        integralChangeRequestModel.setBrandId(vo.getSysBrandId());
+        integralChangeRequestModel.setMemberCode(memberInfo.getMemberCode());
+        integralChangeRequestModel.setChangeBills(vo.getActivityCode());
+        integralChangeRequestModel.setChangeIntegral(vo.getPoints());
+        integralChangeRequestModel.setChangeType(IntegralChangeTypeEnum.INCOME.getCode());
+        integralChangeRequestModel.setBusinessType(com.bizvane.members.facade.enums.BusinessTypeEnum.ACTIVITY_TYPE_SMART.getCode());
+        awardBO.setIntegralRecordModel(integralChangeRequestModel);
+        awardBO.setMktType(MktSmartTypeEnum.SMART_TYPE_INTEGRAL.getCode());
+        award.execute(awardBO);
+    }
+    @Override
+    @Async("asyncServiceExecutor")
+    public void sendShort(MktMessagePO mktMessagePO, AwardBO awardBO, SysSmsConfigVO sysSmsConfigVO, MemberInfoModel memberInfo) {
+        sysSmsConfigVO.setPhone(memberInfo.getPhone());
+        sysSmsConfigVO.setMsgContent(mktMessagePO.getMsgContent());
+        awardBO.setSysSmsConfigVO(sysSmsConfigVO);
+        awardBO.setMktType(MktSmartTypeEnum.SMART_TYPE_SMS.getCode());
+        award.execute(awardBO);
+    }
+    @Override
+    @Async("asyncServiceExecutor")
+    public void sendWx(MktMessagePO mktMessagePO, AwardBO awardBO, MemberMessageVO memberMessageVO, MemberInfoModel memberInfo) {
+        memberMessageVO.setMemberCode(memberInfo.getMemberCode());
+        memberMessageVO.setOpenId(memberInfo.getWxOpenId());
+        memberMessageVO.setActivityInterests(mktMessagePO.getMsgContent());
+        awardBO.setMemberMessageVO(memberMessageVO);
+        awardBO.setMktType(MktSmartTypeEnum.SMART_TYPE_WXMESSAGE.getCode());
+        award.execute(awardBO);
+    }
+
+    @Override
+    @Async("asyncServiceExecutor")
+    public void sendCoupon(ActivitySmartVO vo, AwardBO awardBO, SendCouponSimpleRequestVO sendCouponSimpleRequestVO, MemberInfoModel memberInfo) {
+        if (!org.springframework.util.CollectionUtils.isEmpty(vo.getMktCouponPOS())) {
+            for (MktCouponPO mktCouponPO : vo.getMktCouponPOS()) {
+                sendCouponSimpleRequestVO.setMemberCode(memberInfo.getMemberCode().toString());
+                sendCouponSimpleRequestVO.setCouponDefinitionId(mktCouponPO.getCouponDefinitionId());
+                sendCouponSimpleRequestVO.setSendBussienId(mktCouponPO.getBizId());
+                sendCouponSimpleRequestVO.setSendType(SendTypeEnum.SEND_COUPON_ORIENT_MARKET.getCode());
+                sendCouponSimpleRequestVO.setBrandId(vo.getSysBrandId());
+                sendCouponSimpleRequestVO.setCompanyId(vo.getSysCompanyId());
+                awardBO.setSendCouponSimpleRequestVO(sendCouponSimpleRequestVO);
+                awardBO.setMktType(MktSmartTypeEnum.SMART_TYPE_COUPON.getCode());
+                award.execute(awardBO);
+            }
+        }
+    }
+    @Override
+    @Async("asyncServiceExecutor")
+    public void sendRegisterWx(List<MktMessagePO> messageVOList, WxChannelInfoVo wxChannelInfoVo) {
+        for (MktMessagePO mktMessagePO:messageVOList) {
+            AwardBO awardBO = new AwardBO();
+            if (mktMessagePO.getMsgType().equals("1") && !StringUtils.isEmpty(wxChannelInfoVo.getWxOpenId())){
+                //发送微信模板消息
+                MemberMessageVO memberMessageVO = new MemberMessageVO();
+                memberMessageVO.setMemberCode(wxChannelInfoVo.getMemberCode());
+                memberMessageVO.setOpenId(wxChannelInfoVo.getWxOpenId());
+                awardBO.setMemberMessageVO(memberMessageVO);
+                awardBO.setMktType(MktSmartTypeEnum.SMART_TYPE_WXMESSAGE.getCode());
+                award.execute(awardBO);
+            }
+        }
+    }
+
+    @Override
+    @Async("asyncServiceExecutor")
+    public void sendDx(List<MktMessagePO> messageVOList, MemberInfoModel memberInfo) {
+        for (MktMessagePO mktMessagePO:messageVOList) {
+            AwardBO awardBO = new AwardBO();
+            if (mktMessagePO.getMsgType().equals("2")){
+                SysSmsConfigVO sysSmsConfigVO = new SysSmsConfigVO();
+                sysSmsConfigVO.setPhone(memberInfo.getPhone());
+                awardBO.setSysSmsConfigVO(sysSmsConfigVO);
+                awardBO.setMktType(MktSmartTypeEnum.SMART_TYPE_SMS.getCode());
+                //发送短信消息
+                award.execute(awardBO);
+            }
+        }
     }
 }

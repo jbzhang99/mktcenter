@@ -1,4 +1,5 @@
 package com.bizvane.mktcenterserviceimpl.service.impl;
+import com.alibaba.fastjson.JSON;
 import com.bizvane.centercontrolservice.models.po.AppletFunctionPO;
 import com.bizvane.centercontrolservice.models.po.AppletRoutePO;
 import com.bizvane.centercontrolservice.rpc.AppletRouteServiceRpc;
@@ -33,6 +34,7 @@ import com.bizvane.utils.responseinfo.ResponseData;
 import com.bizvane.utils.tokens.SysAccountPO;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,6 +49,7 @@ import java.util.*;
  * @description
  * @Copyright (c) 2018 上海商帆信息科技有限公司-版权所有
  */
+@Slf4j
 @Service
 public class TaskShareServiceImpl implements TaskShareService {
     @Autowired
@@ -269,17 +272,20 @@ public class TaskShareServiceImpl implements TaskShareService {
      */
     @Override
     public  void   doAwardShare(ShareSuccessVO vo){
+        log.info("邀请任务的奖励--参数--"+ JSON.toJSONString(vo));
         //被邀请人信息
         Date shareDate = vo.getShareDate();
         //邀请人的信息
         String memberCode = vo.getMemberCode();
         MemberInfoModel memeberDetail = taskService.getCompanyMemeberDetail(memberCode);
+        log.info("邀请任务的奖励--会员详情参数--"+ JSON.toJSONString(memeberDetail));
         Long companyId = memeberDetail.getSysCompanyId();
         Long brandId = memeberDetail.getBrandId();
         String cardNo = memeberDetail.getCardNo();
         Long serviceStoreId = memeberDetail.getServiceStoreId();
         //符合条件的任务列表
         List<TaskAwardBO> taskAwardList = taskService.getTaskShareAwardList(companyId, brandId, shareDate);
+        log.info("邀请任务的奖励--任务列表--"+ JSON.toJSONString(memeberDetail));
         if (CollectionUtils.isNotEmpty(taskAwardList)){
             taskAwardList.stream().
                 filter(obj->{
@@ -298,16 +304,18 @@ public class TaskShareServiceImpl implements TaskShareService {
                     recordVO.setTaskId(mktTaskId);
                     recordVO.setMemberCode(memberCode);
 
-                    // 获取会员是否已经成功参与过某一活动
+                    // 获取会员是否已经成功参与过某一任务
                     Boolean isOrNoAward = taskRecordService.getIsOrNoAward(recordVO);
+                    log.info("邀请任务的奖励--已经成功参与--"+isOrNoAward+"--"+JSON.toJSONString(recordVO));
                     if (!isOrNoAward){
                         MktTaskRecordPO recordPO = new MktTaskRecordPO();
                         BeanUtils.copyProperties(recordVO,recordPO);
                         recordPO.setParticipateDate(shareDate);
                         taskRecordService.addTaskRecord(recordPO);
 
-                        //获取会员参与某一活动总次数
+                        //获取会员参与某一任务总次数
                         TotalStatisticsBO totalBO = taskRecordService.getTotalStatistics(recordVO);
+                        log.info("邀请任务的奖励--参与某一任务总次数--"+JSON.toJSONString(totalBO));
                         if (totalBO!=null && totalBO.getTotalTimes()!=null &&  totalBO.getTotalTimes().equals(shareTimes)){
                             recordPO.setRewarded(Integer.valueOf(1));
                             taskRecordService.updateTaskRecord(recordPO);

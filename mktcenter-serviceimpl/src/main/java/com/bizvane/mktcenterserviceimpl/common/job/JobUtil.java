@@ -149,6 +149,7 @@ public class JobUtil {
     public void addMessageXXTaskJob(SysAccountPO stageUser, MktTaskPOWithBLOBs po, MktMessagePO messagePO){
         int bizType = JobBusinessTypeEnum.ACTIVITY_TYPE_TASK.getCode();
         Long mktTaskId = po.getMktTaskId();
+        Integer taskType = po.getTaskType();
         String taskCode = po.getTaskCode();
         String taskName = po.getTaskName();
         String name = stageUser.getName();
@@ -157,9 +158,10 @@ public class JobUtil {
         Long sysBrandId = po.getSysBrandId();
         Boolean exceptWechat = messagePO.getExceptWechat();
         StringBuilder builder = new StringBuilder();
-        String param = this.getMessageJobParam(sysBrandId, msgContent,exceptWechat);
+        String param = this.getMessageJobParam(sysBrandId,taskType, msgContent,exceptWechat);
         //清除一下job
         this.doRemoveJobe(bizType, taskCode, param);
+        log.info("添加消息的job--addMessageXXTaskJob--"+sendTime+"--"+taskName+"--"+param+"--"+name+"--"+JobHandlerConstants.MESSAGE_SEND_XX+"--"+bizType+"--"+taskCode);
         //添加job
         this.addJob(sendTime,taskName,param,name,JobHandlerConstants.MESSAGE_SEND_XX,bizType,taskCode);
     }
@@ -178,6 +180,7 @@ public class JobUtil {
         String param = this.getMessageJobParam(mktTaskId, taskType, sysCompanyId, sysBrandId, msgContent,exceptWechat);
         //清除一下job
         this.doRemoveJobe(bizType, taskCode, param);
+        log.info("添加短信的job--addMessageDXTaskJob--"+sendTime+"--"+taskName+"--"+param+"--"+name+"--"+JobHandlerConstants.MESSAGE_SEND_DX+"--"+bizType+"--"+taskCode);
         //添加job
         this.addJob(sendTime,taskName,param,name,JobHandlerConstants.MESSAGE_SEND_DX,bizType,taskCode);
     }
@@ -220,9 +223,11 @@ public class JobUtil {
         builder.append(exceptWechat);
         return builder.toString();
     }
-    private String getMessageJobParam(long sysBrandId, String msgContent,Boolean exceptWechat){
+    private String getMessageJobParam(long sysBrandId,Integer taskType, String msgContent,Boolean exceptWechat){
         StringBuilder builder = new StringBuilder();
         builder.append(sysBrandId);
+        builder.append("&");
+        builder.append(taskType);
         builder.append("&");
         builder.append(msgContent);
         builder.append("&");

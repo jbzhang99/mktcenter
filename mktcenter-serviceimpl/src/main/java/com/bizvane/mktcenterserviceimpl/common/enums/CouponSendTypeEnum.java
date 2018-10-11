@@ -7,12 +7,12 @@ package com.bizvane.mktcenterserviceimpl.common.enums;
 public enum CouponSendTypeEnum {
 
     SEND_COUPON_OPNE_CARD("10",0,"开卡发券"),
-    SEND_COUPON_BIRTH("15",0,"生日发券"),
+    SEND_COUPON_BIRTH("15",7,"生日发券"),
     SEND_COUPON_GIVE("20",0,"受赠"),
     SEND_COUPON_INTEGRAL("25",0,"积分兑换"),
     SEND_COUPON_ONLINE_ACTIVITY("30",1,"线上开卡"),
     SEND_COUPON_UPGRADE_ACTIVITY("35",2,"会员升级"),
-    SEND_COUPON_BIRTH_ACTIVITY("40",7,"会员生日"),
+    //SEND_COUPON_BIRTH_ACTIVITY("40",7,"会员生日"),
     SEND_COUPON_COUSUME_ACTIVITY("45",5,"会员消费"),
     SEND_COUPON_SIGN_ACTIVITY("50",6,"会员签到"),
     SEND_COUPON_RECEIVE_QRCODE_ACTIVITY("55",3,"扫码领券活动"),

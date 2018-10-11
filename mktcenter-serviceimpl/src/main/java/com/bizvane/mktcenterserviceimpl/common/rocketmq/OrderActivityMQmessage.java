@@ -1,5 +1,6 @@
 package com.bizvane.mktcenterserviceimpl.common.rocketmq;
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.aliyun.openservices.ons.api.Action;
 import com.aliyun.openservices.ons.api.ConsumeContext;
@@ -13,6 +14,7 @@ import com.bizvane.members.facade.service.api.MemberOrderApiService;
 import com.bizvane.mktcenterservice.interfaces.ActivityOrderService;
 import com.bizvane.mktcenterservice.models.bo.OrderModelBo;
 import com.bizvane.utils.responseinfo.ResponseData;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -21,6 +23,7 @@ import org.springframework.stereotype.Component;
  * Created by agan on 2018/8/27.
  */
 @Component
+@Slf4j
 public class OrderActivityMQmessage implements MessageListener {
     @Autowired
     private ActivityOrderService activityOrderService;
@@ -33,6 +36,7 @@ public class OrderActivityMQmessage implements MessageListener {
         //获取订单信息
         String modelStr= new String(message.getBody());
         OrderModel model = JSONObject.parseObject(modelStr, OrderModel.class);
+        log.info("MQ消息队列获取参数是+======="+ JSON.toJSONString(model));
         OrderModelBo bo = new OrderModelBo();
         bo.setMemberCode(Long.parseLong(model.getMemberCode()));
         bo.setBrandId(Math.toIntExact(model.getBrandId()));

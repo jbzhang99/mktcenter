@@ -1,20 +1,14 @@
 package com.bizvane.mktcenterserviceimpl.controllers.report;
 
-import java.lang.reflect.Field;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.apache.commons.collections.map.MultiValueMap;
 import org.apache.commons.lang3.StringUtils;
 import org.codehaus.jettison.json.JSONArray;
 import org.codehaus.jettison.json.JSONException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
@@ -23,12 +17,9 @@ import com.alibaba.fastjson.JSONObject;
 import com.bizvane.mktcenterservice.interfaces.ReportTempService;
 import com.bizvane.mktcenterservice.models.po.FileReportTempPO;
 import com.bizvane.mktcenterservice.models.po.FileReportTempPOExample;
-import com.bizvane.mktcenterservice.models.po.MktCouponPOExample;
 import com.bizvane.mktcenterservice.models.requestvo.BackData;
 import com.bizvane.mktcenterservice.models.requestvo.BackDataBiaotou;
 import com.bizvane.mktcenterservice.models.requestvo.BackDataTime;
-import com.bizvane.mktcenterservice.models.requestvo.BaseUrl;
-import com.bizvane.mktcenterservice.models.requestvo.ReBase;
 import com.bizvane.mktcenterservice.models.requestvo.postvo.ActiveMemberAllInterface;
 import com.bizvane.mktcenterservice.models.requestvo.postvo.IncomeTotalList;
 import com.bizvane.mktcenterservice.models.requestvo.postvo.IncomeVip;
@@ -39,8 +30,8 @@ import com.bizvane.mktcenterservice.models.requestvo.postvo.OfflineVipIncome;
 import com.bizvane.mktcenterservice.models.requestvo.postvo.OnlineVipIncome;
 import com.bizvane.mktcenterservice.models.requestvo.postvo.RePurchaseMemberAllInterface;
 import com.bizvane.mktcenterservice.models.requestvo.postvo.TouristIncome;
-import com.bizvane.mktcenterservice.models.requestvo.postvo.VipIncomeAnalysis;
 import com.bizvane.mktcenterservice.models.requestvo.postvo.VipNum;
+import com.bizvane.mktcenterserviceimpl.common.report.BaseUrl;
 import com.bizvane.mktcenterserviceimpl.common.utils.FigureUtil;
 import com.bizvane.mktcenterserviceimpl.mappers.FileReportTempPOMapper;
 import com.bizvane.utils.responseinfo.ResponseData;
@@ -67,14 +58,13 @@ public class ReportIncomeController {
 	@Autowired
 	private  ReportTempService reportTempService;
 
-
     
-
+	BaseUrl BaseUrl =new BaseUrl();
     
 // 收入01- 收入总表
    @RequestMapping("incomeTotalList")
    public ResponseData<List<BackData>> incomeTotalListGroup( IncomeTotalList sendVO, HttpServletRequest request){
-	   sendVO.setCorpId("C10153");  SysAccountPO sysAccountPO =TokenUtils.getStageUser(request);
+	   sendVO.setCorpId("C10291");  SysAccountPO sysAccountPO =TokenUtils.getStageUser(request);
 	     FileReportTempPOExample example = new FileReportTempPOExample();
 	     example.createCriteria().andTemplateTypeEqualTo("incomeTotalList").andValidEqualTo(Boolean.TRUE);
 	     List<FileReportTempPO>  FileReportTempPOlist = fileReportTempPOMapper.selectByExample(example);
@@ -97,8 +87,8 @@ public class ReportIncomeController {
 	    		 //组织转换
 	    		 
 		    	    String organizationContentStr = jsonObject.getString("organizationContentStr");
+		    	    String dimension = jsonObject.getString("dimension");
 		    		 if(StringUtils.isNotBlank(organizationContentStr)){
-//		    			 ["12","33","56"]
 		    		 String[] al= organizationContentStr.toString().split(",");
 		    		  jsonObject.put("organizationContent", al); // 直接put相同的key
 		    		 }
@@ -110,7 +100,50 @@ public class ReportIncomeController {
 	     if(job.get("successFlag").equals("1")) {
 	             // 导出表格
 		    	 if(StringUtils.isNotBlank(postTem)&&postTem.equals("export")){
-		    		 reportTempService.Export(sysAccountPO,"_summary",job.get("data").toString(), fileReportTempPOlist.get(0));
+		    		 
+		    		 //表头字段
+		    		 FileReportTempPO fileReportTempPO=fileReportTempPOlist.get(0);
+		    		 
+					 if(dimension.equals("0")) {
+						 fileReportTempPO.setReportDataName("storeId,"+fileReportTempPO.getReportDataName());
+						 fileReportTempPO.setReportData("所属店铺,"+fileReportTempPO.getReportData());
+						 
+						 fileReportTempPO.setReportDataName("empName,"+fileReportTempPO.getReportDataName());
+						 fileReportTempPO.setReportData("员工姓名,"+fileReportTempPO.getReportData());
+						 
+						 fileReportTempPO.setReportDataName("empCode,"+fileReportTempPO.getReportDataName());
+						 fileReportTempPO.setReportData("员工编号,"+fileReportTempPO.getReportData());
+
+					 }else if(dimension.equals("1")) {
+						 fileReportTempPO.setReportDataName("groupId,"+fileReportTempPO.getReportDataName());
+						 fileReportTempPO.setReportData("所属群组,"+fileReportTempPO.getReportData());
+						 
+						 fileReportTempPO.setReportDataName("storeName,"+fileReportTempPO.getReportDataName());
+						 fileReportTempPO.setReportData("店铺名称,"+fileReportTempPO.getReportData());
+						 
+						 fileReportTempPO.setReportDataName("storeCode,"+fileReportTempPO.getReportDataName());
+						 fileReportTempPO.setReportData("店铺编号,"+fileReportTempPO.getReportData());
+						 
+					 }else if(dimension.equals("2")) {
+						 
+						 fileReportTempPO.setReportDataName("brandCode,"+fileReportTempPO.getReportDataName());
+						 fileReportTempPO.setReportData("品牌编号,"+fileReportTempPO.getReportData());
+						 
+						 fileReportTempPO.setReportDataName("brandName,"+fileReportTempPO.getReportDataName());
+						 fileReportTempPO.setReportData("品牌名称,"+fileReportTempPO.getReportData());
+						 
+						 
+					 }else if(dimension.equals("3")) {
+						 fileReportTempPO.setReportDataName("groupName,"+fileReportTempPO.getReportDataName());
+						 fileReportTempPO.setReportData("群组名称,"+fileReportTempPO.getReportData());
+						 
+						 fileReportTempPO.setReportDataName("groupCode,"+fileReportTempPO.getReportDataName());
+						 fileReportTempPO.setReportData("群组编号,"+fileReportTempPO.getReportData());
+						 
+						 
+					 }
+		    		 
+		    		 reportTempService.Export(sysAccountPO,"_summary",job.get("data").toString(), fileReportTempPO);
 		    		 ResponseData.setMessage("导出中");
 		    	 }else {
 		    		 ResponseData.setMessage(job.get("message").toString());
@@ -133,14 +166,14 @@ public class ReportIncomeController {
 					  System.out.println("查询条数报错！");
 					}
 			     
-			     ResponseData.setData(FigureUtil.parseJSON2Map(job.get("data").toString(),tiaoshu,fileReportTempPOlist));
+			     ResponseData.setData(FigureUtil.parseJSON2Map(job.get("data").toString(),dimension,tiaoshu,fileReportTempPOlist));
 	             ResponseData.setCode(0);
 	  	     
 
 	     }else {
 	      ResponseData.setCode(0);
 	  	  ResponseData.setMessage(job.get("message").toString());
-	  	  ResponseData.setData(FigureUtil.parseJSON2Map("false",0,fileReportTempPOlist));
+	  	  ResponseData.setData(FigureUtil.parseJSON2Map("false",dimension,0,fileReportTempPOlist));
 	    	 
 	     }
 
@@ -152,7 +185,7 @@ public class ReportIncomeController {
 // 收入01- 会销收入表汇总
    @RequestMapping("incomeVip")
    public ResponseData<List<BackData>> incomeVip( IncomeVip sendVO, HttpServletRequest request){
-	   sendVO.setCorpId("C10153");  SysAccountPO sysAccountPO =TokenUtils.getStageUser(request);
+	   sendVO.setCorpId("C10291");  SysAccountPO sysAccountPO =TokenUtils.getStageUser(request);
 	     FileReportTempPOExample example = new FileReportTempPOExample();
 	     example.createCriteria().andTemplateTypeEqualTo("incomeVip").andValidEqualTo(Boolean.TRUE);
 	     List<FileReportTempPO>  FileReportTempPOlist = fileReportTempPOMapper.selectByExample(example);
@@ -164,7 +197,7 @@ public class ReportIncomeController {
 // 收入01- 游客收入表汇总
    @RequestMapping("touristIncome")
    public ResponseData<List<BackData>> touristIncome( TouristIncome sendVO, HttpServletRequest request){
-	   sendVO.setCorpId("C10153");  SysAccountPO sysAccountPO =TokenUtils.getStageUser(request);
+	   sendVO.setCorpId("C10291");  SysAccountPO sysAccountPO =TokenUtils.getStageUser(request);
 	     FileReportTempPOExample example = new FileReportTempPOExample();
 	     example.createCriteria().andTemplateTypeEqualTo("touristIncome").andValidEqualTo(Boolean.TRUE);
 	     List<FileReportTempPO>  FileReportTempPOlist = fileReportTempPOMapper.selectByExample(example);
@@ -174,7 +207,7 @@ public class ReportIncomeController {
 // 02渠道-线上会销收入表汇总
    @RequestMapping("onlineVipIncome")
    public ResponseData<List<BackData>> onlineVipIncome( OnlineVipIncome sendVO, HttpServletRequest request){
-	   sendVO.setCorpId("C10153");  SysAccountPO sysAccountPO =TokenUtils.getStageUser(request);
+	   sendVO.setCorpId("C10291");  SysAccountPO sysAccountPO =TokenUtils.getStageUser(request);
 	     FileReportTempPOExample example = new FileReportTempPOExample();
 	     example.createCriteria().andTemplateTypeEqualTo("onlineVipIncome").andValidEqualTo(Boolean.TRUE);
 	     List<FileReportTempPO>  FileReportTempPOlist = fileReportTempPOMapper.selectByExample(example);
@@ -184,7 +217,7 @@ public class ReportIncomeController {
 // 02渠道-线下
    @RequestMapping("offlineVipIncome")
    public ResponseData<List<BackData>> offlineVipIncome( OfflineVipIncome sendVO, HttpServletRequest request){
-	   sendVO.setCorpId("C10153");  SysAccountPO sysAccountPO =TokenUtils.getStageUser(request);
+	   sendVO.setCorpId("C10291");  SysAccountPO sysAccountPO =TokenUtils.getStageUser(request);
 	     FileReportTempPOExample example = new FileReportTempPOExample();
 	     example.createCriteria().andTemplateTypeEqualTo("offlineVipIncome").andValidEqualTo(Boolean.TRUE);
 	     List<FileReportTempPO>  FileReportTempPOlist = fileReportTempPOMapper.selectByExample(example);
@@ -194,21 +227,21 @@ public class ReportIncomeController {
 // 03开绑卡分析-开卡
 //   @RequestMapping("offlineVipIncome")
 //   public ResponseData<List<BackData>> offlineVipIncome(OfflineVipIncome sendVO, HttpServletRequest request){
-//	   sendVO.setCorpId("C10153");  SysAccountPO sysAccountPO =TokenUtils.getStageUser(request);
+//	   sendVO.setCorpId("C10291");  SysAccountPO sysAccountPO =TokenUtils.getStageUser(request);
 //   	 return sendpost(BaseUrl.getLoadUrl("offlineVipIncome"),sendVO,FileReportTempPOlist,sysAccountPO);
 //   }
    
 // 03开绑卡分析-绑卡
 // @RequestMapping("offlineVipIncome")
 // public ResponseData<List<BackData>> offlineVipIncome(OfflineVipIncome sendVO, HttpServletRequest request){
-//	   sendVO.setCorpId("C10153");  SysAccountPO sysAccountPO =TokenUtils.getStageUser(request);
+//	   sendVO.setCorpId("C10291");  SysAccountPO sysAccountPO =TokenUtils.getStageUser(request);
 // 	 return sendpost(BaseUrl.getLoadUrl("offlineVipIncome"),sendVO,FileReportTempPOlist,sysAccountPO);
 // }
    
 // 04会员数量
    @RequestMapping("vipNum")
    public ResponseData<List<BackData>> vipNum( VipNum sendVO, HttpServletRequest request){
-	   sendVO.setCorpId("C10153");  SysAccountPO sysAccountPO =TokenUtils.getStageUser(request);
+	   sendVO.setCorpId("C10291");  SysAccountPO sysAccountPO =TokenUtils.getStageUser(request);
 	     FileReportTempPOExample example = new FileReportTempPOExample();
 	     example.createCriteria().andTemplateTypeEqualTo("vipNum").andValidEqualTo(Boolean.TRUE);
 	     List<FileReportTempPO>  FileReportTempPOlist = fileReportTempPOMapper.selectByExample(example);
@@ -218,7 +251,7 @@ public class ReportIncomeController {
 // 05新增会员-新增会员收入
    @RequestMapping("increaseVip")
    public ResponseData<List<BackData>> increaseVip( IncreaseVip sendVO, HttpServletRequest request){
-	   sendVO.setCorpId("C10153");  SysAccountPO sysAccountPO =TokenUtils.getStageUser(request);
+	   sendVO.setCorpId("C10291");  SysAccountPO sysAccountPO =TokenUtils.getStageUser(request);
 	     FileReportTempPOExample example = new FileReportTempPOExample();
 	     example.createCriteria().andTemplateTypeEqualTo("increaseVip").andValidEqualTo(Boolean.TRUE);
 	     List<FileReportTempPO>  FileReportTempPOlist = fileReportTempPOMapper.selectByExample(example);
@@ -227,7 +260,7 @@ public class ReportIncomeController {
 // 05新增会员-新增会员数量
    @RequestMapping("increaseVipNum")
    public ResponseData<List<BackData>> increaseVipNum( IncreaseVipNum sendVO, HttpServletRequest request){
-	   sendVO.setCorpId("C10153");  SysAccountPO sysAccountPO =TokenUtils.getStageUser(request);
+	   sendVO.setCorpId("C10291");  SysAccountPO sysAccountPO =TokenUtils.getStageUser(request);
 	     FileReportTempPOExample example = new FileReportTempPOExample();
 	     example.createCriteria().andTemplateTypeEqualTo("increaseVipNum").andValidEqualTo(Boolean.TRUE);
 	     List<FileReportTempPO>  FileReportTempPOlist = fileReportTempPOMapper.selectByExample(example);
@@ -237,20 +270,20 @@ public class ReportIncomeController {
 // 06会员卡分析-类型1
 //   @RequestMapping("increaseVipNum")
 //   public ResponseData<List<BackData>> increaseVipNum(IncreaseVipNum sendVO, HttpServletRequest request){
-//	   sendVO.setCorpId("C10153");  SysAccountPO sysAccountPO =TokenUtils.getStageUser(request);
+//	   sendVO.setCorpId("C10291");  SysAccountPO sysAccountPO =TokenUtils.getStageUser(request);
 //   	 return sendpost(BaseUrl.getLoadUrl("increaseVipNum"),sendVO,FileReportTempPOlist,sysAccountPO);
 //   }
 // 06会员卡分析-类型2
 // @RequestMapping("increaseVipNum")
 // public ResponseData<List<BackData>> increaseVipNum(IncreaseVipNum sendVO, HttpServletRequest request){
-//	   sendVO.setCorpId("C10153");  SysAccountPO sysAccountPO =TokenUtils.getStageUser(request);
+//	   sendVO.setCorpId("C10291");  SysAccountPO sysAccountPO =TokenUtils.getStageUser(request);
 // 	 return sendpost(BaseUrl.getLoadUrl("increaseVipNum"),sendVO,FileReportTempPOlist,sysAccountPO);
 // }
    
 // 07新老会员分析-新会员
    @RequestMapping("newOldMemberInterface")
    public ResponseData<List<BackData>> newOldMemberInterface( NewOldMemberInterface sendVO, HttpServletRequest request){
-	   sendVO.setCorpId("C10153");  SysAccountPO sysAccountPO =TokenUtils.getStageUser(request);
+	   sendVO.setCorpId("C10291");  SysAccountPO sysAccountPO =TokenUtils.getStageUser(request);
 	     FileReportTempPOExample example = new FileReportTempPOExample();
 	     example.createCriteria().andTemplateTypeEqualTo("newOldMemberInterface").andValidEqualTo(Boolean.TRUE);
 	     List<FileReportTempPO>  FileReportTempPOlist = fileReportTempPOMapper.selectByExample(example);
@@ -260,7 +293,7 @@ public class ReportIncomeController {
 // 08活跃会员表汇总
    @RequestMapping("activeMemberAllInterface")
    public ResponseData<List<BackData>> activeMemberAllInterface( ActiveMemberAllInterface sendVO, HttpServletRequest request){
-	   sendVO.setCorpId("C10153");  SysAccountPO sysAccountPO =TokenUtils.getStageUser(request);
+	   sendVO.setCorpId("C10291");  SysAccountPO sysAccountPO =TokenUtils.getStageUser(request);
 	     FileReportTempPOExample example = new FileReportTempPOExample();
 	     example.createCriteria().andTemplateTypeEqualTo("activeMemberAllInterface").andValidEqualTo(Boolean.TRUE);
 	     List<FileReportTempPO>  FileReportTempPOlist = fileReportTempPOMapper.selectByExample(example);
@@ -270,7 +303,7 @@ public class ReportIncomeController {
 // 09复购-会员表汇总
    @RequestMapping("rePurchaseMemberAllInterface")
    public ResponseData<List<BackData>> rePurchaseMemberAllInterface( RePurchaseMemberAllInterface sendVO, HttpServletRequest request){
-	   sendVO.setCorpId("C10153");  SysAccountPO sysAccountPO =TokenUtils.getStageUser(request);
+	   sendVO.setCorpId("C10291");  SysAccountPO sysAccountPO =TokenUtils.getStageUser(request);
 	     FileReportTempPOExample example = new FileReportTempPOExample();
 	     example.createCriteria().andTemplateTypeEqualTo("rePurchaseMemberAllInterface").andValidEqualTo(Boolean.TRUE);
 	     List<FileReportTempPO>  FileReportTempPOlist = fileReportTempPOMapper.selectByExample(example);
@@ -280,7 +313,7 @@ public class ReportIncomeController {
 // 10回购-会员表汇总
 //   @RequestMapping("activeMemberAllInterface")
 //   public ResponseData<List<BackData>> activeMemberAllInterface(ActiveMemberAllInterface sendVO, HttpServletRequest request){
-//	   sendVO.setCorpId("C10153");  SysAccountPO sysAccountPO =TokenUtils.getStageUser(request);
+//	   sendVO.setCorpId("C10291");  SysAccountPO sysAccountPO =TokenUtils.getStageUser(request);
 //   	 return sendpost(BaseUrl.getLoadUrl("activeMemberAllInterface"),sendVO,FileReportTempPOlist,sysAccountPO);
 //   }
    
@@ -289,7 +322,7 @@ public class ReportIncomeController {
 // 收入01- 性别表汇总
    @RequestMapping("gender")
    public ResponseData<List<BackData>> gender( IncomeTotalList sendVO, HttpServletRequest request){
-	   sendVO.setCorpId("C10153");  SysAccountPO sysAccountPO =TokenUtils.getStageUser(request);
+	   sendVO.setCorpId("C10291");  SysAccountPO sysAccountPO =TokenUtils.getStageUser(request);
 	     FileReportTempPOExample example = new FileReportTempPOExample();
 	     example.createCriteria().andTemplateTypeEqualTo("gender").andValidEqualTo(Boolean.TRUE);
 	     List<FileReportTempPO>  FileReportTempPOlist = fileReportTempPOMapper.selectByExample(example);
@@ -300,7 +333,7 @@ public class ReportIncomeController {
 // 收入01- 年龄分析
    @RequestMapping("ageAnalysis")
    public ResponseData<List<BackData>> ageAnalysis( IncomeTotalList sendVO, HttpServletRequest request){
-	   sendVO.setCorpId("C10153");  SysAccountPO sysAccountPO =TokenUtils.getStageUser(request);
+	   sendVO.setCorpId("C10291");  SysAccountPO sysAccountPO =TokenUtils.getStageUser(request);
 	     FileReportTempPOExample example = new FileReportTempPOExample();
 	     example.createCriteria().andTemplateTypeEqualTo("ageAnalysis").andValidEqualTo(Boolean.TRUE);
 	     List<FileReportTempPO>  FileReportTempPOlist = fileReportTempPOMapper.selectByExample(example);
@@ -312,7 +345,7 @@ public class ReportIncomeController {
 ////收入01- 生日分析
 // @RequestMapping("gender")
 // public ResponseData<List<BackData>> gender( IncomeTotalList sendVO, HttpServletRequest request){
-//	   sendVO.setCorpId("C10153");  SysAccountPO sysAccountPO =TokenUtils.getStageUser(request);
+//	   sendVO.setCorpId("C10291");  SysAccountPO sysAccountPO =TokenUtils.getStageUser(request);
 //	     FileReportTempPOExample example = new FileReportTempPOExample();
 //	     example.createCriteria().andTemplateTypeEqualTo("gender").andValidEqualTo(Boolean.TRUE);
 //	     List<FileReportTempPO>  FileReportTempPOlist = fileReportTempPOMapper.selectByExample(example);
@@ -324,7 +357,7 @@ public class ReportIncomeController {
 ////收入01- 线上渠道分析
 //@RequestMapping("gender")
 //public ResponseData<List<BackData>> gender( IncomeTotalList sendVO, HttpServletRequest request){
-//	   sendVO.setCorpId("C10153");  SysAccountPO sysAccountPO =TokenUtils.getStageUser(request);
+//	   sendVO.setCorpId("C10291");  SysAccountPO sysAccountPO =TokenUtils.getStageUser(request);
 //	     FileReportTempPOExample example = new FileReportTempPOExample();
 //	     example.createCriteria().andTemplateTypeEqualTo("gender").andValidEqualTo(Boolean.TRUE);
 //	     List<FileReportTempPO>  FileReportTempPOlist = fileReportTempPOMapper.selectByExample(example);

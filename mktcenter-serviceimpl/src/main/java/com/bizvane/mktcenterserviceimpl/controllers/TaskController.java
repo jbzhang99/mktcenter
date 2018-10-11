@@ -2,6 +2,7 @@ package com.bizvane.mktcenterserviceimpl.controllers;
 
 import com.bizvane.centerstageservice.models.vo.SysStoreVo;
 import com.bizvane.mktcenterservice.interfaces.TaskService;
+import com.bizvane.mktcenterservice.models.bo.TaskAwardBO;
 import com.bizvane.mktcenterservice.models.bo.TaskBO;
 import com.bizvane.mktcenterservice.models.po.MktTaskPOWithBLOBs;
 import com.bizvane.mktcenterservice.models.vo.*;
@@ -102,5 +103,4 @@ public class TaskController {
     public ResponseData<com.github.pagehelper.PageInfo<MktTaskPOWithBLOBs>> getTaskByTaskType(TaskVO vo, PageForm pageForm){
        return taskService.getTaskByTaskType(vo,pageForm);
     }
-
 }

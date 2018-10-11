@@ -21,6 +21,7 @@ import com.bizvane.members.facade.vo.WxChannelInfoVo;
 import com.bizvane.messagefacade.models.vo.MemberMessageVO;
 import com.bizvane.messagefacade.models.vo.SysSmsConfigVO;
 import com.bizvane.mktcenterservice.interfaces.ActivityBirthdayService;
+import com.bizvane.mktcenterservice.interfaces.ActivityService;
 import com.bizvane.mktcenterservice.interfaces.ActivityVipAniversaryService;
 import com.bizvane.mktcenterservice.models.bo.AwardBO;
 import com.bizvane.mktcenterservice.models.po.*;
@@ -70,6 +71,8 @@ public class MemberMessageSend {
     private WxChannelInfoAdvancedSearchApiService wxChannelInfoAdvancedSearchApiServic;
     @Autowired
     private MembersAdvancedSearchApiService membersAdvancedSearchApiService;
+    @Autowired
+    private ActivityService activityService;
     /**
      * 查询会员信息发送你个短信和微信消息
      * @param messageVOList
@@ -86,27 +89,8 @@ public class MemberMessageSend {
             //循环发送
             if (!CollectionUtils.isEmpty(memberInfoModelList)){
                 for (MemberInfoModel memberInfo:memberInfoModelList) {
-                    //循环信息类然后发送
-                    for (MktMessagePO mktMessagePO:messageVOList) {
-                        AwardBO awardBO = new AwardBO();
-                        if (mktMessagePO.getMsgType().equals("1") && !StringUtils.isEmpty(memberInfo.getWxOpenId())){
-                            //发送微信模板消息
-                            MemberMessageVO memberMessageVO = new MemberMessageVO();
-                            memberMessageVO.setMemberCode(memberInfo.getMemberCode());
-                            memberMessageVO.setOpenId(memberInfo.getWxOpenId());
-                            awardBO.setMemberMessageVO(memberMessageVO);
-                            awardBO.setMktType(MktSmartTypeEnum.SMART_TYPE_WXMESSAGE.getCode());
-                            award.execute(awardBO);
-                        }
-                        if (mktMessagePO.getMsgType().equals("2")){
-                            SysSmsConfigVO sysSmsConfigVO = new SysSmsConfigVO();
-                            sysSmsConfigVO.setPhone(memberInfo.getPhone());
-                            awardBO.setSysSmsConfigVO(sysSmsConfigVO);
-                            awardBO.setMktType(MktSmartTypeEnum.SMART_TYPE_SMS.getCode());
-                            //发送短信消息
-                            award.execute(awardBO);
-                        }
-                    }
+                    activityService.sendMessage(messageVOList, memberInfo);
+
                 }
             }
         }
@@ -123,26 +107,16 @@ public class MemberMessageSend {
         ResponseData<com.bizvane.utils.responseinfo.PageInfo<MemberInfoVo>> memberInfoVoPage = membersAdvancedSearchApiService.search(membersInfoSearchVo);
         AwardBO awardBO = new AwardBO();
         IntegralRecordModel integralRecordModel = new IntegralRecordModel();
+        log.info("已经查询到相应的会员一共多少页++++++++++="+memberInfoVoPage.getData().getPages());
         for (int a =1;a<=memberInfoVoPage.getData().getPages();a++) {
             membersInfoSearchVo.setPageNumber(a);
             ResponseData<com.bizvane.utils.responseinfo.PageInfo<MemberInfoVo>> memberInfoVoPages = membersAdvancedSearchApiService.search(membersInfoSearchVo);
             List<MemberInfoVo> memberInfoModelList = memberInfoVoPages.getData().getList();
             for (MemberInfoModel memberInfo:memberInfoModelList) {
-                IntegralChangeRequestModel integralChangeRequestModel =new IntegralChangeRequestModel();
-                integralChangeRequestModel.setSysCompanyId(vo.getSysCompanyId());
-                integralChangeRequestModel.setBrandId(vo.getSysBrandId());
-                integralChangeRequestModel.setMemberCode(memberInfo.getMemberCode());
-                integralChangeRequestModel.setChangeBills(vo.getActivityCode());
-                integralChangeRequestModel.setChangeIntegral(vo.getPoints());
-                integralChangeRequestModel.setChangeType(IntegralChangeTypeEnum.INCOME.getCode());
-                integralChangeRequestModel.setBusinessType(String.valueOf(BusinessTypeEnum.ACTIVITY_TYPE_ACTIVITY.getCode()));
-                awardBO.setIntegralRecordModel(integralChangeRequestModel);
-                awardBO.setMktType(MktSmartTypeEnum.SMART_TYPE_INTEGRAL.getCode());
-                award.execute(awardBO);
+                activityService.sendPoints(vo, awardBO, memberInfo);
             }
         }
     }
-
     /**
      * 智能营销发送短信消息
      * @param mktMessagePO
@@ -158,14 +132,11 @@ public class MemberMessageSend {
             ResponseData<com.bizvane.utils.responseinfo.PageInfo<MemberInfoVo>> memberInfoVoPages = membersAdvancedSearchApiService.search(membersInfoSearchVo);
             List<MemberInfoVo> memberInfoModelList = memberInfoVoPages.getData().getList();
             for (MemberInfoModel memberInfo:memberInfoModelList) {
-                sysSmsConfigVO.setPhone(memberInfo.getPhone());
-                sysSmsConfigVO.setMsgContent(mktMessagePO.getMsgContent());
-                awardBO.setSysSmsConfigVO(sysSmsConfigVO);
-                awardBO.setMktType(MktSmartTypeEnum.SMART_TYPE_SMS.getCode());
-                award.execute(awardBO);
+                activityService.sendShort(mktMessagePO, awardBO, sysSmsConfigVO, memberInfo);
             }
         }
     }
+
     /**
      * 智能营销发送微信模板消息
      * @param mktMessagePO
@@ -181,12 +152,7 @@ public class MemberMessageSend {
             ResponseData<com.bizvane.utils.responseinfo.PageInfo<MemberInfoVo>> memberInfoVoPages = membersAdvancedSearchApiService.search(membersInfoSearchVo);
             List<MemberInfoVo> memberInfoModelList = memberInfoVoPages.getData().getList();
             for (MemberInfoModel memberInfo:memberInfoModelList) {
-                memberMessageVO.setMemberCode(memberInfo.getMemberCode());
-                memberMessageVO.setOpenId(memberInfo.getWxOpenId());
-                memberMessageVO.setActivityInterests(mktMessagePO.getMsgContent());
-                awardBO.setMemberMessageVO(memberMessageVO);
-                awardBO.setMktType(MktSmartTypeEnum.SMART_TYPE_WXMESSAGE.getCode());
-                award.execute(awardBO);
+                activityService.sendWx(mktMessagePO, awardBO, memberMessageVO, memberInfo);
             }
         }
     }
@@ -206,22 +172,11 @@ public class MemberMessageSend {
             ResponseData<com.bizvane.utils.responseinfo.PageInfo<MemberInfoVo>> memberInfoVoPages = membersAdvancedSearchApiService.search(membersInfoSearchVo);
             List<MemberInfoVo> memberInfoModelList = memberInfoVoPages.getData().getList();
             for (MemberInfoModel memberInfo : memberInfoModelList) {
-                if (!CollectionUtils.isEmpty(vo.getMktCouponPOS())) {
-                    for (MktCouponPO mktCouponPO : vo.getMktCouponPOS()) {
-                        sendCouponSimpleRequestVO.setMemberCode(memberInfo.getMemberCode().toString());
-                        sendCouponSimpleRequestVO.setCouponDefinitionId(mktCouponPO.getCouponDefinitionId());
-                        sendCouponSimpleRequestVO.setSendBussienId(mktCouponPO.getBizId());
-                        sendCouponSimpleRequestVO.setSendType(SendTypeEnum.SEND_COUPON_ORIENT_MARKET.getCode());
-                        sendCouponSimpleRequestVO.setBrandId(vo.getSysBrandId());
-                        sendCouponSimpleRequestVO.setCompanyId(vo.getSysCompanyId());
-                        awardBO.setSendCouponSimpleRequestVO(sendCouponSimpleRequestVO);
-                        awardBO.setMktType(MktSmartTypeEnum.SMART_TYPE_COUPON.getCode());
-                        award.execute(awardBO);
-                    }
-                }
+                activityService.sendCoupon(vo, awardBO, sendCouponSimpleRequestVO, memberInfo);
             }
         }
     }
+
 
     /**
      * 生日活动发送奖励券
@@ -229,12 +184,13 @@ public class MemberMessageSend {
      */
     @Async("asyncServiceExecutor")
     public void sendBirthdayCoupon(List<ActivityVO> activityBirthdayList) {
+        log.info("开始执行发送生日活动");
         for (ActivityVO activityBirthday:activityBirthdayList) {
             //根据品牌id 会员等级 会员范围  时间周期 查询会员信息 循环
             //查询对应的会员
             MemberInfoApiModel memberInfoModel= new MemberInfoApiModel();
             memberInfoModel.setBrandId(activityBirthday.getSysBrandId());
-            if (!activityBirthday.getMbrLevelCode().equals("0")){
+            if (!activityBirthday.getMbrLevelCode().equals(0)){
                 memberInfoModel.setLevelId(Long.parseLong(activityBirthday.getMbrLevelCode()));
             }
             memberInfoModel.setBirthdayLine(activityBirthday.getDaysAhead());
@@ -242,10 +198,17 @@ public class MemberMessageSend {
             memberInfoModel.setPageNumber(1);
             memberInfoModel.setPageSize(10000);
             ResponseData<PageInfo<MemberInfoModel>> memberInfoModelLists =memberInfoApiService.getMemberInfo(memberInfoModel);
+            //循环页数
             for (int a=1;a<=memberInfoModelLists.getData().getPages();a++){
+                memberInfoModel.setPageNumber(a);
+                log.info("开始查询相应的会员参数++++++++++=+=============+"+ JSON.toJSONString(memberInfoModel));
                 ResponseData<PageInfo<MemberInfoModel>> memberInfoModelListss =memberInfoApiService.getMemberInfo(memberInfoModel);
                 List<MemberInfoModel> memberInfoModelList = memberInfoModelListss.getData().getList();
-                activityBirthdayService.birthdayReward(activityBirthday,memberInfoModelList);
+                log.info("已经查询到相应的会员总数量是++++++++++="+memberInfoModelListss.getData().getTotal());
+                //循环每一页的人数
+                for (MemberInfoModel memberInfo:memberInfoModelList) {
+                    activityBirthdayService.birthdayReward(activityBirthday, memberInfo);
+                }
             }
 
 
@@ -263,7 +226,7 @@ public class MemberMessageSend {
             //查询对应的会员
             MemberInfoApiModel memberInfoModel= new MemberInfoApiModel();
             memberInfoModel.setBrandId(activityAniversary.getSysBrandId());
-            if (!activityAniversary.getMbrLevelCode().equals("0")){
+            if (!activityAniversary.getMbrLevelCode().equals(0)){
                 memberInfoModel.setLevelId(Long.parseLong(activityAniversary.getMbrLevelCode()));
             }
             memberInfoModel.setBirthdayLine(activityAniversary.getDaysAhead());
@@ -272,9 +235,14 @@ public class MemberMessageSend {
             memberInfoModel.setPageSize(10000);
             ResponseData<PageInfo<MemberInfoModel>> memberInfoModelLists =memberInfoApiService.getMemberInfo(memberInfoModel);
             for (int a=1;a<=memberInfoModelLists.getData().getPages();a++){
+                memberInfoModel.setPageNumber(a);
+                log.info("开始查询相应的会员参数++++++++++=+=============+"+ JSON.toJSONString(memberInfoModel));
                 ResponseData<PageInfo<MemberInfoModel>> memberInfoModelListss =memberInfoApiService.getMemberInfo(memberInfoModel);
                 List<MemberInfoModel> memberInfoModelList = memberInfoModelListss.getData().getList();
-                activityVipAniversaryService.AniversaryReward(activityAniversary,memberInfoModelList);
+                log.info("已经查询到相应的会员总数量是++++++++++="+memberInfoModelListss.getData().getTotal());
+                for (MemberInfoModel memberInfo:memberInfoModelList) {
+                    activityVipAniversaryService.AniversaryReward(activityAniversary, memberInfo);
+                }
             }
         }
     }
@@ -409,22 +377,12 @@ public class MemberMessageSend {
             //循环发送
             if (!CollectionUtils.isEmpty(wxChannelInfoVoAll)){
                 for (WxChannelInfoVo wxChannelInfoVo:wxChannelInfoVoAll) {
-                    for (MktMessagePO mktMessagePO:messageVOList) {
-                        AwardBO awardBO = new AwardBO();
-                        if (mktMessagePO.getMsgType().equals("1") && !StringUtils.isEmpty(wxChannelInfoVo.getWxOpenId())){
-                            //发送微信模板消息
-                            MemberMessageVO memberMessageVO = new MemberMessageVO();
-                            memberMessageVO.setMemberCode(wxChannelInfoVo.getMemberCode());
-                            memberMessageVO.setOpenId(wxChannelInfoVo.getWxOpenId());
-                            awardBO.setMemberMessageVO(memberMessageVO);
-                            awardBO.setMktType(MktSmartTypeEnum.SMART_TYPE_WXMESSAGE.getCode());
-                            award.execute(awardBO);
-                        }
-                    }
+                    activityService.sendRegisterWx(messageVOList, wxChannelInfoVo);
                 }
             }
         }
     }
+
 
     @Async("asyncServiceExecutor")
     public void sendDXmessage(List<MktMessagePO> messageVOList, MembersInfoSearchVo membersInfoSearchVo) {
@@ -440,19 +398,10 @@ public class MemberMessageSend {
                 for (MemberInfoModel memberInfo:memberInfoModelList) {
                     log.info("循环信息类然后发送短信+");
                     //循环信息类然后发送
-                    for (MktMessagePO mktMessagePO:messageVOList) {
-                        AwardBO awardBO = new AwardBO();
-                        if (mktMessagePO.getMsgType().equals("2")){
-                            SysSmsConfigVO sysSmsConfigVO = new SysSmsConfigVO();
-                            sysSmsConfigVO.setPhone(memberInfo.getPhone());
-                            awardBO.setSysSmsConfigVO(sysSmsConfigVO);
-                            awardBO.setMktType(MktSmartTypeEnum.SMART_TYPE_SMS.getCode());
-                            //发送短信消息
-                            award.execute(awardBO);
-                        }
-                    }
+                    activityService.sendDx(messageVOList, memberInfo);
                 }
             }
         }
     }
+
 }

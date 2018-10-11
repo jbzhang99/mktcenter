@@ -50,6 +50,7 @@ import com.github.pagehelper.PageInfo;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
@@ -278,7 +279,7 @@ public class ActivityUpgradeServiceImpl implements ActivityUpgradeService {
                 mktCouponPO.setBizId(mktActivityId);
                 mktCouponPO.setCouponName(couponCode.getCouponName());
                 mktCouponPO.setCouponDefinitionId(couponCode.getCouponDefinitionId());
-                mktCouponPO.setBizId(couponCode.getBizId());
+               // mktCouponPO.setBizId(couponCode.getBizId());
                 mktCouponPOMapper.insertSelective(mktCouponPO);
             }
         }
@@ -557,8 +558,10 @@ public class ActivityUpgradeServiceImpl implements ActivityUpgradeService {
      */
     @Override
     @Transactional
+    @Async("asyncServiceExecutor")
     public ResponseData<Integer> executeUpgrades(MemberInfoModel vo) {
-        log.info("执行升级活动开始");
+        log.info("执行升级活动开始开始了开始了开始了开始了开始了");
+        log.info("执行升级活动参数="+ JSON.toJSONString(vo));
         //返回对象
         ResponseData responseData = new ResponseData();
         //查询品牌下所有执行中的活动
@@ -592,7 +595,7 @@ public class ActivityUpgradeServiceImpl implements ActivityUpgradeService {
                 integralChangeRequestModel.setChangeDate(new Date());
                 bo.setIntegralRecordModel(integralChangeRequestModel);
                 bo.setMktType(MktSmartTypeEnum.SMART_TYPE_INTEGRAL.getCode());
-                log.info("新增积分奖励");
+                log.info("新增积分奖励开始开始开始开始");
                 award.execute(bo);
             }
 
@@ -612,7 +615,7 @@ public class ActivityUpgradeServiceImpl implements ActivityUpgradeService {
                     sendCouponSimpleRequestVO.setBrandId(vo.getBrandId());
                     awardBO.setSendCouponSimpleRequestVO(sendCouponSimpleRequestVO);
                     awardBO.setMktType(MktSmartTypeEnum.SMART_TYPE_COUPON.getCode());
-                    log.info("新增券奖励");
+                    log.info("新增券奖励开始开始开始开始");
                     award.execute(awardBO);
                 }
             }

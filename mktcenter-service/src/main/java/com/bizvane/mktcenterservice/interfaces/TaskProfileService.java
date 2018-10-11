@@ -2,6 +2,8 @@ package com.bizvane.mktcenterservice.interfaces;
 
 import com.bizvane.members.facade.vo.ExtendPropertyVO;
 import com.bizvane.mktcenterservice.models.bo.TaskBO;
+import com.bizvane.mktcenterservice.models.po.MktMessagePO;
+import com.bizvane.mktcenterservice.models.po.MktTaskPOWithBLOBs;
 import com.bizvane.mktcenterservice.models.vo.*;
 import com.bizvane.utils.responseinfo.ResponseData;
 import com.bizvane.utils.tokens.SysAccountPO;
@@ -23,6 +25,7 @@ public interface TaskProfileService {
      * @return
      */
     public ResponseData<Integer> addTask(TaskBO bo, SysAccountPO stageUser) throws ParseException;
+
 
     /**
      * 修改任务

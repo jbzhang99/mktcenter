@@ -110,7 +110,7 @@ public class FigureUtil {
 	}
   
 //查询表头和转json数据
-  public static  List<BackData> parseJSON2Map(String jsonStr,Integer tiaoshu,List<FileReportTempPO> fileReportTempPOlist){  
+  public static  List<BackData> parseJSON2Map(String jsonStr,String dimension,Integer tiaoshu,List<FileReportTempPO> fileReportTempPOlist){  
 	   List<BackData> listdata =new ArrayList<BackData>();
  	try {
  		
@@ -125,6 +125,56 @@ public class FigureUtil {
  				map.put(i++, string);
  			}
  			 i=1;
+ 			 
+			 BackDataBiaotou biaotouDimension= new BackDataBiaotou();
+			 
+			 if(dimension.equals("0")) {
+				 biaotouDimension.setHeaderType("empCode");
+				 biaotouDimension.setHeaderName("员工编号");
+				 biaotoulist.add(biaotouDimension);
+				 biaotouDimension= new BackDataBiaotou();
+				 biaotouDimension.setHeaderType("empName");
+				 biaotouDimension.setHeaderName("员工姓名");
+				 biaotoulist.add(biaotouDimension);
+				 biaotouDimension= new BackDataBiaotou();
+				 biaotouDimension.setHeaderType("storeId");
+				 biaotouDimension.setHeaderName("所属店铺");
+				 biaotoulist.add(biaotouDimension);
+
+			 }else if(dimension.equals("1")) {
+				 biaotouDimension.setHeaderType("storeCode");
+				 biaotouDimension.setHeaderName("店铺编号");
+				 biaotoulist.add(biaotouDimension);
+				 
+				 biaotouDimension= new BackDataBiaotou();
+				 biaotouDimension.setHeaderType("storeName");
+				 biaotouDimension.setHeaderName("店铺名称");
+				 biaotoulist.add(biaotouDimension);
+				 
+				 biaotouDimension= new BackDataBiaotou();
+				 biaotouDimension.setHeaderType("groupId");
+				 biaotouDimension.setHeaderName("所属群组");
+				 biaotoulist.add(biaotouDimension);
+				 
+			 }else if(dimension.equals("2")) {
+				 biaotouDimension.setHeaderType("brandCode");
+				 biaotouDimension.setHeaderName("品牌编号");
+				 biaotoulist.add(biaotouDimension);
+				 biaotouDimension= new BackDataBiaotou();
+				 biaotouDimension.setHeaderType("brandName");
+				 biaotouDimension.setHeaderName("品牌名称");
+				 biaotoulist.add(biaotouDimension);
+				 
+			 }else if(dimension.equals("3")) {
+				 biaotouDimension.setHeaderType("groupCode");
+				 biaotouDimension.setHeaderName("群组编号");
+				 biaotoulist.add(biaotouDimension);
+				 biaotouDimension= new BackDataBiaotou();
+				 biaotouDimension.setHeaderType("groupName");
+				 biaotouDimension.setHeaderName("群组名称");
+				 biaotoulist.add(biaotouDimension);
+				 
+			 }
  			for(String string :fileReportTempPOlist.get(0).getReportDataName().split(",")) {
  				BackDataBiaotou biaotou= new BackDataBiaotou();
  				biaotou.setHeaderType(string);

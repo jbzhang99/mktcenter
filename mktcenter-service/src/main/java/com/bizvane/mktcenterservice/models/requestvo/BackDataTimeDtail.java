@@ -1,5 +1,9 @@
 package com.bizvane.mktcenterservice.models.requestvo;
 
+import java.util.List;
+
+import com.alibaba.fastjson.JSONObject;
+
 public class BackDataTimeDtail {
 	private String 	total;
 	private String vipData;
@@ -11,6 +15,16 @@ public class BackDataTimeDtail {
 	private String touristsDataAccountedfor;
 	private String 	onlineDataAccountedfor;
 	private String 	offlineDataAccountedfor;
+	
+	private List<JSONObject>  josonData;
+	
+
+	public List<JSONObject> getJosonData() {
+		return josonData;
+	}
+	public void setJosonData(List<JSONObject> josonData) {
+		this.josonData = josonData;
+	}
 	
 	
 	public String getVipDataAccountedfor() {

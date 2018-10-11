@@ -2,18 +2,25 @@ package com.bizvane.mktcenterserviceimpl.service.impl;
 
 import com.alibaba.fastjson.JSON;
 import com.bizvane.centerstageservice.models.po.SysCheckPo;
+import com.bizvane.centerstageservice.models.po.SysStorePo;
 import com.bizvane.centerstageservice.models.vo.SysCheckConfigVo;
+import com.bizvane.centerstageservice.rpc.StoreServiceRpc;
 import com.bizvane.centerstageservice.rpc.SysCheckConfigServiceRpc;
 import com.bizvane.centerstageservice.rpc.SysCheckServiceRpc;
+import com.bizvane.couponfacade.enums.SendTypeEnum;
 import com.bizvane.couponfacade.interfaces.CouponEntityServiceFeign;
 import com.bizvane.couponfacade.interfaces.CouponQueryServiceFeign;
 import com.bizvane.couponfacade.interfaces.SendCouponServiceFeign;
+import com.bizvane.couponfacade.models.po.CouponEntityPO;
 import com.bizvane.couponfacade.models.vo.CouponDetailResponseVO;
 import com.bizvane.couponfacade.models.vo.SendCouponSimpleRequestVO;
 import com.bizvane.members.facade.enums.IntegralChangeTypeEnum;
+import com.bizvane.members.facade.models.IntegralRecordModel;
 import com.bizvane.members.facade.models.MemberInfoModel;
 import com.bizvane.members.facade.service.api.IntegralChangeApiService;
+import com.bizvane.members.facade.service.api.IntegralRecordApiService;
 import com.bizvane.members.facade.service.card.request.IntegralChangeRequestModel;
+import com.bizvane.members.facade.vo.IntegralRecordVo;
 import com.bizvane.mktcenterservice.interfaces.ActivityVipAniversaryService;
 import com.bizvane.mktcenterservice.models.bo.ActivityBO;
 import com.bizvane.mktcenterservice.models.po.*;
@@ -41,10 +48,12 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
+import org.springframework.util.StringUtils;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * Created by pc on 2018/9/7.
@@ -90,7 +99,10 @@ public class ActivityVipAniversaryServiceImpl implements ActivityVipAniversarySe
 
     @Autowired
     private JobClient jobClient;
-
+    @Autowired
+    private StoreServiceRpc storeServiceRpc;
+    @Autowired
+    private IntegralRecordApiService integralRecordApiService;
     @Override
     public ResponseData<ActivityVO> getActivityVipAniversaryList(ActivityVO vo, PageForm pageForm) {
         log.info("查询纪念日活动列表开始");
@@ -107,12 +119,6 @@ public class ActivityVipAniversaryServiceImpl implements ActivityVipAniversarySe
     @Override
     @Transactional
     public ResponseData<Integer> addActivityVipAniversary(ActivityBO bo, SysAccountPO stageUser) {
-        //本地测试时使用
-/*        SysAccountPO stageUser1=new SysAccountPO();
-        stageUser1.setBrandId(2l);
-        stageUser1.setSysCompanyId(2l);
-        stageUser1.setCreateUserId(26l);
-        stageUser1.setCreateUserName("zjw");*/
 
         log.info("创建纪念日活动开始");
         //返回对象
@@ -137,6 +143,27 @@ public class ActivityVipAniversaryServiceImpl implements ActivityVipAniversarySe
         MktActivityPOWithBLOBs mktActivityPOWithBLOBs = new MktActivityPOWithBLOBs();
         BeanUtils.copyProperties(activityVO,mktActivityPOWithBLOBs);
 
+        //查询判断长期活动同一会员等级是否有重复
+        if(1 == bo.getActivityVO().getLongTerm()){
+            ActivityVO vo = new ActivityVO();
+            vo.setMbrLevelCode(bo.getActivityVO().getMbrLevelCode());
+            vo.setLongTerm(bo.getActivityVO().getLongTerm());
+            vo.setSysBrandId(activityVO.getSysBrandId());
+            vo.setActivityType(ActivityTypeEnum.ACTIVITY_TYPE_BIRTHDAY.getCode());
+            List<ActivityVO> registerList = mktActivityVipAniversaryPOMapper.getActivityAniversaryList(vo);
+            if(!CollectionUtils.isEmpty(registerList)){
+                for (ActivityVO activity:registerList) {
+                    //判断适用商品
+                    if (!ExecuteParamCheckUtil.addActivitCheck(bo,activity)){
+                        responseData.setCode(SysResponseEnum.FAILED.getCode());
+                        responseData.setMessage("已存在同一类型的长期活动!");
+                        return responseData;
+                    }
+                }
+
+            }
+        }
+
         //查询审核配置，是否需要审核然后判断
         SysCheckConfigVo so = new SysCheckConfigVo();
         so.setSysBrandId(activityVO.getSysBrandId());
@@ -152,33 +179,14 @@ public class ActivityVipAniversaryServiceImpl implements ActivityVipAniversarySe
                 }
             }
         }
-
-        //调用rpc的返回结果
-        ResponseData<Long> rpcResponse=new ResponseData<>();
         if(i>0){
             //查询结果如果需要审核审核状态为待审核
             mktActivityPOWithBLOBs.setCheckStatus(CheckStatusEnum.CHECK_STATUS_PENDING.getCode());
             //活动状态设置为待执行
             mktActivityPOWithBLOBs.setActivityStatus(ActivityStatusEnum.ACTIVITY_STATUS_PENDING.getCode());
-
-            //如果是待审核数据则需要增加一条审核数据l
-            SysCheckPo po = new SysCheckPo();
-            po.setSysBrandId(mktActivityPOWithBLOBs.getSysBrandId());
-            po.setBusinessCode(mktActivityPOWithBLOBs.getActivityCode());
-            po.setBusinessName(mktActivityPOWithBLOBs.getActivityName());
-            po.setBusinessType(ActivityTypeEnum.ACTIVITY_TYPE_ANNIVERSARY.getCode());
-            po.setFunctionCode("C0002");
-            po.setCheckStatus(CheckStatusEnum.CHECK_STATUS_PENDING.getCode());
-            po.setCreateDate(new Date());
-            po.setCreateUserId(stageUser.getSysAccountId());
-            po.setCreateUserName(stageUser.getName());
-            po.setBizName(mktActivityPOWithBLOBs.getActivityName());
-            log.info("增加一条数据到审核中心");
-            rpcResponse=sysCheckServiceRpc.addCheck(po);
-            log.info("sysCheckServiceRpc添加入会纪念日活动到审核中心的返回结果是:" + rpcResponse.getData());
             //getStartTime 开始时间>当前时间增加job
             System.out.println("time======"+activityVO.getStartTime());
-            if( new Date().before(activityVO.getStartTime())){
+            if( 1 != bo.getActivityVO().getLongTerm() && new Date().before(activityVO.getStartTime())){
                 //创建任务调度任务开始时间
                 jobUtil.addStratAniversaryJob(stageUser,activityVO,activityCode);
                 //创建任务调度任务结束时间
@@ -209,8 +217,22 @@ public class ActivityVipAniversaryServiceImpl implements ActivityVipAniversarySe
         mktActivityPOMapper.insertSelective(mktActivityPOWithBLOBs);
         //获取新增后数据id
         Long mktActivityId = mktActivityPOWithBLOBs.getMktActivityId();
-
-
+        if(i>0){
+            //如果是待审核数据则需要增加一条审核数据l
+            SysCheckPo po = new SysCheckPo();
+            po.setSysBrandId(mktActivityPOWithBLOBs.getSysBrandId());
+            po.setBusinessCode(mktActivityPOWithBLOBs.getActivityCode());
+            po.setBusinessName(mktActivityPOWithBLOBs.getActivityName());
+            po.setBusinessType(ActivityTypeEnum.ACTIVITY_TYPE_ANNIVERSARY.getCode());
+            po.setFunctionCode("C0002");
+            po.setCheckStatus(CheckStatusEnum.CHECK_STATUS_PENDING.getCode());
+            po.setCreateDate(new Date());
+            po.setCreateUserId(stageUser.getSysAccountId());
+            po.setCreateUserName(stageUser.getName());
+            po.setBizName(mktActivityPOWithBLOBs.getActivityName());
+            log.info("增加一条数据到审核中心");
+            sysCheckServiceRpc.addCheck(po);
+        }
         //新增纪念日活动表
         MktActivityVipAniversaryPO mktActivityVipAniversaryPO=new MktActivityVipAniversaryPO();
         BeanUtils.copyProperties(mktActivityPOWithBLOBs,mktActivityVipAniversaryPO);
@@ -219,6 +241,7 @@ public class ActivityVipAniversaryServiceImpl implements ActivityVipAniversarySe
         mktActivityVipAniversaryPO.setMbrLevelName(activityVO.getMbrLevelName());
         mktActivityVipAniversaryPO.setDaysAhead(activityVO.getDaysAhead());
         mktActivityVipAniversaryPO.setIsStoreLimit(activityVO.getStoreLimit());
+        mktActivityVipAniversaryPO.setRegisterMonths(activityVO.getRegisterMonths());
         if (false==activityVO.getStoreLimit()){
             mktActivityVipAniversaryPO.setStoreLimitList(activityVO.getStoreLimitList());
             mktActivityVipAniversaryPO.setStoreLimitType(activityVO.getStoreLimitType());
@@ -236,19 +259,19 @@ public class ActivityVipAniversaryServiceImpl implements ActivityVipAniversarySe
                 mktCouponPO.setBizId(mktActivityId);
                 mktCouponPO.setCouponName(couponCode.getCouponName());
                 mktCouponPO.setCouponDefinitionId(couponCode.getCouponDefinitionId());
-                mktCouponPO.setBizId(couponCode.getBizId());
+                //mktCouponPO.setBizId(couponCode.getBizId());
                 mktCouponPOMapper.insertSelective(mktCouponPO);
             }
         }
 
         responseData.setCode(SysResponseEnum.SUCCESS.getCode());
         responseData.setMessage(SysResponseEnum.SUCCESS.getMessage());
-        responseData.setData(rpcResponse.getData());
         return responseData;
     }
 
     @Override
     public ResponseData<ActivityBO> selectActivityVipAniversaryById(String businessCode) {
+        ActivityBO bo = new ActivityBO();
         log.info("查询纪念日活动详情参数="+businessCode);
         ResponseData responseData = new ResponseData();
         ActivityVO vo= new ActivityVO();
@@ -259,6 +282,19 @@ public class ActivityVipAniversaryServiceImpl implements ActivityVipAniversarySe
             responseData.setCode(SysResponseEnum.OPERATE_FAILED_DATA_NOT_EXISTS.getCode());
             responseData.setMessage(SysResponseEnum.OPERATE_FAILED_DATA_NOT_EXISTS.getMessage());
             return responseData;
+        }
+
+        if(!CollectionUtils.isEmpty(registerList)){
+            bo.setActivityVO(registerList.get(0));
+            if (!StringUtils.isEmpty(registerList.get(0).getStoreLimitList())){
+                String ids =registerList.get(0).getStoreLimitList();
+                //查询适用门店
+                List<Long> listIds = Arrays.asList(ids.split(",")).stream().map(s -> Long.parseLong(s.trim())).collect(Collectors.toList());
+                ResponseData<List<SysStorePo>> sysStorePOs = storeServiceRpc.getIdStoreLists(listIds);
+                if(!CollectionUtils.isEmpty(sysStorePOs.getData())){
+                    bo.getActivityVO().setSysStorePos(sysStorePOs.getData());
+                }
+            }
         }
         //查询活动卷
         MktCouponPOExample example = new  MktCouponPOExample();
@@ -277,13 +313,7 @@ public class ActivityVipAniversaryServiceImpl implements ActivityVipAniversarySe
         MktMessagePOExample exampl = new MktMessagePOExample();
         exampl.createCriteria().andBizIdEqualTo(registerList.get(0).getMktActivityId()).andValidEqualTo(true);
         List<MktMessagePO> listMktMessage = mktMessagePOMapper.selectByExample(exampl);
-        ActivityBO bo = new ActivityBO();
-        if(!CollectionUtils.isEmpty(registerList)){
-            bo.setActivityVO(registerList.get(0));
-        }
-        if(!CollectionUtils.isEmpty(lists)){
             bo.setCouponEntityAndDefinitionVOList(lists);
-        }
         if(!CollectionUtils.isEmpty(listMktMessage)){
             bo.setMessageVOList(listMktMessage);
         }
@@ -319,22 +349,22 @@ public class ActivityVipAniversaryServiceImpl implements ActivityVipAniversarySe
         MktActivityPO activityPO = mktActivityPO.get(0);
         //判断是审核通过还是审核驳回
         if(bs.getCheckStatus()==CheckStatusEnum.CHECK_STATUS_APPROVED.getCode()){
-            //活动开始时间<当前时间<活动结束时间   也就是StartTime=null
-            if((new Date().after(activityPO.getStartTime()) && new Date().before(activityPO.getEndTime()))){
+            //活动开始时间<当前时间<活动结束时间  或者长期活动 也就是StartTime=null
+            if(1== activityPO.getLongTerm() ||(new Date().after(activityPO.getStartTime()) && new Date().before(activityPO.getEndTime()))){
                 //将活动状态变更为执行中 并且发送消息
                 bs.setActivityStatus(ActivityStatusEnum.ACTIVITY_STATUS_EXECUTING.getCode());
-                int i = mktActivityPOMapper.updateByPrimaryKeySelective(bs);
             }
             //判断审核时间 >活动结束时间  将活动状态变为已结束
-            if(new Date().after(activityPO.getEndTime())){
+            if(null!=activityPO.getEndTime()&&new Date().after(activityPO.getEndTime())){
                 bs.setActivityStatus(ActivityStatusEnum.ACTIVITY_STATUS_FINISHED.getCode());
-                int i = mktActivityPOMapper.updateByPrimaryKeySelective(bs);
             }
 
         }else{
             bs.setActivityStatus(ActivityStatusEnum.ACTIVITY_STATUS_FINISHED.getCode());
-            int i = mktActivityPOMapper.updateByPrimaryKeySelective(bs);
         }
+        log.info("更新审核状态的参数是+======="+ JSON.toJSONString(bs));
+        int i = mktActivityPOMapper.updateByPrimaryKeySelective(bs);
+        log.info("更新审核状态完成");
         //更新审核中心状态
         ResponseData<Integer> rpcResponse=sysCheckServiceRpc.updateCheck(po);
         //审核中心返回的结果，1是成功
@@ -497,40 +527,122 @@ public class ActivityVipAniversaryServiceImpl implements ActivityVipAniversarySe
 
     @Override
     @Async("asyncServiceExecutor")
-    public void AniversaryReward(ActivityVO activityAniversary, List<MemberInfoModel> memberInfoModelList) {
+    public void AniversaryReward(ActivityVO activityAniversary, MemberInfoModel memberInfo) {
         log.info("纪念日活动发送奖励开始");
-        for (MemberInfoModel memberInfo:memberInfoModelList) {
             //判断生日适用门店信息
             if (!ExecuteParamCheckUtil.implementActivitCheck(memberInfo,activityAniversary)){
-                continue;
+                return;
             }
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy");
+        Date date = new Date();// 取时间
+        Calendar calendar = new GregorianCalendar();
+        calendar.setTime(date);
+        calendar.add(Calendar.YEAR, 1);// 把日期往后增加一年.整数往后推,负数往前移动
+        date = calendar.getTime();
+        //明年
+        String s1 =sdf.format(date);
+        Date toyear = null;
+        try {
+            toyear = sdf.parse(s1);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        //今年
+        String s2 =sdf.format(new Date());
+        Date year = null;
+        try {
+            year = sdf.parse(s2);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        //判断当前时间加上发送天数是都是今年还是明年
+        //如果为true 说明是今年
+        if (true==dateSize(activityAniversary)){
+            //判断今年有没有发券
+            ResponseData<List<CouponEntityPO>> couponEntityPOs = couponEntityServiceFeign.findCouponHave(memberInfo.getMemberCode(),activityAniversary.getMktActivityId(),s2);
+            List<CouponEntityPO> couponEntityPO =couponEntityPOs.getData();
+            if (!CollectionUtils.isEmpty(couponEntityPO)){
+                return;
+            }
+            //判断今年有没有发积分
+            IntegralRecordVo vs = new IntegralRecordVo();
+            vs.setMemberCode(memberInfo.getMemberCode());
+            vs.setChangeBills(activityAniversary.getActivityCode());
+            vs.setYear(s2);
+            ResponseData<List<IntegralRecordModel>> integralRecordModels = integralRecordApiService.queryIntegralRecord(vs);
+            List<IntegralRecordModel> integralRecordModel = integralRecordModels.getData();
+            if (!CollectionUtils.isEmpty(integralRecordModel)){
+                return;
+            }
+        }else{
+            //说明是明年 判断生日加上提前发送天数有没到明年
+            //true 说明是到了明年
+            if (true==dateMonth(activityAniversary,memberInfo)){
+                //判断明年有没有发券
+                ResponseData<List<CouponEntityPO>> couponEntityPOs = couponEntityServiceFeign.findCouponHave(memberInfo.getMemberCode(),activityAniversary.getMktActivityId(),s1);
+                List<CouponEntityPO> couponEntityPO =couponEntityPOs.getData();
+                if (!CollectionUtils.isEmpty(couponEntityPO)){
+                    return;
+                }
+                //判断明年有没有发积分
+                IntegralRecordVo vs = new IntegralRecordVo();
+                vs.setMemberCode(memberInfo.getMemberCode());
+                vs.setChangeBills(activityAniversary.getActivityCode());
+                vs.setYear(s1);
+                ResponseData<List<IntegralRecordModel>> integralRecordModels = integralRecordApiService.queryIntegralRecord(vs);
+                List<IntegralRecordModel> integralRecordModel = integralRecordModels.getData();
+                if (!CollectionUtils.isEmpty(integralRecordModel)){
+                    return;
+                }
+            }else{
+                //判断今年有没有发券
+                ResponseData<List<CouponEntityPO>> couponEntityPOs = couponEntityServiceFeign.findCouponHave(memberInfo.getMemberCode(),activityAniversary.getMktActivityId(),s2);
+                List<CouponEntityPO> couponEntityPO =couponEntityPOs.getData();
+                if (!CollectionUtils.isEmpty(couponEntityPO)){
+                    return;
+                }
+                //判断今年有没有发积分
+                IntegralRecordVo vs = new IntegralRecordVo();
+                vs.setMemberCode(memberInfo.getMemberCode());
+                vs.setChangeBills(activityAniversary.getActivityCode());
+                vs.setYear(s2);
+                ResponseData<List<IntegralRecordModel>> integralRecordModels = integralRecordApiService.queryIntegralRecord(vs);
+                List<IntegralRecordModel> integralRecordModel = integralRecordModels.getData();
+                if (!CollectionUtils.isEmpty(integralRecordModel)){
+                    return;
+                }
+            }
+
+        }
+            log.info("执行纪念日活动通过验证通过验证通过验证========");
             //增加积分奖励新增接口
             IntegralChangeRequestModel integralChangeRequestModel =new IntegralChangeRequestModel();
+            integralChangeRequestModel.setSysCompanyId(activityAniversary.getSysCompanyId());
             integralChangeRequestModel.setBrandId(activityAniversary.getSysBrandId());
             integralChangeRequestModel.setMemberCode(memberInfo.getMemberCode());
             integralChangeRequestModel.setChangeBills(activityAniversary.getActivityCode());
             integralChangeRequestModel.setChangeIntegral(activityAniversary.getPoints());
             integralChangeRequestModel.setChangeType(IntegralChangeTypeEnum.INCOME.getCode());
-            integralChangeRequestModel.setBusinessType(String.valueOf(BusinessTypeEnum.ACTIVITY_TYPE_ACTIVITY.getCode()));
+            integralChangeRequestModel.setBusinessType(com.bizvane.members.facade.enums.BusinessTypeEnum.ACTIVITY_TYPE_BIRTHDAY.getCode());
+            integralChangeRequestModel.setChangeDate(new Date());
+            log.info("执行纪念日活动开始开始增加积分增加积分++++++");
             integralChangeApiService.integralChangeOperate(integralChangeRequestModel);
             // 增加卷奖励接口
-            MktCouponPOExample example = new  MktCouponPOExample();
-            example.createCriteria().andBizIdEqualTo(activityAniversary.getMktActivityId()).andValidEqualTo(true);
-            List<MktCouponPO> mktCouponPOs= mktCouponPOMapper.selectByExample(example);
-            for (MktCouponPO mktCouponPO:mktCouponPOs) {
-                //拿到会员 在到券那里确认有没有发卷 没有执行发券和积分操作
-              /*  ResponseData<List<CouponEntityPO>> CouponEntityPOs = couponEntityServiceFeign.findCouponHave(mktCouponPO.getCouponDefinitionId().toString(),memberInfo.getMemberCode(),activityAniversary.getMktActivityId());
-                List<CouponEntityPO> couponEntityPOs =CouponEntityPOs.getData();
-                if (CollectionUtils.isEmpty(couponEntityPOs)){
-                    continue;
-                }*/
-                SendCouponSimpleRequestVO va = new SendCouponSimpleRequestVO();
-                va.setMemberCode(memberInfo.getMemberCode());
-                va.setCouponDefinitionId(mktCouponPO.getCouponDefinitionId());
-                va.setSendBussienId(mktCouponPO.getBizId());
-                va.setSendType("90");
-                sendCouponServiceFeign.simple(va);
-            }
+        // 增加卷奖励接口
+        MktCouponPOExample example = new  MktCouponPOExample();
+        example.createCriteria().andBizIdEqualTo(activityAniversary.getMktActivityId()).andValidEqualTo(true);
+        List<MktCouponPO> mktCouponPOs= mktCouponPOMapper.selectByExample(example);
+        for (MktCouponPO mktCouponPO:mktCouponPOs) {
+            SendCouponSimpleRequestVO va = new SendCouponSimpleRequestVO();
+            va.setMemberCode(memberInfo.getMemberCode());
+            va.setCouponDefinitionId(mktCouponPO.getCouponDefinitionId());
+            va.setSendBussienId(mktCouponPO.getBizId());
+            va.setSendType(SendTypeEnum.SEND_COUPON_MEMORY_DAY.getCode());
+            va.setBrandId(activityAniversary.getSysBrandId());
+            va.setCompanyId(activityAniversary.getSysCompanyId());
+            log.info("执行纪念日活动开始开始增加券增加券~~~~~~~~~~");
+            sendCouponServiceFeign.simple(va);
+        }
             //新增积分到会员参与活动记录表中数据
             MktActivityRecordPO po = new MktActivityRecordPO();
             po.setActivityType(ActivityTypeEnum.ACTIVITY_TYPE_ANNIVERSARY.getCode());
@@ -541,6 +653,64 @@ public class ActivityVipAniversaryServiceImpl implements ActivityVipAniversarySe
             po.setSysBrandId(activityAniversary.getSysBrandId());
             mktActivityRecordPOMapper.insertSelective(po);
 
+    }
+    private Boolean dateMonth(ActivityVO activityBirthday,MemberInfoModel memberInfo) {
+        boolean  falg;
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        Date birthday = memberInfo.getBirthday();
+        Calendar ca = Calendar.getInstance();
+        ca.add(Calendar.DATE, activityBirthday.getDaysAhead());// num为增加的天数，可以改变的
+        birthday = ca.getTime();
+        String enddate = format.format(birthday);
+        System.out.println("增加天数以后的日期：" + enddate);
+
+        //获取生日月份和增加天数后的月份
+        SimpleDateFormat sdf = new SimpleDateFormat("MM");
+        String s1 = sdf.format(memberInfo.getBirthday());
+        String s2 = sdf.format(birthday);
+        System.out.println("日期1：" + s1);
+        System.out.println("日期1：" + s2);
+        if (Integer.parseInt(s1) > Integer.parseInt(s2)){
+            falg=true;
+        }else{
+            falg=false;
         }
+        return falg;
+    }
+
+    private Boolean dateSize(ActivityVO activityBirthday) {
+        boolean  falg;
+        Date d = new Date();
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        //得到当年日期
+        String currdate = format.format(d);
+        System.out.println("现在的日期是：" + currdate);
+        //获取增加天数后得到的日期
+        Calendar ca = Calendar.getInstance();
+        ca.add(Calendar.DATE, activityBirthday.getDaysAhead());// num为增加的天数，可以改变的
+        d = ca.getTime();
+        String enddate = format.format(d);
+        System.out.println("增加天数以后的日期：" + enddate);
+
+
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy");
+        //获取当前年份
+        String date = sdf.format(new Date());
+        System.out.println("获取当前年份：" + date);
+        //获取增加日期后得到的年份
+        Date today = null;
+        try {
+            today = format.parse(enddate);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        String formatDate = sdf.format(today);
+        System.out.println("增加天数以后的日期得到的年份：" + formatDate);
+        if (Integer.parseInt(date)>=Integer.parseInt(formatDate)){
+            falg=true;
+        }else{
+            falg=false;
+        }
+        return falg;
     }
 }

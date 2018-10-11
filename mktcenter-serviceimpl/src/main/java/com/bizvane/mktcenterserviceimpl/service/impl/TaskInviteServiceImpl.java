@@ -1,5 +1,6 @@
 package com.bizvane.mktcenterserviceimpl.service.impl;
 
+import com.alibaba.fastjson.JSON;
 import com.bizvane.members.facade.models.MemberInfoModel;
 import com.bizvane.mktcenterservice.interfaces.*;
 import com.bizvane.mktcenterservice.models.bo.*;
@@ -16,12 +17,15 @@ import com.bizvane.mktcenterserviceimpl.mappers.MktTaskInvitePOMapper;
 import com.bizvane.utils.enumutils.SysResponseEnum;
 import com.bizvane.utils.responseinfo.ResponseData;
 import com.bizvane.utils.tokens.SysAccountPO;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import springfox.documentation.spring.web.json.Json;
 
 import java.text.ParseException;
 import java.util.Date;
@@ -33,6 +37,7 @@ import java.util.List;
  * @description
  * @Copyright (c) 2018 上海商帆信息科技有限公司-版权所有
  */
+@Slf4j
 @Service
 public class TaskInviteServiceImpl implements TaskInviteService {
     @Autowired
@@ -81,11 +86,6 @@ public class TaskInviteServiceImpl implements TaskInviteService {
             return responseData;
         }
         TaskVO taskVO = bo.getTaskVO();
-        taskVO.setValid(Boolean.TRUE);
-        taskVO.setCreateDate(TimeUtils.getNowTime());
-        taskVO.setCreateUserId(stageUser.getSysAccountId());
-        taskVO.setCreateUserName(stageUser.getName());
-
         //1.生成任务编号
         String taskCode = CodeUtil.getTaskCode();
         //2.任务主表新增
@@ -226,13 +226,16 @@ public class TaskInviteServiceImpl implements TaskInviteService {
     /**
      * 执行邀请任务的奖励
      */
+    @Async
     @Override
     public  void   doAwardInvite(InviteSuccessVO vo){
+        log.info("执行邀请任务的奖励--参数--"+ JSON.toJSONString(vo));
         //被邀请人信息
         Date openCardTime = vo.getOpenCardTime();
         //邀请人的信息
         String inviteMemberCode = vo.getInviteMemberCode();
         MemberInfoModel memeberDetail = taskService.getCompanyMemeberDetail(inviteMemberCode);
+        log.info("邀请注册任务中会员详情--"+ JSON.toJSONString(memeberDetail));
         Long companyId = memeberDetail.getSysCompanyId();
         Long brandId = memeberDetail.getBrandId();
         String memberCode = memeberDetail.getMemberCode();
@@ -240,6 +243,7 @@ public class TaskInviteServiceImpl implements TaskInviteService {
         Long serviceStoreId = memeberDetail.getServiceStoreId();
         //符合条件的任务列表
         List<TaskAwardBO> taskInviteAwardList = taskService.getTaskInviteAwardList(companyId, brandId,openCardTime);
+        log.info("符合条件的邀请注册任务列表--"+ JSON.toJSONString(taskInviteAwardList));
         if (CollectionUtils.isNotEmpty(taskInviteAwardList)){
             taskInviteAwardList.stream().
                 filter(obj->{
@@ -256,8 +260,9 @@ public class TaskInviteServiceImpl implements TaskInviteService {
                     recordVO.setTaskType(taskType);
                     recordVO.setTaskId(mktTaskId);
                     recordVO.setMemberCode(inviteMemberCode);
-                    // 获取会员是否已经成功参与过某一活动
+                    // 获取会员是否已经成功参与过某一任务
                     Boolean isOrNoAward = taskRecordService.getIsOrNoAward(recordVO);
+                    log.info("获取会员是否参加过某一任务--"+isOrNoAward+"--"+JSON.toJSONString(recordVO));
                     if (!isOrNoAward){
                         MktTaskRecordPO recordPO = new MktTaskRecordPO();
                         BeanUtils.copyProperties(recordVO,recordPO);
@@ -266,7 +271,7 @@ public class TaskInviteServiceImpl implements TaskInviteService {
                         //获取会员参与某一活动放总金额和总次数
                         TotalStatisticsBO totalBO = taskRecordService.getTotalStatistics(recordVO);
                         if (totalBO!=null && totalBO.getTotalTimes()!=null &&  totalBO.getTotalTimes().equals(inviteNum)){
-                            recordPO.setRewarded(Integer.valueOf(1));
+                            recordPO.setRewarded(1);
                             taskRecordService.updateTaskRecord(recordPO);
                             taskService.sendCouponAndPoint(memberCode,obj);
                         }
