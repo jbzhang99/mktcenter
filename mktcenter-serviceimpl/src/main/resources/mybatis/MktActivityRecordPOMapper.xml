@@ -525,6 +525,7 @@ WHERE
     <if test="memberCode != null and memberCode!= ''">
       and member_code = #{memberCode,jdbcType=VARCHAR}
     </if>
+    ORDER BY participate_date DESC
   </select>
   <select id="selectRecordPOList" parameterType="com.bizvane.mktcenterservice.models.po.MktActivityRecordPO" resultType="com.bizvane.mktcenterservice.models.po.MktActivityRecordPO">
     SELECT

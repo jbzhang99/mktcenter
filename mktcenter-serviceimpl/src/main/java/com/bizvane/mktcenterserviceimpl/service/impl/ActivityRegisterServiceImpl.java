@@ -371,7 +371,7 @@ public class ActivityRegisterServiceImpl implements ActivityRegisterService {
         for (ActivityVO activityVO:registerList) {
             //判断开卡会员适合哪个活动根据开卡会员等级判断
             if( null==activityVO.getMbrLevelCode()||activityVO.getMbrLevelCode().equals(vo.getLevelId()) ){
-                if (!ExecuteParamCheckUtil.implementActivitCheck(vo,activity)){
+                if (!ExecuteParamCheckUtil.implementActivitCheck(vo,activityVO)){
                     continue;
                 }
                 //增加积分奖励新增接口
