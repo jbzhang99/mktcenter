@@ -309,7 +309,7 @@ public class ActivityRegisterServiceImpl implements ActivityRegisterService {
                 membersInfoSearchVo.setBrandId(activityVO.getSysBrandId());
                 log.info("开卡活动-查询发送短信高级搜索参数+=====："+JSON.toJSONString(membersInfoSearchVo));
                 memberMessage.sendDXmessage(messageVOList, membersInfoSearchVo);
-                //查询对应的会员  发送微信模板消息
+               /* //查询对应的会员  发送微信模板消息
                 WxChannelInfoSearchVo wxChannelInfoSearchVo = new WxChannelInfoSearchVo();
                 wxChannelInfoSearchVo.setPageNum(1);
                 wxChannelInfoSearchVo.setPageSize(10000);
@@ -318,7 +318,7 @@ public class ActivityRegisterServiceImpl implements ActivityRegisterService {
                 wxChannelInfoSearchVo.setMiniProgram((byte) 1);
                 wxChannelInfoSearchVo.setBrandId(activityVO.getSysBrandId());
                 log.info("开卡活动-查询发送微信模板高级搜索参数+=====："+JSON.toJSONString(wxChannelInfoSearchVo));
-                memberMessage.sendWXmessage(messageVOList, wxChannelInfoSearchVo);
+                memberMessage.sendWXmessage(messageVOList, wxChannelInfoSearchVo);*/
             }else{
                 //自定义时间发送 加人job任务
                 jobUtil.addSendMessageJob(stageUser,activityVO,activityCode);
@@ -369,7 +369,7 @@ public class ActivityRegisterServiceImpl implements ActivityRegisterService {
         }
         for (ActivityVO activityVO:registerList) {
             //判断开卡会员适合哪个活动根据开卡会员等级判断
-            if(activityVO.getMbrLevelCode().equals(vo.getLevelId().toString()) || activityVO.getMbrLevelCode().equals("0")){
+            if( null==activityVO.getMbrLevelCode()||activityVO.getMbrLevelCode().equals(vo.getLevelId()) ){
                 if (!ExecuteParamCheckUtil.implementActivitCheck(vo,activity)){
                     continue;
                 }
