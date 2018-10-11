@@ -291,7 +291,7 @@ public class TaskShareServiceImpl implements TaskShareService {
                 filter(obj->{
                      Boolean isStoreLimit = obj.getStoreLimit();
                      String  StoreLimitList=obj.getStoreLimitList();
-                     return isStoreLimit || (serviceStoreId!=null && StringUtils.isNotBlank(StoreLimitList) &&  obj.getStoreLimitList().contains(String.valueOf(serviceStoreId)));}).
+                     return isStoreLimit || (serviceStoreId!=null) ||(StringUtils.isNotBlank(StoreLimitList) &&  obj.getStoreLimitList().contains(String.valueOf(serviceStoreId)));}).
                 forEach(obj->{
                     Integer taskType = obj.getTaskType();
                     Long mktTaskId = obj.getMktTaskId();

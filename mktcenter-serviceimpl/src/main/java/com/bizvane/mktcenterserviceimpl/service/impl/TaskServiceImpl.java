@@ -282,8 +282,15 @@ public class TaskServiceImpl implements TaskService {
      * @return
      */
     @Override
-    public List<TaskAwardBO> getTaskInviteAwardList(Long sysCompanyId, Long sysBrandId,Date placeOrderTime){
-        return mktTaskPOMapper.getTaskInviteAwardList(sysCompanyId, sysBrandId,placeOrderTime);
+    public List<TaskAwardBO> getTaskInviteAwardList(Long sysCompanyId, Long sysBrandId,Date openCardTime){
+        String openCardStr="";
+        if (openCardTime==null){
+            openCardStr = TimeUtils.formatter.format(new Date());
+        }else{
+            openCardStr = TimeUtils.formatter.format(openCardTime);
+        }
+        log.info("邀请开卡的任务列表查询参数getTaskInviteAwardList--"+sysCompanyId+"--"+sysBrandId+"--"+openCardStr);
+        return mktTaskPOMapper.getTaskInviteAwardList(sysCompanyId, sysBrandId,openCardStr);
     }
 
     /**
@@ -301,7 +308,14 @@ public class TaskServiceImpl implements TaskService {
      */
     @Override
     public List<TaskAwardBO> getTaskShareAwardList(Long sysCompanyId, Long sysBrandId,Date shareDate){
-        return mktTaskPOMapper.getTaskShareAwardList(sysCompanyId, sysBrandId,shareDate);
+        String shareDateStr="";
+        if (shareDate==null){
+            shareDateStr = TimeUtils.formatter.format(new Date());
+        }else{
+            shareDateStr = TimeUtils.formatter.format(shareDate);
+        }
+        log.info("分享任务的奖励getTaskShareAwardList--"+sysCompanyId+"--"+sysBrandId+"--"+shareDateStr);
+        return mktTaskPOMapper.getTaskShareAwardList(sysCompanyId, sysBrandId,shareDateStr);
     }
 
     /**

@@ -294,7 +294,7 @@ public class TaskProfileServiceImpl implements TaskProfileService {
                     filter(obj->{
                         Boolean isStoreLimit = obj.getStoreLimit();
                         String  StoreLimitList=obj.getStoreLimitList();
-                        return isStoreLimit || (serviceStoreId!=null && StringUtils.isNotBlank(StoreLimitList) &&  obj.getStoreLimitList().contains(String.valueOf(serviceStoreId)));}).
+                        return !isStoreLimit || (serviceStoreId!=null) || (StringUtils.isNotBlank(StoreLimitList) &&  obj.getStoreLimitList().contains(String.valueOf(serviceStoreId)));}).
                     forEach(obj->{
                         MktTaskRecordVO recordVO = new MktTaskRecordVO();
                         recordVO.setSysBrandId(brandId);

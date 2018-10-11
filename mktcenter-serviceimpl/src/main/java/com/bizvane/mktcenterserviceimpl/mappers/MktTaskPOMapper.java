@@ -122,7 +122,7 @@ public interface MktTaskPOMapper {
 	 * @param placeOrderTime
 	 * @return
 	 */
-	public List<TaskAwardBO> getTaskInviteAwardList(@Param("sysCompanyId") Long sysCompanyId, @Param("sysBrandId") Long sysBrandId,@Param("placeOrderTime")Date placeOrderTime);
+	public List<TaskAwardBO> getTaskInviteAwardList(@Param("sysCompanyId") Long sysCompanyId, @Param("sysBrandId") Long sysBrandId,@Param("placeOrderTime")String placeOrderTime);
 
 	/**
 	 * 完善资料任务的奖励
@@ -140,7 +140,7 @@ public interface MktTaskPOMapper {
 	 * @param placeOrderTime
 	 * @return
 	 */
-	public List<TaskAwardBO> getTaskShareAwardList(@Param("sysCompanyId") Long sysCompanyId, @Param("sysBrandId") Long sysBrandId,@Param("placeOrderTime")Date placeOrderTime);
+	public List<TaskAwardBO> getTaskShareAwardList(@Param("sysCompanyId") Long sysCompanyId, @Param("sysBrandId") Long sysBrandId,@Param("placeOrderTime")String placeOrderTime);
 
 	/**
 	 * 获取会员已完成和未完成任务列表
