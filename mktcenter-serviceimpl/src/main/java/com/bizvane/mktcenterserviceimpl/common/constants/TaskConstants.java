@@ -32,6 +32,11 @@ public class TaskConstants {
 
     //邀请注册
     public final static String ERROR_MSG_invite_num_EMPTY ="邀请注册人数为空";
+    //任务job区分类型
+    public final static int ACTIVITY_TYPE_TASK_CODE_STARTJOB=20;
+    public final static int ACTIVITY_TYPE_TASK_CODE_ENDJOB=21;
+    public final static int ACTIVITY_TYPE_TASK_CODE_XDOB=22;
+    public final static int ACTIVITY_TYPE_TASK_CODE_XXOB=22;
 
     //任务类型
     //活动

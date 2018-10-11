@@ -8,6 +8,9 @@ import com.bizvane.centerstageservice.models.po.SysStorePo;
 import com.bizvane.messagefacade.interfaces.TemplateMessageServiceFeign;
 import com.bizvane.messagefacade.models.vo.*;
 import com.bizvane.mktcenterservice.models.vo.PageForm;
+import com.bizvane.utils.jobutils.JobBusinessTypeEnum;
+import com.bizvane.utils.jobutils.JobClient;
+import com.bizvane.utils.jobutils.XxlJobInfo;
 import com.bizvane.utils.tokens.SysAccountPO;
 import com.bizvane.centerstageservice.models.po.SysCheckConfigPo;
 import com.bizvane.centerstageservice.models.po.SysCheckPo;
@@ -62,8 +65,6 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
 import java.text.ParseException;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -114,6 +115,8 @@ public class TaskServiceImpl implements TaskService {
     private StoreServiceRpc  storeServiceRpc;
     @Autowired
     private TemplateMessageServiceFeign templateMessageServiceFeign;
+    @Autowired
+    private JobClient jobClient;
     /**
      * 通过id查询店铺列表
      */
@@ -654,6 +657,12 @@ public class TaskServiceImpl implements TaskService {
     @Override
     public ResponseData<Integer> stopTaskById(Long mktTaskId, SysAccountPO sysAccountPO) {
         ResponseData responseData = new ResponseData();
+        //审核通过 执行中的任务不能被禁用
+        MktTaskPOWithBLOBs po = mktTaskPOMapper.selectByPrimaryKey(mktTaskId);
+        if (po!=null && TaskConstants.THREE.equals(po.getCheckStatus()) && TaskConstants.SECOND.equals(po.getTaskStatus())){
+            responseData.setData(ResponseConstants.DATA_NOT_STOP);
+        }
+
         MktTaskPOWithBLOBs mktTaskPOWithBLOBs = new MktTaskPOWithBLOBs();
         mktTaskPOWithBLOBs.setMktTaskId(mktTaskId);
         mktTaskPOWithBLOBs.setTaskStatus(TaskStatusEnum.TASK_STATUS_DISABLED.getCode());
@@ -661,6 +670,12 @@ public class TaskServiceImpl implements TaskService {
         mktTaskPOWithBLOBs.setModifiedUserId(sysAccountPO.getSysAccountId());
         mktTaskPOWithBLOBs.setModifiedUserName(sysAccountPO.getName());
         mktTaskPOMapper.updateByPrimaryKeySelective(mktTaskPOWithBLOBs);
+
+        //禁用后要清除所有的job
+        XxlJobInfo xxlJobInfo = new XxlJobInfo();
+        xxlJobInfo.setBizCode(po.getTaskCode());
+        jobClient.removeByBiz(xxlJobInfo);
+
         responseData.setData(ResponseConstants.SUCCESS_MSG);
         return responseData;
     }

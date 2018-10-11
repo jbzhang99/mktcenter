@@ -13,4 +13,5 @@ public class ResponseConstants {
     public static final Integer ERROR=-1;
     public static final String ERROR_MSG="操作失败！";
     public static final String DATA_NOT_EXIST="查询数据不存在！";
+    public static final String DATA_NOT_STOP="进行中的任务不能被禁用！";
 }

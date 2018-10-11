@@ -50,17 +50,21 @@ public class OrderTaskListener implements MessageListener {
         log.info("订单信息--OrderTaskListener--"+modelStr);
         OrderModel model = JSONObject.parseObject(modelStr, OrderModel.class);
         //根据会员code获取会员详情
+
         String memberCode = model.getMemberCode();
-        //订单列表
-        //订单来源 1=线下   2=微商城
+        //订单列表   订单来源 1=线下   2=微商城
         Integer orderSource = model.getOrderFrom();
         Long companyId = model.getSysCompanyId();
         Long brandId = model.getBrandId();
         Date placeOrderTime = model.getPlaceOrderTime();
 
         MemberInfoModel memeberDetail = taskService.getCompanyMemeberDetail(memberCode);
+        if (memeberDetail==null){
+            log.info("订单信息--会员详情-不存在!");
+            return Action.CommitMessage;
+        }
         log.info("订单信息--会员详情--------"+memeberDetail);
-        Long serviceStoreId = memeberDetail.getServiceStoreId();
+          Long serviceStoreId = memeberDetail.getServiceStoreId();
         List<TaskAwardBO> taskOrderAwardList = taskService.getTaskOrderAwardList(companyId, brandId, placeOrderTime, orderSource);
         log.info("根据订单信息 获取的任务列表----"+ JSON.toJSONString(taskOrderAwardList));
         if (CollectionUtils.isNotEmpty(taskOrderAwardList)){
@@ -78,10 +82,12 @@ public class OrderTaskListener implements MessageListener {
 
     //任务类型：1完善资料，2分享任务，3邀请注册，4累计消费次数，5累计消费金额',
     private void doExecuteTask(OrderModel model, TaskAwardBO obj,Date placeOrderTime) {
+        log.info("开始执行订单奖励----");
         BigDecimal tradeAmount = model.getTradeAmount();//订单金额
         Long brandId = model.getBrandId();
         String memberCode = model.getMemberCode();
-       // String carNo = model.getCarNo();
+        Long sysCompanyId = model.getSysCompanyId();
+        // String carNo = model.getCarNo();
         Integer taskType = obj.getTaskType();
         Long mktTaskId = obj.getMktTaskId();
         BigDecimal consumeAmount = obj.getConsumeAmount();//累计金额
@@ -103,16 +109,21 @@ public class OrderTaskListener implements MessageListener {
             BeanUtils.copyProperties(recordVO,recordPO);
             recordPO.setConsumeAmount(tradeAmount);
             recordPO.setParticipateDate(placeOrderTime);
-            taskRecordService.addTaskRecord(recordPO);
+            recordPO.setSysCompanyId(sysCompanyId);
+            recordPO.setCreateDate(new  Date());
+            Long addRecordId = taskRecordService.addTaskRecord(recordPO);
 
+            recordPO.setMktTaskRecordId(addRecordId);
             //获取会员参与某一活动放总金额和总次数
              TotalStatisticsBO totalBO = taskRecordService.getTotalStatistics(recordVO);
-
-               //累计消费次数任务=4
+            log.info("--获取会员参与某一活动放总金额和总次数--"+JSON.toJSONString(totalBO));
+            taskService.sendCouponAndPoint(memberCode,obj);   //每次都发测试后删除
+            //累计消费次数任务=4
                 if (TaskTypeEnum.TASK_TYPE_CONSUME_TIMES.getCode()==taskType){
                     if(totalBO!=null && totalBO.getTotalTimes()!=null && totalBO.getTotalTimes().equals(consumeTimes)){
                             recordPO.setPoints(points);
                             recordPO.setRewarded(Integer.valueOf(1));
+                            recordPO.setModifiedDate(new Date());
                             taskRecordService.updateTaskRecord(recordPO);
                             taskService.sendCouponAndPoint(memberCode,obj);
                     }
@@ -122,6 +133,7 @@ public class OrderTaskListener implements MessageListener {
                 if (TaskTypeEnum.TASK_TYPE_CONSUME_AMOUNT.getCode()==taskType){
                     if(totalBO!=null && totalBO.getTotalConsume()!=null && totalBO.getTotalConsume().compareTo(consumeAmount) == 1){
                             recordPO.setRewarded(Integer.valueOf(1));
+                            recordPO.setModifiedDate(new Date());
                             taskRecordService.updateTaskRecord(recordPO);
                             taskService.sendCouponAndPoint(memberCode,obj);
 
