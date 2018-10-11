@@ -173,7 +173,7 @@ public class TaskProfileServiceImpl implements TaskProfileService {
             po.setCheckStatus(CheckStatusEnum.CHECK_STATUS_APPROVED.getCode());
         }
         //待执行=1  2.执行中
-        po.setTaskStatus(po.getCheckStatus());
+       // po.setTaskStatus(po.getCheckStatus());
         return po;
     }
 
