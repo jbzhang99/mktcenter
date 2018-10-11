@@ -136,7 +136,7 @@ public class ActivityBirthdayServiceImpl implements ActivityBirthdayService {
         //工具类生成活动编码
         String activityCode = CodeUtil.getActivityCode();
         activityVO.setActivityCode(activityCode);
-        //增加活动类型是消费活动
+        //增加活动类型是生日活动
         activityVO.setActivityType(ActivityTypeEnum.ACTIVITY_TYPE_BIRTHDAY.getCode());
         //增加品牌id
         log.info("获取的品牌id是="+stageUser.getBrandId());
@@ -156,7 +156,6 @@ public class ActivityBirthdayServiceImpl implements ActivityBirthdayService {
             ActivityVO vo = new ActivityVO();
             vo.setMbrLevelCode(bo.getActivityVO().getMbrLevelCode());
             vo.setLongTerm(bo.getActivityVO().getLongTerm());
-            vo.setSysBrandId(activityVO.getSysBrandId());
             vo.setSysBrandId(activityVO.getSysBrandId());
             vo.setActivityType(ActivityTypeEnum.ACTIVITY_TYPE_BIRTHDAY.getCode());
             List<ActivityVO> registerList = mktActivityBirthdayPOMapper.getActivityBirthdayList(vo);

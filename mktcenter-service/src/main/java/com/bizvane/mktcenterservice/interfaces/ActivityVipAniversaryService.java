@@ -55,7 +55,7 @@ public interface ActivityVipAniversaryService {
     /**
      * 纪念日活动定时发送奖励
      * @param activityBirthday
-     * @param memberInfoModelList
+     * @param memberInfo
      */
-    public void AniversaryReward(ActivityVO activityBirthday, List<MemberInfoModel> memberInfoModelList);
+    public void AniversaryReward(ActivityVO activityBirthday, MemberInfoModel memberInfo);
 }

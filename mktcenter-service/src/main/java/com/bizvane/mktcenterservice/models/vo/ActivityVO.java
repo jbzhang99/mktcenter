@@ -206,6 +206,16 @@ public class ActivityVO extends MktActivityPO {
     private List<SysStorePo> sysStorePos;
     //商品实体类
     private List<SysDimSkuPo> sysDimSkuPos;
+    @io.swagger.annotations.ApiModelProperty(value = "入会满多少月",name = "registerMonths", required = false,example = "")
+    private Integer registerMonths;
+
+    public Integer getRegisterMonths() {
+        return registerMonths;
+    }
+
+    public void setRegisterMonths(Integer registerMonths) {
+        this.registerMonths = registerMonths;
+    }
 
     public List<SysDimSkuPo> getSysDimSkuPos() {
         return sysDimSkuPos;

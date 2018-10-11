@@ -2,6 +2,7 @@ package com.bizvane.mktcenterserviceimpl.service.jobhandler;
 
 import com.bizvane.mktcenterservice.models.vo.ActivityVO;
 import com.bizvane.mktcenterserviceimpl.common.award.MemberMessageSend;
+import com.bizvane.mktcenterserviceimpl.common.enums.ActivityStatusEnum;
 import com.bizvane.mktcenterserviceimpl.common.enums.ActivityTypeEnum;
 import com.bizvane.mktcenterserviceimpl.mappers.MktActivityVipAniversaryPOMapper;
 import com.xxl.job.core.biz.model.ReturnT;
@@ -30,6 +31,7 @@ public class EveryDayAniversaryJobHandler extends IJobHandler {
         //查询所有的执行中的纪念日活动
         ActivityVO vo = new ActivityVO();
         vo.setActivityType(ActivityTypeEnum.ACTIVITY_TYPE_ANNIVERSARY.getCode());
+        vo.setActivityStatus(ActivityStatusEnum.ACTIVITY_STATUS_EXECUTING.getCode());
         List<ActivityVO> activityAniversaryList = mktActivityVipAniversaryPOMapper.getActivityAniversaryList(vo);
         memberMessage.sendAniversaryCoupon(activityAniversaryList);
         returnT.setCode(0);
