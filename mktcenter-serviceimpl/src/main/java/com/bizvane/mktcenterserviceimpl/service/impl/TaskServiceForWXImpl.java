@@ -89,6 +89,8 @@ public class TaskServiceForWXImpl implements TaskServiceForWX {
      */
     @Override
     public ResponseData<AppletFunctionBO>  getURLDetail(TaskForWXVO vo){
+        log.info("获取链接详情getURLDetail--入参--"+JSON.toJSONString(vo));
+
         ResponseData<AppletFunctionBO> responseData = new ResponseData<>();
         AppletFunctionBO urlBO = new AppletFunctionBO();
         MktTaskSharePOExample mktTaskSharePOExample = new MktTaskSharePOExample();
@@ -108,6 +110,7 @@ public class TaskServiceForWXImpl implements TaskServiceForWX {
                 urlBO.setType(2);
             }
         }
+        log.info("获取链接详情getURLDetail--出参--"+JSON.toJSONString(urlBO));
         responseData.setData(urlBO);
         return responseData;
     }
