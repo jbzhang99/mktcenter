@@ -19,7 +19,7 @@ spring:
   swagger:
     show: true
   application:
-    name: mktcenter-test
+    name: mktcenter-dev
   #  security:
   #    enabled: false
   #    user:
