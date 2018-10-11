@@ -117,7 +117,7 @@ public class OrderTaskListener implements MessageListener {
             //获取会员参与某一活动放总金额和总次数
              TotalStatisticsBO totalBO = taskRecordService.getTotalStatistics(recordVO);
             log.info("--获取会员参与某一活动放总金额和总次数--"+JSON.toJSONString(totalBO));
-            taskService.sendCouponAndPoint(memberCode,obj);   //每次都发测试后删除
+           // taskService.sendCouponAndPoint(memberCode,obj);   //每次都发测试后删除
             //累计消费次数任务=4
                 if (TaskTypeEnum.TASK_TYPE_CONSUME_TIMES.getCode()==taskType){
                     if(totalBO!=null && totalBO.getTotalTimes()!=null && totalBO.getTotalTimes().equals(consumeTimes)){
