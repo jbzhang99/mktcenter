@@ -476,16 +476,19 @@ public class TaskServiceImpl implements TaskService {
             Long mktTaskId = mktTaskPOWithBLOBs.getMktTaskId();
             mktmessagePOList.stream().forEach(
                     message -> {
+                        log.info("循环中的信息发送---"+JSON.toJSONString(message));
                         Boolean exceptWechat = message.getExceptWechat();
                         String msgType = message.getMsgType();
                         String msgContent = message.getMsgContent();
                         //1=模板消息   所有的会员
                         if (TaskConstants.FIRST.equals(msgType)) {
                          //立即发送
+                         log.info("完善资料 模板消息---"+sysBrandId+"--"+taskType+"--"+msgContent+"--"+exceptWechat);
                          this.sendMemberMessage(sysBrandId,taskType,msgContent,exceptWechat);
                         }
                         //2=短信     所有粉丝
                         if (TaskConstants.SECOND.equals(msgType)){
+                            log.info("完善资料 模板消息---"+mktTaskId+"--"+taskType+"--"+sysCompanyId+"--"+sysBrandId+"--"+msgContent+"--"+exceptWechat);
                            this.sendBachMSM(mktTaskId,taskType,sysCompanyId,sysBrandId,msgContent,exceptWechat);
                         }
 

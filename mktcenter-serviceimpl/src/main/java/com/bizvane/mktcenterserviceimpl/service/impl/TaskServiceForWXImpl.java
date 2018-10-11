@@ -48,8 +48,11 @@ public class TaskServiceForWXImpl implements TaskServiceForWX {
     @Override
     //获取该会员已完成和未完成任务的任务
     public ResponseData<PageInfo<TaskWXBO>> getCompleteTask(TaskForWXVO vo) {
+        log.info("获取会员的任务列表getCompleteTask--入参--"+JSON.toJSONString(vo));
+
         ResponseData<PageInfo<TaskWXBO>> responseData = new ResponseData(new PageInfo<TaskWXBO>(new ArrayList<TaskWXBO>()));
         ResponseData<Long> resultData = wxAppletApiService.getServiceStoreId(vo.getMemberCode());
+        log.info("获取会员的任务列表storeId--出参--"+JSON.toJSONString(resultData));
         Long storeId = resultData.getData();
         vo.setStoreIdStyleOne(new StringBuilder().append(storeId).append(",%").toString());
         vo.setStoreIdStyleTwo(new StringBuilder().append("%,").append(storeId).append(",%").toString());
@@ -66,6 +69,7 @@ public class TaskServiceForWXImpl implements TaskServiceForWX {
         }catch (Exception e){
             e.printStackTrace();
         }finally {
+            log.info("获取会员的任务列表最终数据--出参--"+JSON.toJSONString(responseData));
             return responseData;
         }
     }
