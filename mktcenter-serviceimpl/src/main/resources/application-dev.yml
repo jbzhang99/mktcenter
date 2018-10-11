@@ -166,7 +166,3 @@ activity:
 
 tenant:
   isEnabledTenantInterceptor: false
-
-  spring.zipkin.base-url-url =  = http://192.168.2.119:9411
-  spring.sleuth.sampler.percentage = e = 1
-  spring.sleuth.scheduled.enabled = false
