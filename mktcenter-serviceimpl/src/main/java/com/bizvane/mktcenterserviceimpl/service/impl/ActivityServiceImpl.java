@@ -346,6 +346,8 @@ public class ActivityServiceImpl implements ActivityService {
             if (mktMessagePO.getMsgType().equals("2")){
                 SysSmsConfigVO sysSmsConfigVO = new SysSmsConfigVO();
                 sysSmsConfigVO.setPhone(memberInfo.getPhone());
+                sysSmsConfigVO.setMsgContent(mktMessagePO.getMsgContent());
+                sysSmsConfigVO.setSysBrandId(memberInfo.getBrandId());
                 awardBO.setSysSmsConfigVO(sysSmsConfigVO);
                 awardBO.setMktType(MktSmartTypeEnum.SMART_TYPE_SMS.getCode());
                 //发送短信消息
@@ -373,6 +375,7 @@ public class ActivityServiceImpl implements ActivityService {
     public void sendShort(MktMessagePO mktMessagePO, AwardBO awardBO, SysSmsConfigVO sysSmsConfigVO, MemberInfoModel memberInfo) {
         sysSmsConfigVO.setPhone(memberInfo.getPhone());
         sysSmsConfigVO.setMsgContent(mktMessagePO.getMsgContent());
+        sysSmsConfigVO.setSysBrandId(memberInfo.getBrandId());
         awardBO.setSysSmsConfigVO(sysSmsConfigVO);
         awardBO.setMktType(MktSmartTypeEnum.SMART_TYPE_SMS.getCode());
         award.execute(awardBO);
@@ -430,6 +433,8 @@ public class ActivityServiceImpl implements ActivityService {
             if (mktMessagePO.getMsgType().equals("2")){
                 SysSmsConfigVO sysSmsConfigVO = new SysSmsConfigVO();
                 sysSmsConfigVO.setPhone(memberInfo.getPhone());
+                sysSmsConfigVO.setSysBrandId(memberInfo.getBrandId());
+                sysSmsConfigVO.setMsgContent(mktMessagePO.getMsgContent());
                 awardBO.setSysSmsConfigVO(sysSmsConfigVO);
                 awardBO.setMktType(MktSmartTypeEnum.SMART_TYPE_SMS.getCode());
                 //发送短信消息
