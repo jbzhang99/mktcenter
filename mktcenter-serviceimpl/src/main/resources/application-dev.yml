@@ -17,7 +17,7 @@ spring:
   swagger:
     show: true
   application:
-    name: mktcenter-dev
+    name: mktcenter-test
   #  security:
   #    enabled: false
   #    user:
@@ -60,10 +60,10 @@ spring:
     date-format: yyyy-MM-dd HH:mm:ss
     time-zone: GMT+8
   zipkin:
-    base-url-url: http://192.168.2.15:9411
+    baseUrl: http://192.168.2.15:9411
   sleuth:
     sampler:
-      probability: 1
+      probability: 1.0
     scheduled:
       enabled: false
 eureka:
