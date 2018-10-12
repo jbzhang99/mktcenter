@@ -8,7 +8,7 @@
             <level>debug</level>
         </filter>
         <encoder>
-            <pattern>%d{HH:mm:ss.SSS} %contextName [%thread] %-5level %logger{36} - %msg%n
+            <pattern>%d{HH:mm:ss.SSS} %contextName [%thread] [%X{X-B3-TraceId},%X{X-B3-SpanId}] %-5level %logger{36} - %msg%n
             </pattern>
         </encoder>
     </appender>
@@ -24,11 +24,47 @@
         </rollingPolicy>
 
         <encoder>
-            <pattern>%date %level [%thread] %logger{36} [%file : %line] %msg%n
+            <pattern>%date %level [%thread] [%X{X-B3-TraceId},%X{X-B3-SpanId}] %logger{36} [%file : %line] %msg%n
             </pattern>
         </encoder>
     </appender>
 
+    <appender name="logstash-test"
+              class="net.logstash.logback.appender.LogstashTcpSocketAppender">
+        <destination>192.168.1.45:9300</destination>
+        <queueSize>1048576</queueSize>
+        <!-- encoder必须配置,有多种可选 -->
+        <encoder charset="UTF-8" class="net.logstash.logback.encoder.LogstashEncoder">
+            <customFields>{"appname":"${Application_Name}"}</customFields>
+        </encoder>
+        <connectionStrategy>
+            <roundRobin>
+                <connectionTTL>5 minutes</connectionTTL>
+            </roundRobin>
+        </connectionStrategy>
+    </appender>
+
+    <appender name="logstash-uat"
+              class="net.logstash.logback.appender.LogstashTcpSocketAppender">
+        <destination>192.168.2.22:9300</destination>
+        <queueSize>1048576</queueSize>
+        <!-- encoder必须配置,有多种可选 -->
+        <encoder charset="UTF-8" class="net.logstash.logback.encoder.LogstashEncoder">
+            <customFields>{"appname":"${Application_Name}"}</customFields>
+        </encoder>
+        <connectionStrategy>
+            <roundRobin>
+                <connectionTTL>5 minutes</connectionTTL>
+            </roundRobin>
+        </connectionStrategy>
+    </appender>
+
+    <springProfile name="log-test">
+        <root level="info"><appender-ref ref="logstash-test" /></root>
+    </springProfile>
+    <springProfile name="log-uat">
+        <root level="info"><appender-ref ref="logstash-uat" /></root>
+    </springProfile>
     <root level="info">
         <appender-ref ref="console" />
         <appender-ref ref="file" />

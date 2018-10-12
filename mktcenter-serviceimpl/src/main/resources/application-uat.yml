@@ -14,8 +14,6 @@ spring:
         max-idle: 8
         max-wait: 2000ms
         min-idle: 0
-#  profiles:
-#    active: basecontroller,commonutilslocal,log
   swagger:
     show: true
   application:
