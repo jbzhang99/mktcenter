@@ -33,9 +33,8 @@ public class ActivitySmartRpcController {
 
     @RequestMapping("getSmartActivityGroupById")
     @io.swagger.annotations.ApiModelProperty(value = "mktActivitySmartId",name = "通过id获取智能营销分组", required = false,example = "")
-    public ResponseData<MktActivitySmartGroupPO> getSmartActivityGroupById(@RequestParam("mktActivitySmartGroupId") Long mktActivitySmartGroupId,HttpServletRequest request){
-        SysAccountPO stageUser = TokenUtils.getStageUser(request);
-        return activitySmartService.getSmartActivityGroupById(mktActivitySmartGroupId,stageUser);
+    public ResponseData<MktActivitySmartGroupPO> getSmartActivityGroupById(@RequestParam("mktActivitySmartGroupId") Long mktActivitySmartGroupId){
+        return activitySmartService.getSmartActivityGroupById(mktActivitySmartGroupId,new SysAccountPO());
     }
 
     @RequestMapping("getSmartActivityGroupList")
