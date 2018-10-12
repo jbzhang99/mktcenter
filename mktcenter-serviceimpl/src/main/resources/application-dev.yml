@@ -14,12 +14,10 @@ spring:
         max-idle: 8
         max-wait: 2000ms
         min-idle: 0
-  profiles:
-    active: basecontroller,commonutilslocal,log
   swagger:
     show: true
   application:
-    name: mktcenter-test
+    name: mktcenter-dev
   #  security:
   #    enabled: false
   #    user:
@@ -65,7 +63,7 @@ spring:
     base-url-url: http://192.168.2.15:9411
   sleuth:
     sampler:
-      percentage: 1
+      probability: 1
     scheduled:
       enabled: false
 eureka:
