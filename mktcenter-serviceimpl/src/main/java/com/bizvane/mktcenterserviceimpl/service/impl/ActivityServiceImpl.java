@@ -227,9 +227,10 @@ public class ActivityServiceImpl implements ActivityService {
                     // 设置精确到小数点后2位
                     numberFormat.setMaximumFractionDigits(2);
                     String result = numberFormat.format((float) couponFindCouponCountResponseVO.getCouponUsedSum() / (float) couponFindCouponCountResponseVO.getCouponSum() * 100);
-                    if(!StringUtils.isEmpty(result)){
+                    if (null!=couponFindCouponCountResponseVO.getCouponUsedSum() && null!=couponFindCouponCountResponseVO.getCouponSum()){
                         activityAnalysisCount.setCouponUsedSumPercentage(result + "%");
                     }
+
 
                 }
 
