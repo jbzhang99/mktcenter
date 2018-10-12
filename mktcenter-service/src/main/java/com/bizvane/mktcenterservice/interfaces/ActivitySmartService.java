@@ -45,7 +45,7 @@ public interface ActivitySmartService {
      * @param mktActivitySmartId
      * @return
      */
-    public ResponseData<MktActivitySmartGroupPO> getSmartActivityGroupById(Long mktActivitySmartId);
+    public ResponseData<MktActivitySmartGroupPO> getSmartActivityGroupById(Long mktActivitySmartId,SysAccountPO stageUser);
 
     /**
      * 查询某个智能营销活动详情
