@@ -249,7 +249,7 @@ public class TaskInviteServiceImpl implements TaskInviteService {
                 filter(obj->{
                     Boolean isStoreLimit = obj.getStoreLimit();
                     String  StoreLimitList=obj.getStoreLimitList();
-                    return isStoreLimit||(serviceStoreId!=null)||(StringUtils.isNotBlank(StoreLimitList) && obj.getStoreLimitList().contains(String.valueOf(serviceStoreId)));}).
+                    return !isStoreLimit||(serviceStoreId!=null)||(StringUtils.isNotBlank(StoreLimitList) && obj.getStoreLimitList().contains(String.valueOf(serviceStoreId)));}).
                 forEach(obj->{
                     Integer taskType = obj.getTaskType();
                     Long mktTaskId = obj.getMktTaskId();
@@ -267,11 +267,13 @@ public class TaskInviteServiceImpl implements TaskInviteService {
                         MktTaskRecordPO recordPO = new MktTaskRecordPO();
                         BeanUtils.copyProperties(recordVO,recordPO);
                         recordPO.setParticipateDate(openCardTime);
-                        taskRecordService.addTaskRecord(recordPO);
+                        recordPO.setSysCompanyId(companyId);
+                        Long recordId = taskRecordService.addTaskRecord(recordPO);
                         //获取会员参与某一活动放总金额和总次数
                         TotalStatisticsBO totalBO = taskRecordService.getTotalStatistics(recordVO);
                         if (totalBO!=null && totalBO.getTotalTimes()!=null &&  totalBO.getTotalTimes().equals(inviteNum)){
                             recordPO.setRewarded(1);
+                            recordPO.setMktTaskRecordId(recordId);
                             taskRecordService.updateTaskRecord(recordPO);
                             taskService.sendCouponAndPoint(memberCode,obj);
                         }

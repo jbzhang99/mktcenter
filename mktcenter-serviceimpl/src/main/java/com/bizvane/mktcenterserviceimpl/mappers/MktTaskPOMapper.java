@@ -140,7 +140,7 @@ public interface MktTaskPOMapper {
 	 * @param placeOrderTime
 	 * @return
 	 */
-	public List<TaskAwardBO> getTaskShareAwardList(@Param("sysCompanyId") Long sysCompanyId, @Param("sysBrandId") Long sysBrandId,@Param("placeOrderTime")String placeOrderTime);
+	public List<TaskAwardBO> getTaskShareAwardList(@Param("sysCompanyId") Long sysCompanyId, @Param("sysBrandId") Long sysBrandId,@Param("shareDate")String shareDate);
 
 	/**
 	 * 获取会员已完成和未完成任务列表
