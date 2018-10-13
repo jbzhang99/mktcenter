@@ -359,6 +359,7 @@ public class ActivityServiceImpl implements ActivityService {
     @Override
     @Async("asyncServiceExecutor")
     public void sendPoints(ActivitySmartVO vo, AwardBO awardBO, MemberInfoModel memberInfo) {
+        log.info("智能营销开始发送积分积分积分了啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊");
         IntegralChangeRequestModel integralChangeRequestModel =new IntegralChangeRequestModel();
         integralChangeRequestModel.setSysCompanyId(vo.getSysCompanyId());
         integralChangeRequestModel.setBrandId(vo.getSysBrandId());
@@ -405,6 +406,8 @@ public class ActivityServiceImpl implements ActivityService {
                 sendCouponSimpleRequestVO.setCompanyId(vo.getSysCompanyId());
                 awardBO.setSendCouponSimpleRequestVO(sendCouponSimpleRequestVO);
                 awardBO.setMktType(MktSmartTypeEnum.SMART_TYPE_COUPON.getCode());
+                log.info("调用高级搜索的参数列表=================="+ JSON.toJSONString(sendCouponSimpleRequestVO));
+                log.info("智能营销开始发券发券发券发券了+++++++++++++++++++++=========================");
                 award.execute(awardBO);
             }
         }

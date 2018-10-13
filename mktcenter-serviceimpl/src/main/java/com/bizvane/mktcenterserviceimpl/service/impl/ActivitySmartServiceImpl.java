@@ -647,6 +647,7 @@ public class ActivitySmartServiceImpl implements ActivitySmartService {
             membersInfoSearchVo.setPageNumber(1);
             membersInfoSearchVo.setPageSize(1000);
             membersInfoSearchVo.setBrandId(stageUser.getBrandId());
+            log.info("调用高级搜索的参数列表=================="+ JSON.toJSONString(membersInfoSearchVo));
             memberMessageSend.sendMemberCoupon(vo, membersInfoSearchVo);
         }
         responseData.setMessage(ResponseConstants.SUCCESS_MSG);
@@ -749,6 +750,8 @@ public class ActivitySmartServiceImpl implements ActivitySmartService {
             membersInfoSearchVo.setPageNumber(1);
             membersInfoSearchVo.setPageSize(1000);
             membersInfoSearchVo.setBrandId(stageUser.getBrandId());
+            log.info("智能营销调用高级搜索的参数列表+++++++==================");
+            log.info("调用高级搜索的参数列表=================="+ JSON.toJSONString(membersInfoSearchVo));
             memberMessageSend.sendMemberPoints(vo, activityCode, membersInfoSearchVo);
 
         }
