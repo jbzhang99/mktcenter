@@ -14,12 +14,10 @@ spring:
         max-idle: 8
         max-wait: 2000ms
         min-idle: 0
-  profiles:
-    active: basecontroller,commonutilslocal,log
   swagger:
     show: true
   application:
-    name: mktcenter-dev
+    name: mktcenter-test
   #  security:
   #    enabled: false
   #    user:
@@ -61,6 +59,13 @@ spring:
   jackson:
     date-format: yyyy-MM-dd HH:mm:ss
     time-zone: GMT+8
+  zipkin:
+    baseUrl: http://192.168.2.15:9411
+  sleuth:
+    sampler:
+      probability: 1.0
+    scheduled:
+      enabled: false
 eureka:
   instance:
     metadata-map:

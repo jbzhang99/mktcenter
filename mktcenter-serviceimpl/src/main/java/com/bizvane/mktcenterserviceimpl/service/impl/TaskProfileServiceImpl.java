@@ -173,7 +173,7 @@ public class TaskProfileServiceImpl implements TaskProfileService {
             po.setCheckStatus(CheckStatusEnum.CHECK_STATUS_APPROVED.getCode());
         }
         //待执行=1  2.执行中
-        po.setTaskStatus(po.getCheckStatus());
+       // po.setTaskStatus(po.getCheckStatus());
         return po;
     }
 
@@ -294,8 +294,9 @@ public class TaskProfileServiceImpl implements TaskProfileService {
                     filter(obj->{
                         Boolean isStoreLimit = obj.getStoreLimit();
                         String  StoreLimitList=obj.getStoreLimitList();
-                        return isStoreLimit || (serviceStoreId!=null && StringUtils.isNotBlank(StoreLimitList) &&  obj.getStoreLimitList().contains(String.valueOf(serviceStoreId)));}).
+                        return !isStoreLimit || (serviceStoreId!=null) || (StringUtils.isNotBlank(StoreLimitList) &&  obj.getStoreLimitList().contains(String.valueOf(serviceStoreId)));}).
                     forEach(obj->{
+                        log.info("完善资料任务--每个---"+ JSON.toJSONString(obj));
                         MktTaskRecordVO recordVO = new MktTaskRecordVO();
                         recordVO.setSysBrandId(brandId);
                         recordVO.setTaskType(obj.getTaskType());
@@ -310,6 +311,7 @@ public class TaskProfileServiceImpl implements TaskProfileService {
                             BeanUtils.copyProperties(recordVO,recordPO);
                             recordPO.setParticipateDate(profileDate);
                             recordPO.setRewarded(Integer.valueOf(1));
+                            recordPO.setSysCompanyId(companyId);
                             taskRecordService.addTaskRecord(recordPO);
                             taskService.sendCouponAndPoint(memberCode,obj);
                         }

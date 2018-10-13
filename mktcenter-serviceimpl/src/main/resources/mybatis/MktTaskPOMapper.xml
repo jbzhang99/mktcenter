@@ -849,6 +849,9 @@
     tta.remark,
     tti.mkt_task_id,
     tti.invite_num,
+    tti.is_store_limit,
+    tti.store_limit_type,
+    tti.store_limit_list,
     tmc.mkt_coupon_id,
     tmc.coupon_definition_id,
     tmc.coupon_name
@@ -864,7 +867,7 @@
     AND  tta.task_status=2
     AND tta.task_type =3
     <if test="sysCompanyId != null and sysCompanyId!= '' ">
-      AND  sys_company_id=#{sysCompanyId}
+      AND  tta.sys_company_id=#{sysCompanyId}
     </if>
     <if test="sysBrandId != null and sysBrandId!= '' ">
       AND sys_brand_id=#{sysBrandId}
@@ -894,6 +897,9 @@
     tta.remark,
     ttp.mkt_task_profile_id,
     ttp.property_code,
+    ttp.is_store_limit,
+    ttp.store_limit_type,
+    ttp.store_limit_list,
     tmc.mkt_coupon_id,
     tmc.coupon_definition_id,
     tmc.coupon_name
@@ -941,6 +947,9 @@
     tts.mkt_task_share_id,
     tts.share_times,
     tts.share_url_type,
+    tts.is_store_limit,
+    tts.store_limit_type,
+    tts.store_limit_list,
     tmc.mkt_coupon_id,
     tmc.coupon_definition_id,
     tmc.coupon_name

@@ -285,13 +285,13 @@ public class TaskShareServiceImpl implements TaskShareService {
         Long serviceStoreId = memeberDetail.getServiceStoreId();
         //符合条件的任务列表
         List<TaskAwardBO> taskAwardList = taskService.getTaskShareAwardList(companyId, brandId, shareDate);
-        log.info("邀请任务的奖励--任务列表--"+ JSON.toJSONString(memeberDetail));
+        log.info("邀请任务的奖励--任务列表--"+ JSON.toJSONString(taskAwardList));
         if (CollectionUtils.isNotEmpty(taskAwardList)){
             taskAwardList.stream().
                 filter(obj->{
                      Boolean isStoreLimit = obj.getStoreLimit();
                      String  StoreLimitList=obj.getStoreLimitList();
-                     return isStoreLimit || (serviceStoreId!=null && StringUtils.isNotBlank(StoreLimitList) &&  obj.getStoreLimitList().contains(String.valueOf(serviceStoreId)));}).
+                     return !isStoreLimit || (serviceStoreId!=null) ||(StringUtils.isNotBlank(StoreLimitList) &&  obj.getStoreLimitList().contains(String.valueOf(serviceStoreId)));}).
                 forEach(obj->{
                     Integer taskType = obj.getTaskType();
                     Long mktTaskId = obj.getMktTaskId();
@@ -311,13 +311,15 @@ public class TaskShareServiceImpl implements TaskShareService {
                         MktTaskRecordPO recordPO = new MktTaskRecordPO();
                         BeanUtils.copyProperties(recordVO,recordPO);
                         recordPO.setParticipateDate(shareDate);
-                        taskRecordService.addTaskRecord(recordPO);
+                        recordPO.setSysCompanyId(companyId);
+                        Long recordId = taskRecordService.addTaskRecord(recordPO);
 
                         //获取会员参与某一任务总次数
                         TotalStatisticsBO totalBO = taskRecordService.getTotalStatistics(recordVO);
                         log.info("邀请任务的奖励--参与某一任务总次数--"+JSON.toJSONString(totalBO));
                         if (totalBO!=null && totalBO.getTotalTimes()!=null &&  totalBO.getTotalTimes().equals(shareTimes)){
                             recordPO.setRewarded(Integer.valueOf(1));
+                            recordPO.setSysCompanyId(recordId);
                             taskRecordService.updateTaskRecord(recordPO);
                             taskService.sendCouponAndPoint(memberCode,obj);
                         }

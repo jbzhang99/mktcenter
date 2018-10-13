@@ -328,6 +328,7 @@ public class MemberMessageSend {
 //                            sysSmsConfigVO.setPhone(memberInfoModel.getPhone());
                         sysSmsConfigVO.setPhone(memberInfoModel.getPhone());
                         sysSmsConfigVO.setMsgContent(mktMessagePO.getMsgContent());
+                        sysSmsConfigVO.setSysBrandId(memberInfoModel.getBrandId());
                         awardBO.setMktType(MktSmartTypeEnum.SMART_TYPE_SMS.getCode());
                         awardBO.setSysSmsConfigVO(sysSmsConfigVO);
                         //get sms config

@@ -657,7 +657,7 @@ public class ActivityVipAniversaryServiceImpl implements ActivityVipAniversarySe
     private Boolean dateMonth(ActivityVO activityBirthday,MemberInfoModel memberInfo) {
         boolean  falg;
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        Date birthday = memberInfo.getBirthday();
+        Date birthday = memberInfo.getOpenCardTime();
         Calendar ca = Calendar.getInstance();
         ca.add(Calendar.DATE, activityBirthday.getDaysAhead());// num为增加的天数，可以改变的
         birthday = ca.getTime();
@@ -666,7 +666,7 @@ public class ActivityVipAniversaryServiceImpl implements ActivityVipAniversarySe
 
         //获取生日月份和增加天数后的月份
         SimpleDateFormat sdf = new SimpleDateFormat("MM");
-        String s1 = sdf.format(memberInfo.getBirthday());
+        String s1 = sdf.format(memberInfo.getOpenCardTime());
         String s2 = sdf.format(birthday);
         System.out.println("日期1：" + s1);
         System.out.println("日期1：" + s2);

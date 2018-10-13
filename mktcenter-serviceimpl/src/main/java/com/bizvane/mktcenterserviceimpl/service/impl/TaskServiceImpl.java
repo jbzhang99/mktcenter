@@ -8,6 +8,9 @@ import com.bizvane.centerstageservice.models.po.SysStorePo;
 import com.bizvane.messagefacade.interfaces.TemplateMessageServiceFeign;
 import com.bizvane.messagefacade.models.vo.*;
 import com.bizvane.mktcenterservice.models.vo.PageForm;
+import com.bizvane.utils.jobutils.JobBusinessTypeEnum;
+import com.bizvane.utils.jobutils.JobClient;
+import com.bizvane.utils.jobutils.XxlJobInfo;
 import com.bizvane.utils.tokens.SysAccountPO;
 import com.bizvane.centerstageservice.models.po.SysCheckConfigPo;
 import com.bizvane.centerstageservice.models.po.SysCheckPo;
@@ -62,8 +65,6 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
 import java.text.ParseException;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -114,6 +115,8 @@ public class TaskServiceImpl implements TaskService {
     private StoreServiceRpc  storeServiceRpc;
     @Autowired
     private TemplateMessageServiceFeign templateMessageServiceFeign;
+    @Autowired
+    private JobClient jobClient;
     /**
      * 通过id查询店铺列表
      */
@@ -279,8 +282,15 @@ public class TaskServiceImpl implements TaskService {
      * @return
      */
     @Override
-    public List<TaskAwardBO> getTaskInviteAwardList(Long sysCompanyId, Long sysBrandId,Date placeOrderTime){
-        return mktTaskPOMapper.getTaskInviteAwardList(sysCompanyId, sysBrandId,placeOrderTime);
+    public List<TaskAwardBO> getTaskInviteAwardList(Long sysCompanyId, Long sysBrandId,Date openCardTime){
+        String openCardStr="";
+        if (openCardTime==null){
+            openCardStr = TimeUtils.formatter.format(new Date());
+        }else{
+            openCardStr = TimeUtils.formatter.format(openCardTime);
+        }
+        log.info("邀请开卡的任务列表查询参数getTaskInviteAwardList--"+sysCompanyId+"--"+sysBrandId+"--"+openCardStr);
+        return mktTaskPOMapper.getTaskInviteAwardList(sysCompanyId, sysBrandId,openCardStr);
     }
 
     /**
@@ -298,7 +308,14 @@ public class TaskServiceImpl implements TaskService {
      */
     @Override
     public List<TaskAwardBO> getTaskShareAwardList(Long sysCompanyId, Long sysBrandId,Date shareDate){
-        return mktTaskPOMapper.getTaskShareAwardList(sysCompanyId, sysBrandId,shareDate);
+        String shareDateStr="";
+        if (shareDate==null){
+            shareDateStr = TimeUtils.formatter.format(new Date());
+        }else{
+            shareDateStr = TimeUtils.formatter.format(shareDate);
+        }
+        log.info("分享任务的奖励getTaskShareAwardList--"+sysCompanyId+"--"+sysBrandId+"--"+shareDateStr);
+        return mktTaskPOMapper.getTaskShareAwardList(sysCompanyId, sysBrandId,shareDateStr);
     }
 
     /**
@@ -427,7 +444,7 @@ public class TaskServiceImpl implements TaskService {
                         //发送时间
                         Date sendTime = message.getSendTime();
                         //1=模板消息   所有的会员
-                        if (TaskConstants.FIRST.equals(msgType)) {
+                        if (TaskConstants.FIRST_STR.equals(msgType)) {
                             //立即发送
                             if (sendImmediately){
                                 this.sendMemberMessage(sysBrandId,taskType,msgContent,exceptWechat);
@@ -437,7 +454,7 @@ public class TaskServiceImpl implements TaskService {
                         }
 
                         //2=短信     所有粉丝
-                        if (TaskConstants.SECOND.equals(msgType)){
+                        if (TaskConstants.SECOND_STR.equals(msgType)){
                             if (sendImmediately){
                                 this.sendBachMSM(mktTaskId,taskType,sysCompanyId,sysBrandId,msgContent,exceptWechat);
                             }else if (!sendImmediately && sendTime!=null){
@@ -452,22 +469,26 @@ public class TaskServiceImpl implements TaskService {
     //完善资料任务发送短信和消息任务的逻辑判断
     @Async
     public  void doSendprofilMsg(MktTaskPOWithBLOBs mktTaskPOWithBLOBs, List<MktMessagePO> mktmessagePOList, SysAccountPO stageUser, Integer taskType) {
+        log.info("---完善资料任务doSendprofilMsg---"+JSON.toJSONString(mktTaskPOWithBLOBs)+"--"+JSON.toJSONString(mktmessagePOList));
         if (CollectionUtils.isNotEmpty(mktmessagePOList)) {
             Long sysCompanyId = mktTaskPOWithBLOBs.getSysCompanyId();
             Long sysBrandId = mktTaskPOWithBLOBs.getSysBrandId();
             Long mktTaskId = mktTaskPOWithBLOBs.getMktTaskId();
             mktmessagePOList.stream().forEach(
                     message -> {
+                        log.info("循环中的信息发送---"+JSON.toJSONString(message));
                         Boolean exceptWechat = message.getExceptWechat();
                         String msgType = message.getMsgType();
                         String msgContent = message.getMsgContent();
                         //1=模板消息   所有的会员
-                        if (TaskConstants.FIRST.equals(msgType)) {
-                         //立即发送
-                         this.sendMemberMessage(sysBrandId,taskType,msgContent,exceptWechat);
+                        if (TaskConstants.FIRST_STR.equals(msgType)) {
+                            //立即发送
+                            log.info("完善资料 模板消息---"+sysBrandId+"--"+taskType+"--"+msgContent+"--"+exceptWechat);
+                            this.sendMemberMessage(sysBrandId,taskType,msgContent,exceptWechat);
                         }
                         //2=短信     所有粉丝
-                        if (TaskConstants.SECOND.equals(msgType)){
+                        if (TaskConstants.SECOND_STR.equals(msgType)){
+                            log.info("完善资料 短信---"+mktTaskId+"--"+taskType+"--"+sysCompanyId+"--"+sysBrandId+"--"+msgContent+"--"+exceptWechat);
                            this.sendBachMSM(mktTaskId,taskType,sysCompanyId,sysBrandId,msgContent,exceptWechat);
                         }
 
@@ -654,6 +675,12 @@ public class TaskServiceImpl implements TaskService {
     @Override
     public ResponseData<Integer> stopTaskById(Long mktTaskId, SysAccountPO sysAccountPO) {
         ResponseData responseData = new ResponseData();
+        //审核通过 执行中的任务不能被禁用
+        MktTaskPOWithBLOBs po = mktTaskPOMapper.selectByPrimaryKey(mktTaskId);
+        if (po!=null && TaskConstants.THREE.equals(po.getCheckStatus()) && TaskConstants.SECOND.equals(po.getTaskStatus())){
+            responseData.setData(ResponseConstants.DATA_NOT_STOP);
+        }
+
         MktTaskPOWithBLOBs mktTaskPOWithBLOBs = new MktTaskPOWithBLOBs();
         mktTaskPOWithBLOBs.setMktTaskId(mktTaskId);
         mktTaskPOWithBLOBs.setTaskStatus(TaskStatusEnum.TASK_STATUS_DISABLED.getCode());
@@ -661,6 +688,12 @@ public class TaskServiceImpl implements TaskService {
         mktTaskPOWithBLOBs.setModifiedUserId(sysAccountPO.getSysAccountId());
         mktTaskPOWithBLOBs.setModifiedUserName(sysAccountPO.getName());
         mktTaskPOMapper.updateByPrimaryKeySelective(mktTaskPOWithBLOBs);
+
+        //禁用后要清除所有的job
+        XxlJobInfo xxlJobInfo = new XxlJobInfo();
+        xxlJobInfo.setBizCode(po.getTaskCode());
+        jobClient.removeByBiz(xxlJobInfo);
+
         responseData.setData(ResponseConstants.SUCCESS_MSG);
         return responseData;
     }

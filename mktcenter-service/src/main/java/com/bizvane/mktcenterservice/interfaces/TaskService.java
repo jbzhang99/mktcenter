@@ -75,7 +75,7 @@ public interface TaskService {
      * @return
      *
      */
-    public List<TaskAwardBO> getTaskInviteAwardList(Long sysCompanyId, Long sysBrandId,Date date);
+    public List<TaskAwardBO> getTaskInviteAwardList(Long sysCompanyId, Long sysBrandId,Date openCardTime);
 
     /**
      * 完善资料任务的奖励查询
