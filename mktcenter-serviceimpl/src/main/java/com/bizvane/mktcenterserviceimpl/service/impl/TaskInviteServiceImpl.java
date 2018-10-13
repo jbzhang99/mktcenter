@@ -230,6 +230,7 @@ public class TaskInviteServiceImpl implements TaskInviteService {
     @Override
     public  void   doAwardInvite(InviteSuccessVO vo){
         log.info("执行邀请任务的奖励--参数--"+ JSON.toJSONString(vo));
+        Long mktTaskIdParam = vo.getMktTaskId();
         //被邀请人信息
         Date openCardTime = vo.getOpenCardTime();
         //邀请人的信息
@@ -242,7 +243,7 @@ public class TaskInviteServiceImpl implements TaskInviteService {
         String cardNo = memeberDetail.getCardNo();
         Long serviceStoreId = memeberDetail.getServiceStoreId();
         //符合条件的任务列表
-        List<TaskAwardBO> taskInviteAwardList = taskService.getTaskInviteAwardList(companyId, brandId,openCardTime);
+        List<TaskAwardBO> taskInviteAwardList = taskService.getTaskInviteAwardList(mktTaskIdParam,companyId, brandId,openCardTime);
         log.info("符合条件的邀请注册任务列表--"+ JSON.toJSONString(taskInviteAwardList));
         if (CollectionUtils.isNotEmpty(taskInviteAwardList)){
             taskInviteAwardList.stream().

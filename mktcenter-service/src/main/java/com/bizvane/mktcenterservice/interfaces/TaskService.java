@@ -75,19 +75,19 @@ public interface TaskService {
      * @return
      *
      */
-    public List<TaskAwardBO> getTaskInviteAwardList(Long sysCompanyId, Long sysBrandId,Date openCardTime);
+    public List<TaskAwardBO> getTaskInviteAwardList( Long mktTaskIdParam,Long sysCompanyId, Long sysBrandId,Date openCardTime);
 
     /**
      * 完善资料任务的奖励查询
      * @return
      */
-    public List<TaskAwardBO> getTaskProfileAwardList(Long sysCompanyId, Long sysBrandId,Date profileDate);
+    public List<TaskAwardBO> getTaskProfileAwardList(Long mktTaskIdParam,Long sysCompanyId, Long sysBrandId,Date profileDate);
 
     /**
      * 分享任务的奖励查询
      * @return
      */
-    public List<TaskAwardBO> getTaskShareAwardList(Long sysCompanyId, Long sysBrandId,Date shareDate);
+    public List<TaskAwardBO> getTaskShareAwardList(Long mktTaskIdparam ,Long sysCompanyId, Long sysBrandId,Date shareDate);
     /**
      * 查询订单详情
      * @param mktTaskId

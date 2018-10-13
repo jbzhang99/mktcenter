@@ -282,15 +282,15 @@ public class TaskServiceImpl implements TaskService {
      * @return
      */
     @Override
-    public List<TaskAwardBO> getTaskInviteAwardList(Long sysCompanyId, Long sysBrandId,Date openCardTime){
+    public List<TaskAwardBO> getTaskInviteAwardList( Long mktTaskIdParam,Long sysCompanyId, Long sysBrandId,Date openCardTime){
         String openCardStr="";
         if (openCardTime==null){
             openCardStr = TimeUtils.formatter.format(new Date());
         }else{
             openCardStr = TimeUtils.formatter.format(openCardTime);
         }
-        log.info("邀请开卡的任务列表查询参数getTaskInviteAwardList--"+sysCompanyId+"--"+sysBrandId+"--"+openCardStr);
-        return mktTaskPOMapper.getTaskInviteAwardList(sysCompanyId, sysBrandId,openCardStr);
+        log.info("邀请开卡的任务列表查询参数getTaskInviteAwardList-参数-"+mktTaskIdParam+"--"+sysCompanyId+"--"+sysBrandId+"--"+openCardStr);
+        return mktTaskPOMapper.getTaskInviteAwardList(mktTaskIdParam,sysCompanyId, sysBrandId,openCardStr);
     }
 
     /**
@@ -298,8 +298,8 @@ public class TaskServiceImpl implements TaskService {
      * @return
      */
     @Override
-    public List<TaskAwardBO> getTaskProfileAwardList(Long sysCompanyId, Long sysBrandId,Date profileDate){
-        return mktTaskPOMapper.getTaskProfileAwardList(sysCompanyId, sysBrandId,profileDate);
+    public List<TaskAwardBO> getTaskProfileAwardList( Long mktTaskIdParam,Long sysCompanyId, Long sysBrandId,Date profileDate){
+        return mktTaskPOMapper.getTaskProfileAwardList(mktTaskIdParam,sysCompanyId,sysBrandId,profileDate);
     }
 
     /**
@@ -307,15 +307,15 @@ public class TaskServiceImpl implements TaskService {
      * @return
      */
     @Override
-    public List<TaskAwardBO> getTaskShareAwardList(Long sysCompanyId, Long sysBrandId,Date shareDate){
+    public List<TaskAwardBO> getTaskShareAwardList(Long mktTaskIdparam,Long sysCompanyId, Long sysBrandId,Date shareDate){
         String shareDateStr="";
         if (shareDate==null){
             shareDateStr = TimeUtils.formatter.format(new Date());
         }else{
             shareDateStr = TimeUtils.formatter.format(shareDate);
         }
-        log.info("分享任务的奖励getTaskShareAwardList--"+sysCompanyId+"--"+sysBrandId+"--"+shareDateStr);
-        return mktTaskPOMapper.getTaskShareAwardList(sysCompanyId, sysBrandId,shareDateStr);
+        log.info("分享任务的奖励getTaskShareAwardList-参数-"+mktTaskIdparam+"--"+sysCompanyId+"--"+sysBrandId+"--"+shareDateStr);
+        return mktTaskPOMapper.getTaskShareAwardList(mktTaskIdparam,sysCompanyId, sysBrandId,shareDateStr);
     }
 
     /**

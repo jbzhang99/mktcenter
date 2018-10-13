@@ -275,6 +275,7 @@ public class TaskProfileServiceImpl implements TaskProfileService {
     @Override
     public  void   doAwardProfile(ProfileSuccessVO vo){
         log.info("执行完善资料任务--参数---"+ JSON.toJSONString(vo));
+        Long mktTaskIdParam = vo.getMktTaskId();
         //完善资料时间
         Date profileDate = vo.getProfileDate();
         //完善者的code
@@ -287,7 +288,7 @@ public class TaskProfileServiceImpl implements TaskProfileService {
         String cardNo = memeberDetail.getCardNo();
         Long serviceStoreId = memeberDetail.getServiceStoreId();
         //符合条件的任务列表
-        List<TaskAwardBO> taskAwardList = taskService.getTaskProfileAwardList(companyId, brandId, null);
+        List<TaskAwardBO> taskAwardList = taskService.getTaskProfileAwardList(mktTaskIdParam,companyId, brandId, null);
         log.info("完善资料任务--任务列表---"+ JSON.toJSONString(taskAwardList));
         if (CollectionUtils.isNotEmpty(taskAwardList)){
             taskAwardList.stream().
