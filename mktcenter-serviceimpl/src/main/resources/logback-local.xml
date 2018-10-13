@@ -2,6 +2,8 @@
 <configuration debug="true">
     <contextName>logback</contextName>
     <property name="log.path" value="log/logback.log" />
+    <springProperty scope="context" name="Application_Name" source="spring.application.name"/>
+    <include resource="org/springframework/boot/logging/logback/base.xml"/>
 
     <appender name="console" class="ch.qos.logback.core.ConsoleAppender">
         <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
@@ -31,7 +33,7 @@
 
     <appender name="logstash-test"
               class="net.logstash.logback.appender.LogstashTcpSocketAppender">
-        <destination>192.168.1.45:9300</destination>
+        <destination>192.168.1.51:4560</destination>
         <queueSize>1048576</queueSize>
         <!-- encoder必须配置,有多种可选 -->
         <encoder charset="UTF-8" class="net.logstash.logback.encoder.LogstashEncoder">
@@ -68,6 +70,7 @@
     <root level="info">
         <appender-ref ref="console" />
         <appender-ref ref="file" />
+        <appender-ref ref="logstash-test" />
     </root>
     <logger name="org.springframework.scheduling"  level="error" />
     <Logger name="org.apache.catalina.util.LifecycleBase" level="error" />
