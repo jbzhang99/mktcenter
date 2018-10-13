@@ -647,6 +647,7 @@ public class ActivitySmartServiceImpl implements ActivitySmartService {
             membersInfoSearchVo.setPageNumber(1);
             membersInfoSearchVo.setPageSize(1000);
             membersInfoSearchVo.setBrandId(stageUser.getBrandId());
+            membersInfoSearchVo.setSysCompanyId(stageUser.getSysCompanyId());
             log.info("调用高级搜索的参数列表=================="+ JSON.toJSONString(membersInfoSearchVo));
             memberMessageSend.sendMemberCoupon(vo, membersInfoSearchVo);
         }
@@ -750,6 +751,7 @@ public class ActivitySmartServiceImpl implements ActivitySmartService {
             membersInfoSearchVo.setPageNumber(1);
             membersInfoSearchVo.setPageSize(1000);
             membersInfoSearchVo.setBrandId(stageUser.getBrandId());
+            membersInfoSearchVo.setSysCompanyId(stageUser.getSysCompanyId());
             log.info("智能营销调用高级搜索的参数列表+++++++==================");
             log.info("调用高级搜索的参数列表=================="+ JSON.toJSONString(membersInfoSearchVo));
             memberMessageSend.sendMemberPoints(vo, activityCode, membersInfoSearchVo);
@@ -867,6 +869,7 @@ public class ActivitySmartServiceImpl implements ActivitySmartService {
             membersInfoSearchVo.setPageNumber(1);
             membersInfoSearchVo.setPageSize(1000);
             membersInfoSearchVo.setBrandId(stageUser.getBrandId());
+            membersInfoSearchVo.setSysCompanyId(stageUser.getSysCompanyId());
             memberMessageSend.sendShortMessage(mktMessagePO, membersInfoSearchVo);
         }
 
@@ -984,6 +987,7 @@ public class ActivitySmartServiceImpl implements ActivitySmartService {
             membersInfoSearchVo.setPageNumber(1);
             membersInfoSearchVo.setPageSize(1000);
             membersInfoSearchVo.setBrandId(stageUser.getBrandId());
+            membersInfoSearchVo.setSysCompanyId(stageUser.getSysCompanyId());
             memberMessageSend.sendWxMessage(mktMessagePO, membersInfoSearchVo);
         }
 
