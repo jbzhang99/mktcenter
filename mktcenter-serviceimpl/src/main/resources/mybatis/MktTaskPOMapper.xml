@@ -866,6 +866,9 @@
     AND  tta.check_status=3
     AND  tta.task_status=2
     AND tta.task_type =3
+    <if test="mktTaskId != null and mktTaskId!= '' ">
+      AND  tta.mkt_task_id=#{mktTaskId}
+    </if>
     <if test="sysCompanyId != null and sysCompanyId!= '' ">
       AND  tta.sys_company_id=#{sysCompanyId}
     </if>
@@ -914,6 +917,9 @@
     AND  tta.check_status=3
     AND  tta.task_status=2
     AND tta.task_type =1
+    <if test="mktTaskId != null and mktTaskId!= '' ">
+      AND  tta.mkt_task_id=#{mktTaskId}
+    </if>
     <if test="sysCompanyId != null and sysCompanyId!= '' ">
       AND  tta.sys_company_id=#{sysCompanyId}
     </if>
@@ -964,6 +970,9 @@
     AND  tta.check_status=3
     AND  tta.task_status=2
     AND tta.task_type =2
+    <if test="mktTaskId != null and mktTaskId!= '' ">
+      AND  tta.mkt_task_id=#{mktTaskId}
+    </if>
     <if test="sysCompanyId != null and sysCompanyId!= '' ">
       AND  tta.sys_company_id=#{sysCompanyId}
     </if>
