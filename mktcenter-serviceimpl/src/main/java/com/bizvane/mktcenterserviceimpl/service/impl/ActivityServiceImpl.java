@@ -228,6 +228,7 @@ public class ActivityServiceImpl implements ActivityService {
                     numberFormat.setMaximumFractionDigits(2);
                     String result = numberFormat.format((float) couponFindCouponCountResponseVO.getCouponUsedSum() / (float) couponFindCouponCountResponseVO.getCouponSum() * 100);
                     if (null!=couponFindCouponCountResponseVO.getCouponUsedSum() && null!=couponFindCouponCountResponseVO.getCouponSum()){
+                        log.info("百分比百分比百分比百分比+========"+result);
                         activityAnalysisCount.setCouponUsedSumPercentage(result + "%");
                     }
 

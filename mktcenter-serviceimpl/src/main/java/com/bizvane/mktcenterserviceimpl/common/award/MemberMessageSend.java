@@ -229,7 +229,7 @@ public class MemberMessageSend {
             if (!activityAniversary.getMbrLevelCode().equals(0)){
                 memberInfoModel.setLevelId(Long.parseLong(activityAniversary.getMbrLevelCode()));
             }
-            memberInfoModel.setBirthdayLine(activityAniversary.getDaysAhead());
+            memberInfoModel.setOpenCardTimeLine(activityAniversary.getDaysAhead());
             memberInfoModel.setMemberScope(activityAniversary.getMemberType().toString());
             memberInfoModel.setPageNumber(1);
             memberInfoModel.setPageSize(10000);
