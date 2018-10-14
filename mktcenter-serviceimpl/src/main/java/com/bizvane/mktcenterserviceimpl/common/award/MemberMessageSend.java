@@ -104,7 +104,6 @@ public class MemberMessageSend {
      */
     public void sendMemberPoints(ActivitySmartVO vo, String activityCode, MembersInfoSearchVo membersInfoSearchVo) {
         ResponseData<com.bizvane.utils.responseinfo.PageInfo<MemberInfoVo>> memberInfoVoPage = membersAdvancedSearchApiService.search(membersInfoSearchVo);
-        AwardBO awardBO = new AwardBO();
         IntegralRecordModel integralRecordModel = new IntegralRecordModel();
         log.info("已经查询到相应的会员一共多少页++++++++++="+memberInfoVoPage.getData().getPages());
         for (int a =1;a<=memberInfoVoPage.getData().getPages();a++) {
@@ -112,6 +111,7 @@ public class MemberMessageSend {
             ResponseData<com.bizvane.utils.responseinfo.PageInfo<MemberInfoVo>> memberInfoVoPages = membersAdvancedSearchApiService.search(membersInfoSearchVo);
             List<MemberInfoVo> memberInfoModelList = memberInfoVoPages.getData().getList();
             for (MemberInfoModel memberInfo:memberInfoModelList) {
+                AwardBO awardBO = new AwardBO();
                 log.info("调用高级搜索的参数列表查询完毕==================一共++++"+memberInfoModelList.size());
                 activityService.sendPoints(vo, awardBO, memberInfo);
             }
@@ -125,13 +125,13 @@ public class MemberMessageSend {
     @Async("asyncServiceExecutor")
     public  void sendShortMessage(MktMessagePO mktMessagePO, MembersInfoSearchVo membersInfoSearchVo) {
         ResponseData<com.bizvane.utils.responseinfo.PageInfo<MemberInfoVo>> memberInfoVoPage = membersAdvancedSearchApiService.search(membersInfoSearchVo);
-        AwardBO awardBO = new AwardBO();
         SysSmsConfigVO sysSmsConfigVO = new SysSmsConfigVO();
         for (int a =1;a<=memberInfoVoPage.getData().getPages();a++) {
             membersInfoSearchVo.setPageNumber(a);
             ResponseData<com.bizvane.utils.responseinfo.PageInfo<MemberInfoVo>> memberInfoVoPages = membersAdvancedSearchApiService.search(membersInfoSearchVo);
             List<MemberInfoVo> memberInfoModelList = memberInfoVoPages.getData().getList();
             for (MemberInfoModel memberInfo:memberInfoModelList) {
+                AwardBO awardBO = new AwardBO();
                 activityService.sendShort(mktMessagePO, awardBO, sysSmsConfigVO, memberInfo);
             }
         }
@@ -145,13 +145,13 @@ public class MemberMessageSend {
     @Async("asyncServiceExecutor")
     public  void sendWxMessage(MktMessagePO mktMessagePO, MembersInfoSearchVo membersInfoSearchVo) {
         ResponseData<com.bizvane.utils.responseinfo.PageInfo<MemberInfoVo>> memberInfoVoPage = membersAdvancedSearchApiService.search(membersInfoSearchVo);
-        AwardBO awardBO = new AwardBO();
         MemberMessageVO memberMessageVO = new MemberMessageVO();
         for (int a =1;a<=memberInfoVoPage.getData().getPages();a++) {
             membersInfoSearchVo.setPageNumber(a);
             ResponseData<com.bizvane.utils.responseinfo.PageInfo<MemberInfoVo>> memberInfoVoPages = membersAdvancedSearchApiService.search(membersInfoSearchVo);
             List<MemberInfoVo> memberInfoModelList = memberInfoVoPages.getData().getList();
             for (MemberInfoModel memberInfo:memberInfoModelList) {
+                AwardBO awardBO = new AwardBO();
                 activityService.sendWx(mktMessagePO, awardBO, memberMessageVO, memberInfo);
             }
         }
@@ -166,13 +166,13 @@ public class MemberMessageSend {
     public void sendMemberCoupon(ActivitySmartVO vo, MembersInfoSearchVo membersInfoSearchVo) {
         log.info("马上开始发券了激动吗嘛嘛嘛嘛嘛嘛嘛嘛嘛啊啊啊啊啊啊啊");
         ResponseData<com.bizvane.utils.responseinfo.PageInfo<MemberInfoVo>> memberInfoVoPage = membersAdvancedSearchApiService.search(membersInfoSearchVo);
-        AwardBO awardBO = new AwardBO();
         SendCouponSimpleRequestVO sendCouponSimpleRequestVO = new SendCouponSimpleRequestVO();
         for (int a = 1; a <= memberInfoVoPage.getData().getPages(); a++) {
             membersInfoSearchVo.setPageNumber(a);
             ResponseData<com.bizvane.utils.responseinfo.PageInfo<MemberInfoVo>> memberInfoVoPages = membersAdvancedSearchApiService.search(membersInfoSearchVo);
             List<MemberInfoVo> memberInfoModelList = memberInfoVoPages.getData().getList();
             for (MemberInfoModel memberInfo : memberInfoModelList) {
+                AwardBO awardBO = new AwardBO();
                 activityService.sendCoupon(vo, awardBO, sendCouponSimpleRequestVO, memberInfo);
             }
         }
