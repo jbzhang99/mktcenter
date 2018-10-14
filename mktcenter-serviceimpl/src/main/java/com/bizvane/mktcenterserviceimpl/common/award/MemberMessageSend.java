@@ -113,7 +113,7 @@ public class MemberMessageSend {
             ResponseData<com.bizvane.utils.responseinfo.PageInfo<MemberInfoVo>> memberInfoVoPages = membersAdvancedSearchApiService.search(membersInfoSearchVo);
             List<MemberInfoVo> memberInfoModelList = memberInfoVoPages.getData().getList();
             for (MemberInfoModel memberInfo:memberInfoModelList) {
-                log.info("调用高级搜索的参数列表查询完毕==================");
+                log.info("调用高级搜索的参数列表查询完毕==================一共++++"+memberInfoModelList.size());
                 activityService.sendPoints(vo, awardBO, memberInfo);
             }
         }
