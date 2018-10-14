@@ -103,4 +103,8 @@ public class TaskController {
     public ResponseData<com.github.pagehelper.PageInfo<MktTaskPOWithBLOBs>> getTaskByTaskType(TaskVO vo, PageForm pageForm){
        return taskService.getTaskByTaskType(vo,pageForm);
     }
+    @RequestMapping("sendBachMSM")
+    public void sendBachMSM(Long mktTaskId,Integer taskType,Long sysCompanyId,Long sysBrandId,String msgContent,Boolean exceptWechat){
+      taskService.sendBachMSM(mktTaskId,taskType,sysCompanyId,sysBrandId,msgContent,exceptWechat);
+    }
 }
