@@ -370,6 +370,7 @@ public class ActivityServiceImpl implements ActivityService {
         integralChangeRequestModel.setBusinessType(com.bizvane.members.facade.enums.BusinessTypeEnum.ACTIVITY_TYPE_SMART.getCode());
         awardBO.setIntegralRecordModel(integralChangeRequestModel);
         awardBO.setMktType(MktSmartTypeEnum.SMART_TYPE_INTEGRAL.getCode());
+        log.info("手机号码是+====="+memberInfo.getPhone()+"开始赠送积分了~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
         award.execute(awardBO);
     }
     @Override
