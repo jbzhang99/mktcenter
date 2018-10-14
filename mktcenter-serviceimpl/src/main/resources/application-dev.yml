@@ -17,7 +17,7 @@ spring:
   swagger:
     show: true
   application:
-    name: mktcenter-dev
+    name: mktcenter-test
   #  security:
   #    enabled: false
   #    user:
@@ -127,7 +127,7 @@ feign:
       name: members-test
       path: members.api
     message:
-      name: message-server-test
+      name: message-test
       path: message.api
     wechat:
       name: wechat-test
@@ -167,3 +167,6 @@ bitdata:
 
 tenant:
   isEnabledTenantInterceptor: false
+ribbon:
+  ConnectTimeout: 60000
+  ReadTimeout: 60000

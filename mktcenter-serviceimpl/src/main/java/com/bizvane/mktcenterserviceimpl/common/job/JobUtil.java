@@ -160,9 +160,10 @@ public class JobUtil {
         String msgContent = messagePO.getMsgContent();
         Date sendTime = messagePO.getSendTime();
         Long sysBrandId = po.getSysBrandId();
+        Long sysCompanyId = po.getSysCompanyId();
         Boolean exceptWechat = messagePO.getExceptWechat();
         StringBuilder builder = new StringBuilder();
-        String param = this.getMessageJobParam(sysBrandId,taskType, msgContent,exceptWechat);
+        String param = this.getMessageJobParam(sysCompanyId,sysBrandId,taskType, msgContent,exceptWechat);
         //清除一下job
         this.doRemoveJobe(bizType, taskCode, param);
         log.info("添加消息的job--addMessageXXTaskJob--"+sendTime+"--"+taskName+"--"+param+"--"+name+"--"+JobHandlerConstants.MESSAGE_SEND_XX+"--"+bizType+"--"+taskCode);
@@ -228,8 +229,10 @@ public class JobUtil {
         builder.append(exceptWechat);
         return builder.toString();
     }
-    private String getMessageJobParam(long sysBrandId,Integer taskType, String msgContent,Boolean exceptWechat){
+    private String getMessageJobParam(Long sysCompanyId,Long sysBrandId,Integer taskType, String msgContent,Boolean exceptWechat){
         StringBuilder builder = new StringBuilder();
+        builder.append(sysCompanyId);
+        builder.append("&");
         builder.append(sysBrandId);
         builder.append("&");
         builder.append(taskType);

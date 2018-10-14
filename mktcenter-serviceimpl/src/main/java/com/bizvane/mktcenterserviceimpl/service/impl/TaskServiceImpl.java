@@ -447,7 +447,7 @@ public class TaskServiceImpl implements TaskService {
                         if (TaskConstants.FIRST_STR.equals(msgType)) {
                             //立即发送
                             if (sendImmediately){
-                                this.sendMemberMessage(sysBrandId,taskType,msgContent,exceptWechat);
+                                this.sendMemberMessage(sysCompanyId,sysBrandId,taskType,msgContent,exceptWechat);
                             }else if (!sendImmediately && sendTime!=null){
                                 jobUtil.addMessageXXTaskJob(stageUser, mktTaskPOWithBLOBs,message);
                             }
@@ -484,7 +484,7 @@ public class TaskServiceImpl implements TaskService {
                         if (TaskConstants.FIRST_STR.equals(msgType)) {
                             //立即发送
                             log.info("完善资料 模板消息---"+sysBrandId+"--"+taskType+"--"+msgContent+"--"+exceptWechat);
-                            this.sendMemberMessage(sysBrandId,taskType,msgContent,exceptWechat);
+                            this.sendMemberMessage(sysCompanyId,sysBrandId,taskType,msgContent,exceptWechat);
                         }
                         //2=短信     所有粉丝
                         if (TaskConstants.SECOND_STR.equals(msgType)){
@@ -500,14 +500,14 @@ public class TaskServiceImpl implements TaskService {
     //给会员发送微信消息
     @Async
     @Override
-    public  void sendMemberMessage(Long sysBrandId,Integer taskType,String msgContent,Boolean exceptWechat) {
+    public  void sendMemberMessage(Long sysCompanyId,Long sysBrandId,Integer taskType,String msgContent,Boolean exceptWechat) {
         log.info("发送模板消息--参数--"+sysBrandId+"--"+taskType+"--"+msgContent+"--"+exceptWechat);
-        com.bizvane.utils.responseinfo.PageInfo<MemberInfoModel> memeberspage = this.getCompanyMemebers(sysBrandId,taskType,exceptWechat,1,10000);
+        com.bizvane.utils.responseinfo.PageInfo<MemberInfoModel> memeberspage = this.getCompanyMemebers(sysCompanyId,sysBrandId,taskType,exceptWechat,1,10000);
         List<MemberInfoModel> maemberlist = memeberspage.getList();
         int pages = memeberspage.getPages();
         if (CollectionUtils.isNotEmpty(maemberlist)){
             for (int i=1;i<pages;i++){
-                com.bizvane.utils.responseinfo.PageInfo<MemberInfoModel> pagesdata= this.getCompanyMemebers(sysBrandId,taskType,exceptWechat,i, 10000);
+                com.bizvane.utils.responseinfo.PageInfo<MemberInfoModel> pagesdata= this.getCompanyMemebers(sysCompanyId,sysBrandId,taskType,exceptWechat,i, 10000);
                 List<MemberInfoModel> list = pagesdata.getList();
                 log.info("发送消息获取的会员列表--"+JSON.toJSONString(list));
                 AwardBO memberBO = new AwardBO();
@@ -540,7 +540,7 @@ public class TaskServiceImpl implements TaskService {
         SysSmsConfigPo smsConfigPo = sysSmsConfigServiceRpc.getCenterControlChannel(smsConfigVo);
         Integer batchNum = smsConfigPo.getBatchNum();
        log.info("发送短信之获取短信通道的相关信息--出参"+JSON.toJSONString(smsConfigVo)+"--出参--"+JSON.toJSONString(smsConfigPo));
-        com.bizvane.utils.responseinfo.PageInfo<MemberInfoModel> memeberspage = this.getCompanyMemebers(sysBrandId,taskType,exceptWechat,1,batchNum);
+        com.bizvane.utils.responseinfo.PageInfo<MemberInfoModel> memeberspage = this.getCompanyMemebers(sysCompanyId,sysBrandId,taskType,exceptWechat,1,batchNum);
         List<MemberInfoModel> memberlist = memeberspage.getList();
         int pages = memeberspage.getPages();
         log.info("sendBachMSM获取页数---"+pages+"--"+JSON.toJSONString(memberlist));
@@ -565,12 +565,12 @@ public class TaskServiceImpl implements TaskService {
         //临时测试结束
         if (CollectionUtils.isNotEmpty(memberlist)){
             for (int i=1;i<pages;i++){
-                com.bizvane.utils.responseinfo.PageInfo<MemberInfoModel> onepagememebers = this.getCompanyMemebers(sysBrandId,taskType,exceptWechat,i,batchNum);
+                com.bizvane.utils.responseinfo.PageInfo<MemberInfoModel> onepagememebers = this.getCompanyMemebers(sysCompanyId,sysBrandId,taskType,exceptWechat,i,batchNum);
                 List<MemberInfoModel> onelist = onepagememebers.getList();
                 String pnones = onelist.stream().filter(fan -> StringUtils.isNotBlank(fan.getPhone())).map(fan -> fan.getPhone()).collect(Collectors.joining(","));
                 messageVO.setPhones(pnones);
                 fanBO.setSysSmsConfigVO(messageVO);
-                log.info("发送短信时的入参--"+JSON.toJSONString(fanBO));
+                log.info("发送短信时的入参--"+i+"--页数--"+JSON.toJSONString(fanBO));
                 award.execute(fanBO);
             }
 
@@ -931,9 +931,10 @@ public class TaskServiceImpl implements TaskService {
      * 查询品牌下的所有会员,分页-已经审核
      */
     @Override
-    public com.bizvane.utils.responseinfo.PageInfo<MemberInfoModel> getCompanyMemebers(Long sysBrandId,Integer taskType,Boolean exceptWechat,Integer pageNumber,Integer pageSize) {
+    public com.bizvane.utils.responseinfo.PageInfo<MemberInfoModel> getCompanyMemebers(Long sysCompanyId,Long sysBrandId,Integer taskType,Boolean exceptWechat,Integer pageNumber,Integer pageSize) {
         log.info("getCompanyMemebers查询相应的会员--参数--"+sysBrandId+"--"+taskType+"--"+exceptWechat+"--"+pageNumber+"--"+pageSize);
         MemberInfoApiModel members = new MemberInfoApiModel();
+        members.setSysCompanyId(sysCompanyId);
         members.setBrandId(sysBrandId);
         members.setPageNumber(pageNumber);
         members.setPageSize(pageSize);
