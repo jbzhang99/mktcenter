@@ -644,7 +644,7 @@ public class ActivityOrderServiceImpl implements ActivityOrderService {
             if (!ExecuteParamCheckUtil.CheckserviceStore(vo,activityVO)){
                 continue;
             }
-
+            log.info("消费活动验证通过了通过了通过了通过了通过了通过了通过了通过了通过了通过了通过了通过了+++++++++++++++");
 
             //增加积分奖励新增接口
             if (null!=activityVO.getPoints()){
