@@ -372,6 +372,7 @@ public class ActivityServiceImpl implements ActivityService {
         awardBO.setMktType(MktSmartTypeEnum.SMART_TYPE_INTEGRAL.getCode());
         log.info("手机号码是+====="+memberInfo.getPhone()+"开始赠送积分了~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
         award.execute(awardBO);
+        log.info("手机号码是+====="+memberInfo.getPhone()+"送完积分了&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&");
     }
     @Override
     @Async("asyncServiceExecutor")

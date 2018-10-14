@@ -102,7 +102,6 @@ public class MemberMessageSend {
      * @param activityCode
      * @param membersInfoSearchVo
      */
-    @Async("asyncServiceExecutor")
     public void sendMemberPoints(ActivitySmartVO vo, String activityCode, MembersInfoSearchVo membersInfoSearchVo) {
         ResponseData<com.bizvane.utils.responseinfo.PageInfo<MemberInfoVo>> memberInfoVoPage = membersAdvancedSearchApiService.search(membersInfoSearchVo);
         AwardBO awardBO = new AwardBO();
