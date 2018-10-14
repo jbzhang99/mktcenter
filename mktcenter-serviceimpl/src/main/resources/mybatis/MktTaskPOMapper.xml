@@ -1130,8 +1130,8 @@
     tmt.task_type,
     tmt.start_time,
     tmt.end_time,
-    IF(count(tmtr.consume_amount)&gt;=tmto.consume_amount,'1/1','0/1') AS task_progress,
-    IF(count(tmtr.consume_amount)&gt;=tmto.consume_amount,1,0) AS rewarded,
+    IF(sum (tmtr.consume_amount)&gt;=tmto.consume_amount,'1/1','0/1') AS task_progress,
+    IF(sum(tmtr.consume_amount)&gt;=tmto.consume_amount,1,0) AS rewarded,
     IF(tmto.order_source <![CDATA[ <> ]]>1, 2,1) as sourceType
     FROM
     t_mkt_task  tmt
