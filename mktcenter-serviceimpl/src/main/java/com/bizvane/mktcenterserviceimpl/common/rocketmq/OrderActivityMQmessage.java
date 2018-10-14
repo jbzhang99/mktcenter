@@ -38,7 +38,7 @@ public class OrderActivityMQmessage implements MessageListener {
         OrderModel model = JSONObject.parseObject(modelStr, OrderModel.class);
         log.info("MQ消息队列获取参数是+======="+ JSON.toJSONString(model));
         OrderModelBo bo = new OrderModelBo();
-        bo.setMemberCode(Long.parseLong(model.getMemberCode()));
+        bo.setMemberCode(model.getMemberCode());
         bo.setBrandId(Math.toIntExact(model.getBrandId()));
         bo.setOrderFrom(model.getOrderFrom());
         bo.setServiceStoreId(model.getServiceStoreId());
