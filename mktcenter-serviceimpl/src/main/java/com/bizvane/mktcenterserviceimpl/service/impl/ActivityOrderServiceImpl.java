@@ -133,7 +133,6 @@ public class ActivityOrderServiceImpl implements ActivityOrderService {
      * @return
      */
     @Override
-    @Transactional
     public ResponseData<Integer> addActivityOrder(ActivityBO bo, SysAccountPO stageUser) {
         log.info("创建消费活动开始");
         //返回对象
@@ -383,7 +382,6 @@ public class ActivityOrderServiceImpl implements ActivityOrderService {
      * @return
      */
     @Override
-    @Transactional
     public ResponseData<Integer> updateActivityOrder(ActivityBO bo, SysAccountPO stageUser) {
         log.info("修改消费活动开始");
         //返回对象
@@ -548,7 +546,6 @@ public class ActivityOrderServiceImpl implements ActivityOrderService {
      * @return
      */
     @Override
-    @Transactional
     public ResponseData<Integer> checkActivityOrder(SysCheckPo po, SysAccountPO sysAccountPO) {
         log.info("审核消费活动开始");
         ResponseData responseData = new ResponseData();
@@ -604,7 +601,6 @@ public class ActivityOrderServiceImpl implements ActivityOrderService {
      * @return
      */
     @Override
-    @Transactional
     public ResponseData<Integer> executeOrder(OrderModelBo vo) {
         log.info("执行消费活动开始开始了开始了开始了开始了开始了开始了");
         //返回对象
