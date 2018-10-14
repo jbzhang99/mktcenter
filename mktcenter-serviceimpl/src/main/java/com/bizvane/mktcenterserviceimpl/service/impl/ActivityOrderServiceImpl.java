@@ -606,7 +606,7 @@ public class ActivityOrderServiceImpl implements ActivityOrderService {
     @Override
     @Transactional
     public ResponseData<Integer> executeOrder(OrderModelBo vo) {
-        log.info("执行消费活动开始");
+        log.info("执行消费活动开始开始了开始了开始了开始了开始了开始了");
         //返回对象
         log.info("执行消费活动+======="+ JSON.toJSONString(vo));
         ResponseData responseData = new ResponseData();
@@ -652,7 +652,7 @@ public class ActivityOrderServiceImpl implements ActivityOrderService {
 
             //增加积分奖励新增接口
             if (null!=activityVO.getPoints()){
-                log.info("新增消费活动积分奖励奖励");
+                log.info("新增消费活动积分奖励奖励+++++++++++++++");
                 AwardBO bo = new AwardBO();
                 IntegralChangeRequestModel integralChangeRequestModel =new IntegralChangeRequestModel();
                 integralChangeRequestModel.setSysCompanyId(activityVO.getSysCompanyId());
@@ -665,13 +665,13 @@ public class ActivityOrderServiceImpl implements ActivityOrderService {
                 integralChangeRequestModel.setChangeDate(new Date());
                 bo.setIntegralRecordModel(integralChangeRequestModel);
                 bo.setMktType(MktSmartTypeEnum.SMART_TYPE_INTEGRAL.getCode());
-                log.info("新增积分奖励="+activityVO.getPoints());
+                log.info("新增积分奖励========================"+activityVO.getPoints());
                 award.execute(bo);
             }
 
 
             // 增加卷奖励接口
-            log.info("新增消费活动券奖励券奖励");
+            log.info("新增消费活动券奖励券奖励奖励奖励奖励奖励奖励奖励奖励");
             MktCouponPOExample example = new  MktCouponPOExample();
             example.createCriteria().andBizIdEqualTo(activityVO.getMktActivityId()).andValidEqualTo(true);
             List<MktCouponPO> mktCouponPOs= mktCouponPOMapper.selectByExample(example);
