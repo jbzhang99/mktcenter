@@ -191,6 +191,7 @@ public class MemberMessageSend {
             //查询对应的会员
             MemberInfoApiModel memberInfoModel= new MemberInfoApiModel();
             memberInfoModel.setBrandId(activityBirthday.getSysBrandId());
+            memberInfoModel.setSysCompanyId(activityBirthday.getSysCompanyId());
             if (!activityBirthday.getMbrLevelCode().equals(0)){
                 memberInfoModel.setLevelId(Long.parseLong(activityBirthday.getMbrLevelCode()));
             }
