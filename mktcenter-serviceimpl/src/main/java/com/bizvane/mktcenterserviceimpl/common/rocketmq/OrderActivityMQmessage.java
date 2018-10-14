@@ -44,6 +44,7 @@ public class OrderActivityMQmessage implements MessageListener {
         bo.setServiceStoreId(model.getServiceStoreId());
         bo.setPayMoney(model.getPayMoney());
         //会员等级id
+        log.info("开始查询会员等级======="+ bo.toString());
         ResponseData<MemberCardLevelModel>  memberCardLevelModel =memberCardProgramApiService.queryMemberCardInfo(model.getMemberCode());
         bo.setLevelId(memberCardLevelModel.getData().getLevelId());
         log.info("查询会员等级完成+======="+ memberCardLevelModel.getData().getLevelId());
