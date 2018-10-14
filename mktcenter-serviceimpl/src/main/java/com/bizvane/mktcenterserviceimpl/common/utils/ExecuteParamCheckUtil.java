@@ -39,7 +39,7 @@ public class ExecuteParamCheckUtil {
      */
     public static Boolean CheckMbrLevelCode(Long levelId,String mbrLevelCode){
         boolean  falg;
-        if (mbrLevelCode.equals(levelId)){
+        if (mbrLevelCode.equals(levelId.toString())){
             falg = true;
         }else {
             falg=false;
