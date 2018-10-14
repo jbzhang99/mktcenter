@@ -11,6 +11,7 @@ import com.bizvane.members.facade.models.IntegralRecordModel;
 import com.bizvane.members.facade.service.api.IntegralChangeApiService;
 import com.bizvane.members.facade.service.api.IntegralRecordApiService;
 import com.bizvane.members.facade.service.card.request.IntegralChangeRequestModel;
+import com.bizvane.messagefacade.interfaces.SendBatchMessageFeign;
 import com.bizvane.messagefacade.interfaces.SendCommonMessageFeign;
 import com.bizvane.messagefacade.interfaces.TemplateMessageServiceFeign;
 import com.bizvane.messagefacade.models.vo.*;
@@ -51,6 +52,10 @@ public class AwardFactory {
 
     @Autowired
     private TemplateMessageServiceFeign templateMessageServiceFeign;
+
+    @Autowired
+    private SendBatchMessageFeign sendBatchMessageFeign;
+
     @Autowired
     private IntegralChangeApiService integralChangeApiService;
     /**
@@ -165,9 +170,12 @@ public class AwardFactory {
 
     //发送批量短信
     @Async("asyncServiceExecutor")
-    public ResponseData<String> sendBantchSms(AwardBO bo){
-        GenrealSendMessageVO vo = bo.getGenrealSendMessageVO();
-        return templateMessageServiceFeign.sendGenrealBatch(vo);
+    public ResponseData<Integer> sendBantchSms(AwardBO bo){
+        log.info("发送批量短信----sendBantchSms--参数--"+JSON.toJSONString(bo));
+        SysSmsConfigVO vo = bo.getSysSmsConfigVO();
+        ResponseData<Integer> responseData = sendBatchMessageFeign.sendSmgBatch(vo);
+        log.info("发送批量短信----sendBantchSms--出参--"+JSON.toJSONString(responseData));
+        return responseData;
     }
 
 }

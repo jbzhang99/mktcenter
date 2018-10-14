@@ -547,20 +547,29 @@ public class TaskServiceImpl implements TaskService {
         AwardBO fanBO = new AwardBO();
         //7=批量短信
         fanBO.setMktType(MktSmartTypeEnum.SMART_TYPE_MESSAGE_BATCH.getCode());
-        GenrealSendMessageVO messageVO = new GenrealSendMessageVO();
+        SysSmsConfigVO  messageVO = new SysSmsConfigVO();
         messageVO.setSysBrandId(sysBrandId);
-        messageVO.setSysCompanyId(sysCompanyId);
-        messageVO.setMessageBody(msgContent);
-        messageVO.setTaskId(mktTaskId);
-        messageVO.setTemplateType(String.valueOf(taskType));
-
+        messageVO.setSysCompanyId(String.valueOf(sysCompanyId));
+        messageVO.setMsgContent(msgContent);
+        messageVO.setBatchNum(batchNum);
+        messageVO.setMsgId(String.valueOf(mktTaskId));
+        messageVO.setChannelName(smsConfigPo.getChannelName());//通道名称
+        messageVO.setChannelAccount(smsConfigPo.getChannelAccount());//账号
+        messageVO.setChannelPassword(smsConfigPo.getChannelPassword());//密码
+        messageVO.setChannelService(smsConfigPo.getChannelService());//路径
+        //临时测试开始
+//        messageVO.setPhones("17521178360,17603273170,18516632918,17521070910,17327752131,18068682098,15853150670");
+//        fanBO.setSysSmsConfigVO(messageVO);
+//        log.info("发送短信时的入参--"+JSON.toJSONString(fanBO));
+//        award.execute(fanBO);
+        //临时测试结束
         if (CollectionUtils.isNotEmpty(memberlist)){
             for (int i=1;i<pages;i++){
                 com.bizvane.utils.responseinfo.PageInfo<MemberInfoModel> onepagememebers = this.getCompanyMemebers(sysBrandId,taskType,exceptWechat,i,batchNum);
                 List<MemberInfoModel> onelist = onepagememebers.getList();
                 String pnones = onelist.stream().filter(fan -> StringUtils.isNotBlank(fan.getPhone())).map(fan -> fan.getPhone()).collect(Collectors.joining(","));
-                messageVO.setPhoneStr(pnones);
-                fanBO.setGenrealSendMessageVO(messageVO);
+                messageVO.setPhones(pnones);
+                fanBO.setSysSmsConfigVO(messageVO);
                 log.info("发送短信时的入参--"+JSON.toJSONString(fanBO));
                 award.execute(fanBO);
             }
@@ -923,6 +932,7 @@ public class TaskServiceImpl implements TaskService {
      */
     @Override
     public com.bizvane.utils.responseinfo.PageInfo<MemberInfoModel> getCompanyMemebers(Long sysBrandId,Integer taskType,Boolean exceptWechat,Integer pageNumber,Integer pageSize) {
+        log.info("getCompanyMemebers查询相应的会员--参数--"+sysBrandId+"--"+taskType+"--"+exceptWechat+"--"+pageNumber+"--"+pageSize);
         MemberInfoApiModel members = new MemberInfoApiModel();
         members.setBrandId(sysBrandId);
         members.setPageNumber(pageNumber);
@@ -940,6 +950,7 @@ public class TaskServiceImpl implements TaskService {
         }
         ResponseData<com.bizvane.utils.responseinfo.PageInfo<MemberInfoModel>> memberInfo = memberInfoApiService.getMemberInfo(members);
         com.bizvane.utils.responseinfo.PageInfo<MemberInfoModel> data = memberInfo.getData();
+        log.info("会员数据------出参---"+JSON.toJSONString(data));
         return data;
 
     }
