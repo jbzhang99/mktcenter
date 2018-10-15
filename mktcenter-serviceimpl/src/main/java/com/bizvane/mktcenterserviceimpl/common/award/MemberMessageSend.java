@@ -227,6 +227,7 @@ public class MemberMessageSend {
             //根据品牌id 会员等级 会员范围  时间周期 查询会员信息 循环
             //查询对应的会员
             MemberInfoApiModel memberInfoModel= new MemberInfoApiModel();
+            memberInfoModel.setSysCompanyId(activityAniversary.getSysCompanyId());
             memberInfoModel.setBrandId(activityAniversary.getSysBrandId());
             if (!activityAniversary.getMbrLevelCode().equals(0)){
                 memberInfoModel.setLevelId(Long.parseLong(activityAniversary.getMbrLevelCode()));
