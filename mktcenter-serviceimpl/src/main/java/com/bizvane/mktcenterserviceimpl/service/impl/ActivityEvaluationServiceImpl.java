@@ -220,6 +220,7 @@ public class ActivityEvaluationServiceImpl implements ActivityEvaluationService 
     @Override
     @Transactional
     public ResponseData<Integer> executeActivityEvaluation(MemberInfoModel vo) {
+        log.info("执行评价送积分活动=++++++++++++++______________-----------------------333333");
         log.info("执行评价送积分活动=" + vo.getBrandId() + "=" + vo.getMemberCode());
         //返回对象
         ResponseData responseData = new ResponseData();
@@ -236,6 +237,7 @@ public class ActivityEvaluationServiceImpl implements ActivityEvaluationService 
         }
         for (ActivityVO activityVO : evaluationList) {
             //增加积分奖励新增接口
+            log.info("执行评价送积分777777777777777777");
             AwardBO bo = new AwardBO();
             IntegralChangeRequestModel integralChangeRequestModel = new IntegralChangeRequestModel();
             integralChangeRequestModel.setSysCompanyId(activityVO.getSysCompanyId());
