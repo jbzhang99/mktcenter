@@ -30,7 +30,8 @@ public class JobHandlerConstants {
     public static String endActivityAniversary = "endActivityAniversary";
     //每日执行的生日活动
     public  static String everyDayActivityBirthday = "everyDayActivityBirthday";
-
+    //入会纪念日
+    public  static String everyDayActivityAniversary ="everyDayActivityAniversary";
     public static String smartActivity = "smartActivity";
 
     public static String sendMessageActivity = "sendMessageActivity";
