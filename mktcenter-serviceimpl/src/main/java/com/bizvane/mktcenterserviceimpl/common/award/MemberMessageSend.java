@@ -192,7 +192,7 @@ public class MemberMessageSend {
             MemberInfoApiModel memberInfoModel= new MemberInfoApiModel();
             memberInfoModel.setBrandId(activityBirthday.getSysBrandId());
             memberInfoModel.setSysCompanyId(activityBirthday.getSysCompanyId());
-            memberInfoModel.setLevelId(Long.parseLong(activityBirthday.getMbrLevelCode()));
+            memberInfoModel.setLevelId(Long.valueOf(activityBirthday.getMbrLevelCode()));
             memberInfoModel.setBirthdayLine(activityBirthday.getDaysAhead());
             memberInfoModel.setMemberScope(activityBirthday.getMemberType().toString());
             memberInfoModel.setPageNumber(1);
@@ -227,7 +227,7 @@ public class MemberMessageSend {
             MemberInfoApiModel memberInfoModel= new MemberInfoApiModel();
             memberInfoModel.setSysCompanyId(activityAniversary.getSysCompanyId());
             memberInfoModel.setBrandId(activityAniversary.getSysBrandId());
-            memberInfoModel.setLevelId(Long.parseLong(activityAniversary.getMbrLevelCode()));
+            memberInfoModel.setLevelId(Long.valueOf(activityAniversary.getMbrLevelCode()));
             memberInfoModel.setOpenCardTimeLine(activityAniversary.getDaysAhead());
             memberInfoModel.setMemberScope(activityAniversary.getMemberType().toString());
             memberInfoModel.setPageNumber(1);
