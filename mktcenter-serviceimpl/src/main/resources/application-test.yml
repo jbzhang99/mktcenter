@@ -154,9 +154,9 @@ qiniu:
 
 activity:
   qrcodeurl: http://www.test.bizvane.com/qrcode?activityCode=
-  
+
 bitdata:
-  url: http://47.98.194.197:8765/api/open-data-analysis/  
+  url: http://47.98.194.197:8765/api/open-data-analysis/
 
 tenant:
   isEnabledTenantInterceptor: false
