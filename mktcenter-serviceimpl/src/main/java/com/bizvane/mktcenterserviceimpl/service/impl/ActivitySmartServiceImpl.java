@@ -117,22 +117,25 @@ public class ActivitySmartServiceImpl implements ActivitySmartService {
         if(!CollectionUtils.isEmpty(mktActivitySmartGroupPOS)){
             //查询数量这个分组会员数量
             for (MktActivitySmartGroupPO mktActivitySmartGroupPO:mktActivitySmartGroupPOS) {
-                String targetMbr = mktActivitySmartGroupPO.getTargetMbr();
-                ////分页查询会员信息
-                //把高级搜索的条件转换成对象
-                // JSONObject jsonObject=JSONObject.parseObject(targetMbr);
-                // MembersInfoSearchVo membersInfoSearchVo=jsonObject.toJavaObject(MembersInfoSearchVo.class);
-                MembersInfoSearchVo membersInfoSearchVo=JSON.parseObject(targetMbr,MembersInfoSearchVo.class);
-                membersInfoSearchVo.setPageNumber(1);
-                membersInfoSearchVo.setPageSize(1);
+
                 //判断是中控调用的还是中台
                 if (null==vo.getType()){
+                    String targetMbr = mktActivitySmartGroupPO.getTargetMbr();
+                    ////分页查询会员信息
+                    //把高级搜索的条件转换成对象
+                    // JSONObject jsonObject=JSONObject.parseObject(targetMbr);
+                    // MembersInfoSearchVo membersInfoSearchVo=jsonObject.toJavaObject(MembersInfoSearchVo.class);
+                    MembersInfoSearchVo membersInfoSearchVo=JSON.parseObject(targetMbr,MembersInfoSearchVo.class);
+                    membersInfoSearchVo.setPageNumber(1);
+                    membersInfoSearchVo.setPageSize(1);
                     membersInfoSearchVo.setBrandId(stageUser.getBrandId());
+                    log.info("调用高级搜索的参数列表=================="+ JSON.toJSONString(membersInfoSearchVo)+"分页参数++"+membersInfoSearchVo.getPageNumber()+"分页参数2++"+membersInfoSearchVo.getPageSize()+"品牌id+====="+membersInfoSearchVo.getBrandId());
+                    //ResponseData<com.bizvane.utils.responseinfo.PageInfo<MemberInfoVo>> memberInfoVoPages = membersAdvancedSearchApiService.search(membersInfoSearchVo);
+                    ResponseData<com.bizvane.utils.responseinfo.PageInfo<MembersInfoSearchPojo>> memberInfoVoPages =membersAdvancedSearchApiService.advancedSearch(membersInfoSearchVo);
+                    mktActivitySmartGroupPO.setTargetMbrCount((int) memberInfoVoPages.getData().getTotal());
+
                 }
-                log.info("调用高级搜索的参数列表=================="+ JSON.toJSONString(membersInfoSearchVo)+"分页参数++"+membersInfoSearchVo.getPageNumber()+"分页参数2++"+membersInfoSearchVo.getPageSize()+"品牌id+====="+membersInfoSearchVo.getBrandId());
-                //ResponseData<com.bizvane.utils.responseinfo.PageInfo<MemberInfoVo>> memberInfoVoPages = membersAdvancedSearchApiService.search(membersInfoSearchVo);
-                ResponseData<com.bizvane.utils.responseinfo.PageInfo<MembersInfoSearchPojo>> memberInfoVoPages =membersAdvancedSearchApiService.advancedSearch(membersInfoSearchVo);
-                mktActivitySmartGroupPO.setTargetMbrCount((int) memberInfoVoPages.getData().getTotal());
+
             }
         }
 
