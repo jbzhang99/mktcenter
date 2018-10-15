@@ -272,26 +272,27 @@ public class TaskShareServiceImpl implements TaskShareService {
      */
     @Override
     public  void   doAwardShare(ShareSuccessVO vo){
-        log.info("邀请任务的奖励--参数--"+ JSON.toJSONString(vo));
+        log.info("分享任务的奖励--参数--"+ JSON.toJSONString(vo));
+        Long mktTaskIdparam = vo.getMktTaskId();
         //被邀请人信息
         Date shareDate = vo.getShareDate();
         //邀请人的信息
         String memberCode = vo.getMemberCode();
         MemberInfoModel memeberDetail = taskService.getCompanyMemeberDetail(memberCode);
-        log.info("邀请任务的奖励--会员详情参数--"+ JSON.toJSONString(memeberDetail));
+        log.info("分享任务的奖励--会员详情参数--"+ JSON.toJSONString(memeberDetail));
         Long companyId = memeberDetail.getSysCompanyId();
         Long brandId = memeberDetail.getBrandId();
         String cardNo = memeberDetail.getCardNo();
         Long serviceStoreId = memeberDetail.getServiceStoreId();
         //符合条件的任务列表
-        List<TaskAwardBO> taskAwardList = taskService.getTaskShareAwardList(companyId, brandId, shareDate);
-        log.info("邀请任务的奖励--任务列表--"+ JSON.toJSONString(memeberDetail));
+        List<TaskAwardBO> taskAwardList = taskService.getTaskShareAwardList(mktTaskIdparam,companyId, brandId, shareDate);
+        log.info("分享任务的奖励--任务列表--"+ JSON.toJSONString(taskAwardList));
         if (CollectionUtils.isNotEmpty(taskAwardList)){
             taskAwardList.stream().
                 filter(obj->{
                      Boolean isStoreLimit = obj.getStoreLimit();
                      String  StoreLimitList=obj.getStoreLimitList();
-                     return isStoreLimit || (serviceStoreId!=null && StringUtils.isNotBlank(StoreLimitList) &&  obj.getStoreLimitList().contains(String.valueOf(serviceStoreId)));}).
+                     return !isStoreLimit || (serviceStoreId!=null) ||(StringUtils.isNotBlank(StoreLimitList) &&  obj.getStoreLimitList().contains(String.valueOf(serviceStoreId)));}).
                 forEach(obj->{
                     Integer taskType = obj.getTaskType();
                     Long mktTaskId = obj.getMktTaskId();
@@ -306,18 +307,20 @@ public class TaskShareServiceImpl implements TaskShareService {
 
                     // 获取会员是否已经成功参与过某一任务
                     Boolean isOrNoAward = taskRecordService.getIsOrNoAward(recordVO);
-                    log.info("邀请任务的奖励--已经成功参与--"+isOrNoAward+"--"+JSON.toJSONString(recordVO));
+                    log.info("分享任务的奖励--已经成功参与--"+isOrNoAward+"--"+JSON.toJSONString(recordVO));
                     if (!isOrNoAward){
                         MktTaskRecordPO recordPO = new MktTaskRecordPO();
                         BeanUtils.copyProperties(recordVO,recordPO);
                         recordPO.setParticipateDate(shareDate);
-                        taskRecordService.addTaskRecord(recordPO);
+                        recordPO.setSysCompanyId(companyId);
+                        Long recordId = taskRecordService.addTaskRecord(recordPO);
 
                         //获取会员参与某一任务总次数
                         TotalStatisticsBO totalBO = taskRecordService.getTotalStatistics(recordVO);
-                        log.info("邀请任务的奖励--参与某一任务总次数--"+JSON.toJSONString(totalBO));
+                        log.info("分享任务的奖励--参与某一任务总次数--"+JSON.toJSONString(totalBO));
                         if (totalBO!=null && totalBO.getTotalTimes()!=null &&  totalBO.getTotalTimes().equals(shareTimes)){
                             recordPO.setRewarded(Integer.valueOf(1));
+                            recordPO.setSysCompanyId(recordId);
                             taskRecordService.updateTaskRecord(recordPO);
                             taskService.sendCouponAndPoint(memberCode,obj);
                         }

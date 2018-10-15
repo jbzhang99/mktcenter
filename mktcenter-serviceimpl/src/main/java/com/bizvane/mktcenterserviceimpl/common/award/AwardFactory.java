@@ -11,6 +11,7 @@ import com.bizvane.members.facade.models.IntegralRecordModel;
 import com.bizvane.members.facade.service.api.IntegralChangeApiService;
 import com.bizvane.members.facade.service.api.IntegralRecordApiService;
 import com.bizvane.members.facade.service.card.request.IntegralChangeRequestModel;
+import com.bizvane.messagefacade.interfaces.SendBatchMessageFeign;
 import com.bizvane.messagefacade.interfaces.SendCommonMessageFeign;
 import com.bizvane.messagefacade.interfaces.TemplateMessageServiceFeign;
 import com.bizvane.messagefacade.models.vo.*;
@@ -51,6 +52,10 @@ public class AwardFactory {
 
     @Autowired
     private TemplateMessageServiceFeign templateMessageServiceFeign;
+
+    @Autowired
+    private SendBatchMessageFeign sendBatchMessageFeign;
+
     @Autowired
     private IntegralChangeApiService integralChangeApiService;
     /**
@@ -65,9 +70,9 @@ public class AwardFactory {
             SendCouponSimpleRequestVO va = bo.getSendCouponSimpleRequestVO();
             log.info("开始执行发券操作参数="+ JSON.toJSONString(va));
             ResponseData<Object> simple = sendCouponServiceFeign.simple(va);
-            log.info("发券操作完成完成了完成了完成了完成了");
+            log.info("发券操作完成完成了完成了完成了完成了--"+JSON.toJSONString(simple));
         } catch (Exception e) {
-            log.error("com.bizvane.mktcenterserviceimpl.common.award.AwardFactory.awardCouponSimple error"+ e.getMessage());
+            log.error("com.bizvane.mktcenterserviceimpl.common.award.AwardFactory.awardCouponSimple error--"+ e.getMessage());
             responseData.setCode(ResponseConstants.ERROR);
             return responseData;
         }
@@ -165,9 +170,12 @@ public class AwardFactory {
 
     //发送批量短信
     @Async("asyncServiceExecutor")
-    public ResponseData<String> sendBantchSms(AwardBO bo){
-        GenrealSendMessageVO vo = bo.getGenrealSendMessageVO();
-        return templateMessageServiceFeign.sendGenrealBatch(vo);
+    public ResponseData<Integer> sendBantchSms(AwardBO bo){
+        log.info("发送批量短信----sendBantchSms--参数--"+JSON.toJSONString(bo));
+        SysSmsConfigVO vo = bo.getSysSmsConfigVO();
+        ResponseData<Integer> responseData = sendBatchMessageFeign.sendSmgBatch(vo);
+        log.info("发送批量短信----sendBantchSms--出参--"+JSON.toJSONString(responseData));
+        return responseData;
     }
 
 }

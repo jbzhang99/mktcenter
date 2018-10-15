@@ -19,7 +19,7 @@ public interface TaskRecordService {
      * @param vo
      * @return
      */
-    public Integer addTaskRecord(MktTaskRecordPO vo);
+    public Long addTaskRecord(MktTaskRecordPO vo);
 
     /**
      * 修改记录

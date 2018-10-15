@@ -8,6 +8,7 @@ import java.util.Date;
  * 完善资料任务
  */
 public class ProfileSuccessVO {
+    private Long mktTaskId;
     //会员code
     private String memberCode;
     //apppid
@@ -47,5 +48,13 @@ public class ProfileSuccessVO {
 
     public void setBrandId(Long brandId) {
         this.brandId = brandId;
+    }
+
+    public Long getMktTaskId() {
+        return mktTaskId;
+    }
+
+    public void setMktTaskId(Long mktTaskId) {
+        this.mktTaskId = mktTaskId;
     }
 }

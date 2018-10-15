@@ -1,5 +1,7 @@
 package com.bizvane.mktcenterserviceimpl.controllers.report;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -14,6 +16,9 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
 import com.alibaba.fastjson.JSONObject;
+import com.bizvane.centerstageservice.models.vo.StaffVo;
+import com.bizvane.centerstageservice.models.vo.SysStoreVo;
+import com.bizvane.centerstageservice.rpc.StoreServiceRpc;
 import com.bizvane.mktcenterservice.interfaces.ReportTempService;
 import com.bizvane.mktcenterservice.models.po.FileReportTempPO;
 import com.bizvane.mktcenterservice.models.po.FileReportTempPOExample;
@@ -34,10 +39,12 @@ import com.bizvane.mktcenterservice.models.requestvo.postvo.VipNum;
 import com.bizvane.mktcenterserviceimpl.common.report.BaseUrl;
 import com.bizvane.mktcenterserviceimpl.common.utils.FigureUtil;
 import com.bizvane.mktcenterserviceimpl.mappers.FileReportTempPOMapper;
+import com.bizvane.utils.responseinfo.PageInfo;
 import com.bizvane.utils.responseinfo.ResponseData;
 import com.bizvane.utils.tokens.SysAccountPO;
 import com.bizvane.utils.tokens.TokenUtils;
 
+import javassist.expr.NewArray;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -50,6 +57,7 @@ import lombok.extern.slf4j.Slf4j;
 @RestController
 @RequestMapping("report")
 public class ReportIncomeController {
+	private static final Collection Long = null;
 	@Autowired
 	private RestTemplate restTemplate;
 	@Autowired
@@ -57,6 +65,8 @@ public class ReportIncomeController {
 	
 	@Autowired
 	private  ReportTempService reportTempService;
+	@Autowired
+	private   StoreServiceRpc storeServiceRpc;
 
     
 	BaseUrl BaseUrl =new BaseUrl();
@@ -73,7 +83,7 @@ public class ReportIncomeController {
    }
    
 // 请求放回数据
- public ResponseData<List<BackData>> sendpost(String url,Object vipIncomeAnalysis,List<FileReportTempPO> fileReportTempPOlist,SysAccountPO sysAccountPO){
+ public ResponseData<List<BackData>> sendpost(String url,Object vipIncomeAnalysis,List<FileReportTempPO> fileReportTempPOlist,SysAccountPO currentUser){
            log.info("报表查询ReportIncomeController："+url+vipIncomeAnalysis.toString());
 	    	 JSONObject jsonObject = JSONObject.parseObject(JSONObject.toJSONString(vipIncomeAnalysis));
 	    	 
@@ -85,14 +95,41 @@ public class ReportIncomeController {
 	    		 }
 	    		 
 	    		 //组织转换
-	    		 
 		    	    String organizationContentStr = jsonObject.getString("organizationContentStr");
 		    	    String dimension = jsonObject.getString("dimension");
 		    		 if(StringUtils.isNotBlank(organizationContentStr)){
 		    		 String[] al= organizationContentStr.toString().split(",");
 		    		  jsonObject.put("organizationContent", al); // 直接put相同的key
 		    		 }
-	    	 
+		    		 
+		    		 //默认页 sendVO.setCorpId("C10291");
+		    		 jsonObject.put("corpId", currentUser.getCompanyCode()); 
+		    		 String organization = jsonObject.getString("organization");
+		    		         if(organization.equals("0")) {
+		    		             //获取当前用户，所有店铺id
+		    		        	 String[] str = new String[]{};
+		    		        	 try {
+					    		        	 SysStoreVo staffVo =new SysStoreVo();
+					    		             staffVo.setSysCompanyId(currentUser.getSysCompanyId());
+					    		             staffVo.setSysBrandId(currentUser.getBrandId());
+					    		             staffVo.setSysAccountId(currentUser.getSysAccountId());
+					    		             ResponseData<PageInfo<SysStoreVo>> SysStoreVo = storeServiceRpc.getSysStoreList(staffVo);
+					    		             List<Long>  Longlist =SysStoreVo.getData().getList().get(0).getStoreIdList();
+					    		             str = new String[Longlist.size()];
+					    		            int i=0;
+					    		             for( Long Long : Longlist) {
+					    		            	 str[i++] = Long.toString();
+					    		             }
+									} catch (Exception e) {
+										System.out.println("获取当前用户，所有店铺id出错");
+									}
+		    		        	 System.out.println("当前用户"+JSONObject.toJSONString(currentUser));
+		    		        	 jsonObject.put("organization", "1"); // 直接put相同的key
+		    		        	 jsonObject.put("organizationContent", str); // / 
+		    		         }
+		    		       //默认页     
+		    		         
+		    		         System.out.println(url+"发送内容:"+jsonObject.toJSONString());
 		 ResponseEntity<String> response = this.restTemplate.postForEntity(url, jsonObject,String.class, new Object[0]);
 	     ResponseData<List<BackData>> ResponseData =new ResponseData<List<BackData>>();
 	     JSONObject job = JSONObject.parseObject(response.getBody());
@@ -143,7 +180,7 @@ public class ReportIncomeController {
 						 
 					 }
 		    		 
-		    		 reportTempService.Export(sysAccountPO,"_summary",job.get("data").toString(), fileReportTempPO);
+		    		 reportTempService.Export(currentUser,"_summary",job.get("data").toString(), fileReportTempPO);
 		    		 ResponseData.setMessage("导出中");
 		    	 }else {
 		    		 ResponseData.setMessage(job.get("message").toString());
@@ -369,26 +406,7 @@ public class ReportIncomeController {
    
 
    
-// 请求放回数据带时间格式的json
- public ResponseData<List<BackDataTime>> sendpostHaveTime(String url,Object vipIncomeAnalysis,List<FileReportTempPO> fileReportTempPOlist){
- log.info("报表查询ReportIncomeController："+url+vipIncomeAnalysis.toString());
-		 ResponseEntity<String> response = this.restTemplate.postForEntity(url, vipIncomeAnalysis,String.class, new Object[0]);
-	     ResponseData<List<BackDataTime>> ResponseData =new ResponseData<List<BackDataTime>>();
-	     JSONObject job = JSONObject.parseObject(response.getBody());
-	     
-	     if(job.get("successFlag").equals("1")) {
-	    	 ResponseData.setCode(0);
-	  	    ResponseData.setMessage(job.get("message").toString());
-		    ResponseData.setData(FigureUtil.parseJSON2MapTime(job.get("data").toString(),fileReportTempPOlist));
-	     }else {
-	    	 ResponseData.setCode(0);
-	  	    ResponseData.setMessage(job.get("message").toString());
-	  	  ResponseData.setData(FigureUtil.parseJSON2MapTime("false",fileReportTempPOlist));
-	    	 
-	     }
 
-     return ResponseData;
- }
    
 
     

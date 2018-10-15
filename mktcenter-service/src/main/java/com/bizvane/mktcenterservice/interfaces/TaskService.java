@@ -31,7 +31,7 @@ public interface TaskService {
      * 给会员发送消息
      * @param sysBrandId
      */
-    public  void sendMemberMessage(Long sysBrandId,Integer taskType,String msgContent,Boolean exceptWechat);
+    public  void sendMemberMessage(Long sysCompanyId,Long sysBrandId,Integer taskType,String msgContent,Boolean exceptWechat);
     /**
      * 批量给粉丝发送短信
      */
@@ -75,19 +75,19 @@ public interface TaskService {
      * @return
      *
      */
-    public List<TaskAwardBO> getTaskInviteAwardList(Long sysCompanyId, Long sysBrandId,Date date);
+    public List<TaskAwardBO> getTaskInviteAwardList( Long mktTaskIdParam,Long sysCompanyId, Long sysBrandId,Date openCardTime);
 
     /**
      * 完善资料任务的奖励查询
      * @return
      */
-    public List<TaskAwardBO> getTaskProfileAwardList(Long sysCompanyId, Long sysBrandId,Date profileDate);
+    public List<TaskAwardBO> getTaskProfileAwardList(Long mktTaskIdParam,Long sysCompanyId, Long sysBrandId,Date profileDate);
 
     /**
      * 分享任务的奖励查询
      * @return
      */
-    public List<TaskAwardBO> getTaskShareAwardList(Long sysCompanyId, Long sysBrandId,Date shareDate);
+    public List<TaskAwardBO> getTaskShareAwardList(Long mktTaskIdparam ,Long sysCompanyId, Long sysBrandId,Date shareDate);
     /**
      * 查询订单详情
      * @param mktTaskId
@@ -171,7 +171,7 @@ public interface TaskService {
      * 获取品牌下的所有会员
      * @return
      */
-    public  PageInfo<MemberInfoModel> getCompanyMemebers(Long sysBrandId,Integer taskType,Boolean exceptWechat,Integer pageNumber,Integer pageSize);
+    public  PageInfo<MemberInfoModel> getCompanyMemebers(Long sysCompanyId,Long sysBrandId,Integer taskType,Boolean exceptWechat,Integer pageNumber,Integer pageSize);
 
     /**
      * 获取品牌下的所有粉丝

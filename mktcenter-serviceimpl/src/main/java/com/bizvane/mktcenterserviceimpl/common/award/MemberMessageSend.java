@@ -102,10 +102,8 @@ public class MemberMessageSend {
      * @param activityCode
      * @param membersInfoSearchVo
      */
-    @Async("asyncServiceExecutor")
     public void sendMemberPoints(ActivitySmartVO vo, String activityCode, MembersInfoSearchVo membersInfoSearchVo) {
         ResponseData<com.bizvane.utils.responseinfo.PageInfo<MemberInfoVo>> memberInfoVoPage = membersAdvancedSearchApiService.search(membersInfoSearchVo);
-        AwardBO awardBO = new AwardBO();
         IntegralRecordModel integralRecordModel = new IntegralRecordModel();
         log.info("已经查询到相应的会员一共多少页++++++++++="+memberInfoVoPage.getData().getPages());
         for (int a =1;a<=memberInfoVoPage.getData().getPages();a++) {
@@ -113,6 +111,8 @@ public class MemberMessageSend {
             ResponseData<com.bizvane.utils.responseinfo.PageInfo<MemberInfoVo>> memberInfoVoPages = membersAdvancedSearchApiService.search(membersInfoSearchVo);
             List<MemberInfoVo> memberInfoModelList = memberInfoVoPages.getData().getList();
             for (MemberInfoModel memberInfo:memberInfoModelList) {
+                AwardBO awardBO = new AwardBO();
+                log.info("调用高级搜索的参数列表查询完毕==================一共++++"+memberInfoModelList.size());
                 activityService.sendPoints(vo, awardBO, memberInfo);
             }
         }
@@ -125,13 +125,13 @@ public class MemberMessageSend {
     @Async("asyncServiceExecutor")
     public  void sendShortMessage(MktMessagePO mktMessagePO, MembersInfoSearchVo membersInfoSearchVo) {
         ResponseData<com.bizvane.utils.responseinfo.PageInfo<MemberInfoVo>> memberInfoVoPage = membersAdvancedSearchApiService.search(membersInfoSearchVo);
-        AwardBO awardBO = new AwardBO();
-        SysSmsConfigVO sysSmsConfigVO = new SysSmsConfigVO();
         for (int a =1;a<=memberInfoVoPage.getData().getPages();a++) {
             membersInfoSearchVo.setPageNumber(a);
             ResponseData<com.bizvane.utils.responseinfo.PageInfo<MemberInfoVo>> memberInfoVoPages = membersAdvancedSearchApiService.search(membersInfoSearchVo);
             List<MemberInfoVo> memberInfoModelList = memberInfoVoPages.getData().getList();
             for (MemberInfoModel memberInfo:memberInfoModelList) {
+                SysSmsConfigVO sysSmsConfigVO = new SysSmsConfigVO();
+                AwardBO awardBO = new AwardBO();
                 activityService.sendShort(mktMessagePO, awardBO, sysSmsConfigVO, memberInfo);
             }
         }
@@ -145,13 +145,13 @@ public class MemberMessageSend {
     @Async("asyncServiceExecutor")
     public  void sendWxMessage(MktMessagePO mktMessagePO, MembersInfoSearchVo membersInfoSearchVo) {
         ResponseData<com.bizvane.utils.responseinfo.PageInfo<MemberInfoVo>> memberInfoVoPage = membersAdvancedSearchApiService.search(membersInfoSearchVo);
-        AwardBO awardBO = new AwardBO();
-        MemberMessageVO memberMessageVO = new MemberMessageVO();
         for (int a =1;a<=memberInfoVoPage.getData().getPages();a++) {
             membersInfoSearchVo.setPageNumber(a);
             ResponseData<com.bizvane.utils.responseinfo.PageInfo<MemberInfoVo>> memberInfoVoPages = membersAdvancedSearchApiService.search(membersInfoSearchVo);
             List<MemberInfoVo> memberInfoModelList = memberInfoVoPages.getData().getList();
             for (MemberInfoModel memberInfo:memberInfoModelList) {
+                MemberMessageVO memberMessageVO = new MemberMessageVO();
+                AwardBO awardBO = new AwardBO();
                 activityService.sendWx(mktMessagePO, awardBO, memberMessageVO, memberInfo);
             }
         }
@@ -164,14 +164,15 @@ public class MemberMessageSend {
      */
     @Async("asyncServiceExecutor")
     public void sendMemberCoupon(ActivitySmartVO vo, MembersInfoSearchVo membersInfoSearchVo) {
+        log.info("马上开始发券了激动吗嘛嘛嘛嘛嘛嘛嘛嘛嘛啊啊啊啊啊啊啊");
         ResponseData<com.bizvane.utils.responseinfo.PageInfo<MemberInfoVo>> memberInfoVoPage = membersAdvancedSearchApiService.search(membersInfoSearchVo);
-        AwardBO awardBO = new AwardBO();
-        SendCouponSimpleRequestVO sendCouponSimpleRequestVO = new SendCouponSimpleRequestVO();
         for (int a = 1; a <= memberInfoVoPage.getData().getPages(); a++) {
             membersInfoSearchVo.setPageNumber(a);
             ResponseData<com.bizvane.utils.responseinfo.PageInfo<MemberInfoVo>> memberInfoVoPages = membersAdvancedSearchApiService.search(membersInfoSearchVo);
             List<MemberInfoVo> memberInfoModelList = memberInfoVoPages.getData().getList();
             for (MemberInfoModel memberInfo : memberInfoModelList) {
+                SendCouponSimpleRequestVO sendCouponSimpleRequestVO = new SendCouponSimpleRequestVO();
+                AwardBO awardBO = new AwardBO();
                 activityService.sendCoupon(vo, awardBO, sendCouponSimpleRequestVO, memberInfo);
             }
         }
@@ -190,6 +191,7 @@ public class MemberMessageSend {
             //查询对应的会员
             MemberInfoApiModel memberInfoModel= new MemberInfoApiModel();
             memberInfoModel.setBrandId(activityBirthday.getSysBrandId());
+            memberInfoModel.setSysCompanyId(activityBirthday.getSysCompanyId());
             if (!activityBirthday.getMbrLevelCode().equals(0)){
                 memberInfoModel.setLevelId(Long.parseLong(activityBirthday.getMbrLevelCode()));
             }
@@ -229,7 +231,7 @@ public class MemberMessageSend {
             if (!activityAniversary.getMbrLevelCode().equals(0)){
                 memberInfoModel.setLevelId(Long.parseLong(activityAniversary.getMbrLevelCode()));
             }
-            memberInfoModel.setBirthdayLine(activityAniversary.getDaysAhead());
+            memberInfoModel.setOpenCardTimeLine(activityAniversary.getDaysAhead());
             memberInfoModel.setMemberScope(activityAniversary.getMemberType().toString());
             memberInfoModel.setPageNumber(1);
             memberInfoModel.setPageSize(10000);
@@ -328,6 +330,7 @@ public class MemberMessageSend {
 //                            sysSmsConfigVO.setPhone(memberInfoModel.getPhone());
                         sysSmsConfigVO.setPhone(memberInfoModel.getPhone());
                         sysSmsConfigVO.setMsgContent(mktMessagePO.getMsgContent());
+                        sysSmsConfigVO.setSysBrandId(memberInfoModel.getBrandId());
                         awardBO.setMktType(MktSmartTypeEnum.SMART_TYPE_SMS.getCode());
                         awardBO.setSysSmsConfigVO(sysSmsConfigVO);
                         //get sms config

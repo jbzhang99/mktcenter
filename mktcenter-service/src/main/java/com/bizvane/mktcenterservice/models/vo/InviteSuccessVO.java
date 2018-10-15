@@ -8,6 +8,7 @@ import java.util.Date;
  * 邀请会员注册
  */
 public class InviteSuccessVO {
+    private Long mktTaskId;
     //注册人code
     private String memberCode;
     //开卡时间
@@ -37,5 +38,13 @@ public class InviteSuccessVO {
 
     public void setInviteMemberCode(String inviteMemberCode) {
         this.inviteMemberCode = inviteMemberCode;
+    }
+
+    public Long getMktTaskId() {
+        return mktTaskId;
+    }
+
+    public void setMktTaskId(Long mktTaskId) {
+        this.mktTaskId = mktTaskId;
     }
 }

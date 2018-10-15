@@ -8,6 +8,7 @@ import java.util.Date;
  * 分享任务
  */
 public class ShareSuccessVO {
+    private Long mktTaskId;
     //会员code
     private String memberCode;
     //apppid
@@ -38,5 +39,13 @@ public class ShareSuccessVO {
 
     public void setMemberCode(String memberCode) {
         this.memberCode = memberCode;
+    }
+
+    public Long getMktTaskId() {
+        return mktTaskId;
+    }
+
+    public void setMktTaskId(Long mktTaskId) {
+        this.mktTaskId = mktTaskId;
     }
 }

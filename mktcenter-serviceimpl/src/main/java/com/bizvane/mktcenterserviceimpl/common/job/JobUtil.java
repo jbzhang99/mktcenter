@@ -5,6 +5,7 @@ import com.bizvane.mktcenterservice.models.po.MktTaskPOWithBLOBs;
 import com.bizvane.mktcenterservice.models.vo.ActivitySmartVO;
 import com.bizvane.mktcenterservice.models.vo.ActivityVO;
 import com.bizvane.mktcenterserviceimpl.common.constants.JobHandlerConstants;
+import com.bizvane.mktcenterserviceimpl.common.constants.TaskConstants;
 import com.bizvane.mktcenterserviceimpl.common.utils.DateUtil;
 import com.bizvane.utils.enumutils.JobEnum;
 import com.bizvane.utils.jobutils.JobBusinessTypeEnum;
@@ -100,8 +101,9 @@ public class JobUtil {
      * 添加任务开始job
      */
     public  void addTaskStartJob(SysAccountPO stageUser, MktTaskPOWithBLOBs po) {
-        //2=任务
-        int bizType = JobBusinessTypeEnum.ACTIVITY_TYPE_TASK.getCode();
+        //20=开始任务
+        //int bizType = JobBusinessTypeEnum.ACTIVITY_TYPE_TASK.getCode();
+        int bizType =TaskConstants.ACTIVITY_TYPE_TASK_CODE_STARTJOB;
         //任务code
         String taskCode = po.getTaskCode();
         //任务id
@@ -125,8 +127,9 @@ public class JobUtil {
      * @param po
      */
     public void addTaskEndJob(SysAccountPO stageUser, MktTaskPOWithBLOBs po) {
-        //拼接任务job中的
-        int bizType = JobBusinessTypeEnum.ACTIVITY_TYPE_TASK.getCode();
+        //拼接任务job中的    21=结束job
+       // int bizType = JobBusinessTypeEnum.ACTIVITY_TYPE_TASK.getCode();
+        int bizType =TaskConstants.ACTIVITY_TYPE_TASK_CODE_ENDJOB;
         Long mktTaskId = po.getMktTaskId();
         String taskName = po.getTaskName();
         String name = stageUser.getName();
@@ -147,7 +150,8 @@ public class JobUtil {
      * @param messagePO
      */
     public void addMessageXXTaskJob(SysAccountPO stageUser, MktTaskPOWithBLOBs po, MktMessagePO messagePO){
-        int bizType = JobBusinessTypeEnum.ACTIVITY_TYPE_TASK.getCode();
+        //int bizType = JobBusinessTypeEnum.ACTIVITY_TYPE_TASK.getCode();
+        int bizType =TaskConstants.ACTIVITY_TYPE_TASK_CODE_XXOB;
         Long mktTaskId = po.getMktTaskId();
         Integer taskType = po.getTaskType();
         String taskCode = po.getTaskCode();
@@ -156,9 +160,10 @@ public class JobUtil {
         String msgContent = messagePO.getMsgContent();
         Date sendTime = messagePO.getSendTime();
         Long sysBrandId = po.getSysBrandId();
+        Long sysCompanyId = po.getSysCompanyId();
         Boolean exceptWechat = messagePO.getExceptWechat();
         StringBuilder builder = new StringBuilder();
-        String param = this.getMessageJobParam(sysBrandId,taskType, msgContent,exceptWechat);
+        String param = this.getMessageJobParam(sysCompanyId,sysBrandId,taskType, msgContent,exceptWechat);
         //清除一下job
         this.doRemoveJobe(bizType, taskCode, param);
         log.info("添加消息的job--addMessageXXTaskJob--"+sendTime+"--"+taskName+"--"+param+"--"+name+"--"+JobHandlerConstants.MESSAGE_SEND_XX+"--"+bizType+"--"+taskCode);
@@ -166,7 +171,8 @@ public class JobUtil {
         this.addJob(sendTime,taskName,param,name,JobHandlerConstants.MESSAGE_SEND_XX,bizType,taskCode);
     }
     public void addMessageDXTaskJob(SysAccountPO stageUser, MktTaskPOWithBLOBs po, MktMessagePO messagePO){
-        int bizType = JobBusinessTypeEnum.ACTIVITY_TYPE_TASK.getCode();
+       // int bizType = JobBusinessTypeEnum.ACTIVITY_TYPE_TASK.getCode();
+        int bizType =TaskConstants.ACTIVITY_TYPE_TASK_CODE_XDOB;
         Long mktTaskId = po.getMktTaskId();
         Integer taskType = po.getTaskType();
         String taskCode = po.getTaskCode();
@@ -223,8 +229,10 @@ public class JobUtil {
         builder.append(exceptWechat);
         return builder.toString();
     }
-    private String getMessageJobParam(long sysBrandId,Integer taskType, String msgContent,Boolean exceptWechat){
+    private String getMessageJobParam(Long sysCompanyId,Long sysBrandId,Integer taskType, String msgContent,Boolean exceptWechat){
         StringBuilder builder = new StringBuilder();
+        builder.append(sysCompanyId);
+        builder.append("&");
         builder.append(sysBrandId);
         builder.append("&");
         builder.append(taskType);

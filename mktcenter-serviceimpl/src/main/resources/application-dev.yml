@@ -14,8 +14,6 @@ spring:
         max-idle: 8
         max-wait: 2000ms
         min-idle: 0
-  profiles:
-    active: basecontroller,commonutilslocal,log
   swagger:
     show: true
   application:
@@ -62,10 +60,10 @@ spring:
     date-format: yyyy-MM-dd HH:mm:ss
     time-zone: GMT+8
   zipkin:
-    base-url-url: http://192.168.2.15:9411
+    baseUrl: http://192.168.2.15:9411
   sleuth:
     sampler:
-      percentage: 1
+      probability: 1.0
     scheduled:
       enabled: false
 eureka:
@@ -129,7 +127,7 @@ feign:
       name: members-test
       path: members.api
     message:
-      name: message-server-test
+      name: message-test
       path: message.api
     wechat:
       name: wechat-test
@@ -163,10 +161,12 @@ qiniu:
 
 activity:
   qrcodeurl: http://www.test.bizvane.com/qrcode?activityCode=
+  
+bitdata:
+  url: http://47.98.194.197:8765/api/open-data-analysis/
 
 tenant:
   isEnabledTenantInterceptor: false
-
-  spring.zipkin.base-url-url =  = http://192.168.2.119:9411
-  spring.sleuth.sampler.percentage = e = 1
-  spring.sleuth.scheduled.enabled = false
+ribbon:
+  ConnectTimeout: 60000
+  ReadTimeout: 60000

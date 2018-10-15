@@ -352,6 +352,7 @@ public class ActivityRegisterServiceImpl implements ActivityRegisterService {
     @Transactional
     public ResponseData<Integer> executeActivity(MemberInfoModel vo) {
         log.info("开卡活动-开卡活动执行开始");
+        log.info("开卡活动-开卡活动传过来参数======================："+JSON.toJSONString(vo));
         //返回对象
         ResponseData responseData = new ResponseData();
         //查询品牌下所有执行中的活动
@@ -369,8 +370,8 @@ public class ActivityRegisterServiceImpl implements ActivityRegisterService {
         }
         for (ActivityVO activityVO:registerList) {
             //判断开卡会员适合哪个活动根据开卡会员等级判断
-            if( null==activityVO.getMbrLevelCode()||activityVO.getMbrLevelCode().equals(vo.getLevelId()) ){
-                if (!ExecuteParamCheckUtil.implementActivitCheck(vo,activity)){
+            if( null==activityVO.getMbrLevelCode()||activityVO.getMbrLevelCode().equals(vo.getLevelId().toString()) ){
+                if (!ExecuteParamCheckUtil.implementActivitCheck(vo,activityVO)){
                     continue;
                 }
                 //增加积分奖励新增接口
@@ -388,6 +389,7 @@ public class ActivityRegisterServiceImpl implements ActivityRegisterService {
                        integralChangeRequestModel.setChangeDate(new Date());
                        bo.setIntegralRecordModel(integralChangeRequestModel);
                        bo.setMktType(MktSmartTypeEnum.SMART_TYPE_INTEGRAL.getCode());
+                       log.info("开卡活动-开卡活动合格开始增加积分+++++++++");
                        award.execute(bo);
 
                        // 增加卷奖励接口
@@ -406,6 +408,7 @@ public class ActivityRegisterServiceImpl implements ActivityRegisterService {
                                sendCouponSimpleRequestVO.setBrandId(vo.getBrandId());
                                awardBO.setSendCouponSimpleRequestVO(sendCouponSimpleRequestVO);
                                awardBO.setMktType(MktSmartTypeEnum.SMART_TYPE_COUPON.getCode());
+                               log.info("开卡活动-开卡活动合格开始增加券+++++++++");
                                award.execute(awardBO);
                            }
                        }

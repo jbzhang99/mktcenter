@@ -6,7 +6,7 @@ import java.math.BigDecimal;
  * Created by agan on 2018/7/28.
  */
 public class OrderModelBo {
-    private Long memberCode;//会员编号
+    private String memberCode;//会员编号
     private Integer brandId;//品牌id
     private Integer orderFrom;//订单来源
     private BigDecimal payMoney;//订单金额
@@ -48,11 +48,11 @@ public class OrderModelBo {
         this.payMoney = payMoney;
     }
 
-    public Long getMemberCode() {
+    public String getMemberCode() {
         return memberCode;
     }
 
-    public void setMemberCode(Long memberCode) {
+    public void setMemberCode(String memberCode) {
         this.memberCode = memberCode;
     }
 

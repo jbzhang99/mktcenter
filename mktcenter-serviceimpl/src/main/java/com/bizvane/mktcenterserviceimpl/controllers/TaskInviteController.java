@@ -5,10 +5,7 @@ import com.bizvane.mktcenterservice.interfaces.TaskInviteService;
 import com.bizvane.mktcenterservice.models.bo.TaskBO;
 import com.bizvane.mktcenterservice.models.bo.TaskDetailBO;
 import com.bizvane.mktcenterservice.models.po.MktCouponPO;
-import com.bizvane.mktcenterservice.models.vo.MessageVO;
-import com.bizvane.mktcenterservice.models.vo.PageForm;
-import com.bizvane.mktcenterservice.models.vo.TaskDetailVO;
-import com.bizvane.mktcenterservice.models.vo.TaskVO;
+import com.bizvane.mktcenterservice.models.vo.*;
 import com.bizvane.mktcenterserviceimpl.common.constants.SystemConstants;
 import com.bizvane.mktcenterserviceimpl.common.utils.TaskParamCheckUtil;
 import com.bizvane.utils.enumutils.SysResponseEnum;
@@ -54,5 +51,10 @@ public class TaskInviteController {
     public ResponseData updateInviteTask(TaskBO bo, HttpServletRequest request) throws ParseException {
         SysAccountPO stageUser = TokenUtils.getStageUser(request);
         return  taskInviteService.updateInviteTask(bo, stageUser);
+    }
+
+    @RequestMapping("/doAwardInvite")
+    public  void   doAwardInvite(InviteSuccessVO vo){
+        taskInviteService.doAwardInvite( vo);
     }
 }

@@ -14,8 +14,6 @@ spring:
         max-idle: 8
         max-wait: 2000ms
         min-idle: 0
-#  profiles:
-#    active: basecontroller,commonutilslocal,log
   swagger:
     show: true
   application:
@@ -156,6 +154,11 @@ qiniu:
 
 activity:
   qrcodeurl: http://www.xxx.bizvane.com/qrcode?activityCode=
+bitdata:
+  url: http://47.98.194.197:8765/api/open-data-analysis/
 
 tenant:
   isEnabledTenantInterceptor: false
+ribbon:
+  ConnectTimeout: 60000
+  ReadTimeout: 60000

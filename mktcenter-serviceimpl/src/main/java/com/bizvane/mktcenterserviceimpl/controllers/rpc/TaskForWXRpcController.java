@@ -41,7 +41,7 @@ public class TaskForWXRpcController {
 
     @RequestMapping("/getURLDetail")
     @io.swagger.annotations.ApiModelProperty(value = "TaskForWXVO",name = "获取url链接详情", required = false,example = "")
-    public ResponseData<AppletFunctionBO>  getURLDetail(TaskForWXVO vo){
+    public ResponseData<AppletFunctionBO>  getURLDetail(@RequestBody TaskForWXVO vo){
       return taskServiceForWX.getURLDetail(vo);
     }
 }

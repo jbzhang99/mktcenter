@@ -175,7 +175,7 @@ public class ActivitySmartServiceImpl implements ActivitySmartService {
      * @return
      */
     @Override
-    public ResponseData<MktActivitySmartGroupPO> getSmartActivityGroupById(Long mktActivitySmartGroupId) {
+    public ResponseData<MktActivitySmartGroupPO> getSmartActivityGroupById(Long mktActivitySmartGroupId,SysAccountPO stageUser) {
         log.info("com.bizvane.mktcenterserviceimpl.service.impl.ActivitySmartServiceImpl.getSmartActivityGroupById param"+"mktActivitySmartGroupId:"+ mktActivitySmartGroupId);
         ResponseData responseData = new ResponseData();
         //活动分组id不能为空
@@ -186,6 +186,18 @@ public class ActivitySmartServiceImpl implements ActivitySmartService {
             return responseData;
         }
         MktActivitySmartGroupPO mktActivitySmartGroupPO = mktActivitySmartGroupPOMapper.selectByPrimaryKey(mktActivitySmartGroupId);
+        ////////////////////
+        String targetMbr = mktActivitySmartGroupPO.getTargetMbr();
+        MembersInfoSearchVo membersInfoSearchVo=JSON.parseObject(targetMbr,MembersInfoSearchVo.class);
+        membersInfoSearchVo.setPageNumber(1);
+        membersInfoSearchVo.setPageSize(1);
+        membersInfoSearchVo.setBrandId(stageUser.getBrandId());
+        log.info("调用高级搜索的参数列表=================="+ JSON.toJSONString(membersInfoSearchVo)+"分页参数++"+membersInfoSearchVo.getPageNumber()+"分页参数2++"+membersInfoSearchVo.getPageSize()+"品牌id+====="+membersInfoSearchVo.getBrandId());
+        //ResponseData<com.bizvane.utils.responseinfo.PageInfo<MemberInfoVo>> memberInfoVoPages = membersAdvancedSearchApiService.search(membersInfoSearchVo);
+        ResponseData<com.bizvane.utils.responseinfo.PageInfo<MembersInfoSearchPojo>> memberInfoVoPages =membersAdvancedSearchApiService.advancedSearch(membersInfoSearchVo);
+        mktActivitySmartGroupPO.setTargetMbrCount((int) memberInfoVoPages.getData().getTotal());
+
+        /////////////////////////
         responseData.setData(mktActivitySmartGroupPO);
         log.info("com.bizvane.mktcenterserviceimpl.service.impl.ActivitySmartServiceImpl.getSmartActivityGroupById result"+ JSON.toJSONString(responseData));
         return responseData;
@@ -635,6 +647,8 @@ public class ActivitySmartServiceImpl implements ActivitySmartService {
             membersInfoSearchVo.setPageNumber(1);
             membersInfoSearchVo.setPageSize(1000);
             membersInfoSearchVo.setBrandId(stageUser.getBrandId());
+            membersInfoSearchVo.setSysCompanyId(stageUser.getSysCompanyId());
+            log.info("调用高级搜索的参数列表=================="+ JSON.toJSONString(membersInfoSearchVo));
             memberMessageSend.sendMemberCoupon(vo, membersInfoSearchVo);
         }
         responseData.setMessage(ResponseConstants.SUCCESS_MSG);
@@ -737,6 +751,9 @@ public class ActivitySmartServiceImpl implements ActivitySmartService {
             membersInfoSearchVo.setPageNumber(1);
             membersInfoSearchVo.setPageSize(1000);
             membersInfoSearchVo.setBrandId(stageUser.getBrandId());
+            membersInfoSearchVo.setSysCompanyId(stageUser.getSysCompanyId());
+            log.info("智能营销调用高级搜索的参数列表+++++++==================");
+            log.info("调用高级搜索的参数列表=================="+ JSON.toJSONString(membersInfoSearchVo));
             memberMessageSend.sendMemberPoints(vo, activityCode, membersInfoSearchVo);
 
         }
@@ -852,6 +869,7 @@ public class ActivitySmartServiceImpl implements ActivitySmartService {
             membersInfoSearchVo.setPageNumber(1);
             membersInfoSearchVo.setPageSize(1000);
             membersInfoSearchVo.setBrandId(stageUser.getBrandId());
+            membersInfoSearchVo.setSysCompanyId(stageUser.getSysCompanyId());
             memberMessageSend.sendShortMessage(mktMessagePO, membersInfoSearchVo);
         }
 
@@ -969,6 +987,7 @@ public class ActivitySmartServiceImpl implements ActivitySmartService {
             membersInfoSearchVo.setPageNumber(1);
             membersInfoSearchVo.setPageSize(1000);
             membersInfoSearchVo.setBrandId(stageUser.getBrandId());
+            membersInfoSearchVo.setSysCompanyId(stageUser.getSysCompanyId());
             memberMessageSend.sendWxMessage(mktMessagePO, membersInfoSearchVo);
         }
 

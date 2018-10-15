@@ -73,6 +73,7 @@ public class AwardBO {
      */
     private GenrealGetMessageVO  genrealGetMessageVO;
 
+
     public IntegralChangeRequestModel getIntegralRecordModel() {
         return integralRecordModel;
     }
@@ -152,4 +153,5 @@ public class AwardBO {
     public void setGenrealGetMessageVO(GenrealGetMessageVO genrealGetMessageVO) {
         this.genrealGetMessageVO = genrealGetMessageVO;
     }
+
 }

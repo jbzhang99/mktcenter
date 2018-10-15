@@ -227,7 +227,12 @@ public class ActivityServiceImpl implements ActivityService {
                     // 设置精确到小数点后2位
                     numberFormat.setMaximumFractionDigits(2);
                     String result = numberFormat.format((float) couponFindCouponCountResponseVO.getCouponUsedSum() / (float) couponFindCouponCountResponseVO.getCouponSum() * 100);
-                    activityAnalysisCount.setCouponUsedSumPercentage(result + "%");
+                    if (null!=couponFindCouponCountResponseVO.getCouponUsedSum() && null!=couponFindCouponCountResponseVO.getCouponSum()){
+                        log.info("百分比百分比百分比百分比+========"+result);
+                        activityAnalysisCount.setCouponUsedSumPercentage(result + "%");
+                    }
+
+
                 }
 
             }
@@ -342,6 +347,8 @@ public class ActivityServiceImpl implements ActivityService {
             if (mktMessagePO.getMsgType().equals("2")){
                 SysSmsConfigVO sysSmsConfigVO = new SysSmsConfigVO();
                 sysSmsConfigVO.setPhone(memberInfo.getPhone());
+                sysSmsConfigVO.setMsgContent(mktMessagePO.getMsgContent());
+                sysSmsConfigVO.setSysBrandId(memberInfo.getBrandId());
                 awardBO.setSysSmsConfigVO(sysSmsConfigVO);
                 awardBO.setMktType(MktSmartTypeEnum.SMART_TYPE_SMS.getCode());
                 //发送短信消息
@@ -352,6 +359,7 @@ public class ActivityServiceImpl implements ActivityService {
     @Override
     @Async("asyncServiceExecutor")
     public void sendPoints(ActivitySmartVO vo, AwardBO awardBO, MemberInfoModel memberInfo) {
+        log.info("智能营销开始发送积分积分积分了啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊");
         IntegralChangeRequestModel integralChangeRequestModel =new IntegralChangeRequestModel();
         integralChangeRequestModel.setSysCompanyId(vo.getSysCompanyId());
         integralChangeRequestModel.setBrandId(vo.getSysBrandId());
@@ -362,13 +370,16 @@ public class ActivityServiceImpl implements ActivityService {
         integralChangeRequestModel.setBusinessType(com.bizvane.members.facade.enums.BusinessTypeEnum.ACTIVITY_TYPE_SMART.getCode());
         awardBO.setIntegralRecordModel(integralChangeRequestModel);
         awardBO.setMktType(MktSmartTypeEnum.SMART_TYPE_INTEGRAL.getCode());
+        log.info("手机号码是+====="+memberInfo.getPhone()+"开始赠送积分了~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
         award.execute(awardBO);
+        log.info("手机号码是+====="+memberInfo.getPhone()+"送完积分了&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&");
     }
     @Override
     @Async("asyncServiceExecutor")
     public void sendShort(MktMessagePO mktMessagePO, AwardBO awardBO, SysSmsConfigVO sysSmsConfigVO, MemberInfoModel memberInfo) {
         sysSmsConfigVO.setPhone(memberInfo.getPhone());
         sysSmsConfigVO.setMsgContent(mktMessagePO.getMsgContent());
+        sysSmsConfigVO.setSysBrandId(memberInfo.getBrandId());
         awardBO.setSysSmsConfigVO(sysSmsConfigVO);
         awardBO.setMktType(MktSmartTypeEnum.SMART_TYPE_SMS.getCode());
         award.execute(awardBO);
@@ -389,7 +400,7 @@ public class ActivityServiceImpl implements ActivityService {
     public void sendCoupon(ActivitySmartVO vo, AwardBO awardBO, SendCouponSimpleRequestVO sendCouponSimpleRequestVO, MemberInfoModel memberInfo) {
         if (!org.springframework.util.CollectionUtils.isEmpty(vo.getMktCouponPOS())) {
             for (MktCouponPO mktCouponPO : vo.getMktCouponPOS()) {
-                sendCouponSimpleRequestVO.setMemberCode(memberInfo.getMemberCode().toString());
+                sendCouponSimpleRequestVO.setMemberCode(memberInfo.getMemberCode());
                 sendCouponSimpleRequestVO.setCouponDefinitionId(mktCouponPO.getCouponDefinitionId());
                 sendCouponSimpleRequestVO.setSendBussienId(mktCouponPO.getBizId());
                 sendCouponSimpleRequestVO.setSendType(SendTypeEnum.SEND_COUPON_ORIENT_MARKET.getCode());
@@ -397,6 +408,8 @@ public class ActivityServiceImpl implements ActivityService {
                 sendCouponSimpleRequestVO.setCompanyId(vo.getSysCompanyId());
                 awardBO.setSendCouponSimpleRequestVO(sendCouponSimpleRequestVO);
                 awardBO.setMktType(MktSmartTypeEnum.SMART_TYPE_COUPON.getCode());
+                log.info("调用高级搜索的参数列表=================="+ JSON.toJSONString(sendCouponSimpleRequestVO));
+                log.info("智能营销开始发券发券发券发券了+++++++++++++++++++++=========================");
                 award.execute(awardBO);
             }
         }
@@ -426,6 +439,8 @@ public class ActivityServiceImpl implements ActivityService {
             if (mktMessagePO.getMsgType().equals("2")){
                 SysSmsConfigVO sysSmsConfigVO = new SysSmsConfigVO();
                 sysSmsConfigVO.setPhone(memberInfo.getPhone());
+                sysSmsConfigVO.setSysBrandId(memberInfo.getBrandId());
+                sysSmsConfigVO.setMsgContent(mktMessagePO.getMsgContent());
                 awardBO.setSysSmsConfigVO(sysSmsConfigVO);
                 awardBO.setMktType(MktSmartTypeEnum.SMART_TYPE_SMS.getCode());
                 //发送短信消息

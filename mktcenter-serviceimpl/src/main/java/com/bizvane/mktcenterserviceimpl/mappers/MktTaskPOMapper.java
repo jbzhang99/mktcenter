@@ -122,7 +122,7 @@ public interface MktTaskPOMapper {
 	 * @param placeOrderTime
 	 * @return
 	 */
-	public List<TaskAwardBO> getTaskInviteAwardList(@Param("sysCompanyId") Long sysCompanyId, @Param("sysBrandId") Long sysBrandId,@Param("placeOrderTime")Date placeOrderTime);
+	public List<TaskAwardBO> getTaskInviteAwardList(@Param("mktTaskId") Long mktTaskId,@Param("sysCompanyId") Long sysCompanyId, @Param("sysBrandId") Long sysBrandId,@Param("placeOrderTime")String placeOrderTime);
 
 	/**
 	 * 完善资料任务的奖励
@@ -131,16 +131,15 @@ public interface MktTaskPOMapper {
 	 * @param placeOrderTime
 	 * @return
 	 */
-	public List<TaskAwardBO> getTaskProfileAwardList(@Param("sysCompanyId") Long sysCompanyId, @Param("sysBrandId") Long sysBrandId,@Param("placeOrderTime")Date placeOrderTime);
+	public List<TaskAwardBO> getTaskProfileAwardList(@Param("mktTaskId") Long mktTaskId,@Param("sysCompanyId") Long sysCompanyId, @Param("sysBrandId") Long sysBrandId,@Param("placeOrderTime")Date placeOrderTime);
 
 	/**
 	 * 分享任务的奖励
 	 * @param sysCompanyId
 	 * @param sysBrandId
-	 * @param placeOrderTime
 	 * @return
 	 */
-	public List<TaskAwardBO> getTaskShareAwardList(@Param("sysCompanyId") Long sysCompanyId, @Param("sysBrandId") Long sysBrandId,@Param("placeOrderTime")Date placeOrderTime);
+	public List<TaskAwardBO> getTaskShareAwardList(@Param("mktTaskId") Long mktTaskId,@Param("sysCompanyId") Long sysCompanyId, @Param("sysBrandId") Long sysBrandId,@Param("shareDate")String shareDate);
 
 	/**
 	 * 获取会员已完成和未完成任务列表
