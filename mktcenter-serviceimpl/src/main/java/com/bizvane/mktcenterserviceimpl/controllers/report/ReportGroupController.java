@@ -265,9 +265,19 @@ public class ReportGroupController {
 		    JSONObject jsonObject = JSONObject.parseObject(JSONObject.toJSONString(vipIncomeAnalysis));
 	    	String organizationContentStr = jsonObject.getString("organizationContentStr");
 	    	if(StringUtils.isNotBlank(organizationContentStr)){
-	    		 String[] al= organizationContentStr.toString().split(",");
+	    		
+	    		 int i=0;
+	             for( String trLong : organizationContentStr.split(",")) {
+	            	 i++;
+	             }
+	             String[] al= new String[i];
+	             i=0;
+	             for( String trLong : organizationContentStr.split(",")) {
+	            	 al[i++] = trLong;
+	             }
+	    		 
 	    		  jsonObject.put("organizationContent", al); // 直接put相同的key
-	    	}
+	    		 }
 	    	
    		 //默认页 sendVO.setCorpId("C10291");
    		 jsonObject.put("corpId", currentUser.getCompanyCode()); 

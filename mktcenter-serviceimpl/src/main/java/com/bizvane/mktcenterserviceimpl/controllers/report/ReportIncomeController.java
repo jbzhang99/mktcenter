@@ -98,7 +98,17 @@ public class ReportIncomeController {
 		    	    String organizationContentStr = jsonObject.getString("organizationContentStr");
 		    	    String dimension = jsonObject.getString("dimension");
 		    		 if(StringUtils.isNotBlank(organizationContentStr)){
-		    		 String[] al= organizationContentStr.toString().split(",");
+		    		
+		    		 int i=0;
+		             for( String trLong : organizationContentStr.split(",")) {
+		            	 i++;
+		             }
+		             String[] al= new String[i];
+		             i=0;
+		             for( String trLong : organizationContentStr.split(",")) {
+		            	 al[i++] = trLong;
+		             }
+		    		 
 		    		  jsonObject.put("organizationContent", al); // 直接put相同的key
 		    		 }
 		    		 
