@@ -8,13 +8,13 @@ import org.springframework.stereotype.Component;
 @Component
 public class BaseUrl {
 
-//	@Value("${bitdata.url}")
-//	public  String url ;
-	public static String staticurl ="http://47.98.194.197:8765/api/open-data-analysis/";
+	@Value("${bitdata.url}")
+	public  String url ;
 	
+	public static String staticurl ="http://47.98.194.197:8765/api/open-data-analysis/";
 	public  String getLoadUrl(String method) {
-		return staticurl+method;
+		return url+method;
 	}
 	
-
+ 
 }
