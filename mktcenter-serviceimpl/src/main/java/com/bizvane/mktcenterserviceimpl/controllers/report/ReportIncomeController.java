@@ -16,8 +16,10 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
 import com.alibaba.fastjson.JSONObject;
+import com.bizvane.centerstageservice.models.po.SysCompanyPo;
 import com.bizvane.centerstageservice.models.vo.StaffVo;
 import com.bizvane.centerstageservice.models.vo.SysStoreVo;
+import com.bizvane.centerstageservice.rpc.CompanyServiceRpc;
 import com.bizvane.centerstageservice.rpc.StoreServiceRpc;
 import com.bizvane.mktcenterservice.interfaces.ReportTempService;
 import com.bizvane.mktcenterservice.models.po.FileReportTempPO;
@@ -67,6 +69,9 @@ public class ReportIncomeController {
 	private  ReportTempService reportTempService;
 	@Autowired
 	private   StoreServiceRpc storeServiceRpc;
+	
+	@Autowired
+	private   CompanyServiceRpc companyServiceRpc;
 
     
 	BaseUrl BaseUrl =new BaseUrl();
@@ -113,7 +118,9 @@ public class ReportIncomeController {
 		    		 }
 		    		 
 		    		 //默认页 sendVO.setCorpId("C10291");
-		    		 jsonObject.put("corpId", currentUser.getCompanyCode()); 
+		    	   		ResponseData<SysCompanyPo>   SysCompanyP=	companyServiceRpc.getCompanyById(currentUser.getSysCompanyId());
+		    	   	    jsonObject.put("corpId", SysCompanyP.getData().getCompanyCode()); 
+		    		 
 		    		 String organization = jsonObject.getString("organization");
 		    		         if(organization.equals("0")) {
 		    		             //获取当前用户，所有店铺id
