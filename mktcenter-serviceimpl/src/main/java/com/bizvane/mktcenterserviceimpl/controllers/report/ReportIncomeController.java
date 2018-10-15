@@ -44,6 +44,7 @@ import com.bizvane.utils.responseinfo.ResponseData;
 import com.bizvane.utils.tokens.SysAccountPO;
 import com.bizvane.utils.tokens.TokenUtils;
 
+import javassist.expr.NewArray;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -106,7 +107,7 @@ public class ReportIncomeController {
 		    		 String organization = jsonObject.getString("organization");
 		    		         if(organization.equals("0")) {
 		    		             //获取当前用户，所有店铺id
-		    		        	 
+		    		        	 String[] str = new String[]{};
 		    		        	 try {
 					    		        	 SysStoreVo staffVo =new SysStoreVo();
 					    		             staffVo.setSysCompanyId(currentUser.getSysCompanyId());
@@ -114,19 +115,21 @@ public class ReportIncomeController {
 					    		             staffVo.setSysAccountId(currentUser.getSysAccountId());
 					    		             ResponseData<PageInfo<SysStoreVo>> SysStoreVo = storeServiceRpc.getSysStoreList(staffVo);
 					    		             List<Long>  Longlist =SysStoreVo.getData().getList().get(0).getStoreIdList();
-					    		             String str ="";
+					    		             str = new String[Longlist.size()];
+					    		            int i=0;
 					    		             for( Long Long : Longlist) {
-					    		            	 str=str+Long.toString()+",";
+					    		            	 str[i++] = Long.toString();
 					    		             }
-					    		             jsonObject.put("organizationContent", str); // / 
 									} catch (Exception e) {
 										System.out.println("获取当前用户，所有店铺id出错");
 									}
-		    		            
-		    		        	 jsonObject.put("organization", 1); // 直接put相同的key
-		    		    		 
+		    		        	 System.out.println("当前用户"+JSONObject.toJSONString(currentUser));
+		    		        	 jsonObject.put("organization", "1"); // 直接put相同的key
+		    		        	 jsonObject.put("organizationContent", str); // / 
 		    		         }
 		    		       //默认页     
+		    		         
+		    		         System.out.println(url+"发送内容:"+jsonObject.toJSONString());
 		 ResponseEntity<String> response = this.restTemplate.postForEntity(url, jsonObject,String.class, new Object[0]);
 	     ResponseData<List<BackData>> ResponseData =new ResponseData<List<BackData>>();
 	     JSONObject job = JSONObject.parseObject(response.getBody());

@@ -197,32 +197,32 @@ log.info("报表查询ReportIncomeController："+url+vipIncomeAnalysis.toString(
 	    		  jsonObject.put("organizationContent", al); // 直接put相同的key
 	    	}
 	    	
-	   		 //默认页 sendVO.setCorpId("C10291");
-//	   		 jsonObject.put("corpId", currentUser.getCompanyCode()); // /
-//	   		 String organization = jsonObject.getString("organization");
-//	   		         if(organization.equals("0")) {
-//	   		             //获取当前用户，所有店铺id
-//	   		        	 try {
-//				    		        	 SysStoreVo staffVo =new SysStoreVo();
-//				    		             staffVo.setSysCompanyId(currentUser.getSysCompanyId());
-//				    		             staffVo.setSysBrandId(currentUser.getBrandId());
-//				    		             staffVo.setSysAccountId(currentUser.getSysAccountId());
-//				    		             ResponseData<PageInfo<SysStoreVo>> SysStoreVo = storeServiceRpc.getSysStoreList(staffVo);
-//				    		             
-//				    		             List<Long>  Longlist =SysStoreVo.getData().getList().get(0).getStoreIdList();
-//				    		             String str ="";
-//				    		             for( Long Long : Longlist) {
-//				    		            	 str=str+Long.toString()+",";
-//				    		             }
-//				    		             jsonObject.put("organizationContent", str); // / 
-//								} catch (Exception e) {
-//									System.out.println("获取当前用户，所有店铺id出错");
-//								}
-//	   		            
-//	   		        	 jsonObject.put("organization", 1); // 直接put相同的key
-//	   		    		 
-//	   		         }
-	   		    //默认页
+   		 //默认页 sendVO.setCorpId("C10291");
+   		 jsonObject.put("corpId", currentUser.getCompanyCode()); 
+   		 String organization = jsonObject.getString("organization");
+   		         if(organization.equals("0")) {
+   		             //获取当前用户，所有店铺id
+   		        	 String[] str = new String[]{};
+   		        	 try {
+			    		        	 SysStoreVo staffVo =new SysStoreVo();
+			    		             staffVo.setSysCompanyId(currentUser.getSysCompanyId());
+			    		             staffVo.setSysBrandId(currentUser.getBrandId());
+			    		             staffVo.setSysAccountId(currentUser.getSysAccountId());
+			    		             ResponseData<PageInfo<SysStoreVo>> SysStoreVo = storeServiceRpc.getSysStoreList(staffVo);
+			    		             List<Long>  Longlist =SysStoreVo.getData().getList().get(0).getStoreIdList();
+			    		             str = new String[Longlist.size()];
+			    		            int i=0;
+			    		             for( Long Long : Longlist) {
+			    		            	 str[i++] = Long.toString();
+			    		             }
+							} catch (Exception e) {
+								System.out.println("获取当前用户，所有店铺id出错");
+							}
+   		        	 System.out.println("当前用户"+JSONObject.toJSONString(currentUser));
+   		        	 jsonObject.put("organization", "1"); // 直接put相同的key
+   		        	 jsonObject.put("organizationContent", str); // / 
+   		         }
+   		       //默认页  
 			 
 		 ResponseEntity<String> response = this.restTemplate.postForEntity(url, jsonObject,String.class, new Object[0]);
 	     ResponseData<BackDataTimeDtailtu> ResponseData =new ResponseData<BackDataTimeDtailtu>();

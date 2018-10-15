@@ -13,7 +13,7 @@ public class BaseUrl {
 	
 	public static String staticurl ="http://47.98.194.197:8765/api/open-data-analysis/";
 	public  String getLoadUrl(String method) {
-		return url+method;
+		return staticurl+method;
 	}
 	
  
