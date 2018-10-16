@@ -138,7 +138,7 @@ public class FigureController {
 
    
 // 请求放回数据带时间格式的json
- public ResponseData<BackDataTimeDtail> sendpostHaveTime(String url,IncomeTotalListGroup vipIncomeAnalysis,List<FileReportTempPO> fileReportTempPOlist,SysAccountPO sysAccountPO){
+ public ResponseData<BackDataTimeDtail> sendpostHaveTime(String url,IncomeTotalListGroup vipIncomeAnalysis,List<FileReportTempPO> fileReportTempPOlist,SysAccountPO currentUser){
  log.info("报表查询ReportIncomeController："+url+vipIncomeAnalysis.toString());
  
             //TODO 获取活跃度
@@ -166,6 +166,34 @@ public class FigureController {
 	    		  jsonObject.put("organizationContent", al); // 直接put相同的key
 	    		 
 	    	}
+	    	
+	   		 //默认页 sendVO.setCorpId("C10291");
+		   		ResponseData<SysCompanyPo>   SysCompanyP=	companyServiceRpc.getCompanyById(currentUser.getSysCompanyId());
+		   	    jsonObject.put("corpId", SysCompanyP.getData().getCompanyCode()); 
+		   	    
+	   		         if(StringUtils.isBlank(organizationContentStr)) {
+	   		             //获取当前用户，所有店铺id
+	   		        	 String[] str = new String[]{};
+	   		        	 try {
+				    		        	 SysStoreVo staffVo =new SysStoreVo();
+				    		             staffVo.setSysCompanyId(currentUser.getSysCompanyId());
+				    		             staffVo.setSysBrandId(currentUser.getBrandId());
+				    		             staffVo.setSysAccountId(currentUser.getSysAccountId());
+				    		             ResponseData<PageInfo<SysStoreVo>> SysStoreVo = storeServiceRpc.getSysStoreList(staffVo);
+				    		             List<Long>  Longlist =SysStoreVo.getData().getList().get(0).getStoreIdList();
+				    		             str = new String[Longlist.size()];
+				    		            int i=0;
+				    		             for( Long Long : Longlist) {
+				    		            	 str[i++] = Long.toString();
+				    		             }
+								} catch (Exception e) {
+									System.out.println("获取当前用户，所有店铺id出错");
+								}
+	   		        	 System.out.println("当前用户"+JSONObject.toJSONString(currentUser));
+	   		        	 jsonObject.put("organization", "1"); // 直接put相同的key
+	   		        	 jsonObject.put("organizationContent", str); // / 
+	   		         }
+	   		       //默认页  
 			 
 		 ResponseEntity<String> response = this.restTemplate.postForEntity(url, jsonObject,String.class, new Object[0]);
 	     ResponseData<BackDataTimeDtail> ResponseData =new ResponseData<BackDataTimeDtail>();
@@ -176,7 +204,7 @@ public class FigureController {
              // 导出表格
 	    	 String postTem = jsonObject.getString("postTem");
 	    	 if(StringUtils.isNotBlank(postTem)&&postTem.equals("export")){
-	    		 reportTempService.Export(sysAccountPO,"_cycle",job.get("data").toString(),fileReportTempPOlist.get(0));
+	    		 reportTempService.Export(currentUser,"_cycle",job.get("data").toString(),fileReportTempPOlist.get(0));
 	    		 ResponseData.setMessage("导出中");
 	    	 }else {
 	    		 ResponseData.setMessage(job.get("message").toString());
@@ -217,8 +245,7 @@ log.info("报表查询ReportIncomeController："+url+vipIncomeAnalysis.toString(
 	   		ResponseData<SysCompanyPo>   SysCompanyP=	companyServiceRpc.getCompanyById(currentUser.getSysCompanyId());
 	   	    jsonObject.put("corpId", SysCompanyP.getData().getCompanyCode()); 
 	   	    
-   		 String organization = jsonObject.getString("organization");
-   		         if(organization.equals("0")) {
+   		         if(StringUtils.isBlank(organizationContentStr)) {
    		             //获取当前用户，所有店铺id
    		        	 String[] str = new String[]{};
    		        	 try {
