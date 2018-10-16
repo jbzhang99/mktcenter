@@ -190,7 +190,8 @@ public class ActivitySmartServiceImpl implements ActivitySmartService {
         }
         MktActivitySmartGroupPO mktActivitySmartGroupPO = mktActivitySmartGroupPOMapper.selectByPrimaryKey(mktActivitySmartGroupId);
         ////////////////////
-        String targetMbr = mktActivitySmartGroupPO.getTargetMbr();
+        //todo 暂时注释掉
+       /* String targetMbr = mktActivitySmartGroupPO.getTargetMbr();
         MembersInfoSearchVo membersInfoSearchVo=JSON.parseObject(targetMbr,MembersInfoSearchVo.class);
         membersInfoSearchVo.setPageNumber(1);
         membersInfoSearchVo.setPageSize(1);
@@ -199,7 +200,7 @@ public class ActivitySmartServiceImpl implements ActivitySmartService {
         //ResponseData<com.bizvane.utils.responseinfo.PageInfo<MemberInfoVo>> memberInfoVoPages = membersAdvancedSearchApiService.search(membersInfoSearchVo);
         ResponseData<com.bizvane.utils.responseinfo.PageInfo<MembersInfoSearchPojo>> memberInfoVoPages =membersAdvancedSearchApiService.advancedSearch(membersInfoSearchVo);
         mktActivitySmartGroupPO.setTargetMbrCount((int) memberInfoVoPages.getData().getTotal());
-
+*/
         /////////////////////////
         responseData.setData(mktActivitySmartGroupPO);
         log.info("com.bizvane.mktcenterserviceimpl.service.impl.ActivitySmartServiceImpl.getSmartActivityGroupById result"+ JSON.toJSONString(responseData));
