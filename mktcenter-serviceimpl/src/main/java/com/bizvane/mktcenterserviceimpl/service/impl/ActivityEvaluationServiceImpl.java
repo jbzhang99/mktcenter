@@ -218,7 +218,6 @@ public class ActivityEvaluationServiceImpl implements ActivityEvaluationService 
     }
 
     @Override
-    @Transactional
     public ResponseData<Integer> executeActivityEvaluation(MemberInfoModel vo) {
         log.info("执行评价送积分活动=++++++++++++++______________-----------------------333333");
         log.info("执行评价送积分活动=" + vo.getBrandId() + "=" + vo.getMemberCode());
@@ -270,7 +269,6 @@ public class ActivityEvaluationServiceImpl implements ActivityEvaluationService 
 
 
     @Override
-    @Transactional
     public ResponseData<Integer> checkActivityEvaluation(SysCheckPo po, SysAccountPO sysAccountPO) {
         log.info("审核活动开始");
         ResponseData responseData = new ResponseData();
