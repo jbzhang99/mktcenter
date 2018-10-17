@@ -547,8 +547,8 @@
      <if test="endTime != null ">
        and <![CDATA[ tma.end_time <=#{endTime,jdbcType=TIMESTAMP}]]>
      </if>
-     <if test="activityName != null and activityName != '' ">
-       AND tma.activity_name = #{activityName,jdbcType=VARCHAR}
+     <if test="activityName != null and activityName!= ''">
+       AND tma.activity_name LIKE "%"#{activityName}"%"
      </if>
      <if test="sysBrandId != null and sysBrandId != '' ">
        AND tma.sys_brand_id = #{sysBrandId,jdbcType=BIGINT}
