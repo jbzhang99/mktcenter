@@ -221,14 +221,17 @@ public class ActivityServiceImpl implements ActivityService {
                 //收益
                 activityAnalysisCount.setMoney(couponFindCouponCountResponseVO.getMoney());
                 //核销率
-                if (null!=couponFindCouponCountResponseVO.getCouponUsedSum() && null!=couponFindCouponCountResponseVO.getCouponSum()) {
+                if ((null!=couponFindCouponCountResponseVO.getCouponUsedSum() && null!=couponFindCouponCountResponseVO.getCouponSum())) {
                     // 创建一个数值格式化对象
                     NumberFormat numberFormat = NumberFormat.getInstance();
                     // 设置精确到小数点后2位
                     numberFormat.setMaximumFractionDigits(2);
                     String result = numberFormat.format((float) couponFindCouponCountResponseVO.getCouponUsedSum() / (float) couponFindCouponCountResponseVO.getCouponSum() * 100);
                     log.info("百分比百分比百分比百分比+========"+result);
-                    activityAnalysisCount.setCouponUsedSumPercentage(result + "%");
+                    if (!result.equals("�")){
+                        activityAnalysisCount.setCouponUsedSumPercentage(result + "%");
+                    }
+
 
 
                 }
