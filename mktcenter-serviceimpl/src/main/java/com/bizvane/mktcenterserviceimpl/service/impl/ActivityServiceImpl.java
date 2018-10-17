@@ -192,13 +192,13 @@ public class ActivityServiceImpl implements ActivityService {
         List<ActivityAnalysisCountBO> activityAnalysisList = mktActivityPOMapper.getActivityAnalysisCountpage(bo);
         if (!CollectionUtils.isEmpty(activityAnalysisList)){
             for (ActivityAnalysisCountBO activityAnalysisCount:activityAnalysisList) {
-                if (activityAnalysisCount.getActivityStatus().equals(ActivityStatusEnum.ACTIVITY_STATUS_PENDING)){
+                if (activityAnalysisCount.getActivityStatus()==ActivityStatusEnum.ACTIVITY_STATUS_PENDING.getCode()){
                     activityAnalysisCount.setDays("0天");
                 }
-                if (activityAnalysisCount.getActivityStatus().equals(ActivityStatusEnum.ACTIVITY_STATUS_EXECUTING)){
+                if (activityAnalysisCount.getActivityStatus()==ActivityStatusEnum.ACTIVITY_STATUS_EXECUTING.getCode()){
                     activityAnalysisCount.setDays(DateUtil.getIntervalBetweenTwoDate(activityAnalysisCount.getStartTime(),new Date()));
                 }
-                if (activityAnalysisCount.getActivityStatus().equals(ActivityStatusEnum.ACTIVITY_STATUS_FINISHED)){
+                if (activityAnalysisCount.getActivityStatus()==ActivityStatusEnum.ACTIVITY_STATUS_FINISHED.getCode()){
                     activityAnalysisCount.setDays(DateUtil.getIntervalBetweenTwoDate(activityAnalysisCount.getStartTime(),activityAnalysisCount.getEndTime()));
                 }
                 if (activityAnalysisCount.getActivityStatus()==4){
