@@ -226,7 +226,6 @@ public class ActivityEvaluationServiceImpl implements ActivityEvaluationService 
         //查询品牌下所有执行中的活动
         ActivityVO activity = new ActivityVO();
         activity.setActivityStatus(ActivityStatusEnum.ACTIVITY_STATUS_EXECUTING.getCode());
-        activity.setSysBrandId(vo.getBrandId());
         activity.setActivityType(ActivityTypeEnum.ACTIVITY_TYPE_EVALUATION.getCode());
         List<ActivityVO> evaluationList = mktActivityEvaluationPOMapper.getActivityVOList(activity);
         if (CollectionUtils.isEmpty(evaluationList)) {
