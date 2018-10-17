@@ -139,6 +139,8 @@ rocketmq:
   onsaddr: http://onsaddr-internet.aliyun.com/rocketmq/nsaddr4client-internet
   accessKey: LTAIpoqUHsXq6q7r
   secretKey: 0ZJ7bfxXJLT8TpOKvZU3i4YWuhvJzs
+  addr: 
+  environment: test
 
 threadPool:
   corePoolSize: 16

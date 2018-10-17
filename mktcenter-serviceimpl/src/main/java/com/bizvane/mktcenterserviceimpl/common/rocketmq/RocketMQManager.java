@@ -41,6 +41,12 @@ public class RocketMQManager implements ApplicationRunner {
   @Value("${spring.application.name}")//mktcenter
   private String modelName;
   
+  @Value("${rocketmq.environment}")
+  private String environment;
+  
+  @Value("${rocketmq.addr}")
+  private String addr;
+
   @Autowired
   private RocketConfigPOMapper rocketConfigPOMapper;
   
@@ -67,7 +73,10 @@ public class RocketMQManager implements ApplicationRunner {
         if (RocketConstants.ROCKET_CONFIG_ROLE_TYPE_PRODUCER.equals(rocketConfigPO.getRoleType())) {
           Properties properties = getProperties();
           properties.setProperty(PropertyKeyConst.ProducerId, rocketConfigPO.getRoleId());
-          
+          if(environment.equals("uat")) {
+        	  properties.setProperty("NAMESRV_ADDR", addr);
+        	  
+          }
           Producer producer = ONSFactory.createProducer(properties);
           producer.start();
           
@@ -75,8 +84,14 @@ public class RocketMQManager implements ApplicationRunner {
         } else if (RocketConstants.ROCKET_CONFIG_ROLE_TYPE_CONSUMER.equals(rocketConfigPO.getRoleType())) {
           Properties properties = getProperties();
           properties.setProperty(PropertyKeyConst.ConsumerId, rocketConfigPO.getRoleId());
+          if(environment.equals("uat")) {
+        	  properties.setProperty("NAMESRV_ADDR", addr);
+        	  
+          }
           
           Consumer consumer = ONSFactory.createConsumer(properties);
+          
+          
           
           MessageListener messageListener = (MessageListener) SpringContextUtil.getBean(rocketConfigPO.getMessageListenerBean());
           consumer.subscribe(rocketConfigPO.getTopic(), rocketConfigPO.getTag(), messageListener);
