@@ -179,12 +179,15 @@ public class FigureController {
 				    		             staffVo.setSysCompanyId(currentUser.getSysCompanyId());
 				    		             staffVo.setSysBrandId(currentUser.getBrandId());
 				    		             staffVo.setSysAccountId(currentUser.getSysAccountId());
+				    		             
 				    		             ResponseData<PageInfo<SysStoreVo>> SysStoreVo = storeServiceRpc.getSysStoreList(staffVo);
-				    		             List<Long>  Longlist =SysStoreVo.getData().getList().get(0).getStoreIdList();
-				    		             str = new String[Longlist.size()];
+				    		             
+				    		             staffVo.setPageSize(Integer.parseInt(String.valueOf(SysStoreVo.getData().getTotal())));
+				    		             ResponseData<PageInfo<SysStoreVo>> SysStoreVo2 = storeServiceRpc.getSysStoreList(staffVo);
+				    		             str = new String[SysStoreVo2.getData().getList().size()];
 				    		            int i=0;
-				    		             for( Long Long : Longlist) {
-				    		            	 str[i++] = Long.toString();
+				    		             for( SysStoreVo sysStore : SysStoreVo2.getData().getList()) {
+				    		            	 str[i++] = sysStore.getSysStoreId().toString();
 				    		             }
 								} catch (Exception e) {
 									System.out.println("获取当前用户，所有店铺id出错");
@@ -249,18 +252,21 @@ log.info("报表查询ReportIncomeController："+url+vipIncomeAnalysis.toString(
    		             //获取当前用户，所有店铺id
    		        	 String[] str = new String[]{};
    		        	 try {
-			    		        	 SysStoreVo staffVo =new SysStoreVo();
-			    		             staffVo.setSysCompanyId(currentUser.getSysCompanyId());
-			    		             staffVo.setSysBrandId(currentUser.getBrandId());
-			    		             staffVo.setSysAccountId(currentUser.getSysAccountId());
-			    		             ResponseData<PageInfo<SysStoreVo>> SysStoreVo = storeServiceRpc.getSysStoreList(staffVo);
-			    		             List<Long>  Longlist =SysStoreVo.getData().getList().get(0).getStoreIdList();
-			    		             str = new String[Longlist.size()];
-			    		            int i=0;
-			    		             for( Long Long : Longlist) {
-			    		            	 str[i++] = Long.toString();
-			    		             }
-							} catch (Exception e) {
+    		        	 SysStoreVo staffVo =new SysStoreVo();
+    		             staffVo.setSysCompanyId(currentUser.getSysCompanyId());
+    		             staffVo.setSysBrandId(currentUser.getBrandId());
+    		             staffVo.setSysAccountId(currentUser.getSysAccountId());
+    		             
+    		             ResponseData<PageInfo<SysStoreVo>> SysStoreVo = storeServiceRpc.getSysStoreList(staffVo);
+    		             
+    		             staffVo.setPageSize(Integer.parseInt(String.valueOf(SysStoreVo.getData().getTotal())));
+    		             ResponseData<PageInfo<SysStoreVo>> SysStoreVo2 = storeServiceRpc.getSysStoreList(staffVo);
+    		             str = new String[SysStoreVo2.getData().getList().size()];
+    		            int i=0;
+    		             for( SysStoreVo sysStore : SysStoreVo2.getData().getList()) {
+    		            	 str[i++] = sysStore.getSysStoreId().toString();
+    		             }
+				        } catch (Exception e) {
 								System.out.println("获取当前用户，所有店铺id出错");
 							}
    		        	 System.out.println("当前用户"+JSONObject.toJSONString(currentUser));
