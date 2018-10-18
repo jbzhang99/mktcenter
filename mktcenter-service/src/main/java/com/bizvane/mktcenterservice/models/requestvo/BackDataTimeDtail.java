@@ -11,6 +11,43 @@ public class BackDataTimeDtail {
 	private String 	onlineData;
 	private String 	offlineData;
 	
+	private String 	totalName;
+	private String vipDataName;
+	private String touristsDataName;
+	private String 	onlineDataName;
+	private String 	offlineDataName;
+	
+	
+	public String getTotalName() {
+		return totalName;
+	}
+	public void setTotalName(String totalName) {
+		this.totalName = totalName;
+	}
+	public String getVipDataName() {
+		return vipDataName;
+	}
+	public void setVipDataName(String vipDataName) {
+		this.vipDataName = vipDataName;
+	}
+	public String getTouristsDataName() {
+		return touristsDataName;
+	}
+	public void setTouristsDataName(String touristsDataName) {
+		this.touristsDataName = touristsDataName;
+	}
+	public String getOnlineDataName() {
+		return onlineDataName;
+	}
+	public void setOnlineDataName(String onlineDataName) {
+		this.onlineDataName = onlineDataName;
+	}
+	public String getOfflineDataName() {
+		return offlineDataName;
+	}
+	public void setOfflineDataName(String offlineDataName) {
+		this.offlineDataName = offlineDataName;
+	}
 	private String vipDataAccountedfor;
 	private String touristsDataAccountedfor;
 	private String 	onlineDataAccountedfor;
