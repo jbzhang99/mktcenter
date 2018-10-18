@@ -174,7 +174,7 @@ public class ActivityRegisterServiceImpl implements ActivityRegisterService {
             if(!CollectionUtils.isEmpty(registerList)){
                 for (ActivityVO activity:registerList) {
                     //判断适用商品
-                    if (!ExecuteParamCheckUtil.addActivitCheck(bo,activity)){
+                    if (false==activity.getStoreLimit() ||!ExecuteParamCheckUtil.addActivitCheck(bo,activity)){
                          responseData.setCode(SysResponseEnum.FAILED.getCode());
                          responseData.setMessage("已存在同一类型的长期活动!");
                          return responseData;
