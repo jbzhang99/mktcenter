@@ -604,7 +604,6 @@
     tma.valid,
 
     tmab.mkt_activity_vip_aniversary_id,
-    tmab.mkt_activity_id,
     tmab.member_type,
     tmab.days_ahead,
     tmab.is_store_limit,

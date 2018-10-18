@@ -655,7 +655,6 @@
     tma.valid,
 
     tmao.mkt_activity_order_id,
-    tmao.mkt_activity_id,
     tmao.member_type,
     tmao.mbr_level_code,
     tmao.mbr_level_name,

@@ -567,7 +567,6 @@
     tma.valid,
 
     tmau.mkt_activity_upgrade_id,
-    tmau.mkt_activity_id,
     tmau.member_type,
     tmau.mbr_level_code,
     tmau.mbr_level_name,

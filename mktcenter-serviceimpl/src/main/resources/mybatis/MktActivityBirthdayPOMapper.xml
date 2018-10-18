@@ -585,7 +585,6 @@
     tma.valid,
 
     tmab.mkt_activity_birthday_id,
-    tmab.mkt_activity_id,
     tmab.member_type,
     tmab.mbr_level_code,
     tmab.mbr_level_name,

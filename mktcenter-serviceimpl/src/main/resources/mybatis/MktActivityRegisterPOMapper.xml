@@ -569,7 +569,6 @@
         tma.valid,
 
         tmar.mkt_activity_resigter_id,
-        tmar.mkt_activity_id,
         tmar.offline_card_status,
         tmar.mbr_level_code,
         tmar.mbr_level_name,
