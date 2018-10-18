@@ -16,8 +16,10 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
 import com.alibaba.fastjson.JSONObject;
+import com.bizvane.centerstageservice.models.po.SysCompanyPo;
 import com.bizvane.centerstageservice.models.vo.StaffVo;
 import com.bizvane.centerstageservice.models.vo.SysStoreVo;
+import com.bizvane.centerstageservice.rpc.CompanyServiceRpc;
 import com.bizvane.centerstageservice.rpc.StoreServiceRpc;
 import com.bizvane.mktcenterservice.interfaces.ReportTempService;
 import com.bizvane.mktcenterservice.models.po.FileReportTempPO;
@@ -67,6 +69,9 @@ public class ReportIncomeController {
 	private  ReportTempService reportTempService;
 	@Autowired
 	private   StoreServiceRpc storeServiceRpc;
+	
+	@Autowired
+	private   CompanyServiceRpc companyServiceRpc;
 
     
 	BaseUrl BaseUrl =new BaseUrl();
@@ -98,29 +103,44 @@ public class ReportIncomeController {
 		    	    String organizationContentStr = jsonObject.getString("organizationContentStr");
 		    	    String dimension = jsonObject.getString("dimension");
 		    		 if(StringUtils.isNotBlank(organizationContentStr)){
-		    		 String[] al= organizationContentStr.toString().split(",");
+		    		
+		    		 int i=0;
+		             for( String trLong : organizationContentStr.split(",")) {
+		            	 i++;
+		             }
+		             String[] al= new String[i];
+		             i=0;
+		             for( String trLong : organizationContentStr.split(",")) {
+		            	 al[i++] = trLong;
+		             }
+		    		 
 		    		  jsonObject.put("organizationContent", al); // 直接put相同的key
 		    		 }
 		    		 
 		    		 //默认页 sendVO.setCorpId("C10291");
-		    		 jsonObject.put("corpId", currentUser.getCompanyCode()); 
+		    	   		ResponseData<SysCompanyPo>   SysCompanyP=	companyServiceRpc.getCompanyById(currentUser.getSysCompanyId());
+		    	   	    jsonObject.put("corpId", SysCompanyP.getData().getCompanyCode()); 
+		    		 
 		    		 String organization = jsonObject.getString("organization");
 		    		         if(organization.equals("0")) {
 		    		             //获取当前用户，所有店铺id
 		    		        	 String[] str = new String[]{};
 		    		        	 try {
-					    		        	 SysStoreVo staffVo =new SysStoreVo();
-					    		             staffVo.setSysCompanyId(currentUser.getSysCompanyId());
-					    		             staffVo.setSysBrandId(currentUser.getBrandId());
-					    		             staffVo.setSysAccountId(currentUser.getSysAccountId());
-					    		             ResponseData<PageInfo<SysStoreVo>> SysStoreVo = storeServiceRpc.getSysStoreList(staffVo);
-					    		             List<Long>  Longlist =SysStoreVo.getData().getList().get(0).getStoreIdList();
-					    		             str = new String[Longlist.size()];
-					    		            int i=0;
-					    		             for( Long Long : Longlist) {
-					    		            	 str[i++] = Long.toString();
-					    		             }
-									} catch (Exception e) {
+			    		        	 SysStoreVo staffVo =new SysStoreVo();
+			    		             staffVo.setSysCompanyId(currentUser.getSysCompanyId());
+			    		             staffVo.setSysBrandId(currentUser.getBrandId());
+			    		             staffVo.setSysAccountId(currentUser.getSysAccountId());
+			    		             
+			    		             ResponseData<PageInfo<SysStoreVo>> SysStoreVo = storeServiceRpc.getSysStoreList(staffVo);
+			    		             
+			    		             staffVo.setPageSize(Integer.parseInt(String.valueOf(SysStoreVo.getData().getTotal())));
+			    		             ResponseData<PageInfo<SysStoreVo>> SysStoreVo2 = storeServiceRpc.getSysStoreList(staffVo);
+			    		             str = new String[SysStoreVo2.getData().getList().size()];
+			    		            int i=0;
+			    		             for( SysStoreVo sysStore : SysStoreVo2.getData().getList()) {
+			    		            	 str[i++] = sysStore.getSysStoreId().toString();
+			    		             }
+							     } catch (Exception e) {
 										System.out.println("获取当前用户，所有店铺id出错");
 									}
 		    		        	 System.out.println("当前用户"+JSONObject.toJSONString(currentUser));

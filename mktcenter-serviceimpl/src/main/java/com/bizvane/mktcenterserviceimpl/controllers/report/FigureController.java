@@ -15,7 +15,9 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
 import com.alibaba.fastjson.JSONObject;
+import com.bizvane.centerstageservice.models.po.SysCompanyPo;
 import com.bizvane.centerstageservice.models.vo.SysStoreVo;
+import com.bizvane.centerstageservice.rpc.CompanyServiceRpc;
 import com.bizvane.centerstageservice.rpc.StoreServiceRpc;
 import com.bizvane.mktcenterservice.interfaces.ReportTempService;
 import com.bizvane.mktcenterservice.models.po.FileReportTempPO;
@@ -59,6 +61,9 @@ public class FigureController {
 	
 	@Autowired
 	private  StoreServiceRpc storeServiceRpc;
+	
+	@Autowired
+	private   CompanyServiceRpc companyServiceRpc;
     
 	
     @RequestMapping("vipIncomeAnalysis")
@@ -133,7 +138,7 @@ public class FigureController {
 
    
 // 请求放回数据带时间格式的json
- public ResponseData<BackDataTimeDtail> sendpostHaveTime(String url,IncomeTotalListGroup vipIncomeAnalysis,List<FileReportTempPO> fileReportTempPOlist,SysAccountPO sysAccountPO){
+ public ResponseData<BackDataTimeDtail> sendpostHaveTime(String url,IncomeTotalListGroup vipIncomeAnalysis,List<FileReportTempPO> fileReportTempPOlist,SysAccountPO currentUser){
  log.info("报表查询ReportIncomeController："+url+vipIncomeAnalysis.toString());
  
             //TODO 获取活跃度
@@ -147,9 +152,51 @@ public class FigureController {
 		    JSONObject jsonObject = JSONObject.parseObject(JSONObject.toJSONString(vipIncomeAnalysis));
 	    	String organizationContentStr = jsonObject.getString("organizationContentStr");
 	    	if(StringUtils.isNotBlank(organizationContentStr)){
-	    		 String[] al= organizationContentStr.toString().split(",");
+	    		
+	    		 int i=0;
+	             for( String trLong : organizationContentStr.split(",")) {
+	            	 i++;
+	             }
+	             String[] al= new String[i];
+	             i=0;
+	             for( String trLong : organizationContentStr.split(",")) {
+	            	 al[i++] = trLong;
+	             }
+	    		 
 	    		  jsonObject.put("organizationContent", al); // 直接put相同的key
+	    		 
 	    	}
+	    	
+	   		 //默认页 sendVO.setCorpId("C10291");
+		   		ResponseData<SysCompanyPo>   SysCompanyP=	companyServiceRpc.getCompanyById(currentUser.getSysCompanyId());
+		   	    jsonObject.put("corpId", SysCompanyP.getData().getCompanyCode()); 
+		   	    
+	   		         if(StringUtils.isBlank(organizationContentStr)) {
+	   		             //获取当前用户，所有店铺id
+	   		        	 String[] str = new String[]{};
+	   		        	 try {
+				    		        	 SysStoreVo staffVo =new SysStoreVo();
+				    		             staffVo.setSysCompanyId(currentUser.getSysCompanyId());
+				    		             staffVo.setSysBrandId(currentUser.getBrandId());
+				    		             staffVo.setSysAccountId(currentUser.getSysAccountId());
+				    		             
+				    		             ResponseData<PageInfo<SysStoreVo>> SysStoreVo = storeServiceRpc.getSysStoreList(staffVo);
+				    		             
+				    		             staffVo.setPageSize(Integer.parseInt(String.valueOf(SysStoreVo.getData().getTotal())));
+				    		             ResponseData<PageInfo<SysStoreVo>> SysStoreVo2 = storeServiceRpc.getSysStoreList(staffVo);
+				    		             str = new String[SysStoreVo2.getData().getList().size()];
+				    		            int i=0;
+				    		             for( SysStoreVo sysStore : SysStoreVo2.getData().getList()) {
+				    		            	 str[i++] = sysStore.getSysStoreId().toString();
+				    		             }
+								} catch (Exception e) {
+									System.out.println("获取当前用户，所有店铺id出错");
+								}
+	   		        	 System.out.println("当前用户"+JSONObject.toJSONString(currentUser));
+	   		        	 jsonObject.put("organization", "1"); // 直接put相同的key
+	   		        	 jsonObject.put("organizationContent", str); // / 
+	   		         }
+	   		       //默认页  
 			 
 		 ResponseEntity<String> response = this.restTemplate.postForEntity(url, jsonObject,String.class, new Object[0]);
 	     ResponseData<BackDataTimeDtail> ResponseData =new ResponseData<BackDataTimeDtail>();
@@ -160,7 +207,7 @@ public class FigureController {
              // 导出表格
 	    	 String postTem = jsonObject.getString("postTem");
 	    	 if(StringUtils.isNotBlank(postTem)&&postTem.equals("export")){
-	    		 reportTempService.Export(sysAccountPO,"_cycle",job.get("data").toString(),fileReportTempPOlist.get(0));
+	    		 reportTempService.Export(currentUser,"_cycle",job.get("data").toString(),fileReportTempPOlist.get(0));
 	    		 ResponseData.setMessage("导出中");
 	    	 }else {
 	    		 ResponseData.setMessage(job.get("message").toString());
@@ -198,24 +245,28 @@ log.info("报表查询ReportIncomeController："+url+vipIncomeAnalysis.toString(
 	    	}
 	    	
    		 //默认页 sendVO.setCorpId("C10291");
-   		 jsonObject.put("corpId", currentUser.getCompanyCode()); 
-   		 String organization = jsonObject.getString("organization");
-   		         if(organization.equals("0")) {
+	   		ResponseData<SysCompanyPo>   SysCompanyP=	companyServiceRpc.getCompanyById(currentUser.getSysCompanyId());
+	   	    jsonObject.put("corpId", SysCompanyP.getData().getCompanyCode()); 
+	   	    
+   		         if(StringUtils.isBlank(organizationContentStr)) {
    		             //获取当前用户，所有店铺id
    		        	 String[] str = new String[]{};
    		        	 try {
-			    		        	 SysStoreVo staffVo =new SysStoreVo();
-			    		             staffVo.setSysCompanyId(currentUser.getSysCompanyId());
-			    		             staffVo.setSysBrandId(currentUser.getBrandId());
-			    		             staffVo.setSysAccountId(currentUser.getSysAccountId());
-			    		             ResponseData<PageInfo<SysStoreVo>> SysStoreVo = storeServiceRpc.getSysStoreList(staffVo);
-			    		             List<Long>  Longlist =SysStoreVo.getData().getList().get(0).getStoreIdList();
-			    		             str = new String[Longlist.size()];
-			    		            int i=0;
-			    		             for( Long Long : Longlist) {
-			    		            	 str[i++] = Long.toString();
-			    		             }
-							} catch (Exception e) {
+    		        	 SysStoreVo staffVo =new SysStoreVo();
+    		             staffVo.setSysCompanyId(currentUser.getSysCompanyId());
+    		             staffVo.setSysBrandId(currentUser.getBrandId());
+    		             staffVo.setSysAccountId(currentUser.getSysAccountId());
+    		             
+    		             ResponseData<PageInfo<SysStoreVo>> SysStoreVo = storeServiceRpc.getSysStoreList(staffVo);
+    		             
+    		             staffVo.setPageSize(Integer.parseInt(String.valueOf(SysStoreVo.getData().getTotal())));
+    		             ResponseData<PageInfo<SysStoreVo>> SysStoreVo2 = storeServiceRpc.getSysStoreList(staffVo);
+    		             str = new String[SysStoreVo2.getData().getList().size()];
+    		            int i=0;
+    		             for( SysStoreVo sysStore : SysStoreVo2.getData().getList()) {
+    		            	 str[i++] = sysStore.getSysStoreId().toString();
+    		             }
+				        } catch (Exception e) {
 								System.out.println("获取当前用户，所有店铺id出错");
 							}
    		        	 System.out.println("当前用户"+JSONObject.toJSONString(currentUser));

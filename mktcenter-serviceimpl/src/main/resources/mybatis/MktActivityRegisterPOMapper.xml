@@ -569,7 +569,6 @@
         tma.valid,
 
         tmar.mkt_activity_resigter_id,
-        tmar.mkt_activity_id,
         tmar.offline_card_status,
         tmar.mbr_level_code,
         tmar.mbr_level_name,
@@ -607,6 +606,9 @@
     <!--活动编号-->
     <if test="activityCode != null and activityCode!= ''">
       AND tma.activity_code = #{activityCode}
+    </if>
+    <if test="activityName != null and activityName!= ''">
+      AND tma.activity_name LIKE "%"#{activityName}"%"
     </if>
   </select>
 </mapper>

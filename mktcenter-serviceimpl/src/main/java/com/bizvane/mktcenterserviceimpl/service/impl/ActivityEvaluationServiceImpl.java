@@ -7,7 +7,7 @@ import com.bizvane.centerstageservice.rpc.SysCheckConfigServiceRpc;
 import com.bizvane.centerstageservice.rpc.SysCheckServiceRpc;
 import com.bizvane.couponfacade.interfaces.CouponQueryServiceFeign;
 import com.bizvane.couponfacade.models.vo.CouponFindCouponCountResponseVO;
-import com.bizvane.members.facade.enums.IntegralChangeTypeEnum;
+import com.bizvane.members.facade.enums.*;
 import com.bizvane.members.facade.models.MemberInfoModel;
 import com.bizvane.members.facade.service.card.request.IntegralChangeRequestModel;
 import com.bizvane.mktcenterservice.interfaces.ActivityEvaluationService;
@@ -85,11 +85,6 @@ public class ActivityEvaluationServiceImpl implements ActivityEvaluationService 
     @Transactional
     public ResponseData<Integer> addActivityEvaluation(ActivityBO bo, SysAccountPO stageUser) {
         //本地测试时使用
-/*         SysAccountPO stageUser1=new SysAccountPO();
-        stageUser1.setBrandId(2l);
-        stageUser1.setSysCompanyId(2l);
-        stageUser1.setCreateUserId(26l);
-        stageUser1.setCreateUserName("zjw");*/
         log.info("创建评价奖励活动开始");
         //返回对象
         ResponseData responseData = new ResponseData();
@@ -182,8 +177,7 @@ public class ActivityEvaluationServiceImpl implements ActivityEvaluationService 
             po.setCreateUserName(stageUser.getCreateUserName());
             po.setBizName(mktActivityPOWithBLOBs.getActivityName());
             log.info("请求sysCheckServiceRpc时的参数" + JSON.toJSONString(po));
-            rpcResponse = sysCheckServiceRpc.addCheck(po);
-            log.info("sysCheckServiceRpc添加评价奖励活动到审核中心的返回结果是:" + rpcResponse.getData());
+            sysCheckServiceRpc.addCheck(po);
         }
 
 
@@ -202,7 +196,6 @@ public class ActivityEvaluationServiceImpl implements ActivityEvaluationService 
         mktActivityEvaluationPOMapper.insertSelective(mktActivityEvaluationPO);
         responseData.setCode(SysResponseEnum.SUCCESS.getCode());
         responseData.setMessage(SysResponseEnum.SUCCESS.getMessage());
-        responseData.setData(rpcResponse.getData());
         return responseData;
     }
 
@@ -225,15 +218,14 @@ public class ActivityEvaluationServiceImpl implements ActivityEvaluationService 
     }
 
     @Override
-    @Transactional
     public ResponseData<Integer> executeActivityEvaluation(MemberInfoModel vo) {
+        log.info("执行评价送积分活动=++++++++++++++______________-----------------------333333");
         log.info("执行评价送积分活动=" + vo.getBrandId() + "=" + vo.getMemberCode());
         //返回对象
         ResponseData responseData = new ResponseData();
         //查询品牌下所有执行中的活动
         ActivityVO activity = new ActivityVO();
         activity.setActivityStatus(ActivityStatusEnum.ACTIVITY_STATUS_EXECUTING.getCode());
-        activity.setSysBrandId(vo.getBrandId());
         activity.setActivityType(ActivityTypeEnum.ACTIVITY_TYPE_EVALUATION.getCode());
         List<ActivityVO> evaluationList = mktActivityEvaluationPOMapper.getActivityVOList(activity);
         if (CollectionUtils.isEmpty(evaluationList)) {
@@ -243,14 +235,17 @@ public class ActivityEvaluationServiceImpl implements ActivityEvaluationService 
         }
         for (ActivityVO activityVO : evaluationList) {
             //增加积分奖励新增接口
+            log.info("执行评价送积分777777777777777777");
             AwardBO bo = new AwardBO();
             IntegralChangeRequestModel integralChangeRequestModel = new IntegralChangeRequestModel();
+            integralChangeRequestModel.setSysCompanyId(activityVO.getSysCompanyId());
             integralChangeRequestModel.setBrandId(activityVO.getSysBrandId());
             integralChangeRequestModel.setMemberCode(vo.getMemberCode());
             integralChangeRequestModel.setChangeBills(activityVO.getActivityCode());
             integralChangeRequestModel.setChangeIntegral(activityVO.getPoints());
             integralChangeRequestModel.setChangeType(IntegralChangeTypeEnum.INCOME.getCode());
-            integralChangeRequestModel.setBusinessType(String.valueOf(BusinessTypeEnum.ACTIVITY_TYPE_ACTIVITY.getCode()));
+            integralChangeRequestModel.setBusinessType(com.bizvane.members.facade.enums.BusinessTypeEnum.TASK_TYPE_EVALUATE_AWARD.getCode());
+            integralChangeRequestModel.setChangeDate(new Date());
             bo.setIntegralRecordModel(integralChangeRequestModel);
             bo.setMktType(MktSmartTypeEnum.SMART_TYPE_INTEGRAL.getCode());
             log.info("新增积分奖励");
@@ -273,7 +268,6 @@ public class ActivityEvaluationServiceImpl implements ActivityEvaluationService 
 
 
     @Override
-    @Transactional
     public ResponseData<Integer> checkActivityEvaluation(SysCheckPo po, SysAccountPO sysAccountPO) {
         log.info("审核活动开始");
         ResponseData responseData = new ResponseData();

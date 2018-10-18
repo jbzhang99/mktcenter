@@ -192,13 +192,18 @@ public class ActivityServiceImpl implements ActivityService {
         List<ActivityAnalysisCountBO> activityAnalysisList = mktActivityPOMapper.getActivityAnalysisCountpage(bo);
         if (!CollectionUtils.isEmpty(activityAnalysisList)){
             for (ActivityAnalysisCountBO activityAnalysisCount:activityAnalysisList) {
-                if (activityAnalysisCount.getActivityStatus().equals(ActivityStatusEnum.ACTIVITY_STATUS_PENDING)){
+                if (activityAnalysisCount.getActivityStatus()==ActivityStatusEnum.ACTIVITY_STATUS_PENDING.getCode()){
                     activityAnalysisCount.setDays("0天");
                 }
-                if (activityAnalysisCount.getActivityStatus().equals(ActivityStatusEnum.ACTIVITY_STATUS_EXECUTING)){
-                    activityAnalysisCount.setDays(DateUtil.getIntervalBetweenTwoDate(activityAnalysisCount.getStartTime(),new Date()));
+                if (activityAnalysisCount.getActivityStatus()==ActivityStatusEnum.ACTIVITY_STATUS_EXECUTING.getCode()){
+                    if (activityAnalysisCount.getLongTerm()==0){
+                        activityAnalysisCount.setDays(DateUtil.getIntervalBetweenTwoDate(activityAnalysisCount.getStartTime(),new Date()));
+                    }else if (activityAnalysisCount.getLongTerm()==1){
+                        activityAnalysisCount.setDays(DateUtil.getIntervalBetweenTwoDate(activityAnalysisCount.getCreateDate(),new Date()));
+                    }
+
                 }
-                if (activityAnalysisCount.getActivityStatus().equals(ActivityStatusEnum.ACTIVITY_STATUS_FINISHED)){
+                if (activityAnalysisCount.getActivityStatus()==ActivityStatusEnum.ACTIVITY_STATUS_FINISHED.getCode()){
                     activityAnalysisCount.setDays(DateUtil.getIntervalBetweenTwoDate(activityAnalysisCount.getStartTime(),activityAnalysisCount.getEndTime()));
                 }
                 if (activityAnalysisCount.getActivityStatus()==4){
@@ -221,16 +226,17 @@ public class ActivityServiceImpl implements ActivityService {
                 //收益
                 activityAnalysisCount.setMoney(couponFindCouponCountResponseVO.getMoney());
                 //核销率
-                if (null!=couponFindCouponCountResponseVO.getCouponUsedSum() && null!=couponFindCouponCountResponseVO.getCouponSum()) {
+                if ((null!=couponFindCouponCountResponseVO.getCouponUsedSum() && null!=couponFindCouponCountResponseVO.getCouponSum())) {
                     // 创建一个数值格式化对象
                     NumberFormat numberFormat = NumberFormat.getInstance();
                     // 设置精确到小数点后2位
                     numberFormat.setMaximumFractionDigits(2);
                     String result = numberFormat.format((float) couponFindCouponCountResponseVO.getCouponUsedSum() / (float) couponFindCouponCountResponseVO.getCouponSum() * 100);
-                    if (null!=couponFindCouponCountResponseVO.getCouponUsedSum() && null!=couponFindCouponCountResponseVO.getCouponSum()){
-                        log.info("百分比百分比百分比百分比+========"+result);
+                    log.info("百分比百分比百分比百分比+========"+result);
+                    if (!result.equals("�")){
                         activityAnalysisCount.setCouponUsedSumPercentage(result + "%");
                     }
+
 
 
                 }

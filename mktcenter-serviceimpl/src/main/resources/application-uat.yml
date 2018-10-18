@@ -136,9 +136,11 @@ feign:
       path: fitment.api
 
 rocketmq:
-  onsaddr: http://onsaddr-internet.aliyun.com/rocketmq/nsaddr4client-internet
+  onsaddr:
   accessKey: LTAIpoqUHsXq6q7r
   secretKey: 0ZJ7bfxXJLT8TpOKvZU3i4YWuhvJzs
+  addr: 192.168.2.18:9876
+  environment: uat
 
 threadPool:
   corePoolSize: 16

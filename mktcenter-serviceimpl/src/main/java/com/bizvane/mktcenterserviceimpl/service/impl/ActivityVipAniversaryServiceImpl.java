@@ -623,7 +623,7 @@ public class ActivityVipAniversaryServiceImpl implements ActivityVipAniversarySe
             integralChangeRequestModel.setChangeBills(activityAniversary.getActivityCode());
             integralChangeRequestModel.setChangeIntegral(activityAniversary.getPoints());
             integralChangeRequestModel.setChangeType(IntegralChangeTypeEnum.INCOME.getCode());
-            integralChangeRequestModel.setBusinessType(com.bizvane.members.facade.enums.BusinessTypeEnum.ACTIVITY_TYPE_BIRTHDAY.getCode());
+            integralChangeRequestModel.setBusinessType(com.bizvane.members.facade.enums.BusinessTypeEnum.TASK_TYPE_MEMORIAL_DAY.getCode());
             integralChangeRequestModel.setChangeDate(new Date());
             log.info("执行纪念日活动开始开始增加积分增加积分++++++");
             integralChangeApiService.integralChangeOperate(integralChangeRequestModel);

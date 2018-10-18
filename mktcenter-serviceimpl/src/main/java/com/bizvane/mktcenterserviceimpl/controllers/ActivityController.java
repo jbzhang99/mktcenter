@@ -118,4 +118,5 @@ public class ActivityController {
     public ResponseData<CtivityAnalysisBO> getActivityAnalysisCountpage(ActivityAnalysisCountBO bo, PageForm pageForm){
         return activityService.getActivityAnalysisCountpage(bo,pageForm);
     }
+
 }

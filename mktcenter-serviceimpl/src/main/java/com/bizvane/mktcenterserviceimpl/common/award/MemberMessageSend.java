@@ -102,6 +102,7 @@ public class MemberMessageSend {
      * @param activityCode
      * @param membersInfoSearchVo
      */
+    @Async("asyncServiceExecutor")
     public void sendMemberPoints(ActivitySmartVO vo, String activityCode, MembersInfoSearchVo membersInfoSearchVo) {
         ResponseData<com.bizvane.utils.responseinfo.PageInfo<MemberInfoVo>> memberInfoVoPage = membersAdvancedSearchApiService.search(membersInfoSearchVo);
         IntegralRecordModel integralRecordModel = new IntegralRecordModel();
@@ -192,9 +193,7 @@ public class MemberMessageSend {
             MemberInfoApiModel memberInfoModel= new MemberInfoApiModel();
             memberInfoModel.setBrandId(activityBirthday.getSysBrandId());
             memberInfoModel.setSysCompanyId(activityBirthday.getSysCompanyId());
-            if (!activityBirthday.getMbrLevelCode().equals(0)){
-                memberInfoModel.setLevelId(Long.parseLong(activityBirthday.getMbrLevelCode()));
-            }
+            memberInfoModel.setLevelId(Long.valueOf(activityBirthday.getMbrLevelCode()));
             memberInfoModel.setBirthdayLine(activityBirthday.getDaysAhead());
             memberInfoModel.setMemberScope(activityBirthday.getMemberType().toString());
             memberInfoModel.setPageNumber(1);
@@ -227,10 +226,9 @@ public class MemberMessageSend {
             //根据品牌id 会员等级 会员范围  时间周期 查询会员信息 循环
             //查询对应的会员
             MemberInfoApiModel memberInfoModel= new MemberInfoApiModel();
+            memberInfoModel.setSysCompanyId(activityAniversary.getSysCompanyId());
             memberInfoModel.setBrandId(activityAniversary.getSysBrandId());
-            if (!activityAniversary.getMbrLevelCode().equals(0)){
-                memberInfoModel.setLevelId(Long.parseLong(activityAniversary.getMbrLevelCode()));
-            }
+            memberInfoModel.setLevelId(Long.valueOf(activityAniversary.getMbrLevelCode()));
             memberInfoModel.setOpenCardTimeLine(activityAniversary.getDaysAhead());
             memberInfoModel.setMemberScope(activityAniversary.getMemberType().toString());
             memberInfoModel.setPageNumber(1);
