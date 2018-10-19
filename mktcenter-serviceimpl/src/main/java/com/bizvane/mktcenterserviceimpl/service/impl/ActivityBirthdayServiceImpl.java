@@ -757,8 +757,12 @@ public class ActivityBirthdayServiceImpl implements ActivityBirthdayService {
         return falg;
     }
     public static void main(String[] args){
+        boolean falg ;
         String ids= "1,2,3,4,5,6";
-        List<Long> listIds = Arrays.asList(ids.split(",")).stream().map(s -> Long.parseLong(s.trim())).collect(Collectors.toList());
-        System.out.println(Arrays.toString(listIds .toArray()));//[1,2,3,3,4,5,6]
+        //List<Long> listIds = Arrays.asList(ids.split(",")).stream().map(s -> Long.parseLong(s.trim())).collect(Collectors.toList());
+        List<String> listIds = Arrays.asList(ids.split(","));
+        String ss = "1";
+        falg=listIds.contains(ss);
+        System.out.println("======================="+falg);//[1,2,3,3,4,5,6]
     }
 }
