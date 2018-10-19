@@ -307,6 +307,7 @@ public class ActivityRegisterServiceImpl implements ActivityRegisterService {
                 membersInfoSearchVo.setPageSize(10000);
                 membersInfoSearchVo.setCardStatus(1);
                 membersInfoSearchVo.setBrandId(activityVO.getSysBrandId());
+                membersInfoSearchVo.setSysCompanyId(activityVO.getSysCompanyId());
                 log.info("开卡活动-查询发送短信高级搜索参数+=====："+JSON.toJSONString(membersInfoSearchVo));
                 memberMessage.sendDXmessage(messageVOList, membersInfoSearchVo);
                /* //查询对应的会员  发送微信模板消息
