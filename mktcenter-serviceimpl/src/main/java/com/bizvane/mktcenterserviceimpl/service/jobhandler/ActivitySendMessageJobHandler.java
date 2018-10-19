@@ -75,7 +75,7 @@ public class ActivitySendMessageJobHandler extends IJobHandler {
                 //开卡活动的
                 if (mktActivityPO.getActivityType()== ActivityTypeEnum.ACTIVITY_TYPE_REGISGER.getCode()){
 
-                    membersInfoSearchVo.setCardStatus(1);
+                    membersInfoSearchVo.setCardStatus(2);
 
                 }
                 //升级活动的
