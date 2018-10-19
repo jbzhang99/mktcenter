@@ -50,6 +50,7 @@ public class ActivitySendMessageJobHandler extends IJobHandler {
     private MktActivityOrderPOMapper mktActivityOrderPOMapper;
     @Autowired
     private Award award;
+    @Autowired
     private MemberMessageSend memberMessage;
     @Override
     public ReturnT<String> execute(String param) throws Exception {
@@ -63,8 +64,8 @@ public class ActivitySendMessageJobHandler extends IJobHandler {
         MktActivityPO mktActivityPO = mktActivityPOs.get(0);
             //查询消息集合
             MktMessagePOExample example = new MktMessagePOExample();
-            example.createCriteria().andBizIdEqualTo(Long.parseLong("param"));
-            List<MktMessagePO> ListMktMessage = mktMessagePOMapper.selectByExample(example);
+            example.createCriteria().andBizIdEqualTo(mktActivityPO.getMktActivityId());
+            List<MktMessagePO> ListMktMessage = mktMessagePOMapper.selectByExampleWithBLOBs(example);
             if (!CollectionUtils.isEmpty(ListMktMessage)){
                 //判断是什么类型的活动 然后给不同的会员发送消息
                 //分页查询会员信息发送短信
@@ -72,10 +73,11 @@ public class ActivitySendMessageJobHandler extends IJobHandler {
                 membersInfoSearchVo.setPageNumber(1);
                 membersInfoSearchVo.setPageSize(10000);
                 membersInfoSearchVo.setBrandId(mktActivityPO.getSysBrandId());
+                membersInfoSearchVo.setSysCompanyId(mktActivityPO.getSysCompanyId());
                 //开卡活动的
                 if (mktActivityPO.getActivityType()== ActivityTypeEnum.ACTIVITY_TYPE_REGISGER.getCode()){
 
-                    membersInfoSearchVo.setCardStatus(1);
+                    membersInfoSearchVo.setCardStatus(2);
 
                 }
                 //升级活动的
@@ -96,23 +98,21 @@ public class ActivitySendMessageJobHandler extends IJobHandler {
                     vo.setActivityCode(param);
                     List<ActivityVO> activityOrderList = mktActivityOrderPOMapper.getActivityOrderList(vo);
 
-                    if (!activityOrderList.get(0).getMbrLevelCode().equals("0")){
                         List<Long> level = new ArrayList<>();
                         level.add(Long.parseLong(activityOrderList.get(0).getMbrLevelCode()));
                        membersInfoSearchVo.setLevelID(level);
-                    }
                 }
                 //如果是开卡活动
                 if (mktActivityPO.getActivityType()== ActivityTypeEnum.ACTIVITY_TYPE_REGISGER.getCode()){
                     memberMessage.sendDXmessage(ListMktMessage, membersInfoSearchVo);
                     //查询对应的会员  发送微信模板消息
-                    WxChannelInfoSearchVo wxChannelInfoSearchVo = new WxChannelInfoSearchVo();
+                 /*   WxChannelInfoSearchVo wxChannelInfoSearchVo = new WxChannelInfoSearchVo();
                     wxChannelInfoSearchVo.setPageNum(1);
                     wxChannelInfoSearchVo.setPageSize(10000);
                     wxChannelInfoSearchVo.setFocus(2);
                     wxChannelInfoSearchVo.setCardStatus(2);
                     wxChannelInfoSearchVo.setMiniProgram((byte) 1);
-                    memberMessage.sendWXmessage(ListMktMessage, wxChannelInfoSearchVo);
+                    memberMessage.sendWXmessage(ListMktMessage, wxChannelInfoSearchVo);*/
                 }else{
                     memberMessage.getMemberList(ListMktMessage, membersInfoSearchVo);
                 }

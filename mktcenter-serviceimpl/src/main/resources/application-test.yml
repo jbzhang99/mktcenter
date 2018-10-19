@@ -120,7 +120,7 @@ feign:
       name: members-test
       path: members.api
     message:
-      name: message-server-test
+      name: message-test
       path: message.api
     wechat:
       name: wechat-test

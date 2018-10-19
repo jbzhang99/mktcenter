@@ -11,7 +11,11 @@ public class BackDataTimeDtailtu {
 	private String oldVipData;
 	private String newVipData;
 
-
+	private String vipDataName;
+	private String inactivityVipDataName;
+	private String activityVipDataName;
+	private String oldVipDataName;
+	private String newVipDataName;
 
 	private String  inactivityVipDataAccountedfor;
 	private String 	activityVipDataAccountedfor;
@@ -21,6 +25,36 @@ public class BackDataTimeDtailtu {
 	private List<JSONObject>  josonData;
 	
 
+	public String getVipDataName() {
+		return vipDataName;
+	}
+	public void setVipDataName(String vipDataName) {
+		this.vipDataName = vipDataName;
+	}
+	public String getInactivityVipDataName() {
+		return inactivityVipDataName;
+	}
+	public void setInactivityVipDataName(String inactivityVipDataName) {
+		this.inactivityVipDataName = inactivityVipDataName;
+	}
+	public String getActivityVipDataName() {
+		return activityVipDataName;
+	}
+	public void setActivityVipDataName(String activityVipDataName) {
+		this.activityVipDataName = activityVipDataName;
+	}
+	public String getOldVipDataName() {
+		return oldVipDataName;
+	}
+	public void setOldVipDataName(String oldVipDataName) {
+		this.oldVipDataName = oldVipDataName;
+	}
+	public String getNewVipDataName() {
+		return newVipDataName;
+	}
+	public void setNewVipDataName(String newVipDataName) {
+		this.newVipDataName = newVipDataName;
+	}
 	public List<JSONObject> getJosonData() {
 		return josonData;
 	}

@@ -305,8 +305,9 @@ public class ActivityRegisterServiceImpl implements ActivityRegisterService {
                 MembersInfoSearchVo membersInfoSearchVo = new MembersInfoSearchVo();
                 membersInfoSearchVo.setPageNumber(1);
                 membersInfoSearchVo.setPageSize(10000);
-                membersInfoSearchVo.setCardStatus(1);
+                membersInfoSearchVo.setCardStatus(2);
                 membersInfoSearchVo.setBrandId(activityVO.getSysBrandId());
+                membersInfoSearchVo.setSysCompanyId(activityVO.getSysCompanyId());
                 log.info("开卡活动-查询发送短信高级搜索参数+=====："+JSON.toJSONString(membersInfoSearchVo));
                 memberMessage.sendDXmessage(messageVOList, membersInfoSearchVo);
                /* //查询对应的会员  发送微信模板消息
@@ -371,9 +372,11 @@ public class ActivityRegisterServiceImpl implements ActivityRegisterService {
         for (ActivityVO activityVO:registerList) {
             //判断开卡会员适合哪个活动根据开卡会员等级判断
             if( null==activityVO.getMbrLevelCode()||activityVO.getMbrLevelCode().equals(vo.getLevelId().toString()) ){
+                log.info("开始验证门店");
                 if (!ExecuteParamCheckUtil.implementActivitCheck(vo,activityVO)){
                     continue;
                 }
+                log.info("开卡活动-限制条件通过");
                 //增加积分奖励新增接口
                    if(null!=activityVO.getPoints()){
                        AwardBO bo = new AwardBO();
