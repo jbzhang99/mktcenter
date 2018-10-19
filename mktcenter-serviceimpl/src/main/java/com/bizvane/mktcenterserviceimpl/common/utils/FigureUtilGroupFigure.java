@@ -178,7 +178,7 @@ public class FigureUtilGroupFigure {
 			        	   str1="折扣率,会员折扣率,非会员折扣率,线上会员折扣率,线下会员折扣率";
 			           }
 			           
-		        	    int i=0;
+		        	    int i=1;
 						for(String string :str1.split(",")) {
 							str[i]=string;
 							i++;
