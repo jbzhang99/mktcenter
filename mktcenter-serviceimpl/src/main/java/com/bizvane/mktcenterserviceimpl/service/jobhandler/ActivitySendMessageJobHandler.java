@@ -50,6 +50,7 @@ public class ActivitySendMessageJobHandler extends IJobHandler {
     private MktActivityOrderPOMapper mktActivityOrderPOMapper;
     @Autowired
     private Award award;
+    @Autowired
     private MemberMessageSend memberMessage;
     @Override
     public ReturnT<String> execute(String param) throws Exception {
