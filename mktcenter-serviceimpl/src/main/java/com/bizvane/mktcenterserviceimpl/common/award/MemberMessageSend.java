@@ -387,11 +387,14 @@ public class MemberMessageSend {
 
     @Async("asyncServiceExecutor")
     public void sendDXmessage(List<MktMessagePO> messageVOList, MembersInfoSearchVo membersInfoSearchVo) {
+        log.info("查询会员条件是==========="+ JSON.toJSONString(membersInfoSearchVo));
         ResponseData<PageInfo<MemberInfoVo>> memberInfoVoPage = membersAdvancedSearchApiService.search(membersInfoSearchVo);
+        log.info("查询到会员是++++++++++"+ JSON.toJSONString(memberInfoVoPage));
         //循环分页条件查询会员信息发送短信信息
         for (int a =1;a<=memberInfoVoPage.getData().getPages();a++){
             membersInfoSearchVo.setPageNumber(a);
             ResponseData<com.bizvane.utils.responseinfo.PageInfo<MemberInfoVo>> memberInfoVoPages = membersAdvancedSearchApiService.search(membersInfoSearchVo);
+            log.info("查询到需要发短信会员是···········"+ JSON.toJSONString(memberInfoVoPages));
             List<MemberInfoVo> memberInfoModelList = memberInfoVoPages.getData().getList();
             log.info("开始循环发送短信");
             //循环发送
