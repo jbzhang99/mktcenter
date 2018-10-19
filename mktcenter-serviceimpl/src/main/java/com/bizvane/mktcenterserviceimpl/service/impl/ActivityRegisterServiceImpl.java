@@ -375,6 +375,7 @@ public class ActivityRegisterServiceImpl implements ActivityRegisterService {
                 if (!ExecuteParamCheckUtil.implementActivitCheck(vo,activityVO)){
                     continue;
                 }
+                log.info("开卡活动-限制条件通过");
                 //增加积分奖励新增接口
                    if(null!=activityVO.getPoints()){
                        AwardBO bo = new AwardBO();

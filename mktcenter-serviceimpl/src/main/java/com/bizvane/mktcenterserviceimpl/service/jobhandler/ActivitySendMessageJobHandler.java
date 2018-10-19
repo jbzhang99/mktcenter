@@ -64,7 +64,7 @@ public class ActivitySendMessageJobHandler extends IJobHandler {
             //查询消息集合
             MktMessagePOExample example = new MktMessagePOExample();
             example.createCriteria().andBizIdEqualTo(mktActivityPO.getMktActivityId());
-            List<MktMessagePO> ListMktMessage = mktMessagePOMapper.selectByExample(example);
+            List<MktMessagePO> ListMktMessage = mktMessagePOMapper.selectByExampleWithBLOBs(example);
             if (!CollectionUtils.isEmpty(ListMktMessage)){
                 //判断是什么类型的活动 然后给不同的会员发送消息
                 //分页查询会员信息发送短信
