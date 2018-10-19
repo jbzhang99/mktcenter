@@ -105,13 +105,13 @@ public class ActivitySendMessageJobHandler extends IJobHandler {
                 if (mktActivityPO.getActivityType()== ActivityTypeEnum.ACTIVITY_TYPE_REGISGER.getCode()){
                     memberMessage.sendDXmessage(ListMktMessage, membersInfoSearchVo);
                     //查询对应的会员  发送微信模板消息
-                    WxChannelInfoSearchVo wxChannelInfoSearchVo = new WxChannelInfoSearchVo();
+                 /*   WxChannelInfoSearchVo wxChannelInfoSearchVo = new WxChannelInfoSearchVo();
                     wxChannelInfoSearchVo.setPageNum(1);
                     wxChannelInfoSearchVo.setPageSize(10000);
                     wxChannelInfoSearchVo.setFocus(2);
                     wxChannelInfoSearchVo.setCardStatus(2);
                     wxChannelInfoSearchVo.setMiniProgram((byte) 1);
-                    memberMessage.sendWXmessage(ListMktMessage, wxChannelInfoSearchVo);
+                    memberMessage.sendWXmessage(ListMktMessage, wxChannelInfoSearchVo);*/
                 }else{
                     memberMessage.getMemberList(ListMktMessage, membersInfoSearchVo);
                 }
