@@ -64,8 +64,7 @@ public class FigureController {
 	
 	@Autowired
 	private   CompanyServiceRpc companyServiceRpc;
-	@Autowired
-	private   BaseUrl baseUrl;
+
 	
     @RequestMapping("vipIncomeAnalysis")
     public ResponseData<BackDataTimeDtail> vipIncomeAnalysis( IncomeTotalListGroup sendVO, HttpServletRequest request){

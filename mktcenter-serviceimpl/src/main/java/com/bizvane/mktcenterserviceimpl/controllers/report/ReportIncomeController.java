@@ -73,8 +73,8 @@ public class ReportIncomeController {
 	@Autowired
 	private   CompanyServiceRpc companyServiceRpc;
 
-    
-	BaseUrl BaseUrl =new BaseUrl();
+	@Autowired
+	private BaseUrl BaseUrl;
     
 // 收入01- 收入总表
    @RequestMapping("incomeTotalList")
