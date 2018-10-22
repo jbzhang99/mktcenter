@@ -197,11 +197,15 @@ public class ActivityServiceImpl implements ActivityService {
                 }
                 if (activityAnalysisCount.getActivityStatus()==ActivityStatusEnum.ACTIVITY_STATUS_EXECUTING.getCode()){
                     if (activityAnalysisCount.getLongTerm()==0){
-                        activityAnalysisCount.setDays(DateUtil.getIntervalBetweenTwoDate(activityAnalysisCount.getStartTime(),new Date()));
+                        //这里判断是否是签到或者评价奖励
+                        if(activityAnalysisCount.getActivityType()==6 ||activityAnalysisCount.getActivityType()==9){
+                            activityAnalysisCount.setDays(DateUtil.getIntervalBetweenTwoDate(activityAnalysisCount.getCreateDate(),new Date()));
+                        }else{
+                            activityAnalysisCount.setDays(DateUtil.getIntervalBetweenTwoDate(activityAnalysisCount.getStartTime(),new Date()));                        }
+
                     }else if (activityAnalysisCount.getLongTerm()==1){
                         activityAnalysisCount.setDays(DateUtil.getIntervalBetweenTwoDate(activityAnalysisCount.getCreateDate(),new Date()));
                     }
-
                 }
                 if (activityAnalysisCount.getActivityStatus()==ActivityStatusEnum.ACTIVITY_STATUS_FINISHED.getCode()){
                     activityAnalysisCount.setDays(DateUtil.getIntervalBetweenTwoDate(activityAnalysisCount.getStartTime(),activityAnalysisCount.getEndTime()));

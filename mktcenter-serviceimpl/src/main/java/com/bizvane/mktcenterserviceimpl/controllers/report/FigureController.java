@@ -64,7 +64,7 @@ public class FigureController {
 	
 	@Autowired
 	private   CompanyServiceRpc companyServiceRpc;
-    
+
 	
     @RequestMapping("vipIncomeAnalysis")
     public ResponseData<BackDataTimeDtail> vipIncomeAnalysis( IncomeTotalListGroup sendVO, HttpServletRequest request){
@@ -197,7 +197,10 @@ public class FigureController {
 	   		        	 jsonObject.put("organizationContent", str); // / 
 	   		         }
 	   		       //默认页  
-			 
+			 //用户key
+	   		   jsonObject.put("businessNum", BaseUrl.getBusinessNum());
+	   		   jsonObject.put("apiKey", BaseUrl.getApiKey());
+	   		 //用户key
 		 ResponseEntity<String> response = this.restTemplate.postForEntity(url, jsonObject,String.class, new Object[0]);
 	     ResponseData<BackDataTimeDtail> ResponseData =new ResponseData<BackDataTimeDtail>();
 	     JSONObject job = JSONObject.parseObject(response.getBody());
@@ -274,7 +277,8 @@ log.info("报表查询ReportIncomeController："+url+vipIncomeAnalysis.toString(
    		        	 jsonObject.put("organizationContent", str); // / 
    		         }
    		       //默认页  
-			 
+  	   		   jsonObject.put("businessNum", BaseUrl.getBusinessNum());
+  	   		   jsonObject.put("apiKey", BaseUrl.getApiKey());
 		 ResponseEntity<String> response = this.restTemplate.postForEntity(url, jsonObject,String.class, new Object[0]);
 	     ResponseData<BackDataTimeDtailtu> ResponseData =new ResponseData<BackDataTimeDtailtu>();
 	     JSONObject job = JSONObject.parseObject(response.getBody());

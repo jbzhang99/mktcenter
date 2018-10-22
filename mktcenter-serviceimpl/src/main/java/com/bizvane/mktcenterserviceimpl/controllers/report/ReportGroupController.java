@@ -315,6 +315,11 @@ public class ReportGroupController {
    		        	 jsonObject.put("organizationContent", str); // / 
    		         }
    		       //默认页  
+   		         
+   				 //用户key
+  	   		   jsonObject.put("businessNum", BaseUrl.getBusinessNum());
+  	   		   jsonObject.put("apiKey", BaseUrl.getApiKey());
+  	   		 //用户key
 		 ResponseEntity<String> response = this.restTemplate.postForEntity(url, jsonObject,String.class, new Object[0]);
 	     ResponseData<List<BackDataTime>> ResponseData =new ResponseData<List<BackDataTime>>();
 	     JSONObject job = JSONObject.parseObject(response.getBody());

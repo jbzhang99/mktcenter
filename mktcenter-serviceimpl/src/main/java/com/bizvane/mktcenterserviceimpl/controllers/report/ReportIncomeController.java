@@ -73,8 +73,8 @@ public class ReportIncomeController {
 	@Autowired
 	private   CompanyServiceRpc companyServiceRpc;
 
-    
-	BaseUrl BaseUrl =new BaseUrl();
+	@Autowired
+	private BaseUrl BaseUrl;
     
 // 收入01- 收入总表
    @RequestMapping("incomeTotalList")
@@ -150,6 +150,11 @@ public class ReportIncomeController {
 		    		       //默认页     
 		    		         
 		    		         System.out.println(url+"发送内容:"+jsonObject.toJSONString());
+		    		         
+		    				 //用户key
+		    		   		   jsonObject.put("businessNum", BaseUrl.getBusinessNum());
+		    		   		   jsonObject.put("apiKey", BaseUrl.getApiKey());
+		    		   		 //用户key
 		 ResponseEntity<String> response = this.restTemplate.postForEntity(url, jsonObject,String.class, new Object[0]);
 	     ResponseData<List<BackData>> ResponseData =new ResponseData<List<BackData>>();
 	     JSONObject job = JSONObject.parseObject(response.getBody());
@@ -213,6 +218,10 @@ public class ReportIncomeController {
 			    	 //查询总条数
 		    		  jsonObject.put("startRecord", 1); // 直接put相同的key
 		    		  jsonObject.put("queryNum", 1048576); // / xlsx最大行1048576
+		 			 //用户key
+			   		   jsonObject.put("businessNum", BaseUrl.getBusinessNum());
+			   		   jsonObject.put("apiKey", BaseUrl.getApiKey());
+			   		 //用户key
 					  ResponseEntity<String> responseall = this.restTemplate.postForEntity(url, jsonObject,String.class, new Object[0]);
 				     JSONObject jsonall = JSONObject.parseObject(responseall.getBody());
 					 JSONArray arr=new JSONArray(jsonall.get("data").toString());

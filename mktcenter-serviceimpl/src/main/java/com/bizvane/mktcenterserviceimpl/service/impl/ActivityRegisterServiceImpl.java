@@ -170,6 +170,8 @@ public class ActivityRegisterServiceImpl implements ActivityRegisterService {
             vo.setLongTerm(bo.getActivityVO().getLongTerm());
             vo.setSysBrandId(activityVO.getSysBrandId());
             vo.setActivityType(ActivityTypeEnum.ACTIVITY_TYPE_REGISGER.getCode());
+            //判断过滤禁用状态
+            vo.setStop("ture");
             List<ActivityVO> registerList = mktActivityRegisterPOMapper.getActivityList(vo);
             if(!CollectionUtils.isEmpty(registerList)){
                 for (ActivityVO activity:registerList) {
