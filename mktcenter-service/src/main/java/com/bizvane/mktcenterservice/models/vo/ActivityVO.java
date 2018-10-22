@@ -208,6 +208,16 @@ public class ActivityVO extends MktActivityPO {
     private List<SysDimSkuPo> sysDimSkuPos;
     @io.swagger.annotations.ApiModelProperty(value = "入会满多少月",name = "registerMonths", required = false,example = "")
     private Integer registerMonths;
+    //判断创建时候过滤禁用状态
+    private String stop;
+
+    public String getStop() {
+        return stop;
+    }
+
+    public void setStop(String stop) {
+        this.stop = stop;
+    }
 
     public Integer getRegisterMonths() {
         return registerMonths;
