@@ -142,11 +142,7 @@ public class ActivitySmartServiceImpl implements ActivitySmartService {
 
         PageInfo<MktActivitySmartGroupPO> pageInfo = new PageInfo<>(mktActivitySmartGroupPOS);
 
-        if (null==vo.getType()){
-            responseData.setData(mktActivitySmartGroupPOS);
-        }else{
             responseData.setData(pageInfo);
-        }
         log.info("com.bizvane.mktcenterserviceimpl.service.impl.ActivitySmartServiceImpl.getSmartActivityGroupList result"+ JSON.toJSONString(responseData));
         return responseData;
     }
