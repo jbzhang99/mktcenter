@@ -116,6 +116,8 @@ public class ActivitySmartJobHandler extends IJobHandler {
                 MembersInfoSearchVo membersInfoSearchVo= JSON.parseObject(targetMbr,MembersInfoSearchVo.class);
                 membersInfoSearchVo.setPageNumber(1);
                 membersInfoSearchVo.setPageSize(10000);
+                membersInfoSearchVo.setSysCompanyId(mktActivityPOWithBLOBs.getSysCompanyId());
+                membersInfoSearchVo.setBrandId(mktActivityPOWithBLOBs.getSysBrandId());
                 memberMessage.sendSmart(mktSmartType, mktActivityPOWithBLOBs, membersInfoSearchVo);
 
                 returnT.setCode(ResponseConstants.SUCCESS);
