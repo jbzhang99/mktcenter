@@ -514,9 +514,11 @@ public class ActivityServiceImpl implements ActivityService {
             return responseData;
         }
 
+
         CouponSendMemberListRequestVO requestVO = new CouponSendMemberListRequestVO();
         requestVO.setSendBusinessId(mktActivityId);
-        requestVO.setSendType(activityType+"");
+        //类型转换
+        requestVO.setSendType(CouponSendTypeEnum.getCouponSendTypeEnumByMktModuleCode(activityType).getCouponModuleCode());
         requestVO.setBrandId(stageUser.getBrandId());
         requestVO.setPageNumber(pageForm.getPageNumber());
         requestVO.setPageSize(pageForm.getPageSize());
