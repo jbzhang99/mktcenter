@@ -336,7 +336,7 @@ public class MemberMessageSend {
                         activityMessageVO.setActivityName(mktActivityPOWithBLOBs.getActivityName());
                         activityMessageVO.setActivityInterests(mktMessage.getMsgContent());
                         activityMessageVO.setMemberPhone(memberInfoModel.getPhone());
-                        //todo 缺少开始时间和结束时间
+                        activityMessageVO.setActivityLongtime("智能营销");
                         awardBO.setMktType(MktSmartTypeEnum.SMART_TYPE_WXMESSAGE.getCode());
                         awardBO.setActivityMessageVO(activityMessageVO);
                         log.info("智能营销-开始发微信微信了");
