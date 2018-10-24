@@ -85,9 +85,11 @@ public class ActivitySmartJobHandler extends IJobHandler {
                 Integer mktSmartType = Integer.valueOf(split[0]);
                 String activitiCode = split[1];
                 //get main activity object
+                log.info("智能营销-param参数是mktSmartType====："+mktSmartType+"activitiCode是==="+activitiCode);
                 MktActivityPOExample mktActivityPOExample = new MktActivityPOExample();
                 mktActivityPOExample.createCriteria().andValidEqualTo(Boolean.TRUE).andActivityCodeEqualTo(activitiCode);
                 List<MktActivityPOWithBLOBs> mktActivityPOWithBLOBsList = mktActivityPOMapper.selectByExampleWithBLOBs(mktActivityPOExample);
+                log.info("智能营销-查询到该智能营销活动时+==："+JSON.toJSONString(mktActivityPOWithBLOBsList));
                 MktActivityPOWithBLOBs mktActivityPOWithBLOBs = new MktActivityPOWithBLOBs();
                 if(CollectionUtils.isNotEmpty(mktActivityPOWithBLOBsList)){
                     mktActivityPOWithBLOBs = mktActivityPOWithBLOBsList.get(0);
@@ -100,6 +102,7 @@ public class ActivitySmartJobHandler extends IJobHandler {
                 MktActivitySmartPOExample mktActivitySmartPOExample = new MktActivitySmartPOExample();
                 mktActivitySmartPOExample.createCriteria().andValidEqualTo(Boolean.TRUE).andMktActivityIdEqualTo(mktActivityPOWithBLOBs.getMktActivityId());
                 List<MktActivitySmartPO> mktActivitySmartPOList = mktActivitySmartPOMapper.selectByExampleWithBLOBs(mktActivitySmartPOExample);
+                log.info("智能营销-查询到结果是++++++++++++++==："+JSON.toJSONString(mktActivitySmartPOList));
                 MktActivitySmartPO mktActivitySmartPO = new MktActivitySmartPO();
                 if(CollectionUtils.isNotEmpty(mktActivitySmartPOList)){
                     mktActivitySmartPO = mktActivitySmartPOList.get(0);
@@ -109,6 +112,7 @@ public class ActivitySmartJobHandler extends IJobHandler {
                     return returnT;
                 }
                 String targetMbr = mktActivitySmartPO.getTargetMbr();
+                log.info("智能营销-高级搜索的条件："+targetMbr);
                 ////分页查询会员信息
                 //把高级搜索的条件转换成对象
                 // JSONObject jsonObject=JSONObject.parseObject(targetMbr);
@@ -116,6 +120,9 @@ public class ActivitySmartJobHandler extends IJobHandler {
                 MembersInfoSearchVo membersInfoSearchVo= JSON.parseObject(targetMbr,MembersInfoSearchVo.class);
                 membersInfoSearchVo.setPageNumber(1);
                 membersInfoSearchVo.setPageSize(10000);
+                membersInfoSearchVo.setSysCompanyId(mktActivityPOWithBLOBs.getSysCompanyId());
+                membersInfoSearchVo.setBrandId(mktActivityPOWithBLOBs.getSysBrandId());
+                log.info("智能营销-查询发短信会员参数："+JSON.toJSONString(membersInfoSearchVo));
                 memberMessage.sendSmart(mktSmartType, mktActivityPOWithBLOBs, membersInfoSearchVo);
 
                 returnT.setCode(ResponseConstants.SUCCESS);

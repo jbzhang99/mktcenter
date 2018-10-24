@@ -256,25 +256,13 @@ public class MemberMessageSend {
     @Async("asyncServiceExecutor")
     public void sendSmart(Integer mktSmartType, MktActivityPOWithBLOBs mktActivityPOWithBLOBs, MembersInfoSearchVo membersInfoSearchVo) {
         ResponseData<PageInfo<MemberInfoVo>> memberInfoVoPage = membersAdvancedSearchApiService.search(membersInfoSearchVo);
-        //ResponseData<PageInfo<MembersInfoSearchPojo>> memberInfoVoPage =membersAdvancedSearchApiService.advancedSearch(membersInfoSearchVo);
         for (int a =0;a<memberInfoVoPage.getData().getPages();a++){
             membersInfoSearchVo.setPageNumber(a);
             ResponseData<PageInfo<MemberInfoVo>> memberInfoVoPages = membersAdvancedSearchApiService.search(membersInfoSearchVo);
-            //ResponseData<PageInfo<MembersInfoSearchPojo>> memberInfoVoPages =membersAdvancedSearchApiService.advancedSearch(membersInfoSearchVo);
             List<MemberInfoVo> memberInfoModelList = memberInfoVoPages.getData().getList();
-            /*if(CollectionUtils.isEmpty(memberInfoModelList)){
-                log.error("target member is empty");
-                returnT.setMsg("target member is empty");
-                return returnT;
-            }*/
             log.info("start deal with award");
             AwardBO awardBO = new AwardBO();
             MktSmartTypeEnum mktSmartTypeEnum = MktSmartTypeEnum.getMktSmartTypeEnumByCode(mktSmartType);
-            /*if(mktSmartTypeEnum==null){
-                log.error("mktSmartTypeEnum is null");
-                returnT.setMsg("mktSmartTypeEnum is null");
-                return returnT;
-            }*/
             switch (mktSmartTypeEnum){
                 case SMART_TYPE_COUPON_BATCH:
                     log.info("match with SMART_TYPE_COUPON_BATCH");
@@ -283,17 +271,18 @@ public class MemberMessageSend {
                     List<MktCouponPO> mktCouponPOS = mktCouponPOMapper.selectByExample(mktCouponPOExample);
                     //coupon loop
                     for(MktCouponPO mktCouponPO : mktCouponPOS){
+
                         SendCouponBatchRequestVO sendCouponBatchRequestVO = new SendCouponBatchRequestVO();
                         //sendCouponBatchRequestVO.setMemberList(memberInfoVoPages.getData().getList());
                         sendCouponBatchRequestVO.setCouponDefinitionId(mktCouponPO.getCouponDefinitionId());
                         awardBO.setMktType(MktSmartTypeEnum.SMART_TYPE_COUPON_BATCH.getCode());
                         awardBO.setSendCouponBatchRequestVO(sendCouponBatchRequestVO);
+                        log.info("智能营销-开始批量发券发券");
                         award.execute(awardBO);
                     }
                     break;
                 case SMART_TYPE_INTEGRAL:
                     log.info("match with SMART_TYPE_INTEGRAL");
-                    //member loop
                     for(MemberInfoModel memberInfoModel : memberInfoModelList){
                         IntegralChangeRequestModel integralChangeRequestModel =new IntegralChangeRequestModel();
                         integralChangeRequestModel.setSysCompanyId(mktActivityPOWithBLOBs.getSysCompanyId());
@@ -306,6 +295,7 @@ public class MemberMessageSend {
                         integralChangeRequestModel.setChangeDate(new Date());
                         awardBO.setIntegralRecordModel(integralChangeRequestModel);
                         awardBO.setMktType(MktSmartTypeEnum.SMART_TYPE_INTEGRAL.getCode());
+                        log.info("智能营销-开始发积分积分了");
                         award.execute(awardBO);
                     }
                     break;
@@ -315,11 +305,6 @@ public class MemberMessageSend {
                     MktMessagePOExample mktMessagePOExample = new MktMessagePOExample();
                     mktMessagePOExample.createCriteria().andValidEqualTo(Boolean.TRUE).andBizTypeEqualTo(BusinessTypeEnum.ACTIVITY_TYPE_ACTIVITY.getCode()).andBizIdEqualTo(mktActivityPOWithBLOBs.getMktActivityId());
                     List<MktMessagePO> mktMessagePOS = mktMessagePOMapper.selectByExampleWithBLOBs(mktMessagePOExample);
-                   /* if(CollectionUtils.isEmpty(mktMessagePOS)){
-                        log.error("mktMessagePOS is empty");
-                        returnT.setMsg("mktMessagePOS is empty");
-                        return returnT;
-                    }*/
                     MktMessagePO mktMessagePO = mktMessagePOS.get(0);
                     //member loop
                     for(MemberInfoModel memberInfoModel : memberInfoModelList){
@@ -330,7 +315,7 @@ public class MemberMessageSend {
                         sysSmsConfigVO.setSysBrandId(memberInfoModel.getBrandId());
                         awardBO.setMktType(MktSmartTypeEnum.SMART_TYPE_SMS.getCode());
                         awardBO.setSysSmsConfigVO(sysSmsConfigVO);
-                        //get sms config
+                        log.info("智能营销-开始发短信短信了");
                         award.execute(awardBO);
                     }
                     break;
@@ -340,11 +325,6 @@ public class MemberMessageSend {
                     MktMessagePOExample mktMessagePOExample1 = new MktMessagePOExample();
                     mktMessagePOExample1.createCriteria().andValidEqualTo(Boolean.TRUE).andBizTypeEqualTo(BusinessTypeEnum.ACTIVITY_TYPE_ACTIVITY.getCode()).andBizIdEqualTo(mktActivityPOWithBLOBs.getMktActivityId());
                     List<MktMessagePO> mktMessagePOS1 = mktMessagePOMapper.selectByExample(mktMessagePOExample1);
-                   /* if(CollectionUtils.isEmpty(mktMessagePOS1)){
-                        log.error("mktMessagePOS1 is empty");
-                        returnT.setMsg("mktMessagePOS1 is empty");
-                        return returnT;
-                    }*/
                     //member loop
                     for(MemberInfoModel memberInfoModel : memberInfoModelList){
                         MemberMessageVO memberMessageVO = new MemberMessageVO();
@@ -352,7 +332,7 @@ public class MemberMessageSend {
                         memberMessageVO.setOpenId(memberInfoModel.getWxOpenId());
                         awardBO.setMktType(MktSmartTypeEnum.SMART_TYPE_WXMESSAGE.getCode());
                         awardBO.setMemberMessageVO(memberMessageVO);
-                        //get WXMESSAGE config
+                        log.info("智能营销-开始发微信微信了");
                         award.execute(awardBO);
                     }
                     break;
