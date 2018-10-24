@@ -606,6 +606,7 @@ public class ActivitySmartServiceImpl implements ActivitySmartService {
                 //活动状态设置为待执行
                 mktActivityPOWithBLOBs.setActivityStatus(ActivityStatusEnum.ACTIVITY_STATUS_PENDING.getCode());
                 //创建任务调度
+                vo.setMktSmartType(MktSmartTypeEnum.SMART_TYPE_COUPON.getCode());
                 jobUtil.addSmartActivityJob(stageUser,vo);
             }else{
                 //活动状态设置为执行中
@@ -723,6 +724,7 @@ public class ActivitySmartServiceImpl implements ActivitySmartService {
                 log.warn("vnew Date().before(vo.getSendTime()) is true");
                 //活动状态设置为待执行
                 mktActivityPOWithBLOBs.setActivityStatus(ActivityStatusEnum.ACTIVITY_STATUS_PENDING.getCode());
+                vo.setMktSmartType(MktSmartTypeEnum.SMART_TYPE_INTEGRAL.getCode());
                 //创建任务调度
                 jobUtil.addSmartActivityJob(stageUser,vo);
             }else{
@@ -830,6 +832,7 @@ public class ActivitySmartServiceImpl implements ActivitySmartService {
                 log.info("new Date().before(vo.getSendTime()) is true");
                 //活动状态设置为待执行
                 mktActivityPOWithBLOBs.setActivityStatus(ActivityStatusEnum.ACTIVITY_STATUS_PENDING.getCode());
+                vo.setMktSmartType(MktSmartTypeEnum.SMART_TYPE_SMS.getCode());
                 //创建任务调度
                 jobUtil.addSmartActivityJob(stageUser,vo);
             }else{
@@ -948,6 +951,7 @@ public class ActivitySmartServiceImpl implements ActivitySmartService {
                 log.info("new Date().before(vo.getSendTime()) is true");
                 //活动状态设置为待执行
                 mktActivityPOWithBLOBs.setActivityStatus(ActivityStatusEnum.ACTIVITY_STATUS_PENDING.getCode());
+                vo.setMktSmartType(MktSmartTypeEnum.SMART_TYPE_WXMESSAGE.getCode());
                 //创建任务调度
                 jobUtil.addSmartActivityJob(stageUser,vo);
             }else{
