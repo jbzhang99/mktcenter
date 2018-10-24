@@ -17,7 +17,7 @@ spring:
   swagger:
     show: true
   application:
-    name: mktcenter-test-test
+    name: mktcenter-test
   #  security:
   #    enabled: false
   #    user:
@@ -131,7 +131,7 @@ feign:
       path: message.api
     wechat:
       name: wechat-test
-      path: wechat.api
+      path: wechat
     applet:
       name: applet-test
       path: applet.api
@@ -160,9 +160,6 @@ qiniu:
   secretKey: HIKXNXr12qRhpIAsdI8xTaX87LeTqqLGjXB_RgDf
   bucketNm: bizvane01
   domain: https://qi.test.bizvane.cn
-
-activity:
-  qrcodeurl: http://www.test.bizvane.com/qrcode?activityCode=
   
 bitdata:
   businessNum: testbz
@@ -172,5 +169,7 @@ bitdata:
 tenant:
   isEnabledTenantInterceptor: false
 ribbon:
-  ConnectTimeout: 60000
-  ReadTimeout: 60000
+  ConnectTimeout: 6000000
+  ReadTimeout: 6000000
+activity:
+  qrcodeurl: http://www.test.bizvane.com/qrcode?activityCode=
