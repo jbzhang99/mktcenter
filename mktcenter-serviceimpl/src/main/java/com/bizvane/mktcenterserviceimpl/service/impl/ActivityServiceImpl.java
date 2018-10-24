@@ -476,24 +476,32 @@ public class ActivityServiceImpl implements ActivityService {
     @Override
     public ResponseData<PageInfo<CouponSendMemberListResponseVO>> findCouponSendResult(Long mktActivityId, Integer activityType,
                                                                                        SysAccountPO stageUser,PageForm pageForm) {
-
-        CouponSendMemberListRequestVO requestVO = new CouponSendMemberListRequestVO();
+        ResponseData responseData = new ResponseData();
 
         if(null == mktActivityId){
-
+            responseData.setCode(SysResponseEnum.FAILED.getCode());
+            responseData.setMessage(SysResponseEnum.MODEL_FAILED_VALIDATION.getMessage());
+            return responseData;
         }
 
         if(null == activityType){
-
+            responseData.setCode(SysResponseEnum.FAILED.getCode());
+            responseData.setMessage(SysResponseEnum.MODEL_FAILED_VALIDATION.getMessage());
+            return responseData;
         }
 
+        CouponSendMemberListRequestVO requestVO = new CouponSendMemberListRequestVO();
         requestVO.setSendBusinessId(mktActivityId);
         requestVO.setSendType(activityType+"");
         requestVO.setBrandId(stageUser.getBrandId());
         requestVO.setPageNumber(pageForm.getPageNumber());
         requestVO.setPageSize(pageForm.getPageSize());
 
-        ResponseData<PageInfo<CouponSendMemberListResponseVO>> responseData = couponEntityServiceFeign.findCouponSendMemberList(requestVO);
+        ResponseData<PageInfo<CouponSendMemberListResponseVO>> responseDataResult = couponEntityServiceFeign.findCouponSendMemberList(requestVO);
+
+        responseData.setData(responseDataResult.getData());
+        responseData.setCode(SysResponseEnum.SUCCESS.getCode());
+        responseData.setMessage(SysResponseEnum.SUCCESS.getMessage());
         return responseData;
     }
 }
