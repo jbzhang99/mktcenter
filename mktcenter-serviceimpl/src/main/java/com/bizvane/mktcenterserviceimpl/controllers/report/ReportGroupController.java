@@ -305,7 +305,7 @@ public class ReportGroupController {
     		             str = new String[SysStoreVo2.getData().getList().size()];
     		            int i=0;
     		             for( SysStoreVo sysStore : SysStoreVo2.getData().getList()) {
-    		            	 str[i++] = sysStore.getSysStoreId().toString();
+    		            	 str[i++] = sysStore.getStoreId();
     		             }
 				    } catch (Exception e) {
 								System.out.println("获取当前用户，所有店铺id出错");
