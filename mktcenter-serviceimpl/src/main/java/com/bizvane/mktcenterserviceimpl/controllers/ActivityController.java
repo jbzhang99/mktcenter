@@ -131,11 +131,11 @@ public class ActivityController {
      * @return
      */
     @RequestMapping("findCouponResultMemberList")
-    public ResponseData<PageInfo<CouponSendMemberListResponseVO>> findCouponResultMemberList(@RequestParam(required = false) Long mktActivityId,
-                                                                                             @RequestParam(required = false) Integer activityType,
+    public ResponseData<PageInfo<CouponSendMemberListResponseVO>> findCouponResultMemberList(@RequestParam(required = false) Long id,
+                                                                                             @RequestParam(required = false) Integer type,
                                                                                              HttpServletRequest request, PageForm pageForm){
         SysAccountPO stageUser = TokenUtils.getStageUser(request);
-        return activityService.findCouponSendResult(mktActivityId,activityType,stageUser,pageForm);
+        return activityService.findCouponSendResult(id,type,stageUser,pageForm);
     }
 
 
