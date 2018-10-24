@@ -4,8 +4,12 @@ import com.alibaba.fastjson.JSON;
 import com.bizvane.centerstageservice.models.po.SysCheckPo;
 import com.bizvane.centerstageservice.rpc.SysCheckServiceRpc;
 import com.bizvane.couponfacade.enums.SendTypeEnum;
+import com.bizvane.couponfacade.interfaces.CouponEntityServiceFeign;
 import com.bizvane.couponfacade.interfaces.CouponQueryServiceFeign;
+import com.bizvane.couponfacade.models.po.CouponEntityPO;
 import com.bizvane.couponfacade.models.vo.CouponFindCouponCountResponseVO;
+import com.bizvane.couponfacade.models.vo.CouponSendMemberListRequestVO;
+import com.bizvane.couponfacade.models.vo.CouponSendMemberListResponseVO;
 import com.bizvane.couponfacade.models.vo.SendCouponSimpleRequestVO;
 import com.bizvane.members.facade.enums.IntegralChangeTypeEnum;
 import com.bizvane.members.facade.es.vo.MembersInfoSearchVo;
@@ -31,6 +35,7 @@ import com.bizvane.mktcenterservice.models.vo.ActivityVO;
 import com.bizvane.mktcenterservice.models.vo.PageForm;
 import com.bizvane.mktcenterserviceimpl.common.award.Award;
 import com.bizvane.mktcenterserviceimpl.common.award.MemberMessageSend;
+import com.bizvane.mktcenterserviceimpl.common.constants.SystemConstants;
 import com.bizvane.mktcenterserviceimpl.common.enums.*;
 import com.bizvane.mktcenterserviceimpl.common.job.JobUtil;
 import com.bizvane.mktcenterserviceimpl.common.utils.DateUtil;
@@ -81,6 +86,10 @@ public class ActivityServiceImpl implements ActivityService {
     private JobClient jobClient;
     @Autowired
     private Award award;
+    @Autowired
+    private CouponEntityServiceFeign couponEntityServiceFeign;
+
+
     /**
      * 禁用/启用活动
      * @param vo
@@ -458,5 +467,33 @@ public class ActivityServiceImpl implements ActivityService {
                 award.execute(awardBO);
             }
         }
+    }
+
+    /**
+     * 活动、任务效果分析“发行优惠券”添加会员明细弹框；
+     * @return
+     */
+    @Override
+    public ResponseData<PageInfo<CouponSendMemberListResponseVO>> findCouponSendResult(Long mktActivityId, Integer activityType,
+                                                                                       SysAccountPO stageUser,PageForm pageForm) {
+
+        CouponSendMemberListRequestVO requestVO = new CouponSendMemberListRequestVO();
+
+        if(null == mktActivityId){
+
+        }
+
+        if(null == activityType){
+
+        }
+
+        requestVO.setSendBusinessId(mktActivityId);
+        requestVO.setSendType(activityType+"");
+        requestVO.setBrandId(stageUser.getBrandId());
+        requestVO.setPageNumber(pageForm.getPageNumber());
+        requestVO.setPageSize(pageForm.getPageSize());
+
+        ResponseData<PageInfo<CouponSendMemberListResponseVO>> responseData = couponEntityServiceFeign.findCouponSendMemberList(requestVO);
+        return responseData;
     }
 }

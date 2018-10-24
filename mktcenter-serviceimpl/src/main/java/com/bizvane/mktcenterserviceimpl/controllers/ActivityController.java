@@ -1,6 +1,8 @@
 package com.bizvane.mktcenterserviceimpl.controllers;
 
 import com.bizvane.centerstageservice.models.po.SysCheckPo;
+import com.bizvane.centerstageservice.utils.PageFormUtil;
+import com.bizvane.couponfacade.models.vo.CouponSendMemberListResponseVO;
 import com.bizvane.mktcenterservice.interfaces.*;
 import com.bizvane.mktcenterservice.models.bo.ActivityAnalysisCountBO;
 import com.bizvane.mktcenterservice.models.bo.CtivityAnalysisBO;
@@ -9,8 +11,11 @@ import com.bizvane.mktcenterservice.models.vo.PageForm;
 import com.bizvane.mktcenterserviceimpl.common.enums.ActivityTypeEnum;
 import com.bizvane.utils.responseinfo.ResponseData;
 import com.bizvane.utils.tokens.SysAccountPO;
+import com.bizvane.utils.tokens.TokenUtils;
+import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
@@ -118,5 +123,20 @@ public class ActivityController {
     public ResponseData<CtivityAnalysisBO> getActivityAnalysisCountpage(ActivityAnalysisCountBO bo, PageForm pageForm){
         return activityService.getActivityAnalysisCountpage(bo,pageForm);
     }
+
+
+
+    /**
+     * 活动、任务效果分析“发行优惠券”添加会员明细弹框；
+     * @return
+     */
+    @RequestMapping("findCouponResultMemberList")
+    public ResponseData<PageInfo<CouponSendMemberListResponseVO>> findCouponResultMemberList(@RequestParam(required = false) Long mktActivityId,
+                                                                                             @RequestParam(required = false) Integer activityType,
+                                                                                             HttpServletRequest request, PageForm pageForm){
+        SysAccountPO stageUser = TokenUtils.getStageUser(request);
+        return activityService.findCouponSendResult(mktActivityId,activityType,stageUser,pageForm);
+    }
+
 
 }
