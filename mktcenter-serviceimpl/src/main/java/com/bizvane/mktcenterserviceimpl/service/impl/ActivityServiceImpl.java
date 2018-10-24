@@ -509,34 +509,33 @@ public class ActivityServiceImpl implements ActivityService {
      * @return
      */
     @Override
-    public ResponseData<PageInfo<CouponSendMemberListResponseVO>> findCouponSendResult(Long mktActivityId, Integer activityType,
+    public ResponseData<PageInfo<CouponSendMemberListResponseVO>> findCouponSendResult(Long id, Integer type,
                                                                                        SysAccountPO stageUser,PageForm pageForm) {
         ResponseData responseData = new ResponseData();
 
-        if(null == mktActivityId){
+        if(null == id){
             responseData.setCode(SysResponseEnum.FAILED.getCode());
             responseData.setMessage(SysResponseEnum.MODEL_FAILED_VALIDATION.getMessage());
             return responseData;
         }
 
-        if(null == activityType){
+        if(null == type){
             responseData.setCode(SysResponseEnum.FAILED.getCode());
             responseData.setMessage(SysResponseEnum.MODEL_FAILED_VALIDATION.getMessage());
             return responseData;
         }
-
 
         CouponSendMemberListRequestVO requestVO = new CouponSendMemberListRequestVO();
-        requestVO.setSendBusinessId(mktActivityId);
+        requestVO.setSendBusinessId(id);
         //类型转换
-        requestVO.setSendType(CouponSendTypeEnum.getCouponSendTypeEnumByMktModuleCode(activityType).getCouponModuleCode());
+        requestVO.setSendType(ActivityConvertCouponTypeEnum.getActivityConvertCouponTypeEnumByCode(type).getCouponCode());
         requestVO.setBrandId(stageUser.getBrandId());
         requestVO.setPageNumber(pageForm.getPageNumber());
         requestVO.setPageSize(pageForm.getPageSize());
 
-        ResponseData<PageInfo<CouponSendMemberListResponseVO>> responseDataResult = couponEntityServiceFeign.findCouponSendMemberList(requestVO);
+        ResponseData<PageInfo<CouponSendMemberListResponseVO>> sendMemberListResult = couponEntityServiceFeign.findCouponSendMemberList(requestVO);
 
-        responseData.setData(responseDataResult.getData());
+        responseData.setData(sendMemberListResult.getData());
         responseData.setCode(SysResponseEnum.SUCCESS.getCode());
         responseData.setMessage(SysResponseEnum.SUCCESS.getMessage());
         return responseData;
