@@ -256,7 +256,7 @@ public class MemberMessageSend {
     @Async("asyncServiceExecutor")
     public void sendSmart(Integer mktSmartType, MktActivityPOWithBLOBs mktActivityPOWithBLOBs, MembersInfoSearchVo membersInfoSearchVo) {
         ResponseData<PageInfo<MemberInfoVo>> memberInfoVoPage = membersAdvancedSearchApiService.search(membersInfoSearchVo);
-        for (int a =0;a<memberInfoVoPage.getData().getPages();a++){
+        for (int a =1;a<=memberInfoVoPage.getData().getPages();a++){
             membersInfoSearchVo.setPageNumber(a);
             ResponseData<PageInfo<MemberInfoVo>> memberInfoVoPages = membersAdvancedSearchApiService.search(membersInfoSearchVo);
             List<MemberInfoVo> memberInfoModelList = memberInfoVoPages.getData().getList();

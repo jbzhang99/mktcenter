@@ -608,5 +608,8 @@
     <if test="activityName != null and activityName!= ''">
       AND tma.activity_name LIKE "%"#{activityName}"%"
     </if>
+    <if test="stop != null and stop!= ''">
+      AND tma.activity_status !=4
+    </if>
   </select>
 </mapper>

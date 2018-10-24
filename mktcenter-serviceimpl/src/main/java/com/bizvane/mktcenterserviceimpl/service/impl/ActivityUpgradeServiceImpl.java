@@ -161,8 +161,10 @@ public class ActivityUpgradeServiceImpl implements ActivityUpgradeService {
             ActivityVO vo = new ActivityVO();
             vo.setMbrLevelCode(bo.getActivityVO().getMbrLevelCode());
             vo.setLongTerm(bo.getActivityVO().getLongTerm());
-           vo.setSysBrandId(activityVO.getSysBrandId());
-           vo.setActivityType(ActivityTypeEnum.ACTIVITY_TYPE_UPGRADE.getCode());
+            vo.setSysBrandId(activityVO.getSysBrandId());
+            vo.setActivityType(ActivityTypeEnum.ACTIVITY_TYPE_UPGRADE.getCode());
+           //判断过滤禁用状态
+           vo.setStop("ture");
             List<ActivityVO> activityUpgradeList = mktActivityUpgradePOMapper.getActivityUpgradeList(vo);
            if(!CollectionUtils.isEmpty(activityUpgradeList)){
                for (ActivityVO activity:activityUpgradeList) {
