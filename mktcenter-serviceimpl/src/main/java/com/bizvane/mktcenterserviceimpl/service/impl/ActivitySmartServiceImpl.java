@@ -158,12 +158,12 @@ public class ActivitySmartServiceImpl implements ActivitySmartService {
         log.info("com.bizvane.mktcenterserviceimpl.service.impl.ActivitySmartServiceImpl.getActivityHistoryList param"+"vo:"+ JSON.toJSONString(vo)+"pageForm"+ JSON.toJSONString(pageForm));
         ResponseData responseData = new ResponseData();
         //活动分组id不能为空
-        if(vo.getMktActivitySmartGroupId()==null){
+       /* if(vo.getMktActivitySmartGroupId()==null){
             log.warn("vo.getMktActivitySmartGroupId() is null");
             responseData.setCode(ResponseConstants.ERROR);
             responseData.setMessage(ActivityConstants.SMART_ACTIVITY_GROUP_ID_EMPTY);
             return responseData;
-        }
+        }*/
         PageHelper.startPage(pageForm.getPageNumber(),pageForm.getPageSize());
         List<ActivitySmartVO> activityList = mktActivitySmartPOMapper.getActivityList(vo);
 
