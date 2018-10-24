@@ -23,6 +23,7 @@ import com.bizvane.members.facade.vo.MemberInfoApiModel;
 import com.bizvane.members.facade.vo.MemberInfoVo;
 import com.bizvane.members.facade.vo.PageVo;
 import com.bizvane.members.facade.vo.WxChannelInfoVo;
+import com.bizvane.messagefacade.models.vo.ActivityMessageVO;
 import com.bizvane.messagefacade.models.vo.MemberMessageVO;
 import com.bizvane.messagefacade.models.vo.SysSmsConfigVO;
 import com.bizvane.mktcenterservice.interfaces.ActivityService;
@@ -350,16 +351,27 @@ public class ActivityServiceImpl implements ActivityService {
     }
     @Override
     @Async("asyncServiceExecutor")
-    public void sendMessage(List<MktMessagePO> messageVOList, MemberInfoModel memberInfo) {
+    public void sendMessage(List<MktMessagePO> messageVOList, MemberInfoModel memberInfo,ActivityVO activityVO) {
         //循环信息类然后发送
         for (MktMessagePO mktMessagePO:messageVOList) {
             AwardBO awardBO = new AwardBO();
             if (mktMessagePO.getMsgType().equals("1") && !StringUtils.isEmpty(memberInfo.getWxOpenId())){
                 //发送微信模板消息
-                MemberMessageVO memberMessageVO = new MemberMessageVO();
-                memberMessageVO.setMemberCode(memberInfo.getMemberCode());
-                memberMessageVO.setOpenId(memberInfo.getWxOpenId());
-                awardBO.setMemberMessageVO(memberMessageVO);
+                ActivityMessageVO activityMessageVO = new ActivityMessageVO();
+                activityMessageVO.setMemberCode(memberInfo.getMemberCode());
+                activityMessageVO.setSysCompanyId(activityVO.getSysCompanyId());
+                activityMessageVO.setSysBrandId(activityVO.getSysBrandId());
+                activityMessageVO.setSysBrandName("品牌名称");
+                activityMessageVO.setActivityName(activityVO.getActivityName());
+                activityMessageVO.setActivityInterests(mktMessagePO.getMsgContent());
+                activityMessageVO.setMemberPhone(memberInfo.getPhone());
+                if (activityVO.getLongTerm()==1){
+                    activityMessageVO.setActivityLongtime("长期活动");
+                }else{
+                    activityMessageVO.setActivityStartDate(activityVO.getStartTime());
+                    activityMessageVO.setActivityEndDate(activityVO.getEndTime());
+                }
+                awardBO.setActivityMessageVO(activityMessageVO);
                 awardBO.setMktType(MktSmartTypeEnum.SMART_TYPE_WXMESSAGE.getCode());
                 award.execute(awardBO);
             }
@@ -436,15 +448,27 @@ public class ActivityServiceImpl implements ActivityService {
     }
     @Override
     @Async("asyncServiceExecutor")
-    public void sendRegisterWx(List<MktMessagePO> messageVOList, WxChannelInfoVo wxChannelInfoVo) {
+    public void sendRegisterWx(List<MktMessagePO> messageVOList, WxChannelInfoVo wxChannelInfoVo,ActivityVO activityVO) {
         for (MktMessagePO mktMessagePO:messageVOList) {
             AwardBO awardBO = new AwardBO();
             if (mktMessagePO.getMsgType().equals("1") && !StringUtils.isEmpty(wxChannelInfoVo.getWxOpenId())){
                 //发送微信模板消息
-                MemberMessageVO memberMessageVO = new MemberMessageVO();
-                memberMessageVO.setMemberCode(wxChannelInfoVo.getMemberCode());
-                memberMessageVO.setOpenId(wxChannelInfoVo.getWxOpenId());
-                awardBO.setMemberMessageVO(memberMessageVO);
+                //发送微信模板消息
+                ActivityMessageVO activityMessageVO = new ActivityMessageVO();
+                activityMessageVO.setMemberCode(wxChannelInfoVo.getMemberCode());
+                activityMessageVO.setSysCompanyId(activityVO.getSysCompanyId());
+                activityMessageVO.setSysBrandId(activityVO.getSysBrandId());
+                activityMessageVO.setSysBrandName("品牌名称");
+                activityMessageVO.setActivityName(activityVO.getActivityName());
+                activityMessageVO.setActivityInterests(mktMessagePO.getMsgContent());
+                activityMessageVO.setMemberPhone(wxChannelInfoVo.getPhone());
+                if (activityVO.getLongTerm()==1){
+                    activityMessageVO.setActivityLongtime("长期活动");
+                }else{
+                    activityMessageVO.setActivityStartDate(activityVO.getStartTime());
+                    activityMessageVO.setActivityEndDate(activityVO.getEndTime());
+                }
+                awardBO.setActivityMessageVO(activityMessageVO);
                 awardBO.setMktType(MktSmartTypeEnum.SMART_TYPE_WXMESSAGE.getCode());
                 award.execute(awardBO);
             }

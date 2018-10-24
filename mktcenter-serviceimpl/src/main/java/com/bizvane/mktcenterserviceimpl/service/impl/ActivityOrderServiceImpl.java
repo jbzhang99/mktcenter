@@ -285,13 +285,11 @@ public class ActivityOrderServiceImpl implements ActivityOrderService {
                 MembersInfoSearchVo membersInfoSearchVo = new MembersInfoSearchVo();
                 membersInfoSearchVo.setPageNumber(1);
                 membersInfoSearchVo.setPageSize(10000);
-                if (!activityVO.getMbrLevelCode().equals("0")){
                    List<Long> level = new ArrayList<>();
                     level.add(Long.parseLong(activityVO.getMbrLevelCode()));
                     membersInfoSearchVo.setLevelID(level);
-                }
                 membersInfoSearchVo.setBrandId(activityVO.getSysBrandId());
-                memberMessage.getMemberList(messageVOList, membersInfoSearchVo);
+                memberMessage.getMemberList(messageVOList, membersInfoSearchVo,activityVO);
             }else{
                 //自定义时间发送 加人job任务
                 jobUtil.addSendMessageJob(stageUser,activityVO,activityCode);
@@ -531,7 +529,7 @@ public class ActivityOrderServiceImpl implements ActivityOrderService {
                // membersInfoSearchVo.setLevelId(Long.parseLong(activityVO.getMbrLevelCode()));
             }
             membersInfoSearchVo.setBrandId(activityVO.getSysBrandId());
-            memberMessage.getMemberList(messageVOList, membersInfoSearchVo);
+            memberMessage.getMemberList(messageVOList, membersInfoSearchVo,activityVO);
 
         }
         responseData.setCode(SysResponseEnum.SUCCESS.getCode());

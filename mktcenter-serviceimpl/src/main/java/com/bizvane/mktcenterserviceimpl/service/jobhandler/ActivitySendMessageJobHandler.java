@@ -23,6 +23,7 @@ import com.bizvane.utils.responseinfo.ResponseData;
 import com.xxl.job.core.biz.model.ReturnT;
 import com.xxl.job.core.handler.IJobHandler;
 import com.xxl.job.core.handler.annotation.JobHandler;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
@@ -62,6 +63,8 @@ public class ActivitySendMessageJobHandler extends IJobHandler {
         examplem.createCriteria().andActivityCodeEqualTo(param).andValidEqualTo(true);
         List<MktActivityPO> mktActivityPOs = mktActivityPOMapper.selectByExample(examplem);
         MktActivityPO mktActivityPO = mktActivityPOs.get(0);
+        ActivityVO activityVO = new ActivityVO();
+        BeanUtils.copyProperties(mktActivityPO,activityVO);
             //查询消息集合
             MktMessagePOExample example = new MktMessagePOExample();
             example.createCriteria().andBizIdEqualTo(mktActivityPO.getMktActivityId());
@@ -106,15 +109,15 @@ public class ActivitySendMessageJobHandler extends IJobHandler {
                 if (mktActivityPO.getActivityType()== ActivityTypeEnum.ACTIVITY_TYPE_REGISGER.getCode()){
                     memberMessage.sendDXmessage(ListMktMessage, membersInfoSearchVo);
                     //查询对应的会员  发送微信模板消息
-                 /*   WxChannelInfoSearchVo wxChannelInfoSearchVo = new WxChannelInfoSearchVo();
+                    WxChannelInfoSearchVo wxChannelInfoSearchVo = new WxChannelInfoSearchVo();
                     wxChannelInfoSearchVo.setPageNum(1);
                     wxChannelInfoSearchVo.setPageSize(10000);
                     wxChannelInfoSearchVo.setFocus(2);
                     wxChannelInfoSearchVo.setCardStatus(2);
                     wxChannelInfoSearchVo.setMiniProgram((byte) 1);
-                    memberMessage.sendWXmessage(ListMktMessage, wxChannelInfoSearchVo);*/
+                    memberMessage.sendWXmessage(ListMktMessage, wxChannelInfoSearchVo,activityVO);
                 }else{
-                    memberMessage.getMemberList(ListMktMessage, membersInfoSearchVo);
+                    memberMessage.getMemberList(ListMktMessage, membersInfoSearchVo,activityVO);
                 }
 
             }

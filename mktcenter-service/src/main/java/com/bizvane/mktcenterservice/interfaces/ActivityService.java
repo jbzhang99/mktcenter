@@ -56,7 +56,7 @@ public interface ActivityService {
      */
     public ResponseData<CtivityAnalysisBO> getActivityAnalysisCountpage(ActivityAnalysisCountBO bo, PageForm pageForm);
 
-    public void sendMessage(List<MktMessagePO> messageVOList, MemberInfoModel memberInfo);
+    public void sendMessage(List<MktMessagePO> messageVOList, MemberInfoModel memberInfo,ActivityVO activityVO);
 
     public void sendPoints(ActivitySmartVO vo, AwardBO awardBO, MemberInfoModel memberInfo);
 
@@ -66,7 +66,7 @@ public interface ActivityService {
 
     public  void sendCoupon(ActivitySmartVO vo, AwardBO awardBO, SendCouponSimpleRequestVO sendCouponSimpleRequestVO, MemberInfoModel memberInfo);
 
-    public void sendRegisterWx(List<MktMessagePO> messageVOList, WxChannelInfoVo wxChannelInfoVo);
+    public void sendRegisterWx(List<MktMessagePO> messageVOList, WxChannelInfoVo wxChannelInfoVo,ActivityVO activityVO);
 
     public void sendDx(List<MktMessagePO> messageVOList, MemberInfoModel memberInfo);
 
