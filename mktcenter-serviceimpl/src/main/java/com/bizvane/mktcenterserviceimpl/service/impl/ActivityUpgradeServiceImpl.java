@@ -314,7 +314,7 @@ public class ActivityUpgradeServiceImpl implements ActivityUpgradeService {
                 List<Long> level = new ArrayList<>();
                 level.add(mbrLevel.getMbrLevelId());
                 membersInfoSearchVo.setLevelID(level);
-                memberMessage.getMemberList(messageVOList, membersInfoSearchVo);
+                memberMessage.getMemberList(messageVOList, membersInfoSearchVo,activityVO);
             }else{
                 //自定义时间发送 加人job任务
                 jobUtil.addSendMessageJob(stageUser,activityVO,activityCode);
@@ -488,7 +488,7 @@ public class ActivityUpgradeServiceImpl implements ActivityUpgradeService {
             List<Long> level = new ArrayList<>();
             level.add(mbrLevel.getMbrLevelId());
             membersInfoSearchVo.setLevelID(level);
-            memberMessage.getMemberList(messageVOList, membersInfoSearchVo);
+            memberMessage.getMemberList(messageVOList, membersInfoSearchVo,activityVO);
         }
         responseData.setCode(SysResponseEnum.SUCCESS.getCode());
         responseData.setMessage(SysResponseEnum.SUCCESS.getMessage());

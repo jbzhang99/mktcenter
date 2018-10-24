@@ -155,15 +155,8 @@ public class AwardFactory {
     @Async("asyncServiceExecutor")
     public ResponseData<String> sendWxTemplateMessage(AwardBO bo){
         ResponseData responseData = new ResponseData();
-        MemberMessageVO memberMessageVO = bo.getMemberMessageVO();
-        ActivityMessageVO activityMessageVO = new ActivityMessageVO();
-        activityMessageVO.setSysBrandId(memberMessageVO.getSysBrandId());
-        activityMessageVO.setMemberCode(memberMessageVO.getMemberCode());
-        activityMessageVO.setActivityInterests(memberMessageVO.getActivityInterests());
-        activityMessageVO.setActivityName(memberMessageVO.getActivityName());
-        activityMessageVO.setActivityStartDate(memberMessageVO.getActivityDate());
-        log.info("开始执行发送模板消息操作参数="+ JSON.toJSONString(activityMessageVO));
-        templateMessageServiceFeign.sendTemplateMessage(activityMessageVO);
+        log.info("开始执行发送模板消息操作参数="+ JSON.toJSONString(bo.getActivityMessageVO()));
+        templateMessageServiceFeign.sendTemplateMessage(bo.getActivityMessageVO());
         log.info("发送模板消息操作完成完成了完成了完成了完成了");
         return responseData;
     }
