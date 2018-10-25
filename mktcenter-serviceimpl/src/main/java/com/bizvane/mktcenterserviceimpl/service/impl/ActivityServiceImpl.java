@@ -510,7 +510,8 @@ public class ActivityServiceImpl implements ActivityService {
      */
     @Override
     public ResponseData<PageInfo<CouponSendMemberListResponseVO>> findCouponSendResultActivity(Long id, Integer type,
-                                                                                       SysAccountPO stageUser,PageForm pageForm) {
+                                                                                       SysAccountPO stageUser,PageForm pageForm,
+                                                                                        String name,String cardNo) {
         ResponseData responseData = new ResponseData();
 
         if(null == id){
@@ -532,6 +533,8 @@ public class ActivityServiceImpl implements ActivityService {
         requestVO.setBrandId(stageUser.getBrandId());
         requestVO.setPageNumber(pageForm.getPageNumber());
         requestVO.setPageSize(pageForm.getPageSize());
+        requestVO.setName(name);
+        requestVO.setCardNo(cardNo);
 
         ResponseData<PageInfo<CouponSendMemberListResponseVO>> sendMemberListResult = couponEntityServiceFeign.findCouponSendMemberList(requestVO);
 

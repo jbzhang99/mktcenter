@@ -74,5 +74,6 @@ public interface ActivityService {
      * 活动、任务效果分析“发行优惠券”添加会员明细弹框；
      * @return
      */
-    ResponseData<PageInfo<CouponSendMemberListResponseVO>> findCouponSendResultActivity(Long id, Integer type, SysAccountPO stageUser, PageForm pageForm);
+    ResponseData<PageInfo<CouponSendMemberListResponseVO>> findCouponSendResultActivity(Long id, Integer type, SysAccountPO stageUser,
+                                                                                        PageForm pageForm,String name,String cardNo);
 }
