@@ -4,7 +4,7 @@
   <resultMap id="BaseResultMap" type="com.bizvane.mktcenterservice.models.po.MktActivitySignin">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-08-31 12:40:26.
+      This element was generated on 2018-10-25 14:39:03.
     -->
     <id column="mkt_activity_sign_in_id" jdbcType="BIGINT" property="mktActivitySignInId" />
     <result column="sys_company_id" jdbcType="BIGINT" property="sysCompanyId" />
@@ -14,6 +14,8 @@
     <result column="integral_basis" jdbcType="BIGINT" property="integralBasis" />
     <result column="integral_addend" jdbcType="BIGINT" property="integralAddend" />
     <result column="integral_max" jdbcType="BIGINT" property="integralMax" />
+    <result column="is_store_limit" jdbcType="BIT" property="isStoreLimit" />
+    <result column="store_limit_type" jdbcType="INTEGER" property="storeLimitType" />
     <result column="remark" jdbcType="VARCHAR" property="remark" />
     <result column="create_user_id" jdbcType="BIGINT" property="createUserId" />
     <result column="create_user_name" jdbcType="VARCHAR" property="createUserName" />
@@ -23,10 +25,17 @@
     <result column="modified_date" jdbcType="TIMESTAMP" property="modifiedDate" />
     <result column="valid" jdbcType="BIT" property="valid" />
   </resultMap>
+  <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.bizvane.mktcenterservice.models.po.MktActivitySignin">
+    <!--
+      WARNING - 只读 - @mbg.generated
+      This element was generated on 2018-10-25 14:39:03.
+    -->
+    <result column="store_limit_list" jdbcType="LONGVARCHAR" property="storeLimitList" />
+  </resultMap>
   <sql id="Example_Where_Clause">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-08-31 12:40:26.
+      This element was generated on 2018-10-25 14:39:03.
     -->
     <where>
       <foreach collection="oredCriteria" item="criteria" separator="or">
@@ -59,7 +68,7 @@
   <sql id="Update_By_Example_Where_Clause">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-08-31 12:40:26.
+      This element was generated on 2018-10-25 14:39:03.
     -->
     <where>
       <foreach collection="example.oredCriteria" item="criteria" separator="or">
@@ -92,16 +101,44 @@
   <sql id="Base_Column_List">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-08-31 12:40:26.
+      This element was generated on 2018-10-25 14:39:03.
     -->
     mkt_activity_sign_in_id, sys_company_id, mkt_activity_id, sign_type, integral_type, 
-    integral_basis, integral_addend, integral_max, remark, create_user_id, create_user_name, 
-    create_date, modified_user_id, modified_user_name, modified_date, valid
+    integral_basis, integral_addend, integral_max, is_store_limit, store_limit_type, 
+    remark, create_user_id, create_user_name, create_date, modified_user_id, modified_user_name, 
+    modified_date, valid
   </sql>
+  <sql id="Blob_Column_List">
+    <!--
+      WARNING - 只读 - @mbg.generated
+      This element was generated on 2018-10-25 14:39:03.
+    -->
+    store_limit_list
+  </sql>
+  <select id="selectByExampleWithBLOBs" parameterType="com.bizvane.mktcenterservice.models.po.MktActivitySigninExample" resultMap="ResultMapWithBLOBs">
+    <!--
+      WARNING - 只读 - @mbg.generated
+      This element was generated on 2018-10-25 14:39:03.
+    -->
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from t_mkt_activity_signin
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
   <select id="selectByExample" parameterType="com.bizvane.mktcenterservice.models.po.MktActivitySigninExample" resultMap="BaseResultMap">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-08-31 12:40:26.
+      This element was generated on 2018-10-25 14:39:03.
     -->
     select
     <if test="distinct">
@@ -116,20 +153,22 @@
       order by ${orderByClause}
     </if>
   </select>
-  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="ResultMapWithBLOBs">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-08-31 12:40:26.
+      This element was generated on 2018-10-25 14:39:03.
     -->
     select 
     <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
     from t_mkt_activity_signin
     where mkt_activity_sign_in_id = #{mktActivitySignInId,jdbcType=BIGINT}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-08-31 12:40:26.
+      This element was generated on 2018-10-25 14:39:03.
     -->
     delete from t_mkt_activity_signin
     where mkt_activity_sign_in_id = #{mktActivitySignInId,jdbcType=BIGINT}
@@ -137,7 +176,7 @@
   <delete id="deleteByExample" parameterType="com.bizvane.mktcenterservice.models.po.MktActivitySigninExample">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-08-31 12:40:26.
+      This element was generated on 2018-10-25 14:39:03.
     -->
     delete from t_mkt_activity_signin
     <if test="_parameter != null">
@@ -147,25 +186,27 @@
   <insert id="insert" parameterType="com.bizvane.mktcenterservice.models.po.MktActivitySignin">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-08-31 12:40:26.
+      This element was generated on 2018-10-25 14:39:03.
     -->
     insert into t_mkt_activity_signin (mkt_activity_sign_in_id, sys_company_id, 
       mkt_activity_id, sign_type, integral_type, 
       integral_basis, integral_addend, integral_max, 
-      remark, create_user_id, create_user_name, 
-      create_date, modified_user_id, modified_user_name, 
-      modified_date, valid)
+      is_store_limit, store_limit_type, remark, 
+      create_user_id, create_user_name, create_date, 
+      modified_user_id, modified_user_name, modified_date, 
+      valid, store_limit_list)
     values (#{mktActivitySignInId,jdbcType=BIGINT}, #{sysCompanyId,jdbcType=BIGINT}, 
       #{mktActivityId,jdbcType=BIGINT}, #{signType,jdbcType=INTEGER}, #{integralType,jdbcType=VARCHAR}, 
       #{integralBasis,jdbcType=BIGINT}, #{integralAddend,jdbcType=BIGINT}, #{integralMax,jdbcType=BIGINT}, 
-      #{remark,jdbcType=VARCHAR}, #{createUserId,jdbcType=BIGINT}, #{createUserName,jdbcType=VARCHAR}, 
-      #{createDate,jdbcType=TIMESTAMP}, #{modifiedUserId,jdbcType=BIGINT}, #{modifiedUserName,jdbcType=VARCHAR}, 
-      #{modifiedDate,jdbcType=TIMESTAMP}, #{valid,jdbcType=BIT})
+      #{isStoreLimit,jdbcType=BIT}, #{storeLimitType,jdbcType=INTEGER}, #{remark,jdbcType=VARCHAR}, 
+      #{createUserId,jdbcType=BIGINT}, #{createUserName,jdbcType=VARCHAR}, #{createDate,jdbcType=TIMESTAMP}, 
+      #{modifiedUserId,jdbcType=BIGINT}, #{modifiedUserName,jdbcType=VARCHAR}, #{modifiedDate,jdbcType=TIMESTAMP}, 
+      #{valid,jdbcType=BIT}, #{storeLimitList,jdbcType=LONGVARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.bizvane.mktcenterservice.models.po.MktActivitySignin">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-08-31 12:40:26.
+      This element was generated on 2018-10-25 14:39:03.
     -->
     insert into t_mkt_activity_signin
     <trim prefix="(" suffix=")" suffixOverrides=",">
@@ -193,6 +234,12 @@
       <if test="integralMax != null">
         integral_max,
       </if>
+      <if test="isStoreLimit != null">
+        is_store_limit,
+      </if>
+      <if test="storeLimitType != null">
+        store_limit_type,
+      </if>
       <if test="remark != null">
         remark,
       </if>
@@ -216,6 +263,9 @@
       </if>
       <if test="valid != null">
         valid,
+      </if>
+      <if test="storeLimitList != null">
+        store_limit_list,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
@@ -243,6 +293,12 @@
       <if test="integralMax != null">
         #{integralMax,jdbcType=BIGINT},
       </if>
+      <if test="isStoreLimit != null">
+        #{isStoreLimit,jdbcType=BIT},
+      </if>
+      <if test="storeLimitType != null">
+        #{storeLimitType,jdbcType=INTEGER},
+      </if>
       <if test="remark != null">
         #{remark,jdbcType=VARCHAR},
       </if>
@@ -267,12 +323,15 @@
       <if test="valid != null">
         #{valid,jdbcType=BIT},
       </if>
+      <if test="storeLimitList != null">
+        #{storeLimitList,jdbcType=LONGVARCHAR},
+      </if>
     </trim>
   </insert>
   <select id="countByExample" parameterType="com.bizvane.mktcenterservice.models.po.MktActivitySigninExample" resultType="java.lang.Long">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-08-31 12:40:26.
+      This element was generated on 2018-10-25 14:39:03.
     -->
     select count(*) from t_mkt_activity_signin
     <if test="_parameter != null">
@@ -282,7 +341,7 @@
   <update id="updateByExampleSelective" parameterType="map">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-08-31 12:40:26.
+      This element was generated on 2018-10-25 14:39:03.
     -->
     update t_mkt_activity_signin
     <set>
@@ -310,6 +369,12 @@
       <if test="record.integralMax != null">
         integral_max = #{record.integralMax,jdbcType=BIGINT},
       </if>
+      <if test="record.isStoreLimit != null">
+        is_store_limit = #{record.isStoreLimit,jdbcType=BIT},
+      </if>
+      <if test="record.storeLimitType != null">
+        store_limit_type = #{record.storeLimitType,jdbcType=INTEGER},
+      </if>
       <if test="record.remark != null">
         remark = #{record.remark,jdbcType=VARCHAR},
       </if>
@@ -334,15 +399,18 @@
       <if test="record.valid != null">
         valid = #{record.valid,jdbcType=BIT},
       </if>
+      <if test="record.storeLimitList != null">
+        store_limit_list = #{record.storeLimitList,jdbcType=LONGVARCHAR},
+      </if>
     </set>
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
-  <update id="updateByExample" parameterType="map">
+  <update id="updateByExampleWithBLOBs" parameterType="map">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-08-31 12:40:26.
+      This element was generated on 2018-10-25 14:39:03.
     -->
     update t_mkt_activity_signin
     set mkt_activity_sign_in_id = #{record.mktActivitySignInId,jdbcType=BIGINT},
@@ -353,6 +421,37 @@
       integral_basis = #{record.integralBasis,jdbcType=BIGINT},
       integral_addend = #{record.integralAddend,jdbcType=BIGINT},
       integral_max = #{record.integralMax,jdbcType=BIGINT},
+      is_store_limit = #{record.isStoreLimit,jdbcType=BIT},
+      store_limit_type = #{record.storeLimitType,jdbcType=INTEGER},
+      remark = #{record.remark,jdbcType=VARCHAR},
+      create_user_id = #{record.createUserId,jdbcType=BIGINT},
+      create_user_name = #{record.createUserName,jdbcType=VARCHAR},
+      create_date = #{record.createDate,jdbcType=TIMESTAMP},
+      modified_user_id = #{record.modifiedUserId,jdbcType=BIGINT},
+      modified_user_name = #{record.modifiedUserName,jdbcType=VARCHAR},
+      modified_date = #{record.modifiedDate,jdbcType=TIMESTAMP},
+      valid = #{record.valid,jdbcType=BIT},
+      store_limit_list = #{record.storeLimitList,jdbcType=LONGVARCHAR}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    <!--
+      WARNING - 只读 - @mbg.generated
+      This element was generated on 2018-10-25 14:39:03.
+    -->
+    update t_mkt_activity_signin
+    set mkt_activity_sign_in_id = #{record.mktActivitySignInId,jdbcType=BIGINT},
+      sys_company_id = #{record.sysCompanyId,jdbcType=BIGINT},
+      mkt_activity_id = #{record.mktActivityId,jdbcType=BIGINT},
+      sign_type = #{record.signType,jdbcType=INTEGER},
+      integral_type = #{record.integralType,jdbcType=VARCHAR},
+      integral_basis = #{record.integralBasis,jdbcType=BIGINT},
+      integral_addend = #{record.integralAddend,jdbcType=BIGINT},
+      integral_max = #{record.integralMax,jdbcType=BIGINT},
+      is_store_limit = #{record.isStoreLimit,jdbcType=BIT},
+      store_limit_type = #{record.storeLimitType,jdbcType=INTEGER},
       remark = #{record.remark,jdbcType=VARCHAR},
       create_user_id = #{record.createUserId,jdbcType=BIGINT},
       create_user_name = #{record.createUserName,jdbcType=VARCHAR},
@@ -368,7 +467,7 @@
   <update id="updateByPrimaryKeySelective" parameterType="com.bizvane.mktcenterservice.models.po.MktActivitySignin">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-08-31 12:40:26.
+      This element was generated on 2018-10-25 14:39:03.
     -->
     update t_mkt_activity_signin
     <set>
@@ -392,6 +491,12 @@
       </if>
       <if test="integralMax != null">
         integral_max = #{integralMax,jdbcType=BIGINT},
+      </if>
+      <if test="isStoreLimit != null">
+        is_store_limit = #{isStoreLimit,jdbcType=BIT},
+      </if>
+      <if test="storeLimitType != null">
+        store_limit_type = #{storeLimitType,jdbcType=INTEGER},
       </if>
       <if test="remark != null">
         remark = #{remark,jdbcType=VARCHAR},
@@ -417,13 +522,16 @@
       <if test="valid != null">
         valid = #{valid,jdbcType=BIT},
       </if>
+      <if test="storeLimitList != null">
+        store_limit_list = #{storeLimitList,jdbcType=LONGVARCHAR},
+      </if>
     </set>
     where mkt_activity_sign_in_id = #{mktActivitySignInId,jdbcType=BIGINT}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.bizvane.mktcenterservice.models.po.MktActivitySignin">
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.bizvane.mktcenterservice.models.po.MktActivitySignin">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-08-31 12:40:26.
+      This element was generated on 2018-10-25 14:39:03.
     -->
     update t_mkt_activity_signin
     set sys_company_id = #{sysCompanyId,jdbcType=BIGINT},
@@ -433,6 +541,34 @@
       integral_basis = #{integralBasis,jdbcType=BIGINT},
       integral_addend = #{integralAddend,jdbcType=BIGINT},
       integral_max = #{integralMax,jdbcType=BIGINT},
+      is_store_limit = #{isStoreLimit,jdbcType=BIT},
+      store_limit_type = #{storeLimitType,jdbcType=INTEGER},
+      remark = #{remark,jdbcType=VARCHAR},
+      create_user_id = #{createUserId,jdbcType=BIGINT},
+      create_user_name = #{createUserName,jdbcType=VARCHAR},
+      create_date = #{createDate,jdbcType=TIMESTAMP},
+      modified_user_id = #{modifiedUserId,jdbcType=BIGINT},
+      modified_user_name = #{modifiedUserName,jdbcType=VARCHAR},
+      modified_date = #{modifiedDate,jdbcType=TIMESTAMP},
+      valid = #{valid,jdbcType=BIT},
+      store_limit_list = #{storeLimitList,jdbcType=LONGVARCHAR}
+    where mkt_activity_sign_in_id = #{mktActivitySignInId,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.bizvane.mktcenterservice.models.po.MktActivitySignin">
+    <!--
+      WARNING - 只读 - @mbg.generated
+      This element was generated on 2018-10-25 14:39:03.
+    -->
+    update t_mkt_activity_signin
+    set sys_company_id = #{sysCompanyId,jdbcType=BIGINT},
+      mkt_activity_id = #{mktActivityId,jdbcType=BIGINT},
+      sign_type = #{signType,jdbcType=INTEGER},
+      integral_type = #{integralType,jdbcType=VARCHAR},
+      integral_basis = #{integralBasis,jdbcType=BIGINT},
+      integral_addend = #{integralAddend,jdbcType=BIGINT},
+      integral_max = #{integralMax,jdbcType=BIGINT},
+      is_store_limit = #{isStoreLimit,jdbcType=BIT},
+      store_limit_type = #{storeLimitType,jdbcType=INTEGER},
       remark = #{remark,jdbcType=VARCHAR},
       create_user_id = #{createUserId,jdbcType=BIGINT},
       create_user_name = #{createUserName,jdbcType=VARCHAR},

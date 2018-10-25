@@ -130,12 +130,14 @@ public class ActivityController {
      * 活动、任务效果分析“发行优惠券”添加会员明细弹框；
      * @return
      */
-    @RequestMapping("findCouponResultMemberList")
-    public ResponseData<PageInfo<CouponSendMemberListResponseVO>> findCouponResultMemberList(@RequestParam(required = false) Long id,
+    @RequestMapping("findCouponResultMemberListActivity")
+    public ResponseData<PageInfo<CouponSendMemberListResponseVO>> findCouponResultMemberListActivity(@RequestParam(required = false) Long id,
                                                                                              @RequestParam(required = false) Integer type,
+                                                                                             @RequestParam(required = false) String name,
+                                                                                             @RequestParam(required = false) String cardNo,
                                                                                              HttpServletRequest request, PageForm pageForm){
         SysAccountPO stageUser = TokenUtils.getStageUser(request);
-        return activityService.findCouponSendResult(id,type,stageUser,pageForm);
+        return activityService.findCouponSendResultActivity(id,type,stageUser,pageForm,name,cardNo);
     }
 
 

@@ -5,6 +5,9 @@ import com.bizvane.centercontrolservice.models.po.SysSmsConfigPo;
 import com.bizvane.centercontrolservice.models.vo.SmsConfigVo;
 import com.bizvane.centercontrolservice.rpc.SysSmsConfigServiceRpc;
 import com.bizvane.centerstageservice.models.po.SysStorePo;
+import com.bizvane.couponfacade.interfaces.CouponEntityServiceFeign;
+import com.bizvane.couponfacade.models.vo.CouponSendMemberListRequestVO;
+import com.bizvane.couponfacade.models.vo.CouponSendMemberListResponseVO;
 import com.bizvane.messagefacade.interfaces.TemplateMessageServiceFeign;
 import com.bizvane.messagefacade.models.vo.*;
 import com.bizvane.mktcenterservice.models.vo.PageForm;
@@ -117,6 +120,10 @@ public class TaskServiceImpl implements TaskService {
     private TemplateMessageServiceFeign templateMessageServiceFeign;
     @Autowired
     private JobClient jobClient;
+    @Autowired
+    private CouponEntityServiceFeign couponEntityServiceFeign;
+
+
     /**
      * 通过id查询店铺列表
      */
@@ -1030,4 +1037,48 @@ public class TaskServiceImpl implements TaskService {
         result.setData(pageInfo);
         return result;
     }
+
+
+    /**
+     * 活动、任务效果分析“发行优惠券”添加会员明细弹框；
+     * @return
+     */
+    @Override
+    public ResponseData<PageInfo<CouponSendMemberListResponseVO>> findCouponSendResultTask(Long id, Integer type,
+                                                                                           SysAccountPO stageUser, PageForm pageForm,
+                                                                                           String name,String cardNo) {
+        ResponseData responseData = new ResponseData();
+
+        if(null == id){
+            responseData.setCode(SysResponseEnum.FAILED.getCode());
+            responseData.setMessage(SysResponseEnum.MODEL_FAILED_VALIDATION.getMessage());
+            return responseData;
+        }
+
+        if(null == type){
+            responseData.setCode(SysResponseEnum.FAILED.getCode());
+            responseData.setMessage(SysResponseEnum.MODEL_FAILED_VALIDATION.getMessage());
+            return responseData;
+        }
+
+        CouponSendMemberListRequestVO requestVO = new CouponSendMemberListRequestVO();
+        requestVO.setSendBusinessId(id);
+        //类型转换
+        ChangeTaskTypeVO taskTypeVO = changeTaskType(type);
+        requestVO.setSendType(taskTypeVO.getCouponTaskType());
+
+        requestVO.setBrandId(stageUser.getBrandId());
+        requestVO.setPageNumber(pageForm.getPageNumber());
+        requestVO.setPageSize(pageForm.getPageSize());
+        requestVO.setName(name);
+        requestVO.setCardNo(cardNo);
+
+        ResponseData<PageInfo<CouponSendMemberListResponseVO>> sendMemberListResult = couponEntityServiceFeign.findCouponSendMemberList(requestVO);
+
+        responseData.setData(sendMemberListResult.getData());
+        responseData.setCode(SysResponseEnum.SUCCESS.getCode());
+        responseData.setMessage(SysResponseEnum.SUCCESS.getMessage());
+        return responseData;
+    }
+
 }

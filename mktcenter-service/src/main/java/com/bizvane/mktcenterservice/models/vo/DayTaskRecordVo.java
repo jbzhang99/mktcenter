@@ -60,6 +60,17 @@ public class DayTaskRecordVo {
     //短信数量
     private  String  msgNUM;
 
+    //任务类型
+    private Integer taskType;
+
+
+    public Integer getTaskType() {
+        return taskType;
+    }
+
+    public void setTaskType(Integer taskType) {
+        this.taskType = taskType;
+    }
 
     public Long getDayPoints() {
         return dayPoints;
