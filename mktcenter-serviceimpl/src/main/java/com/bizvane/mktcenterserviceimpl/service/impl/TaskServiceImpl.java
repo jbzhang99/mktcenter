@@ -1045,7 +1045,8 @@ public class TaskServiceImpl implements TaskService {
      */
     @Override
     public ResponseData<PageInfo<CouponSendMemberListResponseVO>> findCouponSendResultTask(Long id, Integer type,
-                                                                                           SysAccountPO stageUser, PageForm pageForm) {
+                                                                                           SysAccountPO stageUser, PageForm pageForm,
+                                                                                           String name,String cardNo) {
         ResponseData responseData = new ResponseData();
 
         if(null == id){
@@ -1069,6 +1070,8 @@ public class TaskServiceImpl implements TaskService {
         requestVO.setBrandId(stageUser.getBrandId());
         requestVO.setPageNumber(pageForm.getPageNumber());
         requestVO.setPageSize(pageForm.getPageSize());
+        requestVO.setName(name);
+        requestVO.setCardNo(cardNo);
 
         ResponseData<PageInfo<CouponSendMemberListResponseVO>> sendMemberListResult = couponEntityServiceFeign.findCouponSendMemberList(requestVO);
 

@@ -807,11 +807,10 @@
       FROM
           t_mkt_task tta
       INNER JOIN t_mkt_task_order tto ON tta.mkt_task_id = tto.mkt_task_id
-      LEFT JOIN t_mkt_coupon tmc ON tta.mkt_task_id = tmc.biz_id
+      LEFT JOIN t_mkt_coupon tmc ON tta.mkt_task_id = tmc.biz_id AND tmc.valid = 1
       WHERE
           tta.valid = 1
       AND tto.valid = 1
-      AND tmc.valid = 1
       AND  tta.check_status=3
       AND  tta.task_status=2
       AND tta.task_type  BETWEEN 4  AND 5
@@ -826,7 +825,7 @@
       AND tta.end_time <![CDATA[>=]]> #{placeOrderTime}
     </if>
     <if test="orderSource != null and orderSource!= '' ">
-      AND (order_source=#{orderSource} or order_source=0)
+      AND (tto.order_source=#{orderSource} or tto.order_source=0)
     </if>
   </select>
 
@@ -858,11 +857,10 @@
     FROM
     t_mkt_task tta
     INNER JOIN t_mkt_task_invite tti ON tta.mkt_task_id = tti.mkt_task_id
-    LEFT JOIN t_mkt_coupon tmc ON tta.mkt_task_id = tmc.biz_id
+    LEFT JOIN t_mkt_coupon tmc ON tta.mkt_task_id = tmc.biz_id  AND tmc.valid = 1
     WHERE
     tta.valid = 1
     AND tti.valid = 1
-    AND tmc.valid = 1
     AND  tta.check_status=3
     AND  tta.task_status=2
     AND tta.task_type =3
@@ -873,7 +871,7 @@
       AND  tta.sys_company_id=#{sysCompanyId}
     </if>
     <if test="sysBrandId != null and sysBrandId!= '' ">
-      AND sys_brand_id=#{sysBrandId}
+      AND tta.sys_brand_id=#{sysBrandId}
     </if>
     <if test="placeOrderTime!=null and placeOrderTime!=''">
       AND tta.start_time <![CDATA[<=]]>#{placeOrderTime}
@@ -909,11 +907,10 @@
     FROM
     t_mkt_task tta
     INNER JOIN t_mkt_task_profile ttp ON tta.mkt_task_id = ttp.mkt_task_id
-    LEFT JOIN t_mkt_coupon tmc ON tta.mkt_task_id = tmc.biz_id
+    LEFT JOIN t_mkt_coupon tmc ON tta.mkt_task_id = tmc.biz_id  AND tmc.valid = 1
     WHERE
     tta.valid = 1
     AND ttp.valid = 1
-    AND tmc.valid = 1
     AND  tta.check_status=3
     AND  tta.task_status=2
     AND tta.task_type =1
@@ -962,11 +959,10 @@
     FROM
     t_mkt_task tta
     INNER JOIN t_mkt_task_share tts ON tta.mkt_task_id = tts.mkt_task_id
-    LEFT JOIN t_mkt_coupon tmc ON tta.mkt_task_id = tmc.biz_id
+    LEFT JOIN t_mkt_coupon tmc ON tta.mkt_task_id = tmc.biz_id  AND tmc.valid = 1
     WHERE
     tta.valid = 1
     AND tts.valid = 1
-    AND tmc.valid = 1
     AND  tta.check_status=3
     AND  tta.task_status=2
     AND tta.task_type =2

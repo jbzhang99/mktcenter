@@ -118,8 +118,10 @@ public class TaskController {
     @RequestMapping("findCouponResultMemberListTask")
     public ResponseData<PageInfo<CouponSendMemberListResponseVO>> findCouponResultMemberListTask(@RequestParam(required = false) Long id,
                                                                                                  @RequestParam(required = false) Integer type,
+                                                                                                 @RequestParam(required = false) String name,
+                                                                                                 @RequestParam(required = false) String cardNo,
                                                                                                  HttpServletRequest request, PageForm pageForm){
         SysAccountPO stageUser = TokenUtils.getStageUser(request);
-        return taskService.findCouponSendResultTask(id,type,stageUser,pageForm);
+        return taskService.findCouponSendResultTask(id,type,stageUser,pageForm,name,cardNo);
     }
 }
