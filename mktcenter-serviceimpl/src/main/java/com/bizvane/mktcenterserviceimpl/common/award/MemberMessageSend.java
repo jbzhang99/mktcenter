@@ -309,12 +309,13 @@ public class MemberMessageSend {
                     MktMessagePO mktMessagePO = mktMessagePOS.get(0);
                     //member loop
                     for(MemberInfoModel memberInfoModel : memberInfoModelList){
-                        SysSmsConfigVO sysSmsConfigVO = new SysSmsConfigVO();
-                        sysSmsConfigVO.setPhone(memberInfoModel.getPhone());
-                        sysSmsConfigVO.setMsgContent(mktMessagePO.getMsgContent());
-                        sysSmsConfigVO.setSysBrandId(memberInfoModel.getBrandId());
+                        ActivityMessageVO activityMessageVO = new ActivityMessageVO();
+                        activityMessageVO.setMemberPhone(memberInfoModel.getPhone());
+                        activityMessageVO.setSysBrandId(memberInfoModel.getBrandId());
+                        activityMessageVO.setMemberName(memberInfoModel.getName());
+                        activityMessageVO.setSendWxmember(mktMessagePO.getMsgContent());
                         awardBO.setMktType(MktSmartTypeEnum.SMART_TYPE_SMS.getCode());
-                        awardBO.setSysSmsConfigVO(sysSmsConfigVO);
+                        awardBO.setActivityMessageVO(activityMessageVO);
                         log.info("智能营销-开始发短信短信了");
                         award.execute(awardBO);
                     }
@@ -336,7 +337,7 @@ public class MemberMessageSend {
                         activityMessageVO.setActivityName(mktActivityPOWithBLOBs.getActivityName());
                         activityMessageVO.setActivityInterests(mktMessage.getMsgContent());
                         activityMessageVO.setMemberPhone(memberInfoModel.getPhone());
-                        //todo 缺少开始时间和结束时间
+                        activityMessageVO.setActivityLongtime("智能营销");
                         awardBO.setMktType(MktSmartTypeEnum.SMART_TYPE_WXMESSAGE.getCode());
                         awardBO.setActivityMessageVO(activityMessageVO);
                         log.info("智能营销-开始发微信微信了");

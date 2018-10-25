@@ -376,11 +376,12 @@ public class ActivityServiceImpl implements ActivityService {
                 award.execute(awardBO);
             }
             if (mktMessagePO.getMsgType().equals("2")){
-                SysSmsConfigVO sysSmsConfigVO = new SysSmsConfigVO();
-                sysSmsConfigVO.setPhone(memberInfo.getPhone());
-                sysSmsConfigVO.setMsgContent(mktMessagePO.getMsgContent());
-                sysSmsConfigVO.setSysBrandId(memberInfo.getBrandId());
-                awardBO.setSysSmsConfigVO(sysSmsConfigVO);
+                ActivityMessageVO activityMessageVO = new ActivityMessageVO();
+                activityMessageVO.setMemberPhone(memberInfo.getPhone());
+                activityMessageVO.setSysBrandId(memberInfo.getBrandId());
+                activityMessageVO.setMemberName(memberInfo.getName());
+                activityMessageVO.setSendWxmember(mktMessagePO.getMsgContent());
+                awardBO.setActivityMessageVO(activityMessageVO);
                 awardBO.setMktType(MktSmartTypeEnum.SMART_TYPE_SMS.getCode());
                 //发送短信消息
                 award.execute(awardBO);
@@ -409,20 +410,29 @@ public class ActivityServiceImpl implements ActivityService {
     @Override
     @Async("asyncServiceExecutor")
     public void sendShort(MktMessagePO mktMessagePO, AwardBO awardBO, SysSmsConfigVO sysSmsConfigVO, MemberInfoModel memberInfo) {
-        sysSmsConfigVO.setPhone(memberInfo.getPhone());
-        sysSmsConfigVO.setMsgContent(mktMessagePO.getMsgContent());
-        sysSmsConfigVO.setSysBrandId(memberInfo.getBrandId());
-        awardBO.setSysSmsConfigVO(sysSmsConfigVO);
+        ActivityMessageVO activityMessageVO = new ActivityMessageVO();
+        activityMessageVO.setMemberPhone(memberInfo.getPhone());
+        activityMessageVO.setSysBrandId(memberInfo.getBrandId());
+        activityMessageVO.setMemberName(memberInfo.getName());
+        activityMessageVO.setSendWxmember(mktMessagePO.getMsgContent());
+        awardBO.setActivityMessageVO(activityMessageVO);
         awardBO.setMktType(MktSmartTypeEnum.SMART_TYPE_SMS.getCode());
         award.execute(awardBO);
     }
     @Override
     @Async("asyncServiceExecutor")
     public void sendWx(MktMessagePO mktMessagePO, AwardBO awardBO, MemberMessageVO memberMessageVO, MemberInfoModel memberInfo) {
-        memberMessageVO.setMemberCode(memberInfo.getMemberCode());
-        memberMessageVO.setOpenId(memberInfo.getWxOpenId());
-        memberMessageVO.setActivityInterests(mktMessagePO.getMsgContent());
-        awardBO.setMemberMessageVO(memberMessageVO);
+        //发送微信模板消息
+        ActivityMessageVO activityMessageVO = new ActivityMessageVO();
+        activityMessageVO.setMemberCode(memberInfo.getMemberCode());
+        activityMessageVO.setSysCompanyId(memberInfo.getSysCompanyId());
+        activityMessageVO.setSysBrandId(memberInfo.getBrandId());
+        activityMessageVO.setSysBrandName("品牌名称");
+        activityMessageVO.setActivityName("营销发送微信消息");
+        activityMessageVO.setActivityInterests(mktMessagePO.getMsgContent());
+        activityMessageVO.setMemberPhone(memberInfo.getPhone());
+        activityMessageVO.setActivityLongtime("智能营销");
+        awardBO.setActivityMessageVO(activityMessageVO);
         awardBO.setMktType(MktSmartTypeEnum.SMART_TYPE_WXMESSAGE.getCode());
         award.execute(awardBO);
     }
@@ -481,11 +491,12 @@ public class ActivityServiceImpl implements ActivityService {
         for (MktMessagePO mktMessagePO:messageVOList) {
             AwardBO awardBO = new AwardBO();
             if (mktMessagePO.getMsgType().equals("2")){
-                SysSmsConfigVO sysSmsConfigVO = new SysSmsConfigVO();
-                sysSmsConfigVO.setPhone(memberInfo.getPhone());
-                sysSmsConfigVO.setSysBrandId(memberInfo.getBrandId());
-                sysSmsConfigVO.setMsgContent(mktMessagePO.getMsgContent());
-                awardBO.setSysSmsConfigVO(sysSmsConfigVO);
+                ActivityMessageVO activityMessageVO = new ActivityMessageVO();
+                activityMessageVO.setMemberPhone(memberInfo.getPhone());
+                activityMessageVO.setSysBrandId(memberInfo.getBrandId());
+                activityMessageVO.setMemberName(memberInfo.getName());
+                activityMessageVO.setSendWxmember(mktMessagePO.getMsgContent());
+                awardBO.setActivityMessageVO(activityMessageVO);
                 awardBO.setMktType(MktSmartTypeEnum.SMART_TYPE_SMS.getCode());
                 //发送短信消息
                 award.execute(awardBO);
