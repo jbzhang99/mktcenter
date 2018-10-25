@@ -1,6 +1,8 @@
 package com.bizvane.mktcenterserviceimpl.common.award;
 
 import com.alibaba.fastjson.JSON;
+import com.bizvane.centerstageservice.models.po.SysBrandPo;
+import com.bizvane.centerstageservice.rpc.BrandServiceRpc;
 import com.bizvane.couponfacade.enums.SendTypeEnum;
 import com.bizvane.couponfacade.models.vo.SendCouponBatchRequestVO;
 import com.bizvane.couponfacade.models.vo.SendCouponSimpleRequestVO;
@@ -74,6 +76,8 @@ public class MemberMessageSend {
     private MembersAdvancedSearchApiService membersAdvancedSearchApiService;
     @Autowired
     private ActivityService activityService;
+    @Autowired
+    private BrandServiceRpc brandServiceRpc;
     /**
      * 查询会员信息发送你个短信和微信消息
      * @param messageVOList
@@ -256,6 +260,7 @@ public class MemberMessageSend {
      */
     @Async("asyncServiceExecutor")
     public void sendSmart(Integer mktSmartType, MktActivityPOWithBLOBs mktActivityPOWithBLOBs, MembersInfoSearchVo membersInfoSearchVo) {
+        ResponseData<SysBrandPo> SysBrandPos = brandServiceRpc.getBrandByID(mktActivityPOWithBLOBs.getSysBrandId());
         ResponseData<PageInfo<MemberInfoVo>> memberInfoVoPage = membersAdvancedSearchApiService.search(membersInfoSearchVo);
         for (int a =1;a<=memberInfoVoPage.getData().getPages();a++){
             membersInfoSearchVo.setPageNumber(a);
@@ -333,7 +338,7 @@ public class MemberMessageSend {
                         activityMessageVO.setMemberCode(memberInfoModel.getMemberCode());
                         activityMessageVO.setSysCompanyId(mktActivityPOWithBLOBs.getSysCompanyId());
                         activityMessageVO.setSysBrandId(mktActivityPOWithBLOBs.getSysBrandId());
-                        activityMessageVO.setSysBrandName("品牌名称");
+                        activityMessageVO.setSysBrandName(SysBrandPos.getData().getBrandName());
                         activityMessageVO.setActivityName(mktActivityPOWithBLOBs.getActivityName());
                         activityMessageVO.setActivityInterests(mktMessage.getMsgContent());
                         activityMessageVO.setMemberPhone(memberInfoModel.getPhone());

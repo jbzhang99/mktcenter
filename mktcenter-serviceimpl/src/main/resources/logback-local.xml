@@ -48,7 +48,7 @@
 
     <appender name="logstash-uat"
               class="net.logstash.logback.appender.LogstashTcpSocketAppender">
-        <destination>192.168.2.22:9300</destination>
+        <destination>192.168.2.22:4560</destination>
         <queueSize>1048576</queueSize>
         <!-- encoder必须配置,有多种可选 -->
         <encoder charset="UTF-8" class="net.logstash.logback.encoder.LogstashEncoder">
@@ -61,16 +61,15 @@
         </connectionStrategy>
     </appender>
 
-    <springProfile name="log-test">
+    <springProfile name="test">
         <root level="info"><appender-ref ref="logstash-test" /></root>
     </springProfile>
-    <springProfile name="log-uat">
+    <springProfile name="uat">
         <root level="info"><appender-ref ref="logstash-uat" /></root>
     </springProfile>
     <root level="info">
         <appender-ref ref="console" />
         <appender-ref ref="file" />
-        <appender-ref ref="logstash-test" />
     </root>
     <logger name="org.springframework.scheduling"  level="error" />
     <Logger name="org.apache.catalina.util.LifecycleBase" level="error" />

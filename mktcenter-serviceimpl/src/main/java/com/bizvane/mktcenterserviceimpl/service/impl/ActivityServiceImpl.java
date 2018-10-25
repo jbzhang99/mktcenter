@@ -1,7 +1,9 @@
 package com.bizvane.mktcenterserviceimpl.service.impl;
 
 import com.alibaba.fastjson.JSON;
+import com.bizvane.centerstageservice.models.po.SysBrandPo;
 import com.bizvane.centerstageservice.models.po.SysCheckPo;
+import com.bizvane.centerstageservice.rpc.BrandServiceRpc;
 import com.bizvane.centerstageservice.rpc.SysCheckServiceRpc;
 import com.bizvane.couponfacade.enums.SendTypeEnum;
 import com.bizvane.couponfacade.interfaces.CouponEntityServiceFeign;
@@ -89,7 +91,8 @@ public class ActivityServiceImpl implements ActivityService {
     private Award award;
     @Autowired
     private CouponEntityServiceFeign couponEntityServiceFeign;
-
+    @Autowired
+    private BrandServiceRpc brandServiceRpc;
 
     /**
      * 禁用/启用活动
@@ -352,6 +355,7 @@ public class ActivityServiceImpl implements ActivityService {
     @Override
     @Async("asyncServiceExecutor")
     public void sendMessage(List<MktMessagePO> messageVOList, MemberInfoModel memberInfo,ActivityVO activityVO) {
+        ResponseData<SysBrandPo> SysBrandPos = brandServiceRpc.getBrandByID(activityVO.getSysBrandId());
         //循环信息类然后发送
         for (MktMessagePO mktMessagePO:messageVOList) {
             AwardBO awardBO = new AwardBO();
@@ -361,7 +365,7 @@ public class ActivityServiceImpl implements ActivityService {
                 activityMessageVO.setMemberCode(memberInfo.getMemberCode());
                 activityMessageVO.setSysCompanyId(activityVO.getSysCompanyId());
                 activityMessageVO.setSysBrandId(activityVO.getSysBrandId());
-                activityMessageVO.setSysBrandName("品牌名称");
+                activityMessageVO.setSysBrandName(SysBrandPos.getData().getBrandName());
                 activityMessageVO.setActivityName(activityVO.getActivityName());
                 activityMessageVO.setActivityInterests(mktMessagePO.getMsgContent());
                 activityMessageVO.setMemberPhone(memberInfo.getPhone());
@@ -422,12 +426,13 @@ public class ActivityServiceImpl implements ActivityService {
     @Override
     @Async("asyncServiceExecutor")
     public void sendWx(MktMessagePO mktMessagePO, AwardBO awardBO, MemberMessageVO memberMessageVO, MemberInfoModel memberInfo) {
+        ResponseData<SysBrandPo> SysBrandPos = brandServiceRpc.getBrandByID(memberInfo.getBrandId());
         //发送微信模板消息
         ActivityMessageVO activityMessageVO = new ActivityMessageVO();
         activityMessageVO.setMemberCode(memberInfo.getMemberCode());
         activityMessageVO.setSysCompanyId(memberInfo.getSysCompanyId());
         activityMessageVO.setSysBrandId(memberInfo.getBrandId());
-        activityMessageVO.setSysBrandName("品牌名称");
+        activityMessageVO.setSysBrandName(SysBrandPos.getData().getBrandName());
         activityMessageVO.setActivityName("营销发送微信消息");
         activityMessageVO.setActivityInterests(mktMessagePO.getMsgContent());
         activityMessageVO.setMemberPhone(memberInfo.getPhone());
@@ -459,6 +464,7 @@ public class ActivityServiceImpl implements ActivityService {
     @Override
     @Async("asyncServiceExecutor")
     public void sendRegisterWx(List<MktMessagePO> messageVOList, WxChannelInfoVo wxChannelInfoVo,ActivityVO activityVO) {
+        ResponseData<SysBrandPo> SysBrandPos = brandServiceRpc.getBrandByID(activityVO.getSysBrandId());
         for (MktMessagePO mktMessagePO:messageVOList) {
             AwardBO awardBO = new AwardBO();
             if (mktMessagePO.getMsgType().equals("1") && !StringUtils.isEmpty(wxChannelInfoVo.getWxOpenId())){
@@ -468,7 +474,7 @@ public class ActivityServiceImpl implements ActivityService {
                 activityMessageVO.setMemberCode(wxChannelInfoVo.getMemberCode());
                 activityMessageVO.setSysCompanyId(activityVO.getSysCompanyId());
                 activityMessageVO.setSysBrandId(activityVO.getSysBrandId());
-                activityMessageVO.setSysBrandName("品牌名称");
+                activityMessageVO.setSysBrandName(SysBrandPos.getData().getBrandName());
                 activityMessageVO.setActivityName(activityVO.getActivityName());
                 activityMessageVO.setActivityInterests(mktMessagePO.getMsgContent());
                 activityMessageVO.setMemberPhone(wxChannelInfoVo.getPhone());
