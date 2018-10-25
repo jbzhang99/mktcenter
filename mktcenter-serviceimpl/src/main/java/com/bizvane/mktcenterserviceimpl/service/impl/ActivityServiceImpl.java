@@ -509,7 +509,7 @@ public class ActivityServiceImpl implements ActivityService {
      * @return
      */
     @Override
-    public ResponseData<PageInfo<CouponSendMemberListResponseVO>> findCouponSendResult(Long id, Integer type,
+    public ResponseData<PageInfo<CouponSendMemberListResponseVO>> findCouponSendResultActivity(Long id, Integer type,
                                                                                        SysAccountPO stageUser,PageForm pageForm) {
         ResponseData responseData = new ResponseData();
 

@@ -1,6 +1,7 @@
 package com.bizvane.mktcenterserviceimpl.controllers;
 
 import com.bizvane.centerstageservice.models.vo.SysStoreVo;
+import com.bizvane.couponfacade.models.vo.CouponSendMemberListResponseVO;
 import com.bizvane.mktcenterservice.interfaces.TaskService;
 import com.bizvane.mktcenterservice.models.bo.TaskAwardBO;
 import com.bizvane.mktcenterservice.models.bo.TaskBO;
@@ -9,9 +10,11 @@ import com.bizvane.mktcenterservice.models.vo.*;
 import com.bizvane.utils.responseinfo.ResponseData;
 import com.bizvane.utils.tokens.SysAccountPO;
 import com.bizvane.utils.tokens.TokenUtils;
+import com.github.pagehelper.PageInfo;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
@@ -106,5 +109,18 @@ public class TaskController {
     @RequestMapping("sendBachMSM")
     public void sendBachMSM(Long mktTaskId,Integer taskType,Long sysCompanyId,Long sysBrandId,String msgContent,Boolean exceptWechat){
       taskService.sendBachMSM(mktTaskId,taskType,sysCompanyId,sysBrandId,msgContent,exceptWechat);
+    }
+
+
+    /**
+     * 活动、任务效果分析“发行优惠券”添加会员明细弹框；
+     * @return
+     */
+    @RequestMapping("findCouponResultMemberListTask")
+    public ResponseData<PageInfo<CouponSendMemberListResponseVO>> findCouponResultMemberListTask(@RequestParam(required = false) Long id,
+                                                                                                     @RequestParam(required = false) Integer type,
+                                                                                                     HttpServletRequest request, PageForm pageForm){
+        SysAccountPO stageUser = TokenUtils.getStageUser(request);
+        return taskService.findCouponSendResultTask(id,type,stageUser,pageForm);
     }
 }

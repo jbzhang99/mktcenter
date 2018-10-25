@@ -2,6 +2,7 @@ package com.bizvane.mktcenterservice.interfaces;
 
 import com.bizvane.centerstageservice.models.po.SysAccountPo;
 import com.bizvane.centerstageservice.models.po.SysStorePo;
+import com.bizvane.couponfacade.models.vo.CouponSendMemberListResponseVO;
 import com.bizvane.messagefacade.models.vo.GenrealGetMessageVO;
 import com.bizvane.utils.tokens.SysAccountPO;
 import com.bizvane.centerstageservice.models.po.SysCheckConfigPo;
@@ -203,4 +204,10 @@ public interface TaskService {
      * @return
      */
     public Integer getCenterStageCheckStage(MktTaskPOWithBLOBs po);
+
+    /**
+     * 活动、任务效果分析“发行优惠券”添加会员明细弹框；
+     * @return
+     */
+    ResponseData<com.github.pagehelper.PageInfo<CouponSendMemberListResponseVO>> findCouponSendResultTask(Long id, Integer type, SysAccountPO stageUser, PageForm pageForm);
 }
