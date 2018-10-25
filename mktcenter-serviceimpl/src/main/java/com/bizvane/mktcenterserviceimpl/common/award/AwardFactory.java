@@ -131,18 +131,12 @@ public class AwardFactory {
      */
     @Async("asyncServiceExecutor")
     public ResponseData<String> sendSms(AwardBO bo){
-
-        SysSmsConfigVO msgvo = bo.getSysSmsConfigVO();
-        ActivityMessageVO activityMessageVO = new ActivityMessageVO();
-        activityMessageVO.setSysBrandId(msgvo.getSysBrandId());
-        activityMessageVO.setMemberPhone(msgvo.getPhone());
-        activityMessageVO.setSendWxmember(msgvo.getMsgContent());
         /*msgvo.setChannelName("moments3.4");//平台
         msgvo.setChannelAccount("JJ0253");//账号
         msgvo.setChannelPassword("513678");//密码
         msgvo.setChannelService("http://TSN19.800CT.COM:8901/MWGate/wmgw.asmx/MongateSendSubmit");//路径*/
-        log.info("开始执行发送短信操作参数="+ JSON.toJSONString(activityMessageVO));
-      return templateMessageServiceFeign.sendSmsTemplateMessage(activityMessageVO);
+        log.info("开始执行发送短信操作参数="+ JSON.toJSONString(bo.getActivityMessageVO()));
+      return templateMessageServiceFeign.sendSmsTemplateMessage(bo.getActivityMessageVO());
 
     }
 
