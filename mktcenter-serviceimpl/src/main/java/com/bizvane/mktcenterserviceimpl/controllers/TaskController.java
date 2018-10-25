@@ -111,15 +111,14 @@ public class TaskController {
       taskService.sendBachMSM(mktTaskId,taskType,sysCompanyId,sysBrandId,msgContent,exceptWechat);
     }
 
-
     /**
      * 活动、任务效果分析“发行优惠券”添加会员明细弹框；
      * @return
      */
     @RequestMapping("findCouponResultMemberListTask")
     public ResponseData<PageInfo<CouponSendMemberListResponseVO>> findCouponResultMemberListTask(@RequestParam(required = false) Long id,
-                                                                                                     @RequestParam(required = false) Integer type,
-                                                                                                     HttpServletRequest request, PageForm pageForm){
+                                                                                                 @RequestParam(required = false) Integer type,
+                                                                                                 HttpServletRequest request, PageForm pageForm){
         SysAccountPO stageUser = TokenUtils.getStageUser(request);
         return taskService.findCouponSendResultTask(id,type,stageUser,pageForm);
     }

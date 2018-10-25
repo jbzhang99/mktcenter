@@ -14,9 +14,10 @@ import com.bizvane.mktcenterservice.models.bo.TaskAwardBO;
 import com.bizvane.mktcenterservice.models.po.MktMessagePO;
 import com.bizvane.mktcenterservice.models.po.MktTaskPOWithBLOBs;
 import com.bizvane.mktcenterservice.models.vo.*;
-import com.bizvane.utils.responseinfo.PageInfo;
 import com.bizvane.utils.responseinfo.ResponseData;
 import com.bizvane.utils.tokens.SysAccountPO;
+import com.github.pagehelper.PageInfo;
+
 import java.text.ParseException;
 import java.util.Date;
 import java.util.List;
@@ -172,7 +173,7 @@ public interface TaskService {
      * 获取品牌下的所有会员
      * @return
      */
-    public  PageInfo<MemberInfoModel> getCompanyMemebers(Long sysCompanyId,Long sysBrandId,Integer taskType,Boolean exceptWechat,Integer pageNumber,Integer pageSize);
+    public  com.bizvane.utils.responseinfo.PageInfo<MemberInfoModel> getCompanyMemebers(Long sysCompanyId,Long sysBrandId,Integer taskType,Boolean exceptWechat,Integer pageNumber,Integer pageSize);
 
     /**
      * 获取品牌下的所有粉丝
@@ -209,5 +210,5 @@ public interface TaskService {
      * 活动、任务效果分析“发行优惠券”添加会员明细弹框；
      * @return
      */
-    ResponseData<com.github.pagehelper.PageInfo<CouponSendMemberListResponseVO>> findCouponSendResultTask(Long id, Integer type, SysAccountPO stageUser, PageForm pageForm);
+    ResponseData<PageInfo<CouponSendMemberListResponseVO>> findCouponSendResultTask(Long id, Integer type, SysAccountPO stageUser, PageForm pageForm);
 }

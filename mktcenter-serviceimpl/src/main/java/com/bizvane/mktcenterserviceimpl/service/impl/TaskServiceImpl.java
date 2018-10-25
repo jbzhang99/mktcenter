@@ -11,7 +11,6 @@ import com.bizvane.couponfacade.models.vo.CouponSendMemberListResponseVO;
 import com.bizvane.messagefacade.interfaces.TemplateMessageServiceFeign;
 import com.bizvane.messagefacade.models.vo.*;
 import com.bizvane.mktcenterservice.models.vo.PageForm;
-import com.bizvane.mktcenterserviceimpl.common.enums.ActivityConvertCouponTypeEnum;
 import com.bizvane.utils.jobutils.JobBusinessTypeEnum;
 import com.bizvane.utils.jobutils.JobClient;
 import com.bizvane.utils.jobutils.XxlJobInfo;
@@ -123,8 +122,6 @@ public class TaskServiceImpl implements TaskService {
     private JobClient jobClient;
     @Autowired
     private CouponEntityServiceFeign couponEntityServiceFeign;
-    @Autowired
-    private TaskService taskService;
 
 
     /**
@@ -1048,7 +1045,7 @@ public class TaskServiceImpl implements TaskService {
      */
     @Override
     public ResponseData<PageInfo<CouponSendMemberListResponseVO>> findCouponSendResultTask(Long id, Integer type,
-                                                                                               SysAccountPO stageUser, PageForm pageForm) {
+                                                                                           SysAccountPO stageUser, PageForm pageForm) {
         ResponseData responseData = new ResponseData();
 
         if(null == id){
@@ -1066,7 +1063,7 @@ public class TaskServiceImpl implements TaskService {
         CouponSendMemberListRequestVO requestVO = new CouponSendMemberListRequestVO();
         requestVO.setSendBusinessId(id);
         //类型转换
-        ChangeTaskTypeVO taskTypeVO = taskService.changeTaskType(type);
+        ChangeTaskTypeVO taskTypeVO = changeTaskType(type);
         requestVO.setSendType(taskTypeVO.getCouponTaskType());
 
         requestVO.setBrandId(stageUser.getBrandId());
@@ -1080,4 +1077,5 @@ public class TaskServiceImpl implements TaskService {
         responseData.setMessage(SysResponseEnum.SUCCESS.getMessage());
         return responseData;
     }
+
 }
