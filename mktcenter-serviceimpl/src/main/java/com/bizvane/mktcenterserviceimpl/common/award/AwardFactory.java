@@ -11,6 +11,7 @@ import com.bizvane.members.facade.models.IntegralRecordModel;
 import com.bizvane.members.facade.service.api.IntegralChangeApiService;
 import com.bizvane.members.facade.service.api.IntegralRecordApiService;
 import com.bizvane.members.facade.service.card.request.IntegralChangeRequestModel;
+import com.bizvane.members.facade.service.card.response.IntegralChangeResponseModel;
 import com.bizvane.messagefacade.interfaces.SendBatchMessageFeign;
 import com.bizvane.messagefacade.interfaces.SendCommonMessageFeign;
 import com.bizvane.messagefacade.interfaces.TemplateMessageServiceFeign;
@@ -113,7 +114,8 @@ public class AwardFactory {
             //增加积分奖励新增接口
             IntegralChangeRequestModel var1 = bo.getIntegralRecordModel();
             log.info("开始执行新增积分操作参数="+ JSON.toJSONString(var1));
-            integralChangeApiService.integralChangeOperate(var1);
+            IntegralChangeResponseModel integralChangeResponseModel =integralChangeApiService.integralChangeOperate(var1);
+            log.info("发积分结果打印======"+JSON.toJSONString(integralChangeResponseModel));
             log.info("积分增加操作完成完成了完成了完成了完成了");
         } catch (MemberException e) {
             log.error("com.bizvane.mktcenterserviceimpl.common.award.AwardFactory.awardIntegral error:"+e.getMessage());
