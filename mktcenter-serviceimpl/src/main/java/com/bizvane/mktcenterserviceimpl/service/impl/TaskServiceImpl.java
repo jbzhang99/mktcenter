@@ -216,19 +216,25 @@ public class TaskServiceImpl implements TaskService {
             //查询消息
             MktMessagePOExample mktMessagePOExample = new MktMessagePOExample();
             mktMessagePOExample.createCriteria().andValidEqualTo(true).andBizIdEqualTo(mktTaskId);
-            List<MktMessagePO> mktMessagePOList = mktMessagePOMapper.selectByExample(mktMessagePOExample);
-
+            List<MktMessagePO> mktMessagePOList =  mktMessagePOMapper.selectByExampleWithBLOBs(mktMessagePOExample);
             List<CouponDefinitionPO> couponDefinitionPOS = new ArrayList<>();
-            //查询券定义 todo
-            for (MktCouponPO mktCouponPO:mktCouponPOList){
-                Long couponDefinitionId = mktCouponPO.getCouponDefinitionId();
-                ResponseData<CouponDefinitionPO> coupon = couponDefinitionServiceFeign.findByIdRpc(couponDefinitionId);
-                CouponDefinitionPO couponDefinitionPO = coupon.getData();
-                couponDefinitionPOS.add(couponDefinitionPO);
+
+            if (CollectionUtils.isNotEmpty(mktCouponPOList)){
+                mktCouponPOList.stream().forEach(mktCouponPO->{
+                    Long couponDefinitionId = mktCouponPO.getCouponDefinitionId();
+                    ResponseData<CouponDefinitionPO> coupon = couponDefinitionServiceFeign.findByIdRpc(couponDefinitionId);
+                    CouponDefinitionPO couponDefinitionPO = coupon.getData();
+                    couponDefinitionPOS.add(couponDefinitionPO);
+                });
             }
+//            for (MktCouponPO mktCouponPO:mktCouponPOList){
+//                Long couponDefinitionId = mktCouponPO.getCouponDefinitionId();
+//                ResponseData<CouponDefinitionPO> coupon = couponDefinitionServiceFeign.findByIdRpc(couponDefinitionId);
+//                CouponDefinitionPO couponDefinitionPO = coupon.getData();
+//                couponDefinitionPOS.add(couponDefinitionPO);
+//            }
 
             if (CollectionUtils.isNotEmpty(taskVOList)){
-
                 TaskVO taskVO = taskVOList.get(0);
                 taskBO.setTaskVO(taskVO);
                 String storeLimitList = taskVO.getStoreLimitList();
@@ -239,11 +245,8 @@ public class TaskServiceImpl implements TaskService {
                     log.info("---------通过品牌Ids--"+JSON.toJSONString(storeList)+"-----获取店铺列表----------"+JSON.toJSONString(storeList));
                     taskBO.setStoreList(storeList);
                 }
-
                 taskBO.setTaskVO(taskVO);
             }
-
-
 
 //            if (CollectionUtils.isNotEmpty(mktCouponPOList)){
 //                taskBO.setMktCouponPOList(mktCouponPOList);
@@ -265,7 +268,6 @@ public class TaskServiceImpl implements TaskService {
         }
         return responseData;
     }
-
     /**
      * 根据公司id和品牌id查询执行中的消费类任务
      * @param sysCompanyId
