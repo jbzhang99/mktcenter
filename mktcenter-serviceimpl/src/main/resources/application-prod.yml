@@ -1,0 +1,136 @@
+server:
+  port: 2007
+  servlet:
+    context-path: /mktcenter.api
+spring:
+  redis:
+    database: 7
+    host:  r-bp18995999cbc2f4.redis.rds.aliyuncs.com
+    port: 6379
+    password: BIZvane2019
+    jedis:
+      pool:
+        max-active: 100
+        max-idle: 8
+        max-wait: 2000ms
+        min-idle: 0
+  swagger:
+    show: true
+  application:
+    name: mktcenter-prod
+  datasource:
+    url: jdbc:mysql://bizvane-2018.mysql.polardb.rds.aliyuncs.com:3306/bizvane3?useUnicode=true&characterEncoding=utf-8
+    username: bizvane_2018
+    password: SF_bizvane20180613
+    driver-class-name: com.mysql.jdbc.Driver
+  data:
+    mongodb:
+      database: "7"
+      uri: "mongodb://dds-bp14278823e03ba41.mongodb.rds.aliyuncs.com:3717/?AutoConnectRetry=true"
+  jackson:
+    date-format: yyyy-MM-dd HH:mm:ss
+    time-zone: GMT+8
+eureka:
+  instance:
+    metadata-map:
+      lease-expiration-duration-in-seconds: 30
+      lease-renewal-interval-in-seconds: 10
+  client:
+    service-url:
+      defaultZone: http://172.16.147.203:8761/eureka/,http://172.16.147.198:8761/eureka/
+management:
+  endpoints:
+    web.exposure.include: "*"
+  endpoint:
+    health:
+      show-details: ALWAYS
+mybatis:
+  config-location: classpath:mybatis-config.xml
+  mapper-locations: classpath:mybatis/*Mapper.xml
+logging:
+  config: classpath:logback-local.xml
+  level:
+    root: info
+    com.bizvane.mktcenterserviceimpl.mappers: debug
+
+pagehelper:
+  helperDialect: mysql
+  reasonable: true
+  supportMethodsArguments: true
+  params: count=countSql
+
+xxl:
+  job:
+    admin:
+      ### xxl-job admin address list, such as "http://address" or "http://address01,http://address02"
+      addresses: http://172.16.147.191:8080
+    ### xxl-job executor address
+    executor:
+      appname: ${spring.application.name}
+      ip:
+      port: 9007
+      ### xxl-job log path
+      logpath: log/job
+      ### xxl-job log retention days
+      logretentiondays: -1
+    ### xxl-job, access token
+    accessToken:
+
+feign:
+  client:
+    centerstage:
+      name: centerstage-prod
+      path: centerstage.api
+    coupon:
+      name: coupon-prod
+      path: coupon.api
+    members:
+      name: members-prod
+      path: members.api
+    message:
+      name: message-prod
+      path: message.api
+    wechat:
+      name: wechat-prod
+      path: wechat.api
+    applet:
+      name: applet-prod
+      path: applet.api
+    centercontrol:
+      name: centercontrol-prod
+      path: centercontrol.api
+    fitment:
+      name: fitment-prod
+      path: fitment.api
+
+rocketmq:
+  onsaddr: http://onsaddr-internet.aliyun.com/rocketmq/nsaddr4client-internet
+  accessKey: LTAIpoqUHsXq6q7r
+  secretKey: 0ZJ7bfxXJLT8TpOKvZU3i4YWuhvJzs
+  addr:
+  environment: prod
+
+threadPool:
+  corePoolSize: 16
+  maximumPoolSize: 48
+  keepAliveTime: 60
+  queueCapacity: 99999
+
+qiniu:
+  accessKey: Jv79lFtLNDBj1XJ6vkXkemnRN5LIOSXMeDOvW35n
+  secretKey: HIKXNXr12qRhpIAsdI8xTaX87LeTqqLGjXB_RgDf
+  bucketNm: bizvane-uat
+  domain: https://resource.uat.bizvane.cn
+
+activity:
+  qrcodeurl: http://www.crm.bizvane.com/qrcode?activityCode=
+bitdata:
+  businessNum: testbz
+  apiKey: 4199454b3cac0c02b48fd5a9c67c00c0
+  url: http://bizvane.f3322.net:58765/api/open-data-analysis/
+
+tenant:
+  isEnabledTenantInterceptor: false
+ribbon:
+  ConnectTimeout: 60000
+  ReadTimeout: 60000
