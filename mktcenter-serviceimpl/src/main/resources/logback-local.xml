@@ -61,11 +61,29 @@
         </connectionStrategy>
     </appender>
 
+    <appender name="logstash-prod"
+              class="net.logstash.logback.appender.LogstashTcpSocketAppender">
+        <destination>192.168.2.22:4560</destination>
+        <queueSize>1048576</queueSize>
+        <!-- encoder必须配置,有多种可选 -->
+        <encoder charset="UTF-8" class="net.logstash.logback.encoder.LogstashEncoder">
+            <customFields>{"appname":"${Application_Name}"}</customFields>
+        </encoder>
+        <connectionStrategy>
+            <roundRobin>
+                <connectionTTL>5 minutes</connectionTTL>
+            </roundRobin>
+        </connectionStrategy>
+    </appender>
+
     <springProfile name="test">
         <root level="info"><appender-ref ref="logstash-test" /></root>
     </springProfile>
     <springProfile name="uat">
         <root level="info"><appender-ref ref="logstash-uat" /></root>
+    </springProfile>
+    <springProfile name="prod">
+        <root level="info"><appender-ref ref="logstash-prod" /></root>
     </springProfile>
     <root level="info">
         <appender-ref ref="console" />
