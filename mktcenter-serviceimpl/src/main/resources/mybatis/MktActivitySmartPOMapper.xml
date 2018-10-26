@@ -559,8 +559,11 @@
     <if test="createDateEnd != null">
       AND <![CDATA[ tma.create_date <=#{createDateEnd}]]>
     </if>
-    <if test="mktSmartType != null and mktSmartType!=0">
+    <if test="mktSmartType != null and mktSmartType!=0">''
       AND tmas.mkt_smart_type = #{mktSmartType}
+    </if>
+    <if test="mbrGroupDefId != null">
+      AND tma.mbr_group_def_id = #{mbrGroupDefId}
     </if>
     ORDER BY tma.create_date DESC
   </select>

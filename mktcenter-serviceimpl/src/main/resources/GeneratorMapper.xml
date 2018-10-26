@@ -74,9 +74,9 @@
         <!--<table tableName="t_mkt_activity_register" domainObjectName="MktActivityRegisterPO">-->
             <!--<generatedKey column="mkt_activity_sign_in_reward_id" sqlStatement="MySql" identity="true"/>-->
         <!--</table>-->
-        <!--<table tableName="t_mkt_activity_signin" domainObjectName="MktActivitySignin">-->
-            <!--<generatedKey column="mkt_activity_signin_id" sqlStatement="MySql" identity="true"/>-->
-        <!--</table>-->
+        <table tableName="t_mkt_activity_signin" domainObjectName="MktActivitySignin">
+            <generatedKey column="mkt_activity_signin_id" sqlStatement="MySql" identity="true"/>
+        </table>
         <!--<table tableName="t_mkt_activity_smart" domainObjectName="MktActivitySmartPO">-->
             <!--<generatedKey column="mkt_activity_smart_id" sqlStatement="MySql" identity="true"/>-->
         <!--</table>-->
@@ -111,10 +111,10 @@
 <!--             <generatedKey column="mkt_task_share_id" sqlStatement="MySql" identity="true"/> -->
 <!--         </table> -->
 
-     <table tableName="t_file_report_temp" domainObjectName="FileReportTempPO">
+ <!--     <table tableName="t_file_report_temp" domainObjectName="FileReportTempPO">
             <generatedKey column="file_report_temp_id" sqlStatement="MySql" identity="true"/>
         </table> 
-
+ -->
 
         <!--<table tableName="t_rocket_log" domainObjectName="RocketLogPO">-->
             <!--<generatedKey column="rocket_log_id" sqlStatement="MySql" identity="true"/>-->

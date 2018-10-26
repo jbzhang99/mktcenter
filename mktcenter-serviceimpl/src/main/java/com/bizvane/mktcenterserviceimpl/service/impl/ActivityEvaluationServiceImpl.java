@@ -2,7 +2,9 @@ package com.bizvane.mktcenterserviceimpl.service.impl;
 
 import com.alibaba.fastjson.JSON;
 import com.bizvane.centerstageservice.models.po.SysCheckPo;
+import com.bizvane.centerstageservice.models.po.SysStorePo;
 import com.bizvane.centerstageservice.models.vo.SysCheckConfigVo;
+import com.bizvane.centerstageservice.rpc.StoreServiceRpc;
 import com.bizvane.centerstageservice.rpc.SysCheckConfigServiceRpc;
 import com.bizvane.centerstageservice.rpc.SysCheckServiceRpc;
 import com.bizvane.couponfacade.interfaces.CouponQueryServiceFeign;
@@ -37,9 +39,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
+import org.springframework.util.StringUtils;
 
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Created by pc on 2018/9/6.
@@ -67,7 +72,8 @@ public class ActivityEvaluationServiceImpl implements ActivityEvaluationService 
 
     @Autowired
     private Award award;
-
+    @Autowired
+    private StoreServiceRpc storeServiceRpc;
     @Override
     public ResponseData<ActivityVO> getActivityEvaluationList(ActivityVO vo, PageForm pageForm) {
         log.info("查询评价奖励活动开始");
@@ -203,6 +209,7 @@ public class ActivityEvaluationServiceImpl implements ActivityEvaluationService 
     public ResponseData<ActivityBO> selectActivityEvaluationById(String businessCode) {
         log.info("查询评价奖励活动详情");
         ResponseData responseData = new ResponseData();
+        ActivityBO bo = new ActivityBO();
         ActivityVO vo = new ActivityVO();
         vo.setActivityCode(businessCode);
         List<ActivityVO> evaluationList = mktActivityEvaluationPOMapper.getActivityVOList(vo);
@@ -211,7 +218,20 @@ public class ActivityEvaluationServiceImpl implements ActivityEvaluationService 
             responseData.setMessage(SysResponseEnum.OPERATE_FAILED_DATA_NOT_EXISTS.getMessage());
             return responseData;
         }
-        ActivityBO bo = new ActivityBO();
+        if(!CollectionUtils.isEmpty(evaluationList)){
+            bo.setActivityVO(evaluationList.get(0));
+            if (!StringUtils.isEmpty(evaluationList.get(0).getStoreLimitList())){
+                String ids =evaluationList.get(0).getStoreLimitList();
+                //查询适用门店
+                List<Long> listIds = Arrays.asList(ids.split(",")).stream().map(s -> Long.parseLong(s.trim())).collect(Collectors.toList());
+                ResponseData<List<SysStorePo>> sysStorePOs = storeServiceRpc.getIdStoreLists(listIds);
+
+                if(!CollectionUtils.isEmpty(sysStorePOs.getData())){
+                    bo.getActivityVO().setSysStorePos(sysStorePOs.getData());
+                }
+            }
+        }
+
         bo.setActivityVO(evaluationList.get(0));
         responseData.setData(bo);
         return responseData;
