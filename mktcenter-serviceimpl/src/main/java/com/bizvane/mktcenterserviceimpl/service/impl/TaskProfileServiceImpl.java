@@ -173,7 +173,7 @@ public class TaskProfileServiceImpl implements TaskProfileService {
             po.setCheckStatus(CheckStatusEnum.CHECK_STATUS_APPROVED.getCode());
         }
         //待执行=1  2.执行中
-        po.setTaskStatus(po.getCheckStatus());
+       // po.setTaskStatus(po.getCheckStatus());
         return po;
     }
 
@@ -275,6 +275,7 @@ public class TaskProfileServiceImpl implements TaskProfileService {
     @Override
     public  void   doAwardProfile(ProfileSuccessVO vo){
         log.info("执行完善资料任务--参数---"+ JSON.toJSONString(vo));
+        Long mktTaskIdParam = vo.getMktTaskId();
         //完善资料时间
         Date profileDate = vo.getProfileDate();
         //完善者的code
@@ -287,15 +288,16 @@ public class TaskProfileServiceImpl implements TaskProfileService {
         String cardNo = memeberDetail.getCardNo();
         Long serviceStoreId = memeberDetail.getServiceStoreId();
         //符合条件的任务列表
-        List<TaskAwardBO> taskAwardList = taskService.getTaskProfileAwardList(companyId, brandId, null);
+        List<TaskAwardBO> taskAwardList = taskService.getTaskProfileAwardList(mktTaskIdParam,companyId, brandId, null);
         log.info("完善资料任务--任务列表---"+ JSON.toJSONString(taskAwardList));
         if (CollectionUtils.isNotEmpty(taskAwardList)){
             taskAwardList.stream().
                     filter(obj->{
                         Boolean isStoreLimit = obj.getStoreLimit();
                         String  StoreLimitList=obj.getStoreLimitList();
-                        return isStoreLimit || (serviceStoreId!=null && StringUtils.isNotBlank(StoreLimitList) &&  obj.getStoreLimitList().contains(String.valueOf(serviceStoreId)));}).
+                        return !isStoreLimit || (serviceStoreId!=null) || (StringUtils.isNotBlank(StoreLimitList) &&  obj.getStoreLimitList().contains(String.valueOf(serviceStoreId)));}).
                     forEach(obj->{
+                        log.info("完善资料任务--每个---"+ JSON.toJSONString(obj));
                         MktTaskRecordVO recordVO = new MktTaskRecordVO();
                         recordVO.setSysBrandId(brandId);
                         recordVO.setTaskType(obj.getTaskType());
@@ -310,6 +312,8 @@ public class TaskProfileServiceImpl implements TaskProfileService {
                             BeanUtils.copyProperties(recordVO,recordPO);
                             recordPO.setParticipateDate(profileDate);
                             recordPO.setRewarded(Integer.valueOf(1));
+                            recordPO.setSysCompanyId(companyId);
+                            recordPO.setCreateDate(new Date());
                             taskRecordService.addTaskRecord(recordPO);
                             taskService.sendCouponAndPoint(memberCode,obj);
                         }

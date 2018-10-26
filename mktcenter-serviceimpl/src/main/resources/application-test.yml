@@ -14,8 +14,6 @@ spring:
         max-idle: 8
         max-wait: 2000ms
         min-idle: 0
-  profiles:
-    active: basecontroller,commonutilslocal,log
   swagger:
     show: true
   application:
@@ -122,7 +120,7 @@ feign:
       name: members-test
       path: members.api
     message:
-      name: message-server-test
+      name: message-test
       path: message.api
     wechat:
       name: wechat-test
@@ -141,6 +139,8 @@ rocketmq:
   onsaddr: http://onsaddr-internet.aliyun.com/rocketmq/nsaddr4client-internet
   accessKey: LTAIpoqUHsXq6q7r
   secretKey: 0ZJ7bfxXJLT8TpOKvZU3i4YWuhvJzs
+  addr: 
+  environment: test
 
 threadPool:
   corePoolSize: 16
@@ -156,6 +156,11 @@ qiniu:
 
 activity:
   qrcodeurl: http://www.test.bizvane.com/qrcode?activityCode=
+
+bitdata:
+  businessNum: testbz
+  apiKey: 4199454b3cac0c02b48fd5a9c67c00c0
+  url: http://bizvane.f3322.net:58765/api/open-data-analysis/
 
 tenant:
   isEnabledTenantInterceptor: false

@@ -37,8 +37,9 @@ public class TaskRecordServiceImpl implements TaskRecordService {
      * @return
      */
     @Override
-    public Integer addTaskRecord(MktTaskRecordPO po) {
-        return  mktTaskRecordPOMapper.insertSelective(po);
+    public Long addTaskRecord(MktTaskRecordPO po) {
+        int i = mktTaskRecordPOMapper.insertSelective(po);
+        return  po.getMktTaskRecordId();
 
 
     }

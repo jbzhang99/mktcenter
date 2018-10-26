@@ -560,7 +560,7 @@
     </if>
     <!--活动编号-->
     <if test="activityCode != null and activityCode!= ''">
-      AND tma.activity_code = #{activityCode}
+      AND tma.activity_code LIKE "%"#{activityCode}"%"
     </if>
   </select>
 </mapper>

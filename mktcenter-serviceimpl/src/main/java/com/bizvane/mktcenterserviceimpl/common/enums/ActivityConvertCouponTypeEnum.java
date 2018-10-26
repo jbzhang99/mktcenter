@@ -11,7 +11,7 @@ public enum ActivityConvertCouponTypeEnum {
     ACTIVITY_TYPE_MANUAL(4,"55","手动领券活动"),
     ACTIVITY_TYPE_ORDER(5,"45","消费活动"),
     ACTIVITY_TYPE_SIGNIN(6,"50","签到活动"),
-    ACTIVITY_TYPE_BIRTHDAY(7,"40","生日活动"),
+    ACTIVITY_TYPE_BIRTHDAY(7,"15","生日活动"),
     ACTIVITY_TYPE_SMART(8,"","智能营销活动"),
     ACTIVITY_TYPE_EVALUATION(9,"100","评价奖励活动"),
     ACTIVITY_TYPE_ANNIVERSARY(10,"90","纪念日活动");

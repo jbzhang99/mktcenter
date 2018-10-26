@@ -567,7 +567,6 @@
     tma.valid,
 
     tmau.mkt_activity_upgrade_id,
-    tmau.mkt_activity_id,
     tmau.member_type,
     tmau.mbr_level_code,
     tmau.mbr_level_name,
@@ -604,7 +603,13 @@
     </if>
     <!--活动编号-->
     <if test="activityCode != null and activityCode!= ''">
-      AND tma.activity_code = #{activityCode}
+      AND tma.activity_code LIKE "%"#{activityCode}"%"
+    </if>
+    <if test="activityName != null and activityName!= ''">
+      AND tma.activity_name LIKE "%"#{activityName}"%"
+    </if>
+    <if test="stop != null and stop!= ''">
+      AND tma.activity_status !=4
     </if>
   </select>
 </mapper>

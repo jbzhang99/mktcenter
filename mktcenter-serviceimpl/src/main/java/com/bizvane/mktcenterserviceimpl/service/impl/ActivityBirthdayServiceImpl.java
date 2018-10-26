@@ -162,7 +162,7 @@ public class ActivityBirthdayServiceImpl implements ActivityBirthdayService {
             if(!CollectionUtils.isEmpty(registerList)){
                 for (ActivityVO activity:registerList) {
                     //判断适用商品
-                    if (!ExecuteParamCheckUtil.addActivitCheck(bo,activity)){
+                    if (false==activity.getStoreLimit() || !ExecuteParamCheckUtil.addActivitCheck(bo,activity)){
                         responseData.setCode(SysResponseEnum.FAILED.getCode());
                         responseData.setMessage("已存在同一类型的长期活动!");
                         return responseData;
@@ -337,7 +337,7 @@ public class ActivityBirthdayServiceImpl implements ActivityBirthdayService {
         //查询消息模板
         MktMessagePOExample exampl = new MktMessagePOExample();
         exampl.createCriteria().andBizIdEqualTo(registerList.get(0).getMktActivityId()).andValidEqualTo(true);
-        List<MktMessagePO> listMktMessage = mktMessagePOMapper.selectByExample(exampl);
+        List<MktMessagePO> listMktMessage = mktMessagePOMapper.selectByExampleWithBLOBs(exampl);
 
             bo.setCouponEntityAndDefinitionVOList(lists);
         if(!CollectionUtils.isEmpty(listMktMessage)){
@@ -757,8 +757,12 @@ public class ActivityBirthdayServiceImpl implements ActivityBirthdayService {
         return falg;
     }
     public static void main(String[] args){
+        boolean falg ;
         String ids= "1,2,3,4,5,6";
-        List<Long> listIds = Arrays.asList(ids.split(",")).stream().map(s -> Long.parseLong(s.trim())).collect(Collectors.toList());
-        System.out.println(Arrays.toString(listIds .toArray()));//[1,2,3,3,4,5,6]
+        //List<Long> listIds = Arrays.asList(ids.split(",")).stream().map(s -> Long.parseLong(s.trim())).collect(Collectors.toList());
+        List<String> listIds = Arrays.asList(ids.split(","));
+        String ss = "1";
+        falg=listIds.contains(ss);
+        System.out.println("======================="+falg);//[1,2,3,3,4,5,6]
     }
 }

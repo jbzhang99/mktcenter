@@ -1,11 +1,17 @@
 package com.bizvane.mktcenterserviceimpl.service.impl;
 
 import com.alibaba.fastjson.JSON;
+import com.bizvane.centerstageservice.models.po.SysBrandPo;
 import com.bizvane.centerstageservice.models.po.SysCheckPo;
+import com.bizvane.centerstageservice.rpc.BrandServiceRpc;
 import com.bizvane.centerstageservice.rpc.SysCheckServiceRpc;
 import com.bizvane.couponfacade.enums.SendTypeEnum;
+import com.bizvane.couponfacade.interfaces.CouponEntityServiceFeign;
 import com.bizvane.couponfacade.interfaces.CouponQueryServiceFeign;
+import com.bizvane.couponfacade.models.po.CouponEntityPO;
 import com.bizvane.couponfacade.models.vo.CouponFindCouponCountResponseVO;
+import com.bizvane.couponfacade.models.vo.CouponSendMemberListRequestVO;
+import com.bizvane.couponfacade.models.vo.CouponSendMemberListResponseVO;
 import com.bizvane.couponfacade.models.vo.SendCouponSimpleRequestVO;
 import com.bizvane.members.facade.enums.IntegralChangeTypeEnum;
 import com.bizvane.members.facade.es.vo.MembersInfoSearchVo;
@@ -19,6 +25,7 @@ import com.bizvane.members.facade.vo.MemberInfoApiModel;
 import com.bizvane.members.facade.vo.MemberInfoVo;
 import com.bizvane.members.facade.vo.PageVo;
 import com.bizvane.members.facade.vo.WxChannelInfoVo;
+import com.bizvane.messagefacade.models.vo.ActivityMessageVO;
 import com.bizvane.messagefacade.models.vo.MemberMessageVO;
 import com.bizvane.messagefacade.models.vo.SysSmsConfigVO;
 import com.bizvane.mktcenterservice.interfaces.ActivityService;
@@ -31,6 +38,7 @@ import com.bizvane.mktcenterservice.models.vo.ActivityVO;
 import com.bizvane.mktcenterservice.models.vo.PageForm;
 import com.bizvane.mktcenterserviceimpl.common.award.Award;
 import com.bizvane.mktcenterserviceimpl.common.award.MemberMessageSend;
+import com.bizvane.mktcenterserviceimpl.common.constants.SystemConstants;
 import com.bizvane.mktcenterserviceimpl.common.enums.*;
 import com.bizvane.mktcenterserviceimpl.common.job.JobUtil;
 import com.bizvane.mktcenterserviceimpl.common.utils.DateUtil;
@@ -81,6 +89,11 @@ public class ActivityServiceImpl implements ActivityService {
     private JobClient jobClient;
     @Autowired
     private Award award;
+    @Autowired
+    private CouponEntityServiceFeign couponEntityServiceFeign;
+    @Autowired
+    private BrandServiceRpc brandServiceRpc;
+
     /**
      * 禁用/启用活动
      * @param vo
@@ -192,13 +205,22 @@ public class ActivityServiceImpl implements ActivityService {
         List<ActivityAnalysisCountBO> activityAnalysisList = mktActivityPOMapper.getActivityAnalysisCountpage(bo);
         if (!CollectionUtils.isEmpty(activityAnalysisList)){
             for (ActivityAnalysisCountBO activityAnalysisCount:activityAnalysisList) {
-                if (activityAnalysisCount.getActivityStatus().equals(ActivityStatusEnum.ACTIVITY_STATUS_PENDING)){
+                if (activityAnalysisCount.getActivityStatus()==ActivityStatusEnum.ACTIVITY_STATUS_PENDING.getCode()){
                     activityAnalysisCount.setDays("0天");
                 }
-                if (activityAnalysisCount.getActivityStatus().equals(ActivityStatusEnum.ACTIVITY_STATUS_EXECUTING)){
-                    activityAnalysisCount.setDays(DateUtil.getIntervalBetweenTwoDate(activityAnalysisCount.getStartTime(),new Date()));
+                if (activityAnalysisCount.getActivityStatus()==ActivityStatusEnum.ACTIVITY_STATUS_EXECUTING.getCode()){
+                    if (activityAnalysisCount.getLongTerm()==0){
+                        //这里判断是否是签到或者评价奖励
+                        if(activityAnalysisCount.getActivityType()==6 ||activityAnalysisCount.getActivityType()==9){
+                            activityAnalysisCount.setDays(DateUtil.getIntervalBetweenTwoDate(activityAnalysisCount.getCreateDate(),new Date()));
+                        }else{
+                            activityAnalysisCount.setDays(DateUtil.getIntervalBetweenTwoDate(activityAnalysisCount.getStartTime(),new Date()));                        }
+
+                    }else if (activityAnalysisCount.getLongTerm()==1){
+                        activityAnalysisCount.setDays(DateUtil.getIntervalBetweenTwoDate(activityAnalysisCount.getCreateDate(),new Date()));
+                    }
                 }
-                if (activityAnalysisCount.getActivityStatus().equals(ActivityStatusEnum.ACTIVITY_STATUS_FINISHED)){
+                if (activityAnalysisCount.getActivityStatus()==ActivityStatusEnum.ACTIVITY_STATUS_FINISHED.getCode()){
                     activityAnalysisCount.setDays(DateUtil.getIntervalBetweenTwoDate(activityAnalysisCount.getStartTime(),activityAnalysisCount.getEndTime()));
                 }
                 if (activityAnalysisCount.getActivityStatus()==4){
@@ -221,13 +243,19 @@ public class ActivityServiceImpl implements ActivityService {
                 //收益
                 activityAnalysisCount.setMoney(couponFindCouponCountResponseVO.getMoney());
                 //核销率
-                if (null!=couponFindCouponCountResponseVO.getCouponUsedSum() && null!=couponFindCouponCountResponseVO.getCouponSum()) {
+                if ((null!=couponFindCouponCountResponseVO.getCouponUsedSum() && null!=couponFindCouponCountResponseVO.getCouponSum())) {
                     // 创建一个数值格式化对象
                     NumberFormat numberFormat = NumberFormat.getInstance();
                     // 设置精确到小数点后2位
                     numberFormat.setMaximumFractionDigits(2);
                     String result = numberFormat.format((float) couponFindCouponCountResponseVO.getCouponUsedSum() / (float) couponFindCouponCountResponseVO.getCouponSum() * 100);
-                    activityAnalysisCount.setCouponUsedSumPercentage(result + "%");
+                    log.info("百分比百分比百分比百分比+========"+result);
+                    if (!result.equals("�")){
+                        activityAnalysisCount.setCouponUsedSumPercentage(result + "%");
+                    }
+
+
+
                 }
 
             }
@@ -326,23 +354,38 @@ public class ActivityServiceImpl implements ActivityService {
     }
     @Override
     @Async("asyncServiceExecutor")
-    public void sendMessage(List<MktMessagePO> messageVOList, MemberInfoModel memberInfo) {
+    public void sendMessage(List<MktMessagePO> messageVOList, MemberInfoModel memberInfo,ActivityVO activityVO) {
+        ResponseData<SysBrandPo> SysBrandPos = brandServiceRpc.getBrandByID(activityVO.getSysBrandId());
         //循环信息类然后发送
         for (MktMessagePO mktMessagePO:messageVOList) {
             AwardBO awardBO = new AwardBO();
             if (mktMessagePO.getMsgType().equals("1") && !StringUtils.isEmpty(memberInfo.getWxOpenId())){
                 //发送微信模板消息
-                MemberMessageVO memberMessageVO = new MemberMessageVO();
-                memberMessageVO.setMemberCode(memberInfo.getMemberCode());
-                memberMessageVO.setOpenId(memberInfo.getWxOpenId());
-                awardBO.setMemberMessageVO(memberMessageVO);
+                ActivityMessageVO activityMessageVO = new ActivityMessageVO();
+                activityMessageVO.setMemberCode(memberInfo.getMemberCode());
+                activityMessageVO.setSysCompanyId(activityVO.getSysCompanyId());
+                activityMessageVO.setSysBrandId(activityVO.getSysBrandId());
+                activityMessageVO.setSysBrandName(SysBrandPos.getData().getBrandName());
+                activityMessageVO.setActivityName(activityVO.getActivityName());
+                activityMessageVO.setActivityInterests(mktMessagePO.getMsgContent());
+                activityMessageVO.setMemberPhone(memberInfo.getPhone());
+                if (activityVO.getLongTerm()==1){
+                    activityMessageVO.setActivityLongtime("长期活动");
+                }else{
+                    activityMessageVO.setActivityStartDate(activityVO.getStartTime());
+                    activityMessageVO.setActivityEndDate(activityVO.getEndTime());
+                }
+                awardBO.setActivityMessageVO(activityMessageVO);
                 awardBO.setMktType(MktSmartTypeEnum.SMART_TYPE_WXMESSAGE.getCode());
                 award.execute(awardBO);
             }
             if (mktMessagePO.getMsgType().equals("2")){
-                SysSmsConfigVO sysSmsConfigVO = new SysSmsConfigVO();
-                sysSmsConfigVO.setPhone(memberInfo.getPhone());
-                awardBO.setSysSmsConfigVO(sysSmsConfigVO);
+                ActivityMessageVO activityMessageVO = new ActivityMessageVO();
+                activityMessageVO.setMemberPhone(memberInfo.getPhone());
+                activityMessageVO.setSysBrandId(memberInfo.getBrandId());
+                activityMessageVO.setMemberName(memberInfo.getName());
+                activityMessageVO.setSendWxmember(mktMessagePO.getMsgContent());
+                awardBO.setActivityMessageVO(activityMessageVO);
                 awardBO.setMktType(MktSmartTypeEnum.SMART_TYPE_SMS.getCode());
                 //发送短信消息
                 award.execute(awardBO);
@@ -352,6 +395,7 @@ public class ActivityServiceImpl implements ActivityService {
     @Override
     @Async("asyncServiceExecutor")
     public void sendPoints(ActivitySmartVO vo, AwardBO awardBO, MemberInfoModel memberInfo) {
+        log.info("智能营销开始发送积分积分积分了啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊");
         IntegralChangeRequestModel integralChangeRequestModel =new IntegralChangeRequestModel();
         integralChangeRequestModel.setSysCompanyId(vo.getSysCompanyId());
         integralChangeRequestModel.setBrandId(vo.getSysBrandId());
@@ -360,26 +404,40 @@ public class ActivityServiceImpl implements ActivityService {
         integralChangeRequestModel.setChangeIntegral(vo.getPoints());
         integralChangeRequestModel.setChangeType(IntegralChangeTypeEnum.INCOME.getCode());
         integralChangeRequestModel.setBusinessType(com.bizvane.members.facade.enums.BusinessTypeEnum.ACTIVITY_TYPE_SMART.getCode());
+        integralChangeRequestModel.setChangeDate(new Date());
         awardBO.setIntegralRecordModel(integralChangeRequestModel);
         awardBO.setMktType(MktSmartTypeEnum.SMART_TYPE_INTEGRAL.getCode());
+        log.info("手机号码是+====="+memberInfo.getPhone()+"开始赠送积分了~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
         award.execute(awardBO);
+        log.info("手机号码是+====="+memberInfo.getPhone()+"送完积分了&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&");
     }
     @Override
     @Async("asyncServiceExecutor")
     public void sendShort(MktMessagePO mktMessagePO, AwardBO awardBO, SysSmsConfigVO sysSmsConfigVO, MemberInfoModel memberInfo) {
-        sysSmsConfigVO.setPhone(memberInfo.getPhone());
-        sysSmsConfigVO.setMsgContent(mktMessagePO.getMsgContent());
-        awardBO.setSysSmsConfigVO(sysSmsConfigVO);
+        ActivityMessageVO activityMessageVO = new ActivityMessageVO();
+        activityMessageVO.setMemberPhone(memberInfo.getPhone());
+        activityMessageVO.setSysBrandId(memberInfo.getBrandId());
+        activityMessageVO.setMemberName(memberInfo.getName());
+        activityMessageVO.setSendWxmember(mktMessagePO.getMsgContent());
+        awardBO.setActivityMessageVO(activityMessageVO);
         awardBO.setMktType(MktSmartTypeEnum.SMART_TYPE_SMS.getCode());
         award.execute(awardBO);
     }
     @Override
     @Async("asyncServiceExecutor")
     public void sendWx(MktMessagePO mktMessagePO, AwardBO awardBO, MemberMessageVO memberMessageVO, MemberInfoModel memberInfo) {
-        memberMessageVO.setMemberCode(memberInfo.getMemberCode());
-        memberMessageVO.setOpenId(memberInfo.getWxOpenId());
-        memberMessageVO.setActivityInterests(mktMessagePO.getMsgContent());
-        awardBO.setMemberMessageVO(memberMessageVO);
+        ResponseData<SysBrandPo> SysBrandPos = brandServiceRpc.getBrandByID(memberInfo.getBrandId());
+        //发送微信模板消息
+        ActivityMessageVO activityMessageVO = new ActivityMessageVO();
+        activityMessageVO.setMemberCode(memberInfo.getMemberCode());
+        activityMessageVO.setSysCompanyId(memberInfo.getSysCompanyId());
+        activityMessageVO.setSysBrandId(memberInfo.getBrandId());
+        activityMessageVO.setSysBrandName(SysBrandPos.getData().getBrandName());
+        activityMessageVO.setActivityName("营销发送微信消息");
+        activityMessageVO.setActivityInterests(mktMessagePO.getMsgContent());
+        activityMessageVO.setMemberPhone(memberInfo.getPhone());
+        activityMessageVO.setActivityLongtime("智能营销");
+        awardBO.setActivityMessageVO(activityMessageVO);
         awardBO.setMktType(MktSmartTypeEnum.SMART_TYPE_WXMESSAGE.getCode());
         award.execute(awardBO);
     }
@@ -389,7 +447,7 @@ public class ActivityServiceImpl implements ActivityService {
     public void sendCoupon(ActivitySmartVO vo, AwardBO awardBO, SendCouponSimpleRequestVO sendCouponSimpleRequestVO, MemberInfoModel memberInfo) {
         if (!org.springframework.util.CollectionUtils.isEmpty(vo.getMktCouponPOS())) {
             for (MktCouponPO mktCouponPO : vo.getMktCouponPOS()) {
-                sendCouponSimpleRequestVO.setMemberCode(memberInfo.getMemberCode().toString());
+                sendCouponSimpleRequestVO.setMemberCode(memberInfo.getMemberCode());
                 sendCouponSimpleRequestVO.setCouponDefinitionId(mktCouponPO.getCouponDefinitionId());
                 sendCouponSimpleRequestVO.setSendBussienId(mktCouponPO.getBizId());
                 sendCouponSimpleRequestVO.setSendType(SendTypeEnum.SEND_COUPON_ORIENT_MARKET.getCode());
@@ -397,21 +455,36 @@ public class ActivityServiceImpl implements ActivityService {
                 sendCouponSimpleRequestVO.setCompanyId(vo.getSysCompanyId());
                 awardBO.setSendCouponSimpleRequestVO(sendCouponSimpleRequestVO);
                 awardBO.setMktType(MktSmartTypeEnum.SMART_TYPE_COUPON.getCode());
+                log.info("调用高级搜索的参数列表=================="+ JSON.toJSONString(sendCouponSimpleRequestVO));
+                log.info("智能营销开始发券发券发券发券了+++++++++++++++++++++=========================");
                 award.execute(awardBO);
             }
         }
     }
     @Override
     @Async("asyncServiceExecutor")
-    public void sendRegisterWx(List<MktMessagePO> messageVOList, WxChannelInfoVo wxChannelInfoVo) {
+    public void sendRegisterWx(List<MktMessagePO> messageVOList, WxChannelInfoVo wxChannelInfoVo,ActivityVO activityVO) {
+        ResponseData<SysBrandPo> SysBrandPos = brandServiceRpc.getBrandByID(activityVO.getSysBrandId());
         for (MktMessagePO mktMessagePO:messageVOList) {
             AwardBO awardBO = new AwardBO();
             if (mktMessagePO.getMsgType().equals("1") && !StringUtils.isEmpty(wxChannelInfoVo.getWxOpenId())){
                 //发送微信模板消息
-                MemberMessageVO memberMessageVO = new MemberMessageVO();
-                memberMessageVO.setMemberCode(wxChannelInfoVo.getMemberCode());
-                memberMessageVO.setOpenId(wxChannelInfoVo.getWxOpenId());
-                awardBO.setMemberMessageVO(memberMessageVO);
+                //发送微信模板消息
+                ActivityMessageVO activityMessageVO = new ActivityMessageVO();
+                activityMessageVO.setMemberCode(wxChannelInfoVo.getMemberCode());
+                activityMessageVO.setSysCompanyId(activityVO.getSysCompanyId());
+                activityMessageVO.setSysBrandId(activityVO.getSysBrandId());
+                activityMessageVO.setSysBrandName(SysBrandPos.getData().getBrandName());
+                activityMessageVO.setActivityName(activityVO.getActivityName());
+                activityMessageVO.setActivityInterests(mktMessagePO.getMsgContent());
+                activityMessageVO.setMemberPhone(wxChannelInfoVo.getPhone());
+                if (activityVO.getLongTerm()==1){
+                    activityMessageVO.setActivityLongtime("长期活动");
+                }else{
+                    activityMessageVO.setActivityStartDate(activityVO.getStartTime());
+                    activityMessageVO.setActivityEndDate(activityVO.getEndTime());
+                }
+                awardBO.setActivityMessageVO(activityMessageVO);
                 awardBO.setMktType(MktSmartTypeEnum.SMART_TYPE_WXMESSAGE.getCode());
                 award.execute(awardBO);
             }
@@ -424,13 +497,56 @@ public class ActivityServiceImpl implements ActivityService {
         for (MktMessagePO mktMessagePO:messageVOList) {
             AwardBO awardBO = new AwardBO();
             if (mktMessagePO.getMsgType().equals("2")){
-                SysSmsConfigVO sysSmsConfigVO = new SysSmsConfigVO();
-                sysSmsConfigVO.setPhone(memberInfo.getPhone());
-                awardBO.setSysSmsConfigVO(sysSmsConfigVO);
+                ActivityMessageVO activityMessageVO = new ActivityMessageVO();
+                activityMessageVO.setMemberPhone(memberInfo.getPhone());
+                activityMessageVO.setSysBrandId(memberInfo.getBrandId());
+                activityMessageVO.setMemberName(memberInfo.getName());
+                activityMessageVO.setSendWxmember(mktMessagePO.getMsgContent());
+                awardBO.setActivityMessageVO(activityMessageVO);
                 awardBO.setMktType(MktSmartTypeEnum.SMART_TYPE_SMS.getCode());
                 //发送短信消息
                 award.execute(awardBO);
             }
         }
+    }
+
+    /**
+     * 活动、任务效果分析“发行优惠券”添加会员明细弹框；
+     * @return
+     */
+    @Override
+    public ResponseData<PageInfo<CouponSendMemberListResponseVO>> findCouponSendResultActivity(Long id, Integer type,
+                                                                                       SysAccountPO stageUser,PageForm pageForm,
+                                                                                        String name,String cardNo) {
+        ResponseData responseData = new ResponseData();
+
+        if(null == id){
+            responseData.setCode(SysResponseEnum.FAILED.getCode());
+            responseData.setMessage(SysResponseEnum.MODEL_FAILED_VALIDATION.getMessage());
+            return responseData;
+        }
+
+        if(null == type){
+            responseData.setCode(SysResponseEnum.FAILED.getCode());
+            responseData.setMessage(SysResponseEnum.MODEL_FAILED_VALIDATION.getMessage());
+            return responseData;
+        }
+
+        CouponSendMemberListRequestVO requestVO = new CouponSendMemberListRequestVO();
+        requestVO.setSendBusinessId(id);
+        //类型转换
+        requestVO.setSendType(ActivityConvertCouponTypeEnum.getActivityConvertCouponTypeEnumByCode(type).getCouponCode());
+        requestVO.setBrandId(stageUser.getBrandId());
+        requestVO.setPageNumber(pageForm.getPageNumber());
+        requestVO.setPageSize(pageForm.getPageSize());
+        requestVO.setName(name);
+        requestVO.setCardNo(cardNo);
+
+        ResponseData<PageInfo<CouponSendMemberListResponseVO>> sendMemberListResult = couponEntityServiceFeign.findCouponSendMemberList(requestVO);
+
+        responseData.setData(sendMemberListResult.getData());
+        responseData.setCode(SysResponseEnum.SUCCESS.getCode());
+        responseData.setMessage(SysResponseEnum.SUCCESS.getMessage());
+        return responseData;
     }
 }

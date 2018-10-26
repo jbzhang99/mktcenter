@@ -3,7 +3,9 @@ package com.bizvane.mktcenterserviceimpl.service.impl;
 import com.alibaba.fastjson.JSON;
 import com.bizvane.centerstageservice.models.po.SysCheckConfigPo;
 import com.bizvane.centerstageservice.models.po.SysCheckPo;
+import com.bizvane.centerstageservice.models.po.SysStorePo;
 import com.bizvane.centerstageservice.models.vo.SysCheckConfigVo;
+import com.bizvane.centerstageservice.rpc.StoreServiceRpc;
 import com.bizvane.centerstageservice.rpc.SysCheckConfigServiceRpc;
 import com.bizvane.centerstageservice.rpc.SysCheckServiceRpc;
 import com.bizvane.couponfacade.interfaces.CouponQueryServiceFeign;
@@ -37,12 +39,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
+import org.springframework.util.StringUtils;
 
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * @author chen.li
@@ -74,6 +75,8 @@ public class ActivitySigninServiceImpl implements ActivitySigninService {
     private CouponQueryServiceFeign couponQueryServiceFeign;
     @Autowired
     private Award award;
+    @Autowired
+    private StoreServiceRpc storeServiceRpc;
     /**
      * 查询签到活动列表
      * @param vo
@@ -196,6 +199,10 @@ public class ActivitySigninServiceImpl implements ActivitySigninService {
         MktActivitySignin mktActivitySignin = new MktActivitySignin();
         BeanUtils.copyProperties(mktActivityPOWithBLOBs,mktActivitySignin);
         mktActivitySignin.setMktActivityId(mktActivityId);
+        if (true==activityVO.getStoreLimit()){
+            mktActivitySignin.setStoreLimitList(activityVO.getStoreLimitList());
+            mktActivitySignin.setStoreLimitType(activityVO.getStoreLimitType());
+        }
         log.info("新增签到表数据="+ JSON.toJSONString(mktActivitySignin));
         mktActivitySigninMapper.insertSelective(mktActivitySignin);
         responseData.setCode(SysResponseEnum.SUCCESS.getCode());
@@ -212,6 +219,7 @@ public class ActivitySigninServiceImpl implements ActivitySigninService {
     public ResponseData<ActivityBO> selectActivitySigninById(String businessCode) {
         log.info("查询签到详情");
         ResponseData responseData = new ResponseData();
+        ActivityBO bo = new ActivityBO();
         ActivityVO vo= new ActivityVO();
         vo.setActivityCode(businessCode);
         List<ActivityVO> signinList = mktActivitySigninMapper.getActivitySigninList(vo);
@@ -219,6 +227,19 @@ public class ActivitySigninServiceImpl implements ActivitySigninService {
             responseData.setCode(SysResponseEnum.OPERATE_FAILED_DATA_NOT_EXISTS.getCode());
             responseData.setMessage(SysResponseEnum.OPERATE_FAILED_DATA_NOT_EXISTS.getMessage());
             return responseData;
+        }
+        if(!CollectionUtils.isEmpty(signinList)){
+            bo.setActivityVO(signinList.get(0));
+            if (!StringUtils.isEmpty(signinList.get(0).getStoreLimitList())){
+                String ids =signinList.get(0).getStoreLimitList();
+                //查询适用门店
+                List<Long> listIds = Arrays.asList(ids.split(",")).stream().map(s -> Long.parseLong(s.trim())).collect(Collectors.toList());
+                ResponseData<List<SysStorePo>> sysStorePOs = storeServiceRpc.getIdStoreLists(listIds);
+
+                if(!CollectionUtils.isEmpty(sysStorePOs.getData())){
+                    bo.getActivityVO().setSysStorePos(sysStorePOs.getData());
+                }
+            }
         }
         //查询活动卷
         MktCouponPOExample example = new  MktCouponPOExample();
@@ -238,7 +259,6 @@ public class ActivitySigninServiceImpl implements ActivitySigninService {
         MktMessagePOExample exampl = new MktMessagePOExample();
         exampl.createCriteria().andBizIdEqualTo(signinList.get(0).getMktActivityId()).andValidEqualTo(true);
         List<MktMessagePO> listMktMessage = mktMessagePOMapper.selectByExample(exampl);
-        ActivityBO bo = new ActivityBO();
         if(!CollectionUtils.isEmpty(signinList)){
             bo.setActivityVO(signinList.get(0));
         }

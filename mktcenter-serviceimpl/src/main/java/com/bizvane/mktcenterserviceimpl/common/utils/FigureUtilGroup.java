@@ -1,9 +1,12 @@
 package com.bizvane.mktcenterserviceimpl.common.utils;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
 
 import org.codehaus.jettison.json.JSONArray;
 import org.codehaus.jettison.json.JSONException;
@@ -76,13 +79,24 @@ public class FigureUtilGroup {
 		       if(jsonStr!=null&&jsonStr.startsWith("{")&&jsonStr.endsWith("}")){
 		           JSONObject json = JSONObject.parseObject(jsonStr);  
 		           
-		           for(Object k : json.keySet()){
+//		           排序          
+                   Map<String,Object> mapjsonObje=new TreeMap<String,Object>();
+                   for(Object k : json.keySet()){
+		               SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		               Date date = simpleDateFormat.parse(k.toString());
+		               long ts = date.getTime();
+                	   mapjsonObje.put(String.valueOf(ts), k);
+                   }
+		           
+                   mapjsonObje = ((TreeMap) mapjsonObje).descendingMap();
+                   
+		           for(Object k : mapjsonObje.keySet()){
 		        	   ino++;
-//		        	   分页显示，如[10,25），则从第10条查询出25条数据
+//		       分页显示，如[10,25），则从第10条查询出25条数据
 		        	   if(vipIncomeAnalysis.getStartRecord()<=ino&&ino<(vipIncomeAnalysis.getStartRecord()+vipIncomeAnalysis.getQueryNum())) {
 			        	   BackDataTime backData =new BackDataTime();
-			        	   JSONObject  jsonObje= JSONObject.parseObject(json.get(k).toString());
-			        	   jsonObje.put("time", k.toString());
+			        	   JSONObject  jsonObje= JSONObject.parseObject(json.get(mapjsonObje.get(k)).toString());
+			        	   jsonObje.put("time", mapjsonObje.get(k));
 			               backData.setJosonData(jsonObje);
 			               listdata2.add(backData); 
 		        	   }

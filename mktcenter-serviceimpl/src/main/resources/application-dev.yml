@@ -14,8 +14,6 @@ spring:
         max-idle: 8
         max-wait: 2000ms
         min-idle: 0
-  profiles:
-    active: basecontroller,commonutilslocal,log
   swagger:
     show: true
   application:
@@ -62,10 +60,10 @@ spring:
     date-format: yyyy-MM-dd HH:mm:ss
     time-zone: GMT+8
   zipkin:
-    base-url-url: http://192.168.2.15:9411
+    baseUrl: http://192.168.2.15:9411
   sleuth:
     sampler:
-      percentage: 1
+      probability: 1.0
     scheduled:
       enabled: false
 eureka:
@@ -129,11 +127,11 @@ feign:
       name: members-test
       path: members.api
     message:
-      name: message-server-test
+      name: message-test
       path: message.api
     wechat:
       name: wechat-test
-      path: wechat.api
+      path: wechat
     applet:
       name: applet-test
       path: applet.api
@@ -148,6 +146,8 @@ rocketmq:
   onsaddr: http://onsaddr-internet.aliyun.com/rocketmq/nsaddr4client-internet
   accessKey: LTAIpoqUHsXq6q7r
   secretKey: 0ZJ7bfxXJLT8TpOKvZU3i4YWuhvJzs
+  addr: 
+  environment: test
 
 threadPool:
   corePoolSize: 16
@@ -160,13 +160,16 @@ qiniu:
   secretKey: HIKXNXr12qRhpIAsdI8xTaX87LeTqqLGjXB_RgDf
   bucketNm: bizvane01
   domain: https://qi.test.bizvane.cn
-
-activity:
-  qrcodeurl: http://www.test.bizvane.com/qrcode?activityCode=
+  
+bitdata:
+  businessNum: testbz
+  apiKey: 4199454b3cac0c02b48fd5a9c67c00c0
+  url: http://bizvane.f3322.net:58765/api/open-data-analysis/
 
 tenant:
   isEnabledTenantInterceptor: false
-
-  spring.zipkin.base-url-url =  = http://192.168.2.119:9411
-  spring.sleuth.sampler.percentage = e = 1
-  spring.sleuth.scheduled.enabled = false
+ribbon:
+  ConnectTimeout: 6000000
+  ReadTimeout: 6000000
+activity:
+  qrcodeurl: http://www.test.bizvane.com/qrcode?activityCode=

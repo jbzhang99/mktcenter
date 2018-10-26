@@ -56,7 +56,13 @@ public class ReportServiceImpl implements ReportTempService {
 				           JSONObject json = JSONObject.parseObject(jsonStr);  
 				           for(Object k : json.keySet()){
 					               JSONObject jsonObject1 = JSONObject.parseObject(json.get(k).toString());
-					               jsonObject1.put("time", k.toString());
+//					               SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+					               if(k.toString().length()>9) {
+					            	   jsonObject1.put("time", k.toString().substring(0,k.toString().length() - 9));
+					               }else {
+					            	   jsonObject1.put("time",k.toString());
+					               }
+					               
 					               arr.put(jsonObject1);
 				           }
 			           

@@ -23,6 +23,7 @@ import com.bizvane.utils.responseinfo.ResponseData;
 import com.xxl.job.core.biz.model.ReturnT;
 import com.xxl.job.core.handler.IJobHandler;
 import com.xxl.job.core.handler.annotation.JobHandler;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
@@ -50,6 +51,7 @@ public class ActivitySendMessageJobHandler extends IJobHandler {
     private MktActivityOrderPOMapper mktActivityOrderPOMapper;
     @Autowired
     private Award award;
+    @Autowired
     private MemberMessageSend memberMessage;
     @Override
     public ReturnT<String> execute(String param) throws Exception {
@@ -61,10 +63,12 @@ public class ActivitySendMessageJobHandler extends IJobHandler {
         examplem.createCriteria().andActivityCodeEqualTo(param).andValidEqualTo(true);
         List<MktActivityPO> mktActivityPOs = mktActivityPOMapper.selectByExample(examplem);
         MktActivityPO mktActivityPO = mktActivityPOs.get(0);
+        ActivityVO activityVO = new ActivityVO();
+        BeanUtils.copyProperties(mktActivityPO,activityVO);
             //查询消息集合
             MktMessagePOExample example = new MktMessagePOExample();
-            example.createCriteria().andBizIdEqualTo(Long.parseLong("param"));
-            List<MktMessagePO> ListMktMessage = mktMessagePOMapper.selectByExample(example);
+            example.createCriteria().andBizIdEqualTo(mktActivityPO.getMktActivityId());
+            List<MktMessagePO> ListMktMessage = mktMessagePOMapper.selectByExampleWithBLOBs(example);
             if (!CollectionUtils.isEmpty(ListMktMessage)){
                 //判断是什么类型的活动 然后给不同的会员发送消息
                 //分页查询会员信息发送短信
@@ -72,10 +76,11 @@ public class ActivitySendMessageJobHandler extends IJobHandler {
                 membersInfoSearchVo.setPageNumber(1);
                 membersInfoSearchVo.setPageSize(10000);
                 membersInfoSearchVo.setBrandId(mktActivityPO.getSysBrandId());
+                membersInfoSearchVo.setSysCompanyId(mktActivityPO.getSysCompanyId());
                 //开卡活动的
                 if (mktActivityPO.getActivityType()== ActivityTypeEnum.ACTIVITY_TYPE_REGISGER.getCode()){
 
-                    membersInfoSearchVo.setCardStatus(1);
+                    membersInfoSearchVo.setCardStatus(2);
 
                 }
                 //升级活动的
@@ -96,11 +101,9 @@ public class ActivitySendMessageJobHandler extends IJobHandler {
                     vo.setActivityCode(param);
                     List<ActivityVO> activityOrderList = mktActivityOrderPOMapper.getActivityOrderList(vo);
 
-                    if (!activityOrderList.get(0).getMbrLevelCode().equals("0")){
                         List<Long> level = new ArrayList<>();
                         level.add(Long.parseLong(activityOrderList.get(0).getMbrLevelCode()));
                        membersInfoSearchVo.setLevelID(level);
-                    }
                 }
                 //如果是开卡活动
                 if (mktActivityPO.getActivityType()== ActivityTypeEnum.ACTIVITY_TYPE_REGISGER.getCode()){
@@ -112,9 +115,9 @@ public class ActivitySendMessageJobHandler extends IJobHandler {
                     wxChannelInfoSearchVo.setFocus(2);
                     wxChannelInfoSearchVo.setCardStatus(2);
                     wxChannelInfoSearchVo.setMiniProgram((byte) 1);
-                    memberMessage.sendWXmessage(ListMktMessage, wxChannelInfoSearchVo);
+                    memberMessage.sendWXmessage(ListMktMessage, wxChannelInfoSearchVo,activityVO);
                 }else{
-                    memberMessage.getMemberList(ListMktMessage, membersInfoSearchVo);
+                    memberMessage.getMemberList(ListMktMessage, membersInfoSearchVo,activityVO);
                 }
 
             }

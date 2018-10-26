@@ -20,10 +20,10 @@ public class ReBase {
 	private String	endDate	;//	截止时间	String	20	Y
 	
 	public ReBase() {  
-//    	this.businessNum="testbz";
-//    	this.apiKey="4199454b3cac0c02b48fd5a9c67c00c0";
-      	this.businessNum="c10153";
-      	this.apiKey="e898e91ff9758a3b01b84c920158d1a8";
+    	this.businessNum="testbz";
+    	this.apiKey="4199454b3cac0c02b48fd5a9c67c00c0";
+//      	this.businessNum="c10153";
+//      	this.apiKey="e898e91ff9758a3b01b84c920158d1a8";
     }
 	
     

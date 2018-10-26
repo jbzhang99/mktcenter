@@ -1,6 +1,7 @@
 package com.bizvane.mktcenterservice.interfaces;
 
 import com.bizvane.centerstageservice.models.po.SysCheckPo;
+import com.bizvane.couponfacade.models.vo.CouponSendMemberListResponseVO;
 import com.bizvane.couponfacade.models.vo.SendCouponSimpleRequestVO;
 import com.bizvane.members.facade.models.MemberInfoModel;
 import com.bizvane.members.facade.vo.WxChannelInfoVo;
@@ -15,6 +16,7 @@ import com.bizvane.mktcenterservice.models.vo.ActivityVO;
 import com.bizvane.mktcenterservice.models.vo.PageForm;
 import com.bizvane.utils.responseinfo.ResponseData;
 import com.bizvane.utils.tokens.SysAccountPO;
+import com.github.pagehelper.PageInfo;
 
 import java.util.List;
 
@@ -54,7 +56,7 @@ public interface ActivityService {
      */
     public ResponseData<CtivityAnalysisBO> getActivityAnalysisCountpage(ActivityAnalysisCountBO bo, PageForm pageForm);
 
-    public void sendMessage(List<MktMessagePO> messageVOList, MemberInfoModel memberInfo);
+    public void sendMessage(List<MktMessagePO> messageVOList, MemberInfoModel memberInfo,ActivityVO activityVO);
 
     public void sendPoints(ActivitySmartVO vo, AwardBO awardBO, MemberInfoModel memberInfo);
 
@@ -64,7 +66,14 @@ public interface ActivityService {
 
     public  void sendCoupon(ActivitySmartVO vo, AwardBO awardBO, SendCouponSimpleRequestVO sendCouponSimpleRequestVO, MemberInfoModel memberInfo);
 
-    public void sendRegisterWx(List<MktMessagePO> messageVOList, WxChannelInfoVo wxChannelInfoVo);
+    public void sendRegisterWx(List<MktMessagePO> messageVOList, WxChannelInfoVo wxChannelInfoVo,ActivityVO activityVO);
 
     public void sendDx(List<MktMessagePO> messageVOList, MemberInfoModel memberInfo);
+
+    /**
+     * 活动、任务效果分析“发行优惠券”添加会员明细弹框；
+     * @return
+     */
+    ResponseData<PageInfo<CouponSendMemberListResponseVO>> findCouponSendResultActivity(Long id, Integer type, SysAccountPO stageUser,
+                                                                                        PageForm pageForm,String name,String cardNo);
 }

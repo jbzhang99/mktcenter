@@ -2,6 +2,7 @@ package com.bizvane.mktcenterservice.interfaces;
 
 import com.bizvane.centerstageservice.models.po.SysAccountPo;
 import com.bizvane.centerstageservice.models.po.SysStorePo;
+import com.bizvane.couponfacade.models.vo.CouponSendMemberListResponseVO;
 import com.bizvane.messagefacade.models.vo.GenrealGetMessageVO;
 import com.bizvane.utils.tokens.SysAccountPO;
 import com.bizvane.centerstageservice.models.po.SysCheckConfigPo;
@@ -13,9 +14,10 @@ import com.bizvane.mktcenterservice.models.bo.TaskAwardBO;
 import com.bizvane.mktcenterservice.models.po.MktMessagePO;
 import com.bizvane.mktcenterservice.models.po.MktTaskPOWithBLOBs;
 import com.bizvane.mktcenterservice.models.vo.*;
-import com.bizvane.utils.responseinfo.PageInfo;
 import com.bizvane.utils.responseinfo.ResponseData;
 import com.bizvane.utils.tokens.SysAccountPO;
+import com.github.pagehelper.PageInfo;
+
 import java.text.ParseException;
 import java.util.Date;
 import java.util.List;
@@ -31,7 +33,7 @@ public interface TaskService {
      * 给会员发送消息
      * @param sysBrandId
      */
-    public  void sendMemberMessage(Long sysBrandId,Integer taskType,String msgContent,Boolean exceptWechat);
+    public  void sendMemberMessage(Long sysCompanyId,Long sysBrandId,Integer taskType,String msgContent,Boolean exceptWechat);
     /**
      * 批量给粉丝发送短信
      */
@@ -75,19 +77,19 @@ public interface TaskService {
      * @return
      *
      */
-    public List<TaskAwardBO> getTaskInviteAwardList(Long sysCompanyId, Long sysBrandId,Date date);
+    public List<TaskAwardBO> getTaskInviteAwardList( Long mktTaskIdParam,Long sysCompanyId, Long sysBrandId,Date openCardTime);
 
     /**
      * 完善资料任务的奖励查询
      * @return
      */
-    public List<TaskAwardBO> getTaskProfileAwardList(Long sysCompanyId, Long sysBrandId,Date profileDate);
+    public List<TaskAwardBO> getTaskProfileAwardList(Long mktTaskIdParam,Long sysCompanyId, Long sysBrandId,Date profileDate);
 
     /**
      * 分享任务的奖励查询
      * @return
      */
-    public List<TaskAwardBO> getTaskShareAwardList(Long sysCompanyId, Long sysBrandId,Date shareDate);
+    public List<TaskAwardBO> getTaskShareAwardList(Long mktTaskIdparam ,Long sysCompanyId, Long sysBrandId,Date shareDate);
     /**
      * 查询订单详情
      * @param mktTaskId
@@ -139,7 +141,7 @@ public interface TaskService {
      * @param vo
      * @return
      */
-    public ResponseData<com.github.pagehelper.PageInfo<MktTaskPOWithBLOBs>> getTaskByTaskType(TaskVO vo, PageForm pageForm);
+    public ResponseData<com.github.pagehelper.PageInfo<MktTaskPOWithBLOBs>> getTaskByTaskType(TaskSearchVO vo);
 
     /**
      * 新增
@@ -171,7 +173,7 @@ public interface TaskService {
      * 获取品牌下的所有会员
      * @return
      */
-    public  PageInfo<MemberInfoModel> getCompanyMemebers(Long sysBrandId,Integer taskType,Boolean exceptWechat,Integer pageNumber,Integer pageSize);
+    public  com.bizvane.utils.responseinfo.PageInfo<MemberInfoModel> getCompanyMemebers(Long sysCompanyId,Long sysBrandId,Integer taskType,Boolean exceptWechat,Integer pageNumber,Integer pageSize);
 
     /**
      * 获取品牌下的所有粉丝
@@ -203,4 +205,11 @@ public interface TaskService {
      * @return
      */
     public Integer getCenterStageCheckStage(MktTaskPOWithBLOBs po);
+
+    /**
+     * 活动、任务效果分析“发行优惠券”添加会员明细弹框；
+     * @return
+     */
+    ResponseData<PageInfo<CouponSendMemberListResponseVO>> findCouponSendResultTask(Long id, Integer type, SysAccountPO stageUser,
+                                                                                    PageForm pageForm,String name,String cardNo);
 }

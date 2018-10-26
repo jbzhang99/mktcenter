@@ -145,12 +145,51 @@ public class FigureUtilGroupFigure {
 			           backDataTimeDtail.setOnlineData(onlineData.toString());
 			           backDataTimeDtail.setOfflineData(offlineData.toString());
 			           
-			           
+			           try {
+						
 			           backDataTimeDtail.setVipDataAccountedfor(vipData.multiply(new BigDecimal(100)).divide(total, 2, RoundingMode.HALF_UP).toString());
 			           backDataTimeDtail.setTouristsDataAccountedfor(touristsData.multiply(new BigDecimal(100)).divide(total, 2, RoundingMode.HALF_UP).toString());
 			           backDataTimeDtail.setOnlineDataAccountedfor(onlineData.multiply(new BigDecimal(100)).divide(total, 2, RoundingMode.HALF_UP).toString());
 			           backDataTimeDtail.setOfflineDataAccountedfor(offlineData.multiply(new BigDecimal(100)).divide(total, 2, RoundingMode.HALF_UP).toString());
+						} catch (Exception e) {
+							// TODO: handle exception
+						}
+			           //显示下拉
+			           String [] str =new String [7] ;
+			           String str1="";
 			           
+			           if(vipIncomeAnalysis.getIndicators().equals("0")) {
+			        	   str1="总收入（元）,会员收入（元）,非会员收入（元）,线上会员收入（元）,线下会员收入（元）";
+			           }else if(vipIncomeAnalysis.getIndicators().equals("1")) {
+			        	   str1=" 总人数,会员人数,非会员人数,线上会员人数,线下会员人数";
+			           }else if(vipIncomeAnalysis.getIndicators().equals("2")) {
+			        	   str1=" 总新增人数,会员新增人数,非会员新增人数,线上会员人数,线下会员人数";
+			           }else if(vipIncomeAnalysis.getIndicators().equals("3")) {
+			        	   str1=" 总件数,会员件数,非会员件数,线上会员件数,线下会员件数";
+			           }else if(vipIncomeAnalysis.getIndicators().equals("4")) {
+			        	   str1=" 总笔数,会员笔数,非会员笔数,线上会员笔数,线下会员笔数";
+			           }else if(vipIncomeAnalysis.getIndicators().equals("5")) {
+			        	   str1=" 件单价,会员件单价,非会员件单价,线上会员件单价,线下会员件单价";
+			           }else if(vipIncomeAnalysis.getIndicators().equals("6")) {
+			        	   str1=" 客单价,会员客单价,非会员客单价,线上会员客单价,线下会员客单价";
+			           }else if(vipIncomeAnalysis.getIndicators().equals("7")) {
+			        	   str1="连带率,会员连带率,非会员连带率,线上会员连带率,线下会员连带率";
+			           }else if(vipIncomeAnalysis.getIndicators().equals("8")) {
+			        	   str1="折扣率,会员折扣率,非会员折扣率,线上会员折扣率,线下会员折扣率";
+			           }
+			           
+		        	    int i=1;
+						for(String string :str1.split(",")) {
+							str[i]=string;
+							i++;
+						}
+
+			           backDataTimeDtail.setTotalName(str[1]);
+			           backDataTimeDtail.setVipDataName(str[2]);
+			           backDataTimeDtail.setTouristsDataName(str[3]);
+			           backDataTimeDtail.setOnlineDataName(str[4]);
+			           backDataTimeDtail.setOfflineDataName(str[5]);
+			         //显示下拉
 		        	   
 		           }else {
 //		        	   分页显示，如[10,25），则从第10条查询出25条数据
@@ -270,12 +309,55 @@ public class FigureUtilGroupFigure {
 			           backDataTimeDtail.setActivityVipData(activityVipData.toString());
 			           backDataTimeDtail.setOldVipData(oldVipData.toString());
 			           backDataTimeDtail.setNewVipData(newVipData.toString());
-//			           
+//			           t
+			           try {
+						
+					
 			           backDataTimeDtail.setInactivityVipDataAccountedfor(inactivityVipData.multiply(new BigDecimal(100)).divide(vipData, 2, RoundingMode.HALF_UP).toString());
 			           backDataTimeDtail.setActivityVipDataAccountedfor(activityVipData.multiply(new BigDecimal(100)).divide(vipData, 2, RoundingMode.HALF_UP).toString());
 			           backDataTimeDtail.setOldVipDataAccountedfor(oldVipData.multiply(new BigDecimal(100)).divide(vipData, 2, RoundingMode.HALF_UP).toString());
 			           backDataTimeDtail.setNewVipDataAccountedfor(newVipData.multiply(new BigDecimal(100)).divide(vipData, 2, RoundingMode.HALF_UP).toString());
 		           
+			           } catch (Exception e) {
+							// TODO: handle exception
+					}
+
+		       
+		       
+	           //显示下拉
+	           String [] str =new String [7] ;
+	           String str1="";
+	           
+	           if(vipIncomeAnalysis.getIndicators().equals("0")) {
+	        	   str1="总收入（元）,新会员收入（元）,老会员收入（元）,活跃会员收入（元）,非活跃会员收入（元）";
+	           }else if(vipIncomeAnalysis.getIndicators().equals("1")) {
+	        	   str1=" 总件数,新会员件数,老会员件数,活跃会员件数,非活跃会员件数";
+	           }else if(vipIncomeAnalysis.getIndicators().equals("2")) {
+	        	   str1=" 总笔数,新会员笔数,老会员笔数,活跃会员笔数,非活跃会员笔数";
+	           }else if(vipIncomeAnalysis.getIndicators().equals("3")) {
+	        	   str1=" 件单价,新会员件单价,老会员件单价,活跃会员件单价,非活跃会员件单价";
+	           }else if(vipIncomeAnalysis.getIndicators().equals("4")) {
+	        	   str1=" 客单价,新会员客单价,老会员客单价,活跃会员客单价,非活跃会员客单价";
+	           }else if(vipIncomeAnalysis.getIndicators().equals("5")) {
+	        	   str1="连带率,新会员连带率,老会员连带率,活跃会员连带率,非活跃会员连带率";
+	           }else if(vipIncomeAnalysis.getIndicators().equals("6")) {
+	        	   str1="折扣率,新会员折扣率,老会员折扣率,活跃会员折扣率,非活跃会员折扣率";
+	           }
+	           
+        	    int i=0;
+				for(String string :str1.split(",")) {
+					str[i]=string;
+					i++;
+				}
+				
+
+	            backDataTimeDtail.setVipDataName(str[0]);
+				backDataTimeDtail.setNewVipDataName(str[1]);
+				backDataTimeDtail.setOldVipDataName(str[2]);
+				backDataTimeDtail.setActivityVipDataName(str[3]);
+	            backDataTimeDtail.setInactivityVipDataName(str[4]);
+	           
+	         //显示下拉
 		       }
 		       
 				if(null!=fileReportTempPOlist&&fileReportTempPOlist.size()>0) {

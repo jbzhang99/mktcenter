@@ -133,7 +133,6 @@ public class ActivityOrderServiceImpl implements ActivityOrderService {
      * @return
      */
     @Override
-    @Transactional
     public ResponseData<Integer> addActivityOrder(ActivityBO bo, SysAccountPO stageUser) {
         log.info("创建消费活动开始");
         //返回对象
@@ -286,13 +285,11 @@ public class ActivityOrderServiceImpl implements ActivityOrderService {
                 MembersInfoSearchVo membersInfoSearchVo = new MembersInfoSearchVo();
                 membersInfoSearchVo.setPageNumber(1);
                 membersInfoSearchVo.setPageSize(10000);
-                if (!activityVO.getMbrLevelCode().equals("0")){
                    List<Long> level = new ArrayList<>();
                     level.add(Long.parseLong(activityVO.getMbrLevelCode()));
                     membersInfoSearchVo.setLevelID(level);
-                }
                 membersInfoSearchVo.setBrandId(activityVO.getSysBrandId());
-                memberMessage.getMemberList(messageVOList, membersInfoSearchVo);
+                memberMessage.getMemberList(messageVOList, membersInfoSearchVo,activityVO);
             }else{
                 //自定义时间发送 加人job任务
                 jobUtil.addSendMessageJob(stageUser,activityVO,activityCode);
@@ -364,7 +361,7 @@ public class ActivityOrderServiceImpl implements ActivityOrderService {
         //查询消息模板
         MktMessagePOExample exampl = new MktMessagePOExample();
         exampl.createCriteria().andBizIdEqualTo(orderList.get(0).getMktActivityId()).andValidEqualTo(true);
-        List<MktMessagePO> listMktMessage = mktMessagePOMapper.selectByExample(exampl);
+        List<MktMessagePO> listMktMessage = mktMessagePOMapper.selectByExampleWithBLOBs(exampl);
             bo.setCouponEntityAndDefinitionVOList(lists);
         if(!CollectionUtils.isEmpty(listMktMessage)){
             bo.setMessageVOList(listMktMessage);
@@ -383,7 +380,6 @@ public class ActivityOrderServiceImpl implements ActivityOrderService {
      * @return
      */
     @Override
-    @Transactional
     public ResponseData<Integer> updateActivityOrder(ActivityBO bo, SysAccountPO stageUser) {
         log.info("修改消费活动开始");
         //返回对象
@@ -533,7 +529,7 @@ public class ActivityOrderServiceImpl implements ActivityOrderService {
                // membersInfoSearchVo.setLevelId(Long.parseLong(activityVO.getMbrLevelCode()));
             }
             membersInfoSearchVo.setBrandId(activityVO.getSysBrandId());
-            memberMessage.getMemberList(messageVOList, membersInfoSearchVo);
+            memberMessage.getMemberList(messageVOList, membersInfoSearchVo,activityVO);
 
         }
         responseData.setCode(SysResponseEnum.SUCCESS.getCode());
@@ -548,7 +544,6 @@ public class ActivityOrderServiceImpl implements ActivityOrderService {
      * @return
      */
     @Override
-    @Transactional
     public ResponseData<Integer> checkActivityOrder(SysCheckPo po, SysAccountPO sysAccountPO) {
         log.info("审核消费活动开始");
         ResponseData responseData = new ResponseData();
@@ -604,9 +599,8 @@ public class ActivityOrderServiceImpl implements ActivityOrderService {
      * @return
      */
     @Override
-    @Transactional
     public ResponseData<Integer> executeOrder(OrderModelBo vo) {
-        log.info("执行消费活动开始");
+        log.info("执行消费活动开始开始了开始了开始了开始了开始了开始了");
         //返回对象
         log.info("执行消费活动+======="+ JSON.toJSONString(vo));
         ResponseData responseData = new ResponseData();
@@ -622,37 +616,44 @@ public class ActivityOrderServiceImpl implements ActivityOrderService {
             responseData.setMessage(SysResponseEnum.OPERATE_FAILED_DATA_NOT_EXISTS.getMessage());
             return responseData;
         }
+        log.info("执行消费活动查询到的进行中活动+======="+ JSON.toJSONString(orderList));
         for (ActivityVO activityVO:orderList) {
+            log.info("执行消费活动要开始验证验证验证验证验证了啦啦啦啦啦啦啦啦");
             //判断金额是否满足
             if (!ExecuteParamCheckUtil.CheckPayMoney(vo.getPayMoney(),new BigDecimal(activityVO.getOrderMinPrice()))){
                 continue;
             }
+            log.info("消费金额验证完毕11111111111111111111111111111111");
             //判断会员范围 会员类型
             if(!ExecuteParamCheckUtil.CheckMemberType(vo.getMemberType(),activityVO.getMemberType())){
                 continue;
             }
+            log.info("消费会员范围验证完毕222222222222222222222222222222");
             //判断会员等级
             if(!ExecuteParamCheckUtil.CheckMbrLevelCode(vo.getLevelId(),activityVO.getMbrLevelCode())){
                 continue;
             }
+            log.info("消费会员等级验证完毕333333333333333333333333333");
             //判断订单来源
             if(!ExecuteParamCheckUtil.CheckOrderFrom(vo.getOrderFrom(),activityVO.getOrderSource())){
                 continue;
             }
-
+            log.info("消费会员订单来源验证完毕444444444444444444444444444444444");
             //判断适用商品
             if (!ExecuteParamCheckUtil.CheckCommodity(vo,activityVO)){
                 continue;
             }
+            log.info("消费会员适用商品来源验证完毕55555555555555555555555555555555555");
             //判断适用门店
             if (!ExecuteParamCheckUtil.CheckserviceStore(vo,activityVO)){
                 continue;
             }
-
+            log.info("消费会员适用门店来源验证完毕6666666666666666666666666666666666666");
+            log.info("消费活动验证通过了通过了通过了通过了通过了通过了通过了通过了通过了通过了通过了通过了+++++++++++++++");
 
             //增加积分奖励新增接口
             if (null!=activityVO.getPoints()){
-                log.info("新增消费活动积分奖励奖励");
+                log.info("新增消费活动积分奖励奖励+++++++++++++++");
                 AwardBO bo = new AwardBO();
                 IntegralChangeRequestModel integralChangeRequestModel =new IntegralChangeRequestModel();
                 integralChangeRequestModel.setSysCompanyId(activityVO.getSysCompanyId());
@@ -665,13 +666,13 @@ public class ActivityOrderServiceImpl implements ActivityOrderService {
                 integralChangeRequestModel.setChangeDate(new Date());
                 bo.setIntegralRecordModel(integralChangeRequestModel);
                 bo.setMktType(MktSmartTypeEnum.SMART_TYPE_INTEGRAL.getCode());
-                log.info("新增积分奖励="+activityVO.getPoints());
+                log.info("新增积分奖励========================"+activityVO.getPoints());
                 award.execute(bo);
             }
 
 
             // 增加卷奖励接口
-            log.info("新增消费活动券奖励券奖励");
+            log.info("新增消费活动券奖励券奖励奖励奖励奖励奖励奖励奖励奖励");
             MktCouponPOExample example = new  MktCouponPOExample();
             example.createCriteria().andBizIdEqualTo(activityVO.getMktActivityId()).andValidEqualTo(true);
             List<MktCouponPO> mktCouponPOs= mktCouponPOMapper.selectByExample(example);

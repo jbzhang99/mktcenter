@@ -161,13 +161,15 @@ public class ActivityUpgradeServiceImpl implements ActivityUpgradeService {
             ActivityVO vo = new ActivityVO();
             vo.setMbrLevelCode(bo.getActivityVO().getMbrLevelCode());
             vo.setLongTerm(bo.getActivityVO().getLongTerm());
-           vo.setSysBrandId(activityVO.getSysBrandId());
-           vo.setActivityType(ActivityTypeEnum.ACTIVITY_TYPE_UPGRADE.getCode());
+            vo.setSysBrandId(activityVO.getSysBrandId());
+            vo.setActivityType(ActivityTypeEnum.ACTIVITY_TYPE_UPGRADE.getCode());
+           //判断过滤禁用状态
+           vo.setStop("ture");
             List<ActivityVO> activityUpgradeList = mktActivityUpgradePOMapper.getActivityUpgradeList(vo);
            if(!CollectionUtils.isEmpty(activityUpgradeList)){
                for (ActivityVO activity:activityUpgradeList) {
                    //判断适用商品
-                   if (!ExecuteParamCheckUtil.addActivitCheck(bo,activity)){
+                   if (false==activity.getStoreLimit() ||!ExecuteParamCheckUtil.addActivitCheck(bo,activity)){
                        responseData.setCode(SysResponseEnum.FAILED.getCode());
                        responseData.setMessage("已存在同一类型的长期活动!");
                        return responseData;
@@ -312,7 +314,7 @@ public class ActivityUpgradeServiceImpl implements ActivityUpgradeService {
                 List<Long> level = new ArrayList<>();
                 level.add(mbrLevel.getMbrLevelId());
                 membersInfoSearchVo.setLevelID(level);
-                memberMessage.getMemberList(messageVOList, membersInfoSearchVo);
+                memberMessage.getMemberList(messageVOList, membersInfoSearchVo,activityVO);
             }else{
                 //自定义时间发送 加人job任务
                 jobUtil.addSendMessageJob(stageUser,activityVO,activityCode);
@@ -486,7 +488,7 @@ public class ActivityUpgradeServiceImpl implements ActivityUpgradeService {
             List<Long> level = new ArrayList<>();
             level.add(mbrLevel.getMbrLevelId());
             membersInfoSearchVo.setLevelID(level);
-            memberMessage.getMemberList(messageVOList, membersInfoSearchVo);
+            memberMessage.getMemberList(messageVOList, membersInfoSearchVo,activityVO);
         }
         responseData.setCode(SysResponseEnum.SUCCESS.getCode());
         responseData.setMessage(SysResponseEnum.SUCCESS.getMessage());
@@ -578,7 +580,7 @@ public class ActivityUpgradeServiceImpl implements ActivityUpgradeService {
             return responseData;
         }
         for (ActivityVO activityVO:upgradeList) {
-            if (!ExecuteParamCheckUtil.implementActivitCheck(vo,activity)){
+            if (!ExecuteParamCheckUtil.implementActivitCheck(vo,activityVO)){
                 continue;
             }
             ////增加积分奖励新增接口

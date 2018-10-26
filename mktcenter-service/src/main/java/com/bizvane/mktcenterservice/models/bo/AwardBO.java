@@ -6,10 +6,7 @@ import com.bizvane.couponfacade.models.vo.SendCouponSimpleRequestVO;
 import com.bizvane.members.facade.models.IntegralRecordModel;
 import com.bizvane.members.facade.models.MemberInfoModel;
 import com.bizvane.members.facade.service.card.request.IntegralChangeRequestModel;
-import com.bizvane.messagefacade.models.vo.GenrealGetMessageVO;
-import com.bizvane.messagefacade.models.vo.GenrealSendMessageVO;
-import com.bizvane.messagefacade.models.vo.MemberMessageVO;
-import com.bizvane.messagefacade.models.vo.SysSmsConfigVO;
+import com.bizvane.messagefacade.models.vo.*;
 import com.bizvane.mktcenterservice.models.vo.MessageVO;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.annotations.ApiModelProperty;
@@ -72,6 +69,18 @@ public class AwardBO {
      * 查询短信数量
      */
     private GenrealGetMessageVO  genrealGetMessageVO;
+    /**
+     * 发送微信短信消息模板类
+     */
+    private ActivityMessageVO activityMessageVO;
+
+    public ActivityMessageVO getActivityMessageVO() {
+        return activityMessageVO;
+    }
+
+    public void setActivityMessageVO(ActivityMessageVO activityMessageVO) {
+        this.activityMessageVO = activityMessageVO;
+    }
 
     public IntegralChangeRequestModel getIntegralRecordModel() {
         return integralRecordModel;
@@ -152,4 +161,5 @@ public class AwardBO {
     public void setGenrealGetMessageVO(GenrealGetMessageVO genrealGetMessageVO) {
         this.genrealGetMessageVO = genrealGetMessageVO;
     }
+
 }

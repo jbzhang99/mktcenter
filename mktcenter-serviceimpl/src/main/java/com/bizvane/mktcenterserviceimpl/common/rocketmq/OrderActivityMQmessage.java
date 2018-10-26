@@ -38,18 +38,24 @@ public class OrderActivityMQmessage implements MessageListener {
         OrderModel model = JSONObject.parseObject(modelStr, OrderModel.class);
         log.info("MQ消息队列获取参数是+======="+ JSON.toJSONString(model));
         OrderModelBo bo = new OrderModelBo();
-        bo.setMemberCode(Long.parseLong(model.getMemberCode()));
+        bo.setMemberCode(model.getMemberCode());
         bo.setBrandId(Math.toIntExact(model.getBrandId()));
         bo.setOrderFrom(model.getOrderFrom());
         bo.setServiceStoreId(model.getServiceStoreId());
         bo.setPayMoney(model.getPayMoney());
         //会员等级id
+        log.info("开始查询会员等级======="+ bo.toString());
         ResponseData<MemberCardLevelModel>  memberCardLevelModel =memberCardProgramApiService.queryMemberCardInfo(model.getMemberCode());
         bo.setLevelId(memberCardLevelModel.getData().getLevelId());
+        //todo 需要会员模块提供会员范围界定接口
+        bo.setMemberType(0);
+        log.info("查询会员等级完成+======="+ memberCardLevelModel.getData().getLevelId());
         //商品编码
         ResponseData<String> productNossu = memberOrderApiService.queryOrderProductNo(model.getOrderNo());
         bo.setProductNos(productNossu.getData());
+        log.info("查询会员等级完成+======="+ productNossu.getData());
         //店铺code
+        log.info("开始执行执行消费活动++++++++++++++=======");
         activityOrderService.executeOrder(bo);
         //如果想测试消息重投的功能,可以将Action.CommitMessage 替换成Action.ReconsumeLater
         return Action.CommitMessage;

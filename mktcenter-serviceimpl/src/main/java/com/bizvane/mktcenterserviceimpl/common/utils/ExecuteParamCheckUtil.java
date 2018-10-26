@@ -39,7 +39,7 @@ public class ExecuteParamCheckUtil {
      */
     public static Boolean CheckMbrLevelCode(Long levelId,String mbrLevelCode){
         boolean  falg;
-        if (mbrLevelCode.equals("0") ||mbrLevelCode.equals(levelId)){
+        if (mbrLevelCode.equals(levelId.toString())){
             falg = true;
         }else {
             falg=false;
@@ -199,7 +199,7 @@ public class ExecuteParamCheckUtil {
                 //表里查出来的
                 String stroeList = activityVO.getStoreLimitList();
                 List<String> productNoList = Arrays.asList(stroeList.split(","));
-                falg=productNoList.contains(vo.getOpenCardStoreId());
+                falg=productNoList.contains(vo.getOpenCardStoreId().toString());
 
             }
             //判断是否是白名单

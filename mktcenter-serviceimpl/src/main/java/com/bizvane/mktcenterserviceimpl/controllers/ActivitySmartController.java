@@ -77,8 +77,9 @@ public class ActivitySmartController {
             @ApiImplicitParam(name = "mktActivitySmartGroupId", dataType = "Long", value = "智能营销会员分组id", paramType = "query", required = true),
     })
     @PostMapping("getSmartActivityGroupById")
-    public ResponseData<MktActivitySmartGroupPO> getSmartActivityGroupById(Long mktActivitySmartGroupId){
-        return activitySmartService.getSmartActivityGroupById(mktActivitySmartGroupId);
+    public ResponseData<MktActivitySmartGroupPO> getSmartActivityGroupById(Long mktActivitySmartGroupId,HttpServletRequest request){
+        SysAccountPO stageUser = TokenUtils.getStageUser(request);
+        return activitySmartService.getSmartActivityGroupById(mktActivitySmartGroupId,stageUser);
     }
 
     /**

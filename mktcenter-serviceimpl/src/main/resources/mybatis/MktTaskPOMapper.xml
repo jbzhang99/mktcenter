@@ -807,11 +807,10 @@
       FROM
           t_mkt_task tta
       INNER JOIN t_mkt_task_order tto ON tta.mkt_task_id = tto.mkt_task_id
-      LEFT JOIN t_mkt_coupon tmc ON tta.mkt_task_id = tmc.biz_id
+      LEFT JOIN t_mkt_coupon tmc ON tta.mkt_task_id = tmc.biz_id AND tmc.valid = 1
       WHERE
           tta.valid = 1
       AND tto.valid = 1
-      AND tmc.valid = 1
       AND  tta.check_status=3
       AND  tta.task_status=2
       AND tta.task_type  BETWEEN 4  AND 5
@@ -826,7 +825,7 @@
       AND tta.end_time <![CDATA[>=]]> #{placeOrderTime}
     </if>
     <if test="orderSource != null and orderSource!= '' ">
-      AND (order_source=#{orderSource} or order_source=0)
+      AND (tto.order_source=#{orderSource} or tto.order_source=0)
     </if>
   </select>
 
@@ -849,25 +848,30 @@
     tta.remark,
     tti.mkt_task_id,
     tti.invite_num,
+    tti.is_store_limit,
+    tti.store_limit_type,
+    tti.store_limit_list,
     tmc.mkt_coupon_id,
     tmc.coupon_definition_id,
     tmc.coupon_name
     FROM
     t_mkt_task tta
     INNER JOIN t_mkt_task_invite tti ON tta.mkt_task_id = tti.mkt_task_id
-    LEFT JOIN t_mkt_coupon tmc ON tta.mkt_task_id = tmc.biz_id
+    LEFT JOIN t_mkt_coupon tmc ON tta.mkt_task_id = tmc.biz_id  AND tmc.valid = 1
     WHERE
     tta.valid = 1
     AND tti.valid = 1
-    AND tmc.valid = 1
     AND  tta.check_status=3
     AND  tta.task_status=2
     AND tta.task_type =3
+    <if test="mktTaskId != null and mktTaskId!= '' ">
+      AND  tta.mkt_task_id=#{mktTaskId}
+    </if>
     <if test="sysCompanyId != null and sysCompanyId!= '' ">
-      AND  sys_company_id=#{sysCompanyId}
+      AND  tta.sys_company_id=#{sysCompanyId}
     </if>
     <if test="sysBrandId != null and sysBrandId!= '' ">
-      AND sys_brand_id=#{sysBrandId}
+      AND tta.sys_brand_id=#{sysBrandId}
     </if>
     <if test="placeOrderTime!=null and placeOrderTime!=''">
       AND tta.start_time <![CDATA[<=]]>#{placeOrderTime}
@@ -894,20 +898,25 @@
     tta.remark,
     ttp.mkt_task_profile_id,
     ttp.property_code,
+    ttp.is_store_limit,
+    ttp.store_limit_type,
+    ttp.store_limit_list,
     tmc.mkt_coupon_id,
     tmc.coupon_definition_id,
     tmc.coupon_name
     FROM
     t_mkt_task tta
     INNER JOIN t_mkt_task_profile ttp ON tta.mkt_task_id = ttp.mkt_task_id
-    LEFT JOIN t_mkt_coupon tmc ON tta.mkt_task_id = tmc.biz_id
+    LEFT JOIN t_mkt_coupon tmc ON tta.mkt_task_id = tmc.biz_id  AND tmc.valid = 1
     WHERE
     tta.valid = 1
     AND ttp.valid = 1
-    AND tmc.valid = 1
     AND  tta.check_status=3
     AND  tta.task_status=2
     AND tta.task_type =1
+    <if test="mktTaskId != null and mktTaskId!= '' ">
+      AND  tta.mkt_task_id=#{mktTaskId}
+    </if>
     <if test="sysCompanyId != null and sysCompanyId!= '' ">
       AND  tta.sys_company_id=#{sysCompanyId}
     </if>
@@ -941,20 +950,26 @@
     tts.mkt_task_share_id,
     tts.share_times,
     tts.share_url_type,
+    tts.is_store_limit,
+    tts.store_limit_type,
+    tts.store_limit_list,
     tmc.mkt_coupon_id,
     tmc.coupon_definition_id,
     tmc.coupon_name
     FROM
     t_mkt_task tta
     INNER JOIN t_mkt_task_share tts ON tta.mkt_task_id = tts.mkt_task_id
-    LEFT JOIN t_mkt_coupon tmc ON tta.mkt_task_id = tmc.biz_id
+    LEFT JOIN t_mkt_coupon tmc ON tta.mkt_task_id = tmc.biz_id  AND tmc.valid = 1
     WHERE
     tta.valid = 1
     AND tts.valid = 1
-    AND tmc.valid = 1
     AND  tta.check_status=3
     AND  tta.task_status=2
     AND tta.task_type =2
+
+    <if test="mktTaskId != null and mktTaskId!= '' ">
+      AND  tta.mkt_task_id=#{mktTaskId}
+    </if>
     <if test="sysCompanyId != null and sysCompanyId!= '' ">
       AND  tta.sys_company_id=#{sysCompanyId}
     </if>
@@ -1111,8 +1126,8 @@
     tmt.task_type,
     tmt.start_time,
     tmt.end_time,
-    IF(count(tmtr.consume_amount)&gt;=tmto.consume_amount,'1/1','0/1') AS task_progress,
-    IF(count(tmtr.consume_amount)&gt;=tmto.consume_amount,1,0) AS rewarded,
+    IF(sum(tmtr.consume_amount)&gt;=tmto.consume_amount,'1/1','0/1') AS task_progress,
+    IF(sum(tmtr.consume_amount)&gt;=tmto.consume_amount,1,0) AS rewarded,
     IF(tmto.order_source <![CDATA[ <> ]]>1, 2,1) as sourceType
     FROM
     t_mkt_task  tmt

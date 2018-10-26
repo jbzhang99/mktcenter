@@ -8,7 +8,7 @@ import java.math.BigDecimal;
  */
 public class TotalStatisticsBO {
     private BigDecimal totalConsume;
-    private  Long totalTimes;
+    private  Integer totalTimes;
 
     public BigDecimal getTotalConsume() {
         return totalConsume;
@@ -18,11 +18,11 @@ public class TotalStatisticsBO {
         this.totalConsume = totalConsume;
     }
 
-    public Long getTotalTimes() {
+    public Integer getTotalTimes() {
         return totalTimes;
     }
 
-    public void setTotalTimes(Long totalTimes) {
+    public void setTotalTimes(Integer totalTimes) {
         this.totalTimes = totalTimes;
     }
 }

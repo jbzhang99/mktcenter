@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @Time: 2018/9/1 15:36
  */
 @RestController
-@RequestMapping("taskShareRpc")
+@RequestMapping("taskProfileRpc")
 public class TaskProfileRpcController {
 
    @Autowired

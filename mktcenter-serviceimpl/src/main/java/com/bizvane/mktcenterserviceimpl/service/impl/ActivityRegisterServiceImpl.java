@@ -170,11 +170,13 @@ public class ActivityRegisterServiceImpl implements ActivityRegisterService {
             vo.setLongTerm(bo.getActivityVO().getLongTerm());
             vo.setSysBrandId(activityVO.getSysBrandId());
             vo.setActivityType(ActivityTypeEnum.ACTIVITY_TYPE_REGISGER.getCode());
+            //判断过滤禁用状态
+            vo.setStop("ture");
             List<ActivityVO> registerList = mktActivityRegisterPOMapper.getActivityList(vo);
             if(!CollectionUtils.isEmpty(registerList)){
                 for (ActivityVO activity:registerList) {
                     //判断适用商品
-                    if (!ExecuteParamCheckUtil.addActivitCheck(bo,activity)){
+                    if (false==activity.getStoreLimit() ||!ExecuteParamCheckUtil.addActivitCheck(bo,activity)){
                          responseData.setCode(SysResponseEnum.FAILED.getCode());
                          responseData.setMessage("已存在同一类型的长期活动!");
                          return responseData;
@@ -262,6 +264,7 @@ public class ActivityRegisterServiceImpl implements ActivityRegisterService {
         mktActivityRegisterPO.setMbrLevelCode(activityVO.getMbrLevelCode());
         mktActivityRegisterPO.setMbrLevelName(activityVO.getMbrLevelName());
         mktActivityRegisterPO.setIsStoreLimit(activityVO.getStoreLimit());
+        mktActivityRegisterPO.setOfflineCardStatus(activityVO.getOfflineCardStatus());
         if (true==activityVO.getStoreLimit()){
                 mktActivityRegisterPO.setStoreLimitList(activityVO.getStoreLimitList());
                 mktActivityRegisterPO.setStoreLimitType(activityVO.getStoreLimitType());
@@ -305,11 +308,12 @@ public class ActivityRegisterServiceImpl implements ActivityRegisterService {
                 MembersInfoSearchVo membersInfoSearchVo = new MembersInfoSearchVo();
                 membersInfoSearchVo.setPageNumber(1);
                 membersInfoSearchVo.setPageSize(10000);
-                membersInfoSearchVo.setCardStatus(1);
+                membersInfoSearchVo.setCardStatus(2);
                 membersInfoSearchVo.setBrandId(activityVO.getSysBrandId());
+                membersInfoSearchVo.setSysCompanyId(activityVO.getSysCompanyId());
                 log.info("开卡活动-查询发送短信高级搜索参数+=====："+JSON.toJSONString(membersInfoSearchVo));
                 memberMessage.sendDXmessage(messageVOList, membersInfoSearchVo);
-               /* //查询对应的会员  发送微信模板消息
+                //查询对应的会员  发送微信模板消息
                 WxChannelInfoSearchVo wxChannelInfoSearchVo = new WxChannelInfoSearchVo();
                 wxChannelInfoSearchVo.setPageNum(1);
                 wxChannelInfoSearchVo.setPageSize(10000);
@@ -318,7 +322,7 @@ public class ActivityRegisterServiceImpl implements ActivityRegisterService {
                 wxChannelInfoSearchVo.setMiniProgram((byte) 1);
                 wxChannelInfoSearchVo.setBrandId(activityVO.getSysBrandId());
                 log.info("开卡活动-查询发送微信模板高级搜索参数+=====："+JSON.toJSONString(wxChannelInfoSearchVo));
-                memberMessage.sendWXmessage(messageVOList, wxChannelInfoSearchVo);*/
+                memberMessage.sendWXmessage(messageVOList, wxChannelInfoSearchVo,activityVO);
             }else{
                 //自定义时间发送 加人job任务
                 jobUtil.addSendMessageJob(stageUser,activityVO,activityCode);
@@ -352,6 +356,7 @@ public class ActivityRegisterServiceImpl implements ActivityRegisterService {
     @Transactional
     public ResponseData<Integer> executeActivity(MemberInfoModel vo) {
         log.info("开卡活动-开卡活动执行开始");
+        log.info("开卡活动-开卡活动传过来参数======================："+JSON.toJSONString(vo));
         //返回对象
         ResponseData responseData = new ResponseData();
         //查询品牌下所有执行中的活动
@@ -369,10 +374,12 @@ public class ActivityRegisterServiceImpl implements ActivityRegisterService {
         }
         for (ActivityVO activityVO:registerList) {
             //判断开卡会员适合哪个活动根据开卡会员等级判断
-            if( null==activityVO.getMbrLevelCode()||activityVO.getMbrLevelCode().equals(vo.getLevelId()) ){
-                if (!ExecuteParamCheckUtil.implementActivitCheck(vo,activity)){
+            if( null==activityVO.getMbrLevelCode()||activityVO.getMbrLevelCode().equals(vo.getLevelId().toString()) ){
+                log.info("开始验证门店");
+                if (!ExecuteParamCheckUtil.implementActivitCheck(vo,activityVO)){
                     continue;
                 }
+                log.info("开卡活动-限制条件通过");
                 //增加积分奖励新增接口
                    if(null!=activityVO.getPoints()){
                        AwardBO bo = new AwardBO();
@@ -388,38 +395,42 @@ public class ActivityRegisterServiceImpl implements ActivityRegisterService {
                        integralChangeRequestModel.setChangeDate(new Date());
                        bo.setIntegralRecordModel(integralChangeRequestModel);
                        bo.setMktType(MktSmartTypeEnum.SMART_TYPE_INTEGRAL.getCode());
+                       log.info("开卡活动-开卡活动合格开始增加积分+++++++++");
                        award.execute(bo);
 
-                       // 增加卷奖励接口
-                       MktCouponPOExample example = new  MktCouponPOExample();
-                       example.createCriteria().andBizIdEqualTo(activityVO.getMktActivityId()).andValidEqualTo(true);;
-                       List<MktCouponPO> mktCouponPOs= mktCouponPOMapper.selectByExample(example);
-                       if(!CollectionUtils.isEmpty(mktCouponPOs)){
-                           for (MktCouponPO mktCouponPO:mktCouponPOs) {
-                               AwardBO awardBO = new AwardBO();
-                               SendCouponSimpleRequestVO sendCouponSimpleRequestVO = new SendCouponSimpleRequestVO();
-                               sendCouponSimpleRequestVO.setMemberCode(vo.getMemberCode());
-                               sendCouponSimpleRequestVO.setCouponDefinitionId(mktCouponPO.getCouponDefinitionId());
-                               sendCouponSimpleRequestVO.setSendBussienId(mktCouponPO.getBizId());
-                               sendCouponSimpleRequestVO.setSendType(SendTypeEnum.SEND_COUPON_OPNE_CARD.getCode());
-                               sendCouponSimpleRequestVO.setCompanyId(vo.getSysCompanyId());
-                               sendCouponSimpleRequestVO.setBrandId(vo.getBrandId());
-                               awardBO.setSendCouponSimpleRequestVO(sendCouponSimpleRequestVO);
-                               awardBO.setMktType(MktSmartTypeEnum.SMART_TYPE_COUPON.getCode());
-                               award.execute(awardBO);
-                           }
-                       }
-                       //新增积分到会员参与活动记录表中数据
-                       MktActivityRecordPO po = new MktActivityRecordPO();
-                       po.setActivityType(ActivityTypeEnum.ACTIVITY_TYPE_REGISGER.getCode());
-                       po.setMemberCode(vo.getMemberCode());
-                       po.setParticipateDate(new Date());
-                       po.setPoints(activityVO.getPoints());
-                       po.setAcitivityId(activityVO.getMktActivityId());
-                       po.setSysBrandId(activityVO.getSysBrandId());
-                       log.info("新增积分记录表");
-                       mktActivityRecordPOMapper.insertSelective(po);
                    }
+                // 增加卷奖励接口
+                MktCouponPOExample example = new  MktCouponPOExample();
+                example.createCriteria().andBizIdEqualTo(activityVO.getMktActivityId()).andValidEqualTo(true);;
+                List<MktCouponPO> mktCouponPOs= mktCouponPOMapper.selectByExample(example);
+                if(!CollectionUtils.isEmpty(mktCouponPOs)){
+                    for (MktCouponPO mktCouponPO:mktCouponPOs) {
+                        AwardBO awardBO = new AwardBO();
+                        SendCouponSimpleRequestVO sendCouponSimpleRequestVO = new SendCouponSimpleRequestVO();
+                        sendCouponSimpleRequestVO.setMemberCode(vo.getMemberCode());
+                        sendCouponSimpleRequestVO.setCouponDefinitionId(mktCouponPO.getCouponDefinitionId());
+                        sendCouponSimpleRequestVO.setSendBussienId(mktCouponPO.getBizId());
+                        sendCouponSimpleRequestVO.setSendType(SendTypeEnum.SEND_COUPON_OPNE_CARD.getCode());
+                        sendCouponSimpleRequestVO.setCompanyId(vo.getSysCompanyId());
+                        sendCouponSimpleRequestVO.setBrandId(vo.getBrandId());
+                        awardBO.setSendCouponSimpleRequestVO(sendCouponSimpleRequestVO);
+                        awardBO.setMktType(MktSmartTypeEnum.SMART_TYPE_COUPON.getCode());
+                        log.info("开卡活动-开卡活动合格开始增加券+++++++++");
+                        award.execute(awardBO);
+                    }
+                }
+                //新增积分到会员参与活动记录表中数据
+                MktActivityRecordPO po = new MktActivityRecordPO();
+                po.setActivityType(ActivityTypeEnum.ACTIVITY_TYPE_REGISGER.getCode());
+                po.setMemberCode(vo.getMemberCode());
+                po.setParticipateDate(new Date());
+                if(null!=activityVO.getPoints()){
+                    po.setPoints(activityVO.getPoints());
+                }
+                po.setAcitivityId(activityVO.getMktActivityId());
+                po.setSysBrandId(activityVO.getSysBrandId());
+                log.info("新增积分记录表");
+                mktActivityRecordPOMapper.insertSelective(po);
 
             }
 
@@ -585,7 +596,7 @@ public class ActivityRegisterServiceImpl implements ActivityRegisterService {
             membersInfoSearchVo.setPageSize(10000);
             membersInfoSearchVo.setCardStatus(1);
             membersInfoSearchVo.setBrandId(activityVO.getSysBrandId());
-            memberMessage.getMemberList(messageVOList, membersInfoSearchVo);
+            memberMessage.getMemberList(messageVOList, membersInfoSearchVo,activityVO);
             //查询对应的会员   发送微信模板消息
         }
         responseData.setCode(SysResponseEnum.SUCCESS.getCode());

@@ -604,12 +604,13 @@
     tma.valid,
 
     tmab.mkt_activity_vip_aniversary_id,
-    tmab.mkt_activity_id,
     tmab.member_type,
     tmab.days_ahead,
     tmab.is_store_limit,
     tmab.store_limit_type,
-    tmab.store_limit_list
+    tmab.store_limit_list,
+    tmab.mbr_level_code,
+    tmab.mbr_level_name
     FROM
     `t_mkt_activity` tma
     INNER JOIN t_mkt_activity_vip_aniversary tmab ON tma.mkt_activity_id = tmab.mkt_activity_id
@@ -640,7 +641,10 @@
     </if>
     <!--活动编号-->
     <if test="activityCode != null and activityCode!= ''">
-      AND tma.activity_code = #{activityCode}
+      AND tma.activity_code LIKE "%"#{activityCode}"%"
+    </if>
+    <if test="activityName != null and activityName!= ''">
+      AND tma.activity_name LIKE "%"#{activityName}"%"
     </if>
   </select>
 </mapper>

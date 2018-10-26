@@ -520,7 +520,8 @@
      tmm.create_date,
      tmm.modified_user_name,
      tmm.modified_date,
-     tmm.valid
+     tmm.valid,
+     tmm.qrcode
     from t_mkt_activity tma
     left join t_mkt_activity_manual tmm
     on tma.mkt_activity_id = tmm.mkt_activity_id
@@ -547,8 +548,8 @@
      <if test="endTime != null ">
        and <![CDATA[ tma.end_time <=#{endTime,jdbcType=TIMESTAMP}]]>
      </if>
-     <if test="activityName != null and activityName != '' ">
-       AND tma.activity_name = #{activityName,jdbcType=VARCHAR}
+     <if test="activityName != null and activityName!= ''">
+       AND tma.activity_name LIKE "%"#{activityName}"%"
      </if>
      <if test="sysBrandId != null and sysBrandId != '' ">
        AND tma.sys_brand_id = #{sysBrandId,jdbcType=BIGINT}
@@ -591,7 +592,8 @@
     tmm.create_date,
     tmm.modified_user_name,
     tmm.modified_date,
-    tmm.valid
+    tmm.valid,
+    tmm.qrcode
     FROM
     `t_mkt_activity` tma
     INNER JOIN t_mkt_activity_manual tmm ON tma.mkt_activity_id = tmm.mkt_activity_id

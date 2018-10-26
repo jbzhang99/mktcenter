@@ -1,5 +1,6 @@
 package com.bizvane.mktcenterserviceimpl.service.jobhandler;
 
+import com.alibaba.fastjson.JSON;
 import com.bizvane.mktcenterservice.models.vo.ActivityVO;
 import com.bizvane.mktcenterserviceimpl.common.award.MemberMessageSend;
 import com.bizvane.mktcenterserviceimpl.common.enums.ActivityStatusEnum;
@@ -8,6 +9,7 @@ import com.bizvane.mktcenterserviceimpl.mappers.MktActivityVipAniversaryPOMapper
 import com.xxl.job.core.biz.model.ReturnT;
 import com.xxl.job.core.handler.IJobHandler;
 import com.xxl.job.core.handler.annotation.JobHandler;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -18,6 +20,7 @@ import java.util.List;
  */
 @JobHandler(value="everyDayActivityAniversary")
 @Component
+@Slf4j
 public class EveryDayAniversaryJobHandler extends IJobHandler {
     @Autowired
     private MktActivityVipAniversaryPOMapper mktActivityVipAniversaryPOMapper;
@@ -33,6 +36,7 @@ public class EveryDayAniversaryJobHandler extends IJobHandler {
         vo.setActivityType(ActivityTypeEnum.ACTIVITY_TYPE_ANNIVERSARY.getCode());
         vo.setActivityStatus(ActivityStatusEnum.ACTIVITY_STATUS_EXECUTING.getCode());
         List<ActivityVO> activityAniversaryList = mktActivityVipAniversaryPOMapper.getActivityAniversaryList(vo);
+        log.info("定时器开始执行生日活动+++++====="+ JSON.toJSONString(activityAniversaryList));
         memberMessage.sendAniversaryCoupon(activityAniversaryList);
         returnT.setCode(0);
         returnT.setContent("活动执行完毕");
