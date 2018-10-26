@@ -71,6 +71,7 @@ public class AwardFactory {
             SendCouponSimpleRequestVO va = bo.getSendCouponSimpleRequestVO();
             log.info("开始执行发券操作参数="+ JSON.toJSONString(va));
             ResponseData<Object> simple = sendCouponServiceFeign.simple(va);
+            log.info("发券返回参数======"+JSON.toJSONString(simple));
             log.info("发券操作完成完成了完成了完成了完成了--"+JSON.toJSONString(simple));
         } catch (Exception e) {
             log.error("com.bizvane.mktcenterserviceimpl.common.award.AwardFactory.awardCouponSimple error--"+ e.getMessage());
@@ -133,12 +134,15 @@ public class AwardFactory {
      */
     @Async("asyncServiceExecutor")
     public ResponseData<String> sendSms(AwardBO bo){
+        ResponseData responseData = new ResponseData();
         /*msgvo.setChannelName("moments3.4");//平台
         msgvo.setChannelAccount("JJ0253");//账号
         msgvo.setChannelPassword("513678");//密码
         msgvo.setChannelService("http://TSN19.800CT.COM:8901/MWGate/wmgw.asmx/MongateSendSubmit");//路径*/
         log.info("开始执行发送短信操作参数="+ JSON.toJSONString(bo.getActivityMessageVO()));
-      return templateMessageServiceFeign.sendSmsTemplateMessage(bo.getActivityMessageVO());
+        ResponseData<String> response =templateMessageServiceFeign.sendSmsTemplateMessage(bo.getActivityMessageVO());
+        log.info("发送短信返回参数="+ JSON.toJSONString(response));
+        return responseData;
 
     }
 
@@ -152,7 +156,8 @@ public class AwardFactory {
     public ResponseData<String> sendWxTemplateMessage(AwardBO bo){
         ResponseData responseData = new ResponseData();
         log.info("开始执行发送模板消息操作参数="+ JSON.toJSONString(bo.getActivityMessageVO()));
-        templateMessageServiceFeign.sendTemplateMessage(bo.getActivityMessageVO());
+        ResponseData<String>  response = templateMessageServiceFeign.sendTemplateMessage(bo.getActivityMessageVO());
+        log.info("发送微信返回参数="+ JSON.toJSONString(response));
         log.info("发送模板消息操作完成完成了完成了完成了完成了");
         return responseData;
     }
