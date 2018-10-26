@@ -141,7 +141,7 @@ public interface TaskService {
      * @param vo
      * @return
      */
-    public ResponseData<com.github.pagehelper.PageInfo<MktTaskPOWithBLOBs>> getTaskByTaskType(TaskVO vo, PageForm pageForm);
+    public ResponseData<com.github.pagehelper.PageInfo<MktTaskPOWithBLOBs>> getTaskByTaskType(TaskSearchVO vo);
 
     /**
      * 新增

@@ -102,9 +102,15 @@ public class TaskController {
 
         return taskService.doAnalysis(vo,sysAccountPo);
     }
+
+    /**
+     * 进行中任务的搜索
+     * @param vo
+     * @return
+     */
     @RequestMapping("getTaskByTaskType")
-    public ResponseData<com.github.pagehelper.PageInfo<MktTaskPOWithBLOBs>> getTaskByTaskType(TaskVO vo, PageForm pageForm){
-       return taskService.getTaskByTaskType(vo,pageForm);
+    public ResponseData<com.github.pagehelper.PageInfo<MktTaskPOWithBLOBs>> getTaskByTaskType(TaskSearchVO vo){
+       return taskService.getTaskByTaskType(vo);
     }
     @RequestMapping("sendBachMSM")
     public void sendBachMSM(Long mktTaskId,Integer taskType,Long sysCompanyId,Long sysBrandId,String msgContent,Boolean exceptWechat){

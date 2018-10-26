@@ -989,40 +989,43 @@ public class TaskServiceImpl implements TaskService {
 
     /**
      * 根据任务类型查询任务-已经审核
+     * 查询进行中的任务
      */
     @Override
-    public ResponseData<PageInfo<MktTaskPOWithBLOBs>> getTaskByTaskType(TaskVO vo, PageForm pageForm) {
+    public ResponseData<PageInfo<MktTaskPOWithBLOBs>> getTaskByTaskType(TaskSearchVO vo) {
+        log.info("---查询进行中的任务---参数--"+JSON.toJSONString(vo));
         List<MktTaskPOWithBLOBs> lists=null;
         ResponseData<PageInfo<MktTaskPOWithBLOBs>> result = new ResponseData<PageInfo<MktTaskPOWithBLOBs>>();
 
         //1完善资料，2分享任务，3邀请注册，4累计消费次数，5累计消费金额',
-        PageHelper.startPage(pageForm.getPageNumber(), pageForm.getPageSize());
-
+        PageHelper.startPage(vo.getPageNumber(), vo.getPageSize());
         MktTaskPOExample mktTaskPOExample = new MktTaskPOExample();
         MktTaskPOExample.Criteria criteria = mktTaskPOExample.createCriteria();
         criteria.andTaskTypeEqualTo(vo.getTaskType()).andSysBrandIdEqualTo(vo.getBrandId()).andValidEqualTo(Boolean.TRUE);
-
         String taskName = vo.getTaskName();
         if (StringUtils.isNotBlank(taskName)){
           criteria.andTaskNameLike(new StringBuilder().append("%").append(taskName).append("%").toString());
         }
+        String taskCode = vo.getTaskCode();
+        if (StringUtils.isNotBlank(taskCode)){
+            criteria.andTaskNameLike(new StringBuilder().append("%").append(taskCode).append("%").toString());
+        }
         //时间
         Date startTime = vo.getStartTime();
-        Date endTime = vo.getEndTime();
         if (startTime!=null){
             criteria.andStartTimeGreaterThanOrEqualTo(startTime);
         }
+        Date endTime = vo.getEndTime();
         if (endTime!=null){
             criteria.andEndTimeLessThanOrEqualTo(endTime);
         }
-       //状态
         //"审核状态：1未审核，2审核中，3已审核，4已驳回"
         Integer checkStatus = vo.getCheckStatus();
-        //1待执行，2执行中，3已禁用，4已结束
-        Integer taskStatus = vo.getTaskStatus();
        if (checkStatus!=null){
            criteria.andCheckStatusEqualTo(checkStatus);
        }
+        //1待执行，2执行中，3已禁用，4已结束
+        Integer taskStatus = vo.getTaskStatus();
        if (taskStatus!=null){
            criteria.andTaskStatusEqualTo(taskStatus);
        }
