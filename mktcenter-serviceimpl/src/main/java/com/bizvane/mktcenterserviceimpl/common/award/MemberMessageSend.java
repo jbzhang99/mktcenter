@@ -279,7 +279,7 @@ public class MemberMessageSend {
                     for(MktCouponPO mktCouponPO : mktCouponPOS){
 
                         SendCouponBatchRequestVO sendCouponBatchRequestVO = new SendCouponBatchRequestVO();
-                        //sendCouponBatchRequestVO.setMemberList(memberInfoVoPages.getData().getList());
+                        sendCouponBatchRequestVO.setMemberList(memberInfoVoPages.getData().getList());
                         sendCouponBatchRequestVO.setCouponDefinitionId(mktCouponPO.getCouponDefinitionId());
                         awardBO.setMktType(MktSmartTypeEnum.SMART_TYPE_COUPON_BATCH.getCode());
                         awardBO.setSendCouponBatchRequestVO(sendCouponBatchRequestVO);
