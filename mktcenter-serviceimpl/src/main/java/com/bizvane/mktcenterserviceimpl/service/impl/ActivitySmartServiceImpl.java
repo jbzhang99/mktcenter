@@ -610,7 +610,7 @@ public class ActivitySmartServiceImpl implements ActivitySmartService {
                 //活动状态设置为待执行
                 mktActivityPOWithBLOBs.setActivityStatus(ActivityStatusEnum.ACTIVITY_STATUS_PENDING.getCode());
                 //创建任务调度
-                vo.setMktSmartType(MktSmartTypeEnum.SMART_TYPE_COUPON.getCode());
+                vo.setMktSmartType(MktSmartTypeEnum.SMART_TYPE_COUPON_BATCH.getCode());
                 jobUtil.addSmartActivityJob(stageUser,vo);
             }else{
                 //活动状态设置为执行中

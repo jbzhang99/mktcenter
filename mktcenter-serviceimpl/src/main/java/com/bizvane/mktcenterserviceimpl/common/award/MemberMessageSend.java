@@ -267,7 +267,6 @@ public class MemberMessageSend {
             ResponseData<PageInfo<MemberInfoVo>> memberInfoVoPages = membersAdvancedSearchApiService.search(membersInfoSearchVo);
             List<MemberInfoVo> memberInfoModelList = memberInfoVoPages.getData().getList();
             log.info("start deal with award");
-            AwardBO awardBO = new AwardBO();
             MktSmartTypeEnum mktSmartTypeEnum = MktSmartTypeEnum.getMktSmartTypeEnumByCode(mktSmartType);
             switch (mktSmartTypeEnum){
                 case SMART_TYPE_COUPON_BATCH:
@@ -277,7 +276,7 @@ public class MemberMessageSend {
                     List<MktCouponPO> mktCouponPOS = mktCouponPOMapper.selectByExample(mktCouponPOExample);
                     //coupon loop
                     for(MktCouponPO mktCouponPO : mktCouponPOS){
-
+                        AwardBO awardBO = new AwardBO();
                         SendCouponBatchRequestVO sendCouponBatchRequestVO = new SendCouponBatchRequestVO();
                         sendCouponBatchRequestVO.setMemberList(memberInfoVoPages.getData().getList());
                         sendCouponBatchRequestVO.setCouponDefinitionId(mktCouponPO.getCouponDefinitionId());
@@ -290,6 +289,7 @@ public class MemberMessageSend {
                 case SMART_TYPE_INTEGRAL:
                     log.info("match with SMART_TYPE_INTEGRAL");
                     for(MemberInfoModel memberInfoModel : memberInfoModelList){
+                        AwardBO awardBO = new AwardBO();
                         IntegralChangeRequestModel integralChangeRequestModel =new IntegralChangeRequestModel();
                         integralChangeRequestModel.setSysCompanyId(mktActivityPOWithBLOBs.getSysCompanyId());
                         integralChangeRequestModel.setBrandId(mktActivityPOWithBLOBs.getSysBrandId());
@@ -314,6 +314,7 @@ public class MemberMessageSend {
                     MktMessagePO mktMessagePO = mktMessagePOS.get(0);
                     //member loop
                     for(MemberInfoModel memberInfoModel : memberInfoModelList){
+                        AwardBO awardBO = new AwardBO();
                         ActivityMessageVO activityMessageVO = new ActivityMessageVO();
                         activityMessageVO.setMemberPhone(memberInfoModel.getPhone());
                         activityMessageVO.setSysBrandId(memberInfoModel.getBrandId());
@@ -334,6 +335,7 @@ public class MemberMessageSend {
                     MktMessagePO mktMessage = mktMessagePOS1.get(0);
                     //member loop
                     for(MemberInfoModel memberInfoModel : memberInfoModelList){
+                        AwardBO awardBO = new AwardBO();
                         ActivityMessageVO activityMessageVO = new ActivityMessageVO();
                         activityMessageVO.setMemberCode(memberInfoModel.getMemberCode());
                         activityMessageVO.setSysCompanyId(mktActivityPOWithBLOBs.getSysCompanyId());
