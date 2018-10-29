@@ -141,7 +141,7 @@ public interface TaskService {
      * @param vo
      * @return
      */
-    public ResponseData<com.github.pagehelper.PageInfo<MktTaskPOWithBLOBs>> getTaskByTaskType(TaskSearchVO vo);
+    public ResponseData<com.github.pagehelper.PageInfo<MktTaskPOWithBLOBs>> getTaskByTaskType(TaskSearchVO vo) throws ParseException;
 
     /**
      * 新增
