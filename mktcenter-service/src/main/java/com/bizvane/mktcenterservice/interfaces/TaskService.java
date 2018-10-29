@@ -210,6 +210,9 @@ public interface TaskService {
      * 活动、任务效果分析“发行优惠券”添加会员明细弹框；
      * @return
      */
-    ResponseData<PageInfo<CouponSendMemberListResponseVO>> findCouponSendResultTask(Long id, Integer type, SysAccountPO stageUser,
-                                                                                    PageForm pageForm,String name,String cardNo);
+    ResponseData<PageInfo<CouponSendMemberListResponseVO>> findCouponSendResultTask(Long id, Integer type, SysAccountPO stageUser, PageForm pageForm,String name,String cardNo);
+    /**
+     * 查询白名单店铺Id
+     */
+   public  List<Long>  getWhiteStoreIds(Long sysbrandId,Integer taskType);
 }

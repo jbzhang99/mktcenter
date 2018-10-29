@@ -158,4 +158,6 @@ public interface MktTaskPOMapper {
 	public List<TaskVO> getInviteTaskList(@Param("mktTaskId") Long mktTaskId);
 	public List<TaskVO> getShareTaskList(@Param("mktTaskId") Long mktTaskId);
 	public List<TaskVO> getProfileTaskList(@Param("mktTaskId") Long mktTaskId);
+
+	public  String  getWhiteStoreIds(@Param("brandId")Long brandId,@Param("taskType")Integer taskType);
 }

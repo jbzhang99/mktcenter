@@ -1300,4 +1300,38 @@
       AND tta.mkt_task_id = #{mktTaskId}
     </if>
   </select>
+
+  <select  id="getWhiteStoreIds" resultType="java.lang.String">
+    SELECT
+    group_concat(tmcon.store_limit_list) AS storeLimitList
+    FROM
+    t_mkt_task tmt
+    <if test="taskType!=null and taskType=='1'">
+      INNER JOIN
+      t_mkt_task_profile tmcon
+    </if>
+    <if test="taskType!=null and taskType=='2'">
+      INNER JOIN
+      t_mkt_task_share  tmcon
+    </if>
+    <if test="taskType!=null and taskType=='3'">
+      INNER JOIN
+      t_mkt_task_invite tmcon
+    </if>
+    <if test="taskType!=null and (taskType=='4' or taskType!='5')">
+      INNER JOIN  t_mkt_task_order tmcon
+    </if>
+    <if test="taskType!=null">
+      ON  tmt.mkt_task_id =tmcon.mkt_task_id
+      AND tmcon.valid=1
+      AND is_store_limit=1
+      AND store_limit_type2
+    </if>
+    WHERE
+    tmt.valid=1
+    AND tmt.sys_brand_id=#{brandId}
+    AND tmt.task_type=#{taskType}
+    AND tmt.check_status=3
+    AND tmt.task_status=2
+  </select>
 </mapper>
