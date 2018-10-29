@@ -1,6 +1,8 @@
 package com.bizvane.mktcenterserviceimpl.common.award;
 
 import com.alibaba.fastjson.JSON;
+import com.bizvane.centerstageservice.models.po.SysBrandPo;
+import com.bizvane.centerstageservice.rpc.BrandServiceRpc;
 import com.bizvane.couponfacade.enums.SendTypeEnum;
 import com.bizvane.couponfacade.models.vo.SendCouponBatchRequestVO;
 import com.bizvane.couponfacade.models.vo.SendCouponSimpleRequestVO;
@@ -74,6 +76,8 @@ public class MemberMessageSend {
     private MembersAdvancedSearchApiService membersAdvancedSearchApiService;
     @Autowired
     private ActivityService activityService;
+    @Autowired
+    private BrandServiceRpc brandServiceRpc;
     /**
      * 查询会员信息发送你个短信和微信消息
      * @param messageVOList
@@ -256,13 +260,13 @@ public class MemberMessageSend {
      */
     @Async("asyncServiceExecutor")
     public void sendSmart(Integer mktSmartType, MktActivityPOWithBLOBs mktActivityPOWithBLOBs, MembersInfoSearchVo membersInfoSearchVo) {
+        ResponseData<SysBrandPo> SysBrandPos = brandServiceRpc.getBrandByID(mktActivityPOWithBLOBs.getSysBrandId());
         ResponseData<PageInfo<MemberInfoVo>> memberInfoVoPage = membersAdvancedSearchApiService.search(membersInfoSearchVo);
         for (int a =1;a<=memberInfoVoPage.getData().getPages();a++){
             membersInfoSearchVo.setPageNumber(a);
             ResponseData<PageInfo<MemberInfoVo>> memberInfoVoPages = membersAdvancedSearchApiService.search(membersInfoSearchVo);
             List<MemberInfoVo> memberInfoModelList = memberInfoVoPages.getData().getList();
             log.info("start deal with award");
-            AwardBO awardBO = new AwardBO();
             MktSmartTypeEnum mktSmartTypeEnum = MktSmartTypeEnum.getMktSmartTypeEnumByCode(mktSmartType);
             switch (mktSmartTypeEnum){
                 case SMART_TYPE_COUPON_BATCH:
@@ -272,9 +276,9 @@ public class MemberMessageSend {
                     List<MktCouponPO> mktCouponPOS = mktCouponPOMapper.selectByExample(mktCouponPOExample);
                     //coupon loop
                     for(MktCouponPO mktCouponPO : mktCouponPOS){
-
+                        AwardBO awardBO = new AwardBO();
                         SendCouponBatchRequestVO sendCouponBatchRequestVO = new SendCouponBatchRequestVO();
-                        //sendCouponBatchRequestVO.setMemberList(memberInfoVoPages.getData().getList());
+                        sendCouponBatchRequestVO.setMemberList(memberInfoVoPages.getData().getList());
                         sendCouponBatchRequestVO.setCouponDefinitionId(mktCouponPO.getCouponDefinitionId());
                         awardBO.setMktType(MktSmartTypeEnum.SMART_TYPE_COUPON_BATCH.getCode());
                         awardBO.setSendCouponBatchRequestVO(sendCouponBatchRequestVO);
@@ -285,6 +289,7 @@ public class MemberMessageSend {
                 case SMART_TYPE_INTEGRAL:
                     log.info("match with SMART_TYPE_INTEGRAL");
                     for(MemberInfoModel memberInfoModel : memberInfoModelList){
+                        AwardBO awardBO = new AwardBO();
                         IntegralChangeRequestModel integralChangeRequestModel =new IntegralChangeRequestModel();
                         integralChangeRequestModel.setSysCompanyId(mktActivityPOWithBLOBs.getSysCompanyId());
                         integralChangeRequestModel.setBrandId(mktActivityPOWithBLOBs.getSysBrandId());
@@ -309,12 +314,14 @@ public class MemberMessageSend {
                     MktMessagePO mktMessagePO = mktMessagePOS.get(0);
                     //member loop
                     for(MemberInfoModel memberInfoModel : memberInfoModelList){
-                        SysSmsConfigVO sysSmsConfigVO = new SysSmsConfigVO();
-                        sysSmsConfigVO.setPhone(memberInfoModel.getPhone());
-                        sysSmsConfigVO.setMsgContent(mktMessagePO.getMsgContent());
-                        sysSmsConfigVO.setSysBrandId(memberInfoModel.getBrandId());
+                        AwardBO awardBO = new AwardBO();
+                        ActivityMessageVO activityMessageVO = new ActivityMessageVO();
+                        activityMessageVO.setMemberPhone(memberInfoModel.getPhone());
+                        activityMessageVO.setSysBrandId(memberInfoModel.getBrandId());
+                        activityMessageVO.setMemberName(memberInfoModel.getName());
+                        activityMessageVO.setSendWxmember(mktMessagePO.getMsgContent());
                         awardBO.setMktType(MktSmartTypeEnum.SMART_TYPE_SMS.getCode());
-                        awardBO.setSysSmsConfigVO(sysSmsConfigVO);
+                        awardBO.setActivityMessageVO(activityMessageVO);
                         log.info("智能营销-开始发短信短信了");
                         award.execute(awardBO);
                     }
@@ -328,15 +335,16 @@ public class MemberMessageSend {
                     MktMessagePO mktMessage = mktMessagePOS1.get(0);
                     //member loop
                     for(MemberInfoModel memberInfoModel : memberInfoModelList){
+                        AwardBO awardBO = new AwardBO();
                         ActivityMessageVO activityMessageVO = new ActivityMessageVO();
                         activityMessageVO.setMemberCode(memberInfoModel.getMemberCode());
                         activityMessageVO.setSysCompanyId(mktActivityPOWithBLOBs.getSysCompanyId());
                         activityMessageVO.setSysBrandId(mktActivityPOWithBLOBs.getSysBrandId());
-                        activityMessageVO.setSysBrandName("品牌名称");
+                        activityMessageVO.setSysBrandName(SysBrandPos.getData().getBrandName());
                         activityMessageVO.setActivityName(mktActivityPOWithBLOBs.getActivityName());
                         activityMessageVO.setActivityInterests(mktMessage.getMsgContent());
                         activityMessageVO.setMemberPhone(memberInfoModel.getPhone());
-                        //todo 缺少开始时间和结束时间
+                        activityMessageVO.setActivityLongtime("智能营销");
                         awardBO.setMktType(MktSmartTypeEnum.SMART_TYPE_WXMESSAGE.getCode());
                         awardBO.setActivityMessageVO(activityMessageVO);
                         log.info("智能营销-开始发微信微信了");

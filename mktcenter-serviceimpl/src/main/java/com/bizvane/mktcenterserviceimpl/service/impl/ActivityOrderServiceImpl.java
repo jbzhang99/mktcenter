@@ -361,7 +361,7 @@ public class ActivityOrderServiceImpl implements ActivityOrderService {
         //查询消息模板
         MktMessagePOExample exampl = new MktMessagePOExample();
         exampl.createCriteria().andBizIdEqualTo(orderList.get(0).getMktActivityId()).andValidEqualTo(true);
-        List<MktMessagePO> listMktMessage = mktMessagePOMapper.selectByExample(exampl);
+        List<MktMessagePO> listMktMessage = mktMessagePOMapper.selectByExampleWithBLOBs(exampl);
             bo.setCouponEntityAndDefinitionVOList(lists);
         if(!CollectionUtils.isEmpty(listMktMessage)){
             bo.setMessageVOList(listMktMessage);

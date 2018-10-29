@@ -5,6 +5,9 @@ import com.bizvane.centercontrolservice.models.po.SysSmsConfigPo;
 import com.bizvane.centercontrolservice.models.vo.SmsConfigVo;
 import com.bizvane.centercontrolservice.rpc.SysSmsConfigServiceRpc;
 import com.bizvane.centerstageservice.models.po.SysStorePo;
+import com.bizvane.couponfacade.interfaces.CouponEntityServiceFeign;
+import com.bizvane.couponfacade.models.vo.CouponSendMemberListRequestVO;
+import com.bizvane.couponfacade.models.vo.CouponSendMemberListResponseVO;
 import com.bizvane.messagefacade.interfaces.TemplateMessageServiceFeign;
 import com.bizvane.messagefacade.models.vo.*;
 import com.bizvane.mktcenterservice.models.vo.PageForm;
@@ -117,6 +120,10 @@ public class TaskServiceImpl implements TaskService {
     private TemplateMessageServiceFeign templateMessageServiceFeign;
     @Autowired
     private JobClient jobClient;
+    @Autowired
+    private CouponEntityServiceFeign couponEntityServiceFeign;
+
+
     /**
      * 通过id查询店铺列表
      */
@@ -209,19 +216,25 @@ public class TaskServiceImpl implements TaskService {
             //查询消息
             MktMessagePOExample mktMessagePOExample = new MktMessagePOExample();
             mktMessagePOExample.createCriteria().andValidEqualTo(true).andBizIdEqualTo(mktTaskId);
-            List<MktMessagePO> mktMessagePOList = mktMessagePOMapper.selectByExample(mktMessagePOExample);
-
+            List<MktMessagePO> mktMessagePOList =  mktMessagePOMapper.selectByExampleWithBLOBs(mktMessagePOExample);
             List<CouponDefinitionPO> couponDefinitionPOS = new ArrayList<>();
-            //查询券定义 todo
-            for (MktCouponPO mktCouponPO:mktCouponPOList){
-                Long couponDefinitionId = mktCouponPO.getCouponDefinitionId();
-                ResponseData<CouponDefinitionPO> coupon = couponDefinitionServiceFeign.findByIdRpc(couponDefinitionId);
-                CouponDefinitionPO couponDefinitionPO = coupon.getData();
-                couponDefinitionPOS.add(couponDefinitionPO);
+
+            if (CollectionUtils.isNotEmpty(mktCouponPOList)){
+                mktCouponPOList.stream().forEach(mktCouponPO->{
+                    Long couponDefinitionId = mktCouponPO.getCouponDefinitionId();
+                    ResponseData<CouponDefinitionPO> coupon = couponDefinitionServiceFeign.findByIdRpc(couponDefinitionId);
+                    CouponDefinitionPO couponDefinitionPO = coupon.getData();
+                    couponDefinitionPOS.add(couponDefinitionPO);
+                });
             }
+//            for (MktCouponPO mktCouponPO:mktCouponPOList){
+//                Long couponDefinitionId = mktCouponPO.getCouponDefinitionId();
+//                ResponseData<CouponDefinitionPO> coupon = couponDefinitionServiceFeign.findByIdRpc(couponDefinitionId);
+//                CouponDefinitionPO couponDefinitionPO = coupon.getData();
+//                couponDefinitionPOS.add(couponDefinitionPO);
+//            }
 
             if (CollectionUtils.isNotEmpty(taskVOList)){
-
                 TaskVO taskVO = taskVOList.get(0);
                 taskBO.setTaskVO(taskVO);
                 String storeLimitList = taskVO.getStoreLimitList();
@@ -232,11 +245,8 @@ public class TaskServiceImpl implements TaskService {
                     log.info("---------通过品牌Ids--"+JSON.toJSONString(storeList)+"-----获取店铺列表----------"+JSON.toJSONString(storeList));
                     taskBO.setStoreList(storeList);
                 }
-
                 taskBO.setTaskVO(taskVO);
             }
-
-
 
 //            if (CollectionUtils.isNotEmpty(mktCouponPOList)){
 //                taskBO.setMktCouponPOList(mktCouponPOList);
@@ -258,7 +268,6 @@ public class TaskServiceImpl implements TaskService {
         }
         return responseData;
     }
-
     /**
      * 根据公司id和品牌id查询执行中的消费类任务
      * @param sysCompanyId
@@ -982,40 +991,43 @@ public class TaskServiceImpl implements TaskService {
 
     /**
      * 根据任务类型查询任务-已经审核
+     * 查询进行中的任务
      */
     @Override
-    public ResponseData<PageInfo<MktTaskPOWithBLOBs>> getTaskByTaskType(TaskVO vo, PageForm pageForm) {
+    public ResponseData<PageInfo<MktTaskPOWithBLOBs>> getTaskByTaskType(TaskSearchVO vo) {
+        log.info("---查询进行中的任务---参数--"+JSON.toJSONString(vo));
         List<MktTaskPOWithBLOBs> lists=null;
         ResponseData<PageInfo<MktTaskPOWithBLOBs>> result = new ResponseData<PageInfo<MktTaskPOWithBLOBs>>();
 
         //1完善资料，2分享任务，3邀请注册，4累计消费次数，5累计消费金额',
-        PageHelper.startPage(pageForm.getPageNumber(), pageForm.getPageSize());
-
+        PageHelper.startPage(vo.getPageNumber(), vo.getPageSize());
         MktTaskPOExample mktTaskPOExample = new MktTaskPOExample();
         MktTaskPOExample.Criteria criteria = mktTaskPOExample.createCriteria();
         criteria.andTaskTypeEqualTo(vo.getTaskType()).andSysBrandIdEqualTo(vo.getBrandId()).andValidEqualTo(Boolean.TRUE);
-
         String taskName = vo.getTaskName();
         if (StringUtils.isNotBlank(taskName)){
           criteria.andTaskNameLike(new StringBuilder().append("%").append(taskName).append("%").toString());
         }
+        String taskCode = vo.getTaskCode();
+        if (StringUtils.isNotBlank(taskCode)){
+            criteria.andTaskNameLike(new StringBuilder().append("%").append(taskCode).append("%").toString());
+        }
         //时间
         Date startTime = vo.getStartTime();
-        Date endTime = vo.getEndTime();
         if (startTime!=null){
             criteria.andStartTimeGreaterThanOrEqualTo(startTime);
         }
+        Date endTime = vo.getEndTime();
         if (endTime!=null){
             criteria.andEndTimeLessThanOrEqualTo(endTime);
         }
-       //状态
         //"审核状态：1未审核，2审核中，3已审核，4已驳回"
         Integer checkStatus = vo.getCheckStatus();
-        //1待执行，2执行中，3已禁用，4已结束
-        Integer taskStatus = vo.getTaskStatus();
        if (checkStatus!=null){
            criteria.andCheckStatusEqualTo(checkStatus);
        }
+        //1待执行，2执行中，3已禁用，4已结束
+        Integer taskStatus = vo.getTaskStatus();
        if (taskStatus!=null){
            criteria.andTaskStatusEqualTo(taskStatus);
        }
@@ -1030,4 +1042,48 @@ public class TaskServiceImpl implements TaskService {
         result.setData(pageInfo);
         return result;
     }
+
+
+    /**
+     * 活动、任务效果分析“发行优惠券”添加会员明细弹框；
+     * @return
+     */
+    @Override
+    public ResponseData<PageInfo<CouponSendMemberListResponseVO>> findCouponSendResultTask(Long id, Integer type,
+                                                                                           SysAccountPO stageUser, PageForm pageForm,
+                                                                                           String name,String cardNo) {
+        ResponseData responseData = new ResponseData();
+
+        if(null == id){
+            responseData.setCode(SysResponseEnum.FAILED.getCode());
+            responseData.setMessage(SysResponseEnum.MODEL_FAILED_VALIDATION.getMessage());
+            return responseData;
+        }
+
+        if(null == type){
+            responseData.setCode(SysResponseEnum.FAILED.getCode());
+            responseData.setMessage(SysResponseEnum.MODEL_FAILED_VALIDATION.getMessage());
+            return responseData;
+        }
+
+        CouponSendMemberListRequestVO requestVO = new CouponSendMemberListRequestVO();
+        requestVO.setSendBusinessId(id);
+        //类型转换
+        ChangeTaskTypeVO taskTypeVO = changeTaskType(type);
+        requestVO.setSendType(taskTypeVO.getCouponTaskType());
+
+        requestVO.setBrandId(stageUser.getBrandId());
+        requestVO.setPageNumber(pageForm.getPageNumber());
+        requestVO.setPageSize(pageForm.getPageSize());
+        requestVO.setName(name);
+        requestVO.setCardNo(cardNo);
+
+        ResponseData<PageInfo<CouponSendMemberListResponseVO>> sendMemberListResult = couponEntityServiceFeign.findCouponSendMemberList(requestVO);
+
+        responseData.setData(sendMemberListResult.getData());
+        responseData.setCode(SysResponseEnum.SUCCESS.getCode());
+        responseData.setMessage(SysResponseEnum.SUCCESS.getMessage());
+        return responseData;
+    }
+
 }
