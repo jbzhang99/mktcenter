@@ -17,9 +17,11 @@ import org.springframework.web.client.RestTemplate;
 
 import com.alibaba.fastjson.JSONObject;
 import com.bizvane.centerstageservice.models.po.SysCompanyPo;
+import com.bizvane.centerstageservice.models.po.SysStorePo;
 import com.bizvane.centerstageservice.models.vo.StaffVo;
 import com.bizvane.centerstageservice.models.vo.SysStoreVo;
 import com.bizvane.centerstageservice.rpc.CompanyServiceRpc;
+import com.bizvane.centerstageservice.rpc.StoreGroupServiceRpc;
 import com.bizvane.centerstageservice.rpc.StoreServiceRpc;
 import com.bizvane.mktcenterservice.interfaces.ReportTempService;
 import com.bizvane.mktcenterservice.models.po.FileReportTempPO;
@@ -27,6 +29,8 @@ import com.bizvane.mktcenterservice.models.po.FileReportTempPOExample;
 import com.bizvane.mktcenterservice.models.requestvo.BackData;
 import com.bizvane.mktcenterservice.models.requestvo.BackDataBiaotou;
 import com.bizvane.mktcenterservice.models.requestvo.BackDataTime;
+import com.bizvane.mktcenterservice.models.requestvo.BackDataTimeDtail;
+import com.bizvane.mktcenterservice.models.requestvo.BackDataTimeDtailtu;
 import com.bizvane.mktcenterservice.models.requestvo.postvo.ActiveMemberAllInterface;
 import com.bizvane.mktcenterservice.models.requestvo.postvo.IncomeTotalList;
 import com.bizvane.mktcenterservice.models.requestvo.postvo.IncomeVip;
@@ -59,7 +63,6 @@ import lombok.extern.slf4j.Slf4j;
 @RestController
 @RequestMapping("report")
 public class ReportIncomeController {
-	private static final Collection Long = null;
 	@Autowired
 	private RestTemplate restTemplate;
 	@Autowired
@@ -72,6 +75,9 @@ public class ReportIncomeController {
 	
 	@Autowired
 	private   CompanyServiceRpc companyServiceRpc;
+	
+	@Autowired
+	private    StoreGroupServiceRpc storeGroupServiceRpc;
 
 	@Autowired
 	private BaseUrl BaseUrl;
@@ -142,11 +148,46 @@ public class ReportIncomeController {
 			    		             }
 							     } catch (Exception e) {
 										System.out.println("获取当前用户，所有店铺id出错");
+			    				    	 ResponseData<List<BackData>> ResponseData =new ResponseData<List<BackData>>();
+				    				       ResponseData.setCode(0);
+				    					   ResponseData.setMessage("获取当前用户，所有店铺id出错"+e.toString());
+				    					   return ResponseData;
 									}
 		    		        	 System.out.println("当前用户"+JSONObject.toJSONString(currentUser));
 		    		        	 jsonObject.put("organization", "1"); // 直接put相同的key
 		    		        	 jsonObject.put("organizationContent", str); // / 
-		    		         }
+		    		         }else if(organization.equals("3")) {
+		       		        	 
+		       		        	 try {
+
+		    		//   		        	 选择群主
+		    		   		      	if(StringUtils.isNotBlank(organizationContentStr)){
+		    		//   		      	根据群组id列表查询群组下所有的店铺
+		    			   		        List<Long> storeGroupIds=new ArrayList<Long>();
+		    			   	             for( String trLong : organizationContentStr.split(",")) {
+		    			   	            	storeGroupIds.add(Long.parseLong(trLong));
+		    				             }
+		    			   	          ResponseData<List<Long>> getStoreIdsByGroupIds = storeGroupServiceRpc.getStoreIdsByGroupIds(storeGroupIds);
+		    		//   		      	根据群组id列表查询群组下所有的店铺
+		    			   	          ResponseData<List<SysStorePo>>getStoreIds= storeServiceRpc.getIdStoreLists(getStoreIdsByGroupIds.getData());
+		    			   	          String[] str = new String[getStoreIds.getData().size()];
+		    				             int i=0;
+		    				             for( SysStorePo sysStore : getStoreIds.getData()) {
+		    				            	 str[i++] = sysStore.getStoreId();
+		    				             }
+		    		   		        	 jsonObject.put("organization", "1"); // 直接put相同的key
+		    		   		        	 jsonObject.put("organizationContent", str); // / 
+		    		   		      	} 	
+		       		      	
+		     					} catch (Exception e) {
+		    				    	 log.info("获取当前群主，所有店铺id出错");
+		    				    	 ResponseData<List<BackData>> ResponseData =new ResponseData<List<BackData>>();
+		    				       ResponseData.setCode(0);
+		    					   ResponseData.setMessage("获取当前群主，所有店铺id出错"+e.toString());
+		    					   return ResponseData;
+		    					}
+		       		        	 
+		       		         }
 		    		       //默认页     
 		    		         
 		    		         System.out.println(url+"发送内容:"+jsonObject.toJSONString());
@@ -155,6 +196,7 @@ public class ReportIncomeController {
 		    		   		   jsonObject.put("businessNum", BaseUrl.getBusinessNum());
 		    		   		   jsonObject.put("apiKey", BaseUrl.getApiKey());
 		    		   		 //用户key
+		    		   		log.info("报表查询ReportIncomeController："+url+jsonObject.toString());
 		 ResponseEntity<String> response = this.restTemplate.postForEntity(url, jsonObject,String.class, new Object[0]);
 	     ResponseData<List<BackData>> ResponseData =new ResponseData<List<BackData>>();
 	     JSONObject job = JSONObject.parseObject(response.getBody());
@@ -222,6 +264,7 @@ public class ReportIncomeController {
 			   		   jsonObject.put("businessNum", BaseUrl.getBusinessNum());
 			   		   jsonObject.put("apiKey", BaseUrl.getApiKey());
 			   		 //用户key
+			   		log.info("报表查询ReportIncomeController："+url+jsonObject.toString());
 					  ResponseEntity<String> responseall = this.restTemplate.postForEntity(url, jsonObject,String.class, new Object[0]);
 				     JSONObject jsonall = JSONObject.parseObject(responseall.getBody());
 					 JSONArray arr=new JSONArray(jsonall.get("data").toString());
