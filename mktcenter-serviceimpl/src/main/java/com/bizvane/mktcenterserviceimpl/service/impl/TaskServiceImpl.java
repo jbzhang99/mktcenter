@@ -899,6 +899,7 @@ public class TaskServiceImpl implements TaskService {
     @Override
     public  void addCheckData(MktTaskPOWithBLOBs po) {
         Integer checkStatus = po.getCheckStatus();
+        log.info("-------addCheckData-----参数--"+checkStatus+"-----"+JSON.toJSONString(po));
         //待审核=1
         if(TaskConstants.FIRST.equals(checkStatus)) {
             SysCheckPo checkPo = new SysCheckPo();
@@ -908,8 +909,10 @@ public class TaskServiceImpl implements TaskService {
             checkPo.setBusinessId(po.getMktTaskId());
             checkPo.setBusinessCode(po.getTaskCode());
             checkPo.setBusinessName(po.getTaskName());
+            checkPo.setBizName(po.getTaskName());
             checkPo.setCheckStatus(CheckStatusEnum.CHECK_STATUS_PENDING.getCode());
             checkPo.setFunctionCode("C0003");
+            log.info("---addCheck--参数--"+JSON.toJSONString(checkPo));
             sysCheckServiceRpc.addCheck(checkPo);
         }
 
@@ -989,7 +992,7 @@ public class TaskServiceImpl implements TaskService {
      * 查询进行中的任务
      */
     @Override
-    public ResponseData<PageInfo<MktTaskPOWithBLOBs>> getTaskByTaskType(TaskSearchVO vo) {
+    public ResponseData<PageInfo<MktTaskPOWithBLOBs>> getTaskByTaskType(TaskSearchVO vo) throws ParseException {
         log.info("---查询进行中的任务---参数--"+JSON.toJSONString(vo));
         List<MktTaskPOWithBLOBs> lists=null;
         ResponseData<PageInfo<MktTaskPOWithBLOBs>> result = new ResponseData<PageInfo<MktTaskPOWithBLOBs>>();
@@ -1010,12 +1013,12 @@ public class TaskServiceImpl implements TaskService {
         //时间
         Date startTime = vo.getStartTime();
         if (startTime!=null){
-            criteria.andStartTimeGreaterThanOrEqualTo(startTime);
+            criteria.andStartTimeGreaterThanOrEqualTo(TimeUtils.formatter.parse(TimeUtils.sdf.format(startTime)+" 00:00:00"));
 
         }
         Date endTime = vo.getEndTime();
         if (endTime!=null){
-            criteria.andEndTimeLessThanOrEqualTo(endTime);
+            criteria.andEndTimeLessThanOrEqualTo(TimeUtils.formatter.parse(TimeUtils.sdf.format(endTime)+" 23:59:59"));
         }
         //"审核状态：1未审核，2审核中，3已审核，4已驳回"
         Integer checkStatus = vo.getCheckStatus();
