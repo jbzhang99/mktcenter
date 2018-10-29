@@ -604,7 +604,6 @@
     tma.valid,
 
     tmas.mkt_activity_sign_in_id,
-    tmas.mkt_activity_id,
     tmas.sign_type,
     tmas.integral_type,
     tmas.integral_basis,
@@ -638,6 +637,9 @@
     <!--活动编号-->
     <if test="activityCode != null and activityCode!= ''">
       AND tma.activity_code LIKE "%"#{activityCode}"%"
+    </if>
+    <if test="activityName != null and activityName!= ''">
+      AND tma.activity_name LIKE "%"#{activityName}"%"
     </if>
   </select>
 </mapper>

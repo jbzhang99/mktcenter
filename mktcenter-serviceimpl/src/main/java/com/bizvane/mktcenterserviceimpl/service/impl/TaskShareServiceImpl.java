@@ -133,10 +133,12 @@ public class TaskShareServiceImpl implements TaskShareService {
         mktTaskPOWithBLOBs.setTaskCode(taskCode);
         //1.判断是否需要审核  1=需要审核   0=不需要
         Integer StagecheckStatus = taskService.getCenterStageCheckStage(mktTaskPOWithBLOBs);
+        log.info("--判断是否需要审核  1=需要审核   0=不需要--"+StagecheckStatus);
         mktTaskPOWithBLOBs = taskService.isOrNoCheckState(mktTaskPOWithBLOBs,StagecheckStatus);
         Long mktTaskId = taskService.addTask(mktTaskPOWithBLOBs, stageUser);
         //将需要审核的任务添加到审核中心
         if(TaskConstants.FIRST.equals(StagecheckStatus)){
+            log.info("--添加数据到审核表--"+StagecheckStatus);
             taskService.addCheckData(mktTaskPOWithBLOBs);
         }
         //3.任务消费表新增
