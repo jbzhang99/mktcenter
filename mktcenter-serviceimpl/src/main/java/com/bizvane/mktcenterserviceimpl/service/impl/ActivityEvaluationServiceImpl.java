@@ -160,6 +160,7 @@ public class ActivityEvaluationServiceImpl implements ActivityEvaluationService 
         mktActivityPOWithBLOBs.setCreateDate(new Date());
         mktActivityPOWithBLOBs.setCreateUserId(stageUser.getSysAccountId());
         mktActivityPOWithBLOBs.setCreateUserName(stageUser.getName());
+        mktActivityPOWithBLOBs.setActivityName("评价奖励活动");
         log.info("新增主表数据=" + JSON.toJSONString(mktActivityPOWithBLOBs));
         mktActivityPOMapper.insertSelective(mktActivityPOWithBLOBs);
         //获取新增后数据id

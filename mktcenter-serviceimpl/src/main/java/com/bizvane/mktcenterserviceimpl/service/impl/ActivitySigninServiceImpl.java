@@ -27,6 +27,7 @@ import com.bizvane.mktcenterservice.models.vo.PageForm;
 import com.bizvane.mktcenterserviceimpl.common.award.Award;
 import com.bizvane.mktcenterserviceimpl.common.enums.*;
 import com.bizvane.mktcenterserviceimpl.common.utils.CodeUtil;
+import com.bizvane.mktcenterserviceimpl.common.utils.ExecuteParamCheckUtil;
 import com.bizvane.mktcenterserviceimpl.mappers.*;
 import com.bizvane.utils.enumutils.SysResponseEnum;
 import com.bizvane.utils.responseinfo.ResponseData;
@@ -132,6 +133,17 @@ public class ActivitySigninServiceImpl implements ActivitySigninService {
         vo.setSysBrandId(stageUser.getBrandId());
         vo.setActivityType(ActivityTypeEnum.ACTIVITY_TYPE_SIGNIN.getCode());
         List<ActivityVO> activitySigninList = mktActivitySigninMapper.getActivitySigninList(vo);
+       /* if(!CollectionUtils.isEmpty(activitySigninList)){
+            for (ActivityVO activity:activitySigninList) {
+                //判断适用商品
+                if (false==activity.getStoreLimit() ||!ExecuteParamCheckUtil.addActivitCheck(bo,activity)){
+                    responseData.setCode(SysResponseEnum.FAILED.getCode());
+                    responseData.setMessage("已存在签到活动!");
+                    return responseData;
+                }
+            }
+
+        }*/
         if(!CollectionUtils.isEmpty(activitySigninList)){
             responseData.setCode(SysResponseEnum.FAILED.getCode());
             responseData.setMessage("已存在签到活动!");
@@ -173,6 +185,7 @@ public class ActivitySigninServiceImpl implements ActivitySigninService {
         mktActivityPOWithBLOBs.setCreateUserId(stageUser.getSysAccountId());
         mktActivityPOWithBLOBs.setCreateUserName(stageUser.getName());
         log.info("新增主表数据="+ JSON.toJSONString(mktActivityPOWithBLOBs));
+        mktActivityPOWithBLOBs.setActivityName("签到活动");
         mktActivityPOMapper.insertSelective(mktActivityPOWithBLOBs);
 
         //获取新增后数据id
