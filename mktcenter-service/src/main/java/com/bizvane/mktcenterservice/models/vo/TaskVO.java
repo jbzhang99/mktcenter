@@ -220,11 +220,11 @@ public class TaskVO extends MktTaskPO {
         this.storeLimitType = storeLimitType;
     }
 
-    public Boolean getStoreLimit() {
+    public Boolean getIsStoreLimit() {
         return isStoreLimit;
     }
 
-    public void setStoreLimit(Boolean storeLimit) {
-        isStoreLimit = storeLimit;
+    public void setIsStoreLimit(Boolean isStoreLimit) {
+        this.isStoreLimit = isStoreLimit;
     }
 }

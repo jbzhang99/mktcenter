@@ -531,8 +531,7 @@
     tma.modified_date,
     tma.valid,
 
-    tmas.mkt_activity_evaluation_id,
-    tmas.mkt_activity_id
+    tmas.mkt_activity_evaluation_id
     FROM
     `t_mkt_activity` tma
     INNER JOIN t_mkt_activity_evaluation tmas ON tma.mkt_activity_id = tmas.mkt_activity_id
@@ -561,6 +560,9 @@
     <!--活动编号-->
     <if test="activityCode != null and activityCode!= ''">
       AND tma.activity_code LIKE "%"#{activityCode}"%"
+    </if>
+    <if test="activityName != null and activityName!= ''">
+      AND tma.activity_name LIKE "%"#{activityName}"%"
     </if>
   </select>
 </mapper>

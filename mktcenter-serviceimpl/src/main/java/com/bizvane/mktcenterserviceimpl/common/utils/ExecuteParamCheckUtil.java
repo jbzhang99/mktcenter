@@ -159,7 +159,7 @@ public class ExecuteParamCheckUtil {
      */
     public  static Boolean addActivitCheck(ActivityBO bo, ActivityVO activityVO) {
         boolean falg = false;
-        if (false == activityVO.getStoreLimit() && false==bo.getActivityVO().getStoreLimit()) {
+        if (false==bo.getActivityVO().getStoreLimit()) {
             falg = true;
         } else {
             //判断是白名单

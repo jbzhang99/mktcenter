@@ -11,6 +11,7 @@ import com.bizvane.couponfacade.models.vo.CouponSendMemberListResponseVO;
 import com.bizvane.messagefacade.interfaces.TemplateMessageServiceFeign;
 import com.bizvane.messagefacade.models.vo.*;
 import com.bizvane.mktcenterservice.models.vo.PageForm;
+import com.bizvane.mktcenterserviceimpl.mappers.*;
 import com.bizvane.utils.jobutils.JobBusinessTypeEnum;
 import com.bizvane.utils.jobutils.JobClient;
 import com.bizvane.utils.jobutils.XxlJobInfo;
@@ -53,10 +54,6 @@ import com.bizvane.mktcenterserviceimpl.common.enums.MktSmartTypeEnum;
 import com.bizvane.mktcenterserviceimpl.common.enums.TaskStatusEnum;
 import com.bizvane.mktcenterserviceimpl.common.job.JobUtil;
 import com.bizvane.mktcenterserviceimpl.common.utils.TimeUtils;
-import com.bizvane.mktcenterserviceimpl.mappers.MktCouponPOMapper;
-import com.bizvane.mktcenterserviceimpl.mappers.MktMessagePOMapper;
-import com.bizvane.mktcenterserviceimpl.mappers.MktTaskPOMapper;
-import com.bizvane.mktcenterserviceimpl.mappers.MktTaskRecordPOMapper;
 import com.bizvane.utils.enumutils.SysResponseEnum;
 import com.bizvane.utils.responseinfo.ResponseData;
 import com.github.pagehelper.PageHelper;
@@ -122,8 +119,6 @@ public class TaskServiceImpl implements TaskService {
     private JobClient jobClient;
     @Autowired
     private CouponEntityServiceFeign couponEntityServiceFeign;
-
-
     /**
      * 通过id查询店铺列表
      */
@@ -903,13 +898,13 @@ public class TaskServiceImpl implements TaskService {
      */
     @Override
     public  void addCheckData(MktTaskPOWithBLOBs po) {
-        Integer taskType = po.getTaskType();
+        Integer checkStatus = po.getCheckStatus();
         //待审核=1
-        if(TaskConstants.FIRST.equals(taskType)) {
+        if(TaskConstants.FIRST.equals(checkStatus)) {
             SysCheckPo checkPo = new SysCheckPo();
             checkPo.setSysCompanyId(po.getSysCompanyId());
             checkPo.setSysBrandId(po.getSysBrandId());
-            checkPo.setBusinessType(taskType);
+            checkPo.setBusinessType(po.getTaskType());
             checkPo.setBusinessId(po.getMktTaskId());
             checkPo.setBusinessCode(po.getTaskCode());
             checkPo.setBusinessName(po.getTaskName());
@@ -1010,12 +1005,13 @@ public class TaskServiceImpl implements TaskService {
         }
         String taskCode = vo.getTaskCode();
         if (StringUtils.isNotBlank(taskCode)){
-            criteria.andTaskNameLike(new StringBuilder().append("%").append(taskCode).append("%").toString());
+            criteria.andTaskCodeLike(new StringBuilder().append("%").append(taskCode).append("%").toString());
         }
         //时间
         Date startTime = vo.getStartTime();
         if (startTime!=null){
             criteria.andStartTimeGreaterThanOrEqualTo(startTime);
+
         }
         Date endTime = vo.getEndTime();
         if (endTime!=null){
@@ -1085,5 +1081,26 @@ public class TaskServiceImpl implements TaskService {
         responseData.setMessage(SysResponseEnum.SUCCESS.getMessage());
         return responseData;
     }
+    /**
+     * 查询白名单店铺Id
+     * mktTaskProfilePOMapper   mktTaskSharePOMapper  mktTaskInvitePOMapper  mktTaskOrderPOMapper
+     */
+    @Override
+    public  List<Long>  getWhiteStoreIds(Long brandId,Integer taskType){
+        List<Long> storeIds = null;
+        try{
+            String whiteStoreIds = mktTaskPOMapper.getWhiteStoreIds(brandId, taskType);
+            if (StringUtils.isNotBlank(whiteStoreIds)){
+                storeIds = Arrays.asList(whiteStoreIds.split(",")).stream().filter(element -> StringUtils.isNotBlank(element)).
+                        map(element -> Long.valueOf(element)).distinct().collect(Collectors.toList());
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+           log.info("getWhiteStoreIds--异常--");
+        }finally {
+            return storeIds;
+        }
 
+
+    }
 }
