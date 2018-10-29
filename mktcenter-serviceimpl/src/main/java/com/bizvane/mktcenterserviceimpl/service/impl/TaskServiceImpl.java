@@ -898,13 +898,13 @@ public class TaskServiceImpl implements TaskService {
      */
     @Override
     public  void addCheckData(MktTaskPOWithBLOBs po) {
-        Integer taskType = po.getTaskType();
+        Integer checkStatus = po.getCheckStatus();
         //待审核=1
-        if(TaskConstants.FIRST.equals(taskType)) {
+        if(TaskConstants.FIRST.equals(checkStatus)) {
             SysCheckPo checkPo = new SysCheckPo();
             checkPo.setSysCompanyId(po.getSysCompanyId());
             checkPo.setSysBrandId(po.getSysBrandId());
-            checkPo.setBusinessType(taskType);
+            checkPo.setBusinessType(po.getTaskType());
             checkPo.setBusinessId(po.getMktTaskId());
             checkPo.setBusinessCode(po.getTaskCode());
             checkPo.setBusinessName(po.getTaskName());
@@ -1005,12 +1005,13 @@ public class TaskServiceImpl implements TaskService {
         }
         String taskCode = vo.getTaskCode();
         if (StringUtils.isNotBlank(taskCode)){
-            criteria.andTaskNameLike(new StringBuilder().append("%").append(taskCode).append("%").toString());
+            criteria.andTaskCodeLike(new StringBuilder().append("%").append(taskCode).append("%").toString());
         }
         //时间
         Date startTime = vo.getStartTime();
         if (startTime!=null){
             criteria.andStartTimeGreaterThanOrEqualTo(startTime);
+
         }
         Date endTime = vo.getEndTime();
         if (endTime!=null){
