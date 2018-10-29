@@ -604,7 +604,6 @@
     tma.valid,
 
     tmas.mkt_activity_sign_in_id,
-    tmas.mkt_activity_id,
     tmas.sign_type,
     tmas.integral_type,
     tmas.integral_basis,
