@@ -536,7 +536,6 @@
     tmas.mkt_smart_type,
     tmas.target_mbr_count,
     tmas.target_mbr_count_time,
-    tmas.remark,
     tmas.create_user_id,
     tmas.create_user_name,
     tmas.create_date,
