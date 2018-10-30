@@ -106,7 +106,9 @@ public class TaskAmountServiceImpl implements TaskAmountService {
         Integer StagecheckStatus = taskService.getCenterStageCheckStage(mktTaskPOWithBLOBs);
         mktTaskPOWithBLOBs = taskService.isOrNoCheckState(mktTaskPOWithBLOBs,StagecheckStatus);
         Long mktTaskId = taskService.addTask(mktTaskPOWithBLOBs, stageUser);
-        taskService.addCheckData(mktTaskPOWithBLOBs);
+        if(TaskConstants.FIRST.equals(StagecheckStatus)){
+            taskService.addCheckData(mktTaskPOWithBLOBs);
+        }
 
         //3.任务消费表新增
         MktTaskOrderPO mktTaskOrderPO = new MktTaskOrderPO();
@@ -114,7 +116,7 @@ public class TaskAmountServiceImpl implements TaskAmountService {
         mktTaskOrderPO.setMktTaskId(mktTaskId);
         //mktTaskPOWithBLOBs = taskService.isOrNoCheckState(mktTaskPOWithBLOBs);
         this.insertAmoutTask(mktTaskOrderPO, stageUser);
-        taskService.addCheckData(mktTaskPOWithBLOBs);
+        //taskService.addCheckData(mktTaskPOWithBLOBs);
 
         //4.新增奖励新增  biz_type 活动类型  1=活动
         List<MktCouponPO> mktCouponPOList = bo.getMktCouponPOList();

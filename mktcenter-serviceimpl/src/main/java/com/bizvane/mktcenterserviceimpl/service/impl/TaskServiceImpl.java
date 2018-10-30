@@ -1013,12 +1013,11 @@ public class TaskServiceImpl implements TaskService {
         //时间
         Date startTime = vo.getStartTime();
         if (startTime!=null){
-            criteria.andStartTimeGreaterThanOrEqualTo(TimeUtils.formatter.parse(TimeUtils.sdf.format(startTime)+" 00:00:00"));
-
+            criteria.andCreateDateGreaterThanOrEqualTo(TimeUtils.formatter.parse(TimeUtils.sdf.format(startTime)+" 00:00:00"));
         }
         Date endTime = vo.getEndTime();
         if (endTime!=null){
-            criteria.andEndTimeLessThanOrEqualTo(TimeUtils.formatter.parse(TimeUtils.sdf.format(endTime)+" 23:59:59"));
+            criteria.andCreateDateLessThanOrEqualTo(TimeUtils.formatter.parse(TimeUtils.sdf.format(endTime)+" 23:59:59"));
         }
         //"审核状态：1未审核，2审核中，3已审核，4已驳回"
         Integer checkStatus = vo.getCheckStatus();

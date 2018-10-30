@@ -96,7 +96,7 @@ public class TaskOrderServiceImpl implements TaskOrderService {
 
         mktTaskPOWithBLOBs = taskService.isOrNoCheckState(mktTaskPOWithBLOBs,stagecheckStatus);
         Long mktTaskId = taskService.addTask(mktTaskPOWithBLOBs, stageUser);
-        taskService.addCheckData(mktTaskPOWithBLOBs);
+        //taskService.addCheckData(mktTaskPOWithBLOBs);
         //将需要审核的任务添加到审核中心
         if(TaskConstants.FIRST.equals(stagecheckStatus)){
             taskService.addCheckData(mktTaskPOWithBLOBs);
