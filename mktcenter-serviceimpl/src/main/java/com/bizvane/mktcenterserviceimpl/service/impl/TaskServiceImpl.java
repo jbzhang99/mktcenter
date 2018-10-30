@@ -373,7 +373,6 @@ public class TaskServiceImpl implements TaskService {
         Integer checkStatus = mktTaskPOWithBLOBs.getCheckStatus();
         //执行状态:1待执行，2执行中，3已禁用，4已结束',
         Integer taskStatus = mktTaskPOWithBLOBs.getTaskStatus();
-
         if (TaskConstants.THREE.equals(checkStatus) && TaskConstants.SECOND.equals(taskStatus)) {
             this.sendSmg(mktTaskPOWithBLOBs,mktmessagePOList,stageUser);
         }
@@ -703,7 +702,6 @@ public class TaskServiceImpl implements TaskService {
     /**
      * 任务审核:通过/驳回
      * 需要传递任务开始时间,修改执行状态
-
      * @param sysAccountPO
      * @return
      *   `checkStatus` '审核状态：1未审核，2审核中，3已审核，4已驳回'
@@ -711,7 +709,7 @@ public class TaskServiceImpl implements TaskService {
      */
     @Override
     public ResponseData<Integer> checkTaskById(CheckTaskVO vo,SysAccountPO sysAccountPO) throws ParseException {
-        log.info("修改中台审核配置-----"+JSON.toJSONString(vo));
+        log.info("checkTaskById修改中台审核配置-----"+JSON.toJSONString(vo));
         ResponseData<Integer> responseData = new ResponseData<Integer>();
         Long mktTaskId = vo.getBusinessId();
         Integer businessType = vo.getBusinessType();
@@ -742,7 +740,6 @@ public class TaskServiceImpl implements TaskService {
             // 已驳回   待执行
             mktTaskPOWithBLOBs.setTaskStatus(TaskStatusEnum.TASK_STATUS_PENDING.getCode());
         }
-
         mktTaskPOWithBLOBs.setMktTaskId(mktTaskId);
         mktTaskPOWithBLOBs.setCheckStatus(checkStatus);
         mktTaskPOWithBLOBs.setRemark(remark);
@@ -752,24 +749,16 @@ public class TaskServiceImpl implements TaskService {
         int i = mktTaskPOMapper.updateByPrimaryKeySelective(mktTaskPOWithBLOBs);
         //修改中台审核表的数据
         this.updateCheckData(mktTaskId,checkStatus,functionCode,sysAccountPO);
-        log.info("审核通过后的任务状态---checkStatus--"+checkStatus+"--TaskStatus--"+mktTaskPOWithBLOBs.getTaskStatus());
+        log.info("checkTaskById审核通过后的任务状态---checkStatus--"+checkStatus+"--TaskStatus--"+mktTaskPOWithBLOBs.getTaskStatus());
         if (i > 0) {
             //3=已审核
             if (TaskConstants.THREE.equals(checkStatus)) {
                 MktMessagePOExample exampleMSG = new MktMessagePOExample();
                 exampleMSG.createCriteria().andBizIdEqualTo(mktTaskId).andValidEqualTo(Boolean.TRUE);
                 List<MktMessagePO> mktMessagePOS = mktMessagePOMapper.selectByExample(exampleMSG);
-                List<TaskDetailVO> taskDetails = this.getTaskDetailByTaskId(mktTaskId);
-                if (CollectionUtils.isNotEmpty(taskDetails)) {
-                    TaskDetailVO taskdetailvo = taskDetails.get(0);
-                    mktTaskPOWithBLOBs = new MktTaskPOWithBLOBs();
-                    BeanUtils.copyProperties(taskdetailvo, mktTaskPOWithBLOBs);
-                    if (TaskConstants.FIRST.equals(businessType)){
-                        this.doProfileTask(mktTaskPOWithBLOBs,mktMessagePOS,sysAccountPO);
-                    }else{
-                        this.doOrderTask(mktTaskPOWithBLOBs,mktMessagePOS,sysAccountPO);
-                    }
-                }
+                //List<TaskDetailVO> taskDetails = this.getTaskDetailByTaskId(mktTaskId);
+                MktTaskPOWithBLOBs mktTaskPOWithBLOBsData = mktTaskPOMapper.selectByPrimaryKey(mktTaskId);
+                this.doOrderTask(mktTaskPOWithBLOBsData,mktMessagePOS,sysAccountPO);
             }
 
         }
