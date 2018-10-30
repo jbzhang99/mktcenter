@@ -115,6 +115,7 @@ public class TaskProfileServiceImpl implements TaskProfileService {
         mktTaskPOWithBLOBs.setTaskCode(CodeUtil.getTaskCode());
         //调用中台的审核配置,判断是否需要审核  1=需要审核   0=不需要
         Integer stagecheckStatus = taskService.getCenterStageCheckStage(mktTaskPOWithBLOBs);
+        log.info("--完善资料任务从中台获取审核状态--"+stagecheckStatus);
         //设置相应的任务状态和任务状态
         mktTaskPOWithBLOBs = this.isOrNoCheckState(mktTaskPOWithBLOBs,stagecheckStatus);
         Long mktTaskId = taskService.addTask(mktTaskPOWithBLOBs, stageUser);
@@ -167,13 +168,14 @@ public class TaskProfileServiceImpl implements TaskProfileService {
         if (TaskConstants.FIRST.equals(stagecheckStatus)) {
             //待审核=1
             po.setCheckStatus(CheckStatusEnum.CHECK_STATUS_PENDING.getCode());
+            //待执行=1
+            po.setTaskStatus(TaskStatusEnum.TASK_STATUS_PENDING.getCode());
         } else {
-            // checkStatus=0=不需要审核
             //已审核=3
             po.setCheckStatus(CheckStatusEnum.CHECK_STATUS_APPROVED.getCode());
+            //执行中=2
+            po.setTaskStatus(TaskStatusEnum.TASK_STATUS_EXECUTING.getCode());
         }
-        //待执行=1  2.执行中
-       // po.setTaskStatus(po.getCheckStatus());
         return po;
     }
 
@@ -194,6 +196,49 @@ public class TaskProfileServiceImpl implements TaskProfileService {
             result.setMessage(SysResponseEnum.SUCCESS.getMessage());
         }
         return result;
+    }
+    /**
+     * 审核完善资料任务
+     */
+    @Override
+    public ResponseData<Integer> checkTaskProfileById(CheckTaskVO vo,SysAccountPO sysAccountPO) throws ParseException {
+        log.info("checkTaskProfileById修改中台审核配置-----"+JSON.toJSONString(vo));
+        ResponseData<Integer> responseData = new ResponseData<Integer>();
+        Long mktTaskId = vo.getBusinessId();
+        Integer businessType = vo.getBusinessType();
+        Integer checkStatus = vo.getCheckStatus();
+        String remark = vo.getRemark();
+        Long sysCheckId = vo.getSysCheckId();
+        String functionCode = vo.getFunctionCode();
+        MktTaskPOWithBLOBs mktTaskPOWithBLOBs = new MktTaskPOWithBLOBs();
+        if (TaskConstants.THREE.equals(checkStatus)) {
+            mktTaskPOWithBLOBs.setTaskStatus(TaskStatusEnum.TASK_STATUS_EXECUTING.getCode());
+        }else{
+            // 已驳回   待执行
+            mktTaskPOWithBLOBs.setTaskStatus(TaskStatusEnum.TASK_STATUS_PENDING.getCode());
+        }
+        mktTaskPOWithBLOBs.setMktTaskId(mktTaskId);
+        mktTaskPOWithBLOBs.setCheckStatus(checkStatus);
+        mktTaskPOWithBLOBs.setRemark(remark);
+        mktTaskPOWithBLOBs.setModifiedDate(new Date());
+        mktTaskPOWithBLOBs.setModifiedUserId(sysAccountPO.getSysAccountId());
+        mktTaskPOWithBLOBs.setModifiedUserName(sysAccountPO.getName());
+        int i = mktTaskPOMapper.updateByPrimaryKeySelective(mktTaskPOWithBLOBs);
+        //修改中台审核表的数据
+        taskService.updateCheckData(mktTaskId,checkStatus,functionCode,sysAccountPO);
+        log.info("checkTaskProfileById审核通过后的任务状态---checkStatus--"+checkStatus+"--TaskStatus--"+mktTaskPOWithBLOBs.getTaskStatus());
+        if (i > 0) {
+            //3=已审核
+            if (TaskConstants.THREE.equals(checkStatus)) {
+                MktMessagePOExample exampleMSG = new MktMessagePOExample();
+                exampleMSG.createCriteria().andBizIdEqualTo(mktTaskId).andValidEqualTo(Boolean.TRUE);
+                List<MktMessagePO> mktMessagePOS = mktMessagePOMapper.selectByExample(exampleMSG);
+                //List<TaskDetailVO> taskDetails = taskService.getTaskDetailByTaskId(mktTaskId);
+                MktTaskPOWithBLOBs mktTaskPOWithBLOBsData = mktTaskPOMapper.selectByPrimaryKey(mktTaskId);
+                taskService.doProfileTask(mktTaskPOWithBLOBsData,mktMessagePOS,sysAccountPO);
+            }
+        }
+        return responseData;
     }
 
     /**
@@ -314,6 +359,7 @@ public class TaskProfileServiceImpl implements TaskProfileService {
                             recordPO.setRewarded(Integer.valueOf(1));
                             recordPO.setSysCompanyId(companyId);
                             recordPO.setCreateDate(new Date());
+                            recordPO.setPoints(obj.getPoints());
                             taskRecordService.addTaskRecord(recordPO);
                             taskService.sendCouponAndPoint(memberCode,obj);
                         }

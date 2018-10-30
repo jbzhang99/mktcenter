@@ -124,6 +124,7 @@ public class OrderTaskListener implements MessageListener {
                             recordPO.setPoints(points);
                             recordPO.setRewarded(Integer.valueOf(1));
                             recordPO.setModifiedDate(new Date());
+                            recordPO.setPoints(obj.getPoints());
                             taskRecordService.updateTaskRecord(recordPO);
                             taskService.sendCouponAndPoint(memberCode,obj);
                     }
@@ -134,6 +135,7 @@ public class OrderTaskListener implements MessageListener {
                     if(totalBO!=null && totalBO.getTotalConsume()!=null && totalBO.getTotalConsume().compareTo(consumeAmount) == 1){
                             recordPO.setRewarded(Integer.valueOf(1));
                             recordPO.setModifiedDate(new Date());
+                            recordPO.setPoints(obj.getPoints());
                             taskRecordService.updateTaskRecord(recordPO);
                             taskService.sendCouponAndPoint(memberCode,obj);
 
