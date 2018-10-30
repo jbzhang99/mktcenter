@@ -771,15 +771,10 @@ public class TaskServiceImpl implements TaskService {
     @Override
     public ResponseData<TaskRecordVO> doAnalysis(TaskAnalysisVo vo,SysAccountPO sysAccountPo){
         ResponseData<TaskRecordVO> result = new ResponseData<TaskRecordVO>(SysResponseEnum.SUCCESS.getCode(),SysResponseEnum.SUCCESS.getMessage(),null);
-//        String date1 = vo.getDate1();
-//        if (StringUtils.isNotBlank(date1)){
-//            vo.setStartDate(TimeUtils.getDateByPattern(date1));
-//        }
         Long sysBrandId = sysAccountPo.getBrandId();
         vo.setBrandId(sysBrandId);
         //任务类型
         Integer taskType = vo.getTaskType();
-
         GenrealGetMessageVO genrealGetMessageVO=new  GenrealGetMessageVO();
         genrealGetMessageVO.setSysBrandId(sysBrandId);
         genrealGetMessageVO.setTemplateType(String.valueOf(taskType));
@@ -801,6 +796,15 @@ public class TaskServiceImpl implements TaskService {
         if (CollectionUtils.isNotEmpty(analysislists)){
             for (DayTaskRecordVo task: analysislists) {
                 Long taskId = task.getTaskId();
+                //查询每个任务的完成人数
+                MktTaskRecordPOExample example=new MktTaskRecordPOExample();
+                example.createCriteria().andTaskIdEqualTo(taskId).andRewardedEqualTo(1).andValidEqualTo(Boolean.TRUE);
+                List<MktTaskRecordPO> mktTaskRecordresponse = mktTaskRecordPOMapper.selectByExampleWithBLOBs(example);
+                if (CollectionUtils.isNotEmpty(mktTaskRecordresponse)){
+                    task.setOneTaskCompleteCountMbr(Long.valueOf(mktTaskRecordresponse.size()));
+                }else{
+                    task.setOneTaskCompleteCountMbr(0L);
+                }
                 //查询短信数量
                 genrealGetMessageVO.setTaskId(taskId);
                 String msgNUM = this.searchSmsNum(genrealGetMessageVO);
