@@ -136,8 +136,10 @@ public class FigureUtilGroupFigure {
 			                	 JSONObjectlist.add(mapjsonObje.get(key));
 			                 }
 			                 
-			           
-			           backDataTimeDtail.setJosonData(JSONObjectlist);
+			           if(JSONObjectlist.size()>0) {
+			        	   backDataTimeDtail.setJosonData(JSONObjectlist);
+			           }
+			          
 
 			           backDataTimeDtail.setTotal(total.toString());
 			           backDataTimeDtail.setVipData(vipData.toString());
