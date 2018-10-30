@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
 import com.alibaba.fastjson.JSONObject;
+import com.bizvane.centerstageservice.interfaces.SysStoreService;
 import com.bizvane.centerstageservice.models.po.SysCompanyPo;
 import com.bizvane.centerstageservice.models.po.SysStorePo;
 import com.bizvane.centerstageservice.models.vo.StaffVo;
@@ -78,6 +79,9 @@ public class ReportIncomeController {
 	
 	@Autowired
 	private    StoreGroupServiceRpc storeGroupServiceRpc;
+	@Autowired
+	private   StoreServiceRpc sysStoreService;
+
 
 	@Autowired
 	private BaseUrl BaseUrl;
@@ -136,14 +140,13 @@ public class ReportIncomeController {
 			    		             staffVo.setSysCompanyId(currentUser.getSysCompanyId());
 			    		             staffVo.setSysBrandId(currentUser.getBrandId());
 			    		             staffVo.setSysAccountId(currentUser.getSysAccountId());
-			    		             
-			    		             ResponseData<PageInfo<SysStoreVo>> SysStoreVo = storeServiceRpc.getSysStoreList(staffVo);
+			    		             ResponseData<com.github.pagehelper.PageInfo<SysStorePo>> SysStoreVo = sysStoreService.getAllStoreListByRole(staffVo);
 			    		             
 			    		             staffVo.setPageSize(Integer.parseInt(String.valueOf(SysStoreVo.getData().getTotal())));
-			    		             ResponseData<PageInfo<SysStoreVo>> SysStoreVo2 = storeServiceRpc.getSysStoreList(staffVo);
+			    		             ResponseData<com.github.pagehelper.PageInfo<SysStorePo>> SysStoreVo2 = sysStoreService.getAllStoreListByRole(staffVo);
 			    		             str = new String[SysStoreVo2.getData().getList().size()];
 			    		            int i=0;
-			    		             for( SysStoreVo sysStore : SysStoreVo2.getData().getList()) {
+			    		             for( SysStorePo sysStore : SysStoreVo2.getData().getList()) {
 			    		            	 str[i++] = sysStore.getStoreId();
 			    		             }
 							     } catch (Exception e) {

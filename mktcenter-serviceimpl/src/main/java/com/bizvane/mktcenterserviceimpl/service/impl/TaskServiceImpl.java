@@ -171,8 +171,8 @@ public class TaskServiceImpl implements TaskService {
         List<SysStoreVo> list=null;
         vo.setSysAccountId(sysAccountPo.getSysAccountId());
         vo.setSysCompanyId(sysAccountPo.getSysCompanyId());
-        ResponseData<com.bizvane.utils.responseinfo.PageInfo<SysStoreVo>> returnData = storeServiceRpc.getSysStoreList(vo);
-        com.bizvane.utils.responseinfo.PageInfo<SysStoreVo> data = returnData.getData();
+        ResponseData<PageInfo<SysStoreVo>> returnData = storeServiceRpc.getSysStoreList(vo);
+        PageInfo<SysStoreVo> data = returnData.getData();
         if (data!=null){
             list = data.getList();
             responseData.setData(list);
