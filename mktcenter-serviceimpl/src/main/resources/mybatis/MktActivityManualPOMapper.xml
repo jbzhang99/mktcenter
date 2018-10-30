@@ -554,6 +554,10 @@
      <if test="activityCode != null and activityCode!= ''">
        AND tma.activity_code LIKE "%"#{activityCode}"%"
      </if>
+
+     <if test="checkStatus != null and checkStatus!= '' ">
+       AND tma.check_status = #{checkStatus,jdbcType=INTEGER}
+     </if>
      ORDER BY tma.create_date DESC
    </select>
 
