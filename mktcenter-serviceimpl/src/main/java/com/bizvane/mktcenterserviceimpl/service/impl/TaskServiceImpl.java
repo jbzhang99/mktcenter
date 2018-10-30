@@ -209,11 +209,12 @@ public class TaskServiceImpl implements TaskService {
             example.createCriteria().andValidEqualTo(true).andBizIdEqualTo(mktTaskId);
             List<MktCouponPO> mktCouponPOList = mktCouponPOMapper.selectByExample(example);
             //查询消息
+            List<MktMessagePO> mktMessagePOList= new  ArrayList<MktMessagePO>();
             MktMessagePOExample mktMessagePOExample = new MktMessagePOExample();
             mktMessagePOExample.createCriteria().andValidEqualTo(true).andBizIdEqualTo(mktTaskId);
-            List<MktMessagePO> mktMessagePOList =  mktMessagePOMapper.selectByExampleWithBLOBs(mktMessagePOExample);
-            List<CouponDefinitionPO> couponDefinitionPOS = new ArrayList<>();
+            mktMessagePOList =  mktMessagePOMapper.selectByExampleWithBLOBs(mktMessagePOExample);
 
+            List<CouponDefinitionPO> couponDefinitionPOS = new ArrayList<>();
             if (CollectionUtils.isNotEmpty(mktCouponPOList)){
                 mktCouponPOList.stream().forEach(mktCouponPO->{
                     Long couponDefinitionId = mktCouponPO.getCouponDefinitionId();
@@ -222,12 +223,6 @@ public class TaskServiceImpl implements TaskService {
                     couponDefinitionPOS.add(couponDefinitionPO);
                 });
             }
-//            for (MktCouponPO mktCouponPO:mktCouponPOList){
-//                Long couponDefinitionId = mktCouponPO.getCouponDefinitionId();
-//                ResponseData<CouponDefinitionPO> coupon = couponDefinitionServiceFeign.findByIdRpc(couponDefinitionId);
-//                CouponDefinitionPO couponDefinitionPO = coupon.getData();
-//                couponDefinitionPOS.add(couponDefinitionPO);
-//            }
 
             if (CollectionUtils.isNotEmpty(taskVOList)){
                 TaskVO taskVO = taskVOList.get(0);
@@ -243,15 +238,9 @@ public class TaskServiceImpl implements TaskService {
                 taskBO.setTaskVO(taskVO);
             }
 
-//            if (CollectionUtils.isNotEmpty(mktCouponPOList)){
-//                taskBO.setMktCouponPOList(mktCouponPOList);
-//            }
-            if (CollectionUtils.isNotEmpty(mktMessagePOList)){
                 taskBO.setMessagePOList(mktMessagePOList);
-            }
-            if (CollectionUtils.isNotEmpty(couponDefinitionPOS)){
                 taskBO.setCouponDefinitionPOList(couponDefinitionPOS);
-            }
+
             responseData.setData(taskBO);
             responseData.setMessage(SysResponseEnum.SUCCESS.getMessage());
             responseData.setCode(SysResponseEnum.SUCCESS.getCode());
