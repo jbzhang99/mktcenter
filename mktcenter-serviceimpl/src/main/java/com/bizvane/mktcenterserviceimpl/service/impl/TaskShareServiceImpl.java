@@ -319,6 +319,7 @@ public class TaskShareServiceImpl implements TaskShareService {
                         log.info("分享任务的奖励--参与某一任务总次数--"+JSON.toJSONString(totalBO));
                         if (totalBO!=null && totalBO.getTotalTimes()!=null &&  totalBO.getTotalTimes().equals(shareTimes)){
                             recordPO.setRewarded(Integer.valueOf(1));
+                            recordPO.setPoints(obj.getPoints());
                             recordPO.setSysCompanyId(recordId);
                             taskRecordService.updateTaskRecord(recordPO);
                             taskService.sendCouponAndPoint(memberCode,obj);

@@ -359,6 +359,7 @@ public class TaskProfileServiceImpl implements TaskProfileService {
                             recordPO.setRewarded(Integer.valueOf(1));
                             recordPO.setSysCompanyId(companyId);
                             recordPO.setCreateDate(new Date());
+                            recordPO.setPoints(obj.getPoints());
                             taskRecordService.addTaskRecord(recordPO);
                             taskService.sendCouponAndPoint(memberCode,obj);
                         }
