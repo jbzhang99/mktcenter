@@ -515,11 +515,6 @@
 
      tmm.per_person_per_day_max,
      tmm.per_person_max,
-     tmm.create_user_name,
-     tmm.create_date,
-     tmm.modified_user_name,
-     tmm.modified_date,
-     tmm.valid,
      tmm.qrcode
     from t_mkt_activity tma
     left join t_mkt_activity_manual tmm
