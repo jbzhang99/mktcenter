@@ -223,23 +223,23 @@ public class TaskServiceImpl implements TaskService {
                     couponDefinitionPOS.add(couponDefinitionPO);
                 });
             }
-
+            TaskVO taskVO=new TaskVO();
+            List<SysStorePo> storeList=new ArrayList<SysStorePo>();
             if (CollectionUtils.isNotEmpty(taskVOList)){
-                TaskVO taskVO = taskVOList.get(0);
+                taskVO = taskVOList.get(0);
                 taskBO.setTaskVO(taskVO);
                 String storeLimitList = taskVO.getStoreLimitList();
                 if (taskVO!=null && StringUtils.isNotBlank(storeLimitList)){
                     List<Long> storeIdList = Arrays.asList(storeLimitList.split(",")).stream().map(element -> Long.valueOf(element)).collect(Collectors.toList());
                     //查询店铺列表
-                    List<SysStorePo> storeList = this.getStoreListByIds(storeIdList);
+                    storeList = this.getStoreListByIds(storeIdList);
                     log.info("---------通过品牌Ids--"+JSON.toJSONString(storeList)+"-----获取店铺列表----------"+JSON.toJSONString(storeList));
-                    taskBO.setStoreList(storeList);
                 }
-                taskBO.setTaskVO(taskVO);
             }
-
-                taskBO.setMessagePOList(mktMessagePOList);
-                taskBO.setCouponDefinitionPOList(couponDefinitionPOS);
+            taskBO.setStoreList(storeList);
+            taskBO.setTaskVO(taskVO);
+            taskBO.setMessagePOList(mktMessagePOList);
+            taskBO.setCouponDefinitionPOList(couponDefinitionPOS);
 
             responseData.setData(taskBO);
             responseData.setMessage(SysResponseEnum.SUCCESS.getMessage());
