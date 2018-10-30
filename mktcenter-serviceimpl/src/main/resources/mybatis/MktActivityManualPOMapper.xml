@@ -554,6 +554,7 @@
      <if test="activityCode != null and activityCode!= ''">
        AND tma.activity_code LIKE "%"#{activityCode}"%"
      </if>
+     ORDER BY tma.create_date DESC
    </select>
 
   <select id="getActivityList" parameterType="com.bizvane.mktcenterservice.models.vo.ActivityVO" resultType="com.bizvane.mktcenterservice.models.vo.ActivityVO">
