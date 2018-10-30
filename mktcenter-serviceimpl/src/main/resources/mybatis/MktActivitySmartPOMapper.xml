@@ -533,7 +533,6 @@
     tma.valid,
 
     tmas.mkt_activity_smart_id,
-    tmas.mkt_activity_id,
     tmas.mkt_smart_type,
     tmas.target_mbr_count,
     tmas.target_mbr_count_time,
@@ -564,6 +563,12 @@
     </if>
     <if test="mbrGroupDefId != null">
       AND tma.mbr_group_def_id = #{mbrGroupDefId}
+    </if>
+    <if test="activityName != null and activityName!= ''">
+      AND tma.activity_name LIKE "%"#{activityName}"%"
+    </if>
+    <if test="activityCode != null and activityCode!= ''">
+      AND tma.activity_code LIKE "%"#{activityCode}"%"
     </if>
     ORDER BY tma.create_date DESC
   </select>
