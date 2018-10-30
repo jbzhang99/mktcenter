@@ -209,11 +209,12 @@ public class TaskServiceImpl implements TaskService {
             example.createCriteria().andValidEqualTo(true).andBizIdEqualTo(mktTaskId);
             List<MktCouponPO> mktCouponPOList = mktCouponPOMapper.selectByExample(example);
             //查询消息
+            List<MktMessagePO> mktMessagePOList= new  ArrayList<MktMessagePO>();
             MktMessagePOExample mktMessagePOExample = new MktMessagePOExample();
             mktMessagePOExample.createCriteria().andValidEqualTo(true).andBizIdEqualTo(mktTaskId);
-            List<MktMessagePO> mktMessagePOList =  mktMessagePOMapper.selectByExampleWithBLOBs(mktMessagePOExample);
-            List<CouponDefinitionPO> couponDefinitionPOS = new ArrayList<>();
+            mktMessagePOList =  mktMessagePOMapper.selectByExampleWithBLOBs(mktMessagePOExample);
 
+            List<CouponDefinitionPO> couponDefinitionPOS = new ArrayList<>();
             if (CollectionUtils.isNotEmpty(mktCouponPOList)){
                 mktCouponPOList.stream().forEach(mktCouponPO->{
                     Long couponDefinitionId = mktCouponPO.getCouponDefinitionId();
@@ -222,36 +223,24 @@ public class TaskServiceImpl implements TaskService {
                     couponDefinitionPOS.add(couponDefinitionPO);
                 });
             }
-//            for (MktCouponPO mktCouponPO:mktCouponPOList){
-//                Long couponDefinitionId = mktCouponPO.getCouponDefinitionId();
-//                ResponseData<CouponDefinitionPO> coupon = couponDefinitionServiceFeign.findByIdRpc(couponDefinitionId);
-//                CouponDefinitionPO couponDefinitionPO = coupon.getData();
-//                couponDefinitionPOS.add(couponDefinitionPO);
-//            }
-
+            TaskVO taskVO=new TaskVO();
+            List<SysStorePo> storeList=new ArrayList<SysStorePo>();
             if (CollectionUtils.isNotEmpty(taskVOList)){
-                TaskVO taskVO = taskVOList.get(0);
+                taskVO = taskVOList.get(0);
                 taskBO.setTaskVO(taskVO);
                 String storeLimitList = taskVO.getStoreLimitList();
                 if (taskVO!=null && StringUtils.isNotBlank(storeLimitList)){
                     List<Long> storeIdList = Arrays.asList(storeLimitList.split(",")).stream().map(element -> Long.valueOf(element)).collect(Collectors.toList());
                     //查询店铺列表
-                    List<SysStorePo> storeList = this.getStoreListByIds(storeIdList);
+                    storeList = this.getStoreListByIds(storeIdList);
                     log.info("---------通过品牌Ids--"+JSON.toJSONString(storeList)+"-----获取店铺列表----------"+JSON.toJSONString(storeList));
-                    taskBO.setStoreList(storeList);
                 }
-                taskBO.setTaskVO(taskVO);
             }
+            taskBO.setStoreList(storeList);
+            taskBO.setTaskVO(taskVO);
+            taskBO.setMessagePOList(mktMessagePOList);
+            taskBO.setCouponDefinitionPOList(couponDefinitionPOS);
 
-//            if (CollectionUtils.isNotEmpty(mktCouponPOList)){
-//                taskBO.setMktCouponPOList(mktCouponPOList);
-//            }
-            if (CollectionUtils.isNotEmpty(mktMessagePOList)){
-                taskBO.setMessagePOList(mktMessagePOList);
-            }
-            if (CollectionUtils.isNotEmpty(couponDefinitionPOS)){
-                taskBO.setCouponDefinitionPOList(couponDefinitionPOS);
-            }
             responseData.setData(taskBO);
             responseData.setMessage(SysResponseEnum.SUCCESS.getMessage());
             responseData.setCode(SysResponseEnum.SUCCESS.getCode());
@@ -384,7 +373,6 @@ public class TaskServiceImpl implements TaskService {
         Integer checkStatus = mktTaskPOWithBLOBs.getCheckStatus();
         //执行状态:1待执行，2执行中，3已禁用，4已结束',
         Integer taskStatus = mktTaskPOWithBLOBs.getTaskStatus();
-
         if (TaskConstants.THREE.equals(checkStatus) && TaskConstants.SECOND.equals(taskStatus)) {
             this.sendSmg(mktTaskPOWithBLOBs,mktmessagePOList,stageUser);
         }
@@ -714,7 +702,6 @@ public class TaskServiceImpl implements TaskService {
     /**
      * 任务审核:通过/驳回
      * 需要传递任务开始时间,修改执行状态
-
      * @param sysAccountPO
      * @return
      *   `checkStatus` '审核状态：1未审核，2审核中，3已审核，4已驳回'
@@ -722,7 +709,7 @@ public class TaskServiceImpl implements TaskService {
      */
     @Override
     public ResponseData<Integer> checkTaskById(CheckTaskVO vo,SysAccountPO sysAccountPO) throws ParseException {
-        log.info("修改中台审核配置-----"+JSON.toJSONString(vo));
+        log.info("checkTaskById修改中台审核配置-----"+JSON.toJSONString(vo));
         ResponseData<Integer> responseData = new ResponseData<Integer>();
         Long mktTaskId = vo.getBusinessId();
         Integer businessType = vo.getBusinessType();
@@ -753,7 +740,6 @@ public class TaskServiceImpl implements TaskService {
             // 已驳回   待执行
             mktTaskPOWithBLOBs.setTaskStatus(TaskStatusEnum.TASK_STATUS_PENDING.getCode());
         }
-
         mktTaskPOWithBLOBs.setMktTaskId(mktTaskId);
         mktTaskPOWithBLOBs.setCheckStatus(checkStatus);
         mktTaskPOWithBLOBs.setRemark(remark);
@@ -763,24 +749,16 @@ public class TaskServiceImpl implements TaskService {
         int i = mktTaskPOMapper.updateByPrimaryKeySelective(mktTaskPOWithBLOBs);
         //修改中台审核表的数据
         this.updateCheckData(mktTaskId,checkStatus,functionCode,sysAccountPO);
-        log.info("审核通过后的任务状态---checkStatus--"+checkStatus+"--TaskStatus--"+mktTaskPOWithBLOBs.getTaskStatus());
+        log.info("checkTaskById审核通过后的任务状态---checkStatus--"+checkStatus+"--TaskStatus--"+mktTaskPOWithBLOBs.getTaskStatus());
         if (i > 0) {
             //3=已审核
             if (TaskConstants.THREE.equals(checkStatus)) {
                 MktMessagePOExample exampleMSG = new MktMessagePOExample();
                 exampleMSG.createCriteria().andBizIdEqualTo(mktTaskId).andValidEqualTo(Boolean.TRUE);
                 List<MktMessagePO> mktMessagePOS = mktMessagePOMapper.selectByExample(exampleMSG);
-                List<TaskDetailVO> taskDetails = this.getTaskDetailByTaskId(mktTaskId);
-                if (CollectionUtils.isNotEmpty(taskDetails)) {
-                    TaskDetailVO taskdetailvo = taskDetails.get(0);
-                    mktTaskPOWithBLOBs = new MktTaskPOWithBLOBs();
-                    BeanUtils.copyProperties(taskdetailvo, mktTaskPOWithBLOBs);
-                    if (TaskConstants.FIRST.equals(businessType)){
-                        this.doProfileTask(mktTaskPOWithBLOBs,mktMessagePOS,sysAccountPO);
-                    }else{
-                        this.doOrderTask(mktTaskPOWithBLOBs,mktMessagePOS,sysAccountPO);
-                    }
-                }
+                //List<TaskDetailVO> taskDetails = this.getTaskDetailByTaskId(mktTaskId);
+                MktTaskPOWithBLOBs mktTaskPOWithBLOBsData = mktTaskPOMapper.selectByPrimaryKey(mktTaskId);
+                this.doOrderTask(mktTaskPOWithBLOBsData,mktMessagePOS,sysAccountPO);
             }
 
         }
@@ -1013,12 +991,11 @@ public class TaskServiceImpl implements TaskService {
         //时间
         Date startTime = vo.getStartTime();
         if (startTime!=null){
-            criteria.andStartTimeGreaterThanOrEqualTo(TimeUtils.formatter.parse(TimeUtils.sdf.format(startTime)+" 00:00:00"));
-
+            criteria.andCreateDateGreaterThanOrEqualTo(TimeUtils.formatter.parse(TimeUtils.sdf.format(startTime)+" 00:00:00"));
         }
         Date endTime = vo.getEndTime();
         if (endTime!=null){
-            criteria.andEndTimeLessThanOrEqualTo(TimeUtils.formatter.parse(TimeUtils.sdf.format(endTime)+" 23:59:59"));
+            criteria.andCreateDateLessThanOrEqualTo(TimeUtils.formatter.parse(TimeUtils.sdf.format(endTime)+" 23:59:59"));
         }
         //"审核状态：1未审核，2审核中，3已审核，4已驳回"
         Integer checkStatus = vo.getCheckStatus();

@@ -26,7 +26,10 @@ public interface TaskProfileService {
      */
     public ResponseData<Integer> addTask(TaskBO bo, SysAccountPO stageUser) throws ParseException;
 
-
+    /**
+     * 审核完善资料任务
+     */
+    public ResponseData<Integer> checkTaskProfileById(CheckTaskVO vo,SysAccountPO sysAccountPO) throws ParseException;
     /**
      * 修改任务
      * @param bo
