@@ -515,7 +515,6 @@
 
      tmm.per_person_per_day_max,
      tmm.per_person_max,
-     tmm.remark,
      tmm.create_user_name,
      tmm.create_date,
      tmm.modified_user_name,
@@ -558,7 +557,7 @@
            AND tma.mkt_activity_id = #{mktActivityId,jdbcType=BIGINT}
        </if>
      <if test="activityCode != null and activityCode!= ''">
-       AND tma.activity_code = #{activityCode}
+       AND tma.activity_code LIKE "%"#{activityCode}"%"
      </if>
    </select>
 
@@ -587,7 +586,6 @@
 
     tmm.per_person_per_day_max,
     tmm.per_person_max,
-    tmm.remark,
     tmm.create_user_name,
     tmm.create_date,
     tmm.modified_user_name,
@@ -629,7 +627,6 @@
     tmam.qrcode,
     tmam.per_person_per_day_max,
     tmam.per_person_max,
-    tmam.remark,
     tmam.mkt_activity_manual_id,
     tmc.coupon_name,
     tmc.coupon_definition_id
