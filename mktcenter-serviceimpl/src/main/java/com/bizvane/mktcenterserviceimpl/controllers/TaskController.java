@@ -70,7 +70,7 @@ public class TaskController {
         return integerResponseData;
     }
     /**
-     * 任务审核--已经核对
+     * 任务审核--已经核对(除了完善资料任务)
      * @param request
      * @return
      * Long businessId , Integer checkStatus,String remark, Date startTime,Date endTime,

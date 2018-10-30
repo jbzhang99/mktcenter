@@ -58,7 +58,17 @@ public class TaskProfileController {
         bo.getTaskVO().setTaskType(1);
         return  taskProfileService.addTask(bo, sysAccountPo);
     }
-
+    /**
+     * 审核完善资料任务
+     */
+    @RequestMapping("checkTaskProfile")
+    public ResponseData<Integer> checkTaskById(CheckTaskVO vo,HttpServletRequest request) throws ParseException {
+        //获取操作人信息
+        SysAccountPO stageUser = TokenUtils.getStageUser(request);
+        //审核任务
+        ResponseData<Integer> integerResponseData = taskProfileService.checkTaskProfileById(vo,stageUser);
+        return integerResponseData;
+    }
     /**
      * 修改任务
      * @param bo
