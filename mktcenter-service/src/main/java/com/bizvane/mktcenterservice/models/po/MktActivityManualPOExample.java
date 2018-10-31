@@ -8,28 +8,28 @@ import java.util.List;
 public class MktActivityManualPOExample implements Serializable {
     /**
 	 * 只读. 
-	 * @mbg.generated  2018-08-31 12:40:26
+	 * @mbg.generated  2018-10-31 10:42:20
 	 */
 	protected String orderByClause;
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-08-31 12:40:26
+	 * @mbg.generated  2018-10-31 10:42:20
 	 */
 	protected boolean distinct;
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-08-31 12:40:26
+	 * @mbg.generated  2018-10-31 10:42:20
 	 */
 	protected List<Criteria> oredCriteria;
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-08-31 12:40:26
+	 * @mbg.generated  2018-10-31 10:42:20
 	 */
 	private static final long serialVersionUID = 1L;
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-08-31 12:40:26
+	 * @mbg.generated  2018-10-31 10:42:20
 	 */
 	public MktActivityManualPOExample() {
 		oredCriteria = new ArrayList<Criteria>();
@@ -37,7 +37,7 @@ public class MktActivityManualPOExample implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-08-31 12:40:26
+	 * @mbg.generated  2018-10-31 10:42:20
 	 */
 	public void setOrderByClause(String orderByClause) {
 		this.orderByClause = orderByClause;
@@ -45,7 +45,7 @@ public class MktActivityManualPOExample implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-08-31 12:40:26
+	 * @mbg.generated  2018-10-31 10:42:20
 	 */
 	public String getOrderByClause() {
 		return orderByClause;
@@ -53,7 +53,7 @@ public class MktActivityManualPOExample implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-08-31 12:40:26
+	 * @mbg.generated  2018-10-31 10:42:20
 	 */
 	public void setDistinct(boolean distinct) {
 		this.distinct = distinct;
@@ -61,7 +61,7 @@ public class MktActivityManualPOExample implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-08-31 12:40:26
+	 * @mbg.generated  2018-10-31 10:42:20
 	 */
 	public boolean isDistinct() {
 		return distinct;
@@ -69,7 +69,7 @@ public class MktActivityManualPOExample implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-08-31 12:40:26
+	 * @mbg.generated  2018-10-31 10:42:20
 	 */
 	public List<Criteria> getOredCriteria() {
 		return oredCriteria;
@@ -77,7 +77,7 @@ public class MktActivityManualPOExample implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-08-31 12:40:26
+	 * @mbg.generated  2018-10-31 10:42:20
 	 */
 	public void or(Criteria criteria) {
 		oredCriteria.add(criteria);
@@ -85,7 +85,7 @@ public class MktActivityManualPOExample implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-08-31 12:40:26
+	 * @mbg.generated  2018-10-31 10:42:20
 	 */
 	public Criteria or() {
 		Criteria criteria = createCriteriaInternal();
@@ -95,7 +95,7 @@ public class MktActivityManualPOExample implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-08-31 12:40:26
+	 * @mbg.generated  2018-10-31 10:42:20
 	 */
 	public Criteria createCriteria() {
 		Criteria criteria = createCriteriaInternal();
@@ -107,7 +107,7 @@ public class MktActivityManualPOExample implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-08-31 12:40:26
+	 * @mbg.generated  2018-10-31 10:42:20
 	 */
 	protected Criteria createCriteriaInternal() {
 		Criteria criteria = new Criteria();
@@ -116,7 +116,7 @@ public class MktActivityManualPOExample implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-08-31 12:40:26
+	 * @mbg.generated  2018-10-31 10:42:20
 	 */
 	public void clear() {
 		oredCriteria.clear();
@@ -126,7 +126,7 @@ public class MktActivityManualPOExample implements Serializable {
 
 	/**
 	 * 只读. t_mkt_activity_manual
-	 * @mbg.generated  2018-08-31 12:40:26
+	 * @mbg.generated  2018-10-31 10:42:20
 	 */
 	protected abstract static class GeneratedCriteria implements Serializable {
 		protected List<Criterion> criteria;
@@ -466,6 +466,196 @@ public class MktActivityManualPOExample implements Serializable {
 
 		public Criteria andPerPersonMaxNotBetween(Integer value1, Integer value2) {
 			addCriterion("per_person_max not between", value1, value2, "perPersonMax");
+			return (Criteria) this;
+		}
+
+		public Criteria andQrcodeIsNull() {
+			addCriterion("qrcode is null");
+			return (Criteria) this;
+		}
+
+		public Criteria andQrcodeIsNotNull() {
+			addCriterion("qrcode is not null");
+			return (Criteria) this;
+		}
+
+		public Criteria andQrcodeEqualTo(String value) {
+			addCriterion("qrcode =", value, "qrcode");
+			return (Criteria) this;
+		}
+
+		public Criteria andQrcodeNotEqualTo(String value) {
+			addCriterion("qrcode <>", value, "qrcode");
+			return (Criteria) this;
+		}
+
+		public Criteria andQrcodeGreaterThan(String value) {
+			addCriterion("qrcode >", value, "qrcode");
+			return (Criteria) this;
+		}
+
+		public Criteria andQrcodeGreaterThanOrEqualTo(String value) {
+			addCriterion("qrcode >=", value, "qrcode");
+			return (Criteria) this;
+		}
+
+		public Criteria andQrcodeLessThan(String value) {
+			addCriterion("qrcode <", value, "qrcode");
+			return (Criteria) this;
+		}
+
+		public Criteria andQrcodeLessThanOrEqualTo(String value) {
+			addCriterion("qrcode <=", value, "qrcode");
+			return (Criteria) this;
+		}
+
+		public Criteria andQrcodeLike(String value) {
+			addCriterion("qrcode like", value, "qrcode");
+			return (Criteria) this;
+		}
+
+		public Criteria andQrcodeNotLike(String value) {
+			addCriterion("qrcode not like", value, "qrcode");
+			return (Criteria) this;
+		}
+
+		public Criteria andQrcodeIn(List<String> values) {
+			addCriterion("qrcode in", values, "qrcode");
+			return (Criteria) this;
+		}
+
+		public Criteria andQrcodeNotIn(List<String> values) {
+			addCriterion("qrcode not in", values, "qrcode");
+			return (Criteria) this;
+		}
+
+		public Criteria andQrcodeBetween(String value1, String value2) {
+			addCriterion("qrcode between", value1, value2, "qrcode");
+			return (Criteria) this;
+		}
+
+		public Criteria andQrcodeNotBetween(String value1, String value2) {
+			addCriterion("qrcode not between", value1, value2, "qrcode");
+			return (Criteria) this;
+		}
+
+		public Criteria andIsStoreLimitIsNull() {
+			addCriterion("is_store_limit is null");
+			return (Criteria) this;
+		}
+
+		public Criteria andIsStoreLimitIsNotNull() {
+			addCriterion("is_store_limit is not null");
+			return (Criteria) this;
+		}
+
+		public Criteria andIsStoreLimitEqualTo(Boolean value) {
+			addCriterion("is_store_limit =", value, "isStoreLimit");
+			return (Criteria) this;
+		}
+
+		public Criteria andIsStoreLimitNotEqualTo(Boolean value) {
+			addCriterion("is_store_limit <>", value, "isStoreLimit");
+			return (Criteria) this;
+		}
+
+		public Criteria andIsStoreLimitGreaterThan(Boolean value) {
+			addCriterion("is_store_limit >", value, "isStoreLimit");
+			return (Criteria) this;
+		}
+
+		public Criteria andIsStoreLimitGreaterThanOrEqualTo(Boolean value) {
+			addCriterion("is_store_limit >=", value, "isStoreLimit");
+			return (Criteria) this;
+		}
+
+		public Criteria andIsStoreLimitLessThan(Boolean value) {
+			addCriterion("is_store_limit <", value, "isStoreLimit");
+			return (Criteria) this;
+		}
+
+		public Criteria andIsStoreLimitLessThanOrEqualTo(Boolean value) {
+			addCriterion("is_store_limit <=", value, "isStoreLimit");
+			return (Criteria) this;
+		}
+
+		public Criteria andIsStoreLimitIn(List<Boolean> values) {
+			addCriterion("is_store_limit in", values, "isStoreLimit");
+			return (Criteria) this;
+		}
+
+		public Criteria andIsStoreLimitNotIn(List<Boolean> values) {
+			addCriterion("is_store_limit not in", values, "isStoreLimit");
+			return (Criteria) this;
+		}
+
+		public Criteria andIsStoreLimitBetween(Boolean value1, Boolean value2) {
+			addCriterion("is_store_limit between", value1, value2, "isStoreLimit");
+			return (Criteria) this;
+		}
+
+		public Criteria andIsStoreLimitNotBetween(Boolean value1, Boolean value2) {
+			addCriterion("is_store_limit not between", value1, value2, "isStoreLimit");
+			return (Criteria) this;
+		}
+
+		public Criteria andStoreLimitTypeIsNull() {
+			addCriterion("store_limit_type is null");
+			return (Criteria) this;
+		}
+
+		public Criteria andStoreLimitTypeIsNotNull() {
+			addCriterion("store_limit_type is not null");
+			return (Criteria) this;
+		}
+
+		public Criteria andStoreLimitTypeEqualTo(Integer value) {
+			addCriterion("store_limit_type =", value, "storeLimitType");
+			return (Criteria) this;
+		}
+
+		public Criteria andStoreLimitTypeNotEqualTo(Integer value) {
+			addCriterion("store_limit_type <>", value, "storeLimitType");
+			return (Criteria) this;
+		}
+
+		public Criteria andStoreLimitTypeGreaterThan(Integer value) {
+			addCriterion("store_limit_type >", value, "storeLimitType");
+			return (Criteria) this;
+		}
+
+		public Criteria andStoreLimitTypeGreaterThanOrEqualTo(Integer value) {
+			addCriterion("store_limit_type >=", value, "storeLimitType");
+			return (Criteria) this;
+		}
+
+		public Criteria andStoreLimitTypeLessThan(Integer value) {
+			addCriterion("store_limit_type <", value, "storeLimitType");
+			return (Criteria) this;
+		}
+
+		public Criteria andStoreLimitTypeLessThanOrEqualTo(Integer value) {
+			addCriterion("store_limit_type <=", value, "storeLimitType");
+			return (Criteria) this;
+		}
+
+		public Criteria andStoreLimitTypeIn(List<Integer> values) {
+			addCriterion("store_limit_type in", values, "storeLimitType");
+			return (Criteria) this;
+		}
+
+		public Criteria andStoreLimitTypeNotIn(List<Integer> values) {
+			addCriterion("store_limit_type not in", values, "storeLimitType");
+			return (Criteria) this;
+		}
+
+		public Criteria andStoreLimitTypeBetween(Integer value1, Integer value2) {
+			addCriterion("store_limit_type between", value1, value2, "storeLimitType");
+			return (Criteria) this;
+		}
+
+		public Criteria andStoreLimitTypeNotBetween(Integer value1, Integer value2) {
+			addCriterion("store_limit_type not between", value1, value2, "storeLimitType");
 			return (Criteria) this;
 		}
 
@@ -982,7 +1172,7 @@ public class MktActivityManualPOExample implements Serializable {
 
 	/**
 	 * 只读. t_mkt_activity_manual
-	 * @mbg.generated  2018-08-31 12:40:26
+	 * @mbg.generated  2018-10-31 10:42:20
 	 */
 	public static class Criterion implements Serializable {
 		private String condition;

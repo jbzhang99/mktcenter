@@ -707,6 +707,7 @@
      count(distinct tmtr.member_code) AS oneTaskCountMbr,
      count(tmtr.member_code) AS oneTaskShareTimes,
      tmt.start_time,
+     tmt.create_date,
      ROUND(TIMESTAMPDIFF(HOUR,tmt.start_time,tmt.end_time)/24,1) as taskDates
      FROM
      t_mkt_task_record tmtr   INNER JOIN

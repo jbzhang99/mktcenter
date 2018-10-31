@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
 import com.alibaba.fastjson.JSONObject;
+import com.bizvane.centerstageservice.interfaces.SysStoreService;
 import com.bizvane.centerstageservice.models.po.SysCompanyPo;
 import com.bizvane.centerstageservice.models.po.SysStorePo;
 import com.bizvane.centerstageservice.models.vo.StaffVo;
@@ -137,10 +138,10 @@ public class ReportIncomeController {
 			    		             staffVo.setSysBrandId(currentUser.getBrandId());
 			    		             staffVo.setSysAccountId(currentUser.getSysAccountId());
 			    		             
-			    		             ResponseData<PageInfo<SysStoreVo>> SysStoreVo = storeServiceRpc.getSysStoreList(staffVo);
+			    		             ResponseData<com.github.pagehelper.PageInfo<SysStoreVo>> SysStoreVo = storeServiceRpc.getSysStoreList(staffVo);
 			    		             
 			    		             staffVo.setPageSize(Integer.parseInt(String.valueOf(SysStoreVo.getData().getTotal())));
-			    		             ResponseData<PageInfo<SysStoreVo>> SysStoreVo2 = storeServiceRpc.getSysStoreList(staffVo);
+			    		             ResponseData<com.github.pagehelper.PageInfo<com.bizvane.centerstageservice.models.vo.SysStoreVo>> SysStoreVo2 = storeServiceRpc.getSysStoreList(staffVo);
 			    		             str = new String[SysStoreVo2.getData().getList().size()];
 			    		            int i=0;
 			    		             for( SysStoreVo sysStore : SysStoreVo2.getData().getList()) {

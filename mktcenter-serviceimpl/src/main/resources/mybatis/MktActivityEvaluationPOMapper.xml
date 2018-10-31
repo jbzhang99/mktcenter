@@ -530,7 +530,10 @@
     tma.modified_user_name,
     tma.modified_date,
     tma.valid,
-
+    tma.activity_info,
+    tmas.is_store_limit,
+    tmas.store_limit_type,
+    tmas.store_limit_list,
     tmas.mkt_activity_evaluation_id
     FROM
     `t_mkt_activity` tma
@@ -566,6 +569,9 @@
     </if>
     <if test="checkStatus != null and checkStatus!= '' ">
       AND tma.check_status = #{checkStatus,jdbcType=INTEGER}
+    </if>
+    <if test="stop != null and stop!= ''">
+      AND tma.activity_status !=4
     </if>
   </select>
 </mapper>

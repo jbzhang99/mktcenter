@@ -57,6 +57,8 @@ public class DayTaskRecordVo {
 
     //任务开始时间
     private  Date  startTime;
+    //完善资料任务的开始时间
+    private Date createDate;
     //短信数量
     private  String  msgNUM;
 
@@ -222,5 +224,13 @@ public class DayTaskRecordVo {
 
     public void setMsgNUM(String msgNUM) {
         this.msgNUM = msgNUM;
+    }
+
+    public Date getCreateDate() {
+        return createDate;
+    }
+
+    public void setCreateDate(Date createDate) {
+        this.createDate = createDate;
     }
 }

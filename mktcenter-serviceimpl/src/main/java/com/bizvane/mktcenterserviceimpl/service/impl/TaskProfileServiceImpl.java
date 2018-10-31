@@ -220,6 +220,7 @@ public class TaskProfileServiceImpl implements TaskProfileService {
         mktTaskPOWithBLOBs.setMktTaskId(mktTaskId);
         mktTaskPOWithBLOBs.setCheckStatus(checkStatus);
         mktTaskPOWithBLOBs.setRemark(remark);
+        mktTaskPOWithBLOBs.setCreateDate(new Date());
         mktTaskPOWithBLOBs.setModifiedDate(new Date());
         mktTaskPOWithBLOBs.setModifiedUserId(sysAccountPO.getSysAccountId());
         mktTaskPOWithBLOBs.setModifiedUserName(sysAccountPO.getName());
