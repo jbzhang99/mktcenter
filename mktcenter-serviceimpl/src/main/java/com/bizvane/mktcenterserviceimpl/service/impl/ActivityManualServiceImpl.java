@@ -534,7 +534,7 @@ public class ActivityManualServiceImpl implements ActivityManualService {
             }
             for (ActivityVO activityVO1 : activityList) {
                 //过滤门店
-                if (!ExecuteParamCheckUtil.implementActivitCheck(memberInfoModel,activityVO)){
+                if (!ExecuteParamCheckUtil.implementActivitCheck(memberInfoModel,activityVO1)){
                     continue;
                 }
                 //2.查询活动对应的所有券
