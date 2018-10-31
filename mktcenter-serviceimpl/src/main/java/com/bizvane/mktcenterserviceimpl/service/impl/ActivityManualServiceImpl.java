@@ -296,6 +296,17 @@ public class ActivityManualServiceImpl implements ActivityManualService {
             responseData.setMessage(SystemConstants.ERROR_MSG_PARAM_EMPTY);
             return  responseData;
         }
+        //判断活动是否被禁用
+        ActivityVO activity = new ActivityVO();
+        activity.setMktActivityId(vo.getMktActivityId());
+        activity.setValid(Boolean.TRUE);
+        List<ActivityVO> manualList = mktActivityManualPOMapper.getActivityManualList(activity);
+        if (CollectionUtils.isEmpty(manualList) || manualList.get(0).getActivityStatus()!=ActivityStatusEnum.ACTIVITY_STATUS_EXECUTING.getCode()){
+            responseData.setCode(SystemConstants.ERROR_CODE);
+            responseData.setMessage("该活动已结束");
+            return responseData;
+        }
+
         MktActivityRecordPO mktActivityRecordPO = new MktActivityRecordPO();
         mktActivityRecordPO.setMemberCode(memberInfoModel.getMemberCode());
         try {
