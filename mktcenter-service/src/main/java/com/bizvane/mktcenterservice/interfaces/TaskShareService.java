@@ -28,7 +28,7 @@ public interface TaskShareService {
      * 从中控获取站内链接列表
      * @return
      */
-    public ResponseData<List<AppletFunctionPO>>  getURLList();
+    public ResponseData<List<AppletFunctionPO>>  getURLList(Long brandId);
 
     /**
      * 新增任务

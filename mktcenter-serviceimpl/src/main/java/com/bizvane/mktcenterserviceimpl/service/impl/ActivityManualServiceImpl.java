@@ -36,6 +36,7 @@ import com.bizvane.mktcenterserviceimpl.common.utils.CodeUtil;
 import com.bizvane.mktcenterserviceimpl.common.utils.DateUtil;
 import com.bizvane.mktcenterserviceimpl.common.job.JobUtil;
 import com.bizvane.mktcenterserviceimpl.common.utils.SpringContextUtil;
+import com.bizvane.mktcenterserviceimpl.common.utils.ExecuteParamCheckUtil;
 import com.bizvane.mktcenterserviceimpl.mappers.*;
 import com.bizvane.utils.enumutils.SysResponseEnum;
 import com.bizvane.utils.responseinfo.ResponseData;
@@ -142,6 +143,9 @@ public class ActivityManualServiceImpl implements ActivityManualService {
         //活动类型
         MktActivityPOWithBLOBs mktActivityPOWithBLOBs = new MktActivityPOWithBLOBs();
         BeanUtils.copyProperties(activityVO, mktActivityPOWithBLOBs);
+         mktActivityPOWithBLOBs.setSysBrandId(stageUser.getBrandId());
+         mktActivityPOWithBLOBs.setSysCompanyId(stageUser.getSysCompanyId());
+
 
         //查询审核配置，是否需要审核然后判断
         SysCheckConfigVo so = new SysCheckConfigVo();
@@ -214,6 +218,7 @@ public class ActivityManualServiceImpl implements ActivityManualService {
         MktActivityManualPO mktActivityManualPO = new MktActivityManualPO();
         BeanUtils.copyProperties(activityVO, mktActivityManualPO);
         mktActivityManualPO.setMktActivityId(mktActivityId);
+        mktActivityManualPO.setIsStoreLimit(activityVO.getStoreLimit());
         // 扫码领券的二维码
       if(ActivityTypeEnum.ACTIVITY_TYPE_QRCODE.getCode()==activityVO.getActivityType()){
          QRCodeConfig qrCodeConfig = (QRCodeConfig)SpringContextUtil.getBean("QRCodeConfig");
@@ -295,6 +300,17 @@ public class ActivityManualServiceImpl implements ActivityManualService {
             responseData.setMessage(SystemConstants.ERROR_MSG_PARAM_EMPTY);
             return  responseData;
         }
+        //判断活动是否被禁用
+        ActivityVO activity = new ActivityVO();
+        activity.setMktActivityId(vo.getMktActivityId());
+        activity.setValid(Boolean.TRUE);
+        List<ActivityVO> manualList = mktActivityManualPOMapper.getActivityManualList(activity);
+        if (CollectionUtils.isEmpty(manualList) || manualList.get(0).getActivityStatus()!=ActivityStatusEnum.ACTIVITY_STATUS_EXECUTING.getCode()){
+            responseData.setCode(SystemConstants.ERROR_CODE);
+            responseData.setMessage("该活动已结束");
+            return responseData;
+        }
+
         MktActivityRecordPO mktActivityRecordPO = new MktActivityRecordPO();
         mktActivityRecordPO.setMemberCode(memberInfoModel.getMemberCode());
         try {
@@ -532,6 +548,10 @@ public class ActivityManualServiceImpl implements ActivityManualService {
                 return responseData;
             }
             for (ActivityVO activityVO1 : activityList) {
+                //过滤门店
+                if (!ExecuteParamCheckUtil.implementActivitCheck(memberInfoModel,activityVO1)){
+                    continue;
+                }
                 //2.查询活动对应的所有券
                 log.info("couponQueryServiceFeign.findCouponByCouponCode--->入参为:"+activityVO1.getCouponDefinitionId());
                 //ResponseData<CouponDefinitionPO> couponDefinitionPOResponseData  = couponDefinitionServiceFeign.findByIdRpc(activityVO1.getCouponDefinitionId());

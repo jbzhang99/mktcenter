@@ -682,6 +682,9 @@
     tmam.per_person_per_day_max,
     tmam.per_person_max,
     tmam.mkt_activity_manual_id,
+    tmam.is_store_limit,
+    tmam.store_limit_type,
+    tmam.store_limit_list,
     tmc.coupon_name,
     tmc.coupon_definition_id
 

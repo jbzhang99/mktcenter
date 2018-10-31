@@ -132,8 +132,9 @@ public class ActivitySigninServiceImpl implements ActivitySigninService {
         ActivityVO vo= new ActivityVO();
         vo.setSysBrandId(stageUser.getBrandId());
         vo.setActivityType(ActivityTypeEnum.ACTIVITY_TYPE_SIGNIN.getCode());
+        vo.setStop("ture");
         List<ActivityVO> activitySigninList = mktActivitySigninMapper.getActivitySigninList(vo);
-       /* if(!CollectionUtils.isEmpty(activitySigninList)){
+        if(!CollectionUtils.isEmpty(activitySigninList)){
             for (ActivityVO activity:activitySigninList) {
                 //判断适用商品
                 if (false==activity.getStoreLimit() ||!ExecuteParamCheckUtil.addActivitCheck(bo,activity)){
@@ -143,12 +144,12 @@ public class ActivitySigninServiceImpl implements ActivitySigninService {
                 }
             }
 
-        }*/
-        if(!CollectionUtils.isEmpty(activitySigninList)){
+        }
+       /* if(!CollectionUtils.isEmpty(activitySigninList)){
             responseData.setCode(SysResponseEnum.FAILED.getCode());
             responseData.setMessage("已存在签到活动!");
             return responseData;
-        }
+        }*/
         //查询审核配置，是否需要审核然后判断
         SysCheckConfigVo so = new SysCheckConfigVo();
         so.setSysBrandId(activityVO.getSysBrandId());
@@ -318,6 +319,10 @@ public class ActivitySigninServiceImpl implements ActivitySigninService {
             return responseData;
         }
         for (ActivityVO activityVO:signinList) {
+            //过滤门店
+            if (!ExecuteParamCheckUtil.implementActivitCheck(vo,activityVO)){
+                continue;
+            }
             //增加积分奖励新增接口
             AwardBO bo = new AwardBO();
             IntegralChangeRequestModel integralChangeRequestModel =new IntegralChangeRequestModel();

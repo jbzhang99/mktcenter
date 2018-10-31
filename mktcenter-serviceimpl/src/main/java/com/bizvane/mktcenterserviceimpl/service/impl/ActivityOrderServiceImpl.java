@@ -623,32 +623,32 @@ public class ActivityOrderServiceImpl implements ActivityOrderService {
             if (!ExecuteParamCheckUtil.CheckPayMoney(vo.getPayMoney(),new BigDecimal(activityVO.getOrderMinPrice()))){
                 continue;
             }
-            log.info("消费金额验证完毕11111111111111111111111111111111");
+            log.info("消费金额验证完毕");
             //判断会员范围 会员类型
             if(!ExecuteParamCheckUtil.CheckMemberType(vo.getMemberType(),activityVO.getMemberType())){
                 continue;
             }
-            log.info("消费会员范围验证完毕222222222222222222222222222222");
+            log.info("消费会员范围验证完毕");
             //判断会员等级
             if(!ExecuteParamCheckUtil.CheckMbrLevelCode(vo.getLevelId(),activityVO.getMbrLevelCode())){
                 continue;
             }
-            log.info("消费会员等级验证完毕333333333333333333333333333");
+            log.info("消费会员等级验证完毕");
             //判断订单来源
             if(!ExecuteParamCheckUtil.CheckOrderFrom(vo.getOrderFrom(),activityVO.getOrderSource())){
                 continue;
             }
-            log.info("消费会员订单来源验证完毕444444444444444444444444444444444");
+            log.info("消费会员订单来源验证完毕");
             //判断适用商品
             if (!ExecuteParamCheckUtil.CheckCommodity(vo,activityVO)){
                 continue;
             }
-            log.info("消费会员适用商品来源验证完毕55555555555555555555555555555555555");
+            log.info("消费会员适用商品来源验证完毕");
             //判断适用门店
             if (!ExecuteParamCheckUtil.CheckserviceStore(vo,activityVO)){
                 continue;
             }
-            log.info("消费会员适用门店来源验证完毕6666666666666666666666666666666666666");
+            log.info("消费会员适用门店来源验证完毕");
             log.info("消费活动验证通过了通过了通过了通过了通过了通过了通过了通过了通过了通过了通过了通过了+++++++++++++++");
 
             //增加积分奖励新增接口

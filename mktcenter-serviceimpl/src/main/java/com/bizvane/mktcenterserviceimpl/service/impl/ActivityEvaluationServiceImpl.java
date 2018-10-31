@@ -25,6 +25,7 @@ import com.bizvane.mktcenterservice.models.vo.PageForm;
 import com.bizvane.mktcenterserviceimpl.common.award.Award;
 import com.bizvane.mktcenterserviceimpl.common.enums.*;
 import com.bizvane.mktcenterserviceimpl.common.utils.CodeUtil;
+import com.bizvane.mktcenterserviceimpl.common.utils.ExecuteParamCheckUtil;
 import com.bizvane.mktcenterserviceimpl.mappers.MktActivityEvaluationPOMapper;
 import com.bizvane.mktcenterserviceimpl.mappers.MktActivityPOMapper;
 import com.bizvane.mktcenterserviceimpl.mappers.MktActivityRecordPOMapper;
@@ -117,13 +118,19 @@ public class ActivityEvaluationServiceImpl implements ActivityEvaluationService 
         ActivityVO vo = new ActivityVO();
         vo.setSysBrandId(stageUser.getBrandId());
         vo.setActivityType(ActivityTypeEnum.ACTIVITY_TYPE_EVALUATION.getCode());
+        vo.setStop("ture");
         //根据品牌id和活动类型判断该品牌下是否存在该类型的活动，一个品牌下面只能有一个评价奖励的活动
         List<ActivityVO> activityEvaluationList = mktActivityEvaluationPOMapper.getActivityVOList(vo);
         //判断集合是否有值
         if (!CollectionUtils.isEmpty(activityEvaluationList)) {
-            responseData.setCode(SysResponseEnum.FAILED.getCode());
-            responseData.setMessage("已存在评价奖励活动!");
-            return responseData;
+            for (ActivityVO activity:activityEvaluationList) {
+                //判断适用商品
+                if (false==activity.getStoreLimit() ||!ExecuteParamCheckUtil.addActivitCheck(bo,activity)){
+                    responseData.setCode(SysResponseEnum.FAILED.getCode());
+                    responseData.setMessage("已存在评价奖励活动!");
+                    return responseData;
+                }
+            }
         }
         //根据该企业id查询该企业下是否存在审核配置，是否需要审核然后判断
         SysCheckConfigVo so = new SysCheckConfigVo();
@@ -161,6 +168,7 @@ public class ActivityEvaluationServiceImpl implements ActivityEvaluationService 
         mktActivityPOWithBLOBs.setCreateUserId(stageUser.getSysAccountId());
         mktActivityPOWithBLOBs.setCreateUserName(stageUser.getName());
         mktActivityPOWithBLOBs.setActivityName("评价奖励活动");
+        mktActivityPOWithBLOBs.setActivityInfo(activityVO.getActivityInfo());
         log.info("新增主表数据=" + JSON.toJSONString(mktActivityPOWithBLOBs));
         mktActivityPOMapper.insertSelective(mktActivityPOWithBLOBs);
         //获取新增后数据id
@@ -255,6 +263,10 @@ public class ActivityEvaluationServiceImpl implements ActivityEvaluationService 
             return responseData;
         }
         for (ActivityVO activityVO : evaluationList) {
+            //过滤门店
+            if (!ExecuteParamCheckUtil.implementActivitCheck(vo,activityVO)){
+                continue;
+            }
             //增加积分奖励新增接口
             log.info("执行评价送积分777777777777777777");
             AwardBO bo = new AwardBO();
