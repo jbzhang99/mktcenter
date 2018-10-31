@@ -141,6 +141,8 @@ public class ActivityManualServiceImpl implements ActivityManualService {
         //活动类型
         MktActivityPOWithBLOBs mktActivityPOWithBLOBs = new MktActivityPOWithBLOBs();
         BeanUtils.copyProperties(activityVO, mktActivityPOWithBLOBs);
+         mktActivityPOWithBLOBs.setSysBrandId(stageUser.getBrandId());
+         mktActivityPOWithBLOBs.setSysCompanyId(stageUser.getSysCompanyId());
 
         //查询审核配置，是否需要审核然后判断
         SysCheckConfigVo so = new SysCheckConfigVo();
