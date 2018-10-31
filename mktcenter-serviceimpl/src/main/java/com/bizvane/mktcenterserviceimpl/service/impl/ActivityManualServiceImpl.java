@@ -6,6 +6,7 @@ import com.bizvane.centerstageservice.models.po.SysCheckPo;
 import com.bizvane.centerstageservice.models.vo.SysCheckConfigVo;
 import com.bizvane.centerstageservice.rpc.SysCheckConfigServiceRpc;
 import com.bizvane.centerstageservice.rpc.SysCheckServiceRpc;
+import com.bizvane.connectorservice.util.SpringUtil;
 import com.bizvane.couponfacade.enums.SendTypeEnum;
 import com.bizvane.couponfacade.interfaces.CouponDefinitionServiceFeign;
 import com.bizvane.couponfacade.interfaces.CouponQueryServiceFeign;
@@ -34,6 +35,7 @@ import com.bizvane.mktcenterserviceimpl.common.utils.ActivityParamCheckUtil;
 import com.bizvane.mktcenterserviceimpl.common.utils.CodeUtil;
 import com.bizvane.mktcenterserviceimpl.common.utils.DateUtil;
 import com.bizvane.mktcenterserviceimpl.common.job.JobUtil;
+import com.bizvane.mktcenterserviceimpl.common.utils.SpringContextUtil;
 import com.bizvane.mktcenterserviceimpl.mappers.*;
 import com.bizvane.utils.enumutils.SysResponseEnum;
 import com.bizvane.utils.responseinfo.ResponseData;
@@ -214,10 +216,12 @@ public class ActivityManualServiceImpl implements ActivityManualService {
         mktActivityManualPO.setMktActivityId(mktActivityId);
         // 扫码领券的二维码
       if(ActivityTypeEnum.ACTIVITY_TYPE_QRCODE.getCode()==activityVO.getActivityType()){
-         QRCodeConfig qrCodeConfig = new QRCodeConfig();
+         QRCodeConfig qrCodeConfig = (QRCodeConfig)SpringContextUtil.getBean("QRCodeConfig");
          String url= qrCodeConfig.getQrcodeurl()+activityVO.getActivityCode();
           UrlQRCodeCreateRequestVO urlQRCodeCreateRequestVO = new UrlQRCodeCreateRequestVO();
           urlQRCodeCreateRequestVO.setSysBrandId(activityVO.getSysBrandId());
+          urlQRCodeCreateRequestVO.setBrandCode(stageUser.getBrandId()+"");//TODO-
+          urlQRCodeCreateRequestVO.setCompanyCode(stageUser.getCompanyCode());
           urlQRCodeCreateRequestVO.setUrl(url);
          log.info("领券活动-创建活动-扫码领券查询二维码入参:"+JSON.toJSONString(urlQRCodeCreateRequestVO));
           ResponseData<String> qrCodeResponseData= null;
