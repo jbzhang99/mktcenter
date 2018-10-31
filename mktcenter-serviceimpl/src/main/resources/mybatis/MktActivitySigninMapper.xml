@@ -641,5 +641,8 @@
     <if test="activityName != null and activityName!= ''">
       AND tma.activity_name LIKE "%"#{activityName}"%"
     </if>
+    <if test="checkStatus != null and checkStatus!= '' ">
+      AND tma.check_status = #{checkStatus,jdbcType=INTEGER}
+    </if>
   </select>
 </mapper>
