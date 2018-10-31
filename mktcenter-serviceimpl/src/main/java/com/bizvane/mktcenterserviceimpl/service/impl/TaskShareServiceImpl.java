@@ -97,8 +97,8 @@ public class TaskShareServiceImpl implements TaskShareService {
      * 获取站内链接 列表
      */
     @Override
-    public ResponseData<List<AppletFunctionPO>>  getURLList(){
-       return appletRouteServiceRpc.getAllAppletFunction();
+    public ResponseData<List<AppletFunctionPO>>  getURLList(Long brandId){
+       return appletRouteServiceRpc.getAllAppletFunction(brandId);
 
     }
     /**

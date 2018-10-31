@@ -45,8 +45,10 @@ public class TaskShareController {
     private TaskShareService taskShareService;
 
     @RequestMapping("getURLList")
-    public ResponseData<List<AppletFunctionPO>> getURLList(){
-        return taskShareService.getURLList();
+    public ResponseData<List<AppletFunctionPO>> getURLList(HttpServletRequest request){
+        SysAccountPO sysAccountPo = TokenUtils.getStageUser(request);
+        Long brandId = sysAccountPo.getBrandId();
+        return taskShareService.getURLList(brandId);
     }
     /**
      * 创建任务
