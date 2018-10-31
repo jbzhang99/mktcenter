@@ -684,7 +684,7 @@
     tmam.mkt_activity_manual_id,
     tmam.is_store_limit,
     tmam.store_limit_type,
-    store_limit_list,
+    tmam.store_limit_list,
     tmc.coupon_name,
     tmc.coupon_definition_id
 
