@@ -608,6 +608,9 @@
     tmas.integral_type,
     tmas.integral_basis,
     tmas.integral_addend,
+    tmas.is_store_limit,
+    tmas.store_limit_type,
+    tmas.store_limit_list,
     tmas.integral_max
     FROM
     `t_mkt_activity` tma

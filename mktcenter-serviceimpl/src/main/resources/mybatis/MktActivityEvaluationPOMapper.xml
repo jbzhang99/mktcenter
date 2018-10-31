@@ -530,7 +530,9 @@
     tma.modified_user_name,
     tma.modified_date,
     tma.valid,
-
+    tmas.is_store_limit,
+    tmas.store_limit_type,
+    tmas.store_limit_list,
     tmas.mkt_activity_evaluation_id
     FROM
     `t_mkt_activity` tma

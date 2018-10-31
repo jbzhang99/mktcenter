@@ -144,6 +144,7 @@ public class ActivityManualServiceImpl implements ActivityManualService {
          mktActivityPOWithBLOBs.setSysBrandId(stageUser.getBrandId());
          mktActivityPOWithBLOBs.setSysCompanyId(stageUser.getSysCompanyId());
 
+
         //查询审核配置，是否需要审核然后判断
         SysCheckConfigVo so = new SysCheckConfigVo();
         so.setSysBrandId(activityVO.getSysBrandId());
@@ -215,6 +216,7 @@ public class ActivityManualServiceImpl implements ActivityManualService {
         MktActivityManualPO mktActivityManualPO = new MktActivityManualPO();
         BeanUtils.copyProperties(activityVO, mktActivityManualPO);
         mktActivityManualPO.setMktActivityId(mktActivityId);
+        mktActivityManualPO.setIsStoreLimit(activityVO.getStoreLimit());
         // 扫码领券的二维码
       if(ActivityTypeEnum.ACTIVITY_TYPE_QRCODE.getCode()==activityVO.getActivityType()){
          QRCodeConfig qrCodeConfig = new QRCodeConfig();
