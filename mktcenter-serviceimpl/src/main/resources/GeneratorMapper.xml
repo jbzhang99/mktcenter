@@ -59,9 +59,9 @@
         <!--<table tableName="t_mkt_activity_birthday" domainObjectName="MktActivityBirthdayPO">-->
             <!--<generatedKey column="mkt_activity_birthday_id" sqlStatement="MySql" identity="true"/>-->
         <!--</table>-->
-        <!--<table tableName="t_mkt_activity_manual" domainObjectName="MktActivityManualPO">-->
-            <!--<generatedKey column="mkt_activity_manual_id" sqlStatement="MySql" identity="true"/>-->
-        <!--</table>-->
+        <table tableName="t_mkt_activity_manual" domainObjectName="MktActivityManualPO">
+            <generatedKey column="mkt_activity_manual_id" sqlStatement="MySql" identity="true"/>
+        </table>
         <!--<table tableName="t_mkt_activity_mq_log" domainObjectName="MktActivityMqLogPO">-->
             <!--<generatedKey column="mkt_activity_mq_log_id" sqlStatement="MySql" identity="true"/>-->
         <!--</table>-->
@@ -74,9 +74,9 @@
         <!--<table tableName="t_mkt_activity_register" domainObjectName="MktActivityRegisterPO">-->
             <!--<generatedKey column="mkt_activity_sign_in_reward_id" sqlStatement="MySql" identity="true"/>-->
         <!--</table>-->
-        <table tableName="t_mkt_activity_signin" domainObjectName="MktActivitySignin">
+       <!--  <table tableName="t_mkt_activity_signin" domainObjectName="MktActivitySignin">
             <generatedKey column="mkt_activity_signin_id" sqlStatement="MySql" identity="true"/>
-        </table>
+        </table> -->
         <!--<table tableName="t_mkt_activity_smart" domainObjectName="MktActivitySmartPO">-->
             <!--<generatedKey column="mkt_activity_smart_id" sqlStatement="MySql" identity="true"/>-->
         <!--</table>-->

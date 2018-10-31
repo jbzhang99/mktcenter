@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
 import com.alibaba.fastjson.JSONObject;
+import com.bizvane.centerstageservice.interfaces.SysStoreService;
 import com.bizvane.centerstageservice.models.po.SysCompanyPo;
 import com.bizvane.centerstageservice.models.po.SysStorePo;
 import com.bizvane.centerstageservice.models.vo.SysStoreVo;
@@ -67,6 +68,9 @@ public class ReportGroupController {
 	@Autowired
 	private    StoreGroupServiceRpc storeGroupServiceRpc;
 	
+	@Autowired
+	private   StoreServiceRpc sysStoreService;
+
 //	@Autowired
 //	private  MemberLifecycleParameterService memberLifecycleParameterService;
 

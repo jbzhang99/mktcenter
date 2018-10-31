@@ -70,7 +70,8 @@ public class FigureController {
 	
 	@Autowired
 	private    StoreGroupServiceRpc storeGroupServiceRpc;
-
+	@Autowired
+	private   StoreServiceRpc sysStoreService;
 	
     @RequestMapping("vipIncomeAnalysis")
     public ResponseData<BackDataTimeDtail> vipIncomeAnalysis( IncomeTotalListGroup sendVO, HttpServletRequest request){
