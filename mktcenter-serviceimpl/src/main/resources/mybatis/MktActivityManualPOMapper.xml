@@ -4,13 +4,14 @@
   <resultMap id="BaseResultMap" type="com.bizvane.mktcenterservice.models.po.MktActivityManualPO">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-10-31 10:05:06.
+      This element was generated on 2018-10-31 10:42:20.
     -->
     <id column="mkt_activity_manual_id" jdbcType="BIGINT" property="mktActivityManualId" />
     <result column="sys_company_id" jdbcType="BIGINT" property="sysCompanyId" />
     <result column="mkt_activity_id" jdbcType="BIGINT" property="mktActivityId" />
     <result column="per_person_per_day_max" jdbcType="INTEGER" property="perPersonPerDayMax" />
     <result column="per_person_max" jdbcType="INTEGER" property="perPersonMax" />
+    <result column="qrcode" jdbcType="VARCHAR" property="qrcode" />
     <result column="is_store_limit" jdbcType="BIT" property="isStoreLimit" />
     <result column="store_limit_type" jdbcType="INTEGER" property="storeLimitType" />
     <result column="remark" jdbcType="VARCHAR" property="remark" />
@@ -22,18 +23,17 @@
     <result column="modified_date" jdbcType="TIMESTAMP" property="modifiedDate" />
     <result column="valid" jdbcType="BIT" property="valid" />
   </resultMap>
-  <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.bizvane.mktcenterservice.models.po.MktActivityManualPOWithBLOBs">
+  <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.bizvane.mktcenterservice.models.po.MktActivityManualPO">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-10-31 10:05:06.
+      This element was generated on 2018-10-31 10:42:20.
     -->
-    <result column="qrcode" jdbcType="LONGVARCHAR" property="qrcode" />
     <result column="store_limit_list" jdbcType="LONGVARCHAR" property="storeLimitList" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-10-31 10:05:06.
+      This element was generated on 2018-10-31 10:42:20.
     -->
     <where>
       <foreach collection="oredCriteria" item="criteria" separator="or">
@@ -66,7 +66,7 @@
   <sql id="Update_By_Example_Where_Clause">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-10-31 10:05:06.
+      This element was generated on 2018-10-31 10:42:20.
     -->
     <where>
       <foreach collection="example.oredCriteria" item="criteria" separator="or">
@@ -99,23 +99,24 @@
   <sql id="Base_Column_List">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-10-31 10:05:06.
+      This element was generated on 2018-10-31 10:42:20.
     -->
     mkt_activity_manual_id, sys_company_id, mkt_activity_id, per_person_per_day_max, 
-    per_person_max, is_store_limit, store_limit_type, remark, create_user_id, create_user_name, 
-    create_date, modified_user_id, modified_user_name, modified_date, valid
+    per_person_max, qrcode, is_store_limit, store_limit_type, remark, create_user_id, 
+    create_user_name, create_date, modified_user_id, modified_user_name, modified_date, 
+    valid
   </sql>
   <sql id="Blob_Column_List">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-10-31 10:05:06.
+      This element was generated on 2018-10-31 10:42:20.
     -->
-    qrcode, store_limit_list
+    store_limit_list
   </sql>
   <select id="selectByExampleWithBLOBs" parameterType="com.bizvane.mktcenterservice.models.po.MktActivityManualPOExample" resultMap="ResultMapWithBLOBs">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-10-31 10:05:06.
+      This element was generated on 2018-10-31 10:42:20.
     -->
     select
     <if test="distinct">
@@ -135,7 +136,7 @@
   <select id="selectByExample" parameterType="com.bizvane.mktcenterservice.models.po.MktActivityManualPOExample" resultMap="BaseResultMap">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-10-31 10:05:06.
+      This element was generated on 2018-10-31 10:42:20.
     -->
     select
     <if test="distinct">
@@ -153,7 +154,7 @@
   <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="ResultMapWithBLOBs">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-10-31 10:05:06.
+      This element was generated on 2018-10-31 10:42:20.
     -->
     select 
     <include refid="Base_Column_List" />
@@ -165,7 +166,7 @@
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-10-31 10:05:06.
+      This element was generated on 2018-10-31 10:42:20.
     -->
     delete from t_mkt_activity_manual
     where mkt_activity_manual_id = #{mktActivityManualId,jdbcType=BIGINT}
@@ -173,38 +174,38 @@
   <delete id="deleteByExample" parameterType="com.bizvane.mktcenterservice.models.po.MktActivityManualPOExample">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-10-31 10:05:06.
+      This element was generated on 2018-10-31 10:42:20.
     -->
     delete from t_mkt_activity_manual
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insert" parameterType="com.bizvane.mktcenterservice.models.po.MktActivityManualPOWithBLOBs">
+  <insert id="insert" parameterType="com.bizvane.mktcenterservice.models.po.MktActivityManualPO">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-10-31 10:05:06.
+      This element was generated on 2018-10-31 10:42:20.
     -->
     <selectKey keyProperty="mktActivityManualId" order="AFTER" resultType="java.lang.Long">
       SELECT LAST_INSERT_ID()
     </selectKey>
     insert into t_mkt_activity_manual (sys_company_id, mkt_activity_id, per_person_per_day_max, 
-      per_person_max, is_store_limit, store_limit_type, 
-      remark, create_user_id, create_user_name, 
-      create_date, modified_user_id, modified_user_name, 
-      modified_date, valid, qrcode, 
+      per_person_max, qrcode, is_store_limit, 
+      store_limit_type, remark, create_user_id, 
+      create_user_name, create_date, modified_user_id, 
+      modified_user_name, modified_date, valid, 
       store_limit_list)
     values (#{sysCompanyId,jdbcType=BIGINT}, #{mktActivityId,jdbcType=BIGINT}, #{perPersonPerDayMax,jdbcType=INTEGER}, 
-      #{perPersonMax,jdbcType=INTEGER}, #{isStoreLimit,jdbcType=BIT}, #{storeLimitType,jdbcType=INTEGER}, 
-      #{remark,jdbcType=VARCHAR}, #{createUserId,jdbcType=BIGINT}, #{createUserName,jdbcType=VARCHAR}, 
-      #{createDate,jdbcType=TIMESTAMP}, #{modifiedUserId,jdbcType=BIGINT}, #{modifiedUserName,jdbcType=VARCHAR}, 
-      #{modifiedDate,jdbcType=TIMESTAMP}, #{valid,jdbcType=BIT}, #{qrcode,jdbcType=LONGVARCHAR}, 
+      #{perPersonMax,jdbcType=INTEGER}, #{qrcode,jdbcType=VARCHAR}, #{isStoreLimit,jdbcType=BIT}, 
+      #{storeLimitType,jdbcType=INTEGER}, #{remark,jdbcType=VARCHAR}, #{createUserId,jdbcType=BIGINT}, 
+      #{createUserName,jdbcType=VARCHAR}, #{createDate,jdbcType=TIMESTAMP}, #{modifiedUserId,jdbcType=BIGINT}, 
+      #{modifiedUserName,jdbcType=VARCHAR}, #{modifiedDate,jdbcType=TIMESTAMP}, #{valid,jdbcType=BIT}, 
       #{storeLimitList,jdbcType=LONGVARCHAR})
   </insert>
-  <insert id="insertSelective" parameterType="com.bizvane.mktcenterservice.models.po.MktActivityManualPOWithBLOBs">
+  <insert id="insertSelective" parameterType="com.bizvane.mktcenterservice.models.po.MktActivityManualPO">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-10-31 10:05:06.
+      This element was generated on 2018-10-31 10:42:20.
     -->
     <selectKey keyProperty="mktActivityManualId" order="AFTER" resultType="java.lang.Long">
       SELECT LAST_INSERT_ID()
@@ -222,6 +223,9 @@
       </if>
       <if test="perPersonMax != null">
         per_person_max,
+      </if>
+      <if test="qrcode != null">
+        qrcode,
       </if>
       <if test="isStoreLimit != null">
         is_store_limit,
@@ -253,9 +257,6 @@
       <if test="valid != null">
         valid,
       </if>
-      <if test="qrcode != null">
-        qrcode,
-      </if>
       <if test="storeLimitList != null">
         store_limit_list,
       </if>
@@ -272,6 +273,9 @@
       </if>
       <if test="perPersonMax != null">
         #{perPersonMax,jdbcType=INTEGER},
+      </if>
+      <if test="qrcode != null">
+        #{qrcode,jdbcType=VARCHAR},
       </if>
       <if test="isStoreLimit != null">
         #{isStoreLimit,jdbcType=BIT},
@@ -303,9 +307,6 @@
       <if test="valid != null">
         #{valid,jdbcType=BIT},
       </if>
-      <if test="qrcode != null">
-        #{qrcode,jdbcType=LONGVARCHAR},
-      </if>
       <if test="storeLimitList != null">
         #{storeLimitList,jdbcType=LONGVARCHAR},
       </if>
@@ -314,7 +315,7 @@
   <select id="countByExample" parameterType="com.bizvane.mktcenterservice.models.po.MktActivityManualPOExample" resultType="java.lang.Long">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-10-31 10:05:06.
+      This element was generated on 2018-10-31 10:42:20.
     -->
     select count(*) from t_mkt_activity_manual
     <if test="_parameter != null">
@@ -324,7 +325,7 @@
   <update id="updateByExampleSelective" parameterType="map">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-10-31 10:05:06.
+      This element was generated on 2018-10-31 10:42:20.
     -->
     update t_mkt_activity_manual
     <set>
@@ -342,6 +343,9 @@
       </if>
       <if test="record.perPersonMax != null">
         per_person_max = #{record.perPersonMax,jdbcType=INTEGER},
+      </if>
+      <if test="record.qrcode != null">
+        qrcode = #{record.qrcode,jdbcType=VARCHAR},
       </if>
       <if test="record.isStoreLimit != null">
         is_store_limit = #{record.isStoreLimit,jdbcType=BIT},
@@ -373,9 +377,6 @@
       <if test="record.valid != null">
         valid = #{record.valid,jdbcType=BIT},
       </if>
-      <if test="record.qrcode != null">
-        qrcode = #{record.qrcode,jdbcType=LONGVARCHAR},
-      </if>
       <if test="record.storeLimitList != null">
         store_limit_list = #{record.storeLimitList,jdbcType=LONGVARCHAR},
       </if>
@@ -387,7 +388,7 @@
   <update id="updateByExampleWithBLOBs" parameterType="map">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-10-31 10:05:06.
+      This element was generated on 2018-10-31 10:42:20.
     -->
     update t_mkt_activity_manual
     set mkt_activity_manual_id = #{record.mktActivityManualId,jdbcType=BIGINT},
@@ -395,6 +396,7 @@
       mkt_activity_id = #{record.mktActivityId,jdbcType=BIGINT},
       per_person_per_day_max = #{record.perPersonPerDayMax,jdbcType=INTEGER},
       per_person_max = #{record.perPersonMax,jdbcType=INTEGER},
+      qrcode = #{record.qrcode,jdbcType=VARCHAR},
       is_store_limit = #{record.isStoreLimit,jdbcType=BIT},
       store_limit_type = #{record.storeLimitType,jdbcType=INTEGER},
       remark = #{record.remark,jdbcType=VARCHAR},
@@ -405,7 +407,6 @@
       modified_user_name = #{record.modifiedUserName,jdbcType=VARCHAR},
       modified_date = #{record.modifiedDate,jdbcType=TIMESTAMP},
       valid = #{record.valid,jdbcType=BIT},
-      qrcode = #{record.qrcode,jdbcType=LONGVARCHAR},
       store_limit_list = #{record.storeLimitList,jdbcType=LONGVARCHAR}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
@@ -414,7 +415,7 @@
   <update id="updateByExample" parameterType="map">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-10-31 10:05:06.
+      This element was generated on 2018-10-31 10:42:20.
     -->
     update t_mkt_activity_manual
     set mkt_activity_manual_id = #{record.mktActivityManualId,jdbcType=BIGINT},
@@ -422,6 +423,7 @@
       mkt_activity_id = #{record.mktActivityId,jdbcType=BIGINT},
       per_person_per_day_max = #{record.perPersonPerDayMax,jdbcType=INTEGER},
       per_person_max = #{record.perPersonMax,jdbcType=INTEGER},
+      qrcode = #{record.qrcode,jdbcType=VARCHAR},
       is_store_limit = #{record.isStoreLimit,jdbcType=BIT},
       store_limit_type = #{record.storeLimitType,jdbcType=INTEGER},
       remark = #{record.remark,jdbcType=VARCHAR},
@@ -436,10 +438,10 @@
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
-  <update id="updateByPrimaryKeySelective" parameterType="com.bizvane.mktcenterservice.models.po.MktActivityManualPOWithBLOBs">
+  <update id="updateByPrimaryKeySelective" parameterType="com.bizvane.mktcenterservice.models.po.MktActivityManualPO">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-10-31 10:05:06.
+      This element was generated on 2018-10-31 10:42:20.
     -->
     update t_mkt_activity_manual
     <set>
@@ -454,6 +456,9 @@
       </if>
       <if test="perPersonMax != null">
         per_person_max = #{perPersonMax,jdbcType=INTEGER},
+      </if>
+      <if test="qrcode != null">
+        qrcode = #{qrcode,jdbcType=VARCHAR},
       </if>
       <if test="isStoreLimit != null">
         is_store_limit = #{isStoreLimit,jdbcType=BIT},
@@ -485,25 +490,23 @@
       <if test="valid != null">
         valid = #{valid,jdbcType=BIT},
       </if>
-      <if test="qrcode != null">
-        qrcode = #{qrcode,jdbcType=LONGVARCHAR},
-      </if>
       <if test="storeLimitList != null">
         store_limit_list = #{storeLimitList,jdbcType=LONGVARCHAR},
       </if>
     </set>
     where mkt_activity_manual_id = #{mktActivityManualId,jdbcType=BIGINT}
   </update>
-  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.bizvane.mktcenterservice.models.po.MktActivityManualPOWithBLOBs">
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.bizvane.mktcenterservice.models.po.MktActivityManualPO">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-10-31 10:05:06.
+      This element was generated on 2018-10-31 10:42:20.
     -->
     update t_mkt_activity_manual
     set sys_company_id = #{sysCompanyId,jdbcType=BIGINT},
       mkt_activity_id = #{mktActivityId,jdbcType=BIGINT},
       per_person_per_day_max = #{perPersonPerDayMax,jdbcType=INTEGER},
       per_person_max = #{perPersonMax,jdbcType=INTEGER},
+      qrcode = #{qrcode,jdbcType=VARCHAR},
       is_store_limit = #{isStoreLimit,jdbcType=BIT},
       store_limit_type = #{storeLimitType,jdbcType=INTEGER},
       remark = #{remark,jdbcType=VARCHAR},
@@ -514,20 +517,20 @@
       modified_user_name = #{modifiedUserName,jdbcType=VARCHAR},
       modified_date = #{modifiedDate,jdbcType=TIMESTAMP},
       valid = #{valid,jdbcType=BIT},
-      qrcode = #{qrcode,jdbcType=LONGVARCHAR},
       store_limit_list = #{storeLimitList,jdbcType=LONGVARCHAR}
     where mkt_activity_manual_id = #{mktActivityManualId,jdbcType=BIGINT}
   </update>
   <update id="updateByPrimaryKey" parameterType="com.bizvane.mktcenterservice.models.po.MktActivityManualPO">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-10-31 10:05:06.
+      This element was generated on 2018-10-31 10:42:20.
     -->
     update t_mkt_activity_manual
     set sys_company_id = #{sysCompanyId,jdbcType=BIGINT},
       mkt_activity_id = #{mktActivityId,jdbcType=BIGINT},
       per_person_per_day_max = #{perPersonPerDayMax,jdbcType=INTEGER},
       per_person_max = #{perPersonMax,jdbcType=INTEGER},
+      qrcode = #{qrcode,jdbcType=VARCHAR},
       is_store_limit = #{isStoreLimit,jdbcType=BIT},
       store_limit_type = #{storeLimitType,jdbcType=INTEGER},
       remark = #{remark,jdbcType=VARCHAR},

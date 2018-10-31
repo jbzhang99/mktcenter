@@ -12,88 +12,88 @@ import com.bizvane.mktcenterservice.models.po.MktActivityManualPOWithBLOBs;
 public interface MktActivityManualPOMapper {
     /**
 	 * 只读. 
-	 * @mbg.generated  2018-10-31 10:05:06
+	 * @mbg.generated  2018-10-31 10:42:20
 	 */
 	long countByExample(MktActivityManualPOExample example);
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-10-31 10:05:06
+	 * @mbg.generated  2018-10-31 10:42:20
 	 */
 	int deleteByExample(MktActivityManualPOExample example);
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-10-31 10:05:06
+	 * @mbg.generated  2018-10-31 10:42:20
 	 */
 	int deleteByPrimaryKey(Long mktActivityManualId);
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-10-31 10:05:06
+	 * @mbg.generated  2018-10-31 10:42:20
 	 */
-	int insert(MktActivityManualPOWithBLOBs record);
+	int insert(MktActivityManualPO record);
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-10-31 10:05:06
+	 * @mbg.generated  2018-10-31 10:42:20
 	 */
-	int insertSelective(MktActivityManualPOWithBLOBs record);
+	int insertSelective(MktActivityManualPO record);
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-10-31 10:05:06
+	 * @mbg.generated  2018-10-31 10:42:20
 	 */
-	List<MktActivityManualPOWithBLOBs> selectByExampleWithBLOBs(MktActivityManualPOExample example);
+	List<MktActivityManualPO> selectByExampleWithBLOBs(MktActivityManualPOExample example);
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-10-31 10:05:06
+	 * @mbg.generated  2018-10-31 10:42:20
 	 */
 	List<MktActivityManualPO> selectByExample(MktActivityManualPOExample example);
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-10-31 10:05:06
+	 * @mbg.generated  2018-10-31 10:42:20
 	 */
-	MktActivityManualPOWithBLOBs selectByPrimaryKey(Long mktActivityManualId);
+	MktActivityManualPO selectByPrimaryKey(Long mktActivityManualId);
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-10-31 10:05:06
+	 * @mbg.generated  2018-10-31 10:42:20
 	 */
-	int updateByExampleSelective(@Param("record") MktActivityManualPOWithBLOBs record,
+	int updateByExampleSelective(@Param("record") MktActivityManualPO record,
 			@Param("example") MktActivityManualPOExample example);
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-10-31 10:05:06
+	 * @mbg.generated  2018-10-31 10:42:20
 	 */
-	int updateByExampleWithBLOBs(@Param("record") MktActivityManualPOWithBLOBs record,
+	int updateByExampleWithBLOBs(@Param("record") MktActivityManualPO record,
 			@Param("example") MktActivityManualPOExample example);
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-10-31 10:05:06
+	 * @mbg.generated  2018-10-31 10:42:20
 	 */
 	int updateByExample(@Param("record") MktActivityManualPO record,
 			@Param("example") MktActivityManualPOExample example);
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-10-31 10:05:06
+	 * @mbg.generated  2018-10-31 10:42:20
 	 */
-	int updateByPrimaryKeySelective(MktActivityManualPOWithBLOBs record);
+	int updateByPrimaryKeySelective(MktActivityManualPO record);
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-10-31 10:05:06
+	 * @mbg.generated  2018-10-31 10:42:20
 	 */
-	int updateByPrimaryKeyWithBLOBs(MktActivityManualPOWithBLOBs record);
+	int updateByPrimaryKeyWithBLOBs(MktActivityManualPO record);
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-10-31 10:05:06
+	 * @mbg.generated  2018-10-31 10:42:20
 	 */
 	int updateByPrimaryKey(MktActivityManualPO record);
 
