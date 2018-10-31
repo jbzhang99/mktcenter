@@ -34,6 +34,7 @@ import com.bizvane.mktcenterserviceimpl.common.utils.ActivityParamCheckUtil;
 import com.bizvane.mktcenterserviceimpl.common.utils.CodeUtil;
 import com.bizvane.mktcenterserviceimpl.common.utils.DateUtil;
 import com.bizvane.mktcenterserviceimpl.common.job.JobUtil;
+import com.bizvane.mktcenterserviceimpl.common.utils.ExecuteParamCheckUtil;
 import com.bizvane.mktcenterserviceimpl.mappers.*;
 import com.bizvane.utils.enumutils.SysResponseEnum;
 import com.bizvane.utils.responseinfo.ResponseData;
@@ -528,6 +529,10 @@ public class ActivityManualServiceImpl implements ActivityManualService {
                 return responseData;
             }
             for (ActivityVO activityVO1 : activityList) {
+                //过滤门店
+                if (!ExecuteParamCheckUtil.implementActivitCheck(memberInfoModel,activityVO)){
+                    continue;
+                }
                 //2.查询活动对应的所有券
                 log.info("couponQueryServiceFeign.findCouponByCouponCode--->入参为:"+activityVO1.getCouponDefinitionId());
                 //ResponseData<CouponDefinitionPO> couponDefinitionPOResponseData  = couponDefinitionServiceFeign.findByIdRpc(activityVO1.getCouponDefinitionId());
