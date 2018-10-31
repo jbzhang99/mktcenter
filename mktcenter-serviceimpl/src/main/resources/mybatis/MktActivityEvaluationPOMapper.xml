@@ -530,6 +530,7 @@
     tma.modified_user_name,
     tma.modified_date,
     tma.valid,
+    tma.activity_info,
     tmas.is_store_limit,
     tmas.store_limit_type,
     tmas.store_limit_list,
