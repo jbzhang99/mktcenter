@@ -172,4 +172,4 @@ ribbon:
   ConnectTimeout: 6000000
   ReadTimeout: 6000000
 activity:
-  qrcodeurl: http://www.test.bizvane.com/qrcode?activityCode=
+  qrcodeurl: /qrcode?activityCode=
