@@ -499,12 +499,12 @@ public class TaskServiceImpl implements TaskService {
     @Override
     public  void sendMemberMessage(Long sysCompanyId,Long sysBrandId,Integer taskType,String msgContent,Boolean exceptWechat) {
         log.info("发送模板消息--参数--"+sysBrandId+"--"+taskType+"--"+msgContent+"--"+exceptWechat);
-        com.bizvane.utils.responseinfo.PageInfo<MemberInfoModel> memeberspage = this.getCompanyMemebers(sysCompanyId,sysBrandId,taskType,exceptWechat,1,10000);
+        com.bizvane.utils.responseinfo.PageInfo<MemberInfoModel> memeberspage = this.getCompanyMemebers(sysCompanyId,sysBrandId,taskType,Boolean.FALSE,1,10000);
         List<MemberInfoModel> maemberlist = memeberspage.getList();
         int pages = memeberspage.getPages();
         if (CollectionUtils.isNotEmpty(maemberlist)){
             for (int i=1;i<pages;i++){
-                com.bizvane.utils.responseinfo.PageInfo<MemberInfoModel> pagesdata= this.getCompanyMemebers(sysCompanyId,sysBrandId,taskType,exceptWechat,i, 10000);
+                com.bizvane.utils.responseinfo.PageInfo<MemberInfoModel> pagesdata= this.getCompanyMemebers(sysCompanyId,sysBrandId,taskType,Boolean.FALSE,i, 10000);
                 List<MemberInfoModel> list = pagesdata.getList();
                 log.info("发送消息获取的会员列表--"+JSON.toJSONString(list));
                 AwardBO memberBO = new AwardBO();

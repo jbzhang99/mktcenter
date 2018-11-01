@@ -98,6 +98,7 @@ public class TaskShareServiceImpl implements TaskShareService {
      */
     @Override
     public ResponseData<List<AppletFunctionPO>>  getURLList(Long brandId){
+        log.info("----getURLList获取URL列表参数----"+brandId);
        return appletRouteServiceRpc.getAllAppletFunction(brandId);
 
     }
