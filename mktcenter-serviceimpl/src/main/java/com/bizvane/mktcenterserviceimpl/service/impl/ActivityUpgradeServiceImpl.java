@@ -305,16 +305,19 @@ public class ActivityUpgradeServiceImpl implements ActivityUpgradeService {
             if(true==activityVO.getSendImmediately()){
                 //查询该会员下一个等级
                 ResponseData<MbrLevelModel> MbrLevelModels = memberLevelApiService.queryOnLevel(Long.parseLong(activityVO.getMbrLevelCode()));
-                MbrLevelModel  mbrLevel = MbrLevelModels.getData();
-                //分页查询会员信息发送短信
-                MembersInfoSearchVo membersInfoSearchVo = new MembersInfoSearchVo();
-                membersInfoSearchVo.setPageNumber(1);
-                membersInfoSearchVo.setPageSize(10000);
-                membersInfoSearchVo.setBrandId(activityVO.getSysBrandId());
-                List<Long> level = new ArrayList<>();
-                level.add(mbrLevel.getMbrLevelId());
-                membersInfoSearchVo.setLevelID(level);
-                memberMessage.getMemberList(messageVOList, membersInfoSearchVo,activityVO);
+                if (null!=MbrLevelModels.getData()){
+                    MbrLevelModel  mbrLevel = MbrLevelModels.getData();
+                    //分页查询会员信息发送短信
+                    MembersInfoSearchVo membersInfoSearchVo = new MembersInfoSearchVo();
+                    membersInfoSearchVo.setPageNumber(1);
+                    membersInfoSearchVo.setPageSize(10000);
+                    membersInfoSearchVo.setBrandId(activityVO.getSysBrandId());
+                    List<Long> level = new ArrayList<>();
+                    level.add(mbrLevel.getMbrLevelId());
+                    membersInfoSearchVo.setLevelID(level);
+                    memberMessage.getMemberList(messageVOList, membersInfoSearchVo,activityVO);
+                }
+
             }else{
                 //自定义时间发送 加人job任务
                 jobUtil.addSendMessageJob(stageUser,activityVO,activityCode);
