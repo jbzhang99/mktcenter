@@ -567,7 +567,7 @@
         tma.modified_user_name,
         tma.modified_date,
         tma.valid,
-
+        tma.activityInfo,
         tmar.mkt_activity_resigter_id,
         tmar.offline_card_status,
         tmar.mbr_level_code,

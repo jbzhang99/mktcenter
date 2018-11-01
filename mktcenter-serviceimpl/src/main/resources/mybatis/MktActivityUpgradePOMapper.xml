@@ -565,7 +565,7 @@
     tma.modified_user_name,
     tma.modified_date,
     tma.valid,
-
+    tma.activityInfo,
     tmau.mkt_activity_upgrade_id,
     tmau.member_type,
     tmau.mbr_level_code,
