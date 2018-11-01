@@ -280,6 +280,8 @@ public class MemberMessageSend {
                         SendCouponBatchRequestVO sendCouponBatchRequestVO = new SendCouponBatchRequestVO();
                         sendCouponBatchRequestVO.setMemberList(memberInfoVoPages.getData().getList());
                         sendCouponBatchRequestVO.setCouponDefinitionId(mktCouponPO.getCouponDefinitionId());
+                        sendCouponBatchRequestVO.setBusinessId(mktActivityPOWithBLOBs.getMktActivityId());
+                        sendCouponBatchRequestVO.setBusinessType(SendTypeEnum.SEND_COUPON_ORIENT_MARKET.getCode());
                         awardBO.setMktType(MktSmartTypeEnum.SMART_TYPE_COUPON_BATCH.getCode());
                         awardBO.setSendCouponBatchRequestVO(sendCouponBatchRequestVO);
                         log.info("智能营销-开始批量发券发券");
