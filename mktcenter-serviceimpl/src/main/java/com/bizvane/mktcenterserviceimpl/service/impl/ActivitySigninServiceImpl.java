@@ -213,6 +213,7 @@ public class ActivitySigninServiceImpl implements ActivitySigninService {
         MktActivitySignin mktActivitySignin = new MktActivitySignin();
         BeanUtils.copyProperties(mktActivityPOWithBLOBs,mktActivitySignin);
         mktActivitySignin.setMktActivityId(mktActivityId);
+        mktActivitySignin.setIsStoreLimit(activityVO.getStoreLimit());
         if (true==activityVO.getStoreLimit()){
             mktActivitySignin.setStoreLimitList(activityVO.getStoreLimitList());
             mktActivitySignin.setStoreLimitType(activityVO.getStoreLimitType());
