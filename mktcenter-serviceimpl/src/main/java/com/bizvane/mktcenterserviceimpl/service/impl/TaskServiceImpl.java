@@ -1,6 +1,7 @@
 package com.bizvane.mktcenterserviceimpl.service.impl;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.bizvane.centercontrolservice.models.po.SysSmsConfigPo;
 import com.bizvane.centercontrolservice.models.vo.SmsConfigVo;
 import com.bizvane.centercontrolservice.rpc.SysSmsConfigServiceRpc;
@@ -15,6 +16,7 @@ import com.bizvane.mktcenterserviceimpl.mappers.*;
 import com.bizvane.utils.jobutils.JobBusinessTypeEnum;
 import com.bizvane.utils.jobutils.JobClient;
 import com.bizvane.utils.jobutils.XxlJobInfo;
+import com.bizvane.utils.thread.AsyncTaskExecutePool;
 import com.bizvane.utils.tokens.SysAccountPO;
 import com.bizvane.centerstageservice.models.po.SysCheckConfigPo;
 import com.bizvane.centerstageservice.models.po.SysCheckPo;
@@ -67,6 +69,7 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import java.text.ParseException;
 import java.util.*;
+import java.util.concurrent.*;
 import java.util.stream.Collectors;
 
 /**
@@ -119,6 +122,8 @@ public class TaskServiceImpl implements TaskService {
     private JobClient jobClient;
     @Autowired
     private CouponEntityServiceFeign couponEntityServiceFeign;
+    @Autowired
+    private AsyncTaskExecutePool asyncTaskExecutePool;
     /**
      * 通过id查询店铺列表
      */
@@ -766,10 +771,12 @@ public class TaskServiceImpl implements TaskService {
     }
 
     /**
-     * 效果分析的明细--已经审核(除了完善资料任务)
+     * 效果分析的明细--已经审核
      */
     @Override
-    public ResponseData<TaskRecordVO> doAnalysis(TaskAnalysisVo vo,SysAccountPO sysAccountPo){
+    public ResponseData<TaskRecordVO> doAnalysis(TaskAnalysisVo vo,SysAccountPO sysAccountPo) throws ExecutionException, InterruptedException {
+        long startTime = System.currentTimeMillis();
+        System.out.println("-----开始时间"+startTime );
         ResponseData<TaskRecordVO> result = new ResponseData<TaskRecordVO>(SysResponseEnum.SUCCESS.getCode(),SysResponseEnum.SUCCESS.getMessage(),null);
         Long sysBrandId = sysAccountPo.getBrandId();
         vo.setBrandId(sysBrandId);
@@ -785,66 +792,95 @@ public class TaskServiceImpl implements TaskService {
         PageInfo<DayTaskRecordVo> dayTaskRecordVoPage = new PageInfo<>(analysisall);
         List<DayTaskRecordVo> analysislists = dayTaskRecordVoPage.getList();
         //赠送总积分数
-        Long allPoints=0L;
+        final Long[] allPoints = {0L};
         //发行券总张数
-        Long allCountCoupon=0L;
+        final Long[] allCountCoupon = {0L};
         //参与任务总人数
-        Long allCountMbr=0L;
+        final Long[] allCountMbr = {0L};
         //被核销优惠券总数
-        Long allinvalidCountCoupon=0L;
+        final Long[] allinvalidCountCoupon = {0L};
 
         if (CollectionUtils.isNotEmpty(analysislists)){
-            for (DayTaskRecordVo task: analysislists) {
-                Long taskId = task.getTaskId();
-                //查询每个任务的完成人数
-                MktTaskRecordPOExample example=new MktTaskRecordPOExample();
-                example.createCriteria().andTaskIdEqualTo(taskId).andRewardedEqualTo(1).andValidEqualTo(Boolean.TRUE);
-                List<MktTaskRecordPO> mktTaskRecordresponse = mktTaskRecordPOMapper.selectByExampleWithBLOBs(example);
-                if (CollectionUtils.isNotEmpty(mktTaskRecordresponse)){
-                    task.setOneTaskCompleteCountMbr(Long.valueOf(mktTaskRecordresponse.size()));
-                }else{
-                    task.setOneTaskCompleteCountMbr(0L);
+            ThreadPoolExecutor asyncExecutor = new ThreadPoolExecutor(
+                    10, 30, 60L, TimeUnit.SECONDS,
+                    new LinkedBlockingQueue<Runnable>(120),
+                    new ThreadPoolExecutor.CallerRunsPolicy());
+            //<DayTaskRecordVo>
+            ArrayList<Future<DayTaskRecordVo>> dayTaskRecordVos = new ArrayList<>();
+            analysislists.parallelStream().forEach(task->{
+                Future<DayTaskRecordVo> submit = asyncExecutor.submit(() -> {
+                    return this.getAnalysisData(sysBrandId, taskType, genrealGetMessageVO, task, asyncExecutor);
+                });
+                dayTaskRecordVos.add(submit);
+            });
+            dayTaskRecordVos.parallelStream().forEach(taskFuture->{
+                DayTaskRecordVo task = null;
+                try {
+                    task = taskFuture.get();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                } catch (ExecutionException e) {
+                    e.printStackTrace();
                 }
-                //查询短信数量
-                genrealGetMessageVO.setTaskId(taskId);
-                String msgNUM = this.searchSmsNum(genrealGetMessageVO);
-                log.info("----短信统计------"+msgNUM);
-                task.setMsgNUM(msgNUM);
-                //转换任务类型
-                String sendType = this.changeTaskType(taskType).getCouponTaskType();
-                //查询券模块的统计出的相关数量
-                ResponseData<CouponFindCouponCountResponseVO> couponCount= couponQueryService.findCouponCountBySendBusinessId(taskId, sendType, sysBrandId);
-                CouponFindCouponCountResponseVO data = couponCount.getData();
-                //一个任务的券总数量
-                Long couponSum = data.getCouponSum();
-                //一个任务的券核销总数量
-                Long couponUsedSum = data.getCouponUsedSum();
-                //一个任务的券数量
-                task.setOneTaskInvalidCountCoupon(couponUsedSum);
-                //某任务的发行券总张数
-                // task.setDayCountCoupon(couponUsedSum);
-                task.setOneTaskCountCoupon(couponSum);
-                allPoints=allPoints+task.getOneTaskPoints();
-                allCountCoupon= allCountCoupon+task.getOneTaskCountCoupon();
-                allCountMbr=allCountMbr+task.getOneTaskCompleteCountMbr();
-                allinvalidCountCoupon = allinvalidCountCoupon+Long.valueOf(couponSum);
-            }
+                allPoints[0] = allPoints[0] + task.getOneTaskPoints();
+                allCountCoupon[0] = allCountCoupon[0] + task.getOneTaskCountCoupon();
+                allCountMbr[0] = allCountMbr[0] + task.getOneTaskCompleteCountMbr();
+                allinvalidCountCoupon[0] = allinvalidCountCoupon[0] + task.getOneTaskInvalidCountCoupon();
+            });
         }
-        TaskRecordVO taskRecordVO = new TaskRecordVO();
+       TaskRecordVO taskRecordVO = new TaskRecordVO();
         //所有积分和
-        taskRecordVO.setAllPoints(allPoints);
+        taskRecordVO.setAllPoints(allPoints[0]);
         //所有券数量和
-        taskRecordVO.setAllCountCoupon(allCountCoupon);
+        taskRecordVO.setAllCountCoupon(allCountCoupon[0]);
         //所有参数人数和
-        taskRecordVO.setAllCountMbr(allCountMbr);
+        taskRecordVO.setAllCountMbr(allCountMbr[0]);
         //被核销优惠券总数
-        taskRecordVO.setAllinvalidCountCoupon(allinvalidCountCoupon);
+        taskRecordVO.setAllinvalidCountCoupon(allinvalidCountCoupon[0]);
         //每天或每条记录 的分页结果
         taskRecordVO.setDayTaskRecordVoList(dayTaskRecordVoPage);
 
         result.setData(taskRecordVO);
+        long endTime = System.currentTimeMillis();
+        System.out.println("----结束时间---"+(endTime -startTime));
         return result;
     }
+
+    private DayTaskRecordVo getAnalysisData(Long sysBrandId, Integer taskType, GenrealGetMessageVO genrealGetMessageVO , DayTaskRecordVo task,ThreadPoolExecutor asyncExecutor) {
+        Long taskId = task.getTaskId();
+        //查询每个任务的完成人数
+        MktTaskRecordPOExample example=new MktTaskRecordPOExample();
+        example.createCriteria().andTaskIdEqualTo(taskId).andRewardedEqualTo(1).andValidEqualTo(Boolean.TRUE);
+
+        List<MktTaskRecordPO> mktTaskRecordresponse = mktTaskRecordPOMapper.selectByExampleWithBLOBs(example);
+        if (CollectionUtils.isNotEmpty(mktTaskRecordresponse)) {
+            task.setOneTaskCompleteCountMbr(Long.valueOf(mktTaskRecordresponse.size()));
+        } else {
+            task.setOneTaskCompleteCountMbr(0L);
+        }
+
+        //查询短信数量
+        genrealGetMessageVO.setTaskId(taskId);
+        String msgNUM = this.searchSmsNum(genrealGetMessageVO);
+        task.setMsgNUM(msgNUM);
+
+        //转换任务类型
+        String sendType = this.changeTaskType(taskType).getCouponTaskType();
+        //查询券模块的统计出的相关数量
+        ResponseData<CouponFindCouponCountResponseVO> couponCount= couponQueryService.findCouponCountBySendBusinessId(taskId, sendType, sysBrandId);
+        CouponFindCouponCountResponseVO data = couponCount.getData();
+        //一个任务的券总数量
+        Long couponSum = data.getCouponSum();
+        //一个任务的券核销总数量
+        Long couponUsedSum = data.getCouponUsedSum();
+        //一个任务的券数量
+        task.setOneTaskInvalidCountCoupon(couponUsedSum);
+        //某任务的发行券总张数
+        // task.setDayCountCoupon(couponUsedSum);
+        task.setOneTaskCountCoupon(couponSum);
+        return task;
+    }
+
     /**
      * 新增任务主表任务数据
      *

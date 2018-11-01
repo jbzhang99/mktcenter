@@ -21,6 +21,7 @@ import com.github.pagehelper.PageInfo;
 import java.text.ParseException;
 import java.util.Date;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 /**
  * @author chen.li
@@ -188,7 +189,7 @@ public interface TaskService {
     /**
      * 效果分析的明细
      */
-    public ResponseData<TaskRecordVO> doAnalysis(TaskAnalysisVo vo,SysAccountPO sysAccountPo);
+    public ResponseData<TaskRecordVO> doAnalysis(TaskAnalysisVo vo,SysAccountPO sysAccountPo) throws ExecutionException, InterruptedException;
     /**
      * 将需要审核的任务添加到中台
      * @param po
