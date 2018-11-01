@@ -63,7 +63,7 @@ public class TaskProfileController {
 //        sysAccountPo.setName("测试测试");
 //        sysAccountPo.setSysAccountId(12867L);
 //        sysAccountPo.setSysCompanyId(3841L);
-//        bo.getTaskVO().setTaskType(1);
+        bo.getTaskVO().setTaskType(1);
         return  taskProfileService.addTask(bo, sysAccountPo);
     }
     /**
