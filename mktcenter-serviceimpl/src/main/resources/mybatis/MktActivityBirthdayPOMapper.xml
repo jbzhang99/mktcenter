@@ -583,7 +583,7 @@
     tma.modified_user_name,
     tma.modified_date,
     tma.valid,
-    tma.activityInfo,
+    tma.activity_info,
     tmab.mkt_activity_birthday_id,
     tmab.member_type,
     tmab.mbr_level_code,
