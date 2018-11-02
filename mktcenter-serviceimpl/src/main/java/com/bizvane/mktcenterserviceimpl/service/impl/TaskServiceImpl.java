@@ -543,7 +543,7 @@ public class TaskServiceImpl implements TaskService {
             stringBuffer.append("-").append(points);
         }
         if (points!=null && points>0){
-            stringBuffer.append(points);
+            stringBuffer.append(points).append("积分");
          }
         String activityInterests = stringBuffer.toString();
         com.bizvane.utils.responseinfo.PageInfo<MemberInfoModel> memeberspage = this.getCompanyMemebers(sendMessageVO,1,10000);
