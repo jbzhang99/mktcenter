@@ -155,7 +155,7 @@ qiniu:
   domain: https://qi.test.bizvane.cn
 
 activity:
-  qrcodeurl: http://www.test.bizvane.com/qrcode?activityCode=
+  qrcodeurl: /qrcode?activityCode=
 
 bitdata:
   businessNum: testbz

@@ -3,7 +3,6 @@ package com.bizvane.mktcenterserviceimpl.controllers;
 import com.bizvane.centerstageservice.models.vo.SysStoreVo;
 import com.bizvane.couponfacade.models.vo.CouponSendMemberListResponseVO;
 import com.bizvane.mktcenterservice.interfaces.TaskService;
-import com.bizvane.mktcenterservice.models.bo.TaskAwardBO;
 import com.bizvane.mktcenterservice.models.bo.TaskBO;
 import com.bizvane.mktcenterservice.models.po.MktTaskPOWithBLOBs;
 import com.bizvane.mktcenterservice.models.vo.*;
@@ -16,11 +15,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
 import javax.servlet.http.HttpServletRequest;
 import java.text.ParseException;
-import java.util.Date;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 /**
  * @author chen.li
@@ -90,11 +88,10 @@ public class TaskController {
      * @return
      */
     @RequestMapping("doAnalysis")
-    public ResponseData<TaskRecordVO> doAnalysis(TaskAnalysisVo vo,HttpServletRequest request){
+    public ResponseData<TaskRecordVO> doAnalysis(TaskAnalysisVo vo,HttpServletRequest request) throws ExecutionException, InterruptedException {
         SysAccountPO sysAccountPo = TokenUtils.getStageUser(request);
         return taskService.doAnalysis(vo,sysAccountPo);
     }
-
     /**
      * 进行中任务的搜索
      * @param vo
@@ -105,8 +102,8 @@ public class TaskController {
        return taskService.getTaskByTaskType(vo);
     }
     @RequestMapping("sendBachMSM")
-    public void sendBachMSM(Long mktTaskId,Integer taskType,Long sysCompanyId,Long sysBrandId,String msgContent,Boolean exceptWechat){
-      taskService.sendBachMSM(mktTaskId,taskType,sysCompanyId,sysBrandId,msgContent,exceptWechat);
+    public void sendBachMSM(SendMessageVO sendMessageVO){
+      taskService.sendBachMSM(sendMessageVO);
     }
 
     /**

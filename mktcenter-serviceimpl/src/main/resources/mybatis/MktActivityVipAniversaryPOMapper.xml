@@ -602,7 +602,7 @@
     tma.modified_user_name,
     tma.modified_date,
     tma.valid,
-
+    tma.activity_info,
     tmab.mkt_activity_vip_aniversary_id,
     tmab.member_type,
     tmab.days_ahead,

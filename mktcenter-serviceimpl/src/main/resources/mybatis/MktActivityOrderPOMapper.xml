@@ -653,7 +653,7 @@
     tma.modified_user_name,
     tma.modified_date,
     tma.valid,
-
+    tma.activity_info,
     tmao.mkt_activity_order_id,
     tmao.member_type,
     tmao.mbr_level_code,

@@ -731,5 +731,4 @@
      </if>
      GROUP BY tmtr.task_id,tmtr.task_type
    </select>
-
 </mapper>

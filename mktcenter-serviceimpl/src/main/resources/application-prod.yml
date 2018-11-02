@@ -123,7 +123,7 @@ qiniu:
   domain: https://resource.uat.bizvane.cn
 
 activity:
-  qrcodeurl: http://www.crm.bizvane.com/qrcode?activityCode=
+  qrcodeurl: /qrcode?activityCode=
 bitdata:
   businessNum: testbz
   apiKey: 4199454b3cac0c02b48fd5a9c67c00c0

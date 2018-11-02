@@ -280,6 +280,8 @@ public class MemberMessageSend {
                         SendCouponBatchRequestVO sendCouponBatchRequestVO = new SendCouponBatchRequestVO();
                         sendCouponBatchRequestVO.setMemberList(memberInfoVoPages.getData().getList());
                         sendCouponBatchRequestVO.setCouponDefinitionId(mktCouponPO.getCouponDefinitionId());
+                        sendCouponBatchRequestVO.setBusinessId(mktActivityPOWithBLOBs.getMktActivityId());
+                        sendCouponBatchRequestVO.setBusinessType(SendTypeEnum.SEND_COUPON_ORIENT_MARKET.getCode());
                         awardBO.setMktType(MktSmartTypeEnum.SMART_TYPE_COUPON_BATCH.getCode());
                         awardBO.setSendCouponBatchRequestVO(sendCouponBatchRequestVO);
                         log.info("智能营销-开始批量发券发券");
@@ -331,7 +333,7 @@ public class MemberMessageSend {
                     //get activity message object
                     MktMessagePOExample mktMessagePOExample1 = new MktMessagePOExample();
                     mktMessagePOExample1.createCriteria().andValidEqualTo(Boolean.TRUE).andBizTypeEqualTo(BusinessTypeEnum.ACTIVITY_TYPE_ACTIVITY.getCode()).andBizIdEqualTo(mktActivityPOWithBLOBs.getMktActivityId());
-                    List<MktMessagePO> mktMessagePOS1 = mktMessagePOMapper.selectByExample(mktMessagePOExample1);
+                    List<MktMessagePO> mktMessagePOS1 = mktMessagePOMapper.selectByExampleWithBLOBs(mktMessagePOExample1);
                     MktMessagePO mktMessage = mktMessagePOS1.get(0);
                     //member loop
                     for(MemberInfoModel memberInfoModel : memberInfoModelList){
