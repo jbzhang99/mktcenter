@@ -102,8 +102,8 @@ public class TaskController {
        return taskService.getTaskByTaskType(vo);
     }
     @RequestMapping("sendBachMSM")
-    public void sendBachMSM(Long mktTaskId,Integer taskType,Long sysCompanyId,Long sysBrandId,String msgContent,Boolean exceptWechat){
-      taskService.sendBachMSM(mktTaskId,taskType,sysCompanyId,sysBrandId,msgContent,exceptWechat);
+    public void sendBachMSM(SendMessageVO sendMessageVO){
+      taskService.sendBachMSM(sendMessageVO);
     }
 
     /**

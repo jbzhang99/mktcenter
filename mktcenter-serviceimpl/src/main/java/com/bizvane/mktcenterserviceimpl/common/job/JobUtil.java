@@ -1,9 +1,12 @@
 package com.bizvane.mktcenterserviceimpl.common.job;
 
+import com.alibaba.fastjson.JSON;
+import com.bizvane.mktcenterservice.interfaces.TaskService;
 import com.bizvane.mktcenterservice.models.po.MktMessagePO;
 import com.bizvane.mktcenterservice.models.po.MktTaskPOWithBLOBs;
 import com.bizvane.mktcenterservice.models.vo.ActivitySmartVO;
 import com.bizvane.mktcenterservice.models.vo.ActivityVO;
+import com.bizvane.mktcenterservice.models.vo.SendMessageVO;
 import com.bizvane.mktcenterserviceimpl.common.constants.JobHandlerConstants;
 import com.bizvane.mktcenterserviceimpl.common.constants.TaskConstants;
 import com.bizvane.mktcenterserviceimpl.common.utils.DateUtil;
@@ -28,9 +31,10 @@ import java.util.Date;
 public class JobUtil {
     @Autowired
     private XxlJobConfig xxlJobConfig;
-
     @Autowired
     private JobClient jobClient;
+    @Autowired
+    private TaskService taskService;
 
     public static final String defaultStr ="无";
 
@@ -152,18 +156,12 @@ public class JobUtil {
     public void addMessageXXTaskJob(SysAccountPO stageUser, MktTaskPOWithBLOBs po, MktMessagePO messagePO){
         //int bizType = JobBusinessTypeEnum.ACTIVITY_TYPE_TASK.getCode();
         int bizType =TaskConstants.ACTIVITY_TYPE_TASK_CODE_XXOB;
-        Long mktTaskId = po.getMktTaskId();
-        Integer taskType = po.getTaskType();
         String taskCode = po.getTaskCode();
         String taskName = po.getTaskName();
         String name = stageUser.getName();
-        String msgContent = messagePO.getMsgContent();
         Date sendTime = messagePO.getSendTime();
-        Long sysBrandId = po.getSysBrandId();
-        Long sysCompanyId = po.getSysCompanyId();
-        Boolean exceptWechat = messagePO.getExceptWechat();
-        StringBuilder builder = new StringBuilder();
-        String param = this.getMessageJobParam(sysCompanyId,sysBrandId,taskType, msgContent,exceptWechat);
+        SendMessageVO sendMessageVO = taskService.getSendMessageVO(po);
+        String param = JSON.toJSONString(sendMessageVO);
         //清除一下job
         this.doRemoveJobe(bizType, taskCode, param);
         log.info("添加消息的job--addMessageXXTaskJob--"+sendTime+"--"+taskName+"--"+param+"--"+name+"--"+JobHandlerConstants.MESSAGE_SEND_XX+"--"+bizType+"--"+taskCode);
@@ -173,17 +171,12 @@ public class JobUtil {
     public void addMessageDXTaskJob(SysAccountPO stageUser, MktTaskPOWithBLOBs po, MktMessagePO messagePO){
        // int bizType = JobBusinessTypeEnum.ACTIVITY_TYPE_TASK.getCode();
         int bizType =TaskConstants.ACTIVITY_TYPE_TASK_CODE_XDOB;
-        Long mktTaskId = po.getMktTaskId();
-        Integer taskType = po.getTaskType();
         String taskCode = po.getTaskCode();
         String taskName = po.getTaskName();
-        Long sysCompanyId = po.getSysCompanyId();
-        Long sysBrandId = po.getSysBrandId();
         String name = stageUser.getName();
-        String msgContent = messagePO.getMsgContent();
         Date sendTime = messagePO.getSendTime();
-        Boolean exceptWechat = messagePO.getExceptWechat();
-        String param = this.getMessageJobParam(mktTaskId, taskType, sysCompanyId, sysBrandId, msgContent,exceptWechat);
+        SendMessageVO sendMessageVO = taskService.getSendMessageVO(po);
+        String param = JSON.toJSONString(sendMessageVO);
         //清除一下job
         this.doRemoveJobe(bizType, taskCode, param);
         log.info("添加短信的job--addMessageDXTaskJob--"+sendTime+"--"+taskName+"--"+param+"--"+name+"--"+JobHandlerConstants.MESSAGE_SEND_DX+"--"+bizType+"--"+taskCode);
@@ -210,36 +203,6 @@ public class JobUtil {
         builder.append(sysCompanyId);
         builder.append("&");
         builder.append(taskJobStyle);
-        return builder.toString();
-    }
-    //消息或短信类业务的参数拼接
-    //(Long mktTaskId, Integer taskType,Long sysCompanyId,Long sysBrandId,String msgContent)
-    private String getMessageJobParam(Long mktTaskId, Integer taskType,Long sysCompanyId,Long sysBrandId,String msgContent,Boolean exceptWechat) {
-        StringBuilder builder = new StringBuilder();
-        builder.append(mktTaskId);
-        builder.append("&");
-        builder.append(taskType);
-        builder.append("&");
-        builder.append(sysCompanyId);
-        builder.append("&");
-        builder.append(sysBrandId);
-        builder.append("&");
-        builder.append(msgContent);
-        builder.append("&");
-        builder.append(exceptWechat);
-        return builder.toString();
-    }
-    private String getMessageJobParam(Long sysCompanyId,Long sysBrandId,Integer taskType, String msgContent,Boolean exceptWechat){
-        StringBuilder builder = new StringBuilder();
-        builder.append(sysCompanyId);
-        builder.append("&");
-        builder.append(sysBrandId);
-        builder.append("&");
-        builder.append(taskType);
-        builder.append("&");
-        builder.append(msgContent);
-        builder.append("&");
-        builder.append(exceptWechat);
         return builder.toString();
     }
     /**

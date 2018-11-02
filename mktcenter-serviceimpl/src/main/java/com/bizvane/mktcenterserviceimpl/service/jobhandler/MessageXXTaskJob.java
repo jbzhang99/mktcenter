@@ -1,9 +1,12 @@
 package com.bizvane.mktcenterserviceimpl.service.jobhandler;
 
+import com.alibaba.fastjson.JSON;
 import com.bizvane.mktcenterservice.interfaces.TaskService;
+import com.bizvane.mktcenterservice.models.vo.SendMessageVO;
 import com.xxl.job.core.biz.model.ReturnT;
 import com.xxl.job.core.handler.IJobHandler;
 import com.xxl.job.core.handler.annotation.JobHandler;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -14,20 +17,16 @@ import org.springframework.stereotype.Component;
  */
 @JobHandler(value="messageXXTaskJob")
 @Component
+@Slf4j
 public class MessageXXTaskJob extends IJobHandler {
     @Autowired
     private TaskService taskService;
     @Override
     public ReturnT<String> execute(String param) throws Exception {
+        log.info("MessageXXTaskJob--入参---"+param);
         ReturnT returnT = new ReturnT();
-        String[] split = param.split("&");
-
-        Long sysCompanyId = Long.valueOf(split[0]);
-        Long sysbrandId = Long.valueOf(split[1]);
-        Integer taskType=Integer.valueOf(split[2]);
-        String msgContent=split[3];
-        Boolean exceptWechat=Boolean.valueOf(split[4]);
-        taskService.sendMemberMessage(sysCompanyId,sysbrandId,taskType,msgContent,exceptWechat);
+        SendMessageVO sendMessageVO = JSON.parseObject(param, SendMessageVO.class);
+        taskService.sendMemberMessage(sendMessageVO);
 
         returnT.setCode(0);
         returnT.setContent("任务执行完毕");
