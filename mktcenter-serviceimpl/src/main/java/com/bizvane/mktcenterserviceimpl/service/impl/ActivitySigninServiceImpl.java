@@ -151,9 +151,9 @@ public class ActivitySigninServiceImpl implements ActivitySigninService {
             return responseData;
         }*/
         //查询审核配置，是否需要审核然后判断
-        SysCheckConfigVo so = new SysCheckConfigVo();
-        so.setSysBrandId(activityVO.getSysBrandId());
-        ResponseData<List<SysCheckConfigVo>> sysCheckConfigVo =sysCheckConfigServiceRpc.getCheckConfigListAll(so);
+        /*SysCheckConfigVo so = new SysCheckConfigVo();
+        so.setSysBrandId(activityVO.getSysBrandId());*/
+        ResponseData<List<SysCheckConfigVo>> sysCheckConfigVo =sysCheckConfigServiceRpc.getCheckConfigListAll(activityVO.getSysBrandId());
         List<SysCheckConfigVo> sysCheckConfigVoList = sysCheckConfigVo.getData();
         //判断是否有审核配置
         int i = 0;
