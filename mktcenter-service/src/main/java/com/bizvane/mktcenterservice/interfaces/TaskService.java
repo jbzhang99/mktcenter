@@ -21,6 +21,7 @@ import com.github.pagehelper.PageInfo;
 import java.text.ParseException;
 import java.util.Date;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 /**
  * @author chen.li
@@ -31,13 +32,18 @@ import java.util.List;
 public interface TaskService {
     /**
      * 给会员发送消息
-     * @param sysBrandId
      */
-    public  void sendMemberMessage(Long sysCompanyId,Long sysBrandId,Integer taskType,String msgContent,Boolean exceptWechat);
+    public  void sendMemberMessage(SendMessageVO sendMessageVO);
     /**
      * 批量给粉丝发送短信
      */
-    public void sendBachMSM(Long mktTaskId,Integer taskType,Long sysCompanyId,Long sysBrandId,String msgContent,Boolean exceptWechat);
+    public void sendBachMSM(SendMessageVO sendMessageVO);
+    /**
+     * 获取发送消息和短信的VO
+     * @param mktTaskPOWithBLOBs
+     * @return
+     */
+    public SendMessageVO getSendMessageVO(MktTaskPOWithBLOBs mktTaskPOWithBLOBs);
     /**
      * 通过storeid获取店铺列表
      * @param sysStoreIdList
@@ -173,7 +179,7 @@ public interface TaskService {
      * 获取品牌下的所有会员
      * @return
      */
-    public  com.bizvane.utils.responseinfo.PageInfo<MemberInfoModel> getCompanyMemebers(Long sysCompanyId,Long sysBrandId,Integer taskType,Boolean exceptWechat,Integer pageNumber,Integer pageSize);
+    public  com.bizvane.utils.responseinfo.PageInfo<MemberInfoModel> getCompanyMemebers(SendMessageVO sendMessageVO,Integer pageNumber,Integer pageSize);
 
     /**
      * 获取品牌下的所有粉丝
@@ -188,7 +194,7 @@ public interface TaskService {
     /**
      * 效果分析的明细
      */
-    public ResponseData<TaskRecordVO> doAnalysis(TaskAnalysisVo vo,SysAccountPO sysAccountPo);
+    public ResponseData<TaskRecordVO> doAnalysis(TaskAnalysisVo vo,SysAccountPO sysAccountPo) throws ExecutionException, InterruptedException;
     /**
      * 将需要审核的任务添加到中台
      * @param po

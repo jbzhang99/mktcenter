@@ -623,6 +623,7 @@ public class ActivitySmartServiceImpl implements ActivitySmartService {
         }
 
         //新增活动主表
+        mktActivityPOWithBLOBs.setActivityName("智能营销发券");
         mktActivityPOMapper.insertSelective(mktActivityPOWithBLOBs);
         //获取新增后数据id
         Long mktActivityId = mktActivityPOWithBLOBs.getMktActivityId();
@@ -742,6 +743,7 @@ public class ActivitySmartServiceImpl implements ActivitySmartService {
         }
 
         //新增活动主表
+        mktActivityPOWithBLOBs.setActivityName("智能营销发积分");
         mktActivityPOMapper.insertSelective(mktActivityPOWithBLOBs);
         //获取新增后数据id
         Long mktActivityId = mktActivityPOWithBLOBs.getMktActivityId();
@@ -850,6 +852,7 @@ public class ActivitySmartServiceImpl implements ActivitySmartService {
         }
 
         //新增活动主表
+        mktActivityPOWithBLOBs.setActivityName("智能营销发短信");
         mktActivityPOMapper.insertSelective(mktActivityPOWithBLOBs);
         //获取新增后数据id
         Long mktActivityId = mktActivityPOWithBLOBs.getMktActivityId();
@@ -969,6 +972,7 @@ public class ActivitySmartServiceImpl implements ActivitySmartService {
         }
 
         //新增活动主表
+        mktActivityPOWithBLOBs.setActivityName("智能营销发微信消息");
         mktActivityPOMapper.insertSelective(mktActivityPOWithBLOBs);
         //获取新增后数据id
         Long mktActivityId = mktActivityPOWithBLOBs.getMktActivityId();
