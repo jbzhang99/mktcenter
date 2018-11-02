@@ -333,7 +333,7 @@ public class MemberMessageSend {
                     //get activity message object
                     MktMessagePOExample mktMessagePOExample1 = new MktMessagePOExample();
                     mktMessagePOExample1.createCriteria().andValidEqualTo(Boolean.TRUE).andBizTypeEqualTo(BusinessTypeEnum.ACTIVITY_TYPE_ACTIVITY.getCode()).andBizIdEqualTo(mktActivityPOWithBLOBs.getMktActivityId());
-                    List<MktMessagePO> mktMessagePOS1 = mktMessagePOMapper.selectByExample(mktMessagePOExample1);
+                    List<MktMessagePO> mktMessagePOS1 = mktMessagePOMapper.selectByExampleWithBLOBs(mktMessagePOExample1);
                     MktMessagePO mktMessage = mktMessagePOS1.get(0);
                     //member loop
                     for(MemberInfoModel memberInfoModel : memberInfoModelList){
