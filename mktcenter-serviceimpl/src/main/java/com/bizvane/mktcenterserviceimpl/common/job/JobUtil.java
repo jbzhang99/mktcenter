@@ -33,8 +33,6 @@ public class JobUtil {
     private XxlJobConfig xxlJobConfig;
     @Autowired
     private JobClient jobClient;
-    @Autowired
-    private TaskService taskService;
 
     public static final String defaultStr ="无";
 
@@ -160,7 +158,7 @@ public class JobUtil {
         String taskName = po.getTaskName();
         String name = stageUser.getName();
         Date sendTime = messagePO.getSendTime();
-        SendMessageVO sendMessageVO = taskService.getSendMessageVO(po);
+        SendMessageVO sendMessageVO = this.getSendMessageVO(po);
         String param = JSON.toJSONString(sendMessageVO);
         //清除一下job
         this.doRemoveJobe(bizType, taskCode, param);
@@ -175,7 +173,7 @@ public class JobUtil {
         String taskName = po.getTaskName();
         String name = stageUser.getName();
         Date sendTime = messagePO.getSendTime();
-        SendMessageVO sendMessageVO = taskService.getSendMessageVO(po);
+        SendMessageVO sendMessageVO = this.getSendMessageVO(po);
         String param = JSON.toJSONString(sendMessageVO);
         //清除一下job
         this.doRemoveJobe(bizType, taskCode, param);
@@ -204,6 +202,22 @@ public class JobUtil {
         builder.append("&");
         builder.append(taskJobStyle);
         return builder.toString();
+    }
+    public SendMessageVO getSendMessageVO(MktTaskPOWithBLOBs mktTaskPOWithBLOBs) {
+        SendMessageVO sendMessageVO = new SendMessageVO();
+        sendMessageVO.setMktTaskId(mktTaskPOWithBLOBs.getMktTaskId());
+        sendMessageVO.setTaskName(mktTaskPOWithBLOBs.getTaskName());
+        sendMessageVO.setTaskType(mktTaskPOWithBLOBs.getTaskType());
+        sendMessageVO.setSysCompanyId(mktTaskPOWithBLOBs.getSysCompanyId());
+        sendMessageVO.setSysBrandId(mktTaskPOWithBLOBs.getSysBrandId());
+        sendMessageVO.setStartTime(mktTaskPOWithBLOBs.getStartTime());
+        sendMessageVO.setEndTime(mktTaskPOWithBLOBs.getEndTime());
+        Integer points = mktTaskPOWithBLOBs.getPoints();
+        if (points==null){
+            points=0;
+        }
+        sendMessageVO.setPoints(points);
+        return sendMessageVO;
     }
     /**
      * 发送信息job
