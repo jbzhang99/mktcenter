@@ -113,10 +113,11 @@ public class ActivityUpgradeServiceImpl implements ActivityUpgradeService {
      * @return
      */
     @Override
-    public ResponseData<ActivityVO> getActivityUpgradeList(ActivityVO vo, PageForm pageForm) {
+    public ResponseData<ActivityVO> getActivityUpgradeList(ActivityVO vo, PageForm pageForm,SysAccountPO stageUser) {
         log.info("查询升级活动列表");
         ResponseData responseData = new ResponseData();
         PageHelper.startPage(pageForm.getPageNumber(),pageForm.getPageSize());
+        vo.setSysBrandId(stageUser.getBrandId());
         List<ActivityVO> activityUpgradeList = mktActivityUpgradePOMapper.getActivityUpgradeList(vo);
         PageInfo<ActivityVO> pageInfo = new PageInfo<>(activityUpgradeList);
         responseData.setData(pageInfo);

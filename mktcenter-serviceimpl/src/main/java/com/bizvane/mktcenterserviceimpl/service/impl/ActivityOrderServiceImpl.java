@@ -114,10 +114,11 @@ public class ActivityOrderServiceImpl implements ActivityOrderService {
      * @return
      */
     @Override
-    public ResponseData<ActivityVO> getActivityOrderList(ActivityVO vo, PageForm pageForm) {
+    public ResponseData<ActivityVO> getActivityOrderList(ActivityVO vo, PageForm pageForm,SysAccountPO stageUser) {
         log.info("查询消费活动列表开始");
         ResponseData responseData = new ResponseData();
         PageHelper.startPage(pageForm.getPageNumber(),pageForm.getPageSize());
+        vo.setSysBrandId(stageUser.getBrandId());
         List<ActivityVO> activityOrderList = mktActivityOrderPOMapper.getActivityOrderList(vo);
         PageInfo<ActivityVO> pageInfo = new PageInfo<>(activityOrderList);
         responseData.setData(pageInfo);

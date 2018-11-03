@@ -5,7 +5,7 @@ server:
 spring:
   redis:
     database: 7
-    host: 192.168.2.18
+    host: redis.uat.com
     port: 6379
     password: bizvane
     jedis:
@@ -24,38 +24,19 @@ spring:
   #      name: root
   #      password: root
   datasource:
-    url: jdbc:mysql://192.168.2.25:3306/julu-uat?useUnicode=true&characterEncoding=utf-8
+    url: jdbc:mysql://mysql.uat.com:3306/julu-uat?useUnicode=true&characterEncoding=utf-8
     username: root
     password: bizvane
     driver-class-name: com.mysql.jdbc.Driver
   data:
     mongodb:
       database: "7"
-      uri: "mongodb://192.168.2.18:27017/?AutoConnectRetry=true"
+      uri: "mongodb://mongodb.uat.com:27017/?AutoConnectRetry=true"
   elasticsearch:
     cluster-name: uat-es
-    cluster-nodes: 192.168.2.22:9300,192.168.2.23:9300,192.168.2.24:9300
+    cluster-nodes: elasticsearch.uat.com:9300
     repositories:
       enabled: true
-  kafka:
-    producer:
-      bootstrap-servers: "192.168.2.18:9092"
-      key-serializer: "org.apache.kafka.common.serialization.StringSerializer"
-      value-serializer: "org.apache.kafka.common.serialization.StringSerializer"
-      batch-size: 16384
-      buffer-memory: 33554432
-      retries: 0
-      acks: "1"
-    consumer:
-      bootstrap-servers: "192.168.2.18:9092"
-      enable-auto-commit: false
-      auto-offset-reset: "earliest"
-      key-deserializer: "org.apache.kafka.common.serialization.StringDeserializer"
-      value-deserializer: "org.apache.kafka.common.serialization.StringDeserializer"
-      session-timeout: 30000
-      request-timeout: 40000
-      heartbeat-interval: 29000ms
-      max-partition-fetch-bytes: 524288
   jackson:
     date-format: yyyy-MM-dd HH:mm:ss
     time-zone: GMT+8
@@ -68,7 +49,7 @@ eureka:
       lease-renewal-interval-in-seconds: 10
   client:
     service-url:
-      defaultZone: http://192.168.2.20:8761/eureka/,http://192.168.2.21:8761/eureka/
+      defaultZone: http://eureka.uat.com:8761/eureka/
 management:
   endpoints:
     web.exposure.include: "*"
@@ -95,7 +76,7 @@ xxl:
   job:
     admin:
       ### xxl-job admin address list, such as "http://address" or "http://address01,http://address02"
-      addresses: http://192.168.2.11:8080
+      addresses: http://job.uat.com:8080
     ### xxl-job executor address
     executor:
       appname: ${spring.application.name}

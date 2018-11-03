@@ -28,8 +28,9 @@ public class ActivityAniversaryController {
      * @return
      */ 
     @RequestMapping("getActivityAniversaryList")
-    public ResponseData<ActivityVO> getActivityAniversary(ActivityVO vo, PageForm pageForm){
-        ResponseData<ActivityVO> activityAniversaryList=activityVipAniversaryService.getActivityVipAniversaryList(vo,pageForm);
+    public ResponseData<ActivityVO> getActivityAniversary(ActivityVO vo, PageForm pageForm,HttpServletRequest request){
+        SysAccountPO stageUser = TokenUtils.getStageUser(request);
+        ResponseData<ActivityVO> activityAniversaryList=activityVipAniversaryService.getActivityVipAniversaryList(vo,pageForm,stageUser);
         return  activityAniversaryList;
     }
 

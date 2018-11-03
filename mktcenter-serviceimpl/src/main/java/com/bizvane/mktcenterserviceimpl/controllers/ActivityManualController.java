@@ -27,8 +27,9 @@ public class ActivityManualController {
       * 查询活动列表
       * */
     @RequestMapping("/getActivityList")
-    public  ResponseData<ActivityVO> getActivityList(ActivityVO vo, PageForm  pageForm){
-        return activityManualService.getActivityManualList(vo,pageForm);
+    public  ResponseData<ActivityVO> getActivityList(ActivityVO vo, PageForm  pageForm,HttpServletRequest request){
+        SysAccountPO stageUser = TokenUtils.getStageUser(request);
+        return activityManualService.getActivityManualList(vo,pageForm,stageUser);
     }
 
 

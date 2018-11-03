@@ -85,10 +85,11 @@ public class ActivitySigninServiceImpl implements ActivitySigninService {
      * @return
      */
     @Override
-    public ResponseData<ActivityVO> getActivitySigninList(ActivityVO vo, PageForm pageForm) {
+    public ResponseData<ActivityVO> getActivitySigninList(ActivityVO vo, PageForm pageForm,SysAccountPO stageUser) {
         log.info("查询签到活动列表");
         ResponseData responseData = new ResponseData();
         PageHelper.startPage(pageForm.getPageNumber(),pageForm.getPageSize());
+        vo.setSysBrandId(stageUser.getBrandId());
         List<ActivityVO> activitySigninList = mktActivitySigninMapper.getActivitySigninList(vo);
         PageInfo<ActivityVO> pageInfo = new PageInfo<>(activitySigninList);
         responseData.setData(pageInfo);

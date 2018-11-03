@@ -215,7 +215,7 @@ public class TaskServiceImpl implements TaskService {
             }
             //查询券信息
             MktCouponPOExample example = new MktCouponPOExample();
-            example.createCriteria().andValidEqualTo(true).andBizIdEqualTo(mktTaskId);
+            example.createCriteria().andValidEqualTo(true).andBizIdEqualTo(mktTaskId).andBizTypeEqualTo(2);
             List<MktCouponPO> mktCouponPOList = mktCouponPOMapper.selectByExample(example);
             //查询消息
             List<MktMessagePO> mktMessagePOList= new  ArrayList<MktMessagePO>();

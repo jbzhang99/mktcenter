@@ -38,8 +38,9 @@ public class ActivitySigninController {
      * @return
      */
     @RequestMapping("getActivitySigninList")
-    public ResponseData<ActivityVO> getActivitySigninList(ActivityVO vo, PageForm pageForm){
-        ResponseData<ActivityVO> activitySigninList = activitySigninService.getActivitySigninList(vo, pageForm);
+    public ResponseData<ActivityVO> getActivitySigninList(ActivityVO vo, PageForm pageForm, HttpServletRequest request){
+        SysAccountPO stageUser = TokenUtils.getStageUser(request);
+        ResponseData<ActivityVO> activitySigninList = activitySigninService.getActivitySigninList(vo, pageForm,stageUser);
         return activitySigninList;
     }
 

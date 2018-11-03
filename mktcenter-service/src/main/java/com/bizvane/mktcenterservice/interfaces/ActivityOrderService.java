@@ -24,7 +24,7 @@ public interface ActivityOrderService {
      * @param vo
      * @return
      */
-    public ResponseData<ActivityVO> getActivityOrderList(ActivityVO vo, PageForm pageForm);
+    public ResponseData<ActivityVO> getActivityOrderList(ActivityVO vo, PageForm pageForm,SysAccountPO stageUser);
     /**
      * 新增会员消费活动
      * @param bo

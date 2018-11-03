@@ -104,10 +104,11 @@ public class ActivityVipAniversaryServiceImpl implements ActivityVipAniversarySe
     @Autowired
     private IntegralRecordApiService integralRecordApiService;
     @Override
-    public ResponseData<ActivityVO> getActivityVipAniversaryList(ActivityVO vo, PageForm pageForm) {
+    public ResponseData<ActivityVO> getActivityVipAniversaryList(ActivityVO vo, PageForm pageForm,SysAccountPO stageUser) {
         log.info("查询纪念日活动列表开始");
         ResponseData responseData = new ResponseData();
         PageHelper.startPage(pageForm.getPageNumber(),pageForm.getPageSize());
+        vo.setSysBrandId(stageUser.getBrandId());
         List<ActivityVO> activityAniversaryList = mktActivityVipAniversaryPOMapper.getActivityAniversaryList(vo);
         PageInfo<ActivityVO> pageInfo = new PageInfo<>(activityAniversaryList);
         responseData.setData(pageInfo);

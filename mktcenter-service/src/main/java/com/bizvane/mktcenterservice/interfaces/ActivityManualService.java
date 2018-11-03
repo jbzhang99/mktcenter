@@ -17,7 +17,7 @@ import java.util.List;
 
 public interface ActivityManualService {
 
-  ResponseData<ActivityVO> getActivityManualList(ActivityVO vo , PageForm pageForm);
+  ResponseData<ActivityVO> getActivityManualList(ActivityVO vo , PageForm pageForm,SysAccountPO stageUser);
 
   ResponseData<Integer> addActivityManual(ActivityBO bo,SysAccountPO stageUser);
 

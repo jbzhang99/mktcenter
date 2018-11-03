@@ -113,10 +113,11 @@ public class ActivityRegisterServiceImpl implements ActivityRegisterService {
      * @return
      */
     @Override
-    public ResponseData<ActivityVO> getActivityList(ActivityVO vo,PageForm pageForm) {
+    public ResponseData<ActivityVO> getActivityList(ActivityVO vo,PageForm pageForm,SysAccountPO stageUser) {
         ResponseData responseData = new ResponseData();
         PageHelper.startPage(pageForm.getPageNumber(),pageForm.getPageSize());
         List<ActivityVO> activityRegisterList = new ArrayList<>();
+        vo.setSysBrandId(stageUser.getBrandId());
         try{
             log.info("开卡活动列表开始，参数="+vo);
             activityRegisterList = mktActivityRegisterPOMapper.getActivityList(vo);

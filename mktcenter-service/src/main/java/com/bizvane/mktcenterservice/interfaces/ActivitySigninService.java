@@ -24,7 +24,7 @@ public interface ActivitySigninService {
      * @param vo
      * @return
      */
-    public ResponseData<ActivityVO> getActivitySigninList(ActivityVO vo, PageForm pageForm);
+    public ResponseData<ActivityVO> getActivitySigninList(ActivityVO vo, PageForm pageForm,SysAccountPO stageUser);
     /**
      * 新增会员签到活动
      * @param bo
