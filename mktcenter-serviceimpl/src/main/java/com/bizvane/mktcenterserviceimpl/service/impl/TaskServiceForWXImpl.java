@@ -105,7 +105,7 @@ public class TaskServiceForWXImpl implements TaskServiceForWX {
             String shareUrl = sharePOWithBLOBs.getShareUrl();
             // 1站内链接，2自定义链接',
             Integer shareUrlType = sharePOWithBLOBs.getShareUrlType();
-            if (TaskConstants.SECOND.equals(shareUrlType)) {
+            if (TaskConstants.FIRST.equals(shareUrlType)) {
                 urlBO = appletRouteServiceRpc.getAllAppletFunctionByUrl(shareUrl).getData();
                 urlBO.setType(1);
             }else {
