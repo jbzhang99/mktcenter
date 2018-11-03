@@ -22,7 +22,7 @@ public interface ActivityRegisterService {
      * @param vo
      * @return
      */
-    public ResponseData<ActivityVO> getActivityList(ActivityVO vo,PageForm pageForm);
+    public ResponseData<ActivityVO> getActivityList(ActivityVO vo,PageForm pageForm,SysAccountPO stageUser);
 
     /**
      * 新增开卡活动

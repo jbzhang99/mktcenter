@@ -38,8 +38,9 @@ public class ActivityRegisterController {
      * @return
      */
     @RequestMapping("getActivityList")
-    public ResponseData<ActivityVO> getActivityList(ActivityVO vo, PageForm pageForm){
-        ResponseData<ActivityVO> activityRegisterList = activityRegisterService.getActivityList(vo, pageForm);
+    public ResponseData<ActivityVO> getActivityList(ActivityVO vo, PageForm pageForm,HttpServletRequest request){
+        SysAccountPO stageUser = TokenUtils.getStageUser(request);
+        ResponseData<ActivityVO> activityRegisterList = activityRegisterService.getActivityList(vo, pageForm,stageUser);
         return activityRegisterList;
     }
 

@@ -30,8 +30,9 @@ public class ActivityEvaluationController {
      * @return
      */
     @RequestMapping("getActivityEvaluationList")
-    public ResponseData<ActivityVO> getActivityEvaluationList(ActivityVO vo, PageForm pageForm){
-        ResponseData<ActivityVO> activityEvaluationList = activityEvaluationService.getActivityEvaluationList(vo,pageForm);
+    public ResponseData<ActivityVO> getActivityEvaluationList(ActivityVO vo, PageForm pageForm,HttpServletRequest request){
+        SysAccountPO stageUser = TokenUtils.getStageUser(request);
+        ResponseData<ActivityVO> activityEvaluationList = activityEvaluationService.getActivityEvaluationList(vo,pageForm,stageUser);
         return activityEvaluationList;
     }
 

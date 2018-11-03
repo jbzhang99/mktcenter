@@ -38,8 +38,9 @@ public class ActivityOrderController {
      * @return
      */
     @RequestMapping("getActivityOrderList")
-    public ResponseData<ActivityVO> getActivityOrderList(ActivityVO vo, PageForm pageForm){
-        ResponseData<ActivityVO> activityOrderList = activityOrderService.getActivityOrderList(vo, pageForm);
+    public ResponseData<ActivityVO> getActivityOrderList(ActivityVO vo, PageForm pageForm,HttpServletRequest request){
+        SysAccountPO stageUser = TokenUtils.getStageUser(request);
+        ResponseData<ActivityVO> activityOrderList = activityOrderService.getActivityOrderList(vo, pageForm,stageUser);
         return activityOrderList;
     }
 

@@ -107,10 +107,11 @@ public class ActivityBirthdayServiceImpl implements ActivityBirthdayService {
      * @return
      */
     @Override
-    public ResponseData<ActivityVO> getActivityBirthdayList(ActivityVO vo, PageForm pageForm) {
+    public ResponseData<ActivityVO> getActivityBirthdayList(ActivityVO vo, PageForm pageForm,SysAccountPO stageUser) {
         log.info("查询生日活动列表开始");
         ResponseData responseData = new ResponseData();
         PageHelper.startPage(pageForm.getPageNumber(),pageForm.getPageSize());
+        vo.setSysBrandId(stageUser.getBrandId());
         List<ActivityVO> activityBirthdayList = mktActivityBirthdayPOMapper.getActivityBirthdayList(vo);
         PageInfo<ActivityVO> pageInfo = new PageInfo<>(activityBirthdayList);
         responseData.setData(pageInfo);

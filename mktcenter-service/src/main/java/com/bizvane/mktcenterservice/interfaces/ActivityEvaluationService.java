@@ -19,7 +19,7 @@ public interface ActivityEvaluationService {
      * @param vo
      * @return
      */
-    public ResponseData<ActivityVO> getActivityEvaluationList(ActivityVO vo, PageForm pageForm);
+    public ResponseData<ActivityVO> getActivityEvaluationList(ActivityVO vo, PageForm pageForm,SysAccountPO stageUser);
 
     /**
      * 新增评价奖励活动

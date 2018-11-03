@@ -21,7 +21,7 @@ public interface ActivityVipAniversaryService {
      * @param vo
      * @return
      */
-    public ResponseData<ActivityVO> getActivityVipAniversaryList(ActivityVO vo, PageForm pageForm);
+    public ResponseData<ActivityVO> getActivityVipAniversaryList(ActivityVO vo, PageForm pageForm,SysAccountPO stageUser);
 
     /**
      * 新增纪念日活动

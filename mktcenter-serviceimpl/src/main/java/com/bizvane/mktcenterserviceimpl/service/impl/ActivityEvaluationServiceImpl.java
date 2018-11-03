@@ -76,10 +76,11 @@ public class ActivityEvaluationServiceImpl implements ActivityEvaluationService 
     @Autowired
     private StoreServiceRpc storeServiceRpc;
     @Override
-    public ResponseData<ActivityVO> getActivityEvaluationList(ActivityVO vo, PageForm pageForm) {
+    public ResponseData<ActivityVO> getActivityEvaluationList(ActivityVO vo, PageForm pageForm,SysAccountPO stageUser) {
         log.info("查询评价奖励活动开始");
         ResponseData responseData = new ResponseData();
         PageHelper.startPage(pageForm.getPageNumber(), pageForm.getPageSize());
+        vo.setSysBrandId(stageUser.getBrandId());
         List<ActivityVO> activityEvaluation = mktActivityEvaluationPOMapper.getActivityVOList(vo);
         PageInfo<ActivityVO> pageInfo = new PageInfo<>(activityEvaluation);
         responseData.setData(pageInfo);

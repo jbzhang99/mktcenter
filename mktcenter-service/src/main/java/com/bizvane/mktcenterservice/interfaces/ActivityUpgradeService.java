@@ -24,7 +24,7 @@ public interface ActivityUpgradeService {
      * @param vo
      * @return
      */
-    public ResponseData<ActivityVO> getActivityUpgradeList(ActivityVO vo, PageForm pageForm);
+    public ResponseData<ActivityVO> getActivityUpgradeList(ActivityVO vo, PageForm pageForm, SysAccountPO stageUser);
     /**
      * 新增会员升级活动
      * @param bo

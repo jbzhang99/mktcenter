@@ -38,8 +38,9 @@ public class ActivityUpgradeController {
      * @return
      */
     @RequestMapping("getActivityUpgradeList")
-    public ResponseData<ActivityVO> getActivityUpgradeList(ActivityVO vo, PageForm pageForm){
-        ResponseData<ActivityVO> activityUpgradeList = activityUpgradeService.getActivityUpgradeList(vo, pageForm);
+    public ResponseData<ActivityVO> getActivityUpgradeList(ActivityVO vo, PageForm pageForm,HttpServletRequest request){
+        SysAccountPO stageUser = TokenUtils.getStageUser(request);
+        ResponseData<ActivityVO> activityUpgradeList = activityUpgradeService.getActivityUpgradeList(vo, pageForm,stageUser);
         return activityUpgradeList;
     }
     /**

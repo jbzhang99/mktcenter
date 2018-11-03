@@ -37,8 +37,10 @@ public class ActivityBirthdayController {
      * @return
      */
     @RequestMapping("getActivityBirthdayList")
-    public ResponseData<ActivityVO> getActivityBirthdayList(ActivityVO vo, PageForm pageForm){
-        ResponseData<ActivityVO> activityBirthdayList = activityBirthdayService.getActivityBirthdayList(vo, pageForm);
+    public ResponseData<ActivityVO> getActivityBirthdayList(ActivityVO vo, PageForm pageForm,HttpServletRequest request){
+        //参数校验通过，获取操作人信息
+        SysAccountPO stageUser = TokenUtils.getStageUser(request);
+        ResponseData<ActivityVO> activityBirthdayList = activityBirthdayService.getActivityBirthdayList(vo, pageForm,stageUser);
         return activityBirthdayList;
     }
     /**
