@@ -132,7 +132,7 @@ public class OrderTaskListener implements MessageListener {
 
                 //累计金额任务=5
                 if (TaskTypeEnum.TASK_TYPE_CONSUME_AMOUNT.getCode()==taskType){
-                    if(totalBO!=null && totalBO.getTotalConsume()!=null && totalBO.getTotalConsume().compareTo(consumeAmount) == 1){
+                    if(totalBO!=null && totalBO.getTotalConsume()!=null && totalBO.getTotalConsume().compareTo(consumeAmount) == 0){
                             recordPO.setRewarded(Integer.valueOf(1));
                             recordPO.setModifiedDate(new Date());
                             recordPO.setPoints(obj.getPoints());
@@ -145,6 +145,5 @@ public class OrderTaskListener implements MessageListener {
 
         }
    }
-
 }
 
