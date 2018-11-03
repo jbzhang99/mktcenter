@@ -610,6 +610,7 @@
     tmab.store_limit_type,
     tmab.store_limit_list,
     tmab.mbr_level_code,
+    tmab.registerMonths,
     tmab.mbr_level_name
     FROM
     `t_mkt_activity` tma
