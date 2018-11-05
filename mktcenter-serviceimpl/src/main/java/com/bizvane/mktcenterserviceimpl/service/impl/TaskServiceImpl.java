@@ -1168,7 +1168,5 @@ public class TaskServiceImpl implements TaskService {
         }finally {
             return storeIds;
         }
-
-
     }
 }

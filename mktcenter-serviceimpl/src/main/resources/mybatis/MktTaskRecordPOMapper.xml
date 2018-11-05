@@ -708,7 +708,12 @@
      count(tmtr.member_code) AS oneTaskShareTimes,
      tmt.start_time,
      tmt.create_date,
+     <if test="taskType!=null and taskType!='1'">
      ROUND(TIMESTAMPDIFF(HOUR,tmt.start_time,tmt.end_time)/24,1) as taskDates
+     </if>
+     <if test="taskType!=null and taskType=='1'">
+       ROUND(TIMESTAMPDIFF(HOUR,tmt.start_time,now())/24,1) as taskDates
+     </if>
      FROM
      t_mkt_task_record tmtr   INNER JOIN
      t_mkt_task  tmt ON tmtr.task_id=tmt.mkt_task_id
