@@ -30,6 +30,6 @@ public interface ActivityManualServiceRpc {
 
     @RequestMapping("/executeActivity")
     @io.swagger.annotations.ApiModelProperty(value = "model,couponCode,activityType",name = "执行领券活动", required = false,example = "")
-    public  ResponseData<Integer> executeActivity(@RequestBody ActivityManualVO vo);
+    public  ResponseData<ActivityManualVO> executeActivity(@RequestBody ActivityManualVO vo);
 
 }

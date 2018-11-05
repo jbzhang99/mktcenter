@@ -15,6 +15,26 @@ public class ActivityManualVO extends MktActivityManualPO {
 
     private Long couponDefinitionId;
 
+    private Long countTodaySum;//今天领取的总数量
+
+    private Long countAllSum;//领取的总数量
+
+    public Long getCountTodaySum() {
+        return countTodaySum;
+    }
+
+    public void setCountTodaySum(Long countTodaySum) {
+        this.countTodaySum = countTodaySum;
+    }
+
+    public Long getCountAllSum() {
+        return countAllSum;
+    }
+
+    public void setCountAllSum(Long countAllSum) {
+        this.countAllSum = countAllSum;
+    }
+
     public MemberInfoModel getMemberInfoModel() {
         return memberInfoModel;
     }

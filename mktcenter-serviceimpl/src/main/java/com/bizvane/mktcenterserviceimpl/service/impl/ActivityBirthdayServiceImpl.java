@@ -764,12 +764,15 @@ public class ActivityBirthdayServiceImpl implements ActivityBirthdayService {
         return falg;
     }
     public static void main(String[] args){
-        boolean falg ;
+       /* boolean falg ;
         String ids= "1,2,3,4,5,6";
         //List<Long> listIds = Arrays.asList(ids.split(",")).stream().map(s -> Long.parseLong(s.trim())).collect(Collectors.toList());
         List<String> listIds = Arrays.asList(ids.split(","));
         String ss = "1";
-        falg=listIds.contains(ss);
-        System.out.println("======================="+falg);//[1,2,3,3,4,5,6]
+        falg=listIds.contains(ss);*/
+       Long ss = 3L;
+       Integer dd = 9;
+       Long s = dd-ss-1;
+        System.out.println("======================="+s);//[1,2,3,3,4,5,6]
     }
 }

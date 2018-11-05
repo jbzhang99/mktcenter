@@ -21,7 +21,7 @@ public interface ActivityManualService {
 
   ResponseData<Integer> addActivityManual(ActivityBO bo,SysAccountPO stageUser);
 
-  ResponseData<Integer> executeActivity(ActivityManualVO vo);
+  ResponseData<ActivityManualVO> executeActivity(ActivityManualVO vo);
 
   ResponseData<List<ActivityBO>> getActivityManualEffect(ActivityVO vo);
 

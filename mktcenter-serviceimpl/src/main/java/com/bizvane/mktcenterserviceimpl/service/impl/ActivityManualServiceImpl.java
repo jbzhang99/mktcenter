@@ -283,7 +283,7 @@ public class ActivityManualServiceImpl implements ActivityManualService {
      * @return
      */
     @Override
-    public ResponseData<Integer> executeActivity(ActivityManualVO vo) {
+    public ResponseData<ActivityManualVO> executeActivity(ActivityManualVO vo) {
         log.info("领券活动-执行活动，入参:memberInfoModel-"+ JSON.toJSONString(vo));
         ResponseData responseData = new ResponseData();
         if(vo==null || vo.getMktActivityId()==null){
@@ -404,6 +404,16 @@ public class ActivityManualServiceImpl implements ActivityManualService {
             mktActivityRecordPO.setModifiedUserName(memberInfoModel.getModifiedUserName());
             log.info("领券活动-执行活动-新增记录表，入参:"+JSON.toJSONString(mktActivityRecordPO));
             mktActivityRecordPOMapper.insertSelective(mktActivityRecordPO);
+
+            //计算券还剩余领取几次
+            Long countAllSum = mktActivityManualPO.getPerPersonMax()-countAll-1;
+            Long countTodaySum = mktActivityManualPO.getPerPersonPerDayMax()-countToday-1;
+            ActivityManualVO activityManualVO = new ActivityManualVO();
+            activityManualVO.setCountAllSum(countAllSum);
+            activityManualVO.setCountTodaySum(countTodaySum);
+            responseData.setData(activityManualVO);
+            responseData.setCode(SystemConstants.SUCCESS_CODE);
+            responseData.setMessage(SystemConstants.SUCCESS_MESSAGE);
         }catch (Exception e){
             log.error("领券活动-执行活动-出错:"+e.getMessage());
             responseData.setCode(SystemConstants.ERROR_CODE);
