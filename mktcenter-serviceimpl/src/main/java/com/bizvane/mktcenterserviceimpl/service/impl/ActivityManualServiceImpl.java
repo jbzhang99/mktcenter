@@ -1,9 +1,13 @@
 package com.bizvane.mktcenterserviceimpl.service.impl;
 
 import com.alibaba.fastjson.JSON;
+import com.bizvane.centerstageservice.models.po.SysBrandPo;
 import com.bizvane.centerstageservice.models.po.SysCheckConfigPo;
 import com.bizvane.centerstageservice.models.po.SysCheckPo;
+import com.bizvane.centerstageservice.models.po.SysCompanyPo;
 import com.bizvane.centerstageservice.models.vo.SysCheckConfigVo;
+import com.bizvane.centerstageservice.rpc.BrandServiceRpc;
+import com.bizvane.centerstageservice.rpc.CompanyServiceRpc;
 import com.bizvane.centerstageservice.rpc.SysCheckConfigServiceRpc;
 import com.bizvane.centerstageservice.rpc.SysCheckServiceRpc;
 import com.bizvane.connectorservice.util.SpringUtil;
@@ -91,6 +95,11 @@ public class ActivityManualServiceImpl implements ActivityManualService {
     private Award award;
 
     @Autowired
+    private BrandServiceRpc brandServiceRpc;
+    @Autowired
+    private CompanyServiceRpc companyServiceRpc;
+
+    @Autowired
     private QRCodeServiceFeign qrCodeServiceFeign;
     @Autowired
     private SysCheckServiceRpc sysCheckServiceRpc;
@@ -132,7 +141,12 @@ public class ActivityManualServiceImpl implements ActivityManualService {
         if(responseData.getCode()==ResponseConstants.ERROR){
             return responseData;
         }
-
+        //判断活动开始时间是否大于当前时间
+        if(new Date().after(activityVO.getStartTime())){
+            responseData.setCode(SysResponseEnum.MODEL_FAILED_VALIDATION.getCode());
+            responseData.setMessage("活动开始时间不能比当前时间小!");
+            return responseData;
+        }
         activityVO.setCreateUserName(stageUser.getName());
         activityVO.setCreateUserId(stageUser.getSysAccountId());
         activityVO.setCreateDate(new Date());
@@ -226,8 +240,13 @@ public class ActivityManualServiceImpl implements ActivityManualService {
          String url= qrCodeConfig.getQrcodeurl()+activityVO.getActivityCode();
           UrlQRCodeCreateRequestVO urlQRCodeCreateRequestVO = new UrlQRCodeCreateRequestVO();
           urlQRCodeCreateRequestVO.setSysBrandId(activityVO.getSysBrandId());
-          urlQRCodeCreateRequestVO.setBrandCode(stageUser.getBrandId()+"");//TODO-
-          urlQRCodeCreateRequestVO.setCompanyCode(stageUser.getCompanyCode());
+
+          //根据brandId查询brandCode
+          ResponseData<SysBrandPo> brandPoResult = brandServiceRpc.getBrandByID(activityVO.getSysBrandId());
+          urlQRCodeCreateRequestVO.setBrandCode(brandPoResult.getData().getBrandCode());//TODO-
+
+          ResponseData<SysCompanyPo> companyResult = companyServiceRpc.getCompanyById(stageUser.getSysCompanyId());
+          urlQRCodeCreateRequestVO.setCompanyCode(companyResult.getData().getCompanyCode());
           urlQRCodeCreateRequestVO.setUrl(url);
          log.info("领券活动-创建活动-扫码领券查询二维码入参:"+JSON.toJSONString(urlQRCodeCreateRequestVO));
           ResponseData<String> qrCodeResponseData= null;
@@ -242,6 +261,7 @@ public class ActivityManualServiceImpl implements ActivityManualService {
               }
               mktActivityManualPO.setQrcode(qrCodeResponseData.getData());
           } catch (Exception e) {
+              log.info("二维码返回结果ssssssssssssssssssss:"+JSON.toJSONString(e));
               e.printStackTrace();
           }
        }
@@ -278,7 +298,7 @@ public class ActivityManualServiceImpl implements ActivityManualService {
      * @return
      */
     @Override
-    public ResponseData<Integer> executeActivity(ActivityManualVO vo) {
+    public ResponseData<ActivityManualVO> executeActivity(ActivityManualVO vo) {
         log.info("领券活动-执行活动，入参:memberInfoModel-"+ JSON.toJSONString(vo));
         ResponseData responseData = new ResponseData();
         if(vo==null || vo.getMktActivityId()==null){
@@ -399,6 +419,16 @@ public class ActivityManualServiceImpl implements ActivityManualService {
             mktActivityRecordPO.setModifiedUserName(memberInfoModel.getModifiedUserName());
             log.info("领券活动-执行活动-新增记录表，入参:"+JSON.toJSONString(mktActivityRecordPO));
             mktActivityRecordPOMapper.insertSelective(mktActivityRecordPO);
+
+            //计算券还剩余领取几次
+            Long countAllSum = mktActivityManualPO.getPerPersonMax()-countAll-1;
+            Long countTodaySum = mktActivityManualPO.getPerPersonPerDayMax()-countToday-1;
+            ActivityManualVO activityManualVO = new ActivityManualVO();
+            activityManualVO.setCountAllSum(countAllSum);
+            activityManualVO.setCountTodaySum(countTodaySum);
+            responseData.setData(activityManualVO);
+            responseData.setCode(SystemConstants.SUCCESS_CODE);
+            responseData.setMessage(SystemConstants.SUCCESS_MESSAGE);
         }catch (Exception e){
             log.error("领券活动-执行活动-出错:"+e.getMessage());
             responseData.setCode(SystemConstants.ERROR_CODE);

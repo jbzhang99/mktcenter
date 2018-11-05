@@ -134,6 +134,12 @@ public class ActivityBirthdayServiceImpl implements ActivityBirthdayService {
         ResponseData responseData = new ResponseData();
         //得到大实体类
         ActivityVO activityVO = bo.getActivityVO();
+        //判断活动开始时间是否大于当前时间
+        if(1 != bo.getActivityVO().getLongTerm() && new Date().after(activityVO.getStartTime())){
+            responseData.setCode(SysResponseEnum.MODEL_FAILED_VALIDATION.getCode());
+            responseData.setMessage("活动开始时间不能比当前时间小!");
+            return responseData;
+        }
         //工具类生成活动编码
         String activityCode = CodeUtil.getActivityCode();
         activityVO.setActivityCode(activityCode);
@@ -758,12 +764,15 @@ public class ActivityBirthdayServiceImpl implements ActivityBirthdayService {
         return falg;
     }
     public static void main(String[] args){
-        boolean falg ;
+       /* boolean falg ;
         String ids= "1,2,3,4,5,6";
         //List<Long> listIds = Arrays.asList(ids.split(",")).stream().map(s -> Long.parseLong(s.trim())).collect(Collectors.toList());
         List<String> listIds = Arrays.asList(ids.split(","));
         String ss = "1";
-        falg=listIds.contains(ss);
-        System.out.println("======================="+falg);//[1,2,3,3,4,5,6]
+        falg=listIds.contains(ss);*/
+       Long ss = 3L;
+       Integer dd = 9;
+       Long s = dd-ss-1;
+        System.out.println("======================="+s);//[1,2,3,3,4,5,6]
     }
 }

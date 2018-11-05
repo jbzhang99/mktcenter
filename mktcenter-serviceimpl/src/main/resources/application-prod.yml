@@ -119,8 +119,8 @@ threadPool:
 qiniu:
   accessKey: Jv79lFtLNDBj1XJ6vkXkemnRN5LIOSXMeDOvW35n
   secretKey: HIKXNXr12qRhpIAsdI8xTaX87LeTqqLGjXB_RgDf
-  bucketNm: bizvane-uat
-  domain: https://resource.uat.bizvane.cn
+  bucketNm: bizvane-prod
+  domain: https://static.bizvane.com
 
 activity:
   qrcodeurl: /qrcode?activityCode=

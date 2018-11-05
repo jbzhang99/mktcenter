@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import javax.servlet.http.HttpServletRequest;
 import java.text.ParseException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
@@ -119,4 +120,5 @@ public class TaskController {
         SysAccountPO stageUser = TokenUtils.getStageUser(request);
         return taskService.findCouponSendResultTask(id,type,stageUser,pageForm,name,cardNo);
     }
+
 }

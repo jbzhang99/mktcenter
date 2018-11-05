@@ -220,5 +220,5 @@ public interface TaskService {
     /**
      * 查询白名单店铺Id
      */
-   public  List<Long>  getWhiteStoreIds(Long sysbrandId,Integer taskType);
+   public  List<Long>  getWhiteStoreIds(WhiteStoreVO vo);
 }

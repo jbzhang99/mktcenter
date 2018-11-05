@@ -124,7 +124,7 @@ feign:
       path: message.api
     wechat:
       name: wechat-test
-      path: wechat.api
+      path: wechat
     applet:
       name: applet-test
       path: applet.api
