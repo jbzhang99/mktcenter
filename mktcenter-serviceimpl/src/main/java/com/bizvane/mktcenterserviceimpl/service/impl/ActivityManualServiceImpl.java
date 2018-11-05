@@ -1,9 +1,13 @@
 package com.bizvane.mktcenterserviceimpl.service.impl;
 
 import com.alibaba.fastjson.JSON;
+import com.bizvane.centerstageservice.models.po.SysBrandPo;
 import com.bizvane.centerstageservice.models.po.SysCheckConfigPo;
 import com.bizvane.centerstageservice.models.po.SysCheckPo;
+import com.bizvane.centerstageservice.models.po.SysCompanyPo;
 import com.bizvane.centerstageservice.models.vo.SysCheckConfigVo;
+import com.bizvane.centerstageservice.rpc.BrandServiceRpc;
+import com.bizvane.centerstageservice.rpc.CompanyServiceRpc;
 import com.bizvane.centerstageservice.rpc.SysCheckConfigServiceRpc;
 import com.bizvane.centerstageservice.rpc.SysCheckServiceRpc;
 import com.bizvane.connectorservice.util.SpringUtil;
@@ -89,6 +93,11 @@ public class ActivityManualServiceImpl implements ActivityManualService {
 
     @Autowired
     private Award award;
+
+    @Autowired
+    private BrandServiceRpc brandServiceRpc;
+    @Autowired
+    private CompanyServiceRpc companyServiceRpc;
 
     @Autowired
     private QRCodeServiceFeign qrCodeServiceFeign;
@@ -231,8 +240,13 @@ public class ActivityManualServiceImpl implements ActivityManualService {
          String url= qrCodeConfig.getQrcodeurl()+activityVO.getActivityCode();
           UrlQRCodeCreateRequestVO urlQRCodeCreateRequestVO = new UrlQRCodeCreateRequestVO();
           urlQRCodeCreateRequestVO.setSysBrandId(activityVO.getSysBrandId());
-          urlQRCodeCreateRequestVO.setBrandCode(stageUser.getBrandId()+"");//TODO-
-          urlQRCodeCreateRequestVO.setCompanyCode(stageUser.getCompanyCode());
+
+          //根据brandId查询brandCode
+          ResponseData<SysBrandPo> brandPoResult = brandServiceRpc.getBrandByID(activityVO.getSysBrandId());
+          urlQRCodeCreateRequestVO.setBrandCode(brandPoResult.getData().getBrandCode());//TODO-
+
+          ResponseData<SysCompanyPo> companyResult = companyServiceRpc.getCompanyById(stageUser.getSysCompanyId());
+          urlQRCodeCreateRequestVO.setCompanyCode(companyResult.getData().getCompanyCode());
           urlQRCodeCreateRequestVO.setUrl(url);
          log.info("领券活动-创建活动-扫码领券查询二维码入参:"+JSON.toJSONString(urlQRCodeCreateRequestVO));
           ResponseData<String> qrCodeResponseData= null;
