@@ -160,7 +160,7 @@ public class ExecuteParamCheckUtil {
     public  static Boolean addActivitCheck(ActivityBO bo, ActivityVO activityVO) {
         boolean falg = false;
         if (false==bo.getActivityVO().getStoreLimit()) {
-            falg = true;
+            falg = false;
         } else {
             //判断是白名单
             if (bo.getActivityVO().getStoreLimitType()==2) {
