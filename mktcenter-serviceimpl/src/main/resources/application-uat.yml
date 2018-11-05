@@ -2,6 +2,8 @@ server:
   port: 2007
   servlet:
     context-path: /mktcenter.api
+  tomcat:
+    basedir: /work2/tmp
 spring:
   redis:
     database: 7
