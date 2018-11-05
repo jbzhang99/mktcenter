@@ -14,6 +14,7 @@ import java.util.List;
 import com.bizvane.mktcenterservice.models.vo.TaskDetailVO;
 import com.bizvane.mktcenterservice.models.vo.TaskForWXVO;
 import com.bizvane.mktcenterservice.models.vo.TaskVO;
+import com.bizvane.mktcenterservice.models.vo.WhiteStoreVO;
 import org.apache.ibatis.annotations.Param;
 
 public interface MktTaskPOMapper {
@@ -159,5 +160,5 @@ public interface MktTaskPOMapper {
 	public List<TaskVO> getShareTaskList(@Param("mktTaskId") Long mktTaskId);
 	public List<TaskVO> getProfileTaskList(@Param("mktTaskId") Long mktTaskId);
 
-	public  String  getWhiteStoreIds(@Param("brandId")Long brandId,@Param("taskType")Integer taskType);
+	public  String  getWhiteStoreIds(WhiteStoreVO vo);
 }

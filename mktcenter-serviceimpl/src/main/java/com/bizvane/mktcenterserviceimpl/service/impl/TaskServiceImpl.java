@@ -740,6 +740,7 @@ public class TaskServiceImpl implements TaskService {
         mktTaskPOWithBLOBs.setModifiedDate(new Date());
         mktTaskPOWithBLOBs.setModifiedUserId(sysAccountPO.getSysAccountId());
         mktTaskPOWithBLOBs.setModifiedUserName(sysAccountPO.getName());
+        mktTaskPOWithBLOBs.setValid(Boolean.FALSE);
         mktTaskPOMapper.updateByPrimaryKeySelective(mktTaskPOWithBLOBs);
 
         //禁用后要清除所有的job
@@ -1153,10 +1154,10 @@ public class TaskServiceImpl implements TaskService {
      * mktTaskProfilePOMapper   mktTaskSharePOMapper  mktTaskInvitePOMapper  mktTaskOrderPOMapper
      */
     @Override
-    public  List<Long>  getWhiteStoreIds(Long brandId,Integer taskType){
+    public  List<Long>  getWhiteStoreIds(WhiteStoreVO vo){
         List<Long> storeIds = null;
         try{
-            String whiteStoreIds = mktTaskPOMapper.getWhiteStoreIds(brandId, taskType);
+            String whiteStoreIds = mktTaskPOMapper.getWhiteStoreIds(vo);
             if (StringUtils.isNotBlank(whiteStoreIds)){
                 storeIds = Arrays.asList(whiteStoreIds.split(",")).stream().filter(element -> StringUtils.isNotBlank(element)).
                         map(element -> Long.valueOf(element)).distinct().collect(Collectors.toList());
