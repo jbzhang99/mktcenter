@@ -8,6 +8,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.util.StringUtil;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -167,11 +168,13 @@ public class ExecuteParamCheckUtil {
                 //前端传过来的
                 String storeLimitList = bo.getActivityVO().getStoreLimitList();
                 List<String> result = Arrays.asList(storeLimitList.split(","));
+                List res = new ArrayList(result);
                 //表里查出来的
                 String stroeList = activityVO.getStoreLimitList();
                 List<String> productNoList = Arrays.asList(stroeList.split(","));
-                productNoList.retainAll(result);
-                boolean fa=productNoList.size()>0;
+                List productList = new ArrayList(productNoList);
+                productList.retainAll(res);
+                boolean fa=productList.size()>0;
                 if (fa==true){
                     falg=false;
                 }else {
