@@ -602,7 +602,7 @@
     tma.modified_user_name,
     tma.modified_date,
     tma.valid,
-
+    tma.activity_info,
     tmas.mkt_activity_sign_in_id,
     tmas.sign_type,
     tmas.integral_type,
