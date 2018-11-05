@@ -101,17 +101,14 @@ public class TaskProfileServiceImpl implements TaskProfileService {
     @Override
     @Transactional
     public ResponseData<Integer> addTask(TaskBO bo, SysAccountPO stageUser) throws ParseException {
-        //0.参数的检验
+        //参数的检验
         ResponseData responseData = TaskParamCheckUtil.checkParam(bo);
-        //参数校验不通过
         if(responseData.getCode()>0){
             return responseData;
         }
         TaskVO taskVO = bo.getTaskVO();
-        //1.任务主表新增
         MktTaskPOWithBLOBs mktTaskPOWithBLOBs = new MktTaskPOWithBLOBs();
         BeanUtils.copyProperties(taskVO, mktTaskPOWithBLOBs);
-        //任务编号
         mktTaskPOWithBLOBs.setTaskCode(CodeUtil.getTaskCode());
         //调用中台的审核配置,判断是否需要审核  1=需要审核   0=不需要
         Integer stagecheckStatus = taskService.getCenterStageCheckStage(mktTaskPOWithBLOBs);
@@ -123,13 +120,11 @@ public class TaskProfileServiceImpl implements TaskProfileService {
         if(TaskConstants.FIRST.equals(stagecheckStatus)){
             taskService.addCheckData(mktTaskPOWithBLOBs);
         }
-        //3.任务消费表新增
         MktTaskProfilePOWithBLOBs mktTaskProfilePO = new MktTaskProfilePOWithBLOBs();
         BeanUtils.copyProperties(taskVO, mktTaskProfilePO);
         mktTaskProfilePO.setMktTaskId(mktTaskId);
         this.insertProfileTask(mktTaskProfilePO,stageUser);
 
-        //4.新增奖励新增   业务类型：1活动，2任务
         List<MktCouponPO> mktCouponPOList = bo.getMktCouponPOList();
         if (org.apache.commons.collections.CollectionUtils.isNotEmpty(mktCouponPOList)) {
             mktCouponPOList.stream().forEach(param -> {
@@ -138,7 +133,6 @@ public class TaskProfileServiceImpl implements TaskProfileService {
                 taskCouponService.addTaskCoupon(param, stageUser);
             });
         }
-        //5.新增消息新增  消息业务类型：1活动，2任务
         List<MktMessagePO> mktmessagePOList = bo.getMessagePOList();
         if (org.apache.commons.collections.CollectionUtils.isNotEmpty(mktmessagePOList)) {
             mktmessagePOList.stream().forEach(param -> {
@@ -149,7 +143,7 @@ public class TaskProfileServiceImpl implements TaskProfileService {
             );
         }
 
-        //6.处理任务
+        //处理任务
         taskService.doProfileTask(mktTaskPOWithBLOBs,mktmessagePOList,stageUser);
 
         responseData.setCode(SystemConstants.SUCCESS_CODE);
@@ -175,6 +169,7 @@ public class TaskProfileServiceImpl implements TaskProfileService {
             po.setCheckStatus(CheckStatusEnum.CHECK_STATUS_APPROVED.getCode());
             //执行中=2
             po.setTaskStatus(TaskStatusEnum.TASK_STATUS_EXECUTING.getCode());
+            po.setStartTime(new Date());
         }
         return po;
     }
@@ -213,6 +208,7 @@ public class TaskProfileServiceImpl implements TaskProfileService {
         MktTaskPOWithBLOBs mktTaskPOWithBLOBs = new MktTaskPOWithBLOBs();
         if (TaskConstants.THREE.equals(checkStatus)) {
             mktTaskPOWithBLOBs.setTaskStatus(TaskStatusEnum.TASK_STATUS_EXECUTING.getCode());
+            mktTaskPOWithBLOBs.setStartTime(new Date());
         }else{
             // 已驳回   待执行
             mktTaskPOWithBLOBs.setTaskStatus(TaskStatusEnum.TASK_STATUS_PENDING.getCode());
