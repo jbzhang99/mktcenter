@@ -276,27 +276,6 @@ public class ActivityServiceImpl implements ActivityService {
         }
         ActivityConvertCouponTypeEnum activityConvertCouponTypeEnumByCode = ActivityConvertCouponTypeEnum.getActivityConvertCouponTypeEnumByCode(type);
         String activityType = activityConvertCouponTypeEnumByCode.getCouponCode();
-//        if(bo.getActivityType()== ){
-//            activityType = SendTypeEnum.SEND_COUPON_ONLINE_ACTIVITY.getCode();
-//        }
-//        if(bo.getActivityType()== ActivityTypeEnum.ACTIVITY_TYPE_UPGRADE.getCode()){
-//            activityType = SendTypeEnum.SEND_COUPON_UPGRADE_ACTIVITY.getCode();
-//        }
-//        if(bo.getActivityType()== ActivityTypeEnum.ACTIVITY_TYPE_ORDER.getCode()){
-//            activityType = SendTypeEnum.SEND_COUPON_COUSUME_ACTIVITY.getCode();
-//        }
-//        if(bo.getActivityType()== ActivityTypeEnum.ACTIVITY_TYPE_SIGNIN.getCode()){
-//            activityType = SendTypeEnum.SEND_COUPON_SIGN_ACTIVITY.getCode();
-//        }
-//        if(bo.getActivityType()== ActivityTypeEnum.ACTIVITY_TYPE_BIRTHDAY.getCode()){
-//            activityType = SendTypeEnum.SEND_COUPON_BIRTH_ACTIVITY.getCode();
-//        }
-//        if(bo.getActivityType()== ActivityTypeEnum.ACTIVITY_TYPE_QRCODE.getCode()){
-//            activityType = SendTypeEnum.SEND_COUPON_RECEIVE_ACTIVITY.getCode();
-//        }
-//        if(bo.getActivityType()== ActivityTypeEnum.ACTIVITY_TYPE_MANUAL.getCode()){
-//            activityType = SendTypeEnum.SEND_COUPON_RECEIVE_ACTIVITY.getCode();
-//        }
         //查询券合计
         ResponseData<CouponFindCouponCountResponseVO> couponFindCouponCountVO =  couponQueryServiceFeign.getCountBySendType(activityType,bo.getSysBrandId());
         CouponFindCouponCountResponseVO couponFindCoupon = couponFindCouponCountVO.getData();
