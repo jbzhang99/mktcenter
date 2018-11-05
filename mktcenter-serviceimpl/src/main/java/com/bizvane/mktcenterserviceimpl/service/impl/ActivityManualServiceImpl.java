@@ -261,6 +261,7 @@ public class ActivityManualServiceImpl implements ActivityManualService {
               }
               mktActivityManualPO.setQrcode(qrCodeResponseData.getData());
           } catch (Exception e) {
+              log.info("二维码返回结果ssssssssssssssssssss:"+JSON.toJSONString(e));
               e.printStackTrace();
           }
        }
