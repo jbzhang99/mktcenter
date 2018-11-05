@@ -740,7 +740,7 @@ public class TaskServiceImpl implements TaskService {
         mktTaskPOWithBLOBs.setModifiedDate(new Date());
         mktTaskPOWithBLOBs.setModifiedUserId(sysAccountPO.getSysAccountId());
         mktTaskPOWithBLOBs.setModifiedUserName(sysAccountPO.getName());
-        mktTaskPOWithBLOBs.setValid(Boolean.FALSE);
+        //mktTaskPOWithBLOBs.setValid(Boolean.FALSE);
         mktTaskPOMapper.updateByPrimaryKeySelective(mktTaskPOWithBLOBs);
 
         //禁用后要清除所有的job
