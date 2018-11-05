@@ -429,7 +429,11 @@ public class ActivityServiceImpl implements ActivityService {
                 sendCouponSimpleRequestVO.setMemberCode(memberInfo.getMemberCode());
                 sendCouponSimpleRequestVO.setCouponDefinitionId(mktCouponPO.getCouponDefinitionId());
                 sendCouponSimpleRequestVO.setSendBussienId(mktCouponPO.getBizId());
-                sendCouponSimpleRequestVO.setSendType(SendTypeEnum.SEND_COUPON_ORIENT_MARKET.getCode());
+                if (null!=vo.getMktActivitySmartGroupId()){
+                    sendCouponSimpleRequestVO.setSendType(SendTypeEnum.SEND_COUPON_ORIENT_MARKET.getCode());
+                }else {
+                    sendCouponSimpleRequestVO.setSendType(SendTypeEnum.SEND_COUPON_MEMBER_GROUP.getCode());
+                }
                 sendCouponSimpleRequestVO.setBrandId(vo.getSysBrandId());
                 sendCouponSimpleRequestVO.setCompanyId(vo.getSysCompanyId());
                 awardBO.setSendCouponSimpleRequestVO(sendCouponSimpleRequestVO);

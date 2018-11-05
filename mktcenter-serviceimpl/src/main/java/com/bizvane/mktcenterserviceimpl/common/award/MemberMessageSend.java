@@ -281,7 +281,11 @@ public class MemberMessageSend {
                         sendCouponBatchRequestVO.setMemberList(memberInfoVoPages.getData().getList());
                         sendCouponBatchRequestVO.setCouponDefinitionId(mktCouponPO.getCouponDefinitionId());
                         sendCouponBatchRequestVO.setBusinessId(mktActivityPOWithBLOBs.getMktActivityId());
-                        sendCouponBatchRequestVO.setBusinessType(SendTypeEnum.SEND_COUPON_ORIENT_MARKET.getCode());
+                        if (null!=mktActivityPOWithBLOBs.getMktActivitySmartGroupId()){
+                            sendCouponBatchRequestVO.setBusinessType(SendTypeEnum.SEND_COUPON_ORIENT_MARKET.getCode());
+                        }else {
+                            sendCouponBatchRequestVO.setBusinessType(SendTypeEnum.SEND_COUPON_MEMBER_GROUP.getCode());
+                        }
                         awardBO.setMktType(MktSmartTypeEnum.SMART_TYPE_COUPON_BATCH.getCode());
                         awardBO.setSendCouponBatchRequestVO(sendCouponBatchRequestVO);
                         log.info("智能营销-开始批量发券发券");
