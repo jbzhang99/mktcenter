@@ -19,7 +19,7 @@ spring:
   application:
     name: mktcenter-prod
   datasource:
-    url: jdbc:mysql://bizvane-2018.mysql.polardb.rds.aliyuncs.com:3306/bizvane3?useUnicode=true&characterEncoding=utf-8
+    url: jdbc:mysql://bizvane-2018.mysql.polardb.rds.aliyuncs.com:3306/crm-prod?useUnicode=true&characterEncoding=utf-8
     username: bizvane_2018
     password: SF_bizvane20180613
     driver-class-name: com.mysql.jdbc.Driver
