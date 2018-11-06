@@ -57,12 +57,12 @@ public class TaskProfileController {
      */
     @RequestMapping("addTask")
     public ResponseData<Integer> addTask(TaskBO bo, HttpServletRequest request) throws ParseException {
-        SysAccountPO sysAccountPo = TokenUtils.getStageUser(request);
-//        SysAccountPO sysAccountPo=new SysAccountPO();
-//        sysAccountPo.setBrandId(96L);
-//        sysAccountPo.setName("测试测试");
-//        sysAccountPo.setSysAccountId(12867L);
-//        sysAccountPo.setSysCompanyId(3841L);
+      //  SysAccountPO sysAccountPo = TokenUtils.getStageUser(request);
+        SysAccountPO sysAccountPo=new SysAccountPO();
+        sysAccountPo.setBrandId(96L);
+        sysAccountPo.setName("测试测试");
+        sysAccountPo.setSysAccountId(12867L);
+        sysAccountPo.setSysCompanyId(3841L);
         bo.getTaskVO().setTaskType(1);
         return  taskProfileService.addTask(bo, sysAccountPo);
     }
