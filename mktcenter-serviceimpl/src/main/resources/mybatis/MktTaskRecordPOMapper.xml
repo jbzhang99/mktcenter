@@ -708,10 +708,10 @@
      count(tmtr.member_code) AS oneTaskShareTimes,
      tmt.start_time,
      tmt.create_date,
-     <if test="taskType!=null and taskType!='1'">
+     <if test="taskType!=null and taskType!='1'.toString()">
      ROUND(TIMESTAMPDIFF(HOUR,tmt.start_time,tmt.end_time)/24,1) as taskDates
      </if>
-     <if test="taskType!=null and taskType=='1'">
+     <if test="taskType!=null and taskType=='1'.toString()">
        ROUND(TIMESTAMPDIFF(HOUR,tmt.start_time,now())/24,1) as taskDates
      </if>
      FROM
@@ -732,7 +732,10 @@
        AND tmt.create_date <![CDATA[>=]]> #{date1}
      </if>
      <if test="memberLevel!=null">
-       tmtr.member_level=#{memberLevel}
+       AND tmtr.member_level=#{memberLevel}
+     </if>
+     <if test="taskStatus!=null and taskStatus!='0'.toString()">
+       AND tmt.task_status=#{taskStatus}
      </if>
      GROUP BY tmtr.task_id,tmtr.task_type
    </select>
