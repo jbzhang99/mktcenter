@@ -60,6 +60,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 import java.text.NumberFormat;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
@@ -202,8 +203,11 @@ public class ActivityServiceImpl implements ActivityService {
         CtivityAnalysisBO ctivityAnalysisBO = new CtivityAnalysisBO();
         PageHelper.startPage(pageForm.getPageNumber(),pageForm.getPageSize());
         //分页查询出主表信息
+        log.info("现在查询主表信息第一次开始时间是+======="+ new SimpleDateFormat("yyyy/MM/dd-HH:mm:ss:SSS").format(new Date()));
         List<ActivityAnalysisCountBO> activityAnalysisList = mktActivityPOMapper.getActivityAnalysisCountpage(bo);
+        log.info("查询主表信息结束时间是+======="+ new SimpleDateFormat("yyyy/MM/dd-HH:mm:ss:SSS").format(new Date()));
         if (!CollectionUtils.isEmpty(activityAnalysisList)){
+            log.info("开始循环时间+++++++"+ new SimpleDateFormat("yyyy/MM/dd-HH:mm:ss:SSS").format(new Date()));
             for (ActivityAnalysisCountBO activityAnalysisCount:activityAnalysisList) {
                 if (activityAnalysisCount.getActivityStatus()==ActivityStatusEnum.ACTIVITY_STATUS_PENDING.getCode()){
                     activityAnalysisCount.setDays("0天");
@@ -234,7 +238,9 @@ public class ActivityServiceImpl implements ActivityService {
                 }else{
                     sendType = CouponSendTypeEnum.getCouponSendTypeEnumByMktModuleCode(bo.getActivityType()).getCouponModuleCode();
                 }
+                log.info("查询一个活动发券情况开始时间！！！！！！！！！"+ new SimpleDateFormat("yyyy/MM/dd-HH:mm:ss:SSS").format(new Date()));
                 ResponseData<CouponFindCouponCountResponseVO> couponFindCouponCountResponseVODate = couponQueryServiceFeign.findCouponCountBySendBusinessId(activityAnalysisCount.getMktActivityId(),sendType,activityAnalysisCount.getSysBrandId());
+                log.info("查询一个活动发券情况结束时间？？？？？？？？？"+ new SimpleDateFormat("yyyy/MM/dd-HH:mm:ss:SSS").format(new Date()));
                 CouponFindCouponCountResponseVO couponFindCouponCountResponseVO = couponFindCouponCountResponseVODate.getData();
                 //券数量
                 activityAnalysisCount.setCouponSum(couponFindCouponCountResponseVO.getCouponSum());
@@ -259,7 +265,7 @@ public class ActivityServiceImpl implements ActivityService {
                 }
 
             }
-
+            log.info("循环结束时间+++++++"+ new SimpleDateFormat("yyyy/MM/dd-HH:mm:ss:SSS").format(new Date()));
         }
         //合计积分总数 和参与人数总数
         CtivityAnalysisBO ctivityAnalysis = mktActivityPOMapper.getActivityAnalysisTotal(bo);
@@ -277,6 +283,7 @@ public class ActivityServiceImpl implements ActivityService {
         ActivityConvertCouponTypeEnum activityConvertCouponTypeEnumByCode = ActivityConvertCouponTypeEnum.getActivityConvertCouponTypeEnumByCode(type);
         String activityType = activityConvertCouponTypeEnumByCode.getCouponCode();
         //查询券合计
+        log.info("查询券合计开始时间+++++++"+ new SimpleDateFormat("yyyy/MM/dd-HH:mm:ss:SSS").format(new Date()));
         ResponseData<CouponFindCouponCountResponseVO> couponFindCouponCountVO =  couponQueryServiceFeign.getCountBySendType(activityType,bo.getSysBrandId());
         CouponFindCouponCountResponseVO couponFindCoupon = couponFindCouponCountVO.getData();
         //合计优惠券总数量
@@ -285,6 +292,7 @@ public class ActivityServiceImpl implements ActivityService {
         ctivityAnalysisBO.setCouponUsedSumTotal(couponFindCoupon.getCouponUsedSum());
         //合计券收益
         ctivityAnalysisBO.setMoneyTotal(couponFindCoupon.getMoney());
+        log.info("查询券合计结束时间+++++++"+ new SimpleDateFormat("yyyy/MM/dd-HH:mm:ss:SSS").format(new Date()));
         PageInfo<ActivityAnalysisCountBO> pageInfo = new PageInfo<>(activityAnalysisList);
         ctivityAnalysisBO.setActivityAnalysisCountBO(pageInfo.getList());
         ctivityAnalysisBO.setTotal(pageInfo.getTotal());
