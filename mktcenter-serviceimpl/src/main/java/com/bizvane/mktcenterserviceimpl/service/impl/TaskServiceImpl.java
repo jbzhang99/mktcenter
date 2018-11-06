@@ -540,6 +540,8 @@ public class TaskServiceImpl implements TaskService {
         if (CollectionUtils.isNotEmpty(mktCouponPOS)){
             String couponNames = mktCouponPOS.stream().map(fan -> fan.getCouponName()).collect(Collectors.joining("-"));
             stringBuffer.append(couponNames);
+        }
+        if (StringUtils.isNotBlank(stringBuffer.toString())){
             stringBuffer.append("-");
         }
         if (points!=null && points>0){
