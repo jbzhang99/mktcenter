@@ -255,6 +255,7 @@ public class ActivityManualServiceImpl implements ActivityManualService {
               log.info("二维码返回结果ssssssssssssssssssss:"+JSON.toJSONString(qrCodeResponseData));
               if(null==qrCodeResponseData||null==qrCodeResponseData.getData()){
                   log.info("领券活动-创建活动-扫码领券生成二维码为空");
+                  responseData.setCode(SysResponseEnum.FAILED.getCode());
                   responseData.setMessage(SystemConstants.ERROR_QR_CODE_EMPTY);
                   responseData.setData(SystemConstants.ERROR_CODE);
                   return responseData;

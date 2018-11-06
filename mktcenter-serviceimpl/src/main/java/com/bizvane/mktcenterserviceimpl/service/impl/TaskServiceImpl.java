@@ -540,7 +540,9 @@ public class TaskServiceImpl implements TaskService {
         if (CollectionUtils.isNotEmpty(mktCouponPOS)){
             String couponNames = mktCouponPOS.stream().map(fan -> fan.getCouponName()).collect(Collectors.joining("-"));
             stringBuffer.append(couponNames);
-            stringBuffer.append("-").append(points);
+        }
+        if (StringUtils.isNotBlank(stringBuffer.toString())){
+            stringBuffer.append("-");
         }
         if (points!=null && points>0){
             stringBuffer.append(points).append("积分");
@@ -550,7 +552,7 @@ public class TaskServiceImpl implements TaskService {
         List<MemberInfoModel> maemberlist = memeberspage.getList();
         int pages = memeberspage.getPages();
         if (CollectionUtils.isNotEmpty(maemberlist)){
-            for (int i=1;i<pages;i++){
+            for (int i=1;i<=pages;i++){
                 com.bizvane.utils.responseinfo.PageInfo<MemberInfoModel> pagesdata= this.getCompanyMemebers(sendMessageVO,i, 10000);
                 List<MemberInfoModel> list = pagesdata.getList();
                 log.info("发送消息获取的会员列表--"+JSON.toJSONString(list));
@@ -608,7 +610,7 @@ public class TaskServiceImpl implements TaskService {
 //        messageVO.setChannelService(smsConfigPo.getChannelService());//路径
 
         if (CollectionUtils.isNotEmpty(memberlist)){
-            for (int i=1;i<pages;i++){
+            for (int i=1;i<=pages;i++){
                 com.bizvane.utils.responseinfo.PageInfo<MemberInfoModel> onepagememebers = this.getCompanyMemebers(sendMessageVO,i,batchNum);
                 List<MemberInfoModel> onelist = onepagememebers.getList();
                 String pnones = onelist.stream().filter(fan -> StringUtils.isNotBlank(fan.getPhone())).map(fan -> fan.getPhone()).collect(Collectors.joining(","));

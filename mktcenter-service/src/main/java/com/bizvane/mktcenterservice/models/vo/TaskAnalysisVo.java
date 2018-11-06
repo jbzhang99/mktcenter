@@ -21,6 +21,8 @@ public class TaskAnalysisVo {
     //,每个品牌下的会员等级都是不一样的
     private Integer memberLevel;
 
+    private Integer taskStatus;
+
     public Date getStartDate() {
         return startDate;
     }
@@ -101,4 +103,11 @@ public class TaskAnalysisVo {
         this.memberLevel = memberLevel;
     }
 
+    public Integer getTaskStatus() {
+        return taskStatus;
+    }
+
+    public void setTaskStatus(Integer taskStatus) {
+        this.taskStatus = taskStatus;
+    }
 }
