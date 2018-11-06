@@ -1306,19 +1306,19 @@
     group_concat(tmcon.store_limit_list) AS storeLimitList
     FROM
     t_mkt_task tmt
-    <if test="taskType!=null and taskType=='1'">
+    <if test="taskType!=null and taskType=='1'.toString()">
       INNER JOIN
       t_mkt_task_profile tmcon
     </if>
-    <if test="taskType!=null and taskType=='2'">
+    <if test="taskType!=null and taskType=='2'.toString()">
       INNER JOIN
       t_mkt_task_share  tmcon
     </if>
-    <if test="taskType!=null and taskType=='3'">
+    <if test="taskType!=null and taskType=='3'.toString()">
       INNER JOIN
       t_mkt_task_invite tmcon
     </if>
-    <if test="taskType!=null and (taskType=='4' or taskType!='5')">
+    <if test="taskType!=null and (taskType=='4'.toString() or taskType!='5'.toString())">
       INNER JOIN  t_mkt_task_order tmcon
     </if>
     <if test="taskType!=null">
