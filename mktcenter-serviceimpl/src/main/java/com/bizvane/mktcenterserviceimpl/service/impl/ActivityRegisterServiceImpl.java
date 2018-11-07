@@ -391,7 +391,7 @@ public class ActivityRegisterServiceImpl implements ActivityRegisterService {
             if( null==activityVO.getMbrLevelCode()||activityVO.getMbrLevelCode().equals(vo.getLevelId().toString()) ){
                 //验证是否开卡
                 log.info("验证是否开卡");
-                if (0!=activityVO.getOfflineCardStatus() || !vo.getOfflineCardStatus().toString().equals(activityVO.getOfflineCardStatus().toString())){
+                if (0!=activityVO.getOfflineCardStatus() && !vo.getOfflineCardStatus().toString().equals(activityVO.getOfflineCardStatus().toString())){
                     continue;
                 }
                 log.info("开始验证门店");
