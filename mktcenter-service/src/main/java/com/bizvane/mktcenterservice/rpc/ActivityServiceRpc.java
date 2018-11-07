@@ -88,7 +88,7 @@ public interface ActivityServiceRpc {
   * @return
   */
  @RequestMapping("executeActivitySignin")
- public ResponseData<Integer> executeActivitySignin(@RequestBody MemberInfoModelVOActivity vo);
+ public ResponseData<Integer> executeActivitySignin(@RequestBody MemberInfoModel vo);
 
  /**
   * 执行评价奖励活动
@@ -104,7 +104,7 @@ public interface ActivityServiceRpc {
   * @return
   */
  @RequestMapping("executeActivity")
- ResponseData<Integer> executeActivity(@RequestBody MemberInfoModel vo);
+ ResponseData<Integer> executeActivity(@RequestBody MemberInfoModelVOActivity vo);
 
  /**
   * 升级活动
