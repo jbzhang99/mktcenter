@@ -179,6 +179,7 @@ public class ActivityServiceImpl implements ActivityService {
         List<ActivityVO> lists = new ArrayList<>();
         MemberInfoModel memberInfoModel = new MemberInfoModel();
         memberInfoModel.setServiceStoreId(vo.getServiceStoreId());
+        log.info("服务id是=============="+vo.getServiceStoreId());
         List<ActivityVO> activityList =mktActivityPOMapper.getActivityList(vo);
         if (!CollectionUtils.isEmpty(activityList)){
             for (ActivityVO activity:activityList) {

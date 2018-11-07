@@ -730,7 +730,7 @@
   <select id="getActivityList" parameterType="com.bizvane.mktcenterservice.models.vo.ActivityVO" resultType="com.bizvane.mktcenterservice.models.vo.ActivityVO">
   select t.activity_type activityType,t.activity_code as activityCode,t.activity_name as activityName,t.mkt_activity_id as mktActivityId
   from t_mkt_activity t
-  where t.valid=1  and t.activity_status=2
+  where t.valid=1  and t.activity_status=2  AND  t.activity_type IN (2,5)
     <if test="sysBrandId != null and sysBrandId!= ''">
       AND t.sys_brand_id = #{sysBrandId}
     </if>

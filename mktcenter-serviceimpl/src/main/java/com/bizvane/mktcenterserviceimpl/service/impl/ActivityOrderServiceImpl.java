@@ -288,6 +288,7 @@ public class ActivityOrderServiceImpl implements ActivityOrderService {
         ////如果是立即发送 则发送短息
         if(!CollectionUtils.isEmpty(messageVOList) ){
             if(true==activityVO.getSendImmediately()){
+                log.info("我看看进来了吗");
                 //分页查询会员信息发送短信
                 MembersInfoSearchVo membersInfoSearchVo = new MembersInfoSearchVo();
                 membersInfoSearchVo.setPageNumber(1);
@@ -297,6 +298,7 @@ public class ActivityOrderServiceImpl implements ActivityOrderService {
                     membersInfoSearchVo.setLevelID(level);
                 membersInfoSearchVo.setBrandId(activityVO.getSysBrandId());
                 membersInfoSearchVo.setSysCompanyId(activityVO.getSysBrandId());
+                log.info("查询会员参数==============="+ JSON.toJSONString(membersInfoSearchVo));
                 memberMessage.getMemberList(messageVOList, membersInfoSearchVo,activityVO);
             }else{
                 //自定义时间发送 加人job任务

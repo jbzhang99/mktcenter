@@ -92,6 +92,7 @@ public class MemberMessageSend {
             ResponseData<com.bizvane.utils.responseinfo.PageInfo<MemberInfoVo>> memberInfoVoPages = membersAdvancedSearchApiService.search(membersInfoSearchVo);
             List<MemberInfoVo> memberInfoModelList = memberInfoVoPages.getData().getList();
             //循环发送
+            log.info("开始循环发送++++++++++++++++++++++");
             if (!CollectionUtils.isEmpty(memberInfoModelList)){
                 for (MemberInfoModel memberInfo:memberInfoModelList) {
                     activityService.sendMessage(messageVOList, memberInfo,activityVO);
