@@ -572,7 +572,7 @@ public class TaskServiceImpl implements TaskService {
                     memberMessageVO.setActivityInterests(activityInterests);
                     memberMessageVO.setMemberPhone(member.getPhone());
                     memberMessageVO.setTemplateType("TASK_TEMPLATE_MESSAGE");
-                   // memberBO.setActivityMessageVO(memberMessageVO);
+                    memberBO.setActivityMessageVO(memberMessageVO);
                     log.info("sendMemberMessage发送消息获取的每个会员详情--"+JSON.toJSONString(memberBO));
                     ResponseData<String>  response = templateMessageServiceFeign.sendTemplateMessage(memberMessageVO);
                     log.info("sendMemberMessage发送微信返回参数="+ JSON.toJSONString(response));
