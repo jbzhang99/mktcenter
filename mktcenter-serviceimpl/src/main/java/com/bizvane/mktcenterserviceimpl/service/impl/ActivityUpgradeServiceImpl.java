@@ -310,6 +310,7 @@ public class ActivityUpgradeServiceImpl implements ActivityUpgradeService {
         ////如果是立即发送 则发送短息
         if(!CollectionUtils.isEmpty(messageVOList) ){
             if(true==activityVO.getSendImmediately()){
+                log.info("开始立即发送");
                 //查询该会员下一个等级
                 ResponseData<MbrLevelModel> MbrLevelModels = memberLevelApiService.queryOnLevel(Long.parseLong(activityVO.getMbrLevelCode()));
                 if (null!=MbrLevelModels.getData()){
@@ -319,9 +320,11 @@ public class ActivityUpgradeServiceImpl implements ActivityUpgradeService {
                     membersInfoSearchVo.setPageNumber(1);
                     membersInfoSearchVo.setPageSize(10000);
                     membersInfoSearchVo.setBrandId(activityVO.getSysBrandId());
+                    membersInfoSearchVo.setSysCompanyId(activityVO.getSysCompanyId());
                     List<Long> level = new ArrayList<>();
                     level.add(mbrLevel.getMbrLevelId());
                     membersInfoSearchVo.setLevelID(level);
+                    log.info("发送短息查询会员参数="+ JSON.toJSONString(membersInfoSearchVo));
                     memberMessage.getMemberList(messageVOList, membersInfoSearchVo,activityVO);
                 }
 

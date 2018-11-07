@@ -85,6 +85,7 @@ public class MemberMessageSend {
      */
     @Async("asyncServiceExecutor")
     public void getMemberList(List<MktMessagePO> messageVOList, MembersInfoSearchVo membersInfoSearchVo,ActivityVO activityVO) {
+        log.info("进来这里了==============");
         ResponseData<PageInfo<MemberInfoVo>> memberInfoVoPage = membersAdvancedSearchApiService.search(membersInfoSearchVo);
         //循环分页条件查询会员信息发送短信信息
         for (int a =1;a<=memberInfoVoPage.getData().getPages();a++){
