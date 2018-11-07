@@ -174,7 +174,7 @@ public class ActivityOrderServiceImpl implements ActivityOrderService {
         if(!CollectionUtils.isEmpty(sysCheckConfigVoList)){
             for (SysCheckConfigVo sysCheckConfig:sysCheckConfigVoList) {
                 //判断是否需要审核  暂时先写这三个审核类型 后期确定下来写成枚举类
-                if(sysCheckConfig.getFunctionCode().equals("C0001") || sysCheckConfig.getFunctionCode().equals("C0002") || sysCheckConfig.getFunctionCode().equals("C0003")){
+                if(sysCheckConfig.getFunctionCode().equals("C0002")){
                     i+=1;
                 }
             }
@@ -296,6 +296,7 @@ public class ActivityOrderServiceImpl implements ActivityOrderService {
                     level.add(Long.parseLong(activityVO.getMbrLevelCode()));
                     membersInfoSearchVo.setLevelID(level);
                 membersInfoSearchVo.setBrandId(activityVO.getSysBrandId());
+                membersInfoSearchVo.setSysCompanyId(activityVO.getSysBrandId());
                 memberMessage.getMemberList(messageVOList, membersInfoSearchVo,activityVO);
             }else{
                 //自定义时间发送 加人job任务
