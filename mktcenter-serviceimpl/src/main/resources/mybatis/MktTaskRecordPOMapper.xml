@@ -715,8 +715,8 @@
      ROUND(TIMESTAMPDIFF(HOUR,tmt.start_time,now())/24,1) as taskDates
      <!--</if>-->
      FROM
-     t_mkt_task_record tmtr   INNER JOIN
-     t_mkt_task  tmt ON tmtr.task_id=tmt.mkt_task_id AND      tmtr.valid = 1
+     t_mkt_task  tmt  LEFT JOIN
+     t_mkt_task_record tmtr ON tmt.mkt_task_id = tmtr.task_id AND tmtr.valid = 1
      WHERE
      tmt.valid=1
      AND tmt.sys_brand_id = #{brandId}
