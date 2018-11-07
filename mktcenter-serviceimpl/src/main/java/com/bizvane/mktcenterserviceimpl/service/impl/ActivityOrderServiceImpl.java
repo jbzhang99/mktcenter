@@ -298,6 +298,8 @@ public class ActivityOrderServiceImpl implements ActivityOrderService {
                     membersInfoSearchVo.setLevelID(level);
                 membersInfoSearchVo.setBrandId(activityVO.getSysBrandId());
                 membersInfoSearchVo.setSysCompanyId(activityVO.getSysCompanyId());
+                //加个是否是长期活动
+                activityVO.setLongTerm(0);
                 log.info("查询会员参数==============="+ JSON.toJSONString(membersInfoSearchVo));
                 memberMessage.getMemberList(messageVOList, membersInfoSearchVo,activityVO);
             }else{
