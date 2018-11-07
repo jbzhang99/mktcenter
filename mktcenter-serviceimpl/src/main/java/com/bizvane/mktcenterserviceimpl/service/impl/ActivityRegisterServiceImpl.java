@@ -367,12 +367,12 @@ public class ActivityRegisterServiceImpl implements ActivityRegisterService {
         log.info("开卡活动-开卡活动传过来参数======================："+JSON.toJSONString(vo));
         //返回对象
         ResponseData responseData = new ResponseData();
-        if (null==vo.getServiceStoreId()){
+        /*if (null==vo.getServiceStoreId()){
             responseData.setCode(SysResponseEnum.MODEL_FAILED_VALIDATION.getCode());
             responseData.setMessage("服务门店为NULL!");
             log.info("服务门店为NULL!");
             return responseData;
-        }
+        }*/
         //查询品牌下所有执行中的活动
         ActivityVO activity = new ActivityVO();
         activity.setActivityStatus(ActivityStatusEnum.ACTIVITY_STATUS_EXECUTING.getCode());
@@ -395,9 +395,12 @@ public class ActivityRegisterServiceImpl implements ActivityRegisterService {
                     continue;
                 }
                 log.info("开始验证门店");
-                if (!ExecuteParamCheckUtil.implementActivitCheck(vo,activityVO)){
-                    continue;
+                if(null!=vo.getServiceStoreId()){
+                    if (!ExecuteParamCheckUtil.implementActivitCheck(vo,activityVO)){
+                        continue;
+                    }
                 }
+
                 log.info("开卡活动-限制条件通过");
                 //增加积分奖励新增接口
                    if(null!=activityVO.getPoints()){
