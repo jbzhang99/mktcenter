@@ -11,6 +11,7 @@ import com.bizvane.centerstageservice.rpc.BrandServiceRpc;
 import com.bizvane.couponfacade.interfaces.CouponEntityServiceFeign;
 import com.bizvane.couponfacade.models.vo.CouponSendMemberListRequestVO;
 import com.bizvane.couponfacade.models.vo.CouponSendMemberListResponseVO;
+import com.bizvane.messagefacade.interfaces.SendBatchMessageFeign;
 import com.bizvane.messagefacade.interfaces.TemplateMessageServiceFeign;
 import com.bizvane.messagefacade.models.vo.*;
 import com.bizvane.mktcenterservice.models.vo.PageForm;
@@ -128,6 +129,8 @@ public class TaskServiceImpl implements TaskService {
     private AsyncTaskExecutePool asyncTaskExecutePool;
     @Autowired
     private BrandServiceRpc brandServiceRpc;
+    @Autowired
+    private SendBatchMessageFeign sendBatchMessageFeign;
     /**
      * 通过id查询店铺列表
      */
@@ -528,7 +531,7 @@ public class TaskServiceImpl implements TaskService {
     @Override
     public  void sendMemberMessage(SendMessageVO sendMessageVO) {
         sendMessageVO.setExceptWechat(Boolean.FALSE);
-        log.info("发送模板消息--参数--"+JSON.toJSONString(sendMessageVO));
+        log.info("sendMemberMessage发送模板消息--参数--"+JSON.toJSONString(sendMessageVO));
         Long sysBrandId = sendMessageVO.getSysBrandId();
         ResponseData<SysBrandPo> brandByID = brandServiceRpc.getBrandByID(sysBrandId);
         SysBrandPo sysBrandPo = brandByID.getData();
@@ -555,7 +558,7 @@ public class TaskServiceImpl implements TaskService {
             for (int i=1;i<=pages;i++){
                 com.bizvane.utils.responseinfo.PageInfo<MemberInfoModel> pagesdata= this.getCompanyMemebers(sendMessageVO,i, 10000);
                 List<MemberInfoModel> list = pagesdata.getList();
-                log.info("发送消息获取的会员列表--"+JSON.toJSONString(list));
+                log.info("sendMemberMessage发送消息获取的会员列表--"+JSON.toJSONString(list));
                 AwardBO memberBO = new AwardBO();
                 //4=微信模板消息  营销
                 memberBO.setMktType(MktSmartTypeEnum.SMART_TYPE_WXMESSAGE.getCode());
@@ -569,9 +572,11 @@ public class TaskServiceImpl implements TaskService {
                     memberMessageVO.setActivityInterests(activityInterests);
                     memberMessageVO.setMemberPhone(member.getPhone());
                     memberMessageVO.setTemplateType("TASK_TEMPLATE_MESSAGE");
-                    memberBO.setActivityMessageVO(memberMessageVO);
-                    log.info("发送消息获取的每个会员详情--"+JSON.toJSONString(memberBO));
-                    award.execute(memberBO);
+                   // memberBO.setActivityMessageVO(memberMessageVO);
+                    log.info("sendMemberMessage发送消息获取的每个会员详情--"+JSON.toJSONString(memberBO));
+                    ResponseData<String>  response = templateMessageServiceFeign.sendTemplateMessage(memberMessageVO);
+                    log.info("sendMemberMessage发送微信返回参数="+ JSON.toJSONString(response));
+                   // award.execute(memberBO);
                 });
             }
 
@@ -582,6 +587,7 @@ public class TaskServiceImpl implements TaskService {
     @Override
     public void sendBachMSM(SendMessageVO sendMessageVO) {
         log.info("批量发送短信--sendBachMSM--"+JSON.toJSONString(sendMessageVO));
+        Integer batchNum=500;
         Long sysBrandId = sendMessageVO.getSysBrandId();
         //获取营销短信通道
         SmsConfigVo smsConfigVo = new SmsConfigVo();
@@ -589,8 +595,10 @@ public class TaskServiceImpl implements TaskService {
         smsConfigVo.setChannelType(Integer.valueOf(10));
         smsConfigVo.setCompanyChannel(Boolean.FALSE);
         SysSmsConfigPo smsConfigPo = sysSmsConfigServiceRpc.getCenterControlChannel(smsConfigVo);
-        Integer batchNum = smsConfigPo.getBatchNum();
-       log.info("发送短信之获取短信通道的相关信息--出参"+JSON.toJSONString(smsConfigVo)+"--出参--"+JSON.toJSONString(smsConfigPo));
+        if(smsConfigPo!=null){
+            batchNum=smsConfigPo.getBatchNum();
+        }
+       log.info("sendBachMSM发送短信之获取短信通道的相关信息--出参"+JSON.toJSONString(smsConfigVo)+"--出参--"+JSON.toJSONString(smsConfigPo));
         com.bizvane.utils.responseinfo.PageInfo<MemberInfoModel> memeberspage = this.getCompanyMemebers(sendMessageVO,1,batchNum);
         List<MemberInfoModel> memberlist = memeberspage.getList();
         int pages = memeberspage.getPages();
@@ -602,12 +610,7 @@ public class TaskServiceImpl implements TaskService {
         messageVO.setSysBrandId(sysBrandId);
         messageVO.setSysCompanyId(String.valueOf(sendMessageVO.getSysCompanyId()));
         messageVO.setMsgContent(sendMessageVO.getMsgContent());
-//        messageVO.setBatchNum(batchNum);
         messageVO.setMsgId(String.valueOf(sendMessageVO.getMktTaskId()));
-//        messageVO.setChannelName(smsConfigPo.getChannelName());//通道名称
-//        messageVO.setChannelAccount(smsConfigPo.getChannelAccount());//账号
-//        messageVO.setChannelPassword(smsConfigPo.getChannelPassword());//密码
-//        messageVO.setChannelService(smsConfigPo.getChannelService());//路径
 
         if (CollectionUtils.isNotEmpty(memberlist)){
             for (int i=1;i<=pages;i++){
@@ -615,9 +618,11 @@ public class TaskServiceImpl implements TaskService {
                 List<MemberInfoModel> onelist = onepagememebers.getList();
                 String pnones = onelist.stream().filter(fan -> StringUtils.isNotBlank(fan.getPhone())).map(fan -> fan.getPhone()).collect(Collectors.joining(","));
                 messageVO.setPhones(pnones);
-                fanBO.setSysSmsConfigVO(messageVO);
-                log.info("发送短信时的入参--"+i+"--页数--"+JSON.toJSONString(fanBO));
-                award.execute(fanBO);
+                //fanBO.setSysSmsConfigVO(messageVO);
+                log.info("sendBachMSM发送短信时的入参手机号--"+i+"--页数--"+JSON.toJSONString(fanBO));
+                ResponseData<Integer> responseData = sendBatchMessageFeign.sendSmgBatch(messageVO);
+                log.info("sendBachMSM发送短信返回参数="+ JSON.toJSONString(responseData));
+               // award.execute(fanBO);
             }
 
         }
