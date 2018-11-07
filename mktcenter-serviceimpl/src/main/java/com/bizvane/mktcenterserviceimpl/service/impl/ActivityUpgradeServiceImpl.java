@@ -310,6 +310,7 @@ public class ActivityUpgradeServiceImpl implements ActivityUpgradeService {
         ////如果是立即发送 则发送短息
         if(!CollectionUtils.isEmpty(messageVOList) ){
             if(true==activityVO.getSendImmediately()){
+                log.info("开始立即发送");
                 //查询该会员下一个等级
                 ResponseData<MbrLevelModel> MbrLevelModels = memberLevelApiService.queryOnLevel(Long.parseLong(activityVO.getMbrLevelCode()));
                 if (null!=MbrLevelModels.getData()){
@@ -319,9 +320,11 @@ public class ActivityUpgradeServiceImpl implements ActivityUpgradeService {
                     membersInfoSearchVo.setPageNumber(1);
                     membersInfoSearchVo.setPageSize(10000);
                     membersInfoSearchVo.setBrandId(activityVO.getSysBrandId());
+                    membersInfoSearchVo.setSysCompanyId(activityVO.getSysCompanyId());
                     List<Long> level = new ArrayList<>();
                     level.add(mbrLevel.getMbrLevelId());
                     membersInfoSearchVo.setLevelID(level);
+                    log.info("发送短息查询会员参数="+ JSON.toJSONString(membersInfoSearchVo));
                     memberMessage.getMemberList(messageVOList, membersInfoSearchVo,activityVO);
                 }
 
@@ -373,7 +376,7 @@ public class ActivityUpgradeServiceImpl implements ActivityUpgradeService {
         if(!CollectionUtils.isEmpty(sysCheckConfigVoList)){
             for (SysCheckConfigVo sysCheckConfig:sysCheckConfigVoList) {
                 //判断是否需要审核  暂时先写这三个审核类型 后期确定下来写成枚举类
-                if(sysCheckConfig.getFunctionCode().equals("C0001") || sysCheckConfig.getFunctionCode().equals("C0002") || sysCheckConfig.getFunctionCode().equals("C0003")){
+                if(sysCheckConfig.getFunctionCode().equals("C0002")){
                     i+=1;
                 }
             }
@@ -498,6 +501,7 @@ public class ActivityUpgradeServiceImpl implements ActivityUpgradeService {
             List<Long> level = new ArrayList<>();
             level.add(mbrLevel.getMbrLevelId());
             membersInfoSearchVo.setLevelID(level);
+            membersInfoSearchVo.setSysCompanyId(activityVO.getSysCompanyId());
             memberMessage.getMemberList(messageVOList, membersInfoSearchVo,activityVO);
         }
         responseData.setCode(SysResponseEnum.SUCCESS.getCode());
@@ -572,10 +576,16 @@ public class ActivityUpgradeServiceImpl implements ActivityUpgradeService {
     @Transactional
     @Async("asyncServiceExecutor")
     public ResponseData<Integer> executeUpgrades(MemberInfoModel vo) {
-        log.info("执行升级活动开始开始了开始了开始了开始了开始了");
-        log.info("执行升级活动参数="+ JSON.toJSONString(vo));
         //返回对象
         ResponseData responseData = new ResponseData();
+        log.info("执行升级活动开始开始了开始了开始了开始了开始了");
+        log.info("执行升级活动参数="+ JSON.toJSONString(vo));
+        if (null==vo.getServiceStoreId()){
+            responseData.setCode(SysResponseEnum.MODEL_FAILED_VALIDATION.getCode());
+            responseData.setMessage("服务门店为NULL!");
+            log.info("服务门店为NULL!");
+            return responseData;
+        }
         //查询品牌下所有执行中的活动
         ActivityVO activity = new ActivityVO();
         activity.setActivityStatus(ActivityStatusEnum.ACTIVITY_STATUS_EXECUTING.getCode());

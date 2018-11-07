@@ -211,6 +211,16 @@ public class ActivityVO extends MktActivityPO {
     //判断创建时候过滤禁用状态
     private String stop;
 
+    private Long serviceStoreId;//服务门店
+
+    public Long getServiceStoreId() {
+        return serviceStoreId;
+    }
+
+    public void setServiceStoreId(Long serviceStoreId) {
+        this.serviceStoreId = serviceStoreId;
+    }
+
     public String getStop() {
         return stop;
     }

@@ -172,7 +172,7 @@ public class ActivityManualServiceImpl implements ActivityManualService {
         if (!CollectionUtils.isEmpty(sysCheckConfigVoList)) {
             for (SysCheckConfigVo sysCheckConfig : sysCheckConfigVoList) {
                 //判断是否需要审核  暂时先写这三个审核类型 后期确定下来写成枚举类
-                if (sysCheckConfig.getFunctionCode().equals("C0001") || sysCheckConfig.getFunctionCode().equals("C0002") || sysCheckConfig.getFunctionCode().equals("C0003")) {
+                if (sysCheckConfig.getFunctionCode().equals("C0002")) {
                     i += 1;
                 }
             }
@@ -542,6 +542,12 @@ public class ActivityManualServiceImpl implements ActivityManualService {
     @Override
     public ResponseData<List<ActivityVO>> getActivityByMemberInfo(MemberInfoModel memberInfoModel,Integer activityType) {
         ResponseData responseData = new ResponseData();
+        if (null==memberInfoModel.getServiceStoreId()){
+            responseData.setCode(SysResponseEnum.MODEL_FAILED_VALIDATION.getCode());
+            responseData.setMessage("服务门店为NULL!");
+            log.info("服务门店为NULL!");
+            return responseData;
+        }
         log.info("领券中心查询入参:"+JSON.toJSONString(memberInfoModel));
         //入参校验
         if(null==memberInfoModel){

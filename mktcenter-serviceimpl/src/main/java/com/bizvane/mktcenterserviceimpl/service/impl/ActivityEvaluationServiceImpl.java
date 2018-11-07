@@ -144,7 +144,7 @@ public class ActivityEvaluationServiceImpl implements ActivityEvaluationService 
         if (!CollectionUtils.isEmpty(sysCheckConfigVoList)) {
             for (SysCheckConfigVo sysCheckConfig : sysCheckConfigVoList) {
                 //判断是否需要审核  暂时先写这三个审核类型 后期确定下来写成枚举类
-                if (sysCheckConfig.getFunctionCode().equals("C0001") || sysCheckConfig.getFunctionCode().equals("C0002") || sysCheckConfig.getFunctionCode().equals("C0003")) {
+                if (sysCheckConfig.getFunctionCode().equals("C0002")) {
                     i += 1;
                 }
             }
@@ -253,6 +253,12 @@ public class ActivityEvaluationServiceImpl implements ActivityEvaluationService 
         log.info("执行评价送积分活动=" + vo.getBrandId() + "=" + vo.getMemberCode());
         //返回对象
         ResponseData responseData = new ResponseData();
+        if (null==vo.getServiceStoreId()){
+            responseData.setCode(SysResponseEnum.MODEL_FAILED_VALIDATION.getCode());
+            responseData.setMessage("服务门店为NULL!");
+            log.info("服务门店为NULL!");
+            return responseData;
+        }
         //查询品牌下所有执行中的活动
         ActivityVO activity = new ActivityVO();
         activity.setActivityStatus(ActivityStatusEnum.ACTIVITY_STATUS_EXECUTING.getCode());

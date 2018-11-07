@@ -5,6 +5,7 @@ import com.bizvane.members.facade.models.MemberInfoModel;
 import com.bizvane.mktcenterservice.models.bo.ActivityBO;
 import com.bizvane.mktcenterservice.models.po.MktActivityRecordPO;
 import com.bizvane.mktcenterservice.models.vo.ActivityVO;
+import com.bizvane.mktcenterservice.models.vo.MemberInfoModelVOActivity;
 import com.bizvane.mktcenterservice.models.vo.MktActivityRecordVO;
 import com.bizvane.utils.responseinfo.ResponseData;
 import org.springframework.cloud.openfeign.FeignClient;
@@ -103,7 +104,7 @@ public interface ActivityServiceRpc {
   * @return
   */
  @RequestMapping("executeActivity")
- ResponseData<Integer> executeActivity(@RequestBody MemberInfoModel vo);
+ ResponseData<Integer> executeActivity(@RequestBody MemberInfoModelVOActivity vo);
 
  /**
   * 升级活动

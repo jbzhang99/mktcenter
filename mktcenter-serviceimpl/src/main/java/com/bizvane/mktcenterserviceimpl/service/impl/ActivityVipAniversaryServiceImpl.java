@@ -181,7 +181,7 @@ public class ActivityVipAniversaryServiceImpl implements ActivityVipAniversarySe
         if(!CollectionUtils.isEmpty(sysCheckConfigVoList)){
             for (SysCheckConfigVo sysCheckConfig:sysCheckConfigVoList) {
                 //判断是否需要审核  暂时先写这三个审核类型 后期确定下来写成枚举类
-                if(sysCheckConfig.getFunctionCode().equals("C0001") || sysCheckConfig.getFunctionCode().equals("C0002") || sysCheckConfig.getFunctionCode().equals("C0003")){
+                if(sysCheckConfig.getFunctionCode().equals("C0002")){
                     i+=1;
                 }
             }
@@ -536,6 +536,10 @@ public class ActivityVipAniversaryServiceImpl implements ActivityVipAniversarySe
     @Async("asyncServiceExecutor")
     public void AniversaryReward(ActivityVO activityAniversary, MemberInfoModel memberInfo) {
         log.info("纪念日活动发送奖励开始");
+        if (null==memberInfo.getServiceStoreId()){
+            log.info("服务门店为NULL!");
+            return ;
+        }
             //判断生日适用门店信息
             if (!ExecuteParamCheckUtil.implementActivitCheck(memberInfo,activityAniversary)){
                 return;

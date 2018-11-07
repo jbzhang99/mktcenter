@@ -25,6 +25,7 @@ import java.util.Properties;
  * @author 董争光
  * 2018年5月21日下午2:01:31
  */
+
 @Component
 //@EnableApolloConfig({"RocketMQManager"})
 public class RocketMQManager implements ApplicationRunner {
@@ -74,6 +75,7 @@ public class RocketMQManager implements ApplicationRunner {
           Properties properties = getProperties();
           properties.setProperty(PropertyKeyConst.ProducerId, rocketConfigPO.getRoleId());
           if(environment.equals("uat")) {
+
         	  properties.setProperty("NAMESRV_ADDR", addr);
         	  
           }
