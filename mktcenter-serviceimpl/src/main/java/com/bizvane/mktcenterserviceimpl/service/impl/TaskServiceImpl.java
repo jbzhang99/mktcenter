@@ -157,6 +157,7 @@ public class TaskServiceImpl implements TaskService {
         String result="0/0";
         try{
             ResponseData<SmsStatisticsVO> returnData = templateMessageServiceFeign.getReturnMessage(vo);
+            log.info("获取短信接口出参---"+JSON.toJSONString(returnData));
             SmsStatisticsVO data = returnData.getData();
             if (data!=null){
                 Long allCountSms = data.getAllCountSms();
