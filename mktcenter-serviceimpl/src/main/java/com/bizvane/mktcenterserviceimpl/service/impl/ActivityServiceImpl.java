@@ -31,6 +31,7 @@ import com.bizvane.mktcenterservice.models.vo.PageForm;
 import com.bizvane.mktcenterserviceimpl.common.award.Award;
 import com.bizvane.mktcenterserviceimpl.common.enums.*;
 import com.bizvane.mktcenterserviceimpl.common.utils.DateUtil;
+import com.bizvane.mktcenterserviceimpl.common.utils.ExecuteParamCheckUtil;
 import com.bizvane.mktcenterserviceimpl.mappers.MktActivityPOMapper;
 import com.bizvane.mktcenterserviceimpl.mappers.MktActivityRegisterPOMapper;
 import com.bizvane.mktcenterserviceimpl.mappers.MktMessagePOMapper;
@@ -51,6 +52,7 @@ import org.springframework.util.StringUtils;
 import java.math.BigDecimal;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -174,8 +176,22 @@ public class ActivityServiceImpl implements ActivityService {
     @Override
     public ResponseData<List<ActivityVO>> getActivityList(ActivityVO vo) {
         ResponseData responseData = new ResponseData();
+        List<ActivityVO> lists = new ArrayList<>();
+        MemberInfoModel memberInfoModel = new MemberInfoModel();
+        memberInfoModel.setServiceStoreId(vo.getServiceStoreId());
         List<ActivityVO> activityList =mktActivityPOMapper.getActivityList(vo);
-        responseData.setData(activityList);
+        if (!CollectionUtils.isEmpty(activityList)){
+            for (ActivityVO activity:activityList) {
+                //过滤门店
+                if (!ExecuteParamCheckUtil.implementActivitCheck(memberInfoModel,activity)){
+                    continue;
+                }
+                lists.add(activity);
+
+            }
+        }
+
+        responseData.setData(lists);
         responseData.setCode(SysResponseEnum.SUCCESS.getCode());
         responseData.setMessage(SysResponseEnum.SUCCESS.getMessage());
         return responseData;

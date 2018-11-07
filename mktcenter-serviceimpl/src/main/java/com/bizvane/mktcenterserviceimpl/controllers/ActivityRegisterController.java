@@ -6,6 +6,7 @@ import com.bizvane.mktcenterservice.models.bo.ActivityBO;
 import com.bizvane.mktcenterservice.models.po.MktCouponPO;
 import com.bizvane.mktcenterservice.models.po.MktMessagePO;
 import com.bizvane.mktcenterservice.models.vo.ActivityVO;
+import com.bizvane.mktcenterservice.models.vo.MemberInfoModelVOActivity;
 import com.bizvane.mktcenterservice.models.vo.MessageVO;
 import com.bizvane.mktcenterservice.models.vo.PageForm;
 import com.bizvane.mktcenterserviceimpl.common.constants.SystemConstants;
@@ -102,7 +103,7 @@ public class ActivityRegisterController {
      * @return
      */
     @RequestMapping("executeActivity")
-    public ResponseData<Integer> executeActivity(MemberInfoModel vo){
+    public ResponseData<Integer> executeActivity(MemberInfoModelVOActivity vo){
         return activityRegisterService.executeActivity(vo);
     }
     /**

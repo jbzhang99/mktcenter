@@ -542,6 +542,12 @@ public class ActivityManualServiceImpl implements ActivityManualService {
     @Override
     public ResponseData<List<ActivityVO>> getActivityByMemberInfo(MemberInfoModel memberInfoModel,Integer activityType) {
         ResponseData responseData = new ResponseData();
+        if (null==memberInfoModel.getServiceStoreId()){
+            responseData.setCode(SysResponseEnum.MODEL_FAILED_VALIDATION.getCode());
+            responseData.setMessage("服务门店为NULL!");
+            log.info("服务门店为NULL!");
+            return responseData;
+        }
         log.info("领券中心查询入参:"+JSON.toJSONString(memberInfoModel));
         //入参校验
         if(null==memberInfoModel){

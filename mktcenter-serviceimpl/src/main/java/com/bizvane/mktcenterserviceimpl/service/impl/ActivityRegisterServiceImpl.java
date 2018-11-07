@@ -34,6 +34,7 @@ import com.bizvane.mktcenterservice.models.bo.ActivityBO;
 import com.bizvane.mktcenterservice.models.bo.AwardBO;
 import com.bizvane.mktcenterservice.models.po.*;
 import com.bizvane.mktcenterservice.models.vo.ActivityVO;
+import com.bizvane.mktcenterservice.models.vo.MemberInfoModelVOActivity;
 import com.bizvane.mktcenterservice.models.vo.PageForm;
 import com.bizvane.mktcenterserviceimpl.common.award.Award;
 import com.bizvane.mktcenterserviceimpl.common.award.MemberMessageSend;
@@ -361,11 +362,17 @@ public class ActivityRegisterServiceImpl implements ActivityRegisterService {
      */
     @Override
     @Transactional
-    public ResponseData<Integer> executeActivity(MemberInfoModel vo) {
+    public ResponseData<Integer> executeActivity(MemberInfoModelVOActivity vo) {
         log.info("开卡活动-开卡活动执行开始");
         log.info("开卡活动-开卡活动传过来参数======================："+JSON.toJSONString(vo));
         //返回对象
         ResponseData responseData = new ResponseData();
+        if (null==vo.getServiceStoreId()){
+            responseData.setCode(SysResponseEnum.MODEL_FAILED_VALIDATION.getCode());
+            responseData.setMessage("服务门店为NULL!");
+            log.info("服务门店为NULL!");
+            return responseData;
+        }
         //查询品牌下所有执行中的活动
         ActivityVO activity = new ActivityVO();
         activity.setActivityStatus(ActivityStatusEnum.ACTIVITY_STATUS_EXECUTING.getCode());
@@ -382,6 +389,11 @@ public class ActivityRegisterServiceImpl implements ActivityRegisterService {
         for (ActivityVO activityVO:registerList) {
             //判断开卡会员适合哪个活动根据开卡会员等级判断
             if( null==activityVO.getMbrLevelCode()||activityVO.getMbrLevelCode().equals(vo.getLevelId().toString()) ){
+                //验证是否开卡
+                log.info("验证是否开卡");
+                if (0!=activityVO.getOfflineCardStatus() || !vo.getOfflineCardStatus().toString().equals(activityVO.getOfflineCardStatus().toString())){
+                    continue;
+                }
                 log.info("开始验证门店");
                 if (!ExecuteParamCheckUtil.implementActivitCheck(vo,activityVO)){
                     continue;

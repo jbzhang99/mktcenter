@@ -298,6 +298,12 @@ public class ActivitySigninServiceImpl implements ActivitySigninService {
     public ResponseData<Integer> executeActivitySignin(MemberInfoModel vo) {
         //返回对象
         ResponseData responseData = new ResponseData();
+        if (null==vo.getServiceStoreId()){
+            responseData.setCode(SysResponseEnum.MODEL_FAILED_VALIDATION.getCode());
+            responseData.setMessage("服务门店为NULL!");
+            log.info("服务门店为NULL!");
+            return responseData;
+        }
         log.info("执行签到活动="+vo.getBrandId()+"="+vo.getMemberCode());
         //判断今天是否是执行过签到活动
         MktActivityRecordPO example = new MktActivityRecordPO();
