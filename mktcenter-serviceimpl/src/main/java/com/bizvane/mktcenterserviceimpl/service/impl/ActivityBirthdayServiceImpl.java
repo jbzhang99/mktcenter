@@ -53,6 +53,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
+import java.math.BigDecimal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -577,6 +578,10 @@ public class ActivityBirthdayServiceImpl implements ActivityBirthdayService {
     @Async("asyncServiceExecutor")
     public void birthdayReward(ActivityVO activityBirthday, MemberInfoModel memberInfo) {
         log.info("执行生日活动开始开始了开始了开始了开始了开始了");
+        if (null==memberInfo.getServiceStoreId()){
+            log.info("服务门店为NULL!");
+            return ;
+        }
 //        for (MemberInfoModel memberInfo:memberInfoModelList) {
             //判断生日适用门店信息
             if (!ExecuteParamCheckUtil.implementActivitCheck(memberInfo,activityBirthday)){
@@ -770,9 +775,29 @@ public class ActivityBirthdayServiceImpl implements ActivityBirthdayService {
         List<String> listIds = Arrays.asList(ids.split(","));
         String ss = "1";
         falg=listIds.contains(ss);*/
-       Long ss = 3L;
-       Integer dd = 9;
-       Long s = dd-ss-1;
-        System.out.println("======================="+s);//[1,2,3,3,4,5,6]
+        //前端传过来的
+       /* String storeLimitList ="1,2,3";
+        List<String> result = Arrays.asList(storeLimitList.split(","));
+        List ss = new ArrayList(result);
+
+        //表里查出来的
+        String stroeList = "4,5,6";
+        List<String> productNoList = Arrays.asList(stroeList.split(","));
+        List dd = new ArrayList(productNoList);
+        dd.retainAll(ss);
+        boolean fa=dd.size()>0;*/
+       List<Long> ss = new ArrayList<>();
+       ss.add(1L);
+       ss.add(2L);
+    Long tt = 0L;
+        BigDecimal moneySu = new BigDecimal(0);
+       for (int i =0;i<2;i++){
+           tt= tt + ss.get(i);
+           moneySu = moneySu.add(new BigDecimal(String.valueOf(ss.get(i))));
+       }
+
+
+        System.out.println("======================="+tt);
+        System.out.println("======================="+moneySu);
     }
 }

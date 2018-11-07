@@ -6,6 +6,7 @@ import com.bizvane.mktcenterservice.interfaces.*;
 import com.bizvane.mktcenterservice.models.bo.ActivityBO;
 import com.bizvane.mktcenterservice.models.po.MktActivityRecordPO;
 import com.bizvane.mktcenterservice.models.vo.ActivityVO;
+import com.bizvane.mktcenterservice.models.vo.MemberInfoModelVOActivity;
 import com.bizvane.mktcenterservice.models.vo.MktActivityRecordVO;
 import com.bizvane.mktcenterserviceimpl.common.enums.ActivityTypeEnum;
 import com.bizvane.utils.responseinfo.ResponseData;
@@ -188,7 +189,7 @@ public class ActivityRpcController {
      * @return
      */
     @RequestMapping("executeActivity")
-    public ResponseData<Integer> executeActivity(@RequestBody  MemberInfoModel vo){
+    public ResponseData<Integer> executeActivity(@RequestBody MemberInfoModelVOActivity vo){
         return activityRegisterService.executeActivity(vo);
     }
 

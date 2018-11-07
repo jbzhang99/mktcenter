@@ -3,6 +3,7 @@ package com.bizvane.mktcenterservice.interfaces;
 import com.bizvane.members.facade.models.MemberInfoModel;
 import com.bizvane.mktcenterservice.models.bo.ActivityBO;
 import com.bizvane.mktcenterservice.models.vo.ActivityVO;
+import com.bizvane.mktcenterservice.models.vo.MemberInfoModelVOActivity;
 import com.bizvane.mktcenterservice.models.vo.PageForm;
 import com.bizvane.utils.responseinfo.ResponseData;
 import com.bizvane.utils.tokens.SysAccountPO;
@@ -36,7 +37,7 @@ public interface ActivityRegisterService {
      * @param
      * @return
      */
-    public ResponseData<Integer> executeActivity(MemberInfoModel vo);
+    public ResponseData<Integer> executeActivity(MemberInfoModelVOActivity vo);
 
     /**
      * 修改活动
