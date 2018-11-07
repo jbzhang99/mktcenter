@@ -839,8 +839,8 @@ public class TaskServiceImpl implements TaskService {
         //任务类型
         Integer taskType = vo.getTaskType();
         GenrealGetMessageVO genrealGetMessageVO=new  GenrealGetMessageVO();
-        genrealGetMessageVO.setSysBrandId(sysBrandId);
-        genrealGetMessageVO.setTemplateType(String.valueOf(taskType));
+//        genrealGetMessageVO.setSysBrandId(sysBrandId);
+//        genrealGetMessageVO.setTemplateType(String.valueOf(taskType));
 
         //每个任务的券,积分,会员 总数
         PageHelper.startPage(vo.getPageNumber(),vo.getPageSize());
