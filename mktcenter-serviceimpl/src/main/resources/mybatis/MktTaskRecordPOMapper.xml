@@ -708,20 +708,19 @@
      count(tmtr.member_code) AS oneTaskShareTimes,
      tmt.start_time,
      tmt.create_date,
-     <if test="taskType!=null and taskType!='1'.toString()">
-     ROUND(TIMESTAMPDIFF(HOUR,tmt.start_time,tmt.end_time)/24,1) as taskDates
-     </if>
-     <if test="taskType!=null and taskType=='1'.toString()">
-       ROUND(TIMESTAMPDIFF(HOUR,tmt.start_time,now())/24,1) as taskDates
-     </if>
+     <!--<if test="taskType!=null and taskType!='1'.toString()">-->
+     <!--ROUND(TIMESTAMPDIFF(HOUR,tmt.start_time,tmt.end_time)/24,1) as taskDates-->
+     <!--</if>-->
+     <!--<if test="taskType!=null and taskType=='1'.toString()">-->
+     ROUND(TIMESTAMPDIFF(HOUR,tmt.start_time,now())/24,1) as taskDates
+     <!--</if>-->
      FROM
      t_mkt_task_record tmtr   INNER JOIN
-     t_mkt_task  tmt ON tmtr.task_id=tmt.mkt_task_id
+     t_mkt_task  tmt ON tmtr.task_id=tmt.mkt_task_id AND      tmtr.valid = 1
      WHERE
-     tmtr.valid = 1
-     AND tmt.valid=1
-     AND tmtr.sys_brand_id = #{brandId}
-     AND tmtr.task_type = #{taskType}
+     tmt.valid=1
+     AND tmt.sys_brand_id = #{brandId}
+     AND tmt.task_type = #{taskType}
      <if test="taskName!=null and taskName!=''">
        AND tmt.task_name like CONCAT('%',#{taskName},'%')
      </if>
@@ -731,12 +730,9 @@
      <if test="date1!=null and date1!=''">
        AND tmt.create_date <![CDATA[>=]]> #{date1}
      </if>
-     <if test="memberLevel!=null">
-       AND tmtr.member_level=#{memberLevel}
-     </if>
      <if test="taskStatus!=null and taskStatus!='0'.toString()">
        AND tmt.task_status=#{taskStatus}
      </if>
-     GROUP BY tmtr.task_id,tmtr.task_type
+     GROUP BY taskId,taskName
    </select>
 </mapper>
