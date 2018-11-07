@@ -1008,7 +1008,8 @@
     AND (tmto.is_store_limit = 0
     OR tmto.store_limit_list LIKE #{storeIdStyleOne}
     OR tmto.store_limit_list LIKE #{storeIdStyleTwo}
-    OR tmto.store_limit_list LIKE #{storeIdStyleThree})
+    OR tmto.store_limit_list LIKE #{storeIdStyleThree}
+    OR tmto.store_limit_list =#{storeId})
     AND tmt.sys_brand_id=#{brandId}
     GROUP BY tmt.mkt_task_id,tmt.task_type,tmt.sys_brand_id,tmtr.member_code
     <if test="rewarded!=null">
@@ -1042,7 +1043,8 @@
     AND (tmto.is_store_limit = 0
     OR tmto.store_limit_list LIKE #{storeIdStyleOne}
     OR tmto.store_limit_list LIKE #{storeIdStyleTwo}
-    OR tmto.store_limit_list LIKE #{storeIdStyleThree})
+    OR tmto.store_limit_list LIKE #{storeIdStyleThree}
+    OR tmto.store_limit_list =#{storeId})
     AND tmt.sys_brand_id=#{brandId}
     GROUP BY tmt.mkt_task_id,tmt.task_type,tmt.sys_brand_id,tmtr.member_code
     <if test="rewarded!=null">
@@ -1076,7 +1078,8 @@
     AND (tmto.is_store_limit = 0
     OR tmto.store_limit_list LIKE #{storeIdStyleOne}
     OR tmto.store_limit_list LIKE #{storeIdStyleTwo}
-    OR tmto.store_limit_list LIKE #{storeIdStyleThree})
+    OR tmto.store_limit_list LIKE #{storeIdStyleThree}
+    OR tmto.store_limit_list =#{storeId})
     AND tmt.sys_brand_id=#{brandId}
     GROUP BY tmt.mkt_task_id,tmt.task_type,tmt.sys_brand_id,tmtr.member_code
     <if test="rewarded!=null">
@@ -1110,7 +1113,8 @@
     AND (tmto.is_store_limit = 0
     OR tmto.store_limit_list LIKE #{storeIdStyleOne}
     OR tmto.store_limit_list LIKE #{storeIdStyleTwo}
-    OR tmto.store_limit_list LIKE #{storeIdStyleThree})
+    OR tmto.store_limit_list LIKE #{storeIdStyleThree}
+    OR tmto.store_limit_list =#{storeId})
     AND tmt.sys_brand_id=#{brandId}
     GROUP BY tmt.mkt_task_id,tmt.task_type,tmt.sys_brand_id,tmtr.member_code
     <if test="rewarded!=null">
@@ -1144,7 +1148,8 @@
     AND (tmto.is_store_limit = 0
     OR tmto.store_limit_list LIKE #{storeIdStyleOne}
     OR tmto.store_limit_list LIKE #{storeIdStyleTwo}
-    OR tmto.store_limit_list LIKE #{storeIdStyleThree})
+    OR tmto.store_limit_list LIKE #{storeIdStyleThree}
+    OR tmto.store_limit_list =#{storeId})
     AND tmt.sys_brand_id=#{brandId}
     GROUP BY tmt.mkt_task_id,tmt.task_type,tmt.sys_brand_id,tmtr.member_code
     <if test="rewarded!=null">
