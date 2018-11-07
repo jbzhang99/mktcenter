@@ -618,7 +618,7 @@ public class TaskServiceImpl implements TaskService {
                 List<MemberInfoModel> onelist = onepagememebers.getList();
                 String pnones = onelist.stream().filter(fan -> StringUtils.isNotBlank(fan.getPhone())).map(fan -> fan.getPhone()).collect(Collectors.joining(","));
                 messageVO.setPhones(pnones);
-                //fanBO.setSysSmsConfigVO(messageVO);
+                fanBO.setSysSmsConfigVO(messageVO);
                 log.info("sendBachMSM发送短信时的入参手机号--"+i+"--页数--"+JSON.toJSONString(fanBO));
                 ResponseData<Integer> responseData = sendBatchMessageFeign.sendSmgBatch(messageVO);
                 log.info("sendBachMSM发送短信返回参数="+ JSON.toJSONString(responseData));
