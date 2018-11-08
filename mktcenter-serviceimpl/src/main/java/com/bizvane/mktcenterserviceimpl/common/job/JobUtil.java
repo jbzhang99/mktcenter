@@ -176,6 +176,7 @@ public class JobUtil {
         Date sendTime = messagePO.getSendTime();
         SendMessageVO sendMessageVO = this.getSendMessageVO(po);
         sendMessageVO.setExceptWechat(messagePO.getExceptWechat());
+        sendMessageVO.setMsgContent(messagePO.getMsgContent());
         String param = JSON.toJSONString(sendMessageVO);
         //清除一下job
         this.doRemoveJobe(bizType, taskCode, param);
