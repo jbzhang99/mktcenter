@@ -111,7 +111,7 @@ public class ActivitySendMessageJobHandler extends IJobHandler {
                     wxChannelInfoSearchVo.setPageNum(1);
                     wxChannelInfoSearchVo.setPageSize(10000);
                     wxChannelInfoSearchVo.setFocus(2);
-                    wxChannelInfoSearchVo.setCardStatus(2);
+                    wxChannelInfoSearchVo.setCardStatus(1);
                     wxChannelInfoSearchVo.setMiniProgram((byte) 1);
                     memberMessage.sendWXmessage(ListMktMessage, wxChannelInfoSearchVo,activityVO);
                 }else{
