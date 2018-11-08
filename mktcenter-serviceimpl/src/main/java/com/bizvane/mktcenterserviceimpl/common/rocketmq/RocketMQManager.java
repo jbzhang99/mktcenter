@@ -106,13 +106,13 @@ public class RocketMQManager implements ApplicationRunner {
   }
 
   private Properties getProperties() {
-    Properties properties = new Properties();
-    properties.setProperty(PropertyKeyConst.AccessKey, accessKey);
-    properties.setProperty(PropertyKeyConst.SecretKey, secretKey);
-    properties.setProperty(PropertyKeyConst.ONSAddr, onsaddr);
-    
-    return properties;
-  }
+	    Properties properties = new Properties();
+	    properties.setProperty(PropertyKeyConst.AccessKey, accessKey);
+	    properties.setProperty(PropertyKeyConst.SecretKey, secretKey);
+	    properties.setProperty(PropertyKeyConst.ONSAddr, onsaddr);
+	    
+	    return properties;
+	  }
   
   public static Producer getProducer(String businessType) {
     return producerMap.get(businessType);
