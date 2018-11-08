@@ -205,7 +205,7 @@ public class ActivityRegisterServiceImpl implements ActivityRegisterService {
         if(!CollectionUtils.isEmpty(sysCheckConfigVoList)){
             for (SysCheckConfigVo sysCheckConfig:sysCheckConfigVoList) {
                 //判断是否需要审核  暂时先写这三个审核类型 后期确定下来写成枚举类
-                if(sysCheckConfig.getFunctionCode().equals("C0001") || sysCheckConfig.getFunctionCode().equals("C0002") || sysCheckConfig.getFunctionCode().equals("C0003")){
+                if(sysCheckConfig.getFunctionCode().equals("C0002")){
                     i+=1;
                 }
             }
@@ -367,12 +367,12 @@ public class ActivityRegisterServiceImpl implements ActivityRegisterService {
         log.info("开卡活动-开卡活动传过来参数======================："+JSON.toJSONString(vo));
         //返回对象
         ResponseData responseData = new ResponseData();
-        if (null==vo.getServiceStoreId()){
+        /*if (null==vo.getServiceStoreId()){
             responseData.setCode(SysResponseEnum.MODEL_FAILED_VALIDATION.getCode());
             responseData.setMessage("服务门店为NULL!");
             log.info("服务门店为NULL!");
             return responseData;
-        }
+        }*/
         //查询品牌下所有执行中的活动
         ActivityVO activity = new ActivityVO();
         activity.setActivityStatus(ActivityStatusEnum.ACTIVITY_STATUS_EXECUTING.getCode());
@@ -391,13 +391,16 @@ public class ActivityRegisterServiceImpl implements ActivityRegisterService {
             if( null==activityVO.getMbrLevelCode()||activityVO.getMbrLevelCode().equals(vo.getLevelId().toString()) ){
                 //验证是否开卡
                 log.info("验证是否开卡");
-                if (0!=activityVO.getOfflineCardStatus() || !vo.getOfflineCardStatus().toString().equals(activityVO.getOfflineCardStatus().toString())){
+                if (0!=activityVO.getOfflineCardStatus() && !vo.getOfflineCardStatus().toString().equals(activityVO.getOfflineCardStatus().toString())){
                     continue;
                 }
                 log.info("开始验证门店");
-                if (!ExecuteParamCheckUtil.implementActivitCheck(vo,activityVO)){
-                    continue;
+                if(null!=vo.getServiceStoreId()){
+                    if (!ExecuteParamCheckUtil.implementActivitCheck(vo,activityVO)){
+                        continue;
+                    }
                 }
+
                 log.info("开卡活动-限制条件通过");
                 //增加积分奖励新增接口
                    if(null!=activityVO.getPoints()){

@@ -144,7 +144,7 @@ public class ActivityEvaluationServiceImpl implements ActivityEvaluationService 
         if (!CollectionUtils.isEmpty(sysCheckConfigVoList)) {
             for (SysCheckConfigVo sysCheckConfig : sysCheckConfigVoList) {
                 //判断是否需要审核  暂时先写这三个审核类型 后期确定下来写成枚举类
-                if (sysCheckConfig.getFunctionCode().equals("C0001") || sysCheckConfig.getFunctionCode().equals("C0002") || sysCheckConfig.getFunctionCode().equals("C0003")) {
+                if (sysCheckConfig.getFunctionCode().equals("C0002")) {
                     i += 1;
                 }
             }
