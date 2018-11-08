@@ -1023,6 +1023,7 @@ public class TaskServiceImpl implements TaskService {
         // "会员范围:1微信会员，2全部会员"
         members.setMemberScope(TaskConstants.ALL_MEMBER);
        // 当except_wechat==true时,需要排除微信会员
+        log.info("getCompanyMemebers查询相应的会员--参数"+sendMessageVO.getExceptWechat());
         if (sendMessageVO.getExceptWechat()){
             members.setMemberScope(TaskConstants.NO_WEXIN_MEMBER);
         }
