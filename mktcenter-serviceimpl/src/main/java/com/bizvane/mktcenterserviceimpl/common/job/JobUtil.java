@@ -168,7 +168,7 @@ public class JobUtil {
     }
     public void addMessageDXTaskJob(SysAccountPO stageUser, MktTaskPOWithBLOBs po, MktMessagePO messagePO){
        // int bizType = JobBusinessTypeEnum.ACTIVITY_TYPE_TASK.getCode();
-        int bizType =TaskConstants.ACTIVITY_TYPE_TASK_CODE_XDOB;
+        int bizType =TaskConstants.ACTIVITY_TYPE_TASK_CODE_DXOB;
         String taskCode = po.getTaskCode();
         String taskName = po.getTaskName();
         String name = stageUser.getName();
