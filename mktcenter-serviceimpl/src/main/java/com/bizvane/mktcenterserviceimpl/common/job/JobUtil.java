@@ -159,6 +159,7 @@ public class JobUtil {
         String name = stageUser.getName();
         Date sendTime = messagePO.getSendTime();
         SendMessageVO sendMessageVO = this.getSendMessageVO(po);
+        sendMessageVO.setExceptWechat(messagePO.getExceptWechat());
         String param = JSON.toJSONString(sendMessageVO);
         //清除一下job
         this.doRemoveJobe(bizType, taskCode, param);
@@ -174,6 +175,7 @@ public class JobUtil {
         String name = stageUser.getName();
         Date sendTime = messagePO.getSendTime();
         SendMessageVO sendMessageVO = this.getSendMessageVO(po);
+        sendMessageVO.setExceptWechat(messagePO.getExceptWechat());
         String param = JSON.toJSONString(sendMessageVO);
         //清除一下job
         this.doRemoveJobe(bizType, taskCode, param);
