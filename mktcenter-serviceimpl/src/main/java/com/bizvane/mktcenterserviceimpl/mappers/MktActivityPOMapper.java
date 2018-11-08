@@ -8,6 +8,7 @@ import com.bizvane.mktcenterservice.models.po.MktActivityPOWithBLOBs;
 import java.util.List;
 
 import com.bizvane.mktcenterservice.models.vo.ActivityVO;
+import com.bizvane.mktcenterservice.models.vo.WhiteStoreVO;
 import org.apache.ibatis.annotations.Param;
 import sun.security.x509.AVA;
 
@@ -111,4 +112,6 @@ public interface MktActivityPOMapper {
 	List<ActivityAnalysisCountBO>  getActivityAnalysisCountpage(ActivityAnalysisCountBO bo);
 	//查询活动人数统计和积分数量
 	CtivityAnalysisBO getActivityAnalysisTotal(ActivityAnalysisCountBO bo);
+	//白名单店铺
+	public  String  getActivityWhiteStoreIds(WhiteStoreVO vo);
 }

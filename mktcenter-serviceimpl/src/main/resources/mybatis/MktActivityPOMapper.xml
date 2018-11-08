@@ -791,5 +791,59 @@
       AND t.activity_type IN (3,4)
     </if>
   </select>
-  <!--查询同一种类型积分总数量和总参与人数 -->
+  <!--查询店铺白名单 -->
+  <select  id="getActivityWhiteStoreIds" resultType="java.lang.String">
+    SELECT
+    group_concat(tmcon.store_limit_list) AS storeLimitList
+    FROM
+    t_mkt_activity tmt
+    <if test="activityType!=null and activityType=='1'.toString()">
+      INNER JOIN
+      t_mkt_activity_register tmcon
+    </if>
+    <if test="activityType!=null and activityType=='2'.toString()">
+      INNER JOIN
+      t_mkt_activity_upgrade  tmcon
+    </if>
+    <if test="activityType!=null and (activityType=='3'.toString() or activityType=='4'.toString())">
+      INNER JOIN  t_mkt_activity_manual tmcon
+    </if>
+    <if test="activityType!=null and activityType=='5'.toString()">
+      INNER JOIN
+      t_mkt_activity_order tmcon
+    </if>
+    <if test="activityType!=null and activityType=='6'.toString()">
+      INNER JOIN
+      t_mkt_activity_signin tmcon
+    </if>
+    <if test="activityType!=null and activityType=='7'.toString()">
+      INNER JOIN
+      t_mkt_activity_birthday tmcon
+    </if>
+    <if test="activityType!=null and activityType=='9'.toString()">
+      INNER JOIN
+      t_mkt_activity_evaluation tmcon
+    </if>
+    <if test="activityType!=null and activityType=='10'.toString()">
+      INNER JOIN
+      t_mkt_activity_vip_aniversary tmcon
+    </if>
+    <if test="activityType!=null">
+      ON  tmt.mkt_activity_id =tmcon.mkt_activity_id
+      AND tmcon.valid=1
+      AND is_store_limit=1
+      AND store_limit_type=2
+    </if>
+    WHERE
+    tmt.valid=1
+    <if test="mbrLevelCode != null and mbrLevelCode!= ''">
+      AND tmcon.mbr_level_code=#{mbrLevelCode}
+    </if>
+    AND tmt.sys_brand_id=#{sysbrandId}
+    AND tmt.activity_type=#{activityType}
+    AND tmt.start_time &lt;=#{startTime,jdbcType=TIMESTAMP}
+    AND tmt.end_time &gt;= #{startTime,jdbcType=TIMESTAMP}
+    AND tmt.check_status &lt;&gt; 4
+    AND (tmt.activity_status=1 OR tmt.activity_status=2)
+  </select>
 </mapper>

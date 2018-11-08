@@ -14,6 +14,7 @@ import com.bizvane.mktcenterservice.models.po.MktMessagePO;
 import com.bizvane.mktcenterservice.models.vo.ActivitySmartVO;
 import com.bizvane.mktcenterservice.models.vo.ActivityVO;
 import com.bizvane.mktcenterservice.models.vo.PageForm;
+import com.bizvane.mktcenterservice.models.vo.WhiteStoreVO;
 import com.bizvane.utils.responseinfo.ResponseData;
 import com.bizvane.utils.tokens.SysAccountPO;
 import com.github.pagehelper.PageInfo;
@@ -76,4 +77,8 @@ public interface ActivityService {
      */
     ResponseData<PageInfo<CouponSendMemberListResponseVO>> findCouponSendResultActivity(Long id, Integer type, SysAccountPO stageUser,
                                                                                         PageForm pageForm,String name,String cardNo);
+    /**
+     * 前端调用店铺
+     */
+    public  List<Long>  getActivityWhiteStoreIds(WhiteStoreVO vo);
 }
