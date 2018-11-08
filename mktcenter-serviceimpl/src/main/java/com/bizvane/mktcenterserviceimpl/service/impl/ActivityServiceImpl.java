@@ -28,6 +28,7 @@ import com.bizvane.mktcenterservice.models.po.*;
 import com.bizvane.mktcenterservice.models.vo.ActivitySmartVO;
 import com.bizvane.mktcenterservice.models.vo.ActivityVO;
 import com.bizvane.mktcenterservice.models.vo.PageForm;
+import com.bizvane.mktcenterservice.models.vo.WhiteStoreVO;
 import com.bizvane.mktcenterserviceimpl.common.award.Award;
 import com.bizvane.mktcenterserviceimpl.common.enums.*;
 import com.bizvane.mktcenterserviceimpl.common.utils.DateUtil;
@@ -53,8 +54,10 @@ import java.math.BigDecimal;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @author chen.li
@@ -376,7 +379,8 @@ public class ActivityServiceImpl implements ActivityService {
         //循环信息类然后发送
         for (MktMessagePO mktMessagePO:messageVOList) {
             AwardBO awardBO = new AwardBO();
-            if (mktMessagePO.getMsgType().equals("1") && !StringUtils.isEmpty(memberInfo.getWxOpenId())){
+            if (mktMessagePO.getMsgType().equals("1") ){
+                log.info("开始发送微信消息");
                 //发送微信模板消息
                 ActivityMessageVO activityMessageVO = new ActivityMessageVO();
                 activityMessageVO.setMemberCode(memberInfo.getMemberCode());
@@ -488,7 +492,8 @@ public class ActivityServiceImpl implements ActivityService {
         ResponseData<SysBrandPo> SysBrandPos = brandServiceRpc.getBrandByID(activityVO.getSysBrandId());
         for (MktMessagePO mktMessagePO:messageVOList) {
             AwardBO awardBO = new AwardBO();
-            if (mktMessagePO.getMsgType().equals("1") && !StringUtils.isEmpty(wxChannelInfoVo.getWxOpenId())){
+            if (mktMessagePO.getMsgType().equals("1") ){
+                log.info("发送微信~~~~~~~~~~~~~~~~~~");
                 //发送微信模板消息
                 //发送微信模板消息
                 ActivityMessageVO activityMessageVO = new ActivityMessageVO();
@@ -569,5 +574,27 @@ public class ActivityServiceImpl implements ActivityService {
         responseData.setCode(SysResponseEnum.SUCCESS.getCode());
         responseData.setMessage(SysResponseEnum.SUCCESS.getMessage());
         return responseData;
+    }
+
+    /**
+     * 白名单店铺
+     * @param vo
+     * @return
+     */
+    @Override
+    public List<Long> getActivityWhiteStoreIds(WhiteStoreVO vo) {
+        List<Long> storeIds = null;
+        try{
+            String whiteStoreIds = mktActivityPOMapper.getActivityWhiteStoreIds(vo);
+            if (org.apache.commons.lang3.StringUtils.isNotBlank(whiteStoreIds)){
+                storeIds = Arrays.asList(whiteStoreIds.split(",")).stream().filter(element -> org.apache.commons.lang3.StringUtils.isNotBlank(element)).
+                        map(element -> Long.valueOf(element)).distinct().collect(Collectors.toList());
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+            log.info("getWhiteStoreIds--异常--");
+        }finally {
+            return storeIds;
+        }
     }
 }

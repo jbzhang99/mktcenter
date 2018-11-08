@@ -372,7 +372,9 @@ public class MemberMessageSend {
      */
     @Async("asyncServiceExecutor")
     public void sendWXmessage(List<MktMessagePO> messageVOList, WxChannelInfoSearchVo wxChannelInfoSearchVo,ActivityVO activityVO) {
+        log.info("开卡开始发送微信消息");
         ResponseData<com.bizvane.utils.responseinfo.PageInfo<WxChannelInfoVo>> wxChannelInfoVos =  wxChannelInfoAdvancedSearchApiServic.queryAdvancedChannelInfoList(wxChannelInfoSearchVo);
+        log.info("开卡开始发送微信消息"+ JSON.toJSONString(wxChannelInfoVos));
         //查询到页数循环
         for (int a = 1;a<=wxChannelInfoVos.getData().getPages();a++){
             wxChannelInfoSearchVo.setPageNum(a);

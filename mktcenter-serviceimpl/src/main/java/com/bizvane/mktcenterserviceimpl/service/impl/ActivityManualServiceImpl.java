@@ -544,7 +544,7 @@ public class ActivityManualServiceImpl implements ActivityManualService {
         ResponseData responseData = new ResponseData();
         if (null==memberInfoModel.getServiceStoreId()){
             responseData.setCode(SysResponseEnum.MODEL_FAILED_VALIDATION.getCode());
-            responseData.setMessage("服务门店为NULL!");
+            responseData.setMessage("服务门店不存在!");
             log.info("服务门店为NULL!");
             return responseData;
         }

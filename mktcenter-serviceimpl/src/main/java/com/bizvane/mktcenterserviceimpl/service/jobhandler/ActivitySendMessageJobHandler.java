@@ -79,9 +79,7 @@ public class ActivitySendMessageJobHandler extends IJobHandler {
                 membersInfoSearchVo.setSysCompanyId(mktActivityPO.getSysCompanyId());
                 //开卡活动的
                 if (mktActivityPO.getActivityType()== ActivityTypeEnum.ACTIVITY_TYPE_REGISGER.getCode()){
-
-                    membersInfoSearchVo.setCardStatus(1);
-
+                    membersInfoSearchVo.setCardStatus(2);
                 }
                 //升级活动的
                 if (mktActivityPO.getActivityType()== ActivityTypeEnum.ACTIVITY_TYPE_UPGRADE.getCode()){
@@ -102,7 +100,7 @@ public class ActivitySendMessageJobHandler extends IJobHandler {
                     List<ActivityVO> activityOrderList = mktActivityOrderPOMapper.getActivityOrderList(vo);
 
                         List<Long> level = new ArrayList<>();
-                        level.add(Long.parseLong(activityOrderList.get(0).getMbrLevelCode()));
+                        level.add(Long.valueOf(activityOrderList.get(0).getMbrLevelCode()));
                        membersInfoSearchVo.setLevelID(level);
                 }
                 //如果是开卡活动

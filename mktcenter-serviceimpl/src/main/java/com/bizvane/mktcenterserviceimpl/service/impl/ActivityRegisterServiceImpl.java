@@ -316,7 +316,7 @@ public class ActivityRegisterServiceImpl implements ActivityRegisterService {
                 MembersInfoSearchVo membersInfoSearchVo = new MembersInfoSearchVo();
                 membersInfoSearchVo.setPageNumber(1);
                 membersInfoSearchVo.setPageSize(10000);
-                membersInfoSearchVo.setCardStatus(1);
+                membersInfoSearchVo.setCardStatus(2);
                 membersInfoSearchVo.setBrandId(activityVO.getSysBrandId());
                 membersInfoSearchVo.setSysCompanyId(activityVO.getSysCompanyId());
                 log.info("开卡活动-查询发送短信高级搜索参数+=====："+JSON.toJSONString(membersInfoSearchVo));

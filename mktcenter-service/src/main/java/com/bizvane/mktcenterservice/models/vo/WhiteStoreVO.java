@@ -11,6 +11,24 @@ public class WhiteStoreVO {
   private  Integer taskType;
   private  Date startTime;
   private  Date endTime;
+  private Integer activityType;
+  private String mbrLevelCode;
+
+    public Integer getActivityType() {
+        return activityType;
+    }
+
+    public void setActivityType(Integer activityType) {
+        this.activityType = activityType;
+    }
+
+    public String getMbrLevelCode() {
+        return mbrLevelCode;
+    }
+
+    public void setMbrLevelCode(String mbrLevelCode) {
+        this.mbrLevelCode = mbrLevelCode;
+    }
 
     public Long getSysbrandId() {
         return sysbrandId;

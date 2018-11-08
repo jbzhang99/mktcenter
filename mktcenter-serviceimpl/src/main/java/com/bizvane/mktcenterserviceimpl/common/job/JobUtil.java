@@ -159,6 +159,7 @@ public class JobUtil {
         String name = stageUser.getName();
         Date sendTime = messagePO.getSendTime();
         SendMessageVO sendMessageVO = this.getSendMessageVO(po);
+        sendMessageVO.setExceptWechat(messagePO.getExceptWechat());
         String param = JSON.toJSONString(sendMessageVO);
         //清除一下job
         this.doRemoveJobe(bizType, taskCode, param);
@@ -168,12 +169,14 @@ public class JobUtil {
     }
     public void addMessageDXTaskJob(SysAccountPO stageUser, MktTaskPOWithBLOBs po, MktMessagePO messagePO){
        // int bizType = JobBusinessTypeEnum.ACTIVITY_TYPE_TASK.getCode();
-        int bizType =TaskConstants.ACTIVITY_TYPE_TASK_CODE_XDOB;
+        int bizType =TaskConstants.ACTIVITY_TYPE_TASK_CODE_DXOB;
         String taskCode = po.getTaskCode();
         String taskName = po.getTaskName();
         String name = stageUser.getName();
         Date sendTime = messagePO.getSendTime();
         SendMessageVO sendMessageVO = this.getSendMessageVO(po);
+        sendMessageVO.setExceptWechat(messagePO.getExceptWechat());
+        sendMessageVO.setMsgContent(messagePO.getMsgContent());
         String param = JSON.toJSONString(sendMessageVO);
         //清除一下job
         this.doRemoveJobe(bizType, taskCode, param);
