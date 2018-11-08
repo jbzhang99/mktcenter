@@ -1,5 +1,6 @@
 package com.bizvane.mktcenterserviceimpl.controllers.rpc;
 
+import com.bizvane.mktcenterservice.interfaces.ActivityService;
 import com.bizvane.mktcenterservice.interfaces.TaskService;
 import com.bizvane.mktcenterservice.models.vo.WhiteStoreVO;
 import lombok.extern.slf4j.Slf4j;
@@ -21,15 +22,21 @@ import java.util.List;
 public class TaskRpcController {
     @Autowired
     private TaskService taskService;
+    @Autowired
+    private ActivityService activityService;
     /**
      * 查询白名单店铺Id集合
      */
     @RequestMapping("getWhiteStoreIds")
     public List<Long> getWhiteStoreIds(@RequestBody WhiteStoreVO vo){
-        if (vo.getSysbrandId()==null || vo.getTaskType()==null|| vo.getStartTime()==null || vo.getEndTime()==null){
-            log.info("getWhiteStoreIds获取店铺白名单参数不合格!");
-            return new ArrayList<Long>();
+        List<Long> lists = null;
+        if (null!=vo.getTaskType()){
+            lists = taskService.getWhiteStoreIds(vo);
+        }else if (null!=vo.getActivityType()){
+            lists = activityService.getActivityWhiteStoreIds(vo);
+        }else {
+            log.info("getWhiteStoreIds获取店铺白名单参数活动或者任务类型为空不合格!");
         }
-        return taskService.getWhiteStoreIds(vo);
+        return lists;
     }
 }

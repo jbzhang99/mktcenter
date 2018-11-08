@@ -174,7 +174,7 @@ public class ActivityOrderServiceImpl implements ActivityOrderService {
         if(!CollectionUtils.isEmpty(sysCheckConfigVoList)){
             for (SysCheckConfigVo sysCheckConfig:sysCheckConfigVoList) {
                 //判断是否需要审核  暂时先写这三个审核类型 后期确定下来写成枚举类
-                if(sysCheckConfig.getFunctionCode().equals("C0001") || sysCheckConfig.getFunctionCode().equals("C0002") || sysCheckConfig.getFunctionCode().equals("C0003")){
+                if(sysCheckConfig.getFunctionCode().equals("C0002")){
                     i+=1;
                 }
             }
@@ -288,6 +288,7 @@ public class ActivityOrderServiceImpl implements ActivityOrderService {
         ////如果是立即发送 则发送短息
         if(!CollectionUtils.isEmpty(messageVOList) ){
             if(true==activityVO.getSendImmediately()){
+                log.info("我看看进来了吗");
                 //分页查询会员信息发送短信
                 MembersInfoSearchVo membersInfoSearchVo = new MembersInfoSearchVo();
                 membersInfoSearchVo.setPageNumber(1);
@@ -296,6 +297,10 @@ public class ActivityOrderServiceImpl implements ActivityOrderService {
                     level.add(Long.parseLong(activityVO.getMbrLevelCode()));
                     membersInfoSearchVo.setLevelID(level);
                 membersInfoSearchVo.setBrandId(activityVO.getSysBrandId());
+                membersInfoSearchVo.setSysCompanyId(activityVO.getSysCompanyId());
+                //加个是否是长期活动
+                activityVO.setLongTerm(0);
+                log.info("查询会员参数==============="+ JSON.toJSONString(membersInfoSearchVo));
                 memberMessage.getMemberList(messageVOList, membersInfoSearchVo,activityVO);
             }else{
                 //自定义时间发送 加人job任务

@@ -85,13 +85,16 @@ public class MemberMessageSend {
      */
     @Async("asyncServiceExecutor")
     public void getMemberList(List<MktMessagePO> messageVOList, MembersInfoSearchVo membersInfoSearchVo,ActivityVO activityVO) {
+        log.info("进来这里了参数是=============="+ JSON.toJSONString(membersInfoSearchVo));
         ResponseData<PageInfo<MemberInfoVo>> memberInfoVoPage = membersAdvancedSearchApiService.search(membersInfoSearchVo);
+        log.info("查询到的会员是+++++++++++++"+ JSON.toJSONString(memberInfoVoPage));
         //循环分页条件查询会员信息发送短信信息
         for (int a =1;a<=memberInfoVoPage.getData().getPages();a++){
             membersInfoSearchVo.setPageNumber(a);
             ResponseData<com.bizvane.utils.responseinfo.PageInfo<MemberInfoVo>> memberInfoVoPages = membersAdvancedSearchApiService.search(membersInfoSearchVo);
             List<MemberInfoVo> memberInfoModelList = memberInfoVoPages.getData().getList();
             //循环发送
+            log.info("开始循环发送++++++++++++++++++++++");
             if (!CollectionUtils.isEmpty(memberInfoModelList)){
                 for (MemberInfoModel memberInfo:memberInfoModelList) {
                     activityService.sendMessage(messageVOList, memberInfo,activityVO);
@@ -369,7 +372,9 @@ public class MemberMessageSend {
      */
     @Async("asyncServiceExecutor")
     public void sendWXmessage(List<MktMessagePO> messageVOList, WxChannelInfoSearchVo wxChannelInfoSearchVo,ActivityVO activityVO) {
+        log.info("开卡开始发送微信消息");
         ResponseData<com.bizvane.utils.responseinfo.PageInfo<WxChannelInfoVo>> wxChannelInfoVos =  wxChannelInfoAdvancedSearchApiServic.queryAdvancedChannelInfoList(wxChannelInfoSearchVo);
+        log.info("开卡开始发送微信消息"+ JSON.toJSONString(wxChannelInfoVos));
         //查询到页数循环
         for (int a = 1;a<=wxChannelInfoVos.getData().getPages();a++){
             wxChannelInfoSearchVo.setPageNum(a);

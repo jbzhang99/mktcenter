@@ -35,8 +35,8 @@ public class TaskConstants {
     //任务job区分类型
     public final static int ACTIVITY_TYPE_TASK_CODE_STARTJOB=20;
     public final static int ACTIVITY_TYPE_TASK_CODE_ENDJOB=21;
-    public final static int ACTIVITY_TYPE_TASK_CODE_XDOB=22;
-    public final static int ACTIVITY_TYPE_TASK_CODE_XXOB=22;
+    public final static int ACTIVITY_TYPE_TASK_CODE_DXOB=22;
+    public final static int ACTIVITY_TYPE_TASK_CODE_XXOB=23;
 
     //任务类型
     //活动

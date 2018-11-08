@@ -2,6 +2,7 @@ package com.bizvane.mktcenterserviceimpl.controllers;
 
 import com.bizvane.centerstageservice.models.vo.SysStoreVo;
 import com.bizvane.couponfacade.models.vo.CouponSendMemberListResponseVO;
+import com.bizvane.members.facade.models.MemberInfoModel;
 import com.bizvane.mktcenterservice.interfaces.TaskService;
 import com.bizvane.mktcenterservice.models.bo.TaskBO;
 import com.bizvane.mktcenterservice.models.po.MktTaskPOWithBLOBs;
@@ -120,5 +121,9 @@ public class TaskController {
         SysAccountPO stageUser = TokenUtils.getStageUser(request);
         return taskService.findCouponSendResultTask(id,type,stageUser,pageForm,name,cardNo);
     }
-
+    @RequestMapping("getCompanyMemebers")
+    public  com.bizvane.utils.responseinfo.PageInfo<MemberInfoModel>   test(SendMessageVO sendMessageVO){
+        System.out.println(1111);
+       return taskService.getCompanyMemebers(sendMessageVO, 1, 10000);
+    }
 }

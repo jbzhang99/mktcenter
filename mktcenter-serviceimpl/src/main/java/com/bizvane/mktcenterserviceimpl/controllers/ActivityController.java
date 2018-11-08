@@ -8,6 +8,7 @@ import com.bizvane.mktcenterservice.models.bo.ActivityAnalysisCountBO;
 import com.bizvane.mktcenterservice.models.bo.CtivityAnalysisBO;
 import com.bizvane.mktcenterservice.models.vo.ActivityVO;
 import com.bizvane.mktcenterservice.models.vo.PageForm;
+import com.bizvane.mktcenterservice.models.vo.WhiteStoreVO;
 import com.bizvane.mktcenterserviceimpl.common.enums.ActivityTypeEnum;
 import com.bizvane.utils.responseinfo.ResponseData;
 import com.bizvane.utils.tokens.SysAccountPO;
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 /**
  * @author chen.li
@@ -140,5 +142,14 @@ public class ActivityController {
         return activityService.findCouponSendResultActivity(id,type,stageUser,pageForm,name,cardNo);
     }
 
+    /**
+     * 白名单店铺
+     * @param vo
+     * @return
+     */
+    @RequestMapping("getActivityWhiteStoreIds")
+    public List<Long> getActivityWhiteStoreIds(WhiteStoreVO vo){
+        return activityService.getActivityWhiteStoreIds(vo);
+    }
 
 }

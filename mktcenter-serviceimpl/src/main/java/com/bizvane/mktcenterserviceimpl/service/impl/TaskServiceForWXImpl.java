@@ -54,6 +54,7 @@ public class TaskServiceForWXImpl implements TaskServiceForWX {
         ResponseData<Long> resultData = wxAppletApiService.getServiceStoreId(vo.getMemberCode());
         log.info("获取会员的任务列表storeId--出参--"+JSON.toJSONString(resultData));
         Long storeId = resultData.getData();
+        vo.setStoreId(storeId);
         vo.setStoreIdStyleOne(new StringBuilder().append(storeId).append(",%").toString());
         vo.setStoreIdStyleTwo(new StringBuilder().append("%,").append(storeId).append(",%").toString());
         vo.setStoreIdStyleThree(new StringBuilder().append("%,").append(storeId).toString());
