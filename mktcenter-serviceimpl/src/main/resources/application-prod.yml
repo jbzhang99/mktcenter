@@ -25,8 +25,10 @@ spring:
     driver-class-name: com.mysql.jdbc.Driver
   data:
     mongodb:
-      database: "7"
       uri: "mongodb://dds-bp14278823e03ba41.mongodb.rds.aliyuncs.com:3717/?AutoConnectRetry=true"
+      database: "crm"
+      username: crm
+      password: BIZvane2019
   jackson:
     date-format: yyyy-MM-dd HH:mm:ss
     time-zone: GMT+8
