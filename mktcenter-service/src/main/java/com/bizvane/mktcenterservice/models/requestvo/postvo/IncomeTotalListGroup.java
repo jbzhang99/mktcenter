@@ -23,7 +23,15 @@ public class IncomeTotalListGroup  extends ReBase  {
 	
 	private String	  gender;
 	
+	private String	  vipType;
 	
+	
+	public String getVipType() {
+		return vipType;
+	}
+	public void setVipType(String vipType) {
+		this.vipType = vipType;
+	}
 	public String getGender() {
 		return gender;
 	}

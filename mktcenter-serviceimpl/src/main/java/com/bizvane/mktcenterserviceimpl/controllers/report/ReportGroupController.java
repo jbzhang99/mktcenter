@@ -214,7 +214,7 @@ public class ReportGroupController {
 	     FileReportTempPOExample example = new FileReportTempPOExample();
 	     example.createCriteria().andTemplateTypeEqualTo("newOldMemberInterfaceGroup").andValidEqualTo(Boolean.TRUE);
 	     List<FileReportTempPO>  FileReportTempPOlist = fileReportTempPOMapper.selectByExample(example);
-   	 return sendpostHaveTime(BaseUrl.getLoadUrl("newOldMemberInterfaceGroup"),sendVO,FileReportTempPOlist,sysAccountPO);
+   	 return sendpostHaveTime(BaseUrl.getLoadUrl("newOldMemberPtInterface"),sendVO,FileReportTempPOlist,sysAccountPO);
    }
    
 // 08活跃会员表汇总
@@ -224,7 +224,7 @@ public class ReportGroupController {
 	     FileReportTempPOExample example = new FileReportTempPOExample();
 	     example.createCriteria().andTemplateTypeEqualTo("activeMemberAllInterfaceGroup").andValidEqualTo(Boolean.TRUE);
 	     List<FileReportTempPO>  FileReportTempPOlist = fileReportTempPOMapper.selectByExample(example);
-   	 return sendpostHaveTime(BaseUrl.getLoadUrl("activeMemberAllInterfaceGroup"),sendVO,FileReportTempPOlist,sysAccountPO);
+   	 return sendpostHaveTime(BaseUrl.getLoadUrl("activeMemberParticleInterface"),sendVO,FileReportTempPOlist,sysAccountPO);
    }
    
 // 09复购-会员表汇总
@@ -234,7 +234,7 @@ public class ReportGroupController {
 	     FileReportTempPOExample example = new FileReportTempPOExample();
 	     example.createCriteria().andTemplateTypeEqualTo("rePurchaseMemberAllInterfaceGroup").andValidEqualTo(Boolean.TRUE);
 	     List<FileReportTempPO>  FileReportTempPOlist = fileReportTempPOMapper.selectByExample(example);
-   	 return sendpostHaveTime(BaseUrl.getLoadUrl("rePurchaseMemberAllInterfaceGroup"),sendVO,FileReportTempPOlist,sysAccountPO);
+   	 return sendpostHaveTime(BaseUrl.getLoadUrl("rePurchaseMemberParticleInterface"),sendVO,FileReportTempPOlist,sysAccountPO);
    }
    
 // 10回购-会员表汇总
