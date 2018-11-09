@@ -326,7 +326,7 @@ public class ActivityRegisterServiceImpl implements ActivityRegisterService {
                 wxChannelInfoSearchVo.setPageNum(1);
                 wxChannelInfoSearchVo.setPageSize(10000);
                 wxChannelInfoSearchVo.setFocus(2);
-                wxChannelInfoSearchVo.setCardStatus(2);
+                wxChannelInfoSearchVo.setCardStatus(1);
                 wxChannelInfoSearchVo.setMiniProgram((byte) 1);
                 wxChannelInfoSearchVo.setBrandId(activityVO.getSysBrandId());
                 log.info("开卡活动-查询发送微信模板高级搜索参数+=====："+JSON.toJSONString(wxChannelInfoSearchVo));
