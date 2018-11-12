@@ -270,6 +270,7 @@ public class ActivityUpgradeServiceImpl implements ActivityUpgradeService {
         mktActivityUpgradePO.setMbrLevelCode(activityVO.getMbrLevelCode());
         mktActivityUpgradePO.setMbrLevelName(activityVO.getMbrLevelName());
         mktActivityUpgradePO.setIsStoreLimit(activityVO.getStoreLimit());
+        mktActivityUpgradePO.setMemberType(activityVO.getMemberType());
         if (true==activityVO.getStoreLimit()){
             mktActivityUpgradePO.setStoreLimitList(activityVO.getStoreLimitList());
             mktActivityUpgradePO.setStoreLimitType(activityVO.getStoreLimitType());

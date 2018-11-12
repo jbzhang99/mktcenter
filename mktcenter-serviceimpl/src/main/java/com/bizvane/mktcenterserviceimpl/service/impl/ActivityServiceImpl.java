@@ -497,6 +497,10 @@ public class ActivityServiceImpl implements ActivityService {
                 //发送微信模板消息
                 //发送微信模板消息
                 ActivityMessageVO activityMessageVO = new ActivityMessageVO();
+                //如果是开卡活动传微信id
+                if (activityVO.getActivityType()==ActivityTypeEnum.ACTIVITY_TYPE_REGISGER.getCode()){
+                    activityMessageVO.setOpenId(wxChannelInfoVo.getWxOpenId());
+                }
                 activityMessageVO.setMemberCode(wxChannelInfoVo.getMemberCode());
                 activityMessageVO.setSysCompanyId(activityVO.getSysCompanyId());
                 activityMessageVO.setSysBrandId(activityVO.getSysBrandId());
