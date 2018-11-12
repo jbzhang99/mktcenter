@@ -515,7 +515,7 @@ public class ActivityServiceImpl implements ActivityService {
                     activityMessageVO.setOpenId(wxChannelInfoVo.getWxOpenId());
                 }
                 if (null==wxChannelInfoVo.getMemberCode()){
-                    activityMessageVO.setMemberCode("");
+                    activityMessageVO.setMemberCode(String.valueOf(1));
                 }else{
                     activityMessageVO.setMemberCode(wxChannelInfoVo.getMemberCode());
                 }
