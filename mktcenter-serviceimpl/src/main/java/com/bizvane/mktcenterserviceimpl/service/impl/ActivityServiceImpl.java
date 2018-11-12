@@ -503,7 +503,11 @@ public class ActivityServiceImpl implements ActivityService {
                 if (activityVO.getActivityType()==ActivityTypeEnum.ACTIVITY_TYPE_REGISGER.getCode()){
                     activityMessageVO.setOpenId(wxChannelInfoVo.getWxOpenId());
                 }
-                activityMessageVO.setMemberCode(wxChannelInfoVo.getMemberCode());
+                if (null==wxChannelInfoVo.getMemberCode()){
+                    activityMessageVO.setMemberCode("");
+                }else{
+                    activityMessageVO.setMemberCode(wxChannelInfoVo.getMemberCode());
+                }
                 activityMessageVO.setSysCompanyId(activityVO.getSysCompanyId());
                 activityMessageVO.setSysBrandId(activityVO.getSysBrandId());
                 activityMessageVO.setSysBrandName(SysBrandPos.getData().getBrandName());
