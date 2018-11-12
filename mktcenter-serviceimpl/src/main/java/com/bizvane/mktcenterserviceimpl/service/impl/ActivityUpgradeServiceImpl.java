@@ -630,6 +630,7 @@ public class ActivityUpgradeServiceImpl implements ActivityUpgradeService {
                 for (MktCouponPO mktCouponPO:mktCouponPOs) {
                     AwardBO awardBO = new AwardBO();
                     SendCouponSimpleRequestVO sendCouponSimpleRequestVO = new SendCouponSimpleRequestVO();
+                    sendCouponSimpleRequestVO.setBusinessName(activityVO.getActivityName());
                     sendCouponSimpleRequestVO.setMemberCode(vo.getMemberCode());
                     sendCouponSimpleRequestVO.setCouponDefinitionId(mktCouponPO.getCouponDefinitionId());
                     sendCouponSimpleRequestVO.setSendBussienId(mktCouponPO.getBizId());

@@ -698,6 +698,7 @@ public class ActivityOrderServiceImpl implements ActivityOrderService {
                     sendCouponSimpleRequestVO.setSendType(SendTypeEnum.SEND_COUPON_COUSUME_ACTIVITY.getCode());
                     sendCouponSimpleRequestVO.setBrandId(vo.getBrandId().longValue());
                     sendCouponSimpleRequestVO.setCompanyId(vo.getCompanyId());
+                    sendCouponSimpleRequestVO.setBusinessName(activityVO.getActivityName());
                     awardBO.setSendCouponSimpleRequestVO(sendCouponSimpleRequestVO);
                     awardBO.setMktType(MktSmartTypeEnum.SMART_TYPE_COUPON.getCode());
                     award.execute(awardBO);

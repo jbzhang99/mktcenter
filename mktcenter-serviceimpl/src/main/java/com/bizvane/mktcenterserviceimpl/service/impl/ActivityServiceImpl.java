@@ -468,6 +468,7 @@ public class ActivityServiceImpl implements ActivityService {
     public void sendCoupon(ActivitySmartVO vo, AwardBO awardBO, SendCouponSimpleRequestVO sendCouponSimpleRequestVO, MemberInfoModel memberInfo) {
         if (!org.springframework.util.CollectionUtils.isEmpty(vo.getMktCouponPOS())) {
             for (MktCouponPO mktCouponPO : vo.getMktCouponPOS()) {
+                sendCouponSimpleRequestVO.setBusinessName(vo.getActivityName());
                 sendCouponSimpleRequestVO.setMemberCode(memberInfo.getMemberCode());
                 sendCouponSimpleRequestVO.setCouponDefinitionId(mktCouponPO.getCouponDefinitionId());
                 sendCouponSimpleRequestVO.setSendBussienId(mktCouponPO.getBizId());

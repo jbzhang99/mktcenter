@@ -402,6 +402,7 @@ public class ActivityManualServiceImpl implements ActivityManualService {
             sendCouponSimpleRequestVO.setSendType(SendTypeEnum.SEND_COUPON_RECEIVE_ACTIVITY.getCode());
             sendCouponSimpleRequestVO.setBrandId(memberInfoModel.getBrandId());
             sendCouponSimpleRequestVO.setCompanyId(memberInfoModel.getSysCompanyId());
+            sendCouponSimpleRequestVO.setBusinessName(manualList.get(0).getActivityName());
             awardBO.setSendCouponSimpleRequestVO(sendCouponSimpleRequestVO);
             awardBO.setMktType(MktSmartTypeEnum.SMART_TYPE_COUPON.getCode());
             log.info("领券活动执行活动-发券调接口入参:"+JSON.toJSONString(awardBO));
