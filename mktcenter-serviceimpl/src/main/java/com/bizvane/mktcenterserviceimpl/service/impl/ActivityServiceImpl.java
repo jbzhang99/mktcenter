@@ -290,7 +290,18 @@ public class ActivityServiceImpl implements ActivityService {
 
 
                 }
-
+                //判断百分比 默认0
+                if (null==activityAnalysisCount.getCouponUsedSumPercentage()){
+                    activityAnalysisCount.setCouponUsedSumPercentage(0+"%");
+                }
+                //活动金额默认0
+                if (null==activityAnalysisCount.getOrderAmountSum()){
+                    activityAnalysisCount.setOrderAmountSum(new BigDecimal(0));
+                }
+                //参与人次默认0
+                if (null==activityAnalysisCount.getParticipateNumber()){
+                    activityAnalysisCount.setParticipateNumber(0L);
+                }
             }
             log.info("循环结束时间+++++++"+ new SimpleDateFormat("yyyy/MM/dd-HH:mm:ss:SSS").format(new Date()));
         }
