@@ -396,6 +396,7 @@ public class ActivityServiceImpl implements ActivityService {
                     activityMessageVO.setActivityStartDate(activityVO.getStartTime());
                     activityMessageVO.setActivityEndDate(activityVO.getEndTime());
                 }
+                activityMessageVO.setMemberName(memberInfo.getName());
                 awardBO.setActivityMessageVO(activityMessageVO);
                 awardBO.setMktType(MktSmartTypeEnum.SMART_TYPE_WXMESSAGE.getCode());
                 award.execute(awardBO);
