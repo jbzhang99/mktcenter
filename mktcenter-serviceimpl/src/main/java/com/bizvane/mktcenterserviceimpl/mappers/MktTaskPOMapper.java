@@ -11,10 +11,7 @@ import com.bizvane.mktcenterservice.models.po.MktTaskPOWithBLOBs;
 import java.util.Date;
 import java.util.List;
 
-import com.bizvane.mktcenterservice.models.vo.TaskDetailVO;
-import com.bizvane.mktcenterservice.models.vo.TaskForWXVO;
-import com.bizvane.mktcenterservice.models.vo.TaskVO;
-import com.bizvane.mktcenterservice.models.vo.WhiteStoreVO;
+import com.bizvane.mktcenterservice.models.vo.*;
 import org.apache.ibatis.annotations.Param;
 
 public interface MktTaskPOMapper {
@@ -160,5 +157,5 @@ public interface MktTaskPOMapper {
 	public List<TaskVO> getShareTaskList(@Param("mktTaskId") Long mktTaskId);
 	public List<TaskVO> getProfileTaskList(@Param("mktTaskId") Long mktTaskId);
 
-	public  String  getWhiteStoreIds(WhiteStoreVO vo);
+	public List<WhiteStoreResultVO> getWhiteStoreIds(WhiteStoreVO vo);
 }

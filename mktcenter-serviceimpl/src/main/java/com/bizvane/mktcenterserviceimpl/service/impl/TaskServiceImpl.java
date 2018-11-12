@@ -131,6 +131,7 @@ public class TaskServiceImpl implements TaskService {
     private BrandServiceRpc brandServiceRpc;
     @Autowired
     private SendBatchMessageFeign sendBatchMessageFeign;
+
     /**
      * 通过id查询店铺列表
      */
@@ -1167,15 +1168,27 @@ public class TaskServiceImpl implements TaskService {
     public  List<Long>  getWhiteStoreIds(WhiteStoreVO vo){
         List<Long> storeIds = null;
         try{
-            String whiteStoreIds = mktTaskPOMapper.getWhiteStoreIds(vo);
-            if (StringUtils.isNotBlank(whiteStoreIds)){
-                storeIds = Arrays.asList(whiteStoreIds.split(",")).stream().filter(element -> StringUtils.isNotBlank(element)).
+            List<WhiteStoreResultVO> whiteStoreIds = mktTaskPOMapper.getWhiteStoreIds(vo);
+            if (CollectionUtils.isEmpty(whiteStoreIds)){
+               return storeIds;
+            }
+            WhiteStoreResultVO whiteStoreResultVO = whiteStoreIds.get(0);
+            String storeLimitType = whiteStoreResultVO.getStoreLimitType();
+            if (StringUtils.isNotBlank(storeLimitType)&&storeLimitType.contains("0")){
+                storeIds =brandServiceRpc.getStoreIdsByBrandId(vo.getSysbrandId()).getData();
+                return storeIds;
+            }
+            String storeLimitList = whiteStoreResultVO.getStoreLimitList();
+            if (StringUtils.isNotBlank(storeLimitList)){
+               storeIds =Arrays.asList(storeLimitList.split(",")).stream().filter(element -> StringUtils.isNotBlank(element)).
                         map(element -> Long.valueOf(element)).distinct().collect(Collectors.toList());
+                return storeIds;
             }
         }catch (Exception e){
             e.printStackTrace();
            log.info("getWhiteStoreIds--异常--");
         }finally {
+            log.info("getWhiteStoreIds---出参-----"+JSON.toJSONString(storeIds));
             return storeIds;
         }
     }

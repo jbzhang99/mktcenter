@@ -1306,9 +1306,10 @@
     </if>
   </select>
 
-  <select  id="getWhiteStoreIds" resultType="java.lang.String">
+  <select  id="getWhiteStoreIds" resultType="com.bizvane.mktcenterservice.models.vo.WhiteStoreResultVO">
     SELECT
-    group_concat(tmcon.store_limit_list) AS storeLimitList
+    group_concat(tmcon.store_limit_list) AS storeLimitList,
+    group_concat(is_store_limit) AS storeLimitType
     FROM
     t_mkt_task tmt
     <if test="taskType!=null and taskType=='1'.toString()">
@@ -1329,15 +1330,17 @@
     <if test="taskType!=null">
       ON  tmt.mkt_task_id =tmcon.mkt_task_id
       AND tmcon.valid=1
-      AND is_store_limit=1
-      AND store_limit_type=2
     </if>
     WHERE
     tmt.valid=1
     AND tmt.sys_brand_id=#{sysbrandId}
     AND tmt.task_type=#{taskType}
+    <if test="startTime != null and startTime!= '' ">
     AND tmt.start_time &lt;=#{startTime,jdbcType=TIMESTAMP}
+    </if>
+    <if test="endTime != null and endTime!= '' ">
     AND tmt.end_time &gt;= #{endTime,jdbcType=TIMESTAMP}
+    </if>
     AND tmt.check_status &lt;&gt; 4
     AND (tmt.task_status=1 OR tmt.task_status=2)
   </select>

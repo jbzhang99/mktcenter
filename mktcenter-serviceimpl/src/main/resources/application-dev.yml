@@ -144,8 +144,8 @@ feign:
 
 rocketmq:
   onsaddr:
-  accessKey: 
-  secretKey: 
+  accessKey: LTAIpoqUHsXq6q7r
+  secretKey: 0ZJ7bfxXJLT8TpOKvZU3i4YWuhvJzs
   addr: 192.168.1.50:9876
   environment: uat
 
