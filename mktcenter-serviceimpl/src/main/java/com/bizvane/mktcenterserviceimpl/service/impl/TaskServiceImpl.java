@@ -1170,6 +1170,14 @@ public class TaskServiceImpl implements TaskService {
     @Override
     public  List<Long>  getWhiteStoreIds(WhiteStoreVO vo){
         List<Long> storeIds = null;
+        Date startTime = vo.getStartTime();
+        Date endTime = vo.getEndTime();
+        if (startTime!=null){
+            vo.setDate1(TimeUtils.formatter.format(startTime));
+        }
+        if (endTime!=null){
+            vo.setDate2(TimeUtils.formatter.format(endTime));
+        }
         try{
             List<WhiteStoreResultVO> whiteStoreIds = mktTaskPOMapper.getWhiteStoreIds(vo);
             if (CollectionUtils.isEmpty(whiteStoreIds)){
