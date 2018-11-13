@@ -1309,22 +1309,25 @@
   <select  id="getWhiteStoreIds" resultType="com.bizvane.mktcenterservice.models.vo.WhiteStoreResultVO">
     SELECT
     group_concat(tmcon.store_limit_list) AS storeLimitList,
-    group_concat(is_store_limit) AS storeLimitType
+    group_concat(tmcon.is_store_limit) AS storeLimitType
     FROM
     t_mkt_task tmt
-    <if test="taskType!=null and taskType=='1'.toString()">
+    <if test="taskType=='1'.toString()">
       INNER JOIN
       t_mkt_task_profile tmcon
     </if>
-    <if test="taskType!=null and taskType=='2'.toString()">
+    <if test="taskType=='2'.toString()">
       INNER JOIN
       t_mkt_task_share  tmcon
     </if>
-    <if test="taskType!=null and taskType=='3'.toString()">
+    <if test="taskType=='3'.toString()">
       INNER JOIN
       t_mkt_task_invite tmcon
     </if>
-    <if test="taskType!=null and (taskType=='4'.toString() or taskType!='5'.toString())">
+    <if test="taskType=='4'.toString()">
+      INNER JOIN  t_mkt_task_order tmcon
+    </if>
+    <if test="taskType=='5'.toString()">
       INNER JOIN  t_mkt_task_order tmcon
     </if>
     <if test="taskType!=null">
@@ -1335,11 +1338,9 @@
     tmt.valid=1
     AND tmt.sys_brand_id=#{sysbrandId}
     AND tmt.task_type=#{taskType}
-    <if test="startTime != null and startTime!= '' ">
-    AND tmt.start_time &lt;=#{startTime,jdbcType=TIMESTAMP}
-    </if>
-    <if test="endTime != null and endTime!= '' ">
-    AND tmt.end_time &gt;= #{endTime,jdbcType=TIMESTAMP}
+    <if test="date1!= null and date1!= '' ">
+    AND tmt.start_time &lt;=#{date1}
+    AND tmt.end_time &gt;= #{date1}
     </if>
     AND tmt.check_status &lt;&gt; 4
     AND (tmt.task_status=1 OR tmt.task_status=2)

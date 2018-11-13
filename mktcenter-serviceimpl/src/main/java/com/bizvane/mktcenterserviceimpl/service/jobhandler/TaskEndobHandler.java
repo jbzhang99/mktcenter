@@ -39,7 +39,7 @@ public class TaskEndobHandler extends IJobHandler {
         String[] split = param.split("&");
         MktTaskPOWithBLOBs mktTaskPOWithBLOBs = new MktTaskPOWithBLOBs();
         mktTaskPOWithBLOBs.setTaskStatus(TaskStatusEnum.TASK_STATUS_FINISHED.getCode());
-        mktTaskPOWithBLOBs.setValid(Boolean.FALSE);
+//        mktTaskPOWithBLOBs.setValid(Boolean.FALSE);
         MktTaskPOExample example = new MktTaskPOExample();
         example.createCriteria().andMktTaskIdEqualTo(Long.valueOf(split[0])).andValidEqualTo(Boolean.TRUE);
         mktTaskPOMapper.updateByExampleSelective(mktTaskPOWithBLOBs,example);

@@ -46,6 +46,7 @@ import com.bizvane.utils.enumutils.SysResponseEnum;
 import com.bizvane.utils.responseinfo.ResponseData;
 import com.bizvane.utils.tokens.SysAccountPO;
 import com.bizvane.wechatfacade.interfaces.QRCodeServiceFeign;
+import com.bizvane.wechatfacade.models.vo.CreateMiniprgmQRCodeRequestVO;
 import com.bizvane.wechatfacade.models.vo.UrlQRCodeCreateRequestVO;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
@@ -238,20 +239,22 @@ public class ActivityManualServiceImpl implements ActivityManualService {
       if(ActivityTypeEnum.ACTIVITY_TYPE_QRCODE.getCode()==activityVO.getActivityType()){
          QRCodeConfig qrCodeConfig = (QRCodeConfig)SpringContextUtil.getBean("QRCodeConfig");
          String url= qrCodeConfig.getQrcodeurl()+activityVO.getActivityCode();
-          UrlQRCodeCreateRequestVO urlQRCodeCreateRequestVO = new UrlQRCodeCreateRequestVO();
-          urlQRCodeCreateRequestVO.setSysBrandId(activityVO.getSysBrandId());
+          CreateMiniprgmQRCodeRequestVO createMiniprgmQRCodeRequestVO = new CreateMiniprgmQRCodeRequestVO();
+          createMiniprgmQRCodeRequestVO.setSysBrandId(activityVO.getSysBrandId());
+          createMiniprgmQRCodeRequestVO.setMiniProgramType("10");
 
           //根据brandId查询brandCode
-          ResponseData<SysBrandPo> brandPoResult = brandServiceRpc.getBrandByID(activityVO.getSysBrandId());
-          urlQRCodeCreateRequestVO.setBrandCode(brandPoResult.getData().getBrandCode());//TODO-
+         // ResponseData<SysBrandPo> brandPoResult = brandServiceRpc.getBrandByID(activityVO.getSysBrandId());
+          //createMiniprgmQRCodeRequestVO.setBrandCode(brandPoResult.getData().getBrandCode());//TODO-
 
-          ResponseData<SysCompanyPo> companyResult = companyServiceRpc.getCompanyById(stageUser.getSysCompanyId());
-          urlQRCodeCreateRequestVO.setCompanyCode(companyResult.getData().getCompanyCode());
-          urlQRCodeCreateRequestVO.setUrl(url);
-         log.info("领券活动-创建活动-扫码领券查询二维码入参:"+JSON.toJSONString(urlQRCodeCreateRequestVO));
+          //ResponseData<SysCompanyPo> companyResult = companyServiceRpc.getCompanyById(stageUser.getSysCompanyId());
+          //urlQRCodeCreateRequestVO.setCompanyCode(companyResult.getData().getCompanyCode());
+          //urlQRCodeCreateRequestVO.setUrl(url);
+          createMiniprgmQRCodeRequestVO.setPath("pages/template01/coupon-scancode/main");
+         log.info("领券活动-创建活动-扫码领券查询二维码入参:"+JSON.toJSONString(createMiniprgmQRCodeRequestVO));
           ResponseData<String> qrCodeResponseData= null;
           try {
-              qrCodeResponseData = qrCodeServiceFeign.createUrlQRCode(urlQRCodeCreateRequestVO);
+              qrCodeResponseData = qrCodeServiceFeign.createMiniprgmQRCode(createMiniprgmQRCodeRequestVO);
               log.info("二维码返回结果ssssssssssssssssssss:"+JSON.toJSONString(qrCodeResponseData));
               if(null==qrCodeResponseData||null==qrCodeResponseData.getData()){
                   log.info("领券活动-创建活动-扫码领券生成二维码为空");
@@ -543,12 +546,7 @@ public class ActivityManualServiceImpl implements ActivityManualService {
     @Override
     public ResponseData<List<ActivityVO>> getActivityByMemberInfo(MemberInfoModel memberInfoModel,Integer activityType) {
         ResponseData responseData = new ResponseData();
-        if (null==memberInfoModel.getServiceStoreId()){
-            responseData.setCode(SysResponseEnum.MODEL_FAILED_VALIDATION.getCode());
-            responseData.setMessage("服务门店不存在!");
-            log.info("服务门店为NULL!");
-            return responseData;
-        }
+        log.info("服务门店为!======================="+memberInfoModel.getServiceStoreId());
         log.info("领券中心查询入参:"+JSON.toJSONString(memberInfoModel));
         //入参校验
         if(null==memberInfoModel){
