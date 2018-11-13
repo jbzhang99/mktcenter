@@ -219,6 +219,8 @@ public class FigureController {
 				   	            	storeGroupIds.add(Long.parseLong(trLong));
 					             }
 				   	          ResponseData<List<Long>> getStoreIdsByGroupIds = storeGroupServiceRpc.getStoreIdsByGroupIds(storeGroupIds);
+				   	       jsonObject.put("organization", "1"); // 直接put相同的key
+				   	       if(getStoreIdsByGroupIds.getData()!=null) {
 			//   		      	根据群组id列表查询群组下所有的店铺
 				   	          ResponseData<List<SysStorePo>>getStoreIds= storeServiceRpc.getIdStoreLists(getStoreIdsByGroupIds.getData());
 				   	          String[] str = new String[getStoreIds.getData().size()];
@@ -228,6 +230,7 @@ public class FigureController {
 					             }
 			   		        	 jsonObject.put("organization", "1"); // 直接put相同的key
 			   		        	 jsonObject.put("organizationContent", str); // / 
+				   	       }
 			   		      	} 	
 	   		      	
 	 					} catch (Exception e) {
@@ -336,6 +339,8 @@ log.info("报表查询ReportIncomeController："+url+JSONObject.toJSONString(vip
 			   	            	storeGroupIds.add(Long.parseLong(trLong));
 				             }
 			   	          ResponseData<List<Long>> getStoreIdsByGroupIds = storeGroupServiceRpc.getStoreIdsByGroupIds(storeGroupIds);
+			   	       jsonObject.put("organization", "1"); // 直接put相同的key
+			   	       if(getStoreIdsByGroupIds.getData()!=null) {
 		//   		      	根据群组id列表查询群组下所有的店铺
 			   	          ResponseData<List<SysStorePo>>getStoreIds= storeServiceRpc.getIdStoreLists(getStoreIdsByGroupIds.getData());
 			   	          String[] str = new String[getStoreIds.getData().size()];
@@ -345,7 +350,8 @@ log.info("报表查询ReportIncomeController："+url+JSONObject.toJSONString(vip
 				             }
 		   		        	 jsonObject.put("organization", "1"); // 直接put相同的key
 		   		        	 jsonObject.put("organizationContent", str); // / 
-		   		      	} 	
+		   		      	  } 	
+		   		      	}
    		      	
  					} catch (Exception e) {
  						 e.printStackTrace();
