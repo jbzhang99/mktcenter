@@ -1081,7 +1081,7 @@ public class TaskServiceImpl implements TaskService {
         PageHelper.startPage(vo.getPageNumber(), vo.getPageSize());
         MktTaskPOExample mktTaskPOExample = new MktTaskPOExample();
         MktTaskPOExample.Criteria criteria = mktTaskPOExample.createCriteria();
-        criteria.andTaskTypeEqualTo(vo.getTaskType()).andSysBrandIdEqualTo(vo.getBrandId()).andValidEqualTo(Boolean.TRUE);
+        criteria.andTaskTypeEqualTo(vo.getTaskType()).andSysBrandIdEqualTo(vo.getBrandId());
         String taskName = vo.getTaskName();
         if (StringUtils.isNotBlank(taskName)){
           criteria.andTaskNameLike(new StringBuilder().append("%").append(taskName).append("%").toString());
