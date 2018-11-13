@@ -915,7 +915,10 @@ public class TaskServiceImpl implements TaskService {
         } else {
             task.setOneTaskCompleteCountMbr(0L);
         }
-
+        Integer taskDates = task.getTaskDates();
+        if (taskDates==null || taskDates<0){
+            task.setTaskDates(0);
+        }
         //查询短信数量
         genrealGetMessageVO.setTaskId(taskId);
         genrealGetMessageVO.setSysBrandId(sysBrandId);
