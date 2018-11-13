@@ -64,7 +64,7 @@ mybatis:
 logging:
   config: classpath:logback-local.xml
   level:
-    root: info
+    root: error
     com.bizvane.mktcenterserviceimpl.mappers: debug
 
 # pagehelper
