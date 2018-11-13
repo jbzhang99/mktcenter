@@ -290,7 +290,18 @@ public class ActivityServiceImpl implements ActivityService {
 
 
                 }
-
+                //判断百分比 默认0
+                if (null==activityAnalysisCount.getCouponUsedSumPercentage()){
+                    activityAnalysisCount.setCouponUsedSumPercentage(0+"%");
+                }
+                //活动金额默认0
+                if (null==activityAnalysisCount.getOrderAmountSum()){
+                    activityAnalysisCount.setOrderAmountSum(new BigDecimal(0));
+                }
+                //参与人次默认0
+                if (null==activityAnalysisCount.getParticipateNumber()){
+                    activityAnalysisCount.setParticipateNumber(0L);
+                }
             }
             log.info("循环结束时间+++++++"+ new SimpleDateFormat("yyyy/MM/dd-HH:mm:ss:SSS").format(new Date()));
         }
@@ -396,6 +407,7 @@ public class ActivityServiceImpl implements ActivityService {
                     activityMessageVO.setActivityStartDate(activityVO.getStartTime());
                     activityMessageVO.setActivityEndDate(activityVO.getEndTime());
                 }
+                activityMessageVO.setMemberName(memberInfo.getName());
                 awardBO.setActivityMessageVO(activityMessageVO);
                 awardBO.setMktType(MktSmartTypeEnum.SMART_TYPE_WXMESSAGE.getCode());
                 award.execute(awardBO);
@@ -468,6 +480,7 @@ public class ActivityServiceImpl implements ActivityService {
     public void sendCoupon(ActivitySmartVO vo, AwardBO awardBO, SendCouponSimpleRequestVO sendCouponSimpleRequestVO, MemberInfoModel memberInfo) {
         if (!org.springframework.util.CollectionUtils.isEmpty(vo.getMktCouponPOS())) {
             for (MktCouponPO mktCouponPO : vo.getMktCouponPOS()) {
+                sendCouponSimpleRequestVO.setBusinessName(vo.getActivityName());
                 sendCouponSimpleRequestVO.setMemberCode(memberInfo.getMemberCode());
                 sendCouponSimpleRequestVO.setCouponDefinitionId(mktCouponPO.getCouponDefinitionId());
                 sendCouponSimpleRequestVO.setSendBussienId(mktCouponPO.getBizId());
@@ -501,7 +514,11 @@ public class ActivityServiceImpl implements ActivityService {
                 if (activityVO.getActivityType()==ActivityTypeEnum.ACTIVITY_TYPE_REGISGER.getCode()){
                     activityMessageVO.setOpenId(wxChannelInfoVo.getWxOpenId());
                 }
-                activityMessageVO.setMemberCode(wxChannelInfoVo.getMemberCode());
+                if (null==wxChannelInfoVo.getMemberCode()){
+                    activityMessageVO.setMemberCode(String.valueOf(1));
+                }else{
+                    activityMessageVO.setMemberCode(wxChannelInfoVo.getMemberCode());
+                }
                 activityMessageVO.setSysCompanyId(activityVO.getSysCompanyId());
                 activityMessageVO.setSysBrandId(activityVO.getSysBrandId());
                 activityMessageVO.setSysBrandName(SysBrandPos.getData().getBrandName());

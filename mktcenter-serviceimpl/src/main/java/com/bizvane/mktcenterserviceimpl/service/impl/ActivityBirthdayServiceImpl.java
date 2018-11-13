@@ -687,6 +687,7 @@ public class ActivityBirthdayServiceImpl implements ActivityBirthdayService {
             List<MktCouponPO> mktCouponPOs= mktCouponPOMapper.selectByExample(example);
             for (MktCouponPO mktCouponPO:mktCouponPOs) {
                 SendCouponSimpleRequestVO va = new SendCouponSimpleRequestVO();
+                va.setBusinessName(activityBirthday.getActivityName());
                 va.setMemberCode(memberInfo.getMemberCode());
                 va.setCouponDefinitionId(mktCouponPO.getCouponDefinitionId());
                 va.setSendBussienId(mktCouponPO.getBizId());

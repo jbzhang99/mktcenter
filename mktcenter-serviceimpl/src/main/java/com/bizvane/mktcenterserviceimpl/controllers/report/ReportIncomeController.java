@@ -169,17 +169,20 @@ public class ReportIncomeController {
 		    			   	            	storeGroupIds.add(Long.parseLong(trLong));
 		    				             }
 		    			   	          ResponseData<List<Long>> getStoreIdsByGroupIds = storeGroupServiceRpc.getStoreIdsByGroupIds(storeGroupIds);
+		    			   	         jsonObject.put("organization", "1"); // 直接put相同的key
+		    			   	          if(getStoreIdsByGroupIds.getData()!=null) {
 		    		//   		      	根据群组id列表查询群组下所有的店铺
-		    			   	          ResponseData<List<SysStorePo>>getStoreIds= storeServiceRpc.getIdStoreLists(getStoreIdsByGroupIds.getData());
-		    			   	          String[] str = new String[getStoreIds.getData().size()];
-		    				             int i=0;
-		    				             for( SysStorePo sysStore : getStoreIds.getData()) {
-		    				            	 str[i++] = sysStore.getStoreId();
-		    				             }
-		    		   		        	 jsonObject.put("organization", "1"); // 直接put相同的key
-		    		   		        	 jsonObject.put("organizationContent", str); // / 
-		    		   		      	} 	
-		       		      	
+			    			   	          ResponseData<List<SysStorePo>>getStoreIds= storeServiceRpc.getIdStoreLists(getStoreIdsByGroupIds.getData());
+			    			   	          String[] str = new String[getStoreIds.getData().size()];
+			    				             int i=0;
+			    				             for( SysStorePo sysStore : getStoreIds.getData()) {
+			    				            	 str[i++] = sysStore.getStoreId();
+			    				             }
+			    		   		        	 jsonObject.put("organization", "1"); // 直接put相同的key
+			    		   		        	 jsonObject.put("organizationContent", str); // / 
+			    		   		      	} 
+		    			   	          
+		    		   		      	}
 		     					} catch (Exception e) {
 		    				    	 log.info("获取当前群主，所有店铺id出错");
 		    				    	 ResponseData<List<BackData>> ResponseData =new ResponseData<List<BackData>>();

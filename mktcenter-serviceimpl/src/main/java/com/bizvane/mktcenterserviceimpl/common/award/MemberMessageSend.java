@@ -284,6 +284,7 @@ public class MemberMessageSend {
                         sendCouponBatchRequestVO.setMemberList(memberInfoVoPages.getData().getList());
                         sendCouponBatchRequestVO.setCouponDefinitionId(mktCouponPO.getCouponDefinitionId());
                         sendCouponBatchRequestVO.setBusinessId(mktActivityPOWithBLOBs.getMktActivityId());
+                        sendCouponBatchRequestVO.setBusinessName(mktActivityPOWithBLOBs.getActivityName());
                         if (null!=mktActivityPOWithBLOBs.getMktActivitySmartGroupId()){
                             sendCouponBatchRequestVO.setBusinessType(SendTypeEnum.SEND_COUPON_ORIENT_MARKET.getCode());
                         }else {

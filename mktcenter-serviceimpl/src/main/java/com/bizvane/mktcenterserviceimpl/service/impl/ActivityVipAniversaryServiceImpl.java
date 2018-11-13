@@ -645,6 +645,7 @@ public class ActivityVipAniversaryServiceImpl implements ActivityVipAniversarySe
         List<MktCouponPO> mktCouponPOs= mktCouponPOMapper.selectByExample(example);
         for (MktCouponPO mktCouponPO:mktCouponPOs) {
             SendCouponSimpleRequestVO va = new SendCouponSimpleRequestVO();
+            va.setBusinessName(activityAniversary.getActivityName());
             va.setMemberCode(memberInfo.getMemberCode());
             va.setCouponDefinitionId(mktCouponPO.getCouponDefinitionId());
             va.setSendBussienId(mktCouponPO.getBizId());

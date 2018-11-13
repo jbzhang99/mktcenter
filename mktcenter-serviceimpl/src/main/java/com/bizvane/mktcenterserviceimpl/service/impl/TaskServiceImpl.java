@@ -131,6 +131,7 @@ public class TaskServiceImpl implements TaskService {
     private BrandServiceRpc brandServiceRpc;
     @Autowired
     private SendBatchMessageFeign sendBatchMessageFeign;
+
     /**
      * 通过id查询店铺列表
      */
@@ -914,7 +915,10 @@ public class TaskServiceImpl implements TaskService {
         } else {
             task.setOneTaskCompleteCountMbr(0L);
         }
-
+        Integer taskDates = task.getTaskDates();
+        if (taskDates==null || taskDates<0){
+            task.setTaskDates(0);
+        }
         //查询短信数量
         genrealGetMessageVO.setTaskId(taskId);
         genrealGetMessageVO.setSysBrandId(sysBrandId);
@@ -1077,7 +1081,7 @@ public class TaskServiceImpl implements TaskService {
         PageHelper.startPage(vo.getPageNumber(), vo.getPageSize());
         MktTaskPOExample mktTaskPOExample = new MktTaskPOExample();
         MktTaskPOExample.Criteria criteria = mktTaskPOExample.createCriteria();
-        criteria.andTaskTypeEqualTo(vo.getTaskType()).andSysBrandIdEqualTo(vo.getBrandId()).andValidEqualTo(Boolean.TRUE);
+        criteria.andTaskTypeEqualTo(vo.getTaskType()).andSysBrandIdEqualTo(vo.getBrandId());
         String taskName = vo.getTaskName();
         if (StringUtils.isNotBlank(taskName)){
           criteria.andTaskNameLike(new StringBuilder().append("%").append(taskName).append("%").toString());
@@ -1167,15 +1171,27 @@ public class TaskServiceImpl implements TaskService {
     public  List<Long>  getWhiteStoreIds(WhiteStoreVO vo){
         List<Long> storeIds = null;
         try{
-            String whiteStoreIds = mktTaskPOMapper.getWhiteStoreIds(vo);
-            if (StringUtils.isNotBlank(whiteStoreIds)){
-                storeIds = Arrays.asList(whiteStoreIds.split(",")).stream().filter(element -> StringUtils.isNotBlank(element)).
+            List<WhiteStoreResultVO> whiteStoreIds = mktTaskPOMapper.getWhiteStoreIds(vo);
+            if (CollectionUtils.isEmpty(whiteStoreIds)){
+               return storeIds;
+            }
+            WhiteStoreResultVO whiteStoreResultVO = whiteStoreIds.get(0);
+            String storeLimitType = whiteStoreResultVO.getStoreLimitType();
+            if (StringUtils.isNotBlank(storeLimitType)&&storeLimitType.contains("0")){
+                storeIds =brandServiceRpc.getStoreIdsByBrandId(vo.getSysbrandId()).getData();
+                return storeIds;
+            }
+            String storeLimitList = whiteStoreResultVO.getStoreLimitList();
+            if (StringUtils.isNotBlank(storeLimitList)){
+               storeIds =Arrays.asList(storeLimitList.split(",")).stream().filter(element -> StringUtils.isNotBlank(element)).
                         map(element -> Long.valueOf(element)).distinct().collect(Collectors.toList());
+                return storeIds;
             }
         }catch (Exception e){
             e.printStackTrace();
            log.info("getWhiteStoreIds--异常--");
         }finally {
+            log.info("getWhiteStoreIds---出参-----"+JSON.toJSONString(storeIds));
             return storeIds;
         }
     }

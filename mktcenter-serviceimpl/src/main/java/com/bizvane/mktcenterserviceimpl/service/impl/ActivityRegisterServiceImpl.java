@@ -435,6 +435,7 @@ public class ActivityRegisterServiceImpl implements ActivityRegisterService {
                         sendCouponSimpleRequestVO.setSendType(SendTypeEnum.SEND_COUPON_OPNE_CARD.getCode());
                         sendCouponSimpleRequestVO.setCompanyId(vo.getSysCompanyId());
                         sendCouponSimpleRequestVO.setBrandId(vo.getBrandId());
+                        sendCouponSimpleRequestVO.setBusinessName(activityVO.getActivityName());
                         awardBO.setSendCouponSimpleRequestVO(sendCouponSimpleRequestVO);
                         awardBO.setMktType(MktSmartTypeEnum.SMART_TYPE_COUPON.getCode());
                         log.info("开卡活动-开卡活动合格开始增加券+++++++++");
