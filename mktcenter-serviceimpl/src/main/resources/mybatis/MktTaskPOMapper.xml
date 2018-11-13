@@ -1338,8 +1338,8 @@
     <if test="startTime != null and startTime!= '' ">
     AND tmt.start_time &lt;=#{startTime,jdbcType=TIMESTAMP}
     </if>
-    <if test="endTime != null and endTime!= '' ">
-    AND tmt.end_time &gt;= #{endTime,jdbcType=TIMESTAMP}
+    <if test="startTime != null and startTime!= '' ">
+    AND tmt.end_time &gt;= #{startTime,jdbcType=TIMESTAMP}
     </if>
     AND tmt.check_status &lt;&gt; 4
     AND (tmt.task_status=1 OR tmt.task_status=2)
