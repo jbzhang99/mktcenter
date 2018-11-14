@@ -1025,18 +1025,19 @@ public class TaskServiceImpl implements TaskService {
         members.setBrandId(sendMessageVO.getSysBrandId());
         members.setPageNumber(pageNumber);
         members.setPageSize(pageSize);
-        // "会员范围:1微信会员，2全部会员"
-        members.setMemberScope(TaskConstants.ALL_MEMBER);
-       // 当except_wechat==true时,需要排除微信会员
         Boolean exceptWechat = sendMessageVO.getExceptWechat();
         log.info("getCompanyMemebers查询相应的会员--ExceptWechat--"+exceptWechat);
-        if (exceptWechat!=null && exceptWechat){
-            members.setMemberScope(TaskConstants.NO_WEXIN_MEMBER);
-        }
-        //当是完善资料任务时,查询完善资料和未完善资料的任务 消息类型，1模板消息，2短信',
+        // 会员范围(1:微信会员，2：全部会员(排除微信会员) 3真正的全部会员)
+        members.setMemberScope(TaskConstants.ALL_REALY_MEMBER);
+        //当是完善资料任务时,查询完善资料和未完善资料的任务
         if (TaskConstants.FIRST.equals(sendMessageVO.getTaskType())){
             members.setDataIntegrityPercentage(0);
         }
+        // 当except_wechat==true时,需要排除微信会员
+        if (exceptWechat!=null && exceptWechat){
+            members.setMemberScope(TaskConstants.ALL_MEMBER);
+        }
+
         ResponseData<com.bizvane.utils.responseinfo.PageInfo<MemberInfoModel>> memberInfo = memberInfoApiService.getMemberInfo(members);
         com.bizvane.utils.responseinfo.PageInfo<MemberInfoModel> data = memberInfo.getData();
         log.info("会员数据------出参---"+JSON.toJSONString(data));
