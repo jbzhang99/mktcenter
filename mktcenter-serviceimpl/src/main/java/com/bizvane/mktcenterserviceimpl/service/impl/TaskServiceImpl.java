@@ -11,6 +11,8 @@ import com.bizvane.centerstageservice.rpc.BrandServiceRpc;
 import com.bizvane.couponfacade.interfaces.CouponEntityServiceFeign;
 import com.bizvane.couponfacade.models.vo.CouponSendMemberListRequestVO;
 import com.bizvane.couponfacade.models.vo.CouponSendMemberListResponseVO;
+import com.bizvane.members.facade.service.api.IntegralChangeApiService;
+import com.bizvane.members.facade.service.card.response.IntegralChangeResponseModel;
 import com.bizvane.messagefacade.interfaces.SendBatchMessageFeign;
 import com.bizvane.messagefacade.interfaces.TemplateMessageServiceFeign;
 import com.bizvane.messagefacade.models.vo.*;
@@ -131,7 +133,8 @@ public class TaskServiceImpl implements TaskService {
     private BrandServiceRpc brandServiceRpc;
     @Autowired
     private SendBatchMessageFeign sendBatchMessageFeign;
-
+    @Autowired
+    private IntegralChangeApiService integralChangeApiService;
     /**
      * 通过id查询店铺列表
      */
@@ -659,11 +662,11 @@ public class TaskServiceImpl implements TaskService {
             integralRecordModel.setChangeType(IntegralChangeTypeEnum.INCOME.getCode());
             integralRecordModel.setChangeBills(taskCode);
             integralRecordModel.setChangeIntegral(orderAwardBO.getPoints());
-
-            bo.setMktType(MktSmartTypeEnum.SMART_TYPE_INTEGRAL.getCode());
-            bo.setIntegralRecordModel(integralRecordModel);
-            log.info("发送积分的参数--"+JSON.toJSONString(bo));
-            award.execute(bo);
+//            bo.setMktType(MktSmartTypeEnum.SMART_TYPE_INTEGRAL.getCode());
+//            bo.setIntegralRecordModel(integralRecordModel);
+            log.info("任务发送积分的参数--"+JSON.toJSONString(integralRecordModel));
+            IntegralChangeResponseModel integralChangeResponseModel =integralChangeApiService.integralChangeOperate(integralRecordModel);
+            log.info("任务发积分结果打印======"+JSON.toJSONString(integralChangeResponseModel));
         }
 
         if(CollectionUtils.isNotEmpty(mktCouponPOList)){
