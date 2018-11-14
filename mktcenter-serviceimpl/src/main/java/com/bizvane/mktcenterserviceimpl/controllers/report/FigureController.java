@@ -258,7 +258,31 @@ public class FigureController {
              // 导出表格
 	    	 String postTem = jsonObject.getString("postTem");
 	    	 if(StringUtils.isNotBlank(postTem)&&postTem.equals("export")){
-	    		 reportTempService.Export(currentUser,"_cycle",job.get("data").toString(),fileReportTempPOlist.get(0));
+	    		 
+		           String str1="";
+		           if(vipIncomeAnalysis.getIndicators().equals("0")) {
+		        	   str1="总收入（元）,会员收入（元）,非会员收入（元）,线上会员收入（元）,线下会员收入（元）";
+		           }else if(vipIncomeAnalysis.getIndicators().equals("1")) {
+		        	   str1=" 总人数,会员人数,非会员人数,线上会员人数,线下会员人数";
+		           }else if(vipIncomeAnalysis.getIndicators().equals("2")) {
+		        	   str1=" 总新增人数,会员新增人数,非会员新增人数,线上会员人数,线下会员人数";
+		           }else if(vipIncomeAnalysis.getIndicators().equals("3")) {
+		        	   str1=" 总件数,会员件数,非会员件数,线上会员件数,线下会员件数";
+		           }else if(vipIncomeAnalysis.getIndicators().equals("4")) {
+		        	   str1=" 总笔数,会员笔数,非会员笔数,线上会员笔数,线下会员笔数";
+		           }else if(vipIncomeAnalysis.getIndicators().equals("5")) {
+		        	   str1=" 件单价,会员件单价,非会员件单价,线上会员件单价,线下会员件单价";
+		           }else if(vipIncomeAnalysis.getIndicators().equals("6")) {
+		        	   str1=" 客单价,会员客单价,非会员客单价,线上会员客单价,线下会员客单价";
+		           }else if(vipIncomeAnalysis.getIndicators().equals("7")) {
+		        	   str1="连带率,会员连带率,非会员连带率,线上会员连带率,线下会员连带率";
+		           }else if(vipIncomeAnalysis.getIndicators().equals("8")) {
+		        	   str1="折扣率,会员折扣率,非会员折扣率,线上会员折扣率,线下会员折扣率";
+		           }
+	    		 
+		           FileReportTempPO fileReportTempPO=fileReportTempPOlist.get(0);
+		           fileReportTempPO.setReportData(str1);
+	    		 reportTempService.Export(currentUser,"_cycle",job.get("data").toString(),fileReportTempPO);
 	    		 ResponseData.setMessage("导出中");
 	    	 }else {
 	    		 ResponseData.setMessage(job.get("message").toString());
@@ -376,7 +400,30 @@ log.info("报表查询ReportIncomeController："+url+JSONObject.toJSONString(vip
            // 导出表格
 	    	 String postTem = jsonObject.getString("postTem");
 	    	 if(StringUtils.isNotBlank(postTem)&&postTem.equals("export")){
-	    		 reportTempService.Export(currentUser,"_cycle",job.get("data").toString(),fileReportTempPOlist.get(0));
+		           String str1="";
+		           if(vipIncomeAnalysis.getIndicators().equals("0")) {
+		        	   str1="总收入（元）,会员收入（元）,非会员收入（元）,线上会员收入（元）,线下会员收入（元）";
+		           }else if(vipIncomeAnalysis.getIndicators().equals("1")) {
+		        	   str1=" 总人数,会员人数,非会员人数,线上会员人数,线下会员人数";
+		           }else if(vipIncomeAnalysis.getIndicators().equals("2")) {
+		        	   str1=" 总新增人数,会员新增人数,非会员新增人数,线上会员人数,线下会员人数";
+		           }else if(vipIncomeAnalysis.getIndicators().equals("3")) {
+		        	   str1=" 总件数,会员件数,非会员件数,线上会员件数,线下会员件数";
+		           }else if(vipIncomeAnalysis.getIndicators().equals("4")) {
+		        	   str1=" 总笔数,会员笔数,非会员笔数,线上会员笔数,线下会员笔数";
+		           }else if(vipIncomeAnalysis.getIndicators().equals("5")) {
+		        	   str1=" 件单价,会员件单价,非会员件单价,线上会员件单价,线下会员件单价";
+		           }else if(vipIncomeAnalysis.getIndicators().equals("6")) {
+		        	   str1=" 客单价,会员客单价,非会员客单价,线上会员客单价,线下会员客单价";
+		           }else if(vipIncomeAnalysis.getIndicators().equals("7")) {
+		        	   str1="连带率,会员连带率,非会员连带率,线上会员连带率,线下会员连带率";
+		           }else if(vipIncomeAnalysis.getIndicators().equals("8")) {
+		        	   str1="折扣率,会员折扣率,非会员折扣率,线上会员折扣率,线下会员折扣率";
+		           }
+	    		 
+		           FileReportTempPO fileReportTempPO=fileReportTempPOlist.get(0);
+		           fileReportTempPO.setReportData(str1);
+	    		 reportTempService.Export(currentUser,"_cycle",job.get("data").toString(),fileReportTempPO);
 	    		 ResponseData.setMessage("导出中");
 	    	 }else {
 	    		 ResponseData.setMessage(job.get("message").toString());
