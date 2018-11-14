@@ -270,6 +270,7 @@ public class ActivityUpgradeServiceImpl implements ActivityUpgradeService {
         mktActivityUpgradePO.setMbrLevelCode(activityVO.getMbrLevelCode());
         mktActivityUpgradePO.setMbrLevelName(activityVO.getMbrLevelName());
         mktActivityUpgradePO.setIsStoreLimit(activityVO.getStoreLimit());
+        mktActivityUpgradePO.setMemberType(activityVO.getMemberType());
         if (true==activityVO.getStoreLimit()){
             mktActivityUpgradePO.setStoreLimitList(activityVO.getStoreLimitList());
             mktActivityUpgradePO.setStoreLimitType(activityVO.getStoreLimitType());
@@ -580,12 +581,7 @@ public class ActivityUpgradeServiceImpl implements ActivityUpgradeService {
         ResponseData responseData = new ResponseData();
         log.info("执行升级活动开始开始了开始了开始了开始了开始了");
         log.info("执行升级活动参数="+ JSON.toJSONString(vo));
-        if (null==vo.getServiceStoreId()){
-            responseData.setCode(SysResponseEnum.MODEL_FAILED_VALIDATION.getCode());
-            responseData.setMessage("服务门店为NULL!");
-            log.info("服务门店为NULL!");
-            return responseData;
-        }
+        log.info("服务门店为!======================="+vo.getServiceStoreId());
         //查询品牌下所有执行中的活动
         ActivityVO activity = new ActivityVO();
         activity.setActivityStatus(ActivityStatusEnum.ACTIVITY_STATUS_EXECUTING.getCode());
@@ -629,6 +625,7 @@ public class ActivityUpgradeServiceImpl implements ActivityUpgradeService {
                 for (MktCouponPO mktCouponPO:mktCouponPOs) {
                     AwardBO awardBO = new AwardBO();
                     SendCouponSimpleRequestVO sendCouponSimpleRequestVO = new SendCouponSimpleRequestVO();
+                    sendCouponSimpleRequestVO.setBusinessName(activityVO.getActivityName());
                     sendCouponSimpleRequestVO.setMemberCode(vo.getMemberCode());
                     sendCouponSimpleRequestVO.setCouponDefinitionId(mktCouponPO.getCouponDefinitionId());
                     sendCouponSimpleRequestVO.setSendBussienId(mktCouponPO.getBizId());

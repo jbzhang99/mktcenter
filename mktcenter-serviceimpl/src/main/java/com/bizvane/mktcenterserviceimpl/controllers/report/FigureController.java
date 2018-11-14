@@ -219,6 +219,8 @@ public class FigureController {
 				   	            	storeGroupIds.add(Long.parseLong(trLong));
 					             }
 				   	          ResponseData<List<Long>> getStoreIdsByGroupIds = storeGroupServiceRpc.getStoreIdsByGroupIds(storeGroupIds);
+				   	       jsonObject.put("organization", "1"); // 直接put相同的key
+				   	       if(getStoreIdsByGroupIds.getData()!=null) {
 			//   		      	根据群组id列表查询群组下所有的店铺
 				   	          ResponseData<List<SysStorePo>>getStoreIds= storeServiceRpc.getIdStoreLists(getStoreIdsByGroupIds.getData());
 				   	          String[] str = new String[getStoreIds.getData().size()];
@@ -228,6 +230,7 @@ public class FigureController {
 					             }
 			   		        	 jsonObject.put("organization", "1"); // 直接put相同的key
 			   		        	 jsonObject.put("organizationContent", str); // / 
+				   	       }
 			   		      	} 	
 	   		      	
 	 					} catch (Exception e) {
@@ -255,7 +258,31 @@ public class FigureController {
              // 导出表格
 	    	 String postTem = jsonObject.getString("postTem");
 	    	 if(StringUtils.isNotBlank(postTem)&&postTem.equals("export")){
-	    		 reportTempService.Export(currentUser,"_cycle",job.get("data").toString(),fileReportTempPOlist.get(0));
+	    		 //1表会员
+		           String str1="";
+		           if(vipIncomeAnalysis.getIndicators().equals("0")) {
+		        	   str1=" 时间,总会员收入（元）,会员收入（元）,非会员收入（元）,线上会员收入（元）,线下会员收入（元）";
+		           }else if(vipIncomeAnalysis.getIndicators().equals("1")) {
+		        	   str1=" 时间,总人数,会员人数,非会员人数,线上会员人数,线下会员人数";
+		           }else if(vipIncomeAnalysis.getIndicators().equals("2")) {
+		        	   str1=" 时间,总新增人数,会员新增人数,非会员新增人数,线上会员人数,线下会员人数";
+		           }else if(vipIncomeAnalysis.getIndicators().equals("3")) {
+		        	   str1=" 时间,总件数,会员件数,非会员件数,线上会员件数,线下会员件数";
+		           }else if(vipIncomeAnalysis.getIndicators().equals("4")) {
+		        	   str1=" 时间,总笔数,会员笔数,非会员笔数,线上会员笔数,线下会员笔数";
+		           }else if(vipIncomeAnalysis.getIndicators().equals("5")) {
+		        	   str1=" 时间,件单价,会员件单价,非会员件单价,线上会员件单价,线下会员件单价";
+		           }else if(vipIncomeAnalysis.getIndicators().equals("6")) {
+		        	   str1=" 时间,总客单价,会员客单价,非会员客单价,线上会员客单价,线下会员客单价";
+		           }else if(vipIncomeAnalysis.getIndicators().equals("7")) {
+		        	   str1=" 时间,连带率,会员连带率,非会员连带率,线上会员连带率,线下会员连带率";
+		           }else if(vipIncomeAnalysis.getIndicators().equals("8")) {
+		        	   str1=" 时间,折扣率,会员折扣率,非会员折扣率,线上会员折扣率,线下会员折扣率";
+		           }
+	    		 
+		           FileReportTempPO fileReportTempPO=fileReportTempPOlist.get(0);
+		           fileReportTempPO.setReportData(str1);
+	    		 reportTempService.Export(currentUser,"_cycle",job.get("data").toString(),fileReportTempPO);
 	    		 ResponseData.setMessage("导出中");
 	    	 }else {
 	    		 ResponseData.setMessage(job.get("message").toString());
@@ -336,6 +363,8 @@ log.info("报表查询ReportIncomeController："+url+JSONObject.toJSONString(vip
 			   	            	storeGroupIds.add(Long.parseLong(trLong));
 				             }
 			   	          ResponseData<List<Long>> getStoreIdsByGroupIds = storeGroupServiceRpc.getStoreIdsByGroupIds(storeGroupIds);
+			   	       jsonObject.put("organization", "1"); // 直接put相同的key
+			   	       if(getStoreIdsByGroupIds.getData()!=null) {
 		//   		      	根据群组id列表查询群组下所有的店铺
 			   	          ResponseData<List<SysStorePo>>getStoreIds= storeServiceRpc.getIdStoreLists(getStoreIdsByGroupIds.getData());
 			   	          String[] str = new String[getStoreIds.getData().size()];
@@ -345,7 +374,8 @@ log.info("报表查询ReportIncomeController："+url+JSONObject.toJSONString(vip
 				             }
 		   		        	 jsonObject.put("organization", "1"); // 直接put相同的key
 		   		        	 jsonObject.put("organizationContent", str); // / 
-		   		      	} 	
+		   		      	  } 	
+		   		      	}
    		      	
  					} catch (Exception e) {
  						 e.printStackTrace();
@@ -370,7 +400,31 @@ log.info("报表查询ReportIncomeController："+url+JSONObject.toJSONString(vip
            // 导出表格
 	    	 String postTem = jsonObject.getString("postTem");
 	    	 if(StringUtils.isNotBlank(postTem)&&postTem.equals("export")){
-	    		 reportTempService.Export(currentUser,"_cycle",job.get("data").toString(),fileReportTempPOlist.get(0));
+          //	    		 表2
+		           String str1="";
+		           if(vipIncomeAnalysis.getIndicators().equals("0")) {
+		        	   str1=" 时间,会员总收入金额,新会员收入金额,老会员收入金额,活跃会员收入金额,非活跃会员收入金额";
+		           }else if(vipIncomeAnalysis.getIndicators().equals("1")) {
+		        	   str1=" 时间,会员总人数,新会员人数,老会员人数,活跃会员人数,非活跃会员人数";
+		           }else if(vipIncomeAnalysis.getIndicators().equals("2")) {
+		        	   str1=" 时间,会员总新增人数,新会员新增人数,老会员新增人数,活跃会员新增人数,非活跃会员新增人数";
+		           }else if(vipIncomeAnalysis.getIndicators().equals("3")) {
+		        	   str1=" 时间,会员总件数,新会员件数,老会员件数,活跃会员件数,非活跃会员件数";
+		           }else if(vipIncomeAnalysis.getIndicators().equals("4")) {
+		        	   str1=" 时间,会员总笔数,新会员笔数,老会员笔数,活跃会员笔数,非活跃会员笔数";
+		           }else if(vipIncomeAnalysis.getIndicators().equals("5")) {
+		        	   str1=" 时间,会员总件单价,新会员件单价,老会员件单价,活跃会员件单价,非活跃会员件单价";
+		           }else if(vipIncomeAnalysis.getIndicators().equals("6")) {
+		        	   str1=" 时间,会员总客单价,新会员客单价,老会员客单价,活跃会员客单价,非活跃会员客单价";
+		           }else if(vipIncomeAnalysis.getIndicators().equals("7")) {
+		        	   str1=" 时间,会员总连带率,新会员连带率,老会员连带率,活跃会员连带率,非活跃会员连带率";
+		           }else if(vipIncomeAnalysis.getIndicators().equals("8")) {
+		        	   str1=" 时间,会员总折扣率,新会员折扣率,老会员折扣率,活跃会员折扣率,非活跃会员折扣率";
+		           }
+	    		 
+		           FileReportTempPO fileReportTempPO=fileReportTempPOlist.get(0);
+		           fileReportTempPO.setReportData(str1);
+	    		 reportTempService.Export(currentUser,"_cycle",job.get("data").toString(),fileReportTempPO);
 	    		 ResponseData.setMessage("导出中");
 	    	 }else {
 	    		 ResponseData.setMessage(job.get("message").toString());

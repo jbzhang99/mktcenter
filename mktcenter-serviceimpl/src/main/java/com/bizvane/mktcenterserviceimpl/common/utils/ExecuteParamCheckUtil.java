@@ -199,10 +199,15 @@ public class ExecuteParamCheckUtil {
         } else {
             //判断是白名单
             if (activityVO.getStoreLimitType()==2) {
-                //表里查出来的
-                String stroeList = activityVO.getStoreLimitList();
-                List<String> productNoList = Arrays.asList(stroeList.split(","));
-                falg=productNoList.contains(vo.getServiceStoreId().toString());
+                if (null!=vo.getServiceStoreId()){
+                    //表里查出来的
+                    String stroeList = activityVO.getStoreLimitList();
+                    List<String> productNoList = Arrays.asList(stroeList.split(","));
+                    falg=productNoList.contains(vo.getServiceStoreId().toString());
+                }else{
+                    falg = false;
+                }
+
 
             }
             //判断是否是白名单

@@ -1,5 +1,6 @@
 package com.bizvane.mktcenterserviceimpl.controllers.rpc;
 
+import com.alibaba.fastjson.JSON;
 import com.bizvane.mktcenterservice.interfaces.ActivityService;
 import com.bizvane.mktcenterservice.interfaces.TaskService;
 import com.bizvane.mktcenterservice.models.vo.WhiteStoreVO;
@@ -29,8 +30,13 @@ public class TaskRpcController {
      */
     @RequestMapping("getWhiteStoreIds")
     public List<Long> getWhiteStoreIds(@RequestBody WhiteStoreVO vo){
+        log.info("---getWhiteStoreIds---入参---"+ JSON.toJSONString(vo));
         List<Long> lists = null;
         if (null!=vo.getTaskType()){
+            if (vo.getTaskType()!=1 && (vo.getEndTime()==null || vo.getStartTime()==null)){
+            log.info("在查询非完善资料任务时,开始时间或结束时间为null,参数不合格!");
+            return lists;
+            }
             lists = taskService.getWhiteStoreIds(vo);
         }else if (null!=vo.getActivityType()){
             lists = activityService.getActivityWhiteStoreIds(vo);

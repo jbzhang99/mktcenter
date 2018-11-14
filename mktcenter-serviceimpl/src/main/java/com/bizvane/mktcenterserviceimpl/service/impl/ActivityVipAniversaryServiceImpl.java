@@ -536,10 +536,7 @@ public class ActivityVipAniversaryServiceImpl implements ActivityVipAniversarySe
     @Async("asyncServiceExecutor")
     public void AniversaryReward(ActivityVO activityAniversary, MemberInfoModel memberInfo) {
         log.info("纪念日活动发送奖励开始");
-        if (null==memberInfo.getServiceStoreId()){
-            log.info("服务门店为NULL!");
-            return ;
-        }
+        log.info("服务门店为NULL!==========="+memberInfo.getServiceStoreId());
             //判断生日适用门店信息
             if (!ExecuteParamCheckUtil.implementActivitCheck(memberInfo,activityAniversary)){
                 return;
@@ -645,6 +642,7 @@ public class ActivityVipAniversaryServiceImpl implements ActivityVipAniversarySe
         List<MktCouponPO> mktCouponPOs= mktCouponPOMapper.selectByExample(example);
         for (MktCouponPO mktCouponPO:mktCouponPOs) {
             SendCouponSimpleRequestVO va = new SendCouponSimpleRequestVO();
+            va.setBusinessName(activityAniversary.getActivityName());
             va.setMemberCode(memberInfo.getMemberCode());
             va.setCouponDefinitionId(mktCouponPO.getCouponDefinitionId());
             va.setSendBussienId(mktCouponPO.getBizId());

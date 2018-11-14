@@ -214,7 +214,7 @@ public class ReportGroupController {
 	     FileReportTempPOExample example = new FileReportTempPOExample();
 	     example.createCriteria().andTemplateTypeEqualTo("newOldMemberInterfaceGroup").andValidEqualTo(Boolean.TRUE);
 	     List<FileReportTempPO>  FileReportTempPOlist = fileReportTempPOMapper.selectByExample(example);
-   	 return sendpostHaveTime(BaseUrl.getLoadUrl("newOldMemberInterfaceGroup"),sendVO,FileReportTempPOlist,sysAccountPO);
+   	 return sendpostHaveTime(BaseUrl.getLoadUrl("newOldMemberPtInterface"),sendVO,FileReportTempPOlist,sysAccountPO);
    }
    
 // 08活跃会员表汇总
@@ -224,7 +224,7 @@ public class ReportGroupController {
 	     FileReportTempPOExample example = new FileReportTempPOExample();
 	     example.createCriteria().andTemplateTypeEqualTo("activeMemberAllInterfaceGroup").andValidEqualTo(Boolean.TRUE);
 	     List<FileReportTempPO>  FileReportTempPOlist = fileReportTempPOMapper.selectByExample(example);
-   	 return sendpostHaveTime(BaseUrl.getLoadUrl("activeMemberAllInterfaceGroup"),sendVO,FileReportTempPOlist,sysAccountPO);
+   	 return sendpostHaveTime(BaseUrl.getLoadUrl("activeMemberParticleInterface"),sendVO,FileReportTempPOlist,sysAccountPO);
    }
    
 // 09复购-会员表汇总
@@ -234,7 +234,7 @@ public class ReportGroupController {
 	     FileReportTempPOExample example = new FileReportTempPOExample();
 	     example.createCriteria().andTemplateTypeEqualTo("rePurchaseMemberAllInterfaceGroup").andValidEqualTo(Boolean.TRUE);
 	     List<FileReportTempPO>  FileReportTempPOlist = fileReportTempPOMapper.selectByExample(example);
-   	 return sendpostHaveTime(BaseUrl.getLoadUrl("rePurchaseMemberAllInterfaceGroup"),sendVO,FileReportTempPOlist,sysAccountPO);
+   	 return sendpostHaveTime(BaseUrl.getLoadUrl("rePurchaseMemberParticleInterface"),sendVO,FileReportTempPOlist,sysAccountPO);
    }
    
 // 10回购-会员表汇总
@@ -340,6 +340,8 @@ public class ReportGroupController {
 			   	            	storeGroupIds.add(Long.parseLong(trLong));
 				             }
 			   	          ResponseData<List<Long>> getStoreIdsByGroupIds = storeGroupServiceRpc.getStoreIdsByGroupIds(storeGroupIds);
+			   	       jsonObject.put("organization", "1"); // 直接put相同的key
+			   	       if(getStoreIdsByGroupIds.getData()!=null) {
 		//   		      	根据群组id列表查询群组下所有的店铺
 			   	          ResponseData<List<SysStorePo>>getStoreIds= storeServiceRpc.getIdStoreLists(getStoreIdsByGroupIds.getData());
 			   	          String[] str = new String[getStoreIds.getData().size()];
@@ -349,7 +351,8 @@ public class ReportGroupController {
 				             }
 		   		        	 jsonObject.put("organization", "1"); // 直接put相同的key
 		   		        	 jsonObject.put("organizationContent", str); // / 
-		   		      	} 	
+		   		      	 } 	
+		   		      	}
    		      	
  					} catch (Exception e) {
 				    	 log.info("获取当前群主，所有店铺id出错");

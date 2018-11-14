@@ -578,10 +578,7 @@ public class ActivityBirthdayServiceImpl implements ActivityBirthdayService {
     @Async("asyncServiceExecutor")
     public void birthdayReward(ActivityVO activityBirthday, MemberInfoModel memberInfo) {
         log.info("执行生日活动开始开始了开始了开始了开始了开始了");
-        if (null==memberInfo.getServiceStoreId()){
-            log.info("服务门店为NULL!");
-            return ;
-        }
+            log.info("服务门店为NULL!==========="+memberInfo.getServiceStoreId());
 //        for (MemberInfoModel memberInfo:memberInfoModelList) {
             //判断生日适用门店信息
             if (!ExecuteParamCheckUtil.implementActivitCheck(memberInfo,activityBirthday)){
@@ -687,6 +684,7 @@ public class ActivityBirthdayServiceImpl implements ActivityBirthdayService {
             List<MktCouponPO> mktCouponPOs= mktCouponPOMapper.selectByExample(example);
             for (MktCouponPO mktCouponPO:mktCouponPOs) {
                 SendCouponSimpleRequestVO va = new SendCouponSimpleRequestVO();
+                va.setBusinessName(activityBirthday.getActivityName());
                 va.setMemberCode(memberInfo.getMemberCode());
                 va.setCouponDefinitionId(mktCouponPO.getCouponDefinitionId());
                 va.setSendBussienId(mktCouponPO.getBizId());
