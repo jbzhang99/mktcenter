@@ -153,7 +153,7 @@ public class TaskServiceImpl implements TaskService {
      * 查询短信数量
      */
     @Override
-    public String searchSmsNum(GenrealGetMessageVO vo){
+    public synchronized String searchSmsNum(GenrealGetMessageVO vo){
         log.info("获取短信接口参数===="+JSON.toJSONString(vo));
         String result="0/0";
         try{
