@@ -405,20 +405,16 @@ log.info("报表查询ReportIncomeController："+url+JSONObject.toJSONString(vip
 		           if(vipIncomeAnalysis.getIndicators().equals("0")) {
 		        	   str1=" 时间,会员总收入金额,新会员收入金额,老会员收入金额,活跃会员收入金额,非活跃会员收入金额";
 		           }else if(vipIncomeAnalysis.getIndicators().equals("1")) {
-		        	   str1=" 时间,会员总人数,新会员人数,老会员人数,活跃会员人数,非活跃会员人数";
-		           }else if(vipIncomeAnalysis.getIndicators().equals("2")) {
-		        	   str1=" 时间,会员总新增人数,新会员新增人数,老会员新增人数,活跃会员新增人数,非活跃会员新增人数";
-		           }else if(vipIncomeAnalysis.getIndicators().equals("3")) {
 		        	   str1=" 时间,会员总件数,新会员件数,老会员件数,活跃会员件数,非活跃会员件数";
-		           }else if(vipIncomeAnalysis.getIndicators().equals("4")) {
+		           }else if(vipIncomeAnalysis.getIndicators().equals("2")) {
 		        	   str1=" 时间,会员总笔数,新会员笔数,老会员笔数,活跃会员笔数,非活跃会员笔数";
-		           }else if(vipIncomeAnalysis.getIndicators().equals("5")) {
+		           }else if(vipIncomeAnalysis.getIndicators().equals("3")) {
 		        	   str1=" 时间,会员总件单价,新会员件单价,老会员件单价,活跃会员件单价,非活跃会员件单价";
-		           }else if(vipIncomeAnalysis.getIndicators().equals("6")) {
+		           }else if(vipIncomeAnalysis.getIndicators().equals("4")) {
 		        	   str1=" 时间,会员总客单价,新会员客单价,老会员客单价,活跃会员客单价,非活跃会员客单价";
-		           }else if(vipIncomeAnalysis.getIndicators().equals("7")) {
+		           }else if(vipIncomeAnalysis.getIndicators().equals("5")) {
 		        	   str1=" 时间,会员总连带率,新会员连带率,老会员连带率,活跃会员连带率,非活跃会员连带率";
-		           }else if(vipIncomeAnalysis.getIndicators().equals("8")) {
+		           }else if(vipIncomeAnalysis.getIndicators().equals("6")) {
 		        	   str1=" 时间,会员总折扣率,新会员折扣率,老会员折扣率,活跃会员折扣率,非活跃会员折扣率";
 		           }
 	    		 
