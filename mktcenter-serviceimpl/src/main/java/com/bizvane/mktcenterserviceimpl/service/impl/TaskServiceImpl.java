@@ -163,7 +163,8 @@ public class TaskServiceImpl implements TaskService {
             if (data!=null){
                 Long allCountSms = data.getAllCountSms();
                 Long failedSms = data.getFailedSms();
-                StringBuilder builder = new StringBuilder();
+               // StringBuilder builder = new StringBuilder();
+                StringBuffer builder = new StringBuffer();
                 builder.append(failedSms);
                 builder.append("/");
                 builder.append(allCountSms);
