@@ -153,7 +153,7 @@ public class TaskServiceImpl implements TaskService {
      * 查询短信数量
      */
     @Override
-    public synchronized String searchSmsNum(GenrealGetMessageVO vo){
+    public  String searchSmsNum(GenrealGetMessageVO vo){
         log.info("获取短信接口参数===="+JSON.toJSONString(vo));
         String result="0/0";
         try{
@@ -840,10 +840,6 @@ public class TaskServiceImpl implements TaskService {
         vo.setBrandId(sysBrandId);
         //任务类型
         Integer taskType = vo.getTaskType();
-        GenrealGetMessageVO genrealGetMessageVO=new  GenrealGetMessageVO();
-//        genrealGetMessageVO.setSysBrandId(sysBrandId);
-//        genrealGetMessageVO.setTemplateType(String.valueOf(taskType));
-
         //每个任务的券,积分,会员 总数
         PageHelper.startPage(vo.getPageNumber(),vo.getPageSize());
         List<DayTaskRecordVo> analysisall = mktTaskRecordPOMapper.getAnalysisResult(vo);
@@ -867,7 +863,7 @@ public class TaskServiceImpl implements TaskService {
             ArrayList<Future<DayTaskRecordVo>> dayTaskRecordVos = new ArrayList<>();
             analysislists.parallelStream().forEach(task->{
                 Future<DayTaskRecordVo> submit = asyncExecutor.submit(() -> {
-                    return this.getAnalysisData(sysBrandId, taskType, genrealGetMessageVO, task, asyncExecutor);
+                    return this.getAnalysisData(sysBrandId, taskType, task, asyncExecutor);
                 });
                 dayTaskRecordVos.add(submit);
             });
@@ -904,7 +900,7 @@ public class TaskServiceImpl implements TaskService {
         return result;
     }
 
-    private DayTaskRecordVo getAnalysisData(Long sysBrandId, Integer taskType, GenrealGetMessageVO genrealGetMessageVO , DayTaskRecordVo task,ThreadPoolExecutor asyncExecutor) {
+    private DayTaskRecordVo getAnalysisData(Long sysBrandId, Integer taskType,DayTaskRecordVo task,ThreadPoolExecutor asyncExecutor) {
         Long taskId = task.getTaskId();
         //查询每个任务的完成人数
         MktTaskRecordPOExample example=new MktTaskRecordPOExample();
@@ -921,6 +917,7 @@ public class TaskServiceImpl implements TaskService {
             task.setTaskDates(0);
         }
         //查询短信数量
+        GenrealGetMessageVO genrealGetMessageVO = new GenrealGetMessageVO();
         genrealGetMessageVO.setTaskId(taskId);
         genrealGetMessageVO.setSysBrandId(sysBrandId);
         String msgNUM = this.searchSmsNum(genrealGetMessageVO);
