@@ -321,9 +321,17 @@ public class ActivitySigninServiceImpl implements ActivitySigninService {
             responseData.setMessage(SysResponseEnum.OPERATE_FAILED_DATA_NOT_EXISTS.getMessage());
             return responseData;
         }
+        int a =0;
         for (ActivityVO activityVO:signinList) {
             //过滤门店
             if (!ExecuteParamCheckUtil.implementActivitCheck(vo,activityVO)){
+                //判断如果没有合适的提示它没有合适的活动
+                a+=1;
+                if(a==signinList.size()){
+                    responseData.setCode(SysResponseEnum.FAILED.getCode());
+                    responseData.setMessage("没有适用的签到活动哦");
+                    return responseData;
+                }
                 continue;
             }
             //增加积分奖励新增接口
