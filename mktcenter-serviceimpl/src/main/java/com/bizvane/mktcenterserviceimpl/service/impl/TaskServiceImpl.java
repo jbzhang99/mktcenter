@@ -11,6 +11,8 @@ import com.bizvane.centerstageservice.rpc.BrandServiceRpc;
 import com.bizvane.couponfacade.interfaces.CouponEntityServiceFeign;
 import com.bizvane.couponfacade.models.vo.CouponSendMemberListRequestVO;
 import com.bizvane.couponfacade.models.vo.CouponSendMemberListResponseVO;
+import com.bizvane.members.facade.service.api.IntegralChangeApiService;
+import com.bizvane.members.facade.service.card.response.IntegralChangeResponseModel;
 import com.bizvane.messagefacade.interfaces.SendBatchMessageFeign;
 import com.bizvane.messagefacade.interfaces.TemplateMessageServiceFeign;
 import com.bizvane.messagefacade.models.vo.*;
@@ -131,7 +133,8 @@ public class TaskServiceImpl implements TaskService {
     private BrandServiceRpc brandServiceRpc;
     @Autowired
     private SendBatchMessageFeign sendBatchMessageFeign;
-
+    @Autowired
+    private IntegralChangeApiService integralChangeApiService;
     /**
      * 通过id查询店铺列表
      */
@@ -153,7 +156,7 @@ public class TaskServiceImpl implements TaskService {
      * 查询短信数量
      */
     @Override
-    public String searchSmsNum(GenrealGetMessageVO vo){
+    public  String searchSmsNum(GenrealGetMessageVO vo){
         log.info("获取短信接口参数===="+JSON.toJSONString(vo));
         String result="0/0";
         try{
@@ -163,7 +166,8 @@ public class TaskServiceImpl implements TaskService {
             if (data!=null){
                 Long allCountSms = data.getAllCountSms();
                 Long failedSms = data.getFailedSms();
-                StringBuilder builder = new StringBuilder();
+               // StringBuilder builder = new StringBuilder();
+                StringBuffer builder = new StringBuffer();
                 builder.append(failedSms);
                 builder.append("/");
                 builder.append(allCountSms);
@@ -658,11 +662,11 @@ public class TaskServiceImpl implements TaskService {
             integralRecordModel.setChangeType(IntegralChangeTypeEnum.INCOME.getCode());
             integralRecordModel.setChangeBills(taskCode);
             integralRecordModel.setChangeIntegral(orderAwardBO.getPoints());
-
-            bo.setMktType(MktSmartTypeEnum.SMART_TYPE_INTEGRAL.getCode());
-            bo.setIntegralRecordModel(integralRecordModel);
-            log.info("发送积分的参数--"+JSON.toJSONString(bo));
-            award.execute(bo);
+//            bo.setMktType(MktSmartTypeEnum.SMART_TYPE_INTEGRAL.getCode());
+//            bo.setIntegralRecordModel(integralRecordModel);
+            log.info("任务发送积分的参数--"+JSON.toJSONString(integralRecordModel));
+            IntegralChangeResponseModel integralChangeResponseModel =integralChangeApiService.integralChangeOperate(integralRecordModel);
+            log.info("任务发积分结果打印======"+JSON.toJSONString(integralChangeResponseModel));
         }
 
         if(CollectionUtils.isNotEmpty(mktCouponPOList)){
@@ -839,10 +843,6 @@ public class TaskServiceImpl implements TaskService {
         vo.setBrandId(sysBrandId);
         //任务类型
         Integer taskType = vo.getTaskType();
-        GenrealGetMessageVO genrealGetMessageVO=new  GenrealGetMessageVO();
-//        genrealGetMessageVO.setSysBrandId(sysBrandId);
-//        genrealGetMessageVO.setTemplateType(String.valueOf(taskType));
-
         //每个任务的券,积分,会员 总数
         PageHelper.startPage(vo.getPageNumber(),vo.getPageSize());
         List<DayTaskRecordVo> analysisall = mktTaskRecordPOMapper.getAnalysisResult(vo);
@@ -866,7 +866,7 @@ public class TaskServiceImpl implements TaskService {
             ArrayList<Future<DayTaskRecordVo>> dayTaskRecordVos = new ArrayList<>();
             analysislists.parallelStream().forEach(task->{
                 Future<DayTaskRecordVo> submit = asyncExecutor.submit(() -> {
-                    return this.getAnalysisData(sysBrandId, taskType, genrealGetMessageVO, task, asyncExecutor);
+                    return this.getAnalysisData(sysBrandId, taskType, task, asyncExecutor);
                 });
                 dayTaskRecordVos.add(submit);
             });
@@ -903,7 +903,7 @@ public class TaskServiceImpl implements TaskService {
         return result;
     }
 
-    private DayTaskRecordVo getAnalysisData(Long sysBrandId, Integer taskType, GenrealGetMessageVO genrealGetMessageVO , DayTaskRecordVo task,ThreadPoolExecutor asyncExecutor) {
+    private DayTaskRecordVo getAnalysisData(Long sysBrandId, Integer taskType,DayTaskRecordVo task,ThreadPoolExecutor asyncExecutor) {
         Long taskId = task.getTaskId();
         //查询每个任务的完成人数
         MktTaskRecordPOExample example=new MktTaskRecordPOExample();
@@ -920,6 +920,7 @@ public class TaskServiceImpl implements TaskService {
             task.setTaskDates(0);
         }
         //查询短信数量
+        GenrealGetMessageVO genrealGetMessageVO = new GenrealGetMessageVO();
         genrealGetMessageVO.setTaskId(taskId);
         genrealGetMessageVO.setSysBrandId(sysBrandId);
         String msgNUM = this.searchSmsNum(genrealGetMessageVO);
@@ -1024,18 +1025,19 @@ public class TaskServiceImpl implements TaskService {
         members.setBrandId(sendMessageVO.getSysBrandId());
         members.setPageNumber(pageNumber);
         members.setPageSize(pageSize);
-        // "会员范围:1微信会员，2全部会员"
-        members.setMemberScope(TaskConstants.ALL_MEMBER);
-       // 当except_wechat==true时,需要排除微信会员
         Boolean exceptWechat = sendMessageVO.getExceptWechat();
         log.info("getCompanyMemebers查询相应的会员--ExceptWechat--"+exceptWechat);
-        if (exceptWechat!=null && exceptWechat){
-            members.setMemberScope(TaskConstants.NO_WEXIN_MEMBER);
-        }
-        //当是完善资料任务时,查询完善资料和未完善资料的任务 消息类型，1模板消息，2短信',
+        // 会员范围(1:微信会员，2：全部会员(排除微信会员) 3真正的全部会员)
+        members.setMemberScope(TaskConstants.ALL_REALY_MEMBER);
+        //当是完善资料任务时,查询完善资料和未完善资料的任务
         if (TaskConstants.FIRST.equals(sendMessageVO.getTaskType())){
             members.setDataIntegrityPercentage(0);
         }
+        // 当except_wechat==true时,需要排除微信会员
+        if (exceptWechat!=null && exceptWechat){
+            members.setMemberScope(TaskConstants.ALL_MEMBER);
+        }
+
         ResponseData<com.bizvane.utils.responseinfo.PageInfo<MemberInfoModel>> memberInfo = memberInfoApiService.getMemberInfo(members);
         com.bizvane.utils.responseinfo.PageInfo<MemberInfoModel> data = memberInfo.getData();
         log.info("会员数据------出参---"+JSON.toJSONString(data));
@@ -1170,6 +1172,14 @@ public class TaskServiceImpl implements TaskService {
     @Override
     public  List<Long>  getWhiteStoreIds(WhiteStoreVO vo){
         List<Long> storeIds = null;
+        Date startTime = vo.getStartTime();
+        Date endTime = vo.getEndTime();
+        if (startTime!=null){
+            vo.setDate1(TimeUtils.formatter.format(startTime));
+        }
+        if (endTime!=null){
+            vo.setDate2(TimeUtils.formatter.format(endTime));
+        }
         try{
             List<WhiteStoreResultVO> whiteStoreIds = mktTaskPOMapper.getWhiteStoreIds(vo);
             if (CollectionUtils.isEmpty(whiteStoreIds)){

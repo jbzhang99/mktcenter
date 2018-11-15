@@ -1,8 +1,12 @@
 package com.bizvane.mktcenterserviceimpl.controllers.report;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -261,6 +265,7 @@ public class ReportIncomeController {
 //		    	 查询条数
 		    	 int tiaoshu=100;
 			     try {
+			    	 //这里多查询一次 ，只为了获取中条数，为了分页
 			    	 //查询总条数
 		    		  jsonObject.put("startRecord", 1); // 直接put相同的key
 		    		  jsonObject.put("queryNum", 1048576); // / xlsx最大行1048576
@@ -279,9 +284,72 @@ public class ReportIncomeController {
 					  System.out.println("查询条数报错！");
 					}
 			     
-			     ResponseData.setData(FigureUtil.parseJSON2Map(job.get("data").toString(),dimension,tiaoshu,fileReportTempPOlist));
-	             ResponseData.setCode(0);
-	  	     
+			     
+			     //计算群主数据
+//			     try {
+//			    	 //获取所有数据
+//						JSONArray arr=new JSONArray(job.get("data").toString());
+//						Map<String,String> mapQuan=new HashMap<String,String>();
+//						
+//						 for(int i=0;i<arr.length();i++){
+//					       org.codehaus.jettison.json.JSONObject jsonObjtarr=  arr.getJSONObject(i);
+//					       Iterator<String> it = jsonObjtarr.keys(); 
+//					       while(it.hasNext()){
+//					       // 获得key
+//						       String key = it.next(); 
+////						       "groupId":"","storeName":"南京测试一店","storeCode":"G002"
+//						       if(key.equals("groupId")||key.equals("storeName")||key.equals("storeCode")) {
+//						    	   mapQuan.put(key, jsonObjtarr.toString());
+//						       }else {
+//							       BigDecimal valueData= new BigDecimal(jsonObjtarr.getString(key));
+//							       if(mapQuan.get(key)==null) {
+//							    	   mapQuan.put(key, "0");
+//							       }
+//							       valueData.add(new BigDecimal(mapQuan.get(key)));
+//							       mapQuan.put(key, valueData.toString());
+//						    	   
+//						       }
+//						      
+//					         }
+//								
+//					   	}
+//						//net.sf.json.JSONObject 将Map转换为JSON方法
+//						 String json = mapQuan.toString();
+//				} catch (JSONException e) {
+//					// TODO Auto-generated catch block
+//					e.printStackTrace();
+//				}
+			     
+			     
+			     
+			     String jsonStr= job.get("data").toString();
+			     //计算群主数据     
+			     if(organization.equals("0")||organization.equals("1")) {
+			    	 JSONArray havegroupIdarr=new JSONArray();
+			      try {
+			    	  JSONArray arr=new JSONArray(job.get("data").toString());
+			    	 
+			    	  for(int i=0;i<arr.length();i++){
+			    		  org.codehaus.jettison.json.JSONObject jsonObjtarr=  arr.getJSONObject(i);
+//			    		  店铺id
+			    		  String  storeCode =  jsonObjtarr.get("storeCode").toString();
+//			    		  更具店铺id找群主名称
+			    		  List<String> storellist =new ArrayList<>();
+			    		  storellist.add(storeCode);
+			    		  ResponseData<Map<String,String>> getStore	=  storeServiceRpc.getStoreGroupNameByStoreCodes(storellist);
+			    		  jsonObjtarr.put("groupId", getStore.getData().get(storeCode));
+			    		  havegroupIdarr.put(jsonObjtarr);
+			    	  }
+						
+			    	  jsonStr=havegroupIdarr.toString();
+					} catch (JSONException e) {
+						log.info("群主需要转换，出错");
+						e.printStackTrace();
+					}
+			     }
+			    	 
+				     ResponseData.setData(FigureUtil.parseJSON2Map(jsonStr,dimension,tiaoshu,fileReportTempPOlist));
+		             ResponseData.setCode(0);
 
 	     }else {
 	      ResponseData.setCode(0);

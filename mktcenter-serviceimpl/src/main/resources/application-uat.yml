@@ -67,6 +67,7 @@ logging:
     root: info
     com.bizvane.mktcenterserviceimpl.mappers: debug
 
+
 # pagehelper
 pagehelper:
   helperDialect: mysql

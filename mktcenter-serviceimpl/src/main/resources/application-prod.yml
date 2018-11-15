@@ -39,7 +39,7 @@ eureka:
       lease-renewal-interval-in-seconds: 10
   client:
     service-url:
-      defaultZone: http://172.16.147.203:8761/eureka/
+      defaultZone: http://172.16.147.203:8761/eureka/,http://172.16.147.198:8761/eureka/
 management:
   endpoints:
     web.exposure.include: "*"
@@ -127,9 +127,9 @@ qiniu:
 activity:
   qrcodeurl: /qrcode?activityCode=
 bitdata:
-  businessNum: testbz
-  apiKey: 4199454b3cac0c02b48fd5a9c67c00c0
-  url: http://bizvane.f3322.net:58765/api/open-data-analysis/
+  businessNum: c10153
+  apiKey: e898e91ff9758a3b01b84c920158d1a8
+  url: http://open.bizvane.com:8888/api/open-data-analysis/
 
 tenant:
   isEnabledTenantInterceptor: false

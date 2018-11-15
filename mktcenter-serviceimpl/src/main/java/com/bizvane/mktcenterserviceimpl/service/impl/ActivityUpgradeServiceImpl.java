@@ -581,12 +581,7 @@ public class ActivityUpgradeServiceImpl implements ActivityUpgradeService {
         ResponseData responseData = new ResponseData();
         log.info("执行升级活动开始开始了开始了开始了开始了开始了");
         log.info("执行升级活动参数="+ JSON.toJSONString(vo));
-        if (null==vo.getServiceStoreId()){
-            responseData.setCode(SysResponseEnum.MODEL_FAILED_VALIDATION.getCode());
-            responseData.setMessage("服务门店为NULL!");
-            log.info("服务门店为NULL!");
-            return responseData;
-        }
+        log.info("服务门店为!======================="+vo.getServiceStoreId());
         //查询品牌下所有执行中的活动
         ActivityVO activity = new ActivityVO();
         activity.setActivityStatus(ActivityStatusEnum.ACTIVITY_STATUS_EXECUTING.getCode());
