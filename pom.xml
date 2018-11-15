@@ -37,6 +37,11 @@
                 <updatePolicy>always</updatePolicy>
             </snapshots>
         </repository>
+        <repository>
+            <id>julu-release</id>
+            <name>julu-release</name>
+            <url>http://repo.bizvane.com/nexus/content/repositories/julu-release</url>
+        </repository>
     </repositories>
     <modules>
         <module>mktcenter-service</module>
