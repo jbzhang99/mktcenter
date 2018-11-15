@@ -807,7 +807,7 @@
       FROM
           t_mkt_task tta
       INNER JOIN t_mkt_task_order tto ON tta.mkt_task_id = tto.mkt_task_id
-      LEFT JOIN t_mkt_coupon tmc ON tta.mkt_task_id = tmc.biz_id AND tmc.valid = 1
+      LEFT JOIN t_mkt_coupon tmc ON tta.mkt_task_id = tmc.biz_id AND tmc.valid = 1 AND tmc.biz_type=2
       WHERE
           tta.valid = 1
       AND tto.valid = 1
@@ -857,7 +857,7 @@
     FROM
     t_mkt_task tta
     INNER JOIN t_mkt_task_invite tti ON tta.mkt_task_id = tti.mkt_task_id
-    LEFT JOIN t_mkt_coupon tmc ON tta.mkt_task_id = tmc.biz_id  AND tmc.valid = 1
+    LEFT JOIN t_mkt_coupon tmc ON tta.mkt_task_id = tmc.biz_id  AND tmc.valid = 1 AND tmc.biz_type=2
     WHERE
     tta.valid = 1
     AND tti.valid = 1
@@ -907,7 +907,7 @@
     FROM
     t_mkt_task tta
     INNER JOIN t_mkt_task_profile ttp ON tta.mkt_task_id = ttp.mkt_task_id
-    LEFT JOIN t_mkt_coupon tmc ON tta.mkt_task_id = tmc.biz_id  AND tmc.valid = 1
+    LEFT JOIN t_mkt_coupon tmc ON tta.mkt_task_id = tmc.biz_id  AND tmc.valid = 1 AND tmc.biz_type=2
     WHERE
     tta.valid = 1
     AND ttp.valid = 1
@@ -959,7 +959,7 @@
     FROM
     t_mkt_task tta
     INNER JOIN t_mkt_task_share tts ON tta.mkt_task_id = tts.mkt_task_id
-    LEFT JOIN t_mkt_coupon tmc ON tta.mkt_task_id = tmc.biz_id  AND tmc.valid = 1
+    LEFT JOIN t_mkt_coupon tmc ON tta.mkt_task_id = tmc.biz_id  AND tmc.valid = 1 AND tmc.biz_type=2
     WHERE
     tta.valid = 1
     AND tts.valid = 1
