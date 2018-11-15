@@ -251,6 +251,7 @@ public class ActivityManualServiceImpl implements ActivityManualService {
           //urlQRCodeCreateRequestVO.setCompanyCode(companyResult.getData().getCompanyCode());
           //urlQRCodeCreateRequestVO.setUrl(url);
           createMiniprgmQRCodeRequestVO.setPath("pages/template01/coupon-scancode/main");
+          createMiniprgmQRCodeRequestVO.setScene(activityVO.getActivityCode());
          log.info("领券活动-创建活动-扫码领券查询二维码入参:"+JSON.toJSONString(createMiniprgmQRCodeRequestVO));
           ResponseData<String> qrCodeResponseData= null;
           try {
