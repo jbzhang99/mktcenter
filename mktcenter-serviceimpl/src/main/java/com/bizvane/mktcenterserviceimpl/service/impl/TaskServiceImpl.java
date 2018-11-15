@@ -820,7 +820,7 @@ public class TaskServiceImpl implements TaskService {
             //3=已审核
             if (TaskConstants.THREE.equals(checkStatus)) {
                 MktMessagePOExample exampleMSG = new MktMessagePOExample();
-                exampleMSG.createCriteria().andBizIdEqualTo(mktTaskId).andValidEqualTo(Boolean.TRUE);
+                exampleMSG.createCriteria().andBizIdEqualTo(mktTaskId).andValidEqualTo(Boolean.TRUE).andBizTypeEqualTo(2);
                 List<MktMessagePO> mktMessagePOS = mktMessagePOMapper.selectByExample(exampleMSG);
                 //List<TaskDetailVO> taskDetails = this.getTaskDetailByTaskId(mktTaskId);
                 MktTaskPOWithBLOBs mktTaskPOWithBLOBsData = mktTaskPOMapper.selectByPrimaryKey(mktTaskId);
