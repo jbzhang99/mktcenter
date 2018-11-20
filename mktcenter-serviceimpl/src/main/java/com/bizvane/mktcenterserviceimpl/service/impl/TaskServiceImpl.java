@@ -578,6 +578,7 @@ public class TaskServiceImpl implements TaskService {
                     memberMessageVO.setActivityInterests(activityInterests);
                     memberMessageVO.setMemberPhone(member.getPhone());
                     memberMessageVO.setTemplateType("TASK_TEMPLATE_MESSAGE");
+                    memberMessageVO.setUnl(new StringBuilder(TaskConstants.WX_URL).append(sendMessageVO.getMktTaskId()).toString());
                     memberBO.setActivityMessageVO(memberMessageVO);
                     log.info("sendMemberMessage发送消息获取的每个会员详情--"+JSON.toJSONString(memberBO));
                     ResponseData<String>  response = templateMessageServiceFeign.sendTemplateMessage(memberMessageVO);
@@ -644,6 +645,7 @@ public class TaskServiceImpl implements TaskService {
         log.info("发送券和积分sendCouponAndPoint--参数--"+memberCode+"---"+JSON.toJSONString(orderAwardBO));
         Long mktTaskId = orderAwardBO.getMktTaskId();
         String taskCode = orderAwardBO.getTaskCode();
+        String taskName = orderAwardBO.getTaskName();
         List<MktCouponPO> mktCouponPOList = orderAwardBO.getMktCouponPOList();
         Integer points = orderAwardBO.getPoints();
         ChangeTaskTypeVO changeTaskTypeVO = this.changeTaskType(orderAwardBO.getTaskType());
@@ -679,6 +681,7 @@ public class TaskServiceImpl implements TaskService {
                 SendCouponSimpleRequestVO onecouponVO = new SendCouponSimpleRequestVO();
                 onecouponVO.setMemberCode(memberCode);
                 onecouponVO.setSendBussienId(mktTaskId);
+                onecouponVO.setBusinessName(taskName);
                 onecouponVO.setSendType(changeTaskTypeVO.getCouponTaskType());
                 onecouponVO.setCouponDefinitionId(coupon.getCouponDefinitionId());
                 bo.setSendCouponSimpleRequestVO(onecouponVO);
