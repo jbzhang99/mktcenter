@@ -66,5 +66,5 @@ public class TaskConstants {
     public  final static String   FIRST_STR="1";
     public  final static String   SECOND_STR="2";
 
-
+    public  final static String   WX_URL="/pages/template01/task-details/main?taskId=";
 }

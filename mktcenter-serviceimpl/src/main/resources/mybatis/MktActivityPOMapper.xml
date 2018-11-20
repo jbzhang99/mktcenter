@@ -771,6 +771,9 @@
     <if test="activityName != null and activityName!= ''">
       AND t.activity_name LIKE "%"#{activityName}"%"
     </if>
+    <if test="activityCode != null and activityCode!= ''">
+      AND t.activity_code LIKE "%"#{activityCode}"%"
+    </if>
     <!-- 适用领券活动-->
     <if test="activityTypeExtend != null and activityTypeExtend!= ''">
       AND t.activity_type IN (3,4)
