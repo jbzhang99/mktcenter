@@ -649,4 +649,71 @@
       valid = #{valid,jdbcType=BIT}
     where exchange_id = #{exchangeId,jdbcType=BIGINT}
   </update>
+<!--积分兑换券列表 -->
+  <select id="getCouponIntegralExchangeList" parameterType="com.bizvane.mktcenterservice.models.vo.MktCouponIntegralExchangeVO" resultType="com.bizvane.mktcenterservice.models.vo.MktCouponIntegralExchangeVO">
+    SELECT
+    tma.exchange_id,
+    tma.exchange_code,
+    tma.sys_brand_id,
+    tma.sys_company_id,
+    tma.coupon_entity_id,
+    tma.coupon_name,
+    tma.exchange_price,
+    tma.store_status,
+    tma.store_count,
+    tma.exchange_status,
+    tma.exchange_count,
+    tma.already_exchange_count,
+    tma.store_scope,
+    tma.store_list,
+    tma.sales_status,
+    tma.exchange_info,
+    tma.create_user_id,
+    tma.create_user_name,
+    tma.create_date,
+    tma.modify_user_id,
+    tma.modify_user_name,
+    tma.modified_date,
+    tma.valid,
+
+
+    tmar.mbr_level_code,
+    tmar.store_limit_list
+    FROM
+    `t_mkt_coupon_integral_exchange` tma
+    INNER JOIN t_mkt_activity_register tmar ON tma.mkt_activity_id = tmar.mkt_activity_id
+    and tma.valid=1
+    and tmar.valid=1
+    <!--活动主表ID -->
+    <if test="mktActivityId != null and mktActivityId!= '' ">
+      AND tma.mkt_activity_id = #{mktActivityId}
+    </if>
+    <if test="activityStatus != null and activityStatus!=0">
+      AND tma.activity_status = #{activityStatus}
+    </if>
+    <!--是否是长期活动 -->
+    <if test="longTerm != null and longTerm!= '' ">
+      AND tma.long_term = #{longTerm}
+    </if>
+    <!--开卡时等级编号 -->
+    <if test="mbrLevelCode != null and mbrLevelCode!= ''">
+      AND tmar.mbr_level_code = #{mbrLevelCode}
+    </if>
+    <!--所属品牌id -->
+    <if test="sysBrandId != null and sysBrandId!= ''">
+      AND tma.sys_brand_id = #{sysBrandId}
+    </if>
+    <!--活动类型-->
+    <if test="activityType != null and activityType!= ''">
+      AND tma.activity_type = #{activityType}
+    </if>
+    <!--活动编号-->
+    <if test="activityCode != null and activityCode!= ''">
+      AND tma.activity_code LIKE "%"#{activityCode}"%"
+    </if>
+    <if test="activityName != null and activityName!= ''">
+      AND tma.activity_name LIKE "%"#{activityName}"%"
+    </if>
+    ORDER BY tma.create_date DESC
+  </select>
 </mapper>

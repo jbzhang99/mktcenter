@@ -3,6 +3,8 @@ package com.bizvane.mktcenterserviceimpl.mappers;
 import com.bizvane.mktcenterservice.models.po.MktCouponIntegralExchangePO;
 import com.bizvane.mktcenterservice.models.po.MktCouponIntegralExchangePOExample;
 import java.util.List;
+
+import com.bizvane.mktcenterservice.models.vo.MktCouponIntegralExchangeVO;
 import org.apache.ibatis.annotations.Param;
 
 public interface MktCouponIntegralExchangePOMapper {
@@ -103,4 +105,6 @@ public interface MktCouponIntegralExchangePOMapper {
      * @mbg.generated 2018-11-22 16:07:57
      */
     int updateByPrimaryKey(MktCouponIntegralExchangePO record);
+
+    List<MktCouponIntegralExchangeVO> getCouponIntegralExchangeList(MktCouponIntegralExchangeVO vo);
 }
