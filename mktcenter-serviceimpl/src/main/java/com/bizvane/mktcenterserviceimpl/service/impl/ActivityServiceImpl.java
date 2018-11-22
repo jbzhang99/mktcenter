@@ -322,7 +322,7 @@ public class ActivityServiceImpl implements ActivityService {
         String activityType = activityConvertCouponTypeEnumByCode.getCouponCode();
         //查询券合计
         log.info("查询券合计开始时间+++++++"+ new SimpleDateFormat("yyyy/MM/dd-HH:mm:ss:SSS").format(new Date()));
-       /* ResponseData<CouponFindCouponCountResponseVO> couponFindCouponCountVO =  couponQueryServiceFeign.getCountBySendType(activityType,bo.getSysBrandId());
+        /*ResponseData<CouponFindCouponCountResponseVO> couponFindCouponCountVO =  couponQueryServiceFeign.getCountBySendType(activityType,bo.getSysBrandId());
         CouponFindCouponCountResponseVO couponFindCoupon = couponFindCouponCountVO.getData();*/
       /*  //合计优惠券总数量
         ctivityAnalysisBO.setCouponSumTotal(couponFindCoupon.getCouponSum());
