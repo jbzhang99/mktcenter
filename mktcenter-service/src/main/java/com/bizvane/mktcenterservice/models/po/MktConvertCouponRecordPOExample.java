@@ -8,28 +8,28 @@ import java.util.List;
 public class MktConvertCouponRecordPOExample implements Serializable {
     /**
 	 * 只读. 
-	 * @mbg.generated  2018-11-22 21:48:36
+	 * @mbg.generated  2018-11-22 22:48:30
 	 */
 	protected String orderByClause;
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-11-22 21:48:36
+	 * @mbg.generated  2018-11-22 22:48:30
 	 */
 	protected boolean distinct;
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-11-22 21:48:36
+	 * @mbg.generated  2018-11-22 22:48:30
 	 */
 	protected List<Criteria> oredCriteria;
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-11-22 21:48:36
+	 * @mbg.generated  2018-11-22 22:48:30
 	 */
 	private static final long serialVersionUID = 1L;
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-11-22 21:48:36
+	 * @mbg.generated  2018-11-22 22:48:30
 	 */
 	public MktConvertCouponRecordPOExample() {
 		oredCriteria = new ArrayList<Criteria>();
@@ -37,7 +37,7 @@ public class MktConvertCouponRecordPOExample implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-11-22 21:48:36
+	 * @mbg.generated  2018-11-22 22:48:30
 	 */
 	public void setOrderByClause(String orderByClause) {
 		this.orderByClause = orderByClause;
@@ -45,7 +45,7 @@ public class MktConvertCouponRecordPOExample implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-11-22 21:48:36
+	 * @mbg.generated  2018-11-22 22:48:30
 	 */
 	public String getOrderByClause() {
 		return orderByClause;
@@ -53,7 +53,7 @@ public class MktConvertCouponRecordPOExample implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-11-22 21:48:36
+	 * @mbg.generated  2018-11-22 22:48:30
 	 */
 	public void setDistinct(boolean distinct) {
 		this.distinct = distinct;
@@ -61,7 +61,7 @@ public class MktConvertCouponRecordPOExample implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-11-22 21:48:36
+	 * @mbg.generated  2018-11-22 22:48:30
 	 */
 	public boolean isDistinct() {
 		return distinct;
@@ -69,7 +69,7 @@ public class MktConvertCouponRecordPOExample implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-11-22 21:48:36
+	 * @mbg.generated  2018-11-22 22:48:30
 	 */
 	public List<Criteria> getOredCriteria() {
 		return oredCriteria;
@@ -77,7 +77,7 @@ public class MktConvertCouponRecordPOExample implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-11-22 21:48:36
+	 * @mbg.generated  2018-11-22 22:48:30
 	 */
 	public void or(Criteria criteria) {
 		oredCriteria.add(criteria);
@@ -85,7 +85,7 @@ public class MktConvertCouponRecordPOExample implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-11-22 21:48:36
+	 * @mbg.generated  2018-11-22 22:48:30
 	 */
 	public Criteria or() {
 		Criteria criteria = createCriteriaInternal();
@@ -95,7 +95,7 @@ public class MktConvertCouponRecordPOExample implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-11-22 21:48:36
+	 * @mbg.generated  2018-11-22 22:48:30
 	 */
 	public Criteria createCriteria() {
 		Criteria criteria = createCriteriaInternal();
@@ -107,7 +107,7 @@ public class MktConvertCouponRecordPOExample implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-11-22 21:48:36
+	 * @mbg.generated  2018-11-22 22:48:30
 	 */
 	protected Criteria createCriteriaInternal() {
 		Criteria criteria = new Criteria();
@@ -116,7 +116,7 @@ public class MktConvertCouponRecordPOExample implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-11-22 21:48:36
+	 * @mbg.generated  2018-11-22 22:48:30
 	 */
 	public void clear() {
 		oredCriteria.clear();
@@ -126,7 +126,7 @@ public class MktConvertCouponRecordPOExample implements Serializable {
 
 	/**
 	 * 只读. t_mkt_convert_coupon_record
-	 * @mbg.generated  2018-11-22 21:48:36
+	 * @mbg.generated  2018-11-22 22:48:30
 	 */
 	protected abstract static class GeneratedCriteria implements Serializable {
 		protected List<Criterion> criteria;
@@ -686,6 +686,76 @@ public class MktConvertCouponRecordPOExample implements Serializable {
 
 		public Criteria andCardNoNotBetween(String value1, String value2) {
 			addCriterion("card_no not between", value1, value2, "cardNo");
+			return (Criteria) this;
+		}
+
+		public Criteria andCouponNameIsNull() {
+			addCriterion("coupon_name is null");
+			return (Criteria) this;
+		}
+
+		public Criteria andCouponNameIsNotNull() {
+			addCriterion("coupon_name is not null");
+			return (Criteria) this;
+		}
+
+		public Criteria andCouponNameEqualTo(String value) {
+			addCriterion("coupon_name =", value, "couponName");
+			return (Criteria) this;
+		}
+
+		public Criteria andCouponNameNotEqualTo(String value) {
+			addCriterion("coupon_name <>", value, "couponName");
+			return (Criteria) this;
+		}
+
+		public Criteria andCouponNameGreaterThan(String value) {
+			addCriterion("coupon_name >", value, "couponName");
+			return (Criteria) this;
+		}
+
+		public Criteria andCouponNameGreaterThanOrEqualTo(String value) {
+			addCriterion("coupon_name >=", value, "couponName");
+			return (Criteria) this;
+		}
+
+		public Criteria andCouponNameLessThan(String value) {
+			addCriterion("coupon_name <", value, "couponName");
+			return (Criteria) this;
+		}
+
+		public Criteria andCouponNameLessThanOrEqualTo(String value) {
+			addCriterion("coupon_name <=", value, "couponName");
+			return (Criteria) this;
+		}
+
+		public Criteria andCouponNameLike(String value) {
+			addCriterion("coupon_name like", value, "couponName");
+			return (Criteria) this;
+		}
+
+		public Criteria andCouponNameNotLike(String value) {
+			addCriterion("coupon_name not like", value, "couponName");
+			return (Criteria) this;
+		}
+
+		public Criteria andCouponNameIn(List<String> values) {
+			addCriterion("coupon_name in", values, "couponName");
+			return (Criteria) this;
+		}
+
+		public Criteria andCouponNameNotIn(List<String> values) {
+			addCriterion("coupon_name not in", values, "couponName");
+			return (Criteria) this;
+		}
+
+		public Criteria andCouponNameBetween(String value1, String value2) {
+			addCriterion("coupon_name between", value1, value2, "couponName");
+			return (Criteria) this;
+		}
+
+		public Criteria andCouponNameNotBetween(String value1, String value2) {
+			addCriterion("coupon_name not between", value1, value2, "couponName");
 			return (Criteria) this;
 		}
 
@@ -1492,7 +1562,7 @@ public class MktConvertCouponRecordPOExample implements Serializable {
 
 	/**
 	 * 只读. t_mkt_convert_coupon_record
-	 * @mbg.generated  2018-11-22 21:48:36
+	 * @mbg.generated  2018-11-22 22:48:30
 	 */
 	public static class Criterion implements Serializable {
 		private String condition;
