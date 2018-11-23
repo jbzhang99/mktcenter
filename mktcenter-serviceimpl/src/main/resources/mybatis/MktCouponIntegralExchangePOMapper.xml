@@ -663,7 +663,6 @@
     tma.store_count,
     tma.exchange_status,
     tma.exchange_count,
-    tma.already_exchange_count,
     tma.store_scope,
     tma.store_list,
     tma.sales_status,
@@ -677,42 +676,40 @@
     tma.valid,
 
 
-    tmar.mbr_level_code,
-    tmar.store_limit_list
+    tmar.cou AS alreadyExchangeCount
     FROM
     `t_mkt_coupon_integral_exchange` tma
-    INNER JOIN t_mkt_activity_register tmar ON tma.mkt_activity_id = tmar.mkt_activity_id
-    and tma.valid=1
-    and tmar.valid=1
+    LEFT JOIN
+    (SELECT exchange_id,count(1)cou FROM t_mkt_convert_coupon_record
+    GROUP BY exchange_id
+    ) tmar
+
+    ON tma.exchange_id = tmar.exchange_id
+    WHERE
+    tma.valid=1
     <!--活动主表ID -->
-    <if test="mktActivityId != null and mktActivityId!= '' ">
-      AND tma.mkt_activity_id = #{mktActivityId}
-    </if>
-    <if test="activityStatus != null and activityStatus!=0">
-      AND tma.activity_status = #{activityStatus}
-    </if>
-    <!--是否是长期活动 -->
-    <if test="longTerm != null and longTerm!= '' ">
-      AND tma.long_term = #{longTerm}
-    </if>
-    <!--开卡时等级编号 -->
-    <if test="mbrLevelCode != null and mbrLevelCode!= ''">
-      AND tmar.mbr_level_code = #{mbrLevelCode}
+    <if test="exchangeId != null and exchangeId!= '' ">
+      AND tma.exchange_id = #{exchangeId}
     </if>
     <!--所属品牌id -->
     <if test="sysBrandId != null and sysBrandId!= ''">
       AND tma.sys_brand_id = #{sysBrandId}
     </if>
-    <!--活动类型-->
-    <if test="activityType != null and activityType!= ''">
-      AND tma.activity_type = #{activityType}
+    <!--编号-->
+    <if test="exchangeCode != null and exchangeCode!= ''">
+      AND tma.exchange_code LIKE "%"#{exchangeCode}"%"
     </if>
-    <!--活动编号-->
-    <if test="activityCode != null and activityCode!= ''">
-      AND tma.activity_code LIKE "%"#{activityCode}"%"
+    <if test="couponName != null and couponName!= ''">
+      AND tma.coupon_name LIKE "%"#{couponName}"%"
     </if>
-    <if test="activityName != null and activityName!= ''">
-      AND tma.activity_name LIKE "%"#{activityName}"%"
+    <if test="salesStatus != null and salesStatus!= ''">
+      AND tma.sales_status = #{salesStatus}
+    </if>
+    <if test="startTime != null and startTime!= ''">
+      AND  tma.create_date  &gt;=#{startTime,jdbcType=TIMESTAMP}
+    </if>
+    <if test="endTime != null and endTime!= ''">
+      AND  tma.create_date &lt;=#{endTime,jdbcType=TIMESTAMP}
     </if>
     ORDER BY tma.create_date DESC
   </select>

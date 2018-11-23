@@ -15,6 +15,7 @@ public class CodeUtil {
     private  final  static String  TASK_PREFIX="TC";
     private  final  static String  ACTIVITY_PREFIX="AC";
     private  final  static String  MEMBER_GROUP_CODE_PREFIX="MGC";
+    private  final  static String  COUPON_EXCHANGE="NC";
     private  final  static SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmssSSS");
 
     public synchronized static   String  getTaskCode()  {
@@ -28,7 +29,9 @@ public class CodeUtil {
     public static String getMemberGroupCode()  {
         return generateCode(MEMBER_GROUP_CODE_PREFIX);
     }
-
+    public synchronized static   String  getCouponIntegralExchangeCode()  {
+        return generateCode(COUPON_EXCHANGE);
+    }
     public synchronized static  String  generateCode(String feature)  {
         StringBuilder stringBuilder=null;
         String  code="";
