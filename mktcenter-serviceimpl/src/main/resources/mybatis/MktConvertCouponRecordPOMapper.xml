@@ -669,4 +669,59 @@
       valid = #{valid,jdbcType=BIT}
     where convert_coupon_record_id = #{convertCouponRecordId,jdbcType=BIGINT}
   </update>
+  <select id="getCouponRecordLists" resultType="com.bizvane.mktcenterservice.models.po.MktConvertCouponRecordPO">
+       SELECT
+        convert_coupon_record_id,
+        convert_coupon_record_code,
+        exchange_id,
+        exchange_code,
+        sys_company_id,
+        sys_brand_id,
+        member_name,
+        member_code,
+        card_no,
+        coupon_name,
+        coupon_codes,
+        coupon_num,
+        convert_price,
+        convert_num,
+        convert_tatal_integral,
+        convert_time,
+        success_type,
+        create_user_id,
+        create_user_name,
+        create_date,
+        modified_user_id,
+        modified_user_name,
+        modified_date,
+        valid
+       FROM
+        t_mkt_convert_coupon_record
+       WHERE
+        valid = 1
+       <if test="convertCouponRecordCode!=null and convertCouponRecordCode!=''">
+        AND convert_coupon_record_code  LIKE CONCAT('%',#{convertCouponRecordCode},'%')
+       </if>
+       <if test="exchangeCode!=null and exchangeCode!=''">
+        AND exchange_code  LIKE CONCAT('%',#{exchangeCode},'%')
+       </if>
+       <if test="memberName!=null and memberName!=''">
+        AND member_name  LIKE CONCAT('%',#{memberName},'%')
+       </if>
+      <if test="cardNo!=null and cardNo!=''">
+        AND card_no  LIKE CONCAT('%',#{cardNo},'%')
+      </if>
+     <if test="couponCodes!=null and couponCodes!=''">
+        AND coupon_codes LIKE CONCAT('%',#{couponCodes},'%')
+     </if>
+    <if test="couponName!=null and couponName!=''">
+        AND coupon_name LIKE CONCAT('%',#{couponName},'%')
+    </if>
+    <if test="startTime!=null and startTime!=''">
+        AND convert_time  <![CDATA[>=]]> #{startTime,jdbcType=TIMESTAMP}
+    </if>
+    <if test="endTime!=null and endTime!=''">
+        AND convert_time  <![CDATA[<=]]> #{endTime,jdbcType=TIMESTAMP}
+    </if>
+  </select>
 </mapper>

@@ -3,6 +3,8 @@ package com.bizvane.mktcenterserviceimpl.mappers;
 import com.bizvane.mktcenterservice.models.po.MktConvertCouponRecordPO;
 import com.bizvane.mktcenterservice.models.po.MktConvertCouponRecordPOExample;
 import java.util.List;
+
+import com.bizvane.mktcenterservice.models.vo.CouponRecordVO;
 import org.apache.ibatis.annotations.Param;
 
 public interface MktConvertCouponRecordPOMapper {
@@ -93,4 +95,6 @@ public interface MktConvertCouponRecordPOMapper {
 	 * @mbg.generated  2018-11-23 11:48:52
 	 */
 	int updateByPrimaryKey(MktConvertCouponRecordPO record);
+
+	List<MktConvertCouponRecordPO> getCouponRecordLists(CouponRecordVO vo);
 }
