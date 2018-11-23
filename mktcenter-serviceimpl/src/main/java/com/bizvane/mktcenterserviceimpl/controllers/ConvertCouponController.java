@@ -4,6 +4,7 @@ import com.bizvane.mktcenterservice.interfaces.ConvertCouponService;
 import com.bizvane.mktcenterservice.models.po.MktConvertCouponRecordPO;
 import com.bizvane.mktcenterservice.models.vo.CouponRecordVO;
 import com.bizvane.utils.responseinfo.ResponseData;
+import com.github.pagehelper.PageInfo;
 import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -27,13 +28,7 @@ public class ConvertCouponController {
      * @param vo
      */
     @RequestMapping("getCouponRecordLists")
-    public ResponseData<List<MktConvertCouponRecordPO>> getCouponRecordLists(CouponRecordVO vo){
-        ResponseData<List<MktConvertCouponRecordPO>> responseData = new ResponseData<>();
-        List<MktConvertCouponRecordPO> couponRecordLists = convertCouponService.getCouponRecordLists(vo);
-            responseData.setData(couponRecordLists);
-        if (CollectionUtils.isEmpty(couponRecordLists)){
-            responseData.setData(new ArrayList<MktConvertCouponRecordPO>());
-        }
-        return responseData;
+    public ResponseData<PageInfo<MktConvertCouponRecordPO>>  getCouponRecordLists(CouponRecordVO vo){
+        return convertCouponService.getCouponRecordLists(vo);
     }
 }

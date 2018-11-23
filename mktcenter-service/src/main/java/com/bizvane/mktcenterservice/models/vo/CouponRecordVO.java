@@ -10,6 +10,8 @@ import java.util.Date;
  */
 @Data
 public class CouponRecordVO {
+    private Integer pageSize=10;
+    private Integer pageNumber=1;
     private String exchangeCode;
     private String convertCouponRecordCode;
     private String memberName;
