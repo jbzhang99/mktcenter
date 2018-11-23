@@ -10,6 +10,7 @@ import java.util.Date;
  */
 @Data
 public class CouponRecordVO {
+    //pc端
     private Integer pageSize=10;
     private Integer pageNumber=1;
     private String exchangeCode;
@@ -20,6 +21,12 @@ public class CouponRecordVO {
     private String couponCodes;
     private Date startTime;
     private Date endTime;
+
+    //小程序
+    private Boolean canConvertCoupon;
+    //可用积分
+    private Integer countIntegral;
+    private String memberCode;
 
 
 }

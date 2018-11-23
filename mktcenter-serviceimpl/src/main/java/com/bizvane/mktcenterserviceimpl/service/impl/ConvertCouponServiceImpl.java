@@ -41,4 +41,8 @@ public class ConvertCouponServiceImpl implements ConvertCouponService {
         responseData.setData(page);
         return responseData;
     }
+    /**
+     * 查询可兑换的券
+     */
+
 }
