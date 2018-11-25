@@ -4,6 +4,7 @@ import com.bizvane.mktcenterservice.models.po.MktCouponIntegralExchangePO;
 import com.bizvane.mktcenterservice.models.po.MktCouponIntegralExchangePOExample;
 import java.util.List;
 
+import com.bizvane.mktcenterservice.models.vo.CouponRecordVO;
 import com.bizvane.mktcenterservice.models.vo.MktCouponIntegralExchangeVO;
 import org.apache.ibatis.annotations.Param;
 
@@ -107,4 +108,7 @@ public interface MktCouponIntegralExchangePOMapper {
     int updateByPrimaryKey(MktCouponIntegralExchangePO record);
 
     List<MktCouponIntegralExchangeVO> getCouponIntegralExchangeList(MktCouponIntegralExchangeVO vo);
+
+    List<MktCouponIntegralExchangeVO> getExchangeLists(CouponRecordVO vo);
+    List<Integer> getExchangeIds(CouponRecordVO vo);
 }

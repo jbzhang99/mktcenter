@@ -3,6 +3,7 @@ package com.bizvane.mktcenterservice.models.vo;
 import lombok.Data;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * @Author: lijunwei
@@ -27,6 +28,7 @@ public class CouponRecordVO {
     //可用积分
     private Integer countIntegral;
     private String memberCode;
-
+    private Long openCardStoreId=-1L;
+    private List<Integer> exchangeIds;
 
 }

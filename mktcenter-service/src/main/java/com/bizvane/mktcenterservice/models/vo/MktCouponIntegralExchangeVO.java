@@ -12,9 +12,11 @@ import java.util.List;
 public class MktCouponIntegralExchangeVO extends MktCouponIntegralExchangePO{
     private Date startTime;
     private  Date endTime;
+
     //门店实体类
     private List<SysStorePo> sysStorePos;
-
+    //券剩余数量
+    private Integer residueCouponNumber;
     public List<SysStorePo> getSysStorePos() {
         return sysStorePos;
     }
@@ -37,5 +39,13 @@ public class MktCouponIntegralExchangeVO extends MktCouponIntegralExchangePO{
 
     public void setEndTime(Date endTime) {
         this.endTime = endTime;
+    }
+
+    public Integer getResidueCouponNumber() {
+        return residueCouponNumber;
+    }
+
+    public void setResidueCouponNumber(Integer residueCouponNumber) {
+        this.residueCouponNumber = residueCouponNumber;
     }
 }
