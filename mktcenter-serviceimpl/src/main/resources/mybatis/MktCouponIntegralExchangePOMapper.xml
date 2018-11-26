@@ -732,6 +732,7 @@
     AND tmccr.valid=1
     WHERE
     tmcie.valid=1
+    AND tmcie.sys_brand_id=#{brandId}
     AND tmcie.sales_status=1
     <if test="countIntegral != null">
     AND tmcie.exchange_price<![CDATA[<=]]>#{countIntegral}
@@ -761,6 +762,7 @@
     AND tmccr.coupon_num >= tmcie.exchange_count
     WHERE
     tmccr.valid=1
+    AND tmccr.sys_brand_id=#{brandId}
     AND tmccr.member_code=#{memberCode}
   </select>
 </mapper>

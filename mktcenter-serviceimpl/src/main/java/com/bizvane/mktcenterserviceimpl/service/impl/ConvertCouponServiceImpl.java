@@ -48,13 +48,19 @@ public class ConvertCouponServiceImpl implements ConvertCouponService {
     }
 
     /**
-     * 查询兑换的券  列表
+     * 查询兑换的券 全部或可兑换 列表
      */
     @Override
     public ResponseData<PageInfo<MktCouponIntegralExchangeVO>> getConvernCouponLists(CouponRecordVO vo) {
         if (vo.getCanConvertCoupon()) {
+            //可兑换券的列表
             List<Integer> exchangeIds = mktCouponIntegralExchangePOMapper.getExchangeIds(vo);
             vo.setExchangeIds(exchangeIds);
+        }else{
+            //品牌下的券列表
+            vo.setOpenCardStoreId(null);
+            vo.setExchangeIds(null);
+            vo.setCountIntegral(null);
         }
         ResponseData<PageInfo<MktCouponIntegralExchangeVO>> responseData = new ResponseData<>();
         PageInfo<MktCouponIntegralExchangeVO> page = null;
