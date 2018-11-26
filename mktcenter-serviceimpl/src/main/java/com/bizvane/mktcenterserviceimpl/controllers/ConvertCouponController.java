@@ -10,6 +10,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -30,5 +33,13 @@ public class ConvertCouponController {
     @RequestMapping("getCouponRecordLists")
     public ResponseData<PageInfo<MktConvertCouponRecordPO>>  getCouponRecordLists(CouponRecordVO vo){
         return convertCouponService.getCouponRecordLists(vo);
+    }
+
+    /**
+     * 导出
+     */
+    @RequestMapping("doExportData")
+    public void  doExportData(CouponRecordVO vo, HttpServletRequest request, HttpServletResponse response) throws IOException {
+        convertCouponService.doExportData(vo,response);
     }
 }

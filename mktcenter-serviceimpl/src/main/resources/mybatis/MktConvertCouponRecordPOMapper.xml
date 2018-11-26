@@ -698,6 +698,7 @@
         member_name,
         member_code,
         card_no,
+        coupon_entity_id,
         coupon_name,
         coupon_codes,
         coupon_num,
