@@ -119,6 +119,7 @@ feign:
       name: fitment-uat
       path: fitment.api
 
+
 rocketmq:
   onsaddr:
   accessKey: LTAIpoqUHsXq6q7r
