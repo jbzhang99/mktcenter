@@ -35,7 +35,7 @@ public class CouponRecordVO {
     private List<Long> exchangeIds;
 
     //兑换券  参数
-    private Integer couponId;
+    //private Integer couponId;
     //private String couponCode;
     private Long exchangeId;
     private Integer exchangeNum;
