@@ -168,14 +168,17 @@ public class ConvertCouponServiceImpl implements ConvertCouponService {
     public ResponseData<Integer> doConvernCoupon(CouponRecordVO vo) {
         log.info("doConvernCoupon----参数--" + JSON.toJSONString(vo));
         ResponseData<Integer> responseData = new ResponseData<>();
+        responseData.setMessage("兑换成功!");
         MktCouponIntegralExchangePOExample example = new MktCouponIntegralExchangePOExample();
         example.createCriteria().andExchangeIdEqualTo(vo.getExchangeId());
+        //查询兑换规则详情
         List<MktCouponIntegralExchangePO> mktCouponIntegralExchangePOS = mktCouponIntegralExchangePOMapper.selectByExampleWithBLOBs(example);
         if (CollectionUtils.isEmpty(mktCouponIntegralExchangePOS)) {
             responseData.setCode(100);
             responseData.setMessage("兑换规则不存在!");
             return responseData;
         }
+
         String memberCode = vo.getMemberCode();//会员code
         MktCouponIntegralExchangePO mktCouponIntegralExchangePO = mktCouponIntegralExchangePOS.get(0);
 
@@ -207,10 +210,63 @@ public class ConvertCouponServiceImpl implements ConvertCouponService {
             }
         }
 
-        Integer exchangeNum = vo.getExchangeNum();
-        Integer exchangePrice = mktCouponIntegralExchangePO.getExchangePrice();
-        String couponRecordCode = CodeUtil.getCouponRecordCode();
+        Integer exchangeNum = vo.getExchangeNum();//要要兑换的数量
+        Integer exchangePrice = mktCouponIntegralExchangePO.getExchangePrice();//兑换的单价
+        String couponRecordCode = CodeUtil.getCouponRecordCode();//兑换记录code
         MemberInfoModel memeberDetail = taskService.getCompanyMemeberDetail(memberCode);
+        if (memeberDetail==null){
+            responseData.setCode(100);
+            responseData.setMessage("会员不存在!");
+            return responseData;
+        }
+        Integer countIntegral = memeberDetail.getCountIntegral();
+        if (countIntegral<exchangeNum * exchangePrice){
+            responseData.setCode(100);
+            responseData.setMessage("可用积分不足!");
+            return responseData;
+        }
+       //插入记录表数据
+        MktConvertCouponRecordPO record = InsertMktConvertCouponRecordPO(vo, mktCouponIntegralExchangePO, exchangeNum, exchangePrice, couponRecordCode, memeberDetail);
+       //调整积分
+        IntegralChangeResponseModel integralChangeResponseModel = doIntegralChangeResponseModel(exchangeNum, exchangePrice, couponRecordCode, memeberDetail);
+        Integer code = integralChangeResponseModel.getCode();
+        if (Integer.valueOf(0).equals(code)) {
+            for (int i = 1; i <= exchangeNum; i++) {
+                SendCouponSimpleRequestVO onecouponVO = new SendCouponSimpleRequestVO();
+                onecouponVO.setMemberCode(memberCode);
+                onecouponVO.setSendBussienId(record.getConvertCouponRecordId());
+                onecouponVO.setBusinessName(couponRecordCode);
+                // SendTypeEnum.SEND_COUPON_INVITE_OPENCARD_TASK.getCode();
+                onecouponVO.setSendType("101");
+                onecouponVO.setCouponDefinitionId(mktCouponIntegralExchangePO.getCouponEntityId());
+                ResponseData<Object> simple = sendCouponServiceFeign.simple(onecouponVO);
+                log.info("doConvernCoupon----发券----参数--" + JSON.toJSONString(onecouponVO) + "----出参--" + JSON.toJSONString(simple));
+            }
+        }else{
+            responseData.setCode(100);
+            responseData.setMessage("兑换失败!");
+            return responseData;
+        }
+        return responseData;
+    }
+   //修改积分
+    public IntegralChangeResponseModel doIntegralChangeResponseModel(Integer exchangeNum, Integer exchangePrice, String couponRecordCode, MemberInfoModel memeberDetail) {
+        IntegralChangeRequestModel integralRecordModel = new IntegralChangeRequestModel();
+        integralRecordModel.setSysCompanyId(memeberDetail.getSysCompanyId());
+        integralRecordModel.setBrandId(memeberDetail.getBrandId());
+        integralRecordModel.setMemberCode(memeberDetail.getMemberCode());
+        //BusinessTypeEnum  会员定义的任务类型
+        // BusinessTypeEnum.TASK_TYPE_PREFECT.getCode()
+        integralRecordModel.setBusinessType("26");
+        //2=收入积分(新增积分)      1=支出积分(减少积分)
+        integralRecordModel.setChangeType(IntegralChangeTypeEnum.Expend.getCode());
+        integralRecordModel.setChangeBills(couponRecordCode);
+        integralRecordModel.setChangeIntegral(exchangeNum * exchangePrice);
+        return integralChangeApiService.integralChangeOperate(integralRecordModel);
+    }
+
+    //插入记录表
+    public  MktConvertCouponRecordPO InsertMktConvertCouponRecordPO(CouponRecordVO vo, MktCouponIntegralExchangePO mktCouponIntegralExchangePO, Integer exchangeNum, Integer exchangePrice, String couponRecordCode, MemberInfoModel memeberDetail) {
         MktConvertCouponRecordPO record = new MktConvertCouponRecordPO();
         record.setConvertCouponRecordCode(couponRecordCode);
         record.setExchangeId(mktCouponIntegralExchangePO.getExchangeId());
@@ -226,36 +282,7 @@ public class ConvertCouponServiceImpl implements ConvertCouponService {
         record.setConvertTime(new Date());
         record.setValid(Boolean.TRUE);
         mktConvertCouponRecordPOMapper.insertSelective(record);
-
-        IntegralChangeRequestModel integralRecordModel = new IntegralChangeRequestModel();
-        integralRecordModel.setSysCompanyId(memeberDetail.getSysCompanyId());
-        integralRecordModel.setBrandId(memeberDetail.getBrandId());
-        integralRecordModel.setMemberCode(memeberDetail.getMemberCode());
-        //BusinessTypeEnum  会员定义的任务类型
-        //BusinessTypeEnum.TASK_TYPE_PREFECT.getCode()
-        integralRecordModel.setBusinessType("26");
-        //2=收入积分(新增积分)      1=支出积分(减少积分)
-        integralRecordModel.setChangeType(IntegralChangeTypeEnum.Expend.getCode());
-        integralRecordModel.setChangeBills(couponRecordCode);
-        integralRecordModel.setChangeIntegral(exchangeNum * exchangePrice);
-        IntegralChangeResponseModel integralChangeResponseModel = integralChangeApiService.integralChangeOperate(integralRecordModel);
-        Integer code = integralChangeResponseModel.getCode();
-
-        if (Integer.valueOf(0).equals(code)) {
-            for (int i = 1; i <= exchangeNum; i++) {
-                SendCouponSimpleRequestVO onecouponVO = new SendCouponSimpleRequestVO();
-                onecouponVO.setMemberCode(memberCode);
-                onecouponVO.setSendBussienId(record.getConvertCouponRecordId());
-                onecouponVO.setBusinessName(couponRecordCode);
-                //  SendTypeEnum.SEND_COUPON_INVITE_OPENCARD_TASK.getCode();
-                onecouponVO.setSendType("101");
-                onecouponVO.setCouponDefinitionId(mktCouponIntegralExchangePO.getCouponEntityId());
-                ResponseData<Object> simple = sendCouponServiceFeign.simple(onecouponVO);
-                log.info("doConvernCoupon----发券----参数--" + JSON.toJSONString(onecouponVO) + "----出参--" + JSON.toJSONString(simple));
-            }
-        }
-
-        return responseData;
+        return record;
     }
 
     //查询已兑换券列表
