@@ -97,4 +97,6 @@ public interface MktConvertCouponRecordPOMapper {
 	int updateByPrimaryKey(MktConvertCouponRecordPO record);
 
 	List<MktConvertCouponRecordPO> getCouponRecordLists(CouponRecordVO vo);
+
+	Integer getConvertNumber(CouponRecordVO vo);
 }

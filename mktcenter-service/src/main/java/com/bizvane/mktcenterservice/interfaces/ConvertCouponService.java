@@ -6,6 +6,7 @@ import com.bizvane.mktcenterservice.models.vo.MktCouponIntegralExchangeVO;
 import com.bizvane.utils.responseinfo.ResponseData;
 import com.github.pagehelper.PageInfo;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 /**
@@ -17,4 +18,6 @@ public interface ConvertCouponService {
     public ResponseData<PageInfo<MktConvertCouponRecordPO>> getCouponRecordLists(CouponRecordVO vo);
 
     public  ResponseData<PageInfo<MktCouponIntegralExchangeVO>>  getConvernCouponLists(CouponRecordVO vo);
+
+    public ResponseData<Integer> doConvernCoupon(CouponRecordVO vo);
 }

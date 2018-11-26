@@ -29,7 +29,15 @@ public class CouponRecordVO {
     //可用积分
     private Integer countIntegral;
     private String memberCode;
-    private Long openCardStoreId=-1L;
-    private List<Integer> exchangeIds;
+    //门店id
+    private Long openCardStoreId;
+    //已经兑换足够数量的限制券id集合
+    private List<Long> exchangeIds;
+
+    //兑换券  参数
+    private Integer couponId;
+    //private String couponCode;
+    private Long exchangeId;
+    private Integer exchangeNum;
 
 }
