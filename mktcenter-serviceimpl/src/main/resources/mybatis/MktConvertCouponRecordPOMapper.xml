@@ -4,7 +4,7 @@
   <resultMap id="BaseResultMap" type="com.bizvane.mktcenterservice.models.po.MktConvertCouponRecordPO">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-11-23 11:48:52.
+      This element was generated on 2018-11-26 14:51:19.
     -->
     <id column="convert_coupon_record_id" jdbcType="BIGINT" property="convertCouponRecordId" />
     <result column="convert_coupon_record_code" jdbcType="VARCHAR" property="convertCouponRecordCode" />
@@ -16,6 +16,7 @@
     <result column="member_code" jdbcType="VARCHAR" property="memberCode" />
     <result column="card_no" jdbcType="VARCHAR" property="cardNo" />
     <result column="coupon_name" jdbcType="VARCHAR" property="couponName" />
+    <result column="coupon_entity_id" jdbcType="BIGINT" property="couponEntityId" />
     <result column="coupon_num" jdbcType="INTEGER" property="couponNum" />
     <result column="convert_price" jdbcType="INTEGER" property="convertPrice" />
     <result column="convert_num" jdbcType="INTEGER" property="convertNum" />
@@ -33,14 +34,14 @@
   <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.bizvane.mktcenterservice.models.po.MktConvertCouponRecordPO">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-11-23 11:48:52.
+      This element was generated on 2018-11-26 14:51:19.
     -->
     <result column="coupon_codes" jdbcType="LONGVARCHAR" property="couponCodes" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-11-23 11:48:52.
+      This element was generated on 2018-11-26 14:51:19.
     -->
     <where>
       <foreach collection="oredCriteria" item="criteria" separator="or">
@@ -73,7 +74,7 @@
   <sql id="Update_By_Example_Where_Clause">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-11-23 11:48:52.
+      This element was generated on 2018-11-26 14:51:19.
     -->
     <where>
       <foreach collection="example.oredCriteria" item="criteria" separator="or">
@@ -106,25 +107,25 @@
   <sql id="Base_Column_List">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-11-23 11:48:52.
+      This element was generated on 2018-11-26 14:51:19.
     -->
     convert_coupon_record_id, convert_coupon_record_code, exchange_id, exchange_code, 
-    sys_company_id, sys_brand_id, member_name, member_code, card_no, coupon_name, coupon_num, 
-    convert_price, convert_num, convert_tatal_integral, convert_time, success_type, create_user_id, 
-    create_user_name, create_date, modified_user_id, modified_user_name, modified_date, 
-    valid
+    sys_company_id, sys_brand_id, member_name, member_code, card_no, coupon_name, coupon_entity_id, 
+    coupon_num, convert_price, convert_num, convert_tatal_integral, convert_time, success_type, 
+    create_user_id, create_user_name, create_date, modified_user_id, modified_user_name, 
+    modified_date, valid
   </sql>
   <sql id="Blob_Column_List">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-11-23 11:48:52.
+      This element was generated on 2018-11-26 14:51:19.
     -->
     coupon_codes
   </sql>
   <select id="selectByExampleWithBLOBs" parameterType="com.bizvane.mktcenterservice.models.po.MktConvertCouponRecordPOExample" resultMap="ResultMapWithBLOBs">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-11-23 11:48:52.
+      This element was generated on 2018-11-26 14:51:19.
     -->
     select
     <if test="distinct">
@@ -144,7 +145,7 @@
   <select id="selectByExample" parameterType="com.bizvane.mktcenterservice.models.po.MktConvertCouponRecordPOExample" resultMap="BaseResultMap">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-11-23 11:48:52.
+      This element was generated on 2018-11-26 14:51:19.
     -->
     select
     <if test="distinct">
@@ -162,7 +163,7 @@
   <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="ResultMapWithBLOBs">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-11-23 11:48:52.
+      This element was generated on 2018-11-26 14:51:19.
     -->
     select 
     <include refid="Base_Column_List" />
@@ -174,7 +175,7 @@
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-11-23 11:48:52.
+      This element was generated on 2018-11-26 14:51:19.
     -->
     delete from t_mkt_convert_coupon_record
     where convert_coupon_record_id = #{convertCouponRecordId,jdbcType=BIGINT}
@@ -182,7 +183,7 @@
   <delete id="deleteByExample" parameterType="com.bizvane.mktcenterservice.models.po.MktConvertCouponRecordPOExample">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-11-23 11:48:52.
+      This element was generated on 2018-11-26 14:51:19.
     -->
     delete from t_mkt_convert_coupon_record
     <if test="_parameter != null">
@@ -192,7 +193,7 @@
   <insert id="insert" parameterType="com.bizvane.mktcenterservice.models.po.MktConvertCouponRecordPO">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-11-23 11:48:52.
+      This element was generated on 2018-11-26 14:51:19.
     -->
     <selectKey keyProperty="convertCouponRecordId" order="AFTER" resultType="java.lang.Long">
       SELECT LAST_INSERT_ID()
@@ -200,26 +201,26 @@
     insert into t_mkt_convert_coupon_record (convert_coupon_record_code, exchange_id, 
       exchange_code, sys_company_id, sys_brand_id, 
       member_name, member_code, card_no, 
-      coupon_name, coupon_num, convert_price, 
-      convert_num, convert_tatal_integral, convert_time, 
-      success_type, create_user_id, create_user_name, 
-      create_date, modified_user_id, modified_user_name, 
-      modified_date, valid, coupon_codes
-      )
+      coupon_name, coupon_entity_id, coupon_num, 
+      convert_price, convert_num, convert_tatal_integral, 
+      convert_time, success_type, create_user_id, 
+      create_user_name, create_date, modified_user_id, 
+      modified_user_name, modified_date, valid, 
+      coupon_codes)
     values (#{convertCouponRecordCode,jdbcType=VARCHAR}, #{exchangeId,jdbcType=BIGINT}, 
       #{exchangeCode,jdbcType=VARCHAR}, #{sysCompanyId,jdbcType=BIGINT}, #{sysBrandId,jdbcType=BIGINT}, 
       #{memberName,jdbcType=VARCHAR}, #{memberCode,jdbcType=VARCHAR}, #{cardNo,jdbcType=VARCHAR}, 
-      #{couponName,jdbcType=VARCHAR}, #{couponNum,jdbcType=INTEGER}, #{convertPrice,jdbcType=INTEGER}, 
-      #{convertNum,jdbcType=INTEGER}, #{convertTatalIntegral,jdbcType=INTEGER}, #{convertTime,jdbcType=TIMESTAMP}, 
-      #{successType,jdbcType=BIT}, #{createUserId,jdbcType=BIGINT}, #{createUserName,jdbcType=VARCHAR}, 
-      #{createDate,jdbcType=TIMESTAMP}, #{modifiedUserId,jdbcType=BIGINT}, #{modifiedUserName,jdbcType=VARCHAR}, 
-      #{modifiedDate,jdbcType=TIMESTAMP}, #{valid,jdbcType=BIT}, #{couponCodes,jdbcType=LONGVARCHAR}
-      )
+      #{couponName,jdbcType=VARCHAR}, #{couponEntityId,jdbcType=BIGINT}, #{couponNum,jdbcType=INTEGER}, 
+      #{convertPrice,jdbcType=INTEGER}, #{convertNum,jdbcType=INTEGER}, #{convertTatalIntegral,jdbcType=INTEGER}, 
+      #{convertTime,jdbcType=TIMESTAMP}, #{successType,jdbcType=BIT}, #{createUserId,jdbcType=BIGINT}, 
+      #{createUserName,jdbcType=VARCHAR}, #{createDate,jdbcType=TIMESTAMP}, #{modifiedUserId,jdbcType=BIGINT}, 
+      #{modifiedUserName,jdbcType=VARCHAR}, #{modifiedDate,jdbcType=TIMESTAMP}, #{valid,jdbcType=BIT}, 
+      #{couponCodes,jdbcType=LONGVARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.bizvane.mktcenterservice.models.po.MktConvertCouponRecordPO">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-11-23 11:48:52.
+      This element was generated on 2018-11-26 14:51:19.
     -->
     <selectKey keyProperty="convertCouponRecordId" order="AFTER" resultType="java.lang.Long">
       SELECT LAST_INSERT_ID()
@@ -252,6 +253,9 @@
       </if>
       <if test="couponName != null">
         coupon_name,
+      </if>
+      <if test="couponEntityId != null">
+        coupon_entity_id,
       </if>
       <if test="couponNum != null">
         coupon_num,
@@ -324,6 +328,9 @@
       <if test="couponName != null">
         #{couponName,jdbcType=VARCHAR},
       </if>
+      <if test="couponEntityId != null">
+        #{couponEntityId,jdbcType=BIGINT},
+      </if>
       <if test="couponNum != null">
         #{couponNum,jdbcType=INTEGER},
       </if>
@@ -371,7 +378,7 @@
   <select id="countByExample" parameterType="com.bizvane.mktcenterservice.models.po.MktConvertCouponRecordPOExample" resultType="java.lang.Long">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-11-23 11:48:52.
+      This element was generated on 2018-11-26 14:51:19.
     -->
     select count(*) from t_mkt_convert_coupon_record
     <if test="_parameter != null">
@@ -381,7 +388,7 @@
   <update id="updateByExampleSelective" parameterType="map">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-11-23 11:48:52.
+      This element was generated on 2018-11-26 14:51:19.
     -->
     update t_mkt_convert_coupon_record
     <set>
@@ -414,6 +421,9 @@
       </if>
       <if test="record.couponName != null">
         coupon_name = #{record.couponName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.couponEntityId != null">
+        coupon_entity_id = #{record.couponEntityId,jdbcType=BIGINT},
       </if>
       <if test="record.couponNum != null">
         coupon_num = #{record.couponNum,jdbcType=INTEGER},
@@ -465,7 +475,7 @@
   <update id="updateByExampleWithBLOBs" parameterType="map">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-11-23 11:48:52.
+      This element was generated on 2018-11-26 14:51:19.
     -->
     update t_mkt_convert_coupon_record
     set convert_coupon_record_id = #{record.convertCouponRecordId,jdbcType=BIGINT},
@@ -478,6 +488,7 @@
       member_code = #{record.memberCode,jdbcType=VARCHAR},
       card_no = #{record.cardNo,jdbcType=VARCHAR},
       coupon_name = #{record.couponName,jdbcType=VARCHAR},
+      coupon_entity_id = #{record.couponEntityId,jdbcType=BIGINT},
       coupon_num = #{record.couponNum,jdbcType=INTEGER},
       convert_price = #{record.convertPrice,jdbcType=INTEGER},
       convert_num = #{record.convertNum,jdbcType=INTEGER},
@@ -499,7 +510,7 @@
   <update id="updateByExample" parameterType="map">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-11-23 11:48:52.
+      This element was generated on 2018-11-26 14:51:19.
     -->
     update t_mkt_convert_coupon_record
     set convert_coupon_record_id = #{record.convertCouponRecordId,jdbcType=BIGINT},
@@ -512,6 +523,7 @@
       member_code = #{record.memberCode,jdbcType=VARCHAR},
       card_no = #{record.cardNo,jdbcType=VARCHAR},
       coupon_name = #{record.couponName,jdbcType=VARCHAR},
+      coupon_entity_id = #{record.couponEntityId,jdbcType=BIGINT},
       coupon_num = #{record.couponNum,jdbcType=INTEGER},
       convert_price = #{record.convertPrice,jdbcType=INTEGER},
       convert_num = #{record.convertNum,jdbcType=INTEGER},
@@ -532,7 +544,7 @@
   <update id="updateByPrimaryKeySelective" parameterType="com.bizvane.mktcenterservice.models.po.MktConvertCouponRecordPO">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-11-23 11:48:52.
+      This element was generated on 2018-11-26 14:51:19.
     -->
     update t_mkt_convert_coupon_record
     <set>
@@ -562,6 +574,9 @@
       </if>
       <if test="couponName != null">
         coupon_name = #{couponName,jdbcType=VARCHAR},
+      </if>
+      <if test="couponEntityId != null">
+        coupon_entity_id = #{couponEntityId,jdbcType=BIGINT},
       </if>
       <if test="couponNum != null">
         coupon_num = #{couponNum,jdbcType=INTEGER},
@@ -611,7 +626,7 @@
   <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.bizvane.mktcenterservice.models.po.MktConvertCouponRecordPO">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-11-23 11:48:52.
+      This element was generated on 2018-11-26 14:51:19.
     -->
     update t_mkt_convert_coupon_record
     set convert_coupon_record_code = #{convertCouponRecordCode,jdbcType=VARCHAR},
@@ -623,6 +638,7 @@
       member_code = #{memberCode,jdbcType=VARCHAR},
       card_no = #{cardNo,jdbcType=VARCHAR},
       coupon_name = #{couponName,jdbcType=VARCHAR},
+      coupon_entity_id = #{couponEntityId,jdbcType=BIGINT},
       coupon_num = #{couponNum,jdbcType=INTEGER},
       convert_price = #{convertPrice,jdbcType=INTEGER},
       convert_num = #{convertNum,jdbcType=INTEGER},
@@ -642,7 +658,7 @@
   <update id="updateByPrimaryKey" parameterType="com.bizvane.mktcenterservice.models.po.MktConvertCouponRecordPO">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-11-23 11:48:52.
+      This element was generated on 2018-11-26 14:51:19.
     -->
     update t_mkt_convert_coupon_record
     set convert_coupon_record_code = #{convertCouponRecordCode,jdbcType=VARCHAR},
@@ -654,6 +670,7 @@
       member_code = #{memberCode,jdbcType=VARCHAR},
       card_no = #{cardNo,jdbcType=VARCHAR},
       coupon_name = #{couponName,jdbcType=VARCHAR},
+      coupon_entity_id = #{couponEntityId,jdbcType=BIGINT},
       coupon_num = #{couponNum,jdbcType=INTEGER},
       convert_price = #{convertPrice,jdbcType=INTEGER},
       convert_num = #{convertNum,jdbcType=INTEGER},
@@ -727,7 +744,7 @@
     ORDER BY create_date  DESC
   </select>
 
-  <select id="getConvertNumber"  resultType="java.lang.Integer">
+  <select id="getConvertNumber" resultType="java.lang.Integer">
   SELECT
   SUM(convert_num)
   FROM
