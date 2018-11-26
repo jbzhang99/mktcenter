@@ -63,7 +63,7 @@ public class TaskForWXRpcController {
     }
     //查询已兑换
     @RequestMapping("/getConvernConpouByMember")
-    public ResponseData<List<MktConvertCouponRecordPO>> getConvernConpouByMember(@RequestBody CouponRecordVO vo){
+    public ResponseData<PageInfo<MktConvertCouponRecordPO>> getConvernConpouByMember(@RequestBody CouponRecordVO vo){
         return convertCouponService.getConvernConpouByMember(vo);
     }
 }

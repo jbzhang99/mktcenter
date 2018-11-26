@@ -48,5 +48,5 @@ public interface TaskServiceForWXRpc {
     public ResponseData<Integer> doConvernCoupon(@RequestBody CouponRecordVO vo);
     //查询已兑换
     @RequestMapping("/getConvernConpouByMember")
-    public ResponseData<List<MktConvertCouponRecordPO>> getConvernConpouByMember(@RequestBody CouponRecordVO vo);
+    public ResponseData<PageInfo<MktConvertCouponRecordPO>> getConvernConpouByMember(@RequestBody CouponRecordVO vo);
 }

@@ -23,7 +23,7 @@ public interface ConvertCouponService {
 
     public ResponseData<Integer> doConvernCoupon(CouponRecordVO vo);
 
-    public ResponseData<List<MktConvertCouponRecordPO>> getConvernConpouByMember(CouponRecordVO vo);
+    public ResponseData<PageInfo<MktConvertCouponRecordPO>> getConvernConpouByMember(CouponRecordVO vo);
 
     public void doExportData(CouponRecordVO vo,HttpServletResponse response) throws IOException;
 }

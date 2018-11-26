@@ -24,7 +24,6 @@ import com.bizvane.mktcenterserviceimpl.common.utils.CodeUtil;
 import com.bizvane.mktcenterserviceimpl.common.utils.TimeUtils;
 import com.bizvane.mktcenterserviceimpl.mappers.MktConvertCouponRecordPOMapper;
 import com.bizvane.mktcenterserviceimpl.mappers.MktCouponIntegralExchangePOMapper;
-import com.bizvane.utils.commonutils.DateUtils;
 import com.bizvane.utils.responseinfo.ResponseData;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
@@ -261,12 +260,14 @@ public class ConvertCouponServiceImpl implements ConvertCouponService {
 
     //查询已兑换券列表
     @Override
-    public ResponseData<List<MktConvertCouponRecordPO>> getConvernConpouByMember(CouponRecordVO vo) {
-        ResponseData<List<MktConvertCouponRecordPO>> responseData = new ResponseData<>();
+    public ResponseData<PageInfo<MktConvertCouponRecordPO>> getConvernConpouByMember(CouponRecordVO vo) {
+        ResponseData<PageInfo<MktConvertCouponRecordPO>> responseData = new ResponseData<>();
+        PageHelper.startPage(vo.getPageNumber(), vo.getPageSize());
         MktConvertCouponRecordPOExample example = new MktConvertCouponRecordPOExample();
         example.createCriteria().andMemberCodeEqualTo(vo.getMemberCode()).andValidEqualTo(Boolean.TRUE);
         List<MktConvertCouponRecordPO> mktConvertCouponRecordPOS = mktConvertCouponRecordPOMapper.selectByExampleWithBLOBs(example);
-        responseData.setData(mktConvertCouponRecordPOS);
+        PageInfo<MktConvertCouponRecordPO> page = new PageInfo<>(mktConvertCouponRecordPOS);
+        responseData.setData(page);
         return responseData;
     }
 
