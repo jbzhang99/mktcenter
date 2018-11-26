@@ -718,6 +718,9 @@
         t_mkt_convert_coupon_record
        WHERE
         valid = 1
+      <if test="brandId!=null and brandId!=''">
+        AND sys_brand_id=#{brandId}
+      </if>
        <if test="convertCouponRecordCode!=null and convertCouponRecordCode!=''">
         AND convert_coupon_record_code  LIKE CONCAT('%',#{convertCouponRecordCode},'%')
        </if>
