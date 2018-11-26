@@ -713,6 +713,32 @@
     </if>
     ORDER BY tma.create_date DESC
   </select>
+  <!--批量上架下架 -->
+  <update id="batchUpdateCouponIntegralExchange" parameterType="com.bizvane.mktcenterservice.models.vo.MktCouponIntegralExchangeVO">
+    update t_mkt_coupon_integral_exchange
+    <set>
+      <if test="salesStatus != null">
+        sales_status = #{salesStatus,jdbcType=INTEGER},
+      </if>
+      <if test="modifyUserId != null">
+        modify_user_id = #{modifyUserId,jdbcType=BIGINT},
+      </if>
+      <if test="modifyUserName != null">
+        modify_user_name = #{modifyUserName,jdbcType=VARCHAR},
+      </if>
+      <if test="modifiedDate != null">
+        modified_date = #{modifiedDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="valid != null">
+        valid = #{valid,jdbcType=BIT},
+      </if>
+    </set>
+    where exchange_id in
+    <foreach collection="exchangeIds" item="item"
+             open="(" close=")" separator=",">
+      #{item}
+    </foreach>
+  </update>
 
   <select id="getExchangeLists" resultType="com.bizvane.mktcenterservice.models.vo.MktCouponIntegralExchangeVO">
     SELECT

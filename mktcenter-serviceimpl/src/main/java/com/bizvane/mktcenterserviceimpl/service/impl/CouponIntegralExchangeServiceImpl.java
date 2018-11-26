@@ -3,10 +3,10 @@ package com.bizvane.mktcenterserviceimpl.service.impl;
 import com.alibaba.fastjson.JSON;
 import com.bizvane.centerstageservice.models.po.SysStorePo;
 import com.bizvane.centerstageservice.rpc.StoreServiceRpc;
+import com.bizvane.couponfacade.interfaces.CouponQueryServiceFeign;
+import com.bizvane.couponfacade.models.vo.CouponDetailResponseVO;
 import com.bizvane.mktcenterservice.interfaces.CouponIntegralExchangeService;
-import com.bizvane.mktcenterservice.models.po.MktActivityPOWithBLOBs;
 import com.bizvane.mktcenterservice.models.po.MktCouponIntegralExchangePO;
-import com.bizvane.mktcenterservice.models.vo.ActivityVO;
 import com.bizvane.mktcenterservice.models.vo.MktCouponIntegralExchangeVO;
 import com.bizvane.mktcenterservice.models.vo.PageForm;
 import com.bizvane.mktcenterserviceimpl.common.utils.CodeUtil;
@@ -39,6 +39,8 @@ public class CouponIntegralExchangeServiceImpl implements CouponIntegralExchange
 
     @Autowired
     private StoreServiceRpc storeServiceRpc;
+    @Autowired
+    private CouponQueryServiceFeign couponQueryServiceFeign;
     /**
      * 积分兑换券列表
      * @param vo
@@ -53,6 +55,11 @@ public class CouponIntegralExchangeServiceImpl implements CouponIntegralExchange
         vo.setSysBrandId(stageUser.getBrandId());
         log.info("积分兑换券列表开始，参数="+ JSON.toJSONString(vo));
         List<MktCouponIntegralExchangeVO> mktCouponIntegralExchangeVOList = mktCouponIntegralExchangePOMapper.getCouponIntegralExchangeList(vo);
+        for (MktCouponIntegralExchangeVO mktCouponIntegralExchangeVO:mktCouponIntegralExchangeVOList) {
+                if (null!=mktCouponIntegralExchangeVO.getStoreStatus() && null!=mktCouponIntegralExchangeVO.getAlreadyExchangeCount()){
+                    mktCouponIntegralExchangeVO.setRestCount((int) (mktCouponIntegralExchangeVO.getStoreCount()  - mktCouponIntegralExchangeVO.getAlreadyExchangeCount()));
+                }
+        }
         PageInfo<MktCouponIntegralExchangeVO> pageInfo = new PageInfo<>(mktCouponIntegralExchangeVOList);
         responseData.setData(pageInfo);
         return responseData;
@@ -108,7 +115,7 @@ public class CouponIntegralExchangeServiceImpl implements CouponIntegralExchange
     }
 
     /**
-     * 查看积分兑换规则
+     * 查看积分兑换规则详情
      * @param exchangeId
      * @return
      */
@@ -130,7 +137,32 @@ public class CouponIntegralExchangeServiceImpl implements CouponIntegralExchange
             couponIntegralExchangeVO.setSysStorePos(sysStorePOs.getData());
         }
         //查询券
+        ResponseData<CouponDetailResponseVO>  entityAndDefinition = couponQueryServiceFeign.getCouponDefinition(couponIntegralExchangeVO.getCouponEntityId());
+        couponIntegralExchangeVO.setCouponDetailResponseVO(entityAndDefinition.getData());
 
-        return null;
+        responseData.setData(couponIntegralExchangeVO);
+        responseData.setCode(SysResponseEnum.SUCCESS.getCode());
+        responseData.setMessage(SysResponseEnum.SUCCESS.getMessage());
+        return responseData;
+    }
+
+    /**
+     * 批量上下架
+     * @param vo
+     * @param stageUser
+     * @return
+     */
+    @Override
+    public ResponseData<Integer> batchUpdateCouponIntegralExchange(MktCouponIntegralExchangeVO vo, SysAccountPO stageUser) {
+        ResponseData responseData = new ResponseData();
+        vo.setModifyUserId(stageUser.getCreateUserId());
+        vo.setModifyUserName(stageUser.getCreateUserName());
+        vo.setModifiedDate(new Date());
+        vo.setValid(Boolean.TRUE);
+        log.info("批量上下架，参数="+ JSON.toJSONString(vo));
+        mktCouponIntegralExchangePOMapper.batchUpdateCouponIntegralExchange(vo);
+        responseData.setCode(SysResponseEnum.SUCCESS.getCode());
+        responseData.setMessage(SysResponseEnum.SUCCESS.getMessage());
+        return responseData;
     }
 }

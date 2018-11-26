@@ -107,7 +107,19 @@ public interface MktCouponIntegralExchangePOMapper {
      */
     int updateByPrimaryKey(MktCouponIntegralExchangePO record);
 
+    /**
+     * 查询列表
+     * @param vo
+     * @return
+     */
     List<MktCouponIntegralExchangeVO> getCouponIntegralExchangeList(MktCouponIntegralExchangeVO vo);
+
+    /**
+     * 批量上下架
+     * @param vo
+     * @return
+     */
+    int batchUpdateCouponIntegralExchange(MktCouponIntegralExchangeVO vo);
 
     List<MktCouponIntegralExchangeVO> getExchangeLists(CouponRecordVO vo);
     List<Long> getExchangeIds(CouponRecordVO vo);
