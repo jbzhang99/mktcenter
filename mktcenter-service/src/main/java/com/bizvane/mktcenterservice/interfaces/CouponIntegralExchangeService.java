@@ -40,4 +40,10 @@ public interface CouponIntegralExchangeService {
      * @return
      */
     public ResponseData<MktCouponIntegralExchangeVO> selectCouponIntegralExchange(Long exchangeId);
+
+    /**
+     *批量上架下架
+     * @return
+     */
+    public ResponseData<Integer> batchUpdateCouponIntegralExchange(MktCouponIntegralExchangeVO vo,SysAccountPO stageUser);
 }

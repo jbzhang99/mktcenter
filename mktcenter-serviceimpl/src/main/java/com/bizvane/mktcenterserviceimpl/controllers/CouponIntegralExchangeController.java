@@ -71,4 +71,16 @@ public class CouponIntegralExchangeController {
     public ResponseData<MktCouponIntegralExchangeVO> selectCouponIntegralExchange(Long exchangeId){
         return couponIntegralExchangeService.selectCouponIntegralExchange(exchangeId);
     }
+
+    /**
+     * 批量上下架
+     * @param vo
+     * @param request
+     * @return
+     */
+    public ResponseData<Integer> batchUpdateCouponIntegralExchange(MktCouponIntegralExchangeVO vo,HttpServletRequest request){
+        SysAccountPO stageUser = TokenUtils.getStageUser(request);
+        ResponseData<Integer> batchResponseData = couponIntegralExchangeService.batchUpdateCouponIntegralExchange(vo,stageUser);
+        return batchResponseData;
+    }
 }
