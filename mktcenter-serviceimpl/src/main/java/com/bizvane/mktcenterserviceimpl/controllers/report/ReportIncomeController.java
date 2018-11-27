@@ -2,8 +2,6 @@ package com.bizvane.mktcenterserviceimpl.controllers.report;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -11,10 +9,8 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.lang3.StringUtils;
-import org.apache.poi.hssf.record.chart.BarRecord;
 import org.codehaus.jettison.json.JSONArray;
 import org.codehaus.jettison.json.JSONException;
-import org.eclipse.jetty.io.ByteBufferPool.Bucket;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -22,12 +18,9 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
 import com.alibaba.fastjson.JSONObject;
-import com.aliyun.openservices.shade.io.netty.handler.codec.http.multipart.HttpPostRequestEncoder.ErrorDataEncoderException;
-import com.bizvane.centerstageservice.interfaces.SysStoreService;
 import com.bizvane.centerstageservice.models.po.SysCompanyPo;
 import com.bizvane.centerstageservice.models.po.SysStoreGroupPo;
 import com.bizvane.centerstageservice.models.po.SysStorePo;
-import com.bizvane.centerstageservice.models.vo.StaffVo;
 import com.bizvane.centerstageservice.models.vo.SysStoreVo;
 import com.bizvane.centerstageservice.rpc.CompanyServiceRpc;
 import com.bizvane.centerstageservice.rpc.StoreGroupServiceRpc;
@@ -36,10 +29,6 @@ import com.bizvane.mktcenterservice.interfaces.ReportTempService;
 import com.bizvane.mktcenterservice.models.po.FileReportTempPO;
 import com.bizvane.mktcenterservice.models.po.FileReportTempPOExample;
 import com.bizvane.mktcenterservice.models.requestvo.BackData;
-import com.bizvane.mktcenterservice.models.requestvo.BackDataBiaotou;
-import com.bizvane.mktcenterservice.models.requestvo.BackDataTime;
-import com.bizvane.mktcenterservice.models.requestvo.BackDataTimeDtail;
-import com.bizvane.mktcenterservice.models.requestvo.BackDataTimeDtailtu;
 import com.bizvane.mktcenterservice.models.requestvo.postvo.ActiveMemberAllInterface;
 import com.bizvane.mktcenterservice.models.requestvo.postvo.IncomeTotalList;
 import com.bizvane.mktcenterservice.models.requestvo.postvo.IncomeVip;
@@ -54,13 +43,10 @@ import com.bizvane.mktcenterservice.models.requestvo.postvo.VipNum;
 import com.bizvane.mktcenterserviceimpl.common.report.BaseUrl;
 import com.bizvane.mktcenterserviceimpl.common.utils.FigureUtil;
 import com.bizvane.mktcenterserviceimpl.mappers.FileReportTempPOMapper;
-import com.bizvane.utils.responseinfo.PageInfo;
 import com.bizvane.utils.responseinfo.ResponseData;
 import com.bizvane.utils.tokens.SysAccountPO;
 import com.bizvane.utils.tokens.TokenUtils;
-import com.netflix.infix.lang.infix.antlr.EventFilterParser.null_predicate_return;
 
-import javassist.expr.NewArray;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -180,6 +166,7 @@ public class ReportIncomeController {
 		    				             }
 		    			   	          ResponseData<List<Long>> getStoreIdsByGroupIds = storeGroupServiceRpc.getStoreIdsByGroupIds(storeGroupIds);
 		    			   	         jsonObject.put("organization", "1"); // 直接put相同的key
+		    			   	         jsonObject.put("dimension", "1"); // 直接put相同的key
 		    			   	          if(getStoreIdsByGroupIds.getData()!=null) {
 		    		//   		      	根据群组id列表查询群组下所有的店铺
 			    			   	          ResponseData<List<SysStorePo>>getStoreIds= storeServiceRpc.getIdStoreLists(getStoreIdsByGroupIds.getData());
@@ -221,9 +208,14 @@ public class ReportIncomeController {
 		     if(organization.equals("3")) {
 		     try {
 		    	 //隐藏平均折扣，复购率
-//		    	 List<FileReportTempPO> fileReportTempPOlist =null;
-		    	 String ReportDataName =fileReportTempPOlist.get(0).getReportDataName().replaceAll("averageDiscount,", "");
-//		    	 fileReportTempPOlist=
+		    	 FileReportTempPO fileReportTemp =fileReportTempPOlist.get(0);
+		    	 
+		    	String  AAA= fileReportTempPOlist.get(0).getReportData().replaceAll("平均折扣(%),", "").replaceAll("复购率(%),", "");
+		    	AAA=AAA.replaceAll("平均折扣(%),", "").replaceAll("复购率(%),", "");
+		    	 fileReportTemp.setReportData(fileReportTempPOlist.get(0).getReportData().replaceAll("平均折扣(%),", "").replaceAll("复购率(%),", ""));
+		    	 fileReportTemp.setReportDataName(fileReportTempPOlist.get(0).getReportDataName().replaceAll("averageDiscount", "").replaceAll("complexPurchaseRate", ""));
+		    	 fileReportTempPOlist=new ArrayList<FileReportTempPO>();
+		    	 fileReportTempPOlist.add(fileReportTemp);
 		    	 
                    // 找到店铺对应群主信息
 	    		  List<Long> storeGroupIds =new ArrayList<>();
@@ -280,8 +272,20 @@ public class ReportIncomeController {
 						    				  jsongroup.put(SysStoreGroupPo.getSysStoreGroupId().toString(), jsonObjtarr);
 						    			  }else {
 						    				  // 相加
-						    				  
+//						    				  业绩
+						    				  String achievementsstr ="";
 						    		 			for(String string :fileReportTempPOlist.get(0).getReportDataName().split(",")) {
+						    		 				
+						    		 				if(string.equals("achievements")) {
+							    		 				BigDecimal valueData= new BigDecimal("0");
+							    		 				Iterator<String> it = jsonObjtarr.keys(); 
+							    		 				while(it.hasNext()){
+								    		 				if(it.next().equals(string)) {
+								    		 					 achievementsstr =jsonObjtarr.get("achievements").toString();
+								    		 					}
+								    		 				}
+						    		 				}
+						    		 				
 						    		 			   // 新加
 						    		 				BigDecimal valueData= new BigDecimal("0");
 						    		 				Iterator<String> it = jsonObjtarr.keys(); 
@@ -289,9 +293,9 @@ public class ReportIncomeController {
 							    		 				if(it.next().equals(string)) {
 							    		 					//如果是业绩占比，总业绩除占比
 							    		 					if(string.equals("percentOfAchievements")) {
-							    		 						BigDecimal achievements= new BigDecimal(jsonObjtarr.get("achievements").toString());
+							    		 						BigDecimal achievements= new BigDecimal(achievementsstr);
 							    		 						achievements=achievements.multiply(new BigDecimal("100"));
-							    		 						valueData= achievements.divide(new BigDecimal(jsonObjtarr.get(string).toString()),2,BigDecimal.ROUND_HALF_UP); ;
+							    		 						valueData= achievements.divide(new BigDecimal(jsonObjtarr.get(string).toString()),2,BigDecimal.ROUND_HALF_UP);
 							    		 					}else {
 							    		 						valueData= valueData.add(new BigDecimal(jsonObjtarr.get(string).toString()));
 							    		 					}
@@ -345,40 +349,40 @@ public class ReportIncomeController {
 			 		  
 		 				Iterator<String> itnewjsongroupnew = jsongroupnew.keys(); 
 		 				while(itnewjsongroupnew.hasNext()){
-		 					if(itnewjsongroupnew.next()==null) {
-		 						break;
-		 					}
-		 		 				if(itnewjsongroupnew.next().equals("achievements")) {
+		 					
+		 				String itnewjsong =	itnewjsongroupnew.next();
+
+		 		 				if(itnewjsong.equals("achievements")) {
 		 					          BigDecimal   achievements   =   new   BigDecimal(jsongroupnew.getString("achievements"));
 		 					          achievements=achievements.divide(new BigDecimal(jsongroupnew.getString("pieceNumber")),2,BigDecimal.ROUND_HALF_UP);
 		 					 		  jsongroupnew.put("unitPrice", achievements.toString());// 件单价=总业绩/件数
-		 					 		break;
+		 					 		continue;
 		 		 				}
  		 				        
-		 		 				if(itnewjsongroupnew.next().equals("guestPrice")) {
-		 					          BigDecimal   achievements   =   new   BigDecimal(jsongroupnew.getString("achievements"));
+		 		 				if(itnewjsong.equals("guestPrice")) {
+		 					          BigDecimal   achievements   =   new   BigDecimal(jsongroupnew.getString("pieceNumber"));
 		 					          achievements=achievements.divide(new BigDecimal(jsongroupnew.getString("penNumber")),2,BigDecimal.ROUND_HALF_UP);
 		 					 		  jsongroupnew.put("guestPrice", achievements.toString());// 客单价=总业绩/笔数
-		 					 		break;
+		 					 		continue;
 		 		 				}
 		 		 				
-		 		 				if(itnewjsongroupnew.next().equals("jointRate")) {
+		 		 				if(itnewjsong.equals("jointRate")) {
 		 					          BigDecimal   achievements   =   new   BigDecimal(jsongroupnew.getString("achievements"));
 		 					          achievements=achievements.divide(new BigDecimal(jsongroupnew.getString("penNumber")),2,BigDecimal.ROUND_HALF_UP);
 		 					 		  jsongroupnew.put("jointRate", achievements.toString());// 连带率=件数/笔数，
-		 					 		break;
+		 					 		continue;
 		 		 				}
 		 		 				
-		 		 				if(itnewjsongroupnew.next().equals("averageConsumptionTimes")) {
+		 		 				if(itnewjsong.equals("averageConsumptionTimes")) {
 		 					          BigDecimal   achievements   =   new   BigDecimal(jsongroupnew.getString("penNumber"));
 		 					          achievements=achievements.divide(new BigDecimal(jsongroupnew.getString("number")),2,BigDecimal.ROUND_HALF_UP);
 		 					 		  jsongroupnew.put("averageConsumptionTimes", achievements.toString());//  平均消费次数=笔数/人数,
 		 		 				}
 		 		 				
-		 		 				if(itnewjsongroupnew.next().equals("percentOfAchievements")) {
+		 		 				if(itnewjsong.equals("percentOfAchievements")) {
 		 					          BigDecimal   achievements   =   new   BigDecimal(jsongroupnew.getString("achievements"));
-		 					          achievements=achievements.divide(new BigDecimal(jsongroupnew.getString("percentOfAchievements")),2,BigDecimal.ROUND_HALF_UP);
-		 					 		  jsongroupnew.put("percentOfAchievements", achievements.toString());//  平均消费次数=笔数/人数,
+		 					          achievements=achievements.divide(new BigDecimal(jsongroupnew.getString("percentOfAchievements")),4,BigDecimal.ROUND_HALF_UP);
+		 					 		  jsongroupnew.put("percentOfAchievements", achievements.multiply(new BigDecimal(100)));//  平均消费次数=笔数/人数,
 		 		 				}
 		 		 				
 		 		 				
@@ -415,10 +419,15 @@ public class ReportIncomeController {
 			    		  List<String> storellist =new ArrayList<>();
 			    		  storellist.add(storeCode);
 			    		  ResponseData<Map<String,String>> getStore	=  storeServiceRpc.getStoreGroupNameByStoreCodes(storellist);
-			    		  jsonObjtarr.put("groupId", getStore.getData().get(storeCode));
+			    		  if(getStore.getData().get(storeCode)==null) {
+			    			  jsonObjtarr.put("groupId", "");
+			    		  }else {
+			    			  jsonObjtarr.put("groupId", getStore.getData().get(storeCode));
+			    		  }
+			    		  
 			    		  //找店铺名
 			    	     com.bizvane.utils.responseinfo.ResponseData<String> storeCodename = storeServiceRpc.getStoreNameByCode(storeCode);
-			    	     
+			    	      
 			    		  jsonObjtarr.put("storeName", storeCodename.getData());
 			    		  
 			    		  havegroupIdarr.put(jsonObjtarr);
