@@ -848,9 +848,8 @@ public class TaskServiceImpl implements TaskService {
         Integer taskType = vo.getTaskType();
         //每个任务的券,积分,会员 总数
         PageHelper.startPage(vo.getPageNumber(),vo.getPageSize());
-        List<DayTaskRecordVo> analysisall = mktTaskRecordPOMapper.getAnalysisResult(vo);
-        PageInfo<DayTaskRecordVo> dayTaskRecordVoPage = new PageInfo<>(analysisall);
-        List<DayTaskRecordVo> analysislists = dayTaskRecordVoPage.getList();
+        List<DayTaskRecordVo> analysislists = mktTaskRecordPOMapper.getAnalysisResult(vo);
+
         //赠送总积分数
         final Long[] allPoints = {0L};
         //发行券总张数
@@ -897,6 +896,9 @@ public class TaskServiceImpl implements TaskService {
         taskRecordVO.setAllCountMbr(allCountMbr[0]);
         //被核销优惠券总数
         taskRecordVO.setAllinvalidCountCoupon(allinvalidCountCoupon[0]);
+
+
+        PageInfo<DayTaskRecordVo> dayTaskRecordVoPage = new PageInfo<>(analysislists);
         //每天或每条记录 的分页结果
         taskRecordVO.setDayTaskRecordVoList(dayTaskRecordVoPage);
 
