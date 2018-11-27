@@ -11,8 +11,8 @@ import java.util.List;
  * Created by agan on 2018/11/22.
  */
 public class MktCouponIntegralExchangeVO extends MktCouponIntegralExchangePO{
-    private Date startTime;
-    private  Date endTime;
+    private String startTime;
+    private  String endTime;
 
     private List<Long> exchangeIds;//id集合
     private Integer restCount;//剩余库存
@@ -55,19 +55,19 @@ public class MktCouponIntegralExchangeVO extends MktCouponIntegralExchangePO{
         this.sysStorePos = sysStorePos;
     }
 
-    public Date getStartTime() {
+    public String getStartTime() {
         return startTime;
     }
 
-    public void setStartTime(Date startTime) {
+    public void setStartTime(String startTime) {
         this.startTime = startTime;
     }
 
-    public Date getEndTime() {
+    public String getEndTime() {
         return endTime;
     }
 
-    public void setEndTime(Date endTime) {
+    public void setEndTime(String endTime) {
         this.endTime = endTime;
     }
 
