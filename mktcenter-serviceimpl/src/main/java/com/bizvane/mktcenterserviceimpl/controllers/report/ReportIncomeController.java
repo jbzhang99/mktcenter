@@ -210,10 +210,23 @@ public class ReportIncomeController {
 		    	 //隐藏平均折扣，复购率
 		    	 FileReportTempPO fileReportTemp =fileReportTempPOlist.get(0);
 		    	 
-		    	String  AAA= fileReportTempPOlist.get(0).getReportData().replaceAll("平均折扣(%),", "").replaceAll("复购率(%),", "");
-		    	AAA=AAA.replaceAll("平均折扣(%),", "").replaceAll("复购率(%),", "");
-		    	 fileReportTemp.setReportData(fileReportTempPOlist.get(0).getReportData().replaceAll("平均折扣(%),", "").replaceAll("复购率(%),", ""));
-		    	 fileReportTemp.setReportDataName(fileReportTempPOlist.get(0).getReportDataName().replaceAll("averageDiscount", "").replaceAll("complexPurchaseRate", ""));
+		    	String setReportData="";
+		    	for( String trLong : fileReportTempPOlist.get(0).getReportData().split(",")) {
+		    		boolean status = trLong.contains("平均折扣");
+		    		boolean statusf = trLong.contains("复购率");
+		    		if(!status){
+		    			if(!statusf){
+		    				if(setReportData.equals("")) {
+		    					setReportData=trLong+",";
+		    				}else {
+		    					setReportData=setReportData+trLong+",";
+		    				}
+		    				
+		    			}
+		    		}
+		    	 }
+		    	 fileReportTemp.setReportData(setReportData);
+		    	 fileReportTemp.setReportDataName(fileReportTempPOlist.get(0).getReportDataName().replaceAll("averageDiscount,", "").replaceAll("complexPurchaseRate,", ""));
 		    	 fileReportTempPOlist=new ArrayList<FileReportTempPO>();
 		    	 fileReportTempPOlist.add(fileReportTemp);
 		    	 
