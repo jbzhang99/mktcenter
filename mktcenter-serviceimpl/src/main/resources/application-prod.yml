@@ -94,7 +94,7 @@ feign:
       path: message.api
     wechat:
       name: wechat-prod
-      path: wechat.api
+      path: wechat
     applet:
       name: applet-prod
       path: applet.api
