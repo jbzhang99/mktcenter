@@ -1,6 +1,7 @@
 package com.bizvane.mktcenterservice.models.vo;
 
 import com.bizvane.centerstageservice.models.po.SysStorePo;
+import com.bizvane.couponfacade.models.po.CouponDefinitionPO;
 import com.bizvane.couponfacade.models.vo.CouponDetailResponseVO;
 import com.bizvane.mktcenterservice.models.po.MktCouponIntegralExchangePO;
 
@@ -20,6 +21,7 @@ public class MktCouponIntegralExchangeVO extends MktCouponIntegralExchangePO{
     private List<SysStorePo> sysStorePos;
     //券剩余数量
     private Integer residueCouponNumber;
+    private CouponDefinitionPO couponDefinitionPO;
     //券
     private CouponDetailResponseVO couponDetailResponseVO;
 
@@ -77,5 +79,13 @@ public class MktCouponIntegralExchangeVO extends MktCouponIntegralExchangePO{
 
     public void setResidueCouponNumber(Integer residueCouponNumber) {
         this.residueCouponNumber = residueCouponNumber;
+    }
+
+    public CouponDefinitionPO getCouponDefinitionPO() {
+        return couponDefinitionPO;
+    }
+
+    public void setCouponDefinitionPO(CouponDefinitionPO couponDefinitionPO) {
+        this.couponDefinitionPO = couponDefinitionPO;
     }
 }
