@@ -8,28 +8,28 @@ import java.util.List;
 public class MktConvertCouponRecordPOExample implements Serializable {
     /**
 	 * 只读. 
-	 * @mbg.generated  2018-11-23 11:48:52
+	 * @mbg.generated  2018-11-26 14:51:19
 	 */
 	protected String orderByClause;
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-11-23 11:48:52
+	 * @mbg.generated  2018-11-26 14:51:19
 	 */
 	protected boolean distinct;
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-11-23 11:48:52
+	 * @mbg.generated  2018-11-26 14:51:19
 	 */
 	protected List<Criteria> oredCriteria;
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-11-23 11:48:52
+	 * @mbg.generated  2018-11-26 14:51:19
 	 */
 	private static final long serialVersionUID = 1L;
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-11-23 11:48:52
+	 * @mbg.generated  2018-11-26 14:51:19
 	 */
 	public MktConvertCouponRecordPOExample() {
 		oredCriteria = new ArrayList<Criteria>();
@@ -37,7 +37,7 @@ public class MktConvertCouponRecordPOExample implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-11-23 11:48:52
+	 * @mbg.generated  2018-11-26 14:51:19
 	 */
 	public void setOrderByClause(String orderByClause) {
 		this.orderByClause = orderByClause;
@@ -45,7 +45,7 @@ public class MktConvertCouponRecordPOExample implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-11-23 11:48:52
+	 * @mbg.generated  2018-11-26 14:51:19
 	 */
 	public String getOrderByClause() {
 		return orderByClause;
@@ -53,7 +53,7 @@ public class MktConvertCouponRecordPOExample implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-11-23 11:48:52
+	 * @mbg.generated  2018-11-26 14:51:19
 	 */
 	public void setDistinct(boolean distinct) {
 		this.distinct = distinct;
@@ -61,7 +61,7 @@ public class MktConvertCouponRecordPOExample implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-11-23 11:48:52
+	 * @mbg.generated  2018-11-26 14:51:19
 	 */
 	public boolean isDistinct() {
 		return distinct;
@@ -69,7 +69,7 @@ public class MktConvertCouponRecordPOExample implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-11-23 11:48:52
+	 * @mbg.generated  2018-11-26 14:51:19
 	 */
 	public List<Criteria> getOredCriteria() {
 		return oredCriteria;
@@ -77,7 +77,7 @@ public class MktConvertCouponRecordPOExample implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-11-23 11:48:52
+	 * @mbg.generated  2018-11-26 14:51:19
 	 */
 	public void or(Criteria criteria) {
 		oredCriteria.add(criteria);
@@ -85,7 +85,7 @@ public class MktConvertCouponRecordPOExample implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-11-23 11:48:52
+	 * @mbg.generated  2018-11-26 14:51:19
 	 */
 	public Criteria or() {
 		Criteria criteria = createCriteriaInternal();
@@ -95,7 +95,7 @@ public class MktConvertCouponRecordPOExample implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-11-23 11:48:52
+	 * @mbg.generated  2018-11-26 14:51:19
 	 */
 	public Criteria createCriteria() {
 		Criteria criteria = createCriteriaInternal();
@@ -107,7 +107,7 @@ public class MktConvertCouponRecordPOExample implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-11-23 11:48:52
+	 * @mbg.generated  2018-11-26 14:51:19
 	 */
 	protected Criteria createCriteriaInternal() {
 		Criteria criteria = new Criteria();
@@ -116,7 +116,7 @@ public class MktConvertCouponRecordPOExample implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-11-23 11:48:52
+	 * @mbg.generated  2018-11-26 14:51:19
 	 */
 	public void clear() {
 		oredCriteria.clear();
@@ -126,7 +126,7 @@ public class MktConvertCouponRecordPOExample implements Serializable {
 
 	/**
 	 * 只读. t_mkt_convert_coupon_record
-	 * @mbg.generated  2018-11-23 11:48:52
+	 * @mbg.generated  2018-11-26 14:51:19
 	 */
 	protected abstract static class GeneratedCriteria implements Serializable {
 		protected List<Criterion> criteria;
@@ -826,6 +826,66 @@ public class MktConvertCouponRecordPOExample implements Serializable {
 
 		public Criteria andCouponNameNotBetween(String value1, String value2) {
 			addCriterion("coupon_name not between", value1, value2, "couponName");
+			return (Criteria) this;
+		}
+
+		public Criteria andCouponEntityIdIsNull() {
+			addCriterion("coupon_entity_id is null");
+			return (Criteria) this;
+		}
+
+		public Criteria andCouponEntityIdIsNotNull() {
+			addCriterion("coupon_entity_id is not null");
+			return (Criteria) this;
+		}
+
+		public Criteria andCouponEntityIdEqualTo(Long value) {
+			addCriterion("coupon_entity_id =", value, "couponEntityId");
+			return (Criteria) this;
+		}
+
+		public Criteria andCouponEntityIdNotEqualTo(Long value) {
+			addCriterion("coupon_entity_id <>", value, "couponEntityId");
+			return (Criteria) this;
+		}
+
+		public Criteria andCouponEntityIdGreaterThan(Long value) {
+			addCriterion("coupon_entity_id >", value, "couponEntityId");
+			return (Criteria) this;
+		}
+
+		public Criteria andCouponEntityIdGreaterThanOrEqualTo(Long value) {
+			addCriterion("coupon_entity_id >=", value, "couponEntityId");
+			return (Criteria) this;
+		}
+
+		public Criteria andCouponEntityIdLessThan(Long value) {
+			addCriterion("coupon_entity_id <", value, "couponEntityId");
+			return (Criteria) this;
+		}
+
+		public Criteria andCouponEntityIdLessThanOrEqualTo(Long value) {
+			addCriterion("coupon_entity_id <=", value, "couponEntityId");
+			return (Criteria) this;
+		}
+
+		public Criteria andCouponEntityIdIn(List<Long> values) {
+			addCriterion("coupon_entity_id in", values, "couponEntityId");
+			return (Criteria) this;
+		}
+
+		public Criteria andCouponEntityIdNotIn(List<Long> values) {
+			addCriterion("coupon_entity_id not in", values, "couponEntityId");
+			return (Criteria) this;
+		}
+
+		public Criteria andCouponEntityIdBetween(Long value1, Long value2) {
+			addCriterion("coupon_entity_id between", value1, value2, "couponEntityId");
+			return (Criteria) this;
+		}
+
+		public Criteria andCouponEntityIdNotBetween(Long value1, Long value2) {
+			addCriterion("coupon_entity_id not between", value1, value2, "couponEntityId");
 			return (Criteria) this;
 		}
 
@@ -1632,7 +1692,7 @@ public class MktConvertCouponRecordPOExample implements Serializable {
 
 	/**
 	 * 只读. t_mkt_convert_coupon_record
-	 * @mbg.generated  2018-11-23 11:48:52
+	 * @mbg.generated  2018-11-26 14:51:19
 	 */
 	public static class Criterion implements Serializable {
 		private String condition;

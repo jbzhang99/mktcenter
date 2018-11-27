@@ -122,5 +122,5 @@ public interface MktCouponIntegralExchangePOMapper {
     int batchUpdateCouponIntegralExchange(MktCouponIntegralExchangeVO vo);
 
     List<MktCouponIntegralExchangeVO> getExchangeLists(CouponRecordVO vo);
-    List<Integer> getExchangeIds(CouponRecordVO vo);
+    List<Long> getExchangeIds(CouponRecordVO vo);
 }

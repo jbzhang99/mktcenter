@@ -21,6 +21,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
+import org.springframework.util.StringUtils;
 
 import java.util.Arrays;
 import java.util.Date;
@@ -130,12 +131,15 @@ public class CouponIntegralExchangeServiceImpl implements CouponIntegralExchange
         MktCouponIntegralExchangeVO couponIntegralExchangeVO = mktCouponIntegralExchangeVOList.get(0);
         //查询门店
         String ids =couponIntegralExchangeVO.getStoreList();
-        //查询适用门店
-        List<Long> listIds = Arrays.asList(ids.split(",")).stream().map(s -> Long.parseLong(s.trim())).collect(Collectors.toList());
-        ResponseData<List<SysStorePo>> sysStorePOs = storeServiceRpc.getIdStoreLists(listIds);
-        if(!CollectionUtils.isEmpty(sysStorePOs.getData())){
-            couponIntegralExchangeVO.setSysStorePos(sysStorePOs.getData());
+        if (!StringUtils.isEmpty(ids)){
+            //查询适用门店
+            List<Long> listIds = Arrays.asList(ids.split(",")).stream().map(s -> Long.parseLong(s.trim())).collect(Collectors.toList());
+            ResponseData<List<SysStorePo>> sysStorePOs = storeServiceRpc.getIdStoreLists(listIds);
+            if(!CollectionUtils.isEmpty(sysStorePOs.getData())){
+                couponIntegralExchangeVO.setSysStorePos(sysStorePOs.getData());
+            }
         }
+
         //查询券
         ResponseData<CouponDetailResponseVO>  entityAndDefinition = couponQueryServiceFeign.getCouponDefinition(couponIntegralExchangeVO.getCouponEntityId());
         couponIntegralExchangeVO.setCouponDetailResponseVO(entityAndDefinition.getData());

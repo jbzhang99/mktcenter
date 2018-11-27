@@ -791,4 +791,6 @@
     AND tmccr.sys_brand_id=#{brandId}
     AND tmccr.member_code=#{memberCode}
   </select>
+
+
 </mapper>

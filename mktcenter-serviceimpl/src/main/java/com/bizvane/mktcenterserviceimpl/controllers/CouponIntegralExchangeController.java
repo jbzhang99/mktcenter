@@ -78,6 +78,7 @@ public class CouponIntegralExchangeController {
      * @param request
      * @return
      */
+    @RequestMapping("batchUpdateCouponIntegralExchange")
     public ResponseData<Integer> batchUpdateCouponIntegralExchange(MktCouponIntegralExchangeVO vo,HttpServletRequest request){
         SysAccountPO stageUser = TokenUtils.getStageUser(request);
         ResponseData<Integer> batchResponseData = couponIntegralExchangeService.batchUpdateCouponIntegralExchange(vo,stageUser);

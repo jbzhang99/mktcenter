@@ -1,6 +1,7 @@
 package com.bizvane.mktcenterservice.models.vo;
 
 import com.bizvane.centerstageservice.models.po.SysStorePo;
+import com.bizvane.couponfacade.models.po.CouponDefinitionPO;
 import com.bizvane.couponfacade.models.vo.CouponDetailResponseVO;
 import com.bizvane.mktcenterservice.models.po.MktCouponIntegralExchangePO;
 
@@ -11,8 +12,8 @@ import java.util.List;
  * Created by agan on 2018/11/22.
  */
 public class MktCouponIntegralExchangeVO extends MktCouponIntegralExchangePO{
-    private Date startTime;
-    private  Date endTime;
+    private String startTime;
+    private  String endTime;
 
     private List<Long> exchangeIds;//id集合
     private Integer restCount;//剩余库存
@@ -20,6 +21,7 @@ public class MktCouponIntegralExchangeVO extends MktCouponIntegralExchangePO{
     private List<SysStorePo> sysStorePos;
     //券剩余数量
     private Integer residueCouponNumber;
+    private CouponDefinitionPO couponDefinitionPO;
     //券
     private CouponDetailResponseVO couponDetailResponseVO;
 
@@ -55,19 +57,19 @@ public class MktCouponIntegralExchangeVO extends MktCouponIntegralExchangePO{
         this.sysStorePos = sysStorePos;
     }
 
-    public Date getStartTime() {
+    public String getStartTime() {
         return startTime;
     }
 
-    public void setStartTime(Date startTime) {
+    public void setStartTime(String startTime) {
         this.startTime = startTime;
     }
 
-    public Date getEndTime() {
+    public String getEndTime() {
         return endTime;
     }
 
-    public void setEndTime(Date endTime) {
+    public void setEndTime(String endTime) {
         this.endTime = endTime;
     }
 
@@ -77,5 +79,13 @@ public class MktCouponIntegralExchangeVO extends MktCouponIntegralExchangePO{
 
     public void setResidueCouponNumber(Integer residueCouponNumber) {
         this.residueCouponNumber = residueCouponNumber;
+    }
+
+    public CouponDefinitionPO getCouponDefinitionPO() {
+        return couponDefinitionPO;
+    }
+
+    public void setCouponDefinitionPO(CouponDefinitionPO couponDefinitionPO) {
+        this.couponDefinitionPO = couponDefinitionPO;
     }
 }
