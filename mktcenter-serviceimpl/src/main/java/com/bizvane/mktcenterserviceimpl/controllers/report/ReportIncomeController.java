@@ -365,7 +365,11 @@ public class ReportIncomeController {
 		 					
 		 				String itnewjsong =	itnewjsongroupnew.next();
 
-		 		 				if(itnewjsong.equals("achievements")) {
+		 		 				if(itnewjsong.equals("unitPrice")) {
+		 		 					if(jsongroupnew.getString("pieceNumber").equals("0")) {
+		 		 						jsongroupnew.put("unitPrice", 0);//  如果除数是0
+		 		 						continue;
+		 		 					}
 		 					          BigDecimal   achievements   =   new   BigDecimal(jsongroupnew.getString("achievements"));
 		 					          achievements=achievements.divide(new BigDecimal(jsongroupnew.getString("pieceNumber")),2,BigDecimal.ROUND_HALF_UP);
 		 					 		  jsongroupnew.put("unitPrice", achievements.toString());// 件单价=总业绩/件数
@@ -373,6 +377,10 @@ public class ReportIncomeController {
 		 		 				}
  		 				        
 		 		 				if(itnewjsong.equals("guestPrice")) {
+		 		 					if(jsongroupnew.getString("penNumber").equals("0")) {
+		 		 						jsongroupnew.put("guestPrice", 0);//  如果除数是0
+		 		 						continue;
+		 		 					}
 		 					          BigDecimal   achievements   =   new   BigDecimal(jsongroupnew.getString("pieceNumber"));
 		 					          achievements=achievements.divide(new BigDecimal(jsongroupnew.getString("penNumber")),2,BigDecimal.ROUND_HALF_UP);
 		 					 		  jsongroupnew.put("guestPrice", achievements.toString());// 客单价=总业绩/笔数
@@ -380,6 +388,10 @@ public class ReportIncomeController {
 		 		 				}
 		 		 				
 		 		 				if(itnewjsong.equals("jointRate")) {
+		 		 					if(jsongroupnew.getString("penNumber").equals("0")) {
+		 		 						jsongroupnew.put("jointRate", 0);//  如果除数是0
+		 		 						continue;
+		 		 					}
 		 					          BigDecimal   achievements   =   new   BigDecimal(jsongroupnew.getString("achievements"));
 		 					          achievements=achievements.divide(new BigDecimal(jsongroupnew.getString("penNumber")),2,BigDecimal.ROUND_HALF_UP);
 		 					 		  jsongroupnew.put("jointRate", achievements.toString());// 连带率=件数/笔数，
@@ -387,12 +399,20 @@ public class ReportIncomeController {
 		 		 				}
 		 		 				
 		 		 				if(itnewjsong.equals("averageConsumptionTimes")) {
+		 		 					if(jsongroupnew.getString("number").equals("0")) {
+		 		 						jsongroupnew.put("averageConsumptionTimes", 0);//  如果除数是0
+		 		 						continue;
+		 		 					}
 		 					          BigDecimal   achievements   =   new   BigDecimal(jsongroupnew.getString("penNumber"));
 		 					          achievements=achievements.divide(new BigDecimal(jsongroupnew.getString("number")),2,BigDecimal.ROUND_HALF_UP);
 		 					 		  jsongroupnew.put("averageConsumptionTimes", achievements.toString());//  平均消费次数=笔数/人数,
 		 		 				}
 		 		 				
 		 		 				if(itnewjsong.equals("percentOfAchievements")) {
+		 		 					if(jsongroupnew.getString("percentOfAchievements").equals("0")) {
+		 		 						jsongroupnew.put("percentOfAchievements", 0);//  如果除数是0
+		 		 						continue;
+		 		 					}
 		 					          BigDecimal   achievements   =   new   BigDecimal(jsongroupnew.getString("achievements"));
 		 					          achievements=achievements.divide(new BigDecimal(jsongroupnew.getString("percentOfAchievements")),4,BigDecimal.ROUND_HALF_UP);
 		 					 		  jsongroupnew.put("percentOfAchievements", achievements.multiply(new BigDecimal(100)));//  平均消费次数=笔数/人数,
@@ -407,7 +427,7 @@ public class ReportIncomeController {
 			 		}
 		    		 	   
 				log.info("计算群主数据"+jsongroupArr);
-				jsonStr= jsongroupArr.toString();    	  
+//				jsonStr= jsongroupArr.toString();    	  
 
 				} catch (JSONException e) {
 					 log.info("技术群主数据出错："+e.getMessage());
