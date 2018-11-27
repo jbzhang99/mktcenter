@@ -173,7 +173,7 @@
 		<dependency>
 			<groupId>com.bizvane</groupId>
 			<artifactId>centerstage-service</artifactId>
-			<version>1.0.0</version>
+			<version>1.0.1</version>
 		</dependency>
 		<!--中台模块依赖 -->
 		<dependency>
