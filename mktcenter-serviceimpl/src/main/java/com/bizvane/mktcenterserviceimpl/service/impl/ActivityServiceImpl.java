@@ -408,6 +408,7 @@ public class ActivityServiceImpl implements ActivityService {
                     activityMessageVO.setActivityEndDate(activityVO.getEndTime());
                 }
                 activityMessageVO.setMemberName(memberInfo.getName());
+                activityMessageVO.setUnl("/pages/template01/activity-details/main?activityCode="+activityVO.getActivityCode()+"&activityType="+activityVO.getActivityType());
                 awardBO.setActivityMessageVO(activityMessageVO);
                 awardBO.setMktType(MktSmartTypeEnum.SMART_TYPE_WXMESSAGE.getCode());
                 award.execute(awardBO);
@@ -470,6 +471,7 @@ public class ActivityServiceImpl implements ActivityService {
         activityMessageVO.setActivityInterests(mktMessagePO.getMsgContent());
         activityMessageVO.setMemberPhone(memberInfo.getPhone());
         activityMessageVO.setActivityLongtime("智能营销");
+        activityMessageVO.setUnl("/pages/template01/activity-details/main");
         awardBO.setActivityMessageVO(activityMessageVO);
         awardBO.setMktType(MktSmartTypeEnum.SMART_TYPE_WXMESSAGE.getCode());
         award.execute(awardBO);
@@ -531,6 +533,7 @@ public class ActivityServiceImpl implements ActivityService {
                     activityMessageVO.setActivityStartDate(activityVO.getStartTime());
                     activityMessageVO.setActivityEndDate(activityVO.getEndTime());
                 }
+                activityMessageVO.setUnl("/pages/template01/activity-details/main?activityCode="+activityVO.getActivityCode()+"&activityType="+activityVO.getActivityType());
                 awardBO.setActivityMessageVO(activityMessageVO);
                 awardBO.setMktType(MktSmartTypeEnum.SMART_TYPE_WXMESSAGE.getCode());
                 award.execute(awardBO);

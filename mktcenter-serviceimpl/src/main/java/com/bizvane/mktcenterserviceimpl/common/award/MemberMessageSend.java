@@ -355,6 +355,7 @@ public class MemberMessageSend {
                         activityMessageVO.setActivityInterests(mktMessage.getMsgContent());
                         activityMessageVO.setMemberPhone(memberInfoModel.getPhone());
                         activityMessageVO.setActivityLongtime("智能营销");
+                        activityMessageVO.setUnl("/pages/template01/activity-details/main");
                         awardBO.setMktType(MktSmartTypeEnum.SMART_TYPE_WXMESSAGE.getCode());
                         awardBO.setActivityMessageVO(activityMessageVO);
                         log.info("智能营销-开始发微信微信了");
