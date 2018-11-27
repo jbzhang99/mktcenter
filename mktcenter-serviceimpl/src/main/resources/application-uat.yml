@@ -137,7 +137,7 @@ qiniu:
   accessKey: Jv79lFtLNDBj1XJ6vkXkemnRN5LIOSXMeDOvW35n
   secretKey: HIKXNXr12qRhpIAsdI8xTaX87LeTqqLGjXB_RgDf
   bucketNm: bizvane-uat
-  domain: https://resource.uat.bizvane.cn
+  domain: resource.uat.bizvane.cn
 
 activity:
   qrcodeurl: /qrcode?activityCode=
