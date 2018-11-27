@@ -26,4 +26,6 @@ public interface ConvertCouponService {
     public ResponseData<PageInfo<MktConvertCouponRecordPO>> getConvernConpouByMember(CouponRecordVO vo);
 
     public void doExportData(CouponRecordVO vo,HttpServletResponse response) throws IOException;
+
+    public ResponseData doExportData001(CouponRecordVO vo, HttpServletRequest request);
 }

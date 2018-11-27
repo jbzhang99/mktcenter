@@ -34,13 +34,13 @@ public class ConvertCouponController {
      */
     @RequestMapping("getCouponRecordLists")
     public ResponseData<PageInfo<MktConvertCouponRecordPO>>  getCouponRecordLists(CouponRecordVO vo,HttpServletRequest request){
-        SysAccountPO sysAccountPo = TokenUtils.getStageUser(request);
-//        SysAccountPO sysAccountPo=new SysAccountPO();
-//        sysAccountPo.setBrandId(96L);
-//        sysAccountPo.setName("测试测试");
-//        sysAccountPo.setSysAccountId(12867L);
-//        sysAccountPo.setSysCompanyId(3841L);
-//        vo.setBrandId(sysAccountPo.getBrandId());
+        //SysAccountPO sysAccountPo = TokenUtils.getStageUser(request);
+        SysAccountPO sysAccountPo=new SysAccountPO();
+        sysAccountPo.setBrandId(96L);
+        sysAccountPo.setName("测试测试");
+        sysAccountPo.setSysAccountId(12867L);
+        sysAccountPo.setSysCompanyId(3841L);
+        vo.setBrandId(sysAccountPo.getBrandId());
         return convertCouponService.getCouponRecordLists(vo);
     }
 
@@ -48,7 +48,7 @@ public class ConvertCouponController {
      * 导出
      */
     @RequestMapping("doExportData")
-    public void  doExportData(CouponRecordVO vo, HttpServletRequest request, HttpServletResponse response) throws IOException {
-        convertCouponService.doExportData(vo,response);
+    public void  doExportData(CouponRecordVO vo, HttpServletRequest request) throws IOException {
+        convertCouponService.doExportData001(vo,request);
     }
 }

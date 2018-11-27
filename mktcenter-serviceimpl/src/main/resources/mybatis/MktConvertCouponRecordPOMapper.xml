@@ -718,32 +718,32 @@
         t_mkt_convert_coupon_record
        WHERE
         valid = 1
-      <if test="brandId!=null and brandId!=''">
-        AND sys_brand_id=#{brandId}
+      <if test="vo.brandId!=null">
+        AND sys_brand_id=#{vo.brandId}
       </if>
-       <if test="convertCouponRecordCode!=null and convertCouponRecordCode!=''">
-        AND convert_coupon_record_code  LIKE CONCAT('%',#{convertCouponRecordCode},'%')
+       <if test="vo.convertCouponRecordCode!=null and vo.convertCouponRecordCode!=''">
+        AND convert_coupon_record_code  LIKE CONCAT('%',#{vo.convertCouponRecordCode},'%')
        </if>
-       <if test="exchangeCode!=null and exchangeCode!=''">
-        AND exchange_code  LIKE CONCAT('%',#{exchangeCode},'%')
+       <if test="vo.exchangeCode!=null and vo.exchangeCode!=''">
+        AND exchange_code  LIKE CONCAT('%',#{vo.exchangeCode},'%')
        </if>
-       <if test="memberName!=null and memberName!=''">
-        AND member_name  LIKE CONCAT('%',#{memberName},'%')
+       <if test="vo.memberName!=null and vo.memberName!=''">
+        AND member_name  LIKE CONCAT('%',#{vo.memberName},'%')
        </if>
-      <if test="cardNo!=null and cardNo!=''">
-        AND card_no  LIKE CONCAT('%',#{cardNo},'%')
+      <if test="vo.cardNo!=null and vo.cardNo!=''">
+        AND card_no  LIKE CONCAT('%',#{vo.cardNo},'%')
       </if>
-     <if test="couponCodes!=null and couponCodes!=''">
-        AND coupon_codes LIKE CONCAT('%',#{couponCodes},'%')
+     <if test="vo.couponCodes!=null and vo.couponCodes!=''">
+        AND coupon_codes LIKE CONCAT('%',#{vo.couponCodes},'%')
      </if>
-    <if test="couponName!=null and couponName!=''">
-        AND coupon_name LIKE CONCAT('%',#{couponName},'%')
+    <if test="vo.couponName!=null and vo.couponName!=''">
+        AND coupon_name LIKE CONCAT('%',#{vo.couponName},'%')
     </if>
-    <if test="startTime!=null and startTime!=''">
-        AND convert_time  <![CDATA[>=]]> #{startTime,jdbcType=TIMESTAMP}
+    <if test="vo.startTime!=null">
+        AND convert_time  <![CDATA[>=]]> #{vo.startTime,jdbcType=TIMESTAMP}
     </if>
-    <if test="endTime!=null and endTime!=''">
-        AND convert_time  <![CDATA[<=]]> #{endTime,jdbcType=TIMESTAMP}
+    <if test="vo.endTime!=null">
+        AND convert_time  <![CDATA[<=]]> #{vo.endTime,jdbcType=TIMESTAMP}
     </if>
     ORDER BY create_date  DESC
   </select>

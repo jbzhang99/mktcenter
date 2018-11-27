@@ -159,7 +159,8 @@ qiniu:
   accessKey: Jv79lFtLNDBj1XJ6vkXkemnRN5LIOSXMeDOvW35n
   secretKey: HIKXNXr12qRhpIAsdI8xTaX87LeTqqLGjXB_RgDf
   bucketNm: bizvane01
-  domain: https://qi.test.bizvane.cn
+  #domain: https://qi.test.bizvane.cn
+  domain: qi.test.bizvane.cn
   
 bitdata:
   businessNum: testbz

@@ -22,7 +22,8 @@ public class CouponRecordVO {
     private String couponCodes;
     private Date startTime;
     private Date endTime;
-
+    private String startTimestr;
+    private String endTimestr;
     private Long brandId;
     //小程序
     private Boolean canConvertCoupon=Boolean.FALSE;
