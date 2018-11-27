@@ -190,7 +190,7 @@
 		<dependency>
 			<groupId>com.bizvane</groupId>
 			<artifactId>centercontrol-service</artifactId>
-			<version>1.0.0</version>
+			<version>1.0.1</version>
 		</dependency>
 		<!--会员模块依赖 -->
 		<dependency>
