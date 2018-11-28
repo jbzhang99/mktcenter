@@ -252,8 +252,8 @@ public class ConvertCouponServiceImpl implements ConvertCouponService {
         PageInfo<MktCouponIntegralExchangeVO> page = null;
         PageHelper.startPage(vo.getPageNumber(), vo.getPageSize());
         List<MktCouponIntegralExchangeVO> exchangeLists = mktCouponIntegralExchangePOMapper.getExchangeLists(vo);
-        if (CollectionUtils.isEmpty(exchangeLists)) {
-            page = new PageInfo<>(new ArrayList<MktCouponIntegralExchangeVO>());
+        if (CollectionUtils.isNotEmpty(exchangeLists)) {
+            page = new PageInfo<>(exchangeLists);
             List<MktCouponIntegralExchangeVO> list = page.getList();
             for (MktCouponIntegralExchangeVO exchangeVO : list) {
                 Long couponEntityId = exchangeVO.getCouponEntityId();
@@ -261,7 +261,7 @@ public class ConvertCouponServiceImpl implements ConvertCouponService {
                 exchangeVO.setCouponDefinitionPO(coupon.getData());
             }
         } else {
-            page = new PageInfo<>(exchangeLists);
+            page = new PageInfo<>(new ArrayList<MktCouponIntegralExchangeVO>());
         }
         CouponIntegralExchangeBO exchangeBO = new CouponIntegralExchangeBO();
         exchangeBO.setCountIntegral(vo.getCountIntegral());
