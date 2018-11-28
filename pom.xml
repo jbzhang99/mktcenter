@@ -41,11 +41,6 @@
             <id>julu-release</id>
             <url>http://repo.bizvane.com/nexus/content/repositories/julu-release</url>
         </repository>
-        
-     <repository>
-            <id>julu-release</id>
-            <url>http://repo.bizvane.com/nexus/content/repositories/julu-release</url>
-        </repository>
     </repositories>
     <modules>
         <module>mktcenter-service</module>
