@@ -764,7 +764,7 @@
     AND tmcie.exchange_price<![CDATA[<=]]>#{countIntegral}
     </if>
     <if test="openCardStoreId != null">
-    AND ((store_scope=0 OR store_list CONCAT('%',#{openCardStoreId},'%')) )
+    AND (store_scope=0 OR store_list LIKE CONCAT('%',#{openCardStoreId},'%'))
     </if>
     <if test="exchangeIds!=null and customsCodeList.size() > 0">
       AND tmcie.exchange_id NOT IN
