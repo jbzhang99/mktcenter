@@ -74,8 +74,18 @@ public class CouponIntegralExchangeServiceImpl implements CouponIntegralExchange
      */
     @Override
     public ResponseData<Integer> addCouponIntegralExchange(MktCouponIntegralExchangeVO vo, SysAccountPO stageUser) {
-        log.info("新增积分兑换券规则开始，参数="+ JSON.toJSONString(vo));
         ResponseData responseData = new ResponseData();
+        if (vo.getStoreStatus()==1 && null==vo.getStoreCount()){
+            responseData.setCode(SysResponseEnum.MODEL_FAILED_VALIDATION.getCode());
+            responseData.setMessage("请填写限制库存数量！");
+            return responseData;
+        }
+        if (vo.getExchangeStatus()==1 && null==vo.getExchangeCount()){
+            responseData.setCode(SysResponseEnum.MODEL_FAILED_VALIDATION.getCode());
+            responseData.setMessage("请填写限制每人兑换数量！");
+            return responseData;
+        }
+        log.info("新增积分兑换券规则开始，参数="+ JSON.toJSONString(vo));
         //工具类生成活动编码
         String exchangeCode = CodeUtil.getCouponIntegralExchangeCode();
         vo.setExchangeCode(exchangeCode);
