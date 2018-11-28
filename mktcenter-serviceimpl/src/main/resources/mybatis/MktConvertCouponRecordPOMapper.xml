@@ -748,6 +748,68 @@
     ORDER BY create_date  DESC
   </select>
 
+  <select id="getCouponRecordLists002" resultType="com.bizvane.mktcenterservice.models.po.MktConvertCouponRecordPO">
+    SELECT
+    convert_coupon_record_id,
+    convert_coupon_record_code,
+    exchange_id,
+    exchange_code,
+    sys_company_id,
+    sys_brand_id,
+    member_name,
+    member_code,
+    card_no,
+    coupon_entity_id,
+    coupon_name,
+    coupon_codes,
+    coupon_num,
+    convert_price,
+    convert_num,
+    convert_tatal_integral,
+    convert_time,
+    success_type,
+    create_user_id,
+    create_user_name,
+    create_date,
+    modified_user_id,
+    modified_user_name,
+    modified_date,
+    valid
+    FROM
+    t_mkt_convert_coupon_record
+    WHERE
+    valid = 1
+    <if test="vo.brandId!=null">
+      AND sys_brand_id=#{vo.brandId}
+    </if>
+    <if test="vo.convertCouponRecordCode!=null and vo.convertCouponRecordCode!=''">
+      AND convert_coupon_record_code  LIKE CONCAT('%',#{vo.convertCouponRecordCode},'%')
+    </if>
+    <if test="vo.exchangeCode!=null and vo.exchangeCode!=''">
+      AND exchange_code  LIKE CONCAT('%',#{vo.exchangeCode},'%')
+    </if>
+    <if test="vo.memberName!=null and vo.memberName!=''">
+      AND member_name  LIKE CONCAT('%',#{vo.memberName},'%')
+    </if>
+    <if test="vo.cardNo!=null and vo.cardNo!=''">
+      AND card_no  LIKE CONCAT('%',#{vo.cardNo},'%')
+    </if>
+    <if test="vo.couponCodes!=null and vo.couponCodes!=''">
+      AND coupon_codes LIKE CONCAT('%',#{vo.couponCodes},'%')
+    </if>
+    <if test="vo.couponName!=null and vo.couponName!=''">
+      AND coupon_name LIKE CONCAT('%',#{vo.couponName},'%')
+    </if>
+    <if test="vo.startTime!=null">
+      AND convert_time  <![CDATA[>=]]> #{vo.startTime,jdbcType=TIMESTAMP}
+    </if>
+    <if test="vo.endTime!=null">
+      AND convert_time  <![CDATA[<=]]> #{vo.endTime,jdbcType=TIMESTAMP}
+    </if>
+    ORDER BY create_date  DESC
+    limit #{a},#{b}
+  </select>
+
   <select id="getConvertNumber" resultType="java.lang.Integer">
   SELECT
   SUM(convert_num)

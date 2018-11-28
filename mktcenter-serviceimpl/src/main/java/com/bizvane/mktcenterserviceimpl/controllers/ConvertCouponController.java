@@ -34,13 +34,13 @@ public class ConvertCouponController {
      */
     @RequestMapping("getCouponRecordLists")
     public ResponseData<PageInfo<MktConvertCouponRecordPO>>  getCouponRecordLists(CouponRecordVO vo,HttpServletRequest request){
-        //SysAccountPO sysAccountPo = TokenUtils.getStageUser(request);
-        SysAccountPO sysAccountPo=new SysAccountPO();
-        sysAccountPo.setBrandId(96L);
-        sysAccountPo.setName("测试测试");
-        sysAccountPo.setSysAccountId(12867L);
-        sysAccountPo.setSysCompanyId(3841L);
-        vo.setBrandId(sysAccountPo.getBrandId());
+        SysAccountPO sysAccountPo = TokenUtils.getStageUser(request);
+//        SysAccountPO sysAccountPo=new SysAccountPO();
+//        sysAccountPo.setBrandId(96L);
+//        sysAccountPo.setName("测试测试");
+//        sysAccountPo.setSysAccountId(12867L);
+//        sysAccountPo.setSysCompanyId(3841L);
+//        vo.setBrandId(sysAccountPo.getBrandId());
         return convertCouponService.getCouponRecordLists(vo);
     }
 

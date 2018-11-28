@@ -154,18 +154,18 @@ public class ConvertCouponServiceImpl implements ConvertCouponService {
 
     @Override
     public ResponseData doExportData001(CouponRecordVO vo, HttpServletRequest request) {
-        SysAccountPO sysAccountPO = TokenUtils.getStageUser(request);
-//        SysAccountPO sysAccountPO=new SysAccountPO();
-//        sysAccountPO.setBrandId(96L);
-//        sysAccountPO.setName("测试测试");
-//        sysAccountPO.setSysAccountId(12867L);
-//        sysAccountPO.setSysCompanyId(3841L);
-//        vo.setBrandId(sysAccountPO.getBrandId());
+       // SysAccountPO sysAccountPO = TokenUtils.getStageUser(request);
+        SysAccountPO sysAccountPO=new SysAccountPO();
+        sysAccountPO.setBrandId(96L);
+        sysAccountPO.setName("测试测试");
+        sysAccountPO.setSysAccountId(12867L);
+        sysAccountPO.setSysCompanyId(3841L);
+        vo.setBrandId(sysAccountPO.getBrandId());
         ResponseData responseData = new ResponseData();
         responseData.setCode(SysResponseEnum.FAILED.getCode());
         try {
             //创建导出的数据集合
-            List<MktConvertCouponRecordPO> couponRecordLists = mktConvertCouponRecordPOMapper.getCouponRecordLists(vo, 1L, 1L);
+            List<MktConvertCouponRecordPO> couponRecordLists = mktConvertCouponRecordPOMapper.getCouponRecordLists(vo);
             long sum = couponRecordLists.size();
             Long taskId = (long) Integer.parseInt(String.valueOf(UUID.randomUUID().hashCode()).replaceAll("-", ""));
             //  创建人等信息必填
@@ -188,7 +188,7 @@ public class ConvertCouponServiceImpl implements ConvertCouponService {
             new Thread(() -> {
                 try {
                     exportExcelUtil.setExportProcessId(taskId);
-                    Method method = mktConvertCouponRecordPOMapper.getClass().getMethod("getCouponRecordLists", CouponRecordVO.class, Long.class, Long.class);
+                    Method method = mktConvertCouponRecordPOMapper.getClass().getMethod("getCouponRecordLists002", CouponRecordVO.class, Long.class, Long.class);
                     exportExcelUtil.read("mktConvertCouponRecordPOMapper", method, (model, row) -> {
                         if (row.getRowNum() == 0) {
                             String nameArray[] = {"积分订单号", "编号", "会员名称", "会员卡号", "券名称", "积分兑换价格", "兑换数量", "总兑换积分数", "兑换时间"};
@@ -197,17 +197,18 @@ public class ConvertCouponServiceImpl implements ConvertCouponService {
                             }
                         } else {
                             String keyArray[] = {"convertCouponRecordCode", "exchangeCode", "memberName", "cardNo", "couponName", "convertPrice", "convertNum", "convertTatalIntegral", "convertTime"};
-                            for (int i = 0, size = couponRecordLists.size(); i < size; i++) {
+
+                            //for (int i = 0, size = couponRecordLists.size(); i < size; i++) {
                                 for (int k = 0, lengtn = keyArray.length; k < lengtn; k++) {
                                     Cell cell = row.createCell(k);
-                                    Object o = getFieldValueByName(keyArray[k], couponRecordLists.get(i));
+                                    Object o = getFieldValueByName(keyArray[k], model);
                                     if (o instanceof Date) {
                                         cell.setCellValue(TimeUtils.formatter.format((Date) o));
                                     } else {
                                         cell.setCellValue(String.valueOf(o));
                                     }
                                 }
-                            }
+                           // }
                         }
                     }, vo);
 
