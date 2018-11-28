@@ -240,6 +240,7 @@ public class ConvertCouponServiceImpl implements ConvertCouponService {
      */
     @Override
     public ResponseData<CouponIntegralExchangeBO> getConvernCouponLists(CouponRecordVO vo) {
+        Integer countIntegral = vo.getCountIntegral();
         if (vo.getCanConvertCoupon()) {
             //可兑换券的列表
             List<Long> exchangeIds = mktCouponIntegralExchangePOMapper.getExchangeIds(vo);
@@ -265,7 +266,7 @@ public class ConvertCouponServiceImpl implements ConvertCouponService {
             page = new PageInfo<>(new ArrayList<MktCouponIntegralExchangeVO>());
         }
         CouponIntegralExchangeBO exchangeBO = new CouponIntegralExchangeBO();
-        exchangeBO.setCountIntegral(vo.getCountIntegral());
+        exchangeBO.setCountIntegral(countIntegral);
         exchangeBO.setPageInfo(page);
         responseData.setData(exchangeBO);
         return responseData;
