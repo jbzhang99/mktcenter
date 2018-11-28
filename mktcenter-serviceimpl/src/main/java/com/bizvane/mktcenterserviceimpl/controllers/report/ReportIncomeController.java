@@ -451,7 +451,10 @@ public class ReportIncomeController {
 	                      //更具店铺id找群主名称
 			    		  List<String> storellist =new ArrayList<>();
 			    		  storellist.add(storeCode);
-			    		  ResponseData<Map<String,String>> getStore	=  storeServiceRpc.getStoreGroupNameByStoreCodes(storellist);
+			    		  SysStoreVo sysStoreVo =new SysStoreVo();
+			    		  sysStoreVo.setStoreCodes(storellist);
+			    		  sysStoreVo.setSysCompanyId(currentUser.getSysCompanyId());
+			    		  ResponseData<Map<String,String>> getStore	=  storeServiceRpc.getStoreGroupNameByStoreCodes(sysStoreVo);
 			    		  if(getStore.getData().get(storeCode)==null) {
 			    			  jsonObjtarr.put("groupId", "");
 			    		  }else {
