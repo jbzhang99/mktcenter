@@ -702,7 +702,7 @@
     <if test="couponName != null and couponName!= ''">
       AND tma.coupon_name LIKE "%"#{couponName}"%"
     </if>
-    <if test="salesStatus != null and salesStatus!= ''">
+    <if test="salesStatus != null ">
       AND tma.sales_status = #{salesStatus}
     </if>
     <if test="startTime != null and startTime!= ''">
