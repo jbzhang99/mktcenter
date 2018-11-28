@@ -10,6 +10,7 @@ public class CouponIntegralExchangeVO {
     private Long exchangeId;
     private Integer exchangePrice;
     private CouponDefinitionPO couponDefinitionPO;
+    private String exchangeInfo;
 
     public Long getExchangeId() {
         return exchangeId;
@@ -33,5 +34,13 @@ public class CouponIntegralExchangeVO {
 
     public void setCouponDefinitionPO(CouponDefinitionPO couponDefinitionPO) {
         this.couponDefinitionPO = couponDefinitionPO;
+    }
+
+    public String getExchangeInfo() {
+        return exchangeInfo;
+    }
+
+    public void setExchangeInfo(String exchangeInfo) {
+        this.exchangeInfo = exchangeInfo;
     }
 }

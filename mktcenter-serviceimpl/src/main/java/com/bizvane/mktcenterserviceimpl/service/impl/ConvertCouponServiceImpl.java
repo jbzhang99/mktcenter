@@ -291,9 +291,9 @@ public class ConvertCouponServiceImpl implements ConvertCouponService {
         }
         CouponIntegralExchangeVO couponIntegralExchangeVO = new CouponIntegralExchangeVO();
         couponIntegralExchangeVO.setExchangeId(couponEntityId);
-        couponIntegralExchangeVO.setExchangePrice(couponIntegralExchangeVO.getExchangePrice());
+        couponIntegralExchangeVO.setExchangePrice(mktCouponIntegralExchangePO.getExchangePrice());
         couponIntegralExchangeVO.setCouponDefinitionPO(coupon);
-
+        couponIntegralExchangeVO.setExchangeInfo(mktCouponIntegralExchangePO.getExchangeInfo());
         responseData.setData(couponIntegralExchangeVO);
         return responseData;
     }
