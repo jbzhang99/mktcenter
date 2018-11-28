@@ -1,6 +1,8 @@
 package com.bizvane.mktcenterservice.interfaces;
 
+import com.bizvane.mktcenterservice.models.bo.CouponIntegralExchangeBO;
 import com.bizvane.mktcenterservice.models.po.MktConvertCouponRecordPO;
+import com.bizvane.mktcenterservice.models.vo.CouponIntegralExchangeVO;
 import com.bizvane.mktcenterservice.models.vo.CouponRecordVO;
 import com.bizvane.mktcenterservice.models.vo.MktCouponIntegralExchangeVO;
 import com.bizvane.utils.responseinfo.ResponseData;
@@ -19,7 +21,7 @@ public interface ConvertCouponService {
 
     public ResponseData<PageInfo<MktConvertCouponRecordPO>> getCouponRecordLists(CouponRecordVO vo);
 
-    public  ResponseData<PageInfo<MktCouponIntegralExchangeVO>>  getConvernCouponLists(CouponRecordVO vo);
+    public ResponseData<CouponIntegralExchangeBO> getConvernCouponLists(CouponRecordVO vo);
 
     public ResponseData<Integer> doConvernCoupon(CouponRecordVO vo);
 
@@ -28,4 +30,6 @@ public interface ConvertCouponService {
     public void doExportData(CouponRecordVO vo,HttpServletResponse response) throws IOException;
 
     public ResponseData doExportData001(CouponRecordVO vo, HttpServletRequest request);
+
+    public ResponseData<CouponIntegralExchangeVO> getCouponAndPrice(CouponRecordVO vo);
 }

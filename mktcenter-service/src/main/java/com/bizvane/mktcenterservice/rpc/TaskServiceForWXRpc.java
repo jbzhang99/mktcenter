@@ -2,9 +2,11 @@ package com.bizvane.mktcenterservice.rpc;
 
 import com.bizvane.centercontrolservice.models.bo.AppletFunctionBO;
 import com.bizvane.centercontrolservice.models.po.AppletFunctionPO;
+import com.bizvane.mktcenterservice.models.bo.CouponIntegralExchangeBO;
 import com.bizvane.mktcenterservice.models.bo.TaskWXBO;
 import com.bizvane.mktcenterservice.models.bo.TaskWXDetailBO;
 import com.bizvane.mktcenterservice.models.po.MktConvertCouponRecordPO;
+import com.bizvane.mktcenterservice.models.vo.CouponIntegralExchangeVO;
 import com.bizvane.mktcenterservice.models.vo.CouponRecordVO;
 import com.bizvane.mktcenterservice.models.vo.MktCouponIntegralExchangeVO;
 import com.bizvane.mktcenterservice.models.vo.TaskForWXVO;
@@ -42,7 +44,10 @@ public interface TaskServiceForWXRpc {
     //积分兑换券
     //查询对换列表
     @RequestMapping("/getConvernCouponLists")
-    public ResponseData<PageInfo<MktCouponIntegralExchangeVO>> getConvernCouponLists(@RequestBody CouponRecordVO vo);
+    public ResponseData<CouponIntegralExchangeBO> getConvernCouponLists(@RequestBody CouponRecordVO vo);
+   //券详情和单价
+    @RequestMapping("/getCouponAndPrice")
+    public ResponseData<CouponIntegralExchangeVO> getCouponAndPrice(CouponRecordVO vo);
     //兑换
     @RequestMapping("/doConvernCoupon")
     public ResponseData<Integer> doConvernCoupon(@RequestBody CouponRecordVO vo);

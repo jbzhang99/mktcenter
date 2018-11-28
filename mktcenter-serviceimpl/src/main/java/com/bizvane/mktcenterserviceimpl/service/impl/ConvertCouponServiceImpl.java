@@ -14,10 +14,12 @@ import com.bizvane.members.facade.service.card.request.IntegralChangeRequestMode
 import com.bizvane.members.facade.service.card.response.IntegralChangeResponseModel;
 import com.bizvane.mktcenterservice.interfaces.ConvertCouponService;
 import com.bizvane.mktcenterservice.interfaces.TaskService;
+import com.bizvane.mktcenterservice.models.bo.CouponIntegralExchangeBO;
 import com.bizvane.mktcenterservice.models.po.MktConvertCouponRecordPO;
 import com.bizvane.mktcenterservice.models.po.MktConvertCouponRecordPOExample;
 import com.bizvane.mktcenterservice.models.po.MktCouponIntegralExchangePO;
 import com.bizvane.mktcenterservice.models.po.MktCouponIntegralExchangePOExample;
+import com.bizvane.mktcenterservice.models.vo.CouponIntegralExchangeVO;
 import com.bizvane.mktcenterservice.models.vo.CouponRecordVO;
 import com.bizvane.mktcenterservice.models.vo.MktCouponIntegralExchangeVO;
 import com.bizvane.mktcenterserviceimpl.common.utils.CodeUtil;
@@ -149,15 +151,16 @@ public class ConvertCouponServiceImpl implements ConvertCouponService {
             return "";
         }
     }
+
     @Override
     public ResponseData doExportData001(CouponRecordVO vo, HttpServletRequest request) {
-        //SysAccountPO sysAccountPO = TokenUtils.getStageUser(request);
-        SysAccountPO sysAccountPO=new SysAccountPO();
-        sysAccountPO.setBrandId(96L);
-        sysAccountPO.setName("测试测试");
-        sysAccountPO.setSysAccountId(12867L);
-        sysAccountPO.setSysCompanyId(3841L);
-        vo.setBrandId(sysAccountPO.getBrandId());
+        SysAccountPO sysAccountPO = TokenUtils.getStageUser(request);
+//        SysAccountPO sysAccountPO=new SysAccountPO();
+//        sysAccountPO.setBrandId(96L);
+//        sysAccountPO.setName("测试测试");
+//        sysAccountPO.setSysAccountId(12867L);
+//        sysAccountPO.setSysCompanyId(3841L);
+//        vo.setBrandId(sysAccountPO.getBrandId());
         ResponseData responseData = new ResponseData();
         responseData.setCode(SysResponseEnum.FAILED.getCode());
         try {
@@ -235,7 +238,7 @@ public class ConvertCouponServiceImpl implements ConvertCouponService {
      * 查询兑换的券 全部或可兑换 列表
      */
     @Override
-    public ResponseData<PageInfo<MktCouponIntegralExchangeVO>> getConvernCouponLists(CouponRecordVO vo) {
+    public ResponseData<CouponIntegralExchangeBO> getConvernCouponLists(CouponRecordVO vo) {
         if (vo.getCanConvertCoupon()) {
             //可兑换券的列表
             List<Long> exchangeIds = mktCouponIntegralExchangePOMapper.getExchangeIds(vo);
@@ -245,7 +248,7 @@ public class ConvertCouponServiceImpl implements ConvertCouponService {
             vo.setExchangeIds(null);
             vo.setCountIntegral(null);
         }
-        ResponseData<PageInfo<MktCouponIntegralExchangeVO>> responseData = new ResponseData<>();
+        ResponseData<CouponIntegralExchangeBO> responseData = new ResponseData<>();
         PageInfo<MktCouponIntegralExchangeVO> page = null;
         PageHelper.startPage(vo.getPageNumber(), vo.getPageSize());
         List<MktCouponIntegralExchangeVO> exchangeLists = mktCouponIntegralExchangePOMapper.getExchangeLists(vo);
@@ -260,7 +263,37 @@ public class ConvertCouponServiceImpl implements ConvertCouponService {
         } else {
             page = new PageInfo<>(exchangeLists);
         }
-        responseData.setData(page);
+        CouponIntegralExchangeBO exchangeBO = new CouponIntegralExchangeBO();
+        exchangeBO.setCountIntegral(vo.getCountIntegral());
+        exchangeBO.setPageInfo(page);
+        responseData.setData(exchangeBO);
+        return responseData;
+    }
+    /**
+     * 查询券详情和兑换单价
+     */
+    @Override
+    public ResponseData<CouponIntegralExchangeVO> getCouponAndPrice(CouponRecordVO vo){
+        ResponseData<CouponIntegralExchangeVO> responseData = new ResponseData<CouponIntegralExchangeVO>();
+
+        MktCouponIntegralExchangePO mktCouponIntegralExchangePO = mktCouponIntegralExchangePOMapper.selectByPrimaryKey(vo.getExchangeId());
+        if (mktCouponIntegralExchangePO==null){
+            responseData.setMessage("兑换规则不存在!");
+            return responseData;
+        }
+        Long couponEntityId = mktCouponIntegralExchangePO.getCouponEntityId();
+        ResponseData<CouponDefinitionPO> data = couponDefinitionServiceFeign.findByIdRpc(couponEntityId);
+        CouponDefinitionPO coupon = data.getData();
+        if (coupon==null){
+            responseData.setMessage("券不存在!");
+            return responseData;
+        }
+        CouponIntegralExchangeVO couponIntegralExchangeVO = new CouponIntegralExchangeVO();
+        couponIntegralExchangeVO.setExchangeId(couponEntityId);
+        couponIntegralExchangeVO.setExchangePrice(couponIntegralExchangeVO.getExchangePrice());
+        couponIntegralExchangeVO.setCouponDefinitionPO(coupon);
+
+        responseData.setData(couponIntegralExchangeVO);
         return responseData;
     }
 
