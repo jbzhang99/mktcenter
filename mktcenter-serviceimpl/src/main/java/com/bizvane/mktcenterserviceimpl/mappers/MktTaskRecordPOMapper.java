@@ -110,4 +110,8 @@ public interface MktTaskRecordPOMapper {
 	 * @return
 	 */
 	List<DayTaskRecordVo> getAnalysisResult(TaskAnalysisVo vo);
+
+	List<DayTaskRecordVo> getAnalysisTotalData(TaskAnalysisVo vo);
+
+	Long getAnalysisTotalCompletePeple(TaskAnalysisVo vo);
 }

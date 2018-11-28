@@ -91,14 +91,14 @@ public class TaskController {
      */
     @RequestMapping("doAnalysis")
     public ResponseData<TaskRecordVO> doAnalysis(TaskAnalysisVo vo,HttpServletRequest request) throws ExecutionException, InterruptedException {
-        SysAccountPO sysAccountPo = TokenUtils.getStageUser(request);
-//       SysAccountPO sysAccountPo = new SysAccountPO();
-//        sysAccountPo.setSysAccountId(26L);
-//        sysAccountPo.setSysCompanyId(2L);
-//        sysAccountPo.setBrandId(96L);
-//        sysAccountPo.setAccountCode("15328634678");
-//        sysAccountPo.setName("不啊哟删除");
-//        vo.setTaskType(2);
+       // SysAccountPO sysAccountPo = TokenUtils.getStageUser(request);
+       SysAccountPO sysAccountPo = new SysAccountPO();
+        sysAccountPo.setSysAccountId(26L);
+        sysAccountPo.setSysCompanyId(2L);
+        sysAccountPo.setBrandId(96L);
+        sysAccountPo.setAccountCode("15328634678");
+        sysAccountPo.setName("不啊哟删除");
+        vo.setTaskType(2);
         return taskService.doAnalysis(vo,sysAccountPo);
     }
     /**
