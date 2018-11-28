@@ -1013,6 +1013,7 @@ public class TaskServiceImpl implements TaskService {
             checkPo.setBizName(po.getTaskName());
             checkPo.setCheckStatus(CheckStatusEnum.CHECK_STATUS_PENDING.getCode());
             checkPo.setFunctionCode("C0003");
+            checkPo.setCreateDate(po.getCreateDate());
             log.info("---addCheck--参数--"+JSON.toJSONString(checkPo));
             sysCheckServiceRpc.addCheck(checkPo);
         }
