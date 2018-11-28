@@ -154,12 +154,12 @@ public class ConvertCouponServiceImpl implements ConvertCouponService {
 
     @Override
     public ResponseData doExportData001(CouponRecordVO vo, HttpServletRequest request) {
-       // SysAccountPO sysAccountPO = TokenUtils.getStageUser(request);
-        SysAccountPO sysAccountPO=new SysAccountPO();
-        sysAccountPO.setBrandId(96L);
-        sysAccountPO.setName("测试测试");
-        sysAccountPO.setSysAccountId(12867L);
-        sysAccountPO.setSysCompanyId(3841L);
+        SysAccountPO sysAccountPO = TokenUtils.getStageUser(request);
+//        SysAccountPO sysAccountPO=new SysAccountPO();
+//        sysAccountPO.setBrandId(96L);
+//        sysAccountPO.setName("测试测试");
+//        sysAccountPO.setSysAccountId(12867L);
+//        sysAccountPO.setSysCompanyId(3841L);
         vo.setBrandId(sysAccountPO.getBrandId());
         ResponseData responseData = new ResponseData();
         responseData.setCode(SysResponseEnum.FAILED.getCode());
