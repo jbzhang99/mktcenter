@@ -305,7 +305,7 @@ public class ActivityVipAniversaryServiceImpl implements ActivityVipAniversarySe
         }
         //查询活动卷
         MktCouponPOExample example = new  MktCouponPOExample();
-        example.createCriteria().andBizIdEqualTo(registerList.get(0).getMktActivityId()).andValidEqualTo(true);
+        example.createCriteria().andBizIdEqualTo(registerList.get(0).getMktActivityId()).andValidEqualTo(true).andBizTypeEqualTo(1);
         List<MktCouponPO> mktCouponPOs= mktCouponPOMapper.selectByExample(example);
         //查询券接口
         List<CouponDetailResponseVO> lists = new ArrayList<>();
@@ -638,7 +638,7 @@ public class ActivityVipAniversaryServiceImpl implements ActivityVipAniversarySe
             // 增加卷奖励接口
         // 增加卷奖励接口
         MktCouponPOExample example = new  MktCouponPOExample();
-        example.createCriteria().andBizIdEqualTo(activityAniversary.getMktActivityId()).andValidEqualTo(true);
+        example.createCriteria().andBizIdEqualTo(activityAniversary.getMktActivityId()).andValidEqualTo(true).andBizTypeEqualTo(1);
         List<MktCouponPO> mktCouponPOs= mktCouponPOMapper.selectByExample(example);
         for (MktCouponPO mktCouponPO:mktCouponPOs) {
             SendCouponSimpleRequestVO va = new SendCouponSimpleRequestVO();

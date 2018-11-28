@@ -331,7 +331,7 @@ public class ActivityBirthdayServiceImpl implements ActivityBirthdayService {
 
         //查询活动卷
         MktCouponPOExample example = new  MktCouponPOExample();
-        example.createCriteria().andBizIdEqualTo(registerList.get(0).getMktActivityId()).andValidEqualTo(true);
+        example.createCriteria().andBizIdEqualTo(registerList.get(0).getMktActivityId()).andValidEqualTo(true).andBizTypeEqualTo(1);
         List<MktCouponPO> mktCouponPOs= mktCouponPOMapper.selectByExample(example);
         //查询券接口
         List<CouponDetailResponseVO> lists = new ArrayList<>();
@@ -680,7 +680,7 @@ public class ActivityBirthdayServiceImpl implements ActivityBirthdayService {
             integralChangeApiService.integralChangeOperate(integralChangeRequestModel);
             // 增加卷奖励接口
             MktCouponPOExample example = new  MktCouponPOExample();
-            example.createCriteria().andBizIdEqualTo(activityBirthday.getMktActivityId()).andValidEqualTo(true);
+            example.createCriteria().andBizIdEqualTo(activityBirthday.getMktActivityId()).andValidEqualTo(true).andBizTypeEqualTo(1);
             List<MktCouponPO> mktCouponPOs= mktCouponPOMapper.selectByExample(example);
             for (MktCouponPO mktCouponPO:mktCouponPOs) {
                 SendCouponSimpleRequestVO va = new SendCouponSimpleRequestVO();

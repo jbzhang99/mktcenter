@@ -259,7 +259,7 @@ public class ActivitySigninServiceImpl implements ActivitySigninService {
         }
         //查询活动卷
         MktCouponPOExample example = new  MktCouponPOExample();
-        example.createCriteria().andBizIdEqualTo(signinList.get(0).getMktActivityId()).andValidEqualTo(true);
+        example.createCriteria().andBizIdEqualTo(signinList.get(0).getMktActivityId()).andValidEqualTo(true).andBizTypeEqualTo(1);
         List<MktCouponPO> mktCouponPOs= mktCouponPOMapper.selectByExample(example);
         //查询券接口
         List<CouponDetailResponseVO> lists = new ArrayList<>();
