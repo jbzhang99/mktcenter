@@ -60,7 +60,7 @@ public class TaskForWXRpcController {
     }
     //券详情和单价
     @RequestMapping("/getCouponAndPrice")
-    public ResponseData<CouponIntegralExchangeVO> getCouponAndPrice(CouponRecordVO vo){
+    public ResponseData<CouponIntegralExchangeVO> getCouponAndPrice(@RequestBody CouponRecordVO vo){
         return convertCouponService.getCouponAndPrice(vo);
     }
     //兑换

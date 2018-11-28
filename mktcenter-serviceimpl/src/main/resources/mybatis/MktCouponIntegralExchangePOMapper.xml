@@ -766,7 +766,7 @@
     <if test="openCardStoreId != null">
     AND (store_scope=0 OR store_list LIKE CONCAT('%',#{openCardStoreId},'%'))
     </if>
-    <if test="exchangeIds!=null and customsCodeList.size() > 0">
+    <if test="exchangeIds!=null and exchangeIds.size() > 0">
       AND tmcie.exchange_id NOT IN
         <foreach item="item" index="index" collection="exchangeIds" open="(" separator="," close=")">
           #{item}

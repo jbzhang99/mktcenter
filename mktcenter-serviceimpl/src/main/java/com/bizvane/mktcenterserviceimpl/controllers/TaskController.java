@@ -98,7 +98,7 @@ public class TaskController {
 //        sysAccountPo.setBrandId(96L);
 //        sysAccountPo.setAccountCode("15328634678");
 //        sysAccountPo.setName("不啊哟删除");
-        vo.setTaskType(2);
+//        vo.setTaskType(2);
         return taskService.doAnalysis(vo,sysAccountPo);
     }
     /**
