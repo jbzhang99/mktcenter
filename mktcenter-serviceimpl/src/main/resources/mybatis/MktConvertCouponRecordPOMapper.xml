@@ -812,7 +812,7 @@
 
   <select id="getConvertNumber" resultType="java.lang.Integer">
   SELECT
-  SUM(convert_num)
+  IFNULL(SUM(convert_num),0)
   FROM
       t_mkt_convert_coupon_record
   WHERE

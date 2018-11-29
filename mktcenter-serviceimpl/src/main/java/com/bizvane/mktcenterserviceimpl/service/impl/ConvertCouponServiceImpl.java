@@ -329,7 +329,7 @@ public class ConvertCouponServiceImpl implements ConvertCouponService {
             //获取此会员兑换此券的数量
             Integer memberConvertNumber = mktConvertCouponRecordPOMapper.getConvertNumber(vo);
             Long exchangeCount = mktCouponIntegralExchangePO.getExchangeCount();
-            exchangeCount = exchangeCount == null ? 0L : exchangeCount;
+            //exchangeCount = exchangeCount == null ? 0L : exchangeCount;
             if (exchangeCount >= Long.valueOf(memberConvertNumber)) {
                 responseData.setCode(100);
                 responseData.setMessage("超过限制券兑换数量!");
