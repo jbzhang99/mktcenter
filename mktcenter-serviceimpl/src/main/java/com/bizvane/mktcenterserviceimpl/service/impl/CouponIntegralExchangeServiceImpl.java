@@ -57,7 +57,7 @@ public class CouponIntegralExchangeServiceImpl implements CouponIntegralExchange
         log.info("积分兑换券列表开始，参数="+ JSON.toJSONString(vo));
         List<MktCouponIntegralExchangeVO> mktCouponIntegralExchangeVOList = mktCouponIntegralExchangePOMapper.getCouponIntegralExchangeList(vo);
         for (MktCouponIntegralExchangeVO mktCouponIntegralExchangeVO:mktCouponIntegralExchangeVOList) {
-                if (null!=mktCouponIntegralExchangeVO.getStoreStatus() && null!=mktCouponIntegralExchangeVO.getAlreadyExchangeCount()){
+                if (1==mktCouponIntegralExchangeVO.getStoreStatus() && null!=mktCouponIntegralExchangeVO.getAlreadyExchangeCount()){
                     mktCouponIntegralExchangeVO.setRestCount((int) (mktCouponIntegralExchangeVO.getStoreCount()  - mktCouponIntegralExchangeVO.getAlreadyExchangeCount()));
                 }
         }
