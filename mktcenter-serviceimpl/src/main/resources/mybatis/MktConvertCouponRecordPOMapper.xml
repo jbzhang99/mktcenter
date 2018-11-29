@@ -745,7 +745,7 @@
     <if test="vo.endTime!=null">
         AND convert_time  <![CDATA[<=]]> #{vo.endTime,jdbcType=TIMESTAMP}
     </if>
-    ORDER BY create_date  DESC
+    ORDER BY create_date  ASC
   </select>
 
   <select id="getCouponRecordLists002" resultType="com.bizvane.mktcenterservice.models.po.MktConvertCouponRecordPO">
@@ -806,7 +806,7 @@
     <if test="vo.endTime!=null">
       AND convert_time  <![CDATA[<=]]> #{vo.endTime,jdbcType=TIMESTAMP}
     </if>
-    ORDER BY create_date  DESC
+    ORDER BY create_date  ASC
     limit #{a},#{b}
   </select>
 
