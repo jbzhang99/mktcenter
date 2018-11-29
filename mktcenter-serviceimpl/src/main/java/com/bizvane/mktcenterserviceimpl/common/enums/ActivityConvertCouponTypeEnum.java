@@ -5,7 +5,7 @@ package com.bizvane.mktcenterserviceimpl.common.enums;
  */
 public enum ActivityConvertCouponTypeEnum {
     ACTIVITY_TYPE_ALL(0,"0","全部"),
-    ACTIVITY_TYPE_REGISGER(1,"30","开卡活动"),
+    ACTIVITY_TYPE_REGISGER(1,"10","开卡活动"),
     ACTIVITY_TYPE_UPGRADE(2,"35","升级活动"),
     ACTIVITY_TYPE_QRCODE(3,"55","扫码领券活动"),
     ACTIVITY_TYPE_MANUAL(4,"55","手动领券活动"),
