@@ -2,8 +2,6 @@ package com.bizvane.mktcenterserviceimpl.controllers.report;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -20,10 +18,9 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
 import com.alibaba.fastjson.JSONObject;
-import com.bizvane.centerstageservice.interfaces.SysStoreService;
 import com.bizvane.centerstageservice.models.po.SysCompanyPo;
+import com.bizvane.centerstageservice.models.po.SysStoreGroupPo;
 import com.bizvane.centerstageservice.models.po.SysStorePo;
-import com.bizvane.centerstageservice.models.vo.StaffVo;
 import com.bizvane.centerstageservice.models.vo.SysStoreVo;
 import com.bizvane.centerstageservice.rpc.CompanyServiceRpc;
 import com.bizvane.centerstageservice.rpc.StoreGroupServiceRpc;
@@ -32,10 +29,6 @@ import com.bizvane.mktcenterservice.interfaces.ReportTempService;
 import com.bizvane.mktcenterservice.models.po.FileReportTempPO;
 import com.bizvane.mktcenterservice.models.po.FileReportTempPOExample;
 import com.bizvane.mktcenterservice.models.requestvo.BackData;
-import com.bizvane.mktcenterservice.models.requestvo.BackDataBiaotou;
-import com.bizvane.mktcenterservice.models.requestvo.BackDataTime;
-import com.bizvane.mktcenterservice.models.requestvo.BackDataTimeDtail;
-import com.bizvane.mktcenterservice.models.requestvo.BackDataTimeDtailtu;
 import com.bizvane.mktcenterservice.models.requestvo.postvo.ActiveMemberAllInterface;
 import com.bizvane.mktcenterservice.models.requestvo.postvo.IncomeTotalList;
 import com.bizvane.mktcenterservice.models.requestvo.postvo.IncomeVip;
@@ -50,12 +43,10 @@ import com.bizvane.mktcenterservice.models.requestvo.postvo.VipNum;
 import com.bizvane.mktcenterserviceimpl.common.report.BaseUrl;
 import com.bizvane.mktcenterserviceimpl.common.utils.FigureUtil;
 import com.bizvane.mktcenterserviceimpl.mappers.FileReportTempPOMapper;
-import com.bizvane.utils.responseinfo.PageInfo;
 import com.bizvane.utils.responseinfo.ResponseData;
 import com.bizvane.utils.tokens.SysAccountPO;
 import com.bizvane.utils.tokens.TokenUtils;
 
-import javassist.expr.NewArray;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -103,16 +94,17 @@ public class ReportIncomeController {
            log.info("报表查询ReportIncomeController："+url+vipIncomeAnalysis.toString());
 	    	 JSONObject jsonObject = JSONObject.parseObject(JSONObject.toJSONString(vipIncomeAnalysis));
 	    	 
-	    	   //如果是导出，就修改查询条数
+	    	   //如果是导出，或者群主，就修改查询条数（因为大数据那边不知道有多少条数据）
 	    	    String postTem = jsonObject.getString("postTem");
-	    		 if(StringUtils.isNotBlank(postTem)&&postTem.equals("export")){
+	    	    String dimension = jsonObject.getString("dimension");
+	    		 if(StringUtils.isNotBlank(postTem)&&postTem.equals("export")||dimension.equals("3")){
 	    		  jsonObject.put("startRecord", 1); // 直接put相同的key
 	    		  jsonObject.put("queryNum", 1048576); // / xlsx最大行1048576
 	    		 }
 	    		 
 	    		 //组织转换
 		    	    String organizationContentStr = jsonObject.getString("organizationContentStr");
-		    	    String dimension = jsonObject.getString("dimension");
+		    	   
 		    		 if(StringUtils.isNotBlank(organizationContentStr)){
 		    		
 		    		 int i=0;
@@ -174,6 +166,7 @@ public class ReportIncomeController {
 		    				             }
 		    			   	          ResponseData<List<Long>> getStoreIdsByGroupIds = storeGroupServiceRpc.getStoreIdsByGroupIds(storeGroupIds);
 		    			   	         jsonObject.put("organization", "1"); // 直接put相同的key
+		    			   	         jsonObject.put("dimension", "1"); // 直接put相同的key
 		    			   	          if(getStoreIdsByGroupIds.getData()!=null) {
 		    		//   		      	根据群组id列表查询群组下所有的店铺
 			    			   	          ResponseData<List<SysStorePo>>getStoreIds= storeServiceRpc.getIdStoreLists(getStoreIdsByGroupIds.getData());
@@ -198,18 +191,296 @@ public class ReportIncomeController {
 		       		         }
 		    		       //默认页     
 		    		         
-		    		         System.out.println(url+"发送内容:"+jsonObject.toJSONString());
-		    		         
-		    				 //用户key
-		    		   		   jsonObject.put("businessNum", BaseUrl.getBusinessNum());
-		    		   		   jsonObject.put("apiKey", BaseUrl.getApiKey());
-		    		   		 //用户key
-		    		   		log.info("报表查询ReportIncomeController："+url+jsonObject.toString());
+		 //用户key
+		   jsonObject.put("businessNum", BaseUrl.getBusinessNum());
+		   jsonObject.put("apiKey", BaseUrl.getApiKey());
+		 log.info("综合报表查询发送内容:ReportIncomeController："+url+jsonObject.toString());
 		 ResponseEntity<String> response = this.restTemplate.postForEntity(url, jsonObject,String.class, new Object[0]);
 	     ResponseData<List<BackData>> ResponseData =new ResponseData<List<BackData>>();
 	     JSONObject job = JSONObject.parseObject(response.getBody());
+
+	     //转换群主名称   	 
 	     
 	     if(job.get("successFlag").equals("1")) {
+		     String jsonStr= job.get("data").toString();
+		     
+		     //计算翻会店铺数据，技术群主数据
+		     if(organization.equals("3")) {
+		     try {
+		    	 //隐藏平均折扣，复购率
+		    	 FileReportTempPO fileReportTemp =fileReportTempPOlist.get(0);
+		    	 
+		    	String setReportData="";
+		    	for( String trLong : fileReportTempPOlist.get(0).getReportData().split(",")) {
+		    		boolean status = trLong.contains("平均折扣");
+		    		boolean statusf = trLong.contains("复购率");
+		    		if(!status){
+		    			if(!statusf){
+		    				if(setReportData.equals("")) {
+		    					setReportData=trLong+",";
+		    				}else {
+		    					setReportData=setReportData+trLong+",";
+		    				}
+		    				
+		    			}
+		    		}
+		    	 }
+		    	 fileReportTemp.setReportData(setReportData);
+		    	 fileReportTemp.setReportDataName(fileReportTempPOlist.get(0).getReportDataName().replaceAll("averageDiscount,", "").replaceAll("complexPurchaseRate,", ""));
+		    	 fileReportTempPOlist=new ArrayList<FileReportTempPO>();
+		    	 fileReportTempPOlist.add(fileReportTemp);
+		    	 
+                   // 找到店铺对应群主信息
+	    		  List<Long> storeGroupIds =new ArrayList<>();
+	    		
+   	             for( String trLong : organizationContentStr.split(",")) {
+   	            	storeGroupIds.add(Long.valueOf(trLong));
+	             }
+   	            ResponseData<Map<String,SysStoreGroupPo>> getStoreIdLis =	 storeGroupServiceRpc.getStoreIdListByGroupIds(storeGroupIds);
+   	            Map<String,SysStoreGroupPo> sysStoreGroupmap=   getStoreIdLis.getData();
+   	            if(getStoreIdLis.getData()==null) {
+   	              ResponseData.setCode(0);
+    		  	  ResponseData.setMessage("群主接口返回空店铺！"+organizationContentStr);
+    		  	  ResponseData.setData(FigureUtil.parseJSON2Map("false",dimension,0,fileReportTempPOlist));
+    		  	  return ResponseData;
+   	           }
+   		 
+   	          
+		    	       //获取所有店铺数据数据
+   	                     log.info("店铺数据"+jsonStr);
+						JSONArray arr=new JSONArray(jsonStr);
+						//计算出群主数据
+						org.codehaus.jettison.json.JSONObject jsongroup =new org.codehaus.jettison.json.JSONObject();
+						    	  for(int i=0;i<arr.length();i++){
+		
+						    		  org.codehaus.jettison.json.JSONObject jsonObjtarr=  arr.getJSONObject(i);
+				                      //店铺storeCode
+						    		  String  storeCode =  jsonObjtarr.get("storeCode").toString();
+				                      //更具店铺找群主
+						    		  SysStoreGroupPo SysStoreGroupPo= sysStoreGroupmap.get(storeCode);
+						    		  if(SysStoreGroupPo!=null) {
+						    			  //找到群主数据todo
+						    				Iterator<String> itnewjsongro = jsongroup.keys();
+						    				org.codehaus.jettison.json.JSONObject jsongro =null;
+				    		 				while(itnewjsongro.hasNext()){
+				    		 					if(itnewjsongro.next().equals(SysStoreGroupPo.getSysStoreGroupId().toString())) {
+				    		 						 jsongro =(org.codehaus.jettison.json.JSONObject) jsongroup.get(SysStoreGroupPo.getSysStoreGroupId().toString());
+				    		 					}
+				    		 				}
+						    			  if(jsongro==null) {
+						    				  jsonObjtarr.put("groupCode", SysStoreGroupPo.getSysStoreGroupCode());
+						    				  jsonObjtarr.put("groupName", SysStoreGroupPo.getStoreGroupName());
+						    				  
+						    				//如果是业绩占比，总业绩除占比
+					    		 				Iterator<String> it = jsonObjtarr.keys(); 
+					    		 				while(it.hasNext()){
+						    		 				if(it.next().equals("percentOfAchievements")) {
+						    		 					//如果是业绩占比，总业绩除占比
+						    		 						BigDecimal achievements= new BigDecimal(jsonObjtarr.get("achievements").toString());
+						    		 						achievements=achievements.multiply(new BigDecimal("100"));
+						    		 						jsonObjtarr.put("percentOfAchievements", achievements.divide(new BigDecimal(jsonObjtarr.get("percentOfAchievements").toString()),2,BigDecimal.ROUND_HALF_UP));
+						    		 				}
+					    		 				}
+						    				  
+						    				  jsongroup.put(SysStoreGroupPo.getSysStoreGroupId().toString(), jsonObjtarr);
+						    			  }else {
+						    				  // 相加
+//						    				  业绩
+						    				  String achievementsstr ="";
+						    		 			for(String string :fileReportTempPOlist.get(0).getReportDataName().split(",")) {
+						    		 				
+						    		 				if(string.equals("achievements")) {
+							    		 				BigDecimal valueData= new BigDecimal("0");
+							    		 				Iterator<String> it = jsonObjtarr.keys(); 
+							    		 				while(it.hasNext()){
+								    		 				if(it.next().equals(string)) {
+								    		 					 achievementsstr =jsonObjtarr.get("achievements").toString();
+								    		 					}
+								    		 				}
+						    		 				}
+						    		 				
+						    		 			   // 新加
+						    		 				BigDecimal valueData= new BigDecimal("0");
+						    		 				Iterator<String> it = jsonObjtarr.keys(); 
+						    		 				while(it.hasNext()){
+							    		 				if(it.next().equals(string)) {
+							    		 					//如果是业绩占比，总业绩除占比
+							    		 					if(string.equals("percentOfAchievements")) {
+							    		 						BigDecimal achievements= new BigDecimal(achievementsstr);
+							    		 						achievements=achievements.multiply(new BigDecimal("100"));
+							    		 						valueData= achievements.divide(new BigDecimal(jsonObjtarr.get(string).toString()),2,BigDecimal.ROUND_HALF_UP);
+							    		 					}else {
+							    		 						valueData= valueData.add(new BigDecimal(jsonObjtarr.get(string).toString()));
+							    		 					}
+							    		 					
+							    		 					  break;
+							    		 				}
+						    		 				}
+						    		 			// 累加新数据
+						    		 				Iterator<String> itnew = jsongro.keys(); 
+						    		 				while(itnew.hasNext()){
+							    		 				if(itnew.next().equals(string)) {
+							    		 					valueData= valueData.add(new BigDecimal(jsongro.get(string).toString()));
+							    		 					 break;
+							    		 				}
+						    		 				}
+						    		 				
+						    		 				jsonObjtarr.put(string, valueData);
+						    		 			 }
+							    				  jsonObjtarr.put("groupCode", SysStoreGroupPo.getSysStoreGroupCode());
+							    				  jsonObjtarr.put("groupName", SysStoreGroupPo.getStoreGroupName());
+						    		 			//群主数据累加
+						    		 			jsongroup.put(SysStoreGroupPo.getSysStoreGroupId().toString(), jsonObjtarr);
+						    		 		   }
+							    		  
+						    		  }else {
+						    			  log.info("找不到群主店铺code："+storeCode);
+						    		  }
+		
+						    	  }
+						    	  
+						  //计算后的结果  	  
+                //	现在数据报表是这样算的   件单价=总业绩/件数，客单价=总业绩/笔数，连带率=件数/笔数，平均消费次数=笔数/人数 平均消费次数=笔数/人数     	 ,平均折扣=总业绩/零售总价格, 
+				  Iterator<String> itnew = jsongroup.keys(); 
+				  JSONArray jsongroupArr=new JSONArray();
+			 	   while(itnew.hasNext()){
+//			 		  achievements	业绩
+//			 		 number	人数
+//			 		 pieceNumber	件数
+//			 		 penNumber	笔数
+//			 		 unitPrice	件单价
+//			 		 guestPrice	客单价
+//			 		 averageDiscount	平均折扣
+//			 		 jointRate	连带率
+//			 		 complexPurchaseRate	复购率
+//			 		 averageConsumptionTimes	平均消费次数
+//			 		 percentOfAchievements	业绩占比
+//			 		  业绩占比=*/总业绩，
+//			 		  平均折扣，复购率，不要 
+
+			 		  org.codehaus.jettison.json.JSONObject jsongroupnew =(org.codehaus.jettison.json.JSONObject) jsongroup.get(itnew.next());
+			 		  
+		 				Iterator<String> itnewjsongroupnew = jsongroupnew.keys(); 
+		 				while(itnewjsongroupnew.hasNext()){
+		 					
+		 				String itnewjsong =	itnewjsongroupnew.next();
+
+		 		 				if(itnewjsong.equals("unitPrice")) {
+		 		 					if(jsongroupnew.getString("pieceNumber").equals("0")) {
+		 		 						jsongroupnew.put("unitPrice", 0);//  如果除数是0
+		 		 						continue;
+		 		 					}
+		 					          BigDecimal   achievements   =   new   BigDecimal(jsongroupnew.getString("achievements"));
+		 					          achievements=achievements.divide(new BigDecimal(jsongroupnew.getString("pieceNumber")),2,BigDecimal.ROUND_HALF_UP);
+		 					 		  jsongroupnew.put("unitPrice", achievements.toString());// 件单价=总业绩/件数
+		 					 		continue;
+		 		 				}
+ 		 				        
+		 		 				if(itnewjsong.equals("guestPrice")) {
+		 		 					if(jsongroupnew.getString("penNumber").equals("0")) {
+		 		 						jsongroupnew.put("guestPrice", 0);//  如果除数是0
+		 		 						continue;
+		 		 					}
+		 					          BigDecimal   achievements   =   new   BigDecimal(jsongroupnew.getString("pieceNumber"));
+		 					          achievements=achievements.divide(new BigDecimal(jsongroupnew.getString("penNumber")),2,BigDecimal.ROUND_HALF_UP);
+		 					 		  jsongroupnew.put("guestPrice", achievements.toString());// 客单价=总业绩/笔数
+		 					 		continue;
+		 		 				}
+		 		 				
+		 		 				if(itnewjsong.equals("jointRate")) {
+		 		 					if(jsongroupnew.getString("penNumber").equals("0")) {
+		 		 						jsongroupnew.put("jointRate", 0);//  如果除数是0
+		 		 						continue;
+		 		 					}
+		 					          BigDecimal   achievements   =   new   BigDecimal(jsongroupnew.getString("achievements"));
+		 					          achievements=achievements.divide(new BigDecimal(jsongroupnew.getString("penNumber")),2,BigDecimal.ROUND_HALF_UP);
+		 					 		  jsongroupnew.put("jointRate", achievements.toString());// 连带率=件数/笔数，
+		 					 		continue;
+		 		 				}
+		 		 				
+		 		 				if(itnewjsong.equals("averageConsumptionTimes")) {
+		 		 					if(jsongroupnew.getString("number").equals("0")) {
+		 		 						jsongroupnew.put("averageConsumptionTimes", 0);//  如果除数是0
+		 		 						continue;
+		 		 					}
+		 					          BigDecimal   achievements   =   new   BigDecimal(jsongroupnew.getString("penNumber"));
+		 					          achievements=achievements.divide(new BigDecimal(jsongroupnew.getString("number")),2,BigDecimal.ROUND_HALF_UP);
+		 					 		  jsongroupnew.put("averageConsumptionTimes", achievements.toString());//  平均消费次数=笔数/人数,
+		 		 				}
+		 		 				
+		 		 				if(itnewjsong.equals("percentOfAchievements")) {
+		 		 					if(jsongroupnew.getString("percentOfAchievements").equals("0")) {
+		 		 						jsongroupnew.put("percentOfAchievements", 0);//  如果除数是0
+		 		 						continue;
+		 		 					}
+		 					          BigDecimal   achievements   =   new   BigDecimal(jsongroupnew.getString("achievements"));
+		 					          achievements=achievements.divide(new BigDecimal(jsongroupnew.getString("percentOfAchievements")),4,BigDecimal.ROUND_HALF_UP);
+		 					 		  jsongroupnew.put("percentOfAchievements", achievements.multiply(new BigDecimal(100)));//  平均消费次数=笔数/人数,
+		 		 				}
+		 		 				
+		 		 				
+		 		 				
+ 		 				
+		 				}
+			 		  
+			 		  jsongroupArr.put(jsongroupnew);
+			 		}
+		    		 	   
+				log.info("计算群主数据"+jsongroupArr);
+//				jsonStr= jsongroupArr.toString();    	  
+
+				} catch (JSONException e) {
+					 log.info("技术群主数据出错："+e.getMessage());
+					e.printStackTrace();
+				}
+		     
+		     }
+		     
+			     //转换群主名称     
+			     if(organization.equals("0")||organization.equals("1")) {
+			    	 JSONArray havegroupIdarr=new JSONArray();
+			      try {
+			    	  JSONArray arr=new JSONArray(job.get("data").toString());
+			    	 
+			    	  for(int i=0;i<arr.length();i++){
+			    		  org.codehaus.jettison.json.JSONObject jsonObjtarr=  arr.getJSONObject(i);
+	                      //店铺id
+			    		  String  storeCode =  jsonObjtarr.get("storeCode").toString();
+			    		//根据storeCode找店铺名称
+			    		  
+	                      //更具店铺id找群主名称
+			    		  List<String> storellist =new ArrayList<>();
+			    		  storellist.add(storeCode);
+			    		  SysStoreVo sysStoreVo =new SysStoreVo();
+			    		  sysStoreVo.setStoreCodes(storellist);
+			    		  sysStoreVo.setSysCompanyId(currentUser.getSysCompanyId());
+			    		  ResponseData<Map<String,String>> getStore	=  storeServiceRpc.getStoreGroupNameByStoreCodes(sysStoreVo);
+			    		  if(getStore.getData().get(storeCode)==null) {
+			    			  jsonObjtarr.put("groupId", "");
+			    		  }else {
+			    			  jsonObjtarr.put("groupId", getStore.getData().get(storeCode));
+			    		  }
+			    		  
+			    		  //找店铺名
+			    	     com.bizvane.utils.responseinfo.ResponseData<String> storeCodename = storeServiceRpc.getStoreNameByCode(storeCode);
+			    	      
+			    		  jsonObjtarr.put("storeName", storeCodename.getData());
+			    		  
+			    		  havegroupIdarr.put(jsonObjtarr);
+			    		  
+			    		  
+			    		  
+			    	  }
+						
+			    	  jsonStr=havegroupIdarr.toString();
+					} catch (JSONException e) {
+						log.info("群主需要转换，出错");
+						e.printStackTrace();
+					}
+			     }
+			   //转换群主名称     
+			     
+			     
 	             // 导出表格
 		    	 if(StringUtils.isNotBlank(postTem)&&postTem.equals("export")){
 		    		 
@@ -244,25 +515,21 @@ public class ReportIncomeController {
 						 fileReportTempPO.setReportDataName("brandName,"+fileReportTempPO.getReportDataName());
 						 fileReportTempPO.setReportData("品牌名称,"+fileReportTempPO.getReportData());
 						 
-						 
 					 }else if(dimension.equals("3")) {
 						 fileReportTempPO.setReportDataName("groupName,"+fileReportTempPO.getReportDataName());
 						 fileReportTempPO.setReportData("群组名称,"+fileReportTempPO.getReportData());
-						 
 						 fileReportTempPO.setReportDataName("groupCode,"+fileReportTempPO.getReportDataName());
 						 fileReportTempPO.setReportData("群组编号,"+fileReportTempPO.getReportData());
-						 
-						 
 					 }
 		    		 
-		    		 reportTempService.Export(currentUser,"_summary",job.get("data").toString(), fileReportTempPO);
+		    		 reportTempService.Export(currentUser,"_summary",jsonStr, fileReportTempPO);
 		    		 ResponseData.setMessage("导出中");
 		    	 }else {
 		    		 ResponseData.setMessage(job.get("message").toString());
 			    }
 		    	 // 导出表格end
 		    	 
-//		    	 查询条数
+                    //	 查询条数，为了实现获取末页
 		    	 int tiaoshu=100;
 			     try {
 			    	 //这里多查询一次 ，只为了获取中条数，为了分页
@@ -273,81 +540,18 @@ public class ReportIncomeController {
 			   		   jsonObject.put("businessNum", BaseUrl.getBusinessNum());
 			   		   jsonObject.put("apiKey", BaseUrl.getApiKey());
 			   		 //用户key
-			   		log.info("报表查询ReportIncomeController："+url+jsonObject.toString());
-					  ResponseEntity<String> responseall = this.restTemplate.postForEntity(url, jsonObject,String.class, new Object[0]);
+			   		 log.info("报表查询ReportIncomeController："+url+jsonObject.toString());
+					 ResponseEntity<String> responseall = this.restTemplate.postForEntity(url, jsonObject,String.class, new Object[0]);
 				     JSONObject jsonall = JSONObject.parseObject(responseall.getBody());
 					 JSONArray arr=new JSONArray(jsonall.get("data").toString());
 					 tiaoshu=arr.length();
 					 
-					 
 				  } catch (JSONException e) {
 					  System.out.println("查询条数报错！");
 					}
-			     
-			     
-			     //计算群主数据
-//			     try {
-//			    	 //获取所有数据
-//						JSONArray arr=new JSONArray(job.get("data").toString());
-//						Map<String,String> mapQuan=new HashMap<String,String>();
-//						
-//						 for(int i=0;i<arr.length();i++){
-//					       org.codehaus.jettison.json.JSONObject jsonObjtarr=  arr.getJSONObject(i);
-//					       Iterator<String> it = jsonObjtarr.keys(); 
-//					       while(it.hasNext()){
-//					       // 获得key
-//						       String key = it.next(); 
-////						       "groupId":"","storeName":"南京测试一店","storeCode":"G002"
-//						       if(key.equals("groupId")||key.equals("storeName")||key.equals("storeCode")) {
-//						    	   mapQuan.put(key, jsonObjtarr.toString());
-//						       }else {
-//							       BigDecimal valueData= new BigDecimal(jsonObjtarr.getString(key));
-//							       if(mapQuan.get(key)==null) {
-//							    	   mapQuan.put(key, "0");
-//							       }
-//							       valueData.add(new BigDecimal(mapQuan.get(key)));
-//							       mapQuan.put(key, valueData.toString());
-//						    	   
-//						       }
-//						      
-//					         }
-//								
-//					   	}
-//						//net.sf.json.JSONObject 将Map转换为JSON方法
-//						 String json = mapQuan.toString();
-//				} catch (JSONException e) {
-//					// TODO Auto-generated catch block
-//					e.printStackTrace();
-//				}
-			     
-			     
-			     
-			     String jsonStr= job.get("data").toString();
-			     //计算群主数据     
-			     if(organization.equals("0")||organization.equals("1")) {
-			    	 JSONArray havegroupIdarr=new JSONArray();
-			      try {
-			    	  JSONArray arr=new JSONArray(job.get("data").toString());
-			    	 
-			    	  for(int i=0;i<arr.length();i++){
-			    		  org.codehaus.jettison.json.JSONObject jsonObjtarr=  arr.getJSONObject(i);
-//			    		  店铺id
-			    		  String  storeCode =  jsonObjtarr.get("storeCode").toString();
-//			    		  更具店铺id找群主名称
-			    		  List<String> storellist =new ArrayList<>();
-			    		  storellist.add(storeCode);
-			    		  ResponseData<Map<String,String>> getStore	=  storeServiceRpc.getStoreGroupNameByStoreCodes(storellist);
-			    		  jsonObjtarr.put("groupId", getStore.getData().get(storeCode));
-			    		  havegroupIdarr.put(jsonObjtarr);
-			    	  }
-						
-			    	  jsonStr=havegroupIdarr.toString();
-					} catch (JSONException e) {
-						log.info("群主需要转换，出错");
-						e.printStackTrace();
-					}
-			     }
-			    	 
+                     // 查询条数，为了实现获取末页
+	
+                     //  返回前端数据转换
 				     ResponseData.setData(FigureUtil.parseJSON2Map(jsonStr,dimension,tiaoshu,fileReportTempPOlist));
 		             ResponseData.setCode(0);
 

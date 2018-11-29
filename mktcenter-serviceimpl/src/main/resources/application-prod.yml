@@ -94,7 +94,7 @@ feign:
       path: message.api
     wechat:
       name: wechat-prod
-      path: wechat.api
+      path: wechat
     applet:
       name: applet-prod
       path: applet.api
@@ -122,7 +122,7 @@ qiniu:
   accessKey: Jv79lFtLNDBj1XJ6vkXkemnRN5LIOSXMeDOvW35n
   secretKey: HIKXNXr12qRhpIAsdI8xTaX87LeTqqLGjXB_RgDf
   bucketNm: bizvane-prod
-  domain: https://static.bizvane.com
+  domain: static.bizvane.com
 
 activity:
   qrcodeurl: /qrcode?activityCode=

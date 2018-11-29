@@ -243,6 +243,7 @@ public class JobUtil {
      * @param businessType
      */
     public void addJob(Date execuDate,String desc,String param,String author,String jobHandler,int businessType,String bizCode){
+        log.info("添加job参数是execuDate="+ execuDate+"desc="+desc+"param+="+param+"author+="+author+"jobHandler+="+jobHandler+"businessType+="+businessType+"bizCode"+bizCode);
         //构建job对象
         XxlJobInfo xxlJobInfo = new XxlJobInfo();
         //设置appName

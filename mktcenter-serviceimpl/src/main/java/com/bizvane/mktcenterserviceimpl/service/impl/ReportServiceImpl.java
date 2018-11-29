@@ -121,7 +121,7 @@ public class ReportServiceImpl implements ReportTempService {
 	     			  //时间格式化
 	     			  SimpleDateFormat format = new SimpleDateFormat("yyyyMMddHHmmss");
 	     			  String filename =fileReportTempPOlist.getTemplateName()+nameEnd+ format.format(new Date()) + ".xlsx";
-	     			    qiniuUrl = QiNiuUtil.upload(in, filename);
+	     			    qiniuUrl = "https://"+QiNiuUtil.upload(in, filename);
 	     			  System.out.println("报表上传到七牛ReportIncomeController："+qiniuUrl);
 	     			  in.close();
 	     			  out.close();

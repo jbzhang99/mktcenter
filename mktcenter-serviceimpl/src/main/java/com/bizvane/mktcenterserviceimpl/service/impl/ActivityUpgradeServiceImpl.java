@@ -543,7 +543,7 @@ public class ActivityUpgradeServiceImpl implements ActivityUpgradeService {
 
         //查询活动卷
         MktCouponPOExample example = new  MktCouponPOExample();
-        example.createCriteria().andBizIdEqualTo(upgradeList.get(0).getMktActivityId()).andValidEqualTo(true);
+        example.createCriteria().andBizIdEqualTo(upgradeList.get(0).getMktActivityId()).andValidEqualTo(true).andBizTypeEqualTo(1);
         List<MktCouponPO> mktCouponPOs= mktCouponPOMapper.selectByExample(example);
         //查询券接口
         List<CouponDetailResponseVO> lists = new ArrayList<>();
@@ -619,7 +619,7 @@ public class ActivityUpgradeServiceImpl implements ActivityUpgradeService {
 
             // 增加卷奖励接口
             MktCouponPOExample example = new  MktCouponPOExample();
-            example.createCriteria().andBizIdEqualTo(activityVO.getMktActivityId()).andValidEqualTo(true);
+            example.createCriteria().andBizIdEqualTo(activityVO.getMktActivityId()).andValidEqualTo(true).andBizTypeEqualTo(1);
             List<MktCouponPO> mktCouponPOs= mktCouponPOMapper.selectByExample(example);
             if(!CollectionUtils.isEmpty(mktCouponPOs)){
                 for (MktCouponPO mktCouponPO:mktCouponPOs) {

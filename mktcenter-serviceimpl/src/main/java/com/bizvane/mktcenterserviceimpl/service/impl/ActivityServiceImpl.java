@@ -258,22 +258,22 @@ public class ActivityServiceImpl implements ActivityService {
                 //券数量
                 activityAnalysisCount.setCouponSum(couponFindCouponCountResponseVO.getCouponSum());
                 //算券数量
-                if (null!=couponFindCouponCountResponseVO.getCouponSum()){
+                /*if (null!=couponFindCouponCountResponseVO.getCouponSum()){
                     couponSums= couponSums+couponFindCouponCountResponseVO.getCouponSum();
-                }
+                }*/
                 //核销券数量
                 activityAnalysisCount.setCouponUsedSum(couponFindCouponCountResponseVO.getCouponUsedSum());
                 //算合计核销数量
-                if (null!=couponFindCouponCountResponseVO.getCouponUsedSum()){
+                /*if (null!=couponFindCouponCountResponseVO.getCouponUsedSum()){
                     couponUsedSums=couponUsedSums+couponFindCouponCountResponseVO.getCouponUsedSum();
-                }
+                }*/
 
                 //收益
                 activityAnalysisCount.setMoney(couponFindCouponCountResponseVO.getMoney());
                 //算合计收益
-                if (null!=couponFindCouponCountResponseVO.getMoney()){
+               /* if (null!=couponFindCouponCountResponseVO.getMoney()){
                     moneySu = moneySu.add(new BigDecimal(String.valueOf(couponFindCouponCountResponseVO.getMoney())));
-                }
+                }*/
 
                 //核销率
                 if ((null!=couponFindCouponCountResponseVO.getCouponUsedSum() && null!=couponFindCouponCountResponseVO.getCouponSum())) {
@@ -322,20 +322,20 @@ public class ActivityServiceImpl implements ActivityService {
         String activityType = activityConvertCouponTypeEnumByCode.getCouponCode();
         //查询券合计
         log.info("查询券合计开始时间+++++++"+ new SimpleDateFormat("yyyy/MM/dd-HH:mm:ss:SSS").format(new Date()));
-       /* ResponseData<CouponFindCouponCountResponseVO> couponFindCouponCountVO =  couponQueryServiceFeign.getCountBySendType(activityType,bo.getSysBrandId());
-        CouponFindCouponCountResponseVO couponFindCoupon = couponFindCouponCountVO.getData();*/
-      /*  //合计优惠券总数量
+        ResponseData<CouponFindCouponCountResponseVO> couponFindCouponCountVO =  couponQueryServiceFeign.getCountBySendType(activityType,bo.getSysBrandId());
+        CouponFindCouponCountResponseVO couponFindCoupon = couponFindCouponCountVO.getData();
+        //合计优惠券总数量
         ctivityAnalysisBO.setCouponSumTotal(couponFindCoupon.getCouponSum());
         //合计优惠券核销数量
         ctivityAnalysisBO.setCouponUsedSumTotal(couponFindCoupon.getCouponUsedSum());
         //合计券收益
-        ctivityAnalysisBO.setMoneyTotal(couponFindCoupon.getMoney());*/
-        //合计优惠券总数量
+        ctivityAnalysisBO.setMoneyTotal(couponFindCoupon.getMoney());
+      /*  //合计优惠券总数量
         ctivityAnalysisBO.setCouponSumTotal(couponSums);
         //合计优惠券核销数量
         ctivityAnalysisBO.setCouponUsedSumTotal(couponUsedSums);
         //合计券收益
-        ctivityAnalysisBO.setMoneyTotal(moneySu);
+        ctivityAnalysisBO.setMoneyTotal(moneySu);*/
         log.info("查询券合计结束时间+++++++"+ new SimpleDateFormat("yyyy/MM/dd-HH:mm:ss:SSS").format(new Date()));
         PageInfo<ActivityAnalysisCountBO> pageInfo = new PageInfo<>(activityAnalysisList);
         ctivityAnalysisBO.setActivityAnalysisCountBO(pageInfo.getList());

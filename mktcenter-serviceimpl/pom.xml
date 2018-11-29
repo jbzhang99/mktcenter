@@ -90,7 +90,7 @@
 		<dependency>
 			<groupId>com.bizvane</groupId>
 			<artifactId>mktcenter-service</artifactId>
-			<version>1.0.0</version>
+			<version>1.0.1-SNAPSHOT</version>
 		</dependency>
 
 		<dependency>
@@ -167,13 +167,13 @@
 		<dependency>
 			<groupId>com.bizvane</groupId>
 			<artifactId>coupon-facade</artifactId>
-			<version>1.0.0</version>
+			<version>1.0.1-SNAPSHOT</version>
 		</dependency>
 		<!--中台模块依赖 -->
 		<dependency>
 			<groupId>com.bizvane</groupId>
 			<artifactId>centerstage-service</artifactId>
-			<version>1.0.0</version>
+			<version>1.0.3</version>
 		</dependency>
 		<!--中台模块依赖 -->
 		<dependency>
@@ -190,13 +190,13 @@
 		<dependency>
 			<groupId>com.bizvane</groupId>
 			<artifactId>centercontrol-service</artifactId>
-			<version>1.0.0</version>
+			<version>1.0.1</version>
 		</dependency>
 		<!--会员模块依赖 -->
 		<dependency>
 			<groupId>com.bizvane</groupId>
 			<artifactId>members-facade</artifactId>
-			<version>1.0.0</version>
+			<version>1.0.1-SNAPSHOT</version>
 		</dependency>
 		<!-- 引入消息 -->
 		<dependency>
@@ -250,6 +250,10 @@
 			<groupId>com.ctrip.framework.apollo</groupId>
 			<artifactId>apollo-core</artifactId>
 			<version>1.1.0</version>
+		</dependency>
+		<dependency>
+			<groupId>io.micrometer</groupId>
+			<artifactId>micrometer-registry-prometheus</artifactId>
 		</dependency>
 	</dependencies>
 

@@ -1,0 +1,826 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bizvane.mktcenterserviceimpl.mappers.MktConvertCouponRecordPOMapper">
+  <resultMap id="BaseResultMap" type="com.bizvane.mktcenterservice.models.po.MktConvertCouponRecordPO">
+    <!--
+      WARNING - 只读 - @mbg.generated
+      This element was generated on 2018-11-26 14:51:19.
+    -->
+    <id column="convert_coupon_record_id" jdbcType="BIGINT" property="convertCouponRecordId" />
+    <result column="convert_coupon_record_code" jdbcType="VARCHAR" property="convertCouponRecordCode" />
+    <result column="exchange_id" jdbcType="BIGINT" property="exchangeId" />
+    <result column="exchange_code" jdbcType="VARCHAR" property="exchangeCode" />
+    <result column="sys_company_id" jdbcType="BIGINT" property="sysCompanyId" />
+    <result column="sys_brand_id" jdbcType="BIGINT" property="sysBrandId" />
+    <result column="member_name" jdbcType="VARCHAR" property="memberName" />
+    <result column="member_code" jdbcType="VARCHAR" property="memberCode" />
+    <result column="card_no" jdbcType="VARCHAR" property="cardNo" />
+    <result column="coupon_name" jdbcType="VARCHAR" property="couponName" />
+    <result column="coupon_entity_id" jdbcType="BIGINT" property="couponEntityId" />
+    <result column="coupon_num" jdbcType="INTEGER" property="couponNum" />
+    <result column="convert_price" jdbcType="INTEGER" property="convertPrice" />
+    <result column="convert_num" jdbcType="INTEGER" property="convertNum" />
+    <result column="convert_tatal_integral" jdbcType="INTEGER" property="convertTatalIntegral" />
+    <result column="convert_time" jdbcType="TIMESTAMP" property="convertTime" />
+    <result column="success_type" jdbcType="BIT" property="successType" />
+    <result column="create_user_id" jdbcType="BIGINT" property="createUserId" />
+    <result column="create_user_name" jdbcType="VARCHAR" property="createUserName" />
+    <result column="create_date" jdbcType="TIMESTAMP" property="createDate" />
+    <result column="modified_user_id" jdbcType="BIGINT" property="modifiedUserId" />
+    <result column="modified_user_name" jdbcType="VARCHAR" property="modifiedUserName" />
+    <result column="modified_date" jdbcType="TIMESTAMP" property="modifiedDate" />
+    <result column="valid" jdbcType="BIT" property="valid" />
+  </resultMap>
+  <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.bizvane.mktcenterservice.models.po.MktConvertCouponRecordPO">
+    <!--
+      WARNING - 只读 - @mbg.generated
+      This element was generated on 2018-11-26 14:51:19.
+    -->
+    <result column="coupon_codes" jdbcType="LONGVARCHAR" property="couponCodes" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <!--
+      WARNING - 只读 - @mbg.generated
+      This element was generated on 2018-11-26 14:51:19.
+    -->
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <!--
+      WARNING - 只读 - @mbg.generated
+      This element was generated on 2018-11-26 14:51:19.
+    -->
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    <!--
+      WARNING - 只读 - @mbg.generated
+      This element was generated on 2018-11-26 14:51:19.
+    -->
+    convert_coupon_record_id, convert_coupon_record_code, exchange_id, exchange_code, 
+    sys_company_id, sys_brand_id, member_name, member_code, card_no, coupon_name, coupon_entity_id, 
+    coupon_num, convert_price, convert_num, convert_tatal_integral, convert_time, success_type, 
+    create_user_id, create_user_name, create_date, modified_user_id, modified_user_name, 
+    modified_date, valid
+  </sql>
+  <sql id="Blob_Column_List">
+    <!--
+      WARNING - 只读 - @mbg.generated
+      This element was generated on 2018-11-26 14:51:19.
+    -->
+    coupon_codes
+  </sql>
+  <select id="selectByExampleWithBLOBs" parameterType="com.bizvane.mktcenterservice.models.po.MktConvertCouponRecordPOExample" resultMap="ResultMapWithBLOBs">
+    <!--
+      WARNING - 只读 - @mbg.generated
+      This element was generated on 2018-11-26 14:51:19.
+    -->
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from t_mkt_convert_coupon_record
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByExample" parameterType="com.bizvane.mktcenterservice.models.po.MktConvertCouponRecordPOExample" resultMap="BaseResultMap">
+    <!--
+      WARNING - 只读 - @mbg.generated
+      This element was generated on 2018-11-26 14:51:19.
+    -->
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from t_mkt_convert_coupon_record
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="ResultMapWithBLOBs">
+    <!--
+      WARNING - 只读 - @mbg.generated
+      This element was generated on 2018-11-26 14:51:19.
+    -->
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from t_mkt_convert_coupon_record
+    where convert_coupon_record_id = #{convertCouponRecordId,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    <!--
+      WARNING - 只读 - @mbg.generated
+      This element was generated on 2018-11-26 14:51:19.
+    -->
+    delete from t_mkt_convert_coupon_record
+    where convert_coupon_record_id = #{convertCouponRecordId,jdbcType=BIGINT}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.bizvane.mktcenterservice.models.po.MktConvertCouponRecordPOExample">
+    <!--
+      WARNING - 只读 - @mbg.generated
+      This element was generated on 2018-11-26 14:51:19.
+    -->
+    delete from t_mkt_convert_coupon_record
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.bizvane.mktcenterservice.models.po.MktConvertCouponRecordPO">
+    <!--
+      WARNING - 只读 - @mbg.generated
+      This element was generated on 2018-11-26 14:51:19.
+    -->
+    <selectKey keyProperty="convertCouponRecordId" order="AFTER" resultType="java.lang.Long">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into t_mkt_convert_coupon_record (convert_coupon_record_code, exchange_id, 
+      exchange_code, sys_company_id, sys_brand_id, 
+      member_name, member_code, card_no, 
+      coupon_name, coupon_entity_id, coupon_num, 
+      convert_price, convert_num, convert_tatal_integral, 
+      convert_time, success_type, create_user_id, 
+      create_user_name, create_date, modified_user_id, 
+      modified_user_name, modified_date, valid, 
+      coupon_codes)
+    values (#{convertCouponRecordCode,jdbcType=VARCHAR}, #{exchangeId,jdbcType=BIGINT}, 
+      #{exchangeCode,jdbcType=VARCHAR}, #{sysCompanyId,jdbcType=BIGINT}, #{sysBrandId,jdbcType=BIGINT}, 
+      #{memberName,jdbcType=VARCHAR}, #{memberCode,jdbcType=VARCHAR}, #{cardNo,jdbcType=VARCHAR}, 
+      #{couponName,jdbcType=VARCHAR}, #{couponEntityId,jdbcType=BIGINT}, #{couponNum,jdbcType=INTEGER}, 
+      #{convertPrice,jdbcType=INTEGER}, #{convertNum,jdbcType=INTEGER}, #{convertTatalIntegral,jdbcType=INTEGER}, 
+      #{convertTime,jdbcType=TIMESTAMP}, #{successType,jdbcType=BIT}, #{createUserId,jdbcType=BIGINT}, 
+      #{createUserName,jdbcType=VARCHAR}, #{createDate,jdbcType=TIMESTAMP}, #{modifiedUserId,jdbcType=BIGINT}, 
+      #{modifiedUserName,jdbcType=VARCHAR}, #{modifiedDate,jdbcType=TIMESTAMP}, #{valid,jdbcType=BIT}, 
+      #{couponCodes,jdbcType=LONGVARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.bizvane.mktcenterservice.models.po.MktConvertCouponRecordPO">
+    <!--
+      WARNING - 只读 - @mbg.generated
+      This element was generated on 2018-11-26 14:51:19.
+    -->
+    <selectKey keyProperty="convertCouponRecordId" order="AFTER" resultType="java.lang.Long">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into t_mkt_convert_coupon_record
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="convertCouponRecordCode != null">
+        convert_coupon_record_code,
+      </if>
+      <if test="exchangeId != null">
+        exchange_id,
+      </if>
+      <if test="exchangeCode != null">
+        exchange_code,
+      </if>
+      <if test="sysCompanyId != null">
+        sys_company_id,
+      </if>
+      <if test="sysBrandId != null">
+        sys_brand_id,
+      </if>
+      <if test="memberName != null">
+        member_name,
+      </if>
+      <if test="memberCode != null">
+        member_code,
+      </if>
+      <if test="cardNo != null">
+        card_no,
+      </if>
+      <if test="couponName != null">
+        coupon_name,
+      </if>
+      <if test="couponEntityId != null">
+        coupon_entity_id,
+      </if>
+      <if test="couponNum != null">
+        coupon_num,
+      </if>
+      <if test="convertPrice != null">
+        convert_price,
+      </if>
+      <if test="convertNum != null">
+        convert_num,
+      </if>
+      <if test="convertTatalIntegral != null">
+        convert_tatal_integral,
+      </if>
+      <if test="convertTime != null">
+        convert_time,
+      </if>
+      <if test="successType != null">
+        success_type,
+      </if>
+      <if test="createUserId != null">
+        create_user_id,
+      </if>
+      <if test="createUserName != null">
+        create_user_name,
+      </if>
+      <if test="createDate != null">
+        create_date,
+      </if>
+      <if test="modifiedUserId != null">
+        modified_user_id,
+      </if>
+      <if test="modifiedUserName != null">
+        modified_user_name,
+      </if>
+      <if test="modifiedDate != null">
+        modified_date,
+      </if>
+      <if test="valid != null">
+        valid,
+      </if>
+      <if test="couponCodes != null">
+        coupon_codes,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="convertCouponRecordCode != null">
+        #{convertCouponRecordCode,jdbcType=VARCHAR},
+      </if>
+      <if test="exchangeId != null">
+        #{exchangeId,jdbcType=BIGINT},
+      </if>
+      <if test="exchangeCode != null">
+        #{exchangeCode,jdbcType=VARCHAR},
+      </if>
+      <if test="sysCompanyId != null">
+        #{sysCompanyId,jdbcType=BIGINT},
+      </if>
+      <if test="sysBrandId != null">
+        #{sysBrandId,jdbcType=BIGINT},
+      </if>
+      <if test="memberName != null">
+        #{memberName,jdbcType=VARCHAR},
+      </if>
+      <if test="memberCode != null">
+        #{memberCode,jdbcType=VARCHAR},
+      </if>
+      <if test="cardNo != null">
+        #{cardNo,jdbcType=VARCHAR},
+      </if>
+      <if test="couponName != null">
+        #{couponName,jdbcType=VARCHAR},
+      </if>
+      <if test="couponEntityId != null">
+        #{couponEntityId,jdbcType=BIGINT},
+      </if>
+      <if test="couponNum != null">
+        #{couponNum,jdbcType=INTEGER},
+      </if>
+      <if test="convertPrice != null">
+        #{convertPrice,jdbcType=INTEGER},
+      </if>
+      <if test="convertNum != null">
+        #{convertNum,jdbcType=INTEGER},
+      </if>
+      <if test="convertTatalIntegral != null">
+        #{convertTatalIntegral,jdbcType=INTEGER},
+      </if>
+      <if test="convertTime != null">
+        #{convertTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="successType != null">
+        #{successType,jdbcType=BIT},
+      </if>
+      <if test="createUserId != null">
+        #{createUserId,jdbcType=BIGINT},
+      </if>
+      <if test="createUserName != null">
+        #{createUserName,jdbcType=VARCHAR},
+      </if>
+      <if test="createDate != null">
+        #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifiedUserId != null">
+        #{modifiedUserId,jdbcType=BIGINT},
+      </if>
+      <if test="modifiedUserName != null">
+        #{modifiedUserName,jdbcType=VARCHAR},
+      </if>
+      <if test="modifiedDate != null">
+        #{modifiedDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="valid != null">
+        #{valid,jdbcType=BIT},
+      </if>
+      <if test="couponCodes != null">
+        #{couponCodes,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.bizvane.mktcenterservice.models.po.MktConvertCouponRecordPOExample" resultType="java.lang.Long">
+    <!--
+      WARNING - 只读 - @mbg.generated
+      This element was generated on 2018-11-26 14:51:19.
+    -->
+    select count(*) from t_mkt_convert_coupon_record
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    <!--
+      WARNING - 只读 - @mbg.generated
+      This element was generated on 2018-11-26 14:51:19.
+    -->
+    update t_mkt_convert_coupon_record
+    <set>
+      <if test="record.convertCouponRecordId != null">
+        convert_coupon_record_id = #{record.convertCouponRecordId,jdbcType=BIGINT},
+      </if>
+      <if test="record.convertCouponRecordCode != null">
+        convert_coupon_record_code = #{record.convertCouponRecordCode,jdbcType=VARCHAR},
+      </if>
+      <if test="record.exchangeId != null">
+        exchange_id = #{record.exchangeId,jdbcType=BIGINT},
+      </if>
+      <if test="record.exchangeCode != null">
+        exchange_code = #{record.exchangeCode,jdbcType=VARCHAR},
+      </if>
+      <if test="record.sysCompanyId != null">
+        sys_company_id = #{record.sysCompanyId,jdbcType=BIGINT},
+      </if>
+      <if test="record.sysBrandId != null">
+        sys_brand_id = #{record.sysBrandId,jdbcType=BIGINT},
+      </if>
+      <if test="record.memberName != null">
+        member_name = #{record.memberName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.memberCode != null">
+        member_code = #{record.memberCode,jdbcType=VARCHAR},
+      </if>
+      <if test="record.cardNo != null">
+        card_no = #{record.cardNo,jdbcType=VARCHAR},
+      </if>
+      <if test="record.couponName != null">
+        coupon_name = #{record.couponName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.couponEntityId != null">
+        coupon_entity_id = #{record.couponEntityId,jdbcType=BIGINT},
+      </if>
+      <if test="record.couponNum != null">
+        coupon_num = #{record.couponNum,jdbcType=INTEGER},
+      </if>
+      <if test="record.convertPrice != null">
+        convert_price = #{record.convertPrice,jdbcType=INTEGER},
+      </if>
+      <if test="record.convertNum != null">
+        convert_num = #{record.convertNum,jdbcType=INTEGER},
+      </if>
+      <if test="record.convertTatalIntegral != null">
+        convert_tatal_integral = #{record.convertTatalIntegral,jdbcType=INTEGER},
+      </if>
+      <if test="record.convertTime != null">
+        convert_time = #{record.convertTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.successType != null">
+        success_type = #{record.successType,jdbcType=BIT},
+      </if>
+      <if test="record.createUserId != null">
+        create_user_id = #{record.createUserId,jdbcType=BIGINT},
+      </if>
+      <if test="record.createUserName != null">
+        create_user_name = #{record.createUserName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.createDate != null">
+        create_date = #{record.createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.modifiedUserId != null">
+        modified_user_id = #{record.modifiedUserId,jdbcType=BIGINT},
+      </if>
+      <if test="record.modifiedUserName != null">
+        modified_user_name = #{record.modifiedUserName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.modifiedDate != null">
+        modified_date = #{record.modifiedDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.valid != null">
+        valid = #{record.valid,jdbcType=BIT},
+      </if>
+      <if test="record.couponCodes != null">
+        coupon_codes = #{record.couponCodes,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExampleWithBLOBs" parameterType="map">
+    <!--
+      WARNING - 只读 - @mbg.generated
+      This element was generated on 2018-11-26 14:51:19.
+    -->
+    update t_mkt_convert_coupon_record
+    set convert_coupon_record_id = #{record.convertCouponRecordId,jdbcType=BIGINT},
+      convert_coupon_record_code = #{record.convertCouponRecordCode,jdbcType=VARCHAR},
+      exchange_id = #{record.exchangeId,jdbcType=BIGINT},
+      exchange_code = #{record.exchangeCode,jdbcType=VARCHAR},
+      sys_company_id = #{record.sysCompanyId,jdbcType=BIGINT},
+      sys_brand_id = #{record.sysBrandId,jdbcType=BIGINT},
+      member_name = #{record.memberName,jdbcType=VARCHAR},
+      member_code = #{record.memberCode,jdbcType=VARCHAR},
+      card_no = #{record.cardNo,jdbcType=VARCHAR},
+      coupon_name = #{record.couponName,jdbcType=VARCHAR},
+      coupon_entity_id = #{record.couponEntityId,jdbcType=BIGINT},
+      coupon_num = #{record.couponNum,jdbcType=INTEGER},
+      convert_price = #{record.convertPrice,jdbcType=INTEGER},
+      convert_num = #{record.convertNum,jdbcType=INTEGER},
+      convert_tatal_integral = #{record.convertTatalIntegral,jdbcType=INTEGER},
+      convert_time = #{record.convertTime,jdbcType=TIMESTAMP},
+      success_type = #{record.successType,jdbcType=BIT},
+      create_user_id = #{record.createUserId,jdbcType=BIGINT},
+      create_user_name = #{record.createUserName,jdbcType=VARCHAR},
+      create_date = #{record.createDate,jdbcType=TIMESTAMP},
+      modified_user_id = #{record.modifiedUserId,jdbcType=BIGINT},
+      modified_user_name = #{record.modifiedUserName,jdbcType=VARCHAR},
+      modified_date = #{record.modifiedDate,jdbcType=TIMESTAMP},
+      valid = #{record.valid,jdbcType=BIT},
+      coupon_codes = #{record.couponCodes,jdbcType=LONGVARCHAR}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    <!--
+      WARNING - 只读 - @mbg.generated
+      This element was generated on 2018-11-26 14:51:19.
+    -->
+    update t_mkt_convert_coupon_record
+    set convert_coupon_record_id = #{record.convertCouponRecordId,jdbcType=BIGINT},
+      convert_coupon_record_code = #{record.convertCouponRecordCode,jdbcType=VARCHAR},
+      exchange_id = #{record.exchangeId,jdbcType=BIGINT},
+      exchange_code = #{record.exchangeCode,jdbcType=VARCHAR},
+      sys_company_id = #{record.sysCompanyId,jdbcType=BIGINT},
+      sys_brand_id = #{record.sysBrandId,jdbcType=BIGINT},
+      member_name = #{record.memberName,jdbcType=VARCHAR},
+      member_code = #{record.memberCode,jdbcType=VARCHAR},
+      card_no = #{record.cardNo,jdbcType=VARCHAR},
+      coupon_name = #{record.couponName,jdbcType=VARCHAR},
+      coupon_entity_id = #{record.couponEntityId,jdbcType=BIGINT},
+      coupon_num = #{record.couponNum,jdbcType=INTEGER},
+      convert_price = #{record.convertPrice,jdbcType=INTEGER},
+      convert_num = #{record.convertNum,jdbcType=INTEGER},
+      convert_tatal_integral = #{record.convertTatalIntegral,jdbcType=INTEGER},
+      convert_time = #{record.convertTime,jdbcType=TIMESTAMP},
+      success_type = #{record.successType,jdbcType=BIT},
+      create_user_id = #{record.createUserId,jdbcType=BIGINT},
+      create_user_name = #{record.createUserName,jdbcType=VARCHAR},
+      create_date = #{record.createDate,jdbcType=TIMESTAMP},
+      modified_user_id = #{record.modifiedUserId,jdbcType=BIGINT},
+      modified_user_name = #{record.modifiedUserName,jdbcType=VARCHAR},
+      modified_date = #{record.modifiedDate,jdbcType=TIMESTAMP},
+      valid = #{record.valid,jdbcType=BIT}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.bizvane.mktcenterservice.models.po.MktConvertCouponRecordPO">
+    <!--
+      WARNING - 只读 - @mbg.generated
+      This element was generated on 2018-11-26 14:51:19.
+    -->
+    update t_mkt_convert_coupon_record
+    <set>
+      <if test="convertCouponRecordCode != null">
+        convert_coupon_record_code = #{convertCouponRecordCode,jdbcType=VARCHAR},
+      </if>
+      <if test="exchangeId != null">
+        exchange_id = #{exchangeId,jdbcType=BIGINT},
+      </if>
+      <if test="exchangeCode != null">
+        exchange_code = #{exchangeCode,jdbcType=VARCHAR},
+      </if>
+      <if test="sysCompanyId != null">
+        sys_company_id = #{sysCompanyId,jdbcType=BIGINT},
+      </if>
+      <if test="sysBrandId != null">
+        sys_brand_id = #{sysBrandId,jdbcType=BIGINT},
+      </if>
+      <if test="memberName != null">
+        member_name = #{memberName,jdbcType=VARCHAR},
+      </if>
+      <if test="memberCode != null">
+        member_code = #{memberCode,jdbcType=VARCHAR},
+      </if>
+      <if test="cardNo != null">
+        card_no = #{cardNo,jdbcType=VARCHAR},
+      </if>
+      <if test="couponName != null">
+        coupon_name = #{couponName,jdbcType=VARCHAR},
+      </if>
+      <if test="couponEntityId != null">
+        coupon_entity_id = #{couponEntityId,jdbcType=BIGINT},
+      </if>
+      <if test="couponNum != null">
+        coupon_num = #{couponNum,jdbcType=INTEGER},
+      </if>
+      <if test="convertPrice != null">
+        convert_price = #{convertPrice,jdbcType=INTEGER},
+      </if>
+      <if test="convertNum != null">
+        convert_num = #{convertNum,jdbcType=INTEGER},
+      </if>
+      <if test="convertTatalIntegral != null">
+        convert_tatal_integral = #{convertTatalIntegral,jdbcType=INTEGER},
+      </if>
+      <if test="convertTime != null">
+        convert_time = #{convertTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="successType != null">
+        success_type = #{successType,jdbcType=BIT},
+      </if>
+      <if test="createUserId != null">
+        create_user_id = #{createUserId,jdbcType=BIGINT},
+      </if>
+      <if test="createUserName != null">
+        create_user_name = #{createUserName,jdbcType=VARCHAR},
+      </if>
+      <if test="createDate != null">
+        create_date = #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifiedUserId != null">
+        modified_user_id = #{modifiedUserId,jdbcType=BIGINT},
+      </if>
+      <if test="modifiedUserName != null">
+        modified_user_name = #{modifiedUserName,jdbcType=VARCHAR},
+      </if>
+      <if test="modifiedDate != null">
+        modified_date = #{modifiedDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="valid != null">
+        valid = #{valid,jdbcType=BIT},
+      </if>
+      <if test="couponCodes != null">
+        coupon_codes = #{couponCodes,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where convert_coupon_record_id = #{convertCouponRecordId,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.bizvane.mktcenterservice.models.po.MktConvertCouponRecordPO">
+    <!--
+      WARNING - 只读 - @mbg.generated
+      This element was generated on 2018-11-26 14:51:19.
+    -->
+    update t_mkt_convert_coupon_record
+    set convert_coupon_record_code = #{convertCouponRecordCode,jdbcType=VARCHAR},
+      exchange_id = #{exchangeId,jdbcType=BIGINT},
+      exchange_code = #{exchangeCode,jdbcType=VARCHAR},
+      sys_company_id = #{sysCompanyId,jdbcType=BIGINT},
+      sys_brand_id = #{sysBrandId,jdbcType=BIGINT},
+      member_name = #{memberName,jdbcType=VARCHAR},
+      member_code = #{memberCode,jdbcType=VARCHAR},
+      card_no = #{cardNo,jdbcType=VARCHAR},
+      coupon_name = #{couponName,jdbcType=VARCHAR},
+      coupon_entity_id = #{couponEntityId,jdbcType=BIGINT},
+      coupon_num = #{couponNum,jdbcType=INTEGER},
+      convert_price = #{convertPrice,jdbcType=INTEGER},
+      convert_num = #{convertNum,jdbcType=INTEGER},
+      convert_tatal_integral = #{convertTatalIntegral,jdbcType=INTEGER},
+      convert_time = #{convertTime,jdbcType=TIMESTAMP},
+      success_type = #{successType,jdbcType=BIT},
+      create_user_id = #{createUserId,jdbcType=BIGINT},
+      create_user_name = #{createUserName,jdbcType=VARCHAR},
+      create_date = #{createDate,jdbcType=TIMESTAMP},
+      modified_user_id = #{modifiedUserId,jdbcType=BIGINT},
+      modified_user_name = #{modifiedUserName,jdbcType=VARCHAR},
+      modified_date = #{modifiedDate,jdbcType=TIMESTAMP},
+      valid = #{valid,jdbcType=BIT},
+      coupon_codes = #{couponCodes,jdbcType=LONGVARCHAR}
+    where convert_coupon_record_id = #{convertCouponRecordId,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.bizvane.mktcenterservice.models.po.MktConvertCouponRecordPO">
+    <!--
+      WARNING - 只读 - @mbg.generated
+      This element was generated on 2018-11-26 14:51:19.
+    -->
+    update t_mkt_convert_coupon_record
+    set convert_coupon_record_code = #{convertCouponRecordCode,jdbcType=VARCHAR},
+      exchange_id = #{exchangeId,jdbcType=BIGINT},
+      exchange_code = #{exchangeCode,jdbcType=VARCHAR},
+      sys_company_id = #{sysCompanyId,jdbcType=BIGINT},
+      sys_brand_id = #{sysBrandId,jdbcType=BIGINT},
+      member_name = #{memberName,jdbcType=VARCHAR},
+      member_code = #{memberCode,jdbcType=VARCHAR},
+      card_no = #{cardNo,jdbcType=VARCHAR},
+      coupon_name = #{couponName,jdbcType=VARCHAR},
+      coupon_entity_id = #{couponEntityId,jdbcType=BIGINT},
+      coupon_num = #{couponNum,jdbcType=INTEGER},
+      convert_price = #{convertPrice,jdbcType=INTEGER},
+      convert_num = #{convertNum,jdbcType=INTEGER},
+      convert_tatal_integral = #{convertTatalIntegral,jdbcType=INTEGER},
+      convert_time = #{convertTime,jdbcType=TIMESTAMP},
+      success_type = #{successType,jdbcType=BIT},
+      create_user_id = #{createUserId,jdbcType=BIGINT},
+      create_user_name = #{createUserName,jdbcType=VARCHAR},
+      create_date = #{createDate,jdbcType=TIMESTAMP},
+      modified_user_id = #{modifiedUserId,jdbcType=BIGINT},
+      modified_user_name = #{modifiedUserName,jdbcType=VARCHAR},
+      modified_date = #{modifiedDate,jdbcType=TIMESTAMP},
+      valid = #{valid,jdbcType=BIT}
+    where convert_coupon_record_id = #{convertCouponRecordId,jdbcType=BIGINT}
+  </update>
+
+  <select id="getCouponRecordLists" resultType="com.bizvane.mktcenterservice.models.po.MktConvertCouponRecordPO">
+       SELECT
+        convert_coupon_record_id,
+        convert_coupon_record_code,
+        exchange_id,
+        exchange_code,
+        sys_company_id,
+        sys_brand_id,
+        member_name,
+        member_code,
+        card_no,
+        coupon_entity_id,
+        coupon_name,
+        coupon_codes,
+        coupon_num,
+        convert_price,
+        convert_num,
+        convert_tatal_integral,
+        convert_time,
+        success_type,
+        create_user_id,
+        create_user_name,
+        create_date,
+        modified_user_id,
+        modified_user_name,
+        modified_date,
+        valid
+       FROM
+        t_mkt_convert_coupon_record
+       WHERE
+        valid = 1
+      <if test="vo.brandId!=null">
+        AND sys_brand_id=#{vo.brandId}
+      </if>
+       <if test="vo.convertCouponRecordCode!=null and vo.convertCouponRecordCode!=''">
+        AND convert_coupon_record_code  LIKE CONCAT('%',#{vo.convertCouponRecordCode},'%')
+       </if>
+       <if test="vo.exchangeCode!=null and vo.exchangeCode!=''">
+        AND exchange_code  LIKE CONCAT('%',#{vo.exchangeCode},'%')
+       </if>
+       <if test="vo.memberName!=null and vo.memberName!=''">
+        AND member_name  LIKE CONCAT('%',#{vo.memberName},'%')
+       </if>
+      <if test="vo.cardNo!=null and vo.cardNo!=''">
+        AND card_no  LIKE CONCAT('%',#{vo.cardNo},'%')
+      </if>
+     <if test="vo.couponCodes!=null and vo.couponCodes!=''">
+        AND coupon_codes LIKE CONCAT('%',#{vo.couponCodes},'%')
+     </if>
+    <if test="vo.couponName!=null and vo.couponName!=''">
+        AND coupon_name LIKE CONCAT('%',#{vo.couponName},'%')
+    </if>
+    <if test="vo.startTime!=null">
+        AND convert_time  <![CDATA[>=]]> #{vo.startTime,jdbcType=TIMESTAMP}
+    </if>
+    <if test="vo.endTime!=null">
+        AND convert_time  <![CDATA[<=]]> #{vo.endTime,jdbcType=TIMESTAMP}
+    </if>
+    ORDER BY create_date  ASC
+  </select>
+
+  <select id="getCouponRecordLists002" resultType="com.bizvane.mktcenterservice.models.po.MktConvertCouponRecordPO">
+    SELECT
+    convert_coupon_record_id,
+    convert_coupon_record_code,
+    exchange_id,
+    exchange_code,
+    sys_company_id,
+    sys_brand_id,
+    member_name,
+    member_code,
+    card_no,
+    coupon_entity_id,
+    coupon_name,
+    coupon_codes,
+    coupon_num,
+    convert_price,
+    convert_num,
+    convert_tatal_integral,
+    convert_time,
+    success_type,
+    create_user_id,
+    create_user_name,
+    create_date,
+    modified_user_id,
+    modified_user_name,
+    modified_date,
+    valid
+    FROM
+    t_mkt_convert_coupon_record
+    WHERE
+    valid = 1
+    <if test="vo.brandId!=null">
+      AND sys_brand_id=#{vo.brandId}
+    </if>
+    <if test="vo.convertCouponRecordCode!=null and vo.convertCouponRecordCode!=''">
+      AND convert_coupon_record_code  LIKE CONCAT('%',#{vo.convertCouponRecordCode},'%')
+    </if>
+    <if test="vo.exchangeCode!=null and vo.exchangeCode!=''">
+      AND exchange_code  LIKE CONCAT('%',#{vo.exchangeCode},'%')
+    </if>
+    <if test="vo.memberName!=null and vo.memberName!=''">
+      AND member_name  LIKE CONCAT('%',#{vo.memberName},'%')
+    </if>
+    <if test="vo.cardNo!=null and vo.cardNo!=''">
+      AND card_no  LIKE CONCAT('%',#{vo.cardNo},'%')
+    </if>
+    <if test="vo.couponCodes!=null and vo.couponCodes!=''">
+      AND coupon_codes LIKE CONCAT('%',#{vo.couponCodes},'%')
+    </if>
+    <if test="vo.couponName!=null and vo.couponName!=''">
+      AND coupon_name LIKE CONCAT('%',#{vo.couponName},'%')
+    </if>
+    <if test="vo.startTime!=null">
+      AND convert_time  <![CDATA[>=]]> #{vo.startTime,jdbcType=TIMESTAMP}
+    </if>
+    <if test="vo.endTime!=null">
+      AND convert_time  <![CDATA[<=]]> #{vo.endTime,jdbcType=TIMESTAMP}
+    </if>
+    ORDER BY create_date  ASC
+    limit #{a},#{b}
+  </select>
+
+  <select id="getConvertNumber" resultType="java.lang.Integer">
+  SELECT
+  IFNULL(SUM(convert_num),0)
+  FROM
+      t_mkt_convert_coupon_record
+  WHERE
+	valid = 1
+	AND sys_brand_id = #{brandId}
+	AND exchange_id = #{exchangeId}
+    <if test="memberCode!=null and memberCode!=''">
+	AND  member_code=#{memberCode}
+    </if>
+  </select>
+</mapper>

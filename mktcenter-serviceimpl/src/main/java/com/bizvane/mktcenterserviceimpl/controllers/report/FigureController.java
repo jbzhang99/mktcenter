@@ -249,8 +249,17 @@ public class FigureController {
 	   		   jsonObject.put("apiKey", BaseUrl.getApiKey());
 	   		 //用户key
 	   		log.info("报表查询ReportIncomeController："+url+jsonObject.toString());
-		 ResponseEntity<String> response = this.restTemplate.postForEntity(url, jsonObject,String.class, new Object[0]);
-	     ResponseData<BackDataTimeDtail> ResponseData =new ResponseData<BackDataTimeDtail>();
+	   	 ResponseData<BackDataTimeDtail> ResponseData =new ResponseData<BackDataTimeDtail>();
+	   	 ResponseEntity<String> response =null;
+	   		try {
+	   		   response =this.restTemplate.postForEntity(url, jsonObject,String.class, new Object[0]);
+			} catch (Exception e) {
+				  ResponseData.setCode(0);
+			  	  ResponseData.setMessage("大数据连接异常"+e.getMessage());
+			  	  ResponseData.setData(FigureUtilGroupFigure.parseJSON2MapTime("false",fileReportTempPOlist,vipIncomeAnalysis));
+			  	 return ResponseData;
+			}
+	    
 	     JSONObject job = JSONObject.parseObject(response.getBody());
 	     
 	     if(job.get("successFlag").equals("1")) {
@@ -391,8 +400,19 @@ log.info("报表查询ReportIncomeController："+url+JSONObject.toJSONString(vip
   	   		   jsonObject.put("businessNum", BaseUrl.getBusinessNum());
   	   		   jsonObject.put("apiKey", BaseUrl.getApiKey());
   	   		log.info("报表查询ReportIncomeController："+url+jsonObject.toString());
-		 ResponseEntity<String> response = this.restTemplate.postForEntity(url, jsonObject,String.class, new Object[0]);
-	     ResponseData<BackDataTimeDtailtu> ResponseData =new ResponseData<BackDataTimeDtailtu>();
+  	   		
+  	      ResponseData<BackDataTimeDtailtu> ResponseData =new ResponseData<BackDataTimeDtailtu>();
+  		   	 ResponseEntity<String> response =null;
+  		   		try {
+  		   		response = this.restTemplate.postForEntity(url, jsonObject,String.class, new Object[0]);
+  				} catch (Exception e) {
+  					  ResponseData.setCode(0);
+  				  	  ResponseData.setMessage("大数据连接异常"+e.getMessage());
+  			  	      ResponseData.setData(FigureUtilGroupFigure.parseJSON2MapTimeOpera("false",fileReportTempPOlist,vipIncomeAnalysis));
+  				  	 return ResponseData;
+  				}
+		
+	
 	     JSONObject job = JSONObject.parseObject(response.getBody());
 	     
 	     if(job.get("successFlag").equals("1")) {
