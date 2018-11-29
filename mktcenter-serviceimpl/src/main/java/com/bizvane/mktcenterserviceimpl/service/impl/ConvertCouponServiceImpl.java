@@ -3,10 +3,12 @@ package com.bizvane.mktcenterserviceimpl.service.impl;
 import com.alibaba.fastjson.JSON;
 import com.bizvane.centerstageservice.models.po.FileTaskPo;
 import com.bizvane.centerstageservice.rpc.FileTaskServiceRpc;
+import com.bizvane.couponfacade.enums.SendTypeEnum;
 import com.bizvane.couponfacade.interfaces.CouponDefinitionServiceFeign;
 import com.bizvane.couponfacade.interfaces.SendCouponServiceFeign;
 import com.bizvane.couponfacade.models.po.CouponDefinitionPO;
 import com.bizvane.couponfacade.models.vo.SendCouponSimpleRequestVO;
+import com.bizvane.members.facade.enums.BusinessTypeEnum;
 import com.bizvane.members.facade.enums.IntegralChangeTypeEnum;
 import com.bizvane.members.facade.models.MemberInfoModel;
 import com.bizvane.members.facade.service.api.IntegralChangeApiService;
@@ -368,7 +370,7 @@ public class ConvertCouponServiceImpl implements ConvertCouponService {
         //插入记录表数据
         MktConvertCouponRecordPO record = this.InsertMktConvertCouponRecordPO(vo, mktCouponIntegralExchangePO, exchangeNum, exchangePrice, couponRecordCode, memeberDetail);
         //调整积分
-        IntegralChangeResponseModel integralChangeResponseModel = doIntegralChangeResponseModel(exchangeNum, exchangePrice, couponRecordCode, memeberDetail);
+        IntegralChangeResponseModel integralChangeResponseModel = this.doIntegralChangeResponseModel(exchangeNum, exchangePrice, couponRecordCode, memeberDetail);
         Integer code = integralChangeResponseModel.getCode();
         if (Integer.valueOf(0).equals(code)) {
             for (int i = 1; i <= exchangeNum; i++) {
@@ -376,8 +378,7 @@ public class ConvertCouponServiceImpl implements ConvertCouponService {
                 onecouponVO.setMemberCode(memberCode);
                 onecouponVO.setSendBussienId(record.getConvertCouponRecordId());
                 onecouponVO.setBusinessName(couponRecordCode);
-                // SendTypeEnum.SEND_COUPON_INVITE_OPENCARD_TASK.getCode();
-                onecouponVO.setSendType("101");
+                onecouponVO.setSendType(SendTypeEnum.SEND_COUPON_INTEGRAL_MALl.getCode());//101
                 onecouponVO.setCouponDefinitionId(mktCouponIntegralExchangePO.getCouponEntityId());
                 ResponseData<Object> simple = sendCouponServiceFeign.simple(onecouponVO);
                 log.info("doConvernCoupon----发券----参数--" + JSON.toJSONString(onecouponVO) + "----出参--" + JSON.toJSONString(simple));
@@ -397,8 +398,7 @@ public class ConvertCouponServiceImpl implements ConvertCouponService {
         integralRecordModel.setBrandId(memeberDetail.getBrandId());
         integralRecordModel.setMemberCode(memeberDetail.getMemberCode());
         //BusinessTypeEnum  会员定义的任务类型
-        // BusinessTypeEnum.TASK_TYPE_PREFECT.getCode()
-        integralRecordModel.setBusinessType("26");
+        integralRecordModel.setBusinessType(BusinessTypeEnum.INTEGRAL_EXCHANGE_COUPON.getCode());//"26"
         //2=收入积分(新增积分)      1=支出积分(减少积分)
         integralRecordModel.setChangeType(IntegralChangeTypeEnum.Expend.getCode());
         integralRecordModel.setChangeBills(couponRecordCode);

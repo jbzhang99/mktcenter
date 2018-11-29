@@ -167,7 +167,7 @@
 		<dependency>
 			<groupId>com.bizvane</groupId>
 			<artifactId>coupon-facade</artifactId>
-			<version>1.0.0</version>
+			<version>1.0.1-SNAPSHOT</version>
 		</dependency>
 		<!--中台模块依赖 -->
 		<dependency>
@@ -196,7 +196,7 @@
 		<dependency>
 			<groupId>com.bizvane</groupId>
 			<artifactId>members-facade</artifactId>
-			<version>1.0.0</version>
+			<version>1.0.1-SNAPSHOT</version>
 		</dependency>
 		<!-- 引入消息 -->
 		<dependency>
