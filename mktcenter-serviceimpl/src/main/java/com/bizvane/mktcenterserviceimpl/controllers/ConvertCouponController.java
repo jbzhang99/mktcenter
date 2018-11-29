@@ -48,7 +48,7 @@ public class ConvertCouponController {
      * 导出
      */
     @RequestMapping("doExportData")
-    public void  doExportData(CouponRecordVO vo, HttpServletRequest request) throws IOException {
-        convertCouponService.doExportData001(vo,request);
+    public ResponseData  doExportData(CouponRecordVO vo, HttpServletRequest request) throws IOException {
+        return convertCouponService.doExportData001(vo,request);
     }
 }

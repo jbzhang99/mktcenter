@@ -29,7 +29,6 @@ import java.util.concurrent.atomic.AtomicLong;
  * @param <T>
  */
 public class StreamingExportExcelUtil<T> {
-
 	private Log log = LogFactory.getLog(this.getClass());
 
 	// 默认第一行为标题行
@@ -87,7 +86,7 @@ public class StreamingExportExcelUtil<T> {
 
 	/**
 	 * 设置当前导出任务的唯一进度ID，统计当前导出任务进度使用
-	 * 
+	 *
 	 * @param exportProcessId
 	 */
 	public void setExportProcessId(Object exportProcessId) {
@@ -105,7 +104,7 @@ public class StreamingExportExcelUtil<T> {
 
 	/**
 	 * 获取当前导出任务处理过的excel条数
-	 * 
+	 *
 	 * @param exportProcessId
 	 * @return
 	 */
@@ -116,7 +115,7 @@ public class StreamingExportExcelUtil<T> {
 
 	/**
 	 * 从内存中移除当前
-	 * 
+	 *
 	 * @param exportProcessId
 	 */
 	public static void removeExportProcess(Object exportProcessId) {
@@ -125,7 +124,7 @@ public class StreamingExportExcelUtil<T> {
 
 	/**
 	 * 返回当前已处理条数除总条数
-	 * 
+	 *
 	 * @param exportProcessId
 	 * @return
 	 */
@@ -144,7 +143,7 @@ public class StreamingExportExcelUtil<T> {
 	}
 
 	/**
-	 * 
+	 *
 	 * @param beanName 取数据调用者bean 如(memberInfoServiceImpl)
 	 * @param method   取数据方法 如(getMemberInfoWithLimitTo)
 	 * @param callback 回调方法

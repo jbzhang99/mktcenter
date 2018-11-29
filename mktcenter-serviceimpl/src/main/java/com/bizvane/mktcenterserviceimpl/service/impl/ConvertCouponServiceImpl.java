@@ -167,6 +167,10 @@ public class ConvertCouponServiceImpl implements ConvertCouponService {
             //创建导出的数据集合
             List<MktConvertCouponRecordPO> couponRecordLists = mktConvertCouponRecordPOMapper.getCouponRecordLists(vo);
             long sum = couponRecordLists.size();
+            if (sum==0){
+                responseData.setMessage("导出的数据不存在!");
+                return  responseData;
+            }
             Long taskId = (long) Integer.parseInt(String.valueOf(UUID.randomUUID().hashCode()).replaceAll("-", ""));
             //  创建人等信息必填
             FileTaskPo fileTaskPo = new FileTaskPo();
@@ -362,7 +366,7 @@ public class ConvertCouponServiceImpl implements ConvertCouponService {
             return responseData;
         }
         //插入记录表数据
-        MktConvertCouponRecordPO record = InsertMktConvertCouponRecordPO(vo, mktCouponIntegralExchangePO, exchangeNum, exchangePrice, couponRecordCode, memeberDetail);
+        MktConvertCouponRecordPO record = this.InsertMktConvertCouponRecordPO(vo, mktCouponIntegralExchangePO, exchangeNum, exchangePrice, couponRecordCode, memeberDetail);
         //调整积分
         IntegralChangeResponseModel integralChangeResponseModel = doIntegralChangeResponseModel(exchangeNum, exchangePrice, couponRecordCode, memeberDetail);
         Integer code = integralChangeResponseModel.getCode();
@@ -418,6 +422,7 @@ public class ConvertCouponServiceImpl implements ConvertCouponService {
         record.setMemberName(memeberDetail.getName());
         record.setConvertTime(new Date());
         record.setValid(Boolean.TRUE);
+        record.setSysBrandId(vo.getBrandId());
         mktConvertCouponRecordPOMapper.insertSelective(record);
         return record;
     }
