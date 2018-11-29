@@ -364,6 +364,7 @@ public class ConvertCouponServiceImpl implements ConvertCouponService {
         }
         Integer countIntegral = memeberDetail.getCountIntegral();
         if (countIntegral < exchangeNum * exchangePrice) {
+
             responseData.setCode(100);
             responseData.setMessage("可用积分不足!");
             return responseData;
