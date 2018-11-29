@@ -315,6 +315,7 @@ public class ConvertCouponServiceImpl implements ConvertCouponService {
         example.createCriteria().andExchangeIdEqualTo(vo.getExchangeId());
         //查询兑换规则详情
         List<MktCouponIntegralExchangePO> mktCouponIntegralExchangePOS = mktCouponIntegralExchangePOMapper.selectByExampleWithBLOBs(example);
+
         if (CollectionUtils.isEmpty(mktCouponIntegralExchangePOS)) {
             responseData.setCode(100);
             responseData.setMessage("兑换规则不存在!");
@@ -329,7 +330,7 @@ public class ConvertCouponServiceImpl implements ConvertCouponService {
             //获取此会员兑换此券的数量
             Integer memberConvertNumber = mktConvertCouponRecordPOMapper.getConvertNumber(vo);
             Long exchangeCount = mktCouponIntegralExchangePO.getExchangeCount();
-            //exchangeCount = exchangeCount == null ? 0L : exchangeCount;
+            exchangeCount = exchangeCount == null ? 0L : exchangeCount;
             if ( Long.valueOf(memberConvertNumber)>= exchangeCount) {
                 responseData.setCode(100);
                 responseData.setMessage("超过限制券兑换数量!");
@@ -403,7 +404,9 @@ public class ConvertCouponServiceImpl implements ConvertCouponService {
         integralRecordModel.setChangeType(IntegralChangeTypeEnum.Expend.getCode());
         integralRecordModel.setChangeBills(couponRecordCode);
         integralRecordModel.setChangeIntegral(exchangeNum * exchangePrice);
-        return integralChangeApiService.integralChangeOperate(integralRecordModel);
+        IntegralChangeResponseModel integralChangeResponseModel = integralChangeApiService.integralChangeOperate(integralRecordModel);
+        log.info("doIntegralChangeResponseModel----积分----参数--" + JSON.toJSONString(integralRecordModel) + "----出参--" + JSON.toJSONString(integralChangeResponseModel));
+        return integralChangeResponseModel;
     }
 
     //插入记录表
