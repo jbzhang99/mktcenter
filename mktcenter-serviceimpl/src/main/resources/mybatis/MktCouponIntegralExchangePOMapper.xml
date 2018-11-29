@@ -680,7 +680,7 @@
     FROM
     `t_mkt_coupon_integral_exchange` tma
     LEFT JOIN
-    (SELECT exchange_id,count(1)cou FROM t_mkt_convert_coupon_record
+    (SELECT exchange_id,sum(convert_num)cou FROM t_mkt_convert_coupon_record
     GROUP BY exchange_id
     ) tmar
 
