@@ -870,10 +870,7 @@ public class TaskServiceImpl implements TaskService {
         List<DayTaskRecordVo> analysisTotalData = mktTaskRecordPOMapper.getAnalysisTotalData(vo);
 
         if (CollectionUtils.isNotEmpty(analysisTotalData)){
-            Future<TaskRecordVO> submit = asyncExecutor.submit(() -> {
-                return this.getAnalysisTotalData(vo, sysBrandId, taskRecordVO, allPoints, allCountCoupon, allCountMbr, allinvalidCountCoupon, sendType, analysisTotalData);
-            });
-            TaskRecordVO taskRecordVO1 = submit.get();
+            TaskRecordVO analysisTotalData1 = this.getAnalysisTotalData(vo, sysBrandId, taskRecordVO, allPoints, allCountCoupon, allCountMbr, allinvalidCountCoupon, sendType, analysisTotalData, asyncExecutor);
         }
 
         //每个任务的券,积分,会员 总数
@@ -909,7 +906,8 @@ public class TaskServiceImpl implements TaskService {
         return result;
     }
 
-    private TaskRecordVO getAnalysisTotalData(TaskAnalysisVo vo, Long sysBrandId, TaskRecordVO taskRecordVO, Long[] allPoints, Long[] allCountCoupon, Long[] allCountMbr, Long[] allinvalidCountCoupon, String sendType, List<DayTaskRecordVo> analysisTotalData) {
+    private TaskRecordVO getAnalysisTotalData(TaskAnalysisVo vo, Long sysBrandId, TaskRecordVO taskRecordVO, Long[] allPoints, Long[] allCountCoupon, Long[] allCountMbr, Long[] allinvalidCountCoupon, String sendType, List<DayTaskRecordVo> analysisTotalData,ThreadPoolExecutor asyncExecutor) throws ExecutionException, InterruptedException {
+        Future<TaskRecordVO> submit = asyncExecutor.submit(() -> {
         analysisTotalData.parallelStream().forEach(task -> {
             allPoints[0] = allPoints[0] + task.getOneTaskPoints();
             ResponseData<CouponFindCouponCountResponseVO> couponCount = couponQueryService.findCouponCountBySendBusinessId(task.getTaskId(), sendType, sysBrandId);
@@ -930,6 +928,8 @@ public class TaskServiceImpl implements TaskService {
         //被核销优惠券总数
         taskRecordVO.setAllinvalidCountCoupon(allinvalidCountCoupon[0]);
         return taskRecordVO;
+        });
+      return submit.get();
     }
 
     private DayTaskRecordVo getAnalysisData(Long sysBrandId, Integer taskType,DayTaskRecordVo task,ThreadPoolExecutor asyncExecutor, String sendType) {
