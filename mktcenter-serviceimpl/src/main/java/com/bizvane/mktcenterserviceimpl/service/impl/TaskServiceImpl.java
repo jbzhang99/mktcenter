@@ -9,6 +9,7 @@ import com.bizvane.centerstageservice.models.po.SysBrandPo;
 import com.bizvane.centerstageservice.models.po.SysStorePo;
 import com.bizvane.centerstageservice.rpc.BrandServiceRpc;
 import com.bizvane.couponfacade.interfaces.CouponEntityServiceFeign;
+import com.bizvane.couponfacade.interfaces.SendCouponServiceFeign;
 import com.bizvane.couponfacade.models.vo.CouponSendMemberListRequestVO;
 import com.bizvane.couponfacade.models.vo.CouponSendMemberListResponseVO;
 import com.bizvane.members.facade.service.api.IntegralChangeApiService;
@@ -135,6 +136,8 @@ public class TaskServiceImpl implements TaskService {
     private SendBatchMessageFeign sendBatchMessageFeign;
     @Autowired
     private IntegralChangeApiService integralChangeApiService;
+    @Autowired
+    private SendCouponServiceFeign sendCouponServiceFeign;
     /**
      * 通过id查询店铺列表
      */
@@ -684,9 +687,12 @@ public class TaskServiceImpl implements TaskService {
                 onecouponVO.setBusinessName(taskName);
                 onecouponVO.setSendType(changeTaskTypeVO.getCouponTaskType());
                 onecouponVO.setCouponDefinitionId(coupon.getCouponDefinitionId());
+                onecouponVO.setBrandId(orderAwardBO.getSysBrandId());
                 bo.setSendCouponSimpleRequestVO(onecouponVO);
-                log.info("发送券的参数--"+JSON.toJSONString(bo));
-                award.execute(bo);
+                log.info("发送券的参数-----"+JSON.toJSONString(bo));
+               // award.execute(bo);
+                ResponseData<Object> simple = sendCouponServiceFeign.simple(onecouponVO);
+                log.info("发送券的参数------"+JSON.toJSONString(simple));
             });
 
 
