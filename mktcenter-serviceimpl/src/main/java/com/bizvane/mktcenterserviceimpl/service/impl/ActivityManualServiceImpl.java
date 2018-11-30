@@ -514,7 +514,7 @@ public class ActivityManualServiceImpl implements ActivityManualService {
             log.info("领券活动-查询活动详情-出参:"+ JSON.toJSONString(activityManualList));
             //查询活动券
             MktCouponPOExample example = new  MktCouponPOExample();
-            example.createCriteria().andBizIdEqualTo(activityManualList.get(0).getMktActivityId()).andValidEqualTo(true);
+            example.createCriteria().andBizIdEqualTo(activityManualList.get(0).getMktActivityId()).andValidEqualTo(true).andBizTypeEqualTo(1);
             log.info("领券活动-查询券-入参:"+JSON.toJSONString(example));
             List<MktCouponPO> mktCouponPOs= mktCouponPOMapper.selectByExample(example);
             log.info("领券活动-查询券-出参:"+JSON.toJSONString(mktCouponPOs));
