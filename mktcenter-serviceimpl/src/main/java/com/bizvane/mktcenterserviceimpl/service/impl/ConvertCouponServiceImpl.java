@@ -321,9 +321,10 @@ public class ConvertCouponServiceImpl implements ConvertCouponService {
             responseData.setMessage("兑换规则不存在!");
             return responseData;
         }
-
         String memberCode = vo.getMemberCode();//会员code
         MktCouponIntegralExchangePO mktCouponIntegralExchangePO = mktCouponIntegralExchangePOS.get(0);
+
+        log.info("兑换规则详情-------"+JSON.toJSONString(mktCouponIntegralExchangePO));
 
         Integer exchangeStatus = mktCouponIntegralExchangePO.getExchangeStatus();
         if (Integer.valueOf(1).equals(exchangeStatus)) {
@@ -356,6 +357,7 @@ public class ConvertCouponServiceImpl implements ConvertCouponService {
         Integer exchangeNum = vo.getExchangeNum();//要要兑换的数量
         Integer exchangePrice = mktCouponIntegralExchangePO.getExchangePrice();//兑换的单价
         String couponRecordCode = CodeUtil.getCouponRecordCode();//兑换记录code
+
         MemberInfoModel memeberDetail = taskService.getCompanyMemeberDetail(memberCode);
         if (memeberDetail == null) {
             responseData.setCode(100);
@@ -363,14 +365,15 @@ public class ConvertCouponServiceImpl implements ConvertCouponService {
             return responseData;
         }
         Integer countIntegral = memeberDetail.getCountIntegral();
+        log.info("可用积分--"+countIntegral+"--扣减的积分--"+exchangeNum * exchangePrice);
         if (countIntegral < exchangeNum * exchangePrice) {
-
             responseData.setCode(100);
             responseData.setMessage("可用积分不足!");
             return responseData;
         }
         //插入记录表数据
         MktConvertCouponRecordPO record = this.InsertMktConvertCouponRecordPO(vo, mktCouponIntegralExchangePO, exchangeNum, exchangePrice, couponRecordCode, memeberDetail);
+
         //调整积分
         IntegralChangeResponseModel integralChangeResponseModel = this.doIntegralChangeResponseModel(exchangeNum, exchangePrice, couponRecordCode, memeberDetail);
         Integer code = integralChangeResponseModel.getCode();
@@ -386,6 +389,8 @@ public class ConvertCouponServiceImpl implements ConvertCouponService {
                 log.info("doConvernCoupon----发券----参数--" + JSON.toJSONString(onecouponVO) + "----出参--" + JSON.toJSONString(simple));
             }
         } else {
+            log.info("积分扣减失败,删除对应的积分订单记录!");
+            mktConvertCouponRecordPOMapper.deleteByPrimaryKey(record.getConvertCouponRecordId());
             responseData.setCode(100);
             responseData.setMessage("兑换失败!");
             return responseData;
