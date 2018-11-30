@@ -870,7 +870,26 @@ public class TaskServiceImpl implements TaskService {
         List<DayTaskRecordVo> analysisTotalData = mktTaskRecordPOMapper.getAnalysisTotalData(vo);
 
         if (CollectionUtils.isNotEmpty(analysisTotalData)){
-            TaskRecordVO analysisTotalData1 = this.getAnalysisTotalData(vo, sysBrandId, taskRecordVO, allPoints, allCountCoupon, allCountMbr, allinvalidCountCoupon, sendType, analysisTotalData, asyncExecutor);
+           // TaskRecordVO analysisTotalData1 = this.getAnalysisTotalData(vo, sysBrandId, taskRecordVO, allPoints, allCountCoupon, allCountMbr, allinvalidCountCoupon, sendType, analysisTotalData, asyncExecutor);
+            analysisTotalData.stream().forEach(task -> {
+                allPoints[0] = allPoints[0] + task.getOneTaskPoints();
+                ResponseData<CouponFindCouponCountResponseVO> couponCount = couponQueryService.findCouponCountBySendBusinessId(task.getTaskId(), sendType, sysBrandId);
+                CouponFindCouponCountResponseVO data = couponCount.getData();
+                if (data != null) {
+                    allCountCoupon[0] = allCountCoupon[0] + data.getCouponSum();
+                    allinvalidCountCoupon[0] = allinvalidCountCoupon[0] + data.getCouponUsedSum();
+                }
+            });
+            Long analysisTotalCompletePeple = mktTaskRecordPOMapper.getAnalysisTotalCompletePeple(vo);
+            allCountMbr[0] = analysisTotalCompletePeple;
+            //所有积分和
+            taskRecordVO.setAllPoints(allPoints[0]);
+            //所有券数量和
+            taskRecordVO.setAllCountCoupon(allCountCoupon[0]);
+            //所有参数人数和
+            taskRecordVO.setAllCountMbr(allCountMbr[0]);
+            //被核销优惠券总数
+            taskRecordVO.setAllinvalidCountCoupon(allinvalidCountCoupon[0]);
         }
 
         //每个任务的券,积分,会员 总数
