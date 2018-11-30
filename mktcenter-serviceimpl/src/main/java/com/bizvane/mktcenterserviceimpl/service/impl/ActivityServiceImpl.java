@@ -515,6 +515,9 @@ public class ActivityServiceImpl implements ActivityService {
                 //如果是开卡活动传微信id
                 if (activityVO.getActivityType()==ActivityTypeEnum.ACTIVITY_TYPE_REGISGER.getCode()){
                     activityMessageVO.setOpenId(wxChannelInfoVo.getWxOpenId());
+                    activityMessageVO.setUnl("pages/entry/main");
+                }else{
+                    activityMessageVO.setUnl("/pages/template01/activity-details/main?activityCode="+activityVO.getActivityCode()+"&activityType="+activityVO.getActivityType());
                 }
                 if (null==wxChannelInfoVo.getMemberCode()){
                     activityMessageVO.setMemberCode(String.valueOf(1));
@@ -533,7 +536,6 @@ public class ActivityServiceImpl implements ActivityService {
                     activityMessageVO.setActivityStartDate(activityVO.getStartTime());
                     activityMessageVO.setActivityEndDate(activityVO.getEndTime());
                 }
-                activityMessageVO.setUnl("/pages/template01/activity-details/main?activityCode="+activityVO.getActivityCode()+"&activityType="+activityVO.getActivityType());
                 awardBO.setActivityMessageVO(activityMessageVO);
                 awardBO.setMktType(MktSmartTypeEnum.SMART_TYPE_WXMESSAGE.getCode());
                 award.execute(awardBO);
