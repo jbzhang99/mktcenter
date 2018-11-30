@@ -750,7 +750,7 @@
     tmcie.exchange_status,
     tmcie.exchange_count,
     tmcie.sales_status,
-    (tmcie.store_count-sum(tmccr.coupon_num)) AS residueCouponNumber
+    (tmcie.store_count - (case when sum(tmccr.coupon_num) is null then 0 end) ) AS residueCouponNumber
     FROM
     t_mkt_coupon_integral_exchange tmcie
     LEFT JOIN t_mkt_convert_coupon_record  tmccr
