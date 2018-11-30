@@ -205,20 +205,22 @@ public class MemberMessageSend {
             memberInfoModel.setMemberScope(activityBirthday.getMemberType().toString());
             memberInfoModel.setPageNumber(1);
             memberInfoModel.setPageSize(10000);
+            log.info("我要看看参数++++++++++=+=============+"+ JSON.toJSONString(memberInfoModel));
             ResponseData<PageInfo<MemberInfoModel>> memberInfoModelLists =memberInfoApiService.getMemberInfo(memberInfoModel);
             //循环页数
-            for (int a=1;a<=memberInfoModelLists.getData().getPages();a++){
-                memberInfoModel.setPageNumber(a);
-                log.info("开始查询相应的会员参数++++++++++=+=============+"+ JSON.toJSONString(memberInfoModel));
-                ResponseData<PageInfo<MemberInfoModel>> memberInfoModelListss =memberInfoApiService.getMemberInfo(memberInfoModel);
-                List<MemberInfoModel> memberInfoModelList = memberInfoModelListss.getData().getList();
-                log.info("已经查询到相应的会员总数量是++++++++++="+memberInfoModelListss.getData().getTotal());
-                //循环每一页的人数
-                for (MemberInfoModel memberInfo:memberInfoModelList) {
-                    activityBirthdayService.birthdayReward(activityBirthday, memberInfo);
+            if(!CollectionUtils.isEmpty(memberInfoModelLists.getData().getList())){
+                for (int a=1;a<=memberInfoModelLists.getData().getPages();a++){
+                    memberInfoModel.setPageNumber(a);
+                    log.info("开始查询相应的会员参数++++++++++=+=============+"+ JSON.toJSONString(memberInfoModel));
+                    ResponseData<PageInfo<MemberInfoModel>> memberInfoModelListss =memberInfoApiService.getMemberInfo(memberInfoModel);
+                    List<MemberInfoModel> memberInfoModelList = memberInfoModelListss.getData().getList();
+                    log.info("已经查询到相应的会员总数量是++++++++++="+memberInfoModelListss.getData().getTotal());
+                    //循环每一页的人数
+                    for (MemberInfoModel memberInfo:memberInfoModelList) {
+                        activityBirthdayService.birthdayReward(activityBirthday, memberInfo);
+                    }
                 }
             }
-
 
         }
     }
@@ -240,17 +242,21 @@ public class MemberMessageSend {
             memberInfoModel.setMemberScope(activityAniversary.getMemberType().toString());
             memberInfoModel.setPageNumber(1);
             memberInfoModel.setPageSize(10000);
+            log.info("我要看看参数++++++++++=+=============+"+ JSON.toJSONString(memberInfoModel));
             ResponseData<PageInfo<MemberInfoModel>> memberInfoModelLists =memberInfoApiService.getMemberInfo(memberInfoModel);
-            for (int a=1;a<=memberInfoModelLists.getData().getPages();a++){
-                memberInfoModel.setPageNumber(a);
-                log.info("开始查询相应的会员参数++++++++++=+=============+"+ JSON.toJSONString(memberInfoModel));
-                ResponseData<PageInfo<MemberInfoModel>> memberInfoModelListss =memberInfoApiService.getMemberInfo(memberInfoModel);
-                List<MemberInfoModel> memberInfoModelList = memberInfoModelListss.getData().getList();
-                log.info("已经查询到相应的会员总数量是++++++++++="+memberInfoModelListss.getData().getTotal());
-                for (MemberInfoModel memberInfo:memberInfoModelList) {
-                    activityVipAniversaryService.AniversaryReward(activityAniversary, memberInfo);
+            if(!CollectionUtils.isEmpty(memberInfoModelLists.getData().getList())){
+                for (int a=1;a<=memberInfoModelLists.getData().getPages();a++){
+                    memberInfoModel.setPageNumber(a);
+                    log.info("开始查询相应的会员参数++++++++++=+=============+"+ JSON.toJSONString(memberInfoModel));
+                    ResponseData<PageInfo<MemberInfoModel>> memberInfoModelListss =memberInfoApiService.getMemberInfo(memberInfoModel);
+                    List<MemberInfoModel> memberInfoModelList = memberInfoModelListss.getData().getList();
+                    log.info("已经查询到相应的会员总数量是++++++++++="+memberInfoModelListss.getData().getTotal());
+                    for (MemberInfoModel memberInfo:memberInfoModelList) {
+                        activityVipAniversaryService.AniversaryReward(activityAniversary, memberInfo);
+                    }
                 }
             }
+
         }
     }
 
