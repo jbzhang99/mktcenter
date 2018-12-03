@@ -81,7 +81,7 @@ public class OrderTaskListener implements MessageListener {
   }
 
     //任务类型：1完善资料，2分享任务，3邀请注册，4累计消费次数，5累计消费金额',
-    private void doExecuteTask(OrderModel model, TaskAwardBO obj,Date placeOrderTime) {
+    private synchronized void doExecuteTask(OrderModel model, TaskAwardBO obj,Date placeOrderTime) {
         log.info("开始执行订单奖励----");
         BigDecimal tradeAmount = model.getTradeAmount();//订单金额
         Long brandId = model.getBrandId();
@@ -100,7 +100,6 @@ public class OrderTaskListener implements MessageListener {
         recordVO.setTaskType(taskType);
         recordVO.setTaskId(mktTaskId);
         recordVO.setMemberCode(memberCode);
-
         // 获取会员是否已经成功参与过某一活动
         Boolean isOrNoAward = taskRecordService.getIsOrNoAward(recordVO);
 
