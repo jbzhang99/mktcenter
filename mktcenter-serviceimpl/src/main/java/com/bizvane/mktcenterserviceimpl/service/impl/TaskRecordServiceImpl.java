@@ -66,6 +66,7 @@ public class TaskRecordServiceImpl implements TaskRecordService {
         if (CollectionUtils.isNotEmpty(totalStatistics)){
             bo= totalStatistics.get(0);
         }
+        log.info("TotalStatisticsBO任务的总金额和总次数--出参--"+ JSON.toJSONString(bo));
         return  bo;
     }
 
