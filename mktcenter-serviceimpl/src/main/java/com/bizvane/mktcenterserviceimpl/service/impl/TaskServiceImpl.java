@@ -1119,7 +1119,7 @@ public class TaskServiceImpl implements TaskService {
 
         ResponseData<com.bizvane.utils.responseinfo.PageInfo<MemberInfoModel>> memberInfo = memberInfoApiService.getMemberInfo(members);
         com.bizvane.utils.responseinfo.PageInfo<MemberInfoModel> data = memberInfo.getData();
-        log.info("会员数据------出参---" + JSON.toJSONString(data));
+        log.info("会员数据------出参---"+JSON.toJSONString(members)+"------------------"+ JSON.toJSONString(data));
         return data;
 
     }
