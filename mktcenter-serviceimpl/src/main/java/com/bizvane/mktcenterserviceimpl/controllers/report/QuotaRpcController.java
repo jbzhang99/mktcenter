@@ -44,8 +44,8 @@ public class QuotaRpcController {
    			log.info("报表查询ReportIncomeController："+BaseUrl.getLoadUrl("empDaily")+jsonObject.toString());
    		    response = this.restTemplate.postForEntity(BaseUrl.getLoadUrl("empDaily"), jsonObject,String.class, new Object[0]);
 		} catch (Exception e) {
-			  ResponseData.setCode(0);
-		  	  ResponseData.setMessage("大数据连接异常"+e.getMessage());
+			  ResponseData.setCode(500);
+		  	  ResponseData.setMessage("大数据连接异常"+e.getMessage()+BaseUrl.getLoadUrl("empDaily")+jsonObject.toString());
 		  	
 		  	ResponseData.setData(empDailyback);
 		  	 return ResponseData;
@@ -74,8 +74,8 @@ public class QuotaRpcController {
 	    		  }
 	    	 }
 	     }else {
-			  ResponseData.setCode(0);
-		  	  ResponseData.setMessage(jobObject.getJSONObject("message").toString());
+			  ResponseData.setCode(500);
+		  	  ResponseData.setMessage(jobObject.getJSONObject("message").toString()+BaseUrl.getLoadUrl("empDaily")+jsonObject.toString());
 		  	  ResponseData.setData(empDailyback);
 	     }
 	     ResponseData.setCode(0);
