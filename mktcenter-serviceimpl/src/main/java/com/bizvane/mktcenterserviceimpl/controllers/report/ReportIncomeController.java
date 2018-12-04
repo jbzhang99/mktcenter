@@ -226,7 +226,7 @@ public class ReportIncomeController {
 		    		}
 		    	 }
 		    	 fileReportTemp.setReportData(setReportData);
-		    	 fileReportTemp.setReportDataName(fileReportTempPOlist.get(0).getReportDataName().replaceAll("averageDiscount,", "").replaceAll("complexPurchaseRate,", ""));
+		    	 fileReportTemp.setReportDataName(fileReportTempPOlist.get(0).getReportDataName().replaceAll("averageDiscount", "").replaceAll("complexPurchaseRate", "").replaceAll("averageDiscount,", "").replaceAll("complexPurchaseRate,", ""));
 		    	 fileReportTempPOlist=new ArrayList<FileReportTempPO>();
 		    	 fileReportTempPOlist.add(fileReportTemp);
 		    	 
@@ -427,7 +427,7 @@ public class ReportIncomeController {
 			 		}
 		    		 	   
 				log.info("计算群主数据"+jsongroupArr);
-//				jsonStr= jsongroupArr.toString();    	  
+				jsonStr= jsongroupArr.toString();    	  
 
 				} catch (JSONException e) {
 					 log.info("技术群主数据出错："+e.getMessage());
