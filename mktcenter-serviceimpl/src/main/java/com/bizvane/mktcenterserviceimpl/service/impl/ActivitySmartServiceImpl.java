@@ -1015,4 +1015,116 @@ public class ActivitySmartServiceImpl implements ActivitySmartService {
         log.info("com.bizvane.mktcenterserviceimpl.service.impl.ActivitySmartServiceImpl.addWxMessageActivity result"+ JSON.toJSONString(responseData));
         return responseData;
     }
+
+    /**
+     * 对某个智能营销组创建任务
+     * 类型：5  图文消息
+     */
+    //@Override
+    public ResponseData<Integer> addPictureMessageActivity(ActivitySmartVO vo, MessageVO messageVO, SysAccountPO stageUser) {
+        log.info("addPictureMessageActivity param"+"vo:"+ JSON.toJSONString(vo)+"messageVO:"+ JSON.toJSONString(messageVO)+"stageUser:"+JSON.toJSONString(stageUser));
+        ResponseData responseData = new ResponseData();
+
+        if(vo==null){
+            log.warn("vo is null");
+            responseData.setCode(SysResponseEnum.FAILED.getCode());
+            responseData.setMessage(SysResponseEnum.MODEL_FAILED_VALIDATION.getMessage());
+            return responseData;
+        }
+
+        //关联的智能营销分组不能为空
+        if(null==vo.getMktActivitySmartGroupId() && vo.getSmartType()==1){
+            log.warn("vo.getMktActivitySmartGroupId() is null");
+            responseData.setCode(SysResponseEnum.FAILED.getCode());
+            responseData.setMessage(SysResponseEnum.MODEL_FAILED_VALIDATION.getMessage());
+            return responseData;
+        }
+
+        vo.setCreateUserId(stageUser.getSysAccountId());
+        vo.setCreateDate(new Date());
+        vo.setCreateUserName(stageUser.getName());
+        vo.setSysBrandId(stageUser.getBrandId());
+        vo.setSysCompanyId(stageUser.getSysCompanyId());
+
+        //生成活动编号
+        String activityCode = CodeUtil.getActivityCode();
+        vo.setActivityCode(activityCode);
+        //拷贝属性
+        MktActivityPOWithBLOBs mktActivityPOWithBLOBs = new MktActivityPOWithBLOBs();
+        BeanUtils.copyProperties(vo,mktActivityPOWithBLOBs);
+        //活动编号
+        mktActivityPOWithBLOBs.setActivityCode(activityCode);
+        mktActivityPOWithBLOBs.setSysCompanyId(stageUser.getSysCompanyId());
+        mktActivityPOWithBLOBs.setSysBrandId(stageUser.getBrandId());
+        //8=智能营销活动
+        mktActivityPOWithBLOBs.setActivityType(ActivityTypeEnum.ACTIVITY_TYPE_SMART.getCode());
+        //3=已审核
+        mktActivityPOWithBLOBs.setCheckStatus(CheckStatusEnum.CHECK_STATUS_APPROVED.getCode());
+
+        Boolean execute = Boolean.FALSE;
+        //判断是不是需要立即发送
+//        if (false==vo.getSendImmediately()){
+//            //如果活动时间滞后
+//            if(new Date().before(vo.getSendTime())){
+//                log.info("new Date().before(vo.getSendTime()) is true");
+//                //活动状态设置为待执行
+//                mktActivityPOWithBLOBs.setActivityStatus(ActivityStatusEnum.ACTIVITY_STATUS_PENDING.getCode());
+//                vo.setMktSmartType(MktSmartTypeEnum.SMART_TYPE_WXMESSAGE.getCode());
+//                //创建任务调度
+//                jobUtil.addSmartActivityJob(stageUser,vo);
+//            }else{
+//                //活动状态设置为执行中
+//                mktActivityPOWithBLOBs.setActivityStatus(ActivityStatusEnum.ACTIVITY_STATUS_EXECUTING.getCode());
+//                //需要立即执行
+//                execute = Boolean.TRUE;
+//            }
+//        }else {
+//            execute = Boolean.TRUE;
+//        }
+
+        //新增活动主表
+        /*mktActivityPOWithBLOBs.setActivityName("智能营销发微信消息");*/
+        mktActivityPOMapper.insertSelective(mktActivityPOWithBLOBs);
+        //获取新增后数据id
+        Long mktActivityId = mktActivityPOWithBLOBs.getMktActivityId();
+
+        //新增智能营销表
+        MktActivitySmartPO mktActivitySmartPO = new MktActivitySmartPO();
+        BeanUtils.copyProperties(vo,mktActivitySmartPO);
+        mktActivitySmartPO.setMktActivityId(mktActivityId);
+        mktActivitySmartPO.setMktSmartType(MktSmartTypeEnum.SMART_TYPE_WXMESSAGE.getCode());
+        mktActivitySmartPOMapper.insertSelective(mktActivitySmartPO);
+
+        //新增消息表--图文消息
+        MktMessagePO mktMessagePO = new MktMessagePO();
+        BeanUtils.copyProperties(messageVO,mktMessagePO);
+        mktMessagePO.setBizType(BusinessTypeEnum.ACTIVITY_TYPE_ACTIVITY.getCode());
+        mktMessagePO.setBizId(mktActivityId);
+        mktMessagePO.setCreateDate(new Date());
+        mktMessagePO.setCreateUserId(stageUser.getSysAccountId());
+        mktMessagePO.setCreateUserName(stageUser.getName());
+        mktMessagePO.setSendImmediately(vo.getSendImmediately());
+        mktMessagePO.setSendTime(vo.getSendTime());
+        mktMessagePO.setMsgType("3");
+        mktMessagePOMapper.insertSelective(mktMessagePO);
+
+        //立即执行
+            String targetMbr = vo.getTargetMbr();
+            ////分页查询会员信息
+            //把高级搜索的条件转换成对象
+            // JSONObject jsonObject=JSONObject.parseObject(targetMbr);
+            // MembersInfoSearchVo membersInfoSearchVo=jsonObject.toJavaObject(MembersInfoSearchVo.class);
+            MembersInfoSearchVo membersInfoSearchVo=JSON.parseObject(targetMbr,MembersInfoSearchVo.class);
+            membersInfoSearchVo.setPageNumber(1);
+            membersInfoSearchVo.setPageSize(1000);
+            membersInfoSearchVo.setBrandId(stageUser.getBrandId());
+            membersInfoSearchVo.setSysCompanyId(stageUser.getSysCompanyId());
+
+            memberMessageSend.sendWxMessage(mktMessagePO, membersInfoSearchVo);
+
+
+        responseData.setMessage(ResponseConstants.SUCCESS_MSG);
+        log.info("addPictureMessageActivity result"+ JSON.toJSONString(responseData));
+        return responseData;
+    }
 }
