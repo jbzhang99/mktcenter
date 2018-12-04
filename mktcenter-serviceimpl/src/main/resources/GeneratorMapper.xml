@@ -89,9 +89,9 @@
        <!--  <table tableName="t_mkt_coupon" domainObjectName="MktCouponPO">
             <generatedKey column="mkt_coupon_id" sqlStatement="MySql" identity="true"/>
         </table> -->
-<!--         <table tableName="t_mkt_message" domainObjectName="MktMessagePO"> -->
-<!--         <generatedKey column="mkt_msg_id" sqlStatement="MySql" identity="true"/> -->
-<!--     </table> -->
+        <table tableName="t_mkt_message" domainObjectName="MktMessagePO">
+        <generatedKey column="mkt_msg_id" sqlStatement="MySql" identity="true"/>
+    </table>
         <!--<table tableName="t_mkt_task" domainObjectName="MktTaskPO">-->
             <!--<generatedKey column="mkt_task_id" sqlStatement="MySql" identity="true"/>-->
         <!--</table>-->
@@ -130,12 +130,12 @@
             <generatedKey column="mkt_activity_vip_aniversary_id" sqlStatement="MySql" identity="true"/>
         </table> -->
 
-  <table tableName="t_mkt_convert_coupon_record" domainObjectName="MktConvertCouponRecordPO">
+<!--   <table tableName="t_mkt_convert_coupon_record" domainObjectName="MktConvertCouponRecordPO">
             <generatedKey column="convert_coupon_record_id" sqlStatement="MySql" identity="true"/>
         </table>
           <table tableName="t_mkt_coupon_integral_exchange" domainObjectName="MktCouponIntegralExchangePO">
             <generatedKey column="exchange_id" sqlStatement="MySql" identity="true"/>
-        </table>
+        </table> -->
 
     </context>
 </generatorConfiguration>
