@@ -322,9 +322,12 @@ public class ActivityUpgradeServiceImpl implements ActivityUpgradeService {
                     membersInfoSearchVo.setPageSize(10000);
                     membersInfoSearchVo.setBrandId(activityVO.getSysBrandId());
                     membersInfoSearchVo.setSysCompanyId(activityVO.getSysCompanyId());
-                    List<Long> level = new ArrayList<>();
-                    level.add(mbrLevel.getMbrLevelId());
-                    membersInfoSearchVo.setLevelID(level);
+                    if(!activityVO.getMbrLevelCode().equals("0")){
+                        List<Long> level = new ArrayList<>();
+                        level.add(mbrLevel.getMbrLevelId());
+                        membersInfoSearchVo.setLevelID(level);
+                    }
+
                     log.info("发送短息查询会员参数="+ JSON.toJSONString(membersInfoSearchVo));
                     memberMessage.getMemberList(messageVOList, membersInfoSearchVo,activityVO);
                 }
@@ -588,7 +591,7 @@ public class ActivityUpgradeServiceImpl implements ActivityUpgradeService {
         activity.setSysBrandId(vo.getBrandId());
         activity.setActivityType(ActivityTypeEnum.ACTIVITY_TYPE_UPGRADE.getCode());
         //查询会员等级相应的活动
-        activity.setMbrLevelCode(vo.getLevelId().toString());
+       /* activity.setMbrLevelCode(vo.getLevelId().toString());*/
         List<ActivityVO> upgradeList = mktActivityUpgradePOMapper.getActivityUpgradeList(activity);
         if (CollectionUtils.isEmpty(upgradeList)){
             responseData.setCode(SysResponseEnum.OPERATE_FAILED_DATA_NOT_EXISTS.getCode());
@@ -596,6 +599,10 @@ public class ActivityUpgradeServiceImpl implements ActivityUpgradeService {
             return responseData;
         }
         for (ActivityVO activityVO:upgradeList) {
+            //判断会员等级相应的活动
+            if (!activityVO.getMbrLevelCode().equals(vo.getLevelId().toString()) || activityVO.getMbrLevelCode().equals("0")){
+                continue;
+            }
             if (!ExecuteParamCheckUtil.implementActivitCheck(vo,activityVO)){
                 continue;
             }

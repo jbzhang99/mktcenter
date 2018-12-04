@@ -293,9 +293,13 @@ public class ActivityOrderServiceImpl implements ActivityOrderService {
                 MembersInfoSearchVo membersInfoSearchVo = new MembersInfoSearchVo();
                 membersInfoSearchVo.setPageNumber(1);
                 membersInfoSearchVo.setPageSize(10000);
-                   List<Long> level = new ArrayList<>();
+                //判断下是否是全部会员等级
+                if(!activityVO.getMbrLevelCode().equals("0")){
+                    List<Long> level = new ArrayList<>();
                     level.add(Long.parseLong(activityVO.getMbrLevelCode()));
                     membersInfoSearchVo.setLevelID(level);
+                }
+
                 membersInfoSearchVo.setBrandId(activityVO.getSysBrandId());
                 membersInfoSearchVo.setSysCompanyId(activityVO.getSysCompanyId());
                 //加个是否是长期活动
@@ -642,7 +646,7 @@ public class ActivityOrderServiceImpl implements ActivityOrderService {
             }
             log.info("消费会员范围验证完毕");
             //判断会员等级
-            if(!ExecuteParamCheckUtil.CheckMbrLevelCode(vo.getLevelId(),activityVO.getMbrLevelCode())){
+            if(!ExecuteParamCheckUtil.CheckMbrLevelCode(vo.getLevelId(),activityVO.getMbrLevelCode()) || !activityVO.getMbrLevelCode().equals("0")){
                 continue;
             }
             log.info("消费会员等级验证完毕");

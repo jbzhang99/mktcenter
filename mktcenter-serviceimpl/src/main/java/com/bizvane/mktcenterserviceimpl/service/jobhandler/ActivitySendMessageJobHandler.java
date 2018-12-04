@@ -86,22 +86,29 @@ public class ActivitySendMessageJobHandler extends IJobHandler {
                     ActivityVO vo = new ActivityVO();
                     vo.setActivityCode(param);
                     List<ActivityVO> activityUpgradeList = mktActivityUpgradePOMapper.getActivityUpgradeList(vo);
-                    //查询该会员下一个等级
-                    ResponseData<MbrLevelModel> mbrLevelModels = memberLevelApiService.queryOnLevel(Long.parseLong(activityUpgradeList.get(0).getMbrLevelCode()));
-                    MbrLevelModel  mbrLevel = mbrLevelModels.getData();
-                    List<Long> level = new ArrayList<>();
-                    level.add(mbrLevel.getMbrLevelId());
-                    membersInfoSearchVo.setLevelID(level);
+                    //判断是否是全部会员
+                    if(!activityUpgradeList.get(0).getMbrLevelCode().equals("0")){
+                        //查询该会员下一个等级
+                        ResponseData<MbrLevelModel> mbrLevelModels = memberLevelApiService.queryOnLevel(Long.parseLong(activityUpgradeList.get(0).getMbrLevelCode()));
+                        MbrLevelModel  mbrLevel = mbrLevelModels.getData();
+                        List<Long> level = new ArrayList<>();
+                        level.add(mbrLevel.getMbrLevelId());
+                        membersInfoSearchVo.setLevelID(level);
+                    }
+
                 }
                 //消费活动的
                 if (mktActivityPO.getActivityType()== ActivityTypeEnum.ACTIVITY_TYPE_ORDER.getCode()){
                     ActivityVO vo = new ActivityVO();
                     vo.setActivityCode(param);
                     List<ActivityVO> activityOrderList = mktActivityOrderPOMapper.getActivityOrderList(vo);
-
+                    //判断是否是全部会员
+                    if(!activityOrderList.get(0).getMbrLevelCode().equals("0")){
                         List<Long> level = new ArrayList<>();
                         level.add(Long.valueOf(activityOrderList.get(0).getMbrLevelCode()));
-                       membersInfoSearchVo.setLevelID(level);
+                        membersInfoSearchVo.setLevelID(level);
+                    }
+
                 }
                 //如果是开卡活动
                 if (mktActivityPO.getActivityType()== ActivityTypeEnum.ACTIVITY_TYPE_REGISGER.getCode()){
