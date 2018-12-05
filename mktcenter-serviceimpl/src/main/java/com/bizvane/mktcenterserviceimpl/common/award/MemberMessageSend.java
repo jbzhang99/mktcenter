@@ -206,7 +206,7 @@ public class MemberMessageSend {
             memberInfoModel.setBirthdayLine(activityBirthday.getDaysAhead());
             memberInfoModel.setMemberScope(activityBirthday.getMemberType().toString());
             memberInfoModel.setPageNumber(1);
-            memberInfoModel.setPageSize(100);
+            memberInfoModel.setPageSize(10000);
             log.info("我要看看参数++++++++++=+=============+"+ JSON.toJSONString(memberInfoModel));
             ResponseData<PageInfo<MemberInfoModel>> memberInfoModelLists =memberInfoApiService.getMemberInfo(memberInfoModel);
             //循环页数
@@ -245,7 +245,7 @@ public class MemberMessageSend {
             memberInfoModel.setOpenCardTimeLine(activityAniversary.getDaysAhead());
             memberInfoModel.setMemberScope(activityAniversary.getMemberType().toString());
             memberInfoModel.setPageNumber(1);
-            memberInfoModel.setPageSize(100);
+            memberInfoModel.setPageSize(10000);
             log.info("我要看看参数++++++++++=+=============+"+ JSON.toJSONString(memberInfoModel));
             ResponseData<PageInfo<MemberInfoModel>> memberInfoModelLists =memberInfoApiService.getMemberInfo(memberInfoModel);
             if(!CollectionUtils.isEmpty(memberInfoModelLists.getData().getList())){
