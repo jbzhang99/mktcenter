@@ -439,6 +439,7 @@ public class TaskProfileServiceImpl implements TaskProfileService {
         ExtendPropertyVO extendPropertyVO = new ExtendPropertyVO();
         extendPropertyVO.setWxVisible("2");
         extendPropertyVO.setBrandId(sysBrandId);
-        return  wxAppletApiService.getBaseAndExtendPropertyList(extendPropertyVO);
+//        return  wxAppletApiService.getBaseAndExtendPropertyList(extendPropertyVO);
+        return null;
     }
 }

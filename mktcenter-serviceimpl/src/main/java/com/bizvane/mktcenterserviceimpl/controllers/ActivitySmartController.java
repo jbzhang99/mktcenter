@@ -158,4 +158,25 @@ public class ActivitySmartController {
         ResponseData<Integer> responseData = activitySmartService.addWxMessageActivity(vo,messageVO,stageUser);
         return new ResponseData<>();
     }
+
+    @ApiOperation(value = "对某个智能营销组创建任务，任务类型：5图文消息")
+    @PostMapping("addPictureMessageActivity")
+    public ResponseData<Integer> addPictureMessageActivity(ActivitySmartVO vo, MessageVO messageVO,HttpServletRequest request){
+        //参数校验
+        ActivityParamCheckUtil.checkSmartActivityParam(vo);
+        //参数校验通过，获取操作人信息
+        SysAccountPO stageUser = TokenUtils.getStageUser(request);
+        ResponseData<Integer> responseData = activitySmartService.addPictureMessageActivity(vo,messageVO,stageUser);
+        return new ResponseData<>();
+    }
+
+    /**
+     * 图文消息剩余次数
+     * @param vo
+     * @return
+     */
+    @PostMapping("getPictureMessageCount")
+    public  ResponseData<Integer>  getPictureMessageCount(ActivitySmartVO vo){
+        return activitySmartService.getPictureMessageCount(vo);
+    }
 }

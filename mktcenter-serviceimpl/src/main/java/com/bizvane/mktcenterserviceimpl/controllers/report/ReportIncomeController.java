@@ -278,6 +278,9 @@ public class ReportIncomeController {
 						    		 					//如果是业绩占比，总业绩除占比
 						    		 						BigDecimal achievements= new BigDecimal(jsonObjtarr.get("achievements").toString());
 						    		 						achievements=achievements.multiply(new BigDecimal("100"));
+                                                        if(achievements.toString().equals("0")) {
+							 		 						continue;
+							 		 					}
 						    		 						jsonObjtarr.put("percentOfAchievements", achievements.divide(new BigDecimal(jsonObjtarr.get("percentOfAchievements").toString()),2,BigDecimal.ROUND_HALF_UP));
 						    		 				}
 					    		 				}
@@ -419,13 +422,19 @@ public class ReportIncomeController {
 		 		 				}
 		 		 				
 		 		 				if(itnewjsong.equals("percentOfAchievements")) {
-		 		 					if(jsongroupnew.getString("percentOfAchievements").equals("0")) {
+		 		 					if(jsongroupnew.getString("percentOfAchievements").equals("0.00")) {
 		 		 						jsongroupnew.put("percentOfAchievements", 0);//  如果除数是0
 		 		 						continue;
 		 		 					}
+		 		 					
 		 					          BigDecimal   achievements   =   new   BigDecimal(jsongroupnew.getString("achievements"));
+			 		 					if(achievements.toString().equals("0")) {
+			 		 						jsongroupnew.put("percentOfAchievements", 0);//  如果除数是0
+			 		 						continue;
+			 		 					}
+		 					          
 		 					          achievements=achievements.divide(new BigDecimal(jsongroupnew.getString("percentOfAchievements")),4,BigDecimal.ROUND_HALF_UP);
-		 					 		  jsongroupnew.put("percentOfAchievements", achievements.multiply(new BigDecimal(100)));//  平均消费次数=笔数/人数,
+		 					 		  jsongroupnew.put("percentOfAchievements", achievements.multiply(new BigDecimal(100)));//  
 		 		 				}
 		 		 				
 		 		 				

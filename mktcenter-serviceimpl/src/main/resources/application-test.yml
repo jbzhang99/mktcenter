@@ -59,6 +59,13 @@ spring:
   jackson:
     date-format: yyyy-MM-dd HH:mm:ss
     time-zone: GMT+8
+  zipkin:
+    baseUrl: http://192.168.2.15:9411
+    sleuth:
+      sampler:
+        probability: 1.0
+      scheduled:
+        enabled: false
 eureka:
   instance:
     metadata-map:
@@ -172,6 +179,10 @@ ribbon:
 
 #审计日志#
 rmq:
+  ONSAddr: NAMESRV_ADDR
   namesrvAddr: 192.168.1.50:9876
   accessKey: LTAIpoqUHsXq6q7r
   secretKey: 0ZJ7bfxXJLT8TpOKvZU3i4YWuhvJzs
+  product.id: PID_PUBLIC_BIZVANE_MEMBER_MESSAGE
+  consume.id: CID_PUBLIC_BIZVANE_MEMBER_MESSAGE
+  send.time.out: 30000

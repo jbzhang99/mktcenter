@@ -849,4 +849,19 @@
     AND tmt.check_status &lt;&gt; 4
     AND (tmt.activity_status=1 OR tmt.activity_status=2)
   </select>
+  <select id="getPictureMessageCount" resultType="java.lang.Integer">
+    SELECT
+    4-count( mkt_activity_id )
+    FROM
+      t_mkt_activity
+    WHERE
+      valid=1
+    <if test="mktActivitySmartGroupId != null">
+      AND mkt_activity_smart_group_id =#{mktActivitySmartGroupId}
+    </if>
+    <if test="mbrGroupDefId != null">
+      AND mbr_group_def_id=#{mbrGroupDefId}
+    </if>
+      AND create_date LIKE CONCAT(#{time},'%')
+  </select>
 </mapper>

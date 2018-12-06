@@ -166,6 +166,26 @@ public class MemberMessageSend {
     }
 
     /**
+     * 智能营销发送图文消息
+     * @param mktMessagePO
+     * @param membersInfoSearchVo
+     */
+    @Async("asyncServiceExecutor")
+    public  void sendPictureMessage(MktMessagePO mktMessagePO, MembersInfoSearchVo membersInfoSearchVo) {
+        ResponseData<com.bizvane.utils.responseinfo.PageInfo<MemberInfoVo>> memberInfoVoPage = membersAdvancedSearchApiService.search(membersInfoSearchVo);
+        for (int a =1;a<=memberInfoVoPage.getData().getPages();a++) {
+            membersInfoSearchVo.setPageNumber(a);
+            ResponseData<com.bizvane.utils.responseinfo.PageInfo<MemberInfoVo>> memberInfoVoPages = membersAdvancedSearchApiService.search(membersInfoSearchVo);
+            List<MemberInfoVo> memberInfoModelList = memberInfoVoPages.getData().getList();
+            for (MemberInfoModel memberInfo:memberInfoModelList) {
+                MemberMessageVO memberMessageVO = new MemberMessageVO();
+                AwardBO awardBO = new AwardBO();
+                log.info("sendPictureMessage  of member:"+JSON.toJSONString(memberInfo));
+               // activityService.sendWx(mktMessagePO, awardBO, memberMessageVO, memberInfo);
+            }
+        }
+    }
+    /**
      * 营销查询会员发券
      * @param vo
      * @param membersInfoSearchVo
