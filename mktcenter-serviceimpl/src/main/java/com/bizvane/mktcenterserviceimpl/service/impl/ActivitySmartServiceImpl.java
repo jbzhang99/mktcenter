@@ -1,7 +1,8 @@
 package com.bizvane.mktcenterserviceimpl.service.impl;
 
 import com.alibaba.fastjson.JSON;
-import com.aliyun.openservices.shade.com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import com.bizvane.appletservice.models.bo.ObtainGraphicBo;
 import com.bizvane.appletservice.rpc.GraphicTemplateServiceRpc;
 import com.bizvane.couponfacade.interfaces.CouponQueryServiceFeign;
@@ -1158,8 +1159,8 @@ public class ActivitySmartServiceImpl implements ActivitySmartService {
      * 小程序获取图文列表
      */
     @Override
-    public  ResponseData  getPictureLists(PictureMessageVO vo){
-        ResponseData responseData = new ResponseData();
+    public  ResponseData<JSONArray>  getPictureLists(PictureMessageVO vo){
+        ResponseData responseData = new ResponseData<JSONArray>();
         ObtainGraphicBo obtainGraphicBo=new  ObtainGraphicBo();
         BeanUtils.copyProperties(vo,obtainGraphicBo);
         log.info("getPictureLists  param:"+JSON.toJSONString(obtainGraphicBo));
@@ -1167,7 +1168,11 @@ public class ActivitySmartServiceImpl implements ActivitySmartService {
         ObtainGraphicBo data = obtainGraphicBoResponseData.getData();
         String obtainGraphic = data.getObtainGraphic();
         Object o = JSON.toJSON(obtainGraphic);
-        responseData.setData(o);
+        JSONObject jsonObject = JSON.parseObject(obtainGraphic);
+        String item = JSON.toJSONString(jsonObject.get("item"));
+        System.out.println("item:"+item);
+        JSONArray objects = JSONArray.parseArray(item);
+        responseData.setData(objects);
         return responseData;
     }
 }

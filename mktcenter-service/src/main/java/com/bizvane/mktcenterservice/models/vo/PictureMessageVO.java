@@ -9,7 +9,7 @@ import lombok.Data;
 @Data
 public class PictureMessageVO {
     Long brandId;
-    String offset;
-    String count;
-    String type;
+    String offset="0";
+    String count="20";
+    String type="news";
 }

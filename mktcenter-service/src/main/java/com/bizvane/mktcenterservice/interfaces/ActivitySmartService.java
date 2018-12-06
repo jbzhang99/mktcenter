@@ -1,5 +1,6 @@
 package com.bizvane.mktcenterservice.interfaces;
 
+import com.alibaba.fastjson.JSONArray;
 import com.bizvane.mktcenterservice.models.bo.ActivitySmartBO;
 import com.bizvane.mktcenterservice.models.po.MktActivitySmartGroupPO;
 import com.bizvane.mktcenterservice.models.po.MktActivitySmartPO;
@@ -142,7 +143,7 @@ public interface ActivitySmartService {
      */
     public  ResponseData<Integer>  getPictureMessageCount(ActivitySmartVO vo);
 
-    public  ResponseData  getPictureLists(PictureMessageVO vo);
+    public  ResponseData<JSONArray>  getPictureLists(PictureMessageVO vo);
 
 
 }
