@@ -78,7 +78,7 @@ public interface MktActivityCountPOMapper {
   int updateByPrimaryKey(MktActivityCountPO record);
   
   @Update("update t_mkt_activity_count set member_count=member_count+#{memberCount}, order_amount_sum=order_amount_sum + #{orderAmount}, "
-      + " points_sum=points_sum + #{points} where mbr_label_def_id=#{mktActivityCountId}")
+      + " points_sum=points_sum + #{points} where mkt_activity_count_id=#{mktActivityCountId} ")
   int updateSum(@Param("mktActivityCountId") Long mktActivityCountId, @Param("memberCount") Integer memberCount,
       @Param("orderAmount") BigDecimal orderAmount, @Param("points") Integer points);
 }

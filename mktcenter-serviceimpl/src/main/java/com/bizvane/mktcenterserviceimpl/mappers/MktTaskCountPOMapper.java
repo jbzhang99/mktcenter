@@ -77,12 +77,12 @@ public interface MktTaskCountPOMapper {
   int updateByPrimaryKey(MktTaskCountPO record);
   
   @Update("update t_mkt_task_count set "
-      + "member_count=member_count+#{memberCount}, "
-      + "consume_amount_sum=consume_amount_sum + #{consumeAmount}, "
+      + " member_count=member_count+#{memberCount}, "
+      + " consume_amount_sum=consume_amount_sum + #{consumeAmount}, "
       + " coupon_num_sum=coupon_num_sum + #{couponNum},  "
-      + "points_sum=points_sum + #{points} ,"
-      + "share_num_sum=share_num_sum + #{shareNum}"
-      + "where mkt_task_count_id=#{mktTaskCountId}")
+      + " points_sum=points_sum + #{points} ,"
+      + " share_num_sum=share_num_sum + #{shareNum} "
+      + " where mkt_task_count_id=#{mktTaskCountId} ")
   int updateSum(@Param("mktTaskCountId") Long mktTaskCountId, @Param("memberCount") Integer memberCount,  @Param("consumeAmount") BigDecimal consumeAmount, 
       @Param("couponNum") Integer couponNum, @Param("points") Integer points, @Param("shareNum") Integer shareNum);
 }
