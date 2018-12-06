@@ -169,7 +169,7 @@ activity:
 bitdata:
   businessNum: testbz
   apiKey: 4199454b3cac0c02b48fd5a9c67c00c0
-  url: http://bizvane.f3322.net:58765/api/open-data-analysis/
+  url: http://192.168.1.63:8765/api/open-data-analysis/
 
 tenant:
   isEnabledTenantInterceptor: false
