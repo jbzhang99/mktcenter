@@ -856,8 +856,8 @@
       t_mkt_activity
     WHERE
       valid=1
-    <if test="activitySmartGroupId != null">
-      AND mkt_activity_smart_group_id =#{activitySmartGroupId}
+    <if test="mktActivitySmartGroupId != null">
+      AND mkt_activity_smart_group_id =#{mktActivitySmartGroupId}
     </if>
     <if test="mbrGroupDefId != null">
       AND mbr_group_def_id=#{mbrGroupDefId}

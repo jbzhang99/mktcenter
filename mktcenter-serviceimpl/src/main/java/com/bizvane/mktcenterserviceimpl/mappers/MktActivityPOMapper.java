@@ -115,5 +115,5 @@ public interface MktActivityPOMapper {
 	//白名单店铺
 	public  String  getActivityWhiteStoreIds(WhiteStoreVO vo);
 
-	Integer getPictureMessageCount(@Param("activitySmartGroupId")Long activitySmartGroupId,@Param("mbrGroupDefId")Long mbrGroupDefId,@Param("time")String time);
+	Integer getPictureMessageCount(@Param("mktActivitySmartGroupId")Long mktActivitySmartGroupId,@Param("mbrGroupDefId")Long mbrGroupDefId,@Param("time")String time);
 }
