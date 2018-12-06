@@ -151,7 +151,7 @@ public class MemberMessageSend {
      * @param membersInfoSearchVo
      */
     @Async("asyncServiceExecutor")
-    public  void sendWxMessage(MktMessagePO mktMessagePO, MembersInfoSearchVo membersInfoSearchVo) {
+    public  void sendWxMessage(MktMessagePO mktMessagePO, MembersInfoSearchVo membersInfoSearchVo,ActivitySmartVO vo) {
         ResponseData<com.bizvane.utils.responseinfo.PageInfo<MemberInfoVo>> memberInfoVoPage = membersAdvancedSearchApiService.search(membersInfoSearchVo);
         for (int a =1;a<=memberInfoVoPage.getData().getPages();a++) {
             membersInfoSearchVo.setPageNumber(a);
@@ -160,7 +160,7 @@ public class MemberMessageSend {
             for (MemberInfoModel memberInfo:memberInfoModelList) {
                 MemberMessageVO memberMessageVO = new MemberMessageVO();
                 AwardBO awardBO = new AwardBO();
-                activityService.sendWx(mktMessagePO, awardBO, memberMessageVO, memberInfo);
+                activityService.sendWx(mktMessagePO, awardBO, memberMessageVO, memberInfo,vo);
             }
         }
     }
@@ -361,11 +361,47 @@ public class MemberMessageSend {
                         activityMessageVO.setSysCompanyId(mktActivityPOWithBLOBs.getSysCompanyId());
                         activityMessageVO.setSysBrandId(mktActivityPOWithBLOBs.getSysBrandId());
                         activityMessageVO.setSysBrandName(SysBrandPos.getData().getBrandName());
-                        activityMessageVO.setActivityName(mktActivityPOWithBLOBs.getActivityName());
-                        activityMessageVO.setActivityInterests(mktMessage.getMsgContent());
                         activityMessageVO.setMemberPhone(memberInfoModel.getPhone());
                         activityMessageVO.setActivityLongtime("智能营销");
-                        activityMessageVO.setUnl("/pages/template01/activity-details/main");
+                        activityMessageVO.setUnl(mktMessage.getLink());
+                        //导航语
+                        if (null!=mktMessage.getNavigation()){
+                            activityMessageVO.setNavigation(mktMessage.getNavigation());
+                        }else {
+                            activityMessageVO.setNavigation("");
+                        }
+                        //活动结果
+                        if (null!=mktMessage.getMsgContent()){
+                            activityMessageVO.setActivityInterests(mktMessage.getMsgContent());
+                        }else {
+                            activityMessageVO.setActivityInterests("");
+                        }
+                        //活动时间
+                        if (null!=mktMessage.getActivityTime()){
+                            activityMessageVO.setActivitytime(mktMessage.getActivityTime());
+                        }else {
+                            activityMessageVO.setActivitytime("");
+                        }
+                        //赞助商家
+                        if (null!=mktMessage.getSponsor()){
+                            activityMessageVO.setBusinessman(mktMessage.getSponsor());
+                        }else {
+                            activityMessageVO.setBusinessman("");
+                        }
+                        //备注
+                        if (null!=mktMessage.getRemark()){
+                            activityMessageVO.setRemark(mktMessage.getRemark());
+                        }else {
+                            activityMessageVO.setRemark("");
+                        }
+                        //活动名称
+                        if (null!=mktActivityPOWithBLOBs.getActivityName()){
+                            activityMessageVO.setActivityName(mktActivityPOWithBLOBs.getActivityName());
+                        }else {
+                            activityMessageVO.setActivityName("");
+                        }
+                        activityMessageVO.setSendtype("1");
+                        activityMessageVO.setOpenId(memberInfoModel.getWxOpenId());
                         awardBO.setMktType(MktSmartTypeEnum.SMART_TYPE_WXMESSAGE.getCode());
                         awardBO.setActivityMessageVO(activityMessageVO);
                         log.info("智能营销-开始发微信微信了");

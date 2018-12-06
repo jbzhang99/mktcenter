@@ -1008,7 +1008,7 @@ public class ActivitySmartServiceImpl implements ActivitySmartService {
             membersInfoSearchVo.setPageSize(1000);
             membersInfoSearchVo.setBrandId(stageUser.getBrandId());
             membersInfoSearchVo.setSysCompanyId(stageUser.getSysCompanyId());
-            memberMessageSend.sendWxMessage(mktMessagePO, membersInfoSearchVo);
+            memberMessageSend.sendWxMessage(mktMessagePO, membersInfoSearchVo,vo);
         }
 
         responseData.setMessage(ResponseConstants.SUCCESS_MSG);
@@ -1120,7 +1120,7 @@ public class ActivitySmartServiceImpl implements ActivitySmartService {
             membersInfoSearchVo.setBrandId(stageUser.getBrandId());
             membersInfoSearchVo.setSysCompanyId(stageUser.getSysCompanyId());
 
-            memberMessageSend.sendWxMessage(mktMessagePO, membersInfoSearchVo);
+            memberMessageSend.sendWxMessage(mktMessagePO, membersInfoSearchVo,vo);
 
 
         responseData.setMessage(ResponseConstants.SUCCESS_MSG);

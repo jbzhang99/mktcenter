@@ -202,7 +202,7 @@
 		<dependency>
 			<groupId>com.bizvane</groupId>
 			<artifactId>message-facade</artifactId>
-			<version>1.0.0</version>
+			<version>1.0.1-SNAPSHOT</version>
 		</dependency>
 		<!-- 引入微信模块，二维码 -->
 		<dependency>
