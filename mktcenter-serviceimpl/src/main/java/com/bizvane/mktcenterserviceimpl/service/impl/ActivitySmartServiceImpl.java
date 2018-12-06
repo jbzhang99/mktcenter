@@ -2,6 +2,8 @@ package com.bizvane.mktcenterserviceimpl.service.impl;
 
 import com.alibaba.fastjson.JSON;
 import com.aliyun.openservices.shade.com.alibaba.fastjson.JSONObject;
+import com.bizvane.appletservice.models.bo.ObtainGraphicBo;
+import com.bizvane.appletservice.rpc.GraphicTemplateServiceRpc;
 import com.bizvane.couponfacade.interfaces.CouponQueryServiceFeign;
 import com.bizvane.couponfacade.models.vo.CouponDetailResponseVO;
 import com.bizvane.couponfacade.models.vo.SendCouponSimpleRequestVO;
@@ -23,6 +25,7 @@ import com.bizvane.mktcenterservice.models.po.*;
 import com.bizvane.mktcenterservice.models.vo.ActivitySmartVO;
 import com.bizvane.mktcenterservice.models.vo.MessageVO;
 import com.bizvane.mktcenterservice.models.vo.PageForm;
+import com.bizvane.mktcenterservice.models.vo.PictureMessageVO;
 import com.bizvane.mktcenterserviceimpl.common.award.Award;
 import com.bizvane.mktcenterserviceimpl.common.award.MemberMessageSend;
 import com.bizvane.mktcenterserviceimpl.common.constants.ActivityConstants;
@@ -89,6 +92,8 @@ public class ActivitySmartServiceImpl implements ActivitySmartService {
     private MemberMessageSend memberMessageSend;
     @Autowired
     private CouponQueryServiceFeign couponQueryServiceFeign;
+    @Autowired
+    private GraphicTemplateServiceRpc graphicTemplateServiceRpc;
     /**
      * 查询智能营销分组列表(方块)
      * @param vo
@@ -1009,7 +1014,7 @@ public class ActivitySmartServiceImpl implements ActivitySmartService {
             membersInfoSearchVo.setPageSize(1000);
             membersInfoSearchVo.setBrandId(stageUser.getBrandId());
             membersInfoSearchVo.setSysCompanyId(stageUser.getSysCompanyId());
-            memberMessageSend.sendWxMessage(mktMessagePO, membersInfoSearchVo);
+            memberMessageSend.sendWxMessage(mktMessagePO, membersInfoSearchVo,vo);
         }
 
         responseData.setMessage(ResponseConstants.SUCCESS_MSG);
@@ -1146,6 +1151,23 @@ public class ActivitySmartServiceImpl implements ActivitySmartService {
         String time = TimeUtils.SDF_Y_M.format(new Date());
         Integer pictureMessageCount = mktActivityPOMapper.getPictureMessageCount(mktActivitySmartGroupId, mbrGroupDefId, time);
         responseData.setData(pictureMessageCount);
+        return responseData;
+    }
+
+    /**
+     * 小程序获取图文列表
+     */
+    @Override
+    public  ResponseData  getPictureLists(PictureMessageVO vo){
+        ResponseData responseData = new ResponseData();
+        ObtainGraphicBo obtainGraphicBo=new  ObtainGraphicBo();
+        BeanUtils.copyProperties(vo,obtainGraphicBo);
+        log.info("getPictureLists  param:"+JSON.toJSONString(obtainGraphicBo));
+        ResponseData<ObtainGraphicBo> obtainGraphicBoResponseData = graphicTemplateServiceRpc.obtainGraphicTemplate(obtainGraphicBo);
+        ObtainGraphicBo data = obtainGraphicBoResponseData.getData();
+        String obtainGraphic = data.getObtainGraphic();
+        Object o = JSON.toJSON(obtainGraphic);
+        responseData.setData(o);
         return responseData;
     }
 }

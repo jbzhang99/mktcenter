@@ -459,7 +459,7 @@ public class ActivityServiceImpl implements ActivityService {
     }
     @Override
     @Async("asyncServiceExecutor")
-    public void sendWx(MktMessagePO mktMessagePO, AwardBO awardBO, MemberMessageVO memberMessageVO, MemberInfoModel memberInfo) {
+    public void sendWx(MktMessagePO mktMessagePO, AwardBO awardBO, MemberMessageVO memberMessageVO, MemberInfoModel memberInfo,ActivitySmartVO vo) {
         ResponseData<SysBrandPo> SysBrandPos = brandServiceRpc.getBrandByID(memberInfo.getBrandId());
         //发送微信模板消息
         ActivityMessageVO activityMessageVO = new ActivityMessageVO();
@@ -467,11 +467,47 @@ public class ActivityServiceImpl implements ActivityService {
         activityMessageVO.setSysCompanyId(memberInfo.getSysCompanyId());
         activityMessageVO.setSysBrandId(memberInfo.getBrandId());
         activityMessageVO.setSysBrandName(SysBrandPos.getData().getBrandName());
-        activityMessageVO.setActivityName("营销发送微信消息");
-        activityMessageVO.setActivityInterests(mktMessagePO.getMsgContent());
         activityMessageVO.setMemberPhone(memberInfo.getPhone());
         activityMessageVO.setActivityLongtime("智能营销");
-        activityMessageVO.setUnl("/pages/template01/activity-details/main");
+        activityMessageVO.setUnl(mktMessagePO.getLink());
+        //导航语
+        if (null!=mktMessagePO.getNavigation()){
+            activityMessageVO.setNavigation(mktMessagePO.getNavigation());
+        }else {
+            activityMessageVO.setNavigation("");
+        }
+        //活动结果
+        if (null!=mktMessagePO.getMsgContent()){
+            activityMessageVO.setActivityInterests(mktMessagePO.getMsgContent());
+        }else {
+            activityMessageVO.setActivityInterests("");
+        }
+        //活动时间
+        if (null!=mktMessagePO.getActivityTime()){
+            activityMessageVO.setActivitytime(mktMessagePO.getActivityTime());
+        }else {
+            activityMessageVO.setActivitytime("");
+        }
+        //赞助商家
+        if (null!=mktMessagePO.getSponsor()){
+            activityMessageVO.setBusinessman(mktMessagePO.getSponsor());
+        }else {
+            activityMessageVO.setBusinessman("");
+        }
+        //备注
+        if (null!=mktMessagePO.getRemark()){
+            activityMessageVO.setRemark(mktMessagePO.getRemark());
+        }else {
+            activityMessageVO.setRemark("");
+        }
+        //活动名称
+        if (null!=vo.getActivityName()){
+            activityMessageVO.setActivityName(vo.getActivityName());
+        }else {
+            activityMessageVO.setActivityName("");
+        }
+        activityMessageVO.setSendtype("1");
+        activityMessageVO.setOpenId(memberInfo.getWxOpenId());
         awardBO.setActivityMessageVO(activityMessageVO);
         awardBO.setMktType(MktSmartTypeEnum.SMART_TYPE_WXMESSAGE.getCode());
         award.execute(awardBO);
