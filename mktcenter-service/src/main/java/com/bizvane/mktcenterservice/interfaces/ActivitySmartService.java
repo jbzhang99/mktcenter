@@ -124,4 +124,22 @@ public interface ActivitySmartService {
      */
     public ResponseData<Integer> addWxMessageActivity(ActivitySmartVO vo, MessageVO messageVO, SysAccountPO stageUser);
 
+    /**
+     * 对某个智能营销组创建任务
+     * 任务类型：5图文消息
+     * @param vo
+     * @param messageVO
+     * @param stageUser
+     * @return
+     */
+    public ResponseData<Integer> addPictureMessageActivity(ActivitySmartVO vo, MessageVO messageVO, SysAccountPO stageUser);
+
+    /**
+     * 图文消息的次数统计
+     * @param vo
+     * @return
+     */
+    public  ResponseData<Integer>  getPictureMessageCount(ActivitySmartVO vo);
+
+
 }

@@ -31,6 +31,7 @@ import com.bizvane.mktcenterserviceimpl.common.constants.SystemConstants;
 import com.bizvane.mktcenterserviceimpl.common.enums.*;
 import com.bizvane.mktcenterserviceimpl.common.utils.CodeUtil;
 import com.bizvane.mktcenterserviceimpl.common.job.JobUtil;
+import com.bizvane.mktcenterserviceimpl.common.utils.TimeUtils;
 import com.bizvane.mktcenterserviceimpl.mappers.*;
 import com.bizvane.utils.enumutils.SysResponseEnum;
 import com.bizvane.utils.responseinfo.ResponseData;
@@ -1020,7 +1021,7 @@ public class ActivitySmartServiceImpl implements ActivitySmartService {
      * 对某个智能营销组创建任务
      * 类型：5  图文消息
      */
-    //@Override
+    @Override
     public ResponseData<Integer> addPictureMessageActivity(ActivitySmartVO vo, MessageVO messageVO, SysAccountPO stageUser) {
         log.info("addPictureMessageActivity param"+"vo:"+ JSON.toJSONString(vo)+"messageVO:"+ JSON.toJSONString(messageVO)+"stageUser:"+JSON.toJSONString(stageUser));
         ResponseData responseData = new ResponseData();
@@ -1061,7 +1062,7 @@ public class ActivitySmartServiceImpl implements ActivitySmartService {
         //3=已审核
         mktActivityPOWithBLOBs.setCheckStatus(CheckStatusEnum.CHECK_STATUS_APPROVED.getCode());
 
-        Boolean execute = Boolean.FALSE;
+        //Boolean execute = Boolean.FALSE;
         //判断是不是需要立即发送
 //        if (false==vo.getSendImmediately()){
 //            //如果活动时间滞后
@@ -1092,7 +1093,7 @@ public class ActivitySmartServiceImpl implements ActivitySmartService {
         MktActivitySmartPO mktActivitySmartPO = new MktActivitySmartPO();
         BeanUtils.copyProperties(vo,mktActivitySmartPO);
         mktActivitySmartPO.setMktActivityId(mktActivityId);
-        mktActivitySmartPO.setMktSmartType(MktSmartTypeEnum.SMART_TYPE_WXMESSAGE.getCode());
+        mktActivitySmartPO.setMktSmartType(5);//图文消息
         mktActivitySmartPOMapper.insertSelective(mktActivitySmartPO);
 
         //新增消息表--图文消息
@@ -1120,11 +1121,31 @@ public class ActivitySmartServiceImpl implements ActivitySmartService {
             membersInfoSearchVo.setBrandId(stageUser.getBrandId());
             membersInfoSearchVo.setSysCompanyId(stageUser.getSysCompanyId());
 
-            memberMessageSend.sendWxMessage(mktMessagePO, membersInfoSearchVo);
+            memberMessageSend.sendPictureMessage(mktMessagePO, membersInfoSearchVo);
 
 
         responseData.setMessage(ResponseConstants.SUCCESS_MSG);
         log.info("addPictureMessageActivity result"+ JSON.toJSONString(responseData));
+        return responseData;
+    }
+
+    /**
+     *获取图文消息的剩余次数
+     */
+    @Override
+    public  ResponseData<Integer>  getPictureMessageCount(ActivitySmartVO vo){
+        log.info("ActivitySmartServiceImpl getPictureMessageCount:"+JSON.toJSONString(vo));
+        ResponseData<Integer> responseData = new ResponseData<>();
+        Long mktActivitySmartGroupId = vo.getMktActivitySmartGroupId();
+        Long mbrGroupDefId = vo.getMbrGroupDefId();
+       if (mbrGroupDefId==null && mktActivitySmartGroupId==null){
+           responseData.setMessage("数据不合格!");
+           responseData.setCode(100);
+           return responseData;
+       }
+        String time = TimeUtils.SDF_Y_M.format(new Date());
+        Integer pictureMessageCount = mktActivityPOMapper.getPictureMessageCount(mktActivitySmartGroupId, mbrGroupDefId, time);
+        responseData.setData(pictureMessageCount);
         return responseData;
     }
 }
