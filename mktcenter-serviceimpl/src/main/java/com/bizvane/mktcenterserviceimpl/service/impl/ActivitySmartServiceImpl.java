@@ -1,5 +1,16 @@
 package com.bizvane.mktcenterserviceimpl.service.impl;
 
+
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
+import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
+import org.springframework.util.StringUtils;
+
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
@@ -7,52 +18,49 @@ import com.bizvane.appletservice.models.bo.ObtainGraphicBo;
 import com.bizvane.appletservice.rpc.GraphicTemplateServiceRpc;
 import com.bizvane.couponfacade.interfaces.CouponQueryServiceFeign;
 import com.bizvane.couponfacade.models.vo.CouponDetailResponseVO;
-import com.bizvane.couponfacade.models.vo.SendCouponSimpleRequestVO;
-import com.bizvane.members.facade.enums.IntegralChangeTypeEnum;
 import com.bizvane.members.facade.es.pojo.MembersInfoSearchPojo;
 import com.bizvane.members.facade.es.vo.MembersInfoSearchVo;
-import com.bizvane.members.facade.models.IntegralRecordModel;
-import com.bizvane.members.facade.models.MemberInfoModel;
-import com.bizvane.members.facade.service.api.MemberInfoApiService;
 import com.bizvane.members.facade.service.api.MembersAdvancedSearchApiService;
-import com.bizvane.members.facade.vo.MemberInfoApiModel;
-import com.bizvane.members.facade.vo.MemberInfoVo;
-import com.bizvane.messagefacade.models.vo.MemberMessageVO;
-import com.bizvane.messagefacade.models.vo.SysSmsConfigVO;
 import com.bizvane.mktcenterservice.interfaces.ActivitySmartService;
-import com.bizvane.mktcenterservice.models.bo.ActivitySmartBO;
-import com.bizvane.mktcenterservice.models.bo.AwardBO;
-import com.bizvane.mktcenterservice.models.po.*;
+import com.bizvane.mktcenterservice.models.po.MktActivityCountPO;
+import com.bizvane.mktcenterservice.models.po.MktActivityPOWithBLOBs;
+import com.bizvane.mktcenterservice.models.po.MktActivitySmartGroupPO;
+import com.bizvane.mktcenterservice.models.po.MktActivitySmartGroupPOExample;
+import com.bizvane.mktcenterservice.models.po.MktActivitySmartPO;
+import com.bizvane.mktcenterservice.models.po.MktActivitySmartPOExample;
+import com.bizvane.mktcenterservice.models.po.MktCouponPO;
+import com.bizvane.mktcenterservice.models.po.MktCouponPOExample;
+import com.bizvane.mktcenterservice.models.po.MktMessagePO;
+import com.bizvane.mktcenterservice.models.po.MktMessagePOExample;
 import com.bizvane.mktcenterservice.models.vo.ActivitySmartVO;
 import com.bizvane.mktcenterservice.models.vo.MessageVO;
 import com.bizvane.mktcenterservice.models.vo.PageForm;
 import com.bizvane.mktcenterservice.models.vo.PictureMessageVO;
-import com.bizvane.mktcenterserviceimpl.common.award.Award;
 import com.bizvane.mktcenterserviceimpl.common.award.MemberMessageSend;
 import com.bizvane.mktcenterserviceimpl.common.constants.ActivityConstants;
 import com.bizvane.mktcenterserviceimpl.common.constants.ResponseConstants;
 import com.bizvane.mktcenterserviceimpl.common.constants.SystemConstants;
-import com.bizvane.mktcenterserviceimpl.common.enums.*;
-import com.bizvane.mktcenterserviceimpl.common.utils.CodeUtil;
+import com.bizvane.mktcenterserviceimpl.common.enums.ActivityStatusEnum;
+import com.bizvane.mktcenterserviceimpl.common.enums.ActivityTypeEnum;
+import com.bizvane.mktcenterserviceimpl.common.enums.BusinessTypeEnum;
+import com.bizvane.mktcenterserviceimpl.common.enums.CheckStatusEnum;
+import com.bizvane.mktcenterserviceimpl.common.enums.MktSmartTypeEnum;
 import com.bizvane.mktcenterserviceimpl.common.job.JobUtil;
+import com.bizvane.mktcenterserviceimpl.common.utils.CodeUtil;
 import com.bizvane.mktcenterserviceimpl.common.utils.TimeUtils;
-import com.bizvane.mktcenterserviceimpl.mappers.*;
+import com.bizvane.mktcenterserviceimpl.mappers.MktActivityCountPOMapper;
+import com.bizvane.mktcenterserviceimpl.mappers.MktActivityPOMapper;
+import com.bizvane.mktcenterserviceimpl.mappers.MktActivitySmartGroupPOMapper;
+import com.bizvane.mktcenterserviceimpl.mappers.MktActivitySmartPOMapper;
+import com.bizvane.mktcenterserviceimpl.mappers.MktCouponPOMapper;
+import com.bizvane.mktcenterserviceimpl.mappers.MktMessagePOMapper;
 import com.bizvane.utils.enumutils.SysResponseEnum;
 import com.bizvane.utils.responseinfo.ResponseData;
 import com.bizvane.utils.tokens.SysAccountPO;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import lombok.extern.slf4j.Slf4j;
-import org.apache.poi.ss.formula.functions.T;
-import org.springframework.beans.BeanUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.util.CollectionUtils;
-import org.springframework.util.StringUtils;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * @author chen.li
@@ -83,11 +91,6 @@ public class ActivitySmartServiceImpl implements ActivitySmartService {
     private MktMessagePOMapper mktMessagePOMapper;
 
     @Autowired
-    private Award award;
-
-    @Autowired
-    private MemberInfoApiService memberInfoApiService;
-    @Autowired
     private MembersAdvancedSearchApiService membersAdvancedSearchApiService;
     @Autowired
     private MemberMessageSend memberMessageSend;
@@ -95,6 +98,10 @@ public class ActivitySmartServiceImpl implements ActivitySmartService {
     private CouponQueryServiceFeign couponQueryServiceFeign;
     @Autowired
     private GraphicTemplateServiceRpc graphicTemplateServiceRpc;
+    
+    @Autowired
+    private MktActivityCountPOMapper mktActivityCountPOMapper;
+    
     /**
      * 查询智能营销分组列表(方块)
      * @param vo
@@ -634,6 +641,16 @@ public class ActivitySmartServiceImpl implements ActivitySmartService {
         mktActivityPOMapper.insertSelective(mktActivityPOWithBLOBs);
         //获取新增后数据id
         Long mktActivityId = mktActivityPOWithBLOBs.getMktActivityId();
+        
+        // 新增活动统计表
+        MktActivityCountPO mktActivityCountPO = new MktActivityCountPO();
+        mktActivityCountPO.setMktActivityId(mktActivityId);
+        mktActivityCountPO.setSysCompanyId(mktActivityPOWithBLOBs.getSysCompanyId());
+        mktActivityCountPO.setSysBrandId(mktActivityPOWithBLOBs.getSysBrandId());
+        mktActivityCountPO.setCreateDate(new Date());
+        mktActivityCountPO.setCreateUserId(stageUser.getSysAccountId());
+        mktActivityCountPO.setCreateUserName(stageUser.getName());
+        mktActivityCountPOMapper.insertSelective(mktActivityCountPO);
 
         //新增智能营销表
         MktActivitySmartPO mktActivitySmartPO = new MktActivitySmartPO();
@@ -754,6 +771,16 @@ public class ActivitySmartServiceImpl implements ActivitySmartService {
         mktActivityPOMapper.insertSelective(mktActivityPOWithBLOBs);
         //获取新增后数据id
         Long mktActivityId = mktActivityPOWithBLOBs.getMktActivityId();
+        
+        // 新增活动统计表
+        MktActivityCountPO mktActivityCountPO = new MktActivityCountPO();
+        mktActivityCountPO.setMktActivityId(mktActivityId);
+        mktActivityCountPO.setSysCompanyId(mktActivityPOWithBLOBs.getSysCompanyId());
+        mktActivityCountPO.setSysBrandId(mktActivityPOWithBLOBs.getSysBrandId());
+        mktActivityCountPO.setCreateDate(new Date());
+        mktActivityCountPO.setCreateUserId(stageUser.getSysAccountId());
+        mktActivityCountPO.setCreateUserName(stageUser.getName());
+        mktActivityCountPOMapper.insertSelective(mktActivityCountPO);
 
         //新增智能营销表
         MktActivitySmartPO mktActivitySmartPO = new MktActivitySmartPO();
@@ -863,6 +890,16 @@ public class ActivitySmartServiceImpl implements ActivitySmartService {
         mktActivityPOMapper.insertSelective(mktActivityPOWithBLOBs);
         //获取新增后数据id
         Long mktActivityId = mktActivityPOWithBLOBs.getMktActivityId();
+        
+        // 新增活动统计表
+        MktActivityCountPO mktActivityCountPO = new MktActivityCountPO();
+        mktActivityCountPO.setMktActivityId(mktActivityId);
+        mktActivityCountPO.setSysCompanyId(mktActivityPOWithBLOBs.getSysCompanyId());
+        mktActivityCountPO.setSysBrandId(mktActivityPOWithBLOBs.getSysBrandId());
+        mktActivityCountPO.setCreateDate(new Date());
+        mktActivityCountPO.setCreateUserId(stageUser.getSysAccountId());
+        mktActivityCountPO.setCreateUserName(stageUser.getName());
+        mktActivityCountPOMapper.insertSelective(mktActivityCountPO);
 
         //新增智能营销表
         MktActivitySmartPO mktActivitySmartPO = new MktActivitySmartPO();
@@ -983,6 +1020,16 @@ public class ActivitySmartServiceImpl implements ActivitySmartService {
         mktActivityPOMapper.insertSelective(mktActivityPOWithBLOBs);
         //获取新增后数据id
         Long mktActivityId = mktActivityPOWithBLOBs.getMktActivityId();
+        
+        // 新增活动统计表
+        MktActivityCountPO mktActivityCountPO = new MktActivityCountPO();
+        mktActivityCountPO.setMktActivityId(mktActivityId);
+        mktActivityCountPO.setSysCompanyId(mktActivityPOWithBLOBs.getSysCompanyId());
+        mktActivityCountPO.setSysBrandId(mktActivityPOWithBLOBs.getSysBrandId());
+        mktActivityCountPO.setCreateDate(new Date());
+        mktActivityCountPO.setCreateUserId(stageUser.getSysAccountId());
+        mktActivityCountPO.setCreateUserName(stageUser.getName());
+        mktActivityCountPOMapper.insertSelective(mktActivityCountPO);
 
         //新增智能营销表
         MktActivitySmartPO mktActivitySmartPO = new MktActivitySmartPO();
@@ -1094,6 +1141,16 @@ public class ActivitySmartServiceImpl implements ActivitySmartService {
         mktActivityPOMapper.insertSelective(mktActivityPOWithBLOBs);
         //获取新增后数据id
         Long mktActivityId = mktActivityPOWithBLOBs.getMktActivityId();
+        
+        // 新增活动统计表
+        MktActivityCountPO mktActivityCountPO = new MktActivityCountPO();
+        mktActivityCountPO.setMktActivityId(mktActivityId);
+        mktActivityCountPO.setSysCompanyId(mktActivityPOWithBLOBs.getSysCompanyId());
+        mktActivityCountPO.setSysBrandId(mktActivityPOWithBLOBs.getSysBrandId());
+        mktActivityCountPO.setCreateDate(new Date());
+        mktActivityCountPO.setCreateUserId(stageUser.getSysAccountId());
+        mktActivityCountPO.setCreateUserName(stageUser.getName());
+        mktActivityCountPOMapper.insertSelective(mktActivityCountPO);
 
         //新增智能营销表
         MktActivitySmartPO mktActivitySmartPO = new MktActivitySmartPO();

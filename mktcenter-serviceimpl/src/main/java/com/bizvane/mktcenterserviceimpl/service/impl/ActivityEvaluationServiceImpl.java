@@ -17,6 +17,7 @@ import com.bizvane.mktcenterservice.models.bo.ActivityAnalysisCountBO;
 import com.bizvane.mktcenterservice.models.bo.ActivityBO;
 import com.bizvane.mktcenterservice.models.bo.AwardBO;
 import com.bizvane.mktcenterservice.models.bo.CtivityAnalysisBO;
+import com.bizvane.mktcenterservice.models.po.MktActivityCountPO;
 import com.bizvane.mktcenterservice.models.po.MktActivityEvaluationPO;
 import com.bizvane.mktcenterservice.models.po.MktActivityPOWithBLOBs;
 import com.bizvane.mktcenterservice.models.po.MktActivityRecordPO;
@@ -26,6 +27,7 @@ import com.bizvane.mktcenterserviceimpl.common.award.Award;
 import com.bizvane.mktcenterserviceimpl.common.enums.*;
 import com.bizvane.mktcenterserviceimpl.common.utils.CodeUtil;
 import com.bizvane.mktcenterserviceimpl.common.utils.ExecuteParamCheckUtil;
+import com.bizvane.mktcenterserviceimpl.mappers.MktActivityCountPOMapper;
 import com.bizvane.mktcenterserviceimpl.mappers.MktActivityEvaluationPOMapper;
 import com.bizvane.mktcenterserviceimpl.mappers.MktActivityPOMapper;
 import com.bizvane.mktcenterserviceimpl.mappers.MktActivityRecordPOMapper;
@@ -75,6 +77,10 @@ public class ActivityEvaluationServiceImpl implements ActivityEvaluationService 
     private Award award;
     @Autowired
     private StoreServiceRpc storeServiceRpc;
+    
+    @Autowired
+    private MktActivityCountPOMapper mktActivityCountPOMapper;
+    
     @Override
     public ResponseData<ActivityVO> getActivityEvaluationList(ActivityVO vo, PageForm pageForm,SysAccountPO stageUser) {
         log.info("查询评价奖励活动开始");
@@ -174,6 +180,17 @@ public class ActivityEvaluationServiceImpl implements ActivityEvaluationService 
         mktActivityPOMapper.insertSelective(mktActivityPOWithBLOBs);
         //获取新增后数据id
         Long mktActivityId = mktActivityPOWithBLOBs.getMktActivityId();
+        
+        // 新增活动统计表
+        MktActivityCountPO mktActivityCountPO = new MktActivityCountPO();
+        mktActivityCountPO.setMktActivityId(mktActivityId);
+        mktActivityCountPO.setSysCompanyId(mktActivityPOWithBLOBs.getSysCompanyId());
+        mktActivityCountPO.setSysBrandId(mktActivityPOWithBLOBs.getSysBrandId());
+        mktActivityCountPO.setCreateDate(new Date());
+        mktActivityCountPO.setCreateUserId(stageUser.getSysAccountId());
+        mktActivityCountPO.setCreateUserName(stageUser.getName());
+        mktActivityCountPOMapper.insertSelective(mktActivityCountPO);
+        
         //调用rpc返回的结果
         ResponseData<Long> rpcResponse = new ResponseData<>();
         if (i > 0) {
