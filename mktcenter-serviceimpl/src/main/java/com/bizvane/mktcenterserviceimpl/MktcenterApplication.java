@@ -19,7 +19,7 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 @EnableScheduling
 @EnableFeignClients(basePackages={"com.bizvane.centerstageservice.rpc","com.bizvane.members.facade.service.api",
 "com.bizvane.couponfacade.interfaces","com.bizvane.messagefacade.interfaces",
-"com.bizvane.wechatfacade.interfaces","com.bizvane.appletservice.Rpc","com.bizvane.centercontrolservice.rpc","com.bizvane.fitmentservice.models.Rpc"})
+"com.bizvane.wechatfacade.interfaces","com.bizvane.appletservice.rpc","com.bizvane.centercontrolservice.rpc","com.bizvane.fitmentservice.models.Rpc"})
 @MapperScan("com.bizvane.mktcenterserviceimpl.mappers")
 public class MktcenterApplication {
 

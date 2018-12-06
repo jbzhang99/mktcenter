@@ -7,6 +7,7 @@ import com.bizvane.mktcenterservice.models.po.MktCouponPO;
 import com.bizvane.mktcenterservice.models.vo.ActivitySmartVO;
 import com.bizvane.mktcenterservice.models.vo.MessageVO;
 import com.bizvane.mktcenterservice.models.vo.PageForm;
+import com.bizvane.mktcenterservice.models.vo.PictureMessageVO;
 import com.bizvane.utils.responseinfo.ResponseData;
 import com.bizvane.utils.tokens.SysAccountPO;
 import com.github.pagehelper.PageInfo;
@@ -140,6 +141,8 @@ public interface ActivitySmartService {
      * @return
      */
     public  ResponseData<Integer>  getPictureMessageCount(ActivitySmartVO vo);
+
+    public  ResponseData  getPictureLists(PictureMessageVO vo);
 
 
 }
