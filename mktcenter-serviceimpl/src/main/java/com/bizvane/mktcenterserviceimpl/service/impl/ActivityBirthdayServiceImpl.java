@@ -736,6 +736,8 @@ public class ActivityBirthdayServiceImpl implements ActivityBirthdayService {
             po.setAcitivityId(activityBirthday.getMktActivityId());
             po.setSysBrandId(activityBirthday.getSysBrandId());
             mktActivityRecordPOMapper.insertSelective(po);
+            
+            mktActivityCountPOMapper.updateSum(activityBirthday.getMktActivityId(), 1, BigDecimal.ZERO, activityBirthday.getPoints());
 
 //        }
     }

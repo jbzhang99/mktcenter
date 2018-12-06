@@ -437,6 +437,8 @@ public class ActivityManualServiceImpl implements ActivityManualService {
             mktActivityRecordPO.setModifiedUserName(memberInfoModel.getModifiedUserName());
             log.info("领券活动-执行活动-新增记录表，入参:"+JSON.toJSONString(mktActivityRecordPO));
             mktActivityRecordPOMapper.insertSelective(mktActivityRecordPO);
+            
+            mktActivityCountPOMapper.updateSum(vo.getMktActivityId(), 1, BigDecimal.ZERO, 0);
 
             //计算券还剩余领取几次
             Long countAllSum = mktActivityManualPO.getPerPersonMax()-countAll-1;

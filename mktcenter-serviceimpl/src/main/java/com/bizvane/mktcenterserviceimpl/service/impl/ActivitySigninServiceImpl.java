@@ -42,7 +42,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
-
+import java.math.BigDecimal;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -374,6 +374,8 @@ public class ActivitySigninServiceImpl implements ActivitySigninService {
             po.setSysBrandId(activityVO.getSysBrandId());
             log.info("新增积分记录表");
             mktActivityRecordPOMapper.insertSelective(po);
+            
+            mktActivityCountPOMapper.updateSum(po.getAcitivityId(), 1, BigDecimal.ZERO, po.getPoints());
         }
         responseData.setCode(SysResponseEnum.SUCCESS.getCode());
         responseData.setMessage(SysResponseEnum.SUCCESS.getMessage());

@@ -1066,6 +1066,7 @@ public class TaskServiceImpl implements TaskService {
         mktTaskCountPO.setCreateDate(new Date());
         
         mktTaskCountPOMapper.insertSelective(mktTaskCountPO);
+
         return task.getMktTaskId();
     }
 

@@ -1,5 +1,6 @@
 package com.bizvane.mktcenterserviceimpl.service.impl;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
@@ -459,13 +460,17 @@ public class ActivityRegisterServiceImpl implements ActivityRegisterService {
                 po.setActivityType(ActivityTypeEnum.ACTIVITY_TYPE_REGISGER.getCode());
                 po.setMemberCode(vo.getMemberCode());
                 po.setParticipateDate(new Date());
+                int points = 0;
                 if(null!=activityVO.getPoints()){
-                    po.setPoints(activityVO.getPoints());
+                    points = activityVO.getPoints();
+                    po.setPoints(points);
                 }
                 po.setAcitivityId(activityVO.getMktActivityId());
                 po.setSysBrandId(activityVO.getSysBrandId());
                 log.info("新增积分记录表");
                 mktActivityRecordPOMapper.insertSelective(po);
+                
+                mktActivityCountPOMapper.updateSum(po.getAcitivityId(), 1, BigDecimal.ZERO, points);
 
             }
 

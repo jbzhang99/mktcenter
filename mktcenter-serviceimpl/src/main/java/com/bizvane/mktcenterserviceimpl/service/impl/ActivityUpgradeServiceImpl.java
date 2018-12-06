@@ -56,6 +56,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
@@ -670,6 +671,8 @@ public class ActivityUpgradeServiceImpl implements ActivityUpgradeService {
             po.setSysBrandId(activityVO.getSysBrandId());
             log.info("新增积分记录表");
             mktActivityRecordPOMapper.insertSelective(po);
+            
+            mktActivityCountPOMapper.updateSum(po.getAcitivityId(), 1, BigDecimal.ZERO, po.getPoints());
         }
         responseData.setCode(SysResponseEnum.SUCCESS.getCode());
         responseData.setMessage(SysResponseEnum.SUCCESS.getMessage());

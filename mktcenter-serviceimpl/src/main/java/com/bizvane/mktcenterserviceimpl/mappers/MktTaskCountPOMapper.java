@@ -2,8 +2,11 @@ package com.bizvane.mktcenterserviceimpl.mappers;
 
 import com.bizvane.mktcenterservice.models.po.MktTaskCountPO;
 import com.bizvane.mktcenterservice.models.po.MktTaskCountPOExample;
+
+import java.math.BigDecimal;
 import java.util.List;
 import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.Update;
 
 public interface MktTaskCountPOMapper {
 
@@ -72,4 +75,14 @@ public interface MktTaskCountPOMapper {
    * @mbg.generated  2018-12-06 15:41:41
    */
   int updateByPrimaryKey(MktTaskCountPO record);
+  
+  @Update("update t_mkt_task_count set "
+      + "member_count=member_count+#{memberCount}, "
+      + "consume_amount_sum=consume_amount_sum + #{consumeAmount}, "
+      + " coupon_num_sum=coupon_num_sum + #{couponNum},  "
+      + "points_sum=points_sum + #{points} ,"
+      + "share_num_sum=share_num_sum + #{shareNum}"
+      + "where mkt_task_count_id=#{mktTaskCountId}")
+  int updateSum(@Param("mktTaskCountId") Long mktTaskCountId, @Param("memberCount") Integer memberCount,  @Param("consumeAmount") BigDecimal consumeAmount, 
+      @Param("couponNum") Integer couponNum, @Param("points") Integer points, @Param("shareNum") Integer shareNum);
 }

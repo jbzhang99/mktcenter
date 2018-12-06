@@ -735,6 +735,8 @@ public class ActivityOrderServiceImpl implements ActivityOrderService {
             po.setOrderAmount(new BigDecimal(activityVO.getOrderMinPrice()));
             log.info("新增积分记录表");
             mktActivityRecordPOMapper.insertSelective(po);
+            
+            mktActivityCountPOMapper.updateSum(po.getAcitivityId(), 1, po.getOrderAmount(), po.getPoints());
 
         }
         responseData.setCode(SysResponseEnum.SUCCESS.getCode());

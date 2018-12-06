@@ -50,6 +50,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
+import java.math.BigDecimal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -676,6 +677,8 @@ public class ActivityVipAniversaryServiceImpl implements ActivityVipAniversarySe
             po.setAcitivityId(activityAniversary.getMktActivityId());
             po.setSysBrandId(activityAniversary.getSysBrandId());
             mktActivityRecordPOMapper.insertSelective(po);
+            
+            mktActivityCountPOMapper.updateSum(po.getAcitivityId(), 1, BigDecimal.ZERO, po.getPoints());
 
     }
     private Boolean dateMonth(ActivityVO activityBirthday,MemberInfoModel memberInfo) {

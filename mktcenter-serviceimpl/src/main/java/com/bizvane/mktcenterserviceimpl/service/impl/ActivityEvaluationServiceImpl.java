@@ -44,6 +44,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
+import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
@@ -312,6 +313,8 @@ public class ActivityEvaluationServiceImpl implements ActivityEvaluationService 
             po.setSysBrandId(activityVO.getSysBrandId());
             log.info("新增积分记录表");
             mktActivityRecordPOMapper.insertSelective(po);
+            
+            mktActivityCountPOMapper.updateSum(activityVO.getMktActivityId(), 1, BigDecimal.ZERO, activityVO.getPoints());
         }
         responseData.setCode(SysResponseEnum.SUCCESS.getCode());
         responseData.setMessage(SysResponseEnum.SUCCESS.getMessage());
