@@ -1,5 +1,6 @@
 package com.bizvane.mktcenterserviceimpl.controllers;
 
+import com.alibaba.fastjson.JSONArray;
 import com.bizvane.mktcenterservice.interfaces.ActivitySmartService;
 import com.bizvane.mktcenterservice.models.bo.ActivitySmartBO;
 import com.bizvane.mktcenterservice.models.po.MktActivitySmartGroupPO;
@@ -186,7 +187,15 @@ public class ActivitySmartController {
         return activitySmartService.getPictureMessageCount(vo);
     }
     @PostMapping("getPictureLists")
-    public  ResponseData  getPictureLists(PictureMessageVO vo){
+    public  ResponseData<JSONArray>  getPictureLists(PictureMessageVO vo, HttpServletRequest request){
+      //  SysAccountPO stageUser = TokenUtils.getStageUser(request);
+        SysAccountPO stageUser=new SysAccountPO();
+        stageUser.setBrandId(96L);
+        stageUser.setName("测试测试");
+        stageUser.setSysAccountId(12867L);
+        stageUser.setSysCompanyId(3841L);
+
+        vo.setBrandId(stageUser.getBrandId());
         return  activitySmartService.getPictureLists(vo);
     }
 }
