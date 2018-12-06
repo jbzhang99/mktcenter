@@ -103,6 +103,10 @@ public class ActivityVipAniversaryServiceImpl implements ActivityVipAniversarySe
     private StoreServiceRpc storeServiceRpc;
     @Autowired
     private IntegralRecordApiService integralRecordApiService;
+    
+    @Autowired
+    private MktActivityCountPOMapper mktActivityCountPOMapper;
+    
     @Override
     public ResponseData<ActivityVO> getActivityVipAniversaryList(ActivityVO vo, PageForm pageForm,SysAccountPO stageUser) {
         log.info("查询纪念日活动列表开始");
@@ -224,6 +228,17 @@ public class ActivityVipAniversaryServiceImpl implements ActivityVipAniversarySe
         mktActivityPOMapper.insertSelective(mktActivityPOWithBLOBs);
         //获取新增后数据id
         Long mktActivityId = mktActivityPOWithBLOBs.getMktActivityId();
+        
+        // 新增活动统计表
+        MktActivityCountPO mktActivityCountPO = new MktActivityCountPO();
+        mktActivityCountPO.setMktActivityId(mktActivityId);
+        mktActivityCountPO.setSysCompanyId(mktActivityPOWithBLOBs.getSysCompanyId());
+        mktActivityCountPO.setSysBrandId(mktActivityPOWithBLOBs.getSysBrandId());
+        mktActivityCountPO.setCreateDate(new Date());
+        mktActivityCountPO.setCreateUserId(stageUser.getSysAccountId());
+        mktActivityCountPO.setCreateUserName(stageUser.getName());
+        mktActivityCountPOMapper.insertSelective(mktActivityCountPO);
+        
         if(i>0){
             //如果是待审核数据则需要增加一条审核数据l
             SysCheckPo po = new SysCheckPo();

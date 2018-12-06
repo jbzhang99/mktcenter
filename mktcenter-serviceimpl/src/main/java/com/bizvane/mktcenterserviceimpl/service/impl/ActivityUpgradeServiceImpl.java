@@ -106,6 +106,10 @@ public class ActivityUpgradeServiceImpl implements ActivityUpgradeService {
     private MemberMessageSend memberMessage;
     @Autowired
     private StoreServiceRpc storeServiceRpc;
+    
+    @Autowired
+    private MktActivityCountPOMapper mktActivityCountPOMapper;
+    
     /**
      * 查询升级活动列表
      * @param vo
@@ -244,6 +248,16 @@ public class ActivityUpgradeServiceImpl implements ActivityUpgradeService {
         mktActivityPOMapper.insertSelective(mktActivityPOWithBLOBs);
         //获取新增后数据id
         Long mktActivityId = mktActivityPOWithBLOBs.getMktActivityId();
+        
+        // 新增活动统计表
+        MktActivityCountPO mktActivityCountPO = new MktActivityCountPO();
+        mktActivityCountPO.setMktActivityId(mktActivityId);
+        mktActivityCountPO.setSysCompanyId(mktActivityPOWithBLOBs.getSysCompanyId());
+        mktActivityCountPO.setSysBrandId(mktActivityPOWithBLOBs.getSysBrandId());
+        mktActivityCountPO.setCreateDate(new Date());
+        mktActivityCountPO.setCreateUserId(stageUser.getSysAccountId());
+        mktActivityCountPO.setCreateUserName(stageUser.getName());
+        mktActivityCountPOMapper.insertSelective(mktActivityCountPO);
 
         if (i>0){
             //如果是待审核数据则需要增加一条审核数据

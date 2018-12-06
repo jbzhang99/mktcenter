@@ -699,26 +699,25 @@
 
   <!--效果分析-->
    <select id="getAnalysisResult" resultType="com.bizvane.mktcenterservice.models.vo.DayTaskRecordVo">
-     SELECT
-     tmt.mkt_task_id AS taskId,
-     tmt.task_code AS taskCode,
-     tmt.task_name AS taskName,
-     SUM(tmtr.points)  AS oneTaskPoints,
-     count(tmtr.member_code) AS oneTaskCountMbr,
-     count(tmtr.member_code) AS oneTaskShareTimes,
-     tmt.start_time,
-     tmt.create_date,
-     <!--<if test="taskType!=null and taskType!='1'.toString()">-->
-     <!--ROUND(TIMESTAMPDIFF(HOUR,tmt.start_time,tmt.end_time)/24,1) as taskDates-->
-     <!--</if>-->
-     <!--<if test="taskType!=null and taskType=='1'.toString()">-->
-     ROUND(TIMESTAMPDIFF(HOUR,tmt.start_time,now())/24,1) as taskDates
-     <!--</if>-->
-     FROM
-     t_mkt_task  tmt  LEFT JOIN
-     t_mkt_task_record tmtr ON tmt.mkt_task_id = tmtr.task_id AND tmtr.valid = 1
+	SELECT
+		tmt.mkt_task_id AS taskId,
+		tmt.task_code AS taskCode,
+		tmt.task_name AS taskName,
+		tmtr.points_sum AS oneTaskPoints,
+		tmtr.member_count AS oneTaskCountMbr,
+		tmtr.share_num_sum AS oneTaskShareTimes,
+		tmt.start_time,
+		tmt.create_date,
+		ROUND(
+			TIMESTAMPDIFF(HOUR, tmt.start_time, now()) / 24,
+			1
+		) AS taskDates
+	FROM
+		t_mkt_task tmt
+	JOIN t_mkt_task_count tmtr ON tmt.mkt_task_id = tmtr.mkt_task_id
      WHERE
      tmt.valid=1
+     AND tmtr.valid = 1
      AND tmt.sys_brand_id = #{brandId}
      AND tmt.task_type = #{taskType}
      <if test="taskName!=null and taskName!=''">
@@ -733,18 +732,18 @@
      <if test="taskStatus!=null and taskStatus!='0'.toString()">
        AND tmt.task_status=#{taskStatus}
      </if>
-     GROUP BY taskId,taskName
    </select>
   <select id="getAnalysisTotalData" resultType="com.bizvane.mktcenterservice.models.vo.DayTaskRecordVo">
-    SELECT
-    tmt.mkt_task_id AS taskId,
-    IFNULL(SUM(tmtr.points),0)  AS oneTaskPoints,
-    IFNULL(count(tmtr.member_code),0)AS oneTaskCountMbr
-    FROM
-    t_mkt_task  tmt  LEFT JOIN
-    t_mkt_task_record tmtr ON tmt.mkt_task_id = tmtr.task_id AND tmtr.valid = 1
+	SELECT
+		tmt.mkt_task_id AS taskId,
+		tmtr.points_sum AS oneTaskPoints,
+		tmtr.member_count AS oneTaskCountMbr
+	FROM
+		t_mkt_task tmt
+	JOIN t_mkt_task_count tmtr ON tmt.mkt_task_id = tmtr.mkt_task_id
     WHERE
     tmt.valid=1
+    AND tmtr.valid = 1
     AND tmt.sys_brand_id = #{brandId}
     AND tmt.task_type = #{taskType}
     <if test="taskName!=null and taskName!=''">
@@ -759,7 +758,6 @@
     <if test="taskStatus!=null and taskStatus!='0'.toString()">
       AND tmt.task_status=#{taskStatus}
     </if>
-    GROUP BY taskId
   </select>
 
   <select id="getAnalysisTotalCompletePeple" resultType="java.lang.Long">
