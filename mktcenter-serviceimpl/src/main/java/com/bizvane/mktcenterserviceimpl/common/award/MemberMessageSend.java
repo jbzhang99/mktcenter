@@ -384,6 +384,7 @@ public class MemberMessageSend {
                         activityMessageVO.setMemberPhone(memberInfoModel.getPhone());
                         activityMessageVO.setActivityLongtime("智能营销");
                         activityMessageVO.setUnl(mktMessage.getLink());
+                        activityMessageVO.setMemberName(memberInfoModel.getName());
                         //导航语
                         if (null!=mktMessage.getNavigation()){
                             activityMessageVO.setNavigation(mktMessage.getNavigation());

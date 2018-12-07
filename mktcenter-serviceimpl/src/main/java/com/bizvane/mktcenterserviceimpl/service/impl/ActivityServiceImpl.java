@@ -470,6 +470,7 @@ public class ActivityServiceImpl implements ActivityService {
         activityMessageVO.setMemberPhone(memberInfo.getPhone());
         activityMessageVO.setActivityLongtime("智能营销");
         activityMessageVO.setUnl(mktMessagePO.getLink());
+        activityMessageVO.setMemberName(memberInfo.getName());
         //导航语
         if (null!=mktMessagePO.getNavigation()){
             activityMessageVO.setNavigation(mktMessagePO.getNavigation());
