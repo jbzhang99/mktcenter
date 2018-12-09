@@ -50,14 +50,12 @@ public class OrderTaskListener implements MessageListener {
         log.info("订单信息--OrderTaskListener--"+modelStr);
         OrderModel model = JSONObject.parseObject(modelStr, OrderModel.class);
         //根据会员code获取会员详情
-
         String memberCode = model.getMemberCode();
         //订单列表   订单来源 1=线下   2=微商城
         Integer orderSource = model.getOrderFrom();
         Long companyId = model.getSysCompanyId();
         Long brandId = model.getBrandId();
         Date placeOrderTime = model.getPlaceOrderTime();
-
         MemberInfoModel memeberDetail = taskService.getCompanyMemeberDetail(memberCode);
         if (memeberDetail==null){
             log.info("订单信息--会员详情-不存在!");
@@ -79,70 +77,54 @@ public class OrderTaskListener implements MessageListener {
         //如果想测试消息重投的功能,可以将Action.CommitMessage 替换成Action.ReconsumeLater
       return Action.CommitMessage;
   }
-
-    //任务类型：1完善资料，2分享任务，3邀请注册，4累计消费次数，5累计消费金额',
-    private void doExecuteTask(OrderModel model, TaskAwardBO obj,Date placeOrderTime) {
+    //任务类型：4累计消费次数，5累计消费金额',
+    private synchronized void doExecuteTask(OrderModel model, TaskAwardBO obj,Date placeOrderTime) {
         log.info("开始执行订单奖励----");
         BigDecimal tradeAmount = model.getTradeAmount();//订单金额
         Long brandId = model.getBrandId();
         String memberCode = model.getMemberCode();
         Long sysCompanyId = model.getSysCompanyId();
-        // String carNo = model.getCarNo();
         Integer taskType = obj.getTaskType();
         Long mktTaskId = obj.getMktTaskId();
         BigDecimal consumeAmount = obj.getConsumeAmount();//累计金额
         Integer consumeTimes = obj.getConsumeTimes();//消费次数
         Integer points = obj.getPoints();//奖励积分
-        List<MktCouponPO> couponPOList = obj.getMktCouponPOList();//券
 
         MktTaskRecordVO recordVO = new MktTaskRecordVO();
         recordVO.setSysBrandId(brandId);
         recordVO.setTaskType(taskType);
         recordVO.setTaskId(mktTaskId);
         recordVO.setMemberCode(memberCode);
-
-        // 获取会员是否已经成功参与过某一活动
-        Boolean isOrNoAward = taskRecordService.getIsOrNoAward(recordVO);
-
+        Boolean isOrNoAward = taskRecordService.getIsOrNoAward(recordVO); // 获取会员是否已经成功参与过某一活动
+        recordVO.setPoints(points);
+        recordVO.setConsumeAmount(tradeAmount);
+        recordVO.setParticipateDate(placeOrderTime);
+        recordVO.setSysCompanyId(sysCompanyId);
+        recordVO.setCreateDate(new  Date());
         if (!isOrNoAward){
             MktTaskRecordPO recordPO = new MktTaskRecordPO();
             BeanUtils.copyProperties(recordVO,recordPO);
-            recordPO.setConsumeAmount(tradeAmount);
-            recordPO.setParticipateDate(placeOrderTime);
-            recordPO.setSysCompanyId(sysCompanyId);
-            recordPO.setCreateDate(new  Date());
             Long addRecordId = taskRecordService.addTaskRecord(recordPO);
-
-            recordPO.setMktTaskRecordId(addRecordId);
             //获取会员参与某一活动放总金额和总次数
              TotalStatisticsBO totalBO = taskRecordService.getTotalStatistics(recordVO);
-            log.info("--获取会员参与某一活动放总金额和总次数--"+JSON.toJSONString(totalBO));
-           // taskService.sendCouponAndPoint(memberCode,obj);   //每次都发测试后删除
+            log.info(mktTaskId+"获取会员参与某一任务放总金额和总次数--"+JSON.toJSONString(recordVO)+"-----"+JSON.toJSONString(totalBO));
             //累计消费次数任务=4
-                if (TaskTypeEnum.TASK_TYPE_CONSUME_TIMES.getCode()==taskType){
-                    if(totalBO!=null && totalBO.getTotalTimes()!=null && totalBO.getTotalTimes().equals(consumeTimes)){
-                            recordPO.setPoints(points);
+                if (TaskTypeEnum.TASK_TYPE_CONSUME_TIMES.getCode()==taskType && totalBO.getTotalTimes().equals(consumeTimes)){
+                            log.info(mktTaskId+"消费次数任务进行奖励--"+memberCode);
                             recordPO.setRewarded(Integer.valueOf(1));
                             recordPO.setModifiedDate(new Date());
-                            recordPO.setPoints(obj.getPoints());
                             taskRecordService.updateTaskRecord(recordPO);
                             taskService.sendCouponAndPoint(memberCode,obj);
-                    }
                 }
 
                 //累计金额任务=5
-                if (TaskTypeEnum.TASK_TYPE_CONSUME_AMOUNT.getCode()==taskType){
-                    if(totalBO!=null && totalBO.getTotalConsume()!=null && totalBO.getTotalConsume().compareTo(consumeAmount)!= -1){
+                if (TaskTypeEnum.TASK_TYPE_CONSUME_AMOUNT.getCode()==taskType && totalBO.getTotalConsume().compareTo(consumeAmount)!= -1){
+                           log.info(mktTaskId+"消费金额任务进行奖励--"+memberCode);
                             recordPO.setRewarded(Integer.valueOf(1));
                             recordPO.setModifiedDate(new Date());
-                            recordPO.setPoints(obj.getPoints());
                             taskRecordService.updateTaskRecord(recordPO);
                             taskService.sendCouponAndPoint(memberCode,obj);
-
-                    }
                 }
-
-
         }
    }
 
