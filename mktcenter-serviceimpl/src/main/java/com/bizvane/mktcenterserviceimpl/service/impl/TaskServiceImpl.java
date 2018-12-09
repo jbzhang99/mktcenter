@@ -695,7 +695,7 @@ public class TaskServiceImpl implements TaskService {
      * 任务类型：1完善资料，2分享任务，3邀请注册，4累计消费次数，5累计消费金额
      */
     @Override
-    @Async
+    @Async("asyncServiceExecutor")
     public void sendCouponAndPoint(String memberCode, TaskAwardBO orderAwardBO) {
         log.info("发送券和积分sendCouponAndPoint--参数--" + memberCode + "---" + JSON.toJSONString(orderAwardBO));
         Long mktTaskId = orderAwardBO.getMktTaskId();
@@ -719,8 +719,6 @@ public class TaskServiceImpl implements TaskService {
             integralRecordModel.setChangeType(IntegralChangeTypeEnum.INCOME.getCode());
             integralRecordModel.setChangeBills(taskCode);
             integralRecordModel.setChangeIntegral(orderAwardBO.getPoints());
-//            bo.setMktType(MktSmartTypeEnum.SMART_TYPE_INTEGRAL.getCode());
-//            bo.setIntegralRecordModel(integralRecordModel);
             log.info("任务发送积分的参数--" + JSON.toJSONString(integralRecordModel));
             IntegralChangeResponseModel integralChangeResponseModel = integralChangeApiService.integralChangeOperate(integralRecordModel);
             log.info("任务发积分结果打印======" + JSON.toJSONString(integralChangeResponseModel));
