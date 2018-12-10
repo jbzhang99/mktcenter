@@ -20,9 +20,8 @@ import com.bizvane.members.facade.service.card.request.IntegralChangeRequestMode
 import com.bizvane.members.facade.vo.MemberInfoApiModel;
 import com.bizvane.members.facade.vo.MemberInfoVo;
 import com.bizvane.members.facade.vo.WxChannelInfoVo;
-import com.bizvane.messagefacade.models.vo.ActivityMessageVO;
-import com.bizvane.messagefacade.models.vo.MemberMessageVO;
-import com.bizvane.messagefacade.models.vo.SysSmsConfigVO;
+import com.bizvane.messagefacade.interfaces.TemplateMessageServiceFeign;
+import com.bizvane.messagefacade.models.vo.*;
 import com.bizvane.mktcenterservice.interfaces.ActivityBirthdayService;
 import com.bizvane.mktcenterservice.interfaces.ActivityService;
 import com.bizvane.mktcenterservice.interfaces.ActivityVipAniversaryService;
@@ -32,6 +31,7 @@ import com.bizvane.mktcenterservice.models.vo.ActivitySmartVO;
 import com.bizvane.mktcenterservice.models.vo.ActivityVO;
 import com.bizvane.mktcenterserviceimpl.common.enums.BusinessTypeEnum;
 import com.bizvane.mktcenterserviceimpl.common.enums.MktSmartTypeEnum;
+import com.bizvane.mktcenterserviceimpl.mappers.MktActivityPOMapper;
 import com.bizvane.mktcenterserviceimpl.mappers.MktCouponPOMapper;
 import com.bizvane.mktcenterserviceimpl.mappers.MktMessagePOMapper;
 import com.bizvane.utils.responseinfo.PageInfo;
@@ -44,6 +44,7 @@ import org.springframework.util.CollectionUtils;
 
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * 查询会员发送消息
@@ -69,6 +70,9 @@ public class MemberMessageSend {
     private MktMessagePOMapper mktMessagePOMapper;
 
     @Autowired
+    private MktActivityPOMapper mktActivityPOMapper;
+
+    @Autowired
     private WxChannelInfoAdvancedSearchApiService wxChannelInfoAdvancedSearchApiServic;
     @Autowired
     private MembersAdvancedSearchApiService membersAdvancedSearchApiService;
@@ -78,6 +82,8 @@ public class MemberMessageSend {
     private BrandServiceRpc brandServiceRpc;
     @Autowired
     private  WxChannelInfoApiService wxChannelInfoApiService;
+    @Autowired
+    private  TemplateMessageServiceFeign templateMessageServiceFeign;
     /**
      * 查询会员信息发送你个短信和微信消息
      * @param messageVOList
@@ -171,25 +177,51 @@ public class MemberMessageSend {
      * @param membersInfoSearchVo
      */
     @Async("asyncServiceExecutor")
-    public  void sendPictureMessage(MktMessagePO mktMessagePO, MembersInfoSearchVo membersInfoSearchVo) {
+    public  void sendPictureMessage(MktMessagePO mktMessagePO, MembersInfoSearchVo membersInfoSearchVo,String groupName, Long brandId,Long sysCompanyId) {
+        Long bizId = mktMessagePO.getBizId();
         String msgContent = mktMessagePO.getMsgContent();
         JSONObject jsonObject = JSON.parseObject(msgContent);
-        jsonObject.getString("media_id");
+        String media_id = jsonObject.getString("media_id");//图文ID
         JSONObject content = jsonObject.getJSONObject("content");
         JSONArray news_item = content.getJSONArray("news_item");
         JSONObject titlejsonObject = news_item.getJSONObject(0);
-        String title = titlejsonObject.getString("title");
+        String title = titlejsonObject.getString("title");//标题
 
         ResponseData<com.bizvane.utils.responseinfo.PageInfo<MemberInfoVo>> memberInfoVoPage = membersAdvancedSearchApiService.search(membersInfoSearchVo);
-        for (int a =1;a<=memberInfoVoPage.getData().getPages();a++) {
+        PageInfo<MemberInfoVo> data = memberInfoVoPage.getData();
+        long total = data.getTotal();
+        for (int a =1;a<=data.getPages();a++) {
             membersInfoSearchVo.setPageNumber(a);
             ResponseData<com.bizvane.utils.responseinfo.PageInfo<MemberInfoVo>> memberInfoVoPages = membersAdvancedSearchApiService.search(membersInfoSearchVo);
             List<MemberInfoVo> memberInfoModelList = memberInfoVoPages.getData().getList();
-            for (MemberInfoModel memberInfo:memberInfoModelList) {
-                String openId = wxChannelInfoApiService.getWxOpenIdByMemberCode(memberInfo.getMemberCode()).getData();
-                log.info("sendPictureMessage  of member:"+JSON.toJSONString(memberInfo));
-               // activityService.sendWx(mktMessagePO, awardBO, memberMessageVO, memberInfo);
-            }
+            StringBuilder stringBuilder = new StringBuilder();
+//            for (int i = 0,lenth=memberInfoModelList.size(); i <lenth ; i++) {
+//                if (i!=0){
+//                    stringBuilder.append(",");
+//                }
+//                MemberInfoVo memberInfoVo = memberInfoModelList.get(i);
+//                String openId = wxChannelInfoApiService.getWxOpenIdByMemberCode(memberInfoVo.getMemberCode()).getData();
+//                log.info("sendPictureMessage  of member:"+JSON.toJSONString(memberInfoVo));
+//                stringBuilder.append(openId);
+//            }
+//            String openIdStr = stringBuilder.toString();
+            String openIdStr = memberInfoModelList.stream().map(obj -> wxChannelInfoApiService.getWxOpenIdByMemberCode(obj.getMemberCode()).getData()).collect(Collectors.joining(","));
+            SendTuWenMessageVO vo = new SendTuWenMessageVO();
+            vo.setBrandId(brandId);
+            vo.setSysCompanyId(sysCompanyId);
+            vo.setMsgType("news");
+            vo.setTaskId(bizId);
+            vo.setGroupName(groupName);
+            vo.setHeadlTitle(title);
+            vo.setMediaId(media_id);
+            vo.setMemberSum(String.valueOf(total));
+            vo.setOpenIdS(openIdStr);
+            vo.setSendIgnoreReprint("1");
+            log.info("sendPictureMessage param:"+JSON.toJSONString(vo));
+            Result<String> stringResult = templateMessageServiceFeign.sendTuWenMessage(vo);
+            log.info("sendPictureMessage result:"+stringResult);
+
+
         }
     }
     /**

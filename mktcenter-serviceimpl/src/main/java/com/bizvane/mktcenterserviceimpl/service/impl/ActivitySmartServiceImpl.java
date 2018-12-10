@@ -1,16 +1,6 @@
 package com.bizvane.mktcenterserviceimpl.service.impl;
 
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-
-import org.springframework.beans.BeanUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.util.CollectionUtils;
-import org.springframework.util.StringUtils;
-
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
@@ -20,18 +10,11 @@ import com.bizvane.couponfacade.interfaces.CouponQueryServiceFeign;
 import com.bizvane.couponfacade.models.vo.CouponDetailResponseVO;
 import com.bizvane.members.facade.es.pojo.MembersInfoSearchPojo;
 import com.bizvane.members.facade.es.vo.MembersInfoSearchVo;
+import com.bizvane.members.facade.models.MbrGroupModel;
+import com.bizvane.members.facade.service.api.MemberGroupApiService;
 import com.bizvane.members.facade.service.api.MembersAdvancedSearchApiService;
 import com.bizvane.mktcenterservice.interfaces.ActivitySmartService;
-import com.bizvane.mktcenterservice.models.po.MktActivityCountPO;
-import com.bizvane.mktcenterservice.models.po.MktActivityPOWithBLOBs;
-import com.bizvane.mktcenterservice.models.po.MktActivitySmartGroupPO;
-import com.bizvane.mktcenterservice.models.po.MktActivitySmartGroupPOExample;
-import com.bizvane.mktcenterservice.models.po.MktActivitySmartPO;
-import com.bizvane.mktcenterservice.models.po.MktActivitySmartPOExample;
-import com.bizvane.mktcenterservice.models.po.MktCouponPO;
-import com.bizvane.mktcenterservice.models.po.MktCouponPOExample;
-import com.bizvane.mktcenterservice.models.po.MktMessagePO;
-import com.bizvane.mktcenterservice.models.po.MktMessagePOExample;
+import com.bizvane.mktcenterservice.models.po.*;
 import com.bizvane.mktcenterservice.models.vo.ActivitySmartVO;
 import com.bizvane.mktcenterservice.models.vo.MessageVO;
 import com.bizvane.mktcenterservice.models.vo.PageForm;
@@ -40,27 +23,26 @@ import com.bizvane.mktcenterserviceimpl.common.award.MemberMessageSend;
 import com.bizvane.mktcenterserviceimpl.common.constants.ActivityConstants;
 import com.bizvane.mktcenterserviceimpl.common.constants.ResponseConstants;
 import com.bizvane.mktcenterserviceimpl.common.constants.SystemConstants;
-import com.bizvane.mktcenterserviceimpl.common.enums.ActivityStatusEnum;
-import com.bizvane.mktcenterserviceimpl.common.enums.ActivityTypeEnum;
-import com.bizvane.mktcenterserviceimpl.common.enums.BusinessTypeEnum;
-import com.bizvane.mktcenterserviceimpl.common.enums.CheckStatusEnum;
-import com.bizvane.mktcenterserviceimpl.common.enums.MktSmartTypeEnum;
+import com.bizvane.mktcenterserviceimpl.common.enums.*;
 import com.bizvane.mktcenterserviceimpl.common.job.JobUtil;
 import com.bizvane.mktcenterserviceimpl.common.utils.CodeUtil;
 import com.bizvane.mktcenterserviceimpl.common.utils.TimeUtils;
-import com.bizvane.mktcenterserviceimpl.mappers.MktActivityCountPOMapper;
-import com.bizvane.mktcenterserviceimpl.mappers.MktActivityPOMapper;
-import com.bizvane.mktcenterserviceimpl.mappers.MktActivitySmartGroupPOMapper;
-import com.bizvane.mktcenterserviceimpl.mappers.MktActivitySmartPOMapper;
-import com.bizvane.mktcenterserviceimpl.mappers.MktCouponPOMapper;
-import com.bizvane.mktcenterserviceimpl.mappers.MktMessagePOMapper;
+import com.bizvane.mktcenterserviceimpl.mappers.*;
 import com.bizvane.utils.enumutils.SysResponseEnum;
 import com.bizvane.utils.responseinfo.ResponseData;
 import com.bizvane.utils.tokens.SysAccountPO;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
+import org.springframework.util.StringUtils;
+
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 /**
  * @author chen.li
@@ -101,7 +83,9 @@ public class ActivitySmartServiceImpl implements ActivitySmartService {
     
     @Autowired
     private MktActivityCountPOMapper mktActivityCountPOMapper;
-    
+
+    @Autowired
+    private MemberGroupApiService memberGroupApiService;
     /**
      * 查询智能营销分组列表(方块)
      * @param vo
@@ -1093,6 +1077,8 @@ public class ActivitySmartServiceImpl implements ActivitySmartService {
             responseData.setMessage(SysResponseEnum.MODEL_FAILED_VALIDATION.getMessage());
             return responseData;
         }
+        Long brandId = stageUser.getBrandId();
+        Long sysCompanyId = stageUser.getSysCompanyId();
 
         vo.setCreateUserId(stageUser.getSysAccountId());
         vo.setCreateDate(new Date());
@@ -1180,11 +1166,20 @@ public class ActivitySmartServiceImpl implements ActivitySmartService {
             // MembersInfoSearchVo membersInfoSearchVo=jsonObject.toJavaObject(MembersInfoSearchVo.class);
             MembersInfoSearchVo membersInfoSearchVo=JSON.parseObject(targetMbr,MembersInfoSearchVo.class);
             membersInfoSearchVo.setPageNumber(1);
-            membersInfoSearchVo.setPageSize(1000);
+            membersInfoSearchVo.setPageSize(10000);
             membersInfoSearchVo.setBrandId(stageUser.getBrandId());
             membersInfoSearchVo.setSysCompanyId(stageUser.getSysCompanyId());
-
-            memberMessageSend.sendPictureMessage(mktMessagePO, membersInfoSearchVo);
+            Long mbrGroupDefId = mktActivityPOWithBLOBs.getMbrGroupDefId();
+            Long mktActivitySmartGroupId = mktActivityPOWithBLOBs.getMktActivitySmartGroupId();
+            String groupName= null;
+            if (mbrGroupDefId!=null){
+                MbrGroupModel data = memberGroupApiService.queryGroupInfo(mbrGroupDefId).getData();
+                groupName=data==null?null:data.getName();
+            }else if (mktActivitySmartGroupId!=null){
+                MktActivitySmartGroupPO mktActivitySmartGroupPO = mktActivitySmartGroupPOMapper.selectByPrimaryKey(mktActivitySmartGroupId);
+                groupName=mktActivitySmartGroupPO==null?null:mktActivitySmartGroupPO.getMemberGroupName();
+            }
+        memberMessageSend.sendPictureMessage(mktMessagePO, membersInfoSearchVo,groupName,brandId,sysCompanyId);
 
 
         responseData.setMessage(ResponseConstants.SUCCESS_MSG);
