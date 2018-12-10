@@ -44,6 +44,7 @@ spring:
     time-zone: GMT+8
 eureka:
   instance:
+    prefer-ip-address: true
     metadata-map:
       #      user.name: ${spring.security.user.name}
       #      user.password: ${spring.security.user.password}
