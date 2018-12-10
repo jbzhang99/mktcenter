@@ -121,8 +121,8 @@ public class OrderTaskListener implements MessageListener {
                             log.info(mktTaskId+"消费次数任务进行奖励--"+memberCode);
                             recordPO.setRewarded(Integer.valueOf(1));
                             recordPO.setModifiedDate(new Date());
-                            taskRecordService.updateTaskRecord(recordPO);
                             taskService.sendCouponAndPoint(memberCode,obj);
+                            taskRecordService.updateTaskRecord(recordPO);
                 }
 
                 //累计金额任务=5
@@ -130,8 +130,8 @@ public class OrderTaskListener implements MessageListener {
                            log.info(mktTaskId+"消费金额任务进行奖励--"+memberCode);
                             recordPO.setRewarded(Integer.valueOf(1));
                             recordPO.setModifiedDate(new Date());
-                            taskRecordService.updateTaskRecord(recordPO);
                             taskService.sendCouponAndPoint(memberCode,obj);
+                            taskRecordService.updateTaskRecord(recordPO);
                 }
         }
    }
