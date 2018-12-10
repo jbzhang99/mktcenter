@@ -8,12 +8,10 @@ import com.aliyun.openservices.ons.api.Message;
 import com.aliyun.openservices.ons.api.MessageListener;
 import com.bizvane.members.facade.models.MemberInfoModel;
 import com.bizvane.members.facade.models.OrderModel;
-import com.bizvane.members.facade.models.OrderServeModel;
 import com.bizvane.mktcenterservice.interfaces.TaskRecordService;
 import com.bizvane.mktcenterservice.interfaces.TaskService;
 import com.bizvane.mktcenterservice.models.bo.TaskAwardBO;
 import com.bizvane.mktcenterservice.models.bo.TotalStatisticsBO;
-import com.bizvane.mktcenterservice.models.po.MktCouponPO;
 import com.bizvane.mktcenterservice.models.po.MktTaskRecordPO;
 import com.bizvane.mktcenterservice.models.vo.MktTaskRecordVO;
 import com.bizvane.mktcenterserviceimpl.common.enums.TaskTypeEnum;
@@ -24,7 +22,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.util.Date;
@@ -53,10 +50,10 @@ public class OrderTaskListener implements MessageListener {
         log.info("订单信息--OrderTaskListener--"+modelStr);
         OrderModel model = JSONObject.parseObject(modelStr, OrderModel.class);
         boolean lockBoolean= jedisLock.tryGetDistributedLock();
-        if(!lockBoolean){
-            log.info("订单号--lock--"+model.getOrderNo());
-           return  Action.ReconsumeLater;
-        }
+//        if(!lockBoolean){
+//            log.info("订单号--lock--"+model.getOrderNo());
+//           return  Action.ReconsumeLater;
+//        }
         //根据会员code获取会员详情
         String memberCode = model.getMemberCode();
         //订单列表   订单来源 1=线下   2=微商城
@@ -83,12 +80,12 @@ public class OrderTaskListener implements MessageListener {
                this.doExecuteTask(model, obj,placeOrderTime); });
         }
         //如果想测试消息重投的功能,可以将Action.CommitMessage 替换成Action.ReconsumeLater
-        jedisLock.releaseDistributedLock();
+        //jedisLock.releaseDistributedLock();
       return Action.CommitMessage;
   }
     //任务类型：4累计消费次数，5累计消费金额',
     private synchronized void doExecuteTask(OrderModel model, TaskAwardBO obj,Date placeOrderTime) {
-        log.info("开始执行订单奖励----");
+        log.info("任务开始执行订单奖励----");
         BigDecimal tradeAmount = model.getTradeAmount();//订单金额
         Long brandId = model.getBrandId();
         String memberCode = model.getMemberCode();
