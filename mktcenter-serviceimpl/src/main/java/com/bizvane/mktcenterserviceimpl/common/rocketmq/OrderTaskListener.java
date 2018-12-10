@@ -49,7 +49,7 @@ public class OrderTaskListener implements MessageListener {
         String modelStr= new String(message.getBody());
         log.info("订单信息--OrderTaskListener--"+modelStr);
         OrderModel model = JSONObject.parseObject(modelStr, OrderModel.class);
-        boolean lockBoolean= jedisLock.tryGetDistributedLock();
+//        boolean lockBoolean= jedisLock.tryGetDistributedLock();
 //        if(!lockBoolean){
 //            log.info("订单号--lock--"+model.getOrderNo());
 //           return  Action.ReconsumeLater;
