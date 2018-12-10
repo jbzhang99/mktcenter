@@ -17,6 +17,7 @@ import com.bizvane.mktcenterservice.models.po.MktCouponPO;
 import com.bizvane.mktcenterservice.models.po.MktTaskRecordPO;
 import com.bizvane.mktcenterservice.models.vo.MktTaskRecordVO;
 import com.bizvane.mktcenterserviceimpl.common.enums.TaskTypeEnum;
+import com.bizvane.mktcenterserviceimpl.common.lockUtils.JedisLock;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -42,6 +43,8 @@ public class OrderTaskListener implements MessageListener {
     private TaskService taskService;
     @Autowired
     private TaskRecordService taskRecordService;
+    @Autowired
+    private JedisLock jedisLock;
 
     @Override
     public Action consume(Message message, ConsumeContext consumeContext) {
@@ -49,6 +52,11 @@ public class OrderTaskListener implements MessageListener {
         String modelStr= new String(message.getBody());
         log.info("订单信息--OrderTaskListener--"+modelStr);
         OrderModel model = JSONObject.parseObject(modelStr, OrderModel.class);
+        boolean lockBoolean= jedisLock.tryGetDistributedLock();
+        if(!lockBoolean){
+            log.info("订单号--lock--"+model.getOrderNo());
+           return  Action.ReconsumeLater;
+        }
         //根据会员code获取会员详情
         String memberCode = model.getMemberCode();
         //订单列表   订单来源 1=线下   2=微商城
