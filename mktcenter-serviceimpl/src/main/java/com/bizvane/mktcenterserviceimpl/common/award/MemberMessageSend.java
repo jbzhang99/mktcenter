@@ -1,6 +1,8 @@
 package com.bizvane.mktcenterserviceimpl.common.award;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import com.bizvane.centerstageservice.models.po.SysBrandPo;
 import com.bizvane.centerstageservice.rpc.BrandServiceRpc;
 import com.bizvane.couponfacade.enums.SendTypeEnum;
@@ -15,6 +17,7 @@ import com.bizvane.members.facade.models.MemberInfoModel;
 import com.bizvane.members.facade.service.api.MemberInfoApiService;
 import com.bizvane.members.facade.service.api.MembersAdvancedSearchApiService;
 import com.bizvane.members.facade.service.api.WxChannelInfoAdvancedSearchApiService;
+import com.bizvane.members.facade.service.api.WxChannelInfoApiService;
 import com.bizvane.members.facade.service.card.request.IntegralChangeRequestModel;
 import com.bizvane.members.facade.vo.MemberInfoApiModel;
 import com.bizvane.members.facade.vo.MemberInfoVo;
@@ -78,6 +81,8 @@ public class MemberMessageSend {
     private ActivityService activityService;
     @Autowired
     private BrandServiceRpc brandServiceRpc;
+    @Autowired
+    private  WxChannelInfoApiService wxChannelInfoApiService;
     /**
      * 查询会员信息发送你个短信和微信消息
      * @param messageVOList
@@ -172,14 +177,21 @@ public class MemberMessageSend {
      */
     @Async("asyncServiceExecutor")
     public  void sendPictureMessage(MktMessagePO mktMessagePO, MembersInfoSearchVo membersInfoSearchVo) {
+        String msgContent = mktMessagePO.getMsgContent();
+        JSONObject jsonObject = JSON.parseObject(msgContent);
+        jsonObject.getString("media_id")
+        JSONObject content = jsonObject.getJSONObject("content");
+        JSONArray news_item = content.getJSONArray("news_item");
+        JSONObject titlejsonObject = news_item.getJSONObject(0);
+        String title = titlejsonObject.getString("title");
+
         ResponseData<com.bizvane.utils.responseinfo.PageInfo<MemberInfoVo>> memberInfoVoPage = membersAdvancedSearchApiService.search(membersInfoSearchVo);
         for (int a =1;a<=memberInfoVoPage.getData().getPages();a++) {
             membersInfoSearchVo.setPageNumber(a);
             ResponseData<com.bizvane.utils.responseinfo.PageInfo<MemberInfoVo>> memberInfoVoPages = membersAdvancedSearchApiService.search(membersInfoSearchVo);
             List<MemberInfoVo> memberInfoModelList = memberInfoVoPages.getData().getList();
             for (MemberInfoModel memberInfo:memberInfoModelList) {
-                MemberMessageVO memberMessageVO = new MemberMessageVO();
-                AwardBO awardBO = new AwardBO();
+                String openId = wxChannelInfoApiService.getWxOpenIdByMemberCode(memberInfo.getMemberCode()).getData();
                 log.info("sendPictureMessage  of member:"+JSON.toJSONString(memberInfo));
                // activityService.sendWx(mktMessagePO, awardBO, memberMessageVO, memberInfo);
             }

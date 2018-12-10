@@ -83,6 +83,7 @@ public class OrderTaskListener implements MessageListener {
                this.doExecuteTask(model, obj,placeOrderTime); });
         }
         //如果想测试消息重投的功能,可以将Action.CommitMessage 替换成Action.ReconsumeLater
+        jedisLock.releaseDistributedLock();
       return Action.CommitMessage;
   }
     //任务类型：4累计消费次数，5累计消费金额',
