@@ -144,6 +144,10 @@ public class ActivityOrderServiceImpl implements ActivityOrderService {
         ResponseData responseData = new ResponseData();
         //得到大实体类
         ActivityVO activityVO = bo.getActivityVO();
+        //判断是否是全部等级
+        if (activityVO.getMbrLevelCode().equals("0")){
+            activityVO.setMbrLevelName("全部等级");
+        }
         //判断活动开始时间是否大于当前时间
         if( new Date().after(activityVO.getStartTime())){
             responseData.setCode(SysResponseEnum.MODEL_FAILED_VALIDATION.getCode());
