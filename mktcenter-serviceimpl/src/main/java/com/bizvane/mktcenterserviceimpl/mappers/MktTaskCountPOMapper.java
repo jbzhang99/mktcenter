@@ -82,7 +82,7 @@ public interface MktTaskCountPOMapper {
       + " coupon_num_sum=coupon_num_sum + #{couponNum},  "
       + " points_sum=points_sum + #{points} ,"
       + " share_num_sum=share_num_sum + #{shareNum} "
-      + " where mkt_task_count_id=#{mktTaskCountId} ")
-  int updateSum(@Param("mktTaskCountId") Long mktTaskCountId, @Param("memberCount") Integer memberCount,  @Param("consumeAmount") BigDecimal consumeAmount, 
+      + " where mkt_task_id=#{mktTaskId} ")
+  int updateSum(@Param("mktTaskId") Long mktTaskId, @Param("memberCount") Integer memberCount,  @Param("consumeAmount") BigDecimal consumeAmount, 
       @Param("couponNum") Integer couponNum, @Param("points") Integer points, @Param("shareNum") Integer shareNum);
 }
