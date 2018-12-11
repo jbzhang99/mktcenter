@@ -9,8 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
  * @Author: lijunwei
  * @Time: 2018/8/27 16:06
  */
-@FeignClient("${feign.client.mktcenter.name}")
-@RequestMapping("${feign.client.mktcenter.path}/taskInviteRpc")
+@FeignClient(value = "${feign.client.mktcenter.name}",path = "${feign.client.mktcenter.path}/taskInviteRpc")
 public interface TaskInviteServiceRpc {
 
     @RequestMapping("/doTaskInvite")

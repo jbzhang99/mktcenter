@@ -11,6 +11,7 @@ import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.bizvane.members.facade.service.card.response.IntegralChangeResponseModel;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
@@ -714,7 +715,8 @@ public class ActivityBirthdayServiceImpl implements ActivityBirthdayService {
             integralChangeRequestModel.setBusinessType(com.bizvane.members.facade.enums.BusinessTypeEnum.ACTIVITY_TYPE_BIRTHDAY.getCode());
             integralChangeRequestModel.setChangeDate(new Date());
             log.info("执行升级活动开始开始增加积分增加积分++++++");
-            integralChangeApiService.integralChangeOperate(integralChangeRequestModel);
+            IntegralChangeResponseModel integralChangeResponseModel =integralChangeApiService.integralChangeOperate(integralChangeRequestModel);
+            log.info("增加积分返回结果为------------："+ JSON.toJSONString(integralChangeResponseModel));
             // 增加卷奖励接口
             MktCouponPOExample example = new  MktCouponPOExample();
             example.createCriteria().andBizIdEqualTo(activityBirthday.getMktActivityId()).andValidEqualTo(true).andBizTypeEqualTo(1);
@@ -729,7 +731,8 @@ public class ActivityBirthdayServiceImpl implements ActivityBirthdayService {
                 va.setBrandId(activityBirthday.getSysBrandId());
                 va.setCompanyId(activityBirthday.getSysCompanyId());
                 log.info("执行升级活动开始开始增加券增加券~~~~~~~~~~");
-                sendCouponServiceFeign.simple(va);
+                ResponseData<Object> responseData=sendCouponServiceFeign.simple(va);
+                log.info("增加券返回结果为------------："+ JSON.toJSONString(responseData));
             }
             //新增积分到会员参与活动记录表中数据
             MktActivityRecordPO po = new MktActivityRecordPO();

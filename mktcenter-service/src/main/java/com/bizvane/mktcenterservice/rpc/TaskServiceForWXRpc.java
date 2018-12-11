@@ -23,8 +23,7 @@ import java.util.List;
  * Created by Geng on 2018/8/9.
  */
 
-@FeignClient("${feign.client.mktcenter.name}")
-@RequestMapping("${feign.client.mktcenter.path}/taskForWXRpc")
+@FeignClient(value = "${feign.client.mktcenter.name}",path = "${feign.client.mktcenter.path}/taskForWXRpc")
 public interface TaskServiceForWXRpc {
 
 

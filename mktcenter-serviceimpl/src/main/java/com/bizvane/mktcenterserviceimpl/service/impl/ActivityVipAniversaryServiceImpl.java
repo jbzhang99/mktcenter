@@ -20,6 +20,7 @@ import com.bizvane.members.facade.models.MemberInfoModel;
 import com.bizvane.members.facade.service.api.IntegralChangeApiService;
 import com.bizvane.members.facade.service.api.IntegralRecordApiService;
 import com.bizvane.members.facade.service.card.request.IntegralChangeRequestModel;
+import com.bizvane.members.facade.service.card.response.IntegralChangeResponseModel;
 import com.bizvane.members.facade.vo.IntegralRecordVo;
 import com.bizvane.mktcenterservice.interfaces.ActivityVipAniversaryService;
 import com.bizvane.mktcenterservice.models.bo.ActivityBO;
@@ -654,7 +655,8 @@ public class ActivityVipAniversaryServiceImpl implements ActivityVipAniversarySe
             integralChangeRequestModel.setBusinessType(com.bizvane.members.facade.enums.BusinessTypeEnum.TASK_TYPE_MEMORIAL_DAY.getCode());
             integralChangeRequestModel.setChangeDate(new Date());
             log.info("执行纪念日活动开始开始增加积分增加积分++++++");
-            integralChangeApiService.integralChangeOperate(integralChangeRequestModel);
+            IntegralChangeResponseModel integralChangeResponseModel =integralChangeApiService.integralChangeOperate(integralChangeRequestModel);
+            log.info("增加积分返回结果为------------："+ JSON.toJSONString(integralChangeResponseModel));
             // 增加卷奖励接口
         // 增加卷奖励接口
         MktCouponPOExample example = new  MktCouponPOExample();
@@ -670,7 +672,8 @@ public class ActivityVipAniversaryServiceImpl implements ActivityVipAniversarySe
             va.setBrandId(activityAniversary.getSysBrandId());
             va.setCompanyId(activityAniversary.getSysCompanyId());
             log.info("执行纪念日活动开始开始增加券增加券~~~~~~~~~~");
-            sendCouponServiceFeign.simple(va);
+            ResponseData<Object> responseData=sendCouponServiceFeign.simple(va);
+            log.info("增加券返回结果为------------："+ JSON.toJSONString(responseData));
         }
             //新增积分到会员参与活动记录表中数据
             MktActivityRecordPO po = new MktActivityRecordPO();

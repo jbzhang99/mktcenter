@@ -1116,6 +1116,13 @@ public class ActivitySmartServiceImpl implements ActivitySmartService {
             responseData.setMessage(SysResponseEnum.MODEL_FAILED_VALIDATION.getMessage());
             return responseData;
         }
+
+        Integer count = this.getPictureMessageCount(vo).getData();
+        if (count<1){
+            responseData.setCode(SysResponseEnum.FAILED.getCode());
+            responseData.setMessage("本月发送图文消息的次数不足!");
+            return responseData;
+        }
         Long brandId = stageUser.getBrandId();
         Long sysCompanyId = stageUser.getSysCompanyId();
 

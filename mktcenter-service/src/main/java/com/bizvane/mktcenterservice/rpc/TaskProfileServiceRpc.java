@@ -10,8 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
  * @Author: lijunwei
  * @Time: 2018/9/1 15:39
  */
-@FeignClient("${feign.client.mktcenter.name}")
-@RequestMapping("${feign.client.mktcenter.path}/taskProfileRpc")
+@FeignClient(value = "${feign.client.mktcenter.name}",path = "${feign.client.mktcenter.path}/taskProfileRpc")
 public interface TaskProfileServiceRpc {
 
     @RequestMapping("/doAwardProfile")

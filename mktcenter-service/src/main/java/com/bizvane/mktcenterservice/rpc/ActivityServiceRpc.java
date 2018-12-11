@@ -18,8 +18,7 @@ import java.util.List;
 /**
  * Created by agan on 2018/7/27.
  */
-@FeignClient("${feign.client.mktcenter.name}")
-@RequestMapping("${feign.client.mktcenter.path}/activityRpc")
+@FeignClient(value = "${feign.client.mktcenter.name}",path = "${feign.client.mktcenter.path}/activityRpc")
 public interface ActivityServiceRpc {
  /**
   * 审核

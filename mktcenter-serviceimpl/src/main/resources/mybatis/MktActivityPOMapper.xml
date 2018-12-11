@@ -858,17 +858,18 @@
   </select>
   <select id="getPictureMessageCount" resultType="java.lang.Integer">
     SELECT
-    4-count( mkt_activity_id )
+    4-count(tma.mkt_activity_id)
     FROM
-      t_mkt_activity
+    t_mkt_activity tma INNER JOIN t_mkt_message tmm ON tma.mkt_activity_id  = tmm.biz_id
     WHERE
-      valid=1
+    tma.valid=1
+    AND tmm.msg_type=3
     <if test="mktActivitySmartGroupId != null">
-      AND mkt_activity_smart_group_id =#{mktActivitySmartGroupId}
+      AND tma.mkt_activity_smart_group_id =#{mktActivitySmartGroupId}
     </if>
     <if test="mbrGroupDefId != null">
-      AND mbr_group_def_id=#{mbrGroupDefId}
+      AND tma.mbr_group_def_id=#{mbrGroupDefId}
     </if>
-      AND create_date LIKE CONCAT(#{time},'%')
+      AND tma.create_date LIKE CONCAT(#{time},'%')
   </select>
 </mapper>
