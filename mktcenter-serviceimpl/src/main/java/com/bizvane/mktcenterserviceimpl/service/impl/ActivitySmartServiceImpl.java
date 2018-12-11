@@ -253,6 +253,9 @@ public class ActivitySmartServiceImpl implements ActivitySmartService {
             case SMART_TYPE_WXMESSAGE:
                 log.info("match with SMART_TYPE_WXMESSAGE");
                 responseData =getWxmessageActivityDetailById(mktActivityId);
+            case SMART_TYPE_PICTURE_MESSAGE:
+                log.info("match with SMART_TYPE_PICTURE_MESSAGE");
+                responseData =getPicturemessageActivityDetailById(mktActivityId);
                 break;
             default:break;
         }
@@ -409,6 +412,42 @@ public class ActivitySmartServiceImpl implements ActivitySmartService {
         return responseData;
     }
 
+    /**
+     * 图文消息详情
+     * @param mktActivityId
+     * @return
+     */
+    public ResponseData<ActivitySmartVO> getPicturemessageActivityDetailById(Long mktActivityId){
+        log.info("com.bizvane.mktcenterserviceimpl.service.impl.ActivitySmartServiceImpl.getPicturemessageActivityDetailById param"+"mktActivityId:"+ mktActivityId);
+        ResponseData responseData = new ResponseData();
+        ActivitySmartVO activitySmartVO = new ActivitySmartVO();
+
+        //智能营销规则表
+        MktActivitySmartPOExample mktActivitySmartPOExample = new MktActivitySmartPOExample();
+        mktActivitySmartPOExample.createCriteria().andValidEqualTo(Boolean.TRUE).andMktActivityIdEqualTo(mktActivityId).andMktSmartTypeEqualTo(5);
+        List<MktActivitySmartPO> mktActivitySmartPOS = mktActivitySmartPOMapper.selectByExample(mktActivitySmartPOExample);
+        if(CollectionUtils.isEmpty(mktActivitySmartPOS)){
+            log.warn("mktActivitySmartPOS is empty");
+            responseData.setCode(ResponseConstants.ERROR);
+            responseData.setMessage(ResponseConstants.DATA_NOT_EXIST);
+            return responseData;
+        }
+
+        //主表
+        MktActivityPOWithBLOBs mktActivityPOWithBLOBs = mktActivityPOMapper.selectByPrimaryKey(mktActivityId);
+        BeanUtils.copyProperties(mktActivityPOWithBLOBs,activitySmartVO);
+        activitySmartVO.setTargetMbr(mktActivitySmartPOS.get(0).getTargetMbr());
+        //消息表
+        MktMessagePOExample mktMessagePOExample = new MktMessagePOExample();
+        mktMessagePOExample.createCriteria().andValidEqualTo(Boolean.TRUE).andBizTypeEqualTo(BusinessTypeEnum.ACTIVITY_TYPE_ACTIVITY.getCode()).andBizIdEqualTo(mktActivityId);
+        List<MktMessagePO> mktMessagePOS = mktMessagePOMapper.selectByExampleWithBLOBs(mktMessagePOExample);
+        if(!CollectionUtils.isEmpty(mktMessagePOS)){
+            activitySmartVO.setMktMessagePO(mktMessagePOS.get(0));
+        }
+        responseData.setData(activitySmartVO);
+        log.info("com.bizvane.mktcenterserviceimpl.service.impl.ActivitySmartServiceImpl.getPicturemessageActivityDetailById result"+ JSON.toJSONString(responseData));
+        return responseData;
+    }
     /**
      * 添加智能营销分组
      * @param vo
@@ -1213,18 +1252,40 @@ public class ActivitySmartServiceImpl implements ActivitySmartService {
     @Override
     public  ResponseData<JSONArray>  getPictureLists(PictureMessageVO vo){
         ResponseData responseData = new ResponseData<JSONArray>();
+        JSONArray objectsResult = new JSONArray();
         ObtainGraphicBo obtainGraphicBo=new  ObtainGraphicBo();
         BeanUtils.copyProperties(vo,obtainGraphicBo);
         log.info("getPictureLists  param:"+JSON.toJSONString(obtainGraphicBo));
+        JSONObject jsonObject = this.getJsonPictureLists(obtainGraphicBo);
+        if (jsonObject==null){
+            responseData.setCode(100);
+            responseData.setMessage("无数据!");
+            return responseData;
+        }
+        Integer total_count = jsonObject.getInteger("total_count");
+        int pages = (int) Math.ceil(total_count / 20);
+        if (pages>0){
+            for (int i = 1; i < pages; i++) {
+                ObtainGraphicBo obtainGraphic=new  ObtainGraphicBo();
+                BeanUtils.copyProperties(obtainGraphic,obtainGraphic);
+                obtainGraphic.setOffset(String.valueOf(i-1));
+                obtainGraphic.setCount(String.valueOf(1*20));
+                JSONObject jsonPictureLists = this.getJsonPictureLists(obtainGraphic);
+                String item = JSON.toJSONString(jsonPictureLists.get("item"));
+                System.out.println("item:"+item);
+                JSONArray objects = JSONArray.parseArray(item);
+                objectsResult.addAll(objects);
+            }
+
+        }
+        responseData.setData(objectsResult);
+        return responseData;
+    }
+
+    public JSONObject getJsonPictureLists(ObtainGraphicBo obtainGraphicBo) {
         ResponseData<ObtainGraphicBo> obtainGraphicBoResponseData = graphicTemplateServiceRpc.obtainGraphicTemplate(obtainGraphicBo);
         ObtainGraphicBo data = obtainGraphicBoResponseData.getData();
         String obtainGraphic = data.getObtainGraphic();
-        Object o = JSON.toJSON(obtainGraphic);
-        JSONObject jsonObject = JSON.parseObject(obtainGraphic);
-        String item = JSON.toJSONString(jsonObject.get("item"));
-        System.out.println("item:"+item);
-        JSONArray objects = JSONArray.parseArray(item);
-        responseData.setData(objects);
-        return responseData;
+        return JSON.parseObject(obtainGraphic);
     }
 }

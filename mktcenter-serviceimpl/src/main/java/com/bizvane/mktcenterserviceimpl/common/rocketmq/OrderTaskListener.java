@@ -22,6 +22,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.util.Date;
@@ -42,7 +43,7 @@ public class OrderTaskListener implements MessageListener {
     private TaskRecordService taskRecordService;
     @Autowired
     private JedisLock jedisLock;
-
+    @Transactional
     @Override
     public Action consume(Message message, ConsumeContext consumeContext) {
         //获取订单信息
@@ -67,7 +68,7 @@ public class OrderTaskListener implements MessageListener {
             return Action.CommitMessage;
         }
         log.info("订单信息--会员详情--------"+memeberDetail);
-          Long serviceStoreId = memeberDetail.getServiceStoreId();
+        Long serviceStoreId = memeberDetail.getServiceStoreId();
         List<TaskAwardBO> taskOrderAwardList = taskService.getTaskOrderAwardList(companyId, brandId, placeOrderTime, orderSource);
         log.info("根据订单信息 获取的任务列表----"+ JSON.toJSONString(taskOrderAwardList));
         if (CollectionUtils.isNotEmpty(taskOrderAwardList)){
