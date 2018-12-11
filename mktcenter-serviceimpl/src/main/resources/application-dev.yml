@@ -86,11 +86,7 @@ management:
 mybatis:
   config-location: classpath:mybatis-config.xml
   mapper-locations: classpath:mybatis/*Mapper.xml
-logging:
-  config: classpath:logback-local.xml
-  level:
-    root: info
-    com.bizvane.mktcenterserviceimpl.mappers: debug
+
 
 # pagehelper
 pagehelper:
