@@ -18,13 +18,7 @@ spring:
         min-idle: 0
   swagger:
     show: true
-  application:
-    name: mktcenter-uat
-  #  security:
-  #    enabled: false
-  #    user:
-  #      name: root
-  #      password: root
+
   datasource:
     url: jdbc:mysql://mysql.uat.com:3306/julu-uat?useUnicode=true&characterEncoding=utf-8
     username: root
@@ -92,28 +86,28 @@ xxl:
 feign:
   client:
     centerstage:
-      name: centerstage-uat
+      name: centerstage
       path: centerstage.api
     coupon:
-      name: coupon-uat
+      name: coupon
       path: coupon.api
     members:
-      name: members-uat
+      name: members
       path: members.api
     message:
-      name: message-uat
+      name: message
       path: message.api
     wechat:
-      name: wechat-uat
+      name: wechat
       path: wechat
     applet:
-      name: applet-uat
+      name: applet
       path: applet.api
     centercontrol:
-      name: centercontrol-uat
+      name: centercontrol
       path: centercontrol.api
     fitment:
-      name: fitment-uat
+      name: fitment
       path: fitment.api
 
 

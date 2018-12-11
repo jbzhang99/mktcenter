@@ -16,13 +16,7 @@ spring:
         min-idle: 0
   swagger:
     show: true
-  application:
-    name: mktcenter-dev
-  #  security:
-  #    enabled: false
-  #    user:
-  #      name: root
-  #      password: root
+
   datasource:
     url: jdbc:mysql://bizvane-2018.mysql.polardb.rds.aliyuncs.com:3306/bizvane3?useUnicode=true&characterEncoding=utf-8
     username: bizvane_2018
@@ -115,28 +109,28 @@ xxl:
 feign:
   client:
     centerstage:
-      name: centerstage-dev
+      name: centerstage
       path: centerstage.api
     coupon:
-      name: coupon-dev
+      name: coupon
       path: coupon.api
     members:
-      name: members-dev
+      name: members
       path: members.api
     message:
-      name: message-dev
+      name: message
       path: message.api
     wechat:
-      name: wechat-dev
+      name: wechat
       path: wechat
     applet:
-      name: applet-dev
+      name: applet
       path: applet.api
     centercontrol:
-      name: centercontrol-dev
+      name: centercontrol
       path: centercontrol.api
     fitment:
-      name: fitment-dev
+      name: fitment
       path: fitment.api
 
 rocketmq:

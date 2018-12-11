@@ -16,8 +16,7 @@ spring:
         min-idle: 0
   swagger:
     show: true
-  application:
-    name: mktcenter-prod
+
   datasource:
     url: jdbc:mysql://pc-bp1o4oa69njltr9er-rw-vpc.rwlb.rds.aliyuncs.com:3306/crm?useUnicode=true&characterEncoding=utf-8
     username: application
@@ -78,28 +77,28 @@ xxl:
 feign:
   client:
     centerstage:
-      name: centerstage-prod
+      name: centerstage
       path: centerstage.api
     coupon:
-      name: coupon-prod
+      name: coupon
       path: coupon.api
     members:
-      name: members-prod
+      name: members
       path: members.api
     message:
-      name: message-prod
+      name: message
       path: message.api
     wechat:
-      name: wechat-prod
+      name: wechat
       path: wechat
     applet:
-      name: applet-prod
+      name: applet
       path: applet.api
     centercontrol:
-      name: centercontrol-prod
+      name: centercontrol
       path: centercontrol.api
     fitment:
-      name: fitment-prod
+      name: fitment
       path: fitment.api
 
 rocketmq:
