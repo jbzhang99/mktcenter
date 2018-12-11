@@ -192,7 +192,9 @@ public class MemberMessageSend {
         long total = data.getTotal();
         for (int a =1;a<=data.getPages();a++) {
             membersInfoSearchVo.setPageNumber(a);
+            log.info("sendPictureMessage member param:"+JSON.toJSONString(membersInfoSearchVo));
             ResponseData<com.bizvane.utils.responseinfo.PageInfo<MemberInfoVo>> memberInfoVoPages = membersAdvancedSearchApiService.search(membersInfoSearchVo);
+            log.info("sendPictureMessage member result:"+JSON.toJSONString(memberInfoVoPages));
             List<MemberInfoVo> memberInfoModelList = memberInfoVoPages.getData().getList();
             StringBuilder stringBuilder = new StringBuilder();
 //            for (int i = 0,lenth=memberInfoModelList.size(); i <lenth ; i++) {
