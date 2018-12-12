@@ -212,7 +212,7 @@ public class MemberMessageSend {
             SendTuWenMessageVO vo = new SendTuWenMessageVO();
             vo.setBrandId(brandId);
             vo.setSysCompanyId(sysCompanyId);
-            vo.setMsgType("news");
+            vo.setMsgType("mpnews");
             vo.setTaskId((long) Integer.parseInt(String.valueOf(UUID.randomUUID().hashCode()).replaceAll("-", "")));
             vo.setGroupName(groupName);
             vo.setHeadlTitle(title);
