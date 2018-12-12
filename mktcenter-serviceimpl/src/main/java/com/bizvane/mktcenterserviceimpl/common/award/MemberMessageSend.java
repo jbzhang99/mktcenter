@@ -208,7 +208,7 @@ public class MemberMessageSend {
 //                stringBuilder.append(openId);
 //            }
 //            String openIdStr = stringBuilder.toString();
-            String openIdStr = memberInfoModelList.stream().map(obj -> wxChannelInfoApiService.getWxOpenIdByMemberCode(obj.getMemberCode()).getData()).collect(Collectors.joining(","));
+            String openIdStr = memberInfoModelList.stream().map(obj -> wxChannelInfoApiService.getWxOpenIdByMemberCode(obj.getMemberCode()).getData()).collect(Collectors.joining(",")).replace(",null", "");
             SendTuWenMessageVO vo = new SendTuWenMessageVO();
             vo.setBrandId(brandId);
             vo.setSysCompanyId(sysCompanyId);
