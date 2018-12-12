@@ -1259,37 +1259,42 @@ public class ActivitySmartServiceImpl implements ActivitySmartService {
     @Override
     public  ResponseData<JSONArray>  getPictureLists(PictureMessageVO vo){
         ResponseData responseData = new ResponseData<JSONArray>();
-        JSONArray objectsResult = new JSONArray();
+        JSONArray objects = new JSONArray();
         ObtainGraphicBo obtainGraphicBo=new  ObtainGraphicBo();
         BeanUtils.copyProperties(vo,obtainGraphicBo);
         log.info("getPictureLists  param:"+JSON.toJSONString(obtainGraphicBo));
         JSONObject jsonObject = this.getJsonPictureLists(obtainGraphicBo);
-        String item = JSON.toJSONString(jsonObject.get("item"));
-        System.out.println("item:"+item);
-        JSONArray objects = JSONArray.parseArray(item);
-        responseData.setData(objects);
-
-//        if (jsonObject==null){
-//            responseData.setCode(100);
-//            responseData.setMessage("无数据!");
-//            return responseData;
-//        }
-//        Integer total_count = jsonObject.getInteger("total_count");
-//        int pages = (int) Math.ceil(total_count / 20);
-//        if (pages>0){
-//            for (int i = 1; i < pages; i++) {
-//                ObtainGraphicBo obtainGraphic=new  ObtainGraphicBo();
-//                BeanUtils.copyProperties(obtainGraphic,obtainGraphic);
-//                obtainGraphic.setOffset(String.valueOf(i-1));
-//                obtainGraphic.setCount(String.valueOf(1*20));
-//                JSONObject jsonPictureLists = this.getJsonPictureLists(obtainGraphic);
-//                String item = JSON.toJSONString(jsonPictureLists.get("item"));
-//                System.out.println("item:"+item);
-//                JSONArray objects = JSONArray.parseArray(item);
-//                objectsResult.addAll(objects);
-//            }
-//        }
-//        responseData.setData(objectsResult);
+//        String item = JSON.toJSONString(jsonObject.get("item"));
+//        System.out.println("item:"+item);
+//        JSONArray objects = JSONArray.parseArray(item);
+//        responseData.setData(objects);
+        if (jsonObject==null){
+            responseData.setCode(100);
+            responseData.setMessage("无数据!");
+            return responseData;
+        }
+        int pages =1;
+        Integer total_count = jsonObject.getInteger("total_count");
+        if (total_count>20){
+            pages = (int)Math.ceil((double) total_count / 20);
+        }
+        if (pages>0){
+            for (int i = 1; i <= pages; i++) {
+                ObtainGraphicBo obtainGraphic=new  ObtainGraphicBo();
+                BeanUtils.copyProperties(vo,obtainGraphic);
+                obtainGraphic.setOffset(String.valueOf(i-1));
+                obtainGraphic.setCount(String.valueOf(i*20));
+                JSONObject jsonPictureLists = this.getJsonPictureLists(obtainGraphic);
+                if (jsonPictureLists==null){
+                 break;
+                }
+                String item = JSON.toJSONString(jsonPictureLists.get("item"));
+                System.out.println("item:"+item);
+                JSONArray objectsItem = JSONArray.parseArray(item);
+                objects.addAll(objectsItem);
+            }
+        }
+       responseData.setData(objects);
         return responseData;
     }
 
