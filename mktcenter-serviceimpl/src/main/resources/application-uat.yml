@@ -149,3 +149,13 @@ tenant:
 ribbon:
   ConnectTimeout: 60000
   ReadTimeout: 60000
+
+#审计日志#
+rmq:
+  ONSAddr: NAMESRV_ADDR
+  namesrvAddr: 192.168.1.50:9876
+  accessKey: LTAIpoqUHsXq6q7r
+  secretKey: 0ZJ7bfxXJLT8TpOKvZU3i4YWuhvJzs
+  product.id: PID_PUBLIC_BIZVANE_MEMBER_MESSAGE
+  consume.id: CID_PUBLIC_BIZVANE_MEMBER_MESSAGE
+  send.time.out: 30000
