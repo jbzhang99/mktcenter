@@ -1,13 +1,13 @@
 package com.bizvane.mktcenterserviceimpl.controllers;
 
+import com.alibaba.fastjson.JSONArray;
 import com.bizvane.mktcenterservice.interfaces.ActivitySmartService;
-import com.bizvane.mktcenterservice.models.bo.ActivitySmartBO;
 import com.bizvane.mktcenterservice.models.po.MktActivitySmartGroupPO;
 import com.bizvane.mktcenterservice.models.po.MktActivitySmartPO;
-import com.bizvane.mktcenterservice.models.po.MktCouponPO;
 import com.bizvane.mktcenterservice.models.vo.ActivitySmartVO;
 import com.bizvane.mktcenterservice.models.vo.MessageVO;
 import com.bizvane.mktcenterservice.models.vo.PageForm;
+import com.bizvane.mktcenterservice.models.vo.PictureMessageVO;
 import com.bizvane.mktcenterserviceimpl.common.utils.ActivityParamCheckUtil;
 import com.bizvane.utils.responseinfo.ResponseData;
 import com.bizvane.utils.tokens.SysAccountPO;
@@ -20,11 +20,9 @@ import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.List;
 
 /**
  * @author chen.li
@@ -157,5 +155,43 @@ public class ActivitySmartController {
        SysAccountPO stageUser = TokenUtils.getStageUser(request);
         ResponseData<Integer> responseData = activitySmartService.addWxMessageActivity(vo,messageVO,stageUser);
         return new ResponseData<>();
+    }
+
+    @ApiOperation(value = "对某个智能营销组创建任务，任务类型：5图文消息")
+    @PostMapping("addPictureMessageActivity")
+    public ResponseData<Integer> addPictureMessageActivity(ActivitySmartVO vo, MessageVO messageVO,HttpServletRequest request){
+        //参数校验
+       // ActivityParamCheckUtil.checkSmartActivityParam(vo);
+        //参数校验通过，获取操作人信息
+       // SysAccountPO stageUser = TokenUtils.getStageUser(request);
+        SysAccountPO stageUser=new SysAccountPO();
+        stageUser.setBrandId(96L);
+        stageUser.setName("测试测试");
+        stageUser.setSysAccountId(12867L);
+        stageUser.setSysCompanyId(3841L);
+        ResponseData<Integer> responseData = activitySmartService.addPictureMessageActivity(vo,messageVO,stageUser);
+        return new ResponseData<>();
+    }
+
+    /**
+     * 图文消息剩余次数
+     * @param vo
+     * @return
+     */
+    @PostMapping("getPictureMessageCount")
+    public  ResponseData<Integer>  getPictureMessageCount(ActivitySmartVO vo){
+        return activitySmartService.getPictureMessageCount(vo);
+    }
+    @PostMapping("getPictureLists")
+    public  ResponseData<JSONArray>  getPictureLists(PictureMessageVO vo, HttpServletRequest request){
+      // SysAccountPO stageUser = TokenUtils.getStageUser(request);
+        SysAccountPO stageUser=new SysAccountPO();
+        stageUser.setBrandId(96L);
+        stageUser.setName("测试测试");
+        stageUser.setSysAccountId(12867L);
+        stageUser.setSysCompanyId(3841L);
+
+        vo.setBrandId(stageUser.getBrandId());
+        return  activitySmartService.getPictureLists(vo);
     }
 }

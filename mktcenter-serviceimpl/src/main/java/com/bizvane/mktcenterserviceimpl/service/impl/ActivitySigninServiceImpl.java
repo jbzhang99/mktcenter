@@ -42,7 +42,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
-
+import java.math.BigDecimal;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -78,6 +78,10 @@ public class ActivitySigninServiceImpl implements ActivitySigninService {
     private Award award;
     @Autowired
     private StoreServiceRpc storeServiceRpc;
+    
+    @Autowired
+    private MktActivityCountPOMapper mktActivityCountPOMapper;
+    
     /**
      * 查询签到活动列表
      * @param vo
@@ -192,6 +196,17 @@ public class ActivitySigninServiceImpl implements ActivitySigninService {
 
         //获取新增后数据id
         Long mktActivityId = mktActivityPOWithBLOBs.getMktActivityId();
+        
+        // 新增活动统计表
+        MktActivityCountPO mktActivityCountPO = new MktActivityCountPO();
+        mktActivityCountPO.setMktActivityId(mktActivityId);
+        mktActivityCountPO.setSysCompanyId(mktActivityPOWithBLOBs.getSysCompanyId());
+        mktActivityCountPO.setSysBrandId(mktActivityPOWithBLOBs.getSysBrandId());
+        mktActivityCountPO.setCreateDate(new Date());
+        mktActivityCountPO.setCreateUserId(stageUser.getSysAccountId());
+        mktActivityCountPO.setCreateUserName(stageUser.getName());
+        mktActivityCountPOMapper.insertSelective(mktActivityCountPO);
+        
         if (i>0){
             //如果是待审核数据则需要增加一条审核数据
             log.info("增加审核中心一条数据");
@@ -359,6 +374,8 @@ public class ActivitySigninServiceImpl implements ActivitySigninService {
             po.setSysBrandId(activityVO.getSysBrandId());
             log.info("新增积分记录表");
             mktActivityRecordPOMapper.insertSelective(po);
+            
+            mktActivityCountPOMapper.updateSum(po.getAcitivityId(), 1, BigDecimal.ZERO, po.getPoints());
         }
         responseData.setCode(SysResponseEnum.SUCCESS.getCode());
         responseData.setMessage(SysResponseEnum.SUCCESS.getMessage());

@@ -14,7 +14,8 @@ import java.util.GregorianCalendar;
  */
 public class TimeUtils {
    public static  final  SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-    public static  final  SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+   public static  final  SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+   public static  final  SimpleDateFormat SDF_Y_M = new SimpleDateFormat("yyyy-MM");
     /**"
      * 获取当前时间
      * @return

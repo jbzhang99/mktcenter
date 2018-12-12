@@ -1,28 +1,27 @@
 package com.bizvane.mktcenterserviceimpl.common.award;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import com.bizvane.centerstageservice.models.po.SysBrandPo;
 import com.bizvane.centerstageservice.rpc.BrandServiceRpc;
 import com.bizvane.couponfacade.enums.SendTypeEnum;
 import com.bizvane.couponfacade.models.vo.SendCouponBatchRequestVO;
 import com.bizvane.couponfacade.models.vo.SendCouponSimpleRequestVO;
 import com.bizvane.members.facade.enums.IntegralChangeTypeEnum;
-import com.bizvane.members.facade.es.pojo.MembersInfoSearchPojo;
 import com.bizvane.members.facade.es.vo.MembersInfoSearchVo;
 import com.bizvane.members.facade.es.vo.WxChannelInfoSearchVo;
-import com.bizvane.members.facade.models.IntegralRecordModel;
 import com.bizvane.members.facade.models.MemberInfoModel;
 import com.bizvane.members.facade.service.api.MemberInfoApiService;
 import com.bizvane.members.facade.service.api.MembersAdvancedSearchApiService;
 import com.bizvane.members.facade.service.api.WxChannelInfoAdvancedSearchApiService;
+import com.bizvane.members.facade.service.api.WxChannelInfoApiService;
 import com.bizvane.members.facade.service.card.request.IntegralChangeRequestModel;
 import com.bizvane.members.facade.vo.MemberInfoApiModel;
 import com.bizvane.members.facade.vo.MemberInfoVo;
-import com.bizvane.members.facade.vo.PageVo;
 import com.bizvane.members.facade.vo.WxChannelInfoVo;
-import com.bizvane.messagefacade.models.vo.ActivityMessageVO;
-import com.bizvane.messagefacade.models.vo.MemberMessageVO;
-import com.bizvane.messagefacade.models.vo.SysSmsConfigVO;
+import com.bizvane.messagefacade.interfaces.TemplateMessageServiceFeign;
+import com.bizvane.messagefacade.models.vo.*;
 import com.bizvane.mktcenterservice.interfaces.ActivityBirthdayService;
 import com.bizvane.mktcenterservice.interfaces.ActivityService;
 import com.bizvane.mktcenterservice.interfaces.ActivityVipAniversaryService;
@@ -31,8 +30,8 @@ import com.bizvane.mktcenterservice.models.po.*;
 import com.bizvane.mktcenterservice.models.vo.ActivitySmartVO;
 import com.bizvane.mktcenterservice.models.vo.ActivityVO;
 import com.bizvane.mktcenterserviceimpl.common.enums.BusinessTypeEnum;
-import com.bizvane.mktcenterserviceimpl.common.enums.CouponSendTypeEnum;
 import com.bizvane.mktcenterserviceimpl.common.enums.MktSmartTypeEnum;
+import com.bizvane.mktcenterserviceimpl.mappers.MktActivityPOMapper;
 import com.bizvane.mktcenterserviceimpl.mappers.MktCouponPOMapper;
 import com.bizvane.mktcenterserviceimpl.mappers.MktMessagePOMapper;
 import com.bizvane.utils.responseinfo.PageInfo;
@@ -42,10 +41,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
-import org.springframework.util.StringUtils;
 
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
+import java.util.stream.Collectors;
 
 /**
  * 查询会员发送消息
@@ -71,6 +71,9 @@ public class MemberMessageSend {
     private MktMessagePOMapper mktMessagePOMapper;
 
     @Autowired
+    private MktActivityPOMapper mktActivityPOMapper;
+
+    @Autowired
     private WxChannelInfoAdvancedSearchApiService wxChannelInfoAdvancedSearchApiServic;
     @Autowired
     private MembersAdvancedSearchApiService membersAdvancedSearchApiService;
@@ -78,6 +81,10 @@ public class MemberMessageSend {
     private ActivityService activityService;
     @Autowired
     private BrandServiceRpc brandServiceRpc;
+    @Autowired
+    private  WxChannelInfoApiService wxChannelInfoApiService;
+    @Autowired
+    private  TemplateMessageServiceFeign templateMessageServiceFeign;
     /**
      * 查询会员信息发送你个短信和微信消息
      * @param messageVOList
@@ -151,7 +158,7 @@ public class MemberMessageSend {
      * @param membersInfoSearchVo
      */
     @Async("asyncServiceExecutor")
-    public  void sendWxMessage(MktMessagePO mktMessagePO, MembersInfoSearchVo membersInfoSearchVo) {
+    public  void sendWxMessage(MktMessagePO mktMessagePO, MembersInfoSearchVo membersInfoSearchVo,ActivitySmartVO vo) {
         ResponseData<com.bizvane.utils.responseinfo.PageInfo<MemberInfoVo>> memberInfoVoPage = membersAdvancedSearchApiService.search(membersInfoSearchVo);
         for (int a =1;a<=memberInfoVoPage.getData().getPages();a++) {
             membersInfoSearchVo.setPageNumber(a);
@@ -160,11 +167,66 @@ public class MemberMessageSend {
             for (MemberInfoModel memberInfo:memberInfoModelList) {
                 MemberMessageVO memberMessageVO = new MemberMessageVO();
                 AwardBO awardBO = new AwardBO();
-                activityService.sendWx(mktMessagePO, awardBO, memberMessageVO, memberInfo);
+                activityService.sendWx(mktMessagePO, awardBO, memberMessageVO, memberInfo,vo);
             }
         }
     }
 
+    /**
+     * 智能营销发送图文消息
+     * @param mktMessagePO
+     * @param membersInfoSearchVo
+     */
+    @Async("asyncServiceExecutor")
+    public  void sendPictureMessage(MktMessagePO mktMessagePO, MembersInfoSearchVo membersInfoSearchVo,String groupName, Long brandId,Long sysCompanyId) {
+        Long bizId = mktMessagePO.getBizId();
+        String msgContent = mktMessagePO.getMsgContent();
+        JSONObject jsonObject = JSON.parseObject(msgContent);
+        String media_id = jsonObject.getString("media_id");//图文ID
+        JSONObject content = jsonObject.getJSONObject("content");
+        JSONArray news_item = content.getJSONArray("news_item");
+        JSONObject titlejsonObject = news_item.getJSONObject(0);
+        String title = titlejsonObject.getString("title");//标题
+
+        ResponseData<com.bizvane.utils.responseinfo.PageInfo<MemberInfoVo>> memberInfoVoPage = membersAdvancedSearchApiService.search(membersInfoSearchVo);
+        PageInfo<MemberInfoVo> data = memberInfoVoPage.getData();
+        long total = data.getTotal();
+        for (int a =1;a<=data.getPages();a++) {
+            membersInfoSearchVo.setPageNumber(a);
+            log.info("sendPictureMessage member param:"+JSON.toJSONString(membersInfoSearchVo));
+            ResponseData<com.bizvane.utils.responseinfo.PageInfo<MemberInfoVo>> memberInfoVoPages = membersAdvancedSearchApiService.search(membersInfoSearchVo);
+            log.info("sendPictureMessage member result:"+JSON.toJSONString(memberInfoVoPages));
+            List<MemberInfoVo> memberInfoModelList = memberInfoVoPages.getData().getList();
+            StringBuilder stringBuilder = new StringBuilder();
+//            for (int i = 0,lenth=memberInfoModelList.size(); i <lenth ; i++) {
+//                if (i!=0){
+//                    stringBuilder.append(",");
+//                }
+//                MemberInfoVo memberInfoVo = memberInfoModelList.get(i);
+//                String openId = wxChannelInfoApiService.getWxOpenIdByMemberCode(memberInfoVo.getMemberCode()).getData();
+//                log.info("sendPictureMessage  of member:"+JSON.toJSONString(memberInfoVo));
+//                stringBuilder.append(openId);
+//            }
+//            String openIdStr = stringBuilder.toString();
+            String openIdStr = memberInfoModelList.stream().map(obj -> wxChannelInfoApiService.getWxOpenIdByMemberCode(obj.getMemberCode()).getData()).collect(Collectors.joining(",")).replace(",null", "");
+            SendTuWenMessageVO vo = new SendTuWenMessageVO();
+            vo.setBrandId(brandId);
+            vo.setSysCompanyId(sysCompanyId);
+            vo.setMsgType("mpnews");
+            vo.setTaskId((long) Integer.parseInt(String.valueOf(UUID.randomUUID().hashCode()).replaceAll("-", "")));
+            vo.setGroupName(groupName);
+            vo.setHeadlTitle(title);
+            vo.setMediaId(media_id);
+            vo.setMemberSum(String.valueOf(total));
+            vo.setOpenIdS(openIdStr);
+            vo.setSendIgnoreReprint("1");
+            log.info("sendPictureMessage param:"+JSON.toJSONString(vo));
+            Result<String> stringResult = templateMessageServiceFeign.sendTuWenMessage(vo);
+            log.info("sendPictureMessage result:"+stringResult);
+
+
+        }
+    }
     /**
      * 营销查询会员发券
      * @param vo
@@ -200,11 +262,13 @@ public class MemberMessageSend {
             MemberInfoApiModel memberInfoModel= new MemberInfoApiModel();
             memberInfoModel.setBrandId(activityBirthday.getSysBrandId());
             memberInfoModel.setSysCompanyId(activityBirthday.getSysCompanyId());
-            memberInfoModel.setLevelId(Long.valueOf(activityBirthday.getMbrLevelCode()));
+            if (!activityBirthday.getMbrLevelCode().equals("0")){
+                memberInfoModel.setLevelId(Long.valueOf(activityBirthday.getMbrLevelCode()));
+            }
             memberInfoModel.setBirthdayLine(activityBirthday.getDaysAhead());
             memberInfoModel.setMemberScope(activityBirthday.getMemberType().toString());
             memberInfoModel.setPageNumber(1);
-            memberInfoModel.setPageSize(100);
+            memberInfoModel.setPageSize(10000);
             log.info("我要看看参数++++++++++=+=============+"+ JSON.toJSONString(memberInfoModel));
             ResponseData<PageInfo<MemberInfoModel>> memberInfoModelLists =memberInfoApiService.getMemberInfo(memberInfoModel);
             //循环页数
@@ -237,11 +301,13 @@ public class MemberMessageSend {
             MemberInfoApiModel memberInfoModel= new MemberInfoApiModel();
             memberInfoModel.setSysCompanyId(activityAniversary.getSysCompanyId());
             memberInfoModel.setBrandId(activityAniversary.getSysBrandId());
-            memberInfoModel.setLevelId(Long.valueOf(activityAniversary.getMbrLevelCode()));
+            if (!activityAniversary.getMbrLevelCode().equals("0")){
+                memberInfoModel.setLevelId(Long.valueOf(activityAniversary.getMbrLevelCode()));
+            }
             memberInfoModel.setOpenCardTimeLine(activityAniversary.getDaysAhead());
             memberInfoModel.setMemberScope(activityAniversary.getMemberType().toString());
             memberInfoModel.setPageNumber(1);
-            memberInfoModel.setPageSize(100);
+            memberInfoModel.setPageSize(10000);
             log.info("我要看看参数++++++++++=+=============+"+ JSON.toJSONString(memberInfoModel));
             ResponseData<PageInfo<MemberInfoModel>> memberInfoModelLists =memberInfoApiService.getMemberInfo(memberInfoModel);
             if(!CollectionUtils.isEmpty(memberInfoModelLists.getData().getList())){
@@ -357,11 +423,48 @@ public class MemberMessageSend {
                         activityMessageVO.setSysCompanyId(mktActivityPOWithBLOBs.getSysCompanyId());
                         activityMessageVO.setSysBrandId(mktActivityPOWithBLOBs.getSysBrandId());
                         activityMessageVO.setSysBrandName(SysBrandPos.getData().getBrandName());
-                        activityMessageVO.setActivityName(mktActivityPOWithBLOBs.getActivityName());
-                        activityMessageVO.setActivityInterests(mktMessage.getMsgContent());
                         activityMessageVO.setMemberPhone(memberInfoModel.getPhone());
                         activityMessageVO.setActivityLongtime("智能营销");
-                        activityMessageVO.setUnl("/pages/template01/activity-details/main");
+                        activityMessageVO.setUnl(mktMessage.getLink());
+                        activityMessageVO.setMemberName(memberInfoModel.getName());
+                        //导航语
+                        if (null!=mktMessage.getNavigation()){
+                            activityMessageVO.setNavigation(mktMessage.getNavigation());
+                        }else {
+                            activityMessageVO.setNavigation("");
+                        }
+                        //活动结果
+                        if (null!=mktMessage.getMsgContent()){
+                            activityMessageVO.setActivityInterests(mktMessage.getMsgContent());
+                        }else {
+                            activityMessageVO.setActivityInterests("");
+                        }
+                        //活动时间
+                        if (null!=mktMessage.getActivityTime()){
+                            activityMessageVO.setActivitytime(mktMessage.getActivityTime());
+                        }else {
+                            activityMessageVO.setActivitytime("");
+                        }
+                        //赞助商家
+                        if (null!=mktMessage.getSponsor()){
+                            activityMessageVO.setBusinessman(mktMessage.getSponsor());
+                        }else {
+                            activityMessageVO.setBusinessman("");
+                        }
+                        //备注
+                        if (null!=mktMessage.getRemark()){
+                            activityMessageVO.setRemark(mktMessage.getRemark());
+                        }else {
+                            activityMessageVO.setRemark("");
+                        }
+                        //活动名称
+                        if (null!=mktActivityPOWithBLOBs.getActivityName()){
+                            activityMessageVO.setActivityName(mktActivityPOWithBLOBs.getActivityName());
+                        }else {
+                            activityMessageVO.setActivityName("");
+                        }
+                        activityMessageVO.setSendtype("1");
+                        activityMessageVO.setOpenId(memberInfoModel.getWxOpenId());
                         awardBO.setMktType(MktSmartTypeEnum.SMART_TYPE_WXMESSAGE.getCode());
                         awardBO.setActivityMessageVO(activityMessageVO);
                         log.info("智能营销-开始发微信微信了");

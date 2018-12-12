@@ -1,5 +1,6 @@
 package com.bizvane.mktcenterservice.interfaces;
 
+import com.alibaba.fastjson.JSONArray;
 import com.bizvane.mktcenterservice.models.bo.ActivitySmartBO;
 import com.bizvane.mktcenterservice.models.po.MktActivitySmartGroupPO;
 import com.bizvane.mktcenterservice.models.po.MktActivitySmartPO;
@@ -7,6 +8,7 @@ import com.bizvane.mktcenterservice.models.po.MktCouponPO;
 import com.bizvane.mktcenterservice.models.vo.ActivitySmartVO;
 import com.bizvane.mktcenterservice.models.vo.MessageVO;
 import com.bizvane.mktcenterservice.models.vo.PageForm;
+import com.bizvane.mktcenterservice.models.vo.PictureMessageVO;
 import com.bizvane.utils.responseinfo.ResponseData;
 import com.bizvane.utils.tokens.SysAccountPO;
 import com.github.pagehelper.PageInfo;
@@ -123,5 +125,25 @@ public interface ActivitySmartService {
      * @return
      */
     public ResponseData<Integer> addWxMessageActivity(ActivitySmartVO vo, MessageVO messageVO, SysAccountPO stageUser);
+
+    /**
+     * 对某个智能营销组创建任务
+     * 任务类型：5图文消息
+     * @param vo
+     * @param messageVO
+     * @param stageUser
+     * @return
+     */
+    public ResponseData<Integer> addPictureMessageActivity(ActivitySmartVO vo, MessageVO messageVO, SysAccountPO stageUser);
+
+    /**
+     * 图文消息的次数统计
+     * @param vo
+     * @return
+     */
+    public  ResponseData<Integer>  getPictureMessageCount(ActivitySmartVO vo);
+
+    public  ResponseData<JSONArray>  getPictureLists(PictureMessageVO vo);
+
 
 }

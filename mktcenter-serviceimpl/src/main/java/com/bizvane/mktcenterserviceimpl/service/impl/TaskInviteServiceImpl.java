@@ -277,6 +277,7 @@ public class TaskInviteServiceImpl implements TaskInviteService {
                             recordPO.setPoints(obj.getPoints());
                             recordPO.setMktTaskRecordId(recordId);
                             taskRecordService.updateTaskRecord(recordPO);
+                            log.info("---邀请任务发券前--");
                             taskService.sendCouponAndPoint(memberCode,obj);
                         }
                     }

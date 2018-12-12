@@ -95,10 +95,10 @@ public class TaskController {
 //       SysAccountPO sysAccountPo = new SysAccountPO();
 //        sysAccountPo.setSysAccountId(26L);
 //        sysAccountPo.setSysCompanyId(2L);
-//        sysAccountPo.setBrandId(96L);
+//        sysAccountPo.setBrandId(1L);
 //        sysAccountPo.setAccountCode("15328634678");
 //        sysAccountPo.setName("不啊哟删除");
-//        vo.setTaskType(2);
+//        vo.setTaskType(1);
         return taskService.doAnalysis(vo,sysAccountPo);
     }
     /**

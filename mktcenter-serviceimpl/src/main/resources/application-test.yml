@@ -16,13 +16,7 @@ spring:
         min-idle: 0
   swagger:
     show: true
-  application:
-    name: mktcenter-test
-  #  security:
-  #    enabled: false
-  #    user:
-  #      name: root
-  #      password: root
+
   datasource:
     url: jdbc:mysql://bizvane-2018.mysql.polardb.rds.aliyuncs.com:3306/bizvane3?useUnicode=true&characterEncoding=utf-8
     username: bizvane_2018
@@ -59,8 +53,16 @@ spring:
   jackson:
     date-format: yyyy-MM-dd HH:mm:ss
     time-zone: GMT+8
+  zipkin:
+    baseUrl: http://192.168.2.15:9411
+    sleuth:
+      sampler:
+        probability: 1.0
+      scheduled:
+        enabled: false
 eureka:
   instance:
+    prefer-ip-address: true
     metadata-map:
       #      user.name: ${spring.security.user.name}
       #      user.password: ${spring.security.user.password}
@@ -78,11 +80,7 @@ management:
 mybatis:
   config-location: classpath:mybatis-config.xml
   mapper-locations: classpath:mybatis/*Mapper.xml
-logging:
-  config: classpath:logback-local.xml
-  level:
-    root: info
-    com.bizvane.mktcenterserviceimpl.mappers: debug
+
 
 # pagehelper
 pagehelper:
@@ -111,28 +109,28 @@ xxl:
 feign:
   client:
     centerstage:
-      name: centerstage-test
+      name: centerstage
       path: centerstage.api
     coupon:
-      name: coupon-test
+      name: coupon
       path: coupon.api
     members:
-      name: members-test
+      name: members
       path: members.api
     message:
-      name: message-test
+      name: message
       path: message.api
     wechat:
-      name: wechat-test
+      name: wechat
       path: wechat
     applet:
-      name: applet-test
+      name: applet
       path: applet.api
     centercontrol:
-      name: centercontrol-test
+      name: centercontrol
       path: centercontrol.api
     fitment:
-      name: fitment-test
+      name: fitment
       path: fitment.api
 
 rocketmq:
@@ -162,7 +160,7 @@ activity:
 bitdata:
   businessNum: testbz
   apiKey: 4199454b3cac0c02b48fd5a9c67c00c0
-  url: http://bizvane.f3322.net:58765/api/open-data-analysis/
+  url: http://192.168.1.63:8765/api/open-data-analysis/
 
 tenant:
   isEnabledTenantInterceptor: false
@@ -172,6 +170,10 @@ ribbon:
 
 #审计日志#
 rmq:
+  ONSAddr: NAMESRV_ADDR
   namesrvAddr: 192.168.1.50:9876
   accessKey: LTAIpoqUHsXq6q7r
   secretKey: 0ZJ7bfxXJLT8TpOKvZU3i4YWuhvJzs
+  product.id: PID_PUBLIC_BIZVANE_MEMBER_MESSAGE
+  consume.id: CID_PUBLIC_BIZVANE_MEMBER_MESSAGE
+  send.time.out: 30000

@@ -32,16 +32,16 @@
 	        <artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
 	    </dependency>
 
-		<!--链路，暂不开放-->
-		<!--<dependency>-->
-			<!--<groupId>org.springframework.cloud</groupId>-->
-			<!--<artifactId>spring-cloud-starter-sleuth</artifactId>-->
-		<!--</dependency>-->
-		<!---->
-		<!--<dependency>-->
-			<!--<groupId>org.springframework.cloud</groupId>-->
-			<!--<artifactId>spring-cloud-starter-zipkin</artifactId>-->
-		<!--</dependency>-->
+		<!--链路追踪-->
+		<dependency>
+			<groupId>org.springframework.cloud</groupId>
+			<artifactId>spring-cloud-starter-sleuth</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework.cloud</groupId>
+			<artifactId>spring-cloud-starter-zipkin</artifactId>
+		</dependency>
 
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -79,12 +79,12 @@
 		<dependency>
 			<groupId>com.bizvane</groupId>
 			<artifactId>common-utils</artifactId>
-			<version>1.0.0</version>
+			<version>1.0.1-SNAPSHOT</version>
 		</dependency>
 		<dependency>
 			<groupId>com.bizvane</groupId>
 			<artifactId>base-controller</artifactId>
-			<version>1.0.0</version>
+            <version>1.0.1</version>
 		</dependency>
 
 		<dependency>
@@ -179,7 +179,7 @@
 		<dependency>
 			<groupId>com.bizvane</groupId>
 			<artifactId>applet-service</artifactId>
-			<version>1.0.0</version>
+			<version>1.0.1-SNAPSHOT</version>
 		</dependency>
 		<dependency>
 			<groupId>com.bizvane</groupId>
@@ -202,7 +202,7 @@
 		<dependency>
 			<groupId>com.bizvane</groupId>
 			<artifactId>message-facade</artifactId>
-			<version>1.0.0</version>
+			<version>1.0.1-SNAPSHOT</version>
 		</dependency>
 		<!-- 引入微信模块，二维码 -->
 		<dependency>
@@ -254,6 +254,11 @@
 		<dependency>
 			<groupId>io.micrometer</groupId>
 			<artifactId>micrometer-registry-prometheus</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>redis.clients</groupId>
+			<artifactId>jedis</artifactId>
+			<version>2.9.0</version>
 		</dependency>
 	</dependencies>
 

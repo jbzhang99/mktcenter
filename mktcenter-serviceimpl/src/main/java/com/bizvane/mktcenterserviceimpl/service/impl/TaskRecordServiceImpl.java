@@ -1,5 +1,12 @@
 package com.bizvane.mktcenterserviceimpl.service.impl;
 
+import java.math.BigDecimal;
+import java.util.List;
+
+import org.apache.commons.collections.CollectionUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
 import com.alibaba.fastjson.JSON;
 import com.bizvane.mktcenterservice.interfaces.TaskRecordService;
 import com.bizvane.mktcenterservice.models.bo.TotalStatisticsBO;
@@ -9,17 +16,10 @@ import com.bizvane.mktcenterservice.models.vo.DayTaskRecordVo;
 import com.bizvane.mktcenterservice.models.vo.MktTaskRecordVO;
 import com.bizvane.mktcenterservice.models.vo.TaskAnalysisVo;
 import com.bizvane.mktcenterserviceimpl.common.constants.TaskConstants;
-import com.bizvane.mktcenterserviceimpl.common.utils.TimeUtils;
+import com.bizvane.mktcenterserviceimpl.mappers.MktTaskCountPOMapper;
 import com.bizvane.mktcenterserviceimpl.mappers.MktTaskRecordPOMapper;
-import com.bizvane.utils.tokens.SysAccountPO;
-import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.collections.CollectionUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 
-import java.math.BigDecimal;
-import java.util.Date;
-import java.util.List;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * @Author: lijunwei
@@ -31,6 +31,9 @@ public class TaskRecordServiceImpl implements TaskRecordService {
 
     @Autowired
     private MktTaskRecordPOMapper mktTaskRecordPOMapper;
+    
+    @Autowired
+    private MktTaskCountPOMapper mktTaskCountPOMapper;
 
     /**
      * 添加记录
@@ -39,9 +42,14 @@ public class TaskRecordServiceImpl implements TaskRecordService {
     @Override
     public Long addTaskRecord(MktTaskRecordPO po) {
         int i = mktTaskRecordPOMapper.insertSelective(po);
+        
+        BigDecimal consumeAmount = po.getConsumeAmount() == null ? BigDecimal.ZERO : po.getConsumeAmount();
+        Integer couponNum = po.getCouponNum() == null ? 0 : po.getCouponNum();
+        Integer points = po.getPoints() == null ? 0 : po.getPoints();
+        Integer shareNum = po.getShareNum() == null ? 0 : po.getShareNum();
+        
+        mktTaskCountPOMapper.updateSum(po.getTaskId(), 1, consumeAmount, couponNum, points, shareNum);
         return  po.getMktTaskRecordId();
-
-
     }
 
     /**
@@ -49,6 +57,15 @@ public class TaskRecordServiceImpl implements TaskRecordService {
      */
     @Override
     public Integer updateTaskRecord(MktTaskRecordPO po) {
+      
+      
+      BigDecimal consumeAmount = po.getConsumeAmount() == null ? BigDecimal.ZERO : po.getConsumeAmount();
+      Integer couponNum = po.getCouponNum() == null ? 0 : po.getCouponNum();
+      Integer points = po.getPoints() == null ? 0 : po.getPoints();
+      Integer shareNum = po.getShareNum() == null ? 0 : po.getShareNum();
+      
+      mktTaskCountPOMapper.updateSum(po.getTaskId(), 0, consumeAmount, couponNum, points, shareNum);
+      
         return  mktTaskRecordPOMapper.updateByPrimaryKeySelective(po);
 
     }
@@ -66,6 +83,7 @@ public class TaskRecordServiceImpl implements TaskRecordService {
         if (CollectionUtils.isNotEmpty(totalStatistics)){
             bo= totalStatistics.get(0);
         }
+        log.info("TotalStatisticsBO任务的总金额和总次数--出参--"+ JSON.toJSONString(bo));
         return  bo;
     }
 

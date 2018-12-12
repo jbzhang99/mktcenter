@@ -1,36 +1,32 @@
 package com.bizvane.mktcenterserviceimpl.service.impl;
 
+
 import com.alibaba.fastjson.JSON;
-import com.aliyun.openservices.shade.com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
+import com.bizvane.appletservice.models.bo.ObtainGraphicBo;
+import com.bizvane.appletservice.rpc.GraphicTemplateServiceRpc;
 import com.bizvane.couponfacade.interfaces.CouponQueryServiceFeign;
 import com.bizvane.couponfacade.models.vo.CouponDetailResponseVO;
-import com.bizvane.couponfacade.models.vo.SendCouponSimpleRequestVO;
-import com.bizvane.members.facade.enums.IntegralChangeTypeEnum;
 import com.bizvane.members.facade.es.pojo.MembersInfoSearchPojo;
 import com.bizvane.members.facade.es.vo.MembersInfoSearchVo;
-import com.bizvane.members.facade.models.IntegralRecordModel;
-import com.bizvane.members.facade.models.MemberInfoModel;
-import com.bizvane.members.facade.service.api.MemberInfoApiService;
+import com.bizvane.members.facade.models.MbrGroupModel;
+import com.bizvane.members.facade.service.api.MemberGroupApiService;
 import com.bizvane.members.facade.service.api.MembersAdvancedSearchApiService;
-import com.bizvane.members.facade.vo.MemberInfoApiModel;
-import com.bizvane.members.facade.vo.MemberInfoVo;
-import com.bizvane.messagefacade.models.vo.MemberMessageVO;
-import com.bizvane.messagefacade.models.vo.SysSmsConfigVO;
 import com.bizvane.mktcenterservice.interfaces.ActivitySmartService;
-import com.bizvane.mktcenterservice.models.bo.ActivitySmartBO;
-import com.bizvane.mktcenterservice.models.bo.AwardBO;
 import com.bizvane.mktcenterservice.models.po.*;
 import com.bizvane.mktcenterservice.models.vo.ActivitySmartVO;
 import com.bizvane.mktcenterservice.models.vo.MessageVO;
 import com.bizvane.mktcenterservice.models.vo.PageForm;
-import com.bizvane.mktcenterserviceimpl.common.award.Award;
+import com.bizvane.mktcenterservice.models.vo.PictureMessageVO;
 import com.bizvane.mktcenterserviceimpl.common.award.MemberMessageSend;
 import com.bizvane.mktcenterserviceimpl.common.constants.ActivityConstants;
 import com.bizvane.mktcenterserviceimpl.common.constants.ResponseConstants;
 import com.bizvane.mktcenterserviceimpl.common.constants.SystemConstants;
 import com.bizvane.mktcenterserviceimpl.common.enums.*;
-import com.bizvane.mktcenterserviceimpl.common.utils.CodeUtil;
 import com.bizvane.mktcenterserviceimpl.common.job.JobUtil;
+import com.bizvane.mktcenterserviceimpl.common.utils.CodeUtil;
+import com.bizvane.mktcenterserviceimpl.common.utils.TimeUtils;
 import com.bizvane.mktcenterserviceimpl.mappers.*;
 import com.bizvane.utils.enumutils.SysResponseEnum;
 import com.bizvane.utils.responseinfo.ResponseData;
@@ -38,7 +34,6 @@ import com.bizvane.utils.tokens.SysAccountPO;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.poi.ss.formula.functions.T;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -78,16 +73,19 @@ public class ActivitySmartServiceImpl implements ActivitySmartService {
     private MktMessagePOMapper mktMessagePOMapper;
 
     @Autowired
-    private Award award;
-
-    @Autowired
-    private MemberInfoApiService memberInfoApiService;
-    @Autowired
     private MembersAdvancedSearchApiService membersAdvancedSearchApiService;
     @Autowired
     private MemberMessageSend memberMessageSend;
     @Autowired
     private CouponQueryServiceFeign couponQueryServiceFeign;
+    @Autowired
+    private GraphicTemplateServiceRpc graphicTemplateServiceRpc;
+    
+    @Autowired
+    private MktActivityCountPOMapper mktActivityCountPOMapper;
+
+    @Autowired
+    private MemberGroupApiService memberGroupApiService;
     /**
      * 查询智能营销分组列表(方块)
      * @param vo
@@ -255,6 +253,9 @@ public class ActivitySmartServiceImpl implements ActivitySmartService {
             case SMART_TYPE_WXMESSAGE:
                 log.info("match with SMART_TYPE_WXMESSAGE");
                 responseData =getWxmessageActivityDetailById(mktActivityId);
+            case SMART_TYPE_PICTURE_MESSAGE:
+                log.info("match with SMART_TYPE_PICTURE_MESSAGE");
+                responseData =getPicturemessageActivityDetailById(mktActivityId);
                 break;
             default:break;
         }
@@ -411,6 +412,42 @@ public class ActivitySmartServiceImpl implements ActivitySmartService {
         return responseData;
     }
 
+    /**
+     * 图文消息详情
+     * @param mktActivityId
+     * @return
+     */
+    public ResponseData<ActivitySmartVO> getPicturemessageActivityDetailById(Long mktActivityId){
+        log.info("com.bizvane.mktcenterserviceimpl.service.impl.ActivitySmartServiceImpl.getPicturemessageActivityDetailById param"+"mktActivityId:"+ mktActivityId);
+        ResponseData responseData = new ResponseData();
+        ActivitySmartVO activitySmartVO = new ActivitySmartVO();
+
+        //智能营销规则表
+        MktActivitySmartPOExample mktActivitySmartPOExample = new MktActivitySmartPOExample();
+        mktActivitySmartPOExample.createCriteria().andValidEqualTo(Boolean.TRUE).andMktActivityIdEqualTo(mktActivityId).andMktSmartTypeEqualTo(5);
+        List<MktActivitySmartPO> mktActivitySmartPOS = mktActivitySmartPOMapper.selectByExample(mktActivitySmartPOExample);
+        if(CollectionUtils.isEmpty(mktActivitySmartPOS)){
+            log.warn("mktActivitySmartPOS is empty");
+            responseData.setCode(ResponseConstants.ERROR);
+            responseData.setMessage(ResponseConstants.DATA_NOT_EXIST);
+            return responseData;
+        }
+
+        //主表
+        MktActivityPOWithBLOBs mktActivityPOWithBLOBs = mktActivityPOMapper.selectByPrimaryKey(mktActivityId);
+        BeanUtils.copyProperties(mktActivityPOWithBLOBs,activitySmartVO);
+        activitySmartVO.setTargetMbr(mktActivitySmartPOS.get(0).getTargetMbr());
+        //消息表
+        MktMessagePOExample mktMessagePOExample = new MktMessagePOExample();
+        mktMessagePOExample.createCriteria().andValidEqualTo(Boolean.TRUE).andBizTypeEqualTo(BusinessTypeEnum.ACTIVITY_TYPE_ACTIVITY.getCode()).andBizIdEqualTo(mktActivityId);
+        List<MktMessagePO> mktMessagePOS = mktMessagePOMapper.selectByExampleWithBLOBs(mktMessagePOExample);
+        if(!CollectionUtils.isEmpty(mktMessagePOS)){
+            activitySmartVO.setMktMessagePO(mktMessagePOS.get(0));
+        }
+        responseData.setData(activitySmartVO);
+        log.info("com.bizvane.mktcenterserviceimpl.service.impl.ActivitySmartServiceImpl.getPicturemessageActivityDetailById result"+ JSON.toJSONString(responseData));
+        return responseData;
+    }
     /**
      * 添加智能营销分组
      * @param vo
@@ -627,6 +664,16 @@ public class ActivitySmartServiceImpl implements ActivitySmartService {
         mktActivityPOMapper.insertSelective(mktActivityPOWithBLOBs);
         //获取新增后数据id
         Long mktActivityId = mktActivityPOWithBLOBs.getMktActivityId();
+        
+        // 新增活动统计表
+        MktActivityCountPO mktActivityCountPO = new MktActivityCountPO();
+        mktActivityCountPO.setMktActivityId(mktActivityId);
+        mktActivityCountPO.setSysCompanyId(mktActivityPOWithBLOBs.getSysCompanyId());
+        mktActivityCountPO.setSysBrandId(mktActivityPOWithBLOBs.getSysBrandId());
+        mktActivityCountPO.setCreateDate(new Date());
+        mktActivityCountPO.setCreateUserId(stageUser.getSysAccountId());
+        mktActivityCountPO.setCreateUserName(stageUser.getName());
+        mktActivityCountPOMapper.insertSelective(mktActivityCountPO);
 
         //新增智能营销表
         MktActivitySmartPO mktActivitySmartPO = new MktActivitySmartPO();
@@ -747,6 +794,16 @@ public class ActivitySmartServiceImpl implements ActivitySmartService {
         mktActivityPOMapper.insertSelective(mktActivityPOWithBLOBs);
         //获取新增后数据id
         Long mktActivityId = mktActivityPOWithBLOBs.getMktActivityId();
+        
+        // 新增活动统计表
+        MktActivityCountPO mktActivityCountPO = new MktActivityCountPO();
+        mktActivityCountPO.setMktActivityId(mktActivityId);
+        mktActivityCountPO.setSysCompanyId(mktActivityPOWithBLOBs.getSysCompanyId());
+        mktActivityCountPO.setSysBrandId(mktActivityPOWithBLOBs.getSysBrandId());
+        mktActivityCountPO.setCreateDate(new Date());
+        mktActivityCountPO.setCreateUserId(stageUser.getSysAccountId());
+        mktActivityCountPO.setCreateUserName(stageUser.getName());
+        mktActivityCountPOMapper.insertSelective(mktActivityCountPO);
 
         //新增智能营销表
         MktActivitySmartPO mktActivitySmartPO = new MktActivitySmartPO();
@@ -856,6 +913,16 @@ public class ActivitySmartServiceImpl implements ActivitySmartService {
         mktActivityPOMapper.insertSelective(mktActivityPOWithBLOBs);
         //获取新增后数据id
         Long mktActivityId = mktActivityPOWithBLOBs.getMktActivityId();
+        
+        // 新增活动统计表
+        MktActivityCountPO mktActivityCountPO = new MktActivityCountPO();
+        mktActivityCountPO.setMktActivityId(mktActivityId);
+        mktActivityCountPO.setSysCompanyId(mktActivityPOWithBLOBs.getSysCompanyId());
+        mktActivityCountPO.setSysBrandId(mktActivityPOWithBLOBs.getSysBrandId());
+        mktActivityCountPO.setCreateDate(new Date());
+        mktActivityCountPO.setCreateUserId(stageUser.getSysAccountId());
+        mktActivityCountPO.setCreateUserName(stageUser.getName());
+        mktActivityCountPOMapper.insertSelective(mktActivityCountPO);
 
         //新增智能营销表
         MktActivitySmartPO mktActivitySmartPO = new MktActivitySmartPO();
@@ -976,6 +1043,16 @@ public class ActivitySmartServiceImpl implements ActivitySmartService {
         mktActivityPOMapper.insertSelective(mktActivityPOWithBLOBs);
         //获取新增后数据id
         Long mktActivityId = mktActivityPOWithBLOBs.getMktActivityId();
+        
+        // 新增活动统计表
+        MktActivityCountPO mktActivityCountPO = new MktActivityCountPO();
+        mktActivityCountPO.setMktActivityId(mktActivityId);
+        mktActivityCountPO.setSysCompanyId(mktActivityPOWithBLOBs.getSysCompanyId());
+        mktActivityCountPO.setSysBrandId(mktActivityPOWithBLOBs.getSysBrandId());
+        mktActivityCountPO.setCreateDate(new Date());
+        mktActivityCountPO.setCreateUserId(stageUser.getSysAccountId());
+        mktActivityCountPO.setCreateUserName(stageUser.getName());
+        mktActivityCountPOMapper.insertSelective(mktActivityCountPO);
 
         //新增智能营销表
         MktActivitySmartPO mktActivitySmartPO = new MktActivitySmartPO();
@@ -1008,11 +1085,223 @@ public class ActivitySmartServiceImpl implements ActivitySmartService {
             membersInfoSearchVo.setPageSize(1000);
             membersInfoSearchVo.setBrandId(stageUser.getBrandId());
             membersInfoSearchVo.setSysCompanyId(stageUser.getSysCompanyId());
-            memberMessageSend.sendWxMessage(mktMessagePO, membersInfoSearchVo);
+            memberMessageSend.sendWxMessage(mktMessagePO, membersInfoSearchVo,vo);
         }
 
         responseData.setMessage(ResponseConstants.SUCCESS_MSG);
         log.info("com.bizvane.mktcenterserviceimpl.service.impl.ActivitySmartServiceImpl.addWxMessageActivity result"+ JSON.toJSONString(responseData));
         return responseData;
+    }
+
+    /**
+     * 对某个智能营销组创建任务
+     * 类型：5  图文消息
+     */
+    @Override
+    public ResponseData<Integer> addPictureMessageActivity(ActivitySmartVO vo, MessageVO messageVO, SysAccountPO stageUser) {
+        log.info("addPictureMessageActivity param"+"vo:"+ JSON.toJSONString(vo)+"messageVO:"+ JSON.toJSONString(messageVO)+"stageUser:"+JSON.toJSONString(stageUser));
+        ResponseData responseData = new ResponseData();
+
+        if(vo==null){
+            log.warn("vo is null");
+            responseData.setCode(SysResponseEnum.FAILED.getCode());
+            responseData.setMessage(SysResponseEnum.MODEL_FAILED_VALIDATION.getMessage());
+            return responseData;
+        }
+
+        //关联的智能营销分组不能为空
+        if(null==vo.getMktActivitySmartGroupId() && vo.getSmartType()==1){
+            log.warn("vo.getMktActivitySmartGroupId() is null");
+            responseData.setCode(SysResponseEnum.FAILED.getCode());
+            responseData.setMessage(SysResponseEnum.MODEL_FAILED_VALIDATION.getMessage());
+            return responseData;
+        }
+
+        Integer count = this.getPictureMessageCount(vo).getData();
+        if (count<1){
+            responseData.setCode(SysResponseEnum.FAILED.getCode());
+            responseData.setMessage("本月发送图文消息的次数不足!");
+            return responseData;
+        }
+        Long brandId = stageUser.getBrandId();
+        Long sysCompanyId = stageUser.getSysCompanyId();
+
+        vo.setCreateUserId(stageUser.getSysAccountId());
+        vo.setCreateDate(new Date());
+        vo.setCreateUserName(stageUser.getName());
+        vo.setSysBrandId(stageUser.getBrandId());
+        vo.setSysCompanyId(stageUser.getSysCompanyId());
+
+        //生成活动编号
+        String activityCode = CodeUtil.getActivityCode();
+        vo.setActivityCode(activityCode);
+        //拷贝属性
+        MktActivityPOWithBLOBs mktActivityPOWithBLOBs = new MktActivityPOWithBLOBs();
+        BeanUtils.copyProperties(vo,mktActivityPOWithBLOBs);
+        //活动编号
+        mktActivityPOWithBLOBs.setActivityCode(activityCode);
+        mktActivityPOWithBLOBs.setSysCompanyId(stageUser.getSysCompanyId());
+        mktActivityPOWithBLOBs.setSysBrandId(stageUser.getBrandId());
+        //8=智能营销活动
+        mktActivityPOWithBLOBs.setActivityType(ActivityTypeEnum.ACTIVITY_TYPE_SMART.getCode());
+        //3=已审核
+        mktActivityPOWithBLOBs.setCheckStatus(CheckStatusEnum.CHECK_STATUS_APPROVED.getCode());
+
+        //Boolean execute = Boolean.FALSE;
+        //判断是不是需要立即发送
+//        if (false==vo.getSendImmediately()){
+//            //如果活动时间滞后
+//            if(new Date().before(vo.getSendTime())){
+//                log.info("new Date().before(vo.getSendTime()) is true");
+//                //活动状态设置为待执行
+//                mktActivityPOWithBLOBs.setActivityStatus(ActivityStatusEnum.ACTIVITY_STATUS_PENDING.getCode());
+//                vo.setMktSmartType(MktSmartTypeEnum.SMART_TYPE_WXMESSAGE.getCode());
+//                //创建任务调度
+//                jobUtil.addSmartActivityJob(stageUser,vo);
+//            }else{
+//                //活动状态设置为执行中
+//                mktActivityPOWithBLOBs.setActivityStatus(ActivityStatusEnum.ACTIVITY_STATUS_EXECUTING.getCode());
+//                //需要立即执行
+//                execute = Boolean.TRUE;
+//            }
+//        }else {
+//            execute = Boolean.TRUE;
+//        }
+
+        //新增活动主表
+        /*mktActivityPOWithBLOBs.setActivityName("智能营销发微信消息");*/
+        mktActivityPOMapper.insertSelective(mktActivityPOWithBLOBs);
+        //获取新增后数据id
+        Long mktActivityId = mktActivityPOWithBLOBs.getMktActivityId();
+        
+        // 新增活动统计表
+        MktActivityCountPO mktActivityCountPO = new MktActivityCountPO();
+        mktActivityCountPO.setMktActivityId(mktActivityId);
+        mktActivityCountPO.setSysCompanyId(mktActivityPOWithBLOBs.getSysCompanyId());
+        mktActivityCountPO.setSysBrandId(mktActivityPOWithBLOBs.getSysBrandId());
+        mktActivityCountPO.setCreateDate(new Date());
+        mktActivityCountPO.setCreateUserId(stageUser.getSysAccountId());
+        mktActivityCountPO.setCreateUserName(stageUser.getName());
+        mktActivityCountPOMapper.insertSelective(mktActivityCountPO);
+
+        //新增智能营销表
+        MktActivitySmartPO mktActivitySmartPO = new MktActivitySmartPO();
+        BeanUtils.copyProperties(vo,mktActivitySmartPO);
+        mktActivitySmartPO.setMktActivityId(mktActivityId);
+        mktActivitySmartPO.setMktSmartType(5);//图文消息
+        mktActivitySmartPOMapper.insertSelective(mktActivitySmartPO);
+
+        //新增消息表--图文消息
+        MktMessagePO mktMessagePO = new MktMessagePO();
+        BeanUtils.copyProperties(messageVO,mktMessagePO);
+        mktMessagePO.setBizType(BusinessTypeEnum.ACTIVITY_TYPE_ACTIVITY.getCode());
+        mktMessagePO.setBizId(mktActivityId);
+        mktMessagePO.setCreateDate(new Date());
+        mktMessagePO.setCreateUserId(stageUser.getSysAccountId());
+        mktMessagePO.setCreateUserName(stageUser.getName());
+        mktMessagePO.setSendImmediately(vo.getSendImmediately());
+        mktMessagePO.setSendTime(vo.getSendTime());
+        mktMessagePO.setMsgType("3");
+        mktMessagePOMapper.insertSelective(mktMessagePO);
+
+        //立即执行
+            String targetMbr = vo.getTargetMbr();
+            ////分页查询会员信息
+            //把高级搜索的条件转换成对象
+            // JSONObject jsonObject=JSONObject.parseObject(targetMbr);
+            // MembersInfoSearchVo membersInfoSearchVo=jsonObject.toJavaObject(MembersInfoSearchVo.class);
+            MembersInfoSearchVo membersInfoSearchVo=JSON.parseObject(targetMbr,MembersInfoSearchVo.class);
+            membersInfoSearchVo.setPageNumber(1);
+            membersInfoSearchVo.setPageSize(10000);
+            membersInfoSearchVo.setBrandId(stageUser.getBrandId());
+            membersInfoSearchVo.setSysCompanyId(stageUser.getSysCompanyId());
+            Long mbrGroupDefId = mktActivityPOWithBLOBs.getMbrGroupDefId();
+            Long mktActivitySmartGroupId = mktActivityPOWithBLOBs.getMktActivitySmartGroupId();
+            String groupName= null;
+            if (mbrGroupDefId!=null){
+                MbrGroupModel data = memberGroupApiService.queryGroupInfo(mbrGroupDefId).getData();
+                groupName=data==null?null:data.getName();
+            }else if (mktActivitySmartGroupId!=null){
+                MktActivitySmartGroupPO mktActivitySmartGroupPO = mktActivitySmartGroupPOMapper.selectByPrimaryKey(mktActivitySmartGroupId);
+                groupName=mktActivitySmartGroupPO==null?null:mktActivitySmartGroupPO.getMemberGroupName();
+            }
+        memberMessageSend.sendPictureMessage(mktMessagePO, membersInfoSearchVo,groupName,brandId,sysCompanyId);
+
+
+        responseData.setMessage(ResponseConstants.SUCCESS_MSG);
+        log.info("addPictureMessageActivity result"+ JSON.toJSONString(responseData));
+        return responseData;
+    }
+
+    /**
+     *获取图文消息的剩余次数
+     */
+    @Override
+    public  ResponseData<Integer>  getPictureMessageCount(ActivitySmartVO vo){
+        log.info("ActivitySmartServiceImpl getPictureMessageCount:"+JSON.toJSONString(vo));
+        ResponseData<Integer> responseData = new ResponseData<>();
+        Long mktActivitySmartGroupId = vo.getMktActivitySmartGroupId();
+        Long mbrGroupDefId = vo.getMbrGroupDefId();
+       if (mbrGroupDefId==null && mktActivitySmartGroupId==null){
+           responseData.setMessage("数据不合格!");
+           responseData.setCode(100);
+           return responseData;
+       }
+        String time = TimeUtils.SDF_Y_M.format(new Date());
+        Integer pictureMessageCount = mktActivityPOMapper.getPictureMessageCount(mktActivitySmartGroupId, mbrGroupDefId, time);
+        responseData.setData(pictureMessageCount);
+        return responseData;
+    }
+
+    /**
+     * 小程序获取图文列表
+     */
+    @Override
+    public  ResponseData<JSONArray>  getPictureLists(PictureMessageVO vo){
+        ResponseData responseData = new ResponseData<JSONArray>();
+        JSONArray objects = new JSONArray();
+        ObtainGraphicBo obtainGraphicBo=new  ObtainGraphicBo();
+        BeanUtils.copyProperties(vo,obtainGraphicBo);
+        log.info("getPictureLists  param:"+JSON.toJSONString(obtainGraphicBo));
+        JSONObject jsonObject = this.getJsonPictureLists(obtainGraphicBo);
+//        String item = JSON.toJSONString(jsonObject.get("item"));
+//        System.out.println("item:"+item);
+//        JSONArray objects = JSONArray.parseArray(item);
+//        responseData.setData(objects);
+        if (jsonObject==null){
+            responseData.setCode(100);
+            responseData.setMessage("无数据!");
+            return responseData;
+        }
+        int pages =1;
+        Integer total_count = jsonObject.getInteger("total_count");
+        if (total_count>20){
+            pages = (int)Math.ceil((double) total_count / 20);
+        }
+        if (pages>0){
+            for (int i = 1; i <= pages; i++) {
+                ObtainGraphicBo obtainGraphic=new  ObtainGraphicBo();
+                BeanUtils.copyProperties(vo,obtainGraphic);
+                obtainGraphic.setOffset(String.valueOf(i-1));
+                obtainGraphic.setCount(String.valueOf(i*20));
+                JSONObject jsonPictureLists = this.getJsonPictureLists(obtainGraphic);
+                if (jsonPictureLists==null){
+                 break;
+                }
+                String item = JSON.toJSONString(jsonPictureLists.get("item"));
+                System.out.println("item:"+item);
+                JSONArray objectsItem = JSONArray.parseArray(item);
+                objects.addAll(objectsItem);
+            }
+        }
+       responseData.setData(objects);
+        return responseData;
+    }
+
+    public JSONObject getJsonPictureLists(ObtainGraphicBo obtainGraphicBo) {
+        ResponseData<ObtainGraphicBo> obtainGraphicBoResponseData = graphicTemplateServiceRpc.obtainGraphicTemplate(obtainGraphicBo);
+        ObtainGraphicBo data = obtainGraphicBoResponseData.getData();
+        String obtainGraphic = data.getObtainGraphic();
+        return JSON.parseObject(obtainGraphic);
     }
 }

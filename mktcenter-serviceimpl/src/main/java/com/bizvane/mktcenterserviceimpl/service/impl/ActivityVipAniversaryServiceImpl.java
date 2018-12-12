@@ -20,6 +20,7 @@ import com.bizvane.members.facade.models.MemberInfoModel;
 import com.bizvane.members.facade.service.api.IntegralChangeApiService;
 import com.bizvane.members.facade.service.api.IntegralRecordApiService;
 import com.bizvane.members.facade.service.card.request.IntegralChangeRequestModel;
+import com.bizvane.members.facade.service.card.response.IntegralChangeResponseModel;
 import com.bizvane.members.facade.vo.IntegralRecordVo;
 import com.bizvane.mktcenterservice.interfaces.ActivityVipAniversaryService;
 import com.bizvane.mktcenterservice.models.bo.ActivityBO;
@@ -50,6 +51,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
+import java.math.BigDecimal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -103,6 +105,10 @@ public class ActivityVipAniversaryServiceImpl implements ActivityVipAniversarySe
     private StoreServiceRpc storeServiceRpc;
     @Autowired
     private IntegralRecordApiService integralRecordApiService;
+    
+    @Autowired
+    private MktActivityCountPOMapper mktActivityCountPOMapper;
+    
     @Override
     public ResponseData<ActivityVO> getActivityVipAniversaryList(ActivityVO vo, PageForm pageForm,SysAccountPO stageUser) {
         log.info("查询纪念日活动列表开始");
@@ -126,6 +132,10 @@ public class ActivityVipAniversaryServiceImpl implements ActivityVipAniversarySe
         ResponseData responseData = new ResponseData();
         //得到大实体类
         ActivityVO activityVO = bo.getActivityVO();
+        //判断是否是全部等级
+        if (activityVO.getMbrLevelCode().equals("0")){
+            activityVO.setMbrLevelName("全部等级");
+        }
         //判断活动开始时间是否大于当前时间
         if(1 != bo.getActivityVO().getLongTerm() && new Date().after(activityVO.getStartTime())){
             responseData.setCode(SysResponseEnum.MODEL_FAILED_VALIDATION.getCode());
@@ -224,6 +234,17 @@ public class ActivityVipAniversaryServiceImpl implements ActivityVipAniversarySe
         mktActivityPOMapper.insertSelective(mktActivityPOWithBLOBs);
         //获取新增后数据id
         Long mktActivityId = mktActivityPOWithBLOBs.getMktActivityId();
+        
+        // 新增活动统计表
+        MktActivityCountPO mktActivityCountPO = new MktActivityCountPO();
+        mktActivityCountPO.setMktActivityId(mktActivityId);
+        mktActivityCountPO.setSysCompanyId(mktActivityPOWithBLOBs.getSysCompanyId());
+        mktActivityCountPO.setSysBrandId(mktActivityPOWithBLOBs.getSysBrandId());
+        mktActivityCountPO.setCreateDate(new Date());
+        mktActivityCountPO.setCreateUserId(stageUser.getSysAccountId());
+        mktActivityCountPO.setCreateUserName(stageUser.getName());
+        mktActivityCountPOMapper.insertSelective(mktActivityCountPO);
+        
         if(i>0){
             //如果是待审核数据则需要增加一条审核数据l
             SysCheckPo po = new SysCheckPo();
@@ -634,7 +655,8 @@ public class ActivityVipAniversaryServiceImpl implements ActivityVipAniversarySe
             integralChangeRequestModel.setBusinessType(com.bizvane.members.facade.enums.BusinessTypeEnum.TASK_TYPE_MEMORIAL_DAY.getCode());
             integralChangeRequestModel.setChangeDate(new Date());
             log.info("执行纪念日活动开始开始增加积分增加积分++++++");
-            integralChangeApiService.integralChangeOperate(integralChangeRequestModel);
+            IntegralChangeResponseModel integralChangeResponseModel =integralChangeApiService.integralChangeOperate(integralChangeRequestModel);
+            log.info("增加积分返回结果为------------："+ JSON.toJSONString(integralChangeResponseModel));
             // 增加卷奖励接口
         // 增加卷奖励接口
         MktCouponPOExample example = new  MktCouponPOExample();
@@ -650,7 +672,8 @@ public class ActivityVipAniversaryServiceImpl implements ActivityVipAniversarySe
             va.setBrandId(activityAniversary.getSysBrandId());
             va.setCompanyId(activityAniversary.getSysCompanyId());
             log.info("执行纪念日活动开始开始增加券增加券~~~~~~~~~~");
-            sendCouponServiceFeign.simple(va);
+            ResponseData<Object> responseData=sendCouponServiceFeign.simple(va);
+            log.info("增加券返回结果为------------："+ JSON.toJSONString(responseData));
         }
             //新增积分到会员参与活动记录表中数据
             MktActivityRecordPO po = new MktActivityRecordPO();
@@ -661,6 +684,8 @@ public class ActivityVipAniversaryServiceImpl implements ActivityVipAniversarySe
             po.setAcitivityId(activityAniversary.getMktActivityId());
             po.setSysBrandId(activityAniversary.getSysBrandId());
             mktActivityRecordPOMapper.insertSelective(po);
+            
+            mktActivityCountPOMapper.updateSum(po.getAcitivityId(), 1, BigDecimal.ZERO, po.getPoints());
 
     }
     private Boolean dateMonth(ActivityVO activityBirthday,MemberInfoModel memberInfo) {

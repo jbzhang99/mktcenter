@@ -301,6 +301,8 @@ public class ConvertCouponServiceImpl implements ConvertCouponService {
         couponIntegralExchangeVO.setExchangePrice(mktCouponIntegralExchangePO.getExchangePrice());
         couponIntegralExchangeVO.setCouponDefinitionPO(coupon);
         couponIntegralExchangeVO.setExchangeInfo(mktCouponIntegralExchangePO.getExchangeInfo());
+        couponIntegralExchangeVO.setExchangeStatus(mktCouponIntegralExchangePO.getExchangeStatus());
+        couponIntegralExchangeVO.setExchangeCount(mktCouponIntegralExchangePO.getExchangeCount());
         responseData.setData(couponIntegralExchangeVO);
         return responseData;
     }
@@ -334,7 +336,7 @@ public class ConvertCouponServiceImpl implements ConvertCouponService {
             exchangeCount = exchangeCount == null ? 0L : exchangeCount;
             if ( Long.valueOf(memberConvertNumber)>= exchangeCount) {
                 responseData.setCode(100);
-                responseData.setMessage("超过限制券兑换数量!");
+                responseData.setMessage("超过券兑换数量限制!");
                 return responseData;
             }
         }

@@ -56,17 +56,9 @@ import java.util.*;
 @Slf4j
 public class TaskProfileServiceImpl implements TaskProfileService {
     @Autowired
-    private Award award;
-    @Autowired
-    private JobUtil jobUtil;
-    @Autowired
     private MktTaskPOMapper mktTaskPOMapper;
     @Autowired
-    private MktCouponPOMapper mktCouponPOMapper;
-    @Autowired
     private MktMessagePOMapper mktMessagePOMapper;
-    @Autowired
-    private MktTaskRecordPOMapper mktTaskRecordPOMapper;
     @Autowired
     private MktTaskProfilePOMapper mktTaskProfilePOMapper;
     @Autowired
@@ -76,21 +68,9 @@ public class TaskProfileServiceImpl implements TaskProfileService {
     @Autowired
     private TaskMessageService taskMessageService;
     @Autowired
-    private WxAppletApiService wxAppletApiService;
-    @Autowired
     private TaskRecordService taskRecordService;
     @Autowired
     private CouponQueryServiceFeign couponQueryService;
-    @Autowired
-    private IntegralRecordApiService integralRecordApiService;
-    @Autowired
-    private SysCheckServiceRpc sysCheckServiceRpc;
-    @Autowired
-    private SendCouponServiceFeign sendCouponServiceFeign;
-    @Autowired
-    private SysCheckConfigServiceRpc sysCheckConfigServiceRpc;
-    @Autowired
-    private CouponDefinitionServiceFeign couponDefinitionServiceFeign;
 
     /**
      * 新建完善资料任务
@@ -439,6 +419,7 @@ public class TaskProfileServiceImpl implements TaskProfileService {
         ExtendPropertyVO extendPropertyVO = new ExtendPropertyVO();
         extendPropertyVO.setWxVisible("2");
         extendPropertyVO.setBrandId(sysBrandId);
-        return  wxAppletApiService.getBaseAndExtendPropertyList(extendPropertyVO);
+//        return  wxAppletApiService.getBaseAndExtendPropertyList(extendPropertyVO);
+        return null;
     }
 }

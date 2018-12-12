@@ -11,6 +11,11 @@ public class CouponIntegralExchangeVO {
     private Integer exchangePrice;
     private CouponDefinitionPO couponDefinitionPO;
     private String exchangeInfo;
+    //是否限兑 0：限制 1：不限制
+    private Integer exchangeStatus;
+    //限制兑换量
+    private Long exchangeCount;
+
 
     public Long getExchangeId() {
         return exchangeId;
@@ -42,5 +47,21 @@ public class CouponIntegralExchangeVO {
 
     public void setExchangeInfo(String exchangeInfo) {
         this.exchangeInfo = exchangeInfo;
+    }
+
+    public Integer getExchangeStatus() {
+        return exchangeStatus;
+    }
+
+    public void setExchangeStatus(Integer exchangeStatus) {
+        this.exchangeStatus = exchangeStatus;
+    }
+
+    public Long getExchangeCount() {
+        return exchangeCount;
+    }
+
+    public void setExchangeCount(Long exchangeCount) {
+        this.exchangeCount = exchangeCount;
     }
 }

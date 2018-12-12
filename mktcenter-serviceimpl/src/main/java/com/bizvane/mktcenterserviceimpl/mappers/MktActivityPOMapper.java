@@ -114,4 +114,6 @@ public interface MktActivityPOMapper {
 	CtivityAnalysisBO getActivityAnalysisTotal(ActivityAnalysisCountBO bo);
 	//白名单店铺
 	public  String  getActivityWhiteStoreIds(WhiteStoreVO vo);
+
+	Integer getPictureMessageCount(@Param("mktActivitySmartGroupId")Long mktActivitySmartGroupId,@Param("mbrGroupDefId")Long mbrGroupDefId,@Param("time")String time);
 }

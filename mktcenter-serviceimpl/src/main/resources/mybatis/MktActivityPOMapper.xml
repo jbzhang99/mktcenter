@@ -745,16 +745,23 @@
   </select>
   <!-- 活动效果分析-->
   <select id="getActivityAnalysisCountpage" parameterType="com.bizvane.mktcenterservice.models.bo.ActivityAnalysisCountBO" resultType="com.bizvane.mktcenterservice.models.bo.ActivityAnalysisCountBO">
-    SELECT t.mkt_activity_id AS mktActivityId,t.activity_name AS activityName,
-    t.long_term AS longTerm,t.start_time AS startTime,t.end_time AS endTime,t.activity_code AS activityCode,
-    t.sys_brand_id as sysBrandId,t.activity_type AS activityType,t.create_date AS createDate,t.activity_status AS activityStatus,
-    a.su AS participateNumber,a.pointsSum AS pointsSum,a.orderAmount AS orderAmountSum
-    FROM t_mkt_activity t
-    LEFT JOIN
-    (
-    SELECT acitivity_id, COUNT(1)su,sum(points)pointsSum,sum(order_amount)orderAmount
-    FROM t_mkt_activity_record
-    GROUP BY acitivity_id) a ON a.acitivity_id=t.mkt_activity_id
+	SELECT
+		t.mkt_activity_id AS mktActivityId,
+		t.activity_name AS activityName,
+		t.long_term AS longTerm,
+		t.start_time AS startTime,
+		t.end_time AS endTime,
+		t.activity_code AS activityCode,
+		t.sys_brand_id AS sysBrandId,
+		t.activity_type AS activityType,
+		t.create_date AS createDate,
+		t.activity_status AS activityStatus,
+		a.member_count AS participateNumber,
+		a.points_sum AS pointsSum,
+		a.order_amount_sum AS orderAmountSum
+	FROM
+		t_mkt_activity t
+	JOIN t_mkt_activity_count a ON a.mkt_activity_id = t.mkt_activity_id
     WHERE t.valid=1
     <if test="sysBrandId != null and sysBrandId!= ''">
       AND t.sys_brand_id = #{sysBrandId}
@@ -848,5 +855,21 @@
     AND tmt.end_time &gt;= #{startTime,jdbcType=TIMESTAMP}
     AND tmt.check_status &lt;&gt; 4
     AND (tmt.activity_status=1 OR tmt.activity_status=2)
+  </select>
+  <select id="getPictureMessageCount" resultType="java.lang.Integer">
+    SELECT
+    4-count(tma.mkt_activity_id)
+    FROM
+    t_mkt_activity tma INNER JOIN t_mkt_message tmm ON tma.mkt_activity_id  = tmm.biz_id
+    WHERE
+    tma.valid=1
+    AND tmm.msg_type=3
+    <if test="mktActivitySmartGroupId != null">
+      AND tma.mkt_activity_smart_group_id =#{mktActivitySmartGroupId}
+    </if>
+    <if test="mbrGroupDefId != null">
+      AND tma.mbr_group_def_id=#{mbrGroupDefId}
+    </if>
+      AND tma.create_date LIKE CONCAT(#{time},'%')
   </select>
 </mapper>
