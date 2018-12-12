@@ -1301,6 +1301,10 @@ public class ActivitySmartServiceImpl implements ActivitySmartService {
     public JSONObject getJsonPictureLists(ObtainGraphicBo obtainGraphicBo) {
         ResponseData<ObtainGraphicBo> obtainGraphicBoResponseData = graphicTemplateServiceRpc.obtainGraphicTemplate(obtainGraphicBo);
         ObtainGraphicBo data = obtainGraphicBoResponseData.getData();
+        if (data==null){
+         log.info("图文素材缺乏!");
+          return null;
+        }
         String obtainGraphic = data.getObtainGraphic();
         return JSON.parseObject(obtainGraphic);
     }
