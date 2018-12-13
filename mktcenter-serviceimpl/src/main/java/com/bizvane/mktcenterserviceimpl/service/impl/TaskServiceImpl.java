@@ -1,60 +1,88 @@
 package com.bizvane.mktcenterserviceimpl.service.impl;
 
+import java.text.ParseException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.List;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Future;
+import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
+
+import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Async;
+import org.springframework.stereotype.Service;
+
 import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONObject;
 import com.bizvane.centercontrolservice.models.po.SysSmsConfigPo;
 import com.bizvane.centercontrolservice.models.vo.SmsConfigVo;
 import com.bizvane.centercontrolservice.rpc.SysSmsConfigServiceRpc;
 import com.bizvane.centerstageservice.models.po.SysBrandPo;
-import com.bizvane.centerstageservice.models.po.SysStorePo;
-import com.bizvane.centerstageservice.rpc.BrandServiceRpc;
-import com.bizvane.couponfacade.interfaces.CouponEntityServiceFeign;
-import com.bizvane.couponfacade.interfaces.SendCouponServiceFeign;
-import com.bizvane.couponfacade.models.vo.CouponSendMemberListRequestVO;
-import com.bizvane.couponfacade.models.vo.CouponSendMemberListResponseVO;
-import com.bizvane.members.facade.service.api.IntegralChangeApiService;
-import com.bizvane.members.facade.service.card.response.IntegralChangeResponseModel;
-import com.bizvane.messagefacade.interfaces.SendBatchMessageFeign;
-import com.bizvane.messagefacade.interfaces.TemplateMessageServiceFeign;
-import com.bizvane.messagefacade.models.vo.*;
-import com.bizvane.mktcenterservice.models.vo.PageForm;
-import com.bizvane.mktcenterserviceimpl.mappers.*;
-import com.bizvane.utils.jobutils.JobBusinessTypeEnum;
-import com.bizvane.utils.jobutils.JobClient;
-import com.bizvane.utils.jobutils.XxlJobInfo;
-import com.bizvane.utils.thread.AsyncTaskExecutePool;
-import com.bizvane.utils.tokens.SysAccountPO;
 import com.bizvane.centerstageservice.models.po.SysCheckConfigPo;
 import com.bizvane.centerstageservice.models.po.SysCheckPo;
+import com.bizvane.centerstageservice.models.po.SysStorePo;
 import com.bizvane.centerstageservice.models.vo.SysStoreVo;
+import com.bizvane.centerstageservice.rpc.BrandServiceRpc;
 import com.bizvane.centerstageservice.rpc.StoreServiceRpc;
 import com.bizvane.centerstageservice.rpc.SysCheckConfigServiceRpc;
 import com.bizvane.centerstageservice.rpc.SysCheckServiceRpc;
 import com.bizvane.couponfacade.enums.SendTypeEnum;
 import com.bizvane.couponfacade.interfaces.CouponDefinitionServiceFeign;
+import com.bizvane.couponfacade.interfaces.CouponEntityServiceFeign;
 import com.bizvane.couponfacade.interfaces.CouponQueryServiceFeign;
+import com.bizvane.couponfacade.interfaces.SendCouponServiceFeign;
 import com.bizvane.couponfacade.models.po.CouponDefinitionPO;
 import com.bizvane.couponfacade.models.vo.CouponFindCouponCountResponseVO;
+import com.bizvane.couponfacade.models.vo.CouponSendMemberListRequestVO;
+import com.bizvane.couponfacade.models.vo.CouponSendMemberListResponseVO;
 import com.bizvane.couponfacade.models.vo.SendCouponSimpleRequestVO;
 import com.bizvane.members.facade.enums.BusinessTypeEnum;
 import com.bizvane.members.facade.enums.IntegralChangeTypeEnum;
 import com.bizvane.members.facade.models.MemberInfoModel;
+import com.bizvane.members.facade.service.api.IntegralChangeApiService;
 import com.bizvane.members.facade.service.api.MemberInfoApiService;
 import com.bizvane.members.facade.service.api.WxChannelInfoApiService;
 import com.bizvane.members.facade.service.card.request.IntegralChangeRequestModel;
+import com.bizvane.members.facade.service.card.response.IntegralChangeResponseModel;
 import com.bizvane.members.facade.vo.MemberInfoApiModel;
 import com.bizvane.members.facade.vo.PageVo;
 import com.bizvane.members.facade.vo.WxChannelInfoVo;
-import com.bizvane.messagefacade.interfaces.SendCommonMessageFeign;
-import com.bizvane.mktcenterservice.interfaces.TaskMessageService;
-import com.bizvane.mktcenterservice.interfaces.TaskRecordService;
+import com.bizvane.messagefacade.interfaces.SendBatchMessageFeign;
+import com.bizvane.messagefacade.interfaces.TemplateMessageServiceFeign;
+import com.bizvane.messagefacade.models.vo.ActivityMessageVO;
+import com.bizvane.messagefacade.models.vo.GenrealGetMessageVO;
+import com.bizvane.messagefacade.models.vo.SmsStatisticsVO;
+import com.bizvane.messagefacade.models.vo.SysSmsConfigVO;
 import com.bizvane.mktcenterservice.interfaces.TaskService;
 import com.bizvane.mktcenterservice.models.bo.AwardBO;
 import com.bizvane.mktcenterservice.models.bo.TaskAwardBO;
 import com.bizvane.mktcenterservice.models.bo.TaskBO;
-import com.bizvane.mktcenterservice.models.po.*;
-import com.bizvane.mktcenterservice.models.vo.*;
-import com.bizvane.mktcenterserviceimpl.common.award.Award;
+import com.bizvane.mktcenterservice.models.po.MktCouponPO;
+import com.bizvane.mktcenterservice.models.po.MktCouponPOExample;
+import com.bizvane.mktcenterservice.models.po.MktMessagePO;
+import com.bizvane.mktcenterservice.models.po.MktMessagePOExample;
+import com.bizvane.mktcenterservice.models.po.MktTaskCountPO;
+import com.bizvane.mktcenterservice.models.po.MktTaskPOExample;
+import com.bizvane.mktcenterservice.models.po.MktTaskPOWithBLOBs;
+import com.bizvane.mktcenterservice.models.po.MktTaskRecordPO;
+import com.bizvane.mktcenterservice.models.po.MktTaskRecordPOExample;
+import com.bizvane.mktcenterservice.models.vo.ChangeTaskTypeVO;
+import com.bizvane.mktcenterservice.models.vo.CheckTaskVO;
+import com.bizvane.mktcenterservice.models.vo.DayTaskRecordVo;
+import com.bizvane.mktcenterservice.models.vo.PageForm;
+import com.bizvane.mktcenterservice.models.vo.SendMessageVO;
+import com.bizvane.mktcenterservice.models.vo.TaskAnalysisVo;
+import com.bizvane.mktcenterservice.models.vo.TaskDetailVO;
+import com.bizvane.mktcenterservice.models.vo.TaskRecordVO;
+import com.bizvane.mktcenterservice.models.vo.TaskSearchVO;
+import com.bizvane.mktcenterservice.models.vo.TaskVO;
+import com.bizvane.mktcenterservice.models.vo.WhiteStoreResultVO;
+import com.bizvane.mktcenterservice.models.vo.WhiteStoreVO;
 import com.bizvane.mktcenterserviceimpl.common.constants.ResponseConstants;
 import com.bizvane.mktcenterserviceimpl.common.constants.TaskConstants;
 import com.bizvane.mktcenterserviceimpl.common.enums.CheckStatusEnum;
@@ -62,22 +90,20 @@ import com.bizvane.mktcenterserviceimpl.common.enums.MktSmartTypeEnum;
 import com.bizvane.mktcenterserviceimpl.common.enums.TaskStatusEnum;
 import com.bizvane.mktcenterserviceimpl.common.job.JobUtil;
 import com.bizvane.mktcenterserviceimpl.common.utils.TimeUtils;
+import com.bizvane.mktcenterserviceimpl.mappers.MktCouponPOMapper;
+import com.bizvane.mktcenterserviceimpl.mappers.MktMessagePOMapper;
+import com.bizvane.mktcenterserviceimpl.mappers.MktTaskCountPOMapper;
+import com.bizvane.mktcenterserviceimpl.mappers.MktTaskPOMapper;
+import com.bizvane.mktcenterserviceimpl.mappers.MktTaskRecordPOMapper;
 import com.bizvane.utils.enumutils.SysResponseEnum;
+import com.bizvane.utils.jobutils.JobClient;
+import com.bizvane.utils.jobutils.XxlJobInfo;
 import com.bizvane.utils.responseinfo.ResponseData;
+import com.bizvane.utils.tokens.SysAccountPO;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.BeanUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.scheduling.annotation.Async;
-import org.springframework.stereotype.Service;
 
-import java.text.ParseException;
-import java.util.*;
-import java.util.concurrent.*;
-import java.util.stream.Collectors;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * @author chen.li
@@ -95,14 +121,10 @@ public class TaskServiceImpl implements TaskService {
     private SysCheckConfigServiceRpc sysCheckConfigServiceRpc;
     @Autowired
     private MemberInfoApiService memberInfoApiService;
-    @Autowired
-    private Award award;
-    @Autowired
-    private TaskMessageService taskMessageService;
+
     @Autowired
     private JobUtil jobUtil;
-    @Autowired
-    private TaskRecordService taskRecordService;
+
     @Autowired
     private CouponQueryServiceFeign couponQueryService;
     @Autowired
@@ -118,8 +140,6 @@ public class TaskServiceImpl implements TaskService {
     @Autowired
     private SysSmsConfigServiceRpc sysSmsConfigServiceRpc;
     @Autowired
-    private SendCommonMessageFeign sendCommonMessageFeign;
-    @Autowired
     private CouponDefinitionServiceFeign couponDefinitionServiceFeign;
     @Autowired
     private StoreServiceRpc storeServiceRpc;
@@ -129,8 +149,7 @@ public class TaskServiceImpl implements TaskService {
     private JobClient jobClient;
     @Autowired
     private CouponEntityServiceFeign couponEntityServiceFeign;
-    @Autowired
-    private AsyncTaskExecutePool asyncTaskExecutePool;
+
     @Autowired
     private BrandServiceRpc brandServiceRpc;
     @Autowired
@@ -139,6 +158,9 @@ public class TaskServiceImpl implements TaskService {
     private IntegralChangeApiService integralChangeApiService;
     @Autowired
     private SendCouponServiceFeign sendCouponServiceFeign;
+    
+    @Autowired
+    private MktTaskCountPOMapper mktTaskCountPOMapper;
 
     /**
      * 通过id查询店铺列表
@@ -673,7 +695,7 @@ public class TaskServiceImpl implements TaskService {
      * 任务类型：1完善资料，2分享任务，3邀请注册，4累计消费次数，5累计消费金额
      */
     @Override
-    @Async
+    @Async("asyncServiceExecutor")
     public void sendCouponAndPoint(String memberCode, TaskAwardBO orderAwardBO) {
         log.info("发送券和积分sendCouponAndPoint--参数--" + memberCode + "---" + JSON.toJSONString(orderAwardBO));
         Long mktTaskId = orderAwardBO.getMktTaskId();
@@ -697,8 +719,6 @@ public class TaskServiceImpl implements TaskService {
             integralRecordModel.setChangeType(IntegralChangeTypeEnum.INCOME.getCode());
             integralRecordModel.setChangeBills(taskCode);
             integralRecordModel.setChangeIntegral(orderAwardBO.getPoints());
-//            bo.setMktType(MktSmartTypeEnum.SMART_TYPE_INTEGRAL.getCode());
-//            bo.setIntegralRecordModel(integralRecordModel);
             log.info("任务发送积分的参数--" + JSON.toJSONString(integralRecordModel));
             IntegralChangeResponseModel integralChangeResponseModel = integralChangeApiService.integralChangeOperate(integralRecordModel);
             log.info("任务发积分结果打印======" + JSON.toJSONString(integralChangeResponseModel));
@@ -1034,6 +1054,17 @@ public class TaskServiceImpl implements TaskService {
         task.setCreateUserId(stageUser.getSysAccountId());
         task.setCreateDate(new Date());
         mktTaskPOMapper.insertSelective(task);
+        
+        MktTaskCountPO mktTaskCountPO = new MktTaskCountPO();
+        mktTaskCountPO.setSysCompanyId(stageUser.getSysCompanyId());
+        mktTaskCountPO.setSysBrandId(stageUser.getBrandId());
+        mktTaskCountPO.setMktTaskId(task.getMktTaskId());
+        mktTaskCountPO.setCreateUserName(stageUser.getName());
+        mktTaskCountPO.setCreateUserId(stageUser.getSysAccountId());
+        mktTaskCountPO.setCreateDate(new Date());
+        
+        mktTaskCountPOMapper.insertSelective(mktTaskCountPO);
+
         return task.getMktTaskId();
     }
 

@@ -12,8 +12,7 @@ import com.bizvane.utils.responseinfo.ResponseData;
  * @Author: lijunwei
  * @Time: 2018/11/5 13:53
  */
-@FeignClient("${feign.client.mktcenter.name}")
-@RequestMapping("${feign.client.mktcenter.path}/quotaRpc")
+@FeignClient(value ="${feign.client.mktcenter.name}",path = "${feign.client.mktcenter.path}/quotaRpc")
 public interface QuotaServiceRpc {
     
     

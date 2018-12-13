@@ -16,13 +16,7 @@ spring:
         min-idle: 0
   swagger:
     show: true
-  application:
-    name: mktcenter-dev
-  #  security:
-  #    enabled: false
-  #    user:
-  #      name: root
-  #      password: root
+
   datasource:
     url: jdbc:mysql://bizvane-2018.mysql.polardb.rds.aliyuncs.com:3306/bizvane3?useUnicode=true&characterEncoding=utf-8
     username: bizvane_2018
@@ -68,6 +62,7 @@ spring:
       enabled: false
 eureka:
   instance:
+    prefer-ip-address: true
     metadata-map:
       #      user.name: ${spring.security.user.name}
       #      user.password: ${spring.security.user.password}
@@ -75,7 +70,7 @@ eureka:
       lease-renewal-interval-in-seconds: 10
   client:
     service-url:
-      defaultZone: http://192.168.1.46:8761/eureka/
+      defaultZone: http://192.168.2.58:8761/eureka/
 management:
   endpoints:
     web.exposure.include: "*"
@@ -85,11 +80,7 @@ management:
 mybatis:
   config-location: classpath:mybatis-config.xml
   mapper-locations: classpath:mybatis/*Mapper.xml
-logging:
-  config: classpath:logback-local.xml
-  level:
-    root: info
-    com.bizvane.mktcenterserviceimpl.mappers: debug
+
 
 # pagehelper
 pagehelper:
@@ -118,28 +109,28 @@ xxl:
 feign:
   client:
     centerstage:
-      name: centerstage-test
+      name: centerstage
       path: centerstage.api
     coupon:
-      name: coupon-test
+      name: coupon
       path: coupon.api
     members:
-      name: members-test
+      name: members
       path: members.api
     message:
-      name: message-test
+      name: message
       path: message.api
     wechat:
-      name: wechat-test
+      name: wechat
       path: wechat
     applet:
-      name: applet-test
+      name: applet
       path: applet.api
     centercontrol:
-      name: centercontrol-test
+      name: centercontrol
       path: centercontrol.api
     fitment:
-      name: fitment-test
+      name: fitment
       path: fitment.api
 
 rocketmq:

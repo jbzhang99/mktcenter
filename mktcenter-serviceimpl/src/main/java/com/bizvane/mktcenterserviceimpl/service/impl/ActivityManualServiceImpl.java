@@ -1,23 +1,26 @@
 package com.bizvane.mktcenterserviceimpl.service.impl;
 
+import java.math.BigDecimal;
+import java.text.DecimalFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
+import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
+import org.springframework.util.StringUtils;
+
 import com.alibaba.fastjson.JSON;
-import com.bizvane.centerstageservice.models.po.SysBrandPo;
-import com.bizvane.centerstageservice.models.po.SysCheckConfigPo;
 import com.bizvane.centerstageservice.models.po.SysCheckPo;
-import com.bizvane.centerstageservice.models.po.SysCompanyPo;
 import com.bizvane.centerstageservice.models.vo.SysCheckConfigVo;
-import com.bizvane.centerstageservice.rpc.BrandServiceRpc;
-import com.bizvane.centerstageservice.rpc.CompanyServiceRpc;
 import com.bizvane.centerstageservice.rpc.SysCheckConfigServiceRpc;
 import com.bizvane.centerstageservice.rpc.SysCheckServiceRpc;
-import com.bizvane.connectorservice.util.SpringUtil;
 import com.bizvane.couponfacade.enums.SendTypeEnum;
-import com.bizvane.couponfacade.interfaces.CouponDefinitionServiceFeign;
 import com.bizvane.couponfacade.interfaces.CouponQueryServiceFeign;
-import com.bizvane.couponfacade.models.po.CouponDefinitionPO;
-import com.bizvane.couponfacade.models.po.CouponEntityPO;
 import com.bizvane.couponfacade.models.vo.CouponDetailResponseVO;
-import com.bizvane.couponfacade.models.vo.CouponEntityAndDefinitionVO;
 import com.bizvane.couponfacade.models.vo.CouponFindCouponCountResponseVO;
 import com.bizvane.couponfacade.models.vo.SendCouponSimpleRequestVO;
 import com.bizvane.members.facade.models.MemberInfoModel;
@@ -25,7 +28,14 @@ import com.bizvane.mktcenterservice.interfaces.ActivityManualService;
 import com.bizvane.mktcenterservice.models.bo.ActivityBO;
 import com.bizvane.mktcenterservice.models.bo.ActivityManualBO;
 import com.bizvane.mktcenterservice.models.bo.AwardBO;
-import com.bizvane.mktcenterservice.models.po.*;
+import com.bizvane.mktcenterservice.models.po.MktActivityCountPO;
+import com.bizvane.mktcenterservice.models.po.MktActivityManualPO;
+import com.bizvane.mktcenterservice.models.po.MktActivityManualPOExample;
+import com.bizvane.mktcenterservice.models.po.MktActivityPOWithBLOBs;
+import com.bizvane.mktcenterservice.models.po.MktActivityRecordPO;
+import com.bizvane.mktcenterservice.models.po.MktActivityRecordPOExample;
+import com.bizvane.mktcenterservice.models.po.MktCouponPO;
+import com.bizvane.mktcenterservice.models.po.MktCouponPOExample;
 import com.bizvane.mktcenterservice.models.vo.ActivityManualVO;
 import com.bizvane.mktcenterservice.models.vo.ActivityVO;
 import com.bizvane.mktcenterservice.models.vo.PageForm;
@@ -34,34 +44,32 @@ import com.bizvane.mktcenterserviceimpl.common.config.QRCodeConfig;
 import com.bizvane.mktcenterserviceimpl.common.constants.ActivityConstants;
 import com.bizvane.mktcenterserviceimpl.common.constants.ResponseConstants;
 import com.bizvane.mktcenterserviceimpl.common.constants.SystemConstants;
-import com.bizvane.mktcenterserviceimpl.common.enums.*;
+import com.bizvane.mktcenterserviceimpl.common.enums.ActivityStatusEnum;
+import com.bizvane.mktcenterserviceimpl.common.enums.ActivityTypeEnum;
+import com.bizvane.mktcenterserviceimpl.common.enums.BusinessTypeEnum;
+import com.bizvane.mktcenterserviceimpl.common.enums.CheckStatusEnum;
+import com.bizvane.mktcenterserviceimpl.common.enums.CouponSendTypeEnum;
+import com.bizvane.mktcenterserviceimpl.common.enums.MktSmartTypeEnum;
+import com.bizvane.mktcenterserviceimpl.common.job.JobUtil;
 import com.bizvane.mktcenterserviceimpl.common.utils.ActivityParamCheckUtil;
 import com.bizvane.mktcenterserviceimpl.common.utils.CodeUtil;
 import com.bizvane.mktcenterserviceimpl.common.utils.DateUtil;
-import com.bizvane.mktcenterserviceimpl.common.job.JobUtil;
-import com.bizvane.mktcenterserviceimpl.common.utils.SpringContextUtil;
 import com.bizvane.mktcenterserviceimpl.common.utils.ExecuteParamCheckUtil;
-import com.bizvane.mktcenterserviceimpl.mappers.*;
+import com.bizvane.mktcenterserviceimpl.common.utils.SpringContextUtil;
+import com.bizvane.mktcenterserviceimpl.mappers.MktActivityCountPOMapper;
+import com.bizvane.mktcenterserviceimpl.mappers.MktActivityManualPOMapper;
+import com.bizvane.mktcenterserviceimpl.mappers.MktActivityPOMapper;
+import com.bizvane.mktcenterserviceimpl.mappers.MktActivityRecordPOMapper;
+import com.bizvane.mktcenterserviceimpl.mappers.MktCouponPOMapper;
 import com.bizvane.utils.enumutils.SysResponseEnum;
 import com.bizvane.utils.responseinfo.ResponseData;
 import com.bizvane.utils.tokens.SysAccountPO;
 import com.bizvane.wechatfacade.interfaces.QRCodeServiceFeign;
 import com.bizvane.wechatfacade.models.vo.CreateMiniprgmQRCodeRequestVO;
-import com.bizvane.wechatfacade.models.vo.UrlQRCodeCreateRequestVO;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.BeanUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.CollectionUtils;
-import org.springframework.util.StringUtils;
-import java.math.BigDecimal;
-import java.text.DecimalFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
 
 
 @Service
@@ -87,23 +95,16 @@ public class ActivityManualServiceImpl implements ActivityManualService {
     private CouponQueryServiceFeign couponQueryServiceFeign;
 
     @Autowired
-    private CouponDefinitionServiceFeign couponDefinitionServiceFeign;
-
-    @Autowired
-    private MktMessagePOMapper mktMessagePOMapper;
-
-    @Autowired
     private Award award;
-
-    @Autowired
-    private BrandServiceRpc brandServiceRpc;
-    @Autowired
-    private CompanyServiceRpc companyServiceRpc;
 
     @Autowired
     private QRCodeServiceFeign qrCodeServiceFeign;
     @Autowired
     private SysCheckServiceRpc sysCheckServiceRpc;
+    
+    @Autowired
+    private MktActivityCountPOMapper mktActivityCountPOMapper;
+    
     @Override
     public ResponseData<ActivityVO> getActivityManualList(ActivityVO vo, PageForm pageForm,SysAccountPO stageUser) {
         ResponseData responseData = new ResponseData();
@@ -212,6 +213,17 @@ public class ActivityManualServiceImpl implements ActivityManualService {
         mktActivityPOMapper.insertSelective(mktActivityPOWithBLOBs);
         //返回主表的id
         Long mktActivityId = mktActivityPOWithBLOBs.getMktActivityId();
+        
+        // 新增活动统计表
+        MktActivityCountPO mktActivityCountPO = new MktActivityCountPO();
+        mktActivityCountPO.setMktActivityId(mktActivityId);
+        mktActivityCountPO.setSysCompanyId(mktActivityPOWithBLOBs.getSysCompanyId());
+        mktActivityCountPO.setSysBrandId(mktActivityPOWithBLOBs.getSysBrandId());
+        mktActivityCountPO.setCreateDate(new Date());
+        mktActivityCountPO.setCreateUserId(stageUser.getSysAccountId());
+        mktActivityCountPO.setCreateUserName(stageUser.getName());
+        mktActivityCountPOMapper.insertSelective(mktActivityCountPO);
+        
         log.info("领券活动-创建活动-新增活动-活动主表id"+mktActivityId);
         if (i>0){
             //如果是待审核数据则需要增加一条审核数据l
@@ -425,6 +437,8 @@ public class ActivityManualServiceImpl implements ActivityManualService {
             mktActivityRecordPO.setModifiedUserName(memberInfoModel.getModifiedUserName());
             log.info("领券活动-执行活动-新增记录表，入参:"+JSON.toJSONString(mktActivityRecordPO));
             mktActivityRecordPOMapper.insertSelective(mktActivityRecordPO);
+            
+            mktActivityCountPOMapper.updateSum(vo.getMktActivityId(), 1, BigDecimal.ZERO, 0);
 
             //计算券还剩余领取几次
             Long countAllSum = mktActivityManualPO.getPerPersonMax()-countAll-1;

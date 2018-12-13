@@ -1,7 +1,26 @@
 package com.bizvane.mktcenterserviceimpl.service.impl;
 
+import java.math.BigDecimal;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
+import java.util.List;
+import java.util.stream.Collectors;
+
+import com.bizvane.members.facade.service.card.response.IntegralChangeResponseModel;
+import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Async;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
+import org.springframework.util.StringUtils;
+
 import com.alibaba.fastjson.JSON;
-import com.bizvane.centerstageservice.models.po.SysCheckConfigPo;
 import com.bizvane.centerstageservice.models.po.SysCheckPo;
 import com.bizvane.centerstageservice.models.po.SysStorePo;
 import com.bizvane.centerstageservice.models.vo.SysCheckConfigVo;
@@ -15,9 +34,8 @@ import com.bizvane.couponfacade.interfaces.CouponQueryServiceFeign;
 import com.bizvane.couponfacade.interfaces.SendCouponServiceFeign;
 import com.bizvane.couponfacade.models.po.CouponEntityPO;
 import com.bizvane.couponfacade.models.vo.CouponDetailResponseVO;
-import com.bizvane.couponfacade.models.vo.CouponEntityAndDefinitionVO;
 import com.bizvane.couponfacade.models.vo.SendCouponSimpleRequestVO;
-import com.bizvane.members.facade.enums.*;
+import com.bizvane.members.facade.enums.IntegralChangeTypeEnum;
 import com.bizvane.members.facade.models.IntegralRecordModel;
 import com.bizvane.members.facade.models.MemberInfoModel;
 import com.bizvane.members.facade.service.api.IntegralChangeApiService;
@@ -26,16 +44,31 @@ import com.bizvane.members.facade.service.card.request.IntegralChangeRequestMode
 import com.bizvane.members.facade.vo.IntegralRecordVo;
 import com.bizvane.mktcenterservice.interfaces.ActivityBirthdayService;
 import com.bizvane.mktcenterservice.models.bo.ActivityBO;
-import com.bizvane.mktcenterservice.models.po.*;
+import com.bizvane.mktcenterservice.models.po.MktActivityBirthdayPO;
+import com.bizvane.mktcenterservice.models.po.MktActivityCountPO;
+import com.bizvane.mktcenterservice.models.po.MktActivityPO;
+import com.bizvane.mktcenterservice.models.po.MktActivityPOExample;
+import com.bizvane.mktcenterservice.models.po.MktActivityPOWithBLOBs;
+import com.bizvane.mktcenterservice.models.po.MktActivityRecordPO;
+import com.bizvane.mktcenterservice.models.po.MktCouponPO;
+import com.bizvane.mktcenterservice.models.po.MktCouponPOExample;
+import com.bizvane.mktcenterservice.models.po.MktMessagePO;
+import com.bizvane.mktcenterservice.models.po.MktMessagePOExample;
 import com.bizvane.mktcenterservice.models.vo.ActivityVO;
-import com.bizvane.mktcenterservice.models.vo.MessageVO;
 import com.bizvane.mktcenterservice.models.vo.PageForm;
-import com.bizvane.mktcenterserviceimpl.common.enums.*;
+import com.bizvane.mktcenterserviceimpl.common.enums.ActivityStatusEnum;
+import com.bizvane.mktcenterserviceimpl.common.enums.ActivityTypeEnum;
 import com.bizvane.mktcenterserviceimpl.common.enums.BusinessTypeEnum;
+import com.bizvane.mktcenterserviceimpl.common.enums.CheckStatusEnum;
 import com.bizvane.mktcenterserviceimpl.common.job.JobUtil;
 import com.bizvane.mktcenterserviceimpl.common.utils.CodeUtil;
 import com.bizvane.mktcenterserviceimpl.common.utils.ExecuteParamCheckUtil;
-import com.bizvane.mktcenterserviceimpl.mappers.*;
+import com.bizvane.mktcenterserviceimpl.mappers.MktActivityBirthdayPOMapper;
+import com.bizvane.mktcenterserviceimpl.mappers.MktActivityCountPOMapper;
+import com.bizvane.mktcenterserviceimpl.mappers.MktActivityPOMapper;
+import com.bizvane.mktcenterserviceimpl.mappers.MktActivityRecordPOMapper;
+import com.bizvane.mktcenterserviceimpl.mappers.MktCouponPOMapper;
+import com.bizvane.mktcenterserviceimpl.mappers.MktMessagePOMapper;
 import com.bizvane.utils.enumutils.SysResponseEnum;
 import com.bizvane.utils.jobutils.JobClient;
 import com.bizvane.utils.jobutils.XxlJobInfo;
@@ -43,21 +76,8 @@ import com.bizvane.utils.responseinfo.ResponseData;
 import com.bizvane.utils.tokens.SysAccountPO;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import lombok.extern.slf4j.Slf4j;
-import org.apache.poi.util.StringUtil;
-import org.springframework.beans.BeanUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.scheduling.annotation.Async;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.CollectionUtils;
-import org.springframework.util.StringUtils;
 
-import java.math.BigDecimal;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.*;
-import java.util.stream.Collectors;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * @author chen.li
@@ -97,10 +117,12 @@ public class ActivityBirthdayServiceImpl implements ActivityBirthdayService {
     private IntegralChangeApiService integralChangeApiService;
     @Autowired
     private IntegralRecordApiService integralRecordApiService;
-    @Autowired
-    private SysDimSkuServiceRpc sysDimSkuServiceRpc;
+
     @Autowired
     private StoreServiceRpc storeServiceRpc;
+    
+    @Autowired
+    private MktActivityCountPOMapper mktActivityCountPOMapper;
     /**
      * 查询生日活动列表
      * @param vo
@@ -135,6 +157,10 @@ public class ActivityBirthdayServiceImpl implements ActivityBirthdayService {
         ResponseData responseData = new ResponseData();
         //得到大实体类
         ActivityVO activityVO = bo.getActivityVO();
+        //判断是否是全部等级
+        if (activityVO.getMbrLevelCode().equals("0")){
+            activityVO.setMbrLevelName("全部等级");
+        }
         //判断活动开始时间是否大于当前时间
         if(1 != bo.getActivityVO().getLongTerm() && new Date().after(activityVO.getStartTime())){
             responseData.setCode(SysResponseEnum.MODEL_FAILED_VALIDATION.getCode());
@@ -230,8 +256,20 @@ public class ActivityBirthdayServiceImpl implements ActivityBirthdayService {
         mktActivityPOWithBLOBs.setCreateUserName(stageUser.getName());
         log.info("增加一条数据到主表参数为："+ JSON.toJSONString(mktActivityPOWithBLOBs));
         mktActivityPOMapper.insertSelective(mktActivityPOWithBLOBs);
+        
         //获取新增后数据id
         Long mktActivityId = mktActivityPOWithBLOBs.getMktActivityId();
+        
+        // 新增活动统计表
+        MktActivityCountPO mktActivityCountPO = new MktActivityCountPO();
+        mktActivityCountPO.setMktActivityId(mktActivityPOWithBLOBs.getMktActivityId());
+        mktActivityCountPO.setSysCompanyId(mktActivityPOWithBLOBs.getSysCompanyId());
+        mktActivityCountPO.setSysBrandId(mktActivityPOWithBLOBs.getSysBrandId());
+        mktActivityCountPO.setCreateDate(new Date());
+        mktActivityCountPO.setCreateUserId(stageUser.getSysAccountId());
+        mktActivityCountPO.setCreateUserName(stageUser.getName());
+        mktActivityCountPOMapper.insertSelective(mktActivityCountPO);
+        
         if (i>0){
             //如果是待审核数据则需要增加一条审核数据l
             SysCheckPo po = new SysCheckPo();
@@ -677,7 +715,8 @@ public class ActivityBirthdayServiceImpl implements ActivityBirthdayService {
             integralChangeRequestModel.setBusinessType(com.bizvane.members.facade.enums.BusinessTypeEnum.ACTIVITY_TYPE_BIRTHDAY.getCode());
             integralChangeRequestModel.setChangeDate(new Date());
             log.info("执行升级活动开始开始增加积分增加积分++++++");
-            integralChangeApiService.integralChangeOperate(integralChangeRequestModel);
+            IntegralChangeResponseModel integralChangeResponseModel =integralChangeApiService.integralChangeOperate(integralChangeRequestModel);
+            log.info("增加积分返回结果为------------："+ JSON.toJSONString(integralChangeResponseModel));
             // 增加卷奖励接口
             MktCouponPOExample example = new  MktCouponPOExample();
             example.createCriteria().andBizIdEqualTo(activityBirthday.getMktActivityId()).andValidEqualTo(true).andBizTypeEqualTo(1);
@@ -692,7 +731,8 @@ public class ActivityBirthdayServiceImpl implements ActivityBirthdayService {
                 va.setBrandId(activityBirthday.getSysBrandId());
                 va.setCompanyId(activityBirthday.getSysCompanyId());
                 log.info("执行升级活动开始开始增加券增加券~~~~~~~~~~");
-                sendCouponServiceFeign.simple(va);
+                ResponseData<Object> responseData=sendCouponServiceFeign.simple(va);
+                log.info("增加券返回结果为------------："+ JSON.toJSONString(responseData));
             }
             //新增积分到会员参与活动记录表中数据
             MktActivityRecordPO po = new MktActivityRecordPO();
@@ -703,6 +743,8 @@ public class ActivityBirthdayServiceImpl implements ActivityBirthdayService {
             po.setAcitivityId(activityBirthday.getMktActivityId());
             po.setSysBrandId(activityBirthday.getSysBrandId());
             mktActivityRecordPOMapper.insertSelective(po);
+            
+            mktActivityCountPOMapper.updateSum(activityBirthday.getMktActivityId(), 1, BigDecimal.ZERO, activityBirthday.getPoints());
 
 //        }
     }

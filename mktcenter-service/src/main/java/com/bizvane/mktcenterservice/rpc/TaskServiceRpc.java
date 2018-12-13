@@ -11,8 +11,7 @@ import java.util.List;
  * @Author: lijunwei
  * @Time: 2018/11/5 13:53
  */
-@FeignClient("${feign.client.mktcenter.name}")
-@RequestMapping("${feign.client.mktcenter.path}/taskRpc")
+@FeignClient(value = "${feign.client.mktcenter.name}",path = "${feign.client.mktcenter.path}/taskRpc")
 public interface TaskServiceRpc {
     @RequestMapping("getWhiteStoreIds")
     public List<Long> getWhiteStoreIds(@RequestBody WhiteStoreVO vo);

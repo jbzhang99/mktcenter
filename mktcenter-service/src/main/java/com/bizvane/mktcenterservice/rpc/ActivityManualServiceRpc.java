@@ -16,8 +16,7 @@ import java.util.List;
  * @description
  * @Copyright (c) 2018 上海商帆信息科技有限公司-版权所有
  */
-@FeignClient("${feign.client.mktcenter.name}")
-@RequestMapping("${feign.client.mktcenter.path}/activityManualRpc")
+@FeignClient(value = "${feign.client.mktcenter.name}",path = "${feign.client.mktcenter.path}/activityManualRpc")
 public interface ActivityManualServiceRpc {
 
     @RequestMapping("/getActivityByQrcode")

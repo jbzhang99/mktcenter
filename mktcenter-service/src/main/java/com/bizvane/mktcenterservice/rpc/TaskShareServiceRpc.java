@@ -9,8 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
  * @Author: lijunwei
  * @Time: 2018/9/3 15:46
  */
-@FeignClient("${feign.client.mktcenter.name}")
-@RequestMapping("${feign.client.mktcenter.path}/taskShareRpc")
+@FeignClient(value = "${feign.client.mktcenter.name}",path = "${feign.client.mktcenter.path}/taskShareRpc")
 public interface TaskShareServiceRpc {
     /**
      * 执行分享任务的奖励

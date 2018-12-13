@@ -18,13 +18,7 @@ spring:
         min-idle: 0
   swagger:
     show: true
-  application:
-    name: mktcenter-uat
-  #  security:
-  #    enabled: false
-  #    user:
-  #      name: root
-  #      password: root
+
   datasource:
     url: jdbc:mysql://mysql.uat.com:3306/julu-uat?useUnicode=true&characterEncoding=utf-8
     username: root
@@ -42,8 +36,16 @@ spring:
   jackson:
     date-format: yyyy-MM-dd HH:mm:ss
     time-zone: GMT+8
+  zipkin:
+    baseUrl: http://192.168.2.15:9411
+    sleuth:
+      sampler:
+        probability: 1.0
+      scheduled:
+        enabled: false
 eureka:
   instance:
+    prefer-ip-address: true
     metadata-map:
       #      user.name: ${spring.security.user.name}
       #      user.password: ${spring.security.user.password}
@@ -61,11 +63,7 @@ management:
 mybatis:
   config-location: classpath:mybatis-config.xml
   mapper-locations: classpath:mybatis/*Mapper.xml
-logging:
-  config: classpath:logback-local.xml
-  level:
-    root: info
-    com.bizvane.mktcenterserviceimpl.mappers: debug
+
 
 
 # pagehelper
@@ -95,28 +93,28 @@ xxl:
 feign:
   client:
     centerstage:
-      name: centerstage-uat
+      name: centerstage
       path: centerstage.api
     coupon:
-      name: coupon-uat
+      name: coupon
       path: coupon.api
     members:
-      name: members-uat
+      name: members
       path: members.api
     message:
-      name: message-uat
+      name: message
       path: message.api
     wechat:
-      name: wechat-uat
+      name: wechat
       path: wechat
     applet:
-      name: applet-uat
+      name: applet
       path: applet.api
     centercontrol:
-      name: centercontrol-uat
+      name: centercontrol
       path: centercontrol.api
     fitment:
-      name: fitment-uat
+      name: fitment
       path: fitment.api
 
 
@@ -151,3 +149,13 @@ tenant:
 ribbon:
   ConnectTimeout: 60000
   ReadTimeout: 60000
+
+#审计日志#
+rmq:
+  ONSAddr: NAMESRV_ADDR
+  namesrvAddr: 192.168.1.50:9876
+  accessKey: LTAIpoqUHsXq6q7r
+  secretKey: 0ZJ7bfxXJLT8TpOKvZU3i4YWuhvJzs
+  product.id: PID_PUBLIC_BIZVANE_MEMBER_MESSAGE
+  consume.id: CID_PUBLIC_BIZVANE_MEMBER_MESSAGE
+  send.time.out: 30000

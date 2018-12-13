@@ -56,6 +56,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
@@ -106,6 +107,10 @@ public class ActivityUpgradeServiceImpl implements ActivityUpgradeService {
     private MemberMessageSend memberMessage;
     @Autowired
     private StoreServiceRpc storeServiceRpc;
+    
+    @Autowired
+    private MktActivityCountPOMapper mktActivityCountPOMapper;
+    
     /**
      * 查询升级活动列表
      * @param vo
@@ -140,6 +145,10 @@ public class ActivityUpgradeServiceImpl implements ActivityUpgradeService {
         ResponseData responseData = new ResponseData();
         //得到大实体类
         ActivityVO activityVO = bo.getActivityVO();
+        //判断是否是全部等级
+        if (activityVO.getMbrLevelCode().equals("0")){
+            activityVO.setMbrLevelName("全部等级");
+        }
         //判断活动开始时间是否大于当前时间
         if(1 != bo.getActivityVO().getLongTerm() && new Date().after(activityVO.getStartTime())){
             responseData.setCode(SysResponseEnum.MODEL_FAILED_VALIDATION.getCode());
@@ -244,6 +253,16 @@ public class ActivityUpgradeServiceImpl implements ActivityUpgradeService {
         mktActivityPOMapper.insertSelective(mktActivityPOWithBLOBs);
         //获取新增后数据id
         Long mktActivityId = mktActivityPOWithBLOBs.getMktActivityId();
+        
+        // 新增活动统计表
+        MktActivityCountPO mktActivityCountPO = new MktActivityCountPO();
+        mktActivityCountPO.setMktActivityId(mktActivityId);
+        mktActivityCountPO.setSysCompanyId(mktActivityPOWithBLOBs.getSysCompanyId());
+        mktActivityCountPO.setSysBrandId(mktActivityPOWithBLOBs.getSysBrandId());
+        mktActivityCountPO.setCreateDate(new Date());
+        mktActivityCountPO.setCreateUserId(stageUser.getSysAccountId());
+        mktActivityCountPO.setCreateUserName(stageUser.getName());
+        mktActivityCountPOMapper.insertSelective(mktActivityCountPO);
 
         if (i>0){
             //如果是待审核数据则需要增加一条审核数据
@@ -656,6 +675,8 @@ public class ActivityUpgradeServiceImpl implements ActivityUpgradeService {
             po.setSysBrandId(activityVO.getSysBrandId());
             log.info("新增积分记录表");
             mktActivityRecordPOMapper.insertSelective(po);
+            
+            mktActivityCountPOMapper.updateSum(po.getAcitivityId(), 1, BigDecimal.ZERO, po.getPoints());
         }
         responseData.setCode(SysResponseEnum.SUCCESS.getCode());
         responseData.setMessage(SysResponseEnum.SUCCESS.getMessage());

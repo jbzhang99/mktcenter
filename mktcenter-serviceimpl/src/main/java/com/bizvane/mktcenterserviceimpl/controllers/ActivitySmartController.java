@@ -2,10 +2,8 @@ package com.bizvane.mktcenterserviceimpl.controllers;
 
 import com.alibaba.fastjson.JSONArray;
 import com.bizvane.mktcenterservice.interfaces.ActivitySmartService;
-import com.bizvane.mktcenterservice.models.bo.ActivitySmartBO;
 import com.bizvane.mktcenterservice.models.po.MktActivitySmartGroupPO;
 import com.bizvane.mktcenterservice.models.po.MktActivitySmartPO;
-import com.bizvane.mktcenterservice.models.po.MktCouponPO;
 import com.bizvane.mktcenterservice.models.vo.ActivitySmartVO;
 import com.bizvane.mktcenterservice.models.vo.MessageVO;
 import com.bizvane.mktcenterservice.models.vo.PageForm;
@@ -22,11 +20,9 @@ import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.List;
 
 /**
  * @author chen.li
@@ -167,12 +163,12 @@ public class ActivitySmartController {
         //参数校验
        // ActivityParamCheckUtil.checkSmartActivityParam(vo);
         //参数校验通过，获取操作人信息
-        //SysAccountPO stageUser = TokenUtils.getStageUser(request);
-        SysAccountPO stageUser=new SysAccountPO();
-        stageUser.setBrandId(96L);
-        stageUser.setName("测试测试");
-        stageUser.setSysAccountId(12867L);
-        stageUser.setSysCompanyId(3841L);
+        SysAccountPO stageUser = TokenUtils.getStageUser(request);
+//        SysAccountPO stageUser=new SysAccountPO();
+//        stageUser.setBrandId(96L);
+//        stageUser.setName("测试测试");
+//        stageUser.setSysAccountId(12867L);
+//        stageUser.setSysCompanyId(3841L);
         ResponseData<Integer> responseData = activitySmartService.addPictureMessageActivity(vo,messageVO,stageUser);
         return new ResponseData<>();
     }
@@ -188,12 +184,12 @@ public class ActivitySmartController {
     }
     @PostMapping("getPictureLists")
     public  ResponseData<JSONArray>  getPictureLists(PictureMessageVO vo, HttpServletRequest request){
-      //  SysAccountPO stageUser = TokenUtils.getStageUser(request);
-        SysAccountPO stageUser=new SysAccountPO();
-        stageUser.setBrandId(96L);
-        stageUser.setName("测试测试");
-        stageUser.setSysAccountId(12867L);
-        stageUser.setSysCompanyId(3841L);
+       SysAccountPO stageUser = TokenUtils.getStageUser(request);
+//        SysAccountPO stageUser=new SysAccountPO();
+//        stageUser.setBrandId(96L);
+//        stageUser.setName("测试测试");
+//        stageUser.setSysAccountId(12867L);
+//        stageUser.setSysCompanyId(3841L);
 
         vo.setBrandId(stageUser.getBrandId());
         return  activitySmartService.getPictureLists(vo);
