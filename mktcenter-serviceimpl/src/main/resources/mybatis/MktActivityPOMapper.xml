@@ -787,8 +787,10 @@
     </if>
   </select>
   <select id="getActivityAnalysisTotal" parameterType="com.bizvane.mktcenterservice.models.bo.ActivityAnalysisCountBO" resultType="com.bizvane.mktcenterservice.models.bo.CtivityAnalysisBO">
-    SELECT COUNT(1)participateTotal, SUM(points)pointsSumTotal
-    FROM t_mkt_activity_record t
+    SELECT SUM(a.member_count)participateTotal, SUM(a.points_sum)pointsSumTotal
+    FROM
+    t_mkt_activity t
+    JOIN t_mkt_activity_count a ON a.mkt_activity_id = t.mkt_activity_id
     WHERE t.valid=1
     <if test="sysBrandId != null and sysBrandId!= ''">
       AND t.sys_brand_id = #{sysBrandId}

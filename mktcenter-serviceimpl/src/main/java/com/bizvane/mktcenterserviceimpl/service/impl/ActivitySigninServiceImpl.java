@@ -16,8 +16,10 @@ import com.bizvane.members.facade.enums.BusinessTypeEnum;
 import com.bizvane.members.facade.enums.IntegralChangeTypeEnum;
 import com.bizvane.members.facade.models.IntegralRecordModel;
 import com.bizvane.members.facade.models.MemberInfoModel;
+import com.bizvane.members.facade.service.api.IntegralChangeApiService;
 import com.bizvane.members.facade.service.api.IntegralRecordApiService;
 import com.bizvane.members.facade.service.card.request.IntegralChangeRequestModel;
+import com.bizvane.members.facade.service.card.response.IntegralChangeResponseModel;
 import com.bizvane.mktcenterservice.interfaces.ActivitySigninService;
 import com.bizvane.mktcenterservice.models.bo.ActivityBO;
 import com.bizvane.mktcenterservice.models.bo.AwardBO;
@@ -81,6 +83,9 @@ public class ActivitySigninServiceImpl implements ActivitySigninService {
     
     @Autowired
     private MktActivityCountPOMapper mktActivityCountPOMapper;
+
+    @Autowired
+    private IntegralChangeApiService integralChangeApiService;
     
     /**
      * 查询签到活动列表
@@ -360,10 +365,13 @@ public class ActivitySigninServiceImpl implements ActivitySigninService {
             integralChangeRequestModel.setChangeType(IntegralChangeTypeEnum.INCOME.getCode());
             integralChangeRequestModel.setBusinessType(BusinessTypeEnum.ACTIVITY_TYPE_SIGNIN.getCode());
             integralChangeRequestModel.setChangeDate(new Date());
-            bo.setIntegralRecordModel(integralChangeRequestModel);
-            bo.setMktType(MktSmartTypeEnum.SMART_TYPE_INTEGRAL.getCode());
+           /* bo.setIntegralRecordModel(integralChangeRequestModel);
+            bo.setMktType(MktSmartTypeEnum.SMART_TYPE_INTEGRAL.getCode());*/
             log.info("新增积分奖励");
-            award.execute(bo);
+            //award.execute(bo);
+            log.info("开始执行新增积分操作参数="+ JSON.toJSONString(integralChangeRequestModel));
+            IntegralChangeResponseModel integralChangeResponseModel =integralChangeApiService.integralChangeOperate(integralChangeRequestModel);
+            log.info("发积分结果打印======"+JSON.toJSONString(integralChangeResponseModel));
             //新增积分到会员参与活动记录表中数据
             MktActivityRecordPO po = new MktActivityRecordPO();
             po.setActivityType(ActivityTypeEnum.ACTIVITY_TYPE_SIGNIN.getCode());

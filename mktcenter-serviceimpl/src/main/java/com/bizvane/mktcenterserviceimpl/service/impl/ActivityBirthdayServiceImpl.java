@@ -192,6 +192,7 @@ public class ActivityBirthdayServiceImpl implements ActivityBirthdayService {
             vo.setLongTerm(bo.getActivityVO().getLongTerm());
             vo.setSysBrandId(activityVO.getSysBrandId());
             vo.setActivityType(ActivityTypeEnum.ACTIVITY_TYPE_BIRTHDAY.getCode());
+            vo.setStop("ture");
             List<ActivityVO> registerList = mktActivityBirthdayPOMapper.getActivityBirthdayList(vo);
             if(!CollectionUtils.isEmpty(registerList)){
                 for (ActivityVO activity:registerList) {
@@ -826,7 +827,7 @@ public class ActivityBirthdayServiceImpl implements ActivityBirthdayService {
         List dd = new ArrayList(productNoList);
         dd.retainAll(ss);
         boolean fa=dd.size()>0;*/
-       List<Long> ss = new ArrayList<>();
+      /* List<Long> ss = new ArrayList<>();
        ss.add(1L);
        ss.add(2L);
     Long tt = 0L;
@@ -838,6 +839,11 @@ public class ActivityBirthdayServiceImpl implements ActivityBirthdayService {
 
 
         System.out.println("======================="+tt);
-        System.out.println("======================="+moneySu);
+        System.out.println("======================="+moneySu);*/
+        boolean  falg;
+        List<String> productNoList = new ArrayList<>();
+        productNoList.add("1");
+        falg=productNoList.contains("1");
+        System.out.println("======================="+falg);
     }
 }
