@@ -8,8 +8,10 @@ import lombok.Data;
  */
 @Data
 public class PictureMessageVO {
-    Long brandId;
-    String offset="0";
-    String count="20";
-    String type="news";
+    private  Long brandId;
+    private String offset;//"0"
+    private  String count;//"4"
+    private String type="news";
+    private int pageSize=4;
+    private int pageNumber=1;
 }
