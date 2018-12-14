@@ -24,7 +24,7 @@ spring:
     driver-class-name: com.mysql.jdbc.Driver
   data:
     mongodb:
-      uri: "mongodb://dds-bp14278823e03ba41.mongodb.rds.aliyuncs.com:3717/?AutoConnectRetry=true"
+      uri: "mongodb://dds-bp14278823e03ba41.mongodb.rds.aliyuncs.com:3717,dds-bp14278823e03ba42.mongodb.rds.aliyuncs.com:3717/?AutoConnectRetry=true"
       database: "crm"
       username: crm
       password: BIZvane2019
