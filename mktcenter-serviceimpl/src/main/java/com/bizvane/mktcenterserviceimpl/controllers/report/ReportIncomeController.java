@@ -1,22 +1,5 @@
 package com.bizvane.mktcenterserviceimpl.controllers.report;
 
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-
-import javax.servlet.http.HttpServletRequest;
-
-import org.apache.commons.lang3.StringUtils;
-import org.codehaus.jettison.json.JSONArray;
-import org.codehaus.jettison.json.JSONException;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.client.RestTemplate;
-
 import com.alibaba.fastjson.JSONObject;
 import com.bizvane.centerstageservice.models.po.SysCompanyPo;
 import com.bizvane.centerstageservice.models.po.SysStoreGroupPo;
@@ -29,25 +12,29 @@ import com.bizvane.mktcenterservice.interfaces.ReportTempService;
 import com.bizvane.mktcenterservice.models.po.FileReportTempPO;
 import com.bizvane.mktcenterservice.models.po.FileReportTempPOExample;
 import com.bizvane.mktcenterservice.models.requestvo.BackData;
-import com.bizvane.mktcenterservice.models.requestvo.postvo.ActiveMemberAllInterface;
-import com.bizvane.mktcenterservice.models.requestvo.postvo.IncomeTotalList;
-import com.bizvane.mktcenterservice.models.requestvo.postvo.IncomeVip;
-import com.bizvane.mktcenterservice.models.requestvo.postvo.IncreaseVip;
-import com.bizvane.mktcenterservice.models.requestvo.postvo.IncreaseVipNum;
-import com.bizvane.mktcenterservice.models.requestvo.postvo.NewOldMemberInterface;
-import com.bizvane.mktcenterservice.models.requestvo.postvo.OfflineVipIncome;
-import com.bizvane.mktcenterservice.models.requestvo.postvo.OnlineVipIncome;
-import com.bizvane.mktcenterservice.models.requestvo.postvo.RePurchaseMemberAllInterface;
-import com.bizvane.mktcenterservice.models.requestvo.postvo.TouristIncome;
-import com.bizvane.mktcenterservice.models.requestvo.postvo.VipNum;
+import com.bizvane.mktcenterservice.models.requestvo.postvo.*;
 import com.bizvane.mktcenterserviceimpl.common.report.BaseUrl;
 import com.bizvane.mktcenterserviceimpl.common.utils.FigureUtil;
 import com.bizvane.mktcenterserviceimpl.mappers.FileReportTempPOMapper;
 import com.bizvane.utils.responseinfo.ResponseData;
 import com.bizvane.utils.tokens.SysAccountPO;
 import com.bizvane.utils.tokens.TokenUtils;
-
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
+import org.codehaus.jettison.json.JSONArray;
+import org.codehaus.jettison.json.JSONException;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.client.RestTemplate;
+
+import javax.servlet.http.HttpServletRequest;
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 
 /**
  * @author liangzanwen
@@ -471,7 +458,7 @@ public class ReportIncomeController {
 			    		  List<String> storellist =new ArrayList<>();
 			    		  storellist.add(storeCode);
 			    		  SysStoreVo sysStoreVo =new SysStoreVo();
-			    		  sysStoreVo.setStoreCodes(storellist);
+			    		//  sysStoreVo.setStoreCodes(storellist);
 			    		  sysStoreVo.setSysCompanyId(currentUser.getSysCompanyId());
 			    		  ResponseData<Map<String,String>> getStore	=  storeServiceRpc.getStoreGroupNameByStoreCodes(sysStoreVo);
 			    		  if(getStore.getData().get(storeCode)==null) {
