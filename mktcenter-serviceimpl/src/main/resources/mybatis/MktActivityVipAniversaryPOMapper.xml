@@ -650,6 +650,9 @@
     <if test="checkStatus != null and checkStatus!= '' ">
       AND tma.check_status = #{checkStatus,jdbcType=INTEGER}
     </if>
+    <if test="stop != null and stop!= ''">
+      AND tma.activity_status !=4
+    </if>
     ORDER BY tma.create_date DESC
   </select>
 </mapper>

@@ -30,6 +30,7 @@ import com.bizvane.mktcenterservice.models.requestvo.BackDataTime;
 import com.bizvane.mktcenterservice.models.requestvo.postvo.IncomeTotalListGroup;
 import com.bizvane.mktcenterserviceimpl.common.report.BaseUrl;
 import com.bizvane.mktcenterserviceimpl.common.utils.FigureUtilGroup;
+import com.bizvane.mktcenterserviceimpl.common.utils.FigureUtilGroupFigure;
 import com.bizvane.mktcenterserviceimpl.mappers.FileReportTempPOMapper;
 import com.bizvane.utils.responseinfo.PageInfo;
 import com.bizvane.utils.responseinfo.ResponseData;
@@ -371,8 +372,18 @@ public class ReportGroupController {
   	   		   jsonObject.put("apiKey", BaseUrl.getApiKey());
   	   		 //用户key
   	   		 log.info("报表查询ReportIncomeController："+url+jsonObject.toString());
-		 ResponseEntity<String> response = this.restTemplate.postForEntity(url, jsonObject,String.class, new Object[0]);
-	     ResponseData<List<BackDataTime>> ResponseData =new ResponseData<List<BackDataTime>>();
+  	   	 ResponseData<List<BackDataTime>> ResponseData =new ResponseData<List<BackDataTime>>();
+	   	 ResponseEntity<String> response =null;
+	   		try {
+	   		   response =this.restTemplate.postForEntity(url, jsonObject,String.class, new Object[0]);
+			} catch (Exception e) {
+				 ResponseData.setCode(500);
+				 ResponseData.setMessage("大数据连接异常"+e.getMessage());
+				 ResponseData.setData(FigureUtilGroup.parseJSON2MapTime("false",fileReportTempPOlist,vipIncomeAnalysis));
+			  	 return ResponseData;
+			}
+		 
+	    
 	     JSONObject job = JSONObject.parseObject(response.getBody());
 	     
 	     if(job.get("successFlag").equals("1")) {

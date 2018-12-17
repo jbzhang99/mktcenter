@@ -665,8 +665,10 @@ public class ActivityOrderServiceImpl implements ActivityOrderService {
             }
             log.info("消费会员范围验证完毕");
             //判断会员等级
-            if(!ExecuteParamCheckUtil.CheckMbrLevelCode(vo.getLevelId(),activityVO.getMbrLevelCode()) || !activityVO.getMbrLevelCode().equals("0")){
-                continue;
+            if (!"0".equals(activityVO.getMbrLevelCode())){
+                if(!ExecuteParamCheckUtil.CheckMbrLevelCode(vo.getLevelId(),activityVO.getMbrLevelCode()) ){
+                    continue;
+                }
             }
             log.info("消费会员等级验证完毕");
             //判断订单来源

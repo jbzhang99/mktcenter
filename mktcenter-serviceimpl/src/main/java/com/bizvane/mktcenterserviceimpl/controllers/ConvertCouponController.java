@@ -7,16 +7,12 @@ import com.bizvane.utils.responseinfo.ResponseData;
 import com.bizvane.utils.tokens.SysAccountPO;
 import com.bizvane.utils.tokens.TokenUtils;
 import com.github.pagehelper.PageInfo;
-import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * @Author: lijunwei
@@ -40,7 +36,7 @@ public class ConvertCouponController {
 //        sysAccountPo.setName("测试测试");
 //        sysAccountPo.setSysAccountId(12867L);
 //        sysAccountPo.setSysCompanyId(3841L);
-//        vo.setBrandId(sysAccountPo.getBrandId());
+        vo.setBrandId(sysAccountPo.getBrandId());
         return convertCouponService.getCouponRecordLists(vo);
     }
 

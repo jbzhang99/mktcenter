@@ -308,9 +308,15 @@ public class ActivityServiceImpl implements ActivityService {
         //合计积分总数 和参与人数总数
         CtivityAnalysisBO ctivityAnalysis = mktActivityPOMapper.getActivityAnalysisTotal(bo);
         //参与人数
-        ctivityAnalysisBO.setParticipateTotal(ctivityAnalysis.getParticipateTotal());
-        //积分总数
-        ctivityAnalysisBO.setPointsSumTotal(ctivityAnalysis.getPointsSumTotal());
+        if (null==ctivityAnalysis){
+            ctivityAnalysisBO.setParticipateTotal(0L);
+            ctivityAnalysisBO.setPointsSumTotal(0);
+        }else {
+            ctivityAnalysisBO.setParticipateTotal(ctivityAnalysis.getParticipateTotal());
+            //积分总数
+            ctivityAnalysisBO.setPointsSumTotal(ctivityAnalysis.getPointsSumTotal());
+        }
+
         //积分 合计 券收益合计
         Integer type =null;
         if (null==bo.getActivityType()){

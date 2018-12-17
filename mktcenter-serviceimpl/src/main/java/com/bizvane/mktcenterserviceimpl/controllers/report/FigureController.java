@@ -254,7 +254,7 @@ public class FigureController {
 	   		try {
 	   		   response =this.restTemplate.postForEntity(url, jsonObject,String.class, new Object[0]);
 			} catch (Exception e) {
-				  ResponseData.setCode(0);
+				  ResponseData.setCode(500);
 			  	  ResponseData.setMessage("大数据连接异常"+e.getMessage());
 			  	  ResponseData.setData(FigureUtilGroupFigure.parseJSON2MapTime("false",fileReportTempPOlist,vipIncomeAnalysis));
 			  	 return ResponseData;
@@ -406,7 +406,7 @@ log.info("报表查询ReportIncomeController："+url+JSONObject.toJSONString(vip
   		   		try {
   		   		response = this.restTemplate.postForEntity(url, jsonObject,String.class, new Object[0]);
   				} catch (Exception e) {
-  					  ResponseData.setCode(0);
+  					  ResponseData.setCode(500);
   				  	  ResponseData.setMessage("大数据连接异常"+e.getMessage());
   			  	      ResponseData.setData(FigureUtilGroupFigure.parseJSON2MapTimeOpera("false",fileReportTempPOlist,vipIncomeAnalysis));
   				  	 return ResponseData;

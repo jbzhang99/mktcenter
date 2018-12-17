@@ -1,12 +1,5 @@
 package com.bizvane.mktcenterserviceimpl.service.impl;
 
-import java.math.BigDecimal;
-import java.util.List;
-
-import org.apache.commons.collections.CollectionUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
 import com.alibaba.fastjson.JSON;
 import com.bizvane.mktcenterservice.interfaces.TaskRecordService;
 import com.bizvane.mktcenterservice.models.bo.TotalStatisticsBO;
@@ -18,8 +11,13 @@ import com.bizvane.mktcenterservice.models.vo.TaskAnalysisVo;
 import com.bizvane.mktcenterserviceimpl.common.constants.TaskConstants;
 import com.bizvane.mktcenterserviceimpl.mappers.MktTaskCountPOMapper;
 import com.bizvane.mktcenterserviceimpl.mappers.MktTaskRecordPOMapper;
-
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.collections.CollectionUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.math.BigDecimal;
+import java.util.List;
 
 /**
  * @Author: lijunwei
@@ -64,7 +62,7 @@ public class TaskRecordServiceImpl implements TaskRecordService {
       Integer points = po.getPoints() == null ? 0 : po.getPoints();
       Integer shareNum = po.getShareNum() == null ? 0 : po.getShareNum();
       
-      mktTaskCountPOMapper.updateSum(po.getTaskId(), 0, consumeAmount, couponNum, points, shareNum);
+     // mktTaskCountPOMapper.updateSum(po.getTaskId(), 0, consumeAmount, couponNum, points, shareNum);
       
         return  mktTaskRecordPOMapper.updateByPrimaryKeySelective(po);
 
