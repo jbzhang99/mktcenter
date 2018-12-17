@@ -21,8 +21,10 @@ import com.alibaba.fastjson.JSONObject;
 import com.bizvane.centerstageservice.models.po.SysCompanyPo;
 import com.bizvane.centerstageservice.models.po.SysStoreGroupPo;
 import com.bizvane.centerstageservice.models.po.SysStorePo;
+import com.bizvane.centerstageservice.models.vo.StaffVo;
 import com.bizvane.centerstageservice.models.vo.SysStoreVo;
 import com.bizvane.centerstageservice.rpc.CompanyServiceRpc;
+import com.bizvane.centerstageservice.rpc.StaffServiceRpc;
 import com.bizvane.centerstageservice.rpc.StoreGroupServiceRpc;
 import com.bizvane.centerstageservice.rpc.StoreServiceRpc;
 import com.bizvane.mktcenterservice.interfaces.ReportTempService;
@@ -42,6 +44,7 @@ import com.bizvane.mktcenterservice.models.requestvo.postvo.TouristIncome;
 import com.bizvane.mktcenterservice.models.requestvo.postvo.VipNum;
 import com.bizvane.mktcenterserviceimpl.common.report.BaseUrl;
 import com.bizvane.mktcenterserviceimpl.common.utils.FigureUtil;
+import com.bizvane.mktcenterserviceimpl.common.utils.FigureUtilGroupFigure;
 import com.bizvane.mktcenterserviceimpl.mappers.FileReportTempPOMapper;
 import com.bizvane.utils.responseinfo.ResponseData;
 import com.bizvane.utils.tokens.SysAccountPO;
@@ -74,6 +77,9 @@ public class ReportIncomeController {
 	
 	@Autowired
 	private    StoreGroupServiceRpc storeGroupServiceRpc;
+	
+	@Autowired
+	private     StaffServiceRpc staffServiceRpc;
 
 	@Autowired
 	private BaseUrl BaseUrl;
@@ -195,8 +201,18 @@ public class ReportIncomeController {
 		   jsonObject.put("businessNum", BaseUrl.getBusinessNum());
 		   jsonObject.put("apiKey", BaseUrl.getApiKey());
 		 log.info("综合报表查询发送内容:ReportIncomeController："+url+jsonObject.toString());
-		 ResponseEntity<String> response = this.restTemplate.postForEntity(url, jsonObject,String.class, new Object[0]);
-	     ResponseData<List<BackData>> ResponseData =new ResponseData<List<BackData>>();
+		 
+		 ResponseData<List<BackData>> ResponseData =new ResponseData<List<BackData>>();
+		  ResponseEntity<String> response = null;
+	   	    	try {
+		   		   response =this.restTemplate.postForEntity(url, jsonObject,String.class, new Object[0]);
+				} catch (Exception e) {
+					  ResponseData.setCode(500);
+				  	  ResponseData.setMessage("大数据连接异常"+e.getMessage());
+				  	  ResponseData.setData(FigureUtil.parseJSON2Map("false",dimension,0,fileReportTempPOlist));
+				  	 return ResponseData;
+				}
+	     
 	     JSONObject job = JSONObject.parseObject(response.getBody());
 
 	     //转换群主名称   	 
@@ -460,34 +476,93 @@ public class ReportIncomeController {
 			    	 JSONArray havegroupIdarr=new JSONArray();
 			      try {
 			    	  JSONArray arr=new JSONArray(job.get("data").toString());
-			    	 
+			    	  
+				    	 //店铺id的list
+			    		  List<String> storellist =new ArrayList<>();
+				    	  for(int i=0;i<arr.length();i++){
+				    		  org.codehaus.jettison.json.JSONObject jsonObjtarr=  arr.getJSONObject(i);
+				    		  String  storeCode =  jsonObjtarr.get("storeCode").toString();
+				    		  storellist.add(storeCode);
+				    	  }
+	                      //更具店铺id找群主名称
+			    		  SysStoreVo sysStoreVo =new SysStoreVo();
+			    		  sysStoreVo.setStoreIds(storellist);
+			    		  sysStoreVo.setSysCompanyId(currentUser.getSysCompanyId());
+				    	  ResponseData<Map<String, SysStoreVo>> getStore	=  storeServiceRpc.getStoreGroupNameByStoreCodes(sysStoreVo);
+				    	  
+				    	  Map<String, SysStoreVo> storeVoMap=  getStore.getData();
+				    	  
+				    	  
 			    	  for(int i=0;i<arr.length();i++){
 			    		  org.codehaus.jettison.json.JSONObject jsonObjtarr=  arr.getJSONObject(i);
 	                      //店铺id
 			    		  String  storeCode =  jsonObjtarr.get("storeCode").toString();
 			    		//根据storeCode找店铺名称
 			    		  
-	                      //更具店铺id找群主名称
-			    		  List<String> storellist =new ArrayList<>();
-			    		  storellist.add(storeCode);
-			    		  SysStoreVo sysStoreVo =new SysStoreVo();
-			    		  sysStoreVo.setStoreCodes(storellist);
-			    		  sysStoreVo.setSysCompanyId(currentUser.getSysCompanyId());
-			    		  ResponseData<Map<String,String>> getStore	=  storeServiceRpc.getStoreGroupNameByStoreCodes(sysStoreVo);
-			    		  if(getStore.getData().get(storeCode)==null) {
-			    			  jsonObjtarr.put("groupId", "");
+			    		  if(storeVoMap.get(storeCode)==null) {
+				    		  jsonObjtarr.put("storeCode", "-");//店铺编号
+				    		  jsonObjtarr.put("storeName", "-");//店铺名称
+				    		  jsonObjtarr.put("groupId", "-");//所属群组
 			    		  }else {
-			    			  jsonObjtarr.put("groupId", getStore.getData().get(storeCode));
+			    			  SysStoreVo storeVo=  storeVoMap.get(storeCode);
+			    			  
+				    		  jsonObjtarr.put("storeCode", storeVo.getSysStoreOnlineCode());//店铺编号
+				    		  jsonObjtarr.put("storeName", storeVo.getStoreName());//店铺名称
+				    		  if(storeVo.getStoreGroupName()!=null) {
+				    			  jsonObjtarr.put("groupId", storeVo.getStoreGroupName());//所属群组
+				    		  }else {
+				    			  jsonObjtarr.put("groupId", "-");//所属群组
+				    		  }
+				    		 
 			    		  }
 			    		  
 			    		  //找店铺名
-			    	     com.bizvane.utils.responseinfo.ResponseData<String> storeCodename = storeServiceRpc.getStoreNameByCode(storeCode);
-			    	      
-			    		  jsonObjtarr.put("storeName", storeCodename.getData());
+			    		  havegroupIdarr.put(jsonObjtarr);
+			    	  }
+			    	  jsonStr=havegroupIdarr.toString();
+					} catch (JSONException e) {
+						log.info("群主需要转换，出错");
+						e.printStackTrace();
+					}
+			     }
+			   //转换群主名称     
+			     
+			     
+			     
+			     //转换导购名称 
+			     if(organization.equals("4")) {
+			    	 JSONArray havegroupIdarr=new JSONArray();
+			      try {
+			    	  JSONArray arr=new JSONArray(job.get("data").toString());
+//			    	  参数:staffIds 线下员工idList sysCompanyId 企
+			    	  List<String> staffIds =new ArrayList<>();
+			    	  for(int i=0;i<arr.length();i++){
+			    		  org.codehaus.jettison.json.JSONObject jsonObjtarr=  arr.getJSONObject(i);
+			    		  String  empCode =  jsonObjtarr.get("empCode").toString();
+			    		  staffIds.add(empCode);
+			    	  }
+			    	  StaffVo staffVo =new StaffVo();
+			    	  staffVo.setStaffIds(staffIds);
+			    	  staffVo.setSysCompanyId(currentUser.getSysCompanyId());
+			    	  ResponseData<Map<String, StaffVo>> staffIdsMap =  staffServiceRpc.getStaffIdStaff(staffVo);
+			    	  for(int i=0;i<arr.length();i++){
+			    		  org.codehaus.jettison.json.JSONObject jsonObjtarr=  arr.getJSONObject(i);
+	                      //店铺id
+			    		  String  empCode =  jsonObjtarr.get("empCode").toString();
+			    		//根据导购id
+			    		  if(staffIdsMap.getData().get(empCode)==null) {
+				    		  jsonObjtarr.put("empCode", "-");//员工编号
+				    		  jsonObjtarr.put("empName", "-");//员工姓名
+				    		  jsonObjtarr.put("storeId", "-");//所属店铺
+			    		  }else {
+			    			  StaffVo storeVo=  staffIdsMap.getData().get(empCode);
+				    		  jsonObjtarr.put("empCode", storeVo.getStaffCode());//员工编号
+				    		  jsonObjtarr.put("empName",storeVo.getStaffName());//员工姓名
+				    		  jsonObjtarr.put("storeId", storeVo.getStoreName());//所属店铺
+			    		  }
+
 			    		  
 			    		  havegroupIdarr.put(jsonObjtarr);
-			    		  
-			    		  
 			    		  
 			    	  }
 						
@@ -497,7 +572,6 @@ public class ReportIncomeController {
 						e.printStackTrace();
 					}
 			     }
-			   //转换群主名称     
 			     
 			     
 	             // 导出表格
