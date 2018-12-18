@@ -47,7 +47,7 @@ public class OrderActivityMQmessage implements MessageListener {
         log.info("开始查询会员等级======="+ bo.toString());
         ResponseData<MemberCardLevelModel>  memberCardLevelModel =memberCardProgramApiService.queryMemberCardInfo(model.getMemberCode());
         bo.setLevelId(memberCardLevelModel.getData().getLevelId());
-        //todo 需要会员模块提供会员范围界定接口
+        //
         bo.setMemberType(0);
         log.info("查询会员等级完成+======="+ memberCardLevelModel.getData().getLevelId());
         //商品编码
