@@ -5,32 +5,44 @@ import java.io.Serializable;
 public class MktActivityPOWithBLOBs extends MktActivityPO implements Serializable {
 
 	/**
-	 * 只读. 活动描述、简介. activity_info
-	 * @mbg.generated  2018-09-20 09:44:33
+	 * 只读. 活动描述、简介（积分获取途径说明）. activity_info
+	 * @mbg.generated  2018-12-18 15:22:31
 	 */
-	@io.swagger.annotations.ApiModelProperty(value = "活动描述、简介", name = "activityInfo", required = false, example = "")
+	@io.swagger.annotations.ApiModelProperty(value = "活动描述、简介（积分获取途径说明）", name = "activityInfo", required = false, example = "")
 	private String activityInfo;
 	/**
+	 * 只读. 活动规则. activity_rule
+	 * @mbg.generated  2018-12-18 15:22:31
+	 */
+	@io.swagger.annotations.ApiModelProperty(value = "活动规则", name = "activityRule", required = false, example = "")
+	private String activityRule;
+	/**
 	 * 只读. 活动列表图片，多张逗号分隔. activity_list_img
-	 * @mbg.generated  2018-09-20 09:44:33
+	 * @mbg.generated  2018-12-18 15:22:31
 	 */
 	@io.swagger.annotations.ApiModelProperty(value = "活动列表图片，多张逗号分隔", name = "activityListImg", required = false, example = "")
 	private String activityListImg;
 	/**
 	 * 只读. 活动详情图片. activity_detail_img
-	 * @mbg.generated  2018-09-20 09:44:33
+	 * @mbg.generated  2018-12-18 15:22:31
 	 */
 	@io.swagger.annotations.ApiModelProperty(value = "活动详情图片", name = "activityDetailImg", required = false, example = "")
 	private String activityDetailImg;
 	/**
+	 * 只读. 门店限制名单. store_limit_list
+	 * @mbg.generated  2018-12-18 15:22:31
+	 */
+	@io.swagger.annotations.ApiModelProperty(value = "门店限制名单", name = "storeLimitList", required = false, example = "")
+	private String storeLimitList;
+	/**
 	 * 只读. 
-	 * @mbg.generated  2018-09-20 09:44:33
+	 * @mbg.generated  2018-12-18 15:22:31
 	 */
 	private static final long serialVersionUID = 1L;
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-09-20 09:44:33
+	 * @mbg.generated  2018-12-18 15:22:31
 	 */
 	public String getActivityInfo() {
 		return activityInfo;
@@ -38,7 +50,7 @@ public class MktActivityPOWithBLOBs extends MktActivityPO implements Serializabl
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-09-20 09:44:33
+	 * @mbg.generated  2018-12-18 15:22:31
 	 */
 	public void setActivityInfo(String activityInfo) {
 		this.activityInfo = activityInfo == null ? null : activityInfo.trim();
@@ -46,7 +58,23 @@ public class MktActivityPOWithBLOBs extends MktActivityPO implements Serializabl
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-09-20 09:44:33
+	 * @mbg.generated  2018-12-18 15:22:31
+	 */
+	public String getActivityRule() {
+		return activityRule;
+	}
+
+	/**
+	 * 只读. 
+	 * @mbg.generated  2018-12-18 15:22:31
+	 */
+	public void setActivityRule(String activityRule) {
+		this.activityRule = activityRule == null ? null : activityRule.trim();
+	}
+
+	/**
+	 * 只读. 
+	 * @mbg.generated  2018-12-18 15:22:31
 	 */
 	public String getActivityListImg() {
 		return activityListImg;
@@ -54,7 +82,7 @@ public class MktActivityPOWithBLOBs extends MktActivityPO implements Serializabl
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-09-20 09:44:33
+	 * @mbg.generated  2018-12-18 15:22:31
 	 */
 	public void setActivityListImg(String activityListImg) {
 		this.activityListImg = activityListImg == null ? null : activityListImg.trim();
@@ -62,7 +90,7 @@ public class MktActivityPOWithBLOBs extends MktActivityPO implements Serializabl
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-09-20 09:44:33
+	 * @mbg.generated  2018-12-18 15:22:31
 	 */
 	public String getActivityDetailImg() {
 		return activityDetailImg;
@@ -70,9 +98,25 @@ public class MktActivityPOWithBLOBs extends MktActivityPO implements Serializabl
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-09-20 09:44:33
+	 * @mbg.generated  2018-12-18 15:22:31
 	 */
 	public void setActivityDetailImg(String activityDetailImg) {
 		this.activityDetailImg = activityDetailImg == null ? null : activityDetailImg.trim();
+	}
+
+	/**
+	 * 只读. 
+	 * @mbg.generated  2018-12-18 15:22:31
+	 */
+	public String getStoreLimitList() {
+		return storeLimitList;
+	}
+
+	/**
+	 * 只读. 
+	 * @mbg.generated  2018-12-18 15:22:31
+	 */
+	public void setStoreLimitList(String storeLimitList) {
+		this.storeLimitList = storeLimitList == null ? null : storeLimitList.trim();
 	}
 }
