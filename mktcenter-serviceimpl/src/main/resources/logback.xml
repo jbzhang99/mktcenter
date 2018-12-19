@@ -32,4 +32,5 @@
 		<appender-ref ref="console"/>
 		<appender-ref ref="FILE"/>
 	</root>
+	<logger name="com.bizvane.mktcenterserviceimpl.mappers" level="debug" />
 </configuration>
