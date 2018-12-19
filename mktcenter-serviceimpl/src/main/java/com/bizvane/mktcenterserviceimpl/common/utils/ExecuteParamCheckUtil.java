@@ -87,8 +87,12 @@ public class ExecuteParamCheckUtil {
      * @return
      */
     public  static Boolean CheckCommodity(OrderModelBo vo,ActivityVO activityVO) {
-        boolean falg = false;
-        if (false == activityVO.getCommodityLimit()) {
+        Boolean falg = Boolean.FALSE;
+        Boolean storeLimit =Boolean.FALSE;
+        if(activityVO.getStoreLimit()==null){
+            storeLimit=activityVO.getIsStoreLimit();
+        }
+        if (Boolean.FALSE.equals(storeLimit)) {
             falg = true;
         } else {
             //判断是否是黑名单\
@@ -127,8 +131,12 @@ public class ExecuteParamCheckUtil {
      * @return
      */
     public  static Boolean CheckserviceStore(OrderModelBo vo,ActivityVO activityVO) {
-        boolean falg = false;
-        if (false == activityVO.getStoreLimit()) {
+        Boolean falg = Boolean.FALSE;
+        Boolean storeLimit =Boolean.FALSE;
+        if(activityVO.getStoreLimit()==null){
+            storeLimit=activityVO.getIsStoreLimit();
+        }
+        if (Boolean.FALSE.equals(storeLimit)) {
             falg = true;
         }else{
             //判断是都是黑名单
@@ -159,8 +167,12 @@ public class ExecuteParamCheckUtil {
      * @return
      */
     public  static Boolean addActivitCheck(ActivityBO bo, ActivityVO activityVO) {
-        boolean falg = false;
-        if (false==bo.getActivityVO().getStoreLimit()) {
+        Boolean falg = Boolean.FALSE;
+        Boolean storeLimit =Boolean.FALSE;
+        if(activityVO.getStoreLimit()==null){
+            storeLimit=activityVO.getIsStoreLimit();
+        }
+        if (Boolean.FALSE.equals(storeLimit)) {
             falg = false;
         } else {
             //判断是白名单
