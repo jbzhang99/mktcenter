@@ -53,9 +53,9 @@
             <!--<generatedKey column="def_dictionary_id" sqlStatement="MySql" identity="true"/>-->
         <!--</table>-->
 
-        <table tableName="t_mkt_activity" domainObjectName="MktActivityPO">
+     <!--    <table tableName="t_mkt_activity" domainObjectName="MktActivityPO">
             <generatedKey column="mkt_activity_id" sqlStatement="MySql" identity="true"/>
-        </table>
+        </table> -->
         <!--<table tableName="t_mkt_activity_birthday" domainObjectName="MktActivityBirthdayPO">-->
             <!--<generatedKey column="mkt_activity_birthday_id" sqlStatement="MySql" identity="true"/>-->
         <!--</table>-->
@@ -89,9 +89,9 @@
        <!--  <table tableName="t_mkt_coupon" domainObjectName="MktCouponPO">
             <generatedKey column="mkt_coupon_id" sqlStatement="MySql" identity="true"/>
         </table> -->
-        <table tableName="t_mkt_message" domainObjectName="MktMessagePO">
+   <!--      <table tableName="t_mkt_message" domainObjectName="MktMessagePO">
         <generatedKey column="mkt_msg_id" sqlStatement="MySql" identity="true"/>
-    </table>
+    </table> -->
         <!--<table tableName="t_mkt_task" domainObjectName="MktTaskPO">-->
             <!--<generatedKey column="mkt_task_id" sqlStatement="MySql" identity="true"/>-->
         <!--</table>-->
@@ -137,9 +137,9 @@
             <generatedKey column="exchange_id" sqlStatement="MySql" identity="true"/>
         </table> -->
 
- <table tableName="t_mkt_activity_prize" domainObjectName="MktActivityPrizePO">
+<!--  <table tableName="t_mkt_activity_prize" domainObjectName="MktActivityPrizePO">
             <generatedKey column="mkt_activity_prize_id" sqlStatement="MySql" identity="true"/>
-        </table>
+        </table> -->
          <table tableName="t_mkt_activity_prize_record" domainObjectName="MktActivityPrizeRecordPO">
             <generatedKey column="mkt_activity_prize_record_id" sqlStatement="MySql" identity="true"/>
         </table>

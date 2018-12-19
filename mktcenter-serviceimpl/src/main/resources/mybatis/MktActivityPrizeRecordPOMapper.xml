@@ -4,7 +4,7 @@
   <resultMap id="BaseResultMap" type="com.bizvane.mktcenterservice.models.po.MktActivityPrizeRecordPO">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-12-18 15:22:31.
+      This element was generated on 2018-12-19 15:52:22.
     -->
     <id column="mkt_activity_prize_record_id" jdbcType="BIGINT" property="mktActivityPrizeRecordId" />
     <result column="mkt_activity_id" jdbcType="BIGINT" property="mktActivityId" />
@@ -18,6 +18,7 @@
     <result column="prize_name" jdbcType="VARCHAR" property="prizeName" />
     <result column="prize_time" jdbcType="TIMESTAMP" property="prizeTime" />
     <result column="coupon_definition_id" jdbcType="BIGINT" property="couponDefinitionId" />
+    <result column="is_win_prize" jdbcType="BIT" property="isWinPrize" />
     <result column="remark" jdbcType="VARCHAR" property="remark" />
     <result column="create_user_id" jdbcType="BIGINT" property="createUserId" />
     <result column="create_user_name" jdbcType="VARCHAR" property="createUserName" />
@@ -30,7 +31,7 @@
   <sql id="Example_Where_Clause">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-12-18 15:22:31.
+      This element was generated on 2018-12-19 15:52:22.
     -->
     <where>
       <foreach collection="oredCriteria" item="criteria" separator="or">
@@ -63,7 +64,7 @@
   <sql id="Update_By_Example_Where_Clause">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-12-18 15:22:31.
+      This element was generated on 2018-12-19 15:52:22.
     -->
     <where>
       <foreach collection="example.oredCriteria" item="criteria" separator="or">
@@ -96,17 +97,17 @@
   <sql id="Base_Column_List">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-12-18 15:22:31.
+      This element was generated on 2018-12-19 15:52:22.
     -->
     mkt_activity_prize_record_id, mkt_activity_id, sys_company_id, sys_brand_id, member_code, 
     member_phone, member_name, prize_type, awad_type, prize_name, prize_time, coupon_definition_id, 
-    remark, create_user_id, create_user_name, create_date, modified_user_id, modified_user_name, 
-    modified_date, valid
+    is_win_prize, remark, create_user_id, create_user_name, create_date, modified_user_id, 
+    modified_user_name, modified_date, valid
   </sql>
   <select id="selectByExample" parameterType="com.bizvane.mktcenterservice.models.po.MktActivityPrizeRecordPOExample" resultMap="BaseResultMap">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-12-18 15:22:31.
+      This element was generated on 2018-12-19 15:52:22.
     -->
     select
     <if test="distinct">
@@ -124,7 +125,7 @@
   <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-12-18 15:22:31.
+      This element was generated on 2018-12-19 15:52:22.
     -->
     select 
     <include refid="Base_Column_List" />
@@ -134,7 +135,7 @@
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-12-18 15:22:31.
+      This element was generated on 2018-12-19 15:52:22.
     -->
     delete from t_mkt_activity_prize_record
     where mkt_activity_prize_record_id = #{mktActivityPrizeRecordId,jdbcType=BIGINT}
@@ -142,7 +143,7 @@
   <delete id="deleteByExample" parameterType="com.bizvane.mktcenterservice.models.po.MktActivityPrizeRecordPOExample">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-12-18 15:22:31.
+      This element was generated on 2018-12-19 15:52:22.
     -->
     delete from t_mkt_activity_prize_record
     <if test="_parameter != null">
@@ -152,7 +153,7 @@
   <insert id="insert" parameterType="com.bizvane.mktcenterservice.models.po.MktActivityPrizeRecordPO">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-12-18 15:22:31.
+      This element was generated on 2018-12-19 15:52:22.
     -->
     <selectKey keyProperty="mktActivityPrizeRecordId" order="AFTER" resultType="java.lang.Long">
       SELECT LAST_INSERT_ID()
@@ -160,22 +161,22 @@
     insert into t_mkt_activity_prize_record (mkt_activity_id, sys_company_id, sys_brand_id, 
       member_code, member_phone, member_name, 
       prize_type, awad_type, prize_name, 
-      prize_time, coupon_definition_id, remark, 
-      create_user_id, create_user_name, create_date, 
-      modified_user_id, modified_user_name, modified_date, 
-      valid)
+      prize_time, coupon_definition_id, is_win_prize, 
+      remark, create_user_id, create_user_name, 
+      create_date, modified_user_id, modified_user_name, 
+      modified_date, valid)
     values (#{mktActivityId,jdbcType=BIGINT}, #{sysCompanyId,jdbcType=BIGINT}, #{sysBrandId,jdbcType=BIGINT}, 
       #{memberCode,jdbcType=VARCHAR}, #{memberPhone,jdbcType=VARCHAR}, #{memberName,jdbcType=VARCHAR}, 
       #{prizeType,jdbcType=INTEGER}, #{awadType,jdbcType=INTEGER}, #{prizeName,jdbcType=VARCHAR}, 
-      #{prizeTime,jdbcType=TIMESTAMP}, #{couponDefinitionId,jdbcType=BIGINT}, #{remark,jdbcType=VARCHAR}, 
-      #{createUserId,jdbcType=BIGINT}, #{createUserName,jdbcType=VARCHAR}, #{createDate,jdbcType=TIMESTAMP}, 
-      #{modifiedUserId,jdbcType=INTEGER}, #{modifiedUserName,jdbcType=VARCHAR}, #{modifiedDate,jdbcType=TIMESTAMP}, 
-      #{valid,jdbcType=BIT})
+      #{prizeTime,jdbcType=TIMESTAMP}, #{couponDefinitionId,jdbcType=BIGINT}, #{isWinPrize,jdbcType=BIT}, 
+      #{remark,jdbcType=VARCHAR}, #{createUserId,jdbcType=BIGINT}, #{createUserName,jdbcType=VARCHAR}, 
+      #{createDate,jdbcType=TIMESTAMP}, #{modifiedUserId,jdbcType=INTEGER}, #{modifiedUserName,jdbcType=VARCHAR}, 
+      #{modifiedDate,jdbcType=TIMESTAMP}, #{valid,jdbcType=BIT})
   </insert>
   <insert id="insertSelective" parameterType="com.bizvane.mktcenterservice.models.po.MktActivityPrizeRecordPO">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-12-18 15:22:31.
+      This element was generated on 2018-12-19 15:52:22.
     -->
     <selectKey keyProperty="mktActivityPrizeRecordId" order="AFTER" resultType="java.lang.Long">
       SELECT LAST_INSERT_ID()
@@ -214,6 +215,9 @@
       </if>
       <if test="couponDefinitionId != null">
         coupon_definition_id,
+      </if>
+      <if test="isWinPrize != null">
+        is_win_prize,
       </if>
       <if test="remark != null">
         remark,
@@ -274,6 +278,9 @@
       <if test="couponDefinitionId != null">
         #{couponDefinitionId,jdbcType=BIGINT},
       </if>
+      <if test="isWinPrize != null">
+        #{isWinPrize,jdbcType=BIT},
+      </if>
       <if test="remark != null">
         #{remark,jdbcType=VARCHAR},
       </if>
@@ -303,7 +310,7 @@
   <select id="countByExample" parameterType="com.bizvane.mktcenterservice.models.po.MktActivityPrizeRecordPOExample" resultType="java.lang.Long">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-12-18 15:22:31.
+      This element was generated on 2018-12-19 15:52:22.
     -->
     select count(*) from t_mkt_activity_prize_record
     <if test="_parameter != null">
@@ -313,7 +320,7 @@
   <update id="updateByExampleSelective" parameterType="map">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-12-18 15:22:31.
+      This element was generated on 2018-12-19 15:52:22.
     -->
     update t_mkt_activity_prize_record
     <set>
@@ -353,6 +360,9 @@
       <if test="record.couponDefinitionId != null">
         coupon_definition_id = #{record.couponDefinitionId,jdbcType=BIGINT},
       </if>
+      <if test="record.isWinPrize != null">
+        is_win_prize = #{record.isWinPrize,jdbcType=BIT},
+      </if>
       <if test="record.remark != null">
         remark = #{record.remark,jdbcType=VARCHAR},
       </if>
@@ -385,7 +395,7 @@
   <update id="updateByExample" parameterType="map">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-12-18 15:22:31.
+      This element was generated on 2018-12-19 15:52:22.
     -->
     update t_mkt_activity_prize_record
     set mkt_activity_prize_record_id = #{record.mktActivityPrizeRecordId,jdbcType=BIGINT},
@@ -400,6 +410,7 @@
       prize_name = #{record.prizeName,jdbcType=VARCHAR},
       prize_time = #{record.prizeTime,jdbcType=TIMESTAMP},
       coupon_definition_id = #{record.couponDefinitionId,jdbcType=BIGINT},
+      is_win_prize = #{record.isWinPrize,jdbcType=BIT},
       remark = #{record.remark,jdbcType=VARCHAR},
       create_user_id = #{record.createUserId,jdbcType=BIGINT},
       create_user_name = #{record.createUserName,jdbcType=VARCHAR},
@@ -415,7 +426,7 @@
   <update id="updateByPrimaryKeySelective" parameterType="com.bizvane.mktcenterservice.models.po.MktActivityPrizeRecordPO">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-12-18 15:22:31.
+      This element was generated on 2018-12-19 15:52:22.
     -->
     update t_mkt_activity_prize_record
     <set>
@@ -452,6 +463,9 @@
       <if test="couponDefinitionId != null">
         coupon_definition_id = #{couponDefinitionId,jdbcType=BIGINT},
       </if>
+      <if test="isWinPrize != null">
+        is_win_prize = #{isWinPrize,jdbcType=BIT},
+      </if>
       <if test="remark != null">
         remark = #{remark,jdbcType=VARCHAR},
       </if>
@@ -482,7 +496,7 @@
   <update id="updateByPrimaryKey" parameterType="com.bizvane.mktcenterservice.models.po.MktActivityPrizeRecordPO">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-12-18 15:22:31.
+      This element was generated on 2018-12-19 15:52:22.
     -->
     update t_mkt_activity_prize_record
     set mkt_activity_id = #{mktActivityId,jdbcType=BIGINT},
@@ -496,6 +510,7 @@
       prize_name = #{prizeName,jdbcType=VARCHAR},
       prize_time = #{prizeTime,jdbcType=TIMESTAMP},
       coupon_definition_id = #{couponDefinitionId,jdbcType=BIGINT},
+      is_win_prize = #{isWinPrize,jdbcType=BIT},
       remark = #{remark,jdbcType=VARCHAR},
       create_user_id = #{createUserId,jdbcType=BIGINT},
       create_user_name = #{createUserName,jdbcType=VARCHAR},
