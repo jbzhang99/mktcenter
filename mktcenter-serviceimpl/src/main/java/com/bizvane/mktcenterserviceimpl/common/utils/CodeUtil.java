@@ -4,8 +4,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
-import java.util.concurrent.locks.Lock;
-import java.util.concurrent.locks.ReentrantLock;
 
 /**
  * @Author: lijunwei
@@ -17,6 +15,7 @@ public class CodeUtil {
     private  final  static String  MEMBER_GROUP_CODE_PREFIX="MGC";
     private  final  static String  COUPON_EXCHANGE="NC";
     private  final  static String  COUPON_RECORD_PREFIX="IC";
+    private  final  static String  ACTIVE_ZP_PREFIX="ZP";
     private  final  static SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmssSSS");
 
     public synchronized static   String  getTaskCode()  {
@@ -38,6 +37,9 @@ public class CodeUtil {
         return generateCode(COUPON_RECORD_PREFIX);
     }
 
+    public synchronized static   String  getActivePriceCode()  {
+        return generateCode(ACTIVE_ZP_PREFIX);
+    }
     public synchronized static  String  generateCode(String feature)  {
         StringBuilder stringBuilder=null;
         String  code="";
