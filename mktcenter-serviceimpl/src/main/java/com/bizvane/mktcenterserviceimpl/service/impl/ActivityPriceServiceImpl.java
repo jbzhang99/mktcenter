@@ -103,7 +103,7 @@ public class ActivityPriceServiceImpl implements ActivityPriceService {
     }
 
     /**
-     * 查询
+     * 查询详情
      * @param mktActivityId
      * @return
      */
@@ -124,6 +124,14 @@ public class ActivityPriceServiceImpl implements ActivityPriceService {
         responseData.setData(activityPriceBO);
         return responseData;
     }
+
+    /**
+     * 查询列表
+     */
+   // @Override
+//    public ResponseData<List<MktActivityPOWithBLOBs>> selectActivityPriceLists(Long mktActivityId, HttpServletRequest request){
+//
+//    }
 /**
  * 记录统计
  */
