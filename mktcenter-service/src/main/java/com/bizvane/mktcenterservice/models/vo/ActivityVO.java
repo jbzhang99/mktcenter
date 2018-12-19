@@ -184,7 +184,24 @@ public class ActivityVO extends MktActivityPO {
      */
     @io.swagger.annotations.ApiModelProperty(value = "商品限制类型：1黑名单，2白名单", name = "commodityLimitType", required = false, example = "")
     private Integer commodityLimitType;
+    /**
+     * 只读. 门店限制状态：0不限制，1限制. is_store_limit
+     * @mbg.generated  2018-08-16 16:54:21
+     */
+    @io.swagger.annotations.ApiModelProperty(value = "门店限制状态：0不限制，1限制", name = "isStoreLimit", required = false, example = "")
+    private Boolean isStoreLimit;
+    /**
+     * 只读. 门店限制类型：1黑名单，2白名单. store_limit_type
+     * @mbg.generated  2018-08-16 16:54:21
+     */
+    @io.swagger.annotations.ApiModelProperty(value = "门店限制类型：1黑名单，2白名单", name = "storeLimitType", required = false, example = "")
+    private Integer storeLimitType;
 
+    @io.swagger.annotations.ApiModelProperty(value = "立即发送：1是，0否", name = "sendImmediately", required = false, example = "")
+    private Boolean sendImmediately;
+
+    @io.swagger.annotations.ApiModelProperty(value = "开始发送时间", name = "sendTime", required = false, example = "")
+    private Date sendTime;
     //门店实体类
     private List<SysStorePo> sysStorePos;
     //商品实体类
@@ -237,6 +254,22 @@ public class ActivityVO extends MktActivityPO {
     }
 
 
+    public Boolean getSendImmediately() {
+        return sendImmediately;
+    }
+
+    public void setSendImmediately(Boolean sendImmediately) {
+        this.sendImmediately = sendImmediately;
+    }
+
+    public Date getSendTime() {
+        return sendTime;
+    }
+
+    public void setSendTime(Date sendTime) {
+        this.sendTime = sendTime;
+    }
+
     public String getCommodityLimitList() {
         return commodityLimitList;
     }
@@ -275,6 +308,22 @@ public class ActivityVO extends MktActivityPO {
 
     public void setCommodityLimitType(Integer commodityLimitType) {
         this.commodityLimitType = commodityLimitType;
+    }
+
+    public Boolean getStoreLimit() {
+        return isStoreLimit;
+    }
+
+    public void setStoreLimit(Boolean storeLimit) {
+        isStoreLimit = storeLimit;
+    }
+
+    public Integer getStoreLimitType() {
+        return storeLimitType;
+    }
+
+    public void setStoreLimitType(Integer storeLimitType) {
+        this.storeLimitType = storeLimitType;
     }
 
     public Integer getOrderSource() {

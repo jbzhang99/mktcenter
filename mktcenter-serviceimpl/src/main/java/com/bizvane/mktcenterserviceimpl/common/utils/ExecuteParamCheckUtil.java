@@ -193,8 +193,12 @@ public class ExecuteParamCheckUtil {
      * @return
      */
     public  static Boolean implementActivitCheck(MemberInfoModel vo, ActivityVO activityVO) {
-        boolean falg = false;
-        if (false == activityVO.getStoreLimit()) {
+        Boolean falg = Boolean.FALSE;
+        Boolean storeLimit =Boolean.FALSE;
+        if(activityVO.getStoreLimit()==null){
+            storeLimit=activityVO.getIsStoreLimit();
+        }
+        if (Boolean.FALSE.equals(storeLimit)) {
             falg = true;
         } else {
             //判断是白名单
