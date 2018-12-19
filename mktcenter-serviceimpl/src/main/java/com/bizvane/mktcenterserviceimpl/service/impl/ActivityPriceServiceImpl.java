@@ -2,10 +2,12 @@ package com.bizvane.mktcenterserviceimpl.service.impl;
 
 import com.alibaba.fastjson.JSON;
 import com.bizvane.mktcenterservice.interfaces.ActivityPriceService;
+import com.bizvane.mktcenterservice.models.po.MktActivityPOExample;
 import com.bizvane.mktcenterservice.models.po.MktActivityPOWithBLOBs;
 import com.bizvane.mktcenterservice.models.po.MktActivityPrizePO;
 import com.bizvane.mktcenterservice.models.po.MktActivityPrizePOExample;
 import com.bizvane.mktcenterservice.models.vo.ActivityPriceBO;
+import com.bizvane.mktcenterservice.models.vo.ActivityPriceParamVO;
 import com.bizvane.mktcenterserviceimpl.common.utils.CodeUtil;
 import com.bizvane.mktcenterserviceimpl.mappers.MktActivityPOMapper;
 import com.bizvane.mktcenterserviceimpl.mappers.MktActivityPrizePOMapper;
@@ -22,6 +24,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -45,6 +48,7 @@ public class ActivityPriceServiceImpl implements ActivityPriceService {
 
     /**
      * 新增
+     *
      * @param bo
      * @return
      */
@@ -72,9 +76,9 @@ public class ActivityPriceServiceImpl implements ActivityPriceService {
         createMiniprgmQRCodeRequestVO.setMiniProgramType("10");
         createMiniprgmQRCodeRequestVO.setPath("pages/template01/coupon-scancode/main");
         createMiniprgmQRCodeRequestVO.setScene(activePriceCode);
-        log.info("addActivityPrice wexin param:"+ JSON.toJSONString(createMiniprgmQRCodeRequestVO));
+        log.info("addActivityPrice wexin param:" + JSON.toJSONString(createMiniprgmQRCodeRequestVO));
         ResponseData<String> qrCodeResponseData = qrCodeServiceFeign.createMiniprgmQRCode(createMiniprgmQRCodeRequestVO);
-        log.info("addActivityPrice wexin result:"+ JSON.toJSONString(qrCodeResponseData));
+        log.info("addActivityPrice wexin result:" + JSON.toJSONString(qrCodeResponseData));
         String weixinUrl = qrCodeResponseData.getData();
 
         activityPO.setActivityType(11);
@@ -88,7 +92,7 @@ public class ActivityPriceServiceImpl implements ActivityPriceService {
         mktActivityPOMapper.insertSelective(activityPO);
         Long mktActivityId = activityPO.getMktActivityId();
 
-        activityPrizePOList.parallelStream().forEach((MktActivityPrizePO po)->{
+        activityPrizePOList.parallelStream().forEach((MktActivityPrizePO po) -> {
             po.setMktActivityId(mktActivityId);
             po.setSysBrandId(brandId);
             po.setSysCompanyId(sysCompanyId);
@@ -104,6 +108,7 @@ public class ActivityPriceServiceImpl implements ActivityPriceService {
 
     /**
      * 查询详情
+     *
      * @param mktActivityId
      * @return
      */
@@ -111,7 +116,7 @@ public class ActivityPriceServiceImpl implements ActivityPriceService {
     public ResponseData<ActivityPriceBO> selectActivityPrice(Long mktActivityId, HttpServletRequest request) {
         ResponseData<ActivityPriceBO> responseData = new ResponseData<>();
 
-      //  SysAccountPO sysAccountPo = TokenUtils.getStageUser(request);
+        //  SysAccountPO sysAccountPo = TokenUtils.getStageUser(request);
         ActivityPriceBO activityPriceBO = new ActivityPriceBO();
         MktActivityPOWithBLOBs mktActivityPOWithBLOBs = mktActivityPOMapper.selectByPrimaryKey(mktActivityId);
 
@@ -128,10 +133,33 @@ public class ActivityPriceServiceImpl implements ActivityPriceService {
     /**
      * 查询列表
      */
-   // @Override
-//    public ResponseData<List<MktActivityPOWithBLOBs>> selectActivityPriceLists(Long mktActivityId, HttpServletRequest request){
-//
-//    }
+    @Override
+    public ResponseData<List<MktActivityPOWithBLOBs>> selectActivityPriceLists(ActivityPriceParamVO vo, HttpServletRequest request) {
+        ResponseData<List<MktActivityPOWithBLOBs>> responseData = new ResponseData<>();
+        SysAccountPO sysAccountPo = TokenUtils.getStageUser(request);
+        MktActivityPOExample example = new MktActivityPOExample();
+        MktActivityPOExample.Criteria criteria = example.createCriteria();
+        criteria.andSysBrandIdEqualTo(sysAccountPo.getBrandId());
+        String activityCode = vo.getActivityCode();
+        if (null != activityCode) {
+            criteria.andActivityCodeLike("%" + activityCode + "%");
+        }
+        String activityName = vo.getActivityName();
+        if (null != activityName) {
+            criteria.andActivityNameLike("%" + activityName + "%");
+        }
+        Integer activityStatus = vo.getActivityStatus();
+        if (null != activityStatus) {
+            criteria.andActivityStatusEqualTo(activityStatus);
+        }
+        List<MktActivityPOWithBLOBs> listparam = mktActivityPOMapper.selectByExampleWithBLOBs(example);
+        if (CollectionUtils.isEmpty(listparam)) {
+            responseData.setData(new ArrayList<MktActivityPOWithBLOBs>());
+            return responseData;
+        }
+        responseData.setData(listparam);
+        return responseData;
+    }
 /**
  * 记录统计
  */
