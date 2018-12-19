@@ -2,13 +2,11 @@ package com.bizvane.mktcenterserviceimpl.service.impl;
 
 import com.alibaba.fastjson.JSON;
 import com.bizvane.mktcenterservice.interfaces.ActivityPriceService;
-import com.bizvane.mktcenterservice.models.po.MktActivityPOExample;
-import com.bizvane.mktcenterservice.models.po.MktActivityPOWithBLOBs;
-import com.bizvane.mktcenterservice.models.po.MktActivityPrizePO;
-import com.bizvane.mktcenterservice.models.po.MktActivityPrizePOExample;
+import com.bizvane.mktcenterservice.models.po.*;
 import com.bizvane.mktcenterservice.models.vo.ActivityPriceBO;
 import com.bizvane.mktcenterservice.models.vo.ActivityPriceParamVO;
 import com.bizvane.mktcenterserviceimpl.common.utils.CodeUtil;
+import com.bizvane.mktcenterserviceimpl.mappers.MktActivityCountPOMapper;
 import com.bizvane.mktcenterserviceimpl.mappers.MktActivityPOMapper;
 import com.bizvane.mktcenterserviceimpl.mappers.MktActivityPrizePOMapper;
 import com.bizvane.mktcenterserviceimpl.mappers.MktActivityPrizeRecordPOMapper;
@@ -45,6 +43,8 @@ public class ActivityPriceServiceImpl implements ActivityPriceService {
     private QRCodeServiceFeign qrCodeServiceFeign;
     @Autowired
     private MktActivityPrizeRecordPOMapper mktActivitPrizeRecordPOMapper;
+    @Autowired
+    private MktActivityCountPOMapper mktActivityCountPOMapper;
 
     /**
      * 新增
@@ -101,6 +101,14 @@ public class ActivityPriceServiceImpl implements ActivityPriceService {
             po.setCreateDate(date);
             mktActivityPrizePOMapper.insertSelective(po);
         });
+        MktActivityCountPO mktActivityCountPO = new MktActivityCountPO();
+        mktActivityCountPO.setMktActivityId(mktActivityId);
+        mktActivityCountPO.setSysCompanyId(sysCompanyId);
+        mktActivityCountPO.setSysBrandId(brandId);
+        mktActivityCountPO.setCreateUserId(sysAccountId);
+        mktActivityCountPO.setCreateUserName(name);
+        mktActivityCountPO.setCreateDate(date);
+        mktActivityCountPOMapper.insertSelective(mktActivityCountPO);
 
         responseData.setData(weixinUrl);
         return responseData;
