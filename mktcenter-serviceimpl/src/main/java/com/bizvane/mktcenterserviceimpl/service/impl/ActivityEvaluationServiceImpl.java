@@ -276,6 +276,7 @@ public class ActivityEvaluationServiceImpl implements ActivityEvaluationService 
         ActivityVO activity = new ActivityVO();
         activity.setActivityStatus(ActivityStatusEnum.ACTIVITY_STATUS_EXECUTING.getCode());
         activity.setActivityType(ActivityTypeEnum.ACTIVITY_TYPE_EVALUATION.getCode());
+        activity.setSysBrandId(vo.getBrandId());
         List<ActivityVO> evaluationList = mktActivityEvaluationPOMapper.getActivityVOList(activity);
         if (CollectionUtils.isEmpty(evaluationList)) {
             responseData.setCode(SysResponseEnum.OPERATE_FAILED_DATA_NOT_EXISTS.getCode());
