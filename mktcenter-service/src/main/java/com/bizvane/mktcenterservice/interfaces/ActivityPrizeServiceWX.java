@@ -1,6 +1,8 @@
 package com.bizvane.mktcenterservice.interfaces;
 
 import com.bizvane.mktcenterservice.models.po.MktActivityPrizeRecordPO;
+import com.bizvane.mktcenterservice.models.vo.ActivityPriceBO;
+import com.bizvane.mktcenterservice.models.vo.MktActivityPrizeRecordVO;
 import com.bizvane.utils.responseinfo.ResponseData;
 
 import java.util.List;
@@ -15,4 +17,10 @@ public interface ActivityPrizeServiceWX {
      * @return
      */
     public ResponseData<List<MktActivityPrizeRecordPO>> getPrizeRecordList(MktActivityPrizeRecordPO po);
+
+    /**
+     * 获取抽奖活动规则
+     * @return
+     */
+    public ResponseData<ActivityPriceBO> selectPrizeList(MktActivityPrizeRecordVO vo);
 }

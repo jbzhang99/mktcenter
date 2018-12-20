@@ -558,7 +558,15 @@ public class ActivityVipAniversaryServiceImpl implements ActivityVipAniversarySe
     @Async("asyncServiceExecutor")
     public void AniversaryReward(ActivityVO activityAniversary, MemberInfoModel memberInfo) {
         log.info("纪念日活动发送奖励开始");
-        log.info("服务门店为NULL!==========="+memberInfo.getServiceStoreId());
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(memberInfo.getOpenCardTime());
+        cal.add(Calendar.MONTH, activityAniversary.getRegisterMonths());
+        cal.add(Calendar.DATE, -activityAniversary.getDaysAhead());
+        //开卡时间+上满几个月-延迟天数 >当前时间
+        if (new Date().before(cal.getTime())){
+            return;
+        }
+        log.info("服务门店为!==========="+memberInfo.getServiceStoreId());
             //判断生日适用门店信息
             if (!ExecuteParamCheckUtil.implementActivitCheck(memberInfo,activityAniversary)){
                 return;

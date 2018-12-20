@@ -1,6 +1,8 @@
 package com.bizvane.mktcenterservice.rpc;
 
 import com.bizvane.mktcenterservice.models.po.MktActivityPrizeRecordPO;
+import com.bizvane.mktcenterservice.models.vo.ActivityPriceBO;
+import com.bizvane.mktcenterservice.models.vo.MktActivityPrizeRecordVO;
 import com.bizvane.utils.responseinfo.ResponseData;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -20,4 +22,12 @@ public interface ActivityPrizeServiceRpc {
      */
     @RequestMapping("getPrizeRecordListRpc")
     ResponseData<List<MktActivityPrizeRecordPO>> getPrizeRecordListRpc(@RequestBody MktActivityPrizeRecordPO po);
+
+    /**
+     * 获取抽奖活动规则
+     * @param vo
+     * @return
+     */
+    @RequestMapping("selectPrizeList")
+    public ResponseData<ActivityPriceBO> selectPrizeList(@RequestBody MktActivityPrizeRecordVO vo);
 }

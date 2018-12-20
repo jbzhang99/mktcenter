@@ -840,10 +840,13 @@ public class ActivityBirthdayServiceImpl implements ActivityBirthdayService {
 
         System.out.println("======================="+tt);
         System.out.println("======================="+moneySu);*/
-        boolean  falg;
-        List<String> productNoList = new ArrayList<>();
-        productNoList.add("1");
-        falg=productNoList.contains("1");
-        System.out.println("======================="+falg);
+        Date date = new Date();
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(date);//设置起时间
+        System.out.println("======================="+date.toString());
+        cal.add(Calendar.MONTH, 1);
+        cal.add(Calendar.DATE, -1);
+        System.out.println("======================="+cal.getTime().toString());
+
     }
 }
