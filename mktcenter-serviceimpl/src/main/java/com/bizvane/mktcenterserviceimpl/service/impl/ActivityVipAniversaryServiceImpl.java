@@ -561,7 +561,6 @@ public class ActivityVipAniversaryServiceImpl implements ActivityVipAniversarySe
         Calendar cal = Calendar.getInstance();
         cal.setTime(memberInfo.getOpenCardTime());
         cal.add(Calendar.MONTH, activityAniversary.getRegisterMonths());
-        cal.add(Calendar.DATE, -activityAniversary.getDaysAhead());
         //开卡时间+上满几个月-延迟天数 >当前时间
         if (new Date().before(cal.getTime())){
             return;
