@@ -977,4 +977,20 @@
     </if>
       AND tma.create_date LIKE CONCAT(#{time},'%')
   </select>
+
+  <!-- 查询抽奖主表-->
+  <select id="selectActivity" parameterType="com.bizvane.mktcenterservice.models.vo.MktActivityPrizeRecordVO" resultType="com.bizvane.mktcenterservice.models.po.MktActivityPO">
+    select * FROM
+    t_mkt_activity t
+    where t.valid=1  and t.activity_status=2 and t.activity_type=11
+    <if test="serviceStoreId != null and serviceStoreId!= ''">
+     AND CASE
+      when t.is_store_limit = 1 then  concat(',',t.store_limit_list,',') like concat('%,',#{serviceStoreId},',%')
+      ELSE t.is_store_limit = 0
+      END
+    </if>
+    <if test="sysBrandId != null and sysBrandId!= ''">
+      AND t.sys_brand_id = #{sysBrandId}
+    </if>
+  </select>
 </mapper>
