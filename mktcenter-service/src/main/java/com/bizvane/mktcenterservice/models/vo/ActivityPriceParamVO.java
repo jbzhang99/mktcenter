@@ -8,10 +8,14 @@ import lombok.Data;
  */
 @Data
 public class ActivityPriceParamVO {
+    private int pageNumber;
+    private int pageSize;
+    private Long mktActivityId;
     private String activityCode;
     private String activityName;
     private Integer activityStatus;
-    private  Long brandId;
-    private int pageNumber;
-    private int pageSize;
+    private Long brandId;
+    private String prizeName;
+    private String memberPhone;
+    private String memberName;
 }

@@ -141,9 +141,9 @@ public class ActivityPriceServiceImpl implements ActivityPriceService {
         responseData.setData(activityPriceBO);
         return responseData;
     }
+
     /**
      * 查询详情 code
-     *
      */
     @Override
     public ResponseData<ActivityPriceBO> selectActivityPrice(String activePriceCode, HttpServletRequest request) {
@@ -153,7 +153,7 @@ public class ActivityPriceServiceImpl implements ActivityPriceService {
         ActivityPriceBO activityPriceBO = new ActivityPriceBO();
         MktActivityPOExample example0 = new MktActivityPOExample();
         example0.createCriteria().andActivityCodeEqualTo(activePriceCode);
-       MktActivityPOWithBLOBs mktActivityPOWithBLOBs = mktActivityPOMapper.selectByExampleWithBLOBs(example0).get(0);
+        MktActivityPOWithBLOBs mktActivityPOWithBLOBs = mktActivityPOMapper.selectByExampleWithBLOBs(example0).get(0);
 
         MktActivityPrizePOExample example = new MktActivityPrizePOExample();
         example.createCriteria().andMktActivityIdEqualTo(mktActivityPOWithBLOBs.getMktActivityId());
@@ -164,6 +164,7 @@ public class ActivityPriceServiceImpl implements ActivityPriceService {
         responseData.setData(activityPriceBO);
         return responseData;
     }
+
     /**
      * 查询列表
      */
@@ -216,5 +217,29 @@ public class ActivityPriceServiceImpl implements ActivityPriceService {
         PageInfo<AnalysisPriceResultVO> pageInfo = new PageInfo<>(lists);
         responseData.setData(pageInfo);
         return responseData;
+    }
+
+    /**
+     * 中奖人数
+     */
+    @Override
+    public ResponseData<PageInfo<MktActivityPrizeRecordPO>> selectPrizePeople(ActivityPriceParamVO vo) {
+        ResponseData<PageInfo<MktActivityPrizeRecordPO>> responseData = new ResponseData<>();
+        PageHelper.startPage(vo.getPageNumber(), vo.getPageSize());
+        MktActivityPrizeRecordPOExample example = new MktActivityPrizeRecordPOExample();
+        example.createCriteria().andMktActivityIdEqualTo(vo.getMktActivityId())
+                .andMemberNameLike("%" + vo.getMemberName() + "%")
+                .andPrizeNameLike("%" + vo.getPrizeName() + "%")
+                .andAwadTypeNotEqualTo(50).andValidEqualTo(Boolean.TRUE);
+
+        List<MktActivityPrizeRecordPO> lists = mktActivitPrizeRecordPOMapper.selectByExample(example);
+        if (CollectionUtils.isEmpty(lists)) {
+            lists = new ArrayList<MktActivityPrizeRecordPO>();
+        }
+        PageInfo<MktActivityPrizeRecordPO> pageInfo = new PageInfo<>(lists);
+        responseData.setData(pageInfo);
+        return responseData;
+
+
     }
 }
