@@ -5,7 +5,9 @@ import com.bizvane.mktcenterservice.interfaces.ActivityPriceService;
 import com.bizvane.mktcenterservice.models.po.*;
 import com.bizvane.mktcenterservice.models.vo.ActivityPriceBO;
 import com.bizvane.mktcenterservice.models.vo.ActivityPriceParamVO;
+import com.bizvane.mktcenterservice.models.vo.AnalysisPriceResultVO;
 import com.bizvane.mktcenterserviceimpl.common.utils.CodeUtil;
+import com.bizvane.mktcenterserviceimpl.common.utils.TimeUtils;
 import com.bizvane.mktcenterserviceimpl.mappers.MktActivityCountPOMapper;
 import com.bizvane.mktcenterserviceimpl.mappers.MktActivityPOMapper;
 import com.bizvane.mktcenterserviceimpl.mappers.MktActivityPrizePOMapper;
@@ -15,6 +17,8 @@ import com.bizvane.utils.tokens.SysAccountPO;
 import com.bizvane.utils.tokens.TokenUtils;
 import com.bizvane.wechatfacade.interfaces.QRCodeServiceFeign;
 import com.bizvane.wechatfacade.models.vo.CreateMiniprgmQRCodeRequestVO;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -115,7 +119,7 @@ public class ActivityPriceServiceImpl implements ActivityPriceService {
     }
 
     /**
-     * 查询详情
+     * 查询详情 id
      *
      * @param mktActivityId
      * @return
@@ -137,7 +141,29 @@ public class ActivityPriceServiceImpl implements ActivityPriceService {
         responseData.setData(activityPriceBO);
         return responseData;
     }
+    /**
+     * 查询详情 code
+     *
+     */
+    @Override
+    public ResponseData<ActivityPriceBO> selectActivityPrice(String activePriceCode, HttpServletRequest request) {
+        ResponseData<ActivityPriceBO> responseData = new ResponseData<>();
 
+        //  SysAccountPO sysAccountPo = TokenUtils.getStageUser(request);
+        ActivityPriceBO activityPriceBO = new ActivityPriceBO();
+        MktActivityPOExample example0 = new MktActivityPOExample();
+        example0.createCriteria().andActivityCodeEqualTo(activePriceCode);
+       MktActivityPOWithBLOBs mktActivityPOWithBLOBs = mktActivityPOMapper.selectByExampleWithBLOBs(example0).get(0);
+
+        MktActivityPrizePOExample example = new MktActivityPrizePOExample();
+        example.createCriteria().andMktActivityIdEqualTo(mktActivityPOWithBLOBs.getMktActivityId());
+        List<MktActivityPrizePO> mktActivityPrizePOS = mktActivityPrizePOMapper.selectByExample(example);
+
+        activityPriceBO.setActivityPO(mktActivityPOWithBLOBs);
+        activityPriceBO.setActivityPrizePOList(mktActivityPrizePOS);
+        responseData.setData(activityPriceBO);
+        return responseData;
+    }
     /**
      * 查询列表
      */
@@ -168,11 +194,27 @@ public class ActivityPriceServiceImpl implements ActivityPriceService {
         responseData.setData(listparam);
         return responseData;
     }
-/**
- * 记录统计
- */
-//public ResponseData<ActivityPriceBO> selectActivityPrice(Long mktActivityId, HttpServletRequest request){
-//
-//}
 
+    /**
+     * 记录统计
+     */
+    @Override
+    public ResponseData<PageInfo<AnalysisPriceResultVO>> selectAnalysisPrice(ActivityPriceParamVO vo, HttpServletRequest request) {
+        ResponseData<PageInfo<AnalysisPriceResultVO>> responseData = new ResponseData<>();
+        PageHelper.startPage(vo.getPageNumber(), vo.getPageSize());
+        List<AnalysisPriceResultVO> lists = mktActivityPrizePOMapper.selectAnalysisPrice(vo);
+        if (CollectionUtils.isEmpty(lists)) {
+            lists = new ArrayList<>();
+        } else {
+            lists.parallelStream().forEach(param -> {
+                int dataNum = TimeUtils.getDataNum(param.getEndTime());
+                param.setResidueDates(dataNum);
+                param.setGoingDates(param.getTotalDates() - dataNum);
+                param.setPrizePeople(mktActivitPrizeRecordPOMapper.selectPrizePeopleNum(param.getMktActivityId()));
+            });
+        }
+        PageInfo<AnalysisPriceResultVO> pageInfo = new PageInfo<>(lists);
+        responseData.setData(pageInfo);
+        return responseData;
+    }
 }

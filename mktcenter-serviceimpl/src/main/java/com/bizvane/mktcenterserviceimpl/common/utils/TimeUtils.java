@@ -1,6 +1,5 @@
 package com.bizvane.mktcenterserviceimpl.common.utils;
 
-import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.ParsePosition;
 import java.text.SimpleDateFormat;
@@ -81,5 +80,14 @@ public class TimeUtils {
         return date1;
     }
 
-
+    /**
+     *时间天数
+     */
+    public static int getDataNum(Date endDate) {
+        int data = (int) ((endDate.getTime() - System.currentTimeMillis()) / (1000 * 3600 * 24));
+        return data<0?0:data;
+    }
+    public static int getDataNum(Date startDate,Date endDate) {
+        return (int) ((endDate.getTime() - startDate.getTime()) / (1000*3600*24));
+    }
 }

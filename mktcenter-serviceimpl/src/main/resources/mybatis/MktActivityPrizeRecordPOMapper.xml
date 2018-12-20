@@ -521,4 +521,15 @@
       valid = #{valid,jdbcType=BIT}
     where mkt_activity_prize_record_id = #{mktActivityPrizeRecordId,jdbcType=BIGINT}
   </update>
+
+  <select id="selectPrizePeopleNum" resultType="java.lang.Integer">
+    SELECT
+      COUNT(mkt_activity_id)
+    FROM
+      t_mkt_activity_prize_record
+    WHERE
+      valid=1
+      AND is_win_prize=1
+      AND mkt_activity_id=#{mktActivityId}
+  </select>
 </mapper>

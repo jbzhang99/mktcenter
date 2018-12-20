@@ -11,4 +11,7 @@ public class ActivityPriceParamVO {
     private String activityCode;
     private String activityName;
     private Integer activityStatus;
+    private  Long brandId;
+    private int pageNumber;
+    private int pageSize;
 }

@@ -2,6 +2,8 @@ package com.bizvane.mktcenterservice.models.vo;
 
 import lombok.Data;
 
+import java.util.Date;
+
 /**
  * @Author: lijunwei
  * @Time: 2018/12/19 20:52
@@ -21,4 +23,6 @@ public class AnalysisPriceResultVO {
     private Integer  totalPeople;
     //中奖人数
     private Integer  prizePeople;
+    private Date startTime;
+    private Date endTime;
 }

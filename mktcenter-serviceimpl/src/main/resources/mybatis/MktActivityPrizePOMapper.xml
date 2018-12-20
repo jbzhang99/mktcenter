@@ -586,4 +586,30 @@
       valid = #{valid,jdbcType=BIT}
     where mkt_activity_prize_id = #{mktActivityPrizeId,jdbcType=BIGINT}
   </update>
+  <select id="selectAnalysisPrice" parameterType="com.bizvane.mktcenterservice.models.vo.ActivityPriceParamVO" resultType="com.bizvane.mktcenterservice.models.vo.AnalysisPriceResultVO">
+    SELECT
+      tma.mkt_activity_id,
+      tma.activity_name,
+      tma.activity_code,
+      tma.activity_status,
+      ROUND( TIMESTAMPDIFF( HOUR, tma.start_time, tma.end_time ) / 24, 1 ) AS totalDates, -- 进行时长
+      tmapr.member_count AS totalPeople
+    FROM
+      t_mkt_activity tma
+        INNER JOIN t_mkt_activity_count tmapr ON tma.mkt_activity_id = tmapr.mkt_activity_id
+   WHERE
+     tma.valid=1
+    <if test="activityStatus!= null ">
+    tma.sys_brand_id=#{brandId}
+    </if>
+    <if test="activityStatus!= null ">
+     tma.activity_status=#{activityStatus}
+    </if>
+    <if test="activityName!= null and activityName!= '' ">
+     tma.activity_name LIKE CONCAT('%',#{activityName},'%')
+    </if>
+    <if test="activityCode!= null and activityCode!= '' ">
+    tma.activity_code LIKE CONCAT('%',#{activityCode},'%')
+    </if>
+  </select>
 </mapper>

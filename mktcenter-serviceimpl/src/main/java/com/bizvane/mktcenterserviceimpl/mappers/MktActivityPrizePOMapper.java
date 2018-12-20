@@ -2,8 +2,11 @@ package com.bizvane.mktcenterserviceimpl.mappers;
 
 import com.bizvane.mktcenterservice.models.po.MktActivityPrizePO;
 import com.bizvane.mktcenterservice.models.po.MktActivityPrizePOExample;
-import java.util.List;
+import com.bizvane.mktcenterservice.models.vo.ActivityPriceParamVO;
+import com.bizvane.mktcenterservice.models.vo.AnalysisPriceResultVO;
 import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 public interface MktActivityPrizePOMapper {
     /**
@@ -82,4 +85,9 @@ public interface MktActivityPrizePOMapper {
      * @mbg.generated 2018-12-18 15:22:31
      */
     int updateByPrimaryKey(MktActivityPrizePO record);
+
+    /**
+     *统计
+     */
+    List<AnalysisPriceResultVO> selectAnalysisPrice(ActivityPriceParamVO vo);
 }
