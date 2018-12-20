@@ -18,4 +18,5 @@ public class ActivityPriceParamVO {
     private String prizeName;
     private String memberPhone;
     private String memberName;
+    private String qrCodeUrl;
 }

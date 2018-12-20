@@ -1,5 +1,6 @@
 package com.bizvane.mktcenterservice.interfaces;
 
+import com.alibaba.fastjson.JSONObject;
 import com.bizvane.mktcenterservice.models.po.MktActivityPOWithBLOBs;
 import com.bizvane.mktcenterservice.models.po.MktActivityPrizeRecordPO;
 import com.bizvane.mktcenterservice.models.vo.ActivityPriceBO;
@@ -9,6 +10,7 @@ import com.bizvane.utils.responseinfo.ResponseData;
 import com.github.pagehelper.PageInfo;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.text.ParseException;
 import java.util.List;
 
@@ -18,11 +20,12 @@ import java.util.List;
  */
 public interface ActivityPriceService {
 
-    public ResponseData<String> addActivityPrice(ActivityPriceBO bo, HttpServletRequest request) throws ParseException;
+    public ResponseData<JSONObject> addActivityPrice(ActivityPriceBO bo, HttpServletRequest request) throws ParseException;
     public ResponseData<ActivityPriceBO> selectActivityPrice(Long mktActivityId,HttpServletRequest request);
     public ResponseData<ActivityPriceBO> selectActivityPrice(String activePriceCode, HttpServletRequest request);
     public ResponseData<List<MktActivityPOWithBLOBs>> selectActivityPriceLists(ActivityPriceParamVO vo, HttpServletRequest request);
     public ResponseData<Integer> stopActivityPrice(MktActivityPOWithBLOBs po, HttpServletRequest request);
     public ResponseData<PageInfo<AnalysisPriceResultVO>> selectAnalysisPrice(ActivityPriceParamVO vo, HttpServletRequest request);
     public ResponseData<PageInfo<MktActivityPrizeRecordPO>> selectPrizePeople(ActivityPriceParamVO vo);
+    public ResponseData<String> exportQRCodes(ActivityPriceParamVO vo, HttpServletRequest request, HttpServletResponse response);
 }

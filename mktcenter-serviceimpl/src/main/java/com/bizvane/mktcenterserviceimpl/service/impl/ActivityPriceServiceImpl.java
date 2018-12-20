@@ -1,18 +1,25 @@
 package com.bizvane.mktcenterserviceimpl.service.impl;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
+import com.bizvane.centerstageservice.models.po.FileTaskPo;
+import com.bizvane.centerstageservice.models.vo.QiNiuVo;
+import com.bizvane.centerstageservice.rpc.FileTaskServiceRpc;
 import com.bizvane.mktcenterservice.interfaces.ActivityPriceService;
 import com.bizvane.mktcenterservice.models.po.*;
 import com.bizvane.mktcenterservice.models.vo.ActivityPriceBO;
 import com.bizvane.mktcenterservice.models.vo.ActivityPriceParamVO;
 import com.bizvane.mktcenterservice.models.vo.AnalysisPriceResultVO;
 import com.bizvane.mktcenterserviceimpl.common.job.JobUtil;
+import com.bizvane.mktcenterserviceimpl.common.tools.QiNiuConfigs;
+import com.bizvane.mktcenterserviceimpl.common.tools.QiNiuUtils;
 import com.bizvane.mktcenterserviceimpl.common.utils.CodeUtil;
 import com.bizvane.mktcenterserviceimpl.common.utils.TimeUtils;
 import com.bizvane.mktcenterserviceimpl.mappers.MktActivityCountPOMapper;
 import com.bizvane.mktcenterserviceimpl.mappers.MktActivityPOMapper;
 import com.bizvane.mktcenterserviceimpl.mappers.MktActivityPrizePOMapper;
 import com.bizvane.mktcenterserviceimpl.mappers.MktActivityPrizeRecordPOMapper;
+import com.bizvane.utils.enumutils.SysResponseEnum;
 import com.bizvane.utils.jobutils.JobClient;
 import com.bizvane.utils.jobutils.XxlJobInfo;
 import com.bizvane.utils.responseinfo.ResponseData;
@@ -29,10 +36,20 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.BufferedOutputStream;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.InputStream;
+import java.net.URL;
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
 
 /**
  * @Author: lijunwei
@@ -57,7 +74,12 @@ public class ActivityPriceServiceImpl implements ActivityPriceService {
     private JobUtil jobUtil;
     @Autowired
     private JobClient jobClient;
-
+    @Autowired
+    private QiNiuConfigs qiNiuConfig;
+    @Autowired
+    private  QiNiuUtils niuUtil;
+    @Autowired
+    private FileTaskServiceRpc fileTaskServiceRpc;
     /**
      * 新增
      *
@@ -66,8 +88,8 @@ public class ActivityPriceServiceImpl implements ActivityPriceService {
      */
     @Transactional
     @Override
-    public ResponseData<String> addActivityPrice(ActivityPriceBO bo, HttpServletRequest request) throws ParseException {
-        ResponseData<String> responseData = new ResponseData<>();
+    public ResponseData<JSONObject> addActivityPrice(ActivityPriceBO bo, HttpServletRequest request) throws ParseException {
+        ResponseData<JSONObject> responseData = new ResponseData<>();
         MktActivityPOWithBLOBs activityPO = bo.getActivityPO();
         List<MktActivityPrizePO> activityPrizePOList = bo.getActivityPrizePOList();
         if (activityPO == null || CollectionUtils.isEmpty(activityPrizePOList)) {
@@ -133,7 +155,11 @@ public class ActivityPriceServiceImpl implements ActivityPriceService {
         mktActivityCountPO.setCreateDate(date);
         mktActivityCountPOMapper.insertSelective(mktActivityCountPO);
 
-        responseData.setData(weixinUrl);
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("qrCodeUrl",weixinUrl);
+        jsonObject.put("activePriceCode",activePriceCode);
+        jsonObject.put("activityName",activityPO.getActivityName());
+        responseData.setData(jsonObject);
         return responseData;
     }
 
@@ -282,7 +308,116 @@ public class ActivityPriceServiceImpl implements ActivityPriceService {
         PageInfo<MktActivityPrizeRecordPO> pageInfo = new PageInfo<>(lists);
         responseData.setData(pageInfo);
         return responseData;
+    }
+
+    /**
+     * 下载转盘二维码
+     */
+    @Override
+    public ResponseData<String> exportQRCodes(ActivityPriceParamVO vo, HttpServletRequest request, HttpServletResponse response) {
+
+        SysAccountPO sysAccountPO = TokenUtils.getStageUser(request);
+
+        ResponseData responseData = new ResponseData();
+        responseData.setCode(SysResponseEnum.FAILED.getCode());
 
 
+        //创建需要下载的文件路径的集合
+//        List<SysStorePo> storeResult = new ArrayList<>();
+//        for (Long id : sysStoreVo.getStoreIdList()) {
+//          //  SysStorePo sysStorePo = sysStorePOMapper.selectByPrimaryKey(id);
+////            if (sysStorePo != null && sysStorePo.getStoreOrcode() != null) {
+////                storeResult.add(sysStorePo);
+////            }
+//        }
+
+        //插入导出任务
+        Long taskId = (long) Integer.parseInt(String.valueOf(UUID.randomUUID().hashCode()).replaceAll("-", ""));
+        FileTaskPo fileTaskPo = new FileTaskPo();
+        fileTaskPo.setTaskId(taskId);
+        if (sysAccountPO != null) {
+            fileTaskPo.setSysBrandId(sysAccountPO.getBrandId());
+            fileTaskPo.setCreateUserId(sysAccountPO.getSysAccountId());
+            fileTaskPo.setCreateUserName(sysAccountPO.getName());
+        }
+        fileTaskPo.setTaskTypeCode(String.valueOf(1) + "条");//任务记录
+        fileTaskPo.setTaskName("下载转盘活动二维码");
+        //进度
+        fileTaskPo.setFileStatus(25L);
+        fileTaskPo.setFileType("EXPORT");
+        fileTaskPo.setValid(true);
+        fileTaskServiceRpc.addFileTask(fileTaskPo);
+
+        new Thread(() -> {
+            try {
+                ByteArrayOutputStream tempByteOStream = null;
+                BufferedOutputStream tempBufferOStream = null;
+                ZipOutputStream tempZStream = null;
+                ZipEntry tempEntry = null;
+
+                tempByteOStream = new ByteArrayOutputStream();
+                tempZStream = new ZipOutputStream(tempByteOStream);
+                tempBufferOStream = new BufferedOutputStream(tempZStream);
+
+
+                fileTaskPo.setFileStatus(60L);
+                fileTaskServiceRpc.update(fileTaskPo);
+
+                    try {
+                        URL url = new URL(vo.getQrCodeUrl());
+                        InputStream in = url.openStream();
+                        byte[] buff = new byte[1024];
+                        tempEntry = new ZipEntry(vo.getActivityName() + "(" + vo.getActivityCode() + ")" + ".jpg");
+                        tempZStream.putNextEntry(tempEntry);
+
+                        int len = 0;
+                        while ((len = in.read(buff)) != -1) {
+                            tempZStream.write(buff, 0, len);
+                        }
+
+                        Thread.sleep(3000);
+
+                    } catch (Exception e) {
+                    }
+
+
+                fileTaskPo.setFileStatus(99L);
+//                new Thread(() -> {
+//                	可以做进度
+//                }).start();
+
+                tempBufferOStream.flush();
+                tempByteOStream.flush();
+                tempZStream.closeEntry();
+                tempZStream.close();
+                tempByteOStream.close();
+                tempBufferOStream.close();
+
+                ByteArrayInputStream in = new ByteArrayInputStream(((ByteArrayOutputStream) tempByteOStream).toByteArray());
+
+              //  QiNiuUtils niuUtil = new QiNiuUtils();
+                SimpleDateFormat format = new SimpleDateFormat("yyyyMMddHHmmss");
+                String day = format.format(new Date());
+                QiNiuVo qiniuUrl = niuUtil.upload(qiNiuConfig.getBucket(), in, day + "转盘活动.zip");
+
+                //保存成功会写数据库
+                fileTaskPo.setFileStatus(100L);
+                fileTaskPo.setFileUnl("https://" + qiNiuConfig.getDoMain() + "/" + qiniuUrl.getUrl().toString());
+                fileTaskServiceRpc.update(fileTaskPo);
+
+
+            } catch (Exception e) {
+                e.printStackTrace();
+                // 导出报错
+                fileTaskPo.setFileStatus(-1L);
+                fileTaskServiceRpc.update(fileTaskPo);
+            }
+        }).start();
+
+        responseData.setData(taskId);
+        responseData.setMessage(SysResponseEnum.SUCCESS.getMessage());
+        responseData.setCode(SysResponseEnum.SUCCESS.getCode());
+
+        return responseData;
     }
 }
