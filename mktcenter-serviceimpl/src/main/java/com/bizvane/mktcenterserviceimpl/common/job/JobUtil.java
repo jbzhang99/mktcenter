@@ -1,7 +1,7 @@
 package com.bizvane.mktcenterserviceimpl.common.job;
 
 import com.alibaba.fastjson.JSON;
-import com.bizvane.mktcenterservice.interfaces.TaskService;
+import com.bizvane.mktcenterservice.models.po.MktActivityPOWithBLOBs;
 import com.bizvane.mktcenterservice.models.po.MktMessagePO;
 import com.bizvane.mktcenterservice.models.po.MktTaskPOWithBLOBs;
 import com.bizvane.mktcenterservice.models.vo.ActivitySmartVO;
@@ -77,6 +77,21 @@ public class JobUtil {
         int businessType =JobBusinessTypeEnum.ACTIVITY_TYPE_ACTIVITY.getCode();
         addJob(activityVO.getEndTime(),activityVO.getActivityInfo(),activityCode,stageUser.getName(),activityJobType,businessType,activityCode);
     }
+
+    //新增大转盘开始job
+    public  void addStartPrizeJob(SysAccountPO stageUser, MktActivityPOWithBLOBs activityPO , String activityCode) {
+        String activityJobType = JobHandlerConstants.START_PRIZE;
+        int businessType =JobBusinessTypeEnum.ACTIVITY_TYPE_ACTIVITY.getCode();
+        addJob(activityPO.getStartTime(),activityPO.getActivityInfo(),activityCode,stageUser.getName(),activityJobType,businessType,activityCode);
+    }
+    //新增大转盘结束job
+    public  void addEndPrizeJob(SysAccountPO stageUser, MktActivityPOWithBLOBs activityPO , String activityCode) {
+        String activityJobType = JobHandlerConstants.END_PRIZE;
+        int businessType =JobBusinessTypeEnum.ACTIVITY_TYPE_ACTIVITY.getCode();
+        addJob(activityPO.getEndTime(),activityPO.getActivityInfo(),activityCode,stageUser.getName(),activityJobType,businessType,activityCode);
+    }
+
+
     public  void addStartTaskJob(SysAccountPO stageUser, MktTaskPOWithBLOBs po) {
         String jobType = JobHandlerConstants.task;
         int businessType =JobBusinessTypeEnum.ACTIVITY_TYPE_TASK.getCode();

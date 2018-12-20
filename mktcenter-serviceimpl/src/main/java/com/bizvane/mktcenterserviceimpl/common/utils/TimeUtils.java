@@ -72,6 +72,19 @@ public class TimeUtils {
             return Integer.valueOf(1);
         }
     }
+    public static Boolean  ifImmediatelyRun(Date timeparam) throws ParseException {
+        Date dateNow = new Date();
+        if (timeparam.before(dateNow)) {
+            //小于当前时间
+            return Boolean.TRUE;
+        } else if (timeparam.after(dateNow)) {
+            //大于当前时间
+            return Boolean.FALSE;
+        } else {
+            //等于当前时间
+            return Boolean.TRUE;
+        }
+    }
     public static Date getNextDay(Date date){
         Calendar calendar = new GregorianCalendar();
         calendar.setTime(date);

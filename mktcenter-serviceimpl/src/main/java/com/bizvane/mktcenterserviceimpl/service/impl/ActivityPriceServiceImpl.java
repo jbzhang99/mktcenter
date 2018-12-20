@@ -6,12 +6,15 @@ import com.bizvane.mktcenterservice.models.po.*;
 import com.bizvane.mktcenterservice.models.vo.ActivityPriceBO;
 import com.bizvane.mktcenterservice.models.vo.ActivityPriceParamVO;
 import com.bizvane.mktcenterservice.models.vo.AnalysisPriceResultVO;
+import com.bizvane.mktcenterserviceimpl.common.job.JobUtil;
 import com.bizvane.mktcenterserviceimpl.common.utils.CodeUtil;
 import com.bizvane.mktcenterserviceimpl.common.utils.TimeUtils;
 import com.bizvane.mktcenterserviceimpl.mappers.MktActivityCountPOMapper;
 import com.bizvane.mktcenterserviceimpl.mappers.MktActivityPOMapper;
 import com.bizvane.mktcenterserviceimpl.mappers.MktActivityPrizePOMapper;
 import com.bizvane.mktcenterserviceimpl.mappers.MktActivityPrizeRecordPOMapper;
+import com.bizvane.utils.jobutils.JobClient;
+import com.bizvane.utils.jobutils.XxlJobInfo;
 import com.bizvane.utils.responseinfo.ResponseData;
 import com.bizvane.utils.tokens.SysAccountPO;
 import com.bizvane.utils.tokens.TokenUtils;
@@ -26,6 +29,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpServletRequest;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -49,6 +53,10 @@ public class ActivityPriceServiceImpl implements ActivityPriceService {
     private MktActivityPrizeRecordPOMapper mktActivitPrizeRecordPOMapper;
     @Autowired
     private MktActivityCountPOMapper mktActivityCountPOMapper;
+    @Autowired
+    private JobUtil jobUtil;
+    @Autowired
+    private JobClient jobClient;
 
     /**
      * 新增
@@ -58,7 +66,7 @@ public class ActivityPriceServiceImpl implements ActivityPriceService {
      */
     @Transactional
     @Override
-    public ResponseData<String> addActivityPrice(ActivityPriceBO bo, HttpServletRequest request) {
+    public ResponseData<String> addActivityPrice(ActivityPriceBO bo, HttpServletRequest request) throws ParseException {
         ResponseData<String> responseData = new ResponseData<>();
         MktActivityPOWithBLOBs activityPO = bo.getActivityPO();
         List<MktActivityPrizePO> activityPrizePOList = bo.getActivityPrizePOList();
@@ -66,7 +74,6 @@ public class ActivityPriceServiceImpl implements ActivityPriceService {
             responseData.setCode(100);
             responseData.setMessage("数据不合格!");
         }
-
         SysAccountPO sysAccountPo = TokenUtils.getStageUser(request);
         Long sysAccountId = sysAccountPo.getSysAccountId();
         String name = sysAccountPo.getName();
@@ -75,6 +82,17 @@ public class ActivityPriceServiceImpl implements ActivityPriceService {
         Date date = new Date();
         String activePriceCode = CodeUtil.getActivePriceCode();
 
+        Date startTime = activityPO.getStartTime();
+        Boolean runStatus = TimeUtils.ifImmediatelyRun(startTime);
+        if (runStatus) {
+            activityPO.setActivityType(2);
+        } else {
+            activityPO.setActivityType(1);
+            jobUtil.addStartPrizeJob(sysAccountPo, activityPO, activePriceCode);
+        }
+        jobUtil.addEndPrizeJob(sysAccountPo, activityPO, activePriceCode);
+
+        activityPO.setCheckStatus(3);
         CreateMiniprgmQRCodeRequestVO createMiniprgmQRCodeRequestVO = new CreateMiniprgmQRCodeRequestVO();
         createMiniprgmQRCodeRequestVO.setSysBrandId(brandId);
         createMiniprgmQRCodeRequestVO.setMiniProgramType("10");
@@ -105,6 +123,7 @@ public class ActivityPriceServiceImpl implements ActivityPriceService {
             po.setCreateDate(date);
             mktActivityPrizePOMapper.insertSelective(po);
         });
+
         MktActivityCountPO mktActivityCountPO = new MktActivityCountPO();
         mktActivityCountPO.setMktActivityId(mktActivityId);
         mktActivityCountPO.setSysCompanyId(sysCompanyId);
@@ -195,6 +214,30 @@ public class ActivityPriceServiceImpl implements ActivityPriceService {
         responseData.setData(listparam);
         return responseData;
     }
+
+    /**
+     * 禁用活动
+     * 活动Id  和  活动Code
+     */
+    @Override
+    public ResponseData<Integer> stopActivityPrice(MktActivityPOWithBLOBs po, HttpServletRequest request) {
+        ResponseData<Integer> responseData = new ResponseData<>();
+        SysAccountPO sysAccountPo = TokenUtils.getStageUser(request);
+        po.setActivityStatus(4);
+        po.setModifiedDate(new Date());
+        po.setModifiedUserId(sysAccountPo.getSysAccountId());
+        po.setModifiedUserName(sysAccountPo.getName());
+        mktActivityPOMapper.updateByPrimaryKeySelective(po);
+
+        //禁用后要清除所有的job
+        XxlJobInfo xxlJobInfo = new XxlJobInfo();
+        xxlJobInfo.setBizCode(po.getActivityCode());
+        jobClient.removeByBiz(xxlJobInfo);
+
+        return responseData;
+
+    }
+
 
     /**
      * 记录统计

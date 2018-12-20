@@ -9,6 +9,7 @@ import com.bizvane.utils.responseinfo.ResponseData;
 import com.github.pagehelper.PageInfo;
 
 import javax.servlet.http.HttpServletRequest;
+import java.text.ParseException;
 import java.util.List;
 
 /**
@@ -17,10 +18,11 @@ import java.util.List;
  */
 public interface ActivityPriceService {
 
-    public ResponseData<String> addActivityPrice(ActivityPriceBO bo, HttpServletRequest request);
+    public ResponseData<String> addActivityPrice(ActivityPriceBO bo, HttpServletRequest request) throws ParseException;
     public ResponseData<ActivityPriceBO> selectActivityPrice(Long mktActivityId,HttpServletRequest request);
     public ResponseData<ActivityPriceBO> selectActivityPrice(String activePriceCode, HttpServletRequest request);
     public ResponseData<List<MktActivityPOWithBLOBs>> selectActivityPriceLists(ActivityPriceParamVO vo, HttpServletRequest request);
+    public ResponseData<Integer> stopActivityPrice(MktActivityPOWithBLOBs po, HttpServletRequest request);
     public ResponseData<PageInfo<AnalysisPriceResultVO>> selectAnalysisPrice(ActivityPriceParamVO vo, HttpServletRequest request);
     public ResponseData<PageInfo<MktActivityPrizeRecordPO>> selectPrizePeople(ActivityPriceParamVO vo);
 }

@@ -35,4 +35,9 @@ public class JobHandlerConstants {
     public static String smartActivity = "smartActivity";
 
     public static String sendMessageActivity = "sendMessageActivity";
+
+    //纪念日活动开始
+    public static String START_PRIZE = "startPrize";
+    //纪念日活动结束
+    public static String END_PRIZE= "endPrize";
 }
