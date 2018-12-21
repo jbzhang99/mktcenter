@@ -1,35 +1,24 @@
 package com.bizvane.mktcenterserviceimpl.service.impl;
 
 import com.alibaba.fastjson.JSON;
-import com.bizvane.centerstageservice.models.po.SysCheckConfigPo;
-import com.bizvane.centerstageservice.models.po.SysCheckPo;
-import com.bizvane.centerstageservice.rpc.SysCheckConfigServiceRpc;
-import com.bizvane.centerstageservice.rpc.SysCheckServiceRpc;
-import com.bizvane.couponfacade.interfaces.CouponDefinitionServiceFeign;
 import com.bizvane.couponfacade.interfaces.CouponQueryServiceFeign;
-import com.bizvane.couponfacade.interfaces.SendCouponServiceFeign;
 import com.bizvane.couponfacade.models.vo.CouponFindCouponCountResponseVO;
 import com.bizvane.members.facade.models.MemberInfoModel;
-import com.bizvane.members.facade.service.api.IntegralRecordApiService;
-import com.bizvane.members.facade.service.api.MemberInfoApiService;
-import com.bizvane.members.facade.service.api.WxAppletApiService;
 import com.bizvane.members.facade.vo.ExtendPropertyVO;
 import com.bizvane.mktcenterservice.interfaces.*;
 import com.bizvane.mktcenterservice.models.bo.TaskAwardBO;
 import com.bizvane.mktcenterservice.models.bo.TaskBO;
 import com.bizvane.mktcenterservice.models.po.*;
 import com.bizvane.mktcenterservice.models.vo.*;
-import com.bizvane.mktcenterserviceimpl.common.award.Award;
-import com.bizvane.mktcenterserviceimpl.common.constants.ResponseConstants;
 import com.bizvane.mktcenterserviceimpl.common.constants.SystemConstants;
 import com.bizvane.mktcenterserviceimpl.common.constants.TaskConstants;
-import com.bizvane.mktcenterserviceimpl.common.enums.*;
+import com.bizvane.mktcenterserviceimpl.common.enums.CheckStatusEnum;
+import com.bizvane.mktcenterserviceimpl.common.enums.TaskStatusEnum;
 import com.bizvane.mktcenterserviceimpl.common.utils.CodeUtil;
-import com.bizvane.mktcenterserviceimpl.common.job.JobUtil;
-import com.bizvane.mktcenterserviceimpl.common.utils.DateUtil;
 import com.bizvane.mktcenterserviceimpl.common.utils.TaskParamCheckUtil;
-import com.bizvane.mktcenterserviceimpl.common.utils.TimeUtils;
-import com.bizvane.mktcenterserviceimpl.mappers.*;
+import com.bizvane.mktcenterserviceimpl.mappers.MktMessagePOMapper;
+import com.bizvane.mktcenterserviceimpl.mappers.MktTaskPOMapper;
+import com.bizvane.mktcenterserviceimpl.mappers.MktTaskProfilePOMapper;
 import com.bizvane.utils.enumutils.SysResponseEnum;
 import com.bizvane.utils.responseinfo.ResponseData;
 import com.bizvane.utils.tokens.SysAccountPO;
@@ -43,8 +32,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
 import java.text.ParseException;
-import java.util.*;
+import java.util.Date;
+import java.util.List;
 
 /**
  * @author gengxiaoyu
@@ -294,6 +285,7 @@ public class TaskProfileServiceImpl implements TaskProfileService {
      * 执行完善任务的奖励
      */
     @Async
+    @Transactional
     @Override
     public  void   doAwardProfile(ProfileSuccessVO vo){
         log.info("执行完善资料任务--参数---"+ JSON.toJSONString(vo));

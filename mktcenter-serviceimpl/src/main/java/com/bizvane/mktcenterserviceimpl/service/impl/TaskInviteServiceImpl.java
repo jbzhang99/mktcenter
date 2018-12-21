@@ -3,18 +3,21 @@ package com.bizvane.mktcenterserviceimpl.service.impl;
 import com.alibaba.fastjson.JSON;
 import com.bizvane.members.facade.models.MemberInfoModel;
 import com.bizvane.mktcenterservice.interfaces.*;
-import com.bizvane.mktcenterservice.models.bo.*;
+import com.bizvane.mktcenterservice.models.bo.TaskAwardBO;
+import com.bizvane.mktcenterservice.models.bo.TaskBO;
+import com.bizvane.mktcenterservice.models.bo.TotalStatisticsBO;
 import com.bizvane.mktcenterservice.models.po.*;
-import com.bizvane.mktcenterservice.models.vo.*;
+import com.bizvane.mktcenterservice.models.vo.InviteSuccessVO;
+import com.bizvane.mktcenterservice.models.vo.MktTaskRecordVO;
+import com.bizvane.mktcenterservice.models.vo.TaskVO;
 import com.bizvane.mktcenterserviceimpl.common.award.Award;
 import com.bizvane.mktcenterserviceimpl.common.constants.SystemConstants;
 import com.bizvane.mktcenterserviceimpl.common.constants.TaskConstants;
-import com.bizvane.mktcenterserviceimpl.common.utils.CodeUtil;
 import com.bizvane.mktcenterserviceimpl.common.job.JobUtil;
+import com.bizvane.mktcenterserviceimpl.common.utils.CodeUtil;
 import com.bizvane.mktcenterserviceimpl.common.utils.TaskParamCheckUtil;
 import com.bizvane.mktcenterserviceimpl.common.utils.TimeUtils;
 import com.bizvane.mktcenterserviceimpl.mappers.MktTaskInvitePOMapper;
-import com.bizvane.utils.enumutils.SysResponseEnum;
 import com.bizvane.utils.responseinfo.ResponseData;
 import com.bizvane.utils.tokens.SysAccountPO;
 import lombok.extern.slf4j.Slf4j;
@@ -25,7 +28,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import springfox.documentation.spring.web.json.Json;
 
 import java.text.ParseException;
 import java.util.Date;
@@ -227,6 +229,7 @@ public class TaskInviteServiceImpl implements TaskInviteService {
      * 执行邀请任务的奖励
      */
     @Async
+    @Transactional
     @Override
     public  void   doAwardInvite(InviteSuccessVO vo){
         log.info("执行邀请任务的奖励--参数--"+ JSON.toJSONString(vo));

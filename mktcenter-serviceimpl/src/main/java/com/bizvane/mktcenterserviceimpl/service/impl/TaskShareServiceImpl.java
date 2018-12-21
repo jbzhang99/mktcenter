@@ -272,6 +272,7 @@ public class TaskShareServiceImpl implements TaskShareService {
     /**
      * 执行邀请任务的奖励
      */
+    @Transactional
     @Override
     public  void   doAwardShare(ShareSuccessVO vo){
         log.info("分享任务的奖励--参数--"+ JSON.toJSONString(vo));
