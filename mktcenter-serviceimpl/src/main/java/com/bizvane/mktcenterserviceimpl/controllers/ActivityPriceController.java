@@ -48,8 +48,8 @@ public class ActivityPriceController {
      * 查询详情  code
      */
     @RequestMapping("selectActivityPriceByCode")
-    public ResponseData<ActivityPriceBO> selectActivityPrice(String activePriceCode, HttpServletRequest request) {
-        return activityPriceService.selectActivityPrice(activePriceCode, request);
+    public ResponseData<ActivityPriceBO> selectActivityPrice(String activePriceCode) {
+        return activityPriceService.selectActivityPrice(activePriceCode);
     }
 
     /**
