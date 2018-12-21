@@ -5,6 +5,10 @@ import com.alibaba.fastjson.JSONObject;
 import com.bizvane.centerstageservice.models.po.FileTaskPo;
 import com.bizvane.centerstageservice.models.vo.QiNiuVo;
 import com.bizvane.centerstageservice.rpc.FileTaskServiceRpc;
+import com.bizvane.couponfacade.interfaces.CouponQueryServiceFeign;
+import com.bizvane.couponfacade.interfaces.CouponServiceFeign;
+import com.bizvane.couponfacade.models.po.CouponDefinitionPO;
+import com.bizvane.couponfacade.models.vo.CouponUseVO;
 import com.bizvane.mktcenterservice.interfaces.ActivityPriceService;
 import com.bizvane.mktcenterservice.models.po.*;
 import com.bizvane.mktcenterservice.models.vo.ActivityPriceBO;
@@ -77,9 +81,14 @@ public class ActivityPriceServiceImpl implements ActivityPriceService {
     @Autowired
     private QiNiuConfigs qiNiuConfig;
     @Autowired
-    private  QiNiuUtils niuUtil;
+    private QiNiuUtils niuUtil;
     @Autowired
     private FileTaskServiceRpc fileTaskServiceRpc;
+    @Autowired
+    private CouponServiceFeign couponServiceFeign;
+    @Autowired
+    private CouponQueryServiceFeign couponQueryServiceFeign;
+
     /**
      * 新增
      *
@@ -156,9 +165,9 @@ public class ActivityPriceServiceImpl implements ActivityPriceService {
         mktActivityCountPOMapper.insertSelective(mktActivityCountPO);
 
         JSONObject jsonObject = new JSONObject();
-        jsonObject.put("qrCodeUrl",weixinUrl);
-        jsonObject.put("activePriceCode",activePriceCode);
-        jsonObject.put("activityName",activityPO.getActivityName());
+        jsonObject.put("qrCodeUrl", weixinUrl);
+        jsonObject.put("activePriceCode", activePriceCode);
+        jsonObject.put("activityName", activityPO.getActivityName());
         responseData.setData(jsonObject);
         return responseData;
     }
@@ -311,17 +320,38 @@ public class ActivityPriceServiceImpl implements ActivityPriceService {
     }
 
     /**
+     * 核销
+     */
+    @Override
+    public ResponseData<String> doVerificationCoupon(ActivityPriceParamVO vo, HttpServletRequest request) {
+        log.info("doVerificationCoupon param:" + JSON.toJSONString(vo));
+        ResponseData<String> responseData = null;
+        CouponDefinitionPO couponDefinitionPO = couponQueryServiceFeign.getCouponDefinition(vo.getCouponDefinitionId()).getData().getCouponDefinitionPO();
+        if (couponDefinitionPO == null) {
+            responseData = new ResponseData<>();
+            responseData.setCode(100);
+            responseData.setMessage("券不存在!");
+            return responseData;
+        }
+        SysAccountPO sysAccountPo = TokenUtils.getStageUser(request);
+        CouponUseVO requestVO = new CouponUseVO();
+        requestVO.setCouponCode(couponDefinitionPO.getCouponDefinitionCode());
+        requestVO.setStaffCode(vo.getMemberCode());
+        requestVO.setBrandId(sysAccountPo.getBrandId());
+        responseData = couponServiceFeign.use(requestVO);
+        log.info("doVerificationCoupon result:" + JSON.toJSONString(responseData));
+        return responseData;
+    }
+
+    /**
      * 下载转盘二维码
      */
     @Override
     public ResponseData<String> exportQRCodes(ActivityPriceParamVO vo, HttpServletRequest request, HttpServletResponse response) {
 
         SysAccountPO sysAccountPO = TokenUtils.getStageUser(request);
-
         ResponseData responseData = new ResponseData();
         responseData.setCode(SysResponseEnum.FAILED.getCode());
-
-
         //创建需要下载的文件路径的集合
 //        List<SysStorePo> storeResult = new ArrayList<>();
 //        for (Long id : sysStoreVo.getStoreIdList()) {
@@ -330,7 +360,6 @@ public class ActivityPriceServiceImpl implements ActivityPriceService {
 ////                storeResult.add(sysStorePo);
 ////            }
 //        }
-
         //插入导出任务
         Long taskId = (long) Integer.parseInt(String.valueOf(UUID.randomUUID().hashCode()).replaceAll("-", ""));
         FileTaskPo fileTaskPo = new FileTaskPo();
@@ -363,29 +392,27 @@ public class ActivityPriceServiceImpl implements ActivityPriceService {
                 fileTaskPo.setFileStatus(60L);
                 fileTaskServiceRpc.update(fileTaskPo);
 
-                    try {
-                        URL url = new URL(vo.getQrCodeUrl());
-                        InputStream in = url.openStream();
-                        byte[] buff = new byte[1024];
-                        tempEntry = new ZipEntry(vo.getActivityName() + "(" + vo.getActivityCode() + ")" + ".jpg");
-                        tempZStream.putNextEntry(tempEntry);
+                try {
+                    URL url = new URL(vo.getQrCodeUrl());
+                    InputStream in = url.openStream();
+                    byte[] buff = new byte[1024];
+                    tempEntry = new ZipEntry(vo.getActivityName() + "(" + vo.getActivityCode() + ")" + ".jpg");
+                    tempZStream.putNextEntry(tempEntry);
 
-                        int len = 0;
-                        while ((len = in.read(buff)) != -1) {
-                            tempZStream.write(buff, 0, len);
-                        }
-
-                        Thread.sleep(3000);
-
-                    } catch (Exception e) {
+                    int len = 0;
+                    while ((len = in.read(buff)) != -1) {
+                        tempZStream.write(buff, 0, len);
                     }
 
+                    Thread.sleep(3000);
+
+                } catch (Exception e) {
+                }
 
                 fileTaskPo.setFileStatus(99L);
 //                new Thread(() -> {
 //                	可以做进度
 //                }).start();
-
                 tempBufferOStream.flush();
                 tempByteOStream.flush();
                 tempZStream.closeEntry();
@@ -395,7 +422,7 @@ public class ActivityPriceServiceImpl implements ActivityPriceService {
 
                 ByteArrayInputStream in = new ByteArrayInputStream(((ByteArrayOutputStream) tempByteOStream).toByteArray());
 
-              //  QiNiuUtils niuUtil = new QiNiuUtils();
+                //  QiNiuUtils niuUtil = new QiNiuUtils();
                 SimpleDateFormat format = new SimpleDateFormat("yyyyMMddHHmmss");
                 String day = format.format(new Date());
                 QiNiuVo qiniuUrl = niuUtil.upload(qiNiuConfig.getBucket(), in, day + "转盘活动.zip");

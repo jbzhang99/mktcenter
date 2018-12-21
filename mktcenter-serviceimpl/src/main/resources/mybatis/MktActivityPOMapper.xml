@@ -961,6 +961,24 @@
     AND tmt.check_status &lt;&gt; 4
     AND (tmt.activity_status=1 OR tmt.activity_status=2)
   </select>
+
+  <select id="getActivityWhiteStoreIdsOther" resultType="java.lang.String">
+    SELECT
+    group_concat(tmt.store_limit_list) AS storeLimitList
+    FROM
+    t_mkt_activity tmt
+    WHERE
+    tmt.valid=1
+    AND tmt.is_store_limit=1
+    AND tmt.store_limit_type=2
+    AND tmt.sys_brand_id=#{sysbrandId}
+    AND tmt.activity_type=#{activityType}
+    AND tmt.start_time &lt;=#{startTime,jdbcType=TIMESTAMP}
+    AND tmt.end_time &gt;= #{startTime,jdbcType=TIMESTAMP}
+    AND tmt.check_status &lt;&gt; 4
+    AND (tmt.activity_status=1 OR tmt.activity_status=2)
+  </select>
+
   <select id="getPictureMessageCount" resultType="java.lang.Integer">
     SELECT
     4-count(tma.mkt_activity_id)

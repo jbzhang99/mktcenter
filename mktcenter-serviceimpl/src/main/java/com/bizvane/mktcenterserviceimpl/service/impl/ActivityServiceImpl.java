@@ -24,7 +24,9 @@ import com.bizvane.mktcenterservice.interfaces.ActivityService;
 import com.bizvane.mktcenterservice.models.bo.ActivityAnalysisCountBO;
 import com.bizvane.mktcenterservice.models.bo.AwardBO;
 import com.bizvane.mktcenterservice.models.bo.CtivityAnalysisBO;
-import com.bizvane.mktcenterservice.models.po.*;
+import com.bizvane.mktcenterservice.models.po.MktActivityPOWithBLOBs;
+import com.bizvane.mktcenterservice.models.po.MktCouponPO;
+import com.bizvane.mktcenterservice.models.po.MktMessagePO;
 import com.bizvane.mktcenterservice.models.vo.ActivitySmartVO;
 import com.bizvane.mktcenterservice.models.vo.ActivityVO;
 import com.bizvane.mktcenterservice.models.vo.PageForm;
@@ -48,7 +50,6 @@ import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
-import org.springframework.util.StringUtils;
 
 import java.math.BigDecimal;
 import java.text.NumberFormat;
@@ -653,8 +654,14 @@ public class ActivityServiceImpl implements ActivityService {
     @Override
     public List<Long> getActivityWhiteStoreIds(WhiteStoreVO vo) {
         List<Long> storeIds = null;
+        String whiteStoreIds =null;
+        Integer activityType = vo.getActivityType();
         try{
-            String whiteStoreIds = mktActivityPOMapper.getActivityWhiteStoreIds(vo);
+            if (activityType==11){
+                whiteStoreIds = mktActivityPOMapper.getActivityWhiteStoreIdsOther(vo);
+            }else{
+                whiteStoreIds = mktActivityPOMapper.getActivityWhiteStoreIds(vo);
+            }
             if (org.apache.commons.lang3.StringUtils.isNotBlank(whiteStoreIds)){
                 storeIds = Arrays.asList(whiteStoreIds.split(",")).stream().filter(element -> org.apache.commons.lang3.StringUtils.isNotBlank(element)).
                         map(element -> Long.valueOf(element)).distinct().collect(Collectors.toList());
