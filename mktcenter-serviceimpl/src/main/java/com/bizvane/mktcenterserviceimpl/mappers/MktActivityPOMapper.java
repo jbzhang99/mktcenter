@@ -5,13 +5,12 @@ import com.bizvane.mktcenterservice.models.bo.CtivityAnalysisBO;
 import com.bizvane.mktcenterservice.models.po.MktActivityPO;
 import com.bizvane.mktcenterservice.models.po.MktActivityPOExample;
 import com.bizvane.mktcenterservice.models.po.MktActivityPOWithBLOBs;
-import java.util.List;
-
 import com.bizvane.mktcenterservice.models.vo.ActivityVO;
 import com.bizvane.mktcenterservice.models.vo.MktActivityPrizeRecordVO;
 import com.bizvane.mktcenterservice.models.vo.WhiteStoreVO;
 import org.apache.ibatis.annotations.Param;
-import sun.security.x509.AVA;
+
+import java.util.List;
 
 public interface MktActivityPOMapper {
 
@@ -115,7 +114,7 @@ public interface MktActivityPOMapper {
 	CtivityAnalysisBO getActivityAnalysisTotal(ActivityAnalysisCountBO bo);
 	//白名单店铺
 	public  String  getActivityWhiteStoreIds(WhiteStoreVO vo);
-
+	public  String  getActivityWhiteStoreIdsOther(WhiteStoreVO vo);
 	Integer getPictureMessageCount(@Param("mktActivitySmartGroupId")Long mktActivitySmartGroupId,@Param("mbrGroupDefId")Long mbrGroupDefId,@Param("time")String time);
 	//查询抽奖主表
 	List<MktActivityPO> selectActivity(MktActivityPrizeRecordVO vo);
