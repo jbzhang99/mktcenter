@@ -22,7 +22,7 @@ public interface ActivityPriceService {
 
     public ResponseData<JSONObject> addActivityPrice(ActivityPriceBO bo, HttpServletRequest request) throws ParseException;
     public ResponseData<ActivityPriceBO> selectActivityPrice(Long mktActivityId,HttpServletRequest request);
-    public ResponseData<ActivityPriceBO> selectActivityPrice(String activePriceCode, HttpServletRequest request);
+    public ResponseData<ActivityPriceBO> selectActivityPrice(String activePriceCode);
     public ResponseData<List<MktActivityPOWithBLOBs>> selectActivityPriceLists(ActivityPriceParamVO vo, HttpServletRequest request);
     public ResponseData<Integer> stopActivityPrice(MktActivityPOWithBLOBs po, HttpServletRequest request);
     public ResponseData<PageInfo<AnalysisPriceResultVO>> selectAnalysisPrice(ActivityPriceParamVO vo, HttpServletRequest request);

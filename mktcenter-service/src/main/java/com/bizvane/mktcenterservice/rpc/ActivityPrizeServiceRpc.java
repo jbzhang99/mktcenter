@@ -1,5 +1,6 @@
 package com.bizvane.mktcenterservice.rpc;
 
+import com.bizvane.mktcenterservice.models.po.MktActivityPrizePO;
 import com.bizvane.mktcenterservice.models.po.MktActivityPrizeRecordPO;
 import com.bizvane.mktcenterservice.models.vo.ActivityPriceBO;
 import com.bizvane.mktcenterservice.models.vo.MktActivityPrizeRecordVO;
@@ -30,5 +31,12 @@ public interface ActivityPrizeServiceRpc {
      * @return
      */
     @RequestMapping("selectPrizeList")
-    public ResponseData<ActivityPriceBO> selectPrizeList(@RequestParam("activePriceCode") String activePriceCode);
+    ResponseData<ActivityPriceBO> selectPrizeList(@RequestParam("activePriceCode") String activePriceCode);
+
+    /**
+     * 执行抽奖活动
+     * @param activePriceCode
+     * @return
+     */
+    ResponseData<MktActivityPrizePO> executeActivityPrize(@RequestParam("activePriceCode") String activePriceCode);
 }

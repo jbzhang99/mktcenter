@@ -1,9 +1,11 @@
 package com.bizvane.mktcenterservice.interfaces;
 
+import com.bizvane.mktcenterservice.models.po.MktActivityPrizePO;
 import com.bizvane.mktcenterservice.models.po.MktActivityPrizeRecordPO;
 import com.bizvane.mktcenterservice.models.vo.ActivityPriceBO;
 import com.bizvane.mktcenterservice.models.vo.MktActivityPrizeRecordVO;
 import com.bizvane.utils.responseinfo.ResponseData;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 
@@ -23,4 +25,11 @@ public interface ActivityPrizeServiceWX {
      * @return
      */
     public ResponseData<ActivityPriceBO> selectPrizeList(MktActivityPrizeRecordVO vo);
+
+    /**
+     * 执行抽奖活动
+     * @param activePriceCode
+     * @return
+     */
+    public ResponseData<MktActivityPrizePO> executeActivityPrize(@RequestParam("activePriceCode") String activePriceCode);
 }

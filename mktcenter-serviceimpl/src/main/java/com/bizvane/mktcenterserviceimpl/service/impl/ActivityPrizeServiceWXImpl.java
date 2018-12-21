@@ -1,8 +1,10 @@
 package com.bizvane.mktcenterserviceimpl.service.impl;
 
 import com.alibaba.fastjson.JSON;
+import com.bizvane.mktcenterservice.interfaces.ActivityPriceService;
 import com.bizvane.mktcenterservice.interfaces.ActivityPrizeServiceWX;
 import com.bizvane.mktcenterservice.models.po.MktActivityPO;
+import com.bizvane.mktcenterservice.models.po.MktActivityPrizePO;
 import com.bizvane.mktcenterservice.models.po.MktActivityPrizeRecordPO;
 import com.bizvane.mktcenterservice.models.po.MktActivityPrizeRecordPOExample;
 import com.bizvane.mktcenterservice.models.vo.ActivityPriceBO;
@@ -18,6 +20,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 /**
@@ -31,6 +34,8 @@ public class ActivityPrizeServiceWXImpl implements ActivityPrizeServiceWX {
 
     @Autowired
     private MktActivityPOMapper mktActivityPOMapper;
+    @Autowired
+    private ActivityPriceService activityPriceService;
     /**
      *获取小程序中奖纪录列表
      * @param po
@@ -62,6 +67,18 @@ public class ActivityPrizeServiceWXImpl implements ActivityPrizeServiceWX {
         vo.setActivityStatus(ActivityStatusEnum.ACTIVITY_STATUS_EXECUTING.getCode());
         vo.setActivityType(ActivityTypeEnum.ACTIVITY_TYPE_PRIZE.getCode());
         List<MktActivityPO> activityList = mktActivityPOMapper.selectActivity(vo);
+        return null;
+    }
+
+    /**
+     * 执行抽奖活动
+     * @param activePriceCode
+     * @return
+     */
+    @Override
+    public ResponseData<MktActivityPrizePO> executeActivityPrize(String activePriceCode) {
+        log.info("执行抽奖活动开始参数为："+ activePriceCode);
+        ResponseData<ActivityPriceBO> activityPriceBO =activityPriceService.selectActivityPrice(activePriceCode);
         return null;
     }
 }

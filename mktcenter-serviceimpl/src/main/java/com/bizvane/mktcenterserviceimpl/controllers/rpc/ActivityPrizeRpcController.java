@@ -2,6 +2,7 @@ package com.bizvane.mktcenterserviceimpl.controllers.rpc;
 
 import com.bizvane.mktcenterservice.interfaces.ActivityPriceService;
 import com.bizvane.mktcenterservice.interfaces.ActivityPrizeServiceWX;
+import com.bizvane.mktcenterservice.models.po.MktActivityPrizePO;
 import com.bizvane.mktcenterservice.models.po.MktActivityPrizeRecordPO;
 import com.bizvane.mktcenterservice.models.vo.ActivityPriceBO;
 import com.bizvane.mktcenterservice.models.vo.MktActivityPrizeRecordVO;
@@ -43,10 +44,19 @@ public class ActivityPrizeRpcController {
      * @return
      */
     @RequestMapping("selectPrizeList")
-    ResponseData<ActivityPriceBO> selectPrizeList(@RequestParam("activePriceCode") String activePriceCode,HttpServletRequest request){
+    ResponseData<ActivityPriceBO> selectPrizeList(@RequestParam("activePriceCode") String activePriceCode){
         //获取操作人信息
         SysAccountPO stageUser =new SysAccountPO();
 //        SysAccountPO stageUser = TokenUtils.getStageUser(request);
-        return activityPriceService.selectActivityPrice(activePriceCode,request);
+        return activityPriceService.selectActivityPrice(activePriceCode);
+    }
+
+    /**
+     * 执行抽奖活动
+     * @param activePriceCode
+     * @return
+     */
+    ResponseData<MktActivityPrizePO> executeActivityPrize(@RequestParam("activePriceCode") String activePriceCode){
+        return activityPrizeServiceWX.executeActivityPrize(activePriceCode);
     }
 }

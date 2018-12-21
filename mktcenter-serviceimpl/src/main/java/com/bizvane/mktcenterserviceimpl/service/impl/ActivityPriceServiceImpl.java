@@ -191,7 +191,7 @@ public class ActivityPriceServiceImpl implements ActivityPriceService {
      * 查询详情 code
      */
     @Override
-    public ResponseData<ActivityPriceBO> selectActivityPrice(String activePriceCode, HttpServletRequest request) {
+    public ResponseData<ActivityPriceBO> selectActivityPrice(String activePriceCode) {
         ResponseData<ActivityPriceBO> responseData = new ResponseData<>();
 
         //  SysAccountPO sysAccountPo = TokenUtils.getStageUser(request);
