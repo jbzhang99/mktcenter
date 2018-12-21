@@ -7,6 +7,7 @@ import com.bizvane.utils.responseinfo.ResponseData;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 
@@ -25,9 +26,9 @@ public interface ActivityPrizeServiceRpc {
 
     /**
      * 获取抽奖活动规则
-     * @param vo
+     * @param
      * @return
      */
     @RequestMapping("selectPrizeList")
-    public ResponseData<ActivityPriceBO> selectPrizeList(@RequestBody MktActivityPrizeRecordVO vo);
+    public ResponseData<ActivityPriceBO> selectPrizeList(@RequestParam("activePriceCode") String activePriceCode);
 }

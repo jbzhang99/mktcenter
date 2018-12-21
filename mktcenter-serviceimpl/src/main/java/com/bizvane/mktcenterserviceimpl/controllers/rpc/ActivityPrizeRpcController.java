@@ -1,15 +1,19 @@
 package com.bizvane.mktcenterserviceimpl.controllers.rpc;
 
+import com.bizvane.mktcenterservice.interfaces.ActivityPriceService;
 import com.bizvane.mktcenterservice.interfaces.ActivityPrizeServiceWX;
 import com.bizvane.mktcenterservice.models.po.MktActivityPrizeRecordPO;
 import com.bizvane.mktcenterservice.models.vo.ActivityPriceBO;
 import com.bizvane.mktcenterservice.models.vo.MktActivityPrizeRecordVO;
 import com.bizvane.utils.responseinfo.ResponseData;
+import com.bizvane.utils.tokens.SysAccountPO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 /**
@@ -21,6 +25,8 @@ public class ActivityPrizeRpcController {
 
     @Autowired
     private ActivityPrizeServiceWX activityPrizeServiceWX;
+    @Autowired
+    private ActivityPriceService activityPriceService;
     /**
      * 小程序获取中奖纪录 和中奖纪录轮播
      * @param po
@@ -33,11 +39,14 @@ public class ActivityPrizeRpcController {
 
     /**
      * 获取抽奖活动规则
-     * @param vo
+     * @param
      * @return
      */
     @RequestMapping("selectPrizeList")
-    ResponseData<ActivityPriceBO> selectPrizeList(@RequestBody MktActivityPrizeRecordVO vo){
-        return activityPrizeServiceWX.selectPrizeList(vo);
+    ResponseData<ActivityPriceBO> selectPrizeList(@RequestParam("activePriceCode") String activePriceCode,HttpServletRequest request){
+        //获取操作人信息
+        SysAccountPO stageUser =new SysAccountPO();
+//        SysAccountPO stageUser = TokenUtils.getStageUser(request);
+        return activityPriceService.selectActivityPrice(activePriceCode,request);
     }
 }
