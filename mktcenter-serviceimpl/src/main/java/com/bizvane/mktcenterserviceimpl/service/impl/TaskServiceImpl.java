@@ -1,23 +1,5 @@
 package com.bizvane.mktcenterserviceimpl.service.impl;
 
-import java.text.ParseException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.Future;
-import java.util.concurrent.LinkedBlockingQueue;
-import java.util.concurrent.ThreadPoolExecutor;
-import java.util.concurrent.TimeUnit;
-import java.util.stream.Collectors;
-
-import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.scheduling.annotation.Async;
-import org.springframework.stereotype.Service;
-
 import com.alibaba.fastjson.JSON;
 import com.bizvane.centercontrolservice.models.po.SysSmsConfigPo;
 import com.bizvane.centercontrolservice.models.vo.SmsConfigVo;
@@ -62,27 +44,8 @@ import com.bizvane.mktcenterservice.interfaces.TaskService;
 import com.bizvane.mktcenterservice.models.bo.AwardBO;
 import com.bizvane.mktcenterservice.models.bo.TaskAwardBO;
 import com.bizvane.mktcenterservice.models.bo.TaskBO;
-import com.bizvane.mktcenterservice.models.po.MktCouponPO;
-import com.bizvane.mktcenterservice.models.po.MktCouponPOExample;
-import com.bizvane.mktcenterservice.models.po.MktMessagePO;
-import com.bizvane.mktcenterservice.models.po.MktMessagePOExample;
-import com.bizvane.mktcenterservice.models.po.MktTaskCountPO;
-import com.bizvane.mktcenterservice.models.po.MktTaskPOExample;
-import com.bizvane.mktcenterservice.models.po.MktTaskPOWithBLOBs;
-import com.bizvane.mktcenterservice.models.po.MktTaskRecordPO;
-import com.bizvane.mktcenterservice.models.po.MktTaskRecordPOExample;
-import com.bizvane.mktcenterservice.models.vo.ChangeTaskTypeVO;
-import com.bizvane.mktcenterservice.models.vo.CheckTaskVO;
-import com.bizvane.mktcenterservice.models.vo.DayTaskRecordVo;
-import com.bizvane.mktcenterservice.models.vo.PageForm;
-import com.bizvane.mktcenterservice.models.vo.SendMessageVO;
-import com.bizvane.mktcenterservice.models.vo.TaskAnalysisVo;
-import com.bizvane.mktcenterservice.models.vo.TaskDetailVO;
-import com.bizvane.mktcenterservice.models.vo.TaskRecordVO;
-import com.bizvane.mktcenterservice.models.vo.TaskSearchVO;
-import com.bizvane.mktcenterservice.models.vo.TaskVO;
-import com.bizvane.mktcenterservice.models.vo.WhiteStoreResultVO;
-import com.bizvane.mktcenterservice.models.vo.WhiteStoreVO;
+import com.bizvane.mktcenterservice.models.po.*;
+import com.bizvane.mktcenterservice.models.vo.*;
 import com.bizvane.mktcenterserviceimpl.common.constants.ResponseConstants;
 import com.bizvane.mktcenterserviceimpl.common.constants.TaskConstants;
 import com.bizvane.mktcenterserviceimpl.common.enums.CheckStatusEnum;
@@ -90,11 +53,7 @@ import com.bizvane.mktcenterserviceimpl.common.enums.MktSmartTypeEnum;
 import com.bizvane.mktcenterserviceimpl.common.enums.TaskStatusEnum;
 import com.bizvane.mktcenterserviceimpl.common.job.JobUtil;
 import com.bizvane.mktcenterserviceimpl.common.utils.TimeUtils;
-import com.bizvane.mktcenterserviceimpl.mappers.MktCouponPOMapper;
-import com.bizvane.mktcenterserviceimpl.mappers.MktMessagePOMapper;
-import com.bizvane.mktcenterserviceimpl.mappers.MktTaskCountPOMapper;
-import com.bizvane.mktcenterserviceimpl.mappers.MktTaskPOMapper;
-import com.bizvane.mktcenterserviceimpl.mappers.MktTaskRecordPOMapper;
+import com.bizvane.mktcenterserviceimpl.mappers.*;
 import com.bizvane.utils.enumutils.SysResponseEnum;
 import com.bizvane.utils.jobutils.JobClient;
 import com.bizvane.utils.jobutils.XxlJobInfo;
@@ -102,8 +61,20 @@ import com.bizvane.utils.responseinfo.ResponseData;
 import com.bizvane.utils.tokens.SysAccountPO;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Async;
+import org.springframework.stereotype.Service;
+
+import java.text.ParseException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.List;
+import java.util.concurrent.*;
+import java.util.stream.Collectors;
 
 /**
  * @author chen.li
@@ -309,12 +280,14 @@ public class TaskServiceImpl implements TaskService {
      * @return
      */
     @Override
-    public List<TaskAwardBO> getTaskOrderAwardList(Long sysCompanyId, Long sysBrandId, Date placeOrderTime, Integer orderSource) {
+    public List<TaskAwardBO> getTaskOrderAwardList(Long sysCompanyId, Long sysBrandId, Date placeOrderTime, Integer orderSource,Integer taskType) {
         String orderTime = "";
         if (placeOrderTime != null) {
-            orderTime = TimeUtils.formatter.format(placeOrderTime);
+            orderTime = TimeUtils.sdf.format(placeOrderTime);
+        }else{
+            orderTime = TimeUtils.sdf.format(new Date());
         }
-        List<TaskAwardBO> taskOrderAwardList = mktTaskPOMapper.getTaskOrderAwardList(sysCompanyId, sysBrandId, orderTime, orderSource);
+        List<TaskAwardBO> taskOrderAwardList = mktTaskPOMapper.getTaskOrderAwardList(sysCompanyId, sysBrandId, orderTime, orderSource,taskType);
         log.info("--getTaskOrderAwardList订单奖励列表--" + sysCompanyId + "--" + sysBrandId + "--" + orderTime + "--" + orderSource + JSON.toJSONString(taskOrderAwardList));
         return taskOrderAwardList;
     }

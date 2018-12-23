@@ -297,17 +297,13 @@ public class TaskShareServiceImpl implements TaskShareService {
                      String  StoreLimitList=obj.getStoreLimitList();
                      return !isStoreLimit || (serviceStoreId!=null) ||(StringUtils.isNotBlank(StoreLimitList) &&  obj.getStoreLimitList().contains(String.valueOf(serviceStoreId)));}).
                 forEach(obj->{
-                    Integer taskType = obj.getTaskType();
-                    Long mktTaskId = obj.getMktTaskId();
                     //邀请开卡人数
                     Integer shareTimes = obj.getShareTimes();
-
                     MktTaskRecordVO recordVO = new MktTaskRecordVO();
                     recordVO.setSysBrandId(brandId);
-                    recordVO.setTaskType(taskType);
-                    recordVO.setTaskId(mktTaskId);
+                    recordVO.setTaskType(obj.getTaskType());
+                    recordVO.setTaskId(obj.getMktTaskId());
                     recordVO.setMemberCode(memberCode);
-
                     // 获取会员是否已经成功参与过某一任务
                     Boolean isOrNoAward = taskRecordService.getIsOrNoAward(recordVO);
                     log.info("分享任务的奖励--已经成功参与--"+isOrNoAward+"--"+JSON.toJSONString(recordVO));
@@ -321,7 +317,7 @@ public class TaskShareServiceImpl implements TaskShareService {
                         //获取会员参与某一任务总次数
                         TotalStatisticsBO totalBO = taskRecordService.getTotalStatistics(recordVO);
                         log.info("分享任务的奖励--参与某一任务总次数--"+JSON.toJSONString(totalBO));
-                        if (totalBO!=null && totalBO.getTotalTimes()!=null &&  totalBO.getTotalTimes().equals(shareTimes)){
+                        if (totalBO!=null && totalBO.getTotalTimes()!=null && totalBO.getTotalTimes().equals(shareTimes)){
                             recordPO.setRewarded(Integer.valueOf(1));
                             recordPO.setPoints(obj.getPoints());
                             recordPO.setSysCompanyId(recordId);

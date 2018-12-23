@@ -1,16 +1,14 @@
 package com.bizvane.mktcenterservice.interfaces;
 
-import com.bizvane.centerstageservice.models.po.SysAccountPo;
-import com.bizvane.centerstageservice.models.po.SysStorePo;
-import com.bizvane.couponfacade.models.vo.CouponSendMemberListResponseVO;
-import com.bizvane.messagefacade.models.vo.GenrealGetMessageVO;
-import com.bizvane.utils.tokens.SysAccountPO;
 import com.bizvane.centerstageservice.models.po.SysCheckConfigPo;
+import com.bizvane.centerstageservice.models.po.SysStorePo;
 import com.bizvane.centerstageservice.models.vo.SysStoreVo;
+import com.bizvane.couponfacade.models.vo.CouponSendMemberListResponseVO;
 import com.bizvane.members.facade.models.MemberInfoModel;
 import com.bizvane.members.facade.vo.WxChannelInfoVo;
-import com.bizvane.mktcenterservice.models.bo.TaskBO;
+import com.bizvane.messagefacade.models.vo.GenrealGetMessageVO;
 import com.bizvane.mktcenterservice.models.bo.TaskAwardBO;
+import com.bizvane.mktcenterservice.models.bo.TaskBO;
 import com.bizvane.mktcenterservice.models.po.MktMessagePO;
 import com.bizvane.mktcenterservice.models.po.MktTaskPOWithBLOBs;
 import com.bizvane.mktcenterservice.models.vo.*;
@@ -75,7 +73,7 @@ public interface TaskService {
      * @param sysBrandId
      * @return
      */
-    public List<TaskAwardBO> getTaskOrderAwardList(Long sysCompanyId, Long sysBrandId, Date placeOrderTime, Integer orderSource);
+    public List<TaskAwardBO> getTaskOrderAwardList(Long sysCompanyId, Long sysBrandId, Date placeOrderTime, Integer orderSource,Integer taskType);
     /**
      * 根据公司id和品牌id查询执行中的邀请类任务
      * @param sysCompanyId

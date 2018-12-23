@@ -288,7 +288,7 @@ public class TaskProfileServiceImpl implements TaskProfileService {
     @Transactional
     @Override
     public  void   doAwardProfile(ProfileSuccessVO vo){
-        log.info("执行完善资料任务--参数---"+ JSON.toJSONString(vo));
+        log.info("完善资料任务--参数---"+ JSON.toJSONString(vo));
         Long mktTaskIdParam = vo.getMktTaskId();
         //完善资料时间
         Date profileDate = vo.getProfileDate();
@@ -317,15 +317,14 @@ public class TaskProfileServiceImpl implements TaskProfileService {
                         recordVO.setTaskType(obj.getTaskType());
                         recordVO.setTaskId(obj.getMktTaskId());
                         recordVO.setMemberCode(memberCode);
-
                         // 获取会员是否已经成功参与过某一活动
                         Boolean isOrNoAward = taskRecordService.getIsOrNoAward(recordVO);
-                        log.info("完善资料任务--符合条件的任务---"+ isOrNoAward+"---"+JSON.toJSONString(obj));
+                        log.info("完善资料任务--员是否已经成功参与---"+ isOrNoAward+"---"+JSON.toJSONString(obj));
                         if (!isOrNoAward){
                             MktTaskRecordPO recordPO = new MktTaskRecordPO();
                             BeanUtils.copyProperties(recordVO,recordPO);
                             recordPO.setParticipateDate(profileDate);
-                            recordPO.setRewarded(Integer.valueOf(1));
+                            recordPO.setRewarded(1);
                             recordPO.setSysCompanyId(companyId);
                             recordPO.setCreateDate(new Date());
                             recordPO.setPoints(obj.getPoints());

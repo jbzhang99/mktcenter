@@ -1,18 +1,16 @@
 package com.bizvane.mktcenterserviceimpl.mappers;
 
-import com.bizvane.mktcenterservice.models.bo.TaskInviteAwardBO;
 import com.bizvane.mktcenterservice.models.bo.TaskAwardBO;
 import com.bizvane.mktcenterservice.models.bo.TaskWXBO;
 import com.bizvane.mktcenterservice.models.bo.TaskWXDetailBO;
 import com.bizvane.mktcenterservice.models.po.MktTaskPO;
 import com.bizvane.mktcenterservice.models.po.MktTaskPOExample;
 import com.bizvane.mktcenterservice.models.po.MktTaskPOWithBLOBs;
+import com.bizvane.mktcenterservice.models.vo.*;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.Date;
 import java.util.List;
-
-import com.bizvane.mktcenterservice.models.vo.*;
-import org.apache.ibatis.annotations.Param;
 
 public interface MktTaskPOMapper {
 
@@ -112,7 +110,7 @@ public interface MktTaskPOMapper {
 	 * @return
 	 */
 
-	public List<TaskAwardBO> getTaskOrderAwardList(@Param("sysCompanyId") Long sysCompanyId, @Param("sysBrandId") Long sysBrandId, @Param("placeOrderTime")String placeOrderTime,@Param("orderSource")Integer orderSource);
+	public List<TaskAwardBO> getTaskOrderAwardList(@Param("sysCompanyId") Long sysCompanyId, @Param("sysBrandId") Long sysBrandId, @Param("placeOrderTime")String placeOrderTime,@Param("orderSource")Integer orderSource,@Param("taskType")Integer taskType);
 	/**
 	 * 获取邀请开卡任务的奖励条件
 	 * @param sysCompanyId

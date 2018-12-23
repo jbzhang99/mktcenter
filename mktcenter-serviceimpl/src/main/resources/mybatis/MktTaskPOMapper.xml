@@ -800,20 +800,20 @@
           tto.consume_times,
           tto.is_store_limit,
           tto.store_limit_type,
-          tto.store_limit_list,
-          tmc.mkt_coupon_id,
-          tmc.coupon_definition_id,
-          tmc.coupon_name
+          tto.store_limit_list
+--           ,tmc.mkt_coupon_id,
+--           tmc.coupon_definition_id,
+--           tmc.coupon_name
       FROM
           t_mkt_task tta
       INNER JOIN t_mkt_task_order tto ON tta.mkt_task_id = tto.mkt_task_id
-      LEFT JOIN t_mkt_coupon tmc ON tta.mkt_task_id = tmc.biz_id AND tmc.valid = 1 AND tmc.biz_type=2
+--       LEFT JOIN t_mkt_coupon tmc ON tta.mkt_task_id = tmc.biz_id AND tmc.valid = 1 AND tmc.biz_type=2
       WHERE
           tta.valid = 1
       AND tto.valid = 1
       AND  tta.check_status=3
       AND  tta.task_status=2
-      AND tta.task_type  BETWEEN 4  AND 5
+      AND tta.task_type=#{taskType}
     <if test="sysCompanyId != null and sysCompanyId!= '' ">
       AND  tta.sys_company_id=#{sysCompanyId}
     </if>
@@ -821,9 +821,9 @@
       AND tta.sys_brand_id=#{sysBrandId}
     </if>
     <if test="placeOrderTime!=null and placeOrderTime!=''">
-      AND tta.start_time <![CDATA[<=]]>#{placeOrderTime}
-      AND tta.end_time <![CDATA[>=]]> #{placeOrderTime}
-    </if>
+    AND DATE_FORMAT(tta.start_time,'%Y-%m-%d') <![CDATA[<=]]>#{placeOrderTime}
+    AND DATE_FORMAT(tta.end_time,'%Y-%m-%d') <![CDATA[>=]]> #{placeOrderTime}
+  </if>
     <if test="orderSource != null and orderSource!= '' ">
       AND (tto.order_source=#{orderSource} or tto.order_source=0)
     </if>
@@ -850,14 +850,14 @@
     tti.invite_num,
     tti.is_store_limit,
     tti.store_limit_type,
-    tti.store_limit_list,
-    tmc.mkt_coupon_id,
-    tmc.coupon_definition_id,
-    tmc.coupon_name
+    tti.store_limit_list
+--     ,tmc.mkt_coupon_id,
+--     tmc.coupon_definition_id,
+--     tmc.coupon_name
     FROM
     t_mkt_task tta
     INNER JOIN t_mkt_task_invite tti ON tta.mkt_task_id = tti.mkt_task_id
-    LEFT JOIN t_mkt_coupon tmc ON tta.mkt_task_id = tmc.biz_id  AND tmc.valid = 1 AND tmc.biz_type=2
+--     LEFT JOIN t_mkt_coupon tmc ON tta.mkt_task_id = tmc.biz_id  AND tmc.valid = 1 AND tmc.biz_type=2
     WHERE
     tta.valid = 1
     AND tti.valid = 1
@@ -873,10 +873,10 @@
     <if test="sysBrandId != null and sysBrandId!= '' ">
       AND tta.sys_brand_id=#{sysBrandId}
     </if>
-    <if test="placeOrderTime!=null and placeOrderTime!=''">
-      AND tta.start_time <![CDATA[<=]]>#{placeOrderTime}
-      AND tta.end_time <![CDATA[>=]]> #{placeOrderTime}
-    </if>
+    <!--<if test="placeOrderTime!=null and placeOrderTime!=''">-->
+      <!--AND tta.start_time <![CDATA[<=]]>#{placeOrderTime}-->
+      <!--AND tta.end_time <![CDATA[>=]]> #{placeOrderTime}-->
+    <!--</if>-->
   </select>
 
   <select id="getTaskProfileAwardList" resultMap="taskAwardMap">
@@ -900,14 +900,14 @@
     ttp.property_code,
     ttp.is_store_limit,
     ttp.store_limit_type,
-    ttp.store_limit_list,
-    tmc.mkt_coupon_id,
-    tmc.coupon_definition_id,
-    tmc.coupon_name
+    ttp.store_limit_list
+--     ,tmc.mkt_coupon_id,
+--     tmc.coupon_definition_id,
+--     tmc.coupon_name
     FROM
     t_mkt_task tta
     INNER JOIN t_mkt_task_profile ttp ON tta.mkt_task_id = ttp.mkt_task_id
-    LEFT JOIN t_mkt_coupon tmc ON tta.mkt_task_id = tmc.biz_id  AND tmc.valid = 1 AND tmc.biz_type=2
+--     LEFT JOIN t_mkt_coupon tmc ON tta.mkt_task_id = tmc.biz_id  AND tmc.valid = 1 AND tmc.biz_type=2
     WHERE
     tta.valid = 1
     AND ttp.valid = 1
@@ -952,14 +952,14 @@
     tts.share_url_type,
     tts.is_store_limit,
     tts.store_limit_type,
-    tts.store_limit_list,
-    tmc.mkt_coupon_id,
-    tmc.coupon_definition_id,
-    tmc.coupon_name
+    tts.store_limit_list
+--     ,tmc.mkt_coupon_id,
+--     tmc.coupon_definition_id,
+--     tmc.coupon_name
     FROM
     t_mkt_task tta
     INNER JOIN t_mkt_task_share tts ON tta.mkt_task_id = tts.mkt_task_id
-    LEFT JOIN t_mkt_coupon tmc ON tta.mkt_task_id = tmc.biz_id  AND tmc.valid = 1 AND tmc.biz_type=2
+--     LEFT JOIN t_mkt_coupon tmc ON tta.mkt_task_id = tmc.biz_id  AND tmc.valid = 1 AND tmc.biz_type=2
     WHERE
     tta.valid = 1
     AND tts.valid = 1
@@ -976,10 +976,10 @@
     <if test="sysBrandId != null and sysBrandId!= '' ">
       AND tta.sys_brand_id=#{sysBrandId}
     </if>
-    <if test="shareDate!=null and shareDate!=''">
-      AND tta.start_time <![CDATA[<=]]>#{shareDate}
-      AND tta.end_time <![CDATA[>=]]> #{shareDate}
-    </if>
+    <!--<if test="shareDate!=null and shareDate!=''">-->
+      <!--AND tta.start_time <![CDATA[<=]]>#{shareDate}-->
+      <!--AND tta.end_time <![CDATA[>=]]> #{shareDate}-->
+    <!--</if>-->
   </select>
 <!-- 查询 会员已完成任务列表和未完成列表-->
   <select id="getCompleteTask" parameterType="com.bizvane.mktcenterservice.models.vo.TaskForWXVO" resultType="com.bizvane.mktcenterservice.models.bo.TaskWXBO">
