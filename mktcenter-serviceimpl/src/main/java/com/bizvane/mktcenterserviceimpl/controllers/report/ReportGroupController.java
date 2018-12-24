@@ -21,6 +21,7 @@ import com.bizvane.centerstageservice.models.po.SysCompanyPo;
 import com.bizvane.centerstageservice.models.po.SysStorePo;
 import com.bizvane.centerstageservice.models.vo.SysStoreVo;
 import com.bizvane.centerstageservice.rpc.CompanyServiceRpc;
+import com.bizvane.centerstageservice.rpc.FileTaskServiceRpc;
 import com.bizvane.centerstageservice.rpc.StoreGroupServiceRpc;
 import com.bizvane.centerstageservice.rpc.StoreServiceRpc;
 import com.bizvane.mktcenterservice.interfaces.ReportTempService;
@@ -29,6 +30,7 @@ import com.bizvane.mktcenterservice.models.po.FileReportTempPOExample;
 import com.bizvane.mktcenterservice.models.requestvo.BackDataTime;
 import com.bizvane.mktcenterservice.models.requestvo.postvo.IncomeTotalListGroup;
 import com.bizvane.mktcenterserviceimpl.common.report.BaseUrl;
+import com.bizvane.mktcenterserviceimpl.common.utils.FigureUtil;
 import com.bizvane.mktcenterserviceimpl.common.utils.FigureUtilGroup;
 import com.bizvane.mktcenterserviceimpl.common.utils.FigureUtilGroupFigure;
 import com.bizvane.mktcenterserviceimpl.mappers.FileReportTempPOMapper;
@@ -70,7 +72,7 @@ public class ReportGroupController {
 	private    StoreGroupServiceRpc storeGroupServiceRpc;
 	
 	@Autowired
-	private   StoreServiceRpc sysStoreService;
+	private   FileTaskServiceRpc fileTaskServiceRpc;
 
 //	@Autowired
 //	private  MemberLifecycleParameterService memberLifecycleParameterService;
@@ -391,6 +393,14 @@ public class ReportGroupController {
              // 导出表格
 	    	 String postTem = jsonObject.getString("postTem");
 	    	 if(StringUtils.isNotBlank(postTem)&&postTem.equals("export")){
+				 ResponseData<String> findFileTaskNumResponseData = fileTaskServiceRpc.findFileTaskNum(currentUser.getSysAccountId());
+				 if(findFileTaskNumResponseData.getCode()>0) {
+				      ResponseData.setCode(100);
+				  	  ResponseData.setMessage(findFileTaskNumResponseData.getMessage());
+					  ResponseData.setData(FigureUtilGroup.parseJSON2MapTime("false",fileReportTempPOlist,vipIncomeAnalysis));
+					  return ResponseData;
+				  }
+	    		 
 	    		 reportTempService.Export(currentUser,"_cycle",job.get("data").toString(),fileReportTempPOlist.get(0));
 	    		 ResponseData.setMessage("导出中");
 	    	 }else {

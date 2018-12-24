@@ -24,6 +24,7 @@ import com.bizvane.centerstageservice.models.po.SysStorePo;
 import com.bizvane.centerstageservice.models.vo.StaffVo;
 import com.bizvane.centerstageservice.models.vo.SysStoreVo;
 import com.bizvane.centerstageservice.rpc.CompanyServiceRpc;
+import com.bizvane.centerstageservice.rpc.FileTaskServiceRpc;
 import com.bizvane.centerstageservice.rpc.StaffServiceRpc;
 import com.bizvane.centerstageservice.rpc.StoreGroupServiceRpc;
 import com.bizvane.centerstageservice.rpc.StoreServiceRpc;
@@ -80,6 +81,9 @@ public class ReportIncomeController {
 	
 	@Autowired
 	private     StaffServiceRpc staffServiceRpc;
+	
+	@Autowired
+	private   FileTaskServiceRpc fileTaskServiceRpc;
 
 	@Autowired
 	private BaseUrl BaseUrl;
@@ -614,7 +618,14 @@ public class ReportIncomeController {
 						 fileReportTempPO.setReportDataName("groupCode,"+fileReportTempPO.getReportDataName());
 						 fileReportTempPO.setReportData("群组编号,"+fileReportTempPO.getReportData());
 					 }
-		    		 
+					 ResponseData<String> findFileTaskNumResponseData = fileTaskServiceRpc.findFileTaskNum(currentUser.getSysAccountId());
+					 if(findFileTaskNumResponseData.getCode()>0) {
+					      ResponseData.setCode(100);
+					  	  ResponseData.setMessage(findFileTaskNumResponseData.getMessage());
+					  	  ResponseData.setData(FigureUtil.parseJSON2Map("false",dimension,0,fileReportTempPOlist));
+					      return ResponseData;
+					  }
+					 
 		    		 reportTempService.Export(currentUser,"_summary",jsonStr, fileReportTempPO);
 		    		 ResponseData.setMessage("导出中");
 		    	 }else {

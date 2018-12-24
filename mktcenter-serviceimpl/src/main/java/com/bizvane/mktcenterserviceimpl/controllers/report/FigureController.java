@@ -20,6 +20,7 @@ import com.bizvane.centerstageservice.models.po.SysCompanyPo;
 import com.bizvane.centerstageservice.models.po.SysStorePo;
 import com.bizvane.centerstageservice.models.vo.SysStoreVo;
 import com.bizvane.centerstageservice.rpc.CompanyServiceRpc;
+import com.bizvane.centerstageservice.rpc.FileTaskServiceRpc;
 import com.bizvane.centerstageservice.rpc.StoreGroupServiceRpc;
 import com.bizvane.centerstageservice.rpc.StoreServiceRpc;
 import com.bizvane.mktcenterservice.interfaces.ReportTempService;
@@ -30,6 +31,7 @@ import com.bizvane.mktcenterservice.models.requestvo.BackDataTimeDtail;
 import com.bizvane.mktcenterservice.models.requestvo.BackDataTimeDtailtu;
 import com.bizvane.mktcenterservice.models.requestvo.postvo.IncomeTotalListGroup;
 import com.bizvane.mktcenterserviceimpl.common.report.BaseUrl;
+import com.bizvane.mktcenterserviceimpl.common.utils.FigureUtil;
 import com.bizvane.mktcenterserviceimpl.common.utils.FigureUtilGroupFigure;
 import com.bizvane.mktcenterserviceimpl.mappers.FileReportTempPOMapper;
 import com.bizvane.utils.responseinfo.PageInfo;
@@ -71,7 +73,7 @@ public class FigureController {
 	@Autowired
 	private    StoreGroupServiceRpc storeGroupServiceRpc;
 	@Autowired
-	private   StoreServiceRpc sysStoreService;
+	private   FileTaskServiceRpc fileTaskServiceRpc;
 	
     @RequestMapping("vipIncomeAnalysis")
     public ResponseData<BackDataTimeDtail> vipIncomeAnalysis( IncomeTotalListGroup sendVO, HttpServletRequest request){
@@ -291,6 +293,14 @@ public class FigureController {
 	    		 
 		           FileReportTempPO fileReportTempPO=fileReportTempPOlist.get(0);
 		           fileReportTempPO.setReportData(str1);
+		           
+					 ResponseData<String> findFileTaskNumResponseData = fileTaskServiceRpc.findFileTaskNum(currentUser.getSysAccountId());
+					 if(findFileTaskNumResponseData.getCode()>0) {
+					      ResponseData.setCode(100);
+					  	  ResponseData.setMessage(findFileTaskNumResponseData.getMessage());
+					  	  ResponseData.setData(FigureUtilGroupFigure.parseJSON2MapTime("false",fileReportTempPOlist,vipIncomeAnalysis));
+					      return ResponseData;
+					  }
 	    		 reportTempService.Export(currentUser,"_cycle",job.get("data").toString(),fileReportTempPO);
 	    		 ResponseData.setMessage("导出中");
 	    	 }else {
@@ -301,9 +311,9 @@ public class FigureController {
 	    	ResponseData.setCode(0);
 		    ResponseData.setData(FigureUtilGroupFigure.parseJSON2MapTime(job.get("data").toString(),fileReportTempPOlist,vipIncomeAnalysis));
 	     }else {
-	    	 ResponseData.setCode(0);
-	  	    ResponseData.setMessage(job.get("message").toString());
-	  	  ResponseData.setData(FigureUtilGroupFigure.parseJSON2MapTime("false",fileReportTempPOlist,vipIncomeAnalysis));
+	       ResponseData.setCode(0);
+	  	   ResponseData.setMessage(job.get("message").toString());
+	  	   ResponseData.setData(FigureUtilGroupFigure.parseJSON2MapTime("false",fileReportTempPOlist,vipIncomeAnalysis));
 	    	 
 	     }
 
@@ -440,6 +450,14 @@ log.info("报表查询ReportIncomeController："+url+JSONObject.toJSONString(vip
 	    		 
 		           FileReportTempPO fileReportTempPO=fileReportTempPOlist.get(0);
 		           fileReportTempPO.setReportData(str1);
+					 ResponseData<String> findFileTaskNumResponseData = fileTaskServiceRpc.findFileTaskNum(currentUser.getSysAccountId());
+					 if(findFileTaskNumResponseData.getCode()>0) {
+					      ResponseData.setCode(100);
+					  	  ResponseData.setMessage(findFileTaskNumResponseData.getMessage());
+					  	  ResponseData.setData(FigureUtilGroupFigure.parseJSON2MapTimeOpera("false",fileReportTempPOlist,vipIncomeAnalysis));
+					      return ResponseData;
+					  } 
+		           
 	    		 reportTempService.Export(currentUser,"_cycle",job.get("data").toString(),fileReportTempPO);
 	    		 ResponseData.setMessage("导出中");
 	    	 }else {
@@ -450,9 +468,9 @@ log.info("报表查询ReportIncomeController："+url+JSONObject.toJSONString(vip
 	    	ResponseData.setCode(0);
 		    ResponseData.setData(FigureUtilGroupFigure.parseJSON2MapTimeOpera(job.get("data").toString(),fileReportTempPOlist,vipIncomeAnalysis));
 	     }else {
-	    	 ResponseData.setCode(0);
+	        ResponseData.setCode(0);
 	  	    ResponseData.setMessage(job.get("message").toString());
-	  	  ResponseData.setData(FigureUtilGroupFigure.parseJSON2MapTimeOpera("false",fileReportTempPOlist,vipIncomeAnalysis));
+	  	    ResponseData.setData(FigureUtilGroupFigure.parseJSON2MapTimeOpera("false",fileReportTempPOlist,vipIncomeAnalysis));
 	    	 
 	     }
 
