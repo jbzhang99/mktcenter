@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.text.ParseException;
-import java.util.List;
 
 /**
  * @Author: lijunwei
@@ -56,7 +55,7 @@ public class ActivityPriceController {
      * 活动列表
      */
     @RequestMapping("selectActivityPriceLists")
-    public ResponseData<List<MktActivityPOWithBLOBs>> selectActivityPriceLists(ActivityPriceParamVO vo, HttpServletRequest request) {
+    public ResponseData<PageInfo<MktActivityPOWithBLOBs>> selectActivityPriceLists(ActivityPriceParamVO vo, HttpServletRequest request) {
         return activityPriceService.selectActivityPriceLists(vo, request);
     }
 

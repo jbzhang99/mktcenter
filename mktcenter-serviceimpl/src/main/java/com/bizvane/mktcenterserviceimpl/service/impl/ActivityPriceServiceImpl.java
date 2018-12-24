@@ -97,7 +97,8 @@ public class ActivityPriceServiceImpl implements ActivityPriceService {
      */
     @Transactional
     @Override
-    public ResponseData<JSONObject> addActivityPrice(ActivityPriceBO bo, HttpServletRequest request) throws ParseException {
+    public ResponseData<JSONObject>
+    addActivityPrice(ActivityPriceBO bo, HttpServletRequest request) throws ParseException {
         ResponseData<JSONObject> responseData = new ResponseData<>();
         MktActivityPOWithBLOBs activityPO = bo.getActivityPO();
         List<MktActivityPrizePO> activityPrizePOList = bo.getActivityPrizePOList();
@@ -223,11 +224,13 @@ public class ActivityPriceServiceImpl implements ActivityPriceService {
      * 查询列表
      */
     @Override
-    public ResponseData<List<MktActivityPOWithBLOBs>> selectActivityPriceLists(ActivityPriceParamVO vo, HttpServletRequest request) {
-        ResponseData<List<MktActivityPOWithBLOBs>> responseData = new ResponseData<>();
+    public ResponseData<PageInfo<MktActivityPOWithBLOBs>> selectActivityPriceLists(ActivityPriceParamVO vo, HttpServletRequest request) {
+        ResponseData<PageInfo<MktActivityPOWithBLOBs>> responseData = new ResponseData<>();
         SysAccountPO sysAccountPo = TokenUtils.getStageUser(request);
+        PageHelper.startPage(vo.getPageNumber(), vo.getPageSize());
         MktActivityPOExample example = new MktActivityPOExample();
         MktActivityPOExample.Criteria criteria = example.createCriteria();
+        criteria.andActivityTypeEqualTo(11);
         criteria.andSysBrandIdEqualTo(sysAccountPo.getBrandId());
         String activityCode = vo.getActivityCode();
         if (null != activityCode) {
@@ -238,15 +241,15 @@ public class ActivityPriceServiceImpl implements ActivityPriceService {
             criteria.andActivityNameLike("%" + activityName + "%");
         }
         Integer activityStatus = vo.getActivityStatus();
-        if (null != activityStatus) {
+        if (0 != activityStatus) {
             criteria.andActivityStatusEqualTo(activityStatus);
         }
         List<MktActivityPOWithBLOBs> listparam = mktActivityPOMapper.selectByExampleWithBLOBs(example);
         if (CollectionUtils.isEmpty(listparam)) {
-            responseData.setData(new ArrayList<MktActivityPOWithBLOBs>());
-            return responseData;
+            listparam=new ArrayList<MktActivityPOWithBLOBs>();
         }
-        responseData.setData(listparam);
+        PageInfo<MktActivityPOWithBLOBs> pageInfo = new PageInfo<>(listparam);
+        responseData.setData(pageInfo);
         return responseData;
     }
 
