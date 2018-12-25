@@ -91,12 +91,30 @@ public class ActivityPrizeServiceWXImpl implements ActivityPrizeServiceWX {
      * @return
      */
     @Override
-    public ResponseData<MktActivityPrizePO> executeActivityPrize(String activePriceCode) {
+    public ResponseData<MktActivityPrizePO> executeActivityPrize(String activePriceCode,String memberCode) {
         ResponseData responseData = new ResponseData();
         log.info("执行抽奖活动开始参数为："+ activePriceCode);
         //查询抽奖活动规则
         ResponseData<ActivityPriceBO> activityPriceBOs =activityPriceService.selectActivityPrice(activePriceCode);
         ActivityPriceBO activityPriceBO = activityPriceBOs.getData();
+        //每次抽奖消耗积分
+        AwardBO bo = new AwardBO();
+        //用这个实体类
+        IntegralChangeRequestModel integralChangeRequestModel =new IntegralChangeRequestModel();
+        integralChangeRequestModel.setSysCompanyId(activityPriceBO.getActivityPO().getSysCompanyId());
+        integralChangeRequestModel.setBrandId(activityPriceBO.getActivityPO().getSysBrandId());
+        integralChangeRequestModel.setMemberCode(memberCode);
+        integralChangeRequestModel.setChangeBills(activityPriceBO.getActivityPO().getActivityCode());
+        integralChangeRequestModel.setChangeIntegral(activityPriceBO.getActivityPO().getPoints());
+        integralChangeRequestModel.setChangeType(IntegralChangeTypeEnum.Expend.getCode());
+        integralChangeRequestModel.setBusinessType(com.bizvane.members.facade.enums.BusinessTypeEnum.SOCIAL_AFFAIR.getCode());
+        integralChangeRequestModel.setChangeDate(new Date());
+        bo.setIntegralRecordModel(integralChangeRequestModel);
+        bo.setMktType(MktSmartTypeEnum.SMART_TYPE_INTEGRAL.getCode());
+        log.info("社交活动-社交活动合格开始消耗积分+++++++++");
+        award.execute(bo);
+
+
         //定义一个list集合来放每个等级奖项小数位数来比较小数位数大小确定稀释多少倍
         List<Integer> str = new ArrayList<>();
         List<MktActivityPrizePO> activityPrizePOList = activityPriceBO.getActivityPrizePOList();
@@ -161,8 +179,6 @@ public class ActivityPrizeServiceWXImpl implements ActivityPrizeServiceWX {
         List<MktActivityPrizePO> mktActivityPrizePOS = mktActivityPrizePOMapper.selectByExample(example);
        //如果中奖了走if里面
         if (type!=50){
-            //定义个变量 10 中奖 20没中奖
-            int bl =10;
             //得到抽奖次数
             MktActivityPrizeRecordPOExample ex = new MktActivityPrizeRecordPOExample();
             ex.createCriteria().andMktActivityIdEqualTo(activityPriceBO.getActivityPO().getMktActivityId()).andValidEqualTo(Boolean.TRUE);
@@ -174,7 +190,7 @@ public class ActivityPrizeServiceWXImpl implements ActivityPrizeServiceWX {
 
             //得到一个会员抽中了几次
             MktActivityPrizeRecordPOExample examp = new MktActivityPrizeRecordPOExample();
-            examp.createCriteria().andMktActivityIdEqualTo(activityPriceBO.getActivityPO().getMktActivityId()).andIsWinPrizeEqualTo(Boolean.TRUE).andValidEqualTo(Boolean.TRUE).andMemberCodeEqualTo("假的假的");
+            examp.createCriteria().andMktActivityIdEqualTo(activityPriceBO.getActivityPO().getMktActivityId()).andIsWinPrizeEqualTo(Boolean.TRUE).andValidEqualTo(Boolean.TRUE).andMemberCodeEqualTo(memberCode);
             Long exeCount =  mktActivityPrizeRecordPOMapper.countByExample(examp);
             //判断中奖前几次不中
             if (null!=mktActivityPrizePOS.get(0).getInvalidCount() && mktActivityPrizePOS.get(0).getInvalidCount()<= count){
@@ -195,32 +211,15 @@ public class ActivityPrizeServiceWXImpl implements ActivityPrizeServiceWX {
             if (type!=50){
                 //判断送积分还是券
                 if (mktActivityPrizePOS.get(0).getAwadType()==10){
-                    AwardBO bo = new AwardBO();
-                    //用这个实体类
-                    IntegralChangeRequestModel integralChangeRequestModel =new IntegralChangeRequestModel();
-                    integralChangeRequestModel.setSysCompanyId(activityPriceBO.getActivityPO().getSysCompanyId());
-                    integralChangeRequestModel.setBrandId(activityPriceBO.getActivityPO().getSysBrandId());
-                    // TODO: 2018/12/24  会员code
-                    integralChangeRequestModel.setMemberCode("假的假的");
-                    integralChangeRequestModel.setChangeBills(activityPriceBO.getActivityPO().getActivityCode());
-                    integralChangeRequestModel.setChangeIntegral(mktActivityPrizePOS.get(0).getPrizePoints());
-                    integralChangeRequestModel.setChangeType(IntegralChangeTypeEnum.INCOME.getCode());
-                    // TODO: 2018/12/24  类型加上
-                    integralChangeRequestModel.setBusinessType(com.bizvane.members.facade.enums.BusinessTypeEnum.ACTIVITY_TYPE_REGISGER.getCode());
-                    integralChangeRequestModel.setChangeDate(new Date());
-                    bo.setIntegralRecordModel(integralChangeRequestModel);
-                    bo.setMktType(MktSmartTypeEnum.SMART_TYPE_INTEGRAL.getCode());
-                    log.info("社交活动-社交活动合格开始增加积分+++++++++");
-                    award.execute(bo);
+                    addPoints(memberCode, activityPriceBO, mktActivityPrizePOS);
                 }else {
                     //奖励券
                     AwardBO awardBO = new AwardBO();
                     SendCouponSimpleRequestVO sendCouponSimpleRequestVO = new SendCouponSimpleRequestVO();
-                    sendCouponSimpleRequestVO.setMemberCode("假的 假的");
+                    sendCouponSimpleRequestVO.setMemberCode(memberCode);
                     sendCouponSimpleRequestVO.setCouponDefinitionId(mktActivityPrizePOS.get(0).getCouponDefinitionId());
                     sendCouponSimpleRequestVO.setSendBussienId(activityPriceBO.getActivityPO().getMktActivityId());
-                    // TODO: 2018/12/24  加个类型
-                    sendCouponSimpleRequestVO.setSendType(SendTypeEnum.SEND_COUPON_OPNE_CARD.getCode());
+                    sendCouponSimpleRequestVO.setSendType(SendTypeEnum.SEND_COUPON_SOCIAL_ACTIVITY.getCode());
                     sendCouponSimpleRequestVO.setCompanyId(activityPriceBO.getActivityPO().getSysCompanyId());
                     sendCouponSimpleRequestVO.setBrandId(activityPriceBO.getActivityPO().getSysBrandId());
                     sendCouponSimpleRequestVO.setBusinessName(activityPriceBO.getActivityPO().getActivityName());
@@ -237,49 +236,58 @@ public class ActivityPrizeServiceWXImpl implements ActivityPrizeServiceWX {
                 List<MktActivityPrizePO> mktActivityPrizelist = mktActivityPrizePOMapper.selectByExample(el);
                 //谢谢惠顾判断是否会赠送积分
                 if(mktActivityPrizePOS.get(0).getParticipatePrize()==true){
-                    AwardBO bo = new AwardBO();
-                    //用这个实体类
-                    IntegralChangeRequestModel integralChangeRequestModel =new IntegralChangeRequestModel();
-                    integralChangeRequestModel.setSysCompanyId(activityPriceBO.getActivityPO().getSysCompanyId());
-                    integralChangeRequestModel.setBrandId(activityPriceBO.getActivityPO().getSysBrandId());
-                    // TODO: 2018/12/24  会员code
-                    integralChangeRequestModel.setMemberCode("假的假的");
-                    integralChangeRequestModel.setChangeBills(activityPriceBO.getActivityPO().getActivityCode());
-                    integralChangeRequestModel.setChangeIntegral(mktActivityPrizelist.get(0).getPrizePoints());
-                    integralChangeRequestModel.setChangeType(IntegralChangeTypeEnum.INCOME.getCode());
-                    // TODO: 2018/12/24  类型加上
-                    integralChangeRequestModel.setBusinessType(com.bizvane.members.facade.enums.BusinessTypeEnum.ACTIVITY_TYPE_REGISGER.getCode());
-                    integralChangeRequestModel.setChangeDate(new Date());
-                    bo.setIntegralRecordModel(integralChangeRequestModel);
-                    bo.setMktType(MktSmartTypeEnum.SMART_TYPE_INTEGRAL.getCode());
-                    log.info("社交活动-社交活动谢谢惠顾赠送积分开始增加积分+++++++++");
-                    award.execute(bo);
+                    addPoints(memberCode, activityPriceBO, mktActivityPrizelist);
                 }
                     responseData.setData(mktActivityPrizelist.get(0));
             }
 
         }else{
             //谢谢惠顾
-            AwardBO bo = new AwardBO();
-            //用这个实体类
-            IntegralChangeRequestModel integralChangeRequestModel =new IntegralChangeRequestModel();
-            integralChangeRequestModel.setSysCompanyId(activityPriceBO.getActivityPO().getSysCompanyId());
-            integralChangeRequestModel.setBrandId(activityPriceBO.getActivityPO().getSysBrandId());
-            // TODO: 2018/12/24  会员code
-            integralChangeRequestModel.setMemberCode("假的假的");
-            integralChangeRequestModel.setChangeBills(activityPriceBO.getActivityPO().getActivityCode());
-            integralChangeRequestModel.setChangeIntegral(mktActivityPrizePOS.get(0).getPrizePoints());
-            integralChangeRequestModel.setChangeType(IntegralChangeTypeEnum.INCOME.getCode());
-            // TODO: 2018/12/24  类型加上
-            integralChangeRequestModel.setBusinessType(com.bizvane.members.facade.enums.BusinessTypeEnum.ACTIVITY_TYPE_REGISGER.getCode());
-            integralChangeRequestModel.setChangeDate(new Date());
-            bo.setIntegralRecordModel(integralChangeRequestModel);
-            bo.setMktType(MktSmartTypeEnum.SMART_TYPE_INTEGRAL.getCode());
-            log.info("社交活动-社交活动谢谢惠顾赠送积分开始增加积分+++++++++");
-            award.execute(bo);
+            addPoints(memberCode, activityPriceBO, mktActivityPrizePOS);
             responseData.setData(mktActivityPrizePOS.get(0));
         }
+        //查看是哪种中奖规则
+        MktActivityPrizePOExample PrizePO = new MktActivityPrizePOExample();
+        example.createCriteria().andMktActivityIdEqualTo(activityPriceBO.getActivityPO().getMktActivityId()).andPrizeTypeEqualTo(type).andValidEqualTo(Boolean.TRUE);
+        List<MktActivityPrizePO> ActivityPrize = mktActivityPrizePOMapper.selectByExample(PrizePO);
+        //写进记录
+        MktActivityPrizeRecordPO record = new MktActivityPrizeRecordPO();
+        record.setMktActivityId(activityPriceBO.getActivityPO().getMktActivityId());
+        record.setSysCompanyId(activityPriceBO.getActivityPO().getSysCompanyId());
+        record.setSysBrandId(activityPriceBO.getActivityPO().getSysBrandId());
+        record.setMemberCode(memberCode);
+        record.setCouponDefinitionId(ActivityPrize.get(0).getCouponDefinitionId());
+        record.setPrizeTime(new Date());
+        record.setPrizeType(ActivityPrize.get(0).getPrizeType());
+        record.setAwadType(ActivityPrize.get(0).getAwadType());
+        record.setPrizeName(ActivityPrize.get(0).getPrizeName());
+        if (type!=50){
+            record.setIsWinPrize(Boolean.TRUE);
+        }else {
+            record.setIsWinPrize(Boolean.FALSE);
+        }
+        mktActivityPrizeRecordPOMapper.insertSelective(record);
+        responseData.setCode(SysResponseEnum.SUCCESS.getCode());
+        responseData.setMessage(SysResponseEnum.SUCCESS.getMessage());
         return responseData;
+    }
+
+    private void addPoints(String memberCode, ActivityPriceBO activityPriceBO, List<MktActivityPrizePO> mktActivityPrizePOS) {
+        AwardBO bo = new AwardBO();
+        //用这个实体类
+        IntegralChangeRequestModel integralChangeRequestModel =new IntegralChangeRequestModel();
+        integralChangeRequestModel.setSysCompanyId(activityPriceBO.getActivityPO().getSysCompanyId());
+        integralChangeRequestModel.setBrandId(activityPriceBO.getActivityPO().getSysBrandId());
+        integralChangeRequestModel.setMemberCode(memberCode);
+        integralChangeRequestModel.setChangeBills(activityPriceBO.getActivityPO().getActivityCode());
+        integralChangeRequestModel.setChangeIntegral(mktActivityPrizePOS.get(0).getPrizePoints());
+        integralChangeRequestModel.setChangeType(IntegralChangeTypeEnum.INCOME.getCode());
+        integralChangeRequestModel.setBusinessType(com.bizvane.members.facade.enums.BusinessTypeEnum.SOCIAL_AFFAIR.getCode());
+        integralChangeRequestModel.setChangeDate(new Date());
+        bo.setIntegralRecordModel(integralChangeRequestModel);
+        bo.setMktType(MktSmartTypeEnum.SMART_TYPE_INTEGRAL.getCode());
+        log.info("社交活动-社交活动合格开始增加积分+++++++++");
+        award.execute(bo);
     }
 
     private void calculationCount(List<MktActivityPrizePO> activityPrizePOList, int max, PrizeGradeSectionBO prizeGradeSectionBO, int prizeTy) {

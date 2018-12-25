@@ -2,7 +2,9 @@ package com.bizvane.mktcenterserviceimpl.controllers;
 
 import com.alibaba.fastjson.JSONObject;
 import com.bizvane.mktcenterservice.interfaces.ActivityPriceService;
+import com.bizvane.mktcenterservice.interfaces.ActivityPrizeServiceWX;
 import com.bizvane.mktcenterservice.models.po.MktActivityPOWithBLOBs;
+import com.bizvane.mktcenterservice.models.po.MktActivityPrizePO;
 import com.bizvane.mktcenterservice.models.po.MktActivityPrizeRecordPO;
 import com.bizvane.mktcenterservice.models.vo.ActivityPriceBO;
 import com.bizvane.mktcenterservice.models.vo.ActivityPriceParamVO;
@@ -11,6 +13,7 @@ import com.bizvane.utils.responseinfo.ResponseData;
 import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
@@ -26,6 +29,8 @@ import java.text.ParseException;
 public class ActivityPriceController {
     @Autowired
     private ActivityPriceService activityPriceService;
+    @Autowired
+    private ActivityPrizeServiceWX activityPrizeServiceWX;
 
     /**
      * 新增
@@ -97,5 +102,16 @@ public class ActivityPriceController {
     @RequestMapping("exportQRCodes")
     public ResponseData<String> exportQRCodes(ActivityPriceParamVO vo, HttpServletRequest request, HttpServletResponse response) {
         return activityPriceService.exportQRCodes(vo, request, response);
+    }
+
+    /**
+     * wang keqiang 自测
+     * @param activePriceCode
+     * @param memberCode
+     * @return
+     */
+    @RequestMapping("executePrize")
+    public ResponseData<MktActivityPrizePO> executePrize( String activePriceCode,String memberCode) {
+        return activityPrizeServiceWX.executeActivityPrize(activePriceCode, memberCode);
     }
 }

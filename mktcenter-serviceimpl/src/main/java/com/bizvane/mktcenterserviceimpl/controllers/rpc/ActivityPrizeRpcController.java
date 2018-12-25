@@ -56,7 +56,7 @@ public class ActivityPrizeRpcController {
      * @param activePriceCode
      * @return
      */
-    ResponseData<MktActivityPrizePO> executeActivityPrize(@RequestParam("activePriceCode") String activePriceCode){
-        return activityPrizeServiceWX.executeActivityPrize(activePriceCode);
+    ResponseData<MktActivityPrizePO> executeActivityPrize(@RequestParam("activePriceCode") String activePriceCode,@RequestParam("memberCode") String memberCode){
+        return activityPrizeServiceWX.executeActivityPrize(activePriceCode,memberCode);
     }
 }
