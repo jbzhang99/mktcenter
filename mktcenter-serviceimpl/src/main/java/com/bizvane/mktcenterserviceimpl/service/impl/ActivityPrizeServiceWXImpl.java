@@ -11,6 +11,7 @@ import com.bizvane.mktcenterservice.models.bo.AwardBO;
 import com.bizvane.mktcenterservice.models.bo.PrizeGradeSectionBO;
 import com.bizvane.mktcenterservice.models.po.*;
 import com.bizvane.mktcenterservice.models.vo.ActivityPriceBO;
+import com.bizvane.mktcenterservice.models.vo.ActivityPrizeBO;
 import com.bizvane.mktcenterservice.models.vo.MktActivityPrizeRecordVO;
 import com.bizvane.mktcenterserviceimpl.common.award.Award;
 import com.bizvane.mktcenterserviceimpl.common.enums.ActivityStatusEnum;
@@ -95,8 +96,8 @@ public class ActivityPrizeServiceWXImpl implements ActivityPrizeServiceWX {
         ResponseData responseData = new ResponseData();
         log.info("执行抽奖活动开始参数为："+ activePriceCode+"会员code"+memberCode);
         //查询抽奖活动规则
-        ResponseData<ActivityPriceBO> activityPriceBOs =activityPriceService.selectActivityPrice(activePriceCode);
-        ActivityPriceBO activityPriceBO = activityPriceBOs.getData();
+        ResponseData<ActivityPrizeBO> activityPriceBOs =activityPriceService.selectActivityPrice(activePriceCode);
+        ActivityPrizeBO activityPriceBO = activityPriceBOs.getData();
         //每次抽奖消耗积分
         AwardBO bo = new AwardBO();
         //用这个实体类
@@ -276,7 +277,7 @@ public class ActivityPrizeServiceWXImpl implements ActivityPrizeServiceWX {
         return responseData;
     }
 
-    private void addPoints(String memberCode, ActivityPriceBO activityPriceBO, List<MktActivityPrizePO> mktActivityPrizePOS) {
+    private void addPoints(String memberCode, ActivityPrizeBO activityPriceBO, List<MktActivityPrizePO> mktActivityPrizePOS) {
         AwardBO bo = new AwardBO();
         //用这个实体类
         IntegralChangeRequestModel integralChangeRequestModel =new IntegralChangeRequestModel();

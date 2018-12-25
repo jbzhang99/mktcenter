@@ -5,6 +5,7 @@ import com.bizvane.mktcenterservice.interfaces.ActivityPrizeServiceWX;
 import com.bizvane.mktcenterservice.models.po.MktActivityPrizePO;
 import com.bizvane.mktcenterservice.models.po.MktActivityPrizeRecordPO;
 import com.bizvane.mktcenterservice.models.vo.ActivityPriceBO;
+import com.bizvane.mktcenterservice.models.vo.ActivityPrizeBO;
 import com.bizvane.mktcenterservice.models.vo.MktActivityPrizeRecordVO;
 import com.bizvane.utils.responseinfo.ResponseData;
 import com.bizvane.utils.tokens.SysAccountPO;
@@ -44,7 +45,7 @@ public class ActivityPrizeRpcController {
      * @return
      */
     @RequestMapping("selectPrizeList")
-    ResponseData<ActivityPriceBO> selectPrizeList(@RequestParam("activePriceCode") String activePriceCode){
+    ResponseData<ActivityPrizeBO> selectPrizeList(@RequestParam("activePriceCode") String activePriceCode){
         //获取操作人信息
         SysAccountPO stageUser =new SysAccountPO();
 //        SysAccountPO stageUser = TokenUtils.getStageUser(request);
