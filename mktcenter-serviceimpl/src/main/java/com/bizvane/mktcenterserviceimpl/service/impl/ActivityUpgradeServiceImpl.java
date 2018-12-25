@@ -619,8 +619,10 @@ public class ActivityUpgradeServiceImpl implements ActivityUpgradeService {
         }
         for (ActivityVO activityVO:upgradeList) {
             //判断会员等级相应的活动
-            if (!activityVO.getMbrLevelCode().equals(vo.getLevelId().toString()) || activityVO.getMbrLevelCode().equals("0")){
-                continue;
+            if(!"0".equals(activityVO.getMbrLevelCode())){
+                if (!activityVO.getMbrLevelCode().equals(vo.getLevelId().toString())){
+                    continue;
+                }
             }
             if (!ExecuteParamCheckUtil.implementActivitCheck(vo,activityVO)){
                 continue;
