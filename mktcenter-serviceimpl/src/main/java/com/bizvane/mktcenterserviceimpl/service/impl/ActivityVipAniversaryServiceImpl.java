@@ -556,12 +556,12 @@ public class ActivityVipAniversaryServiceImpl implements ActivityVipAniversarySe
 
     @Override
     @Async("asyncServiceExecutor")
-    public void AniversaryReward(ActivityVO activityAniversary, MemberInfoModel memberInfo) {
+    public void     AniversaryReward(ActivityVO activityAniversary, MemberInfoModel memberInfo) {
         log.info("纪念日活动发送奖励开始");
         Calendar cal = Calendar.getInstance();
         cal.setTime(memberInfo.getOpenCardTime());
         cal.add(Calendar.MONTH, activityAniversary.getRegisterMonths());
-        //开卡时间+上满几个月-延迟天数 >当前时间
+        //开卡时间+上满几个月 >当前时间
         if (new Date().before(cal.getTime())){
             return;
         }
