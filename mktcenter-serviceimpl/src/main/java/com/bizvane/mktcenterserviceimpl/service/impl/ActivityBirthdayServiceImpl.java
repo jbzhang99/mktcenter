@@ -197,7 +197,7 @@ public class ActivityBirthdayServiceImpl implements ActivityBirthdayService {
             if(!CollectionUtils.isEmpty(registerList)){
                 for (ActivityVO activity:registerList) {
                     //判断适用商品
-                    if (false==activity.getStoreLimit() || !ExecuteParamCheckUtil.addActivitCheck(bo,activity)){
+                    if (false==activity.getIsStoreLimit() || !ExecuteParamCheckUtil.addActivitCheck(bo,activity)){
                         responseData.setCode(SysResponseEnum.FAILED.getCode());
                         responseData.setMessage("已存在同一类型的长期活动!");
                         return responseData;
@@ -296,6 +296,7 @@ public class ActivityBirthdayServiceImpl implements ActivityBirthdayService {
         mktActivityBirthdayPO.setMbrLevelName(activityVO.getMbrLevelName());
         mktActivityBirthdayPO.setDaysAhead(activityVO.getDaysAhead());
         mktActivityBirthdayPO.setIsStoreLimit(activityVO.getStoreLimit());
+        mktActivityBirthdayPO.setMemberType(activityVO.getMemberType());
         if (true==activityVO.getStoreLimit()){
             mktActivityBirthdayPO.setStoreLimitList(activityVO.getStoreLimitList());
             mktActivityBirthdayPO.setStoreLimitType(activityVO.getStoreLimitType());
