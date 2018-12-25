@@ -1011,4 +1011,53 @@
       AND t.sys_brand_id = #{sysBrandId}
     </if>
   </select>
+  <select id="selectActivityPriceLists" resultType="com.bizvane.mktcenterservice.models.po.MktActivityPOWithBLOBs">
+    SELECT
+    mkt_activity_id,
+    sys_company_id,
+    sys_brand_id,
+    mbr_group_def_id,
+    mkt_activity_smart_group_id,
+    activity_code,
+    activity_type,
+    activity_name,
+    start_time,
+    end_time,
+    activity_info,
+    activity_rule,
+    long_term,
+    send_immediately,
+    send_time,
+    points,
+    activity_list_img,
+    activity_detail_img,
+    qr_code_url,
+    check_status,
+    activity_status,
+    is_store_limit,
+    store_limit_type,
+    store_limit_list,
+    prize_points,
+    remark,
+    create_user_id,
+    create_user_name,
+    create_date,
+    modified_user_id,
+    modified_user_name,
+    modified_date,
+    valid
+    FROM t_mkt_activity
+    WHERE
+    valid=1
+    AND activity_type=11
+    <if test="brandId!= null ">
+      AND brand_id
+    </if>
+    <if test="activityStatus!= null and activityStatus!='0'.toString() ">
+      AND activity_status=#{activityStatus}
+    </if>
+    <if test="activityName!= null and activityName!= '' ">
+      AND CONCAT(activity_name,activity_code) LIKE concat('%',#{activityName},'%')
+    </if>
+  </select>
 </mapper>

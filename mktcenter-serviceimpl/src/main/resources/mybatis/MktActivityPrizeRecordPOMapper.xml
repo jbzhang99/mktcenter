@@ -532,4 +532,39 @@
       AND is_win_prize=1
       AND mkt_activity_id=#{mktActivityId}
   </select>
+  <select id="selectPrizePeople" resultType="com.bizvane.mktcenterservice.models.po.MktActivityPrizeRecordPO">
+  select
+	mkt_activity_prize_record_id,
+	mkt_activity_id,
+	sys_company_id,
+	sys_brand_id,
+	member_code,
+	member_phone,
+	member_name,
+	prize_type,
+	awad_type,
+	prize_name,
+	prize_time,
+	coupon_definition_id,
+	is_win_prize,
+	remark,
+	create_user_id,
+	create_user_name,
+	create_date,
+	modified_user_id,
+	modified_user_name,
+	modified_date,
+	valid
+	FROM t_mkt_activity_prize_record
+	WHERE
+	valid=1
+	AND awad_type!=50
+    <if test="mktActivityId!= null ">
+    AND mkt_activity_id=#{mktActivityId}
+    </if>
+    <if test="activityName!= null and activityName!= '' ">
+    AND CONCAT(member_phone,member_name,prize_name) LIKE concat('%',#{activityName},'%')
+    </if>
+
+  </select>
 </mapper>

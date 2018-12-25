@@ -2,6 +2,7 @@ package com.bizvane.mktcenterserviceimpl.mappers;
 
 import com.bizvane.mktcenterservice.models.po.MktActivityPrizeRecordPO;
 import com.bizvane.mktcenterservice.models.po.MktActivityPrizeRecordPOExample;
+import com.bizvane.mktcenterservice.models.vo.ActivityPriceParamVO;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -77,4 +78,6 @@ public interface MktActivityPrizeRecordPOMapper {
 	int updateByPrimaryKey(MktActivityPrizeRecordPO record);
 
 	Integer selectPrizePeopleNum(@Param("mktActivityId")Long mktActivityId);
+
+	List<MktActivityPrizeRecordPO> selectPrizePeople(ActivityPriceParamVO vo);
 }

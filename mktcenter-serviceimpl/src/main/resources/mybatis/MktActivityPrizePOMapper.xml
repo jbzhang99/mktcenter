@@ -643,5 +643,6 @@
 	WHERE
 	valid=1
 	AND mkt_activity_id =#{mktActivityId}
+	ORDER BY prize_type ASC
   </select>
 </mapper>

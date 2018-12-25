@@ -200,7 +200,7 @@ public class ActivityPriceServiceImpl implements ActivityPriceService {
             log.info("---------通过品牌Ids--" + JSON.toJSONString(storeList) + "-----获取店铺列表----------" + JSON.toJSONString(storeList));
             activityPriceBO.setStoreList(storeList);
         }
-
+        //
         List<MktActivityPrizeVO> mktActivityPrizeVOS = mktActivityPrizePOMapper.selectMktActivityPrizeById(mktActivityId);
         mktActivityPrizeVOS.stream().forEach(obj -> {
             Long couponDefinitionId = obj.getCouponDefinitionId();
@@ -251,25 +251,8 @@ public class ActivityPriceServiceImpl implements ActivityPriceService {
         sysAccountPo.setAccountCode("15328634678");
         sysAccountPo.setName("不啊哟删除");
 
-
         PageHelper.startPage(vo.getPageNumber(), vo.getPageSize());
-        MktActivityPOExample example = new MktActivityPOExample();
-        MktActivityPOExample.Criteria criteria = example.createCriteria();
-        criteria.andActivityTypeEqualTo(11);
-        criteria.andSysBrandIdEqualTo(sysAccountPo.getBrandId());
-        String activityCode = vo.getActivityCode();
-        if (null != activityCode) {
-            criteria.andActivityCodeLike("%" + activityCode + "%");
-        }
-        String activityName = vo.getActivityName();
-        if (null != activityName) {
-            criteria.andActivityNameLike("%" + activityName + "%");
-        }
-        Integer activityStatus = vo.getActivityStatus();
-        if (0 != activityStatus) {
-            criteria.andActivityStatusEqualTo(activityStatus);
-        }
-        List<MktActivityPOWithBLOBs> listparam = mktActivityPOMapper.selectByExampleWithBLOBs(example);
+        List<MktActivityPOWithBLOBs> listparam = mktActivityPOMapper.selectActivityPriceLists(vo);
         if (CollectionUtils.isEmpty(listparam)) {
             listparam = new ArrayList<MktActivityPOWithBLOBs>();
         }
@@ -341,11 +324,7 @@ public class ActivityPriceServiceImpl implements ActivityPriceService {
         log.info("selectPrizePeople  parram:"+JSON.toJSONString(vo));
         ResponseData<PageInfo<MktActivityPrizeRecordPO>> responseData = new ResponseData<>();
         PageHelper.startPage(vo.getPageNumber(), vo.getPageSize());
-        MktActivityPrizeRecordPOExample example = new MktActivityPrizeRecordPOExample();
-        example.or().andMktActivityIdEqualTo(vo.getMktActivityId()).andMemberNameLike("%" + vo.getActivityName() + "%").andAwadTypeNotEqualTo(50).andValidEqualTo(Boolean.TRUE);
-        example.or().andMktActivityIdEqualTo(vo.getMktActivityId()).andPrizeNameLike("%" + vo.getActivityName() + "%").andAwadTypeNotEqualTo(50).andValidEqualTo(Boolean.TRUE);
-        example.or().andMktActivityIdEqualTo(vo.getMktActivityId()).andMemberPhoneLike("%" + vo.getActivityName() + "%").andAwadTypeNotEqualTo(50).andValidEqualTo(Boolean.TRUE);
-        List<MktActivityPrizeRecordPO> lists = mktActivitPrizeRecordPOMapper.selectByExample(example);
+        List<MktActivityPrizeRecordPO> lists = mktActivitPrizeRecordPOMapper.selectPrizePeople(vo);
         if (CollectionUtils.isEmpty(lists)) {
             lists = new ArrayList<MktActivityPrizeRecordPO>();
         }
@@ -382,7 +361,6 @@ public class ActivityPriceServiceImpl implements ActivityPriceService {
             record.setRemark("1");
             mktActivitPrizeRecordPOMapper.updateByPrimaryKeySelective(record);
         }
-
         return responseData;
     }
 
