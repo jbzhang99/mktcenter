@@ -93,7 +93,7 @@ public class ActivityPrizeServiceWXImpl implements ActivityPrizeServiceWX {
     @Override
     public ResponseData<MktActivityPrizePO> executeActivityPrize(String activePriceCode,String memberCode) {
         ResponseData responseData = new ResponseData();
-        log.info("执行抽奖活动开始参数为："+ activePriceCode);
+        log.info("执行抽奖活动开始参数为："+ activePriceCode+"会员code"+memberCode);
         //查询抽奖活动规则
         ResponseData<ActivityPriceBO> activityPriceBOs =activityPriceService.selectActivityPrice(activePriceCode);
         ActivityPriceBO activityPriceBO = activityPriceBOs.getData();
@@ -113,11 +113,11 @@ public class ActivityPrizeServiceWXImpl implements ActivityPrizeServiceWX {
         bo.setMktType(MktSmartTypeEnum.SMART_TYPE_INTEGRAL.getCode());
         log.info("社交活动-社交活动合格开始消耗积分+++++++++");
         award.execute(bo);
-
-
+        log.info("抽奖活动消耗积分完毕");
         //定义一个list集合来放每个等级奖项小数位数来比较小数位数大小确定稀释多少倍
         List<Integer> str = new ArrayList<>();
         List<MktActivityPrizePO> activityPrizePOList = activityPriceBO.getActivityPrizePOList();
+        log.info("开始计算各个区间数字");
         //循环每个及等级奖项
         for (int i=0;i<activityPrizePOList.size();i++){
             if (null!=activityPrizePOList.get(i).getProbability()){
@@ -146,7 +146,7 @@ public class ActivityPrizeServiceWXImpl implements ActivityPrizeServiceWX {
         calculationCount(activityPrizePOList, max, prizeGradeSectionBO,20);
         calculationCount(activityPrizePOList, max, prizeGradeSectionBO,30);
         calculationCount(activityPrizePOList, max, prizeGradeSectionBO,40);
-
+        log.info("各个中奖等级参数参数为："+ JSON.toJSONString(prizeGradeSectionBO));
         //取随机数 计算随机数在哪个中奖区间
         int vv = (int) Math.pow(10,max);
         //取相应的随机数
@@ -172,7 +172,7 @@ public class ActivityPrizeServiceWXImpl implements ActivityPrizeServiceWX {
             //谢谢惠顾
             type=50;
         }
-
+        log.info("随机数落在哪个区间："+ type);
         //得到中奖规则
         MktActivityPrizePOExample example = new MktActivityPrizePOExample();
         example.createCriteria().andMktActivityIdEqualTo(activityPriceBO.getActivityPO().getMktActivityId()).andPrizeTypeEqualTo(type).andValidEqualTo(Boolean.TRUE);
@@ -209,6 +209,7 @@ public class ActivityPrizeServiceWXImpl implements ActivityPrizeServiceWX {
             }
             //判断验证完之后type是不是50 中奖没中奖
             if (type!=50){
+                log.info("中奖了中奖了："+ type);
                 //判断送积分还是券
                 if (mktActivityPrizePOS.get(0).getAwadType()==10){
                     addPoints(memberCode, activityPriceBO, mktActivityPrizePOS);
@@ -231,6 +232,7 @@ public class ActivityPrizeServiceWXImpl implements ActivityPrizeServiceWX {
                 //把中奖的规则返回给前端
                 responseData.setData(mktActivityPrizePOS.get(0));
             }else{
+                log.info("谢谢惠顾谢谢惠顾谢谢惠顾："+ type);
                 MktActivityPrizePOExample el = new MktActivityPrizePOExample();
                 example.createCriteria().andMktActivityIdEqualTo(activityPriceBO.getActivityPO().getMktActivityId()).andPrizeTypeEqualTo(type).andValidEqualTo(Boolean.TRUE);
                 List<MktActivityPrizePO> mktActivityPrizelist = mktActivityPrizePOMapper.selectByExample(el);
@@ -242,10 +244,12 @@ public class ActivityPrizeServiceWXImpl implements ActivityPrizeServiceWX {
             }
 
         }else{
+            log.info("谢谢惠顾谢谢惠顾谢谢惠顾："+ type);
             //谢谢惠顾
             addPoints(memberCode, activityPriceBO, mktActivityPrizePOS);
             responseData.setData(mktActivityPrizePOS.get(0));
         }
+        log.info("最终结果是什么----------："+ type);
         //查看是哪种中奖规则
         MktActivityPrizePOExample PrizePO = new MktActivityPrizePOExample();
         example.createCriteria().andMktActivityIdEqualTo(activityPriceBO.getActivityPO().getMktActivityId()).andPrizeTypeEqualTo(type).andValidEqualTo(Boolean.TRUE);
