@@ -3,6 +3,7 @@ package com.bizvane.mktcenterserviceimpl.service.impl;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.bizvane.centerstageservice.models.po.FileTaskPo;
+import com.bizvane.centerstageservice.models.po.SysStorePo;
 import com.bizvane.centerstageservice.models.vo.QiNiuVo;
 import com.bizvane.centerstageservice.rpc.FileTaskServiceRpc;
 import com.bizvane.couponfacade.interfaces.CouponQueryServiceFeign;
@@ -10,6 +11,7 @@ import com.bizvane.couponfacade.interfaces.CouponServiceFeign;
 import com.bizvane.couponfacade.models.po.CouponDefinitionPO;
 import com.bizvane.couponfacade.models.vo.CouponUseVO;
 import com.bizvane.mktcenterservice.interfaces.ActivityPriceService;
+import com.bizvane.mktcenterservice.interfaces.TaskService;
 import com.bizvane.mktcenterservice.models.po.*;
 import com.bizvane.mktcenterservice.models.vo.ActivityPriceBO;
 import com.bizvane.mktcenterservice.models.vo.ActivityPriceParamVO;
@@ -35,6 +37,7 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -48,10 +51,8 @@ import java.io.InputStream;
 import java.net.URL;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
+import java.util.stream.Collectors;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
@@ -88,6 +89,8 @@ public class ActivityPriceServiceImpl implements ActivityPriceService {
     private CouponServiceFeign couponServiceFeign;
     @Autowired
     private CouponQueryServiceFeign couponQueryServiceFeign;
+    @Autowired
+    private TaskService taskService;
 
     /**
      * 新增
@@ -181,11 +184,22 @@ public class ActivityPriceServiceImpl implements ActivityPriceService {
      */
     @Override
     public ResponseData<ActivityPriceBO> selectActivityPrice(Long mktActivityId, HttpServletRequest request) {
+
         ResponseData<ActivityPriceBO> responseData = new ResponseData<>();
 
         //  SysAccountPO sysAccountPo = TokenUtils.getStageUser(request);
         ActivityPriceBO activityPriceBO = new ActivityPriceBO();
         MktActivityPOWithBLOBs mktActivityPOWithBLOBs = mktActivityPOMapper.selectByPrimaryKey(mktActivityId);
+        String storeLimitListStr = mktActivityPOWithBLOBs.getStoreLimitList();
+        List<SysStorePo> storeList = new ArrayList<SysStorePo>();
+        if (StringUtils.isNotBlank(storeLimitListStr)) {
+            List<Long> storeIdList = Arrays.asList(storeLimitListStr.split(",")).stream().map(element -> Long.valueOf(element)).collect(Collectors.toList());
+            //查询店铺列表
+            storeList = taskService.getStoreListByIds(storeIdList);
+            log.info("---------通过品牌Ids--" + JSON.toJSONString(storeList) + "-----获取店铺列表----------" + JSON.toJSONString(storeList));
+            activityPriceBO.setStoreList(storeList);
+        }
+
 
         MktActivityPrizePOExample example = new MktActivityPrizePOExample();
         example.createCriteria().andMktActivityIdEqualTo(mktActivityId);
@@ -246,7 +260,7 @@ public class ActivityPriceServiceImpl implements ActivityPriceService {
         }
         List<MktActivityPOWithBLOBs> listparam = mktActivityPOMapper.selectByExampleWithBLOBs(example);
         if (CollectionUtils.isEmpty(listparam)) {
-            listparam=new ArrayList<MktActivityPOWithBLOBs>();
+            listparam = new ArrayList<MktActivityPOWithBLOBs>();
         }
         PageInfo<MktActivityPOWithBLOBs> pageInfo = new PageInfo<>(listparam);
         responseData.setData(pageInfo);

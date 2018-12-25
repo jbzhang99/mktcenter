@@ -1,5 +1,6 @@
 package com.bizvane.mktcenterservice.models.vo;
 
+import com.bizvane.centerstageservice.models.po.SysStorePo;
 import com.bizvane.mktcenterservice.models.po.MktActivityPOWithBLOBs;
 import com.bizvane.mktcenterservice.models.po.MktActivityPrizePO;
 import lombok.Data;
@@ -17,5 +18,7 @@ public class ActivityPriceBO {
     private MktActivityPOWithBLOBs activityPO;
     //奖项
     private List<MktActivityPrizePO> activityPrizePOList;
+
+    private  List<SysStorePo> storeList;
 
 }
