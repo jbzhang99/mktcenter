@@ -106,7 +106,7 @@ public class ActivityPrizeServiceWXImpl implements ActivityPrizeServiceWX {
         integralChangeRequestModel.setBrandId(activityPriceBO.getActivityPO().getSysBrandId());
         integralChangeRequestModel.setMemberCode(memberCode);
         integralChangeRequestModel.setChangeBills(activityPriceBO.getActivityPO().getActivityCode());
-        integralChangeRequestModel.setChangeIntegral(activityPriceBO.getActivityPO().getPoints());
+        integralChangeRequestModel.setChangeIntegral(activityPriceBO.getActivityPO().getPrizePoints());
         integralChangeRequestModel.setChangeType(IntegralChangeTypeEnum.Expend.getCode());
         integralChangeRequestModel.setBusinessType(com.bizvane.members.facade.enums.BusinessTypeEnum.SOCIAL_AFFAIR.getCode());
         integralChangeRequestModel.setChangeDate(new Date());
