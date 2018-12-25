@@ -8,12 +8,12 @@ import com.bizvane.mktcenterservice.models.po.MktActivityPrizePO;
 import com.bizvane.mktcenterservice.models.po.MktActivityPrizeRecordPO;
 import com.bizvane.mktcenterservice.models.vo.ActivityPriceBO;
 import com.bizvane.mktcenterservice.models.vo.ActivityPriceParamVO;
+import com.bizvane.mktcenterservice.models.vo.ActivityPrizeBO;
 import com.bizvane.mktcenterservice.models.vo.AnalysisPriceResultVO;
 import com.bizvane.utils.responseinfo.ResponseData;
 import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
@@ -52,7 +52,7 @@ public class ActivityPriceController {
      * 查询详情  code
      */
     @RequestMapping("selectActivityPriceByCode")
-    public ResponseData<ActivityPriceBO> selectActivityPrice(String activePriceCode) {
+    public ResponseData<ActivityPrizeBO> selectActivityPrice(String activePriceCode) {
         return activityPriceService.selectActivityPrice(activePriceCode);
     }
 

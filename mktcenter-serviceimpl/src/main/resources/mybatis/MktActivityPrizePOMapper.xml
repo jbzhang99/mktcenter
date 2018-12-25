@@ -599,17 +599,47 @@
         INNER JOIN t_mkt_activity_count tmapr ON tma.mkt_activity_id = tmapr.mkt_activity_id
    WHERE
      tma.valid=1
-    <if test="activityStatus!= null ">
-    tma.sys_brand_id=#{brandId}
-    </if>
-    <if test="activityStatus!= null ">
-     tma.activity_status=#{activityStatus}
-    </if>
+    <!--<if test="activityStatus!= null ">-->
+    <!--AND tma.sys_brand_id=#{brandId}-->
+    <!--</if>-->
+    <!--<if test="activityStatus!= null ">-->
+      <!--AND tma.activity_status=#{activityStatus}-->
+    <!--</if>-->
     <if test="activityName!= null and activityName!= '' ">
-     tma.activity_name LIKE CONCAT('%',#{activityName},'%')
+    AND (tma.activity_name LIKE CONCAT('%',#{activityName},'%')
+      OR tma.activity_code LIKE CONCAT('%',#{activityCode},'%'))
     </if>
-    <if test="activityCode!= null and activityCode!= '' ">
-    tma.activity_code LIKE CONCAT('%',#{activityCode},'%')
-    </if>
+  </select>
+  <select id="selectMktActivityPrizeById" resultType="com.bizvane.mktcenterservice.models.vo.MktActivityPrizeVO">
+   SELECT
+	mkt_activity_prize_id,
+	sys_company_id,
+	sys_brand_id,
+	mkt_activity_id,
+	prize_type,
+	prize_name,
+	awad_type,
+	prize_points,
+	coupon_definition_id,
+	coupon_name,
+	image_url,
+	probability,
+	invalid_count,
+	prize_sum,
+	user_limit_sum,
+	participate_prize,
+	participate_points,
+	remark,
+	create_user_id,
+	create_user_name,
+	create_date,
+	modified_user_id,
+	modified_user_name,
+	modified_date,
+	valid
+  FROM t_mkt_activity_prize
+	WHERE
+	valid=1
+	AND mkt_activity_id =#{mktActivityId}
   </select>
 </mapper>
