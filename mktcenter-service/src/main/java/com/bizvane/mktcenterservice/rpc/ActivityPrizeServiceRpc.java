@@ -39,5 +39,7 @@ public interface ActivityPrizeServiceRpc {
      * @param activePriceCode
      * @return
      */
+
+    @RequestMapping("executeActivityPrize")
     ResponseData<MktActivityPrizePO> executeActivityPrize(@RequestParam("activePriceCode") String activePriceCode,@RequestParam("memberCode") String memberCode);
 }
