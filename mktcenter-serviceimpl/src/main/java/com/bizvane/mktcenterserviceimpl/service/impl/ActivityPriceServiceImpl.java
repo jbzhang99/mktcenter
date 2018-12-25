@@ -308,17 +308,24 @@ public class ActivityPriceServiceImpl implements ActivityPriceService {
     @Override
     public ResponseData<PageInfo<AnalysisPriceResultVO>> selectAnalysisPrice(ActivityPriceParamVO vo, HttpServletRequest request) {
         ResponseData<PageInfo<AnalysisPriceResultVO>> responseData = new ResponseData<>();
+        SysAccountPO sysAccountPo = TokenUtils.getStageUser(request);
+//        SysAccountPO sysAccountPo = new SysAccountPO();
+//        sysAccountPo.setSysAccountId(96L);
+//        sysAccountPo.setSysCompanyId(2L);
+//        sysAccountPo.setBrandId(96L);
+//        sysAccountPo.setAccountCode("15328634678");
+//        sysAccountPo.setName("不啊哟删除");
+        vo.setBrandId(sysAccountPo.getBrandId());
         PageHelper.startPage(vo.getPageNumber(), vo.getPageSize());
         List<AnalysisPriceResultVO> lists = mktActivityPrizePOMapper.selectAnalysisPrice(vo);
         if (CollectionUtils.isEmpty(lists)) {
             lists = new ArrayList<>();
         } else {
             lists.parallelStream().forEach(param -> {
-                //int dataNum = TimeUtils.getDataNum(param.getEndTime());
-                param.setResidueDates(1);
-                param.setGoingDates(22);
-                //mktActivitPrizeRecordPOMapper.selectPrizePeopleNum(param.getMktActivityId())
-                param.setPrizePeople(12);
+                int dataNum = TimeUtils.getDataNum(param.getEndTime());
+                param.setResidueDates(dataNum);
+                param.setGoingDates(param.getTotalDates()-dataNum);
+                param.setPrizePeople(mktActivitPrizeRecordPOMapper.selectPrizePeopleNum(param.getMktActivityId()));
             });
         }
         PageInfo<AnalysisPriceResultVO> pageInfo = new PageInfo<>(lists);
@@ -335,17 +342,6 @@ public class ActivityPriceServiceImpl implements ActivityPriceService {
         ResponseData<PageInfo<MktActivityPrizeRecordPO>> responseData = new ResponseData<>();
         PageHelper.startPage(vo.getPageNumber(), vo.getPageSize());
         MktActivityPrizeRecordPOExample example = new MktActivityPrizeRecordPOExample();
-//        MktActivityPrizeRecordPOExample.Criteria criteria1 = example.createCriteria().andMktActivityIdEqualTo(vo.getMktActivityId())
-//                .andMemberNameLike("%" + vo.getActivityName() + "%")
-//                .andAwadTypeNotEqualTo(50).andValidEqualTo(Boolean.TRUE);
-//        MktActivityPrizeRecordPOExample.Criteria criteria2 = example.createCriteria().andMktActivityIdEqualTo(vo.getMktActivityId())
-//                .andPrizeNameLike("%" + vo.getActivityName() + "%")
-//                .andAwadTypeNotEqualTo(50).andValidEqualTo(Boolean.TRUE);
-//        MktActivityPrizeRecordPOExample.Criteria criteria3 = example.createCriteria().andMktActivityIdEqualTo(vo.getMktActivityId())
-//                .andMemberPhoneLike("%" + vo.getActivityName() + "%")
-//                .andAwadTypeNotEqualTo(50).andValidEqualTo(Boolean.TRUE);
-//        example.or(criteria2);
-//        example.or(criteria3);
         example.or().andMktActivityIdEqualTo(vo.getMktActivityId()).andMemberNameLike("%" + vo.getActivityName() + "%").andAwadTypeNotEqualTo(50).andValidEqualTo(Boolean.TRUE);
         example.or().andMktActivityIdEqualTo(vo.getMktActivityId()).andPrizeNameLike("%" + vo.getActivityName() + "%").andAwadTypeNotEqualTo(50).andValidEqualTo(Boolean.TRUE);
         example.or().andMktActivityIdEqualTo(vo.getMktActivityId()).andMemberPhoneLike("%" + vo.getActivityName() + "%").andAwadTypeNotEqualTo(50).andValidEqualTo(Boolean.TRUE);

@@ -593,21 +593,23 @@
       tma.activity_code,
       tma.activity_status,
       ROUND( TIMESTAMPDIFF( HOUR, tma.start_time, tma.end_time ) / 24, 1 ) AS totalDates, -- 进行时长
-      tmapr.member_count AS totalPeople
+      tmapr.member_count AS totalPeople,
+      tma.start_time,
+      tma.end_time
     FROM
       t_mkt_activity tma
         INNER JOIN t_mkt_activity_count tmapr ON tma.mkt_activity_id = tmapr.mkt_activity_id
    WHERE
      tma.valid=1
-    <!--<if test="activityStatus!= null ">-->
-    <!--AND tma.sys_brand_id=#{brandId}-->
-    <!--</if>-->
-    <!--<if test="activityStatus!= null ">-->
-      <!--AND tma.activity_status=#{activityStatus}-->
-    <!--</if>-->
+    AND tma.activity_type=11
+    <if test="brandId!= null ">
+    AND tma.sys_brand_id=#{brandId}
+    </if>
+    <if test="activityStatus!= null and activityStatus!='0'.toString() ">
+      AND tma.activity_status=#{activityStatus}
+    </if>
     <if test="activityName!= null and activityName!= '' ">
-    AND (tma.activity_name LIKE CONCAT('%',#{activityName},'%')
-      OR tma.activity_code LIKE CONCAT('%',#{activityCode},'%'))
+     AND (tma.activity_name LIKE CONCAT('%',#{activityName},'%')OR tma.activity_code LIKE CONCAT('%',#{activityName},'%'))
     </if>
   </select>
   <select id="selectMktActivityPrizeById" resultType="com.bizvane.mktcenterservice.models.vo.MktActivityPrizeVO">
