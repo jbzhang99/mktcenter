@@ -42,6 +42,9 @@ public class QuotaRpcController {
       	 ResponseEntity<String> response =null;
    		try {
    			log.info("报表查询ReportIncomeController："+BaseUrl.getLoadUrl("empDaily")+jsonObject.toString());
+			   //获取用户key
+	   		   jsonObject.put("businessNum", BaseUrl.getBusinessNum());
+	   		   jsonObject.put("apiKey", BaseUrl.getApiKey());
    		    response = this.restTemplate.postForEntity(BaseUrl.getLoadUrl("empDaily"), jsonObject,String.class, new Object[0]);
 		} catch (Exception e) {
 			  ResponseData.setCode(500);
