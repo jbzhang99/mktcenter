@@ -253,6 +253,7 @@ public class ActivitySmartServiceImpl implements ActivitySmartService {
             case SMART_TYPE_WXMESSAGE:
                 log.info("match with SMART_TYPE_WXMESSAGE");
                 responseData =getWxmessageActivityDetailById(mktActivityId);
+                break;
             case SMART_TYPE_PICTURE_MESSAGE:
                 log.info("match with SMART_TYPE_PICTURE_MESSAGE");
                 responseData =getPicturemessageActivityDetailById(mktActivityId);
