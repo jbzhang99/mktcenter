@@ -4,6 +4,8 @@ import com.alibaba.fastjson.JSON;
 import com.bizvane.couponfacade.enums.SendTypeEnum;
 import com.bizvane.couponfacade.models.vo.SendCouponSimpleRequestVO;
 import com.bizvane.members.facade.enums.IntegralChangeTypeEnum;
+import com.bizvane.members.facade.models.MemberInfoModel;
+import com.bizvane.members.facade.service.api.MemberInfoApiService;
 import com.bizvane.members.facade.service.card.request.IntegralChangeRequestModel;
 import com.bizvane.mktcenterservice.interfaces.ActivityPriceService;
 import com.bizvane.mktcenterservice.interfaces.ActivityPrizeServiceWX;
@@ -55,6 +57,8 @@ public class ActivityPrizeServiceWXImpl implements ActivityPrizeServiceWX {
     private Award award;
     @Autowired
     private MktActivityCountPOMapper mktActivityCountPOMapper;
+    @Autowired
+    private MemberInfoApiService memberInfoApiService;
     /**
      *获取小程序中奖纪录列表
      * @param po
@@ -101,6 +105,17 @@ public class ActivityPrizeServiceWXImpl implements ActivityPrizeServiceWX {
         //查询抽奖活动规则
         ResponseData<ActivityPrizeBO> activityPriceBOs =activityPriceService.selectActivityPrice(activePriceCode);
         ActivityPrizeBO activityPriceBO = activityPriceBOs.getData();
+        //判断会员积分是够用
+        MemberInfoModel member = new MemberInfoModel();
+        member.setMemberCode(memberCode);
+        ResponseData<MemberInfoModel> memberInfoModels = memberInfoApiService.getSingleMemberModel(member);
+        if (null!=memberInfoModels.getData()){
+            if (activityPriceBO.getActivityPO().getPrizePoints()>memberInfoModels.getData().getCountIntegral()){
+                responseData.setCode(SysResponseEnum.FAILED.getCode());
+                responseData.setMessage("您的积分不足！");
+                return responseData;
+            }
+        }
         //每次抽奖消耗积分
         AwardBO bo = new AwardBO();
         //用这个实体类
@@ -264,6 +279,8 @@ public class ActivityPrizeServiceWXImpl implements ActivityPrizeServiceWX {
         record.setSysCompanyId(activityPriceBO.getActivityPO().getSysCompanyId());
         record.setSysBrandId(activityPriceBO.getActivityPO().getSysBrandId());
         record.setMemberCode(memberCode);
+        record.setMemberPhone(memberInfoModels.getData().getPhone());
+        record.setMemberName(memberInfoModels.getData().getPhone());
         record.setCouponDefinitionId(ActivityPrize.get(0).getCouponDefinitionId());
         record.setPrizeTime(new Date());
         record.setPrizeType(ActivityPrize.get(0).getPrizeType());
