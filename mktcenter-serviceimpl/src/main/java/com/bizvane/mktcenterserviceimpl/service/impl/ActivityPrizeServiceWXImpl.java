@@ -69,7 +69,15 @@ public class ActivityPrizeServiceWXImpl implements ActivityPrizeServiceWX {
         log.info("查询大转盘中奖纪录列表开始参数为："+ JSON.toJSONString(po));
         ResponseData responseData = new ResponseData();
         MktActivityPrizeRecordPOExample example = new MktActivityPrizeRecordPOExample();
-        BeanUtils.copyProperties(po,example);
+        //判断是轮播还是抽奖记录
+        if(null!=po.getIsWinPrize()){
+            //轮播图
+            example.createCriteria().andSysBrandIdEqualTo(po.getSysBrandId()).andMktActivityIdEqualTo(po.getMktActivityId()).andIsWinPrizeEqualTo(po.getIsWinPrize());
+        }else{
+            //抽奖记录
+            example.createCriteria().andMemberCodeEqualTo(po.getMemberCode()).andSysBrandIdEqualTo(po.getSysBrandId()).andMktActivityIdEqualTo(po.getMktActivityId());
+        }
+
         List<MktActivityPrizeRecordPO> lists = mktActivityPrizeRecordPOMapper.selectByExample(example);
         log.info("大转盘中奖纪录列表查询结束");
         responseData.setCode(SysResponseEnum.SUCCESS.getCode());
