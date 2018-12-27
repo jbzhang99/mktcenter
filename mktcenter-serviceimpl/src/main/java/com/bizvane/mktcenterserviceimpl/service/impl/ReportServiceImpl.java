@@ -1,5 +1,6 @@
 package com.bizvane.mktcenterserviceimpl.service.impl;
 
+import java.io.BufferedOutputStream;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -9,6 +10,8 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
 
 import org.codehaus.jettison.json.JSONArray;
 import org.codehaus.jettison.json.JSONException;
@@ -115,13 +118,42 @@ public class ReportServiceImpl implements ReportTempService {
 		              //导出表格
 	     		     poiUtil.exportExcel(out,fileReportTempPOlist.getTemplateName(), arr, nameEnd,mapbiaotou,map);
 	     			 ByteArrayInputStream in = new ByteArrayInputStream(((ByteArrayOutputStream) out).toByteArray());
-		            
-	     			 fileTaskPo.setFileStatus(99L);
-		             fileTaskServiceRpc.update(fileTaskPo);
 	     			  //时间格式化
 	     			  SimpleDateFormat format = new SimpleDateFormat("yyyyMMddHHmmss");
-	     			  String filename =fileReportTempPOlist.getTemplateName()+nameEnd+ format.format(new Date()) + ".xlsx";
-	     			    qiniuUrl = "https://"+QiNiuUtil.upload(in, filename);
+	     			 String filename =fileReportTempPOlist.getTemplateName()+nameEnd+ format.format(new Date());
+		             //压缩包导出
+	                 ByteArrayOutputStream tempByteOStream = null;
+	                 BufferedOutputStream tempBufferOStream = null;
+	                 ZipOutputStream tempZStream = null;
+	                 ZipEntry tempEntry = null;
+
+	                 tempByteOStream = new ByteArrayOutputStream();
+	                 tempZStream = new ZipOutputStream(tempByteOStream);
+	                 tempBufferOStream = new BufferedOutputStream(tempZStream);
+                     tempEntry = new ZipEntry(filename+".xlsx");
+                     tempZStream.putNextEntry(tempEntry);
+                     int len = 0;
+                     byte[] buff = new byte[1024];
+                     while ((len = in.read(buff)) != -1) {
+                         tempZStream.write(buff, 0, len);
+                     }
+	     			 
+                     
+                     tempBufferOStream.flush();
+                     tempByteOStream.flush();
+                     tempZStream.closeEntry();
+                     tempZStream.close();
+                     tempByteOStream.close();
+                     tempBufferOStream.close();
+                     ByteArrayInputStream into = new ByteArrayInputStream(((ByteArrayOutputStream) tempByteOStream).toByteArray());
+                     
+                     //压缩包导出
+	     			 
+	     			 fileTaskPo.setFileStatus(99L);
+		             fileTaskServiceRpc.update(fileTaskPo);
+
+	     			  
+	     			    qiniuUrl = "https://"+QiNiuUtil.upload(into, filename+ ".zip");
 	     			  System.out.println("报表上传到七牛ReportIncomeController："+qiniuUrl);
 	     			  in.close();
 	     			  out.close();
