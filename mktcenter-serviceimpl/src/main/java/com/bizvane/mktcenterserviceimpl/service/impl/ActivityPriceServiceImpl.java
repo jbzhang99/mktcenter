@@ -133,7 +133,7 @@ public class ActivityPriceServiceImpl implements ActivityPriceService {
         CreateMiniprgmQRCodeRequestVO createMiniprgmQRCodeRequestVO = new CreateMiniprgmQRCodeRequestVO();
         createMiniprgmQRCodeRequestVO.setSysBrandId(brandId);
         createMiniprgmQRCodeRequestVO.setMiniProgramType("10");
-        createMiniprgmQRCodeRequestVO.setPath("pages/template01/coupon-scancode/main");
+        createMiniprgmQRCodeRequestVO.setPath("/pages/template01/prize-draw/main");
         createMiniprgmQRCodeRequestVO.setScene(activePriceCode);
         log.info("addActivityPrice wexin param:" + JSON.toJSONString(createMiniprgmQRCodeRequestVO));
         ResponseData<String> qrCodeResponseData = qrCodeServiceFeign.createMiniprgmQRCode(createMiniprgmQRCodeRequestVO);
