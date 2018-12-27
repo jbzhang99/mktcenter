@@ -17,6 +17,7 @@ import com.bizvane.mktcenterserviceimpl.common.award.Award;
 import com.bizvane.mktcenterserviceimpl.common.enums.ActivityStatusEnum;
 import com.bizvane.mktcenterserviceimpl.common.enums.ActivityTypeEnum;
 import com.bizvane.mktcenterserviceimpl.common.enums.MktSmartTypeEnum;
+import com.bizvane.mktcenterserviceimpl.mappers.MktActivityCountPOMapper;
 import com.bizvane.mktcenterserviceimpl.mappers.MktActivityPOMapper;
 import com.bizvane.mktcenterserviceimpl.mappers.MktActivityPrizePOMapper;
 import com.bizvane.mktcenterserviceimpl.mappers.MktActivityPrizeRecordPOMapper;
@@ -52,6 +53,8 @@ public class ActivityPrizeServiceWXImpl implements ActivityPrizeServiceWX {
     private MktActivityPrizePOMapper mktActivityPrizePOMapper;
     @Autowired
     private Award award;
+    @Autowired
+    private MktActivityCountPOMapper mktActivityCountPOMapper;
     /**
      *获取小程序中奖纪录列表
      * @param po
@@ -272,6 +275,8 @@ public class ActivityPrizeServiceWXImpl implements ActivityPrizeServiceWX {
             record.setIsWinPrize(Boolean.FALSE);
         }
         mktActivityPrizeRecordPOMapper.insertSelective(record);
+
+        mktActivityCountPOMapper.updateSum(activityPriceBO.getActivityPO().getMktActivityId(), 1, BigDecimal.ZERO,0);
         responseData.setCode(SysResponseEnum.SUCCESS.getCode());
         responseData.setMessage(SysResponseEnum.SUCCESS.getMessage());
         return responseData;
