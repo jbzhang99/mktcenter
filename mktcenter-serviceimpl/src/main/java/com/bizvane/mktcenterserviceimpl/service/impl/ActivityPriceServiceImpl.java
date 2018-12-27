@@ -120,6 +120,7 @@ public class ActivityPriceServiceImpl implements ActivityPriceService {
 
         Date startTime = activityPO.getStartTime();
         Boolean runStatus = TimeUtils.ifImmediatelyRun(startTime);
+        log.info("addActivityPrice status:"+runStatus);
         if (runStatus) {
             activityPO.setActivityType(2);
         } else {
