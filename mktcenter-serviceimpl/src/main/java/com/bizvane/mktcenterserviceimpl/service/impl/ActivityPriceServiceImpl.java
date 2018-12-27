@@ -122,9 +122,9 @@ public class ActivityPriceServiceImpl implements ActivityPriceService {
         Boolean runStatus = TimeUtils.ifImmediatelyRun(startTime);
         log.info("addActivityPrice status:"+runStatus);
         if (runStatus) {
-            activityPO.setActivityType(2);
+            activityPO.setActivityStatus(2);
         } else {
-            activityPO.setActivityType(1);
+            activityPO.setActivityStatus(1);
             jobUtil.addStartPrizeJob(sysAccountPo, activityPO, activePriceCode);
         }
         jobUtil.addEndPrizeJob(sysAccountPo, activityPO, activePriceCode);
