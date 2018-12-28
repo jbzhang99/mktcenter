@@ -602,7 +602,7 @@
    WHERE
      tma.valid=1
     AND tma.activity_type=11
-    AND tma.activity_status between 1 and 3
+    AND tma.activity_status between 2 and 3
     <if test="brandId!= null ">
     AND tma.sys_brand_id=#{brandId}
     </if>
