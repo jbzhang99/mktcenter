@@ -262,7 +262,7 @@ public class ActivityPrizeServiceWXImpl implements ActivityPrizeServiceWX {
             }else{
                 log.info("谢谢惠顾谢谢惠顾谢谢惠顾："+ type);
                 MktActivityPrizePOExample el = new MktActivityPrizePOExample();
-                example.createCriteria().andMktActivityIdEqualTo(activityPriceBO.getActivityPO().getMktActivityId()).andPrizeTypeEqualTo(type).andValidEqualTo(Boolean.TRUE);
+                el.createCriteria().andMktActivityIdEqualTo(activityPriceBO.getActivityPO().getMktActivityId()).andPrizeTypeEqualTo(type).andValidEqualTo(Boolean.TRUE);
                 List<MktActivityPrizePO> mktActivityPrizelist = mktActivityPrizePOMapper.selectByExample(el);
                 //谢谢惠顾判断是否会赠送积分
                 if(mktActivityPrizePOS.get(0).getParticipatePrize()==true){
