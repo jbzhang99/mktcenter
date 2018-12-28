@@ -308,7 +308,8 @@ public class ActivityPriceServiceImpl implements ActivityPriceService {
             lists.parallelStream().forEach(param -> {
                 int dataNum = TimeUtils.getDataNum(param.getEndTime());
                 param.setResidueDates(dataNum);
-                param.setGoingDates(param.getTotalDates()-dataNum);
+                int days = param.getTotalDates() - dataNum;
+                param.setGoingDates(days<0?0:days);
                 param.setPrizePeople(mktActivitPrizeRecordPOMapper.selectPrizePeopleNum(param.getMktActivityId()));
             });
         }
