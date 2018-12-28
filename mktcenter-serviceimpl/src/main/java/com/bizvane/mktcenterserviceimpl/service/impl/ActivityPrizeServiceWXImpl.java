@@ -300,6 +300,7 @@ public class ActivityPrizeServiceWXImpl implements ActivityPrizeServiceWX {
         }else {
             record.setIsWinPrize(Boolean.FALSE);
         }
+        record.setValid(Boolean.TRUE);
         mktActivityPrizeRecordPOMapper.insertSelective(record);
 
         mktActivityCountPOMapper.updateSum(activityPriceBO.getActivityPO().getMktActivityId(), 1, BigDecimal.ZERO,0);
