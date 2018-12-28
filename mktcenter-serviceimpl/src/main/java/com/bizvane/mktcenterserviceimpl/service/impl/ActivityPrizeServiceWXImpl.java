@@ -179,6 +179,7 @@ public class ActivityPrizeServiceWXImpl implements ActivityPrizeServiceWX {
         //取相应的随机数
         Random rand = new Random();
         int su = rand.nextInt(100*vv) + 1;
+        log.info("获取到的随机数为："+ su);
         //计算是否在特等奖区间
         int type =0;
         if (1<=su &&su<=prizeGradeSectionBO.getSuperCount()){
@@ -217,20 +218,20 @@ public class ActivityPrizeServiceWXImpl implements ActivityPrizeServiceWX {
 
             //得到一个会员抽中了几次
             MktActivityPrizeRecordPOExample examp = new MktActivityPrizeRecordPOExample();
-            examp.createCriteria().andMktActivityIdEqualTo(activityPriceBO.getActivityPO().getMktActivityId()).andIsWinPrizeEqualTo(Boolean.TRUE).andValidEqualTo(Boolean.TRUE).andMemberCodeEqualTo(memberCode);
+            examp.createCriteria().andMktActivityIdEqualTo(activityPriceBO.getActivityPO().getMktActivityId()).andIsWinPrizeEqualTo(Boolean.TRUE).andValidEqualTo(Boolean.TRUE).andMemberCodeEqualTo(memberCode).andPrizeTypeEqualTo(type);
             Long exeCount =  mktActivityPrizeRecordPOMapper.countByExample(examp);
             //判断中奖前几次不中
-            if (null!=mktActivityPrizePOS.get(0).getInvalidCount() && mktActivityPrizePOS.get(0).getInvalidCount()<= count){
+            if (null!=mktActivityPrizePOS.get(0).getInvalidCount() && mktActivityPrizePOS.get(0).getInvalidCount()>= count){
                 //没中奖
                 type=50;
             }
             //判断奖品数量
-            if(mktActivityPrizePOS.get(0).getPrizeSum()<=cou){
+            if(mktActivityPrizePOS.get(0).getPrizeSum()>=cou){
                 //没中奖
                 type=50;
             }
             //判断每个人限制
-            if(null!=mktActivityPrizePOS.get(0).getUserLimitSum() && mktActivityPrizePOS.get(0).getUserLimitSum()<=exeCount){
+            if(null!=mktActivityPrizePOS.get(0).getUserLimitSum() && mktActivityPrizePOS.get(0).getUserLimitSum()>=exeCount){
                 //没中奖
                 type=50;
             }
@@ -278,10 +279,10 @@ public class ActivityPrizeServiceWXImpl implements ActivityPrizeServiceWX {
         }
         log.info("最终结果是什么----------："+ type);
         //查看是哪种中奖规则
-        MktActivityPrizePOExample PrizePO = new MktActivityPrizePOExample();
-        example.createCriteria().andMktActivityIdEqualTo(activityPriceBO.getActivityPO().getMktActivityId()).andPrizeTypeEqualTo(type).andValidEqualTo(Boolean.TRUE);
-        List<MktActivityPrizePO> ActivityPrize = mktActivityPrizePOMapper.selectByExample(PrizePO);
-        //写进记录
+        MktActivityPrizePOExample prizePO = new MktActivityPrizePOExample();
+        prizePO.createCriteria().andMktActivityIdEqualTo(activityPriceBO.getActivityPO().getMktActivityId()).andPrizeTypeEqualTo(type).andValidEqualTo(Boolean.TRUE);
+        List<MktActivityPrizePO> activityPrize = mktActivityPrizePOMapper.selectByExample(prizePO);
+        //写进记录a
         MktActivityPrizeRecordPO record = new MktActivityPrizeRecordPO();
         record.setMktActivityId(activityPriceBO.getActivityPO().getMktActivityId());
         record.setSysCompanyId(activityPriceBO.getActivityPO().getSysCompanyId());
@@ -289,11 +290,11 @@ public class ActivityPrizeServiceWXImpl implements ActivityPrizeServiceWX {
         record.setMemberCode(memberCode);
         record.setMemberPhone(memberInfoModels.getData().getPhone());
         record.setMemberName(memberInfoModels.getData().getPhone());
-        record.setCouponDefinitionId(ActivityPrize.get(0).getCouponDefinitionId());
+        record.setCouponDefinitionId(activityPrize.get(0).getCouponDefinitionId());
         record.setPrizeTime(new Date());
-        record.setPrizeType(ActivityPrize.get(0).getPrizeType());
-        record.setAwadType(ActivityPrize.get(0).getAwadType());
-        record.setPrizeName(ActivityPrize.get(0).getPrizeName());
+        record.setPrizeType(activityPrize.get(0).getPrizeType());
+        record.setAwadType(activityPrize.get(0).getAwadType());
+        record.setPrizeName(activityPrize.get(0).getPrizeName());
         if (type!=50){
             record.setIsWinPrize(Boolean.TRUE);
         }else {
@@ -425,6 +426,11 @@ public class ActivityPrizeServiceWXImpl implements ActivityPrizeServiceWX {
         Long ss =7L;
         if (ss>b){
             System.out.println("我来试一试");
+        }
+        int pp =5;
+        Long ll = 5L;
+        if (pp>=ll){
+            System.out.println("3333333333333333333333");
         }
     }
 }
