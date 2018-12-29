@@ -209,7 +209,7 @@ public class ActivityPrizeServiceWXImpl implements ActivityPrizeServiceWX {
         if (type!=50){
             //得到抽奖次数
             MktActivityPrizeRecordPOExample ex = new MktActivityPrizeRecordPOExample();
-            ex.createCriteria().andMktActivityIdEqualTo(activityPriceBO.getActivityPO().getMktActivityId()).andValidEqualTo(Boolean.TRUE);
+            ex.createCriteria().andMktActivityIdEqualTo(activityPriceBO.getActivityPO().getMktActivityId()).andValidEqualTo(Boolean.TRUE).andMemberCodeEqualTo(memberCode);
             Long count =  mktActivityPrizeRecordPOMapper.countByExample(ex);
             //得到抽到了奖品数量
             MktActivityPrizeRecordPOExample exe = new MktActivityPrizeRecordPOExample();
@@ -221,7 +221,7 @@ public class ActivityPrizeServiceWXImpl implements ActivityPrizeServiceWX {
             examp.createCriteria().andMktActivityIdEqualTo(activityPriceBO.getActivityPO().getMktActivityId()).andIsWinPrizeEqualTo(Boolean.TRUE).andValidEqualTo(Boolean.TRUE).andMemberCodeEqualTo(memberCode).andPrizeTypeEqualTo(type);
             Long exeCount =  mktActivityPrizeRecordPOMapper.countByExample(examp);
             //判断中奖前几次不中
-            if (null!=mktActivityPrizePOS.get(0).getInvalidCount() && mktActivityPrizePOS.get(0).getInvalidCount()>= count){
+            if (null!=mktActivityPrizePOS.get(0).getInvalidCount() && mktActivityPrizePOS.get(0).getInvalidCount()> count){
                 //没中奖
                 type=50;
             }
@@ -429,7 +429,7 @@ public class ActivityPrizeServiceWXImpl implements ActivityPrizeServiceWX {
             System.out.println("我来试一试");
         }
         int pp =2;
-        Long ll = 1L;
+        Long ll = 3L;
         if (pp>=ll){
             System.out.println("3333333333333333333333");
         }

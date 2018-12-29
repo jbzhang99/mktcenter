@@ -1,5 +1,6 @@
 package com.bizvane.mktcenterserviceimpl.common.utils;
 
+import com.alibaba.fastjson.JSON;
 import com.bizvane.members.facade.models.MemberInfoModel;
 import com.bizvane.mktcenterservice.models.bo.ActivityBO;
 import com.bizvane.mktcenterservice.models.bo.OrderModelBo;
@@ -116,8 +117,10 @@ public class ExecuteParamCheckUtil {
             if (activityVO.getCommodityLimitType()==2) {
                 String commodityWhitelist = activityVO.getCommodityLimitList();
                 List<String> result = Arrays.asList(commodityWhitelist.split(","));
+                log.info("活动查出来的白名单集合："+ JSON.toJSONString(result));
                 String productNos = vo.getProductNos();
                 List<String> productNoList = Arrays.asList(productNos.split(","));
+                log.info("消费时候传过来的集合："+ JSON.toJSONString(productNoList));
                     boolean contains = result.containsAll(productNoList);
                         falg=contains;
             }
