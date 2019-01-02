@@ -2,6 +2,7 @@ package com.bizvane.mktcenterserviceimpl.service.impl;
 
 import com.alibaba.fastjson.JSON;
 import com.bizvane.couponfacade.enums.SendTypeEnum;
+import com.bizvane.couponfacade.interfaces.SendCouponServiceFeign;
 import com.bizvane.couponfacade.models.vo.SendCouponSimpleRequestVO;
 import com.bizvane.members.facade.enums.IntegralChangeTypeEnum;
 import com.bizvane.members.facade.models.MemberInfoModel;
@@ -26,12 +27,10 @@ import com.bizvane.mktcenterserviceimpl.mappers.MktActivityPrizeRecordPOMapper;
 import com.bizvane.utils.enumutils.SysResponseEnum;
 import com.bizvane.utils.responseinfo.ResponseData;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
-import javax.servlet.http.HttpServletRequest;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
@@ -59,6 +58,8 @@ public class ActivityPrizeServiceWXImpl implements ActivityPrizeServiceWX {
     private MktActivityCountPOMapper mktActivityCountPOMapper;
     @Autowired
     private MemberInfoApiService memberInfoApiService;
+    @Autowired
+    private SendCouponServiceFeign sendCouponServiceFeign;
     /**
      *获取小程序中奖纪录列表
      * @param po
@@ -201,6 +202,7 @@ public class ActivityPrizeServiceWXImpl implements ActivityPrizeServiceWX {
             type=50;
         }
         log.info("随机数落在哪个区间："+ type);
+        String coupon="0";
         //得到中奖规则
         MktActivityPrizePOExample example = new MktActivityPrizePOExample();
         example.createCriteria().andMktActivityIdEqualTo(activityPriceBO.getActivityPO().getMktActivityId()).andPrizeTypeEqualTo(type).andValidEqualTo(Boolean.TRUE);
@@ -255,7 +257,13 @@ public class ActivityPrizeServiceWXImpl implements ActivityPrizeServiceWX {
                     awardBO.setSendCouponSimpleRequestVO(sendCouponSimpleRequestVO);
                     awardBO.setMktType(MktSmartTypeEnum.SMART_TYPE_COUPON.getCode());
                     log.info("社交活动-社交活动合格开始增加券+++++++++");
-                    award.execute(awardBO);
+                    //award.execute(awardBO);
+                    ResponseData<String> simple = sendCouponServiceFeign.simple(sendCouponSimpleRequestVO);
+                    log.info("社交活动--发券结果与参数:"+JSON.toJSONString(simple)+"---"+JSON.toJSONString(sendCouponSimpleRequestVO));
+                    if (simple.getCode()==0){
+                        coupon=simple.getData();
+                    }
+
                 }
                 //把中奖的规则返回给前端
                 responseData.setData(mktActivityPrizePOS.get(0));
@@ -288,6 +296,7 @@ public class ActivityPrizeServiceWXImpl implements ActivityPrizeServiceWX {
         record.setSysCompanyId(activityPriceBO.getActivityPO().getSysCompanyId());
         record.setSysBrandId(activityPriceBO.getActivityPO().getSysBrandId());
         record.setMemberCode(memberCode);
+       // record.set
         record.setMemberPhone(memberInfoModels.getData().getPhone());
         record.setMemberName(memberInfoModels.getData().getPhone());
         record.setCouponDefinitionId(activityPrize.get(0).getCouponDefinitionId());

@@ -1,13 +1,10 @@
 package com.bizvane.mktcenterserviceimpl.common.award;
 
 import com.alibaba.fastjson.JSON;
-import com.bizvane.centercontrolservice.rpc.SysSmsConfigServiceRpc;
 import com.bizvane.couponfacade.interfaces.SendCouponServiceFeign;
 import com.bizvane.couponfacade.models.vo.SendCouponBatchRequestVO;
 import com.bizvane.couponfacade.models.vo.SendCouponSimpleRequestVO;
-import com.bizvane.members.facade.enums.IntegralChangeTypeEnum;
 import com.bizvane.members.facade.exception.MemberException;
-import com.bizvane.members.facade.models.IntegralRecordModel;
 import com.bizvane.members.facade.service.api.IntegralChangeApiService;
 import com.bizvane.members.facade.service.api.IntegralRecordApiService;
 import com.bizvane.members.facade.service.card.request.IntegralChangeRequestModel;
@@ -15,7 +12,7 @@ import com.bizvane.members.facade.service.card.response.IntegralChangeResponseMo
 import com.bizvane.messagefacade.interfaces.SendBatchMessageFeign;
 import com.bizvane.messagefacade.interfaces.SendCommonMessageFeign;
 import com.bizvane.messagefacade.interfaces.TemplateMessageServiceFeign;
-import com.bizvane.messagefacade.models.vo.*;
+import com.bizvane.messagefacade.models.vo.SysSmsConfigVO;
 import com.bizvane.mktcenterservice.models.bo.AwardBO;
 import com.bizvane.mktcenterserviceimpl.common.constants.ResponseConstants;
 import com.bizvane.utils.responseinfo.ResponseData;
@@ -23,8 +20,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
-
-import java.util.List;
 
 /**
  * @author chen.li
@@ -70,7 +65,7 @@ public class AwardFactory {
         try {
             SendCouponSimpleRequestVO va = bo.getSendCouponSimpleRequestVO();
             log.info("开始执行发券操作参数="+ JSON.toJSONString(va));
-            ResponseData<Object> simple = sendCouponServiceFeign.simple(va);
+            ResponseData<String> simple = sendCouponServiceFeign.simple(va);
             log.info("发券返回参数======"+JSON.toJSONString(simple));
             log.info("发券操作完成完成了完成了完成了完成了--"+JSON.toJSONString(simple));
         } catch (Exception e) {
