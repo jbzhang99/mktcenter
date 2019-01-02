@@ -342,17 +342,17 @@ public class ActivityPriceServiceImpl implements ActivityPriceService {
     public ResponseData<String> doVerificationCoupon(ActivityPriceParamVO vo, HttpServletRequest request) {
         log.info("doVerificationCoupon param:" + JSON.toJSONString(vo));
         ResponseData<String> responseData = null;
-        CouponDefinitionPO couponDefinitionPO = couponQueryServiceFeign.getCouponDefinition(vo.getCouponDefinitionId()).getData().getCouponDefinitionPO();
-        if (couponDefinitionPO == null) {
+        String couponDefinitionCode = vo.getCouponDefinitionCode();
+        if (StringUtils.isBlank(couponDefinitionCode) || "0".equals(couponDefinitionCode)) {
             responseData = new ResponseData<>();
             responseData.setCode(100);
-            responseData.setMessage("券不存在!");
+            responseData.setMessage("奖品不是券,无法核销!");
             return responseData;
         }
         SysAccountPO sysAccountPo = TokenUtils.getStageUser(request);
         CouponUseVO requestVO = new CouponUseVO();
-        requestVO.setCouponCode(couponDefinitionPO.getCouponDefinitionCode());
-        requestVO.setStaffCode(vo.getMemberCode());
+        requestVO.setCouponCode(couponDefinitionCode);
+        requestVO.setStaffCode(sysAccountPo.getAccountCode());
         requestVO.setBrandId(sysAccountPo.getBrandId());
         responseData = couponServiceFeign.use(requestVO);
         log.info("doVerificationCoupon result:" + JSON.toJSONString(responseData));
