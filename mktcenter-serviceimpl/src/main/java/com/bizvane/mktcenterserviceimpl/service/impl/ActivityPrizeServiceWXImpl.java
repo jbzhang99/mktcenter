@@ -297,7 +297,7 @@ public class ActivityPrizeServiceWXImpl implements ActivityPrizeServiceWX {
         record.setSysBrandId(activityPriceBO.getActivityPO().getSysBrandId());
         record.setMemberCode(memberCode);
         record.setMemberPhone(memberInfoModels.getData().getPhone());
-        record.setMemberName(memberInfoModels.getData().getPhone());
+        record.setMemberName(memberInfoModels.getData().getName());
         record.setCouponDefinitionId(activityPrize.get(0).getCouponDefinitionId());
         record.setCouponDefinitionCode(coupon);
         record.setPrizeTime(new Date());
