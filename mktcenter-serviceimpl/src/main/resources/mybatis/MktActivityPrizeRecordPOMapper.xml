@@ -572,6 +572,7 @@
 	prize_name,
 	prize_time,
 	coupon_definition_id,
+    coupon_definition_code,
 	is_win_prize,
 	remark,
 	create_user_id,
