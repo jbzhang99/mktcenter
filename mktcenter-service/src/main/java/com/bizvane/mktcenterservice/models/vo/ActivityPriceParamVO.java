@@ -22,4 +22,5 @@ public class ActivityPriceParamVO {
     private String qrCodeUrl;
     private Long couponDefinitionId;
     private Long mktActivityPrizeRecordId;
+    private String couponDefinitionCode;
 }

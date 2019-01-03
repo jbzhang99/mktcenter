@@ -593,15 +593,16 @@
       tma.activity_code,
       tma.activity_status,
       ROUND( TIMESTAMPDIFF( HOUR, tma.start_time, tma.end_time ) / 24, 1 ) AS totalDates, -- 进行时长
-      tmapr.member_count AS totalPeople,
+--       tmapr.member_count AS totalPeople,
       tma.start_time,
       tma.end_time
     FROM
       t_mkt_activity tma
-        INNER JOIN t_mkt_activity_count tmapr ON tma.mkt_activity_id = tmapr.mkt_activity_id
+--         INNER JOIN t_mkt_activity_count tmapr ON tma.mkt_activity_id = tmapr.mkt_activity_id
    WHERE
      tma.valid=1
     AND tma.activity_type=11
+    AND tma.activity_status between 2 and 3
     <if test="brandId!= null ">
     AND tma.sys_brand_id=#{brandId}
     </if>
@@ -643,5 +644,6 @@
 	WHERE
 	valid=1
 	AND mkt_activity_id =#{mktActivityId}
+	ORDER BY prize_type ASC
   </select>
 </mapper>

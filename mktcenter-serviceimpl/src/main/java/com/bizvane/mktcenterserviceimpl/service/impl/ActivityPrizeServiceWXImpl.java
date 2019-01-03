@@ -2,9 +2,14 @@ package com.bizvane.mktcenterserviceimpl.service.impl;
 
 import com.alibaba.fastjson.JSON;
 import com.bizvane.couponfacade.enums.SendTypeEnum;
+import com.bizvane.couponfacade.interfaces.SendCouponServiceFeign;
 import com.bizvane.couponfacade.models.vo.SendCouponSimpleRequestVO;
 import com.bizvane.members.facade.enums.IntegralChangeTypeEnum;
+import com.bizvane.members.facade.models.MemberInfoModel;
+import com.bizvane.members.facade.service.api.IntegralChangeApiService;
+import com.bizvane.members.facade.service.api.MemberInfoApiService;
 import com.bizvane.members.facade.service.card.request.IntegralChangeRequestModel;
+import com.bizvane.members.facade.service.card.response.IntegralChangeResponseModel;
 import com.bizvane.mktcenterservice.interfaces.ActivityPriceService;
 import com.bizvane.mktcenterservice.interfaces.ActivityPrizeServiceWX;
 import com.bizvane.mktcenterservice.models.bo.AwardBO;
@@ -17,18 +22,18 @@ import com.bizvane.mktcenterserviceimpl.common.award.Award;
 import com.bizvane.mktcenterserviceimpl.common.enums.ActivityStatusEnum;
 import com.bizvane.mktcenterserviceimpl.common.enums.ActivityTypeEnum;
 import com.bizvane.mktcenterserviceimpl.common.enums.MktSmartTypeEnum;
+import com.bizvane.mktcenterserviceimpl.mappers.MktActivityCountPOMapper;
 import com.bizvane.mktcenterserviceimpl.mappers.MktActivityPOMapper;
 import com.bizvane.mktcenterserviceimpl.mappers.MktActivityPrizePOMapper;
 import com.bizvane.mktcenterserviceimpl.mappers.MktActivityPrizeRecordPOMapper;
 import com.bizvane.utils.enumutils.SysResponseEnum;
 import com.bizvane.utils.responseinfo.ResponseData;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
-import javax.servlet.http.HttpServletRequest;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
@@ -52,6 +57,14 @@ public class ActivityPrizeServiceWXImpl implements ActivityPrizeServiceWX {
     private MktActivityPrizePOMapper mktActivityPrizePOMapper;
     @Autowired
     private Award award;
+    @Autowired
+    private MktActivityCountPOMapper mktActivityCountPOMapper;
+    @Autowired
+    private MemberInfoApiService memberInfoApiService;
+    @Autowired
+    private SendCouponServiceFeign sendCouponServiceFeign;
+    @Autowired
+    private IntegralChangeApiService integralChangeApiService;
     /**
      *获取小程序中奖纪录列表
      * @param po
@@ -62,7 +75,16 @@ public class ActivityPrizeServiceWXImpl implements ActivityPrizeServiceWX {
         log.info("查询大转盘中奖纪录列表开始参数为："+ JSON.toJSONString(po));
         ResponseData responseData = new ResponseData();
         MktActivityPrizeRecordPOExample example = new MktActivityPrizeRecordPOExample();
-        BeanUtils.copyProperties(po,example);
+        //判断是轮播还是抽奖记录
+        if(null!=po.getIsWinPrize()){
+            //轮播图
+            example.createCriteria().andSysBrandIdEqualTo(po.getSysBrandId()).andMktActivityIdEqualTo(po.getMktActivityId()).andIsWinPrizeEqualTo(po.getIsWinPrize());
+        }else{
+            //抽奖记录
+            example.createCriteria().andMemberCodeEqualTo(po.getMemberCode()).andSysBrandIdEqualTo(po.getSysBrandId()).andMktActivityIdEqualTo(po.getMktActivityId());
+        }
+        example.setOrderByClause("create_date DESC");
+
         List<MktActivityPrizeRecordPO> lists = mktActivityPrizeRecordPOMapper.selectByExample(example);
         log.info("大转盘中奖纪录列表查询结束");
         responseData.setCode(SysResponseEnum.SUCCESS.getCode());
@@ -91,6 +113,7 @@ public class ActivityPrizeServiceWXImpl implements ActivityPrizeServiceWX {
      * @param activePriceCode
      * @return
      */
+    @Transactional
     @Override
     public ResponseData<MktActivityPrizePO> executeActivityPrize(String activePriceCode,String memberCode) {
         ResponseData responseData = new ResponseData();
@@ -98,6 +121,17 @@ public class ActivityPrizeServiceWXImpl implements ActivityPrizeServiceWX {
         //查询抽奖活动规则
         ResponseData<ActivityPrizeBO> activityPriceBOs =activityPriceService.selectActivityPrice(activePriceCode);
         ActivityPrizeBO activityPriceBO = activityPriceBOs.getData();
+        //判断会员积分是够用
+        MemberInfoModel member = new MemberInfoModel();
+        member.setMemberCode(memberCode);
+        ResponseData<MemberInfoModel> memberInfoModels = memberInfoApiService.getSingleMemberModel(member);
+        if (null!=memberInfoModels.getData()){
+            if (activityPriceBO.getActivityPO().getPrizePoints()>memberInfoModels.getData().getCountIntegral()){
+                responseData.setCode(SysResponseEnum.FAILED.getCode());
+                responseData.setMessage("您的积分不足！");
+                return responseData;
+            }
+        }
         //每次抽奖消耗积分
         AwardBO bo = new AwardBO();
         //用这个实体类
@@ -153,6 +187,7 @@ public class ActivityPrizeServiceWXImpl implements ActivityPrizeServiceWX {
         //取相应的随机数
         Random rand = new Random();
         int su = rand.nextInt(100*vv) + 1;
+        log.info("获取到的随机数为："+ su);
         //计算是否在特等奖区间
         int type =0;
         if (1<=su &&su<=prizeGradeSectionBO.getSuperCount()){
@@ -174,27 +209,29 @@ public class ActivityPrizeServiceWXImpl implements ActivityPrizeServiceWX {
             type=50;
         }
         log.info("随机数落在哪个区间："+ type);
+        String coupon="0";
         //得到中奖规则
         MktActivityPrizePOExample example = new MktActivityPrizePOExample();
         example.createCriteria().andMktActivityIdEqualTo(activityPriceBO.getActivityPO().getMktActivityId()).andPrizeTypeEqualTo(type).andValidEqualTo(Boolean.TRUE);
         List<MktActivityPrizePO> mktActivityPrizePOS = mktActivityPrizePOMapper.selectByExample(example);
        //如果中奖了走if里面
         if (type!=50){
+            synchronized (ActivityPrizeServiceWXImpl.class){
             //得到抽奖次数
             MktActivityPrizeRecordPOExample ex = new MktActivityPrizeRecordPOExample();
-            ex.createCriteria().andMktActivityIdEqualTo(activityPriceBO.getActivityPO().getMktActivityId()).andValidEqualTo(Boolean.TRUE);
+            ex.createCriteria().andMktActivityIdEqualTo(activityPriceBO.getActivityPO().getMktActivityId()).andValidEqualTo(Boolean.TRUE).andMemberCodeEqualTo(memberCode);
             Long count =  mktActivityPrizeRecordPOMapper.countByExample(ex);
             //得到抽到了奖品数量
             MktActivityPrizeRecordPOExample exe = new MktActivityPrizeRecordPOExample();
-            exe.createCriteria().andMktActivityIdEqualTo(activityPriceBO.getActivityPO().getMktActivityId()).andIsWinPrizeEqualTo(Boolean.TRUE).andValidEqualTo(Boolean.TRUE);
+            exe.createCriteria().andMktActivityIdEqualTo(activityPriceBO.getActivityPO().getMktActivityId()).andIsWinPrizeEqualTo(Boolean.TRUE).andValidEqualTo(Boolean.TRUE).andPrizeTypeEqualTo(type);
             Long cou =  mktActivityPrizeRecordPOMapper.countByExample(exe);
 
             //得到一个会员抽中了几次
             MktActivityPrizeRecordPOExample examp = new MktActivityPrizeRecordPOExample();
-            examp.createCriteria().andMktActivityIdEqualTo(activityPriceBO.getActivityPO().getMktActivityId()).andIsWinPrizeEqualTo(Boolean.TRUE).andValidEqualTo(Boolean.TRUE).andMemberCodeEqualTo(memberCode);
+            examp.createCriteria().andMktActivityIdEqualTo(activityPriceBO.getActivityPO().getMktActivityId()).andIsWinPrizeEqualTo(Boolean.TRUE).andValidEqualTo(Boolean.TRUE).andMemberCodeEqualTo(memberCode).andPrizeTypeEqualTo(type);
             Long exeCount =  mktActivityPrizeRecordPOMapper.countByExample(examp);
             //判断中奖前几次不中
-            if (null!=mktActivityPrizePOS.get(0).getInvalidCount() && mktActivityPrizePOS.get(0).getInvalidCount()<= count){
+            if (null!=mktActivityPrizePOS.get(0).getInvalidCount() && mktActivityPrizePOS.get(0).getInvalidCount()> count){
                 //没中奖
                 type=50;
             }
@@ -228,14 +265,20 @@ public class ActivityPrizeServiceWXImpl implements ActivityPrizeServiceWX {
                     awardBO.setSendCouponSimpleRequestVO(sendCouponSimpleRequestVO);
                     awardBO.setMktType(MktSmartTypeEnum.SMART_TYPE_COUPON.getCode());
                     log.info("社交活动-社交活动合格开始增加券+++++++++");
-                    award.execute(awardBO);
+                    //award.execute(awardBO);
+                    ResponseData<String> simple = sendCouponServiceFeign.simple(sendCouponSimpleRequestVO);
+                    log.info("社交活动--发券结果与参数:"+JSON.toJSONString(simple)+"---"+JSON.toJSONString(sendCouponSimpleRequestVO));
+                    if (simple.getCode()==0){
+                        coupon=simple.getData();
+                    }
+
                 }
                 //把中奖的规则返回给前端
                 responseData.setData(mktActivityPrizePOS.get(0));
             }else{
                 log.info("谢谢惠顾谢谢惠顾谢谢惠顾："+ type);
                 MktActivityPrizePOExample el = new MktActivityPrizePOExample();
-                example.createCriteria().andMktActivityIdEqualTo(activityPriceBO.getActivityPO().getMktActivityId()).andPrizeTypeEqualTo(type).andValidEqualTo(Boolean.TRUE);
+                el.createCriteria().andMktActivityIdEqualTo(activityPriceBO.getActivityPO().getMktActivityId()).andPrizeTypeEqualTo(type).andValidEqualTo(Boolean.TRUE);
                 List<MktActivityPrizePO> mktActivityPrizelist = mktActivityPrizePOMapper.selectByExample(el);
                 //谢谢惠顾判断是否会赠送积分
                 if(mktActivityPrizePOS.get(0).getParticipatePrize()==true){
@@ -243,7 +286,7 @@ public class ActivityPrizeServiceWXImpl implements ActivityPrizeServiceWX {
                 }
                     responseData.setData(mktActivityPrizelist.get(0));
             }
-
+        }
         }else{
             log.info("谢谢惠顾谢谢惠顾谢谢惠顾："+ type);
             //谢谢惠顾
@@ -252,26 +295,32 @@ public class ActivityPrizeServiceWXImpl implements ActivityPrizeServiceWX {
         }
         log.info("最终结果是什么----------："+ type);
         //查看是哪种中奖规则
-        MktActivityPrizePOExample PrizePO = new MktActivityPrizePOExample();
-        example.createCriteria().andMktActivityIdEqualTo(activityPriceBO.getActivityPO().getMktActivityId()).andPrizeTypeEqualTo(type).andValidEqualTo(Boolean.TRUE);
-        List<MktActivityPrizePO> ActivityPrize = mktActivityPrizePOMapper.selectByExample(PrizePO);
-        //写进记录
+        MktActivityPrizePOExample prizePO = new MktActivityPrizePOExample();
+        prizePO.createCriteria().andMktActivityIdEqualTo(activityPriceBO.getActivityPO().getMktActivityId()).andPrizeTypeEqualTo(type).andValidEqualTo(Boolean.TRUE);
+        List<MktActivityPrizePO> activityPrize = mktActivityPrizePOMapper.selectByExample(prizePO);
+        //写进记录a
         MktActivityPrizeRecordPO record = new MktActivityPrizeRecordPO();
         record.setMktActivityId(activityPriceBO.getActivityPO().getMktActivityId());
         record.setSysCompanyId(activityPriceBO.getActivityPO().getSysCompanyId());
         record.setSysBrandId(activityPriceBO.getActivityPO().getSysBrandId());
         record.setMemberCode(memberCode);
-        record.setCouponDefinitionId(ActivityPrize.get(0).getCouponDefinitionId());
+        record.setMemberPhone(memberInfoModels.getData().getPhone());
+        record.setMemberName(memberInfoModels.getData().getName());
+        record.setCouponDefinitionId(activityPrize.get(0).getCouponDefinitionId());
+        record.setCouponDefinitionCode(coupon);
         record.setPrizeTime(new Date());
-        record.setPrizeType(ActivityPrize.get(0).getPrizeType());
-        record.setAwadType(ActivityPrize.get(0).getAwadType());
-        record.setPrizeName(ActivityPrize.get(0).getPrizeName());
+        record.setPrizeType(activityPrize.get(0).getPrizeType());
+        record.setAwadType(activityPrize.get(0).getAwadType());
+        record.setPrizeName(activityPrize.get(0).getPrizeName());
         if (type!=50){
             record.setIsWinPrize(Boolean.TRUE);
         }else {
             record.setIsWinPrize(Boolean.FALSE);
         }
+        record.setValid(Boolean.TRUE);
         mktActivityPrizeRecordPOMapper.insertSelective(record);
+
+        mktActivityCountPOMapper.updateSum(activityPriceBO.getActivityPO().getMktActivityId(), 1, BigDecimal.ZERO,0);
         responseData.setCode(SysResponseEnum.SUCCESS.getCode());
         responseData.setMessage(SysResponseEnum.SUCCESS.getMessage());
         return responseData;
@@ -291,8 +340,11 @@ public class ActivityPrizeServiceWXImpl implements ActivityPrizeServiceWX {
         integralChangeRequestModel.setChangeDate(new Date());
         bo.setIntegralRecordModel(integralChangeRequestModel);
         bo.setMktType(MktSmartTypeEnum.SMART_TYPE_INTEGRAL.getCode());
-        log.info("社交活动-社交活动合格开始增加积分+++++++++");
-        award.execute(bo);
+        log.info("大转盘积分变动 param+++++++++"+activityPriceBO.getActivityPO().getMktActivityId()+"---"+JSON.toJSONString(integralChangeRequestModel)+"--"+JSON.toJSONString(mktActivityPrizePOS));
+        //award.execute(bo);
+
+        IntegralChangeResponseModel integralChangeResponseModel =integralChangeApiService.integralChangeOperate(integralChangeRequestModel);
+        log.info("大转盘积分变动 result+++++++++"+JSON.toJSONString(integralChangeResponseModel));
     }
 
     private void calculationCount(List<MktActivityPrizePO> activityPrizePOList, int max, PrizeGradeSectionBO prizeGradeSectionBO, int prizeTy) {
@@ -395,6 +447,11 @@ public class ActivityPrizeServiceWXImpl implements ActivityPrizeServiceWX {
         Long ss =7L;
         if (ss>b){
             System.out.println("我来试一试");
+        }
+        int pp =2;
+        Long ll = 3L;
+        if (pp>=ll){
+            System.out.println("3333333333333333333333");
         }
     }
 }

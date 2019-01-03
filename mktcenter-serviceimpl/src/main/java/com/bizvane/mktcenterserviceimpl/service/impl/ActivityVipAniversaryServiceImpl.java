@@ -680,7 +680,7 @@ public class ActivityVipAniversaryServiceImpl implements ActivityVipAniversarySe
             va.setBrandId(activityAniversary.getSysBrandId());
             va.setCompanyId(activityAniversary.getSysCompanyId());
             log.info("执行纪念日活动开始开始增加券增加券~~~~~~~~~~");
-            ResponseData<Object> responseData=sendCouponServiceFeign.simple(va);
+            ResponseData<String> responseData=sendCouponServiceFeign.simple(va);
             log.info("增加券返回结果为------------："+ JSON.toJSONString(responseData));
         }
             //新增积分到会员参与活动记录表中数据
