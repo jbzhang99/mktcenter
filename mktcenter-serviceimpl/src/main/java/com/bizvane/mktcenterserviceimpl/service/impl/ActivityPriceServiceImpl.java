@@ -130,6 +130,7 @@ public class ActivityPriceServiceImpl implements ActivityPriceService {
         jobUtil.addEndPrizeJob(sysAccountPo, activityPO, activePriceCode);
 
         activityPO.setCheckStatus(3);
+
         CreateMiniprgmQRCodeRequestVO createMiniprgmQRCodeRequestVO = new CreateMiniprgmQRCodeRequestVO();
         createMiniprgmQRCodeRequestVO.setSysBrandId(brandId);
         createMiniprgmQRCodeRequestVO.setMiniProgramType("10");
