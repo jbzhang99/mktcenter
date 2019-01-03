@@ -209,6 +209,7 @@ public class ActivityPrizeServiceWXImpl implements ActivityPrizeServiceWX {
         List<MktActivityPrizePO> mktActivityPrizePOS = mktActivityPrizePOMapper.selectByExample(example);
        //如果中奖了走if里面
         if (type!=50){
+            synchronized (ActivityPrizeServiceWXImpl.class){
             //得到抽奖次数
             MktActivityPrizeRecordPOExample ex = new MktActivityPrizeRecordPOExample();
             ex.createCriteria().andMktActivityIdEqualTo(activityPriceBO.getActivityPO().getMktActivityId()).andValidEqualTo(Boolean.TRUE).andMemberCodeEqualTo(memberCode);
@@ -278,7 +279,7 @@ public class ActivityPrizeServiceWXImpl implements ActivityPrizeServiceWX {
                 }
                     responseData.setData(mktActivityPrizelist.get(0));
             }
-
+        }
         }else{
             log.info("谢谢惠顾谢谢惠顾谢谢惠顾："+ type);
             //谢谢惠顾
