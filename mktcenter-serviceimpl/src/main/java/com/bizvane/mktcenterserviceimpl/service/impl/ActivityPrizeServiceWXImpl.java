@@ -340,8 +340,9 @@ public class ActivityPrizeServiceWXImpl implements ActivityPrizeServiceWX {
         integralChangeRequestModel.setChangeDate(new Date());
         bo.setIntegralRecordModel(integralChangeRequestModel);
         bo.setMktType(MktSmartTypeEnum.SMART_TYPE_INTEGRAL.getCode());
-        log.info("大转盘积分变动 param+++++++++"+activityPriceBO.getActivityPO().getMktActivityId()+"---"+JSON.toJSONString(integralChangeRequestModel));
+        log.info("大转盘积分变动 param+++++++++"+activityPriceBO.getActivityPO().getMktActivityId()+"---"+JSON.toJSONString(integralChangeRequestModel)+"--"+JSON.toJSONString(mktActivityPrizePOS));
         //award.execute(bo);
+
         IntegralChangeResponseModel integralChangeResponseModel =integralChangeApiService.integralChangeOperate(integralChangeRequestModel);
         log.info("大转盘积分变动 result+++++++++"+JSON.toJSONString(integralChangeResponseModel));
     }
