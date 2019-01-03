@@ -29,6 +29,7 @@ import com.bizvane.utils.responseinfo.ResponseData;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
 import java.math.BigDecimal;
@@ -107,6 +108,7 @@ public class ActivityPrizeServiceWXImpl implements ActivityPrizeServiceWX {
      * @param activePriceCode
      * @return
      */
+    @Transactional
     @Override
     public ResponseData<MktActivityPrizePO> executeActivityPrize(String activePriceCode,String memberCode) {
         ResponseData responseData = new ResponseData();
