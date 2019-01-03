@@ -6,8 +6,10 @@ import com.bizvane.couponfacade.interfaces.SendCouponServiceFeign;
 import com.bizvane.couponfacade.models.vo.SendCouponSimpleRequestVO;
 import com.bizvane.members.facade.enums.IntegralChangeTypeEnum;
 import com.bizvane.members.facade.models.MemberInfoModel;
+import com.bizvane.members.facade.service.api.IntegralChangeApiService;
 import com.bizvane.members.facade.service.api.MemberInfoApiService;
 import com.bizvane.members.facade.service.card.request.IntegralChangeRequestModel;
+import com.bizvane.members.facade.service.card.response.IntegralChangeResponseModel;
 import com.bizvane.mktcenterservice.interfaces.ActivityPriceService;
 import com.bizvane.mktcenterservice.interfaces.ActivityPrizeServiceWX;
 import com.bizvane.mktcenterservice.models.bo.AwardBO;
@@ -61,6 +63,8 @@ public class ActivityPrizeServiceWXImpl implements ActivityPrizeServiceWX {
     private MemberInfoApiService memberInfoApiService;
     @Autowired
     private SendCouponServiceFeign sendCouponServiceFeign;
+    @Autowired
+    private IntegralChangeApiService integralChangeApiService;
     /**
      *获取小程序中奖纪录列表
      * @param po
@@ -335,8 +339,10 @@ public class ActivityPrizeServiceWXImpl implements ActivityPrizeServiceWX {
         integralChangeRequestModel.setChangeDate(new Date());
         bo.setIntegralRecordModel(integralChangeRequestModel);
         bo.setMktType(MktSmartTypeEnum.SMART_TYPE_INTEGRAL.getCode());
-        log.info("社交活动-社交活动合格开始增加积分+++++++++");
-        award.execute(bo);
+        log.info("大转盘积分变动 param+++++++++"+activityPriceBO.getActivityPO().getMktActivityId()+"---"+JSON.toJSONString(integralChangeRequestModel));
+        //award.execute(bo);
+        IntegralChangeResponseModel integralChangeResponseModel =integralChangeApiService.integralChangeOperate(integralChangeRequestModel);
+        log.info("大转盘积分变动 result+++++++++"+JSON.toJSONString(integralChangeResponseModel));
     }
 
     private void calculationCount(List<MktActivityPrizePO> activityPrizePOList, int max, PrizeGradeSectionBO prizeGradeSectionBO, int prizeTy) {
