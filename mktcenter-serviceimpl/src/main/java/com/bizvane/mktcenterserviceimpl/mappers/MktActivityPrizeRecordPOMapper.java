@@ -78,6 +78,6 @@ public interface MktActivityPrizeRecordPOMapper {
 	int updateByPrimaryKey(MktActivityPrizeRecordPO record);
 
 	Integer selectPrizePeopleNum(@Param("mktActivityId")Long mktActivityId);
-
+	Integer selectTotalPeopleNum(@Param("mktActivityId")Long mktActivityId);
 	List<MktActivityPrizeRecordPO> selectPrizePeople(ActivityPriceParamVO vo);
 }

@@ -549,6 +549,15 @@
       AND is_win_prize=1
       AND mkt_activity_id=#{mktActivityId}
   </select>
+  <select id="selectTotalPeopleNum" resultType="java.lang.Integer">
+    SELECT
+	COUNT( DISTINCT member_code )
+    FROM
+        t_mkt_activity_prize_record
+    WHERE
+    valid=1
+	AND mkt_activity_id = #{mktActivityId}
+  </select>
   <select id="selectPrizePeople" resultType="com.bizvane.mktcenterservice.models.po.MktActivityPrizeRecordPO">
   select
 	mkt_activity_prize_record_id,

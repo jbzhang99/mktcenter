@@ -311,6 +311,7 @@ public class ActivityPriceServiceImpl implements ActivityPriceService {
                 int days = param.getTotalDates() - dataNum;
                 param.setGoingDates(days<0?0:days);
                 param.setPrizePeople(mktActivitPrizeRecordPOMapper.selectPrizePeopleNum(param.getMktActivityId()));
+                param.setTotalPeople(mktActivitPrizeRecordPOMapper.selectTotalPeopleNum(param.getMktActivityId()));
             });
         }
         PageInfo<AnalysisPriceResultVO> pageInfo = new PageInfo<>(lists);
