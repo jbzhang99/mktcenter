@@ -31,5 +31,5 @@ public interface ActivityPrizeServiceWX {
      * @param activePriceCode
      * @return
      */
-    public ResponseData<MktActivityPrizePO> executeActivityPrize(@RequestParam("activePriceCode") String activePriceCode);
+    public ResponseData<MktActivityPrizePO> executeActivityPrize( String activePriceCode,String memberCode);
 }

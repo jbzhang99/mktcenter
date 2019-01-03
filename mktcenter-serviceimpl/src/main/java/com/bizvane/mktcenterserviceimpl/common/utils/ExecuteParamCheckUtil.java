@@ -1,9 +1,11 @@
 package com.bizvane.mktcenterserviceimpl.common.utils;
 
+import com.alibaba.fastjson.JSON;
 import com.bizvane.members.facade.models.MemberInfoModel;
 import com.bizvane.mktcenterservice.models.bo.ActivityBO;
 import com.bizvane.mktcenterservice.models.bo.OrderModelBo;
 import com.bizvane.mktcenterservice.models.vo.ActivityVO;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.util.StringUtil;
 
@@ -15,6 +17,7 @@ import java.util.List;
 /**
  * Created by agan on 2018/7/30.
  */
+@Slf4j
 public class ExecuteParamCheckUtil {
     /**
      * 针对会员类型 会员范围判断
@@ -114,8 +117,10 @@ public class ExecuteParamCheckUtil {
             if (activityVO.getCommodityLimitType()==2) {
                 String commodityWhitelist = activityVO.getCommodityLimitList();
                 List<String> result = Arrays.asList(commodityWhitelist.split(","));
+                log.info("活动查出来的白名单集合："+ JSON.toJSONString(result));
                 String productNos = vo.getProductNos();
                 List<String> productNoList = Arrays.asList(productNos.split(","));
+                log.info("消费时候传过来的集合："+ JSON.toJSONString(productNoList));
                     boolean contains = result.containsAll(productNoList);
                         falg=contains;
             }
@@ -218,7 +223,9 @@ public class ExecuteParamCheckUtil {
                 if (null!=vo.getServiceStoreId()){
                     //表里查出来的
                     String stroeList = activityVO.getStoreLimitList();
+                    log.info("表里查出来数据为=============="+stroeList);
                     List<String> productNoList = Arrays.asList(stroeList.split(","));
+                    log.info("服务门店的id为=============="+vo.getServiceStoreId().toString());
                     falg=productNoList.contains(vo.getServiceStoreId().toString());
                 }else{
                     falg = false;

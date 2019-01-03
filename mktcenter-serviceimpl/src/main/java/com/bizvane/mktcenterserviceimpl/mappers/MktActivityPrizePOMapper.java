@@ -4,6 +4,7 @@ import com.bizvane.mktcenterservice.models.po.MktActivityPrizePO;
 import com.bizvane.mktcenterservice.models.po.MktActivityPrizePOExample;
 import com.bizvane.mktcenterservice.models.vo.ActivityPriceParamVO;
 import com.bizvane.mktcenterservice.models.vo.AnalysisPriceResultVO;
+import com.bizvane.mktcenterservice.models.vo.MktActivityPrizeVO;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -90,4 +91,6 @@ public interface MktActivityPrizePOMapper {
      *统计
      */
     List<AnalysisPriceResultVO> selectAnalysisPrice(ActivityPriceParamVO vo);
+
+    List<MktActivityPrizeVO> selectMktActivityPrizeById(@Param("mktActivityId") Long mktActivityId);
 }

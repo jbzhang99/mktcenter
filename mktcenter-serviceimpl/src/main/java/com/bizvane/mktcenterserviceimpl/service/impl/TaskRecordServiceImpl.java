@@ -46,7 +46,7 @@ public class TaskRecordServiceImpl implements TaskRecordService {
         Integer points = po.getPoints() == null ? 0 : po.getPoints();
         Integer shareNum = po.getShareNum() == null ? 0 : po.getShareNum();
         
-        mktTaskCountPOMapper.updateSum(po.getTaskId(), 1, consumeAmount, couponNum, points, shareNum);
+        mktTaskCountPOMapper.updateSum(po.getTaskId(), 1, consumeAmount, 0, 0, 1);
         return  po.getMktTaskRecordId();
     }
 
@@ -62,9 +62,9 @@ public class TaskRecordServiceImpl implements TaskRecordService {
       Integer points = po.getPoints() == null ? 0 : po.getPoints();
       Integer shareNum = po.getShareNum() == null ? 0 : po.getShareNum();
       
-     // mktTaskCountPOMapper.updateSum(po.getTaskId(), 0, consumeAmount, couponNum, points, shareNum);
+      mktTaskCountPOMapper.updateSum(po.getTaskId(), 0, BigDecimal.ZERO, couponNum, points, 0);
       
-        return  mktTaskRecordPOMapper.updateByPrimaryKeySelective(po);
+      return  mktTaskRecordPOMapper.updateByPrimaryKeySelective(po);
 
     }
 

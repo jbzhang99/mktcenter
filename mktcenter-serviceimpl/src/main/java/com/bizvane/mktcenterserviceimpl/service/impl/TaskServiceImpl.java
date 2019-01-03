@@ -714,7 +714,7 @@ public class TaskServiceImpl implements TaskService {
                 bo.setSendCouponSimpleRequestVO(onecouponVO);
                 log.info("任务发送券的参数-----" + JSON.toJSONString(bo));
                 // award.execute(bo);
-                ResponseData<Object> simple = sendCouponServiceFeign.simple(onecouponVO);
+                ResponseData<String> simple = sendCouponServiceFeign.simple(onecouponVO);
                 log.info("任务发送券的结果------" + JSON.toJSONString(simple));
             });
 

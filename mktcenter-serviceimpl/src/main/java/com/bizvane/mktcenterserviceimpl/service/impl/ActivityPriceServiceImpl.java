@@ -3,17 +3,18 @@ package com.bizvane.mktcenterserviceimpl.service.impl;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.bizvane.centerstageservice.models.po.FileTaskPo;
+import com.bizvane.centerstageservice.models.po.SysStorePo;
 import com.bizvane.centerstageservice.models.vo.QiNiuVo;
 import com.bizvane.centerstageservice.rpc.FileTaskServiceRpc;
+import com.bizvane.couponfacade.interfaces.CouponDefinitionServiceFeign;
 import com.bizvane.couponfacade.interfaces.CouponQueryServiceFeign;
 import com.bizvane.couponfacade.interfaces.CouponServiceFeign;
 import com.bizvane.couponfacade.models.po.CouponDefinitionPO;
 import com.bizvane.couponfacade.models.vo.CouponUseVO;
 import com.bizvane.mktcenterservice.interfaces.ActivityPriceService;
+import com.bizvane.mktcenterservice.interfaces.TaskService;
 import com.bizvane.mktcenterservice.models.po.*;
-import com.bizvane.mktcenterservice.models.vo.ActivityPriceBO;
-import com.bizvane.mktcenterservice.models.vo.ActivityPriceParamVO;
-import com.bizvane.mktcenterservice.models.vo.AnalysisPriceResultVO;
+import com.bizvane.mktcenterservice.models.vo.*;
 import com.bizvane.mktcenterserviceimpl.common.job.JobUtil;
 import com.bizvane.mktcenterserviceimpl.common.tools.QiNiuConfigs;
 import com.bizvane.mktcenterserviceimpl.common.tools.QiNiuUtils;
@@ -35,6 +36,7 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -48,10 +50,8 @@ import java.io.InputStream;
 import java.net.URL;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
+import java.util.stream.Collectors;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
@@ -88,6 +88,10 @@ public class ActivityPriceServiceImpl implements ActivityPriceService {
     private CouponServiceFeign couponServiceFeign;
     @Autowired
     private CouponQueryServiceFeign couponQueryServiceFeign;
+    @Autowired
+    private TaskService taskService;
+    @Autowired
+    private CouponDefinitionServiceFeign couponDefinitionServiceFeign;
 
     /**
      * 新增
@@ -101,7 +105,7 @@ public class ActivityPriceServiceImpl implements ActivityPriceService {
     addActivityPrice(ActivityPriceBO bo, HttpServletRequest request) throws ParseException {
         ResponseData<JSONObject> responseData = new ResponseData<>();
         MktActivityPOWithBLOBs activityPO = bo.getActivityPO();
-        List<MktActivityPrizePO> activityPrizePOList = bo.getActivityPrizePOList();
+        List<MktActivityPrizeVO> activityPrizePOList = bo.getActivityPrizePOList();
         if (activityPO == null || CollectionUtils.isEmpty(activityPrizePOList)) {
             responseData.setCode(100);
             responseData.setMessage("数据不合格!");
@@ -116,19 +120,21 @@ public class ActivityPriceServiceImpl implements ActivityPriceService {
 
         Date startTime = activityPO.getStartTime();
         Boolean runStatus = TimeUtils.ifImmediatelyRun(startTime);
+        log.info("addActivityPrice status:"+runStatus);
         if (runStatus) {
-            activityPO.setActivityType(2);
+            activityPO.setActivityStatus(2);
         } else {
-            activityPO.setActivityType(1);
+            activityPO.setActivityStatus(1);
             jobUtil.addStartPrizeJob(sysAccountPo, activityPO, activePriceCode);
         }
         jobUtil.addEndPrizeJob(sysAccountPo, activityPO, activePriceCode);
 
         activityPO.setCheckStatus(3);
+
         CreateMiniprgmQRCodeRequestVO createMiniprgmQRCodeRequestVO = new CreateMiniprgmQRCodeRequestVO();
         createMiniprgmQRCodeRequestVO.setSysBrandId(brandId);
         createMiniprgmQRCodeRequestVO.setMiniProgramType("10");
-        createMiniprgmQRCodeRequestVO.setPath("pages/template01/coupon-scancode/main");
+        createMiniprgmQRCodeRequestVO.setPath("pages/template01/prize-draw/main");
         createMiniprgmQRCodeRequestVO.setScene(activePriceCode);
         log.info("addActivityPrice wexin param:" + JSON.toJSONString(createMiniprgmQRCodeRequestVO));
         ResponseData<String> qrCodeResponseData = qrCodeServiceFeign.createMiniprgmQRCode(createMiniprgmQRCodeRequestVO);
@@ -181,18 +187,33 @@ public class ActivityPriceServiceImpl implements ActivityPriceService {
      */
     @Override
     public ResponseData<ActivityPriceBO> selectActivityPrice(Long mktActivityId, HttpServletRequest request) {
+
         ResponseData<ActivityPriceBO> responseData = new ResponseData<>();
 
         //  SysAccountPO sysAccountPo = TokenUtils.getStageUser(request);
         ActivityPriceBO activityPriceBO = new ActivityPriceBO();
         MktActivityPOWithBLOBs mktActivityPOWithBLOBs = mktActivityPOMapper.selectByPrimaryKey(mktActivityId);
-
-        MktActivityPrizePOExample example = new MktActivityPrizePOExample();
-        example.createCriteria().andMktActivityIdEqualTo(mktActivityId);
-        List<MktActivityPrizePO> mktActivityPrizePOS = mktActivityPrizePOMapper.selectByExample(example);
+        String storeLimitListStr = mktActivityPOWithBLOBs.getStoreLimitList();
+        List<SysStorePo> storeList = new ArrayList<SysStorePo>();
+        if (StringUtils.isNotBlank(storeLimitListStr)) {
+            List<Long> storeIdList = Arrays.asList(storeLimitListStr.split(",")).stream().map(element -> Long.valueOf(element)).collect(Collectors.toList());
+            //查询店铺列表
+            storeList = taskService.getStoreListByIds(storeIdList);
+            log.info("---------通过品牌Ids--" + JSON.toJSONString(storeList) + "-----获取店铺列表----------" + JSON.toJSONString(storeList));
+            activityPriceBO.setStoreList(storeList);
+        }
+        //
+        List<MktActivityPrizeVO> mktActivityPrizeVOS = mktActivityPrizePOMapper.selectMktActivityPrizeById(mktActivityId);
+        mktActivityPrizeVOS.stream().forEach(obj -> {
+            Long couponDefinitionId = obj.getCouponDefinitionId();
+            if (couponDefinitionId != null) {
+                ResponseData<CouponDefinitionPO> coupon = couponDefinitionServiceFeign.findByIdRpc(couponDefinitionId);
+                obj.setCouponDefinitionPO(coupon.getData());
+            }
+        });
 
         activityPriceBO.setActivityPO(mktActivityPOWithBLOBs);
-        activityPriceBO.setActivityPrizePOList(mktActivityPrizePOS);
+        activityPriceBO.setActivityPrizePOList(mktActivityPrizeVOS);
         responseData.setData(activityPriceBO);
         return responseData;
     }
@@ -201,19 +222,17 @@ public class ActivityPriceServiceImpl implements ActivityPriceService {
      * 查询详情 code
      */
     @Override
-    public ResponseData<ActivityPriceBO> selectActivityPrice(String activePriceCode) {
-        ResponseData<ActivityPriceBO> responseData = new ResponseData<>();
-
+    public ResponseData<ActivityPrizeBO> selectActivityPrice(String activePriceCode) {
+        ResponseData<ActivityPrizeBO> responseData = new ResponseData<>();
         //  SysAccountPO sysAccountPo = TokenUtils.getStageUser(request);
-        ActivityPriceBO activityPriceBO = new ActivityPriceBO();
+        ActivityPrizeBO activityPriceBO = new ActivityPrizeBO();
         MktActivityPOExample example0 = new MktActivityPOExample();
         example0.createCriteria().andActivityCodeEqualTo(activePriceCode);
         MktActivityPOWithBLOBs mktActivityPOWithBLOBs = mktActivityPOMapper.selectByExampleWithBLOBs(example0).get(0);
 
-        MktActivityPrizePOExample example = new MktActivityPrizePOExample();
-        example.createCriteria().andMktActivityIdEqualTo(mktActivityPOWithBLOBs.getMktActivityId());
+        MktActivityPrizePOExample example=new MktActivityPrizePOExample();
+        example.createCriteria().andMktActivityIdEqualTo(mktActivityPOWithBLOBs.getMktActivityId()).andValidEqualTo(Boolean.TRUE);
         List<MktActivityPrizePO> mktActivityPrizePOS = mktActivityPrizePOMapper.selectByExample(example);
-
         activityPriceBO.setActivityPO(mktActivityPOWithBLOBs);
         activityPriceBO.setActivityPrizePOList(mktActivityPrizePOS);
         responseData.setData(activityPriceBO);
@@ -226,27 +245,18 @@ public class ActivityPriceServiceImpl implements ActivityPriceService {
     @Override
     public ResponseData<PageInfo<MktActivityPOWithBLOBs>> selectActivityPriceLists(ActivityPriceParamVO vo, HttpServletRequest request) {
         ResponseData<PageInfo<MktActivityPOWithBLOBs>> responseData = new ResponseData<>();
-        SysAccountPO sysAccountPo = TokenUtils.getStageUser(request);
+        //SysAccountPO sysAccountPo = TokenUtils.getStageUser(request);
+        SysAccountPO sysAccountPo = new SysAccountPO();
+        sysAccountPo.setSysAccountId(96L);
+        sysAccountPo.setSysCompanyId(2L);
+        sysAccountPo.setBrandId(96L);
+        sysAccountPo.setAccountCode("15328634678");
+        sysAccountPo.setName("不啊哟删除");
+
         PageHelper.startPage(vo.getPageNumber(), vo.getPageSize());
-        MktActivityPOExample example = new MktActivityPOExample();
-        MktActivityPOExample.Criteria criteria = example.createCriteria();
-        criteria.andActivityTypeEqualTo(11);
-        criteria.andSysBrandIdEqualTo(sysAccountPo.getBrandId());
-        String activityCode = vo.getActivityCode();
-        if (null != activityCode) {
-            criteria.andActivityCodeLike("%" + activityCode + "%");
-        }
-        String activityName = vo.getActivityName();
-        if (null != activityName) {
-            criteria.andActivityNameLike("%" + activityName + "%");
-        }
-        Integer activityStatus = vo.getActivityStatus();
-        if (0 != activityStatus) {
-            criteria.andActivityStatusEqualTo(activityStatus);
-        }
-        List<MktActivityPOWithBLOBs> listparam = mktActivityPOMapper.selectByExampleWithBLOBs(example);
+        List<MktActivityPOWithBLOBs> listparam = mktActivityPOMapper.selectActivityPriceLists(vo);
         if (CollectionUtils.isEmpty(listparam)) {
-            listparam=new ArrayList<MktActivityPOWithBLOBs>();
+            listparam = new ArrayList<MktActivityPOWithBLOBs>();
         }
         PageInfo<MktActivityPOWithBLOBs> pageInfo = new PageInfo<>(listparam);
         responseData.setData(pageInfo);
@@ -283,6 +293,14 @@ public class ActivityPriceServiceImpl implements ActivityPriceService {
     @Override
     public ResponseData<PageInfo<AnalysisPriceResultVO>> selectAnalysisPrice(ActivityPriceParamVO vo, HttpServletRequest request) {
         ResponseData<PageInfo<AnalysisPriceResultVO>> responseData = new ResponseData<>();
+        SysAccountPO sysAccountPo = TokenUtils.getStageUser(request);
+//        SysAccountPO sysAccountPo = new SysAccountPO();
+//        sysAccountPo.setSysAccountId(96L);
+//        sysAccountPo.setSysCompanyId(2L);
+//        sysAccountPo.setBrandId(96L);
+//        sysAccountPo.setAccountCode("15328634678");
+//        sysAccountPo.setName("不啊哟删除");
+        vo.setBrandId(sysAccountPo.getBrandId());
         PageHelper.startPage(vo.getPageNumber(), vo.getPageSize());
         List<AnalysisPriceResultVO> lists = mktActivityPrizePOMapper.selectAnalysisPrice(vo);
         if (CollectionUtils.isEmpty(lists)) {
@@ -291,8 +309,10 @@ public class ActivityPriceServiceImpl implements ActivityPriceService {
             lists.parallelStream().forEach(param -> {
                 int dataNum = TimeUtils.getDataNum(param.getEndTime());
                 param.setResidueDates(dataNum);
-                param.setGoingDates(param.getTotalDates() - dataNum);
+                int days = param.getTotalDates() - dataNum;
+                param.setGoingDates(days<0?0:days);
                 param.setPrizePeople(mktActivitPrizeRecordPOMapper.selectPrizePeopleNum(param.getMktActivityId()));
+                param.setTotalPeople(mktActivitPrizeRecordPOMapper.selectTotalPeopleNum(param.getMktActivityId()));
             });
         }
         PageInfo<AnalysisPriceResultVO> pageInfo = new PageInfo<>(lists);
@@ -305,15 +325,10 @@ public class ActivityPriceServiceImpl implements ActivityPriceService {
      */
     @Override
     public ResponseData<PageInfo<MktActivityPrizeRecordPO>> selectPrizePeople(ActivityPriceParamVO vo) {
+        log.info("selectPrizePeople  parram:"+JSON.toJSONString(vo));
         ResponseData<PageInfo<MktActivityPrizeRecordPO>> responseData = new ResponseData<>();
         PageHelper.startPage(vo.getPageNumber(), vo.getPageSize());
-        MktActivityPrizeRecordPOExample example = new MktActivityPrizeRecordPOExample();
-        example.createCriteria().andMktActivityIdEqualTo(vo.getMktActivityId())
-                .andMemberNameLike("%" + vo.getMemberName() + "%")
-                .andPrizeNameLike("%" + vo.getPrizeName() + "%")
-                .andAwadTypeNotEqualTo(50).andValidEqualTo(Boolean.TRUE);
-
-        List<MktActivityPrizeRecordPO> lists = mktActivitPrizeRecordPOMapper.selectByExample(example);
+        List<MktActivityPrizeRecordPO> lists = mktActivitPrizeRecordPOMapper.selectPrizePeople(vo);
         if (CollectionUtils.isEmpty(lists)) {
             lists = new ArrayList<MktActivityPrizeRecordPO>();
         }
@@ -329,20 +344,27 @@ public class ActivityPriceServiceImpl implements ActivityPriceService {
     public ResponseData<String> doVerificationCoupon(ActivityPriceParamVO vo, HttpServletRequest request) {
         log.info("doVerificationCoupon param:" + JSON.toJSONString(vo));
         ResponseData<String> responseData = null;
-        CouponDefinitionPO couponDefinitionPO = couponQueryServiceFeign.getCouponDefinition(vo.getCouponDefinitionId()).getData().getCouponDefinitionPO();
-        if (couponDefinitionPO == null) {
+        String couponDefinitionCode = vo.getCouponDefinitionCode();
+        if (StringUtils.isBlank(couponDefinitionCode) || "0".equals(couponDefinitionCode)) {
             responseData = new ResponseData<>();
             responseData.setCode(100);
-            responseData.setMessage("券不存在!");
+            responseData.setMessage("奖品不是券,无法核销!");
             return responseData;
         }
         SysAccountPO sysAccountPo = TokenUtils.getStageUser(request);
         CouponUseVO requestVO = new CouponUseVO();
-        requestVO.setCouponCode(couponDefinitionPO.getCouponDefinitionCode());
-        requestVO.setStaffCode(vo.getMemberCode());
+        requestVO.setCouponCode(couponDefinitionCode);
+        requestVO.setStaffCode(sysAccountPo.getAccountCode());
         requestVO.setBrandId(sysAccountPo.getBrandId());
         responseData = couponServiceFeign.use(requestVO);
         log.info("doVerificationCoupon result:" + JSON.toJSONString(responseData));
+
+        if (responseData.getCode() == 0) {
+            MktActivityPrizeRecordPO record = new MktActivityPrizeRecordPO();
+            record.setMktActivityPrizeRecordId(vo.getMktActivityPrizeRecordId());
+            record.setRemark("1");
+            mktActivitPrizeRecordPOMapper.updateByPrimaryKeySelective(record);
+        }
         return responseData;
     }
 

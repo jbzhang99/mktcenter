@@ -389,7 +389,9 @@ public class ActivitySmartServiceImpl implements ActivitySmartService {
         //智能营销规则表
         MktActivitySmartPOExample mktActivitySmartPOExample = new MktActivitySmartPOExample();
         mktActivitySmartPOExample.createCriteria().andValidEqualTo(Boolean.TRUE).andMktActivityIdEqualTo(mktActivityId).andMktSmartTypeEqualTo(MktSmartTypeEnum.SMART_TYPE_WXMESSAGE.getCode());
+        log.info("查询规则表的参数为+======="+ JSON.toJSONString(mktActivitySmartPOExample));
         List<MktActivitySmartPO> mktActivitySmartPOS = mktActivitySmartPOMapper.selectByExample(mktActivitySmartPOExample);
+        log.info("查询到的数据为+======="+ JSON.toJSONString(mktActivitySmartPOS));
         if(CollectionUtils.isEmpty(mktActivitySmartPOS)){
             log.warn("mktActivitySmartPOS is empty");
             responseData.setCode(ResponseConstants.ERROR);

@@ -185,6 +185,7 @@ public class ActivityServiceImpl implements ActivityService {
         memberInfoModel.setServiceStoreId(vo.getServiceStoreId());
         log.info("服务id是=============="+vo.getServiceStoreId());
         List<ActivityVO> activityList =mktActivityPOMapper.getActivityList(vo);
+        log.info("查询到的活动集合是=============="+JSON.toJSONString(activityList));
         if (!CollectionUtils.isEmpty(activityList)){
             for (ActivityVO activity:activityList) {
                 //过滤门店

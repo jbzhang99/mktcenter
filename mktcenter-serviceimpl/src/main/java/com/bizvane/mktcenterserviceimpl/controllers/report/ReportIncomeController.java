@@ -502,8 +502,8 @@ public class ReportIncomeController {
 	                      //店铺id
 			    		  String  storeCode =  jsonObjtarr.get("storeCode").toString();
 			    		//根据storeCode找店铺名称
-			    		  
-			    		  if(storeVoMap.get(storeCode)==null) {
+			    		  jsonObjtarr.put("storeid", storeCode);//店铺编号
+			    		  if(storeVoMap==null||storeVoMap.get(storeCode)==null) {
 				    		  jsonObjtarr.put("storeCode", "-");//店铺编号
 				    		  jsonObjtarr.put("storeName", "-");//店铺名称
 				    		  jsonObjtarr.put("groupId", "-");//所属群组

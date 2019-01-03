@@ -3,6 +3,7 @@ package com.bizvane.mktcenterservice.rpc;
 import com.bizvane.mktcenterservice.models.po.MktActivityPrizePO;
 import com.bizvane.mktcenterservice.models.po.MktActivityPrizeRecordPO;
 import com.bizvane.mktcenterservice.models.vo.ActivityPriceBO;
+import com.bizvane.mktcenterservice.models.vo.ActivityPrizeBO;
 import com.bizvane.mktcenterservice.models.vo.MktActivityPrizeRecordVO;
 import com.bizvane.utils.responseinfo.ResponseData;
 import org.springframework.cloud.openfeign.FeignClient;
@@ -31,12 +32,14 @@ public interface ActivityPrizeServiceRpc {
      * @return
      */
     @RequestMapping("selectPrizeList")
-    ResponseData<ActivityPriceBO> selectPrizeList(@RequestParam("activePriceCode") String activePriceCode);
+    ResponseData<ActivityPrizeBO> selectPrizeList(@RequestParam("activePriceCode") String activePriceCode);
 
     /**
      * 执行抽奖活动
      * @param activePriceCode
      * @return
      */
-    ResponseData<MktActivityPrizePO> executeActivityPrize(@RequestParam("activePriceCode") String activePriceCode);
+
+    @RequestMapping("executeActivityPrize")
+    ResponseData<MktActivityPrizePO> executeActivityPrize(@RequestParam("activePriceCode") String activePriceCode,@RequestParam("memberCode") String memberCode);
 }

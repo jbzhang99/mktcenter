@@ -8,28 +8,28 @@ import java.util.List;
 public class MktActivityPrizeRecordPOExample implements Serializable {
     /**
 	 * 只读. 
-	 * @mbg.generated  2018-12-19 15:52:22
+	 * @mbg.generated  2019-01-02 13:14:26
 	 */
 	protected String orderByClause;
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-12-19 15:52:22
+	 * @mbg.generated  2019-01-02 13:14:26
 	 */
 	protected boolean distinct;
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-12-19 15:52:22
+	 * @mbg.generated  2019-01-02 13:14:26
 	 */
 	protected List<Criteria> oredCriteria;
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-12-19 15:52:22
+	 * @mbg.generated  2019-01-02 13:14:26
 	 */
 	private static final long serialVersionUID = 1L;
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-12-19 15:52:22
+	 * @mbg.generated  2019-01-02 13:14:26
 	 */
 	public MktActivityPrizeRecordPOExample() {
 		oredCriteria = new ArrayList<Criteria>();
@@ -37,7 +37,7 @@ public class MktActivityPrizeRecordPOExample implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-12-19 15:52:22
+	 * @mbg.generated  2019-01-02 13:14:26
 	 */
 	public void setOrderByClause(String orderByClause) {
 		this.orderByClause = orderByClause;
@@ -45,7 +45,7 @@ public class MktActivityPrizeRecordPOExample implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-12-19 15:52:22
+	 * @mbg.generated  2019-01-02 13:14:26
 	 */
 	public String getOrderByClause() {
 		return orderByClause;
@@ -53,7 +53,7 @@ public class MktActivityPrizeRecordPOExample implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-12-19 15:52:22
+	 * @mbg.generated  2019-01-02 13:14:26
 	 */
 	public void setDistinct(boolean distinct) {
 		this.distinct = distinct;
@@ -61,7 +61,7 @@ public class MktActivityPrizeRecordPOExample implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-12-19 15:52:22
+	 * @mbg.generated  2019-01-02 13:14:26
 	 */
 	public boolean isDistinct() {
 		return distinct;
@@ -69,7 +69,7 @@ public class MktActivityPrizeRecordPOExample implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-12-19 15:52:22
+	 * @mbg.generated  2019-01-02 13:14:26
 	 */
 	public List<Criteria> getOredCriteria() {
 		return oredCriteria;
@@ -77,7 +77,7 @@ public class MktActivityPrizeRecordPOExample implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-12-19 15:52:22
+	 * @mbg.generated  2019-01-02 13:14:26
 	 */
 	public void or(Criteria criteria) {
 		oredCriteria.add(criteria);
@@ -85,7 +85,7 @@ public class MktActivityPrizeRecordPOExample implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-12-19 15:52:22
+	 * @mbg.generated  2019-01-02 13:14:26
 	 */
 	public Criteria or() {
 		Criteria criteria = createCriteriaInternal();
@@ -95,7 +95,7 @@ public class MktActivityPrizeRecordPOExample implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-12-19 15:52:22
+	 * @mbg.generated  2019-01-02 13:14:26
 	 */
 	public Criteria createCriteria() {
 		Criteria criteria = createCriteriaInternal();
@@ -107,7 +107,7 @@ public class MktActivityPrizeRecordPOExample implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-12-19 15:52:22
+	 * @mbg.generated  2019-01-02 13:14:26
 	 */
 	protected Criteria createCriteriaInternal() {
 		Criteria criteria = new Criteria();
@@ -116,7 +116,7 @@ public class MktActivityPrizeRecordPOExample implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-12-19 15:52:22
+	 * @mbg.generated  2019-01-02 13:14:26
 	 */
 	public void clear() {
 		oredCriteria.clear();
@@ -126,7 +126,7 @@ public class MktActivityPrizeRecordPOExample implements Serializable {
 
 	/**
 	 * 只读. t_mkt_activity_prize_record
-	 * @mbg.generated  2018-12-19 15:52:22
+	 * @mbg.generated  2019-01-02 13:14:26
 	 */
 	protected abstract static class GeneratedCriteria implements Serializable {
 		protected List<Criterion> criteria;
@@ -929,6 +929,76 @@ public class MktActivityPrizeRecordPOExample implements Serializable {
 			return (Criteria) this;
 		}
 
+		public Criteria andCouponDefinitionCodeIsNull() {
+			addCriterion("coupon_definition_code is null");
+			return (Criteria) this;
+		}
+
+		public Criteria andCouponDefinitionCodeIsNotNull() {
+			addCriterion("coupon_definition_code is not null");
+			return (Criteria) this;
+		}
+
+		public Criteria andCouponDefinitionCodeEqualTo(String value) {
+			addCriterion("coupon_definition_code =", value, "couponDefinitionCode");
+			return (Criteria) this;
+		}
+
+		public Criteria andCouponDefinitionCodeNotEqualTo(String value) {
+			addCriterion("coupon_definition_code <>", value, "couponDefinitionCode");
+			return (Criteria) this;
+		}
+
+		public Criteria andCouponDefinitionCodeGreaterThan(String value) {
+			addCriterion("coupon_definition_code >", value, "couponDefinitionCode");
+			return (Criteria) this;
+		}
+
+		public Criteria andCouponDefinitionCodeGreaterThanOrEqualTo(String value) {
+			addCriterion("coupon_definition_code >=", value, "couponDefinitionCode");
+			return (Criteria) this;
+		}
+
+		public Criteria andCouponDefinitionCodeLessThan(String value) {
+			addCriterion("coupon_definition_code <", value, "couponDefinitionCode");
+			return (Criteria) this;
+		}
+
+		public Criteria andCouponDefinitionCodeLessThanOrEqualTo(String value) {
+			addCriterion("coupon_definition_code <=", value, "couponDefinitionCode");
+			return (Criteria) this;
+		}
+
+		public Criteria andCouponDefinitionCodeLike(String value) {
+			addCriterion("coupon_definition_code like", value, "couponDefinitionCode");
+			return (Criteria) this;
+		}
+
+		public Criteria andCouponDefinitionCodeNotLike(String value) {
+			addCriterion("coupon_definition_code not like", value, "couponDefinitionCode");
+			return (Criteria) this;
+		}
+
+		public Criteria andCouponDefinitionCodeIn(List<String> values) {
+			addCriterion("coupon_definition_code in", values, "couponDefinitionCode");
+			return (Criteria) this;
+		}
+
+		public Criteria andCouponDefinitionCodeNotIn(List<String> values) {
+			addCriterion("coupon_definition_code not in", values, "couponDefinitionCode");
+			return (Criteria) this;
+		}
+
+		public Criteria andCouponDefinitionCodeBetween(String value1, String value2) {
+			addCriterion("coupon_definition_code between", value1, value2, "couponDefinitionCode");
+			return (Criteria) this;
+		}
+
+		public Criteria andCouponDefinitionCodeNotBetween(String value1, String value2) {
+			addCriterion("coupon_definition_code not between", value1, value2, "couponDefinitionCode");
+			return (Criteria) this;
+		}
+
 		public Criteria andIsWinPrizeIsNull() {
 			addCriterion("is_win_prize is null");
 			return (Criteria) this;
@@ -1502,7 +1572,7 @@ public class MktActivityPrizeRecordPOExample implements Serializable {
 
 	/**
 	 * 只读. t_mkt_activity_prize_record
-	 * @mbg.generated  2018-12-19 15:52:22
+	 * @mbg.generated  2019-01-02 13:14:26
 	 */
 	public static class Criterion implements Serializable {
 		private String condition;

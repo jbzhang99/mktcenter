@@ -212,6 +212,15 @@ public class ActivityVO extends MktActivityPO {
     private String stop;
 
     private Long serviceStoreId;//服务门店
+    private String activityDetailImg;//活动详情图片
+
+    public String getActivityDetailImg() {
+        return activityDetailImg;
+    }
+
+    public void setActivityDetailImg(String activityDetailImg) {
+        this.activityDetailImg = activityDetailImg;
+    }
 
     public Long getServiceStoreId() {
         return serviceStoreId;

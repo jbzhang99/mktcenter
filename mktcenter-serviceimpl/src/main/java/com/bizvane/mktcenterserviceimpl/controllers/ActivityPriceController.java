@@ -2,10 +2,13 @@ package com.bizvane.mktcenterserviceimpl.controllers;
 
 import com.alibaba.fastjson.JSONObject;
 import com.bizvane.mktcenterservice.interfaces.ActivityPriceService;
+import com.bizvane.mktcenterservice.interfaces.ActivityPrizeServiceWX;
 import com.bizvane.mktcenterservice.models.po.MktActivityPOWithBLOBs;
+import com.bizvane.mktcenterservice.models.po.MktActivityPrizePO;
 import com.bizvane.mktcenterservice.models.po.MktActivityPrizeRecordPO;
 import com.bizvane.mktcenterservice.models.vo.ActivityPriceBO;
 import com.bizvane.mktcenterservice.models.vo.ActivityPriceParamVO;
+import com.bizvane.mktcenterservice.models.vo.ActivityPrizeBO;
 import com.bizvane.mktcenterservice.models.vo.AnalysisPriceResultVO;
 import com.bizvane.utils.responseinfo.ResponseData;
 import com.github.pagehelper.PageInfo;
@@ -26,6 +29,8 @@ import java.text.ParseException;
 public class ActivityPriceController {
     @Autowired
     private ActivityPriceService activityPriceService;
+    @Autowired
+    private ActivityPrizeServiceWX activityPrizeServiceWX;
 
     /**
      * 新增
@@ -47,7 +52,7 @@ public class ActivityPriceController {
      * 查询详情  code
      */
     @RequestMapping("selectActivityPriceByCode")
-    public ResponseData<ActivityPriceBO> selectActivityPrice(String activePriceCode) {
+    public ResponseData<ActivityPrizeBO> selectActivityPrice(String activePriceCode) {
         return activityPriceService.selectActivityPrice(activePriceCode);
     }
 
@@ -97,5 +102,16 @@ public class ActivityPriceController {
     @RequestMapping("exportQRCodes")
     public ResponseData<String> exportQRCodes(ActivityPriceParamVO vo, HttpServletRequest request, HttpServletResponse response) {
         return activityPriceService.exportQRCodes(vo, request, response);
+    }
+
+    /**
+     * wang keqiang 自测
+     * @param activePriceCode
+     * @param memberCode
+     * @return
+     */
+    @RequestMapping("executePrize")
+    public ResponseData<MktActivityPrizePO> executePrize( String activePriceCode,String memberCode) {
+        return activityPrizeServiceWX.executeActivityPrize(activePriceCode, memberCode);
     }
 }

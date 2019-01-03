@@ -1,25 +1,5 @@
 package com.bizvane.mktcenterserviceimpl.service.impl;
 
-import java.math.BigDecimal;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.GregorianCalendar;
-import java.util.List;
-import java.util.stream.Collectors;
-
-import com.bizvane.members.facade.service.card.response.IntegralChangeResponseModel;
-import org.springframework.beans.BeanUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.scheduling.annotation.Async;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.CollectionUtils;
-import org.springframework.util.StringUtils;
-
 import com.alibaba.fastjson.JSON;
 import com.bizvane.centerstageservice.models.po.SysCheckPo;
 import com.bizvane.centerstageservice.models.po.SysStorePo;
@@ -27,7 +7,6 @@ import com.bizvane.centerstageservice.models.vo.SysCheckConfigVo;
 import com.bizvane.centerstageservice.rpc.StoreServiceRpc;
 import com.bizvane.centerstageservice.rpc.SysCheckConfigServiceRpc;
 import com.bizvane.centerstageservice.rpc.SysCheckServiceRpc;
-import com.bizvane.centerstageservice.rpc.SysDimSkuServiceRpc;
 import com.bizvane.couponfacade.enums.SendTypeEnum;
 import com.bizvane.couponfacade.interfaces.CouponEntityServiceFeign;
 import com.bizvane.couponfacade.interfaces.CouponQueryServiceFeign;
@@ -41,19 +20,11 @@ import com.bizvane.members.facade.models.MemberInfoModel;
 import com.bizvane.members.facade.service.api.IntegralChangeApiService;
 import com.bizvane.members.facade.service.api.IntegralRecordApiService;
 import com.bizvane.members.facade.service.card.request.IntegralChangeRequestModel;
+import com.bizvane.members.facade.service.card.response.IntegralChangeResponseModel;
 import com.bizvane.members.facade.vo.IntegralRecordVo;
 import com.bizvane.mktcenterservice.interfaces.ActivityBirthdayService;
 import com.bizvane.mktcenterservice.models.bo.ActivityBO;
-import com.bizvane.mktcenterservice.models.po.MktActivityBirthdayPO;
-import com.bizvane.mktcenterservice.models.po.MktActivityCountPO;
-import com.bizvane.mktcenterservice.models.po.MktActivityPO;
-import com.bizvane.mktcenterservice.models.po.MktActivityPOExample;
-import com.bizvane.mktcenterservice.models.po.MktActivityPOWithBLOBs;
-import com.bizvane.mktcenterservice.models.po.MktActivityRecordPO;
-import com.bizvane.mktcenterservice.models.po.MktCouponPO;
-import com.bizvane.mktcenterservice.models.po.MktCouponPOExample;
-import com.bizvane.mktcenterservice.models.po.MktMessagePO;
-import com.bizvane.mktcenterservice.models.po.MktMessagePOExample;
+import com.bizvane.mktcenterservice.models.po.*;
 import com.bizvane.mktcenterservice.models.vo.ActivityVO;
 import com.bizvane.mktcenterservice.models.vo.PageForm;
 import com.bizvane.mktcenterserviceimpl.common.enums.ActivityStatusEnum;
@@ -63,12 +34,7 @@ import com.bizvane.mktcenterserviceimpl.common.enums.CheckStatusEnum;
 import com.bizvane.mktcenterserviceimpl.common.job.JobUtil;
 import com.bizvane.mktcenterserviceimpl.common.utils.CodeUtil;
 import com.bizvane.mktcenterserviceimpl.common.utils.ExecuteParamCheckUtil;
-import com.bizvane.mktcenterserviceimpl.mappers.MktActivityBirthdayPOMapper;
-import com.bizvane.mktcenterserviceimpl.mappers.MktActivityCountPOMapper;
-import com.bizvane.mktcenterserviceimpl.mappers.MktActivityPOMapper;
-import com.bizvane.mktcenterserviceimpl.mappers.MktActivityRecordPOMapper;
-import com.bizvane.mktcenterserviceimpl.mappers.MktCouponPOMapper;
-import com.bizvane.mktcenterserviceimpl.mappers.MktMessagePOMapper;
+import com.bizvane.mktcenterserviceimpl.mappers.*;
 import com.bizvane.utils.enumutils.SysResponseEnum;
 import com.bizvane.utils.jobutils.JobClient;
 import com.bizvane.utils.jobutils.XxlJobInfo;
@@ -76,8 +42,20 @@ import com.bizvane.utils.responseinfo.ResponseData;
 import com.bizvane.utils.tokens.SysAccountPO;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Async;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
+import org.springframework.util.StringUtils;
+
+import java.math.BigDecimal;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * @author chen.li
@@ -197,7 +175,7 @@ public class ActivityBirthdayServiceImpl implements ActivityBirthdayService {
             if(!CollectionUtils.isEmpty(registerList)){
                 for (ActivityVO activity:registerList) {
                     //判断适用商品
-                    if (false==activity.getStoreLimit() || !ExecuteParamCheckUtil.addActivitCheck(bo,activity)){
+                    if (false==activity.getIsStoreLimit() || !ExecuteParamCheckUtil.addActivitCheck(bo,activity)){
                         responseData.setCode(SysResponseEnum.FAILED.getCode());
                         responseData.setMessage("已存在同一类型的长期活动!");
                         return responseData;
@@ -296,6 +274,7 @@ public class ActivityBirthdayServiceImpl implements ActivityBirthdayService {
         mktActivityBirthdayPO.setMbrLevelName(activityVO.getMbrLevelName());
         mktActivityBirthdayPO.setDaysAhead(activityVO.getDaysAhead());
         mktActivityBirthdayPO.setIsStoreLimit(activityVO.getStoreLimit());
+        mktActivityBirthdayPO.setMemberType(activityVO.getMemberType());
         if (true==activityVO.getStoreLimit()){
             mktActivityBirthdayPO.setStoreLimitList(activityVO.getStoreLimitList());
             mktActivityBirthdayPO.setStoreLimitType(activityVO.getStoreLimitType());
@@ -732,7 +711,7 @@ public class ActivityBirthdayServiceImpl implements ActivityBirthdayService {
                 va.setBrandId(activityBirthday.getSysBrandId());
                 va.setCompanyId(activityBirthday.getSysCompanyId());
                 log.info("执行升级活动开始开始增加券增加券~~~~~~~~~~");
-                ResponseData<Object> responseData=sendCouponServiceFeign.simple(va);
+                ResponseData<String> responseData=sendCouponServiceFeign.simple(va);
                 log.info("增加券返回结果为------------："+ JSON.toJSONString(responseData));
             }
             //新增积分到会员参与活动记录表中数据

@@ -387,7 +387,7 @@ public class ConvertCouponServiceImpl implements ConvertCouponService {
                 onecouponVO.setBusinessName(couponRecordCode);
                 onecouponVO.setSendType(SendTypeEnum.SEND_COUPON_INTEGRAL_MALl.getCode());//101
                 onecouponVO.setCouponDefinitionId(mktCouponIntegralExchangePO.getCouponEntityId());
-                ResponseData<Object> simple = sendCouponServiceFeign.simple(onecouponVO);
+                ResponseData<String> simple = sendCouponServiceFeign.simple(onecouponVO);
                 log.info("doConvernCoupon----发券----参数--" + JSON.toJSONString(onecouponVO) + "----出参--" + JSON.toJSONString(simple));
             }
         } else {
