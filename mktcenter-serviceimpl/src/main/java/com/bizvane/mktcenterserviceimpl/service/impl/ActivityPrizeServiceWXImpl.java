@@ -280,7 +280,7 @@ public class ActivityPrizeServiceWXImpl implements ActivityPrizeServiceWX {
                 MktActivityPrizePOExample el = new MktActivityPrizePOExample();
                 el.createCriteria().andMktActivityIdEqualTo(activityPriceBO.getActivityPO().getMktActivityId()).andPrizeTypeEqualTo(type).andValidEqualTo(Boolean.TRUE);
                 List<MktActivityPrizePO> mktActivityPrizelist = mktActivityPrizePOMapper.selectByExample(el);
-                Boolean participatePrize = mktActivityPrizePOS.get(0).getParticipatePrize();
+                Boolean participatePrize = mktActivityPrizelist.get(0).getParticipatePrize();
                 log.info("大转盘谢谢奖是否强制发积分"+participatePrize+"----"+JSON.toJSONString(mktActivityPrizelist));
                 //谢谢惠顾判断是否会赠送积分
                 if(participatePrize){
