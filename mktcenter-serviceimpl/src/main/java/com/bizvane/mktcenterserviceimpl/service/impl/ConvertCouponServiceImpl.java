@@ -373,6 +373,17 @@ public class ConvertCouponServiceImpl implements ConvertCouponService {
             responseData.setMessage("可用积分不足!");
             return responseData;
         }
+        ResponseData<Boolean> booleanResponseData = couponDefinitionServiceFeign.couponDefinitionExpire(mktCouponIntegralExchangePO.getCouponEntityId());
+        Boolean data = booleanResponseData.getData();
+        data= (data==null?Boolean.FALSE:Boolean.TRUE);
+        //true是过期   false未过期
+        log.info("兑换券  验证券是否过期"+data+"--"+JSON.toJSONString(booleanResponseData)+"---"+mktCouponIntegralExchangePO.getCouponEntityId());
+        if (data){
+            responseData.setCode(100);
+            responseData.setMessage("优惠券已过期!");
+            return responseData;
+        }
+
         //插入记录表数据
         MktConvertCouponRecordPO record = this.InsertMktConvertCouponRecordPO(vo, mktCouponIntegralExchangePO, exchangeNum, exchangePrice, couponRecordCode, memeberDetail);
 
