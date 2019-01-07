@@ -375,7 +375,7 @@ public class ConvertCouponServiceImpl implements ConvertCouponService {
         }
         ResponseData<Boolean> booleanResponseData = couponDefinitionServiceFeign.couponDefinitionExpire(mktCouponIntegralExchangePO.getCouponEntityId());
         Boolean data = booleanResponseData.getData();
-        data= (data==null?Boolean.FALSE:Boolean.TRUE);
+        data= (data==null?Boolean.FALSE:data);
         //true是过期   false未过期
         log.info("兑换券  验证券是否过期"+data+"--"+JSON.toJSONString(booleanResponseData)+"---"+mktCouponIntegralExchangePO.getCouponEntityId());
         if (data){
