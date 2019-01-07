@@ -20,7 +20,7 @@ public class ActivityEndPrizeJobEndHandler extends IJobHandler {
     private MktActivityPOMapper mktActivityPOMapper;
     @Override
     public ReturnT<String> execute(String param) throws Exception {
-        System.out.println("ActivityEndPrizeJobEndHandler param: "+param);
+        System.out.println("大转盘 ActivityEndPrizeJobEndHandler param: "+param);
         ReturnT returnT = new ReturnT();
         MktActivityPO po = new MktActivityPO();
         po.setActivityCode(param);
@@ -28,7 +28,7 @@ public class ActivityEndPrizeJobEndHandler extends IJobHandler {
         //把活动状态改成已结束
         int sum = mktActivityPOMapper.updateActivityStatus(po);
         returnT.setCode(0);
-        returnT.setContent("ActivityEndPrizeJobEndHandler 活动执行完毕");
+        returnT.setContent("大转盘 ActivityEndPrizeJobEndHandler 活动执行完毕");
         returnT.setMsg("success");
         return returnT;
     }
