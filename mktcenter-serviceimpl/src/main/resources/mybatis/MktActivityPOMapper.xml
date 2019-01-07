@@ -1064,6 +1064,6 @@
     <if test="activityName!= null and activityName!= '' ">
       AND CONCAT(activity_name,activity_code) LIKE concat('%',#{activityName},'%')
     </if>
-    ORDER BY create_date ASC
+    ORDER BY create_date DESC
   </select>
 </mapper>
