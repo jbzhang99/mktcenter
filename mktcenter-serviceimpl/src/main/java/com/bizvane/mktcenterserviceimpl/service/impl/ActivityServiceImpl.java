@@ -24,13 +24,11 @@ import com.bizvane.mktcenterservice.interfaces.ActivityService;
 import com.bizvane.mktcenterservice.models.bo.ActivityAnalysisCountBO;
 import com.bizvane.mktcenterservice.models.bo.AwardBO;
 import com.bizvane.mktcenterservice.models.bo.CtivityAnalysisBO;
+import com.bizvane.mktcenterservice.models.po.MktActivityPOExample;
 import com.bizvane.mktcenterservice.models.po.MktActivityPOWithBLOBs;
 import com.bizvane.mktcenterservice.models.po.MktCouponPO;
 import com.bizvane.mktcenterservice.models.po.MktMessagePO;
-import com.bizvane.mktcenterservice.models.vo.ActivitySmartVO;
-import com.bizvane.mktcenterservice.models.vo.ActivityVO;
-import com.bizvane.mktcenterservice.models.vo.PageForm;
-import com.bizvane.mktcenterservice.models.vo.WhiteStoreVO;
+import com.bizvane.mktcenterservice.models.vo.*;
 import com.bizvane.mktcenterserviceimpl.common.award.Award;
 import com.bizvane.mktcenterserviceimpl.common.enums.*;
 import com.bizvane.mktcenterserviceimpl.common.utils.DateUtil;
@@ -47,6 +45,7 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang3.ArrayUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
@@ -674,4 +673,40 @@ public class ActivityServiceImpl implements ActivityService {
             return storeIds;
         }
     }
+    /**
+     * 扫码对社交活动的判断
+     */
+    @Override
+    public  ResponseData<Integer> judgeMember(JudgeMemberVO vo){
+        log.info("judgeMember param :"+JSON.toJSONString(vo));
+        ResponseData<Integer> responseData=new ResponseData<Integer>();
+        if (vo==null || vo.getActivityCode()==null){
+            responseData.setData(100);
+            responseData.setMessage("参数不合格!");
+            return responseData;
+        }
+        String activityCode = vo.getActivityCode();
+        MktActivityPOExample example=new MktActivityPOExample();
+        example.createCriteria().andActivityCodeEqualTo(activityCode).andCheckStatusEqualTo(3).andActivityStatusEqualTo(2).andValidEqualTo(Boolean.TRUE);
+        List<MktActivityPOWithBLOBs> mktActivityPOWithBLOBslist = mktActivityPOMapper.selectByExampleWithBLOBs(example);
+        if (CollectionUtils.isEmpty(mktActivityPOWithBLOBslist)){
+            responseData.setData(101);
+            responseData.setMessage("活动已经过期!");
+            return responseData;
+        }
+        int size = mktActivityPOWithBLOBslist.stream().filter(obj -> {
+            Boolean isStoreLimit = obj.getIsStoreLimit();
+            isStoreLimit = isStoreLimit == null ? Boolean.FALSE : isStoreLimit;
+            String storeLimitList = obj.getStoreLimitList();
+            String[] storeIds = storeLimitList == null ? new String[]{"0"} : storeLimitList.split(",");
+            return isStoreLimit || ArrayUtils.contains(storeIds, vo.getStoreId());
+        }).collect(Collectors.toList()).size();
+        if (size==0){
+            responseData.setData(102);
+            responseData.setMessage("会员超出活动范围!");
+            return responseData;
+        }
+        return responseData;
+    }
+
 }

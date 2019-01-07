@@ -5,6 +5,7 @@ import com.bizvane.members.facade.models.MemberInfoModel;
 import com.bizvane.mktcenterservice.models.bo.ActivityBO;
 import com.bizvane.mktcenterservice.models.po.MktActivityRecordPO;
 import com.bizvane.mktcenterservice.models.vo.ActivityVO;
+import com.bizvane.mktcenterservice.models.vo.JudgeMemberVO;
 import com.bizvane.mktcenterservice.models.vo.MemberInfoModelVOActivity;
 import com.bizvane.mktcenterservice.models.vo.MktActivityRecordVO;
 import com.bizvane.utils.responseinfo.ResponseData;
@@ -112,4 +113,7 @@ public interface ActivityServiceRpc {
   */
  @RequestMapping("executeUpgrades")
  ResponseData<Integer> executeUpgrades(@RequestBody MemberInfoModel vo);
+
+ @RequestMapping("judgeMember")
+ public  ResponseData<Integer> judgeMember(@RequestBody JudgeMemberVO vo);
 }
