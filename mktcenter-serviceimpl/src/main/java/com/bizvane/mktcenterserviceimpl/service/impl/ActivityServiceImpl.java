@@ -686,12 +686,22 @@ public class ActivityServiceImpl implements ActivityService {
             return responseData;
         }
         String activityCode = vo.getActivityCode();
+
         MktActivityPOExample example=new MktActivityPOExample();
-        example.createCriteria().andActivityCodeEqualTo(activityCode).andCheckStatusEqualTo(3).andActivityStatusEqualTo(2).andValidEqualTo(Boolean.TRUE);
+        example.createCriteria().andActivityCodeEqualTo(activityCode).andValidEqualTo(Boolean.TRUE);
+        //andCheckStatusEqualTo(3).andActivityStatusEqualTo(2)
         List<MktActivityPOWithBLOBs> mktActivityPOWithBLOBslist = mktActivityPOMapper.selectByExampleWithBLOBs(example);
-        if (CollectionUtils.isEmpty(mktActivityPOWithBLOBslist)){
+        MktActivityPOWithBLOBs mktActivityPOWithBLOBs = mktActivityPOWithBLOBslist.get(0);
+        Integer checkStatus = mktActivityPOWithBLOBs.getCheckStatus();
+        Integer activityStatus = mktActivityPOWithBLOBs.getActivityStatus();
+        if (activityStatus==3 || activityStatus==4){
             responseData.setData(101);
             responseData.setMessage("活动已经过期!");
+            return responseData;
+        }
+        if (checkStatus==3 && activityStatus==1){
+            responseData.setData(103);
+            responseData.setMessage("活动未开始!");
             return responseData;
         }
         int size = mktActivityPOWithBLOBslist.stream().filter(obj -> {
