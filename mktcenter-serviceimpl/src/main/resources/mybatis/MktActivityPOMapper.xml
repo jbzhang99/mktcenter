@@ -1056,7 +1056,7 @@
     valid=1
     AND activity_type=11
     <if test="brandId!= null ">
-      AND brand_id=#{brandId}
+      AND sys_brand_id=#{brandId}
     </if>
     <if test="activityStatus!= null and activityStatus!='0'.toString() ">
       AND activity_status=#{activityStatus}
