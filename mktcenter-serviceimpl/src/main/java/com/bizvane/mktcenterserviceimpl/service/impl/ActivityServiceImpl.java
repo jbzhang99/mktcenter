@@ -699,7 +699,7 @@ public class ActivityServiceImpl implements ActivityService {
             responseData.setMessage("活动已经过期!");
             return responseData;
         }
-        if (checkStatus==3 && activityStatus==1){
+        if (checkStatus!=3 || (checkStatus==3 && activityStatus==1)){
             responseData.setData(103);
             responseData.setMessage("活动未开始!");
             return responseData;
