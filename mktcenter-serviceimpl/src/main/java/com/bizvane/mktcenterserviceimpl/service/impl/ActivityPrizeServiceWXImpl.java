@@ -291,9 +291,19 @@ public class ActivityPrizeServiceWXImpl implements ActivityPrizeServiceWX {
             }
         }
         }else{
-            log.info("谢谢惠顾谢谢惠顾谢谢惠顾-----------------："+ type);
+            log.info("谢谢惠顾谢谢惠顾谢谢惠顾01-----------------："+ type);
             //谢谢惠顾
-            addPoints(memberCode, activityPriceBO, mktActivityPrizePOS);
+            MktActivityPrizePOExample el = new MktActivityPrizePOExample();
+            el.createCriteria().andMktActivityIdEqualTo(activityPriceBO.getActivityPO().getMktActivityId()).andPrizeTypeEqualTo(type).andValidEqualTo(Boolean.TRUE);
+            List<MktActivityPrizePO> mktActivityPrizelist = mktActivityPrizePOMapper.selectByExample(el);
+            Boolean participatePrize = mktActivityPrizelist.get(0).getParticipatePrize();
+            log.info("大转盘谢谢奖是否强制发积分01"+participatePrize+"----"+JSON.toJSONString(mktActivityPrizelist));
+            //谢谢惠顾判断是否会赠送积分
+            if(participatePrize){
+                log.info("大转盘谢谢奖强制发积分01"+participatePrize);
+                addPoints(memberCode, activityPriceBO, mktActivityPrizelist);
+            }
+//            addPoints(memberCode, activityPriceBO, mktActivityPrizePOS);
             responseData.setData(mktActivityPrizePOS.get(0));
         }
         log.info("最终结果是什么----------："+ type);
