@@ -680,6 +680,7 @@ public class ActivityServiceImpl implements ActivityService {
     public  ResponseData<Integer> judgeMember(JudgeMemberVO vo){
         log.info("judgeMember param :"+JSON.toJSONString(vo));
         ResponseData<Integer> responseData=new ResponseData<Integer>();
+        responseData.setData(0);
         if (vo==null || vo.getActivityCode()==null){
             responseData.setData(100);
             responseData.setMessage("参数不合格!");
