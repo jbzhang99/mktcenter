@@ -706,7 +706,7 @@ public class ActivityServiceImpl implements ActivityService {
         }
         int size = mktActivityPOWithBLOBslist.stream().filter(obj -> {
             Boolean isStoreLimit = obj.getIsStoreLimit();
-            isStoreLimit = isStoreLimit == null ? Boolean.FALSE : isStoreLimit;
+            isStoreLimit = isStoreLimit == null ? Boolean.TRUE : !isStoreLimit;
             String storeLimitList = obj.getStoreLimitList();
             String[] storeIds = storeLimitList == null ? new String[]{"0"} : storeLimitList.split(",");
             return isStoreLimit || ArrayUtils.contains(storeIds, vo.getStoreId());
