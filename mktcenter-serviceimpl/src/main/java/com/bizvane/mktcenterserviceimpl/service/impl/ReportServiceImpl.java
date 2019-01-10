@@ -5,10 +5,12 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.TreeMap;
 import java.util.UUID;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
@@ -54,6 +56,9 @@ public class ReportServiceImpl implements ReportTempService {
 		       		
 		       		JSONArray arr=null;
 		       		if(nameEnd.equals("_cycle")) {
+		       			
+		       			Map<String,JSONObject> mapjsonObje=new TreeMap<String,JSONObject>();
+		       			SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		       			arr=new JSONArray();
 				        if(jsonStr!=null&&jsonStr.startsWith("{")&&jsonStr.endsWith("}")){
 				           JSONObject json = JSONObject.parseObject(jsonStr);  
@@ -66,8 +71,28 @@ public class ReportServiceImpl implements ReportTempService {
 					            	   jsonObject1.put("time",k.toString());
 					               }
 					               
-					               arr.put(jsonObject1);
+					              if(k.toString().equals("all")) {
+					            	  arr.put(jsonObject1);
+					              }else {
+										try {
+										    Date date;
+											date = simpleDateFormat.parse(k.toString());
+											long ts = date.getTime();
+								             mapjsonObje.put(String.valueOf(ts), jsonObject1);
+										} catch (ParseException e) {
+											e.printStackTrace();
+										}
+					            	  
+					              }
+
+					               
 				           }
+				           
+				           //排序
+				           mapjsonObje = ((TreeMap) mapjsonObje).descendingMap();
+				           for (String key : mapjsonObje.keySet()) {
+				        	   arr.put(mapjsonObje.get(key));
+				            }
 			           
 				       }
 		       			
