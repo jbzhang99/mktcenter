@@ -11,10 +11,7 @@ import com.bizvane.mktcenterservice.models.bo.ActivityAnalysisCountBO;
 import com.bizvane.mktcenterservice.models.bo.AwardBO;
 import com.bizvane.mktcenterservice.models.bo.CtivityAnalysisBO;
 import com.bizvane.mktcenterservice.models.po.MktMessagePO;
-import com.bizvane.mktcenterservice.models.vo.ActivitySmartVO;
-import com.bizvane.mktcenterservice.models.vo.ActivityVO;
-import com.bizvane.mktcenterservice.models.vo.PageForm;
-import com.bizvane.mktcenterservice.models.vo.WhiteStoreVO;
+import com.bizvane.mktcenterservice.models.vo.*;
 import com.bizvane.utils.responseinfo.ResponseData;
 import com.bizvane.utils.tokens.SysAccountPO;
 import com.github.pagehelper.PageInfo;
@@ -81,4 +78,11 @@ public interface ActivityService {
      * 前端调用店铺
      */
     public  List<Long>  getActivityWhiteStoreIds(WhiteStoreVO vo);
+
+    /**
+     * 扫描二维码进行判断
+     * @param vo
+     * @return
+     */
+    public  ResponseData<Integer> judgeMember(JudgeMemberVO vo);
 }

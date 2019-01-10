@@ -76,11 +76,11 @@
 			<version>5.1</version>
 		</dependency>
 
-		<dependency>
-			<groupId>com.bizvane</groupId>
-			<artifactId>common-utils</artifactId>
-			<version>1.0.1-SNAPSHOT</version>
-		</dependency>
+		 <dependency>
+            <groupId>com.bizvane</groupId>
+            <artifactId>common-utils</artifactId>
+            <version>1.0.2</version>
+        </dependency>
 		<dependency>
 			<groupId>com.bizvane</groupId>
 			<artifactId>base-controller</artifactId>
@@ -90,7 +90,7 @@
 		<dependency>
 			<groupId>com.bizvane</groupId>
 			<artifactId>mktcenter-service</artifactId>
-			<version>1.0.1-SNAPSHOT</version>
+			<version>1.0.2-SNAPSHOT</version>
 		</dependency>
 
 		<dependency>
@@ -167,48 +167,48 @@
 		<dependency>
 			<groupId>com.bizvane</groupId>
 			<artifactId>coupon-facade</artifactId>
-			<version>1.0.1-SNAPSHOT</version>
+			<version>1.0.2-SNAPSHOT</version>
 		</dependency>
 		<!--中台模块依赖 -->
 		<dependency>
 			<groupId>com.bizvane</groupId>
 			<artifactId>centerstage-service</artifactId>
-			<version>1.0.1-SNAPSHOT</version>
+			<version>1.0.2-SNAPSHOT</version>
 		</dependency>
 		<!--中台模块依赖 -->
 		<dependency>
 			<groupId>com.bizvane</groupId>
 			<artifactId>applet-service</artifactId>
-			<version>1.0.1-SNAPSHOT</version>
+			<version>1.0.2-SNAPSHOT</version>
 		</dependency>
 		<dependency>
 			<groupId>com.bizvane</groupId>
 			<artifactId>fitment-service</artifactId>
-			<version>1.0.0</version>
+			<version>1.0.2-SNAPSHOT</version>
 		</dependency>
 		<!--中控模块依赖 -->
 		<dependency>
 			<groupId>com.bizvane</groupId>
 			<artifactId>centercontrol-service</artifactId>
-			<version>1.0.1</version>
+			<version>1.0.2-SNAPSHOT</version>
 		</dependency>
 		<!--会员模块依赖 -->
 		<dependency>
 			<groupId>com.bizvane</groupId>
 			<artifactId>members-facade</artifactId>
-			<version>1.0.1-SNAPSHOT</version>
+			<version>1.0.2-SNAPSHOT</version>
 		</dependency>
 		<!-- 引入消息 -->
 		<dependency>
 			<groupId>com.bizvane</groupId>
 			<artifactId>message-facade</artifactId>
-			<version>1.0.1-SNAPSHOT</version>
+			<version>1.0.2-SNAPSHOT</version>
 		</dependency>
 		<!-- 引入微信模块，二维码 -->
 		<dependency>
 			<groupId>com.bizvane</groupId>
 			<artifactId>wechat-facade</artifactId>
-			<version>1.0.0</version>
+			<version>1.0.2-SNAPSHOT</version>
 		</dependency>
 
 		<dependency>
@@ -263,6 +263,7 @@
 	</dependencies>
 
 	<build>
+		<finalName>mktcenter</finalName>
 		<plugins>
 			<plugin>
 				<groupId>org.springframework.boot</groupId>

@@ -7,10 +7,8 @@ import com.bizvane.couponfacade.models.po.CouponEntityPO;
 import com.bizvane.couponfacade.models.vo.CouponDetailResponseVO;
 import com.bizvane.couponfacade.models.vo.CouponFindCouponCountResponseVO;
 import com.bizvane.mktcenterservice.models.po.MktActivityPO;
-import com.bizvane.mktcenterservice.models.po.MktActivityRegisterPO;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
-import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
@@ -21,7 +19,7 @@ import java.util.List;
  * @Copyright (c) 2018 上海商帆信息科技有限公司-版权所有
  */
 public class ActivityVO extends MktActivityPO {
-
+    private Boolean storeLimit;
     /**
      * 只读. 活动描述、简介. activity_info
      * @mbg.generated  2018-07-13 10:42:22
@@ -319,13 +317,13 @@ public class ActivityVO extends MktActivityPO {
         this.commodityLimitType = commodityLimitType;
     }
 
-    public Boolean getStoreLimit() {
-        return isStoreLimit;
-    }
-
-    public void setStoreLimit(Boolean storeLimit) {
-        isStoreLimit = storeLimit;
-    }
+//    public Boolean getStoreLimit() {
+//        return isStoreLimit;
+//    }
+//
+//    public void setStoreLimit(Boolean storeLimit) {
+//        isStoreLimit = storeLimit;
+//    }
 
     public Integer getStoreLimitType() {
         return storeLimitType;
@@ -559,5 +557,13 @@ public class ActivityVO extends MktActivityPO {
 
     public void setCouponDefinitionPO(CouponDefinitionPO couponDefinitionPO) {
         this.couponDefinitionPO = couponDefinitionPO;
+    }
+
+    public Boolean getStoreLimit() {
+        return storeLimit;
+    }
+
+    public void setStoreLimit(Boolean storeLimit) {
+        this.storeLimit = storeLimit;
     }
 }

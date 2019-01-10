@@ -82,13 +82,13 @@ public class JobUtil {
     public  void addStartPrizeJob(SysAccountPO stageUser, MktActivityPOWithBLOBs activityPO , String activityCode) {
         String activityJobType = JobHandlerConstants.START_PRIZE;
         int businessType =JobBusinessTypeEnum.ACTIVITY_TYPE_ACTIVITY.getCode();
-        addJob(activityPO.getStartTime(),activityPO.getActivityInfo(),activityCode,stageUser.getName(),activityJobType,businessType,activityCode);
+        addJob(activityPO.getStartTime(),activityPO.getActivityName(),activityCode,stageUser.getName(),activityJobType,businessType,activityCode);
     }
     //新增大转盘结束job
     public  void addEndPrizeJob(SysAccountPO stageUser, MktActivityPOWithBLOBs activityPO , String activityCode) {
         String activityJobType = JobHandlerConstants.END_PRIZE;
         int businessType =JobBusinessTypeEnum.ACTIVITY_TYPE_ACTIVITY.getCode();
-        addJob(activityPO.getEndTime(),activityPO.getActivityInfo(),activityCode,stageUser.getName(),activityJobType,businessType,activityCode);
+        addJob(activityPO.getEndTime(),activityPO.getActivityName(),activityCode,stageUser.getName(),activityJobType,businessType,activityCode);
     }
 
 

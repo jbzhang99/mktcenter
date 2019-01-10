@@ -612,6 +612,7 @@
     <if test="activityName!= null and activityName!= '' ">
      AND (tma.activity_name LIKE CONCAT('%',#{activityName},'%')OR tma.activity_code LIKE CONCAT('%',#{activityName},'%'))
     </if>
+    ORDER BY tma.create_date DESC
   </select>
   <select id="selectMktActivityPrizeById" resultType="com.bizvane.mktcenterservice.models.vo.MktActivityPrizeVO">
    SELECT

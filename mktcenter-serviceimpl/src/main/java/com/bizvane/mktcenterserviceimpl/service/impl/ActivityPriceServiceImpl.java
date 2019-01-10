@@ -120,7 +120,7 @@ public class ActivityPriceServiceImpl implements ActivityPriceService {
 
         Date startTime = activityPO.getStartTime();
         Boolean runStatus = TimeUtils.ifImmediatelyRun(startTime);
-        log.info("addActivityPrice status:"+runStatus);
+        log.info("大转盘 addActivityPrice status:"+runStatus);
         if (runStatus) {
             activityPO.setActivityStatus(2);
         } else {
@@ -245,14 +245,15 @@ public class ActivityPriceServiceImpl implements ActivityPriceService {
     @Override
     public ResponseData<PageInfo<MktActivityPOWithBLOBs>> selectActivityPriceLists(ActivityPriceParamVO vo, HttpServletRequest request) {
         ResponseData<PageInfo<MktActivityPOWithBLOBs>> responseData = new ResponseData<>();
-        //SysAccountPO sysAccountPo = TokenUtils.getStageUser(request);
-        SysAccountPO sysAccountPo = new SysAccountPO();
-        sysAccountPo.setSysAccountId(96L);
-        sysAccountPo.setSysCompanyId(2L);
-        sysAccountPo.setBrandId(96L);
-        sysAccountPo.setAccountCode("15328634678");
-        sysAccountPo.setName("不啊哟删除");
+        SysAccountPO sysAccountPo = TokenUtils.getStageUser(request);
+//        SysAccountPO sysAccountPo = new SysAccountPO();
+//        sysAccountPo.setSysAccountId(96L);
+//        sysAccountPo.setSysCompanyId(2L);
+//        sysAccountPo.setBrandId(96L);
+//        sysAccountPo.setAccountCode("15328634678");
+//        sysAccountPo.setName("不啊哟删除");
 
+        vo.setBrandId(sysAccountPo.getBrandId());
         PageHelper.startPage(vo.getPageNumber(), vo.getPageSize());
         List<MktActivityPOWithBLOBs> listparam = mktActivityPOMapper.selectActivityPriceLists(vo);
         if (CollectionUtils.isEmpty(listparam)) {

@@ -645,6 +645,10 @@
     tmm.modified_user_name,
     tmm.modified_date,
     tmm.valid,
+    tmm.is_store_limit,
+    tmm.store_limit_type,
+    tmm.store_limit_list,
+    tmm.is_store_limit AS storeLimit,
     tmm.qrcode
     FROM
     `t_mkt_activity` tma

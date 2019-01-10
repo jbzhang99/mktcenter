@@ -6,6 +6,7 @@ import com.bizvane.mktcenterservice.interfaces.*;
 import com.bizvane.mktcenterservice.models.bo.ActivityBO;
 import com.bizvane.mktcenterservice.models.po.MktActivityRecordPO;
 import com.bizvane.mktcenterservice.models.vo.ActivityVO;
+import com.bizvane.mktcenterservice.models.vo.JudgeMemberVO;
 import com.bizvane.mktcenterservice.models.vo.MemberInfoModelVOActivity;
 import com.bizvane.mktcenterservice.models.vo.MktActivityRecordVO;
 import com.bizvane.mktcenterserviceimpl.common.enums.ActivityTypeEnum;
@@ -201,5 +202,10 @@ public class ActivityRpcController {
     @RequestMapping("executeUpgrades")
     public ResponseData<Integer> executeUpgrades(@RequestBody MemberInfoModel vo){
         return activityUpgradeService.executeUpgrades(vo);
+    }
+
+    @RequestMapping("judgeMember")
+    public  ResponseData<Integer> judgeMember(@RequestBody JudgeMemberVO vo){
+       return  activityService.judgeMember(vo);
     }
 }

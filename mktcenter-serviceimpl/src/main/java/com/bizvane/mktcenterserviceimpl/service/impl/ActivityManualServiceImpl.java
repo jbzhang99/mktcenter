@@ -1,18 +1,5 @@
 package com.bizvane.mktcenterserviceimpl.service.impl;
 
-import java.math.BigDecimal;
-import java.text.DecimalFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-
-import org.springframework.beans.BeanUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.CollectionUtils;
-import org.springframework.util.StringUtils;
-
 import com.alibaba.fastjson.JSON;
 import com.bizvane.centerstageservice.models.po.SysCheckPo;
 import com.bizvane.centerstageservice.models.vo.SysCheckConfigVo;
@@ -28,14 +15,7 @@ import com.bizvane.mktcenterservice.interfaces.ActivityManualService;
 import com.bizvane.mktcenterservice.models.bo.ActivityBO;
 import com.bizvane.mktcenterservice.models.bo.ActivityManualBO;
 import com.bizvane.mktcenterservice.models.bo.AwardBO;
-import com.bizvane.mktcenterservice.models.po.MktActivityCountPO;
-import com.bizvane.mktcenterservice.models.po.MktActivityManualPO;
-import com.bizvane.mktcenterservice.models.po.MktActivityManualPOExample;
-import com.bizvane.mktcenterservice.models.po.MktActivityPOWithBLOBs;
-import com.bizvane.mktcenterservice.models.po.MktActivityRecordPO;
-import com.bizvane.mktcenterservice.models.po.MktActivityRecordPOExample;
-import com.bizvane.mktcenterservice.models.po.MktCouponPO;
-import com.bizvane.mktcenterservice.models.po.MktCouponPOExample;
+import com.bizvane.mktcenterservice.models.po.*;
 import com.bizvane.mktcenterservice.models.vo.ActivityManualVO;
 import com.bizvane.mktcenterservice.models.vo.ActivityVO;
 import com.bizvane.mktcenterservice.models.vo.PageForm;
@@ -44,23 +24,10 @@ import com.bizvane.mktcenterserviceimpl.common.config.QRCodeConfig;
 import com.bizvane.mktcenterserviceimpl.common.constants.ActivityConstants;
 import com.bizvane.mktcenterserviceimpl.common.constants.ResponseConstants;
 import com.bizvane.mktcenterserviceimpl.common.constants.SystemConstants;
-import com.bizvane.mktcenterserviceimpl.common.enums.ActivityStatusEnum;
-import com.bizvane.mktcenterserviceimpl.common.enums.ActivityTypeEnum;
-import com.bizvane.mktcenterserviceimpl.common.enums.BusinessTypeEnum;
-import com.bizvane.mktcenterserviceimpl.common.enums.CheckStatusEnum;
-import com.bizvane.mktcenterserviceimpl.common.enums.CouponSendTypeEnum;
-import com.bizvane.mktcenterserviceimpl.common.enums.MktSmartTypeEnum;
+import com.bizvane.mktcenterserviceimpl.common.enums.*;
 import com.bizvane.mktcenterserviceimpl.common.job.JobUtil;
-import com.bizvane.mktcenterserviceimpl.common.utils.ActivityParamCheckUtil;
-import com.bizvane.mktcenterserviceimpl.common.utils.CodeUtil;
-import com.bizvane.mktcenterserviceimpl.common.utils.DateUtil;
-import com.bizvane.mktcenterserviceimpl.common.utils.ExecuteParamCheckUtil;
-import com.bizvane.mktcenterserviceimpl.common.utils.SpringContextUtil;
-import com.bizvane.mktcenterserviceimpl.mappers.MktActivityCountPOMapper;
-import com.bizvane.mktcenterserviceimpl.mappers.MktActivityManualPOMapper;
-import com.bizvane.mktcenterserviceimpl.mappers.MktActivityPOMapper;
-import com.bizvane.mktcenterserviceimpl.mappers.MktActivityRecordPOMapper;
-import com.bizvane.mktcenterserviceimpl.mappers.MktCouponPOMapper;
+import com.bizvane.mktcenterserviceimpl.common.utils.*;
+import com.bizvane.mktcenterserviceimpl.mappers.*;
 import com.bizvane.utils.enumutils.SysResponseEnum;
 import com.bizvane.utils.responseinfo.ResponseData;
 import com.bizvane.utils.tokens.SysAccountPO;
@@ -68,8 +35,19 @@ import com.bizvane.wechatfacade.interfaces.QRCodeServiceFeign;
 import com.bizvane.wechatfacade.models.vo.CreateMiniprgmQRCodeRequestVO;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
+import org.springframework.util.StringUtils;
+
+import java.math.BigDecimal;
+import java.text.DecimalFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 
 @Service
@@ -210,7 +188,8 @@ public class ActivityManualServiceImpl implements ActivityManualService {
         }
         //新增活动主表
          log.info("领券活动-创建活动-新增活动主表入参:"+JSON.toJSONString(mktActivityPOWithBLOBs));
-        mktActivityPOMapper.insertSelective(mktActivityPOWithBLOBs);
+         mktActivityPOWithBLOBs.setIsStoreLimit(activityVO.getStoreLimit());
+         mktActivityPOMapper.insertSelective(mktActivityPOWithBLOBs);
         //返回主表的id
         Long mktActivityId = mktActivityPOWithBLOBs.getMktActivityId();
         
