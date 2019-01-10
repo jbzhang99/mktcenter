@@ -22,6 +22,14 @@ public enum StatisticsEnum {
         this.message = message;
     }
 
+    public static StatisticsEnum getStatisticsEnumByCode(int code){
+        for(StatisticsEnum statisticsEnum : StatisticsEnum.values()){
+            if(code==statisticsEnum.getCode()){
+                return statisticsEnum;
+            }
+        }
+        return null;
+    }
 
     public int getCode() {
         return code;
