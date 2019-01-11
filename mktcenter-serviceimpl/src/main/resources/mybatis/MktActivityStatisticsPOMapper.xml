@@ -506,4 +506,10 @@
       other3 = #{other3,jdbcType=CHAR}
     where mkt_activity_statistics_id = #{mktActivityStatisticsId,jdbcType=BIGINT}
   </update>
+
+  <select id="getAllDate" resultType="string">
+      SELECT DATE_FORMAT(statistics_time, '%Y-%m-%d') FROM t_mkt_activity_statistics
+      GROUP BY statistics_time
+      ORDER BY statistics_time DESC
+  </select>
 </mapper>
