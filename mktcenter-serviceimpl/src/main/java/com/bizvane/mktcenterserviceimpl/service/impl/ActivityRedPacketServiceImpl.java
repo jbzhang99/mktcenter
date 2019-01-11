@@ -2,11 +2,13 @@ package com.bizvane.mktcenterserviceimpl.service.impl;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.bizvane.centerstageservice.models.po.SysStorePo;
+import com.bizvane.couponfacade.interfaces.CouponDefinitionServiceFeign;
 import com.bizvane.mktcenterservice.interfaces.ActivityRedPacketService;
+import com.bizvane.mktcenterservice.interfaces.TaskService;
 import com.bizvane.mktcenterservice.models.bo.ActivityRedPacketBO;
-import com.bizvane.mktcenterservice.models.po.MktActivityPOWithBLOBs;
-import com.bizvane.mktcenterservice.models.po.MktActivityRedPacketPO;
-import com.bizvane.mktcenterservice.models.po.MktActivityRedPacketSumPO;
+import com.bizvane.mktcenterservice.models.po.*;
+import com.bizvane.mktcenterservice.models.vo.ActivityRedPacketVO;
 import com.bizvane.mktcenterserviceimpl.common.job.JobUtil;
 import com.bizvane.mktcenterserviceimpl.common.utils.CodeUtil;
 import com.bizvane.mktcenterserviceimpl.common.utils.TimeUtils;
@@ -19,12 +21,18 @@ import com.bizvane.utils.tokens.TokenUtils;
 import com.bizvane.wechatfacade.interfaces.QRCodeServiceFeign;
 import com.bizvane.wechatfacade.models.vo.CreateMiniprgmQRCodeRequestVO;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
 import java.text.ParseException;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @Author: lijunwei
@@ -36,7 +44,7 @@ public class ActivityRedPacketServiceImpl implements ActivityRedPacketService {
     @Autowired
     private MktActivityPOMapper mktActivityPOMapper;
     @Autowired
-    private  MktActivityRedPacketPO mktActivityRedPacketPO;
+    private MktActivityRedPacketPO mktActivityRedPacketPO;
     @Autowired
     private QRCodeServiceFeign qrCodeServiceFeign;
     @Autowired
@@ -45,6 +53,12 @@ public class ActivityRedPacketServiceImpl implements ActivityRedPacketService {
     private MktActivityRedPacketSumPOMapper mktActivityRedPacketSumPOMapper;
     @Autowired
     private JobUtil jobUtil;
+    @Autowired
+    private TaskService taskService;
+    @Autowired
+    private CouponDefinitionServiceFeign couponDefinitionServiceFeign;
+
+
     /**
      * 新增
      */
@@ -57,7 +71,7 @@ public class ActivityRedPacketServiceImpl implements ActivityRedPacketService {
         MktActivityPOWithBLOBs activityPO = bo.getActivityPO();
         Date startTime = activityPO.getStartTime();
         Boolean runStatus = TimeUtils.ifImmediatelyRun(startTime);
-        log.info("红包 addActivityPrice status:"+runStatus);
+        log.info("红包 addActivityRedPacket status:" + runStatus);
         if (runStatus) {
             activityPO.setActivityStatus(2);
         } else {
@@ -101,7 +115,7 @@ public class ActivityRedPacketServiceImpl implements ActivityRedPacketService {
         redPacketSumPO.setSysCompanyId(sysAccountPo.getSysCompanyId());
         redPacketSumPO.setActivityCode(activityPO.getActivityCode());
         redPacketSumPO.setActivityName(activityPO.getActivityName());
-        redPacketSumPO.setActivityTime(TimeUtils.getDataNum(activityPO.getStartTime(),activityPO.getEndTime()));
+        redPacketSumPO.setActivityTime(TimeUtils.getDataNum(activityPO.getStartTime(), activityPO.getEndTime()));
         redPacketSumPO.setSysBrandId(sysAccountPo.getBrandId());
         redPacketSumPO.setCreateUserId(sysAccountPo.getSysAccountId());
         redPacketSumPO.setCreateUserName(sysAccountPo.getName());
@@ -116,6 +130,40 @@ public class ActivityRedPacketServiceImpl implements ActivityRedPacketService {
         return responseData;
     }
 
-
-
+    /**
+     * 查询详情
+     */
+    @Override
+    public ResponseData<ActivityRedPacketBO> selectActivityRedPacket(ActivityRedPacketVO vo) {
+        ResponseData<ActivityRedPacketBO> responseData = new ResponseData<>();
+        ActivityRedPacketBO activityBO=new  ActivityRedPacketBO();
+        Long mktActivityId = vo.getMktActivityId();
+        String activityCode = vo.getActivityCode();
+        MktActivityPOWithBLOBs mktActivityPOWithBLOBs = null;
+        if (StringUtils.isNotBlank(activityCode)) {
+            MktActivityPOExample example = new MktActivityPOExample();
+            example.createCriteria().andActivityCodeEqualTo(activityCode).andValidEqualTo(Boolean.TRUE);
+            List<MktActivityPOWithBLOBs> mktActivityPOWithBLOBsList = mktActivityPOMapper.selectByExampleWithBLOBs(example);
+            if (CollectionUtils.isNotEmpty(mktActivityPOWithBLOBsList)) {
+                mktActivityPOWithBLOBs = mktActivityPOWithBLOBsList.get(0);
+            }
+        } else {
+            mktActivityPOWithBLOBs = mktActivityPOMapper.selectByPrimaryKey(mktActivityId);
+        }
+        String storeLimitListStr = mktActivityPOWithBLOBs.getStoreLimitList();
+        List<SysStorePo> storeList = new ArrayList<SysStorePo>();
+        if (StringUtils.isNotBlank(storeLimitListStr)) {
+            List<Long> storeIdList = Arrays.asList(storeLimitListStr.split(",")).stream().map(element -> Long.valueOf(element)).collect(Collectors.toList());
+            //查询店铺列表
+            storeList = taskService.getStoreListByIds(storeIdList);
+            log.info("---------通过品牌Ids--" + JSON.toJSONString(storeList) + "-----获取店铺列表----------" + JSON.toJSONString(storeList));
+            activityBO.setStoreList(storeList);
+        }
+        MktActivityRedPacketPOExample example=new MktActivityRedPacketPOExample();
+        example.createCriteria().andMktActivityIdEqualTo(mktActivityPOWithBLOBs.getMktActivityId());
+        MktActivityRedPacketPO mktActivityRedPacketPO = mktActivityRedPacketPOMapper.selectByExample(example).get(0);
+        activityBO.setCouponDefinitionPO(couponDefinitionServiceFeign.findByIdRpc(mktActivityRedPacketPO.getCouponDefinitionId()).getData());
+        responseData.setData(activityBO);
+        return responseData;
+    }
 }
