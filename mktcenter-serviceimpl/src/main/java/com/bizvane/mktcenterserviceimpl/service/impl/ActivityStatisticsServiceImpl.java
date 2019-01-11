@@ -9,6 +9,11 @@ import com.bizvane.utils.redisutils.RedisTemplateServiceImpl;
 import com.bizvane.utils.responseinfo.ResponseData;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
+import org.springframework.data.redis.connection.RedisConnection;
+import org.springframework.data.redis.core.RedisCallback;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.serializer.RedisSerializer;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
@@ -24,7 +29,7 @@ import java.util.*;
 public class ActivityStatisticsServiceImpl implements ActivityStatisticsService{
 
     @Autowired
-    private RedisTemplateServiceImpl<String, Object> redisTemplateService;
+    private RedisTemplateServiceImpl redisTemplateService;
     @Autowired
     private MktActivityStatisticsPOMapper mktActivityStatisticsPOMapper;
 
@@ -35,11 +40,11 @@ public class ActivityStatisticsServiceImpl implements ActivityStatisticsService{
         try {
             //将活动id存入redis中 设置redis的key
             String activityIdsKey = StatisticsConstants.ACTIVITY_LIST_PREFIX + StatisticsConstants.getCurrentDate();
-            Set<Long> activityIds = (Set<Long>) redisTemplateService.listLeftPopList(activityIdsKey);
+            Set activityIds = redisTemplateService.setGetMemberOfSetMap(activityIdsKey);
             if (activityIds == null || activityIds.size() == 0) {
-                Set<Long> activityIdSet = new HashSet<>();
+                Set activityIdSet = new HashSet();
                 activityIdSet.add(activityId);
-                redisTemplateService.listLeftPushList(activityIdsKey,activityIdSet);
+                redisTemplateService.setAddSetMap(activityIdsKey,activityIdSet);
             }else {
                 activityIds.add(activityId);
             }
@@ -50,7 +55,7 @@ public class ActivityStatisticsServiceImpl implements ActivityStatisticsService{
                 key = StatisticsConstants.VISITORS_PREFIX + activityId + "_" + StatisticsConstants.getCurrentDate();
                 //访问量要以小时存一份增量数据
                 String hourKey = key + "_" + StatisticsConstants.getCurrentHour();
-                redisTemplateService.stringIncrementLongString(hourKey,1L);
+                redisTemplateService.incr(hourKey,129600);
             }else if (StatisticsEnum.LAUNCH_MEMBERS_COUNT.getCode() == code) {
                 //发起会员数
                 key = StatisticsConstants.LAUNCH_MEMBERS + activityId + "_" + StatisticsConstants.getCurrentDate();
@@ -64,9 +69,10 @@ public class ActivityStatisticsServiceImpl implements ActivityStatisticsService{
                 //领劵数量
                 key = StatisticsConstants.TAKE_COUPON + activityId + "_" + StatisticsConstants.getCurrentDate();
             }
-            Long incrId = redisTemplateService.stringIncrementLongString(key,1L);
-            //Long id = redisTemplateService.getIncrValue(key); todo 获取自增key的value，还不可用
-            log.info("统计类型:{} 量为:{}",StatisticsEnum.getStatisticsEnumByCode(code).getMessage(),incrId);
+            redisTemplateService.incr(key,129600);
+            //获取自增后的值
+            Long incrValue = redisTemplateService.getIncrValue(key);
+            log.info("统计类型:{} 量为:{}",StatisticsEnum.getStatisticsEnumByCode(code).getMessage(),incrValue);
             responseData.setCode(SysResponseEnum.SUCCESS.getCode());
             responseData.setMessage(SysResponseEnum.SUCCESS.getMessage());
 
@@ -110,7 +116,7 @@ public class ActivityStatisticsServiceImpl implements ActivityStatisticsService{
         String yesterday = StatisticsConstants.getYesterday();
         String activityIdsKey = StatisticsConstants.ACTIVITY_LIST_PREFIX;
         String yesterdayKey = activityIdsKey + yesterday;
-        Set<Long> activityIds = (Set<Long>) redisTemplateService.listLeftPopList(yesterdayKey);
+        Set<Long> activityIds = redisTemplateService.setGetMemberOfSetMap(yesterdayKey);
         if (activityIds == null || activityIds.size() == 0) {
             //证明昨天无活动触发 就此结束
             return;
@@ -122,4 +128,5 @@ public class ActivityStatisticsServiceImpl implements ActivityStatisticsService{
             }
         }
     }
+
 }
