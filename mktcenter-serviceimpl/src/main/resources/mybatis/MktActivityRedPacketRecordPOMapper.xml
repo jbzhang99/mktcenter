@@ -1,0 +1,509 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bizvane.mktcenterserviceimpl.mappers.MktActivityRedPacketRecordPOMapper">
+  <resultMap id="BaseResultMap" type="com.bizvane.mktcenterservice.models.po.MktActivityRedPacketRecordPO">
+    <!--
+      WARNING - 只读 - @mbg.generated
+      This element was generated on 2019-01-11 11:03:19.
+    -->
+    <id column="mkt_activity_red_packet_record_id" jdbcType="BIGINT" property="mktActivityRedPacketRecordId" />
+    <result column="mkt_activity_id" jdbcType="BIGINT" property="mktActivityId" />
+    <result column="sys_company_id" jdbcType="BIGINT" property="sysCompanyId" />
+    <result column="sys_brand_id" jdbcType="BIGINT" property="sysBrandId" />
+    <result column="member_code" jdbcType="VARCHAR" property="memberCode" />
+    <result column="member_phone" jdbcType="VARCHAR" property="memberPhone" />
+    <result column="member_name" jdbcType="VARCHAR" property="memberName" />
+    <result column="coupon_definition_id" jdbcType="BIGINT" property="couponDefinitionId" />
+    <result column="coupon_name" jdbcType="VARCHAR" property="couponName" />
+    <result column="get_coupon_date" jdbcType="TIMESTAMP" property="getCouponDate" />
+    <result column="reward_ integral" jdbcType="INTEGER" property="rewardIntegral" />
+    <result column="type" jdbcType="INTEGER" property="type" />
+    <result column="remark" jdbcType="VARCHAR" property="remark" />
+    <result column="create_user_id" jdbcType="BIGINT" property="createUserId" />
+    <result column="create_user_name" jdbcType="VARCHAR" property="createUserName" />
+    <result column="create_date" jdbcType="TIMESTAMP" property="createDate" />
+    <result column="modified_user_id" jdbcType="INTEGER" property="modifiedUserId" />
+    <result column="modified_user_name" jdbcType="VARCHAR" property="modifiedUserName" />
+    <result column="modified_date" jdbcType="TIMESTAMP" property="modifiedDate" />
+    <result column="valid" jdbcType="BIT" property="valid" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <!--
+      WARNING - 只读 - @mbg.generated
+      This element was generated on 2019-01-11 11:03:19.
+    -->
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <!--
+      WARNING - 只读 - @mbg.generated
+      This element was generated on 2019-01-11 11:03:19.
+    -->
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    <!--
+      WARNING - 只读 - @mbg.generated
+      This element was generated on 2019-01-11 11:03:19.
+    -->
+    mkt_activity_red_packet_record_id, mkt_activity_id, sys_company_id, sys_brand_id, 
+    member_code, member_phone, member_name, coupon_definition_id, coupon_name, get_coupon_date, 
+    "reward_ integral", type, remark, create_user_id, create_user_name, create_date, 
+    modified_user_id, modified_user_name, modified_date, valid
+  </sql>
+  <select id="selectByExample" parameterType="com.bizvane.mktcenterservice.models.po.MktActivityRedPacketRecordPOExample" resultMap="BaseResultMap">
+    <!--
+      WARNING - 只读 - @mbg.generated
+      This element was generated on 2019-01-11 11:03:19.
+    -->
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from t_mkt_activity_red_packet_record
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    <!--
+      WARNING - 只读 - @mbg.generated
+      This element was generated on 2019-01-11 11:03:19.
+    -->
+    select 
+    <include refid="Base_Column_List" />
+    from t_mkt_activity_red_packet_record
+    where mkt_activity_red_packet_record_id = #{mktActivityRedPacketRecordId,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    <!--
+      WARNING - 只读 - @mbg.generated
+      This element was generated on 2019-01-11 11:03:19.
+    -->
+    delete from t_mkt_activity_red_packet_record
+    where mkt_activity_red_packet_record_id = #{mktActivityRedPacketRecordId,jdbcType=BIGINT}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.bizvane.mktcenterservice.models.po.MktActivityRedPacketRecordPOExample">
+    <!--
+      WARNING - 只读 - @mbg.generated
+      This element was generated on 2019-01-11 11:03:19.
+    -->
+    delete from t_mkt_activity_red_packet_record
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.bizvane.mktcenterservice.models.po.MktActivityRedPacketRecordPO">
+    <!--
+      WARNING - 只读 - @mbg.generated
+      This element was generated on 2019-01-11 11:03:19.
+    -->
+    <selectKey keyProperty="mktActivityRedPacketRecordId" order="AFTER" resultType="java.lang.Long">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into t_mkt_activity_red_packet_record (mkt_activity_id, sys_company_id, sys_brand_id, 
+      member_code, member_phone, member_name, 
+      coupon_definition_id, coupon_name, get_coupon_date, 
+      "reward_ integral", type, remark, 
+      create_user_id, create_user_name, create_date, 
+      modified_user_id, modified_user_name, modified_date, 
+      valid)
+    values (#{mktActivityId,jdbcType=BIGINT}, #{sysCompanyId,jdbcType=BIGINT}, #{sysBrandId,jdbcType=BIGINT}, 
+      #{memberCode,jdbcType=VARCHAR}, #{memberPhone,jdbcType=VARCHAR}, #{memberName,jdbcType=VARCHAR}, 
+      #{couponDefinitionId,jdbcType=BIGINT}, #{couponName,jdbcType=VARCHAR}, #{getCouponDate,jdbcType=TIMESTAMP}, 
+      #{rewardIntegral,jdbcType=INTEGER}, #{type,jdbcType=INTEGER}, #{remark,jdbcType=VARCHAR}, 
+      #{createUserId,jdbcType=BIGINT}, #{createUserName,jdbcType=VARCHAR}, #{createDate,jdbcType=TIMESTAMP}, 
+      #{modifiedUserId,jdbcType=INTEGER}, #{modifiedUserName,jdbcType=VARCHAR}, #{modifiedDate,jdbcType=TIMESTAMP}, 
+      #{valid,jdbcType=BIT})
+  </insert>
+  <insert id="insertSelective" parameterType="com.bizvane.mktcenterservice.models.po.MktActivityRedPacketRecordPO">
+    <!--
+      WARNING - 只读 - @mbg.generated
+      This element was generated on 2019-01-11 11:03:19.
+    -->
+    <selectKey keyProperty="mktActivityRedPacketRecordId" order="AFTER" resultType="java.lang.Long">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into t_mkt_activity_red_packet_record
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="mktActivityId != null">
+        mkt_activity_id,
+      </if>
+      <if test="sysCompanyId != null">
+        sys_company_id,
+      </if>
+      <if test="sysBrandId != null">
+        sys_brand_id,
+      </if>
+      <if test="memberCode != null">
+        member_code,
+      </if>
+      <if test="memberPhone != null">
+        member_phone,
+      </if>
+      <if test="memberName != null">
+        member_name,
+      </if>
+      <if test="couponDefinitionId != null">
+        coupon_definition_id,
+      </if>
+      <if test="couponName != null">
+        coupon_name,
+      </if>
+      <if test="getCouponDate != null">
+        get_coupon_date,
+      </if>
+      <if test="rewardIntegral != null">
+        "reward_ integral",
+      </if>
+      <if test="type != null">
+        type,
+      </if>
+      <if test="remark != null">
+        remark,
+      </if>
+      <if test="createUserId != null">
+        create_user_id,
+      </if>
+      <if test="createUserName != null">
+        create_user_name,
+      </if>
+      <if test="createDate != null">
+        create_date,
+      </if>
+      <if test="modifiedUserId != null">
+        modified_user_id,
+      </if>
+      <if test="modifiedUserName != null">
+        modified_user_name,
+      </if>
+      <if test="modifiedDate != null">
+        modified_date,
+      </if>
+      <if test="valid != null">
+        valid,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="mktActivityId != null">
+        #{mktActivityId,jdbcType=BIGINT},
+      </if>
+      <if test="sysCompanyId != null">
+        #{sysCompanyId,jdbcType=BIGINT},
+      </if>
+      <if test="sysBrandId != null">
+        #{sysBrandId,jdbcType=BIGINT},
+      </if>
+      <if test="memberCode != null">
+        #{memberCode,jdbcType=VARCHAR},
+      </if>
+      <if test="memberPhone != null">
+        #{memberPhone,jdbcType=VARCHAR},
+      </if>
+      <if test="memberName != null">
+        #{memberName,jdbcType=VARCHAR},
+      </if>
+      <if test="couponDefinitionId != null">
+        #{couponDefinitionId,jdbcType=BIGINT},
+      </if>
+      <if test="couponName != null">
+        #{couponName,jdbcType=VARCHAR},
+      </if>
+      <if test="getCouponDate != null">
+        #{getCouponDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="rewardIntegral != null">
+        #{rewardIntegral,jdbcType=INTEGER},
+      </if>
+      <if test="type != null">
+        #{type,jdbcType=INTEGER},
+      </if>
+      <if test="remark != null">
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="createUserId != null">
+        #{createUserId,jdbcType=BIGINT},
+      </if>
+      <if test="createUserName != null">
+        #{createUserName,jdbcType=VARCHAR},
+      </if>
+      <if test="createDate != null">
+        #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifiedUserId != null">
+        #{modifiedUserId,jdbcType=INTEGER},
+      </if>
+      <if test="modifiedUserName != null">
+        #{modifiedUserName,jdbcType=VARCHAR},
+      </if>
+      <if test="modifiedDate != null">
+        #{modifiedDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="valid != null">
+        #{valid,jdbcType=BIT},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.bizvane.mktcenterservice.models.po.MktActivityRedPacketRecordPOExample" resultType="java.lang.Long">
+    <!--
+      WARNING - 只读 - @mbg.generated
+      This element was generated on 2019-01-11 11:03:19.
+    -->
+    select count(*) from t_mkt_activity_red_packet_record
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    <!--
+      WARNING - 只读 - @mbg.generated
+      This element was generated on 2019-01-11 11:03:19.
+    -->
+    update t_mkt_activity_red_packet_record
+    <set>
+      <if test="record.mktActivityRedPacketRecordId != null">
+        mkt_activity_red_packet_record_id = #{record.mktActivityRedPacketRecordId,jdbcType=BIGINT},
+      </if>
+      <if test="record.mktActivityId != null">
+        mkt_activity_id = #{record.mktActivityId,jdbcType=BIGINT},
+      </if>
+      <if test="record.sysCompanyId != null">
+        sys_company_id = #{record.sysCompanyId,jdbcType=BIGINT},
+      </if>
+      <if test="record.sysBrandId != null">
+        sys_brand_id = #{record.sysBrandId,jdbcType=BIGINT},
+      </if>
+      <if test="record.memberCode != null">
+        member_code = #{record.memberCode,jdbcType=VARCHAR},
+      </if>
+      <if test="record.memberPhone != null">
+        member_phone = #{record.memberPhone,jdbcType=VARCHAR},
+      </if>
+      <if test="record.memberName != null">
+        member_name = #{record.memberName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.couponDefinitionId != null">
+        coupon_definition_id = #{record.couponDefinitionId,jdbcType=BIGINT},
+      </if>
+      <if test="record.couponName != null">
+        coupon_name = #{record.couponName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.getCouponDate != null">
+        get_coupon_date = #{record.getCouponDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.rewardIntegral != null">
+        "reward_ integral" = #{record.rewardIntegral,jdbcType=INTEGER},
+      </if>
+      <if test="record.type != null">
+        type = #{record.type,jdbcType=INTEGER},
+      </if>
+      <if test="record.remark != null">
+        remark = #{record.remark,jdbcType=VARCHAR},
+      </if>
+      <if test="record.createUserId != null">
+        create_user_id = #{record.createUserId,jdbcType=BIGINT},
+      </if>
+      <if test="record.createUserName != null">
+        create_user_name = #{record.createUserName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.createDate != null">
+        create_date = #{record.createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.modifiedUserId != null">
+        modified_user_id = #{record.modifiedUserId,jdbcType=INTEGER},
+      </if>
+      <if test="record.modifiedUserName != null">
+        modified_user_name = #{record.modifiedUserName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.modifiedDate != null">
+        modified_date = #{record.modifiedDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.valid != null">
+        valid = #{record.valid,jdbcType=BIT},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    <!--
+      WARNING - 只读 - @mbg.generated
+      This element was generated on 2019-01-11 11:03:19.
+    -->
+    update t_mkt_activity_red_packet_record
+    set mkt_activity_red_packet_record_id = #{record.mktActivityRedPacketRecordId,jdbcType=BIGINT},
+      mkt_activity_id = #{record.mktActivityId,jdbcType=BIGINT},
+      sys_company_id = #{record.sysCompanyId,jdbcType=BIGINT},
+      sys_brand_id = #{record.sysBrandId,jdbcType=BIGINT},
+      member_code = #{record.memberCode,jdbcType=VARCHAR},
+      member_phone = #{record.memberPhone,jdbcType=VARCHAR},
+      member_name = #{record.memberName,jdbcType=VARCHAR},
+      coupon_definition_id = #{record.couponDefinitionId,jdbcType=BIGINT},
+      coupon_name = #{record.couponName,jdbcType=VARCHAR},
+      get_coupon_date = #{record.getCouponDate,jdbcType=TIMESTAMP},
+      "reward_ integral" = #{record.rewardIntegral,jdbcType=INTEGER},
+      type = #{record.type,jdbcType=INTEGER},
+      remark = #{record.remark,jdbcType=VARCHAR},
+      create_user_id = #{record.createUserId,jdbcType=BIGINT},
+      create_user_name = #{record.createUserName,jdbcType=VARCHAR},
+      create_date = #{record.createDate,jdbcType=TIMESTAMP},
+      modified_user_id = #{record.modifiedUserId,jdbcType=INTEGER},
+      modified_user_name = #{record.modifiedUserName,jdbcType=VARCHAR},
+      modified_date = #{record.modifiedDate,jdbcType=TIMESTAMP},
+      valid = #{record.valid,jdbcType=BIT}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.bizvane.mktcenterservice.models.po.MktActivityRedPacketRecordPO">
+    <!--
+      WARNING - 只读 - @mbg.generated
+      This element was generated on 2019-01-11 11:03:19.
+    -->
+    update t_mkt_activity_red_packet_record
+    <set>
+      <if test="mktActivityId != null">
+        mkt_activity_id = #{mktActivityId,jdbcType=BIGINT},
+      </if>
+      <if test="sysCompanyId != null">
+        sys_company_id = #{sysCompanyId,jdbcType=BIGINT},
+      </if>
+      <if test="sysBrandId != null">
+        sys_brand_id = #{sysBrandId,jdbcType=BIGINT},
+      </if>
+      <if test="memberCode != null">
+        member_code = #{memberCode,jdbcType=VARCHAR},
+      </if>
+      <if test="memberPhone != null">
+        member_phone = #{memberPhone,jdbcType=VARCHAR},
+      </if>
+      <if test="memberName != null">
+        member_name = #{memberName,jdbcType=VARCHAR},
+      </if>
+      <if test="couponDefinitionId != null">
+        coupon_definition_id = #{couponDefinitionId,jdbcType=BIGINT},
+      </if>
+      <if test="couponName != null">
+        coupon_name = #{couponName,jdbcType=VARCHAR},
+      </if>
+      <if test="getCouponDate != null">
+        get_coupon_date = #{getCouponDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="rewardIntegral != null">
+        "reward_ integral" = #{rewardIntegral,jdbcType=INTEGER},
+      </if>
+      <if test="type != null">
+        type = #{type,jdbcType=INTEGER},
+      </if>
+      <if test="remark != null">
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="createUserId != null">
+        create_user_id = #{createUserId,jdbcType=BIGINT},
+      </if>
+      <if test="createUserName != null">
+        create_user_name = #{createUserName,jdbcType=VARCHAR},
+      </if>
+      <if test="createDate != null">
+        create_date = #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifiedUserId != null">
+        modified_user_id = #{modifiedUserId,jdbcType=INTEGER},
+      </if>
+      <if test="modifiedUserName != null">
+        modified_user_name = #{modifiedUserName,jdbcType=VARCHAR},
+      </if>
+      <if test="modifiedDate != null">
+        modified_date = #{modifiedDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="valid != null">
+        valid = #{valid,jdbcType=BIT},
+      </if>
+    </set>
+    where mkt_activity_red_packet_record_id = #{mktActivityRedPacketRecordId,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.bizvane.mktcenterservice.models.po.MktActivityRedPacketRecordPO">
+    <!--
+      WARNING - 只读 - @mbg.generated
+      This element was generated on 2019-01-11 11:03:19.
+    -->
+    update t_mkt_activity_red_packet_record
+    set mkt_activity_id = #{mktActivityId,jdbcType=BIGINT},
+      sys_company_id = #{sysCompanyId,jdbcType=BIGINT},
+      sys_brand_id = #{sysBrandId,jdbcType=BIGINT},
+      member_code = #{memberCode,jdbcType=VARCHAR},
+      member_phone = #{memberPhone,jdbcType=VARCHAR},
+      member_name = #{memberName,jdbcType=VARCHAR},
+      coupon_definition_id = #{couponDefinitionId,jdbcType=BIGINT},
+      coupon_name = #{couponName,jdbcType=VARCHAR},
+      get_coupon_date = #{getCouponDate,jdbcType=TIMESTAMP},
+      "reward_ integral" = #{rewardIntegral,jdbcType=INTEGER},
+      type = #{type,jdbcType=INTEGER},
+      remark = #{remark,jdbcType=VARCHAR},
+      create_user_id = #{createUserId,jdbcType=BIGINT},
+      create_user_name = #{createUserName,jdbcType=VARCHAR},
+      create_date = #{createDate,jdbcType=TIMESTAMP},
+      modified_user_id = #{modifiedUserId,jdbcType=INTEGER},
+      modified_user_name = #{modifiedUserName,jdbcType=VARCHAR},
+      modified_date = #{modifiedDate,jdbcType=TIMESTAMP},
+      valid = #{valid,jdbcType=BIT}
+    where mkt_activity_red_packet_record_id = #{mktActivityRedPacketRecordId,jdbcType=BIGINT}
+  </update>
+</mapper>
