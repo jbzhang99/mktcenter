@@ -29,4 +29,9 @@ public class ActivityStatisticsController {
         log.info("enter ActivityStatisticsController method getAllDate");
         return activityStatisticsService.getAllDate();
     }
+
+    @RequestMapping("test")
+    public void test(){
+        activityStatisticsService.statisticsData(2L,1);
+    }
 }
