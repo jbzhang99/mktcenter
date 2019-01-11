@@ -43,11 +43,12 @@ public class StatisticsConstants {
     public static final String ACTIVITY_LIST_PREFIX = "activity_list_prefix_";
 
     /**
-     * 获取当前时间
+     * 获取当前日期
+     * 格式 yyyyMMdd
      * @return
      */
     public static String getCurrentDate(){
-        return DateUtil.yyyyMMdd.format(new Date());
+        return DateUtil.getTodateString();
     }
 
     /**
@@ -58,5 +59,14 @@ public class StatisticsConstants {
     public static int getCurrentHour(){
         Calendar calendar = Calendar.getInstance();
         return calendar.get(Calendar.HOUR);
+    }
+
+    /**
+     * 获取昨天日期
+     * 格式  yyyyMMdd
+     * @return
+     */
+    public static String getYesterday(){
+        return DateUtil.getYesterdayString();
     }
 }

@@ -48,8 +48,7 @@ public class ActivityStatisticsServiceImpl implements ActivityStatisticsService{
                 //访问量
                 key = StatisticsConstants.VISITORS_PREFIX + activityId + "_" + StatisticsConstants.getCurrentDate();
                 //访问量要以小时存一份增量数据
-                Calendar calendar = Calendar.getInstance();
-                String hourKey = key + "_" + calendar.get(Calendar.HOUR_OF_DAY);
+                String hourKey = key + "_" + StatisticsConstants.getCurrentHour();
                 redisTemplateService.stringIncrementLongString(hourKey,1L);
             }else if (StatisticsEnum.LAUNCH_MEMBERS_COUNT.getCode() == code) {
                 //发起会员数
