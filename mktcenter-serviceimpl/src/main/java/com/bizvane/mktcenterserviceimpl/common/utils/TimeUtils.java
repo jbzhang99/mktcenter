@@ -101,6 +101,6 @@ public class TimeUtils {
         return data<0?0:data;
     }
     public static int getDataNum(Date startDate,Date endDate) {
-        return (int) ((endDate.getTime() - startDate.getTime()) / (1000*3600*24));
+        return (int)(endDate.getTime() - startDate.getTime()) / (1000 * 3600 * 24);
     }
 }

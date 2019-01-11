@@ -8,6 +8,7 @@ import com.bizvane.mktcenterservice.models.po.MktActivityPOWithBLOBs;
 import com.bizvane.mktcenterservice.models.po.MktActivityRedPacketPO;
 import com.bizvane.mktcenterservice.models.po.MktActivityRedPacketSumPO;
 import com.bizvane.mktcenterserviceimpl.common.utils.CodeUtil;
+import com.bizvane.mktcenterserviceimpl.common.utils.TimeUtils;
 import com.bizvane.mktcenterserviceimpl.mappers.MktActivityPOMapper;
 import com.bizvane.mktcenterserviceimpl.mappers.MktActivityRedPacketPOMapper;
 import com.bizvane.mktcenterserviceimpl.mappers.MktActivityRedPacketSumPOMapper;
@@ -45,6 +46,7 @@ public class ActivityRedPacketServiceImpl implements ActivityRedPacketService {
      */
     @Override
     public ResponseData<JSONObject> addActivityRedPacket(ActivityRedPacketBO bo, HttpServletRequest request) {
+        ResponseData<JSONObject> responseData = new ResponseData<>();
         SysAccountPO sysAccountPo = TokenUtils.getStageUser(request);
         String activeRedPacketCode = CodeUtil.getActiveRedPacketCode();
         Date date = new Date();
@@ -77,23 +79,28 @@ public class ActivityRedPacketServiceImpl implements ActivityRedPacketService {
         activityPO.setCreateUserId(sysAccountPo.getSysAccountId());
         activityPO.setCreateUserName(sysAccountPo.getName());
         activityPO.setCreateDate(date);
-        mktActivityRedPacketPOMapper.insertSelective(activityRedPacketPO)
+        mktActivityRedPacketPOMapper.insertSelective(activityRedPacketPO);
 
         MktActivityRedPacketSumPO redPacketSumPO = new MktActivityRedPacketSumPO();
         redPacketSumPO.setMktActivityId(activityPO.getMktActivityId());
         redPacketSumPO.setSysCompanyId(sysAccountPo.getSysCompanyId());
         redPacketSumPO.setActivityCode(activityPO.getActivityCode());
         redPacketSumPO.setActivityName(activityPO.getActivityName());
+        redPacketSumPO.setActivityTime(TimeUtils.getDataNum(activityPO.getStartTime(),activityPO.getEndTime()));
         redPacketSumPO.setSysBrandId(sysAccountPo.getBrandId());
         redPacketSumPO.setCreateUserId(sysAccountPo.getSysAccountId());
         redPacketSumPO.setCreateUserName(sysAccountPo.getName());
         redPacketSumPO.setCreateDate(date);
         mktActivityRedPacketSumPOMapper.insertSelective(redPacketSumPO);
 
-
-
-
-
-        return null;
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("qrCodeUrl", weixinUrl);
+        jsonObject.put("activityCode", activeRedPacketCode);
+        jsonObject.put("activityName", activityPO.getActivityName());
+        responseData.setData(jsonObject);
+        return responseData;
     }
+
+
+
 }
