@@ -91,6 +91,18 @@ public class JobUtil {
         addJob(activityPO.getEndTime(),activityPO.getActivityName(),activityCode,stageUser.getName(),activityJobType,businessType,activityCode);
     }
 
+    //新增红包开始job
+    public  void addStartRedPacketJob(SysAccountPO stageUser, MktActivityPOWithBLOBs activityPO , String activityCode) {
+        String activityJobType = JobHandlerConstants.START_RED_PACKET;
+        int businessType =JobBusinessTypeEnum.ACTIVITY_TYPE_ACTIVITY.getCode();
+        addJob(activityPO.getStartTime(),activityPO.getActivityName(),activityCode,stageUser.getName(),activityJobType,businessType,activityCode);
+    }
+    //新增红包结束job
+    public  void addEndStartRedPacketJob(SysAccountPO stageUser, MktActivityPOWithBLOBs activityPO , String activityCode) {
+        String activityJobType = JobHandlerConstants.END_RED_PACKET;
+        int businessType =JobBusinessTypeEnum.ACTIVITY_TYPE_ACTIVITY.getCode();
+        addJob(activityPO.getEndTime(),activityPO.getActivityName(),activityCode,stageUser.getName(),activityJobType,businessType,activityCode);
+    }
 
     public  void addStartTaskJob(SysAccountPO stageUser, MktTaskPOWithBLOBs po) {
         String jobType = JobHandlerConstants.task;

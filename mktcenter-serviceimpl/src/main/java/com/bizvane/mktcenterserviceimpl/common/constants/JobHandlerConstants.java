@@ -40,4 +40,8 @@ public class JobHandlerConstants {
     public static String START_PRIZE = "startPrize";
     //纪念日活动结束
     public static String END_PRIZE= "endPrize";
+
+
+    public static String START_RED_PACKET= "startRedPacket";
+    public static String END_RED_PACKET= "endRedPacket";
 }
