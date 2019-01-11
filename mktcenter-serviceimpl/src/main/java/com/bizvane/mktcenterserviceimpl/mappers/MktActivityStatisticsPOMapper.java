@@ -103,4 +103,10 @@ public interface MktActivityStatisticsPOMapper {
      * @mbg.generated 2019-01-11 11:03:19
      */
     int updateByPrimaryKey(MktActivityStatisticsPO record);
+
+    /**
+     * 得到所有日期
+     * @return
+     */
+    List<String> getAllDate();
 }

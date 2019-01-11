@@ -2,6 +2,8 @@ package com.bizvane.mktcenterservice.interfaces;
 
 import com.bizvane.utils.responseinfo.ResponseData;
 
+import java.util.List;
+
 /**
  * @author yy
  * @create 2019-01-10 11:19
@@ -9,4 +11,8 @@ import com.bizvane.utils.responseinfo.ResponseData;
 public interface ActivityStatisticsService {
 
     public ResponseData statisticsData(Long activityId, int code);
+
+    public ResponseData getAllDate();
+
+    public void schedule();
 }

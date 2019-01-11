@@ -3,17 +3,16 @@ package com.bizvane.mktcenterserviceimpl.service.impl;
 import com.bizvane.mktcenterservice.interfaces.ActivityStatisticsService;
 import com.bizvane.mktcenterserviceimpl.common.constants.StatisticsConstants;
 import com.bizvane.mktcenterserviceimpl.common.enums.StatisticsEnum;
+import com.bizvane.mktcenterserviceimpl.mappers.MktActivityStatisticsPOMapper;
 import com.bizvane.utils.enumutils.SysResponseEnum;
 import com.bizvane.utils.redisutils.RedisTemplateServiceImpl;
 import com.bizvane.utils.responseinfo.ResponseData;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
-import java.util.Calendar;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 /**
  * 红包活动统计处理实现类
@@ -26,10 +25,12 @@ public class ActivityStatisticsServiceImpl implements ActivityStatisticsService{
 
     @Autowired
     private RedisTemplateServiceImpl<String, Object> redisTemplateService;
+    @Autowired
+    private MktActivityStatisticsPOMapper mktActivityStatisticsPOMapper;
 
     @Override
     public ResponseData statisticsData(Long activityId, int code) {
-        log.info("enter method:==>statisticsData,{},{}",activityId,code);
+        log.info("enter ActivityStatisticsServiceImpl method:==>statisticsData,{},{} =====START====",activityId,code);
         ResponseData responseData = new ResponseData();
         try {
             //将活动id存入redis中 设置redis的key
@@ -75,6 +76,50 @@ public class ActivityStatisticsServiceImpl implements ActivityStatisticsService{
             responseData.setCode(SysResponseEnum.FAILED.getCode());
             responseData.setMessage(e.getMessage());
         }
+        log.info("enter ActivityStatisticsServiceImpl method =====END====");
         return responseData;
+    }
+
+    @Override
+    public ResponseData getAllDate() {
+        log.info("enter ActivityStatisticsServiceImpl method getAllDate ....START....");
+        ResponseData responseData = new ResponseData();
+        try {
+            List<String> dates = mktActivityStatisticsPOMapper.getAllDate();
+            responseData.setCode(SysResponseEnum.SUCCESS.getCode());
+            responseData.setMessage(SysResponseEnum.SUCCESS.getMessage());
+            responseData.setData(dates);
+        }catch (Exception e){
+            e.printStackTrace();
+            log.error(e.getMessage());
+            responseData.setCode(SysResponseEnum.FAILED.getCode());
+            responseData.setMessage(SysResponseEnum.FAILED.getMessage());
+        }
+        log.info("enter ActivityStatisticsServiceImpl method getAllDate ....END....");
+        return responseData;
+    }
+
+    /**
+     * 定时任务 将统计的量入库至数据库中
+     * 每天0点1分执行
+     */
+    @Override
+    @Scheduled(cron="0 1 0 * * ?")
+    public void schedule() {
+        //获取昨天存储的活动id列表
+        String yesterday = StatisticsConstants.getYesterday();
+        String activityIdsKey = StatisticsConstants.ACTIVITY_LIST_PREFIX;
+        String yesterdayKey = activityIdsKey + yesterday;
+        Set<Long> activityIds = (Set<Long>) redisTemplateService.listLeftPopList(yesterdayKey);
+        if (activityIds == null || activityIds.size() == 0) {
+            //证明昨天无活动触发 就此结束
+            return;
+        }else {
+            //获取昨天24小时内的访问量数据 todo 没完呢
+            List<Map> mapList = new ArrayList<>();
+            for (int i = 0; i < 24; i++) {
+
+            }
+        }
     }
 }

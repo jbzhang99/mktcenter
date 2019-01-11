@@ -43,6 +43,11 @@ public class StatisticsConstants {
     public static final String ACTIVITY_LIST_PREFIX = "activity_list_prefix_";
 
     /**
+     * 活动类型  0红包膨胀了
+     */
+    public static final String STATISTICS_TYPE = "0";
+
+    /**
      * 获取当前日期
      * 格式 yyyyMMdd
      * @return
