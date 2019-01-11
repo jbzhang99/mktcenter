@@ -7,6 +7,7 @@ import com.bizvane.mktcenterservice.models.bo.ActivityRedPacketBO;
 import com.bizvane.mktcenterservice.models.po.MktActivityPOWithBLOBs;
 import com.bizvane.mktcenterservice.models.po.MktActivityRedPacketPO;
 import com.bizvane.mktcenterservice.models.po.MktActivityRedPacketSumPO;
+import com.bizvane.mktcenterserviceimpl.common.job.JobUtil;
 import com.bizvane.mktcenterserviceimpl.common.utils.CodeUtil;
 import com.bizvane.mktcenterserviceimpl.common.utils.TimeUtils;
 import com.bizvane.mktcenterserviceimpl.mappers.MktActivityPOMapper;
@@ -22,6 +23,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
+import java.text.ParseException;
 import java.util.Date;
 
 /**
@@ -41,15 +43,29 @@ public class ActivityRedPacketServiceImpl implements ActivityRedPacketService {
     private MktActivityRedPacketPOMapper mktActivityRedPacketPOMapper;
     @Autowired
     private MktActivityRedPacketSumPOMapper mktActivityRedPacketSumPOMapper;
+    @Autowired
+    private JobUtil jobUtil;
     /**
      * 新增
      */
     @Override
-    public ResponseData<JSONObject> addActivityRedPacket(ActivityRedPacketBO bo, HttpServletRequest request) {
+    public ResponseData<JSONObject> addActivityRedPacket(ActivityRedPacketBO bo, HttpServletRequest request) throws ParseException {
         ResponseData<JSONObject> responseData = new ResponseData<>();
         SysAccountPO sysAccountPo = TokenUtils.getStageUser(request);
         String activeRedPacketCode = CodeUtil.getActiveRedPacketCode();
         Date date = new Date();
+        MktActivityPOWithBLOBs activityPO = bo.getActivityPO();
+        Date startTime = activityPO.getStartTime();
+        Boolean runStatus = TimeUtils.ifImmediatelyRun(startTime);
+        log.info("红包 addActivityPrice status:"+runStatus);
+        if (runStatus) {
+            activityPO.setActivityStatus(2);
+        } else {
+            activityPO.setActivityStatus(1);
+            jobUtil.addStartRedPacketJob(sysAccountPo, activityPO, activeRedPacketCode);
+        }
+        jobUtil.addEndStartRedPacketJob(sysAccountPo, activityPO, activeRedPacketCode);
+
         CreateMiniprgmQRCodeRequestVO createMiniprgmQRCodeRequestVO = new CreateMiniprgmQRCodeRequestVO();
         createMiniprgmQRCodeRequestVO.setSysBrandId(sysAccountPo.getBrandId());
         createMiniprgmQRCodeRequestVO.setMiniProgramType("10");
@@ -60,7 +76,6 @@ public class ActivityRedPacketServiceImpl implements ActivityRedPacketService {
         log.info("addActivityRedPacket wexin result:" + JSON.toJSONString(qrCodeResponseData));
         String weixinUrl = qrCodeResponseData.getData();
 
-        MktActivityPOWithBLOBs activityPO = bo.getActivityPO();
         activityPO.setQrCodeUrl(weixinUrl);
         activityPO.setActivityCode(activeRedPacketCode);
         activityPO.setActivityType(12);
