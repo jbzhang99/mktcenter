@@ -40,13 +40,14 @@ public class ActivityStatisticsServiceImpl implements ActivityStatisticsService{
         try {
             //将活动id存入redis中 设置redis的key
             String activityIdsKey = StatisticsConstants.ACTIVITY_LIST_PREFIX + StatisticsConstants.getCurrentDate();
-            Set activityIds = redisTemplateService.setGetMemberOfSetMap(activityIdsKey);
+            Set activityIds = (Set) redisTemplateService.stringGetStringByKey(activityIdsKey);
             if (activityIds == null || activityIds.size() == 0) {
                 Set activityIdSet = new HashSet();
                 activityIdSet.add(activityId);
-                redisTemplateService.setAddSetMap(activityIdsKey,activityIdSet);
+                redisTemplateService.stringSetString(activityIdsKey,activityIdSet);
             }else {
                 activityIds.add(activityId);
+                redisTemplateService.stringSetString(activityIdsKey,activityIds);
             }
             String key = "";
             //判断要统计的量
