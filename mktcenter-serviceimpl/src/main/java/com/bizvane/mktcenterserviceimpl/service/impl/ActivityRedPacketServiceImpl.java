@@ -8,6 +8,7 @@ import com.bizvane.mktcenterservice.interfaces.ActivityRedPacketService;
 import com.bizvane.mktcenterservice.interfaces.TaskService;
 import com.bizvane.mktcenterservice.models.bo.ActivityRedPacketBO;
 import com.bizvane.mktcenterservice.models.po.*;
+import com.bizvane.mktcenterservice.models.vo.ActivityPriceParamVO;
 import com.bizvane.mktcenterservice.models.vo.ActivityRedPacketVO;
 import com.bizvane.mktcenterserviceimpl.common.job.JobUtil;
 import com.bizvane.mktcenterserviceimpl.common.utils.CodeUtil;
@@ -20,6 +21,8 @@ import com.bizvane.utils.tokens.SysAccountPO;
 import com.bizvane.utils.tokens.TokenUtils;
 import com.bizvane.wechatfacade.interfaces.QRCodeServiceFeign;
 import com.bizvane.wechatfacade.models.vo.CreateMiniprgmQRCodeRequestVO;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -166,4 +169,58 @@ public class ActivityRedPacketServiceImpl implements ActivityRedPacketService {
         responseData.setData(activityBO);
         return responseData;
     }
+
+   // @Override
+    public ResponseData<ActivityRedPacketBO> selectActivityRedPacketDetail(ActivityRedPacketVO vo) {
+        ResponseData<ActivityRedPacketBO> responseData = new ResponseData<>();
+//        ActivityRedPacketBO activityBO=new  ActivityRedPacketBO();
+//        Long mktActivityId = vo.getMktActivityId();
+//        String activityCode = vo.getActivityCode();
+//        MktActivityPOWithBLOBs mktActivityPOWithBLOBs = null;
+//        MktActivityPOExample example = new MktActivityPOExample();
+//        example.createCriteria().andActivityCodeEqualTo(activityCode).andValidEqualTo(Boolean.TRUE);
+//        List<MktActivityPOWithBLOBs> mktActivityPOWithBLOBsList = mktActivityPOMapper.selectByExampleWithBLOBs(example);
+//        if (CollectionUtils.isNotEmpty(mktActivityPOWithBLOBsList)) {
+//            mktActivityPOWithBLOBs = mktActivityPOWithBLOBsList.get(0);
+//        }
+//
+//        MktActivityRedPacketPOExample example=new MktActivityRedPacketPOExample();
+//        example.createCriteria().andMktActivityIdEqualTo(mktActivityPOWithBLOBs.getMktActivityId());
+//        MktActivityRedPacketPO mktActivityRedPacketPO = mktActivityRedPacketPOMapper.selectByExample(example).get(0);
+//        activityBO.setCouponDefinitionPO(couponDefinitionServiceFeign.findByIdRpc(mktActivityRedPacketPO.getCouponDefinitionId()).getData());
+//        responseData.setData(activityBO);
+        return responseData;
+    }
+    /**
+     * 查询活动列表
+     */
+    @Override
+    public ResponseData<PageInfo<MktActivityPOWithBLOBs>>  selectActivityRedPacketList(ActivityPriceParamVO vo, HttpServletRequest request){
+        ResponseData<PageInfo<MktActivityPOWithBLOBs>> responseData = new ResponseData<>();
+        SysAccountPO sysAccountPo = TokenUtils.getStageUser(request);
+        vo.setBrandId(sysAccountPo.getBrandId());
+        PageHelper.startPage(vo.getPageNumber(), vo.getPageSize());
+        List<MktActivityPOWithBLOBs> listparam = mktActivityPOMapper.selectActivityPriceLists(vo);
+        if (CollectionUtils.isEmpty(listparam)) {
+            listparam = new ArrayList<MktActivityPOWithBLOBs>();
+        }
+        PageInfo<MktActivityPOWithBLOBs> pageInfo = new PageInfo<>(listparam);
+        responseData.setData(pageInfo);
+        return responseData;
+    }
+    /**
+     * 添加记录 发起  助力  领券
+     */
+    public void  andActivityRedPacketRecord(ActivityRedPacketVO vo){
+//        vo.get
+//        if(){
+//        }else if(){
+//        }else if(){
+//
+//        }
+
+
+    }
+
+
 }

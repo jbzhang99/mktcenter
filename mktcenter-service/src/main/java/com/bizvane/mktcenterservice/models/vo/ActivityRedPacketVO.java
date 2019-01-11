@@ -10,4 +10,12 @@ import lombok.Data;
 public class ActivityRedPacketVO {
     private Long mktActivityId;
     private String activityCode;
+
+    private Long sysCompanyId;
+    private Long sysBrandId;
+    private String memberCode;
+    private String memberPhone;
+    private String memberName;
+    //1=发起,2=助力,3=赠券
+    private Integer type;
 }

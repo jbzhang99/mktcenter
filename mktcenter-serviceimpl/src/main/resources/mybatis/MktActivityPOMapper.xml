@@ -46,6 +46,23 @@
     <result column="activity_detail_img" jdbcType="LONGVARCHAR" property="activityDetailImg" />
     <result column="store_limit_list" jdbcType="LONGVARCHAR" property="storeLimitList" />
   </resultMap>
+
+  <resultMap extends="ResultMapWithBLOBs" id="myResultMapWithBLOBs" type="com.bizvane.mktcenterservice.models.bo.ActivityRedPacketBO">
+    <association autoMapping="true" property="activityRedPacketPO" javaType="com.bizvane.mktcenterservice.models.po.MktActivityRedPacketPO">
+      <id column="mkt_activity_red_packet_id" jdbcType="BIGINT" property="mktActivityRedPacketId" />
+      <result column="sys_company_id" jdbcType="BIGINT" property="sysCompanyId" />
+      <result column="sys_brand_id" jdbcType="BIGINT" property="sysBrandId" />
+      <result column="mkt_activity_id" jdbcType="BIGINT" property="mktActivityId" />
+      <result column="coupon_definition_id" jdbcType="BIGINT" property="couponDefinitionId" />
+      <result column="coupon_name" jdbcType="VARCHAR" property="couponName" />
+      <result column="coupon_ denomination" jdbcType="INTEGER" property="couponDenomination" />
+      <result column="add_coupon_ denomination" jdbcType="INTEGER" property="addCouponDenomination" />
+      <result column="do_if_reward" jdbcType="BIT" property="doIfReward" />
+      <result column="reward_ integral" jdbcType="INTEGER" property="rewardIntegral" />
+      <result column="remark" jdbcType="VARCHAR" property="remark" />
+    </association>
+  </resultMap>
+
   <sql id="Example_Where_Clause">
     <!--
       WARNING - 只读 - @mbg.generated
