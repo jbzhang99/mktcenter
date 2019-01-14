@@ -47,8 +47,6 @@ public class ActivityRedPacketServiceImpl implements ActivityRedPacketService {
     @Autowired
     private MktActivityPOMapper mktActivityPOMapper;
     @Autowired
-    private MktActivityRedPacketPO mktActivityRedPacketPO;
-    @Autowired
     private QRCodeServiceFeign qrCodeServiceFeign;
     @Autowired
     private MktActivityRedPacketPOMapper mktActivityRedPacketPOMapper;
