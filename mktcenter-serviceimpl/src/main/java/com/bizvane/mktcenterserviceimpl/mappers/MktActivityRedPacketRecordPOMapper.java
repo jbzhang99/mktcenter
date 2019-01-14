@@ -9,81 +9,72 @@ import java.util.List;
 
 public interface MktActivityRedPacketRecordPOMapper {
     /**
-     * 只读. 
-     *
-     * @mbg.generated 2019-01-11 11:03:19
-     */
-    long countByExample(MktActivityRedPacketRecordPOExample example);
+	 * 只读. 
+	 * @mbg.generated  2019-01-14 18:26:10
+	 */
+	long countByExample(MktActivityRedPacketRecordPOExample example);
 
-    /**
-     * 只读. 
-     *
-     * @mbg.generated 2019-01-11 11:03:19
-     */
-    int deleteByExample(MktActivityRedPacketRecordPOExample example);
+	/**
+	 * 只读. 
+	 * @mbg.generated  2019-01-14 18:26:10
+	 */
+	int deleteByExample(MktActivityRedPacketRecordPOExample example);
 
-    /**
-     * 只读. 
-     *
-     * @mbg.generated 2019-01-11 11:03:19
-     */
-    int deleteByPrimaryKey(Long mktActivityRedPacketRecordId);
+	/**
+	 * 只读. 
+	 * @mbg.generated  2019-01-14 18:26:10
+	 */
+	int deleteByPrimaryKey(Long mktActivityRedPacketRecordId);
 
-    /**
-     * 只读. 
-     *
-     * @mbg.generated 2019-01-11 11:03:19
-     */
-    int insert(MktActivityRedPacketRecordPO record);
+	/**
+	 * 只读. 
+	 * @mbg.generated  2019-01-14 18:26:10
+	 */
+	int insert(MktActivityRedPacketRecordPO record);
 
-    /**
-     * 只读. 
-     *
-     * @mbg.generated 2019-01-11 11:03:19
-     */
-    int insertSelective(MktActivityRedPacketRecordPO record);
+	/**
+	 * 只读. 
+	 * @mbg.generated  2019-01-14 18:26:10
+	 */
+	int insertSelective(MktActivityRedPacketRecordPO record);
 
-    /**
-     * 只读. 
-     *
-     * @mbg.generated 2019-01-11 11:03:19
-     */
-    List<MktActivityRedPacketRecordPO> selectByExample(MktActivityRedPacketRecordPOExample example);
+	/**
+	 * 只读. 
+	 * @mbg.generated  2019-01-14 18:26:10
+	 */
+	List<MktActivityRedPacketRecordPO> selectByExample(MktActivityRedPacketRecordPOExample example);
 
-    /**
-     * 只读. 
-     *
-     * @mbg.generated 2019-01-11 11:03:19
-     */
-    MktActivityRedPacketRecordPO selectByPrimaryKey(Long mktActivityRedPacketRecordId);
+	/**
+	 * 只读. 
+	 * @mbg.generated  2019-01-14 18:26:10
+	 */
+	MktActivityRedPacketRecordPO selectByPrimaryKey(Long mktActivityRedPacketRecordId);
 
-    /**
-     * 只读. 
-     *
-     * @mbg.generated 2019-01-11 11:03:19
-     */
-    int updateByExampleSelective(@Param("record") MktActivityRedPacketRecordPO record, @Param("example") MktActivityRedPacketRecordPOExample example);
+	/**
+	 * 只读. 
+	 * @mbg.generated  2019-01-14 18:26:10
+	 */
+	int updateByExampleSelective(@Param("record") MktActivityRedPacketRecordPO record,
+			@Param("example") MktActivityRedPacketRecordPOExample example);
 
-    /**
-     * 只读. 
-     *
-     * @mbg.generated 2019-01-11 11:03:19
-     */
-    int updateByExample(@Param("record") MktActivityRedPacketRecordPO record, @Param("example") MktActivityRedPacketRecordPOExample example);
+	/**
+	 * 只读. 
+	 * @mbg.generated  2019-01-14 18:26:10
+	 */
+	int updateByExample(@Param("record") MktActivityRedPacketRecordPO record,
+			@Param("example") MktActivityRedPacketRecordPOExample example);
 
-    /**
-     * 只读. 
-     *
-     * @mbg.generated 2019-01-11 11:03:19
-     */
-    int updateByPrimaryKeySelective(MktActivityRedPacketRecordPO record);
+	/**
+	 * 只读. 
+	 * @mbg.generated  2019-01-14 18:26:10
+	 */
+	int updateByPrimaryKeySelective(MktActivityRedPacketRecordPO record);
 
-    /**
-     * 只读. 
-     *
-     * @mbg.generated 2019-01-11 11:03:19
-     */
-    int updateByPrimaryKey(MktActivityRedPacketRecordPO record);
+	/**
+	 * 只读. 
+	 * @mbg.generated  2019-01-14 18:26:10
+	 */
+	int updateByPrimaryKey(MktActivityRedPacketRecordPO record);
 
-    Integer  getRedPacketCount(ActivityRedPacketVO vo);
+	Integer  getRedPacketCount(ActivityRedPacketVO vo);
 }
