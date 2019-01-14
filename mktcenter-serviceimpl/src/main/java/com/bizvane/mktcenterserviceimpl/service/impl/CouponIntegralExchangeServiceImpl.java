@@ -91,8 +91,8 @@ public class CouponIntegralExchangeServiceImpl implements CouponIntegralExchange
         vo.setExchangeCode(exchangeCode);
         vo.setSysBrandId(stageUser.getBrandId());
         vo.setSysCompanyId(stageUser.getSysCompanyId());
-        vo.setCreateUserId(stageUser.getCreateUserId());
-        vo.setCreateUserName(stageUser.getCreateUserName());
+        vo.setCreateUserId(stageUser.getSysAccountId());
+        vo.setCreateUserName(stageUser.getName());
         vo.setCreateDate(new Date());
         MktCouponIntegralExchangePO mktCouponIntegralExchangePO = new MktCouponIntegralExchangePO();
         BeanUtils.copyProperties(vo,mktCouponIntegralExchangePO);

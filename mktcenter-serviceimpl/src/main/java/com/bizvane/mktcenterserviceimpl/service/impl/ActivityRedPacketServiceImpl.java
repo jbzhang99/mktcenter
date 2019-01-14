@@ -216,8 +216,6 @@ public class ActivityRedPacketServiceImpl implements ActivityRedPacketService {
 //        }else if(){
 //
 //        }
-
-
     }
 
 
