@@ -1,14 +1,12 @@
 package com.bizvane.mktcenterserviceimpl.mappers;
 
 import com.bizvane.mktcenterservice.models.bo.ActivityAnalysisCountBO;
+import com.bizvane.mktcenterservice.models.bo.ActivityRedPacketBO;
 import com.bizvane.mktcenterservice.models.bo.CtivityAnalysisBO;
 import com.bizvane.mktcenterservice.models.po.MktActivityPO;
 import com.bizvane.mktcenterservice.models.po.MktActivityPOExample;
 import com.bizvane.mktcenterservice.models.po.MktActivityPOWithBLOBs;
-import com.bizvane.mktcenterservice.models.vo.ActivityPriceParamVO;
-import com.bizvane.mktcenterservice.models.vo.ActivityVO;
-import com.bizvane.mktcenterservice.models.vo.MktActivityPrizeRecordVO;
-import com.bizvane.mktcenterservice.models.vo.WhiteStoreVO;
+import com.bizvane.mktcenterservice.models.vo.*;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -121,4 +119,6 @@ public interface MktActivityPOMapper {
 	List<MktActivityPO> selectActivity(MktActivityPrizeRecordVO vo);
 
 	List<MktActivityPOWithBLOBs> selectActivityPriceLists(ActivityPriceParamVO vo);
+
+	ActivityRedPacketBO selectActivityRedPacketDetail(ActivityRedPacketVO vo);
 }

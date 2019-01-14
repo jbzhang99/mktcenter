@@ -2,8 +2,10 @@ package com.bizvane.mktcenterserviceimpl.mappers;
 
 import com.bizvane.mktcenterservice.models.po.MktActivityRedPacketSumPO;
 import com.bizvane.mktcenterservice.models.po.MktActivityRedPacketSumPOExample;
-import java.util.List;
+import com.bizvane.mktcenterservice.models.vo.ActivityRedPacketVO;
 import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 public interface MktActivityRedPacketSumPOMapper {
 
@@ -74,4 +76,6 @@ public interface MktActivityRedPacketSumPOMapper {
 	 * @mbg.generated  2019-01-11 14:54:58
 	 */
 	int updateByPrimaryKey(MktActivityRedPacketSumPO record);
+
+	int updateUpdateCount(ActivityRedPacketVO vo);
 }

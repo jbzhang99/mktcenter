@@ -506,4 +506,14 @@
       valid = #{valid,jdbcType=BIT}
     where mkt_activity_red_packet_record_id = #{mktActivityRedPacketRecordId,jdbcType=BIGINT}
   </update>
+  <select id="getRedPacketCount" resultType="java.lang.Integer">
+    SELECT
+    count(mkt_activity_red_packet_record_id)
+    FROM
+	t_mkt_activity_red_packet_record
+    WHERE
+	valid = 1
+	AND member_code = #{memberCode}
+	AND mkt_activity_id=#{mktActivityId}
+  </select>
 </mapper>

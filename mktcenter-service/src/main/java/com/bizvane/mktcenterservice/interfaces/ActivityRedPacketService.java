@@ -19,4 +19,5 @@ public interface ActivityRedPacketService {
     public ResponseData<JSONObject> addActivityRedPacket(ActivityRedPacketBO bo, HttpServletRequest request) throws ParseException;
     public ResponseData<ActivityRedPacketBO> selectActivityRedPacket(ActivityRedPacketVO vo);
     public ResponseData<PageInfo<MktActivityPOWithBLOBs>>  selectActivityRedPacketList(ActivityPriceParamVO vo, HttpServletRequest request);
+    public ResponseData<ActivityRedPacketBO> selectActivityRedPacketDetail(ActivityRedPacketVO vo);
 }

@@ -15,6 +15,7 @@ import com.bizvane.mktcenterserviceimpl.common.utils.CodeUtil;
 import com.bizvane.mktcenterserviceimpl.common.utils.TimeUtils;
 import com.bizvane.mktcenterserviceimpl.mappers.MktActivityPOMapper;
 import com.bizvane.mktcenterserviceimpl.mappers.MktActivityRedPacketPOMapper;
+import com.bizvane.mktcenterserviceimpl.mappers.MktActivityRedPacketRecordPOMapper;
 import com.bizvane.mktcenterserviceimpl.mappers.MktActivityRedPacketSumPOMapper;
 import com.bizvane.utils.responseinfo.ResponseData;
 import com.bizvane.utils.tokens.SysAccountPO;
@@ -26,8 +27,10 @@ import com.github.pagehelper.PageInfo;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpServletRequest;
 import java.text.ParseException;
@@ -58,7 +61,8 @@ public class ActivityRedPacketServiceImpl implements ActivityRedPacketService {
     private TaskService taskService;
     @Autowired
     private CouponDefinitionServiceFeign couponDefinitionServiceFeign;
-
+    @Autowired
+    private MktActivityRedPacketRecordPOMapper mktActivityRedPacketRecordPOMapper;
 
     /**
      * 新增
@@ -137,7 +141,7 @@ public class ActivityRedPacketServiceImpl implements ActivityRedPacketService {
     @Override
     public ResponseData<ActivityRedPacketBO> selectActivityRedPacket(ActivityRedPacketVO vo) {
         ResponseData<ActivityRedPacketBO> responseData = new ResponseData<>();
-        ActivityRedPacketBO activityBO=new  ActivityRedPacketBO();
+        ActivityRedPacketBO activityBO = new ActivityRedPacketBO();
         Long mktActivityId = vo.getMktActivityId();
         String activityCode = vo.getActivityCode();
         MktActivityPOWithBLOBs mktActivityPOWithBLOBs = null;
@@ -160,7 +164,7 @@ public class ActivityRedPacketServiceImpl implements ActivityRedPacketService {
             log.info("---------通过品牌Ids--" + JSON.toJSONString(storeList) + "-----获取店铺列表----------" + JSON.toJSONString(storeList));
             activityBO.setStoreList(storeList);
         }
-        MktActivityRedPacketPOExample example=new MktActivityRedPacketPOExample();
+        MktActivityRedPacketPOExample example = new MktActivityRedPacketPOExample();
         example.createCriteria().andMktActivityIdEqualTo(mktActivityPOWithBLOBs.getMktActivityId());
         MktActivityRedPacketPO mktActivityRedPacketPO = mktActivityRedPacketPOMapper.selectByExample(example).get(0);
         activityBO.setCouponDefinitionPO(couponDefinitionServiceFeign.findByIdRpc(mktActivityRedPacketPO.getCouponDefinitionId()).getData());
@@ -168,7 +172,7 @@ public class ActivityRedPacketServiceImpl implements ActivityRedPacketService {
         return responseData;
     }
 
-   // @Override
+    @Override
     public ResponseData<ActivityRedPacketBO> selectActivityRedPacketDetail(ActivityRedPacketVO vo) {
         ResponseData<ActivityRedPacketBO> responseData = new ResponseData<>();
 //        ActivityRedPacketBO activityBO=new  ActivityRedPacketBO();
@@ -187,13 +191,17 @@ public class ActivityRedPacketServiceImpl implements ActivityRedPacketService {
 //        MktActivityRedPacketPO mktActivityRedPacketPO = mktActivityRedPacketPOMapper.selectByExample(example).get(0);
 //        activityBO.setCouponDefinitionPO(couponDefinitionServiceFeign.findByIdRpc(mktActivityRedPacketPO.getCouponDefinitionId()).getData());
 //        responseData.setData(activityBO);
+
+        ActivityRedPacketBO activityRedPacketBO = mktActivityPOMapper.selectActivityRedPacketDetail(vo);
+        responseData.setData(activityRedPacketBO);
         return responseData;
     }
+
     /**
      * 查询活动列表
      */
     @Override
-    public ResponseData<PageInfo<MktActivityPOWithBLOBs>>  selectActivityRedPacketList(ActivityPriceParamVO vo, HttpServletRequest request){
+    public ResponseData<PageInfo<MktActivityPOWithBLOBs>> selectActivityRedPacketList(ActivityPriceParamVO vo, HttpServletRequest request) {
         ResponseData<PageInfo<MktActivityPOWithBLOBs>> responseData = new ResponseData<>();
         SysAccountPO sysAccountPo = TokenUtils.getStageUser(request);
         vo.setBrandId(sysAccountPo.getBrandId());
@@ -206,16 +214,47 @@ public class ActivityRedPacketServiceImpl implements ActivityRedPacketService {
         responseData.setData(pageInfo);
         return responseData;
     }
+
     /**
      * 添加记录 发起  助力  领券
      */
-    public void  andActivityRedPacketRecord(ActivityRedPacketVO vo){
-//        vo.get
-//        if(){
-//        }else if(){
-//        }else if(){
-//
-//        }
+    @Transactional
+    public void andActivityRedPacketRecord(ActivityRedPacketVO vo) {
+        log.info("andActivityRedPacketRecord param:" + JSON.toJSONString(vo));
+        Integer type = vo.getType();
+        Integer redPacketCount = mktActivityRedPacketRecordPOMapper.getRedPacketCount(vo);
+        log.info("andActivityRedPacketRecord redPacketCount param:" + redPacketCount);
+        ActivityRedPacketBO bo = mktActivityPOMapper.selectActivityRedPacketDetail(vo);
+        Date couponDate = new Date();
+        Boolean flag = Boolean.FALSE;
+
+        if (1 == type && redPacketCount == 0) {
+            flag = Boolean.TRUE;
+            vo.setInitiatorNum(1);
+        } else if (2 == type) {
+            flag = Boolean.TRUE;
+            vo.setHelpNum(1);
+
+        } else if (3 == type && redPacketCount == 0) {
+            flag = Boolean.TRUE;
+            vo.setGetCouponNum(1);
+        }
+        log.info("andActivityRedPacketRecord flag param:" + flag);
+        if (redPacketCount > 0) {
+            vo.setHelpNum(0);
+        }
+
+        if (flag) {
+            MktActivityRedPacketRecordPO recordPO = new MktActivityRedPacketRecordPO();
+            BeanUtils.copyProperties(vo, recordPO);
+            recordPO.setCouponDefinitionId(bo.getActivityRedPacketPO().getCouponDefinitionId());
+            recordPO.setCouponName(bo.getActivityRedPacketPO().getCouponName());
+            recordPO.setGetCouponDate(couponDate);
+            recordPO.setRewardIntegral(bo.getActivityRedPacketPO().getRewardIntegral());
+            mktActivityRedPacketRecordPOMapper.insertSelective(recordPO);
+
+            mktActivityRedPacketSumPOMapper.updateUpdateCount(vo);
+        }
     }
 
 

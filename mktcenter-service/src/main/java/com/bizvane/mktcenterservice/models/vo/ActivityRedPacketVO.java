@@ -18,4 +18,9 @@ public class ActivityRedPacketVO {
     private String memberName;
     //1=发起,2=助力,3=赠券
     private Integer type;
+
+    private Integer initiatorNum=0;
+    private Integer helpNum=0;
+    private Integer getCouponNum=0;
+
 }

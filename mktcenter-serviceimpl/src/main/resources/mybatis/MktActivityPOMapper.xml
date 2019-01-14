@@ -47,7 +47,35 @@
     <result column="store_limit_list" jdbcType="LONGVARCHAR" property="storeLimitList" />
   </resultMap>
 
-  <resultMap extends="ResultMapWithBLOBs" id="myResultMapWithBLOBs" type="com.bizvane.mktcenterservice.models.bo.ActivityRedPacketBO">
+  <resultMap  id="myResultMapWithBLOBs" type="com.bizvane.mktcenterservice.models.bo.ActivityRedPacketBO">
+    <association autoMapping="true" property="activityPO" javaType="com.bizvane.mktcenterservice.models.po.MktActivityPOWithBLOBs">
+      <id column="mkt_activity_id" jdbcType="BIGINT" property="mktActivityId" />
+      <result column="sys_company_id" jdbcType="BIGINT" property="sysCompanyId" />
+      <result column="sys_brand_id" jdbcType="BIGINT" property="sysBrandId" />
+      <result column="mbr_group_def_id" jdbcType="BIGINT" property="mbrGroupDefId" />
+      <result column="mkt_activity_smart_group_id" jdbcType="BIGINT" property="mktActivitySmartGroupId" />
+      <result column="activity_code" jdbcType="VARCHAR" property="activityCode" />
+      <result column="activity_type" jdbcType="INTEGER" property="activityType" />
+      <result column="activity_name" jdbcType="VARCHAR" property="activityName" />
+      <result column="start_time" jdbcType="TIMESTAMP" property="startTime" />
+      <result column="end_time" jdbcType="TIMESTAMP" property="endTime" />
+      <result column="long_term" jdbcType="INTEGER" property="longTerm" />
+      <result column="send_immediately" jdbcType="BIT" property="sendImmediately" />
+      <result column="send_time" jdbcType="TIMESTAMP" property="sendTime" />
+      <result column="points" jdbcType="INTEGER" property="points" />
+      <result column="qr_code_url" jdbcType="VARCHAR" property="qrCodeUrl" />
+      <result column="check_status" jdbcType="INTEGER" property="checkStatus" />
+      <result column="activity_status" jdbcType="INTEGER" property="activityStatus" />
+      <result column="is_store_limit" jdbcType="BIT" property="isStoreLimit" />
+      <result column="store_limit_type" jdbcType="INTEGER" property="storeLimitType" />
+      <result column="prize_points" jdbcType="INTEGER" property="prizePoints" />
+      <result column="remark" jdbcType="VARCHAR" property="remark" />
+      <result column="activity_info" jdbcType="LONGVARCHAR" property="activityInfo" />
+      <result column="activity_rule" jdbcType="LONGVARCHAR" property="activityRule" />
+      <result column="activity_list_img" jdbcType="LONGVARCHAR" property="activityListImg" />
+      <result column="activity_detail_img" jdbcType="LONGVARCHAR" property="activityDetailImg" />
+      <result column="store_limit_list" jdbcType="LONGVARCHAR" property="storeLimitList" />
+    </association>
     <association autoMapping="true" property="activityRedPacketPO" javaType="com.bizvane.mktcenterservice.models.po.MktActivityRedPacketPO">
       <id column="mkt_activity_red_packet_id" jdbcType="BIGINT" property="mktActivityRedPacketId" />
       <result column="sys_company_id" jdbcType="BIGINT" property="sysCompanyId" />
@@ -59,7 +87,6 @@
       <result column="add_coupon_ denomination" jdbcType="INTEGER" property="addCouponDenomination" />
       <result column="do_if_reward" jdbcType="BIT" property="doIfReward" />
       <result column="reward_ integral" jdbcType="INTEGER" property="rewardIntegral" />
-      <result column="remark" jdbcType="VARCHAR" property="remark" />
     </association>
   </resultMap>
 
@@ -1082,5 +1109,46 @@
       AND CONCAT(activity_name,activity_code) LIKE concat('%',#{activityName},'%')
     </if>
     ORDER BY create_date DESC
+  </select>
+  <select id="selectActivityRedPacketDetail"  resultMap="myResultMapWithBLOBs">
+    SELECT
+	tmc.mkt_activity_id,
+	tmc.sys_company_id,
+	tmc.sys_brand_id,
+	tmc.activity_code,
+	tmc.activity_type,
+	tmc.activity_name,
+	tmc.start_time,
+	tmc.end_time,
+	tmc.activity_info,
+	tmc.activity_rule,
+	tmc.long_term,
+	tmc.activity_list_img,
+	tmc.activity_detail_img,
+	tmc.qr_code_url,
+	tmc.check_status,
+	tmc.activity_status,
+	tmc.is_store_limit,
+	tmc.store_limit_type,
+	tmc.store_limit_list,
+	tmarp.mkt_activity_red_packet_id,
+	tmarp.coupon_definition_id,
+	tmarp.coupon_name,
+	tmarp.coupon_denomination,
+	tmarp.add_coupon_denomination,
+	tmarp.do_if_reward,
+	tmarp.reward_integral
+  FROM
+  t_mkt_activity tmc
+  INNER JOIN t_mkt_activity_red_packet tmarp ON tmc.mkt_activity_id=tmarp.mkt_activity_id
+  AND tmc.valid=1 AND tmarp.valid=1
+  <where>
+    <if test="mktActivityId != null ">
+      tmc.mkt_activity_id=#{mktActivityId}
+    </if>
+    <if test="activityCode!= null and activityCode!= '' ">
+      tmc.activity_code=#{activityCode}
+    </if>
+  </where>
   </select>
 </mapper>
