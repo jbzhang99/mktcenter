@@ -512,4 +512,21 @@
       GROUP BY statistics_time
       ORDER BY statistics_time DESC
   </select>
+
+  <select id="getBo" parameterType="map" resultType="com.bizvane.mktcenterservice.models.bo.ActivityStatisticsBO">
+    select
+      <include refid="Base_Column_List" />
+      from t_mkt_activity_statistics
+      <where>
+        <if test="activityId != null and activityId != ''">
+          mkt_activity_id = #{activityId}
+        </if>
+        <if test="statisticsTime != null and statisticsTime != ''">
+          and DATE_FORMAT(statistics_time,'%Y-%m-%d') = #{statisticsTime}
+        </if>
+        <if test="statisticsType != null and statisticsType != ''">
+          and statistics_type = #{statisticsType}
+        </if>
+      </where>
+  </select>
 </mapper>
