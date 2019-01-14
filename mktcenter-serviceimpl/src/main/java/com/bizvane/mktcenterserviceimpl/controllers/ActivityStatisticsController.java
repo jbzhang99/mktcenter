@@ -5,6 +5,7 @@ import com.bizvane.utils.responseinfo.ResponseData;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
@@ -31,7 +32,17 @@ public class ActivityStatisticsController {
     }
 
     @RequestMapping("test")
-    public void test(){
-        activityStatisticsService.statisticsData(2L,1);
+    public ResponseData test(@RequestParam("activityId") Long activityId,@RequestParam("code") int code){
+        return activityStatisticsService.statisticsData(activityId,code,"");
+    }
+
+    @RequestMapping("test1")
+    public void test1(){
+        activityStatisticsService.schedule();
+    }
+
+    @RequestMapping("test2")
+    public ResponseData test2(@RequestParam("activityId") Long activityId,@RequestParam("time") String time){
+        return activityStatisticsService.activityAnalysis(activityId,time);
     }
 }

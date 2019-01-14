@@ -4,6 +4,7 @@ import com.bizvane.mktcenterserviceimpl.common.tools.DateUtil;
 
 import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 
 /**
  * 红包活动统计静态类
@@ -48,6 +49,13 @@ public class StatisticsConstants {
     public static final String STATISTICS_TYPE = "0";
 
     /**
+     *  redis缓存过期时间
+     *  单位：秒
+     *  时间设置：36小时
+     */
+    public static final long REDIS_LIVE_TIME = 129600;
+
+    /**
      * 获取当前日期
      * 格式 yyyyMMdd
      * @return
@@ -63,7 +71,7 @@ public class StatisticsConstants {
      */
     public static int getCurrentHour(){
         Calendar calendar = Calendar.getInstance();
-        return calendar.get(Calendar.HOUR);
+        return calendar.get(Calendar.HOUR_OF_DAY);
     }
 
     /**
@@ -73,5 +81,14 @@ public class StatisticsConstants {
      */
     public static String getYesterday(){
         return DateUtil.getYesterdayString();
+    }
+
+
+    public static String getBeforeOneDate(String time){
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(DateUtil.stringToDate(time,DateUtil.ymd));
+        calendar.add(calendar.DATE,-1);
+        Date before = calendar.getTime();
+        return DateUtil.format(before,DateUtil.ymd);
     }
 }
