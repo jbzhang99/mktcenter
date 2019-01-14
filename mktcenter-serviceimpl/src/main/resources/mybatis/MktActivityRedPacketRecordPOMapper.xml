@@ -528,7 +528,17 @@
 	t_mkt_activity_red_packet_record
     WHERE
 	valid = 1
+    <if test="type!=null">
+      AND type=#{type}
+    </if>
+    <if test="memberCode!= null and memberCode!= '' ">
 	AND member_code = #{memberCode}
+    </if>
+    <if test="sponsorCode!= null and sponsorCode!= '' ">
+    AND sponsor_code = #{sponsorCode}
+    </if>
+    <if test="mktActivityId!=null">
 	AND mkt_activity_id=#{mktActivityId}
+    </if>
   </select>
 </mapper>

@@ -4,6 +4,12 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.bizvane.centerstageservice.models.po.SysStorePo;
 import com.bizvane.couponfacade.interfaces.CouponDefinitionServiceFeign;
+import com.bizvane.couponfacade.interfaces.SendCouponServiceFeign;
+import com.bizvane.couponfacade.models.vo.SendCouponSimpleRequestVO;
+import com.bizvane.members.facade.enums.IntegralChangeTypeEnum;
+import com.bizvane.members.facade.service.api.IntegralChangeApiService;
+import com.bizvane.members.facade.service.card.request.IntegralChangeRequestModel;
+import com.bizvane.members.facade.service.card.response.IntegralChangeResponseModel;
 import com.bizvane.mktcenterservice.interfaces.ActivityRedPacketService;
 import com.bizvane.mktcenterservice.interfaces.TaskService;
 import com.bizvane.mktcenterservice.models.bo.ActivityRedPacketBO;
@@ -63,6 +69,10 @@ public class ActivityRedPacketServiceImpl implements ActivityRedPacketService {
     private CouponDefinitionServiceFeign couponDefinitionServiceFeign;
     @Autowired
     private MktActivityRedPacketRecordPOMapper mktActivityRedPacketRecordPOMapper;
+    @Autowired
+    private IntegralChangeApiService integralChangeApiService;
+    @Autowired
+    private SendCouponServiceFeign sendCouponServiceFeign;
 
     /**
      * 新增
@@ -175,23 +185,6 @@ public class ActivityRedPacketServiceImpl implements ActivityRedPacketService {
     @Override
     public ResponseData<ActivityRedPacketBO> selectActivityRedPacketDetail(ActivityRedPacketVO vo) {
         ResponseData<ActivityRedPacketBO> responseData = new ResponseData<>();
-//        ActivityRedPacketBO activityBO=new  ActivityRedPacketBO();
-//        Long mktActivityId = vo.getMktActivityId();
-//        String activityCode = vo.getActivityCode();
-//        MktActivityPOWithBLOBs mktActivityPOWithBLOBs = null;
-//        MktActivityPOExample example = new MktActivityPOExample();
-//        example.createCriteria().andActivityCodeEqualTo(activityCode).andValidEqualTo(Boolean.TRUE);
-//        List<MktActivityPOWithBLOBs> mktActivityPOWithBLOBsList = mktActivityPOMapper.selectByExampleWithBLOBs(example);
-//        if (CollectionUtils.isNotEmpty(mktActivityPOWithBLOBsList)) {
-//            mktActivityPOWithBLOBs = mktActivityPOWithBLOBsList.get(0);
-//        }
-//
-//        MktActivityRedPacketPOExample example=new MktActivityRedPacketPOExample();
-//        example.createCriteria().andMktActivityIdEqualTo(mktActivityPOWithBLOBs.getMktActivityId());
-//        MktActivityRedPacketPO mktActivityRedPacketPO = mktActivityRedPacketPOMapper.selectByExample(example).get(0);
-//        activityBO.setCouponDefinitionPO(couponDefinitionServiceFeign.findByIdRpc(mktActivityRedPacketPO.getCouponDefinitionId()).getData());
-//        responseData.setData(activityBO);
-
         ActivityRedPacketBO activityRedPacketBO = mktActivityPOMapper.selectActivityRedPacketDetail(vo);
         responseData.setData(activityRedPacketBO);
         return responseData;
@@ -214,48 +207,91 @@ public class ActivityRedPacketServiceImpl implements ActivityRedPacketService {
         responseData.setData(pageInfo);
         return responseData;
     }
+    /**
+     * 判断记录数据 发起  助力
+     */
+
 
     /**
      * 添加记录 发起  助力  领券
      */
     @Transactional
     public void andActivityRedPacketRecord(ActivityRedPacketVO vo) {
-        log.info("andActivityRedPacketRecord param:" + JSON.toJSONString(vo));
         Integer type = vo.getType();
-        Integer redPacketCount = mktActivityRedPacketRecordPOMapper.getRedPacketCount(vo);
-        log.info("andActivityRedPacketRecord redPacketCount param:" + redPacketCount);
+        String memberCode = vo.getMemberCode();
+        String sponsorCode = vo.getSponsorCode();
+        Long mktActivityId = vo.getMktActivityId();
         ActivityRedPacketBO bo = mktActivityPOMapper.selectActivityRedPacketDetail(vo);
-        Date couponDate = new Date();
+        log.info("andActivityRedPacketRecord 添加记录 param:" + JSON.toJSONString(vo) + "---" + JSON.toJSONString(bo));
+        Integer limitNum = bo.getActivityRedPacketPO().getLimitNum();
         Boolean flag = Boolean.FALSE;
-
-        if (1 == type && redPacketCount == 0) {
+        if (1 == type && mktActivityRedPacketRecordPOMapper.getRedPacketCount(type, memberCode, null, mktActivityId) == 0) {
             flag = Boolean.TRUE;
             vo.setInitiatorNum(1);
-        } else if (2 == type) {
+            log.info("发起者添加!");
+        } else if (2 == type && mktActivityRedPacketRecordPOMapper.getRedPacketCount(type, memberCode, sponsorCode, mktActivityId) == 0 && mktActivityRedPacketRecordPOMapper.getRedPacketCount(type, null, sponsorCode, mktActivityId) <= limitNum) {
             flag = Boolean.TRUE;
             vo.setHelpNum(1);
-
-        } else if (3 == type && redPacketCount == 0) {
+            this.addPonint(bo, vo);
+            log.info("助力者添加!");
+        } else if (3 == type && mktActivityRedPacketRecordPOMapper.getRedPacketCount(type, memberCode, null, mktActivityId) == 0) {
             flag = Boolean.TRUE;
             vo.setGetCouponNum(1);
+            this.addPonint(bo, vo);
+            log.info("发券者添加!");
         }
         log.info("andActivityRedPacketRecord flag param:" + flag);
-        if (redPacketCount > 0) {
+        if (2 == type && mktActivityRedPacketRecordPOMapper.getRedPacketCount(type, memberCode, null, mktActivityId) > 0) {
             vo.setHelpNum(0);
         }
-
         if (flag) {
             MktActivityRedPacketRecordPO recordPO = new MktActivityRedPacketRecordPO();
             BeanUtils.copyProperties(vo, recordPO);
             recordPO.setCouponDefinitionId(bo.getActivityRedPacketPO().getCouponDefinitionId());
             recordPO.setCouponName(bo.getActivityRedPacketPO().getCouponName());
-            recordPO.setGetCouponDate(couponDate);
+            recordPO.setGetCouponDate(new Date());
             recordPO.setRewardIntegral(bo.getActivityRedPacketPO().getRewardIntegral());
             mktActivityRedPacketRecordPOMapper.insertSelective(recordPO);
-
             mktActivityRedPacketSumPOMapper.updateUpdateCount(vo);
         }
     }
 
+    /**
+     * 添加积分
+     */
+    public void addPonint(ActivityRedPacketBO bo, ActivityRedPacketVO vo) {
+        if (!bo.getActivityRedPacketPO().getDoIfReward()) {
+            log.info("助力不送积分!");
+            return;
+        }
+        IntegralChangeRequestModel integralRecordModel = new IntegralChangeRequestModel();
+        integralRecordModel.setSysCompanyId(vo.getSysCompanyId());
+        integralRecordModel.setBrandId(vo.getSysBrandId());
+        integralRecordModel.setMemberCode(vo.getMemberCode());
+        integralRecordModel.setBusinessType("28");
+        //2=收入积分(新增积分)      1=支出积分(减少积分)
+        integralRecordModel.setChangeType(IntegralChangeTypeEnum.INCOME.getCode());
+        integralRecordModel.setChangeBills(bo.getActivityPO().getActivityCode());
+        integralRecordModel.setChangeIntegral(bo.getActivityRedPacketPO().getRewardIntegral());
+        log.info("红包 发送积分的参数--" + JSON.toJSONString(integralRecordModel));
+        IntegralChangeResponseModel integralChangeResponseModel = integralChangeApiService.integralChangeOperate(integralRecordModel);
+        log.info("红包 发积分结果打印======" + JSON.toJSONString(integralChangeResponseModel));
+    }
 
+    /**
+     * 发送券
+     */
+    public void sendCoupon(ActivityRedPacketBO bo, ActivityRedPacketVO vo) {
+        SendCouponSimpleRequestVO onecouponVO = new SendCouponSimpleRequestVO();
+        onecouponVO.setMemberCode(vo.getMemberCode());
+        onecouponVO.setSendBussienId(vo.getMktActivityId());
+        onecouponVO.setBusinessName(bo.getActivityPO().getActivityName());
+        onecouponVO.setSendType("28");
+        onecouponVO.setCouponDefinitionId(bo.getActivityRedPacketPO().getCouponDefinitionId());
+        onecouponVO.setBrandId(vo.getSysBrandId());
+        log.info("红包 发送券的参数-----" + JSON.toJSONString(bo));
+        // award.execute(bo);
+        ResponseData<String> simple = sendCouponServiceFeign.simple(onecouponVO);
+        log.info("红包 发送券的结果------" + JSON.toJSONString(simple));
+    }
 }
