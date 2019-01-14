@@ -7,121 +7,127 @@ public class MktActivityRedPacketPO implements Serializable {
 
 	/**
 	 * 只读. pkid. mkt_activity_red_packet_id
-	 * @mbg.generated  2019-01-11 18:27:37
+	 * @mbg.generated  2019-01-14 18:03:09
 	 */
 	@io.swagger.annotations.ApiModelProperty(value = "pkid", name = "mktActivityRedPacketId", required = false, example = "")
 	private Long mktActivityRedPacketId;
 	/**
 	 * 只读. 所属企业id. sys_company_id
-	 * @mbg.generated  2019-01-11 18:27:37
+	 * @mbg.generated  2019-01-14 18:03:09
 	 */
 	@io.swagger.annotations.ApiModelProperty(value = "所属企业id", name = "sysCompanyId", required = false, example = "")
 	private Long sysCompanyId;
 	/**
 	 * 只读. 所属品牌id. sys_brand_id
-	 * @mbg.generated  2019-01-11 18:27:37
+	 * @mbg.generated  2019-01-14 18:03:09
 	 */
 	@io.swagger.annotations.ApiModelProperty(value = "所属品牌id", name = "sysBrandId", required = false, example = "")
 	private Long sysBrandId;
 	/**
 	 * 只读. 关联活动id. mkt_activity_id
-	 * @mbg.generated  2019-01-11 18:27:37
+	 * @mbg.generated  2019-01-14 18:03:09
 	 */
 	@io.swagger.annotations.ApiModelProperty(value = "关联活动id", name = "mktActivityId", required = false, example = "")
 	private Long mktActivityId;
 	/**
 	 * 只读. 券定义id. coupon_definition_id
-	 * @mbg.generated  2019-01-11 18:27:37
+	 * @mbg.generated  2019-01-14 18:03:09
 	 */
 	@io.swagger.annotations.ApiModelProperty(value = "券定义id", name = "couponDefinitionId", required = false, example = "")
 	private Long couponDefinitionId;
 	/**
 	 * 只读. 活动奖励的券名称. coupon_name
-	 * @mbg.generated  2019-01-11 18:27:37
+	 * @mbg.generated  2019-01-14 18:03:09
 	 */
 	@io.swagger.annotations.ApiModelProperty(value = "活动奖励的券名称", name = "couponName", required = false, example = "")
 	private String couponName;
 	/**
 	 * 只读. 券面额. coupon_denomination
-	 * @mbg.generated  2019-01-11 18:27:37
+	 * @mbg.generated  2019-01-14 18:03:09
 	 */
 	@io.swagger.annotations.ApiModelProperty(value = "券面额", name = "couponDenomination", required = false, example = "")
 	private Integer couponDenomination;
 	/**
 	 * 只读. 叠加券面额. add_coupon_denomination
-	 * @mbg.generated  2019-01-11 18:27:37
+	 * @mbg.generated  2019-01-14 18:03:09
 	 */
 	@io.swagger.annotations.ApiModelProperty(value = "叠加券面额", name = "addCouponDenomination", required = false, example = "")
 	private Integer addCouponDenomination;
 	/**
+	 * 只读. 助力人数上限. limit_num
+	 * @mbg.generated  2019-01-14 18:03:09
+	 */
+	@io.swagger.annotations.ApiModelProperty(value = "助力人数上限", name = "limitNum", required = false, example = "")
+	private Integer limitNum;
+	/**
 	 * 只读. 参与赠送积分，1是，0否. do_if_reward
-	 * @mbg.generated  2019-01-11 18:27:37
+	 * @mbg.generated  2019-01-14 18:03:09
 	 */
 	@io.swagger.annotations.ApiModelProperty(value = "参与赠送积分，1是，0否", name = "doIfReward", required = false, example = "")
 	private Boolean doIfReward;
 	/**
 	 * 只读. 奖励积分. reward_integral
-	 * @mbg.generated  2019-01-11 18:27:37
+	 * @mbg.generated  2019-01-14 18:03:09
 	 */
 	@io.swagger.annotations.ApiModelProperty(value = "奖励积分", name = "rewardIntegral", required = false, example = "")
 	private Integer rewardIntegral;
 	/**
 	 * 只读. 备注. remark
-	 * @mbg.generated  2019-01-11 18:27:37
+	 * @mbg.generated  2019-01-14 18:03:09
 	 */
 	@io.swagger.annotations.ApiModelProperty(value = "备注", name = "remark", required = false, example = "")
 	private String remark;
 	/**
 	 * 只读. 创建人id. create_user_id
-	 * @mbg.generated  2019-01-11 18:27:37
+	 * @mbg.generated  2019-01-14 18:03:09
 	 */
 	@io.swagger.annotations.ApiModelProperty(value = "创建人id", name = "createUserId", required = false, example = "")
 	private Long createUserId;
 	/**
 	 * 只读. 创建人. create_user_name
-	 * @mbg.generated  2019-01-11 18:27:37
+	 * @mbg.generated  2019-01-14 18:03:09
 	 */
 	@io.swagger.annotations.ApiModelProperty(value = "创建人", name = "createUserName", required = false, example = "")
 	private String createUserName;
 	/**
 	 * 只读. 创建日期. create_date
-	 * @mbg.generated  2019-01-11 18:27:37
+	 * @mbg.generated  2019-01-14 18:03:09
 	 */
 	@io.swagger.annotations.ApiModelProperty(value = "创建日期", name = "createDate", required = false, example = "")
 	private Date createDate;
 	/**
 	 * 只读. 修改人id. modified_user_id
-	 * @mbg.generated  2019-01-11 18:27:37
+	 * @mbg.generated  2019-01-14 18:03:09
 	 */
 	@io.swagger.annotations.ApiModelProperty(value = "修改人id", name = "modifiedUserId", required = false, example = "")
 	private Long modifiedUserId;
 	/**
 	 * 只读. 修改人. modified_user_name
-	 * @mbg.generated  2019-01-11 18:27:37
+	 * @mbg.generated  2019-01-14 18:03:09
 	 */
 	@io.swagger.annotations.ApiModelProperty(value = "修改人", name = "modifiedUserName", required = false, example = "")
 	private String modifiedUserName;
 	/**
 	 * 只读. 修改时间. modified_date
-	 * @mbg.generated  2019-01-11 18:27:37
+	 * @mbg.generated  2019-01-14 18:03:09
 	 */
 	@io.swagger.annotations.ApiModelProperty(value = "修改时间", name = "modifiedDate", required = false, example = "")
 	private Date modifiedDate;
 	/**
 	 * 只读. 数据有效性：1=有效；0=无效. valid
-	 * @mbg.generated  2019-01-11 18:27:37
+	 * @mbg.generated  2019-01-14 18:03:09
 	 */
 	@io.swagger.annotations.ApiModelProperty(value = "数据有效性：1=有效；0=无效", name = "valid", required = false, example = "")
 	private Boolean valid;
 	/**
 	 * 只读. 
-	 * @mbg.generated  2019-01-11 18:27:37
+	 * @mbg.generated  2019-01-14 18:03:09
 	 */
 	private static final long serialVersionUID = 1L;
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2019-01-11 18:27:37
+	 * @mbg.generated  2019-01-14 18:03:09
 	 */
 	public Long getMktActivityRedPacketId() {
 		return mktActivityRedPacketId;
@@ -129,7 +135,7 @@ public class MktActivityRedPacketPO implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2019-01-11 18:27:37
+	 * @mbg.generated  2019-01-14 18:03:09
 	 */
 	public void setMktActivityRedPacketId(Long mktActivityRedPacketId) {
 		this.mktActivityRedPacketId = mktActivityRedPacketId;
@@ -137,7 +143,7 @@ public class MktActivityRedPacketPO implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2019-01-11 18:27:37
+	 * @mbg.generated  2019-01-14 18:03:09
 	 */
 	public Long getSysCompanyId() {
 		return sysCompanyId;
@@ -145,7 +151,7 @@ public class MktActivityRedPacketPO implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2019-01-11 18:27:37
+	 * @mbg.generated  2019-01-14 18:03:09
 	 */
 	public void setSysCompanyId(Long sysCompanyId) {
 		this.sysCompanyId = sysCompanyId;
@@ -153,7 +159,7 @@ public class MktActivityRedPacketPO implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2019-01-11 18:27:37
+	 * @mbg.generated  2019-01-14 18:03:09
 	 */
 	public Long getSysBrandId() {
 		return sysBrandId;
@@ -161,7 +167,7 @@ public class MktActivityRedPacketPO implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2019-01-11 18:27:37
+	 * @mbg.generated  2019-01-14 18:03:09
 	 */
 	public void setSysBrandId(Long sysBrandId) {
 		this.sysBrandId = sysBrandId;
@@ -169,7 +175,7 @@ public class MktActivityRedPacketPO implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2019-01-11 18:27:37
+	 * @mbg.generated  2019-01-14 18:03:09
 	 */
 	public Long getMktActivityId() {
 		return mktActivityId;
@@ -177,7 +183,7 @@ public class MktActivityRedPacketPO implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2019-01-11 18:27:37
+	 * @mbg.generated  2019-01-14 18:03:09
 	 */
 	public void setMktActivityId(Long mktActivityId) {
 		this.mktActivityId = mktActivityId;
@@ -185,7 +191,7 @@ public class MktActivityRedPacketPO implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2019-01-11 18:27:37
+	 * @mbg.generated  2019-01-14 18:03:09
 	 */
 	public Long getCouponDefinitionId() {
 		return couponDefinitionId;
@@ -193,7 +199,7 @@ public class MktActivityRedPacketPO implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2019-01-11 18:27:37
+	 * @mbg.generated  2019-01-14 18:03:09
 	 */
 	public void setCouponDefinitionId(Long couponDefinitionId) {
 		this.couponDefinitionId = couponDefinitionId;
@@ -201,7 +207,7 @@ public class MktActivityRedPacketPO implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2019-01-11 18:27:37
+	 * @mbg.generated  2019-01-14 18:03:09
 	 */
 	public String getCouponName() {
 		return couponName;
@@ -209,7 +215,7 @@ public class MktActivityRedPacketPO implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2019-01-11 18:27:37
+	 * @mbg.generated  2019-01-14 18:03:09
 	 */
 	public void setCouponName(String couponName) {
 		this.couponName = couponName == null ? null : couponName.trim();
@@ -217,7 +223,7 @@ public class MktActivityRedPacketPO implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2019-01-11 18:27:37
+	 * @mbg.generated  2019-01-14 18:03:09
 	 */
 	public Integer getCouponDenomination() {
 		return couponDenomination;
@@ -225,7 +231,7 @@ public class MktActivityRedPacketPO implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2019-01-11 18:27:37
+	 * @mbg.generated  2019-01-14 18:03:09
 	 */
 	public void setCouponDenomination(Integer couponDenomination) {
 		this.couponDenomination = couponDenomination;
@@ -233,7 +239,7 @@ public class MktActivityRedPacketPO implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2019-01-11 18:27:37
+	 * @mbg.generated  2019-01-14 18:03:09
 	 */
 	public Integer getAddCouponDenomination() {
 		return addCouponDenomination;
@@ -241,7 +247,7 @@ public class MktActivityRedPacketPO implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2019-01-11 18:27:37
+	 * @mbg.generated  2019-01-14 18:03:09
 	 */
 	public void setAddCouponDenomination(Integer addCouponDenomination) {
 		this.addCouponDenomination = addCouponDenomination;
@@ -249,7 +255,23 @@ public class MktActivityRedPacketPO implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2019-01-11 18:27:37
+	 * @mbg.generated  2019-01-14 18:03:09
+	 */
+	public Integer getLimitNum() {
+		return limitNum;
+	}
+
+	/**
+	 * 只读. 
+	 * @mbg.generated  2019-01-14 18:03:09
+	 */
+	public void setLimitNum(Integer limitNum) {
+		this.limitNum = limitNum;
+	}
+
+	/**
+	 * 只读. 
+	 * @mbg.generated  2019-01-14 18:03:09
 	 */
 	public Boolean getDoIfReward() {
 		return doIfReward;
@@ -257,7 +279,7 @@ public class MktActivityRedPacketPO implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2019-01-11 18:27:37
+	 * @mbg.generated  2019-01-14 18:03:09
 	 */
 	public void setDoIfReward(Boolean doIfReward) {
 		this.doIfReward = doIfReward;
@@ -265,7 +287,7 @@ public class MktActivityRedPacketPO implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2019-01-11 18:27:37
+	 * @mbg.generated  2019-01-14 18:03:09
 	 */
 	public Integer getRewardIntegral() {
 		return rewardIntegral;
@@ -273,7 +295,7 @@ public class MktActivityRedPacketPO implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2019-01-11 18:27:37
+	 * @mbg.generated  2019-01-14 18:03:09
 	 */
 	public void setRewardIntegral(Integer rewardIntegral) {
 		this.rewardIntegral = rewardIntegral;
@@ -281,7 +303,7 @@ public class MktActivityRedPacketPO implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2019-01-11 18:27:37
+	 * @mbg.generated  2019-01-14 18:03:09
 	 */
 	public String getRemark() {
 		return remark;
@@ -289,7 +311,7 @@ public class MktActivityRedPacketPO implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2019-01-11 18:27:37
+	 * @mbg.generated  2019-01-14 18:03:09
 	 */
 	public void setRemark(String remark) {
 		this.remark = remark == null ? null : remark.trim();
@@ -297,7 +319,7 @@ public class MktActivityRedPacketPO implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2019-01-11 18:27:37
+	 * @mbg.generated  2019-01-14 18:03:09
 	 */
 	public Long getCreateUserId() {
 		return createUserId;
@@ -305,7 +327,7 @@ public class MktActivityRedPacketPO implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2019-01-11 18:27:37
+	 * @mbg.generated  2019-01-14 18:03:09
 	 */
 	public void setCreateUserId(Long createUserId) {
 		this.createUserId = createUserId;
@@ -313,7 +335,7 @@ public class MktActivityRedPacketPO implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2019-01-11 18:27:37
+	 * @mbg.generated  2019-01-14 18:03:09
 	 */
 	public String getCreateUserName() {
 		return createUserName;
@@ -321,7 +343,7 @@ public class MktActivityRedPacketPO implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2019-01-11 18:27:37
+	 * @mbg.generated  2019-01-14 18:03:09
 	 */
 	public void setCreateUserName(String createUserName) {
 		this.createUserName = createUserName == null ? null : createUserName.trim();
@@ -329,7 +351,7 @@ public class MktActivityRedPacketPO implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2019-01-11 18:27:37
+	 * @mbg.generated  2019-01-14 18:03:09
 	 */
 	public Date getCreateDate() {
 		return createDate;
@@ -337,7 +359,7 @@ public class MktActivityRedPacketPO implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2019-01-11 18:27:37
+	 * @mbg.generated  2019-01-14 18:03:09
 	 */
 	public void setCreateDate(Date createDate) {
 		this.createDate = createDate;
@@ -345,7 +367,7 @@ public class MktActivityRedPacketPO implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2019-01-11 18:27:37
+	 * @mbg.generated  2019-01-14 18:03:09
 	 */
 	public Long getModifiedUserId() {
 		return modifiedUserId;
@@ -353,7 +375,7 @@ public class MktActivityRedPacketPO implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2019-01-11 18:27:37
+	 * @mbg.generated  2019-01-14 18:03:09
 	 */
 	public void setModifiedUserId(Long modifiedUserId) {
 		this.modifiedUserId = modifiedUserId;
@@ -361,7 +383,7 @@ public class MktActivityRedPacketPO implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2019-01-11 18:27:37
+	 * @mbg.generated  2019-01-14 18:03:09
 	 */
 	public String getModifiedUserName() {
 		return modifiedUserName;
@@ -369,7 +391,7 @@ public class MktActivityRedPacketPO implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2019-01-11 18:27:37
+	 * @mbg.generated  2019-01-14 18:03:09
 	 */
 	public void setModifiedUserName(String modifiedUserName) {
 		this.modifiedUserName = modifiedUserName == null ? null : modifiedUserName.trim();
@@ -377,7 +399,7 @@ public class MktActivityRedPacketPO implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2019-01-11 18:27:37
+	 * @mbg.generated  2019-01-14 18:03:09
 	 */
 	public Date getModifiedDate() {
 		return modifiedDate;
@@ -385,7 +407,7 @@ public class MktActivityRedPacketPO implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2019-01-11 18:27:37
+	 * @mbg.generated  2019-01-14 18:03:09
 	 */
 	public void setModifiedDate(Date modifiedDate) {
 		this.modifiedDate = modifiedDate;
@@ -393,7 +415,7 @@ public class MktActivityRedPacketPO implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2019-01-11 18:27:37
+	 * @mbg.generated  2019-01-14 18:03:09
 	 */
 	public Boolean getValid() {
 		return valid;
@@ -401,7 +423,7 @@ public class MktActivityRedPacketPO implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2019-01-11 18:27:37
+	 * @mbg.generated  2019-01-14 18:03:09
 	 */
 	public void setValid(Boolean valid) {
 		this.valid = valid;
