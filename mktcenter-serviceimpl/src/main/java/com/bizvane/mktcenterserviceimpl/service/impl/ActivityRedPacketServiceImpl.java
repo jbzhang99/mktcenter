@@ -395,6 +395,7 @@ public class ActivityRedPacketServiceImpl implements ActivityRedPacketService {
         recordPO.setCouponDefinitionId(bo.getActivityRedPacketPO().getCouponDefinitionId());
         recordPO.setCouponName(bo.getActivityRedPacketPO().getCouponName());
         recordPO.setGetCouponDate(new Date());
+        recordPO.setCouponCode(couponCode);
         recordPO.setRewardIntegral(bo.getActivityRedPacketPO().getRewardIntegral());
         mktActivityRedPacketRecordPOMapper.insertSelective(recordPO);
         mktActivityRedPacketSumPOMapper.updateUpdateCount(vo);
