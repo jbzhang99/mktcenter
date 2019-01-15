@@ -20,9 +20,9 @@ spring:
     show: true
 
   datasource:
-    url: jdbc:mysql://mysql.uat.com:3306/julu-uat?useUnicode=true&characterEncoding=utf-8
-    username: root
-    password: bizvane
+    url: jdbc:mysql://bizvane-2018.mysql.polardb.rds.aliyuncs.com:3306/julu-uat?useUnicode=true&characterEncoding=utf-8
+    username: bizvane_2018
+    password: SF_bizvane20180613
     driver-class-name: com.mysql.jdbc.Driver
   data:
     mongodb:
