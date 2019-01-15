@@ -22,11 +22,10 @@ public class ActivityStatisticsRpcController {
      * 调用计数器
      * @param activityId
      * @param code
-     * @param memberCode
      * @return
      */
     @RequestMapping("statisticsData")
-    public ResponseData statisticsData(@RequestParam("activityId") Long activityId, @RequestParam("code") int code, @RequestParam("memberCode") String memberCode){
-        return activityStatisticsService.statisticsData(activityId,code,memberCode);
+    public ResponseData statisticsData(@RequestParam("activityId") Long activityId, @RequestParam("code") int code){
+        return activityStatisticsService.statisticsData(activityId,code);
     }
 }

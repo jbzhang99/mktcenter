@@ -1,5 +1,7 @@
 package com.bizvane.mktcenterservice.models.po;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import java.io.Serializable;
 import java.util.Date;
 
@@ -91,6 +93,7 @@ public class MktActivityStatisticsPO implements Serializable {
      *
      * @mbg.generated 2019-01-11 11:03:19
      */
+    @JsonFormat(pattern = "yyyy-MM-dd", locale = "zh", timezone = "GMT+8")
     @io.swagger.annotations.ApiModelProperty(value = "统计时间",name = "statisticsTime", required = false,example = "")
     private Date statisticsTime;
 

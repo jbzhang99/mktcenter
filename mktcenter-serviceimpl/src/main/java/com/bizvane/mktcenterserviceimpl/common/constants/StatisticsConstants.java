@@ -56,6 +56,16 @@ public class StatisticsConstants {
     public static final long REDIS_LIVE_TIME = 129600;
 
     /**
+     * 曲线数据类型 小时维度
+     */
+    public static final int CURVE_HOUR = 1;
+
+    /**
+     * 曲线数据类型 日维度
+     */
+    public static final int CURVE_DAY = 2;
+
+    /**
      * 获取当前日期
      * 格式 yyyyMMdd
      * @return
@@ -90,5 +100,14 @@ public class StatisticsConstants {
         calendar.add(calendar.DATE,-1);
         Date before = calendar.getTime();
         return DateUtil.format(before,DateUtil.ymd);
+    }
+
+
+    public static Date getFifteenDay(String time){
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(DateUtil.stringToDate(time,DateUtil.ymd));
+        calendar.add(calendar.DATE,-15);
+        Date before = calendar.getTime();
+        return before;
     }
 }

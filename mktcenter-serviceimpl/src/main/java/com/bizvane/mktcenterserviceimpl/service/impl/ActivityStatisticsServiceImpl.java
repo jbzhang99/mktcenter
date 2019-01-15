@@ -19,6 +19,7 @@ import com.bizvane.utils.redisutils.RedisTemplateServiceImpl;
 import com.bizvane.utils.responseinfo.ResponseData;
 import com.qiniu.util.Json;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.data.redis.connection.RedisConnection;
@@ -28,6 +29,7 @@ import org.springframework.data.redis.serializer.RedisSerializer;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.*;
 
 /**
@@ -47,7 +49,7 @@ public class ActivityStatisticsServiceImpl implements ActivityStatisticsService{
     private MktActivityPOMapper mktActivityPOMapper;
 
     @Override
-    public ResponseData statisticsData(Long activityId, int code,String memberCode) {
+    public ResponseData statisticsData(Long activityId, int code) {
         log.info("enter ActivityStatisticsServiceImpl method:==>statisticsData,{},{} =====START====",activityId,code);
         ResponseData responseData = new ResponseData();
         try {
@@ -64,19 +66,22 @@ public class ActivityStatisticsServiceImpl implements ActivityStatisticsService{
                 redisTemplateService.stringSetString(activityIdsKey,activityIds);
             }
             String key = "";
-            //判断要统计的量
-            if (StatisticsEnum.VISITORS_COUNT.getCode() == code) {
-                //访问量
-                key = StatisticsConstants.VISITORS_PREFIX + activityId + "_" + today;
-                //访问量要以小时存一份增量数据
-                String hourKey = key + "_" + StatisticsConstants.getCurrentHour();
-                redisTemplateService.incr(hourKey,StatisticsConstants.REDIS_LIVE_TIME);
-            }else if (StatisticsEnum.LAUNCH_MEMBERS_COUNT.getCode() == code) {
+            String visitorsKey = "";
+            String hourKey = "";
+            if (StatisticsEnum.LAUNCH_MEMBERS_COUNT.getCode() == code) {
                 //发起会员数
                 key = StatisticsConstants.LAUNCH_MEMBERS + activityId + "_" + today;
+                //访问量
+                visitorsKey = StatisticsConstants.VISITORS_PREFIX + activityId + "_" + today;
+                //访问量要以小时存一份增量数据
+                hourKey = visitorsKey + "_" + StatisticsConstants.getCurrentHour();
             }else if (StatisticsEnum.HELP_MEMBERS_COUNT.getCode() == code) {
                 //助力会员数
                 key = StatisticsConstants.HELP_MEMBERS + activityId + "_" + today;
+                //访问量
+                visitorsKey = StatisticsConstants.VISITORS_PREFIX + activityId + "_" + today;
+                //访问量要以小时存一份增量数据
+                hourKey = visitorsKey + "_" + StatisticsConstants.getCurrentHour();
             }else if (StatisticsEnum.REGISTER_MEMBERS_COUNT.getCode() == code) {
                 //注册会员数
                 key = StatisticsConstants.REGISTER_MEMBERS + activityId + "_" + today;
@@ -85,6 +90,10 @@ public class ActivityStatisticsServiceImpl implements ActivityStatisticsService{
                 key = StatisticsConstants.TAKE_COUPON + activityId + "_" + today;
             }
             redisTemplateService.incr(key,StatisticsConstants.REDIS_LIVE_TIME);
+            if (StringUtils.isNotBlank(visitorsKey) && StringUtils.isNotBlank(hourKey)) {
+                redisTemplateService.incr(visitorsKey,StatisticsConstants.REDIS_LIVE_TIME);
+                redisTemplateService.incr(hourKey,StatisticsConstants.REDIS_LIVE_TIME);
+            }
             //获取自增后的值
             Long incrValue = redisTemplateService.getIncrValue(key);
             log.info("统计类型:{} 量为:{}",StatisticsEnum.getStatisticsEnumByCode(code).getMessage(),incrValue);
@@ -212,16 +221,112 @@ public class ActivityStatisticsServiceImpl implements ActivityStatisticsService{
         map.put("statisticsType",StatisticsConstants.STATISTICS_TYPE);
         ActivityStatisticsBO todayBO = mktActivityStatisticsPOMapper.getBo(map);
         //获取前一天数据
-        map.put("statisticsTime",StatisticsConstants.getBeforeOneDate(time));
+        String beforeTimeStr = StatisticsConstants.getBeforeOneDate(time);
+        map.put("statisticsTime",beforeTimeStr);
         ActivityStatisticsBO yesBO = mktActivityStatisticsPOMapper.getBo(map);
-        if (todayBO != null) {
-            //获取当天的活动详情 todo 获通过今天和昨天的算出比例
-
-        }else {
+        if (todayBO == null) {
             responseData.setCode(SysResponseEnum.FAILED.getCode());
             responseData.setMessage("此活动当天未激活");
+            return responseData;
         }
-        return null;
+        if (yesBO != null) {
+            //昨天为null时就为缺省值
+            todayBO.setScaleVisitorsCount(BigDecimal.valueOf(todayBO.getVisitorsCount()-yesBO.getVisitorsCount()).divide(BigDecimal.valueOf(yesBO.getVisitorsCount()),4,BigDecimal.ROUND_HALF_UP).multiply(BigDecimal.valueOf(100L)).setScale(2,BigDecimal.ROUND_HALF_UP));
+            todayBO.setScaleLaunchMembersCount(BigDecimal.valueOf(todayBO.getLaunchMembersCount()-yesBO.getLaunchMembersCount()).divide(BigDecimal.valueOf(yesBO.getLaunchMembersCount()),4,BigDecimal.ROUND_HALF_UP).multiply(BigDecimal.valueOf(100L)).setScale(2,BigDecimal.ROUND_HALF_UP));
+            todayBO.setScaleHelpMembersCount(BigDecimal.valueOf(todayBO.getHelpMembersCount()-yesBO.getHelpMembersCount()).divide(BigDecimal.valueOf(yesBO.getHelpMembersCount()),4,BigDecimal.ROUND_HALF_UP).multiply(BigDecimal.valueOf(100L)).setScale(2,BigDecimal.ROUND_HALF_UP));
+            todayBO.setScaleRegisterMembersCount(BigDecimal.valueOf(todayBO.getRegisterMembersCount()-yesBO.getRegisterMembersCount()).divide(BigDecimal.valueOf(yesBO.getRegisterMembersCount()),4,BigDecimal.ROUND_HALF_UP).multiply(BigDecimal.valueOf(100L)).setScale(2,BigDecimal.ROUND_HALF_UP));
+            todayBO.setScaleTakeCouponCount(BigDecimal.valueOf(todayBO.getTakeCouponCount()-yesBO.getTakeCouponCount()).divide(BigDecimal.valueOf(yesBO.getTakeCouponCount()),4,BigDecimal.ROUND_HALF_UP).multiply(BigDecimal.valueOf(100L)).setScale(2,BigDecimal.ROUND_HALF_UP));
+        }
+        MktActivityPOWithBLOBs mktActivityPOWithBLOBs = mktActivityPOMapper.selectByPrimaryKey(activityId);
+        Date startTime = mktActivityPOWithBLOBs.getStartTime();
+        Date todayDate = DateUtil.stringToDate(time,DateUtil.ymd);
+        MktActivityStatisticsPOExample example = new MktActivityStatisticsPOExample();
+        //获取从活动开始时间到当前时间的各项累计数据
+        example.createCriteria().andMktActivityIdEqualTo(activityId).andStatisticsTypeEqualTo(StatisticsConstants.STATISTICS_TYPE)
+                .andStatisticsTimeBetween(startTime,todayDate);
+        List<MktActivityStatisticsPO> todayList = mktActivityStatisticsPOMapper.selectByExample(example);
+        if (todayList != null && todayList.size() > 0) {
+            todayList.forEach(todayPo -> {
+                todayBO.setTotalVisitorsCount((todayBO.getTotalVisitorsCount() == null?0:todayBO.getTotalVisitorsCount()) + todayPo.getVisitorsCount());
+                todayBO.setTotalLaunchMembersCount((todayBO.getTotalLaunchMembersCount() == null?0:todayBO.getTotalLaunchMembersCount()) + todayPo.getLaunchMembersCount());
+                todayBO.setTotalHelpMembersCount((todayBO.getTotalHelpMembersCount() == null?0:todayBO.getTotalHelpMembersCount()) + todayPo.getHelpMembersCount());
+                todayBO.setTotalRegisterMembersCount((todayBO.getTotalRegisterMembersCount()==null?0:todayBO.getTotalRegisterMembersCount()) + todayPo.getRegisterMembersCount());
+                todayBO.setTotalTakeCouponCount((todayBO.getTotalTakeCouponCount()==null?0:todayBO.getTotalTakeCouponCount()) + todayPo.getTakeCouponCount());
+            });
+        }
+        //获取从活动开始时间到当前时间前一天的各项累计数据
+        Date yesDate = yesBO.getStatisticsTime();
+        MktActivityStatisticsPOExample yesExample = new MktActivityStatisticsPOExample();
+        yesExample.createCriteria().andMktActivityIdEqualTo(activityId).andStatisticsTypeEqualTo(StatisticsConstants.STATISTICS_TYPE)
+                .andStatisticsTimeBetween(startTime,yesDate);
+        List<MktActivityStatisticsPO> yesList = mktActivityStatisticsPOMapper.selectByExample(yesExample);
+        if (yesList != null && yesList.size() > 0) {
+            yesList.forEach(yesPo -> {
+                yesBO.setTotalVisitorsCount((yesBO.getTotalVisitorsCount() == null?0:yesBO.getTotalVisitorsCount()) + yesPo.getVisitorsCount());
+                yesBO.setTotalLaunchMembersCount((yesBO.getTotalLaunchMembersCount() == null?0:yesBO.getTotalLaunchMembersCount()) + yesPo.getLaunchMembersCount());
+                yesBO.setTotalHelpMembersCount((yesBO.getTotalHelpMembersCount() == null?0:yesBO.getTotalHelpMembersCount()) + yesPo.getHelpMembersCount());
+                yesBO.setTotalRegisterMembersCount((yesBO.getTotalRegisterMembersCount()==null?0:yesBO.getTotalRegisterMembersCount()) + yesPo.getRegisterMembersCount());
+                yesBO.setTotalTakeCouponCount((yesBO.getTotalTakeCouponCount()==null?0:yesBO.getTotalTakeCouponCount()) + yesPo.getTakeCouponCount());
+            });
+            //算出累计数据的比例
+            todayBO.setScaleTotalVisitorsCount(BigDecimal.valueOf(todayBO.getTotalVisitorsCount()-yesBO.getTotalVisitorsCount()).divide(BigDecimal.valueOf(yesBO.getTotalVisitorsCount()),4,BigDecimal.ROUND_HALF_UP).multiply(BigDecimal.valueOf(100L)).setScale(2,BigDecimal.ROUND_HALF_UP));
+            todayBO.setScaleTotalLaunchMembersCount(BigDecimal.valueOf(todayBO.getTotalLaunchMembersCount()-yesBO.getTotalLaunchMembersCount()).divide(BigDecimal.valueOf(yesBO.getTotalLaunchMembersCount()),4,BigDecimal.ROUND_HALF_UP).multiply(BigDecimal.valueOf(100L)).setScale(2,BigDecimal.ROUND_HALF_UP));
+            todayBO.setScaleTotalHelpMembersCount(BigDecimal.valueOf(todayBO.getTotalHelpMembersCount()-yesBO.getTotalHelpMembersCount()).divide(BigDecimal.valueOf(yesBO.getTotalHelpMembersCount()),4,BigDecimal.ROUND_HALF_UP).multiply(BigDecimal.valueOf(100L)).setScale(2,BigDecimal.ROUND_HALF_UP));
+            todayBO.setScaleTotalRegisterMembersCount(BigDecimal.valueOf(todayBO.getTotalRegisterMembersCount()-yesBO.getTotalRegisterMembersCount()).divide(BigDecimal.valueOf(yesBO.getTotalRegisterMembersCount()),4,BigDecimal.ROUND_HALF_UP).multiply(BigDecimal.valueOf(100L)).setScale(2,BigDecimal.ROUND_HALF_UP));
+            todayBO.setScaleTotalTakeCouponCount(BigDecimal.valueOf(todayBO.getTotalTakeCouponCount()-yesBO.getTotalTakeCouponCount()).divide(BigDecimal.valueOf(yesBO.getTotalTakeCouponCount()),4,BigDecimal.ROUND_HALF_UP).multiply(BigDecimal.valueOf(100L)).setScale(2,BigDecimal.ROUND_HALF_UP));
+        }
+        responseData.setCode(SysResponseEnum.SUCCESS.getCode());
+        responseData.setMessage(SysResponseEnum.SUCCESS.getMessage());
+        responseData.setData(todayBO);
+        return responseData;
+    }
+
+    /**
+     * 曲线图数据
+     * @param activityId
+     * @param time
+     * @param type
+     * @return
+     */
+    @Override
+    public ResponseData curveData(Long activityId, String time, int type) {
+        ResponseData responseData = new ResponseData();
+        Date current = DateUtil.stringToDate(time,DateUtil.ymd);
+        if (type == StatisticsConstants.CURVE_HOUR) {
+            MktActivityStatisticsPOExample example = new MktActivityStatisticsPOExample();
+            example.createCriteria().andMktActivityIdEqualTo(activityId).andStatisticsTypeEqualTo(StatisticsConstants.STATISTICS_TYPE)
+                    .andStatisticsTimeEqualTo(current);
+            List<MktActivityStatisticsPO> statisticsPOList = mktActivityStatisticsPOMapper.selectByExampleWithBLOBs(example);
+            if (statisticsPOList != null && statisticsPOList.size() > 0) {
+                MktActivityStatisticsPO statisticsPO = statisticsPOList.get(0);
+                Map map = Json.decode(statisticsPO.getHourJsonData(),Map.class);
+                responseData.setCode(SysResponseEnum.SUCCESS.getCode());
+                responseData.setMessage(SysResponseEnum.SUCCESS.getMessage());
+                responseData.setData(map);
+            }else {
+                responseData.setCode(SysResponseEnum.FAILED.getCode());
+                responseData.setMessage(SysResponseEnum.FAILED.getMessage());
+            }
+        }if (type == StatisticsConstants.CURVE_DAY) {
+            MktActivityStatisticsPOExample example = new MktActivityStatisticsPOExample();
+            Date fifteenDate = StatisticsConstants.getFifteenDay(time);
+            example.createCriteria().andMktActivityIdEqualTo(activityId).andStatisticsTypeEqualTo(StatisticsConstants.STATISTICS_TYPE)
+                    .andStatisticsTimeBetween(fifteenDate,current);
+            List<MktActivityStatisticsPO> statisticsPOS = mktActivityStatisticsPOMapper.selectByExampleWithBLOBs(example);
+            if (statisticsPOS != null && statisticsPOS.size() > 0) {
+                Map map = new HashMap();
+                statisticsPOS.forEach(po -> {
+                    map.put(DateUtil.format(po.getStatisticsTime(),DateUtil.ymd),po.getVisitorsCount());
+                });
+                responseData.setCode(SysResponseEnum.SUCCESS.getCode());
+                responseData.setMessage(SysResponseEnum.SUCCESS.getMessage());
+                responseData.setData(map);
+            }else {
+                responseData.setCode(SysResponseEnum.FAILED.getCode());
+                responseData.setMessage(SysResponseEnum.FAILED.getMessage());
+            }
+        }
+        return responseData;
     }
 
 }

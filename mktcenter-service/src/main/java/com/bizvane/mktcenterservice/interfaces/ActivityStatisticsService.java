@@ -10,11 +10,14 @@ import java.util.List;
  */
 public interface ActivityStatisticsService {
 
-    public ResponseData statisticsData(Long activityId, int code,String memberCode);
+    public ResponseData statisticsData(Long activityId, int code);
 
     public ResponseData getAllDate();
 
     public void schedule();
 
     public ResponseData activityAnalysis(Long activityId,String time);
+
+
+    public ResponseData curveData(Long activityId,String time,int type);
 }

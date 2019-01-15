@@ -16,11 +16,10 @@ public interface ActivityStatisticsServiceRpc {
      * 操作计数器
      * @param activityId
      * @param code
-     * @param memberCode
      * @return
      */
     @RequestMapping("statisticsData")
-    ResponseData statisticsData(@RequestParam("activityId") Long activityId, @RequestParam("code") int code, @RequestParam("memberCode") String memberCode);
+    ResponseData statisticsData(@RequestParam("activityId") Long activityId, @RequestParam("code") int code);
 }
 
 

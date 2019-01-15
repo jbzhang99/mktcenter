@@ -31,9 +31,16 @@ public class ActivityStatisticsController {
         return activityStatisticsService.getAllDate();
     }
 
-    @RequestMapping("test")
-    public ResponseData test(@RequestParam("activityId") Long activityId,@RequestParam("code") int code){
-        return activityStatisticsService.statisticsData(activityId,code,"");
+    /**
+     * 曲线图数据
+     * @param activityId
+     * @param code
+     * @param time
+     * @return
+     */
+    @RequestMapping("curveData")
+    public ResponseData test(@RequestParam("activityId") Long activityId,@RequestParam("code") int code,@RequestParam("time") String time){
+        return activityStatisticsService.curveData(activityId,time,code);
     }
 
     @RequestMapping("test1")
@@ -41,8 +48,14 @@ public class ActivityStatisticsController {
         activityStatisticsService.schedule();
     }
 
-    @RequestMapping("test2")
-    public ResponseData test2(@RequestParam("activityId") Long activityId,@RequestParam("time") String time){
+    /**
+     * 活动分析
+     * @param activityId
+     * @param time
+     * @return
+     */
+    @RequestMapping("activityAnalysis")
+    public ResponseData activityAnalysis(@RequestParam("activityId") Long activityId,@RequestParam("time") String time){
         return activityStatisticsService.activityAnalysis(activityId,time);
     }
 }
