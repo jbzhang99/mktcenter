@@ -541,7 +541,7 @@
 	AND mkt_activity_id=#{mktActivityId}
     </if>
   </select>
-  <select id="getRedPacketCoponRecord" resultType="com.bizvane.mktcenterservice.models.po.MktActivityRedPacketRecordPO">
+  <select id="getRedPacketCoponRecord" resultType="com.bizvane.mktcenterservice.models.bo.MktActivityRedPacketRecordBO">
     SELECT
     mkt_activity_red_packet_record_id,
     mkt_activity_id,

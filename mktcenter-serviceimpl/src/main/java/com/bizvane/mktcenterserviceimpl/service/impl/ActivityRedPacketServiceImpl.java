@@ -14,6 +14,7 @@ import com.bizvane.mktcenterservice.interfaces.ActivityRedPacketService;
 import com.bizvane.mktcenterservice.interfaces.TaskService;
 import com.bizvane.mktcenterservice.models.bo.ActivityRedPacketBO;
 import com.bizvane.mktcenterservice.models.bo.ActivityRedPacketListBO;
+import com.bizvane.mktcenterservice.models.bo.MktActivityRedPacketRecordBO;
 import com.bizvane.mktcenterservice.models.po.*;
 import com.bizvane.mktcenterservice.models.vo.ActivityPriceParamVO;
 import com.bizvane.mktcenterservice.models.vo.ActivityRedPacketVO;
@@ -36,7 +37,6 @@ import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -226,7 +226,6 @@ public class ActivityRedPacketServiceImpl implements ActivityRedPacketService {
         ResponseData<PageInfo<ActivityRedPacketListBO>> responseData = new ResponseData<>();
         SysAccountPO sysAccountPo = TokenUtils.getStageUser(request);
         vo.setSysBrandId(sysAccountPo.getBrandId());
-        vo.setActivityType(12);
         PageHelper.startPage(vo.getPageNumber(), vo.getPageSize());
         List<ActivityRedPacketListBO> listparam = mktActivityRedPacketSumPOMapper.selectActivityRedPacketAnalyzeLists(vo);
         if (CollectionUtils.isEmpty(listparam)) {
@@ -248,18 +247,24 @@ public class ActivityRedPacketServiceImpl implements ActivityRedPacketService {
      * 查询领券的人列表
      */
     @Override
-    public ResponseData<PageInfo<MktActivityRedPacketRecordPO>> getRedPacketCoponRecord(ActivityRedPacketVO vo, HttpServletRequest request) {
-        ResponseData<PageInfo<MktActivityRedPacketRecordPO>> responseData = new ResponseData<>();
+    public ResponseData<PageInfo<MktActivityRedPacketRecordBO>> getRedPacketCoponRecord(ActivityRedPacketVO vo, HttpServletRequest request) {
+        ResponseData<PageInfo<MktActivityRedPacketRecordBO>> responseData = new ResponseData<>();
         SysAccountPO sysAccountPo = TokenUtils.getStageUser(request);
+        Long mktActivityId = vo.getMktActivityId();
         PageHelper.startPage(vo.getPageNumber(), vo.getPageSize());
-        List<MktActivityRedPacketRecordPO> listparam = mktActivityRedPacketRecordPOMapper.getRedPacketCoponRecord(vo);
+        List<MktActivityRedPacketRecordBO> listparam = mktActivityRedPacketRecordPOMapper.getRedPacketCoponRecord(vo);
         if (CollectionUtils.isEmpty(listparam)) {
-            listparam = new ArrayList<MktActivityRedPacketRecordPO>();
+            listparam = new ArrayList<MktActivityRedPacketRecordBO>();
+        } else {
+            listparam.stream().forEach(param -> {
+                param.setHelpNumber(mktActivityRedPacketRecordPOMapper.getRedPacketCount(2, null, param.getMemberCode(), mktActivityId));
+            });
         }
-        PageInfo<MktActivityRedPacketRecordPO> pageInfo = new PageInfo<>(listparam);
+        PageInfo<MktActivityRedPacketRecordBO> pageInfo = new PageInfo<>(listparam);
         responseData.setData(pageInfo);
         return responseData;
     }
+
     /**
      * 查询助力人员列表
      */
@@ -270,12 +275,13 @@ public class ActivityRedPacketServiceImpl implements ActivityRedPacketService {
         List<MktActivityRedPacketRecordPO> listparam = mktActivityRedPacketRecordPOMapper.getRedPacketZhuLiRecord(vo);
         if (CollectionUtils.isEmpty(listparam)) {
             listparam = new ArrayList<MktActivityRedPacketRecordPO>();
-        }else{
-         //券面额,券提供接口
+        } else {
+            //券面额,券提供接口
         }
         responseData.setData(listparam);
         return responseData;
     }
+
     /**
      * 判断会员是否  助力过  发起过  领券过
      */
@@ -286,16 +292,27 @@ public class ActivityRedPacketServiceImpl implements ActivityRedPacketService {
         String memberCode = vo.getMemberCode();
         String sponsorCode = vo.getSponsorCode();
         Long mktActivityId = vo.getMktActivityId();
+        MktActivityRedPacketPOExample example = new MktActivityRedPacketPOExample();
+        example.createCriteria().andMktActivityIdEqualTo(mktActivityId).andValidEqualTo(Boolean.TRUE);
         Integer redPacketCount = mktActivityRedPacketRecordPOMapper.getRedPacketCount(type, memberCode, sponsorCode, mktActivityId);
-        if (1 == type && redPacketCount > 1) {
+        Integer limitNum = 0;
+        Integer zhuliCount = 0;
+        if (2 == type) {
+            limitNum = mktActivityRedPacketPOMapper.selectByExample(example).get(0).getLimitNum();
+            zhuliCount = mktActivityRedPacketRecordPOMapper.getRedPacketCount(type, null, sponsorCode, mktActivityId);
+        }
+        if (1 == type && redPacketCount > 0) {
             responseData.setMessage("已经发起过此活动,不能再次发起!");
             responseData.setCode(101);
-        } else if (2 == type && redPacketCount > 1) {
+        } else if (2 == type && redPacketCount > 0) {
             responseData.setMessage("已经助力过此活动,不能再次助力!");
-            responseData.setCode(101);
-        } else if (3 == type && redPacketCount > 1) {
+            responseData.setCode(102);
+        } else if (2 == type && limitNum.equals(zhuliCount)) {
+            responseData.setMessage("已达到助力的上线次数!");
+            responseData.setCode(103);
+        } else if (3 == type && redPacketCount > 0) {
             responseData.setMessage("已经领券,不能再次领取!");
-            responseData.setCode(101);
+            responseData.setCode(104);
         } else {
             responseData.setMessage("正常参与!");
             responseData.setCode(0);
@@ -304,51 +321,83 @@ public class ActivityRedPacketServiceImpl implements ActivityRedPacketService {
     }
 
     /**
-     * 添加记录 发起  助力  领券
+     * 添加记录 发起
      */
-    @Async
     @Transactional
     @Override
-    public void andActivityRedPacketRecord(ActivityRedPacketVO vo) {
-        Integer type = vo.getType();
-        String memberCode = vo.getMemberCode();
-        String sponsorCode = vo.getSponsorCode();
-        Long mktActivityId = vo.getMktActivityId();
+    public void andActivityRedPacketCreateRecord(ActivityRedPacketVO vo) {
+        vo.setType(1);
         ActivityRedPacketBO bo = mktActivityPOMapper.selectActivityRedPacketDetail(vo);
-        log.info("andActivityRedPacketRecord 添加记录 param:" + JSON.toJSONString(vo) + "--活动详情-" + JSON.toJSONString(bo));
+        log.info("andActivityRedPacketCreateRecord 添加记录 param:" + JSON.toJSONString(vo) + "--活动详情-" + JSON.toJSONString(bo));
         Integer limitNum = bo.getActivityRedPacketPO().getLimitNum();
-        Integer redPacketCount = mktActivityRedPacketRecordPOMapper.getRedPacketCount(type, memberCode, sponsorCode, mktActivityId);
-        Boolean flag = Boolean.FALSE;
-        if (1 == type && redPacketCount == 0) {
-            flag = Boolean.TRUE;
-            vo.setInitiatorNum(1);
-            log.info("发起者添加!");
-        } else if (2 == type && redPacketCount == 0 && redPacketCount <= limitNum) {
-            flag = Boolean.TRUE;
+        Integer redPacketCount = mktActivityRedPacketRecordPOMapper.getRedPacketCount(1, vo.getMemberCode(), vo.getSponsorCode(), vo.getMktActivityId());
+        if (redPacketCount > 0) {
+            return;
+        }
+        vo.setInitiatorNum(1);
+        this.doStatisticsRecored(vo, bo, "");
+    }
+
+    /**
+     * 添加记录 助力
+     */
+    @Transactional
+    @Override
+    public void andActivityRedPacketZhuliRecord(ActivityRedPacketVO vo) {
+        ActivityRedPacketBO bo = mktActivityPOMapper.selectActivityRedPacketDetail(vo);
+        log.info("andActivityRedPacketZhuliRecord 添加记录 param:" + JSON.toJSONString(vo) + "--活动详情-" + JSON.toJSONString(bo));
+        vo.setType(2);
+        Integer redPacketCount = mktActivityRedPacketRecordPOMapper.getRedPacketCount(2, vo.getMemberCode(), vo.getSponsorCode(), vo.getMktActivityId());
+        if (redPacketCount == 0) {
             vo.setHelpNum(1);
             this.addPonint(bo, vo);
+            Integer zhuliredPacketCount = mktActivityRedPacketRecordPOMapper.getRedPacketCount(2, null, vo.getSponsorCode(), vo.getMktActivityId());
+            MktActivityRedPacketPO activityRedPacketPO = bo.getActivityRedPacketPO();
             log.info("助力者添加!");
-        } else if (3 == type && redPacketCount == 0) {
-            flag = Boolean.TRUE;
-            vo.setGetCouponNum(1);
-            this.addPonint(bo, vo);
-            log.info("发券者添加!");
+            if (mktActivityRedPacketRecordPOMapper.getRedPacketCount(2, vo.getMemberCode(), null, vo.getMktActivityId()) > 0) {
+                vo.setHelpNum(0);
+            }
         }
-        log.info("andActivityRedPacketRecord flag param:" + flag);
-        if (2 == type && mktActivityRedPacketRecordPOMapper.getRedPacketCount(type, memberCode, null, mktActivityId) > 0) {
-            vo.setHelpNum(0);
+        this.doStatisticsRecored(vo, bo, "");
+    }
+
+    /**
+     * 添加记录 发起  助力  领券
+     */
+    @Transactional
+    @Override
+    public ResponseData<Integer> andActivityRedPacketSendCouponRecord(ActivityRedPacketVO vo) {
+        ResponseData<Integer> responseData = new ResponseData<>();
+        vo.setType(3);
+        ActivityRedPacketBO bo = mktActivityPOMapper.selectActivityRedPacketDetail(vo);
+        log.info("andActivityRedPacketZhuliRecord 添加记录 param:" + JSON.toJSONString(vo) + "--活动详情-" + JSON.toJSONString(bo));
+        Integer limitNum = bo.getActivityRedPacketPO().getLimitNum();
+        Integer redPacketCount = mktActivityRedPacketRecordPOMapper.getRedPacketCount(3, vo.getMemberCode(), vo.getSponsorCode(), vo.getMktActivityId());
+        if (redPacketCount > 0) {
+            log.info("andActivityRedPacketSendCouponRecord 已经领取!");
+            responseData.setMessage("已经领取!");
+            responseData.setCode(100);
+            return responseData;
         }
-        //放锁
-        if (flag) {
-            MktActivityRedPacketRecordPO recordPO = new MktActivityRedPacketRecordPO();
-            BeanUtils.copyProperties(vo, recordPO);
-            recordPO.setCouponDefinitionId(bo.getActivityRedPacketPO().getCouponDefinitionId());
-            recordPO.setCouponName(bo.getActivityRedPacketPO().getCouponName());
-            recordPO.setGetCouponDate(new Date());
-            recordPO.setRewardIntegral(bo.getActivityRedPacketPO().getRewardIntegral());
-            mktActivityRedPacketRecordPOMapper.insertSelective(recordPO);
-            mktActivityRedPacketSumPOMapper.updateUpdateCount(vo);
-        }
+        Integer zhuliredPacketCount = mktActivityRedPacketRecordPOMapper.getRedPacketCount(3, null, vo.getSponsorCode(), vo.getMktActivityId());
+        vo.setGetCouponNum(1);
+        String couponCode = this.sendCoupon(bo, vo);
+        MktActivityRedPacketPO activityRedPacketPO = bo.getActivityRedPacketPO();
+        Integer reward = activityRedPacketPO.getCouponDenomination() + zhuliredPacketCount * activityRedPacketPO.getAddCouponDenomination();
+        this.doStatisticsRecored(vo, bo, couponCode);
+        responseData.setData(reward);
+        return responseData;
+    }
+
+    public void doStatisticsRecored(ActivityRedPacketVO vo, ActivityRedPacketBO bo, String couponCode) {
+        MktActivityRedPacketRecordPO recordPO = new MktActivityRedPacketRecordPO();
+        BeanUtils.copyProperties(vo, recordPO);
+        recordPO.setCouponDefinitionId(bo.getActivityRedPacketPO().getCouponDefinitionId());
+        recordPO.setCouponName(bo.getActivityRedPacketPO().getCouponName());
+        recordPO.setGetCouponDate(new Date());
+        recordPO.setRewardIntegral(bo.getActivityRedPacketPO().getRewardIntegral());
+        mktActivityRedPacketRecordPOMapper.insertSelective(recordPO);
+        mktActivityRedPacketSumPOMapper.updateUpdateCount(vo);
     }
 
     /**
@@ -376,7 +425,7 @@ public class ActivityRedPacketServiceImpl implements ActivityRedPacketService {
     /**
      * 发送券
      */
-    public void sendCoupon(ActivityRedPacketBO bo, ActivityRedPacketVO vo) {
+    public String sendCoupon(ActivityRedPacketBO bo, ActivityRedPacketVO vo) {
         SendCouponSimpleRequestVO onecouponVO = new SendCouponSimpleRequestVO();
         onecouponVO.setMemberCode(vo.getMemberCode());
         onecouponVO.setSendBussienId(vo.getMktActivityId());
@@ -388,5 +437,6 @@ public class ActivityRedPacketServiceImpl implements ActivityRedPacketService {
         // award.execute(bo);
         ResponseData<String> simple = sendCouponServiceFeign.simple(onecouponVO);
         log.info("红包 发送券的结果------" + JSON.toJSONString(simple));
+        return simple.getData();
     }
 }

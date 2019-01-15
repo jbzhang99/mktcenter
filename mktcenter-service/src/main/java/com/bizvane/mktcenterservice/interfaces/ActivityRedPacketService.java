@@ -3,6 +3,7 @@ package com.bizvane.mktcenterservice.interfaces;
 import com.alibaba.fastjson.JSONObject;
 import com.bizvane.mktcenterservice.models.bo.ActivityRedPacketBO;
 import com.bizvane.mktcenterservice.models.bo.ActivityRedPacketListBO;
+import com.bizvane.mktcenterservice.models.bo.MktActivityRedPacketRecordBO;
 import com.bizvane.mktcenterservice.models.po.MktActivityPOWithBLOBs;
 import com.bizvane.mktcenterservice.models.po.MktActivityRedPacketRecordPO;
 import com.bizvane.mktcenterservice.models.vo.ActivityPriceParamVO;
@@ -24,8 +25,10 @@ public interface ActivityRedPacketService {
     public ResponseData<PageInfo<MktActivityPOWithBLOBs>>  selectActivityRedPacketList(ActivityPriceParamVO vo, HttpServletRequest request);
     public ResponseData<ActivityRedPacketBO> selectActivityRedPacketDetail(ActivityRedPacketVO vo);
     public ResponseData<Integer> doIfActivityRedPacket(ActivityRedPacketVO vo);
-    public void andActivityRedPacketRecord(ActivityRedPacketVO vo);
     public ResponseData<PageInfo<ActivityRedPacketListBO>> selectActivityRedPacketAnalyzeLists(ActivityRedPacketVO vo, HttpServletRequest request);
-    public ResponseData<PageInfo<MktActivityRedPacketRecordPO>> getRedPacketCoponRecord(ActivityRedPacketVO vo, HttpServletRequest request);
+    public ResponseData<PageInfo<MktActivityRedPacketRecordBO>> getRedPacketCoponRecord(ActivityRedPacketVO vo, HttpServletRequest request);
     public ResponseData<List<MktActivityRedPacketRecordPO>> getRedPacketZhuLiRecord(ActivityRedPacketVO vo, HttpServletRequest request);
+    public void andActivityRedPacketCreateRecord(ActivityRedPacketVO vo);
+    public void andActivityRedPacketZhuliRecord(ActivityRedPacketVO vo);
+    public ResponseData<Integer> andActivityRedPacketSendCouponRecord(ActivityRedPacketVO vo);
 }
