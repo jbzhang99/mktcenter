@@ -26,6 +26,8 @@ public class ActivityRedPacketVO {
     //发起者
     private String sponsorCode;
 
+    private Integer activityStatus;
+
     private Integer initiatorNum = 0;
     private Integer helpNum = 0;
     private Integer getCouponNum = 0;

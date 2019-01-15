@@ -1,5 +1,6 @@
 package com.bizvane.mktcenterserviceimpl.mappers;
 
+import com.bizvane.mktcenterservice.models.bo.ActivityRedPacketListBO;
 import com.bizvane.mktcenterservice.models.po.MktActivityRedPacketSumPO;
 import com.bizvane.mktcenterservice.models.po.MktActivityRedPacketSumPOExample;
 import com.bizvane.mktcenterservice.models.vo.ActivityRedPacketVO;
@@ -78,4 +79,5 @@ public interface MktActivityRedPacketSumPOMapper {
 	int updateByPrimaryKey(MktActivityRedPacketSumPO record);
 
 	int updateUpdateCount(ActivityRedPacketVO vo);
+	List<ActivityRedPacketListBO> selectActivityRedPacketAnalyzeLists(ActivityRedPacketVO vo);
 }

@@ -2,6 +2,7 @@ package com.bizvane.mktcenterservice.interfaces;
 
 import com.alibaba.fastjson.JSONObject;
 import com.bizvane.mktcenterservice.models.bo.ActivityRedPacketBO;
+import com.bizvane.mktcenterservice.models.bo.ActivityRedPacketListBO;
 import com.bizvane.mktcenterservice.models.po.MktActivityPOWithBLOBs;
 import com.bizvane.mktcenterservice.models.vo.ActivityPriceParamVO;
 import com.bizvane.mktcenterservice.models.vo.ActivityRedPacketVO;
@@ -22,4 +23,5 @@ public interface ActivityRedPacketService {
     public ResponseData<ActivityRedPacketBO> selectActivityRedPacketDetail(ActivityRedPacketVO vo);
     public ResponseData<Integer> doIfActivityRedPacket(ActivityRedPacketVO vo);
     public void andActivityRedPacketRecord(ActivityRedPacketVO vo);
+    public ResponseData<PageInfo<ActivityRedPacketListBO>> selectActivityRedPacketAnalyzeLists(ActivityRedPacketVO vo, HttpServletRequest request);
 }

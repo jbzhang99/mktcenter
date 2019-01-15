@@ -1151,46 +1151,4 @@
     </if>
   </where>
   </select>
-  <!--<select id="selectActivityRedPacketLists" resultType="com.bizvane.mktcenterservice.models.bo.ActivityRedPacketListBO">-->
-    <!--SELECT-->
-    <!--tmc.mkt_activity_id,-->
-    <!--tmc.sys_company_id,-->
-    <!--tmc.sys_brand_id,-->
-    <!--tmc.activity_code,-->
-    <!--tmc.activity_type,-->
-    <!--tmc.activity_name,-->
-    <!--tmc.start_time,-->
-    <!--tmc.end_time,-->
-    <!--tmc.activity_info,-->
-    <!--tmc.activity_rule,-->
-    <!--tmc.activity_list_img,-->
-    <!--tmc.activity_detail_img,-->
-    <!--tmc.qr_code_url,-->
-    <!--tmc.check_status,-->
-    <!--tmc.activity_status,-->
-    <!--tmc.is_store_limit,-->
-    <!--tmc.store_limit_type,-->
-    <!--tmc.store_limit_list,-->
-    <!--tarp.initiator_num,-->
-    <!--tarp.help_num,-->
-    <!--tarp.get_coupon_num,-->
-    <!--tarp.activity_time-->
-    <!--FROM t_mkt_activity tmc INNER JOIN t_mkt_activity_red_packet_sum tarp-->
-    <!--ON	tmc.mkt_activity_id=tarp.mkt_activity_id  AND tarp.valid=1-->
-    <!--WHERE-->
-    <!--tmc.valid=1-->
-    <!--<if test="activityType!= null ">-->
-      <!--AND tmc.activity_type=#{activityType}-->
-    <!--</if>-->
-    <!--<if test="brandId!= null ">-->
-      <!--AND tmc.sys_brand_id=#{brandId}-->
-    <!--</if>-->
-    <!--<if test="activityStatus!= null and activityStatus!='0'.toString() ">-->
-      <!--AND tmc.activity_status=#{activityStatus}-->
-    <!--</if>-->
-    <!--<if test="activityName!= null and activityName!= '' ">-->
-      <!--AND CONCAT(tmc.activity_name,tmc.activity_code) LIKE concat('%',#{activityName},'%')-->
-    <!--</if>-->
-    <!--ORDER BY tmc.create_date DESC-->
-  <!--</select>-->
 </mapper>

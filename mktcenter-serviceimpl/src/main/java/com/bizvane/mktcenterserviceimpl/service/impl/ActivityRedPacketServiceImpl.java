@@ -13,6 +13,7 @@ import com.bizvane.members.facade.service.card.response.IntegralChangeResponseMo
 import com.bizvane.mktcenterservice.interfaces.ActivityRedPacketService;
 import com.bizvane.mktcenterservice.interfaces.TaskService;
 import com.bizvane.mktcenterservice.models.bo.ActivityRedPacketBO;
+import com.bizvane.mktcenterservice.models.bo.ActivityRedPacketListBO;
 import com.bizvane.mktcenterservice.models.po.*;
 import com.bizvane.mktcenterservice.models.vo.ActivityPriceParamVO;
 import com.bizvane.mktcenterservice.models.vo.ActivityRedPacketVO;
@@ -132,6 +133,7 @@ public class ActivityRedPacketServiceImpl implements ActivityRedPacketService {
         redPacketSumPO.setActivityCode(activityPO.getActivityCode());
         redPacketSumPO.setActivityName(activityPO.getActivityName());
         redPacketSumPO.setActivityTime(TimeUtils.getDataNum(activityPO.getStartTime(), activityPO.getEndTime()));
+        redPacketSumPO.setEndTime(activityPO.getEndTime());
         redPacketSumPO.setSysBrandId(sysAccountPo.getBrandId());
         redPacketSumPO.setCreateUserId(sysAccountPo.getSysAccountId());
         redPacketSumPO.setCreateUserName(sysAccountPo.getName());
@@ -204,6 +206,7 @@ public class ActivityRedPacketServiceImpl implements ActivityRedPacketService {
         ResponseData<PageInfo<MktActivityPOWithBLOBs>> responseData = new ResponseData<>();
         SysAccountPO sysAccountPo = TokenUtils.getStageUser(request);
         vo.setBrandId(sysAccountPo.getBrandId());
+        vo.setActivityType(12);
         PageHelper.startPage(vo.getPageNumber(), vo.getPageSize());
         List<MktActivityPOWithBLOBs> listparam = mktActivityPOMapper.selectActivityPriceLists(vo);
         if (CollectionUtils.isEmpty(listparam)) {
@@ -213,7 +216,31 @@ public class ActivityRedPacketServiceImpl implements ActivityRedPacketService {
         responseData.setData(pageInfo);
         return responseData;
     }
-
+/**
+ * 活动统计列表
+ */
+@Override
+public ResponseData<PageInfo<ActivityRedPacketListBO>> selectActivityRedPacketAnalyzeLists(ActivityRedPacketVO vo, HttpServletRequest request) {
+    ResponseData<PageInfo<ActivityRedPacketListBO>> responseData = new ResponseData<>();
+    SysAccountPO sysAccountPo = TokenUtils.getStageUser(request);
+    vo.setSysBrandId(sysAccountPo.getBrandId());
+    vo.setActivityType(12);
+    PageHelper.startPage(vo.getPageNumber(), vo.getPageSize());
+    List<ActivityRedPacketListBO> listparam = mktActivityRedPacketSumPOMapper.selectActivityRedPacketAnalyzeLists(vo);
+    if (CollectionUtils.isEmpty(listparam)) {
+        listparam = new ArrayList<ActivityRedPacketListBO>();
+    }else{
+        listparam.stream().forEach(param->{
+            int dataNum = TimeUtils.getDataNum(param.getEndTime());
+            param.setResidueDates(dataNum);
+            int days = param.getActivityTime() - dataNum;
+            param.setGoingDates(days<0?0:days);
+        });
+    }
+    PageInfo<ActivityRedPacketListBO> pageInfo = new PageInfo<>(listparam);
+    responseData.setData(pageInfo);
+    return responseData;
+}
     /**
      * 判断会员是否  助力过  发起过  领券过
      */

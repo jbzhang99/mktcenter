@@ -1,46 +1,30 @@
 package com.bizvane.mktcenterservice.models.bo;
 
-import com.bizvane.mktcenterservice.models.po.MktActivityPO;
+import com.bizvane.mktcenterservice.models.po.MktActivityRedPacketSumPO;
 
 /**
  * @Author: lijunwei
  * @Time: 2019/1/15 17:32
  */
-public class ActivityRedPacketListBO extends MktActivityPO {
-    private Integer initiatorNum;
-    private Integer helpNum;
-    private Integer getCouponNum;
-    private Integer activityTime;
+public class ActivityRedPacketListBO extends MktActivityRedPacketSumPO {
+    //进行天数
+    private Integer goingDates;
+    //剩余天数
+    private Integer  residueDates;
 
-    public Integer getInitiatorNum() {
-        return initiatorNum;
+    public Integer getGoingDates() {
+        return goingDates;
     }
 
-    public void setInitiatorNum(Integer initiatorNum) {
-        this.initiatorNum = initiatorNum;
+    public void setGoingDates(Integer goingDates) {
+        this.goingDates = goingDates;
     }
 
-    public Integer getHelpNum() {
-        return helpNum;
+    public Integer getResidueDates() {
+        return residueDates;
     }
 
-    public void setHelpNum(Integer helpNum) {
-        this.helpNum = helpNum;
-    }
-
-    public Integer getGetCouponNum() {
-        return getCouponNum;
-    }
-
-    public void setGetCouponNum(Integer getCouponNum) {
-        this.getCouponNum = getCouponNum;
-    }
-
-    public Integer getActivityTime() {
-        return activityTime;
-    }
-
-    public void setActivityTime(Integer activityTime) {
-        this.activityTime = activityTime;
+    public void setResidueDates(Integer residueDates) {
+        this.residueDates = residueDates;
     }
 }

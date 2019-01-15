@@ -500,4 +500,31 @@
 	valid = 1
 	AND mkt_activity_id = #{mktActivityId} AND sys_brand_id=#{sysBrandId}
   </update>
+
+  <select id="selectActivityRedPacketAnalyzeLists" resultType="com.bizvane.mktcenterservice.models.bo.ActivityRedPacketListBO">
+  SELECT
+    mkt_activity_id,
+    sys_company_id,
+    activity_code,
+    activity_name,
+    sys_brand_id,
+    initiator_num,
+    help_num,
+    get_coupon_num,
+    end_time,
+    activity_time
+  FROM t_mkt_activity_red_packet_sum
+  WHERE
+  tmc.valid=1
+  <if test="sysBrandId!= null ">
+  AND sys_brand_id=#{sysBrandId}
+  </if>
+  <if test="activityStatus!= null and activityStatus!='0'.toString() ">
+  AND activity_status=#{activityStatus}
+  </if>
+  <if test="activityName!= null and activityName!= '' ">
+  AND CONCAT(activity_name,activity_code) LIKE concat('%',#{activityName},'%')
+  </if>
+  ORDER BY create_date DESC
+  </select>
 </mapper>
