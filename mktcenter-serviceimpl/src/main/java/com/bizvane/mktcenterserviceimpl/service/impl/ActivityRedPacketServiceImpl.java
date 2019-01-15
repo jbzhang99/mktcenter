@@ -35,6 +35,7 @@ import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -182,6 +183,11 @@ public class ActivityRedPacketServiceImpl implements ActivityRedPacketService {
         return responseData;
     }
 
+    /**
+     * 只用来查询活动详情(不查店铺和券)
+     * @param vo
+     * @return
+     */
     @Override
     public ResponseData<ActivityRedPacketBO> selectActivityRedPacketDetail(ActivityRedPacketVO vo) {
         ResponseData<ActivityRedPacketBO> responseData = new ResponseData<>();
@@ -207,34 +213,60 @@ public class ActivityRedPacketServiceImpl implements ActivityRedPacketService {
         responseData.setData(pageInfo);
         return responseData;
     }
-    /**
-     * 判断记录数据 发起  助力
-     */
 
+    /**
+     * 判断会员是否  助力过  发起过  领券过
+     */
+    @Override
+    public ResponseData<Integer> doIfActivityRedPacket(ActivityRedPacketVO vo) {
+        ResponseData<Integer> responseData = new ResponseData<>();
+        Integer type = vo.getType();
+        String memberCode = vo.getMemberCode();
+        String sponsorCode = vo.getSponsorCode();
+        Long mktActivityId = vo.getMktActivityId();
+        Integer redPacketCount = mktActivityRedPacketRecordPOMapper.getRedPacketCount(type, memberCode, sponsorCode, mktActivityId);
+        if (1 == type && redPacketCount > 1) {
+            responseData.setMessage("已经发起过此活动,不能再次发起!");
+            responseData.setCode(101);
+        } else if (2 == type && redPacketCount > 1) {
+            responseData.setMessage("已经助力过此活动,不能再次助力!");
+            responseData.setCode(101);
+        } else if (3 == type && redPacketCount > 1) {
+            responseData.setMessage("已经领券,不能再次领取!");
+            responseData.setCode(101);
+        } else {
+            responseData.setMessage("正常参与!");
+            responseData.setCode(0);
+        }
+        return responseData;
+    }
 
     /**
      * 添加记录 发起  助力  领券
      */
+    @Async
     @Transactional
+    @Override
     public void andActivityRedPacketRecord(ActivityRedPacketVO vo) {
         Integer type = vo.getType();
         String memberCode = vo.getMemberCode();
         String sponsorCode = vo.getSponsorCode();
         Long mktActivityId = vo.getMktActivityId();
         ActivityRedPacketBO bo = mktActivityPOMapper.selectActivityRedPacketDetail(vo);
-        log.info("andActivityRedPacketRecord 添加记录 param:" + JSON.toJSONString(vo) + "---" + JSON.toJSONString(bo));
+        log.info("andActivityRedPacketRecord 添加记录 param:" + JSON.toJSONString(vo) + "--活动详情-" + JSON.toJSONString(bo));
         Integer limitNum = bo.getActivityRedPacketPO().getLimitNum();
+        Integer redPacketCount = mktActivityRedPacketRecordPOMapper.getRedPacketCount(type, memberCode, sponsorCode, mktActivityId);
         Boolean flag = Boolean.FALSE;
-        if (1 == type && mktActivityRedPacketRecordPOMapper.getRedPacketCount(type, memberCode, null, mktActivityId) == 0) {
+        if (1 == type && redPacketCount == 0) {
             flag = Boolean.TRUE;
             vo.setInitiatorNum(1);
             log.info("发起者添加!");
-        } else if (2 == type && mktActivityRedPacketRecordPOMapper.getRedPacketCount(type, memberCode, sponsorCode, mktActivityId) == 0 && mktActivityRedPacketRecordPOMapper.getRedPacketCount(type, null, sponsorCode, mktActivityId) <= limitNum) {
+        } else if (2 == type && redPacketCount == 0 && redPacketCount <= limitNum) {
             flag = Boolean.TRUE;
             vo.setHelpNum(1);
             this.addPonint(bo, vo);
             log.info("助力者添加!");
-        } else if (3 == type && mktActivityRedPacketRecordPOMapper.getRedPacketCount(type, memberCode, null, mktActivityId) == 0) {
+        } else if (3 == type && redPacketCount == 0) {
             flag = Boolean.TRUE;
             vo.setGetCouponNum(1);
             this.addPonint(bo, vo);
@@ -244,6 +276,7 @@ public class ActivityRedPacketServiceImpl implements ActivityRedPacketService {
         if (2 == type && mktActivityRedPacketRecordPOMapper.getRedPacketCount(type, memberCode, null, mktActivityId) > 0) {
             vo.setHelpNum(0);
         }
+        //放锁
         if (flag) {
             MktActivityRedPacketRecordPO recordPO = new MktActivityRedPacketRecordPO();
             BeanUtils.copyProperties(vo, recordPO);

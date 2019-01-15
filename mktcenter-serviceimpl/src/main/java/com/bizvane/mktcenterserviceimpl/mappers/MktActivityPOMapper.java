@@ -121,4 +121,5 @@ public interface MktActivityPOMapper {
 	List<MktActivityPOWithBLOBs> selectActivityPriceLists(ActivityPriceParamVO vo);
 
 	ActivityRedPacketBO selectActivityRedPacketDetail(ActivityRedPacketVO vo);
+//	List<ActivityRedPacketListBO> selectActivityRedPacketLists(ActivityRedPacketVO vo);
 }

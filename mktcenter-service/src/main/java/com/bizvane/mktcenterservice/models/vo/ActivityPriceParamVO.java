@@ -14,6 +14,7 @@ public class ActivityPriceParamVO {
     private String activityCode;
     private String activityName;
     private Integer activityStatus;
+    private Integer activityType=11;
     private Long brandId;
     private String prizeName;
     private String memberPhone;

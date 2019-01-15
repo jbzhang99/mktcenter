@@ -20,4 +20,6 @@ public interface ActivityRedPacketService {
     public ResponseData<ActivityRedPacketBO> selectActivityRedPacket(ActivityRedPacketVO vo);
     public ResponseData<PageInfo<MktActivityPOWithBLOBs>>  selectActivityRedPacketList(ActivityPriceParamVO vo, HttpServletRequest request);
     public ResponseData<ActivityRedPacketBO> selectActivityRedPacketDetail(ActivityRedPacketVO vo);
+    public ResponseData<Integer> doIfActivityRedPacket(ActivityRedPacketVO vo);
+    public void andActivityRedPacketRecord(ActivityRedPacketVO vo);
 }
