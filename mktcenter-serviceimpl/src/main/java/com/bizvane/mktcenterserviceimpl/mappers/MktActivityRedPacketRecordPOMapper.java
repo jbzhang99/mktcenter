@@ -2,6 +2,7 @@ package com.bizvane.mktcenterserviceimpl.mappers;
 
 import com.bizvane.mktcenterservice.models.po.MktActivityRedPacketRecordPO;
 import com.bizvane.mktcenterservice.models.po.MktActivityRedPacketRecordPOExample;
+import com.bizvane.mktcenterservice.models.vo.ActivityRedPacketVO;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -76,4 +77,6 @@ public interface MktActivityRedPacketRecordPOMapper {
 	int updateByPrimaryKey(MktActivityRedPacketRecordPO record);
 
 	Integer  getRedPacketCount(@Param("type")Integer type,@Param("memberCode")String memberCode,@Param("sponsorCode")String sponsorCode,@Param("mktActivityId")Long mktActivityId);
+	List<MktActivityRedPacketRecordPO> getRedPacketCoponRecord(ActivityRedPacketVO vo);
+	List<MktActivityRedPacketRecordPO> getRedPacketZhuLiRecord (ActivityRedPacketVO vo);
 }

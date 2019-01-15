@@ -8,15 +8,17 @@ import lombok.Data;
  */
 @Data
 public class ActivityRedPacketVO {
+    //分页
     private int pageNumber;
     private int pageSize;
-
+   //活动
     private Long mktActivityId;
     private String activityCode;
     private Integer activityType=12;
-
+    private String activityName;
     private Long sysCompanyId;
     private Long sysBrandId;
+    private Integer activityStatus;
     //参与者
     private String memberCode;
     private String memberPhone;
@@ -25,9 +27,7 @@ public class ActivityRedPacketVO {
     private Integer type;
     //发起者
     private String sponsorCode;
-
-    private Integer activityStatus;
-
+    //统计
     private Integer initiatorNum = 0;
     private Integer helpNum = 0;
     private Integer getCouponNum = 0;

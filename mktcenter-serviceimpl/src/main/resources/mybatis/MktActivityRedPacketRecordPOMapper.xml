@@ -541,4 +541,58 @@
 	AND mkt_activity_id=#{mktActivityId}
     </if>
   </select>
+  <select id="getRedPacketCoponRecord" resultType="com.bizvane.mktcenterservice.models.po.MktActivityRedPacketRecordPO">
+    SELECT
+    mkt_activity_red_packet_record_id,
+    mkt_activity_id,
+    sys_company_id,
+    sys_brand_id,
+    member_code,
+    member_phone,
+    member_name,
+    sponsor_code,
+    coupon_definition_id,
+    coupon_name,
+    get_coupon_date,
+    reward_ integral,
+    type
+    FROM
+    t_mkt_activity_red_packet_record
+    WHERE
+    valid = 1
+    AND type=3
+    <if test="mktActivityId!=null">
+      AND mkt_activity_id=#{mktActivityId}
+    </if>
+    <if test="activityName!= null and activityName!= '' ">
+      AND CONCAT(member_name,member_phone,coupon_name) LIKE concat('%',#{activityName},'%')
+    </if>
+  </select>
+  <select id="getRedPacketZhuLiRecord" resultType="com.bizvane.mktcenterservice.models.po.MktActivityRedPacketRecordPO">
+    SELECT
+    mkt_activity_red_packet_record_id,
+    mkt_activity_id,
+    sys_company_id,
+    sys_brand_id,
+    member_code,
+    member_phone,
+    member_name,
+    sponsor_code,
+    coupon_definition_id,
+    coupon_name,
+    get_coupon_date,
+    reward_ integral,
+    type
+    FROM
+    t_mkt_activity_red_packet_record
+    WHERE
+    valid = 1
+    AND type=2
+    <if test="mktActivityId!=null">
+      AND mkt_activity_id=#{mktActivityId}
+    </if>
+    <if test="sponsorCode!= null and sponsorCode!= '' ">
+      AND sponsor_code=#{sponsorCode}
+    </if>
+  </select>
 </mapper>

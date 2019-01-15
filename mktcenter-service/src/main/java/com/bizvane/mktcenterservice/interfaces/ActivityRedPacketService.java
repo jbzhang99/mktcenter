@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.bizvane.mktcenterservice.models.bo.ActivityRedPacketBO;
 import com.bizvane.mktcenterservice.models.bo.ActivityRedPacketListBO;
 import com.bizvane.mktcenterservice.models.po.MktActivityPOWithBLOBs;
+import com.bizvane.mktcenterservice.models.po.MktActivityRedPacketRecordPO;
 import com.bizvane.mktcenterservice.models.vo.ActivityPriceParamVO;
 import com.bizvane.mktcenterservice.models.vo.ActivityRedPacketVO;
 import com.bizvane.utils.responseinfo.ResponseData;
@@ -11,6 +12,7 @@ import com.github.pagehelper.PageInfo;
 
 import javax.servlet.http.HttpServletRequest;
 import java.text.ParseException;
+import java.util.List;
 
 /**
  * @Author: lijunwei
@@ -24,4 +26,6 @@ public interface ActivityRedPacketService {
     public ResponseData<Integer> doIfActivityRedPacket(ActivityRedPacketVO vo);
     public void andActivityRedPacketRecord(ActivityRedPacketVO vo);
     public ResponseData<PageInfo<ActivityRedPacketListBO>> selectActivityRedPacketAnalyzeLists(ActivityRedPacketVO vo, HttpServletRequest request);
+    public ResponseData<PageInfo<MktActivityRedPacketRecordPO>> getRedPacketCoponRecord(ActivityRedPacketVO vo, HttpServletRequest request);
+    public ResponseData<List<MktActivityRedPacketRecordPO>> getRedPacketZhuLiRecord(ActivityRedPacketVO vo, HttpServletRequest request);
 }

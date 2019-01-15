@@ -187,6 +187,7 @@ public class ActivityRedPacketServiceImpl implements ActivityRedPacketService {
 
     /**
      * 只用来查询活动详情(不查店铺和券)
+     *
      * @param vo
      * @return
      */
@@ -216,31 +217,65 @@ public class ActivityRedPacketServiceImpl implements ActivityRedPacketService {
         responseData.setData(pageInfo);
         return responseData;
     }
-/**
- * 活动统计列表
- */
-@Override
-public ResponseData<PageInfo<ActivityRedPacketListBO>> selectActivityRedPacketAnalyzeLists(ActivityRedPacketVO vo, HttpServletRequest request) {
-    ResponseData<PageInfo<ActivityRedPacketListBO>> responseData = new ResponseData<>();
-    SysAccountPO sysAccountPo = TokenUtils.getStageUser(request);
-    vo.setSysBrandId(sysAccountPo.getBrandId());
-    vo.setActivityType(12);
-    PageHelper.startPage(vo.getPageNumber(), vo.getPageSize());
-    List<ActivityRedPacketListBO> listparam = mktActivityRedPacketSumPOMapper.selectActivityRedPacketAnalyzeLists(vo);
-    if (CollectionUtils.isEmpty(listparam)) {
-        listparam = new ArrayList<ActivityRedPacketListBO>();
-    }else{
-        listparam.stream().forEach(param->{
-            int dataNum = TimeUtils.getDataNum(param.getEndTime());
-            param.setResidueDates(dataNum);
-            int days = param.getActivityTime() - dataNum;
-            param.setGoingDates(days<0?0:days);
-        });
+
+    /**
+     * 活动统计列表
+     */
+    @Override
+    public ResponseData<PageInfo<ActivityRedPacketListBO>> selectActivityRedPacketAnalyzeLists(ActivityRedPacketVO vo, HttpServletRequest request) {
+        ResponseData<PageInfo<ActivityRedPacketListBO>> responseData = new ResponseData<>();
+        SysAccountPO sysAccountPo = TokenUtils.getStageUser(request);
+        vo.setSysBrandId(sysAccountPo.getBrandId());
+        vo.setActivityType(12);
+        PageHelper.startPage(vo.getPageNumber(), vo.getPageSize());
+        List<ActivityRedPacketListBO> listparam = mktActivityRedPacketSumPOMapper.selectActivityRedPacketAnalyzeLists(vo);
+        if (CollectionUtils.isEmpty(listparam)) {
+            listparam = new ArrayList<ActivityRedPacketListBO>();
+        } else {
+            listparam.stream().forEach(param -> {
+                int dataNum = TimeUtils.getDataNum(param.getEndTime());
+                param.setResidueDates(dataNum);
+                int days = param.getActivityTime() - dataNum;
+                param.setGoingDates(days < 0 ? 0 : days);
+            });
+        }
+        PageInfo<ActivityRedPacketListBO> pageInfo = new PageInfo<>(listparam);
+        responseData.setData(pageInfo);
+        return responseData;
     }
-    PageInfo<ActivityRedPacketListBO> pageInfo = new PageInfo<>(listparam);
-    responseData.setData(pageInfo);
-    return responseData;
-}
+
+    /**
+     * 查询领券的人列表
+     */
+    @Override
+    public ResponseData<PageInfo<MktActivityRedPacketRecordPO>> getRedPacketCoponRecord(ActivityRedPacketVO vo, HttpServletRequest request) {
+        ResponseData<PageInfo<MktActivityRedPacketRecordPO>> responseData = new ResponseData<>();
+        SysAccountPO sysAccountPo = TokenUtils.getStageUser(request);
+        PageHelper.startPage(vo.getPageNumber(), vo.getPageSize());
+        List<MktActivityRedPacketRecordPO> listparam = mktActivityRedPacketRecordPOMapper.getRedPacketCoponRecord(vo);
+        if (CollectionUtils.isEmpty(listparam)) {
+            listparam = new ArrayList<MktActivityRedPacketRecordPO>();
+        }
+        PageInfo<MktActivityRedPacketRecordPO> pageInfo = new PageInfo<>(listparam);
+        responseData.setData(pageInfo);
+        return responseData;
+    }
+    /**
+     * 查询助力人员列表
+     */
+    @Override
+    public ResponseData<List<MktActivityRedPacketRecordPO>> getRedPacketZhuLiRecord(ActivityRedPacketVO vo, HttpServletRequest request) {
+        ResponseData<List<MktActivityRedPacketRecordPO>> responseData = new ResponseData<>();
+        SysAccountPO sysAccountPo = TokenUtils.getStageUser(request);
+        List<MktActivityRedPacketRecordPO> listparam = mktActivityRedPacketRecordPOMapper.getRedPacketZhuLiRecord(vo);
+        if (CollectionUtils.isEmpty(listparam)) {
+            listparam = new ArrayList<MktActivityRedPacketRecordPO>();
+        }else{
+         //券面额,券提供接口
+        }
+        responseData.setData(listparam);
+        return responseData;
+    }
     /**
      * 判断会员是否  助力过  发起过  领券过
      */
