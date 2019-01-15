@@ -10,7 +10,7 @@ import java.util.List;
  */
 public interface ActivityStatisticsService {
 
-    public ResponseData statisticsData(Long activityId, int code);
+    public ResponseData statisticsData(Long activityId, int code,String memberCode);
 
     public ResponseData getAllDate();
 

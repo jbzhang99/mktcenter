@@ -39,13 +39,18 @@ public class ActivityStatisticsController {
      * @return
      */
     @RequestMapping("curveData")
-    public ResponseData test(@RequestParam("activityId") Long activityId,@RequestParam("code") int code,@RequestParam("time") String time){
+    public ResponseData curveData(@RequestParam("activityId") Long activityId,@RequestParam("code") int code,@RequestParam("time") String time){
         return activityStatisticsService.curveData(activityId,time,code);
     }
 
     @RequestMapping("test1")
     public void test1(){
         activityStatisticsService.schedule();
+    }
+
+    @RequestMapping("test")
+    public ResponseData test(@RequestParam("activityId") Long activityId,@RequestParam("code") int code,@RequestParam("memberCode") String memberCode){
+        return activityStatisticsService.statisticsData(activityId,code,memberCode);
     }
 
     /**

@@ -19,7 +19,7 @@ public interface ActivityStatisticsServiceRpc {
      * @return
      */
     @RequestMapping("statisticsData")
-    ResponseData statisticsData(@RequestParam("activityId") Long activityId, @RequestParam("code") int code);
+    ResponseData statisticsData(@RequestParam("activityId") Long activityId, @RequestParam("code") int code,@RequestParam("memberCode") String memberCode);
 }
 
 

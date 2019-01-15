@@ -49,8 +49,8 @@ public class ActivityStatisticsServiceImpl implements ActivityStatisticsService{
     private MktActivityPOMapper mktActivityPOMapper;
 
     @Override
-    public ResponseData statisticsData(Long activityId, int code) {
-        log.info("enter ActivityStatisticsServiceImpl method:==>statisticsData,{},{} =====START====",activityId,code);
+    public ResponseData statisticsData(Long activityId, int code,String memberCode) {
+        log.info("enter ActivityStatisticsServiceImpl method:==>statisticsData,{},{},{}=====START====",activityId,code,memberCode);
         ResponseData responseData = new ResponseData();
         try {
             //将活动id存入redis中 设置redis的key
@@ -89,14 +89,38 @@ public class ActivityStatisticsServiceImpl implements ActivityStatisticsService{
                 //领劵数量
                 key = StatisticsConstants.TAKE_COUPON + activityId + "_" + today;
             }
-            redisTemplateService.incr(key,StatisticsConstants.REDIS_LIVE_TIME);
-            if (StringUtils.isNotBlank(visitorsKey) && StringUtils.isNotBlank(hourKey)) {
-                redisTemplateService.incr(visitorsKey,StatisticsConstants.REDIS_LIVE_TIME);
-                redisTemplateService.incr(hourKey,StatisticsConstants.REDIS_LIVE_TIME);
+            Set memberCodeSet = (Set) redisTemplateService.stringGetStringByKey(key);
+            if (memberCodeSet == null) {
+                memberCodeSet = new HashSet();
+                memberCodeSet.add(memberCode);
+                redisTemplateService.stringSetString(key,memberCodeSet);
+            }else {
+                memberCodeSet.add(memberCode);
+                redisTemplateService.stringSetString(key,memberCodeSet);
             }
-            //获取自增后的值
-            Long incrValue = redisTemplateService.getIncrValue(key);
-            log.info("统计类型:{} 量为:{}",StatisticsEnum.getStatisticsEnumByCode(code).getMessage(),incrValue);
+
+
+            if (StringUtils.isNotBlank(visitorsKey) && StringUtils.isNotBlank(hourKey)) {
+                Set visitorsMemberCodeSet = (Set) redisTemplateService.stringGetStringByKey(visitorsKey);
+                if (visitorsMemberCodeSet == null) {
+                    visitorsMemberCodeSet = new HashSet();
+                    visitorsMemberCodeSet.add(memberCode);
+                }else {
+                    visitorsMemberCodeSet.add(memberCode);
+                }
+                redisTemplateService.stringSetString(visitorsKey,memberCodeSet);
+
+                Set hourMemberCodeSet = (Set) redisTemplateService.stringGetStringByKey(hourKey);
+                if (hourMemberCodeSet == null) {
+                    hourMemberCodeSet = new HashSet();
+                    hourMemberCodeSet.add(memberCode);
+                }else {
+                    hourMemberCodeSet.add(memberCode);
+                }
+                redisTemplateService.stringSetString(hourKey,hourMemberCodeSet);
+            }
+
+            log.info("统计类型:{}",StatisticsEnum.getStatisticsEnumByCode(code).getMessage());
             responseData.setCode(SysResponseEnum.SUCCESS.getCode());
             responseData.setMessage(SysResponseEnum.SUCCESS.getMessage());
 
@@ -158,34 +182,41 @@ public class ActivityStatisticsServiceImpl implements ActivityStatisticsService{
                     if (mktActivityPOWithBLOBs != null) {
                         for (int i = 0; i < 24; i++) {
                             String key = StatisticsConstants.VISITORS_PREFIX + activityId + "_" + yesterday + "_" + i;
-                            Long incrValue = redisTemplateService.getIncrValue(key);
-                            map.put(i,incrValue);
+                            Set hourMemberCodeSet = (Set) redisTemplateService.stringGetStringByKey(key);
+                            int count = hourMemberCodeSet == null?0:hourMemberCodeSet.size();
+                            map.put(i,count);
                         }
                         //查询昨天访问人数
                         String visitorsKey = StatisticsConstants.VISITORS_PREFIX + activityId + "_" + yesterday;
-                        Long visitorsCount = redisTemplateService.getIncrValue(visitorsKey);
+                        Set visitorsMemberCodeSet = (Set) redisTemplateService.stringGetStringByKey(visitorsKey);
+                        int visitorsCount = visitorsMemberCodeSet == null?0:visitorsMemberCodeSet.size();
                         //查询昨天发起会员数
                         String launchMembersKey = StatisticsConstants.LAUNCH_MEMBERS + activityId + "_" + yesterday;
-                        Long launchMembersCount = redisTemplateService.getIncrValue(launchMembersKey);
+                        Set launchMemberCodeSet = (Set) redisTemplateService.stringGetStringByKey(launchMembersKey);
+                        int launchMembersCount = launchMemberCodeSet == null?0:launchMemberCodeSet.size();
                         //查询助力昨天助力会员数
                         String helpMembersKey = StatisticsConstants.HELP_MEMBERS + activityId + "_" + yesterday;
-                        Long helpMembersCount = redisTemplateService.getIncrValue(helpMembersKey);
+                        Set helpMemberCodeSet = (Set) redisTemplateService.stringGetStringByKey(helpMembersKey);
+                        int helpMembersCount = helpMemberCodeSet == null?0:helpMemberCodeSet.size();
                         //查询注册会员数
                         String registerMembersKey = StatisticsConstants.REGISTER_MEMBERS + activityId + "_" + yesterday;
-                        Long registerMembersCount = redisTemplateService.getIncrValue(registerMembersKey);
+                        Set registerMemberCodeSet = (Set) redisTemplateService.stringGetStringByKey(registerMembersKey);
+                        int registerMembersCount = registerMemberCodeSet == null?0:registerMemberCodeSet.size();
                         //领劵数量
                         String takeCouponKey = StatisticsConstants.TAKE_COUPON + activityId + "_" + yesterday;
-                        Long takeCouponCount = redisTemplateService.getIncrValue(takeCouponKey);
+                        Set takeCouponMemberCodeSet = (Set) redisTemplateService.stringGetStringByKey(takeCouponKey);
+                        int takeCouponCount = takeCouponMemberCodeSet == null?0:takeCouponMemberCodeSet.size();
+
                         //存储到红包活动分析表中
                         MktActivityStatisticsPO mktActivityStatisticsPO = new MktActivityStatisticsPO();
                         mktActivityStatisticsPO.setSysCompanyId(mktActivityPOWithBLOBs.getSysCompanyId());
                         mktActivityStatisticsPO.setSysBrandId(mktActivityPOWithBLOBs.getSysBrandId());
                         mktActivityStatisticsPO.setMktActivityId(activityId);
-                        mktActivityStatisticsPO.setVisitorsCount(visitorsCount.intValue());
-                        mktActivityStatisticsPO.setLaunchMembersCount(launchMembersCount.intValue());
-                        mktActivityStatisticsPO.setHelpMembersCount(helpMembersCount.intValue());
-                        mktActivityStatisticsPO.setRegisterMembersCount(registerMembersCount.intValue());
-                        mktActivityStatisticsPO.setTakeCouponCount(takeCouponCount);
+                        mktActivityStatisticsPO.setVisitorsCount(visitorsCount);
+                        mktActivityStatisticsPO.setLaunchMembersCount(launchMembersCount);
+                        mktActivityStatisticsPO.setHelpMembersCount(helpMembersCount);
+                        mktActivityStatisticsPO.setRegisterMembersCount(registerMembersCount);
+                        mktActivityStatisticsPO.setTakeCouponCount(Long.parseLong(String.valueOf(takeCouponCount)));
                         String json = Json.encode(map);
                         mktActivityStatisticsPO.setHourJsonData(json);
                         mktActivityStatisticsPO.setStatisticsTime(new Date());

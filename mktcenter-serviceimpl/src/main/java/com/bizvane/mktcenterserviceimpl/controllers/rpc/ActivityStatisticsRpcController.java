@@ -25,7 +25,7 @@ public class ActivityStatisticsRpcController {
      * @return
      */
     @RequestMapping("statisticsData")
-    public ResponseData statisticsData(@RequestParam("activityId") Long activityId, @RequestParam("code") int code){
-        return activityStatisticsService.statisticsData(activityId,code);
+    public ResponseData statisticsData(@RequestParam("activityId") Long activityId, @RequestParam("code") int code,@RequestParam("memberCode") String memberCode){
+        return activityStatisticsService.statisticsData(activityId,code,memberCode);
     }
 }
