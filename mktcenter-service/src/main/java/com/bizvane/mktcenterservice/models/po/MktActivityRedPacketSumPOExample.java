@@ -8,28 +8,28 @@ import java.util.List;
 public class MktActivityRedPacketSumPOExample implements Serializable {
     /**
 	 * 只读. 
-	 * @mbg.generated  2019-01-11 14:54:58
+	 * @mbg.generated  2019-01-15 18:24:08
 	 */
 	protected String orderByClause;
 	/**
 	 * 只读. 
-	 * @mbg.generated  2019-01-11 14:54:58
+	 * @mbg.generated  2019-01-15 18:24:08
 	 */
 	protected boolean distinct;
 	/**
 	 * 只读. 
-	 * @mbg.generated  2019-01-11 14:54:58
+	 * @mbg.generated  2019-01-15 18:24:08
 	 */
 	protected List<Criteria> oredCriteria;
 	/**
 	 * 只读. 
-	 * @mbg.generated  2019-01-11 14:54:58
+	 * @mbg.generated  2019-01-15 18:24:08
 	 */
 	private static final long serialVersionUID = 1L;
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2019-01-11 14:54:58
+	 * @mbg.generated  2019-01-15 18:24:08
 	 */
 	public MktActivityRedPacketSumPOExample() {
 		oredCriteria = new ArrayList<Criteria>();
@@ -37,7 +37,7 @@ public class MktActivityRedPacketSumPOExample implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2019-01-11 14:54:58
+	 * @mbg.generated  2019-01-15 18:24:08
 	 */
 	public void setOrderByClause(String orderByClause) {
 		this.orderByClause = orderByClause;
@@ -45,7 +45,7 @@ public class MktActivityRedPacketSumPOExample implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2019-01-11 14:54:58
+	 * @mbg.generated  2019-01-15 18:24:08
 	 */
 	public String getOrderByClause() {
 		return orderByClause;
@@ -53,7 +53,7 @@ public class MktActivityRedPacketSumPOExample implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2019-01-11 14:54:58
+	 * @mbg.generated  2019-01-15 18:24:08
 	 */
 	public void setDistinct(boolean distinct) {
 		this.distinct = distinct;
@@ -61,7 +61,7 @@ public class MktActivityRedPacketSumPOExample implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2019-01-11 14:54:58
+	 * @mbg.generated  2019-01-15 18:24:08
 	 */
 	public boolean isDistinct() {
 		return distinct;
@@ -69,7 +69,7 @@ public class MktActivityRedPacketSumPOExample implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2019-01-11 14:54:58
+	 * @mbg.generated  2019-01-15 18:24:08
 	 */
 	public List<Criteria> getOredCriteria() {
 		return oredCriteria;
@@ -77,7 +77,7 @@ public class MktActivityRedPacketSumPOExample implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2019-01-11 14:54:58
+	 * @mbg.generated  2019-01-15 18:24:08
 	 */
 	public void or(Criteria criteria) {
 		oredCriteria.add(criteria);
@@ -85,7 +85,7 @@ public class MktActivityRedPacketSumPOExample implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2019-01-11 14:54:58
+	 * @mbg.generated  2019-01-15 18:24:08
 	 */
 	public Criteria or() {
 		Criteria criteria = createCriteriaInternal();
@@ -95,7 +95,7 @@ public class MktActivityRedPacketSumPOExample implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2019-01-11 14:54:58
+	 * @mbg.generated  2019-01-15 18:24:08
 	 */
 	public Criteria createCriteria() {
 		Criteria criteria = createCriteriaInternal();
@@ -107,7 +107,7 @@ public class MktActivityRedPacketSumPOExample implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2019-01-11 14:54:58
+	 * @mbg.generated  2019-01-15 18:24:08
 	 */
 	protected Criteria createCriteriaInternal() {
 		Criteria criteria = new Criteria();
@@ -116,7 +116,7 @@ public class MktActivityRedPacketSumPOExample implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2019-01-11 14:54:58
+	 * @mbg.generated  2019-01-15 18:24:08
 	 */
 	public void clear() {
 		oredCriteria.clear();
@@ -126,7 +126,7 @@ public class MktActivityRedPacketSumPOExample implements Serializable {
 
 	/**
 	 * 只读. t_mkt_activity_red_packet_sum
-	 * @mbg.generated  2019-01-11 14:54:58
+	 * @mbg.generated  2019-01-15 18:24:08
 	 */
 	protected abstract static class GeneratedCriteria implements Serializable {
 		protected List<Criterion> criteria;
@@ -729,6 +729,66 @@ public class MktActivityRedPacketSumPOExample implements Serializable {
 			return (Criteria) this;
 		}
 
+		public Criteria andEndTimeIsNull() {
+			addCriterion("end_time is null");
+			return (Criteria) this;
+		}
+
+		public Criteria andEndTimeIsNotNull() {
+			addCriterion("end_time is not null");
+			return (Criteria) this;
+		}
+
+		public Criteria andEndTimeEqualTo(Date value) {
+			addCriterion("end_time =", value, "endTime");
+			return (Criteria) this;
+		}
+
+		public Criteria andEndTimeNotEqualTo(Date value) {
+			addCriterion("end_time <>", value, "endTime");
+			return (Criteria) this;
+		}
+
+		public Criteria andEndTimeGreaterThan(Date value) {
+			addCriterion("end_time >", value, "endTime");
+			return (Criteria) this;
+		}
+
+		public Criteria andEndTimeGreaterThanOrEqualTo(Date value) {
+			addCriterion("end_time >=", value, "endTime");
+			return (Criteria) this;
+		}
+
+		public Criteria andEndTimeLessThan(Date value) {
+			addCriterion("end_time <", value, "endTime");
+			return (Criteria) this;
+		}
+
+		public Criteria andEndTimeLessThanOrEqualTo(Date value) {
+			addCriterion("end_time <=", value, "endTime");
+			return (Criteria) this;
+		}
+
+		public Criteria andEndTimeIn(List<Date> values) {
+			addCriterion("end_time in", values, "endTime");
+			return (Criteria) this;
+		}
+
+		public Criteria andEndTimeNotIn(List<Date> values) {
+			addCriterion("end_time not in", values, "endTime");
+			return (Criteria) this;
+		}
+
+		public Criteria andEndTimeBetween(Date value1, Date value2) {
+			addCriterion("end_time between", value1, value2, "endTime");
+			return (Criteria) this;
+		}
+
+		public Criteria andEndTimeNotBetween(Date value1, Date value2) {
+			addCriterion("end_time not between", value1, value2, "endTime");
+			return (Criteria) this;
+		}
+
 		public Criteria andActivityTimeIsNull() {
 			addCriterion("activity_time is null");
 			return (Criteria) this;
@@ -1302,7 +1362,7 @@ public class MktActivityRedPacketSumPOExample implements Serializable {
 
 	/**
 	 * 只读. t_mkt_activity_red_packet_sum
-	 * @mbg.generated  2019-01-11 14:54:58
+	 * @mbg.generated  2019-01-15 18:24:08
 	 */
 	public static class Criterion implements Serializable {
 		private String condition;
