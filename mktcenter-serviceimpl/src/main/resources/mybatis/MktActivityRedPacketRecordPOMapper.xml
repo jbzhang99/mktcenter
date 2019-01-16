@@ -4,7 +4,7 @@
   <resultMap id="BaseResultMap" type="com.bizvane.mktcenterservice.models.po.MktActivityRedPacketRecordPO">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2019-01-16 10:37:28.
+      This element was generated on 2019-01-16 11:03:52.
     -->
     <id column="mkt_activity_red_packet_record_id" jdbcType="BIGINT" property="mktActivityRedPacketRecordId" />
     <result column="mkt_activity_id" jdbcType="BIGINT" property="mktActivityId" />
@@ -17,6 +17,7 @@
     <result column="coupon_definition_id" jdbcType="BIGINT" property="couponDefinitionId" />
     <result column="coupon_code" jdbcType="VARCHAR" property="couponCode" />
     <result column="coupon_name" jdbcType="VARCHAR" property="couponName" />
+    <result column="add_coupon_denomination" jdbcType="INTEGER" property="addCouponDenomination" />
     <result column="get_coupon_date" jdbcType="TIMESTAMP" property="getCouponDate" />
     <result column="reward_integral" jdbcType="INTEGER" property="rewardIntegral" />
     <result column="type" jdbcType="INTEGER" property="type" />
@@ -32,7 +33,7 @@
   <sql id="Example_Where_Clause">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2019-01-16 10:37:28.
+      This element was generated on 2019-01-16 11:03:52.
     -->
     <where>
       <foreach collection="oredCriteria" item="criteria" separator="or">
@@ -65,7 +66,7 @@
   <sql id="Update_By_Example_Where_Clause">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2019-01-16 10:37:28.
+      This element was generated on 2019-01-16 11:03:52.
     -->
     <where>
       <foreach collection="example.oredCriteria" item="criteria" separator="or">
@@ -98,17 +99,18 @@
   <sql id="Base_Column_List">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2019-01-16 10:37:28.
+      This element was generated on 2019-01-16 11:03:52.
     -->
     mkt_activity_red_packet_record_id, mkt_activity_id, sys_company_id, sys_brand_id, 
     member_code, member_phone, member_name, sponsor_code, coupon_definition_id, coupon_code, 
-    coupon_name, get_coupon_date, reward_integral, type, remark, create_user_id, create_user_name, 
-    create_date, modified_user_id, modified_user_name, modified_date, valid
+    coupon_name, add_coupon_denomination, get_coupon_date, reward_integral, type, remark, 
+    create_user_id, create_user_name, create_date, modified_user_id, modified_user_name, 
+    modified_date, valid
   </sql>
   <select id="selectByExample" parameterType="com.bizvane.mktcenterservice.models.po.MktActivityRedPacketRecordPOExample" resultMap="BaseResultMap">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2019-01-16 10:37:28.
+      This element was generated on 2019-01-16 11:03:52.
     -->
     select
     <if test="distinct">
@@ -126,7 +128,7 @@
   <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2019-01-16 10:37:28.
+      This element was generated on 2019-01-16 11:03:52.
     -->
     select 
     <include refid="Base_Column_List" />
@@ -136,7 +138,7 @@
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2019-01-16 10:37:28.
+      This element was generated on 2019-01-16 11:03:52.
     -->
     delete from t_mkt_activity_red_packet_record
     where mkt_activity_red_packet_record_id = #{mktActivityRedPacketRecordId,jdbcType=BIGINT}
@@ -144,7 +146,7 @@
   <delete id="deleteByExample" parameterType="com.bizvane.mktcenterservice.models.po.MktActivityRedPacketRecordPOExample">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2019-01-16 10:37:28.
+      This element was generated on 2019-01-16 11:03:52.
     -->
     delete from t_mkt_activity_red_packet_record
     <if test="_parameter != null">
@@ -154,7 +156,7 @@
   <insert id="insert" parameterType="com.bizvane.mktcenterservice.models.po.MktActivityRedPacketRecordPO">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2019-01-16 10:37:28.
+      This element was generated on 2019-01-16 11:03:52.
     -->
     <selectKey keyProperty="mktActivityRedPacketRecordId" order="AFTER" resultType="java.lang.Long">
       SELECT LAST_INSERT_ID()
@@ -162,24 +164,24 @@
     insert into t_mkt_activity_red_packet_record (mkt_activity_id, sys_company_id, sys_brand_id, 
       member_code, member_phone, member_name, 
       sponsor_code, coupon_definition_id, coupon_code, 
-      coupon_name, get_coupon_date, reward_integral, 
-      type, remark, create_user_id, 
-      create_user_name, create_date, modified_user_id, 
-      modified_user_name, modified_date, valid
-      )
+      coupon_name, add_coupon_denomination, get_coupon_date, 
+      reward_integral, type, remark, 
+      create_user_id, create_user_name, create_date, 
+      modified_user_id, modified_user_name, modified_date, 
+      valid)
     values (#{mktActivityId,jdbcType=BIGINT}, #{sysCompanyId,jdbcType=BIGINT}, #{sysBrandId,jdbcType=BIGINT}, 
       #{memberCode,jdbcType=VARCHAR}, #{memberPhone,jdbcType=VARCHAR}, #{memberName,jdbcType=VARCHAR}, 
       #{sponsorCode,jdbcType=VARCHAR}, #{couponDefinitionId,jdbcType=BIGINT}, #{couponCode,jdbcType=VARCHAR}, 
-      #{couponName,jdbcType=VARCHAR}, #{getCouponDate,jdbcType=TIMESTAMP}, #{rewardIntegral,jdbcType=INTEGER}, 
-      #{type,jdbcType=INTEGER}, #{remark,jdbcType=VARCHAR}, #{createUserId,jdbcType=BIGINT}, 
-      #{createUserName,jdbcType=VARCHAR}, #{createDate,jdbcType=TIMESTAMP}, #{modifiedUserId,jdbcType=INTEGER}, 
-      #{modifiedUserName,jdbcType=VARCHAR}, #{modifiedDate,jdbcType=TIMESTAMP}, #{valid,jdbcType=BIT}
-      )
+      #{couponName,jdbcType=VARCHAR}, #{addCouponDenomination,jdbcType=INTEGER}, #{getCouponDate,jdbcType=TIMESTAMP}, 
+      #{rewardIntegral,jdbcType=INTEGER}, #{type,jdbcType=INTEGER}, #{remark,jdbcType=VARCHAR}, 
+      #{createUserId,jdbcType=BIGINT}, #{createUserName,jdbcType=VARCHAR}, #{createDate,jdbcType=TIMESTAMP}, 
+      #{modifiedUserId,jdbcType=INTEGER}, #{modifiedUserName,jdbcType=VARCHAR}, #{modifiedDate,jdbcType=TIMESTAMP}, 
+      #{valid,jdbcType=BIT})
   </insert>
   <insert id="insertSelective" parameterType="com.bizvane.mktcenterservice.models.po.MktActivityRedPacketRecordPO">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2019-01-16 10:37:28.
+      This element was generated on 2019-01-16 11:03:52.
     -->
     <selectKey keyProperty="mktActivityRedPacketRecordId" order="AFTER" resultType="java.lang.Long">
       SELECT LAST_INSERT_ID()
@@ -215,6 +217,9 @@
       </if>
       <if test="couponName != null">
         coupon_name,
+      </if>
+      <if test="addCouponDenomination != null">
+        add_coupon_denomination,
       </if>
       <if test="getCouponDate != null">
         get_coupon_date,
@@ -281,6 +286,9 @@
       <if test="couponName != null">
         #{couponName,jdbcType=VARCHAR},
       </if>
+      <if test="addCouponDenomination != null">
+        #{addCouponDenomination,jdbcType=INTEGER},
+      </if>
       <if test="getCouponDate != null">
         #{getCouponDate,jdbcType=TIMESTAMP},
       </if>
@@ -319,7 +327,7 @@
   <select id="countByExample" parameterType="com.bizvane.mktcenterservice.models.po.MktActivityRedPacketRecordPOExample" resultType="java.lang.Long">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2019-01-16 10:37:28.
+      This element was generated on 2019-01-16 11:03:52.
     -->
     select count(*) from t_mkt_activity_red_packet_record
     <if test="_parameter != null">
@@ -329,7 +337,7 @@
   <update id="updateByExampleSelective" parameterType="map">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2019-01-16 10:37:28.
+      This element was generated on 2019-01-16 11:03:52.
     -->
     update t_mkt_activity_red_packet_record
     <set>
@@ -365,6 +373,9 @@
       </if>
       <if test="record.couponName != null">
         coupon_name = #{record.couponName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.addCouponDenomination != null">
+        add_coupon_denomination = #{record.addCouponDenomination,jdbcType=INTEGER},
       </if>
       <if test="record.getCouponDate != null">
         get_coupon_date = #{record.getCouponDate,jdbcType=TIMESTAMP},
@@ -407,7 +418,7 @@
   <update id="updateByExample" parameterType="map">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2019-01-16 10:37:28.
+      This element was generated on 2019-01-16 11:03:52.
     -->
     update t_mkt_activity_red_packet_record
     set mkt_activity_red_packet_record_id = #{record.mktActivityRedPacketRecordId,jdbcType=BIGINT},
@@ -421,6 +432,7 @@
       coupon_definition_id = #{record.couponDefinitionId,jdbcType=BIGINT},
       coupon_code = #{record.couponCode,jdbcType=VARCHAR},
       coupon_name = #{record.couponName,jdbcType=VARCHAR},
+      add_coupon_denomination = #{record.addCouponDenomination,jdbcType=INTEGER},
       get_coupon_date = #{record.getCouponDate,jdbcType=TIMESTAMP},
       reward_integral = #{record.rewardIntegral,jdbcType=INTEGER},
       type = #{record.type,jdbcType=INTEGER},
@@ -439,7 +451,7 @@
   <update id="updateByPrimaryKeySelective" parameterType="com.bizvane.mktcenterservice.models.po.MktActivityRedPacketRecordPO">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2019-01-16 10:37:28.
+      This element was generated on 2019-01-16 11:03:52.
     -->
     update t_mkt_activity_red_packet_record
     <set>
@@ -472,6 +484,9 @@
       </if>
       <if test="couponName != null">
         coupon_name = #{couponName,jdbcType=VARCHAR},
+      </if>
+      <if test="addCouponDenomination != null">
+        add_coupon_denomination = #{addCouponDenomination,jdbcType=INTEGER},
       </if>
       <if test="getCouponDate != null">
         get_coupon_date = #{getCouponDate,jdbcType=TIMESTAMP},
@@ -512,7 +527,7 @@
   <update id="updateByPrimaryKey" parameterType="com.bizvane.mktcenterservice.models.po.MktActivityRedPacketRecordPO">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2019-01-16 10:37:28.
+      This element was generated on 2019-01-16 11:03:52.
     -->
     update t_mkt_activity_red_packet_record
     set mkt_activity_id = #{mktActivityId,jdbcType=BIGINT},
@@ -525,6 +540,7 @@
       coupon_definition_id = #{couponDefinitionId,jdbcType=BIGINT},
       coupon_code = #{couponCode,jdbcType=VARCHAR},
       coupon_name = #{couponName,jdbcType=VARCHAR},
+      add_coupon_denomination = #{addCouponDenomination,jdbcType=INTEGER},
       get_coupon_date = #{getCouponDate,jdbcType=TIMESTAMP},
       reward_integral = #{rewardIntegral,jdbcType=INTEGER},
       type = #{type,jdbcType=INTEGER},
