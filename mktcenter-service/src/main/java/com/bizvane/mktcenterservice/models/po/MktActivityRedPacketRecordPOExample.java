@@ -8,28 +8,28 @@ import java.util.List;
 public class MktActivityRedPacketRecordPOExample implements Serializable {
     /**
 	 * 只读. 
-	 * @mbg.generated  2019-01-15 23:19:25
+	 * @mbg.generated  2019-01-16 10:37:28
 	 */
 	protected String orderByClause;
 	/**
 	 * 只读. 
-	 * @mbg.generated  2019-01-15 23:19:25
+	 * @mbg.generated  2019-01-16 10:37:28
 	 */
 	protected boolean distinct;
 	/**
 	 * 只读. 
-	 * @mbg.generated  2019-01-15 23:19:25
+	 * @mbg.generated  2019-01-16 10:37:28
 	 */
 	protected List<Criteria> oredCriteria;
 	/**
 	 * 只读. 
-	 * @mbg.generated  2019-01-15 23:19:25
+	 * @mbg.generated  2019-01-16 10:37:28
 	 */
 	private static final long serialVersionUID = 1L;
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2019-01-15 23:19:25
+	 * @mbg.generated  2019-01-16 10:37:28
 	 */
 	public MktActivityRedPacketRecordPOExample() {
 		oredCriteria = new ArrayList<Criteria>();
@@ -37,7 +37,7 @@ public class MktActivityRedPacketRecordPOExample implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2019-01-15 23:19:25
+	 * @mbg.generated  2019-01-16 10:37:28
 	 */
 	public void setOrderByClause(String orderByClause) {
 		this.orderByClause = orderByClause;
@@ -45,7 +45,7 @@ public class MktActivityRedPacketRecordPOExample implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2019-01-15 23:19:25
+	 * @mbg.generated  2019-01-16 10:37:28
 	 */
 	public String getOrderByClause() {
 		return orderByClause;
@@ -53,7 +53,7 @@ public class MktActivityRedPacketRecordPOExample implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2019-01-15 23:19:25
+	 * @mbg.generated  2019-01-16 10:37:28
 	 */
 	public void setDistinct(boolean distinct) {
 		this.distinct = distinct;
@@ -61,7 +61,7 @@ public class MktActivityRedPacketRecordPOExample implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2019-01-15 23:19:25
+	 * @mbg.generated  2019-01-16 10:37:28
 	 */
 	public boolean isDistinct() {
 		return distinct;
@@ -69,7 +69,7 @@ public class MktActivityRedPacketRecordPOExample implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2019-01-15 23:19:25
+	 * @mbg.generated  2019-01-16 10:37:28
 	 */
 	public List<Criteria> getOredCriteria() {
 		return oredCriteria;
@@ -77,7 +77,7 @@ public class MktActivityRedPacketRecordPOExample implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2019-01-15 23:19:25
+	 * @mbg.generated  2019-01-16 10:37:28
 	 */
 	public void or(Criteria criteria) {
 		oredCriteria.add(criteria);
@@ -85,7 +85,7 @@ public class MktActivityRedPacketRecordPOExample implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2019-01-15 23:19:25
+	 * @mbg.generated  2019-01-16 10:37:28
 	 */
 	public Criteria or() {
 		Criteria criteria = createCriteriaInternal();
@@ -95,7 +95,7 @@ public class MktActivityRedPacketRecordPOExample implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2019-01-15 23:19:25
+	 * @mbg.generated  2019-01-16 10:37:28
 	 */
 	public Criteria createCriteria() {
 		Criteria criteria = createCriteriaInternal();
@@ -107,7 +107,7 @@ public class MktActivityRedPacketRecordPOExample implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2019-01-15 23:19:25
+	 * @mbg.generated  2019-01-16 10:37:28
 	 */
 	protected Criteria createCriteriaInternal() {
 		Criteria criteria = new Criteria();
@@ -116,7 +116,7 @@ public class MktActivityRedPacketRecordPOExample implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2019-01-15 23:19:25
+	 * @mbg.generated  2019-01-16 10:37:28
 	 */
 	public void clear() {
 		oredCriteria.clear();
@@ -126,7 +126,7 @@ public class MktActivityRedPacketRecordPOExample implements Serializable {
 
 	/**
 	 * 只读. t_mkt_activity_red_packet_record
-	 * @mbg.generated  2019-01-15 23:19:25
+	 * @mbg.generated  2019-01-16 10:37:28
 	 */
 	protected abstract static class GeneratedCriteria implements Serializable {
 		protected List<Criterion> criteria;
@@ -951,62 +951,62 @@ public class MktActivityRedPacketRecordPOExample implements Serializable {
 		}
 
 		public Criteria andRewardIntegralIsNull() {
-			addCriterion("\"reward_ integral\" is null");
+			addCriterion("reward_integral is null");
 			return (Criteria) this;
 		}
 
 		public Criteria andRewardIntegralIsNotNull() {
-			addCriterion("\"reward_ integral\" is not null");
+			addCriterion("reward_integral is not null");
 			return (Criteria) this;
 		}
 
 		public Criteria andRewardIntegralEqualTo(Integer value) {
-			addCriterion("\"reward_ integral\" =", value, "rewardIntegral");
+			addCriterion("reward_integral =", value, "rewardIntegral");
 			return (Criteria) this;
 		}
 
 		public Criteria andRewardIntegralNotEqualTo(Integer value) {
-			addCriterion("\"reward_ integral\" <>", value, "rewardIntegral");
+			addCriterion("reward_integral <>", value, "rewardIntegral");
 			return (Criteria) this;
 		}
 
 		public Criteria andRewardIntegralGreaterThan(Integer value) {
-			addCriterion("\"reward_ integral\" >", value, "rewardIntegral");
+			addCriterion("reward_integral >", value, "rewardIntegral");
 			return (Criteria) this;
 		}
 
 		public Criteria andRewardIntegralGreaterThanOrEqualTo(Integer value) {
-			addCriterion("\"reward_ integral\" >=", value, "rewardIntegral");
+			addCriterion("reward_integral >=", value, "rewardIntegral");
 			return (Criteria) this;
 		}
 
 		public Criteria andRewardIntegralLessThan(Integer value) {
-			addCriterion("\"reward_ integral\" <", value, "rewardIntegral");
+			addCriterion("reward_integral <", value, "rewardIntegral");
 			return (Criteria) this;
 		}
 
 		public Criteria andRewardIntegralLessThanOrEqualTo(Integer value) {
-			addCriterion("\"reward_ integral\" <=", value, "rewardIntegral");
+			addCriterion("reward_integral <=", value, "rewardIntegral");
 			return (Criteria) this;
 		}
 
 		public Criteria andRewardIntegralIn(List<Integer> values) {
-			addCriterion("\"reward_ integral\" in", values, "rewardIntegral");
+			addCriterion("reward_integral in", values, "rewardIntegral");
 			return (Criteria) this;
 		}
 
 		public Criteria andRewardIntegralNotIn(List<Integer> values) {
-			addCriterion("\"reward_ integral\" not in", values, "rewardIntegral");
+			addCriterion("reward_integral not in", values, "rewardIntegral");
 			return (Criteria) this;
 		}
 
 		public Criteria andRewardIntegralBetween(Integer value1, Integer value2) {
-			addCriterion("\"reward_ integral\" between", value1, value2, "rewardIntegral");
+			addCriterion("reward_integral between", value1, value2, "rewardIntegral");
 			return (Criteria) this;
 		}
 
 		public Criteria andRewardIntegralNotBetween(Integer value1, Integer value2) {
-			addCriterion("\"reward_ integral\" not between", value1, value2, "rewardIntegral");
+			addCriterion("reward_integral not between", value1, value2, "rewardIntegral");
 			return (Criteria) this;
 		}
 
@@ -1583,7 +1583,7 @@ public class MktActivityRedPacketRecordPOExample implements Serializable {
 
 	/**
 	 * 只读. t_mkt_activity_red_packet_record
-	 * @mbg.generated  2019-01-15 23:19:25
+	 * @mbg.generated  2019-01-16 10:37:28
 	 */
 	public static class Criterion implements Serializable {
 		private String condition;
