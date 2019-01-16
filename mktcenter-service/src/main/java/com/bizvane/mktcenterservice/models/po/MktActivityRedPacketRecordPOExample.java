@@ -8,28 +8,28 @@ import java.util.List;
 public class MktActivityRedPacketRecordPOExample implements Serializable {
     /**
 	 * 只读. 
-	 * @mbg.generated  2019-01-16 14:56:00
+	 * @mbg.generated  2019-01-16 16:29:57
 	 */
 	protected String orderByClause;
 	/**
 	 * 只读. 
-	 * @mbg.generated  2019-01-16 14:56:00
+	 * @mbg.generated  2019-01-16 16:29:57
 	 */
 	protected boolean distinct;
 	/**
 	 * 只读. 
-	 * @mbg.generated  2019-01-16 14:56:00
+	 * @mbg.generated  2019-01-16 16:29:57
 	 */
 	protected List<Criteria> oredCriteria;
 	/**
 	 * 只读. 
-	 * @mbg.generated  2019-01-16 14:56:00
+	 * @mbg.generated  2019-01-16 16:29:57
 	 */
 	private static final long serialVersionUID = 1L;
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2019-01-16 14:56:00
+	 * @mbg.generated  2019-01-16 16:29:57
 	 */
 	public MktActivityRedPacketRecordPOExample() {
 		oredCriteria = new ArrayList<Criteria>();
@@ -37,7 +37,7 @@ public class MktActivityRedPacketRecordPOExample implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2019-01-16 14:56:00
+	 * @mbg.generated  2019-01-16 16:29:57
 	 */
 	public void setOrderByClause(String orderByClause) {
 		this.orderByClause = orderByClause;
@@ -45,7 +45,7 @@ public class MktActivityRedPacketRecordPOExample implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2019-01-16 14:56:00
+	 * @mbg.generated  2019-01-16 16:29:57
 	 */
 	public String getOrderByClause() {
 		return orderByClause;
@@ -53,7 +53,7 @@ public class MktActivityRedPacketRecordPOExample implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2019-01-16 14:56:00
+	 * @mbg.generated  2019-01-16 16:29:57
 	 */
 	public void setDistinct(boolean distinct) {
 		this.distinct = distinct;
@@ -61,7 +61,7 @@ public class MktActivityRedPacketRecordPOExample implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2019-01-16 14:56:00
+	 * @mbg.generated  2019-01-16 16:29:57
 	 */
 	public boolean isDistinct() {
 		return distinct;
@@ -69,7 +69,7 @@ public class MktActivityRedPacketRecordPOExample implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2019-01-16 14:56:00
+	 * @mbg.generated  2019-01-16 16:29:57
 	 */
 	public List<Criteria> getOredCriteria() {
 		return oredCriteria;
@@ -77,7 +77,7 @@ public class MktActivityRedPacketRecordPOExample implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2019-01-16 14:56:00
+	 * @mbg.generated  2019-01-16 16:29:57
 	 */
 	public void or(Criteria criteria) {
 		oredCriteria.add(criteria);
@@ -85,7 +85,7 @@ public class MktActivityRedPacketRecordPOExample implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2019-01-16 14:56:00
+	 * @mbg.generated  2019-01-16 16:29:57
 	 */
 	public Criteria or() {
 		Criteria criteria = createCriteriaInternal();
@@ -95,7 +95,7 @@ public class MktActivityRedPacketRecordPOExample implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2019-01-16 14:56:00
+	 * @mbg.generated  2019-01-16 16:29:57
 	 */
 	public Criteria createCriteria() {
 		Criteria criteria = createCriteriaInternal();
@@ -107,7 +107,7 @@ public class MktActivityRedPacketRecordPOExample implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2019-01-16 14:56:00
+	 * @mbg.generated  2019-01-16 16:29:57
 	 */
 	protected Criteria createCriteriaInternal() {
 		Criteria criteria = new Criteria();
@@ -116,7 +116,7 @@ public class MktActivityRedPacketRecordPOExample implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2019-01-16 14:56:00
+	 * @mbg.generated  2019-01-16 16:29:57
 	 */
 	public void clear() {
 		oredCriteria.clear();
@@ -126,7 +126,7 @@ public class MktActivityRedPacketRecordPOExample implements Serializable {
 
 	/**
 	 * 只读. t_mkt_activity_red_packet_record
-	 * @mbg.generated  2019-01-16 14:56:00
+	 * @mbg.generated  2019-01-16 16:29:57
 	 */
 	protected abstract static class GeneratedCriteria implements Serializable {
 		protected List<Criterion> criteria;
@@ -960,6 +960,66 @@ public class MktActivityRedPacketRecordPOExample implements Serializable {
 			return (Criteria) this;
 		}
 
+		public Criteria andCouponQuotaIsNull() {
+			addCriterion("coupon_quota is null");
+			return (Criteria) this;
+		}
+
+		public Criteria andCouponQuotaIsNotNull() {
+			addCriterion("coupon_quota is not null");
+			return (Criteria) this;
+		}
+
+		public Criteria andCouponQuotaEqualTo(Integer value) {
+			addCriterion("coupon_quota =", value, "couponQuota");
+			return (Criteria) this;
+		}
+
+		public Criteria andCouponQuotaNotEqualTo(Integer value) {
+			addCriterion("coupon_quota <>", value, "couponQuota");
+			return (Criteria) this;
+		}
+
+		public Criteria andCouponQuotaGreaterThan(Integer value) {
+			addCriterion("coupon_quota >", value, "couponQuota");
+			return (Criteria) this;
+		}
+
+		public Criteria andCouponQuotaGreaterThanOrEqualTo(Integer value) {
+			addCriterion("coupon_quota >=", value, "couponQuota");
+			return (Criteria) this;
+		}
+
+		public Criteria andCouponQuotaLessThan(Integer value) {
+			addCriterion("coupon_quota <", value, "couponQuota");
+			return (Criteria) this;
+		}
+
+		public Criteria andCouponQuotaLessThanOrEqualTo(Integer value) {
+			addCriterion("coupon_quota <=", value, "couponQuota");
+			return (Criteria) this;
+		}
+
+		public Criteria andCouponQuotaIn(List<Integer> values) {
+			addCriterion("coupon_quota in", values, "couponQuota");
+			return (Criteria) this;
+		}
+
+		public Criteria andCouponQuotaNotIn(List<Integer> values) {
+			addCriterion("coupon_quota not in", values, "couponQuota");
+			return (Criteria) this;
+		}
+
+		public Criteria andCouponQuotaBetween(Integer value1, Integer value2) {
+			addCriterion("coupon_quota between", value1, value2, "couponQuota");
+			return (Criteria) this;
+		}
+
+		public Criteria andCouponQuotaNotBetween(Integer value1, Integer value2) {
+			addCriterion("coupon_quota not between", value1, value2, "couponQuota");
+			return (Criteria) this;
+		}
+
 		public Criteria andAddCouponDenominationIsNull() {
 			addCriterion("add_coupon_denomination is null");
 			return (Criteria) this;
@@ -1713,7 +1773,7 @@ public class MktActivityRedPacketRecordPOExample implements Serializable {
 
 	/**
 	 * 只读. t_mkt_activity_red_packet_record
-	 * @mbg.generated  2019-01-16 14:56:00
+	 * @mbg.generated  2019-01-16 16:29:57
 	 */
 	public static class Criterion implements Serializable {
 		private String condition;
