@@ -82,7 +82,15 @@ public class ActivityRedPacketServiceImpl implements ActivityRedPacketService {
     @Override
     public ResponseData<JSONObject> addActivityRedPacket(ActivityRedPacketBO bo, HttpServletRequest request) throws ParseException {
         ResponseData<JSONObject> responseData = new ResponseData<>();
-        SysAccountPO sysAccountPo = TokenUtils.getStageUser(request);
+//        SysAccountPO sysAccountPo = TokenUtils.getStageUser(request);
+
+        SysAccountPO sysAccountPo = new SysAccountPO();
+        sysAccountPo.setSysAccountId(96L);
+        sysAccountPo.setSysCompanyId(2L);
+        sysAccountPo.setBrandId(96L);
+        sysAccountPo.setAccountCode("15328634678");
+        sysAccountPo.setName("不啊哟删除");
+
         String activeRedPacketCode = CodeUtil.getActiveRedPacketCode();
         Date date = new Date();
         MktActivityPOWithBLOBs activityPO = bo.getActivityPO();
@@ -106,7 +114,7 @@ public class ActivityRedPacketServiceImpl implements ActivityRedPacketService {
         ResponseData<String> qrCodeResponseData = qrCodeServiceFeign.createMiniprgmQRCode(createMiniprgmQRCodeRequestVO);
         log.info("addActivityRedPacket wexin result:" + JSON.toJSONString(qrCodeResponseData));
         String weixinUrl = qrCodeResponseData.getData();
-
+        activityPO.setCheckStatus(3);
         activityPO.setQrCodeUrl(weixinUrl);
         activityPO.setActivityCode(activeRedPacketCode);
         activityPO.setActivityType(12);
