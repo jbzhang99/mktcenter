@@ -26,9 +26,9 @@ public class ActivityStatisticsController {
      * @return
      */
     @RequestMapping("getAllDate")
-    public ResponseData getAllDate(){
+    public ResponseData getAllDate(@RequestParam("activityId") Long activityId){
         log.info("enter ActivityStatisticsController method getAllDate");
-        return activityStatisticsService.getAllDate();
+        return activityStatisticsService.getAllDate(activityId);
     }
 
     /**

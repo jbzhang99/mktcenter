@@ -111,7 +111,7 @@ public interface MktActivityStatisticsPOMapper {
      * 得到所有日期
      * @return
      */
-    List<String> getAllDate();
+    List<String> getAllDate(@Param("activityId") Long activityId);
 
 
     ActivityStatisticsBO getBo(Map map);

@@ -135,11 +135,11 @@ public class ActivityStatisticsServiceImpl implements ActivityStatisticsService{
     }
 
     @Override
-    public ResponseData getAllDate() {
+    public ResponseData getAllDate(Long activityId) {
         log.info("enter ActivityStatisticsServiceImpl method getAllDate ....START....");
         ResponseData responseData = new ResponseData();
         try {
-            List<String> dates = mktActivityStatisticsPOMapper.getAllDate();
+            List<String> dates = mktActivityStatisticsPOMapper.getAllDate(activityId);
             responseData.setCode(SysResponseEnum.SUCCESS.getCode());
             responseData.setMessage(SysResponseEnum.SUCCESS.getMessage());
             responseData.setData(dates);

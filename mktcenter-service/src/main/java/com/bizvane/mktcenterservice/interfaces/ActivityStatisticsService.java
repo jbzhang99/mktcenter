@@ -12,7 +12,7 @@ public interface ActivityStatisticsService {
 
     public ResponseData statisticsData(Long activityId, int code,String memberCode);
 
-    public ResponseData getAllDate();
+    public ResponseData getAllDate(Long activityId);
 
     public void schedule();
 
