@@ -97,7 +97,7 @@ public class TimeUtils {
      *时间天数
      */
     public static int getDataNum(Date endDate) {
-        int data = (int) ((endDate.getTime() - System.currentTimeMillis()) / (1000 * 3600 * 24));
+        int data = new Long((endDate.getTime() - System.currentTimeMillis()) / (1000 * 3600 * 24)).intValue();
         return data<0?0:data;
     }
     public static int getDataNum(Date startDate,Date endDate) {
