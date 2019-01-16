@@ -27,8 +27,9 @@ public interface ActivityRedPacketService {
     public ResponseData<Integer> doIfActivityRedPacket(ActivityRedPacketVO vo);
     public ResponseData<PageInfo<ActivityRedPacketListBO>> selectActivityRedPacketAnalyzeLists(ActivityRedPacketVO vo, HttpServletRequest request);
     public ResponseData<PageInfo<MktActivityRedPacketRecordBO>> getRedPacketCoponRecord(ActivityRedPacketVO vo, HttpServletRequest request);
-    public ResponseData<List<MktActivityRedPacketRecordPO>> getRedPacketZhuLiRecord(ActivityRedPacketVO vo, HttpServletRequest request);
+    public ResponseData<List<MktActivityRedPacketRecordPO>> getRedPacketZhuLiRecord(ActivityRedPacketVO vo);
     public void andActivityRedPacketCreateRecord(ActivityRedPacketVO vo);
     public void andActivityRedPacketZhuliRecord(ActivityRedPacketVO vo);
     public ResponseData<Integer> andActivityRedPacketSendCouponRecord(ActivityRedPacketVO vo);
+    public ResponseData<PageInfo<MktActivityRedPacketRecordBO>> getRedPacketCoponAppRecord(ActivityRedPacketVO vo);
 }

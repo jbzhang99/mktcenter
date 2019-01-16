@@ -610,6 +610,12 @@
     WHERE
     valid = 1
     AND type=3
+    <if test="sysBrandId!=null">
+    AND sys_brand_id=#{sysBrandId}
+    </if>
+    <if test="memberCode!= null and memberCode!= '' ">
+      AND member_code = #{memberCode}
+    </if>
     <if test="mktActivityId!=null">
       AND mkt_activity_id=#{mktActivityId}
     </if>

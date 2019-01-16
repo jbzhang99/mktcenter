@@ -72,7 +72,7 @@ public class ActivityRedPacketController {
     }
     @RequestMapping("getRedPacketZhuLiRecord")
     public ResponseData<List<MktActivityRedPacketRecordPO>> getRedPacketZhuLiRecord(ActivityRedPacketVO vo, HttpServletRequest request) {
-        return activityRedPacketService.getRedPacketZhuLiRecord(vo, request);
+        return activityRedPacketService.getRedPacketZhuLiRecord(vo);
     }
 
     @RequestMapping("andActivityRedPacketCreateRecord")
