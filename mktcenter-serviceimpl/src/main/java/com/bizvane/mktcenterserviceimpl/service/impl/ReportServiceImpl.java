@@ -1,14 +1,19 @@
 package com.bizvane.mktcenterserviceimpl.service.impl;
 
+import java.io.BufferedOutputStream;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.TreeMap;
 import java.util.UUID;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
 
 import org.codehaus.jettison.json.JSONArray;
 import org.codehaus.jettison.json.JSONException;
@@ -51,6 +56,9 @@ public class ReportServiceImpl implements ReportTempService {
 		       		
 		       		JSONArray arr=null;
 		       		if(nameEnd.equals("_cycle")) {
+		       			
+		       			Map<String,JSONObject> mapjsonObje=new TreeMap<String,JSONObject>();
+		       			SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		       			arr=new JSONArray();
 				        if(jsonStr!=null&&jsonStr.startsWith("{")&&jsonStr.endsWith("}")){
 				           JSONObject json = JSONObject.parseObject(jsonStr);  
@@ -63,8 +71,28 @@ public class ReportServiceImpl implements ReportTempService {
 					            	   jsonObject1.put("time",k.toString());
 					               }
 					               
-					               arr.put(jsonObject1);
+					              if(k.toString().equals("all")) {
+					            	  arr.put(jsonObject1);
+					              }else {
+										try {
+										    Date date;
+											date = simpleDateFormat.parse(k.toString());
+											long ts = date.getTime();
+								             mapjsonObje.put(String.valueOf(ts), jsonObject1);
+										} catch (ParseException e) {
+											e.printStackTrace();
+										}
+					            	  
+					              }
+
+					               
 				           }
+				           
+				           //排序
+				           mapjsonObje = ((TreeMap) mapjsonObje).descendingMap();
+				           for (String key : mapjsonObje.keySet()) {
+				        	   arr.put(mapjsonObje.get(key));
+				            }
 			           
 				       }
 		       			
@@ -115,13 +143,42 @@ public class ReportServiceImpl implements ReportTempService {
 		              //导出表格
 	     		     poiUtil.exportExcel(out,fileReportTempPOlist.getTemplateName(), arr, nameEnd,mapbiaotou,map);
 	     			 ByteArrayInputStream in = new ByteArrayInputStream(((ByteArrayOutputStream) out).toByteArray());
-		            
-	     			 fileTaskPo.setFileStatus(99L);
-		             fileTaskServiceRpc.update(fileTaskPo);
 	     			  //时间格式化
 	     			  SimpleDateFormat format = new SimpleDateFormat("yyyyMMddHHmmss");
-	     			  String filename =fileReportTempPOlist.getTemplateName()+nameEnd+ format.format(new Date()) + ".xlsx";
-	     			    qiniuUrl = "https://"+QiNiuUtil.upload(in, filename);
+	     			 String filename =fileReportTempPOlist.getTemplateName()+nameEnd+ format.format(new Date());
+		             //压缩包导出
+	                 ByteArrayOutputStream tempByteOStream = null;
+	                 BufferedOutputStream tempBufferOStream = null;
+	                 ZipOutputStream tempZStream = null;
+	                 ZipEntry tempEntry = null;
+
+	                 tempByteOStream = new ByteArrayOutputStream();
+	                 tempZStream = new ZipOutputStream(tempByteOStream);
+	                 tempBufferOStream = new BufferedOutputStream(tempZStream);
+                     tempEntry = new ZipEntry(filename+".xlsx");
+                     tempZStream.putNextEntry(tempEntry);
+                     int len = 0;
+                     byte[] buff = new byte[1024];
+                     while ((len = in.read(buff)) != -1) {
+                         tempZStream.write(buff, 0, len);
+                     }
+	     			 
+                     
+                     tempBufferOStream.flush();
+                     tempByteOStream.flush();
+                     tempZStream.closeEntry();
+                     tempZStream.close();
+                     tempByteOStream.close();
+                     tempBufferOStream.close();
+                     ByteArrayInputStream into = new ByteArrayInputStream(((ByteArrayOutputStream) tempByteOStream).toByteArray());
+                     
+                     //压缩包导出
+	     			 
+	     			 fileTaskPo.setFileStatus(99L);
+		             fileTaskServiceRpc.update(fileTaskPo);
+
+	     			  
+	     			    qiniuUrl = "https://"+QiNiuUtil.upload(into, filename+ ".zip");
 	     			  System.out.println("报表上传到七牛ReportIncomeController："+qiniuUrl);
 	     			  in.close();
 	     			  out.close();
