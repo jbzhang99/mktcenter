@@ -227,9 +227,9 @@ public class ActivityRedPacketServiceImpl implements ActivityRedPacketService {
     @Override
     public ResponseData<PageInfo<ActivityRedPacketListBO>> selectActivityRedPacketAnalyzeLists(ActivityRedPacketVO vo, HttpServletRequest request) {
         ResponseData<PageInfo<ActivityRedPacketListBO>> responseData = new ResponseData<>();
-        SysAccountPO sysAccountPo = TokenUtils.getStageUser(request);
-        vo.setSysBrandId(sysAccountPo.getBrandId());
-//        vo.setSysBrandId(96L);
+//        SysAccountPO sysAccountPo = TokenUtils.getStageUser(request);
+//        vo.setSysBrandId(sysAccountPo.getBrandId());
+        vo.setSysBrandId(96L);
         PageHelper.startPage(vo.getPageNumber(), vo.getPageSize());
         List<ActivityRedPacketListBO> listparam = mktActivityRedPacketSumPOMapper.selectActivityRedPacketAnalyzeLists(vo);
         if (CollectionUtils.isEmpty(listparam)) {
@@ -279,8 +279,6 @@ public class ActivityRedPacketServiceImpl implements ActivityRedPacketService {
         List<MktActivityRedPacketRecordPO> listparam = mktActivityRedPacketRecordPOMapper.getRedPacketZhuLiRecord(vo);
         if (CollectionUtils.isEmpty(listparam)) {
             listparam = new ArrayList<MktActivityRedPacketRecordPO>();
-        } else {
-            //券面额,券提供接口
         }
         responseData.setData(listparam);
         return responseData;
@@ -352,15 +350,16 @@ public class ActivityRedPacketServiceImpl implements ActivityRedPacketService {
         log.info("andActivityRedPacketZhuliRecord 添加记录 param:" + JSON.toJSONString(vo) + "--活动详情-" + JSON.toJSONString(bo));
         vo.setType(2);
         Integer redPacketCount = mktActivityRedPacketRecordPOMapper.getRedPacketCount(2, vo.getMemberCode(), vo.getSponsorCode(), vo.getMktActivityId());
-        if (redPacketCount == 0) {
-            vo.setHelpNum(1);
-            this.addPonint(bo, vo);
-            Integer zhuliredPacketCount = mktActivityRedPacketRecordPOMapper.getRedPacketCount(2, null, vo.getSponsorCode(), vo.getMktActivityId());
-            MktActivityRedPacketPO activityRedPacketPO = bo.getActivityRedPacketPO();
-            log.info("助力者添加!");
-            if (mktActivityRedPacketRecordPOMapper.getRedPacketCount(2, vo.getMemberCode(), null, vo.getMktActivityId()) > 0) {
-                vo.setHelpNum(0);
-            }
+        if (redPacketCount > 0) {
+            return;
+        }
+        vo.setHelpNum(1);
+        this.addPonint(bo, vo);
+        Integer zhuliredPacketCount = mktActivityRedPacketRecordPOMapper.getRedPacketCount(2, null, vo.getSponsorCode(), vo.getMktActivityId());
+        MktActivityRedPacketPO activityRedPacketPO = bo.getActivityRedPacketPO();
+        log.info("助力者添加!");
+        if (mktActivityRedPacketRecordPOMapper.getRedPacketCount(2, vo.getMemberCode(), null, vo.getMktActivityId()) > 0) {
+            vo.setHelpNum(0);
         }
         this.doStatisticsRecored(vo, bo, "");
     }
@@ -401,6 +400,7 @@ public class ActivityRedPacketServiceImpl implements ActivityRedPacketService {
         recordPO.setGetCouponDate(new Date());
         recordPO.setCouponCode(couponCode);
         recordPO.setRewardIntegral(bo.getActivityRedPacketPO().getRewardIntegral());
+        recordPO.setAddCouponDenomination(bo.getActivityRedPacketPO().getAddCouponDenomination());
         mktActivityRedPacketRecordPOMapper.insertSelective(recordPO);
         mktActivityRedPacketSumPOMapper.updateUpdateCount(vo);
     }

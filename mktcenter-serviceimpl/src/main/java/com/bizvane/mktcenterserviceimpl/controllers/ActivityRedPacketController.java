@@ -1,6 +1,7 @@
 package com.bizvane.mktcenterserviceimpl.controllers;
 
 import com.alibaba.fastjson.JSONObject;
+import com.bizvane.mktcenterservice.interfaces.ActivityPriceService;
 import com.bizvane.mktcenterservice.interfaces.ActivityRedPacketService;
 import com.bizvane.mktcenterservice.models.bo.ActivityRedPacketBO;
 import com.bizvane.mktcenterservice.models.bo.ActivityRedPacketListBO;
@@ -28,6 +29,8 @@ import java.util.List;
 public class ActivityRedPacketController {
     @Autowired
     private ActivityRedPacketService activityRedPacketService;
+    @Autowired
+    private ActivityPriceService activityPriceService;
 
     @RequestMapping("addActivityRedPacket")
     public ResponseData<JSONObject> addActivityRedPacket(ActivityRedPacketBO bo, HttpServletRequest request) throws ParseException {
@@ -44,6 +47,10 @@ public class ActivityRedPacketController {
         return activityRedPacketService.selectActivityRedPacketList(vo, request);
     }
 
+    @RequestMapping("stopActivityRebPacket")
+    public ResponseData<Integer> stopActivityPrice(MktActivityPOWithBLOBs po, HttpServletRequest request) {
+        return activityPriceService.stopActivityPrice(po, request);
+    }
     @RequestMapping("selectActivityRedPacketDetail")
     public ResponseData<ActivityRedPacketBO> selectActivityRedPacketDetail(ActivityRedPacketVO vo) {
         return activityRedPacketService.selectActivityRedPacketDetail(vo);

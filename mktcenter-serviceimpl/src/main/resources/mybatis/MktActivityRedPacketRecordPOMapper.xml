@@ -615,7 +615,8 @@
     coupon_definition_id,
     coupon_name,
     get_coupon_date,
-    reward_ integral,
+    reward_integral,
+    add_coupon_denomination,
     type
     FROM
     t_mkt_activity_red_packet_record

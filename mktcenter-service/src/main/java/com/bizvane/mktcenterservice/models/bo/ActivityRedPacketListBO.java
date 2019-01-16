@@ -12,6 +12,8 @@ public class ActivityRedPacketListBO extends MktActivityRedPacketSumPO {
     //剩余天数
     private Integer  residueDates;
 
+    private Integer  activityStatus;
+
     public Integer getGoingDates() {
         return goingDates;
     }
@@ -26,5 +28,13 @@ public class ActivityRedPacketListBO extends MktActivityRedPacketSumPO {
 
     public void setResidueDates(Integer residueDates) {
         this.residueDates = residueDates;
+    }
+
+    public Integer getActivityStatus() {
+        return activityStatus;
+    }
+
+    public void setActivityStatus(Integer activityStatus) {
+        this.activityStatus = activityStatus;
     }
 }
