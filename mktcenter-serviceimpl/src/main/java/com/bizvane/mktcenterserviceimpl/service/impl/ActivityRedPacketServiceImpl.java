@@ -82,14 +82,14 @@ public class ActivityRedPacketServiceImpl implements ActivityRedPacketService {
     @Override
     public ResponseData<JSONObject> addActivityRedPacket(ActivityRedPacketBO bo, HttpServletRequest request) throws ParseException {
         ResponseData<JSONObject> responseData = new ResponseData<>();
-//        SysAccountPO sysAccountPo = TokenUtils.getStageUser(request);
+        SysAccountPO sysAccountPo = TokenUtils.getStageUser(request);
 
-        SysAccountPO sysAccountPo = new SysAccountPO();
-        sysAccountPo.setSysAccountId(96L);
-        sysAccountPo.setSysCompanyId(2L);
-        sysAccountPo.setBrandId(96L);
-        sysAccountPo.setAccountCode("15328634678");
-        sysAccountPo.setName("不啊哟删除");
+//        SysAccountPO sysAccountPo = new SysAccountPO();
+//        sysAccountPo.setSysAccountId(96L);
+//        sysAccountPo.setSysCompanyId(2L);
+//        sysAccountPo.setBrandId(96L);
+//        sysAccountPo.setAccountCode("15328634678");
+//        sysAccountPo.setName("不啊哟删除");
 
         String activeRedPacketCode = CodeUtil.getActiveRedPacketCode();
         Date date = new Date();
@@ -235,9 +235,9 @@ public class ActivityRedPacketServiceImpl implements ActivityRedPacketService {
     @Override
     public ResponseData<PageInfo<ActivityRedPacketListBO>> selectActivityRedPacketAnalyzeLists(ActivityRedPacketVO vo, HttpServletRequest request) {
         ResponseData<PageInfo<ActivityRedPacketListBO>> responseData = new ResponseData<>();
-//        SysAccountPO sysAccountPo = TokenUtils.getStageUser(request);
-//        vo.setSysBrandId(sysAccountPo.getBrandId());
-        vo.setSysBrandId(96L);
+        SysAccountPO sysAccountPo = TokenUtils.getStageUser(request);
+        vo.setSysBrandId(sysAccountPo.getBrandId());
+//        vo.setSysBrandId(96L);
         PageHelper.startPage(vo.getPageNumber(), vo.getPageSize());
         List<ActivityRedPacketListBO> listparam = mktActivityRedPacketSumPOMapper.selectActivityRedPacketAnalyzeLists(vo);
         if (CollectionUtils.isEmpty(listparam)) {
