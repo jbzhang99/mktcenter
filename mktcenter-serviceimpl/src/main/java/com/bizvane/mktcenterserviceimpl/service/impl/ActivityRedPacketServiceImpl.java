@@ -5,12 +5,14 @@ import com.alibaba.fastjson.JSONObject;
 import com.bizvane.centerstageservice.models.po.SysStorePo;
 import com.bizvane.couponfacade.interfaces.CouponDefinitionServiceFeign;
 import com.bizvane.couponfacade.interfaces.SendCouponServiceFeign;
+import com.bizvane.couponfacade.models.po.CouponDefinitionMoneyPO;
 import com.bizvane.couponfacade.models.vo.SendCouponSimpleRequestVO;
 import com.bizvane.members.facade.enums.IntegralChangeTypeEnum;
 import com.bizvane.members.facade.service.api.IntegralChangeApiService;
 import com.bizvane.members.facade.service.card.request.IntegralChangeRequestModel;
 import com.bizvane.members.facade.service.card.response.IntegralChangeResponseModel;
 import com.bizvane.mktcenterservice.interfaces.ActivityRedPacketService;
+import com.bizvane.mktcenterservice.interfaces.ActivityStatisticsService;
 import com.bizvane.mktcenterservice.interfaces.TaskService;
 import com.bizvane.mktcenterservice.models.bo.ActivityRedPacketBO;
 import com.bizvane.mktcenterservice.models.bo.ActivityRedPacketListBO;
@@ -41,6 +43,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpServletRequest;
+import java.math.BigDecimal;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -75,6 +78,8 @@ public class ActivityRedPacketServiceImpl implements ActivityRedPacketService {
     private IntegralChangeApiService integralChangeApiService;
     @Autowired
     private SendCouponServiceFeign sendCouponServiceFeign;
+    @Autowired
+    private ActivityStatisticsService activityStatisticsService;
 
     /**
      * 新增
@@ -370,10 +375,21 @@ public class ActivityRedPacketServiceImpl implements ActivityRedPacketService {
             vo.setHelpNum(0);
         }
         this.doStatisticsRecored(vo, bo, "");
+        this.addCouponModelMoneyNum(vo, bo);
+    }
+
+    public void addCouponModelMoneyNum(ActivityRedPacketVO vo, ActivityRedPacketBO bo) {
+        CouponDefinitionMoneyPO po=new CouponDefinitionMoneyPO();
+        po.setSysBrandId(vo.getSysBrandId());
+        po.setCouponDefinitionId(String.valueOf(bo.getActivityRedPacketPO().getCouponDefinitionId()));
+        po.setMemberCode(vo.getSponsorCode());
+        po.setMoneyAdd(new BigDecimal(bo.getActivityRedPacketPO().getAddCouponDenomination()));
+        ResponseData<Object> objectResponseData = couponDefinitionServiceFeign.definitionMoneyRpc(po);
+       log.info("addCouponModelMoneyNum 入参:"+JSON.toJSONString(po)+" ---结果"+JSON.toJSONString(po));
     }
 
     /**
-     * 添加记录 发起  助力  领券
+     * 添加记录  领券
      */
     @Transactional
     @Override
@@ -399,7 +415,7 @@ public class ActivityRedPacketServiceImpl implements ActivityRedPacketService {
         responseData.setData(reward);
         return responseData;
     }
-
+    //添加历史记录
     public void doStatisticsRecored(ActivityRedPacketVO vo, ActivityRedPacketBO bo, String couponCode) {
         MktActivityRedPacketRecordPO recordPO = new MktActivityRedPacketRecordPO();
         BeanUtils.copyProperties(vo, recordPO);
@@ -411,6 +427,9 @@ public class ActivityRedPacketServiceImpl implements ActivityRedPacketService {
         recordPO.setAddCouponDenomination(bo.getActivityRedPacketPO().getAddCouponDenomination());
         mktActivityRedPacketRecordPOMapper.insertSelective(recordPO);
         mktActivityRedPacketSumPOMapper.updateUpdateCount(vo);
+
+        Integer type = vo.getType();
+        activityStatisticsService.statisticsData(bo.getActivityPO().getMktActivityId(),type==3?4:type,vo.getMemberCode());
     }
 
     /**
@@ -443,7 +462,8 @@ public class ActivityRedPacketServiceImpl implements ActivityRedPacketService {
         onecouponVO.setMemberCode(vo.getMemberCode());
         onecouponVO.setSendBussienId(vo.getMktActivityId());
         onecouponVO.setBusinessName(bo.getActivityPO().getActivityName());
-        onecouponVO.setSendType("28");
+        onecouponVO.setSendType("104");
+        onecouponVO.setTaskId(String.valueOf(bo.getActivityPO().getMktActivityId()));
         onecouponVO.setCouponDefinitionId(bo.getActivityRedPacketPO().getCouponDefinitionId());
         onecouponVO.setBrandId(vo.getSysBrandId());
         log.info("红包 发送券的参数-----" + JSON.toJSONString(bo));
