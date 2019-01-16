@@ -345,10 +345,10 @@ public class ActivityStatisticsServiceImpl implements ActivityStatisticsService{
                     .andStatisticsTimeBetween(fifteenDate,current);
             List<MktActivityStatisticsPO> statisticsPOS = mktActivityStatisticsPOMapper.selectByExampleWithBLOBs(example);
             if (statisticsPOS != null && statisticsPOS.size() > 0) {
-                Map map = new HashMap();
-                statisticsPOS.forEach(po -> {
+                Map map = new TreeMap();
+                for (MktActivityStatisticsPO po:statisticsPOS) {
                     map.put(DateUtil.format(po.getStatisticsTime(),DateUtil.ymd),po.getVisitorsCount());
-                });
+                }
                 responseData.setCode(SysResponseEnum.SUCCESS.getCode());
                 responseData.setMessage(SysResponseEnum.SUCCESS.getMessage());
                 responseData.setData(map);
