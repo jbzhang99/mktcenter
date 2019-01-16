@@ -184,7 +184,7 @@ public class ActivityStatisticsServiceImpl implements ActivityStatisticsService{
                             String key = StatisticsConstants.VISITORS_PREFIX + activityId + "_" + yesterday + "_" + i;
                             Set hourMemberCodeSet = (Set) redisTemplateService.stringGetStringByKey(key);
                             int count = hourMemberCodeSet == null?0:hourMemberCodeSet.size();
-                            map.put(i,count);
+                            map.put(i + ":00",count);
                         }
                         //查询昨天访问人数
                         String visitorsKey = StatisticsConstants.VISITORS_PREFIX + activityId + "_" + yesterday;
