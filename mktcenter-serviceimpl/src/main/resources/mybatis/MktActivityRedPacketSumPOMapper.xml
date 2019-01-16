@@ -515,7 +515,7 @@
     activity_time
   FROM t_mkt_activity_red_packet_sum
   WHERE
-  tmc.valid=1
+   valid=1
   <if test="sysBrandId!= null ">
   AND sys_brand_id=#{sysBrandId}
   </if>

@@ -168,6 +168,7 @@ public class ActivityRedPacketServiceImpl implements ActivityRedPacketService {
         } else {
             mktActivityPOWithBLOBs = mktActivityPOMapper.selectByPrimaryKey(mktActivityId);
         }
+        activityBO.setActivityPO(mktActivityPOWithBLOBs);
         String storeLimitListStr = mktActivityPOWithBLOBs.getStoreLimitList();
         List<SysStorePo> storeList = new ArrayList<SysStorePo>();
         if (StringUtils.isNotBlank(storeLimitListStr)) {
@@ -180,6 +181,7 @@ public class ActivityRedPacketServiceImpl implements ActivityRedPacketService {
         MktActivityRedPacketPOExample example = new MktActivityRedPacketPOExample();
         example.createCriteria().andMktActivityIdEqualTo(mktActivityPOWithBLOBs.getMktActivityId());
         MktActivityRedPacketPO mktActivityRedPacketPO = mktActivityRedPacketPOMapper.selectByExample(example).get(0);
+        activityBO.setActivityRedPacketPO(mktActivityRedPacketPO);
         activityBO.setCouponDefinitionPO(couponDefinitionServiceFeign.findByIdRpc(mktActivityRedPacketPO.getCouponDefinitionId()).getData());
         responseData.setData(activityBO);
         return responseData;
@@ -207,6 +209,7 @@ public class ActivityRedPacketServiceImpl implements ActivityRedPacketService {
         ResponseData<PageInfo<MktActivityPOWithBLOBs>> responseData = new ResponseData<>();
         SysAccountPO sysAccountPo = TokenUtils.getStageUser(request);
         vo.setBrandId(sysAccountPo.getBrandId());
+        //vo.setBrandId(96L);
         vo.setActivityType(12);
         PageHelper.startPage(vo.getPageNumber(), vo.getPageSize());
         List<MktActivityPOWithBLOBs> listparam = mktActivityPOMapper.selectActivityPriceLists(vo);
@@ -226,6 +229,7 @@ public class ActivityRedPacketServiceImpl implements ActivityRedPacketService {
         ResponseData<PageInfo<ActivityRedPacketListBO>> responseData = new ResponseData<>();
         SysAccountPO sysAccountPo = TokenUtils.getStageUser(request);
         vo.setSysBrandId(sysAccountPo.getBrandId());
+//        vo.setSysBrandId(96L);
         PageHelper.startPage(vo.getPageNumber(), vo.getPageSize());
         List<ActivityRedPacketListBO> listparam = mktActivityRedPacketSumPOMapper.selectActivityRedPacketAnalyzeLists(vo);
         if (CollectionUtils.isEmpty(listparam)) {
@@ -249,7 +253,7 @@ public class ActivityRedPacketServiceImpl implements ActivityRedPacketService {
     @Override
     public ResponseData<PageInfo<MktActivityRedPacketRecordBO>> getRedPacketCoponRecord(ActivityRedPacketVO vo, HttpServletRequest request) {
         ResponseData<PageInfo<MktActivityRedPacketRecordBO>> responseData = new ResponseData<>();
-        SysAccountPO sysAccountPo = TokenUtils.getStageUser(request);
+//        SysAccountPO sysAccountPo = TokenUtils.getStageUser(request);
         Long mktActivityId = vo.getMktActivityId();
         PageHelper.startPage(vo.getPageNumber(), vo.getPageSize());
         List<MktActivityRedPacketRecordBO> listparam = mktActivityRedPacketRecordPOMapper.getRedPacketCoponRecord(vo);

@@ -9,8 +9,8 @@ import lombok.Data;
 @Data
 public class ActivityRedPacketVO {
     //分页
-    private int pageNumber;
-    private int pageSize;
+    private int pageNumber=1;
+    private int pageSize=10;
    //活动
     private Long mktActivityId;
     private String activityCode;
