@@ -570,6 +570,7 @@
     sponsor_code,
     coupon_definition_id,
     coupon_name,
+    coupon_code,
     get_coupon_date,
     reward_integral,
     type
@@ -582,7 +583,7 @@
       AND mkt_activity_id=#{mktActivityId}
     </if>
     <if test="activityName!= null and activityName!= '' ">
-      AND CONCAT(member_name,member_phone,coupon_name) LIKE concat('%',#{activityName},'%')
+      AND CONCAT(member_name,member_phone,coupon_name,coupon_code) LIKE concat('%',#{activityName},'%')
     </if>
   </select>
   <select id="getRedPacketZhuLiRecord" resultType="com.bizvane.mktcenterservice.models.po.MktActivityRedPacketRecordPO">
