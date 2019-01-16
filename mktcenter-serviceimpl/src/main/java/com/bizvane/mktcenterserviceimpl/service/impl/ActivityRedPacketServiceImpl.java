@@ -350,7 +350,7 @@ public class ActivityRedPacketServiceImpl implements ActivityRedPacketService {
             return;
         }
         vo.setInitiatorNum(1);
-        this.doStatisticsRecored(vo, bo, "");
+        this.doStatisticsRecored(vo, bo, null,null);
     }
 
     /**
@@ -373,7 +373,7 @@ public class ActivityRedPacketServiceImpl implements ActivityRedPacketService {
         if (mktActivityRedPacketRecordPOMapper.getRedPacketCount(2, vo.getMemberCode(), null, vo.getMktActivityId()) > 0) {
             vo.setHelpNum(0);
         }
-        this.doStatisticsRecored(vo, bo, "");
+        this.doStatisticsRecored(vo, bo, null,null);
         this.addCouponModelMoneyNum(vo, bo);
     }
 
@@ -413,12 +413,12 @@ public class ActivityRedPacketServiceImpl implements ActivityRedPacketService {
         String couponCode = this.sendCoupon(bo, vo);
         MktActivityRedPacketPO activityRedPacketPO = bo.getActivityRedPacketPO();
         Integer reward = activityRedPacketPO.getCouponDenomination() + zhuliredPacketCount * activityRedPacketPO.getAddCouponDenomination();
-        this.doStatisticsRecored(vo, bo, couponCode);
+        this.doStatisticsRecored(vo, bo, couponCode,reward);
         responseData.setData(reward);
         return responseData;
     }
     //添加历史记录
-    public void doStatisticsRecored(ActivityRedPacketVO vo, ActivityRedPacketBO bo, String couponCode) {
+    public void doStatisticsRecored(ActivityRedPacketVO vo, ActivityRedPacketBO bo, String couponCode,Integer reward) {
         MktActivityRedPacketRecordPO recordPO = new MktActivityRedPacketRecordPO();
         BeanUtils.copyProperties(vo, recordPO);
         recordPO.setCouponDefinitionId(bo.getActivityRedPacketPO().getCouponDefinitionId());
@@ -427,6 +427,7 @@ public class ActivityRedPacketServiceImpl implements ActivityRedPacketService {
         recordPO.setCouponCode(couponCode);
         recordPO.setRewardIntegral(bo.getActivityRedPacketPO().getRewardIntegral());
         recordPO.setAddCouponDenomination(bo.getActivityRedPacketPO().getAddCouponDenomination());
+        recordPO.setCouponQuota(reward);
         mktActivityRedPacketRecordPOMapper.insertSelective(recordPO);
         mktActivityRedPacketSumPOMapper.updateUpdateCount(vo);
 
