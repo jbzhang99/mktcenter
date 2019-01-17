@@ -12,6 +12,7 @@ import com.bizvane.members.facade.enums.BusinessTypeEnum;
 import com.bizvane.members.facade.enums.IntegralChangeTypeEnum;
 import com.bizvane.members.facade.models.MemberInfoModel;
 import com.bizvane.members.facade.service.api.IntegralChangeApiService;
+import com.bizvane.members.facade.service.api.MemberInfoApiService;
 import com.bizvane.members.facade.service.card.request.IntegralChangeRequestModel;
 import com.bizvane.members.facade.service.card.response.IntegralChangeResponseModel;
 import com.bizvane.mktcenterservice.interfaces.ConvertCouponService;
@@ -24,9 +25,9 @@ import com.bizvane.mktcenterservice.models.po.MktCouponIntegralExchangePOExample
 import com.bizvane.mktcenterservice.models.vo.CouponIntegralExchangeVO;
 import com.bizvane.mktcenterservice.models.vo.CouponRecordVO;
 import com.bizvane.mktcenterservice.models.vo.MktCouponIntegralExchangeVO;
-import com.bizvane.mktcenterserviceimpl.common.utils.CodeUtil;
 import com.bizvane.mktcenterserviceimpl.common.tools.ExportExcelUtil;
 import com.bizvane.mktcenterserviceimpl.common.tools.StreamingExportExcelUtil;
+import com.bizvane.mktcenterserviceimpl.common.utils.CodeUtil;
 import com.bizvane.mktcenterserviceimpl.common.utils.TimeUtils;
 import com.bizvane.mktcenterserviceimpl.mappers.MktConvertCouponRecordPOMapper;
 import com.bizvane.mktcenterserviceimpl.mappers.MktCouponIntegralExchangePOMapper;
@@ -77,7 +78,8 @@ public class ConvertCouponServiceImpl implements ConvertCouponService {
     private IntegralChangeApiService integralChangeApiService;
     @Autowired
     private FileTaskServiceRpc fileTaskServiceRpc;
-
+    @Autowired
+    private MemberInfoApiService memberInfoApiService;
     /**
      * 积分兑换订单的查询
      */
@@ -401,6 +403,9 @@ public class ConvertCouponServiceImpl implements ConvertCouponService {
                 ResponseData<String> simple = sendCouponServiceFeign.simple(onecouponVO);
                 log.info("doConvernCoupon----发券----参数--" + JSON.toJSONString(onecouponVO) + "----出参--" + JSON.toJSONString(simple));
             }
+            //修改兑换次数
+            ResponseData memberResponse = memberInfoApiService.addIntegralExchangeTicketCount(memberCode, 1);
+            log.info("会员修改 兑换次数的返回值:"+JSON.toJSONString(memberResponse));
         } else {
             log.info("积分扣减失败,删除对应的积分订单记录!");
             mktConvertCouponRecordPOMapper.deleteByPrimaryKey(record.getConvertCouponRecordId());
