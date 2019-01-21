@@ -8,28 +8,28 @@ import java.util.List;
 public class MktActivityRedPacketRecordPOExample implements Serializable {
     /**
 	 * 只读. 
-	 * @mbg.generated  2019-01-16 16:29:57
+	 * @mbg.generated  2019-01-21 14:43:18
 	 */
 	protected String orderByClause;
 	/**
 	 * 只读. 
-	 * @mbg.generated  2019-01-16 16:29:57
+	 * @mbg.generated  2019-01-21 14:43:18
 	 */
 	protected boolean distinct;
 	/**
 	 * 只读. 
-	 * @mbg.generated  2019-01-16 16:29:57
+	 * @mbg.generated  2019-01-21 14:43:18
 	 */
 	protected List<Criteria> oredCriteria;
 	/**
 	 * 只读. 
-	 * @mbg.generated  2019-01-16 16:29:57
+	 * @mbg.generated  2019-01-21 14:43:18
 	 */
 	private static final long serialVersionUID = 1L;
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2019-01-16 16:29:57
+	 * @mbg.generated  2019-01-21 14:43:18
 	 */
 	public MktActivityRedPacketRecordPOExample() {
 		oredCriteria = new ArrayList<Criteria>();
@@ -37,7 +37,7 @@ public class MktActivityRedPacketRecordPOExample implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2019-01-16 16:29:57
+	 * @mbg.generated  2019-01-21 14:43:18
 	 */
 	public void setOrderByClause(String orderByClause) {
 		this.orderByClause = orderByClause;
@@ -45,7 +45,7 @@ public class MktActivityRedPacketRecordPOExample implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2019-01-16 16:29:57
+	 * @mbg.generated  2019-01-21 14:43:18
 	 */
 	public String getOrderByClause() {
 		return orderByClause;
@@ -53,7 +53,7 @@ public class MktActivityRedPacketRecordPOExample implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2019-01-16 16:29:57
+	 * @mbg.generated  2019-01-21 14:43:18
 	 */
 	public void setDistinct(boolean distinct) {
 		this.distinct = distinct;
@@ -61,7 +61,7 @@ public class MktActivityRedPacketRecordPOExample implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2019-01-16 16:29:57
+	 * @mbg.generated  2019-01-21 14:43:18
 	 */
 	public boolean isDistinct() {
 		return distinct;
@@ -69,7 +69,7 @@ public class MktActivityRedPacketRecordPOExample implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2019-01-16 16:29:57
+	 * @mbg.generated  2019-01-21 14:43:18
 	 */
 	public List<Criteria> getOredCriteria() {
 		return oredCriteria;
@@ -77,7 +77,7 @@ public class MktActivityRedPacketRecordPOExample implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2019-01-16 16:29:57
+	 * @mbg.generated  2019-01-21 14:43:18
 	 */
 	public void or(Criteria criteria) {
 		oredCriteria.add(criteria);
@@ -85,7 +85,7 @@ public class MktActivityRedPacketRecordPOExample implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2019-01-16 16:29:57
+	 * @mbg.generated  2019-01-21 14:43:18
 	 */
 	public Criteria or() {
 		Criteria criteria = createCriteriaInternal();
@@ -95,7 +95,7 @@ public class MktActivityRedPacketRecordPOExample implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2019-01-16 16:29:57
+	 * @mbg.generated  2019-01-21 14:43:18
 	 */
 	public Criteria createCriteria() {
 		Criteria criteria = createCriteriaInternal();
@@ -107,7 +107,7 @@ public class MktActivityRedPacketRecordPOExample implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2019-01-16 16:29:57
+	 * @mbg.generated  2019-01-21 14:43:18
 	 */
 	protected Criteria createCriteriaInternal() {
 		Criteria criteria = new Criteria();
@@ -116,7 +116,7 @@ public class MktActivityRedPacketRecordPOExample implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2019-01-16 16:29:57
+	 * @mbg.generated  2019-01-21 14:43:18
 	 */
 	public void clear() {
 		oredCriteria.clear();
@@ -126,7 +126,7 @@ public class MktActivityRedPacketRecordPOExample implements Serializable {
 
 	/**
 	 * 只读. t_mkt_activity_red_packet_record
-	 * @mbg.generated  2019-01-16 16:29:57
+	 * @mbg.generated  2019-01-21 14:43:18
 	 */
 	protected abstract static class GeneratedCriteria implements Serializable {
 		protected List<Criterion> criteria;
@@ -617,6 +617,76 @@ public class MktActivityRedPacketRecordPOExample implements Serializable {
 
 		public Criteria andMemberNameNotBetween(String value1, String value2) {
 			addCriterion("member_name not between", value1, value2, "memberName");
+			return (Criteria) this;
+		}
+
+		public Criteria andWxHeadUrlIsNull() {
+			addCriterion("wx_head_url is null");
+			return (Criteria) this;
+		}
+
+		public Criteria andWxHeadUrlIsNotNull() {
+			addCriterion("wx_head_url is not null");
+			return (Criteria) this;
+		}
+
+		public Criteria andWxHeadUrlEqualTo(String value) {
+			addCriterion("wx_head_url =", value, "wxHeadUrl");
+			return (Criteria) this;
+		}
+
+		public Criteria andWxHeadUrlNotEqualTo(String value) {
+			addCriterion("wx_head_url <>", value, "wxHeadUrl");
+			return (Criteria) this;
+		}
+
+		public Criteria andWxHeadUrlGreaterThan(String value) {
+			addCriterion("wx_head_url >", value, "wxHeadUrl");
+			return (Criteria) this;
+		}
+
+		public Criteria andWxHeadUrlGreaterThanOrEqualTo(String value) {
+			addCriterion("wx_head_url >=", value, "wxHeadUrl");
+			return (Criteria) this;
+		}
+
+		public Criteria andWxHeadUrlLessThan(String value) {
+			addCriterion("wx_head_url <", value, "wxHeadUrl");
+			return (Criteria) this;
+		}
+
+		public Criteria andWxHeadUrlLessThanOrEqualTo(String value) {
+			addCriterion("wx_head_url <=", value, "wxHeadUrl");
+			return (Criteria) this;
+		}
+
+		public Criteria andWxHeadUrlLike(String value) {
+			addCriterion("wx_head_url like", value, "wxHeadUrl");
+			return (Criteria) this;
+		}
+
+		public Criteria andWxHeadUrlNotLike(String value) {
+			addCriterion("wx_head_url not like", value, "wxHeadUrl");
+			return (Criteria) this;
+		}
+
+		public Criteria andWxHeadUrlIn(List<String> values) {
+			addCriterion("wx_head_url in", values, "wxHeadUrl");
+			return (Criteria) this;
+		}
+
+		public Criteria andWxHeadUrlNotIn(List<String> values) {
+			addCriterion("wx_head_url not in", values, "wxHeadUrl");
+			return (Criteria) this;
+		}
+
+		public Criteria andWxHeadUrlBetween(String value1, String value2) {
+			addCriterion("wx_head_url between", value1, value2, "wxHeadUrl");
+			return (Criteria) this;
+		}
+
+		public Criteria andWxHeadUrlNotBetween(String value1, String value2) {
+			addCriterion("wx_head_url not between", value1, value2, "wxHeadUrl");
 			return (Criteria) this;
 		}
 
@@ -1260,6 +1330,76 @@ public class MktActivityRedPacketRecordPOExample implements Serializable {
 			return (Criteria) this;
 		}
 
+		public Criteria andOtherIsNull() {
+			addCriterion("other is null");
+			return (Criteria) this;
+		}
+
+		public Criteria andOtherIsNotNull() {
+			addCriterion("other is not null");
+			return (Criteria) this;
+		}
+
+		public Criteria andOtherEqualTo(String value) {
+			addCriterion("other =", value, "other");
+			return (Criteria) this;
+		}
+
+		public Criteria andOtherNotEqualTo(String value) {
+			addCriterion("other <>", value, "other");
+			return (Criteria) this;
+		}
+
+		public Criteria andOtherGreaterThan(String value) {
+			addCriterion("other >", value, "other");
+			return (Criteria) this;
+		}
+
+		public Criteria andOtherGreaterThanOrEqualTo(String value) {
+			addCriterion("other >=", value, "other");
+			return (Criteria) this;
+		}
+
+		public Criteria andOtherLessThan(String value) {
+			addCriterion("other <", value, "other");
+			return (Criteria) this;
+		}
+
+		public Criteria andOtherLessThanOrEqualTo(String value) {
+			addCriterion("other <=", value, "other");
+			return (Criteria) this;
+		}
+
+		public Criteria andOtherLike(String value) {
+			addCriterion("other like", value, "other");
+			return (Criteria) this;
+		}
+
+		public Criteria andOtherNotLike(String value) {
+			addCriterion("other not like", value, "other");
+			return (Criteria) this;
+		}
+
+		public Criteria andOtherIn(List<String> values) {
+			addCriterion("other in", values, "other");
+			return (Criteria) this;
+		}
+
+		public Criteria andOtherNotIn(List<String> values) {
+			addCriterion("other not in", values, "other");
+			return (Criteria) this;
+		}
+
+		public Criteria andOtherBetween(String value1, String value2) {
+			addCriterion("other between", value1, value2, "other");
+			return (Criteria) this;
+		}
+
+		public Criteria andOtherNotBetween(String value1, String value2) {
+			addCriterion("other not between", value1, value2, "other");
+			return (Criteria) this;
+		}
+
 		public Criteria andRemarkIsNull() {
 			addCriterion("remark is null");
 			return (Criteria) this;
@@ -1773,7 +1913,7 @@ public class MktActivityRedPacketRecordPOExample implements Serializable {
 
 	/**
 	 * 只读. t_mkt_activity_red_packet_record
-	 * @mbg.generated  2019-01-16 16:29:57
+	 * @mbg.generated  2019-01-21 14:43:18
 	 */
 	public static class Criterion implements Serializable {
 		private String condition;
