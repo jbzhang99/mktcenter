@@ -2,7 +2,6 @@ package com.bizvane.mktcenterservice.interfaces;
 
 import com.bizvane.utils.responseinfo.ResponseData;
 
-import java.util.List;
 
 /**
  * @author yy

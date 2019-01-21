@@ -1,14 +1,11 @@
 package com.bizvane.mktcenterserviceimpl.service.impl;
 
-import com.bizvane.mktcenterservice.interfaces.ActivityRedPacketService;
+
 import com.bizvane.mktcenterservice.interfaces.ActivityStatisticsService;
-import com.bizvane.mktcenterservice.models.bo.ActivityRedPacketBO;
 import com.bizvane.mktcenterservice.models.bo.ActivityStatisticsBO;
 import com.bizvane.mktcenterservice.models.po.MktActivityPOWithBLOBs;
-import com.bizvane.mktcenterservice.models.po.MktActivityRedPacketPO;
 import com.bizvane.mktcenterservice.models.po.MktActivityStatisticsPO;
 import com.bizvane.mktcenterservice.models.po.MktActivityStatisticsPOExample;
-import com.bizvane.mktcenterservice.models.vo.ActivityRedPacketVO;
 import com.bizvane.mktcenterserviceimpl.common.constants.StatisticsConstants;
 import com.bizvane.mktcenterserviceimpl.common.enums.StatisticsEnum;
 import com.bizvane.mktcenterserviceimpl.common.tools.DateUtil;
@@ -21,11 +18,6 @@ import com.qiniu.util.Json;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataAccessException;
-import org.springframework.data.redis.connection.RedisConnection;
-import org.springframework.data.redis.core.RedisCallback;
-import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.data.redis.serializer.RedisSerializer;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
@@ -57,7 +49,7 @@ public class ActivityStatisticsServiceImpl implements ActivityStatisticsService{
             String today = StatisticsConstants.getCurrentDate();
             String activityIdsKey = StatisticsConstants.ACTIVITY_LIST_PREFIX + today;
             Set activityIds = (Set) redisTemplateService.stringGetStringByKey(activityIdsKey);
-            if (activityIds == null || activityIds.size() == 0) {
+            if (activityIds.isEmpty()) {
                 Set activityIdSet = new HashSet();
                 activityIdSet.add(activityId);
                 redisTemplateService.stringSetString(activityIdsKey,activityIdSet);
@@ -169,7 +161,7 @@ public class ActivityStatisticsServiceImpl implements ActivityStatisticsService{
             Set<Long> activityIds = (Set<Long>) redisTemplateService.stringGetStringByKey(yesterdayKey);
             log.info("昨天的redisKey:{}",yesterdayKey);
             log.info("昨天的活动id列表:{}",activityIds);
-            if (activityIds == null || activityIds.size() == 0) {
+            if (activityIds.isEmpty()) {
                 //证明昨天无活动触发 就此结束
                 log.info(yesterday + " 无活动触发 就此结束定时");
                 return;
@@ -260,13 +252,15 @@ public class ActivityStatisticsServiceImpl implements ActivityStatisticsService{
             responseData.setMessage("此活动当天未激活");
             return responseData;
         }
+        Date yesDate = null;
         if (yesBO != null) {
             //昨天为null时就为缺省值
-            todayBO.setScaleVisitorsCount(BigDecimal.valueOf(todayBO.getVisitorsCount()-yesBO.getVisitorsCount()).divide(BigDecimal.valueOf(yesBO.getVisitorsCount()),4,BigDecimal.ROUND_HALF_UP).multiply(BigDecimal.valueOf(100L)).setScale(2,BigDecimal.ROUND_HALF_UP));
-            todayBO.setScaleLaunchMembersCount(BigDecimal.valueOf(todayBO.getLaunchMembersCount()-yesBO.getLaunchMembersCount()).divide(BigDecimal.valueOf(yesBO.getLaunchMembersCount()),4,BigDecimal.ROUND_HALF_UP).multiply(BigDecimal.valueOf(100L)).setScale(2,BigDecimal.ROUND_HALF_UP));
-            todayBO.setScaleHelpMembersCount(BigDecimal.valueOf(todayBO.getHelpMembersCount()-yesBO.getHelpMembersCount()).divide(BigDecimal.valueOf(yesBO.getHelpMembersCount()),4,BigDecimal.ROUND_HALF_UP).multiply(BigDecimal.valueOf(100L)).setScale(2,BigDecimal.ROUND_HALF_UP));
-            todayBO.setScaleRegisterMembersCount(BigDecimal.valueOf(todayBO.getRegisterMembersCount()-yesBO.getRegisterMembersCount()).divide(BigDecimal.valueOf(yesBO.getRegisterMembersCount()),4,BigDecimal.ROUND_HALF_UP).multiply(BigDecimal.valueOf(100L)).setScale(2,BigDecimal.ROUND_HALF_UP));
-            todayBO.setScaleTakeCouponCount(BigDecimal.valueOf(todayBO.getTakeCouponCount()-yesBO.getTakeCouponCount()).divide(BigDecimal.valueOf(yesBO.getTakeCouponCount()),4,BigDecimal.ROUND_HALF_UP).multiply(BigDecimal.valueOf(100L)).setScale(2,BigDecimal.ROUND_HALF_UP));
+            todayBO.setScaleVisitorsCount(BigDecimal.valueOf(Long.parseLong(String.valueOf(todayBO.getVisitorsCount()-yesBO.getVisitorsCount()))).divide(BigDecimal.valueOf(yesBO.getVisitorsCount()),4,BigDecimal.ROUND_HALF_UP).multiply(BigDecimal.valueOf(100L)).setScale(2,BigDecimal.ROUND_HALF_UP));
+            todayBO.setScaleLaunchMembersCount(BigDecimal.valueOf(Long.parseLong(String.valueOf(todayBO.getLaunchMembersCount()-yesBO.getLaunchMembersCount()))).divide(BigDecimal.valueOf(yesBO.getLaunchMembersCount()),4,BigDecimal.ROUND_HALF_UP).multiply(BigDecimal.valueOf(100L)).setScale(2,BigDecimal.ROUND_HALF_UP));
+            todayBO.setScaleHelpMembersCount(BigDecimal.valueOf(Long.parseLong(String.valueOf(todayBO.getHelpMembersCount()-yesBO.getHelpMembersCount()))).divide(BigDecimal.valueOf(yesBO.getHelpMembersCount()),4,BigDecimal.ROUND_HALF_UP).multiply(BigDecimal.valueOf(100L)).setScale(2,BigDecimal.ROUND_HALF_UP));
+            todayBO.setScaleRegisterMembersCount(BigDecimal.valueOf(Long.parseLong(String.valueOf(todayBO.getRegisterMembersCount()-yesBO.getRegisterMembersCount()))).divide(BigDecimal.valueOf(yesBO.getRegisterMembersCount()),4,BigDecimal.ROUND_HALF_UP).multiply(BigDecimal.valueOf(100L)).setScale(2,BigDecimal.ROUND_HALF_UP));
+            todayBO.setScaleTakeCouponCount(BigDecimal.valueOf(Long.parseLong(String.valueOf(todayBO.getTakeCouponCount()-yesBO.getTakeCouponCount()))).divide(BigDecimal.valueOf(yesBO.getTakeCouponCount()),4,BigDecimal.ROUND_HALF_UP).multiply(BigDecimal.valueOf(100L)).setScale(2,BigDecimal.ROUND_HALF_UP));
+            yesDate = yesBO.getStatisticsTime();
         }
         MktActivityPOWithBLOBs mktActivityPOWithBLOBs = mktActivityPOMapper.selectByPrimaryKey(activityId);
         Date startTime = mktActivityPOWithBLOBs.getStartTime();
@@ -276,7 +270,7 @@ public class ActivityStatisticsServiceImpl implements ActivityStatisticsService{
         example.createCriteria().andMktActivityIdEqualTo(activityId).andStatisticsTypeEqualTo(StatisticsConstants.STATISTICS_TYPE)
                 .andStatisticsTimeBetween(startTime,todayDate);
         List<MktActivityStatisticsPO> todayList = mktActivityStatisticsPOMapper.selectByExample(example);
-        if (todayList != null && todayList.size() > 0) {
+        if (!todayList.isEmpty()) {
             todayList.forEach(todayPo -> {
                 todayBO.setTotalVisitorsCount((todayBO.getTotalVisitorsCount() == null?0:todayBO.getTotalVisitorsCount()) + todayPo.getVisitorsCount());
                 todayBO.setTotalLaunchMembersCount((todayBO.getTotalLaunchMembersCount() == null?0:todayBO.getTotalLaunchMembersCount()) + todayPo.getLaunchMembersCount());
@@ -286,12 +280,12 @@ public class ActivityStatisticsServiceImpl implements ActivityStatisticsService{
             });
         }
         //获取从活动开始时间到当前时间前一天的各项累计数据
-        Date yesDate = yesBO.getStatisticsTime();
+
         MktActivityStatisticsPOExample yesExample = new MktActivityStatisticsPOExample();
         yesExample.createCriteria().andMktActivityIdEqualTo(activityId).andStatisticsTypeEqualTo(StatisticsConstants.STATISTICS_TYPE)
                 .andStatisticsTimeBetween(startTime,yesDate);
         List<MktActivityStatisticsPO> yesList = mktActivityStatisticsPOMapper.selectByExample(yesExample);
-        if (yesList != null && yesList.size() > 0) {
+        if (!yesList.isEmpty() && yesBO != null) {
             yesList.forEach(yesPo -> {
                 yesBO.setTotalVisitorsCount((yesBO.getTotalVisitorsCount() == null?0:yesBO.getTotalVisitorsCount()) + yesPo.getVisitorsCount());
                 yesBO.setTotalLaunchMembersCount((yesBO.getTotalLaunchMembersCount() == null?0:yesBO.getTotalLaunchMembersCount()) + yesPo.getLaunchMembersCount());
@@ -300,11 +294,11 @@ public class ActivityStatisticsServiceImpl implements ActivityStatisticsService{
                 yesBO.setTotalTakeCouponCount((yesBO.getTotalTakeCouponCount()==null?0:yesBO.getTotalTakeCouponCount()) + yesPo.getTakeCouponCount());
             });
             //算出累计数据的比例
-            todayBO.setScaleTotalVisitorsCount(BigDecimal.valueOf(todayBO.getTotalVisitorsCount()-yesBO.getTotalVisitorsCount()).divide(BigDecimal.valueOf(yesBO.getTotalVisitorsCount()),4,BigDecimal.ROUND_HALF_UP).multiply(BigDecimal.valueOf(100L)).setScale(2,BigDecimal.ROUND_HALF_UP));
-            todayBO.setScaleTotalLaunchMembersCount(BigDecimal.valueOf(todayBO.getTotalLaunchMembersCount()-yesBO.getTotalLaunchMembersCount()).divide(BigDecimal.valueOf(yesBO.getTotalLaunchMembersCount()),4,BigDecimal.ROUND_HALF_UP).multiply(BigDecimal.valueOf(100L)).setScale(2,BigDecimal.ROUND_HALF_UP));
-            todayBO.setScaleTotalHelpMembersCount(BigDecimal.valueOf(todayBO.getTotalHelpMembersCount()-yesBO.getTotalHelpMembersCount()).divide(BigDecimal.valueOf(yesBO.getTotalHelpMembersCount()),4,BigDecimal.ROUND_HALF_UP).multiply(BigDecimal.valueOf(100L)).setScale(2,BigDecimal.ROUND_HALF_UP));
-            todayBO.setScaleTotalRegisterMembersCount(BigDecimal.valueOf(todayBO.getTotalRegisterMembersCount()-yesBO.getTotalRegisterMembersCount()).divide(BigDecimal.valueOf(yesBO.getTotalRegisterMembersCount()),4,BigDecimal.ROUND_HALF_UP).multiply(BigDecimal.valueOf(100L)).setScale(2,BigDecimal.ROUND_HALF_UP));
-            todayBO.setScaleTotalTakeCouponCount(BigDecimal.valueOf(todayBO.getTotalTakeCouponCount()-yesBO.getTotalTakeCouponCount()).divide(BigDecimal.valueOf(yesBO.getTotalTakeCouponCount()),4,BigDecimal.ROUND_HALF_UP).multiply(BigDecimal.valueOf(100L)).setScale(2,BigDecimal.ROUND_HALF_UP));
+            todayBO.setScaleTotalVisitorsCount(BigDecimal.valueOf(Long.parseLong(String.valueOf(todayBO.getTotalVisitorsCount()-yesBO.getTotalVisitorsCount()))).divide(BigDecimal.valueOf(yesBO.getTotalVisitorsCount()),4,BigDecimal.ROUND_HALF_UP).multiply(BigDecimal.valueOf(100L)).setScale(2,BigDecimal.ROUND_HALF_UP));
+            todayBO.setScaleTotalLaunchMembersCount(BigDecimal.valueOf(Long.parseLong(String.valueOf(todayBO.getTotalLaunchMembersCount()-yesBO.getTotalLaunchMembersCount()))).divide(BigDecimal.valueOf(yesBO.getTotalLaunchMembersCount()),4,BigDecimal.ROUND_HALF_UP).multiply(BigDecimal.valueOf(100L)).setScale(2,BigDecimal.ROUND_HALF_UP));
+            todayBO.setScaleTotalHelpMembersCount(BigDecimal.valueOf(Long.parseLong(String.valueOf(todayBO.getTotalHelpMembersCount()-yesBO.getTotalHelpMembersCount()))).divide(BigDecimal.valueOf(yesBO.getTotalHelpMembersCount()),4,BigDecimal.ROUND_HALF_UP).multiply(BigDecimal.valueOf(100L)).setScale(2,BigDecimal.ROUND_HALF_UP));
+            todayBO.setScaleTotalRegisterMembersCount(BigDecimal.valueOf(Long.parseLong(String.valueOf(todayBO.getTotalRegisterMembersCount()-yesBO.getTotalRegisterMembersCount()))).divide(BigDecimal.valueOf(yesBO.getTotalRegisterMembersCount()),4,BigDecimal.ROUND_HALF_UP).multiply(BigDecimal.valueOf(100L)).setScale(2,BigDecimal.ROUND_HALF_UP));
+            todayBO.setScaleTotalTakeCouponCount(BigDecimal.valueOf(Long.parseLong(String.valueOf(todayBO.getTotalTakeCouponCount()-yesBO.getTotalTakeCouponCount()))).divide(BigDecimal.valueOf(yesBO.getTotalTakeCouponCount()),4,BigDecimal.ROUND_HALF_UP).multiply(BigDecimal.valueOf(100L)).setScale(2,BigDecimal.ROUND_HALF_UP));
         }
         responseData.setCode(SysResponseEnum.SUCCESS.getCode());
         responseData.setMessage(SysResponseEnum.SUCCESS.getMessage());
@@ -328,7 +322,7 @@ public class ActivityStatisticsServiceImpl implements ActivityStatisticsService{
             example.createCriteria().andMktActivityIdEqualTo(activityId).andStatisticsTypeEqualTo(StatisticsConstants.STATISTICS_TYPE)
                     .andStatisticsTimeEqualTo(current);
             List<MktActivityStatisticsPO> statisticsPOList = mktActivityStatisticsPOMapper.selectByExampleWithBLOBs(example);
-            if (statisticsPOList != null && statisticsPOList.size() > 0) {
+            if (!statisticsPOList.isEmpty()) {
                 MktActivityStatisticsPO statisticsPO = statisticsPOList.get(0);
                 Map map = Json.decode(statisticsPO.getHourJsonData(),Map.class);
                 responseData.setCode(SysResponseEnum.SUCCESS.getCode());
@@ -338,13 +332,13 @@ public class ActivityStatisticsServiceImpl implements ActivityStatisticsService{
                 responseData.setCode(SysResponseEnum.FAILED.getCode());
                 responseData.setMessage(SysResponseEnum.FAILED.getMessage());
             }
-        }if (type == StatisticsConstants.CURVE_DAY) {
+        }else if (type == StatisticsConstants.CURVE_DAY) {
             MktActivityStatisticsPOExample example = new MktActivityStatisticsPOExample();
             Date fifteenDate = StatisticsConstants.getFifteenDay(time);
             example.createCriteria().andMktActivityIdEqualTo(activityId).andStatisticsTypeEqualTo(StatisticsConstants.STATISTICS_TYPE)
                     .andStatisticsTimeBetween(fifteenDate,current);
             List<MktActivityStatisticsPO> statisticsPOS = mktActivityStatisticsPOMapper.selectByExampleWithBLOBs(example);
-            if (statisticsPOS != null && statisticsPOS.size() > 0) {
+            if (!statisticsPOS.isEmpty()) {
                 Map map = new TreeMap();
                 for (MktActivityStatisticsPO po:statisticsPOS) {
                     map.put(DateUtil.format(po.getStatisticsTime(),DateUtil.ymd),po.getVisitorsCount());
