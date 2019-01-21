@@ -621,7 +621,8 @@
     coupon_code,
     get_coupon_date,
     reward_integral,
-    type
+    type，
+    coupon_quota
     FROM
     t_mkt_activity_red_packet_record
     WHERE
