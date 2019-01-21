@@ -20,7 +20,7 @@ public class ActivityStartRedPacketHandler extends IJobHandler {
     private MktActivityPOMapper mktActivityPOMapper;
     @Override
     public ReturnT<String> execute(String param) throws Exception {
-        System.out.println("红包 ActivityStartRedPacketHandler param: "+param);
+        System.out.println("红包定时 ActivityStartRedPacketHandler param: "+param);
         ReturnT returnT = new ReturnT();
         MktActivityPO po = new MktActivityPO();
         po.setActivityCode(param);
@@ -28,7 +28,7 @@ public class ActivityStartRedPacketHandler extends IJobHandler {
         //把活动状态改成已结束
         int sum = mktActivityPOMapper.updateActivityStatus(po);
         returnT.setCode(0);
-        returnT.setContent("红包 ActivityStartRedPacketHandler 活动执行完毕");
+        returnT.setContent("红包定时 ActivityStartRedPacketHandler 活动执行完毕");
         returnT.setMsg("success");
         return returnT;
     }
