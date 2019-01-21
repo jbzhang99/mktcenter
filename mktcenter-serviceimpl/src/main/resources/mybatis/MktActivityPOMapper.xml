@@ -83,10 +83,10 @@
       <result column="mkt_activity_id" jdbcType="BIGINT" property="mktActivityId" />
       <result column="coupon_definition_id" jdbcType="BIGINT" property="couponDefinitionId" />
       <result column="coupon_name" jdbcType="VARCHAR" property="couponName" />
-      <result column="coupon_ denomination" jdbcType="INTEGER" property="couponDenomination" />
-      <result column="add_coupon_ denomination" jdbcType="INTEGER" property="addCouponDenomination" />
+      <result column="coupon_denomination" jdbcType="INTEGER" property="couponDenomination" />
+      <result column="add_coupon_denomination" jdbcType="INTEGER" property="addCouponDenomination" />
       <result column="do_if_reward" jdbcType="BIT" property="doIfReward" />
-      <result column="reward_ integral" jdbcType="INTEGER" property="rewardIntegral" />
+      <result column="reward_integral" jdbcType="INTEGER" property="rewardIntegral" />
     </association>
   </resultMap>
 

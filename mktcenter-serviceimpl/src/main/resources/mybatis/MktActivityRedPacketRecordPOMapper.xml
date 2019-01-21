@@ -652,7 +652,8 @@
     get_coupon_date,
     reward_integral,
     type，
-    coupon_quota
+    coupon_quota，
+    wx_head_url
     FROM
     t_mkt_activity_red_packet_record
     WHERE

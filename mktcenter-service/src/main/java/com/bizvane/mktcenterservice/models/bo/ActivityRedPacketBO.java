@@ -4,6 +4,7 @@ import com.bizvane.centerstageservice.models.po.SysStorePo;
 import com.bizvane.couponfacade.models.po.CouponDefinitionPO;
 import com.bizvane.mktcenterservice.models.po.MktActivityPOWithBLOBs;
 import com.bizvane.mktcenterservice.models.po.MktActivityRedPacketPO;
+import com.bizvane.mktcenterservice.models.vo.DefinedVO;
 import lombok.Data;
 
 import java.util.List;
@@ -22,4 +23,6 @@ public class ActivityRedPacketBO {
     private List<SysStorePo> storeList;
 
     private CouponDefinitionPO couponDefinitionPO;
+
+    private DefinedVO definedVO;
 }

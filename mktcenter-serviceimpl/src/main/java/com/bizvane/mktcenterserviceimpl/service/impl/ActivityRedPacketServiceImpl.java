@@ -402,7 +402,7 @@ public class ActivityRedPacketServiceImpl implements ActivityRedPacketService {
         ResponseData<Integer> responseData = new ResponseData<>();
         vo.setType(3);
         ActivityRedPacketBO bo = mktActivityPOMapper.selectActivityRedPacketDetail(vo);
-        log.info("andActivityRedPacketZhuliRecord 添加记录 param:" + JSON.toJSONString(vo) + "--活动详情-" + JSON.toJSONString(bo));
+        log.info("andActivityRedPacketSendCouponRecord 添加记录 param:" + JSON.toJSONString(vo) + "--活动详情-" + JSON.toJSONString(bo));
 //        Integer limitNum = bo.getActivityRedPacketPO().getLimitNum();
 //        Integer redPacketCount = mktActivityRedPacketRecordPOMapper.getRedPacketCount(3, vo.getMemberCode(), vo.getSponsorCode(), vo.getMktActivityId());
 //        if (redPacketCount > 0) {
