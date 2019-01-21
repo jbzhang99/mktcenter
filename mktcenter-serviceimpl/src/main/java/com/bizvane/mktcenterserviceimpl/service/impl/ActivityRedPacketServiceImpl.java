@@ -411,7 +411,8 @@ public class ActivityRedPacketServiceImpl implements ActivityRedPacketService {
 //            responseData.setCode(100);
 //            return responseData;
 //        }
-        Integer zhuliredPacketCount = mktActivityRedPacketRecordPOMapper.getRedPacketCount(3, null, vo.getSponsorCode(), vo.getMktActivityId());
+        //查询助力人数
+        Integer zhuliredPacketCount = mktActivityRedPacketRecordPOMapper.getRedPacketCount(3, null, vo.getMemberCode(), vo.getMktActivityId());
         vo.setGetCouponNum(1);
         String couponCode = this.sendCoupon(bo, vo);
         MktActivityRedPacketPO activityRedPacketPO = bo.getActivityRedPacketPO();
