@@ -107,9 +107,11 @@ public class ActivityRedPacketServiceImpl implements ActivityRedPacketService {
             activityPO.setActivityStatus(2);
         } else {
             activityPO.setActivityStatus(1);
-            jobUtil.addStartRedPacketJob(sysAccountPo, activityPO, activeRedPacketCode);
+          //  jobUtil.addStartRedPacketJob(sysAccountPo, activityPO, activeRedPacketCode);
+            jobUtil.addStartPrizeJob(sysAccountPo, activityPO, activeRedPacketCode);
         }
-        jobUtil.addEndStartRedPacketJob(sysAccountPo, activityPO, activeRedPacketCode);
+       // jobUtil.addEndStartRedPacketJob(sysAccountPo, activityPO, activeRedPacketCode);
+        jobUtil.addEndPrizeJob(sysAccountPo, activityPO, activeRedPacketCode);
 
         CreateMiniprgmQRCodeRequestVO createMiniprgmQRCodeRequestVO = new CreateMiniprgmQRCodeRequestVO();
         createMiniprgmQRCodeRequestVO.setSysBrandId(sysAccountPo.getBrandId());
