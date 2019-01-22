@@ -27,7 +27,6 @@ import com.bizvane.mktcenterserviceimpl.mappers.MktActivityPOMapper;
 import com.bizvane.mktcenterserviceimpl.mappers.MktActivityRedPacketPOMapper;
 import com.bizvane.mktcenterserviceimpl.mappers.MktActivityRedPacketRecordPOMapper;
 import com.bizvane.mktcenterserviceimpl.mappers.MktActivityRedPacketSumPOMapper;
-import com.bizvane.utils.enumutils.SysResponseEnum;
 import com.bizvane.utils.responseinfo.ResponseData;
 import com.bizvane.utils.tokens.SysAccountPO;
 import com.bizvane.utils.tokens.TokenUtils;
@@ -156,13 +155,15 @@ public class ActivityRedPacketServiceImpl implements ActivityRedPacketService {
         redPacketSumPO.setCreateDate(date);
         mktActivityRedPacketSumPOMapper.insertSelective(redPacketSumPO);
 
+        activityStatisticsService.addActivityIdsSet(activityPO.getMktActivityId());
+
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("qrCodeUrl", weixinUrl);
         jsonObject.put("activityCode", activeRedPacketCode);
         jsonObject.put("activityName", activityPO.getActivityName());
         responseData.setData(jsonObject);
-        responseData.setMessage(SysResponseEnum.SUCCESS.getMessage());
-        responseData.setCode(SysResponseEnum.SUCCESS.getCode());
+//        responseData.setMessage(SysResponseEnum.SUCCESS.getMessage());
+//        responseData.setCode(SysResponseEnum.SUCCESS.getCode());
         return responseData;
     }
 
