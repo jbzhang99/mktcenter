@@ -309,6 +309,7 @@ public class ActivityRedPacketServiceImpl implements ActivityRedPacketService {
      */
     @Override
     public ResponseData<Integer> doIfActivityRedPacket(ActivityRedPacketVO vo) {
+        log.info("doIfActivityRedPacket 判断 param :"+JSON.toJSONString(vo));
         ResponseData<Integer> responseData = new ResponseData<>();
         Integer type = vo.getType();
         String memberCode = vo.getMemberCode();
