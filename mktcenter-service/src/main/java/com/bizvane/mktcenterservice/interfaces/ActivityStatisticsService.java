@@ -19,4 +19,7 @@ public interface ActivityStatisticsService {
 
 
     public ResponseData curveData(Long activityId,String time,int type);
+
+
+    public ResponseData addActivityIdsSet(Long activityId);
 }

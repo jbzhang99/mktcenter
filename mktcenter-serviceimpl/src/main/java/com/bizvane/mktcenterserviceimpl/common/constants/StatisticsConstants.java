@@ -50,10 +50,10 @@ public class StatisticsConstants {
 
     /**
      *  redis缓存过期时间
-     *  单位：秒
-     *  时间设置：36小时
+     *  单位：毫秒
+     *  时间设置：48小时
      */
-    public static final long REDIS_LIVE_TIME = 129600;
+    public static final long REDIS_LIVE_TIME = 48 * 60 * 60 * 1000 ;
 
     /**
      * 曲线数据类型 小时维度

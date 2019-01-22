@@ -511,7 +511,6 @@
       SELECT DATE_FORMAT(statistics_time, '%Y-%m-%d') FROM t_mkt_activity_statistics
       WHERE mkt_activity_id = #{activityId}
       GROUP BY statistics_time
-      LIMIT 1,2000
   </select>
 
   <select id="getBo" parameterType="map" resultType="com.bizvane.mktcenterservice.models.bo.ActivityStatisticsBO">

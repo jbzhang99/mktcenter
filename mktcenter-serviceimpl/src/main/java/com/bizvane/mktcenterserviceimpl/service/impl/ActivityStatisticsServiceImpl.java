@@ -46,17 +46,11 @@ public class ActivityStatisticsServiceImpl implements ActivityStatisticsService{
         ResponseData responseData = new ResponseData();
         try {
             //将活动id存入redis中 设置redis的key
-            String today = StatisticsConstants.getCurrentDate();
-            String activityIdsKey = StatisticsConstants.ACTIVITY_LIST_PREFIX + today;
-            Set activityIds = (Set) redisTemplateService.stringGetStringByKey(activityIdsKey);
-            if (activityIds.isEmpty()) {
-                Set activityIdSet = new HashSet();
-                activityIdSet.add(activityId);
-                redisTemplateService.stringSetString(activityIdsKey,activityIdSet);
-            }else {
-                activityIds.add(activityId);
-                redisTemplateService.stringSetString(activityIdsKey,activityIds);
+            ResponseData redisResponse = addActivityIdsSet(activityId);
+            if (SysResponseEnum.SUCCESS.getCode() != redisResponse.getCode()) {
+                return redisResponse;
             }
+            String today = StatisticsConstants.getCurrentDate();
             String key = "";
             String visitorsKey = "";
             String hourKey = "";
@@ -85,31 +79,31 @@ public class ActivityStatisticsServiceImpl implements ActivityStatisticsService{
             if (memberCodeSet == null) {
                 memberCodeSet = new HashSet();
                 memberCodeSet.add(memberCode);
-                redisTemplateService.stringSetString(key,memberCodeSet);
+                redisTemplateService.stringSetValueAndExpireTime(key,memberCodeSet,StatisticsConstants.REDIS_LIVE_TIME);
             }else {
                 memberCodeSet.add(memberCode);
-                redisTemplateService.stringSetString(key,memberCodeSet);
+                redisTemplateService.stringSetValueAndExpireTime(key,memberCodeSet,StatisticsConstants.REDIS_LIVE_TIME);
             }
 
 
             if (StringUtils.isNotBlank(visitorsKey) && StringUtils.isNotBlank(hourKey)) {
                 Set visitorsMemberCodeSet = (Set) redisTemplateService.stringGetStringByKey(visitorsKey);
-                if (visitorsMemberCodeSet == null) {
+                if (visitorsMemberCodeSet.isEmpty()) {
                     visitorsMemberCodeSet = new HashSet();
                     visitorsMemberCodeSet.add(memberCode);
                 }else {
                     visitorsMemberCodeSet.add(memberCode);
                 }
-                redisTemplateService.stringSetString(visitorsKey,memberCodeSet);
+                redisTemplateService.stringSetValueAndExpireTime(visitorsKey,visitorsMemberCodeSet,StatisticsConstants.REDIS_LIVE_TIME);
 
                 Set hourMemberCodeSet = (Set) redisTemplateService.stringGetStringByKey(hourKey);
-                if (hourMemberCodeSet == null) {
+                if (hourMemberCodeSet.isEmpty()) {
                     hourMemberCodeSet = new HashSet();
                     hourMemberCodeSet.add(memberCode);
                 }else {
                     hourMemberCodeSet.add(memberCode);
                 }
-                redisTemplateService.stringSetString(hourKey,hourMemberCodeSet);
+                redisTemplateService.stringSetValueAndExpireTime(hourKey,hourMemberCodeSet,StatisticsConstants.REDIS_LIVE_TIME);
             }
 
             log.info("统计类型:{}",StatisticsEnum.getStatisticsEnumByCode(code).getMessage());
@@ -147,16 +141,6 @@ public class ActivityStatisticsServiceImpl implements ActivityStatisticsService{
                 todayBO.setTotalHelpMembersCount(0);
                 todayBO.setTotalRegisterMembersCount(0);
                 todayBO.setTotalTakeCouponCount(0L);
-                todayBO.setScaleVisitorsCount(BigDecimal.ZERO);
-                todayBO.setScaleLaunchMembersCount(BigDecimal.ZERO);
-                todayBO.setScaleHelpMembersCount(BigDecimal.ZERO);
-                todayBO.setScaleRegisterMembersCount(BigDecimal.ZERO);
-                todayBO.setScaleTakeCouponCount(BigDecimal.ZERO);
-                todayBO.setScaleTotalVisitorsCount(BigDecimal.ZERO);
-                todayBO.setScaleTotalLaunchMembersCount(BigDecimal.ZERO);
-                todayBO.setScaleTotalHelpMembersCount(BigDecimal.ZERO);
-                todayBO.setScaleTotalRegisterMembersCount(BigDecimal.ZERO);
-                todayBO.setScaleTotalTakeCouponCount(BigDecimal.ZERO);
 
                 responseData.setData(todayBO);
             }else {
@@ -183,18 +167,17 @@ public class ActivityStatisticsServiceImpl implements ActivityStatisticsService{
     public void schedule() {
         log.info("enter ActivityStatisticsServiceImpl method schedule ....START....");
         try {
-            //获取昨天存储的活动id列表
-            String yesterday = StatisticsConstants.getYesterday();
+            //获取存储的活动id列表
             String activityIdsKey = StatisticsConstants.ACTIVITY_LIST_PREFIX;
-            String yesterdayKey = activityIdsKey + yesterday;
-            Set<Long> activityIds = (Set<Long>) redisTemplateService.stringGetStringByKey(yesterdayKey);
-            log.info("昨天的redisKey:{}",yesterdayKey);
-            log.info("昨天的活动id列表:{}",activityIds);
+            Set<Long> activityIds = (Set<Long>) redisTemplateService.stringGetStringByKey(activityIdsKey);
+            log.info("redisKey:{}",activityIdsKey);
+            log.info("活动id列表:{}",activityIds);
             if (activityIds.isEmpty()) {
                 //证明昨天无活动触发 就此结束
-                log.info(yesterday + " 无活动触发 就此结束定时");
+                log.info("无活动id列表就此结束定时");
                 return;
             }else {
+                String yesterday = StatisticsConstants.getYesterday();
                 //获取昨天24小时内的访问量数据
                 Map map = new HashMap();
                 for (Long activityId:activityIds) {
@@ -273,15 +256,15 @@ public class ActivityStatisticsServiceImpl implements ActivityStatisticsService{
         map.put("statisticsType",StatisticsConstants.STATISTICS_TYPE);
         ActivityStatisticsBO todayBO = mktActivityStatisticsPOMapper.getBo(map);
         //获取前一天数据
-        String beforeTimeStr = StatisticsConstants.getBeforeOneDate(time);
+        /*String beforeTimeStr = StatisticsConstants.getBeforeOneDate(time);
         map.put("statisticsTime",beforeTimeStr);
-        ActivityStatisticsBO yesBO = mktActivityStatisticsPOMapper.getBo(map);
+        ActivityStatisticsBO yesBO = mktActivityStatisticsPOMapper.getBo(map);*/
         if (todayBO == null) {
             responseData.setCode(SysResponseEnum.FAILED.getCode());
             responseData.setMessage("此活动当天未激活");
             return responseData;
         }
-        Date yesDate = null;
+        /*Date yesDate = null;
         if (yesBO != null) {
             //昨天为null时就为缺省值
             todayBO.setScaleVisitorsCount(BigDecimal.valueOf(Long.parseLong(String.valueOf(todayBO.getVisitorsCount()-yesBO.getVisitorsCount()))).divide(BigDecimal.valueOf(yesBO.getVisitorsCount()),4,BigDecimal.ROUND_HALF_UP).multiply(BigDecimal.valueOf(100L)).setScale(2,BigDecimal.ROUND_HALF_UP));
@@ -290,7 +273,7 @@ public class ActivityStatisticsServiceImpl implements ActivityStatisticsService{
             todayBO.setScaleRegisterMembersCount(BigDecimal.valueOf(Long.parseLong(String.valueOf(todayBO.getRegisterMembersCount()-yesBO.getRegisterMembersCount()))).divide(BigDecimal.valueOf(yesBO.getRegisterMembersCount()),4,BigDecimal.ROUND_HALF_UP).multiply(BigDecimal.valueOf(100L)).setScale(2,BigDecimal.ROUND_HALF_UP));
             todayBO.setScaleTakeCouponCount(BigDecimal.valueOf(Long.parseLong(String.valueOf(todayBO.getTakeCouponCount()-yesBO.getTakeCouponCount()))).divide(BigDecimal.valueOf(yesBO.getTakeCouponCount()),4,BigDecimal.ROUND_HALF_UP).multiply(BigDecimal.valueOf(100L)).setScale(2,BigDecimal.ROUND_HALF_UP));
             yesDate = yesBO.getStatisticsTime();
-        }
+        }*/
         MktActivityPOWithBLOBs mktActivityPOWithBLOBs = mktActivityPOMapper.selectByPrimaryKey(activityId);
         Date startTime = mktActivityPOWithBLOBs.getStartTime();
         Date todayDate = DateUtil.stringToDate(time,DateUtil.ymd);
@@ -310,11 +293,11 @@ public class ActivityStatisticsServiceImpl implements ActivityStatisticsService{
         }
         //获取从活动开始时间到当前时间前一天的各项累计数据
 
-        MktActivityStatisticsPOExample yesExample = new MktActivityStatisticsPOExample();
+        /*MktActivityStatisticsPOExample yesExample = new MktActivityStatisticsPOExample();
         yesExample.createCriteria().andMktActivityIdEqualTo(activityId).andStatisticsTypeEqualTo(StatisticsConstants.STATISTICS_TYPE)
                 .andStatisticsTimeBetween(startTime,yesDate);
-        List<MktActivityStatisticsPO> yesList = mktActivityStatisticsPOMapper.selectByExample(yesExample);
-        if (!yesList.isEmpty() && yesBO != null) {
+        List<MktActivityStatisticsPO> yesList = mktActivityStatisticsPOMapper.selectByExample(yesExample);*/
+        /*if (!yesList.isEmpty() && yesBO != null) {
             yesList.forEach(yesPo -> {
                 yesBO.setTotalVisitorsCount((yesBO.getTotalVisitorsCount() == null?0:yesBO.getTotalVisitorsCount()) + yesPo.getVisitorsCount());
                 yesBO.setTotalLaunchMembersCount((yesBO.getTotalLaunchMembersCount() == null?0:yesBO.getTotalLaunchMembersCount()) + yesPo.getLaunchMembersCount());
@@ -328,7 +311,7 @@ public class ActivityStatisticsServiceImpl implements ActivityStatisticsService{
             todayBO.setScaleTotalHelpMembersCount(BigDecimal.valueOf(Long.parseLong(String.valueOf(todayBO.getTotalHelpMembersCount()-yesBO.getTotalHelpMembersCount()))).divide(BigDecimal.valueOf(yesBO.getTotalHelpMembersCount()),4,BigDecimal.ROUND_HALF_UP).multiply(BigDecimal.valueOf(100L)).setScale(2,BigDecimal.ROUND_HALF_UP));
             todayBO.setScaleTotalRegisterMembersCount(BigDecimal.valueOf(Long.parseLong(String.valueOf(todayBO.getTotalRegisterMembersCount()-yesBO.getTotalRegisterMembersCount()))).divide(BigDecimal.valueOf(yesBO.getTotalRegisterMembersCount()),4,BigDecimal.ROUND_HALF_UP).multiply(BigDecimal.valueOf(100L)).setScale(2,BigDecimal.ROUND_HALF_UP));
             todayBO.setScaleTotalTakeCouponCount(BigDecimal.valueOf(Long.parseLong(String.valueOf(todayBO.getTotalTakeCouponCount()-yesBO.getTotalTakeCouponCount()))).divide(BigDecimal.valueOf(yesBO.getTotalTakeCouponCount()),4,BigDecimal.ROUND_HALF_UP).multiply(BigDecimal.valueOf(100L)).setScale(2,BigDecimal.ROUND_HALF_UP));
-        }
+        }*/
         responseData.setCode(SysResponseEnum.SUCCESS.getCode());
         responseData.setMessage(SysResponseEnum.SUCCESS.getMessage());
         responseData.setData(todayBO);
@@ -379,6 +362,31 @@ public class ActivityStatisticsServiceImpl implements ActivityStatisticsService{
                 responseData.setCode(SysResponseEnum.FAILED.getCode());
                 responseData.setMessage(SysResponseEnum.FAILED.getMessage());
             }
+        }
+        return responseData;
+    }
+
+    @Override
+    public ResponseData addActivityIdsSet(Long activityId) {
+        ResponseData responseData = new ResponseData();
+        try {
+            String activityIdsKey = StatisticsConstants.ACTIVITY_LIST_PREFIX;
+            Set activityIds = (Set) redisTemplateService.stringGetStringByKey(activityIdsKey);
+            if (activityIds.isEmpty()) {
+                Set activityIdSet = new HashSet();
+                activityIdSet.add(activityId);
+                redisTemplateService.stringSetString(activityIdsKey,activityIdSet);
+            }else {
+                activityIds.add(activityId);
+                redisTemplateService.stringSetString(activityIdsKey,activityIds);
+            }
+            responseData.setCode(SysResponseEnum.SUCCESS.getCode());
+            responseData.setMessage(SysResponseEnum.SUCCESS.getMessage());
+        }catch (Exception e){
+            e.printStackTrace();
+            log.error(e.getMessage());
+            responseData.setCode(SysResponseEnum.FAILED.getCode());
+            responseData.setMessage(SysResponseEnum.FAILED.getMessage());
         }
         return responseData;
     }
