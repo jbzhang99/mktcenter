@@ -515,7 +515,7 @@
     tmarp.activity_time,
     tma.activity_status
   FROM t_mkt_activity_red_packet_sum tmarp INNER  JOIN  t_mkt_activity tma  ON tmarp.mkt_activity_id=tma.mkt_activity_id
-  AND tma.valid=1
+  AND tma.valid=1 AND tma.activity_status between 2 AND 3
   WHERE
     tmarp.valid=1
   <if test="sysBrandId!= null ">

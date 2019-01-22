@@ -671,6 +671,7 @@
     <if test="activityName!= null and activityName!= '' ">
       AND CONCAT(member_name,member_phone,coupon_name,coupon_code) LIKE concat('%',#{activityName},'%')
     </if>
+    ORDER BY create_date DESC
   </select>
   <select id="getRedPacketZhuLiRecord" resultType="com.bizvane.mktcenterservice.models.po.MktActivityRedPacketRecordPO">
     SELECT
