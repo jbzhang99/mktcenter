@@ -132,9 +132,38 @@ public class ActivityStatisticsServiceImpl implements ActivityStatisticsService{
         ResponseData responseData = new ResponseData();
         try {
             List<String> dates = mktActivityStatisticsPOMapper.getAllDate(activityId);
-            responseData.setCode(SysResponseEnum.SUCCESS.getCode());
-            responseData.setMessage(SysResponseEnum.SUCCESS.getMessage());
-            responseData.setData(dates);
+            if (dates.isEmpty()) {
+                responseData.setCode(SysResponseEnum.OPERATE_FAILED_DATA_NOT_EXISTS.getCode());
+                responseData.setMessage(SysResponseEnum.OPERATE_FAILED_DATA_NOT_EXISTS.getMessage());
+
+                ActivityStatisticsBO todayBO = new ActivityStatisticsBO();
+                todayBO.setVisitorsCount(0);
+                todayBO.setLaunchMembersCount(0);
+                todayBO.setHelpMembersCount(0);
+                todayBO.setRegisterMembersCount(0);
+                todayBO.setTakeCouponCount(0L);
+                todayBO.setTotalVisitorsCount(0);
+                todayBO.setTotalLaunchMembersCount(0);
+                todayBO.setTotalHelpMembersCount(0);
+                todayBO.setTotalRegisterMembersCount(0);
+                todayBO.setTotalTakeCouponCount(0L);
+                todayBO.setScaleVisitorsCount(BigDecimal.ZERO);
+                todayBO.setScaleLaunchMembersCount(BigDecimal.ZERO);
+                todayBO.setScaleHelpMembersCount(BigDecimal.ZERO);
+                todayBO.setScaleRegisterMembersCount(BigDecimal.ZERO);
+                todayBO.setScaleTakeCouponCount(BigDecimal.ZERO);
+                todayBO.setScaleTotalVisitorsCount(BigDecimal.ZERO);
+                todayBO.setScaleTotalLaunchMembersCount(BigDecimal.ZERO);
+                todayBO.setScaleTotalHelpMembersCount(BigDecimal.ZERO);
+                todayBO.setScaleTotalRegisterMembersCount(BigDecimal.ZERO);
+                todayBO.setScaleTotalTakeCouponCount(BigDecimal.ZERO);
+
+                responseData.setData(todayBO);
+            }else {
+                responseData.setCode(SysResponseEnum.SUCCESS.getCode());
+                responseData.setMessage(SysResponseEnum.SUCCESS.getMessage());
+                responseData.setData(dates);
+            }
         }catch (Exception e){
             e.printStackTrace();
             log.error(e.getMessage());
