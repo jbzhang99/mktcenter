@@ -292,6 +292,7 @@ public class ActivityRedPacketServiceImpl implements ActivityRedPacketService {
      */
     @Override
     public ResponseData<List<MktActivityRedPacketRecordPO>> getRedPacketZhuLiRecord(ActivityRedPacketVO vo) {
+        log.info("getRedPacketZhuLiRecord 查询助力人员列表 参数:"+JSON.toJSONString(vo));
         ResponseData<List<MktActivityRedPacketRecordPO>> responseData = new ResponseData<>();
         //SysAccountPO sysAccountPo = TokenUtils.getStageUser(request);
         List<MktActivityRedPacketRecordPO> listparam = mktActivityRedPacketRecordPOMapper.getRedPacketZhuLiRecord(vo);

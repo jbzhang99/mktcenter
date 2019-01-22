@@ -87,6 +87,9 @@ public class ActivityRedPacketController {
     public ResponseData<Integer> andActivityRedPacketSendCouponRecord(ActivityRedPacketVO vo) {
         return activityRedPacketService.andActivityRedPacketSendCouponRecord(vo);
     }
-
+    @RequestMapping("getRedPacketCoponAppRecord")
+    public ResponseData<List<MktActivityRedPacketRecordBO>> getRedPacketCoponAppRecord(ActivityRedPacketVO vo){
+        return activityRedPacketService.getRedPacketCoponAppRecord(vo);
+    }
 
 }
