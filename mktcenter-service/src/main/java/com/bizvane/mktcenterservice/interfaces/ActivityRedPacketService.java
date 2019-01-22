@@ -31,5 +31,5 @@ public interface ActivityRedPacketService {
     public void andActivityRedPacketCreateRecord(ActivityRedPacketVO vo);
     public void andActivityRedPacketZhuliRecord(ActivityRedPacketVO vo);
     public ResponseData<Integer> andActivityRedPacketSendCouponRecord(ActivityRedPacketVO vo);
-    public ResponseData<PageInfo<MktActivityRedPacketRecordBO>> getRedPacketCoponAppRecord(ActivityRedPacketVO vo);
+    public ResponseData<List<MktActivityRedPacketRecordBO>> getRedPacketCoponAppRecord(ActivityRedPacketVO vo);
 }

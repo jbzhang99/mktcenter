@@ -425,7 +425,7 @@ public class ActivityRedPacketServiceImpl implements ActivityRedPacketService {
     }
     //添加历史记录
     public void doStatisticsRecored(ActivityRedPacketVO vo, ActivityRedPacketBO bo, String couponCode,Integer reward) {
-        System.out.println("doStatisticsRecored 添加历史记录 param :"+JSON.toJSONString(vo)+"--"+JSON.toJSONString(bo)+"--"+reward);
+        log.info("doStatisticsRecored 添加历史记录 param :"+JSON.toJSONString(vo)+"--"+JSON.toJSONString(bo)+"--"+reward);
         MktActivityRedPacketRecordPO recordPO = new MktActivityRedPacketRecordPO();
         BeanUtils.copyProperties(vo, recordPO);
         recordPO.setCouponDefinitionId(bo.getActivityRedPacketPO().getCouponDefinitionId());
@@ -489,16 +489,16 @@ public class ActivityRedPacketServiceImpl implements ActivityRedPacketService {
      * @return
      */
     @Override
-    public ResponseData<PageInfo<MktActivityRedPacketRecordBO>> getRedPacketCoponAppRecord(ActivityRedPacketVO vo) {
-        ResponseData<PageInfo<MktActivityRedPacketRecordBO>> responseData = new ResponseData<>();
-        Long mktActivityId = vo.getMktActivityId();
+    public ResponseData<List<MktActivityRedPacketRecordBO>> getRedPacketCoponAppRecord(ActivityRedPacketVO vo) {
+        log.info("getRedPacketCoponAppRecord 小程序查询券记录 param"+JSON.toJSONString(vo));
+        ResponseData<List<MktActivityRedPacketRecordBO>> responseData = new ResponseData<>();
+        //Long mktActivityId = vo.getMktActivityId();
         PageHelper.startPage(vo.getPageNumber(), vo.getPageSize());
         List<MktActivityRedPacketRecordBO> listparam = mktActivityRedPacketRecordPOMapper.getRedPacketCoponRecord(vo);
         if (CollectionUtils.isEmpty(listparam)) {
             listparam = new ArrayList<MktActivityRedPacketRecordBO>();
         }
-        PageInfo<MktActivityRedPacketRecordBO> pageInfo = new PageInfo<>(listparam);
-        responseData.setData(pageInfo);
+        responseData.setData(listparam);
         return responseData;
     }
 }

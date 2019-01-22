@@ -492,7 +492,7 @@
     where mkt_activity_red_packet_sum_id = #{mktActivityRedPacketSumId,jdbcType=BIGINT}
   </update>
   <update id="updateUpdateCount" parameterType="com.bizvane.mktcenterservice.models.vo.ActivityRedPacketVO">
-    UPDATE
+    UPDATE t_mkt_activity_red_packet_sum SET
     initiator_num = initiator_num + #{initiatorNum},
     help_num = help_num + #{helpNum},
     get_coupon_num = get_coupon_num + #{getCouponNum}

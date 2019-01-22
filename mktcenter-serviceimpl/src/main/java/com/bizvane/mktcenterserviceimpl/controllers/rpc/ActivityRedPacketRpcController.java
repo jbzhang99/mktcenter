@@ -6,7 +6,6 @@ import com.bizvane.mktcenterservice.models.bo.MktActivityRedPacketRecordBO;
 import com.bizvane.mktcenterservice.models.po.MktActivityRedPacketRecordPO;
 import com.bizvane.mktcenterservice.models.vo.ActivityRedPacketVO;
 import com.bizvane.utils.responseinfo.ResponseData;
-import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -51,7 +50,7 @@ public class ActivityRedPacketRpcController {
     }
 
     @RequestMapping("getRedPacketCoponAppRecord")
-    public ResponseData<PageInfo<MktActivityRedPacketRecordBO>> getRedPacketCoponAppRecord(ActivityRedPacketVO vo) {
+    public ResponseData<List<MktActivityRedPacketRecordBO>> getRedPacketCoponAppRecord(ActivityRedPacketVO vo) {
         return activityRedPacketService.getRedPacketCoponAppRecord(vo);
     }
 

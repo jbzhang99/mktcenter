@@ -5,7 +5,6 @@ import com.bizvane.mktcenterservice.models.bo.MktActivityRedPacketRecordBO;
 import com.bizvane.mktcenterservice.models.po.MktActivityRedPacketRecordPO;
 import com.bizvane.mktcenterservice.models.vo.ActivityRedPacketVO;
 import com.bizvane.utils.responseinfo.ResponseData;
-import com.github.pagehelper.PageInfo;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -31,5 +30,5 @@ public interface ActivityRedPacketServiceRpc {
     @RequestMapping("getRedPacketZhuLiRecord")
     public ResponseData<List<MktActivityRedPacketRecordPO>> getRedPacketZhuLiRecord(@RequestBody ActivityRedPacketVO vo);
     @RequestMapping("getRedPacketCoponAppRecord")
-    public ResponseData<PageInfo<MktActivityRedPacketRecordBO>> getRedPacketCoponAppRecord(ActivityRedPacketVO vo);
+    public ResponseData<List<MktActivityRedPacketRecordBO>> getRedPacketCoponAppRecord(ActivityRedPacketVO vo);
 }
