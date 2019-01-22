@@ -41,7 +41,7 @@ public class StatisticsConstants {
     /**
      * 活动id列表前缀
      */
-    public static final String ACTIVITY_LIST_PREFIX = "activity_list_prefix_";
+    public static final String ACTIVITY_LIST_PREFIX = "activity_list_prefix";
 
     /**
      * 活动类型  0红包膨胀了
