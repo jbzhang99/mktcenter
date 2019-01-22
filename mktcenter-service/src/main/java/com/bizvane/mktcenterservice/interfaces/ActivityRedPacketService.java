@@ -29,7 +29,7 @@ public interface ActivityRedPacketService {
     public ResponseData<PageInfo<MktActivityRedPacketRecordBO>> getRedPacketCoponRecord(ActivityRedPacketVO vo, HttpServletRequest request);
     public ResponseData<List<MktActivityRedPacketRecordPO>> getRedPacketZhuLiRecord(ActivityRedPacketVO vo);
     public void andActivityRedPacketCreateRecord(ActivityRedPacketVO vo);
-    public void andActivityRedPacketZhuliRecord(ActivityRedPacketVO vo);
+    public ResponseData<Integer> andActivityRedPacketZhuliRecord(ActivityRedPacketVO vo);
     public ResponseData<Integer> andActivityRedPacketSendCouponRecord(ActivityRedPacketVO vo);
     public ResponseData<List<MktActivityRedPacketRecordBO>> getRedPacketCoponAppRecord(ActivityRedPacketVO vo);
 }

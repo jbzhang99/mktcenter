@@ -80,8 +80,8 @@ public class ActivityRedPacketController {
         activityRedPacketService.andActivityRedPacketCreateRecord(vo);
     }
     @RequestMapping("andActivityRedPacketZhuliRecord")
-    public void andActivityRedPacketZhuliRecord(ActivityRedPacketVO vo) {
-        activityRedPacketService.andActivityRedPacketZhuliRecord(vo);
+    public ResponseData<Integer> andActivityRedPacketZhuliRecord(ActivityRedPacketVO vo) {
+       return activityRedPacketService.andActivityRedPacketZhuliRecord(vo);
     }
     @RequestMapping("andActivityRedPacketSendCouponRecord")
     public ResponseData<Integer> andActivityRedPacketSendCouponRecord(ActivityRedPacketVO vo) {

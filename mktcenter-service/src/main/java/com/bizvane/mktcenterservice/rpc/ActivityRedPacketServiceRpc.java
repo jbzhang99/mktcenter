@@ -24,7 +24,7 @@ public interface ActivityRedPacketServiceRpc {
     @RequestMapping("andActivityRedPacketCreateRecord")
     public void andActivityRedPacketCreateRecord(@RequestBody ActivityRedPacketVO vo);
     @RequestMapping("andActivityRedPacketZhuliRecord")
-    public void andActivityRedPacketZhuliRecord(@RequestBody ActivityRedPacketVO vo);
+    public ResponseData<Integer> andActivityRedPacketZhuliRecord(@RequestBody ActivityRedPacketVO vo);
     @RequestMapping("andActivityRedPacketSendCouponRecord")
     public ResponseData<Integer> andActivityRedPacketSendCouponRecord(@RequestBody ActivityRedPacketVO vo);
     @RequestMapping("getRedPacketZhuLiRecord")

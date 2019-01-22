@@ -36,8 +36,8 @@ public class ActivityRedPacketRpcController {
         activityRedPacketService.andActivityRedPacketCreateRecord(vo);
     }
     @RequestMapping("andActivityRedPacketZhuliRecord")
-    public void andActivityRedPacketZhuliRecord(@RequestBody ActivityRedPacketVO vo) {
-        activityRedPacketService.andActivityRedPacketZhuliRecord(vo);
+    public ResponseData<Integer> andActivityRedPacketZhuliRecord(@RequestBody ActivityRedPacketVO vo) {
+       return activityRedPacketService.andActivityRedPacketZhuliRecord(vo);
     }
     @RequestMapping("andActivityRedPacketSendCouponRecord")
     public ResponseData<Integer> andActivityRedPacketSendCouponRecord(@RequestBody ActivityRedPacketVO vo) {

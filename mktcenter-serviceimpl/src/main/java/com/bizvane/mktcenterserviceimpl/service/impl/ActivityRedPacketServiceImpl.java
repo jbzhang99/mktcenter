@@ -364,14 +364,15 @@ public class ActivityRedPacketServiceImpl implements ActivityRedPacketService {
      */
     @Transactional
     @Override
-    public void andActivityRedPacketZhuliRecord(ActivityRedPacketVO vo) {
+    public ResponseData<Integer> andActivityRedPacketZhuliRecord(ActivityRedPacketVO vo) {
+        ResponseData<Integer> responseData = new ResponseData<>();
         ActivityRedPacketBO bo = mktActivityPOMapper.selectActivityRedPacketDetail(vo);
         log.info("andActivityRedPacketZhuliRecord 添加记录 param:" + JSON.toJSONString(vo) + "--活动详情-" + JSON.toJSONString(bo));
         vo.setType(2);
-        Integer redPacketCount = mktActivityRedPacketRecordPOMapper.getRedPacketCount(2, vo.getMemberCode(), vo.getSponsorCode(), vo.getMktActivityId());
-        if (redPacketCount > 0) {
-            return;
-        }
+//        Integer redPacketCount = mktActivityRedPacketRecordPOMapper.getRedPacketCount(2, vo.getMemberCode(), vo.getSponsorCode(), vo.getMktActivityId());
+//        if (redPacketCount > 0) {
+//            return ;
+//        }
         vo.setHelpNum(1);
         this.addPonint(bo, vo);
 //        Integer zhuliredPacketCount = mktActivityRedPacketRecordPOMapper.getRedPacketCount(2, null, vo.getSponsorCode(), vo.getMktActivityId());
@@ -381,6 +382,8 @@ public class ActivityRedPacketServiceImpl implements ActivityRedPacketService {
         }
         this.doStatisticsRecored(vo, bo, null,null);
         this.addCouponModelMoneyNum(vo, bo);
+        responseData.setData(bo.getActivityRedPacketPO().getRewardIntegral());
+        return responseData;
     }
 
     /**
