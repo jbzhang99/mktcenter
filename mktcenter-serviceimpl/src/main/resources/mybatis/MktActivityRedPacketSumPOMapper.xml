@@ -498,7 +498,7 @@
     get_coupon_num = get_coupon_num + #{getCouponNum}
     WHERE
 	valid = 1
-	AND mkt_activity_id = #{mktActivityId} AND sys_brand_id=#{sysBrandId}
+	AND mkt_activity_id = #{mktActivityId}
   </update>
 
   <select id="selectActivityRedPacketAnalyzeLists" resultType="com.bizvane.mktcenterservice.models.bo.ActivityRedPacketListBO">

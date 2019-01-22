@@ -425,6 +425,7 @@ public class ActivityRedPacketServiceImpl implements ActivityRedPacketService {
     }
     //添加历史记录
     public void doStatisticsRecored(ActivityRedPacketVO vo, ActivityRedPacketBO bo, String couponCode,Integer reward) {
+        System.out.println("doStatisticsRecored 添加历史记录 param :"+JSON.toJSONString(vo)+"--"+JSON.toJSONString(bo)+"--"+reward);
         MktActivityRedPacketRecordPO recordPO = new MktActivityRedPacketRecordPO();
         BeanUtils.copyProperties(vo, recordPO);
         recordPO.setCouponDefinitionId(bo.getActivityRedPacketPO().getCouponDefinitionId());
