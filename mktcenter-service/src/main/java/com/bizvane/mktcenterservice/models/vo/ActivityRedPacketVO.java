@@ -17,6 +17,8 @@ public class ActivityRedPacketVO {
     private Integer activityType=12;
     private String activityName;
     private String wxNickname;
+    private String wxHeadUrl;
+
     private Long sysCompanyId;
     private Long sysBrandId;
     private Integer activityStatus;
