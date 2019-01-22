@@ -116,7 +116,7 @@ public class ActivityRedPacketServiceImpl implements ActivityRedPacketService {
         CreateMiniprgmQRCodeRequestVO createMiniprgmQRCodeRequestVO = new CreateMiniprgmQRCodeRequestVO();
         createMiniprgmQRCodeRequestVO.setSysBrandId(sysAccountPo.getBrandId());
         createMiniprgmQRCodeRequestVO.setMiniProgramType("10");
-        createMiniprgmQRCodeRequestVO.setPath("pages/template01/prize-draw/main");
+        createMiniprgmQRCodeRequestVO.setPath("pages/template01/red-packet/main");
         createMiniprgmQRCodeRequestVO.setScene(activeRedPacketCode);
         log.info("addActivityRedPacket wexin param:" + JSON.toJSONString(createMiniprgmQRCodeRequestVO));
         ResponseData<String> qrCodeResponseData = qrCodeServiceFeign.createMiniprgmQRCode(createMiniprgmQRCodeRequestVO);
