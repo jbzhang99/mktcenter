@@ -172,7 +172,7 @@ public class ActivityStatisticsServiceImpl implements ActivityStatisticsService{
             Set<Long> activityIds = (Set<Long>) redisTemplateService.stringGetStringByKey(activityIdsKey);
             log.info("redisKey:{}",activityIdsKey);
             log.info("活动id列表:{}",activityIds);
-            if (activityIds.isEmpty()) {
+            if (activityIds == null || activityIds.size() == 0) {
                 //证明昨天无活动触发 就此结束
                 log.info("无活动id列表就此结束定时");
                 return;
