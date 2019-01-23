@@ -16,6 +16,7 @@ import com.bizvane.utils.redisutils.RedisTemplateServiceImpl;
 import com.bizvane.utils.responseinfo.ResponseData;
 import com.qiniu.util.Json;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -172,7 +173,7 @@ public class ActivityStatisticsServiceImpl implements ActivityStatisticsService{
             Set<Long> activityIds = (Set<Long>) redisTemplateService.stringGetStringByKey(activityIdsKey);
             log.info("redisKey:{}",activityIdsKey);
             log.info("活动id列表:{}",activityIds);
-            if (activityIds == null || activityIds.size() == 0) {
+            if (CollectionUtils.isEmpty(activityIds)) {
                 //证明昨天无活动触发 就此结束
                 log.info("无活动id列表就此结束定时");
                 return;
@@ -373,15 +374,15 @@ public class ActivityStatisticsServiceImpl implements ActivityStatisticsService{
         try {
             String activityIdsKey = StatisticsConstants.ACTIVITY_LIST_PREFIX;
             Set activityIds = (Set) redisTemplateService.stringGetStringByKey(activityIdsKey);
-            if (activityIds == null || activityIds.size() == 0) {
+            if (CollectionUtils.isEmpty(activityIds)) {
                 log.info("活动id列表为空，setter当前活动id{}至列表中",activityId);
                 Set activityIdSet = new HashSet();
                 activityIdSet.add(activityId);
                 redisTemplateService.stringSetString(activityIdsKey,activityIdSet);
             }else {
-                log.info("活动id列表不为空，setter当前活动id{}至列表中",activityId);
                 activityIds.add(activityId);
                 redisTemplateService.stringSetString(activityIdsKey,activityIds);
+                log.info("将活动id{}setter到活动id列表后{}",activityId,activityIds);
             }
             responseData.setCode(SysResponseEnum.SUCCESS.getCode());
             responseData.setMessage(SysResponseEnum.SUCCESS.getMessage());
