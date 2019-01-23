@@ -1147,7 +1147,7 @@
       tmc.mkt_activity_id=#{mktActivityId}
     </if>
     <if test="activityCode!= null and activityCode!= '' ">
-      tmc.activity_code=#{activityCode}
+     AND tmc.activity_code=#{activityCode}
     </if>
   </where>
   </select>
