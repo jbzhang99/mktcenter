@@ -368,15 +368,18 @@ public class ActivityStatisticsServiceImpl implements ActivityStatisticsService{
 
     @Override
     public ResponseData addActivityIdsSet(Long activityId) {
+        log.info("enter ActivityStatisticsServiceImpl method addActivityIdsSet ....START....");
         ResponseData responseData = new ResponseData();
         try {
             String activityIdsKey = StatisticsConstants.ACTIVITY_LIST_PREFIX;
             Set activityIds = (Set) redisTemplateService.stringGetStringByKey(activityIdsKey);
-            if (activityIds.isEmpty()) {
+            if (activityIds == null || activityIds.size() == 0) {
+                log.info("活动id列表为空，setter当前活动id{}至列表中",activityId);
                 Set activityIdSet = new HashSet();
                 activityIdSet.add(activityId);
                 redisTemplateService.stringSetString(activityIdsKey,activityIdSet);
             }else {
+                log.info("活动id列表不为空，setter当前活动id{}至列表中",activityId);
                 activityIds.add(activityId);
                 redisTemplateService.stringSetString(activityIdsKey,activityIds);
             }
@@ -388,6 +391,7 @@ public class ActivityStatisticsServiceImpl implements ActivityStatisticsService{
             responseData.setCode(SysResponseEnum.FAILED.getCode());
             responseData.setMessage(SysResponseEnum.FAILED.getMessage());
         }
+        log.info("enter ActivityStatisticsServiceImpl method addActivityIdsSet ....END....");
         return responseData;
     }
 
