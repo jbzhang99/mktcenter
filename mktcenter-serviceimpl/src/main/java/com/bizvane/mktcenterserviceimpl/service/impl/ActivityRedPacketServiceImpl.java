@@ -326,19 +326,24 @@ public class ActivityRedPacketServiceImpl implements ActivityRedPacketService {
         }
         if (1 == type && redPacketCount > 0) {
             responseData.setMessage("已经发起过此活动,不能再次发起!");
-            responseData.setCode(101);
+            responseData.setData(101);
+            //responseData.setCode(101);
         } else if (2 == type && redPacketCount > 0) {
             responseData.setMessage("已经助力过此活动,不能再次助力!");
-            responseData.setCode(102);
+            responseData.setData(102);
+            //responseData.setCode(102);
         } else if (2 == type && limitNum.equals(zhuliCount)) {
             responseData.setMessage("已达到助力的上线次数!");
-            responseData.setCode(103);
+            responseData.setData(103);
+           // responseData.setCode(103);
         } else if (3 == type && redPacketCount > 0) {
             responseData.setMessage("已经领券,不能再次领取!");
-            responseData.setCode(104);
+            responseData.setData(104);
+            //responseData.setCode(104);
         } else {
             responseData.setMessage("正常参与!");
-            responseData.setCode(0);
+            responseData.setData(0);
+           // responseData.setCode(0);
         }
         return responseData;
     }
