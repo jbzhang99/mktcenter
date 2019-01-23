@@ -396,4 +396,33 @@ public class ActivityStatisticsServiceImpl implements ActivityStatisticsService{
         return responseData;
     }
 
+    @Override
+    public ResponseData deleteActivityIdsSet(Long activityId) {
+        log.info("enter ActivityStatisticsServiceImpl method deleteActivityIdsSet ....START....");
+        ResponseData responseData = new ResponseData();
+        try {
+            String activityIdsKey = StatisticsConstants.ACTIVITY_LIST_PREFIX;
+            Set activityIds = (Set) redisTemplateService.stringGetStringByKey(activityIdsKey);
+            if (CollectionUtils.isNotEmpty(activityIds)) {
+                Iterator car = activityIds.iterator();
+                while (car.hasNext()) {
+                    Long id = (Long) car.next();
+                    if (id == activityId) {
+                        car.remove();
+                    }
+                }
+                redisTemplateService.stringSetString(activityIdsKey,activityIds);
+            }
+            responseData.setCode(SysResponseEnum.SUCCESS.getCode());
+            responseData.setMessage(SysResponseEnum.SUCCESS.getMessage());
+        }catch (Exception e){
+            e.printStackTrace();
+            log.error(e.getMessage());
+            responseData.setCode(SysResponseEnum.FAILED.getCode());
+            responseData.setMessage(SysResponseEnum.FAILED.getMessage());
+        }
+        log.info("enter ActivityStatisticsServiceImpl method deleteActivityIdsSet ....END....");
+        return responseData;
+    }
+
 }

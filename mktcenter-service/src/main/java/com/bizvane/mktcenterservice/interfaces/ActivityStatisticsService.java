@@ -22,4 +22,7 @@ public interface ActivityStatisticsService {
 
 
     public ResponseData addActivityIdsSet(Long activityId);
+
+
+    public ResponseData deleteActivityIdsSet(Long activityId);
 }
