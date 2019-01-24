@@ -2,11 +2,15 @@ package com.bizvane.mktcenterserviceimpl.controllers;
 
 import com.bizvane.mktcenterservice.interfaces.ActivityStatisticsService;
 import com.bizvane.utils.responseinfo.ResponseData;
+import com.bizvane.utils.tokens.SysAccountPO;
+import com.bizvane.utils.tokens.TokenUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
+import javax.servlet.http.HttpServletRequest;
 
 /**
  * @author yy
@@ -39,8 +43,9 @@ public class ActivityStatisticsController {
      * @return
      */
     @RequestMapping("curveData")
-    public ResponseData curveData(@RequestParam("activityId") Long activityId,@RequestParam("code") int code,@RequestParam("time") String time){
-        return activityStatisticsService.curveData(activityId,time,code);
+    public ResponseData curveData(@RequestParam("activityId") Long activityId,@RequestParam("code") int code,@RequestParam("time") String time,HttpServletRequest request){
+        SysAccountPO sysAccountPo = TokenUtils.getStageUser(request);
+        return activityStatisticsService.curveData(activityId,time,code,sysAccountPo);
     }
 
     @RequestMapping("test1")
@@ -60,12 +65,8 @@ public class ActivityStatisticsController {
      * @return
      */
     @RequestMapping("activityAnalysis")
-    public ResponseData activityAnalysis(@RequestParam("activityId") Long activityId,@RequestParam("time") String time){
-        return activityStatisticsService.activityAnalysis(activityId,time);
-    }
-
-    @RequestMapping("test2")
-    public ResponseData test2(@RequestParam("activityId") Long activityId){
-        return activityStatisticsService.deleteActivityIdsSet(activityId);
+    public ResponseData activityAnalysis(@RequestParam("activityId") Long activityId,@RequestParam("time") String time,HttpServletRequest request){
+        SysAccountPO sysAccountPo = TokenUtils.getStageUser(request);
+        return activityStatisticsService.activityAnalysis(activityId,time,sysAccountPo);
     }
 }

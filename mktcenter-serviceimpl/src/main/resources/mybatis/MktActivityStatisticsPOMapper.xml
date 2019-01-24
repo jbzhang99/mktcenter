@@ -527,6 +527,12 @@
         <if test="statisticsType != null and statisticsType != ''">
           and statistics_type = #{statisticsType}
         </if>
+        <if test="sysCompanyId != null and sysCompanyId != ''">
+            and sys_company_id = #{sysCompanyId}
+        </if>
+        <if test="sysBrandId != null and sysBrandId != ''">
+            and sys_brand_id = #{sysBrandId}
+        </if>
       </where>
   </select>
 </mapper>

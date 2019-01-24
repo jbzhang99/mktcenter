@@ -1,6 +1,7 @@
 package com.bizvane.mktcenterservice.interfaces;
 
 import com.bizvane.utils.responseinfo.ResponseData;
+import com.bizvane.utils.tokens.SysAccountPO;
 
 
 /**
@@ -15,14 +16,8 @@ public interface ActivityStatisticsService {
 
     public void schedule();
 
-    public ResponseData activityAnalysis(Long activityId,String time);
+    public ResponseData activityAnalysis(Long activityId, String time, SysAccountPO sysAccountPO);
 
 
-    public ResponseData curveData(Long activityId,String time,int type);
-
-
-    public ResponseData addActivityIdsSet(Long activityId);
-
-
-    public ResponseData deleteActivityIdsSet(Long activityId);
+    public ResponseData curveData(Long activityId,String time,int type, SysAccountPO sysAccountPO);
 }

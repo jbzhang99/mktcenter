@@ -3,6 +3,7 @@ package com.bizvane.mktcenterserviceimpl.service.impl;
 
 import com.bizvane.mktcenterservice.interfaces.ActivityStatisticsService;
 import com.bizvane.mktcenterservice.models.bo.ActivityStatisticsBO;
+import com.bizvane.mktcenterservice.models.po.MktActivityPOExample;
 import com.bizvane.mktcenterservice.models.po.MktActivityPOWithBLOBs;
 import com.bizvane.mktcenterservice.models.po.MktActivityStatisticsPO;
 import com.bizvane.mktcenterservice.models.po.MktActivityStatisticsPOExample;
@@ -14,6 +15,7 @@ import com.bizvane.mktcenterserviceimpl.mappers.MktActivityStatisticsPOMapper;
 import com.bizvane.utils.enumutils.SysResponseEnum;
 import com.bizvane.utils.redisutils.RedisTemplateServiceImpl;
 import com.bizvane.utils.responseinfo.ResponseData;
+import com.bizvane.utils.tokens.SysAccountPO;
 import com.qiniu.util.Json;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections.CollectionUtils;
@@ -46,11 +48,6 @@ public class ActivityStatisticsServiceImpl implements ActivityStatisticsService{
         log.info("enter ActivityStatisticsServiceImpl method:==>statisticsData,{},{},{}=====START====",activityId,code,memberCode);
         ResponseData responseData = new ResponseData();
         try {
-            //将活动id存入redis中 设置redis的key
-            ResponseData redisResponse = addActivityIdsSet(activityId);
-            if (SysResponseEnum.SUCCESS.getCode() != redisResponse.getCode()) {
-                return redisResponse;
-            }
             String today = StatisticsConstants.getCurrentDate();
             String key = "";
             String visitorsKey = "";
@@ -79,31 +76,23 @@ public class ActivityStatisticsServiceImpl implements ActivityStatisticsService{
             Set memberCodeSet = (Set) redisTemplateService.stringGetStringByKey(key);
             if (memberCodeSet == null) {
                 memberCodeSet = new HashSet();
-                memberCodeSet.add(memberCode);
-                redisTemplateService.stringSetValueAndExpireTime(key,memberCodeSet,StatisticsConstants.REDIS_LIVE_TIME);
-            }else {
-                memberCodeSet.add(memberCode);
-                redisTemplateService.stringSetValueAndExpireTime(key,memberCodeSet,StatisticsConstants.REDIS_LIVE_TIME);
             }
-
+            memberCodeSet.add(memberCode);
+            redisTemplateService.stringSetValueAndExpireTime(key,memberCodeSet,StatisticsConstants.REDIS_LIVE_TIME);
 
             if (StringUtils.isNotBlank(visitorsKey) && StringUtils.isNotBlank(hourKey)) {
                 Set visitorsMemberCodeSet = (Set) redisTemplateService.stringGetStringByKey(visitorsKey);
                 if (CollectionUtils.isEmpty(visitorsMemberCodeSet)) {
                     visitorsMemberCodeSet = new HashSet();
-                    visitorsMemberCodeSet.add(memberCode);
-                }else {
-                    visitorsMemberCodeSet.add(memberCode);
                 }
+                visitorsMemberCodeSet.add(memberCode);
                 redisTemplateService.stringSetValueAndExpireTime(visitorsKey,visitorsMemberCodeSet,StatisticsConstants.REDIS_LIVE_TIME);
 
                 Set hourMemberCodeSet = (Set) redisTemplateService.stringGetStringByKey(hourKey);
                 if (CollectionUtils.isEmpty(hourMemberCodeSet)) {
                     hourMemberCodeSet = new HashSet();
-                    hourMemberCodeSet.add(memberCode);
-                }else {
-                    hourMemberCodeSet.add(memberCode);
                 }
+                hourMemberCodeSet.add(memberCode);
                 redisTemplateService.stringSetValueAndExpireTime(hourKey,hourMemberCodeSet,StatisticsConstants.REDIS_LIVE_TIME);
             }
 
@@ -168,84 +157,70 @@ public class ActivityStatisticsServiceImpl implements ActivityStatisticsService{
     public void schedule() {
         log.info("enter ActivityStatisticsServiceImpl method schedule ....START....");
         try {
-            //获取存储的活动id列表
-            String activityIdsKey = StatisticsConstants.ACTIVITY_LIST_PREFIX;
-            Set<Long> activityIds = (Set<Long>) redisTemplateService.stringGetStringByKey(activityIdsKey);
-            log.info("redisKey:{}",activityIdsKey);
+            //获取活动id列表
+            MktActivityPOExample example = new MktActivityPOExample();
+            example.createCriteria().andActivityTypeEqualTo(12).andActivityStatusEqualTo(2).andValidEqualTo(true);
+            List<MktActivityPOWithBLOBs> activityIds = mktActivityPOMapper.selectByExampleWithBLOBs(example);
             log.info("活动id列表:{}",activityIds);
             if (CollectionUtils.isEmpty(activityIds)) {
                 //证明昨天无活动触发 就此结束
                 log.info("无活动id列表就此结束定时");
                 return;
-            }else {
-                String yesterday = StatisticsConstants.getYesterday();
-                //获取昨天24小时内的访问量数据
-                Map map = new TreeMap();
-                for (Long activityId:activityIds) {
-                    //查询活动详情
-                    MktActivityPOWithBLOBs mktActivityPOWithBLOBs = mktActivityPOMapper.selectByPrimaryKey(activityId);
-                    if (mktActivityPOWithBLOBs != null) {
-                        if (mktActivityPOWithBLOBs.getActivityStatus() == 2) {
-                            for (int i = 0; i < 24; i++) {
-                                String key = StatisticsConstants.VISITORS_PREFIX + activityId + "_" + yesterday + "_" + i;
-                                Set hourMemberCodeSet = (Set) redisTemplateService.stringGetStringByKey(key);
-                                int count = hourMemberCodeSet == null?0:hourMemberCodeSet.size();
-                                if (i < 10) {
-                                    map.put("0" + i + ":00" ,count);
-                                }else {
-                                    map.put(i + ":00" ,count);
-                                }
-                            }
-                            //查询昨天访问人数
-                            String visitorsKey = StatisticsConstants.VISITORS_PREFIX + activityId + "_" + yesterday;
-                            Set visitorsMemberCodeSet = (Set) redisTemplateService.stringGetStringByKey(visitorsKey);
-                            int visitorsCount = visitorsMemberCodeSet == null?0:visitorsMemberCodeSet.size();
-                            //查询昨天发起会员数
-                            String launchMembersKey = StatisticsConstants.LAUNCH_MEMBERS + activityId + "_" + yesterday;
-                            Set launchMemberCodeSet = (Set) redisTemplateService.stringGetStringByKey(launchMembersKey);
-                            int launchMembersCount = launchMemberCodeSet == null?0:launchMemberCodeSet.size();
-                            //查询助力昨天助力会员数
-                            String helpMembersKey = StatisticsConstants.HELP_MEMBERS + activityId + "_" + yesterday;
-                            Set helpMemberCodeSet = (Set) redisTemplateService.stringGetStringByKey(helpMembersKey);
-                            int helpMembersCount = helpMemberCodeSet == null?0:helpMemberCodeSet.size();
-                            //查询注册会员数
-                            String registerMembersKey = StatisticsConstants.REGISTER_MEMBERS + activityId + "_" + yesterday;
-                            Set registerMemberCodeSet = (Set) redisTemplateService.stringGetStringByKey(registerMembersKey);
-                            int registerMembersCount = registerMemberCodeSet == null?0:registerMemberCodeSet.size();
-                            //领劵数量
-                            String takeCouponKey = StatisticsConstants.TAKE_COUPON + activityId + "_" + yesterday;
-                            Set takeCouponMemberCodeSet = (Set) redisTemplateService.stringGetStringByKey(takeCouponKey);
-                            int takeCouponCount = takeCouponMemberCodeSet == null?0:takeCouponMemberCodeSet.size();
-
-                            //存储到红包活动分析表中
-                            MktActivityStatisticsPO mktActivityStatisticsPO = new MktActivityStatisticsPO();
-                            mktActivityStatisticsPO.setSysCompanyId(mktActivityPOWithBLOBs.getSysCompanyId());
-                            mktActivityStatisticsPO.setSysBrandId(mktActivityPOWithBLOBs.getSysBrandId());
-                            mktActivityStatisticsPO.setMktActivityId(activityId);
-                            mktActivityStatisticsPO.setVisitorsCount(visitorsCount);
-                            mktActivityStatisticsPO.setLaunchMembersCount(launchMembersCount);
-                            mktActivityStatisticsPO.setHelpMembersCount(helpMembersCount);
-                            mktActivityStatisticsPO.setRegisterMembersCount(registerMembersCount);
-                            mktActivityStatisticsPO.setTakeCouponCount(Long.parseLong(String.valueOf(takeCouponCount)));
-                            String json = Json.encode(map);
-                            mktActivityStatisticsPO.setHourJsonData(json);
-                            Calendar calendar = Calendar.getInstance();
-                            calendar.setTime(new Date());
-                            calendar.add(Calendar.DATE,-1);
-                            mktActivityStatisticsPO.setStatisticsTime(calendar.getTime());
-                            mktActivityStatisticsPO.setStatisticsType(StatisticsConstants.STATISTICS_TYPE);
-                            mktActivityStatisticsPOMapper.insertSelective(mktActivityStatisticsPO);
-                        }else {
-                            log.info("活动id：[" + activityId + "],不在执行中。。。");
-                            //并将redis中的活动id列表删除。
-                            deleteActivityIdsSet(activityId);
-                        }
+            }
+            String yesterday = StatisticsConstants.getYesterday();
+            //获取昨天24小时内的访问量数据
+            Map map = new TreeMap();
+            for (MktActivityPOWithBLOBs activity:activityIds) {
+                Long activityId = activity.getMktActivityId();
+                for (int i = 0; i < 24; i++) {
+                    String key = StatisticsConstants.VISITORS_PREFIX + activityId + "_" + yesterday + "_" + i;
+                    Set hourMemberCodeSet = (Set) redisTemplateService.stringGetStringByKey(key);
+                    int count = hourMemberCodeSet == null?0:hourMemberCodeSet.size();
+                    if (i < 10) {
+                        map.put("0" + i + ":00" ,count);
                     }else {
-                        //此活动查不到
-                        log.info("活动id：[" + activityId + "],无此活动。");
-                        continue;
+                        map.put(i + ":00" ,count);
                     }
                 }
+                //查询昨天访问人数
+                String visitorsKey = StatisticsConstants.VISITORS_PREFIX + activityId + "_" + yesterday;
+                Set visitorsMemberCodeSet = (Set) redisTemplateService.stringGetStringByKey(visitorsKey);
+                int visitorsCount = visitorsMemberCodeSet == null?0:visitorsMemberCodeSet.size();
+                //查询昨天发起会员数
+                String launchMembersKey = StatisticsConstants.LAUNCH_MEMBERS + activityId + "_" + yesterday;
+                Set launchMemberCodeSet = (Set) redisTemplateService.stringGetStringByKey(launchMembersKey);
+                int launchMembersCount = launchMemberCodeSet == null?0:launchMemberCodeSet.size();
+                //查询助力昨天助力会员数
+                String helpMembersKey = StatisticsConstants.HELP_MEMBERS + activityId + "_" + yesterday;
+                Set helpMemberCodeSet = (Set) redisTemplateService.stringGetStringByKey(helpMembersKey);
+                int helpMembersCount = helpMemberCodeSet == null?0:helpMemberCodeSet.size();
+                //查询注册会员数
+                String registerMembersKey = StatisticsConstants.REGISTER_MEMBERS + activityId + "_" + yesterday;
+                Set registerMemberCodeSet = (Set) redisTemplateService.stringGetStringByKey(registerMembersKey);
+                int registerMembersCount = registerMemberCodeSet == null?0:registerMemberCodeSet.size();
+                //领劵数量
+                String takeCouponKey = StatisticsConstants.TAKE_COUPON + activityId + "_" + yesterday;
+                Set takeCouponMemberCodeSet = (Set) redisTemplateService.stringGetStringByKey(takeCouponKey);
+                int takeCouponCount = takeCouponMemberCodeSet == null?0:takeCouponMemberCodeSet.size();
+
+                //存储到红包活动分析表中
+                MktActivityStatisticsPO mktActivityStatisticsPO = new MktActivityStatisticsPO();
+                mktActivityStatisticsPO.setSysCompanyId(activity.getSysCompanyId());
+                mktActivityStatisticsPO.setSysBrandId(activity.getSysBrandId());
+                mktActivityStatisticsPO.setMktActivityId(activityId);
+                mktActivityStatisticsPO.setVisitorsCount(visitorsCount);
+                mktActivityStatisticsPO.setLaunchMembersCount(launchMembersCount);
+                mktActivityStatisticsPO.setHelpMembersCount(helpMembersCount);
+                mktActivityStatisticsPO.setRegisterMembersCount(registerMembersCount);
+                mktActivityStatisticsPO.setTakeCouponCount(Long.parseLong(String.valueOf(takeCouponCount)));
+                String json = Json.encode(map);
+                mktActivityStatisticsPO.setHourJsonData(json);
+                Calendar calendar = Calendar.getInstance();
+                calendar.setTime(new Date());
+                calendar.add(Calendar.DATE,-1);
+                mktActivityStatisticsPO.setStatisticsTime(calendar.getTime());
+                mktActivityStatisticsPO.setStatisticsType(StatisticsConstants.STATISTICS_TYPE);
+                mktActivityStatisticsPOMapper.insertSelective(mktActivityStatisticsPO);
             }
         }catch (Exception e){
             e.printStackTrace();
@@ -261,13 +236,15 @@ public class ActivityStatisticsServiceImpl implements ActivityStatisticsService{
      * @return
      */
     @Override
-    public ResponseData activityAnalysis(Long activityId, String time) {
+    public ResponseData activityAnalysis(Long activityId, String time, SysAccountPO sysAccountPO) {
         ResponseData responseData = new ResponseData();
         Map map = new HashMap();
         //查询当天活动统计记录
         map.put("activityId",activityId);
         map.put("statisticsTime",time);
         map.put("statisticsType",StatisticsConstants.STATISTICS_TYPE);
+        map.put("sysCompanyId",sysAccountPO.getSysCompanyId());
+        map.put("sysBrandId",sysAccountPO.getBrandId());
         ActivityStatisticsBO todayBO = mktActivityStatisticsPOMapper.getBo(map);
         //获取前一天数据
         /*String beforeTimeStr = StatisticsConstants.getBeforeOneDate(time);
@@ -294,7 +271,7 @@ public class ActivityStatisticsServiceImpl implements ActivityStatisticsService{
         MktActivityStatisticsPOExample example = new MktActivityStatisticsPOExample();
         //获取从活动开始时间到当前时间的各项累计数据
         example.createCriteria().andMktActivityIdEqualTo(activityId).andStatisticsTypeEqualTo(StatisticsConstants.STATISTICS_TYPE)
-                .andStatisticsTimeBetween(startTime,todayDate);
+                .andStatisticsTimeBetween(startTime,todayDate).andSysBrandIdEqualTo(sysAccountPO.getBrandId()).andSysCompanyIdEqualTo(sysAccountPO.getSysCompanyId());
         List<MktActivityStatisticsPO> todayList = mktActivityStatisticsPOMapper.selectByExample(example);
         if (!todayList.isEmpty()) {
             todayList.forEach(todayPo -> {
@@ -340,13 +317,13 @@ public class ActivityStatisticsServiceImpl implements ActivityStatisticsService{
      * @return
      */
     @Override
-    public ResponseData curveData(Long activityId, String time, int type) {
+    public ResponseData curveData(Long activityId, String time, int type, SysAccountPO sysAccountPO) {
         ResponseData responseData = new ResponseData();
         Date current = DateUtil.stringToDate(time,DateUtil.ymd);
         if (type == StatisticsConstants.CURVE_HOUR) {
             MktActivityStatisticsPOExample example = new MktActivityStatisticsPOExample();
             example.createCriteria().andMktActivityIdEqualTo(activityId).andStatisticsTypeEqualTo(StatisticsConstants.STATISTICS_TYPE)
-                    .andStatisticsTimeEqualTo(current);
+                    .andStatisticsTimeEqualTo(current).andSysCompanyIdEqualTo(sysAccountPO.getSysCompanyId()).andSysBrandIdEqualTo(sysAccountPO.getBrandId());
             List<MktActivityStatisticsPO> statisticsPOList = mktActivityStatisticsPOMapper.selectByExampleWithBLOBs(example);
             if (!statisticsPOList.isEmpty()) {
                 MktActivityStatisticsPO statisticsPO = statisticsPOList.get(0);
@@ -362,7 +339,7 @@ public class ActivityStatisticsServiceImpl implements ActivityStatisticsService{
             MktActivityStatisticsPOExample example = new MktActivityStatisticsPOExample();
             Date fifteenDate = StatisticsConstants.getFifteenDay(time);
             example.createCriteria().andMktActivityIdEqualTo(activityId).andStatisticsTypeEqualTo(StatisticsConstants.STATISTICS_TYPE)
-                    .andStatisticsTimeBetween(fifteenDate,current);
+                    .andStatisticsTimeBetween(fifteenDate,current).andSysCompanyIdEqualTo(sysAccountPO.getSysCompanyId()).andSysBrandIdEqualTo(sysAccountPO.getBrandId());
             List<MktActivityStatisticsPO> statisticsPOS = mktActivityStatisticsPOMapper.selectByExampleWithBLOBs(example);
             if (!statisticsPOS.isEmpty()) {
                 Map map = new TreeMap();
@@ -377,64 +354,6 @@ public class ActivityStatisticsServiceImpl implements ActivityStatisticsService{
                 responseData.setMessage(SysResponseEnum.FAILED.getMessage());
             }
         }
-        return responseData;
-    }
-
-    @Override
-    public ResponseData addActivityIdsSet(Long activityId) {
-        log.info("enter ActivityStatisticsServiceImpl method addActivityIdsSet ....START....");
-        ResponseData responseData = new ResponseData();
-        try {
-            String activityIdsKey = StatisticsConstants.ACTIVITY_LIST_PREFIX;
-            Set activityIds = (Set) redisTemplateService.stringGetStringByKey(activityIdsKey);
-            if (CollectionUtils.isEmpty(activityIds)) {
-                log.info("活动id列表为空，setter当前活动id{}至列表中",activityId);
-                Set activityIdSet = new HashSet();
-                activityIdSet.add(activityId);
-                redisTemplateService.stringSetString(activityIdsKey,activityIdSet);
-            }else {
-                activityIds.add(activityId);
-                redisTemplateService.stringSetString(activityIdsKey,activityIds);
-                log.info("将活动id{}setter到活动id列表后{}",activityId,activityIds);
-            }
-            responseData.setCode(SysResponseEnum.SUCCESS.getCode());
-            responseData.setMessage(SysResponseEnum.SUCCESS.getMessage());
-        }catch (Exception e){
-            e.printStackTrace();
-            log.error(e.getMessage());
-            responseData.setCode(SysResponseEnum.FAILED.getCode());
-            responseData.setMessage(SysResponseEnum.FAILED.getMessage());
-        }
-        log.info("enter ActivityStatisticsServiceImpl method addActivityIdsSet ....END....");
-        return responseData;
-    }
-
-    @Override
-    public ResponseData deleteActivityIdsSet(Long activityId) {
-        log.info("enter ActivityStatisticsServiceImpl method deleteActivityIdsSet ....START....");
-        ResponseData responseData = new ResponseData();
-        try {
-            String activityIdsKey = StatisticsConstants.ACTIVITY_LIST_PREFIX;
-            Set activityIds = (Set) redisTemplateService.stringGetStringByKey(activityIdsKey);
-            if (CollectionUtils.isNotEmpty(activityIds)) {
-                Iterator car = activityIds.iterator();
-                while (car.hasNext()) {
-                    long id = (long) car.next();
-                    if (id == activityId.longValue()) {
-                        car.remove();
-                    }
-                }
-                redisTemplateService.stringSetString(activityIdsKey,activityIds);
-            }
-            responseData.setCode(SysResponseEnum.SUCCESS.getCode());
-            responseData.setMessage(SysResponseEnum.SUCCESS.getMessage());
-        }catch (Exception e){
-            e.printStackTrace();
-            log.error(e.getMessage());
-            responseData.setCode(SysResponseEnum.FAILED.getCode());
-            responseData.setMessage(SysResponseEnum.FAILED.getMessage());
-        }
-        log.info("enter ActivityStatisticsServiceImpl method deleteActivityIdsSet ....END....");
         return responseData;
     }
 }
