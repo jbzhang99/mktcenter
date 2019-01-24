@@ -163,7 +163,7 @@ public class ActivityRedPacketServiceImpl implements ActivityRedPacketService {
         redPacketSumPO.setCreateDate(date);
         mktActivityRedPacketSumPOMapper.insertSelective(redPacketSumPO);
 
-        activityStatisticsService.addActivityIdsSet(activityPO.getMktActivityId());
+       // activityStatisticsService.addActivityIdsSet(activityPO.getMktActivityId());
 
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("qrCodeUrl", weixinUrl);
@@ -249,7 +249,7 @@ public class ActivityRedPacketServiceImpl implements ActivityRedPacketService {
         xxlJobInfo.setBizCode(po.getActivityCode());
         jobClient.removeByBiz(xxlJobInfo);
 
-        activityStatisticsService.deleteActivityIdsSet(po.getMktActivityId());
+        //activityStatisticsService.deleteActivityIdsSet(po.getMktActivityId());
 
         return responseData;
 
