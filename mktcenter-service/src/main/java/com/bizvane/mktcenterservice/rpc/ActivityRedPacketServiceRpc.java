@@ -30,5 +30,5 @@ public interface ActivityRedPacketServiceRpc {
     @RequestMapping("getRedPacketZhuLiRecord")
     public ResponseData<List<MktActivityRedPacketRecordPO>> getRedPacketZhuLiRecord(@RequestBody ActivityRedPacketVO vo);
     @RequestMapping("getRedPacketCoponAppRecord")
-    public ResponseData<List<MktActivityRedPacketRecordBO>> getRedPacketCoponAppRecord(ActivityRedPacketVO vo);
+    public ResponseData<List<MktActivityRedPacketRecordBO>> getRedPacketCoponAppRecord(@RequestBody ActivityRedPacketVO vo);
 }

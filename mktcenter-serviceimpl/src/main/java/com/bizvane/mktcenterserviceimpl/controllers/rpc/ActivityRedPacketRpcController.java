@@ -50,7 +50,7 @@ public class ActivityRedPacketRpcController {
     }
 
     @RequestMapping("getRedPacketCoponAppRecord")
-    public ResponseData<List<MktActivityRedPacketRecordBO>> getRedPacketCoponAppRecord(ActivityRedPacketVO vo) {
+    public ResponseData<List<MktActivityRedPacketRecordBO>> getRedPacketCoponAppRecord(@RequestBody ActivityRedPacketVO vo) {
         return activityRedPacketService.getRedPacketCoponAppRecord(vo);
     }
 
