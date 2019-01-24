@@ -454,7 +454,7 @@ public class ActivityRedPacketServiceImpl implements ActivityRedPacketService {
         //通知app 新增了助力人
         RedPacketSocketVO appData = this.getRedPacketZhuLiRecordByAPP(vo).getData();
         appData.setMemberCode(vo.getSponsorCode());
-        System.out.println("小程序app助力socket:"+JSON.toJSONString(appData));
+        log.info("小程序app助力socket:"+JSON.toJSONString(appData));
         receiveSocketSendServiceRpc.receiveSocketSend(appData);
 
         this.addCouponModelMoneyNum(vo, bo);
