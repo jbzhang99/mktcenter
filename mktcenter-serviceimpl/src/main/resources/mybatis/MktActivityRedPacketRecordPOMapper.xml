@@ -690,7 +690,8 @@
     reward_integral,
     add_coupon_denomination,
     type,
-    create_date
+    create_date,
+    wx_head_url
     FROM
     t_mkt_activity_red_packet_record
     WHERE
