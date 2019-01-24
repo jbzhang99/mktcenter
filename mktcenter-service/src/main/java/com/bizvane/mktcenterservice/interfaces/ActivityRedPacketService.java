@@ -12,6 +12,7 @@ import com.bizvane.utils.responseinfo.ResponseData;
 import com.github.pagehelper.PageInfo;
 
 import javax.servlet.http.HttpServletRequest;
+import java.io.IOException;
 import java.text.ParseException;
 import java.util.List;
 
@@ -29,7 +30,9 @@ public interface ActivityRedPacketService {
     public ResponseData<PageInfo<MktActivityRedPacketRecordBO>> getRedPacketCoponRecord(ActivityRedPacketVO vo, HttpServletRequest request);
     public ResponseData<List<MktActivityRedPacketRecordPO>> getRedPacketZhuLiRecord(ActivityRedPacketVO vo);
     public void andActivityRedPacketCreateRecord(ActivityRedPacketVO vo);
-    public ResponseData<Integer> andActivityRedPacketZhuliRecord(ActivityRedPacketVO vo);
+    public ResponseData<Integer> andActivityRedPacketZhuliRecord(ActivityRedPacketVO vo) throws IOException;
     public ResponseData<Integer> andActivityRedPacketSendCouponRecord(ActivityRedPacketVO vo);
     public ResponseData<List<MktActivityRedPacketRecordBO>> getRedPacketCoponAppRecord(ActivityRedPacketVO vo);
+    public ResponseData<Integer> stopActivityRedPacket(MktActivityPOWithBLOBs po, HttpServletRequest request);
+    public ResponseData<JSONObject> getRedPacketZhuLiRecordByAPP(ActivityRedPacketVO vo);
 }

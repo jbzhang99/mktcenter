@@ -1,5 +1,6 @@
 package com.bizvane.mktcenterserviceimpl.controllers.rpc;
 
+import com.alibaba.fastjson.JSONObject;
 import com.bizvane.mktcenterservice.interfaces.ActivityRedPacketService;
 import com.bizvane.mktcenterservice.models.bo.ActivityRedPacketBO;
 import com.bizvane.mktcenterservice.models.bo.MktActivityRedPacketRecordBO;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.io.IOException;
 import java.util.List;
 
 /**
@@ -36,7 +38,7 @@ public class ActivityRedPacketRpcController {
         activityRedPacketService.andActivityRedPacketCreateRecord(vo);
     }
     @RequestMapping("andActivityRedPacketZhuliRecord")
-    public ResponseData<Integer> andActivityRedPacketZhuliRecord(@RequestBody ActivityRedPacketVO vo) {
+    public ResponseData<Integer> andActivityRedPacketZhuliRecord(@RequestBody ActivityRedPacketVO vo) throws IOException {
        return activityRedPacketService.andActivityRedPacketZhuliRecord(vo);
     }
     @RequestMapping("andActivityRedPacketSendCouponRecord")
@@ -48,7 +50,10 @@ public class ActivityRedPacketRpcController {
     public ResponseData<List<MktActivityRedPacketRecordPO>> getRedPacketZhuLiRecord(@RequestBody ActivityRedPacketVO vo) {
         return activityRedPacketService.getRedPacketZhuLiRecord(vo);
     }
-
+    @RequestMapping("getRedPacketZhuLiRecordByAPP")
+    public ResponseData<JSONObject> getRedPacketZhuLiRecordByAPP(@RequestBody ActivityRedPacketVO vo){
+        return activityRedPacketService.getRedPacketZhuLiRecordByAPP(vo);
+    }
     @RequestMapping("getRedPacketCoponAppRecord")
     public ResponseData<List<MktActivityRedPacketRecordBO>> getRedPacketCoponAppRecord(@RequestBody ActivityRedPacketVO vo) {
         return activityRedPacketService.getRedPacketCoponAppRecord(vo);

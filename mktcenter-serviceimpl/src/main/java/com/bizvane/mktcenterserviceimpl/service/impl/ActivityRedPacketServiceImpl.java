@@ -2,6 +2,7 @@ package com.bizvane.mktcenterserviceimpl.service.impl;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.bizvane.appletservice.rpc.ReceiveSocketSendServiceRpc;
 import com.bizvane.centerstageservice.models.po.SysStorePo;
 import com.bizvane.couponfacade.interfaces.CouponDefinitionServiceFeign;
 import com.bizvane.couponfacade.interfaces.SendCouponServiceFeign;
@@ -27,6 +28,8 @@ import com.bizvane.mktcenterserviceimpl.mappers.MktActivityPOMapper;
 import com.bizvane.mktcenterserviceimpl.mappers.MktActivityRedPacketPOMapper;
 import com.bizvane.mktcenterserviceimpl.mappers.MktActivityRedPacketRecordPOMapper;
 import com.bizvane.mktcenterserviceimpl.mappers.MktActivityRedPacketSumPOMapper;
+import com.bizvane.utils.jobutils.JobClient;
+import com.bizvane.utils.jobutils.XxlJobInfo;
 import com.bizvane.utils.responseinfo.ResponseData;
 import com.bizvane.utils.tokens.SysAccountPO;
 import com.bizvane.utils.tokens.TokenUtils;
@@ -43,6 +46,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpServletRequest;
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.text.ParseException;
 import java.util.ArrayList;
@@ -69,6 +73,8 @@ public class ActivityRedPacketServiceImpl implements ActivityRedPacketService {
     @Autowired
     private JobUtil jobUtil;
     @Autowired
+    private JobClient jobClient;
+    @Autowired
     private TaskService taskService;
     @Autowired
     private CouponDefinitionServiceFeign couponDefinitionServiceFeign;
@@ -80,6 +86,8 @@ public class ActivityRedPacketServiceImpl implements ActivityRedPacketService {
     private SendCouponServiceFeign sendCouponServiceFeign;
     @Autowired
     private ActivityStatisticsService activityStatisticsService;
+    @Autowired
+    private ReceiveSocketSendServiceRpc receiveSocketSendServiceRpc;
 
     /**
      * 新增
@@ -221,6 +229,32 @@ public class ActivityRedPacketServiceImpl implements ActivityRedPacketService {
     }
 
     /**
+     * 禁用
+     * @param po
+     * @param request
+     * @return
+     */
+    @Override
+    public ResponseData<Integer> stopActivityRedPacket(MktActivityPOWithBLOBs po, HttpServletRequest request) {
+        ResponseData<Integer> responseData = new ResponseData<>();
+        SysAccountPO sysAccountPo = TokenUtils.getStageUser(request);
+        po.setActivityStatus(4);
+        po.setModifiedDate(new Date());
+        po.setModifiedUserId(sysAccountPo.getSysAccountId());
+        po.setModifiedUserName(sysAccountPo.getName());
+        mktActivityPOMapper.updateByPrimaryKeySelective(po);
+
+        //禁用后要清除所有的job
+        XxlJobInfo xxlJobInfo = new XxlJobInfo();
+        xxlJobInfo.setBizCode(po.getActivityCode());
+        jobClient.removeByBiz(xxlJobInfo);
+
+        activityStatisticsService.deleteActivityIdsSet(po.getMktActivityId());
+
+        return responseData;
+
+    }
+    /**
      * 查询活动列表
      */
     @Override
@@ -304,6 +338,32 @@ public class ActivityRedPacketServiceImpl implements ActivityRedPacketService {
         return responseData;
     }
 
+    @Override
+    public ResponseData<JSONObject> getRedPacketZhuLiRecordByAPP(ActivityRedPacketVO vo) {
+        log.info("getRedPacketZhuLiRecordByAPP 查询助力人员列表app 参数:"+JSON.toJSONString(vo));
+        ResponseData<JSONObject> responseData = new ResponseData<>();
+
+        MktActivityRedPacketPOExample packetPOExample = new MktActivityRedPacketPOExample();
+        packetPOExample.createCriteria().andMktActivityIdEqualTo(vo.getMktActivityId()).andValidEqualTo(Boolean.TRUE);
+        MktActivityRedPacketPO packetRecordPO = mktActivityRedPacketPOMapper.selectByExample(packetPOExample).get(0);
+
+        List dataAppZhuli = this.getRedPacketZhuLiRecord(vo).getData();
+        System.out.println("小程序app助力socket: "+JSON.toJSONString(dataAppZhuli));
+        Integer copouAppData=0;
+        JSONObject jsonObject = new JSONObject();
+        if (CollectionUtils.isEmpty(dataAppZhuli)){
+            copouAppData= packetRecordPO.getCouponDenomination();
+        }else{
+            copouAppData=packetRecordPO.getCouponDenomination()+dataAppZhuli.size() * packetRecordPO.getAddCouponDenomination();
+        }
+        System.out.println("小程序app助力socket 券金额 "+copouAppData);
+        jsonObject.put("list",dataAppZhuli);
+        jsonObject.put("couponMoney",copouAppData);
+
+        responseData.setData(jsonObject);
+        return responseData;
+    }
+
     /**
      * 判断会员是否  助力过  发起过  领券过
      */
@@ -371,7 +431,7 @@ public class ActivityRedPacketServiceImpl implements ActivityRedPacketService {
      */
     @Transactional
     @Override
-    public ResponseData<Integer> andActivityRedPacketZhuliRecord(ActivityRedPacketVO vo) {
+    public ResponseData<Integer> andActivityRedPacketZhuliRecord(ActivityRedPacketVO vo) throws IOException {
         ResponseData<Integer> responseData = new ResponseData<>();
         ActivityRedPacketBO bo = mktActivityPOMapper.selectActivityRedPacketDetail(vo);
         log.info("andActivityRedPacketZhuliRecord 添加记录 param:" + JSON.toJSONString(vo) + "--活动详情-" + JSON.toJSONString(bo));
@@ -388,6 +448,16 @@ public class ActivityRedPacketServiceImpl implements ActivityRedPacketService {
             vo.setHelpNum(0);
         }
         this.doStatisticsRecored(vo, bo, null,null);
+        //通知app 新增了助力人
+        JSONObject appData = this.getRedPacketZhuLiRecordByAPP(vo).getData();
+        System.out.println("小程序app助力socket:"+appData);
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append(appData.toJSONString());
+        stringBuilder.append("&");
+        stringBuilder.append(vo.getSponsorCode());
+        String str = stringBuilder.toString();
+        log.info("返回给App最终结果:"+str);
+        receiveSocketSendServiceRpc.receiveSocketSend(str);
         this.addCouponModelMoneyNum(vo, bo);
         responseData.setData(bo.getActivityRedPacketPO().getRewardIntegral());
         return responseData;

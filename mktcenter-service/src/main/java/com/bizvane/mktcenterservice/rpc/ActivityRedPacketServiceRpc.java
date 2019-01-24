@@ -1,5 +1,6 @@
 package com.bizvane.mktcenterservice.rpc;
 
+import com.alibaba.fastjson.JSONObject;
 import com.bizvane.mktcenterservice.models.bo.ActivityRedPacketBO;
 import com.bizvane.mktcenterservice.models.bo.MktActivityRedPacketRecordBO;
 import com.bizvane.mktcenterservice.models.po.MktActivityRedPacketRecordPO;
@@ -29,6 +30,10 @@ public interface ActivityRedPacketServiceRpc {
     public ResponseData<Integer> andActivityRedPacketSendCouponRecord(@RequestBody ActivityRedPacketVO vo);
     @RequestMapping("getRedPacketZhuLiRecord")
     public ResponseData<List<MktActivityRedPacketRecordPO>> getRedPacketZhuLiRecord(@RequestBody ActivityRedPacketVO vo);
+    @RequestMapping("getRedPacketZhuLiRecordByAPP")
+    public ResponseData<JSONObject> getRedPacketZhuLiRecordByAPP(@RequestBody ActivityRedPacketVO vo);
     @RequestMapping("getRedPacketCoponAppRecord")
     public ResponseData<List<MktActivityRedPacketRecordBO>> getRedPacketCoponAppRecord(@RequestBody ActivityRedPacketVO vo);
+
+
 }

@@ -87,6 +87,7 @@
       <result column="add_coupon_denomination" jdbcType="INTEGER" property="addCouponDenomination" />
       <result column="do_if_reward" jdbcType="BIT" property="doIfReward" />
       <result column="reward_integral" jdbcType="INTEGER" property="rewardIntegral" />
+      <result column="limit_num" jdbcType="INTEGER" property="limitNum" />
     </association>
   </resultMap>
 
