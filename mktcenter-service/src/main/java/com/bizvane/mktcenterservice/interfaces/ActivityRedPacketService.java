@@ -8,6 +8,7 @@ import com.bizvane.mktcenterservice.models.po.MktActivityPOWithBLOBs;
 import com.bizvane.mktcenterservice.models.po.MktActivityRedPacketRecordPO;
 import com.bizvane.mktcenterservice.models.vo.ActivityPriceParamVO;
 import com.bizvane.mktcenterservice.models.vo.ActivityRedPacketVO;
+import com.bizvane.mktcenterservice.models.vo.RedPacketSocketVO;
 import com.bizvane.utils.responseinfo.ResponseData;
 import com.github.pagehelper.PageInfo;
 
@@ -34,5 +35,5 @@ public interface ActivityRedPacketService {
     public ResponseData<Integer> andActivityRedPacketSendCouponRecord(ActivityRedPacketVO vo);
     public ResponseData<List<MktActivityRedPacketRecordBO>> getRedPacketCoponAppRecord(ActivityRedPacketVO vo);
     public ResponseData<Integer> stopActivityRedPacket(MktActivityPOWithBLOBs po, HttpServletRequest request);
-    public ResponseData<JSONObject> getRedPacketZhuLiRecordByAPP(ActivityRedPacketVO vo);
+    public ResponseData<RedPacketSocketVO> getRedPacketZhuLiRecordByAPP(ActivityRedPacketVO vo);
 }

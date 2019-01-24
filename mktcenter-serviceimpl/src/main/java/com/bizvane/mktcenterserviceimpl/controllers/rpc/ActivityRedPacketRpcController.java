@@ -1,11 +1,11 @@
 package com.bizvane.mktcenterserviceimpl.controllers.rpc;
 
-import com.alibaba.fastjson.JSONObject;
 import com.bizvane.mktcenterservice.interfaces.ActivityRedPacketService;
 import com.bizvane.mktcenterservice.models.bo.ActivityRedPacketBO;
 import com.bizvane.mktcenterservice.models.bo.MktActivityRedPacketRecordBO;
 import com.bizvane.mktcenterservice.models.po.MktActivityRedPacketRecordPO;
 import com.bizvane.mktcenterservice.models.vo.ActivityRedPacketVO;
+import com.bizvane.mktcenterservice.models.vo.RedPacketSocketVO;
 import com.bizvane.utils.responseinfo.ResponseData;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -51,7 +51,7 @@ public class ActivityRedPacketRpcController {
         return activityRedPacketService.getRedPacketZhuLiRecord(vo);
     }
     @RequestMapping("getRedPacketZhuLiRecordByAPP")
-    public ResponseData<JSONObject> getRedPacketZhuLiRecordByAPP(@RequestBody ActivityRedPacketVO vo){
+    public ResponseData<RedPacketSocketVO>  getRedPacketZhuLiRecordByAPP(@RequestBody ActivityRedPacketVO vo){
         return activityRedPacketService.getRedPacketZhuLiRecordByAPP(vo);
     }
     @RequestMapping("getRedPacketCoponAppRecord")

@@ -21,6 +21,7 @@ import com.bizvane.mktcenterservice.models.bo.MktActivityRedPacketRecordBO;
 import com.bizvane.mktcenterservice.models.po.*;
 import com.bizvane.mktcenterservice.models.vo.ActivityPriceParamVO;
 import com.bizvane.mktcenterservice.models.vo.ActivityRedPacketVO;
+import com.bizvane.mktcenterservice.models.vo.RedPacketSocketVO;
 import com.bizvane.mktcenterserviceimpl.common.job.JobUtil;
 import com.bizvane.mktcenterserviceimpl.common.utils.CodeUtil;
 import com.bizvane.mktcenterserviceimpl.common.utils.TimeUtils;
@@ -339,28 +340,28 @@ public class ActivityRedPacketServiceImpl implements ActivityRedPacketService {
     }
 
     @Override
-    public ResponseData<JSONObject> getRedPacketZhuLiRecordByAPP(ActivityRedPacketVO vo) {
+    public ResponseData<RedPacketSocketVO> getRedPacketZhuLiRecordByAPP(ActivityRedPacketVO vo) {
         log.info("getRedPacketZhuLiRecordByAPP 查询助力人员列表app 参数:"+JSON.toJSONString(vo));
-        ResponseData<JSONObject> responseData = new ResponseData<>();
+        ResponseData<RedPacketSocketVO> responseData = new ResponseData<>();
 
         MktActivityRedPacketPOExample packetPOExample = new MktActivityRedPacketPOExample();
         packetPOExample.createCriteria().andMktActivityIdEqualTo(vo.getMktActivityId()).andValidEqualTo(Boolean.TRUE);
         MktActivityRedPacketPO packetRecordPO = mktActivityRedPacketPOMapper.selectByExample(packetPOExample).get(0);
 
-        List dataAppZhuli = this.getRedPacketZhuLiRecord(vo).getData();
+        List<MktActivityRedPacketRecordPO> dataAppZhuli = this.getRedPacketZhuLiRecord(vo).getData();
         System.out.println("小程序app助力socket: "+JSON.toJSONString(dataAppZhuli));
         Integer copouAppData=0;
-        JSONObject jsonObject = new JSONObject();
+       // JSONObject jsonObject = new JSONObject();
         if (CollectionUtils.isEmpty(dataAppZhuli)){
             copouAppData= packetRecordPO.getCouponDenomination();
         }else{
             copouAppData=packetRecordPO.getCouponDenomination()+dataAppZhuli.size() * packetRecordPO.getAddCouponDenomination();
         }
         System.out.println("小程序app助力socket 券金额 "+copouAppData);
-        jsonObject.put("list",dataAppZhuli);
-        jsonObject.put("couponMoney",copouAppData);
-
-        responseData.setData(jsonObject);
+//        jsonObject.put("list",dataAppZhuli);
+//        jsonObject.put("couponMoney",copouAppData);
+        RedPacketSocketVO redPacketSocketVO = new RedPacketSocketVO();
+        responseData.setData(redPacketSocketVO);
         return responseData;
     }
 
@@ -449,15 +450,11 @@ public class ActivityRedPacketServiceImpl implements ActivityRedPacketService {
         }
         this.doStatisticsRecored(vo, bo, null,null);
         //通知app 新增了助力人
-        JSONObject appData = this.getRedPacketZhuLiRecordByAPP(vo).getData();
-        System.out.println("小程序app助力socket:"+appData);
-        StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append(appData.toJSONString());
-        stringBuilder.append("&");
-        stringBuilder.append(vo.getSponsorCode());
-        String str = stringBuilder.toString();
-        log.info("返回给App最终结果:"+str);
-        receiveSocketSendServiceRpc.receiveSocketSend(str);
+        RedPacketSocketVO appData = this.getRedPacketZhuLiRecordByAPP(vo).getData();
+        appData.setMemberCode(vo.getSponsorCode());
+        System.out.println("小程序app助力socket:"+JSON.toJSONString(appData));
+        //receiveSocketSendServiceRpc.receiveSocketSend(appData);
+
         this.addCouponModelMoneyNum(vo, bo);
         responseData.setData(bo.getActivityRedPacketPO().getRewardIntegral());
         return responseData;

@@ -10,6 +10,7 @@ import com.bizvane.mktcenterservice.models.po.MktActivityPOWithBLOBs;
 import com.bizvane.mktcenterservice.models.po.MktActivityRedPacketRecordPO;
 import com.bizvane.mktcenterservice.models.vo.ActivityPriceParamVO;
 import com.bizvane.mktcenterservice.models.vo.ActivityRedPacketVO;
+import com.bizvane.mktcenterservice.models.vo.RedPacketSocketVO;
 import com.bizvane.utils.responseinfo.ResponseData;
 import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -76,7 +77,7 @@ public class ActivityRedPacketController {
         return activityRedPacketService.getRedPacketZhuLiRecord(vo);
     }
     @RequestMapping("getRedPacketZhuLiRecordByAPP")
-    public ResponseData<JSONObject> getRedPacketZhuLiRecordByAPP(ActivityRedPacketVO vo){
+    public ResponseData<RedPacketSocketVO> getRedPacketZhuLiRecordByAPP(ActivityRedPacketVO vo){
         return activityRedPacketService.getRedPacketZhuLiRecordByAPP(vo);
     }
     @RequestMapping("andActivityRedPacketCreateRecord")
