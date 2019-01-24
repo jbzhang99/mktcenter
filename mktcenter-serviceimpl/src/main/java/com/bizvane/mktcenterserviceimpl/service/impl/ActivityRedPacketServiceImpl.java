@@ -361,6 +361,8 @@ public class ActivityRedPacketServiceImpl implements ActivityRedPacketService {
 //        jsonObject.put("list",dataAppZhuli);
 //        jsonObject.put("couponMoney",copouAppData);
         RedPacketSocketVO redPacketSocketVO = new RedPacketSocketVO();
+        redPacketSocketVO.setCopouAppData(copouAppData);
+        redPacketSocketVO.setDataAppZhuli(dataAppZhuli);
         responseData.setData(redPacketSocketVO);
         return responseData;
     }
@@ -453,7 +455,7 @@ public class ActivityRedPacketServiceImpl implements ActivityRedPacketService {
         RedPacketSocketVO appData = this.getRedPacketZhuLiRecordByAPP(vo).getData();
         appData.setMemberCode(vo.getSponsorCode());
         System.out.println("小程序app助力socket:"+JSON.toJSONString(appData));
-        //receiveSocketSendServiceRpc.receiveSocketSend(appData);
+        receiveSocketSendServiceRpc.receiveSocketSend(appData);
 
         this.addCouponModelMoneyNum(vo, bo);
         responseData.setData(bo.getActivityRedPacketPO().getRewardIntegral());
