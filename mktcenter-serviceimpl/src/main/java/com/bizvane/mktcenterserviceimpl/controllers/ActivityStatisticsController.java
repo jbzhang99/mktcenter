@@ -48,10 +48,10 @@ public class ActivityStatisticsController {
         return activityStatisticsService.curveData(activityId,time,code,sysAccountPo);
     }
 
-    @RequestMapping("test1")
+    /*@RequestMapping("test1")
     public void test1(){
         activityStatisticsService.schedule();
-    }
+    }*/
 
     @RequestMapping("test")
     public ResponseData test(@RequestParam("activityId") Long activityId,@RequestParam("code") int code,@RequestParam("memberCode") String memberCode){

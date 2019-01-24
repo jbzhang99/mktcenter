@@ -152,7 +152,7 @@ public class ActivityStatisticsServiceImpl implements ActivityStatisticsService{
      * 定时任务 将统计的量入库至数据库中
      * 每天0点1分执行
      */
-    @Override
+    /*@Override
     @Scheduled(cron="0 1 0 * * ?")
     public void schedule() {
         log.info("enter ActivityStatisticsServiceImpl method schedule ....START....");
@@ -227,7 +227,7 @@ public class ActivityStatisticsServiceImpl implements ActivityStatisticsService{
             log.error(e.getMessage());
         }
         log.info("enter ActivityStatisticsServiceImpl method schedule ....END....");
-    }
+    }*/
 
     /**
      * 活动分析

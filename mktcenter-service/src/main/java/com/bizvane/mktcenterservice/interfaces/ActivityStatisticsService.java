@@ -14,7 +14,7 @@ public interface ActivityStatisticsService {
 
     public ResponseData getAllDate(Long activityId);
 
-    public void schedule();
+    //public void schedule();
 
     public ResponseData activityAnalysis(Long activityId, String time, SysAccountPO sysAccountPO);
 
