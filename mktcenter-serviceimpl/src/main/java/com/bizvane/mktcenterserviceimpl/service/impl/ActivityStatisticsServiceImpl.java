@@ -89,7 +89,7 @@ public class ActivityStatisticsServiceImpl implements ActivityStatisticsService{
 
             if (StringUtils.isNotBlank(visitorsKey) && StringUtils.isNotBlank(hourKey)) {
                 Set visitorsMemberCodeSet = (Set) redisTemplateService.stringGetStringByKey(visitorsKey);
-                if (visitorsMemberCodeSet.isEmpty()) {
+                if (CollectionUtils.isEmpty(visitorsMemberCodeSet)) {
                     visitorsMemberCodeSet = new HashSet();
                     visitorsMemberCodeSet.add(memberCode);
                 }else {
@@ -98,7 +98,7 @@ public class ActivityStatisticsServiceImpl implements ActivityStatisticsService{
                 redisTemplateService.stringSetValueAndExpireTime(visitorsKey,visitorsMemberCodeSet,StatisticsConstants.REDIS_LIVE_TIME);
 
                 Set hourMemberCodeSet = (Set) redisTemplateService.stringGetStringByKey(hourKey);
-                if (hourMemberCodeSet.isEmpty()) {
+                if (CollectionUtils.isEmpty(hourMemberCodeSet)) {
                     hourMemberCodeSet = new HashSet();
                     hourMemberCodeSet.add(memberCode);
                 }else {
@@ -180,53 +180,66 @@ public class ActivityStatisticsServiceImpl implements ActivityStatisticsService{
             }else {
                 String yesterday = StatisticsConstants.getYesterday();
                 //获取昨天24小时内的访问量数据
-                Map map = new HashMap();
+                Map map = new TreeMap();
                 for (Long activityId:activityIds) {
                     //查询活动详情
                     MktActivityPOWithBLOBs mktActivityPOWithBLOBs = mktActivityPOMapper.selectByPrimaryKey(activityId);
                     if (mktActivityPOWithBLOBs != null) {
-                        for (int i = 0; i < 24; i++) {
-                            String key = StatisticsConstants.VISITORS_PREFIX + activityId + "_" + yesterday + "_" + i;
-                            Set hourMemberCodeSet = (Set) redisTemplateService.stringGetStringByKey(key);
-                            int count = hourMemberCodeSet == null?0:hourMemberCodeSet.size();
-                            map.put(i + ":00",count);
-                        }
-                        //查询昨天访问人数
-                        String visitorsKey = StatisticsConstants.VISITORS_PREFIX + activityId + "_" + yesterday;
-                        Set visitorsMemberCodeSet = (Set) redisTemplateService.stringGetStringByKey(visitorsKey);
-                        int visitorsCount = visitorsMemberCodeSet == null?0:visitorsMemberCodeSet.size();
-                        //查询昨天发起会员数
-                        String launchMembersKey = StatisticsConstants.LAUNCH_MEMBERS + activityId + "_" + yesterday;
-                        Set launchMemberCodeSet = (Set) redisTemplateService.stringGetStringByKey(launchMembersKey);
-                        int launchMembersCount = launchMemberCodeSet == null?0:launchMemberCodeSet.size();
-                        //查询助力昨天助力会员数
-                        String helpMembersKey = StatisticsConstants.HELP_MEMBERS + activityId + "_" + yesterday;
-                        Set helpMemberCodeSet = (Set) redisTemplateService.stringGetStringByKey(helpMembersKey);
-                        int helpMembersCount = helpMemberCodeSet == null?0:helpMemberCodeSet.size();
-                        //查询注册会员数
-                        String registerMembersKey = StatisticsConstants.REGISTER_MEMBERS + activityId + "_" + yesterday;
-                        Set registerMemberCodeSet = (Set) redisTemplateService.stringGetStringByKey(registerMembersKey);
-                        int registerMembersCount = registerMemberCodeSet == null?0:registerMemberCodeSet.size();
-                        //领劵数量
-                        String takeCouponKey = StatisticsConstants.TAKE_COUPON + activityId + "_" + yesterday;
-                        Set takeCouponMemberCodeSet = (Set) redisTemplateService.stringGetStringByKey(takeCouponKey);
-                        int takeCouponCount = takeCouponMemberCodeSet == null?0:takeCouponMemberCodeSet.size();
+                        if (mktActivityPOWithBLOBs.getActivityStatus() == 2) {
+                            for (int i = 0; i < 24; i++) {
+                                String key = StatisticsConstants.VISITORS_PREFIX + activityId + "_" + yesterday + "_" + i;
+                                Set hourMemberCodeSet = (Set) redisTemplateService.stringGetStringByKey(key);
+                                int count = hourMemberCodeSet == null?0:hourMemberCodeSet.size();
+                                if (i < 10) {
+                                    map.put("0" + i + ":00" ,count);
+                                }else {
+                                    map.put(i + ":00" ,count);
+                                }
+                            }
+                            //查询昨天访问人数
+                            String visitorsKey = StatisticsConstants.VISITORS_PREFIX + activityId + "_" + yesterday;
+                            Set visitorsMemberCodeSet = (Set) redisTemplateService.stringGetStringByKey(visitorsKey);
+                            int visitorsCount = visitorsMemberCodeSet == null?0:visitorsMemberCodeSet.size();
+                            //查询昨天发起会员数
+                            String launchMembersKey = StatisticsConstants.LAUNCH_MEMBERS + activityId + "_" + yesterday;
+                            Set launchMemberCodeSet = (Set) redisTemplateService.stringGetStringByKey(launchMembersKey);
+                            int launchMembersCount = launchMemberCodeSet == null?0:launchMemberCodeSet.size();
+                            //查询助力昨天助力会员数
+                            String helpMembersKey = StatisticsConstants.HELP_MEMBERS + activityId + "_" + yesterday;
+                            Set helpMemberCodeSet = (Set) redisTemplateService.stringGetStringByKey(helpMembersKey);
+                            int helpMembersCount = helpMemberCodeSet == null?0:helpMemberCodeSet.size();
+                            //查询注册会员数
+                            String registerMembersKey = StatisticsConstants.REGISTER_MEMBERS + activityId + "_" + yesterday;
+                            Set registerMemberCodeSet = (Set) redisTemplateService.stringGetStringByKey(registerMembersKey);
+                            int registerMembersCount = registerMemberCodeSet == null?0:registerMemberCodeSet.size();
+                            //领劵数量
+                            String takeCouponKey = StatisticsConstants.TAKE_COUPON + activityId + "_" + yesterday;
+                            Set takeCouponMemberCodeSet = (Set) redisTemplateService.stringGetStringByKey(takeCouponKey);
+                            int takeCouponCount = takeCouponMemberCodeSet == null?0:takeCouponMemberCodeSet.size();
 
-                        //存储到红包活动分析表中
-                        MktActivityStatisticsPO mktActivityStatisticsPO = new MktActivityStatisticsPO();
-                        mktActivityStatisticsPO.setSysCompanyId(mktActivityPOWithBLOBs.getSysCompanyId());
-                        mktActivityStatisticsPO.setSysBrandId(mktActivityPOWithBLOBs.getSysBrandId());
-                        mktActivityStatisticsPO.setMktActivityId(activityId);
-                        mktActivityStatisticsPO.setVisitorsCount(visitorsCount);
-                        mktActivityStatisticsPO.setLaunchMembersCount(launchMembersCount);
-                        mktActivityStatisticsPO.setHelpMembersCount(helpMembersCount);
-                        mktActivityStatisticsPO.setRegisterMembersCount(registerMembersCount);
-                        mktActivityStatisticsPO.setTakeCouponCount(Long.parseLong(String.valueOf(takeCouponCount)));
-                        String json = Json.encode(map);
-                        mktActivityStatisticsPO.setHourJsonData(json);
-                        mktActivityStatisticsPO.setStatisticsTime(new Date());
-                        mktActivityStatisticsPO.setStatisticsType(StatisticsConstants.STATISTICS_TYPE);
-                        mktActivityStatisticsPOMapper.insertSelective(mktActivityStatisticsPO);
+                            //存储到红包活动分析表中
+                            MktActivityStatisticsPO mktActivityStatisticsPO = new MktActivityStatisticsPO();
+                            mktActivityStatisticsPO.setSysCompanyId(mktActivityPOWithBLOBs.getSysCompanyId());
+                            mktActivityStatisticsPO.setSysBrandId(mktActivityPOWithBLOBs.getSysBrandId());
+                            mktActivityStatisticsPO.setMktActivityId(activityId);
+                            mktActivityStatisticsPO.setVisitorsCount(visitorsCount);
+                            mktActivityStatisticsPO.setLaunchMembersCount(launchMembersCount);
+                            mktActivityStatisticsPO.setHelpMembersCount(helpMembersCount);
+                            mktActivityStatisticsPO.setRegisterMembersCount(registerMembersCount);
+                            mktActivityStatisticsPO.setTakeCouponCount(Long.parseLong(String.valueOf(takeCouponCount)));
+                            String json = Json.encode(map);
+                            mktActivityStatisticsPO.setHourJsonData(json);
+                            Calendar calendar = Calendar.getInstance();
+                            calendar.setTime(new Date());
+                            calendar.add(Calendar.DATE,-1);
+                            mktActivityStatisticsPO.setStatisticsTime(calendar.getTime());
+                            mktActivityStatisticsPO.setStatisticsType(StatisticsConstants.STATISTICS_TYPE);
+                            mktActivityStatisticsPOMapper.insertSelective(mktActivityStatisticsPO);
+                        }else {
+                            log.info("活动id：[" + activityId + "],不在执行中。。。");
+                            //并将redis中的活动id列表删除。
+                            deleteActivityIdsSet(activityId);
+                        }
                     }else {
                         //此活动查不到
                         log.info("活动id：[" + activityId + "],无此活动。");
@@ -406,8 +419,8 @@ public class ActivityStatisticsServiceImpl implements ActivityStatisticsService{
             if (CollectionUtils.isNotEmpty(activityIds)) {
                 Iterator car = activityIds.iterator();
                 while (car.hasNext()) {
-                    Long id = (Long) car.next();
-                    if (id == activityId) {
+                    long id = (long) car.next();
+                    if (id == activityId.longValue()) {
                         car.remove();
                     }
                 }
@@ -424,5 +437,4 @@ public class ActivityStatisticsServiceImpl implements ActivityStatisticsService{
         log.info("enter ActivityStatisticsServiceImpl method deleteActivityIdsSet ....END....");
         return responseData;
     }
-
 }

@@ -63,4 +63,9 @@ public class ActivityStatisticsController {
     public ResponseData activityAnalysis(@RequestParam("activityId") Long activityId,@RequestParam("time") String time){
         return activityStatisticsService.activityAnalysis(activityId,time);
     }
+
+    @RequestMapping("test2")
+    public ResponseData test2(@RequestParam("activityId") Long activityId){
+        return activityStatisticsService.deleteActivityIdsSet(activityId);
+    }
 }
