@@ -180,7 +180,7 @@ public class ActivityStatisticsServiceImpl implements ActivityStatisticsService{
             }else {
                 String yesterday = StatisticsConstants.getYesterday();
                 //获取昨天24小时内的访问量数据
-                Map map = new HashMap();
+                Map map = new TreeMap();
                 for (Long activityId:activityIds) {
                     //查询活动详情
                     MktActivityPOWithBLOBs mktActivityPOWithBLOBs = mktActivityPOMapper.selectByPrimaryKey(activityId);
@@ -189,7 +189,7 @@ public class ActivityStatisticsServiceImpl implements ActivityStatisticsService{
                             String key = StatisticsConstants.VISITORS_PREFIX + activityId + "_" + yesterday + "_" + i;
                             Set hourMemberCodeSet = (Set) redisTemplateService.stringGetStringByKey(key);
                             int count = hourMemberCodeSet == null?0:hourMemberCodeSet.size();
-                            map.put(i + ":00",count);
+                            map.put(i ,count);
                         }
                         //查询昨天访问人数
                         String visitorsKey = StatisticsConstants.VISITORS_PREFIX + activityId + "_" + yesterday;
@@ -224,7 +224,10 @@ public class ActivityStatisticsServiceImpl implements ActivityStatisticsService{
                         mktActivityStatisticsPO.setTakeCouponCount(Long.parseLong(String.valueOf(takeCouponCount)));
                         String json = Json.encode(map);
                         mktActivityStatisticsPO.setHourJsonData(json);
-                        mktActivityStatisticsPO.setStatisticsTime(new Date());
+                        Calendar calendar = Calendar.getInstance();
+                        calendar.setTime(new Date());
+                        calendar.add(Calendar.DATE,-1);
+                        mktActivityStatisticsPO.setStatisticsTime(calendar.getTime());
                         mktActivityStatisticsPO.setStatisticsType(StatisticsConstants.STATISTICS_TYPE);
                         mktActivityStatisticsPOMapper.insertSelective(mktActivityStatisticsPO);
                     }else {
@@ -406,8 +409,8 @@ public class ActivityStatisticsServiceImpl implements ActivityStatisticsService{
             if (CollectionUtils.isNotEmpty(activityIds)) {
                 Iterator car = activityIds.iterator();
                 while (car.hasNext()) {
-                    Long id = (Long) car.next();
-                    if (id == activityId) {
+                    long id = (long) car.next();
+                    if (id == activityId.longValue()) {
                         car.remove();
                     }
                 }
@@ -424,5 +427,4 @@ public class ActivityStatisticsServiceImpl implements ActivityStatisticsService{
         log.info("enter ActivityStatisticsServiceImpl method deleteActivityIdsSet ....END....");
         return responseData;
     }
-
 }
