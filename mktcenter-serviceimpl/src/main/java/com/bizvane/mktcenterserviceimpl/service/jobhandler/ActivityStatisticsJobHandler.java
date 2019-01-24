@@ -37,16 +37,14 @@ public class ActivityStatisticsJobHandler extends IJobHandler {
     @Override
     public ReturnT<String> execute(String s) throws Exception {
         log.info("红包膨胀了   活动统计   任务开始执行 。。。。");
-        ReturnT returnT = new ReturnT();
         //获取活动id列表
         MktActivityPOExample example = new MktActivityPOExample();
         example.createCriteria().andActivityTypeEqualTo(12).andActivityStatusEqualTo(2).andValidEqualTo(true);
         List<MktActivityPOWithBLOBs> activityIds = mktActivityPOMapper.selectByExampleWithBLOBs(example);
-        log.info("活动id列表:{}",activityIds);
         if (CollectionUtils.isEmpty(activityIds)) {
             //证明昨天无活动触发 就此结束
             log.info("无活动id列表就此结束定时");
-            return null;
+            return ReturnT.FAIL;
         }
         String yesterday = StatisticsConstants.getYesterday();
         //获取昨天24小时内的访问量数据
@@ -103,10 +101,7 @@ public class ActivityStatisticsJobHandler extends IJobHandler {
             mktActivityStatisticsPO.setStatisticsType(StatisticsConstants.STATISTICS_TYPE);
             mktActivityStatisticsPOMapper.insertSelective(mktActivityStatisticsPO);
         }
-        returnT.setCode(0);
-        returnT.setContent("活动执行完毕");
-        returnT.setMsg("success");
         log.info("红包膨胀了   活动统计   任务执行结束。。。。");
-        return returnT;
+        return new ReturnT<>("红包活动统计任务成功执行完毕。");
     }
 }
