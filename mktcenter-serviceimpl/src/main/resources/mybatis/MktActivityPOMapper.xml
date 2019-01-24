@@ -1138,7 +1138,8 @@
 	tmarp.coupon_denomination,
 	tmarp.add_coupon_denomination,
 	tmarp.do_if_reward,
-	tmarp.reward_integral
+	tmarp.reward_integral,
+    tmarp.limit_num
   FROM
   t_mkt_activity tmc
   INNER JOIN t_mkt_activity_red_packet tmarp ON tmc.mkt_activity_id=tmarp.mkt_activity_id
