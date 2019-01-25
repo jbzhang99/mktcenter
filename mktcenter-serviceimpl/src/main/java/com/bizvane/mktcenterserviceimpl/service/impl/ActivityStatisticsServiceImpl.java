@@ -323,7 +323,7 @@ public class ActivityStatisticsServiceImpl implements ActivityStatisticsService{
         if (type == StatisticsConstants.CURVE_HOUR) {
             MktActivityStatisticsPOExample example = new MktActivityStatisticsPOExample();
             example.createCriteria().andMktActivityIdEqualTo(activityId).andStatisticsTypeEqualTo(StatisticsConstants.STATISTICS_TYPE)
-                    .andStatisticsTimeEqualTo(current).andSysCompanyIdEqualTo(sysAccountPO.getSysCompanyId()).andSysBrandIdEqualTo(sysAccountPO.getBrandId());
+                    .andStatisticsTimeEqualTo(current).andSysCompanyIdEqualTo(sysAccountPO.getSysCompanyId()).andSysBrandIdEqualTo(sysAccountPO.getBrandId()).andValidEqualTo(true);
             List<MktActivityStatisticsPO> statisticsPOList = mktActivityStatisticsPOMapper.selectByExampleWithBLOBs(example);
             if (!statisticsPOList.isEmpty()) {
                 MktActivityStatisticsPO statisticsPO = statisticsPOList.get(0);
@@ -339,7 +339,7 @@ public class ActivityStatisticsServiceImpl implements ActivityStatisticsService{
             MktActivityStatisticsPOExample example = new MktActivityStatisticsPOExample();
             Date fifteenDate = StatisticsConstants.getFifteenDay(time);
             example.createCriteria().andMktActivityIdEqualTo(activityId).andStatisticsTypeEqualTo(StatisticsConstants.STATISTICS_TYPE)
-                    .andStatisticsTimeBetween(fifteenDate,current).andSysCompanyIdEqualTo(sysAccountPO.getSysCompanyId()).andSysBrandIdEqualTo(sysAccountPO.getBrandId());
+                    .andStatisticsTimeBetween(fifteenDate,current).andSysCompanyIdEqualTo(sysAccountPO.getSysCompanyId()).andSysBrandIdEqualTo(sysAccountPO.getBrandId()).andValidEqualTo(true);
             List<MktActivityStatisticsPO> statisticsPOS = mktActivityStatisticsPOMapper.selectByExampleWithBLOBs(example);
             if (!statisticsPOS.isEmpty()) {
                 Map map = new TreeMap();
