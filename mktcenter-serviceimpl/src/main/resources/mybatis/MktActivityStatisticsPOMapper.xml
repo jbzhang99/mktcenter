@@ -4,7 +4,7 @@
   <resultMap id="BaseResultMap" type="com.bizvane.mktcenterservice.models.po.MktActivityStatisticsPO">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2019-01-11 11:03:19.
+      This element was generated on 2019-01-25 10:27:46.
     -->
     <id column="mkt_activity_statistics_id" jdbcType="BIGINT" property="mktActivityStatisticsId" />
     <result column="sys_company_id" jdbcType="BIGINT" property="sysCompanyId" />
@@ -17,21 +17,26 @@
     <result column="take_coupon_count" jdbcType="BIGINT" property="takeCouponCount" />
     <result column="statistics_time" jdbcType="DATE" property="statisticsTime" />
     <result column="statistics_type" jdbcType="CHAR" property="statisticsType" />
-    <result column="other1" jdbcType="CHAR" property="other1" />
-    <result column="other2" jdbcType="CHAR" property="other2" />
-    <result column="other3" jdbcType="CHAR" property="other3" />
+    <result column="remark" jdbcType="CHAR" property="remark" />
+    <result column="create_user_id" jdbcType="BIGINT" property="createUserId" />
+    <result column="create_user_name" jdbcType="VARCHAR" property="createUserName" />
+    <result column="create_date" jdbcType="TIMESTAMP" property="createDate" />
+    <result column="modified_user_id" jdbcType="BIGINT" property="modifiedUserId" />
+    <result column="modified_user_name" jdbcType="VARCHAR" property="modifiedUserName" />
+    <result column="modified_date" jdbcType="TIMESTAMP" property="modifiedDate" />
+    <result column="valid" jdbcType="BIT" property="valid" />
   </resultMap>
   <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.bizvane.mktcenterservice.models.po.MktActivityStatisticsPO">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2019-01-11 11:03:19.
+      This element was generated on 2019-01-25 10:27:46.
     -->
     <result column="hour_json_data" jdbcType="LONGVARCHAR" property="hourJsonData" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2019-01-11 11:03:19.
+      This element was generated on 2019-01-25 10:27:46.
     -->
     <where>
       <foreach collection="oredCriteria" item="criteria" separator="or">
@@ -64,7 +69,7 @@
   <sql id="Update_By_Example_Where_Clause">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2019-01-11 11:03:19.
+      This element was generated on 2019-01-25 10:27:46.
     -->
     <where>
       <foreach collection="example.oredCriteria" item="criteria" separator="or">
@@ -97,23 +102,24 @@
   <sql id="Base_Column_List">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2019-01-11 11:03:19.
+      This element was generated on 2019-01-25 10:27:46.
     -->
     mkt_activity_statistics_id, sys_company_id, sys_brand_id, mkt_activity_id, visitors_count, 
     launch_members_count, help_members_count, register_members_count, take_coupon_count, 
-    statistics_time, statistics_type, other1, other2, other3
+    statistics_time, statistics_type, remark, create_user_id, create_user_name, create_date, 
+    modified_user_id, modified_user_name, modified_date, valid
   </sql>
   <sql id="Blob_Column_List">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2019-01-11 11:03:19.
+      This element was generated on 2019-01-25 10:27:46.
     -->
     hour_json_data
   </sql>
   <select id="selectByExampleWithBLOBs" parameterType="com.bizvane.mktcenterservice.models.po.MktActivityStatisticsPOExample" resultMap="ResultMapWithBLOBs">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2019-01-11 11:03:19.
+      This element was generated on 2019-01-25 10:27:46.
     -->
     select
     <if test="distinct">
@@ -133,7 +139,7 @@
   <select id="selectByExample" parameterType="com.bizvane.mktcenterservice.models.po.MktActivityStatisticsPOExample" resultMap="BaseResultMap">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2019-01-11 11:03:19.
+      This element was generated on 2019-01-25 10:27:46.
     -->
     select
     <if test="distinct">
@@ -151,7 +157,7 @@
   <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="ResultMapWithBLOBs">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2019-01-11 11:03:19.
+      This element was generated on 2019-01-25 10:27:46.
     -->
     select 
     <include refid="Base_Column_List" />
@@ -163,7 +169,7 @@
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2019-01-11 11:03:19.
+      This element was generated on 2019-01-25 10:27:46.
     -->
     delete from t_mkt_activity_statistics
     where mkt_activity_statistics_id = #{mktActivityStatisticsId,jdbcType=BIGINT}
@@ -171,7 +177,7 @@
   <delete id="deleteByExample" parameterType="com.bizvane.mktcenterservice.models.po.MktActivityStatisticsPOExample">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2019-01-11 11:03:19.
+      This element was generated on 2019-01-25 10:27:46.
     -->
     delete from t_mkt_activity_statistics
     <if test="_parameter != null">
@@ -181,7 +187,7 @@
   <insert id="insert" parameterType="com.bizvane.mktcenterservice.models.po.MktActivityStatisticsPO">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2019-01-11 11:03:19.
+      This element was generated on 2019-01-25 10:27:46.
     -->
     <selectKey keyProperty="mktActivityStatisticsId" order="AFTER" resultType="java.lang.Long">
       SELECT LAST_INSERT_ID()
@@ -189,18 +195,22 @@
     insert into t_mkt_activity_statistics (sys_company_id, sys_brand_id, mkt_activity_id, 
       visitors_count, launch_members_count, help_members_count, 
       register_members_count, take_coupon_count, statistics_time, 
-      statistics_type, other1, other2, 
-      other3, hour_json_data)
+      statistics_type, remark, create_user_id, 
+      create_user_name, create_date, modified_user_id, 
+      modified_user_name, modified_date, valid, 
+      hour_json_data)
     values (#{sysCompanyId,jdbcType=BIGINT}, #{sysBrandId,jdbcType=BIGINT}, #{mktActivityId,jdbcType=BIGINT}, 
       #{visitorsCount,jdbcType=INTEGER}, #{launchMembersCount,jdbcType=INTEGER}, #{helpMembersCount,jdbcType=INTEGER}, 
       #{registerMembersCount,jdbcType=INTEGER}, #{takeCouponCount,jdbcType=BIGINT}, #{statisticsTime,jdbcType=DATE}, 
-      #{statisticsType,jdbcType=CHAR}, #{other1,jdbcType=CHAR}, #{other2,jdbcType=CHAR}, 
-      #{other3,jdbcType=CHAR}, #{hourJsonData,jdbcType=LONGVARCHAR})
+      #{statisticsType,jdbcType=CHAR}, #{remark,jdbcType=CHAR}, #{createUserId,jdbcType=BIGINT}, 
+      #{createUserName,jdbcType=VARCHAR}, #{createDate,jdbcType=TIMESTAMP}, #{modifiedUserId,jdbcType=BIGINT}, 
+      #{modifiedUserName,jdbcType=VARCHAR}, #{modifiedDate,jdbcType=TIMESTAMP}, #{valid,jdbcType=BIT}, 
+      #{hourJsonData,jdbcType=LONGVARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.bizvane.mktcenterservice.models.po.MktActivityStatisticsPO">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2019-01-11 11:03:19.
+      This element was generated on 2019-01-25 10:27:46.
     -->
     <selectKey keyProperty="mktActivityStatisticsId" order="AFTER" resultType="java.lang.Long">
       SELECT LAST_INSERT_ID()
@@ -237,14 +247,29 @@
       <if test="statisticsType != null">
         statistics_type,
       </if>
-      <if test="other1 != null">
-        other1,
+      <if test="remark != null">
+        remark,
       </if>
-      <if test="other2 != null">
-        other2,
+      <if test="createUserId != null">
+        create_user_id,
       </if>
-      <if test="other3 != null">
-        other3,
+      <if test="createUserName != null">
+        create_user_name,
+      </if>
+      <if test="createDate != null">
+        create_date,
+      </if>
+      <if test="modifiedUserId != null">
+        modified_user_id,
+      </if>
+      <if test="modifiedUserName != null">
+        modified_user_name,
+      </if>
+      <if test="modifiedDate != null">
+        modified_date,
+      </if>
+      <if test="valid != null">
+        valid,
       </if>
       <if test="hourJsonData != null">
         hour_json_data,
@@ -281,14 +306,29 @@
       <if test="statisticsType != null">
         #{statisticsType,jdbcType=CHAR},
       </if>
-      <if test="other1 != null">
-        #{other1,jdbcType=CHAR},
+      <if test="remark != null">
+        #{remark,jdbcType=CHAR},
       </if>
-      <if test="other2 != null">
-        #{other2,jdbcType=CHAR},
+      <if test="createUserId != null">
+        #{createUserId,jdbcType=BIGINT},
       </if>
-      <if test="other3 != null">
-        #{other3,jdbcType=CHAR},
+      <if test="createUserName != null">
+        #{createUserName,jdbcType=VARCHAR},
+      </if>
+      <if test="createDate != null">
+        #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifiedUserId != null">
+        #{modifiedUserId,jdbcType=BIGINT},
+      </if>
+      <if test="modifiedUserName != null">
+        #{modifiedUserName,jdbcType=VARCHAR},
+      </if>
+      <if test="modifiedDate != null">
+        #{modifiedDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="valid != null">
+        #{valid,jdbcType=BIT},
       </if>
       <if test="hourJsonData != null">
         #{hourJsonData,jdbcType=LONGVARCHAR},
@@ -298,7 +338,7 @@
   <select id="countByExample" parameterType="com.bizvane.mktcenterservice.models.po.MktActivityStatisticsPOExample" resultType="java.lang.Long">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2019-01-11 11:03:19.
+      This element was generated on 2019-01-25 10:27:46.
     -->
     select count(*) from t_mkt_activity_statistics
     <if test="_parameter != null">
@@ -308,7 +348,7 @@
   <update id="updateByExampleSelective" parameterType="map">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2019-01-11 11:03:19.
+      This element was generated on 2019-01-25 10:27:46.
     -->
     update t_mkt_activity_statistics
     <set>
@@ -345,14 +385,29 @@
       <if test="record.statisticsType != null">
         statistics_type = #{record.statisticsType,jdbcType=CHAR},
       </if>
-      <if test="record.other1 != null">
-        other1 = #{record.other1,jdbcType=CHAR},
+      <if test="record.remark != null">
+        remark = #{record.remark,jdbcType=CHAR},
       </if>
-      <if test="record.other2 != null">
-        other2 = #{record.other2,jdbcType=CHAR},
+      <if test="record.createUserId != null">
+        create_user_id = #{record.createUserId,jdbcType=BIGINT},
       </if>
-      <if test="record.other3 != null">
-        other3 = #{record.other3,jdbcType=CHAR},
+      <if test="record.createUserName != null">
+        create_user_name = #{record.createUserName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.createDate != null">
+        create_date = #{record.createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.modifiedUserId != null">
+        modified_user_id = #{record.modifiedUserId,jdbcType=BIGINT},
+      </if>
+      <if test="record.modifiedUserName != null">
+        modified_user_name = #{record.modifiedUserName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.modifiedDate != null">
+        modified_date = #{record.modifiedDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.valid != null">
+        valid = #{record.valid,jdbcType=BIT},
       </if>
       <if test="record.hourJsonData != null">
         hour_json_data = #{record.hourJsonData,jdbcType=LONGVARCHAR},
@@ -365,7 +420,7 @@
   <update id="updateByExampleWithBLOBs" parameterType="map">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2019-01-11 11:03:19.
+      This element was generated on 2019-01-25 10:27:46.
     -->
     update t_mkt_activity_statistics
     set mkt_activity_statistics_id = #{record.mktActivityStatisticsId,jdbcType=BIGINT},
@@ -379,9 +434,14 @@
       take_coupon_count = #{record.takeCouponCount,jdbcType=BIGINT},
       statistics_time = #{record.statisticsTime,jdbcType=DATE},
       statistics_type = #{record.statisticsType,jdbcType=CHAR},
-      other1 = #{record.other1,jdbcType=CHAR},
-      other2 = #{record.other2,jdbcType=CHAR},
-      other3 = #{record.other3,jdbcType=CHAR},
+      remark = #{record.remark,jdbcType=CHAR},
+      create_user_id = #{record.createUserId,jdbcType=BIGINT},
+      create_user_name = #{record.createUserName,jdbcType=VARCHAR},
+      create_date = #{record.createDate,jdbcType=TIMESTAMP},
+      modified_user_id = #{record.modifiedUserId,jdbcType=BIGINT},
+      modified_user_name = #{record.modifiedUserName,jdbcType=VARCHAR},
+      modified_date = #{record.modifiedDate,jdbcType=TIMESTAMP},
+      valid = #{record.valid,jdbcType=BIT},
       hour_json_data = #{record.hourJsonData,jdbcType=LONGVARCHAR}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
@@ -390,7 +450,7 @@
   <update id="updateByExample" parameterType="map">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2019-01-11 11:03:19.
+      This element was generated on 2019-01-25 10:27:46.
     -->
     update t_mkt_activity_statistics
     set mkt_activity_statistics_id = #{record.mktActivityStatisticsId,jdbcType=BIGINT},
@@ -404,9 +464,14 @@
       take_coupon_count = #{record.takeCouponCount,jdbcType=BIGINT},
       statistics_time = #{record.statisticsTime,jdbcType=DATE},
       statistics_type = #{record.statisticsType,jdbcType=CHAR},
-      other1 = #{record.other1,jdbcType=CHAR},
-      other2 = #{record.other2,jdbcType=CHAR},
-      other3 = #{record.other3,jdbcType=CHAR}
+      remark = #{record.remark,jdbcType=CHAR},
+      create_user_id = #{record.createUserId,jdbcType=BIGINT},
+      create_user_name = #{record.createUserName,jdbcType=VARCHAR},
+      create_date = #{record.createDate,jdbcType=TIMESTAMP},
+      modified_user_id = #{record.modifiedUserId,jdbcType=BIGINT},
+      modified_user_name = #{record.modifiedUserName,jdbcType=VARCHAR},
+      modified_date = #{record.modifiedDate,jdbcType=TIMESTAMP},
+      valid = #{record.valid,jdbcType=BIT}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -414,7 +479,7 @@
   <update id="updateByPrimaryKeySelective" parameterType="com.bizvane.mktcenterservice.models.po.MktActivityStatisticsPO">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2019-01-11 11:03:19.
+      This element was generated on 2019-01-25 10:27:46.
     -->
     update t_mkt_activity_statistics
     <set>
@@ -448,14 +513,29 @@
       <if test="statisticsType != null">
         statistics_type = #{statisticsType,jdbcType=CHAR},
       </if>
-      <if test="other1 != null">
-        other1 = #{other1,jdbcType=CHAR},
+      <if test="remark != null">
+        remark = #{remark,jdbcType=CHAR},
       </if>
-      <if test="other2 != null">
-        other2 = #{other2,jdbcType=CHAR},
+      <if test="createUserId != null">
+        create_user_id = #{createUserId,jdbcType=BIGINT},
       </if>
-      <if test="other3 != null">
-        other3 = #{other3,jdbcType=CHAR},
+      <if test="createUserName != null">
+        create_user_name = #{createUserName,jdbcType=VARCHAR},
+      </if>
+      <if test="createDate != null">
+        create_date = #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifiedUserId != null">
+        modified_user_id = #{modifiedUserId,jdbcType=BIGINT},
+      </if>
+      <if test="modifiedUserName != null">
+        modified_user_name = #{modifiedUserName,jdbcType=VARCHAR},
+      </if>
+      <if test="modifiedDate != null">
+        modified_date = #{modifiedDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="valid != null">
+        valid = #{valid,jdbcType=BIT},
       </if>
       <if test="hourJsonData != null">
         hour_json_data = #{hourJsonData,jdbcType=LONGVARCHAR},
@@ -466,7 +546,7 @@
   <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.bizvane.mktcenterservice.models.po.MktActivityStatisticsPO">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2019-01-11 11:03:19.
+      This element was generated on 2019-01-25 10:27:46.
     -->
     update t_mkt_activity_statistics
     set sys_company_id = #{sysCompanyId,jdbcType=BIGINT},
@@ -479,16 +559,21 @@
       take_coupon_count = #{takeCouponCount,jdbcType=BIGINT},
       statistics_time = #{statisticsTime,jdbcType=DATE},
       statistics_type = #{statisticsType,jdbcType=CHAR},
-      other1 = #{other1,jdbcType=CHAR},
-      other2 = #{other2,jdbcType=CHAR},
-      other3 = #{other3,jdbcType=CHAR},
+      remark = #{remark,jdbcType=CHAR},
+      create_user_id = #{createUserId,jdbcType=BIGINT},
+      create_user_name = #{createUserName,jdbcType=VARCHAR},
+      create_date = #{createDate,jdbcType=TIMESTAMP},
+      modified_user_id = #{modifiedUserId,jdbcType=BIGINT},
+      modified_user_name = #{modifiedUserName,jdbcType=VARCHAR},
+      modified_date = #{modifiedDate,jdbcType=TIMESTAMP},
+      valid = #{valid,jdbcType=BIT},
       hour_json_data = #{hourJsonData,jdbcType=LONGVARCHAR}
     where mkt_activity_statistics_id = #{mktActivityStatisticsId,jdbcType=BIGINT}
   </update>
   <update id="updateByPrimaryKey" parameterType="com.bizvane.mktcenterservice.models.po.MktActivityStatisticsPO">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2019-01-11 11:03:19.
+      This element was generated on 2019-01-25 10:27:46.
     -->
     update t_mkt_activity_statistics
     set sys_company_id = #{sysCompanyId,jdbcType=BIGINT},
@@ -501,9 +586,14 @@
       take_coupon_count = #{takeCouponCount,jdbcType=BIGINT},
       statistics_time = #{statisticsTime,jdbcType=DATE},
       statistics_type = #{statisticsType,jdbcType=CHAR},
-      other1 = #{other1,jdbcType=CHAR},
-      other2 = #{other2,jdbcType=CHAR},
-      other3 = #{other3,jdbcType=CHAR}
+      remark = #{remark,jdbcType=CHAR},
+      create_user_id = #{createUserId,jdbcType=BIGINT},
+      create_user_name = #{createUserName,jdbcType=VARCHAR},
+      create_date = #{createDate,jdbcType=TIMESTAMP},
+      modified_user_id = #{modifiedUserId,jdbcType=BIGINT},
+      modified_user_name = #{modifiedUserName,jdbcType=VARCHAR},
+      modified_date = #{modifiedDate,jdbcType=TIMESTAMP},
+      valid = #{valid,jdbcType=BIT}
     where mkt_activity_statistics_id = #{mktActivityStatisticsId,jdbcType=BIGINT}
   </update>
 
