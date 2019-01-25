@@ -157,6 +157,7 @@ public class ActivityRedPacketServiceImpl implements ActivityRedPacketService {
         redPacketSumPO.setActivityCode(activityPO.getActivityCode());
         redPacketSumPO.setActivityName(activityPO.getActivityName());
         redPacketSumPO.setActivityTime(TimeUtils.getDataNum(activityPO.getStartTime(), activityPO.getEndTime()));
+        redPacketSumPO.setStartTime(activityPO.getStartTime());
         redPacketSumPO.setEndTime(activityPO.getEndTime());
         redPacketSumPO.setSysBrandId(sysAccountPo.getBrandId());
         redPacketSumPO.setCreateUserId(sysAccountPo.getSysAccountId());

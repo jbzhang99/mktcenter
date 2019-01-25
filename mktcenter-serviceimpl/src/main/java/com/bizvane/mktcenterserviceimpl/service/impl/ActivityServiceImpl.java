@@ -191,9 +191,9 @@ public class ActivityServiceImpl implements ActivityService {
                 lists.add(activity);
 
             }
+            lists = activityList.stream().sorted(Comparator.comparing(ActivityVO::getStartTime).reversed()).collect(Collectors.toList());
         }
-        List<ActivityVO> collect = activityList.stream().sorted(Comparator.comparing(ActivityVO::getStartTime).reversed()).collect(Collectors.toList());
-        responseData.setData(collect);
+        responseData.setData(lists);
         responseData.setCode(SysResponseEnum.SUCCESS.getCode());
         responseData.setMessage(SysResponseEnum.SUCCESS.getMessage());
         return responseData;
