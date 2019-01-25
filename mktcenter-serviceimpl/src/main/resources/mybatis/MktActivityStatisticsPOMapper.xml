@@ -608,14 +608,15 @@
       <include refid="Base_Column_List" />
       from t_mkt_activity_statistics
       <where>
+          valid = 1
         <if test="activityId != null and activityId != ''">
-          mkt_activity_id = #{activityId}
+            AND mkt_activity_id = #{activityId}
         </if>
         <if test="statisticsTime != null and statisticsTime != ''">
-          and DATE_FORMAT(statistics_time,'%Y-%m-%d') = #{statisticsTime}
+            and DATE_FORMAT(statistics_time,'%Y-%m-%d') = #{statisticsTime}
         </if>
         <if test="statisticsType != null and statisticsType != ''">
-          and statistics_type = #{statisticsType}
+            and statistics_type = #{statisticsType}
         </if>
         <if test="sysCompanyId != null and sysCompanyId != ''">
             and sys_company_id = #{sysCompanyId}
