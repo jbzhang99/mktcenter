@@ -511,10 +511,17 @@ public class ActivityRedPacketServiceImpl implements ActivityRedPacketService {
     @Override
     public ResponseData<Integer> andActivityRedPacketSendCouponRecord(ActivityRedPacketVO vo) {
         ResponseData<Integer> responseData = new ResponseData<>();
-        vo.setType(3);
         ActivityRedPacketBO bo = mktActivityPOMapper.selectActivityRedPacketDetail(vo);
         log.info("andActivityRedPacketSendCouponRecord 添加记录 param:" + JSON.toJSONString(vo) + "--活动详情-" + JSON.toJSONString(bo));
-
+        MktActivityRedPacketRecordPOExample recordPOExample = new MktActivityRedPacketRecordPOExample();
+        recordPOExample.createCriteria().andMemberCodeEqualTo(vo.getMemberCode()).andMktActivityIdEqualTo(vo.getMktActivityId()).andTypeEqualTo(1).andValidEqualTo(Boolean.TRUE);
+        List<MktActivityRedPacketRecordPO> mktActivityRedPacketRecordPOS = mktActivityRedPacketRecordPOMapper.selectByExample(recordPOExample);
+        if (CollectionUtils.isEmpty(mktActivityRedPacketRecordPOS)){
+            vo.setType(1);
+            vo.setInitiatorNum(1);
+            this.doStatisticsRecored(vo, bo, null, null);
+        }
+        vo.setType(3);
         //查询助力人数
         Integer zhuliredPacketCount = mktActivityRedPacketRecordPOMapper.getRedPacketCount(3, null, vo.getMemberCode(), vo.getMktActivityId());
         vo.setGetCouponNum(1);
@@ -543,6 +550,7 @@ public class ActivityRedPacketServiceImpl implements ActivityRedPacketService {
         mktActivityRedPacketSumPOMapper.updateUpdateCount(vo);
 
         Integer type = vo.getType();
+        //统计的4是领券
         activityStatisticsService.statisticsData(bo.getActivityPO().getMktActivityId(), type == 3 ? 4 : type, vo.getMemberCode());
     }
 
