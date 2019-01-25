@@ -4,7 +4,7 @@
   <resultMap id="BaseResultMap" type="com.bizvane.mktcenterservice.models.po.MktActivityStatisticsPO">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2019-01-25 10:27:46.
+      This element was generated on 2019-01-25 11:55:25.
     -->
     <id column="mkt_activity_statistics_id" jdbcType="BIGINT" property="mktActivityStatisticsId" />
     <result column="sys_company_id" jdbcType="BIGINT" property="sysCompanyId" />
@@ -15,6 +15,11 @@
     <result column="help_members_count" jdbcType="INTEGER" property="helpMembersCount" />
     <result column="register_members_count" jdbcType="INTEGER" property="registerMembersCount" />
     <result column="take_coupon_count" jdbcType="BIGINT" property="takeCouponCount" />
+    <result column="total_visitors_count" jdbcType="BIGINT" property="totalVisitorsCount" />
+    <result column="total_launch_members_count" jdbcType="BIGINT" property="totalLaunchMembersCount" />
+    <result column="total_help_members_count" jdbcType="BIGINT" property="totalHelpMembersCount" />
+    <result column="total_register_members_count" jdbcType="BIGINT" property="totalRegisterMembersCount" />
+    <result column="total_take_coupon_count" jdbcType="BIGINT" property="totalTakeCouponCount" />
     <result column="statistics_time" jdbcType="DATE" property="statisticsTime" />
     <result column="statistics_type" jdbcType="CHAR" property="statisticsType" />
     <result column="remark" jdbcType="CHAR" property="remark" />
@@ -29,14 +34,14 @@
   <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.bizvane.mktcenterservice.models.po.MktActivityStatisticsPO">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2019-01-25 10:27:46.
+      This element was generated on 2019-01-25 11:55:25.
     -->
     <result column="hour_json_data" jdbcType="LONGVARCHAR" property="hourJsonData" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2019-01-25 10:27:46.
+      This element was generated on 2019-01-25 11:55:25.
     -->
     <where>
       <foreach collection="oredCriteria" item="criteria" separator="or">
@@ -69,7 +74,7 @@
   <sql id="Update_By_Example_Where_Clause">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2019-01-25 10:27:46.
+      This element was generated on 2019-01-25 11:55:25.
     -->
     <where>
       <foreach collection="example.oredCriteria" item="criteria" separator="or">
@@ -102,24 +107,26 @@
   <sql id="Base_Column_List">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2019-01-25 10:27:46.
+      This element was generated on 2019-01-25 11:55:25.
     -->
     mkt_activity_statistics_id, sys_company_id, sys_brand_id, mkt_activity_id, visitors_count, 
     launch_members_count, help_members_count, register_members_count, take_coupon_count, 
-    statistics_time, statistics_type, remark, create_user_id, create_user_name, create_date, 
-    modified_user_id, modified_user_name, modified_date, valid
+    total_visitors_count, total_launch_members_count, total_help_members_count, total_register_members_count, 
+    total_take_coupon_count, statistics_time, statistics_type, remark, create_user_id, 
+    create_user_name, create_date, modified_user_id, modified_user_name, modified_date, 
+    valid
   </sql>
   <sql id="Blob_Column_List">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2019-01-25 10:27:46.
+      This element was generated on 2019-01-25 11:55:25.
     -->
     hour_json_data
   </sql>
   <select id="selectByExampleWithBLOBs" parameterType="com.bizvane.mktcenterservice.models.po.MktActivityStatisticsPOExample" resultMap="ResultMapWithBLOBs">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2019-01-25 10:27:46.
+      This element was generated on 2019-01-25 11:55:25.
     -->
     select
     <if test="distinct">
@@ -139,7 +146,7 @@
   <select id="selectByExample" parameterType="com.bizvane.mktcenterservice.models.po.MktActivityStatisticsPOExample" resultMap="BaseResultMap">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2019-01-25 10:27:46.
+      This element was generated on 2019-01-25 11:55:25.
     -->
     select
     <if test="distinct">
@@ -157,7 +164,7 @@
   <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="ResultMapWithBLOBs">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2019-01-25 10:27:46.
+      This element was generated on 2019-01-25 11:55:25.
     -->
     select 
     <include refid="Base_Column_List" />
@@ -169,7 +176,7 @@
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2019-01-25 10:27:46.
+      This element was generated on 2019-01-25 11:55:25.
     -->
     delete from t_mkt_activity_statistics
     where mkt_activity_statistics_id = #{mktActivityStatisticsId,jdbcType=BIGINT}
@@ -177,7 +184,7 @@
   <delete id="deleteByExample" parameterType="com.bizvane.mktcenterservice.models.po.MktActivityStatisticsPOExample">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2019-01-25 10:27:46.
+      This element was generated on 2019-01-25 11:55:25.
     -->
     delete from t_mkt_activity_statistics
     <if test="_parameter != null">
@@ -187,30 +194,34 @@
   <insert id="insert" parameterType="com.bizvane.mktcenterservice.models.po.MktActivityStatisticsPO">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2019-01-25 10:27:46.
+      This element was generated on 2019-01-25 11:55:25.
     -->
     <selectKey keyProperty="mktActivityStatisticsId" order="AFTER" resultType="java.lang.Long">
       SELECT LAST_INSERT_ID()
     </selectKey>
     insert into t_mkt_activity_statistics (sys_company_id, sys_brand_id, mkt_activity_id, 
       visitors_count, launch_members_count, help_members_count, 
-      register_members_count, take_coupon_count, statistics_time, 
-      statistics_type, remark, create_user_id, 
-      create_user_name, create_date, modified_user_id, 
-      modified_user_name, modified_date, valid, 
-      hour_json_data)
+      register_members_count, take_coupon_count, total_visitors_count, 
+      total_launch_members_count, total_help_members_count, 
+      total_register_members_count, total_take_coupon_count, 
+      statistics_time, statistics_type, remark, 
+      create_user_id, create_user_name, create_date, 
+      modified_user_id, modified_user_name, modified_date, 
+      valid, hour_json_data)
     values (#{sysCompanyId,jdbcType=BIGINT}, #{sysBrandId,jdbcType=BIGINT}, #{mktActivityId,jdbcType=BIGINT}, 
       #{visitorsCount,jdbcType=INTEGER}, #{launchMembersCount,jdbcType=INTEGER}, #{helpMembersCount,jdbcType=INTEGER}, 
-      #{registerMembersCount,jdbcType=INTEGER}, #{takeCouponCount,jdbcType=BIGINT}, #{statisticsTime,jdbcType=DATE}, 
-      #{statisticsType,jdbcType=CHAR}, #{remark,jdbcType=CHAR}, #{createUserId,jdbcType=BIGINT}, 
-      #{createUserName,jdbcType=VARCHAR}, #{createDate,jdbcType=TIMESTAMP}, #{modifiedUserId,jdbcType=BIGINT}, 
-      #{modifiedUserName,jdbcType=VARCHAR}, #{modifiedDate,jdbcType=TIMESTAMP}, #{valid,jdbcType=BIT}, 
-      #{hourJsonData,jdbcType=LONGVARCHAR})
+      #{registerMembersCount,jdbcType=INTEGER}, #{takeCouponCount,jdbcType=BIGINT}, #{totalVisitorsCount,jdbcType=BIGINT}, 
+      #{totalLaunchMembersCount,jdbcType=BIGINT}, #{totalHelpMembersCount,jdbcType=BIGINT}, 
+      #{totalRegisterMembersCount,jdbcType=BIGINT}, #{totalTakeCouponCount,jdbcType=BIGINT}, 
+      #{statisticsTime,jdbcType=DATE}, #{statisticsType,jdbcType=CHAR}, #{remark,jdbcType=CHAR}, 
+      #{createUserId,jdbcType=BIGINT}, #{createUserName,jdbcType=VARCHAR}, #{createDate,jdbcType=TIMESTAMP}, 
+      #{modifiedUserId,jdbcType=BIGINT}, #{modifiedUserName,jdbcType=VARCHAR}, #{modifiedDate,jdbcType=TIMESTAMP}, 
+      #{valid,jdbcType=BIT}, #{hourJsonData,jdbcType=LONGVARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.bizvane.mktcenterservice.models.po.MktActivityStatisticsPO">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2019-01-25 10:27:46.
+      This element was generated on 2019-01-25 11:55:25.
     -->
     <selectKey keyProperty="mktActivityStatisticsId" order="AFTER" resultType="java.lang.Long">
       SELECT LAST_INSERT_ID()
@@ -240,6 +251,21 @@
       </if>
       <if test="takeCouponCount != null">
         take_coupon_count,
+      </if>
+      <if test="totalVisitorsCount != null">
+        total_visitors_count,
+      </if>
+      <if test="totalLaunchMembersCount != null">
+        total_launch_members_count,
+      </if>
+      <if test="totalHelpMembersCount != null">
+        total_help_members_count,
+      </if>
+      <if test="totalRegisterMembersCount != null">
+        total_register_members_count,
+      </if>
+      <if test="totalTakeCouponCount != null">
+        total_take_coupon_count,
       </if>
       <if test="statisticsTime != null">
         statistics_time,
@@ -300,6 +326,21 @@
       <if test="takeCouponCount != null">
         #{takeCouponCount,jdbcType=BIGINT},
       </if>
+      <if test="totalVisitorsCount != null">
+        #{totalVisitorsCount,jdbcType=BIGINT},
+      </if>
+      <if test="totalLaunchMembersCount != null">
+        #{totalLaunchMembersCount,jdbcType=BIGINT},
+      </if>
+      <if test="totalHelpMembersCount != null">
+        #{totalHelpMembersCount,jdbcType=BIGINT},
+      </if>
+      <if test="totalRegisterMembersCount != null">
+        #{totalRegisterMembersCount,jdbcType=BIGINT},
+      </if>
+      <if test="totalTakeCouponCount != null">
+        #{totalTakeCouponCount,jdbcType=BIGINT},
+      </if>
       <if test="statisticsTime != null">
         #{statisticsTime,jdbcType=DATE},
       </if>
@@ -338,7 +379,7 @@
   <select id="countByExample" parameterType="com.bizvane.mktcenterservice.models.po.MktActivityStatisticsPOExample" resultType="java.lang.Long">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2019-01-25 10:27:46.
+      This element was generated on 2019-01-25 11:55:25.
     -->
     select count(*) from t_mkt_activity_statistics
     <if test="_parameter != null">
@@ -348,7 +389,7 @@
   <update id="updateByExampleSelective" parameterType="map">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2019-01-25 10:27:46.
+      This element was generated on 2019-01-25 11:55:25.
     -->
     update t_mkt_activity_statistics
     <set>
@@ -378,6 +419,21 @@
       </if>
       <if test="record.takeCouponCount != null">
         take_coupon_count = #{record.takeCouponCount,jdbcType=BIGINT},
+      </if>
+      <if test="record.totalVisitorsCount != null">
+        total_visitors_count = #{record.totalVisitorsCount,jdbcType=BIGINT},
+      </if>
+      <if test="record.totalLaunchMembersCount != null">
+        total_launch_members_count = #{record.totalLaunchMembersCount,jdbcType=BIGINT},
+      </if>
+      <if test="record.totalHelpMembersCount != null">
+        total_help_members_count = #{record.totalHelpMembersCount,jdbcType=BIGINT},
+      </if>
+      <if test="record.totalRegisterMembersCount != null">
+        total_register_members_count = #{record.totalRegisterMembersCount,jdbcType=BIGINT},
+      </if>
+      <if test="record.totalTakeCouponCount != null">
+        total_take_coupon_count = #{record.totalTakeCouponCount,jdbcType=BIGINT},
       </if>
       <if test="record.statisticsTime != null">
         statistics_time = #{record.statisticsTime,jdbcType=DATE},
@@ -420,7 +476,7 @@
   <update id="updateByExampleWithBLOBs" parameterType="map">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2019-01-25 10:27:46.
+      This element was generated on 2019-01-25 11:55:25.
     -->
     update t_mkt_activity_statistics
     set mkt_activity_statistics_id = #{record.mktActivityStatisticsId,jdbcType=BIGINT},
@@ -432,6 +488,11 @@
       help_members_count = #{record.helpMembersCount,jdbcType=INTEGER},
       register_members_count = #{record.registerMembersCount,jdbcType=INTEGER},
       take_coupon_count = #{record.takeCouponCount,jdbcType=BIGINT},
+      total_visitors_count = #{record.totalVisitorsCount,jdbcType=BIGINT},
+      total_launch_members_count = #{record.totalLaunchMembersCount,jdbcType=BIGINT},
+      total_help_members_count = #{record.totalHelpMembersCount,jdbcType=BIGINT},
+      total_register_members_count = #{record.totalRegisterMembersCount,jdbcType=BIGINT},
+      total_take_coupon_count = #{record.totalTakeCouponCount,jdbcType=BIGINT},
       statistics_time = #{record.statisticsTime,jdbcType=DATE},
       statistics_type = #{record.statisticsType,jdbcType=CHAR},
       remark = #{record.remark,jdbcType=CHAR},
@@ -450,7 +511,7 @@
   <update id="updateByExample" parameterType="map">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2019-01-25 10:27:46.
+      This element was generated on 2019-01-25 11:55:25.
     -->
     update t_mkt_activity_statistics
     set mkt_activity_statistics_id = #{record.mktActivityStatisticsId,jdbcType=BIGINT},
@@ -462,6 +523,11 @@
       help_members_count = #{record.helpMembersCount,jdbcType=INTEGER},
       register_members_count = #{record.registerMembersCount,jdbcType=INTEGER},
       take_coupon_count = #{record.takeCouponCount,jdbcType=BIGINT},
+      total_visitors_count = #{record.totalVisitorsCount,jdbcType=BIGINT},
+      total_launch_members_count = #{record.totalLaunchMembersCount,jdbcType=BIGINT},
+      total_help_members_count = #{record.totalHelpMembersCount,jdbcType=BIGINT},
+      total_register_members_count = #{record.totalRegisterMembersCount,jdbcType=BIGINT},
+      total_take_coupon_count = #{record.totalTakeCouponCount,jdbcType=BIGINT},
       statistics_time = #{record.statisticsTime,jdbcType=DATE},
       statistics_type = #{record.statisticsType,jdbcType=CHAR},
       remark = #{record.remark,jdbcType=CHAR},
@@ -479,7 +545,7 @@
   <update id="updateByPrimaryKeySelective" parameterType="com.bizvane.mktcenterservice.models.po.MktActivityStatisticsPO">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2019-01-25 10:27:46.
+      This element was generated on 2019-01-25 11:55:25.
     -->
     update t_mkt_activity_statistics
     <set>
@@ -506,6 +572,21 @@
       </if>
       <if test="takeCouponCount != null">
         take_coupon_count = #{takeCouponCount,jdbcType=BIGINT},
+      </if>
+      <if test="totalVisitorsCount != null">
+        total_visitors_count = #{totalVisitorsCount,jdbcType=BIGINT},
+      </if>
+      <if test="totalLaunchMembersCount != null">
+        total_launch_members_count = #{totalLaunchMembersCount,jdbcType=BIGINT},
+      </if>
+      <if test="totalHelpMembersCount != null">
+        total_help_members_count = #{totalHelpMembersCount,jdbcType=BIGINT},
+      </if>
+      <if test="totalRegisterMembersCount != null">
+        total_register_members_count = #{totalRegisterMembersCount,jdbcType=BIGINT},
+      </if>
+      <if test="totalTakeCouponCount != null">
+        total_take_coupon_count = #{totalTakeCouponCount,jdbcType=BIGINT},
       </if>
       <if test="statisticsTime != null">
         statistics_time = #{statisticsTime,jdbcType=DATE},
@@ -546,7 +627,7 @@
   <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.bizvane.mktcenterservice.models.po.MktActivityStatisticsPO">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2019-01-25 10:27:46.
+      This element was generated on 2019-01-25 11:55:25.
     -->
     update t_mkt_activity_statistics
     set sys_company_id = #{sysCompanyId,jdbcType=BIGINT},
@@ -557,6 +638,11 @@
       help_members_count = #{helpMembersCount,jdbcType=INTEGER},
       register_members_count = #{registerMembersCount,jdbcType=INTEGER},
       take_coupon_count = #{takeCouponCount,jdbcType=BIGINT},
+      total_visitors_count = #{totalVisitorsCount,jdbcType=BIGINT},
+      total_launch_members_count = #{totalLaunchMembersCount,jdbcType=BIGINT},
+      total_help_members_count = #{totalHelpMembersCount,jdbcType=BIGINT},
+      total_register_members_count = #{totalRegisterMembersCount,jdbcType=BIGINT},
+      total_take_coupon_count = #{totalTakeCouponCount,jdbcType=BIGINT},
       statistics_time = #{statisticsTime,jdbcType=DATE},
       statistics_type = #{statisticsType,jdbcType=CHAR},
       remark = #{remark,jdbcType=CHAR},
@@ -573,7 +659,7 @@
   <update id="updateByPrimaryKey" parameterType="com.bizvane.mktcenterservice.models.po.MktActivityStatisticsPO">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2019-01-25 10:27:46.
+      This element was generated on 2019-01-25 11:55:25.
     -->
     update t_mkt_activity_statistics
     set sys_company_id = #{sysCompanyId,jdbcType=BIGINT},
@@ -584,6 +670,11 @@
       help_members_count = #{helpMembersCount,jdbcType=INTEGER},
       register_members_count = #{registerMembersCount,jdbcType=INTEGER},
       take_coupon_count = #{takeCouponCount,jdbcType=BIGINT},
+      total_visitors_count = #{totalVisitorsCount,jdbcType=BIGINT},
+      total_launch_members_count = #{totalLaunchMembersCount,jdbcType=BIGINT},
+      total_help_members_count = #{totalHelpMembersCount,jdbcType=BIGINT},
+      total_register_members_count = #{totalRegisterMembersCount,jdbcType=BIGINT},
+      total_take_coupon_count = #{totalTakeCouponCount,jdbcType=BIGINT},
       statistics_time = #{statisticsTime,jdbcType=DATE},
       statistics_type = #{statisticsType,jdbcType=CHAR},
       remark = #{remark,jdbcType=CHAR},

@@ -9,28 +9,28 @@ import java.util.List;
 public class MktActivityStatisticsPOExample implements Serializable {
     /**
 	 * 只读. 
-	 * @mbg.generated  2019-01-25 10:27:46
+	 * @mbg.generated  2019-01-25 11:55:25
 	 */
 	protected String orderByClause;
 	/**
 	 * 只读. 
-	 * @mbg.generated  2019-01-25 10:27:46
+	 * @mbg.generated  2019-01-25 11:55:25
 	 */
 	protected boolean distinct;
 	/**
 	 * 只读. 
-	 * @mbg.generated  2019-01-25 10:27:46
+	 * @mbg.generated  2019-01-25 11:55:25
 	 */
 	protected List<Criteria> oredCriteria;
 	/**
 	 * 只读. 
-	 * @mbg.generated  2019-01-25 10:27:46
+	 * @mbg.generated  2019-01-25 11:55:25
 	 */
 	private static final long serialVersionUID = 1L;
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2019-01-25 10:27:46
+	 * @mbg.generated  2019-01-25 11:55:25
 	 */
 	public MktActivityStatisticsPOExample() {
 		oredCriteria = new ArrayList<Criteria>();
@@ -38,7 +38,7 @@ public class MktActivityStatisticsPOExample implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2019-01-25 10:27:46
+	 * @mbg.generated  2019-01-25 11:55:25
 	 */
 	public void setOrderByClause(String orderByClause) {
 		this.orderByClause = orderByClause;
@@ -46,7 +46,7 @@ public class MktActivityStatisticsPOExample implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2019-01-25 10:27:46
+	 * @mbg.generated  2019-01-25 11:55:25
 	 */
 	public String getOrderByClause() {
 		return orderByClause;
@@ -54,7 +54,7 @@ public class MktActivityStatisticsPOExample implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2019-01-25 10:27:46
+	 * @mbg.generated  2019-01-25 11:55:25
 	 */
 	public void setDistinct(boolean distinct) {
 		this.distinct = distinct;
@@ -62,7 +62,7 @@ public class MktActivityStatisticsPOExample implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2019-01-25 10:27:46
+	 * @mbg.generated  2019-01-25 11:55:25
 	 */
 	public boolean isDistinct() {
 		return distinct;
@@ -70,7 +70,7 @@ public class MktActivityStatisticsPOExample implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2019-01-25 10:27:46
+	 * @mbg.generated  2019-01-25 11:55:25
 	 */
 	public List<Criteria> getOredCriteria() {
 		return oredCriteria;
@@ -78,7 +78,7 @@ public class MktActivityStatisticsPOExample implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2019-01-25 10:27:46
+	 * @mbg.generated  2019-01-25 11:55:25
 	 */
 	public void or(Criteria criteria) {
 		oredCriteria.add(criteria);
@@ -86,7 +86,7 @@ public class MktActivityStatisticsPOExample implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2019-01-25 10:27:46
+	 * @mbg.generated  2019-01-25 11:55:25
 	 */
 	public Criteria or() {
 		Criteria criteria = createCriteriaInternal();
@@ -96,7 +96,7 @@ public class MktActivityStatisticsPOExample implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2019-01-25 10:27:46
+	 * @mbg.generated  2019-01-25 11:55:25
 	 */
 	public Criteria createCriteria() {
 		Criteria criteria = createCriteriaInternal();
@@ -108,7 +108,7 @@ public class MktActivityStatisticsPOExample implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2019-01-25 10:27:46
+	 * @mbg.generated  2019-01-25 11:55:25
 	 */
 	protected Criteria createCriteriaInternal() {
 		Criteria criteria = new Criteria();
@@ -117,7 +117,7 @@ public class MktActivityStatisticsPOExample implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2019-01-25 10:27:46
+	 * @mbg.generated  2019-01-25 11:55:25
 	 */
 	public void clear() {
 		oredCriteria.clear();
@@ -127,7 +127,7 @@ public class MktActivityStatisticsPOExample implements Serializable {
 
 	/**
 	 * 只读. t_mkt_activity_statistics
-	 * @mbg.generated  2019-01-25 10:27:46
+	 * @mbg.generated  2019-01-25 11:55:25
 	 */
 	protected abstract static class GeneratedCriteria implements Serializable {
 		protected List<Criterion> criteria;
@@ -733,6 +733,306 @@ public class MktActivityStatisticsPOExample implements Serializable {
 
 		public Criteria andTakeCouponCountNotBetween(Long value1, Long value2) {
 			addCriterion("take_coupon_count not between", value1, value2, "takeCouponCount");
+			return (Criteria) this;
+		}
+
+		public Criteria andTotalVisitorsCountIsNull() {
+			addCriterion("total_visitors_count is null");
+			return (Criteria) this;
+		}
+
+		public Criteria andTotalVisitorsCountIsNotNull() {
+			addCriterion("total_visitors_count is not null");
+			return (Criteria) this;
+		}
+
+		public Criteria andTotalVisitorsCountEqualTo(Long value) {
+			addCriterion("total_visitors_count =", value, "totalVisitorsCount");
+			return (Criteria) this;
+		}
+
+		public Criteria andTotalVisitorsCountNotEqualTo(Long value) {
+			addCriterion("total_visitors_count <>", value, "totalVisitorsCount");
+			return (Criteria) this;
+		}
+
+		public Criteria andTotalVisitorsCountGreaterThan(Long value) {
+			addCriterion("total_visitors_count >", value, "totalVisitorsCount");
+			return (Criteria) this;
+		}
+
+		public Criteria andTotalVisitorsCountGreaterThanOrEqualTo(Long value) {
+			addCriterion("total_visitors_count >=", value, "totalVisitorsCount");
+			return (Criteria) this;
+		}
+
+		public Criteria andTotalVisitorsCountLessThan(Long value) {
+			addCriterion("total_visitors_count <", value, "totalVisitorsCount");
+			return (Criteria) this;
+		}
+
+		public Criteria andTotalVisitorsCountLessThanOrEqualTo(Long value) {
+			addCriterion("total_visitors_count <=", value, "totalVisitorsCount");
+			return (Criteria) this;
+		}
+
+		public Criteria andTotalVisitorsCountIn(List<Long> values) {
+			addCriterion("total_visitors_count in", values, "totalVisitorsCount");
+			return (Criteria) this;
+		}
+
+		public Criteria andTotalVisitorsCountNotIn(List<Long> values) {
+			addCriterion("total_visitors_count not in", values, "totalVisitorsCount");
+			return (Criteria) this;
+		}
+
+		public Criteria andTotalVisitorsCountBetween(Long value1, Long value2) {
+			addCriterion("total_visitors_count between", value1, value2, "totalVisitorsCount");
+			return (Criteria) this;
+		}
+
+		public Criteria andTotalVisitorsCountNotBetween(Long value1, Long value2) {
+			addCriterion("total_visitors_count not between", value1, value2, "totalVisitorsCount");
+			return (Criteria) this;
+		}
+
+		public Criteria andTotalLaunchMembersCountIsNull() {
+			addCriterion("total_launch_members_count is null");
+			return (Criteria) this;
+		}
+
+		public Criteria andTotalLaunchMembersCountIsNotNull() {
+			addCriterion("total_launch_members_count is not null");
+			return (Criteria) this;
+		}
+
+		public Criteria andTotalLaunchMembersCountEqualTo(Long value) {
+			addCriterion("total_launch_members_count =", value, "totalLaunchMembersCount");
+			return (Criteria) this;
+		}
+
+		public Criteria andTotalLaunchMembersCountNotEqualTo(Long value) {
+			addCriterion("total_launch_members_count <>", value, "totalLaunchMembersCount");
+			return (Criteria) this;
+		}
+
+		public Criteria andTotalLaunchMembersCountGreaterThan(Long value) {
+			addCriterion("total_launch_members_count >", value, "totalLaunchMembersCount");
+			return (Criteria) this;
+		}
+
+		public Criteria andTotalLaunchMembersCountGreaterThanOrEqualTo(Long value) {
+			addCriterion("total_launch_members_count >=", value, "totalLaunchMembersCount");
+			return (Criteria) this;
+		}
+
+		public Criteria andTotalLaunchMembersCountLessThan(Long value) {
+			addCriterion("total_launch_members_count <", value, "totalLaunchMembersCount");
+			return (Criteria) this;
+		}
+
+		public Criteria andTotalLaunchMembersCountLessThanOrEqualTo(Long value) {
+			addCriterion("total_launch_members_count <=", value, "totalLaunchMembersCount");
+			return (Criteria) this;
+		}
+
+		public Criteria andTotalLaunchMembersCountIn(List<Long> values) {
+			addCriterion("total_launch_members_count in", values, "totalLaunchMembersCount");
+			return (Criteria) this;
+		}
+
+		public Criteria andTotalLaunchMembersCountNotIn(List<Long> values) {
+			addCriterion("total_launch_members_count not in", values, "totalLaunchMembersCount");
+			return (Criteria) this;
+		}
+
+		public Criteria andTotalLaunchMembersCountBetween(Long value1, Long value2) {
+			addCriterion("total_launch_members_count between", value1, value2, "totalLaunchMembersCount");
+			return (Criteria) this;
+		}
+
+		public Criteria andTotalLaunchMembersCountNotBetween(Long value1, Long value2) {
+			addCriterion("total_launch_members_count not between", value1, value2, "totalLaunchMembersCount");
+			return (Criteria) this;
+		}
+
+		public Criteria andTotalHelpMembersCountIsNull() {
+			addCriterion("total_help_members_count is null");
+			return (Criteria) this;
+		}
+
+		public Criteria andTotalHelpMembersCountIsNotNull() {
+			addCriterion("total_help_members_count is not null");
+			return (Criteria) this;
+		}
+
+		public Criteria andTotalHelpMembersCountEqualTo(Long value) {
+			addCriterion("total_help_members_count =", value, "totalHelpMembersCount");
+			return (Criteria) this;
+		}
+
+		public Criteria andTotalHelpMembersCountNotEqualTo(Long value) {
+			addCriterion("total_help_members_count <>", value, "totalHelpMembersCount");
+			return (Criteria) this;
+		}
+
+		public Criteria andTotalHelpMembersCountGreaterThan(Long value) {
+			addCriterion("total_help_members_count >", value, "totalHelpMembersCount");
+			return (Criteria) this;
+		}
+
+		public Criteria andTotalHelpMembersCountGreaterThanOrEqualTo(Long value) {
+			addCriterion("total_help_members_count >=", value, "totalHelpMembersCount");
+			return (Criteria) this;
+		}
+
+		public Criteria andTotalHelpMembersCountLessThan(Long value) {
+			addCriterion("total_help_members_count <", value, "totalHelpMembersCount");
+			return (Criteria) this;
+		}
+
+		public Criteria andTotalHelpMembersCountLessThanOrEqualTo(Long value) {
+			addCriterion("total_help_members_count <=", value, "totalHelpMembersCount");
+			return (Criteria) this;
+		}
+
+		public Criteria andTotalHelpMembersCountIn(List<Long> values) {
+			addCriterion("total_help_members_count in", values, "totalHelpMembersCount");
+			return (Criteria) this;
+		}
+
+		public Criteria andTotalHelpMembersCountNotIn(List<Long> values) {
+			addCriterion("total_help_members_count not in", values, "totalHelpMembersCount");
+			return (Criteria) this;
+		}
+
+		public Criteria andTotalHelpMembersCountBetween(Long value1, Long value2) {
+			addCriterion("total_help_members_count between", value1, value2, "totalHelpMembersCount");
+			return (Criteria) this;
+		}
+
+		public Criteria andTotalHelpMembersCountNotBetween(Long value1, Long value2) {
+			addCriterion("total_help_members_count not between", value1, value2, "totalHelpMembersCount");
+			return (Criteria) this;
+		}
+
+		public Criteria andTotalRegisterMembersCountIsNull() {
+			addCriterion("total_register_members_count is null");
+			return (Criteria) this;
+		}
+
+		public Criteria andTotalRegisterMembersCountIsNotNull() {
+			addCriterion("total_register_members_count is not null");
+			return (Criteria) this;
+		}
+
+		public Criteria andTotalRegisterMembersCountEqualTo(Long value) {
+			addCriterion("total_register_members_count =", value, "totalRegisterMembersCount");
+			return (Criteria) this;
+		}
+
+		public Criteria andTotalRegisterMembersCountNotEqualTo(Long value) {
+			addCriterion("total_register_members_count <>", value, "totalRegisterMembersCount");
+			return (Criteria) this;
+		}
+
+		public Criteria andTotalRegisterMembersCountGreaterThan(Long value) {
+			addCriterion("total_register_members_count >", value, "totalRegisterMembersCount");
+			return (Criteria) this;
+		}
+
+		public Criteria andTotalRegisterMembersCountGreaterThanOrEqualTo(Long value) {
+			addCriterion("total_register_members_count >=", value, "totalRegisterMembersCount");
+			return (Criteria) this;
+		}
+
+		public Criteria andTotalRegisterMembersCountLessThan(Long value) {
+			addCriterion("total_register_members_count <", value, "totalRegisterMembersCount");
+			return (Criteria) this;
+		}
+
+		public Criteria andTotalRegisterMembersCountLessThanOrEqualTo(Long value) {
+			addCriterion("total_register_members_count <=", value, "totalRegisterMembersCount");
+			return (Criteria) this;
+		}
+
+		public Criteria andTotalRegisterMembersCountIn(List<Long> values) {
+			addCriterion("total_register_members_count in", values, "totalRegisterMembersCount");
+			return (Criteria) this;
+		}
+
+		public Criteria andTotalRegisterMembersCountNotIn(List<Long> values) {
+			addCriterion("total_register_members_count not in", values, "totalRegisterMembersCount");
+			return (Criteria) this;
+		}
+
+		public Criteria andTotalRegisterMembersCountBetween(Long value1, Long value2) {
+			addCriterion("total_register_members_count between", value1, value2, "totalRegisterMembersCount");
+			return (Criteria) this;
+		}
+
+		public Criteria andTotalRegisterMembersCountNotBetween(Long value1, Long value2) {
+			addCriterion("total_register_members_count not between", value1, value2, "totalRegisterMembersCount");
+			return (Criteria) this;
+		}
+
+		public Criteria andTotalTakeCouponCountIsNull() {
+			addCriterion("total_take_coupon_count is null");
+			return (Criteria) this;
+		}
+
+		public Criteria andTotalTakeCouponCountIsNotNull() {
+			addCriterion("total_take_coupon_count is not null");
+			return (Criteria) this;
+		}
+
+		public Criteria andTotalTakeCouponCountEqualTo(Long value) {
+			addCriterion("total_take_coupon_count =", value, "totalTakeCouponCount");
+			return (Criteria) this;
+		}
+
+		public Criteria andTotalTakeCouponCountNotEqualTo(Long value) {
+			addCriterion("total_take_coupon_count <>", value, "totalTakeCouponCount");
+			return (Criteria) this;
+		}
+
+		public Criteria andTotalTakeCouponCountGreaterThan(Long value) {
+			addCriterion("total_take_coupon_count >", value, "totalTakeCouponCount");
+			return (Criteria) this;
+		}
+
+		public Criteria andTotalTakeCouponCountGreaterThanOrEqualTo(Long value) {
+			addCriterion("total_take_coupon_count >=", value, "totalTakeCouponCount");
+			return (Criteria) this;
+		}
+
+		public Criteria andTotalTakeCouponCountLessThan(Long value) {
+			addCriterion("total_take_coupon_count <", value, "totalTakeCouponCount");
+			return (Criteria) this;
+		}
+
+		public Criteria andTotalTakeCouponCountLessThanOrEqualTo(Long value) {
+			addCriterion("total_take_coupon_count <=", value, "totalTakeCouponCount");
+			return (Criteria) this;
+		}
+
+		public Criteria andTotalTakeCouponCountIn(List<Long> values) {
+			addCriterion("total_take_coupon_count in", values, "totalTakeCouponCount");
+			return (Criteria) this;
+		}
+
+		public Criteria andTotalTakeCouponCountNotIn(List<Long> values) {
+			addCriterion("total_take_coupon_count not in", values, "totalTakeCouponCount");
+			return (Criteria) this;
+		}
+
+		public Criteria andTotalTakeCouponCountBetween(Long value1, Long value2) {
+			addCriterion("total_take_coupon_count between", value1, value2, "totalTakeCouponCount");
+			return (Criteria) this;
+		}
+
+		public Criteria andTotalTakeCouponCountNotBetween(Long value1, Long value2) {
+			addCriterion("total_take_coupon_count not between", value1, value2, "totalTakeCouponCount");
 			return (Criteria) this;
 		}
 
@@ -1379,7 +1679,7 @@ public class MktActivityStatisticsPOExample implements Serializable {
 
 	/**
 	 * 只读. t_mkt_activity_statistics
-	 * @mbg.generated  2019-01-25 10:27:46
+	 * @mbg.generated  2019-01-25 11:55:25
 	 */
 	public static class Criterion implements Serializable {
 		private String condition;

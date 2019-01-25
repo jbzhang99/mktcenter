@@ -11,63 +11,63 @@ import org.apache.ibatis.annotations.Param;
 public interface MktActivityStatisticsPOMapper {
     /**
 	 * 只读. 
-	 * @mbg.generated  2019-01-25 10:27:46
+	 * @mbg.generated  2019-01-25 11:55:25
 	 */
 	long countByExample(MktActivityStatisticsPOExample example);
 
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2019-01-25 10:27:46
+	 * @mbg.generated  2019-01-25 11:55:25
 	 */
 	int deleteByExample(MktActivityStatisticsPOExample example);
 
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2019-01-25 10:27:46
+	 * @mbg.generated  2019-01-25 11:55:25
 	 */
 	int deleteByPrimaryKey(Long mktActivityStatisticsId);
 
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2019-01-25 10:27:46
+	 * @mbg.generated  2019-01-25 11:55:25
 	 */
 	int insert(MktActivityStatisticsPO record);
 
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2019-01-25 10:27:46
+	 * @mbg.generated  2019-01-25 11:55:25
 	 */
 	int insertSelective(MktActivityStatisticsPO record);
 
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2019-01-25 10:27:46
+	 * @mbg.generated  2019-01-25 11:55:25
 	 */
 	List<MktActivityStatisticsPO> selectByExampleWithBLOBs(MktActivityStatisticsPOExample example);
 
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2019-01-25 10:27:46
+	 * @mbg.generated  2019-01-25 11:55:25
 	 */
 	List<MktActivityStatisticsPO> selectByExample(MktActivityStatisticsPOExample example);
 
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2019-01-25 10:27:46
+	 * @mbg.generated  2019-01-25 11:55:25
 	 */
 	MktActivityStatisticsPO selectByPrimaryKey(Long mktActivityStatisticsId);
 
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2019-01-25 10:27:46
+	 * @mbg.generated  2019-01-25 11:55:25
 	 */
 	int updateByExampleSelective(@Param("record") MktActivityStatisticsPO record,
 			@Param("example") MktActivityStatisticsPOExample example);
@@ -75,7 +75,7 @@ public interface MktActivityStatisticsPOMapper {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2019-01-25 10:27:46
+	 * @mbg.generated  2019-01-25 11:55:25
 	 */
 	int updateByExampleWithBLOBs(@Param("record") MktActivityStatisticsPO record,
 			@Param("example") MktActivityStatisticsPOExample example);
@@ -83,7 +83,7 @@ public interface MktActivityStatisticsPOMapper {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2019-01-25 10:27:46
+	 * @mbg.generated  2019-01-25 11:55:25
 	 */
 	int updateByExample(@Param("record") MktActivityStatisticsPO record,
 			@Param("example") MktActivityStatisticsPOExample example);
@@ -91,21 +91,21 @@ public interface MktActivityStatisticsPOMapper {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2019-01-25 10:27:46
+	 * @mbg.generated  2019-01-25 11:55:25
 	 */
 	int updateByPrimaryKeySelective(MktActivityStatisticsPO record);
 
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2019-01-25 10:27:46
+	 * @mbg.generated  2019-01-25 11:55:25
 	 */
 	int updateByPrimaryKeyWithBLOBs(MktActivityStatisticsPO record);
 
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2019-01-25 10:27:46
+	 * @mbg.generated  2019-01-25 11:55:25
 	 */
 	int updateByPrimaryKey(MktActivityStatisticsPO record);
 
