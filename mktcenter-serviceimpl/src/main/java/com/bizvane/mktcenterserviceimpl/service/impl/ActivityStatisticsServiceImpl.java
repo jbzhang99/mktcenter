@@ -81,12 +81,12 @@ public class ActivityStatisticsServiceImpl implements ActivityStatisticsService{
             redisTemplateService.stringSetValueAndExpireTime(key,memberCodeSet,StatisticsConstants.REDIS_LIVE_TIME);
 
             if (StringUtils.isNotBlank(visitorsKey) && StringUtils.isNotBlank(hourKey)) {
-                Set visitorsMemberCodeSet = (Set) redisTemplateService.stringGetStringByKey(visitorsKey);
+                /*Set visitorsMemberCodeSet = (Set) redisTemplateService.stringGetStringByKey(visitorsKey);
                 if (CollectionUtils.isEmpty(visitorsMemberCodeSet)) {
                     visitorsMemberCodeSet = new HashSet();
                 }
                 visitorsMemberCodeSet.add(memberCode);
-                redisTemplateService.stringSetValueAndExpireTime(visitorsKey,visitorsMemberCodeSet,StatisticsConstants.REDIS_LIVE_TIME);
+                redisTemplateService.stringSetValueAndExpireTime(visitorsKey,visitorsMemberCodeSet,StatisticsConstants.REDIS_LIVE_TIME);*/
 
                 Set hourMemberCodeSet = (Set) redisTemplateService.stringGetStringByKey(hourKey);
                 if (CollectionUtils.isEmpty(hourMemberCodeSet)) {

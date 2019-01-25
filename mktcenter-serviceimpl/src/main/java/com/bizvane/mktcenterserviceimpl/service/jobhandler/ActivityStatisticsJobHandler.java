@@ -62,9 +62,9 @@ public class ActivityStatisticsJobHandler extends IJobHandler {
                 }
             }
             //查询昨天访问人数
-            String visitorsKey = StatisticsConstants.VISITORS_PREFIX + activityId + "_" + yesterday;
+            /*String visitorsKey = StatisticsConstants.VISITORS_PREFIX + activityId + "_" + yesterday;
             Set visitorsMemberCodeSet = (Set) redisTemplateService.stringGetStringByKey(visitorsKey);
-            int visitorsCount = visitorsMemberCodeSet == null ? 0 : visitorsMemberCodeSet.size();
+            int visitorsCount = visitorsMemberCodeSet == null ? 0 : visitorsMemberCodeSet.size();*/
             //查询昨天发起会员数
             String launchMembersKey = StatisticsConstants.LAUNCH_MEMBERS + activityId + "_" + yesterday;
             Set launchMemberCodeSet = (Set) redisTemplateService.stringGetStringByKey(launchMembersKey);
@@ -87,7 +87,7 @@ public class ActivityStatisticsJobHandler extends IJobHandler {
             mktActivityStatisticsPO.setSysCompanyId(activity.getSysCompanyId());
             mktActivityStatisticsPO.setSysBrandId(activity.getSysBrandId());
             mktActivityStatisticsPO.setMktActivityId(activityId);
-            mktActivityStatisticsPO.setVisitorsCount(visitorsCount);
+            mktActivityStatisticsPO.setVisitorsCount(launchMembersCount + helpMembersCount);
             mktActivityStatisticsPO.setLaunchMembersCount(launchMembersCount);
             mktActivityStatisticsPO.setHelpMembersCount(helpMembersCount);
             mktActivityStatisticsPO.setRegisterMembersCount(registerMembersCount);
