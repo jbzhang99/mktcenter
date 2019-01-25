@@ -293,8 +293,14 @@ public class ActivityRedPacketServiceImpl implements ActivityRedPacketService {
     public ResponseData<PageInfo<ActivityRedPacketListBO>> selectActivityRedPacketAnalyzeLists(ActivityRedPacketVO vo, HttpServletRequest request) {
         ResponseData<PageInfo<ActivityRedPacketListBO>> responseData = new ResponseData<>();
         SysAccountPO sysAccountPo = TokenUtils.getStageUser(request);
+//       SysAccountPO sysAccountPo = new SysAccountPO();
+//        sysAccountPo.setSysAccountId(96L);
+//        sysAccountPo.setSysCompanyId(2L);
+//        sysAccountPo.setBrandId(96L);
+//        sysAccountPo.setAccountCode("15328634678");
+//        sysAccountPo.setName("不啊哟删除");
+
         vo.setSysBrandId(sysAccountPo.getBrandId());
-//        vo.setSysBrandId(96L);
         PageHelper.startPage(vo.getPageNumber(), vo.getPageSize());
         List<ActivityRedPacketListBO> listparam = mktActivityRedPacketSumPOMapper.selectActivityRedPacketAnalyzeLists(vo);
         if (CollectionUtils.isEmpty(listparam)) {

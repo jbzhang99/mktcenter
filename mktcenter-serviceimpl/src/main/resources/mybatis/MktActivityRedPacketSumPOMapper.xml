@@ -527,6 +527,7 @@
     tmarp.help_num,
     tmarp.get_coupon_num,
     tmarp.end_time,
+    tmarp.start_time,
     tmarp.activity_time,
     tma.activity_status
   FROM t_mkt_activity_red_packet_sum tmarp INNER  JOIN  t_mkt_activity tma  ON tmarp.mkt_activity_id=tma.mkt_activity_id

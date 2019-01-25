@@ -99,7 +99,7 @@ public class TimeUtils {
      *时间天数
      */
     public static int getDataNumRed(Date startDate,Date endDate) {
-        boolean sameDay = DateUtils.isSameDay(startDate, endDate);
+        boolean sameDay = DateUtils.isSameDay(startDate, new Date());
         int data = new Long((endDate.getTime() - System.currentTimeMillis()) / (1000 * 3600 * 24)).intValue();
         if (sameDay && data>0){
             data=data-1;
