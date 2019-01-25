@@ -4,10 +4,12 @@ import com.bizvane.mktcenterservice.models.po.MktActivityPOExample;
 import com.bizvane.mktcenterservice.models.po.MktActivityPOWithBLOBs;
 import com.bizvane.mktcenterservice.models.po.MktActivityStatisticsPO;
 import com.bizvane.mktcenterserviceimpl.common.constants.StatisticsConstants;
+import com.bizvane.mktcenterserviceimpl.common.tools.DateUtil;
 import com.bizvane.mktcenterserviceimpl.mappers.MktActivityPOMapper;
 import com.bizvane.mktcenterserviceimpl.mappers.MktActivityStatisticsPOMapper;
 import com.bizvane.utils.redisutils.RedisTemplateServiceImpl;
 import com.qiniu.util.Json;
+import com.qiniu.util.StringUtils;
 import com.xxl.job.core.biz.model.ReturnT;
 import com.xxl.job.core.handler.IJobHandler;
 import com.xxl.job.core.handler.annotation.JobHandler;
@@ -46,8 +48,12 @@ public class ActivityStatisticsJobHandler extends IJobHandler {
             log.info("无活动id列表就此结束定时");
             return ReturnT.FAIL;
         }
-        //String yesterday = StatisticsConstants.getYesterday(); TODO 测试先为当天
-        String yesterday = StatisticsConstants.getCurrentDate();
+        String yesterday = "";
+        if (StringUtils.isNullOrEmpty(s)) {
+            yesterday = StatisticsConstants.getYesterday();
+        }else {
+            yesterday = s;
+        }
         //获取昨天24小时内的访问量数据
         Map map = new TreeMap();
         for (MktActivityPOWithBLOBs activity:activityIds) {
@@ -118,11 +124,15 @@ public class ActivityStatisticsJobHandler extends IJobHandler {
 
             String json = Json.encode(map);
             mktActivityStatisticsPO.setHourJsonData(json);
-            /*Calendar calendar = Calendar.getInstance(); todo 测试先为当天
-            calendar.setTime(new Date());
-            calendar.add(Calendar.DATE, -1);
-            mktActivityStatisticsPO.setStatisticsTime(calendar.getTime());*/
-            mktActivityStatisticsPO.setStatisticsTime(new Date());
+            if (StringUtils.isNullOrEmpty(s)) {
+                Calendar calendar = Calendar.getInstance();
+                calendar.setTime(new Date());
+                calendar.add(Calendar.DATE, -1);
+                mktActivityStatisticsPO.setStatisticsTime(calendar.getTime());
+            }else {
+                Date date = DateUtil.stringToDate(s,"yyyyMMdd");
+                mktActivityStatisticsPO.setStatisticsTime(date);
+            }
 
             mktActivityStatisticsPO.setStatisticsType(StatisticsConstants.STATISTICS_TYPE);
             mktActivityStatisticsPO.setCreateDate(new Date());
