@@ -876,21 +876,21 @@
   </update>
 
   <select id="getActivityList" parameterType="com.bizvane.mktcenterservice.models.vo.ActivityVO" resultType="com.bizvane.mktcenterservice.models.vo.ActivityVO">
-    select t.activity_detail_img,t.activity_type activityType,t.activity_code as activityCode,t.activity_name as activityName,t.mkt_activity_id as mktActivityId ,s.is_store_limit,s.store_limit_type,s.store_limit_list from t_mkt_activity t
+    select t.activity_detail_img,t.activity_type activityType,t.activity_code as activityCode,t.activity_name as activityName,t.mkt_activity_id as mktActivityId ,s.is_store_limit,s.store_limit_type,s.store_limit_list,IF(t.start_time IS NUll,t.create_date,t.start_time) AS startTime from t_mkt_activity t
     INNER JOIN t_mkt_activity_order s on t.mkt_activity_id=s.mkt_activity_id
   where t.valid=1  and t.activity_status=2
     <if test="sysBrandId != null and sysBrandId!= ''">
       AND t.sys_brand_id = #{sysBrandId}
     </if>
     UNION ALL
-    select t.activity_detail_img,t.activity_type activityType,t.activity_code as activityCode,t.activity_name as activityName,t.mkt_activity_id as mktActivityId ,f.is_store_limit,f.store_limit_type,f.store_limit_list from t_mkt_activity t
+    select t.activity_detail_img,t.activity_type activityType,t.activity_code as activityCode,t.activity_name as activityName,t.mkt_activity_id as mktActivityId ,f.is_store_limit,f.store_limit_type,f.store_limit_list,IF(t.start_time IS NUll,t.create_date,t.start_time) AS startTime from t_mkt_activity t
     INNER JOIN t_mkt_activity_upgrade f on t.mkt_activity_id=f.mkt_activity_id
     where t.valid=1 and t.activity_status=2
     <if test="sysBrandId != null and sysBrandId!= ''">
       AND t.sys_brand_id = #{sysBrandId}
     </if>
     UNION ALL
-    select t.activity_detail_img,t.activity_type activityType,t.activity_code as activityCode,t.activity_name as activityName,t.mkt_activity_id as mktActivityId ,t.is_store_limit,t.store_limit_type,t.store_limit_list from t_mkt_activity t
+    select t.activity_detail_img,t.activity_type activityType,t.activity_code as activityCode,t.activity_name as activityName,t.mkt_activity_id as mktActivityId ,t.is_store_limit,t.store_limit_type,t.store_limit_list ,IF(t.start_time IS NUll,t.create_date,t.start_time) AS startTime from t_mkt_activity t
     where t.valid=1 and t.activity_status=2 and (t.activity_type=11 OR t.activity_type=12)
     <if test="sysBrandId != null and sysBrandId!= ''">
       AND t.sys_brand_id = #{sysBrandId}

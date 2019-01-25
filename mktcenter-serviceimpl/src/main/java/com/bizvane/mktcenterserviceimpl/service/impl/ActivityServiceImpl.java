@@ -53,10 +53,7 @@ import org.springframework.stereotype.Service;
 import java.math.BigDecimal;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -195,8 +192,8 @@ public class ActivityServiceImpl implements ActivityService {
 
             }
         }
-
-        responseData.setData(lists);
+        List<ActivityVO> collect = activityList.stream().sorted(Comparator.comparing(ActivityVO::getStartTime).reversed()).collect(Collectors.toList());
+        responseData.setData(collect);
         responseData.setCode(SysResponseEnum.SUCCESS.getCode());
         responseData.setMessage(SysResponseEnum.SUCCESS.getMessage());
         return responseData;
