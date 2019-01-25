@@ -83,6 +83,22 @@ public class ActivityStatisticsJobHandler extends IJobHandler {
             Set takeCouponMemberCodeSet = (Set) redisTemplateService.stringGetStringByKey(takeCouponKey);
             int takeCouponCount = takeCouponMemberCodeSet == null ? 0 : takeCouponMemberCodeSet.size();
 
+            String totalLaunch = StatisticsConstants.TOTAL_LAUNCH_MEMBERS + activityId;
+            Set totalLaunchSet = (Set) redisTemplateService.stringGetStringByKey(totalLaunch);
+            int totalLaunchCount = totalLaunchSet == null ? 0 : totalLaunchSet.size();
+
+            String totalHelp = StatisticsConstants.TOTAL_LAUNCH_MEMBERS + activityId;
+            Set totalHelpSet = (Set) redisTemplateService.stringGetStringByKey(totalHelp);
+            int totalHelpCount = totalHelpSet == null ? 0 : totalHelpSet.size();
+
+            String totalregister = StatisticsConstants.TOTAL_LAUNCH_MEMBERS + activityId;
+            Set totalregisterSet = (Set) redisTemplateService.stringGetStringByKey(totalregister);
+            int totalregisterCount = totalregisterSet == null ? 0 : totalregisterSet.size();
+
+            String totaltake = StatisticsConstants.TOTAL_LAUNCH_MEMBERS + activityId;
+            Set totaltakeSet = (Set) redisTemplateService.stringGetStringByKey(totaltake);
+            int totaltakeCount = totaltakeSet == null ? 0 : totaltakeSet.size();
+
             //存储到红包活动分析表中
             MktActivityStatisticsPO mktActivityStatisticsPO = new MktActivityStatisticsPO();
             mktActivityStatisticsPO.setSysCompanyId(activity.getSysCompanyId());
@@ -93,6 +109,13 @@ public class ActivityStatisticsJobHandler extends IJobHandler {
             mktActivityStatisticsPO.setHelpMembersCount(helpMembersCount);
             mktActivityStatisticsPO.setRegisterMembersCount(registerMembersCount);
             mktActivityStatisticsPO.setTakeCouponCount(Long.parseLong(String.valueOf(takeCouponCount)));
+
+            mktActivityStatisticsPO.setTotalVisitorsCount(Long.parseLong(String.valueOf(totalLaunchCount + totalHelpCount)));
+            mktActivityStatisticsPO.setTotalLaunchMembersCount(Long.parseLong(String.valueOf(totalLaunchCount)));
+            mktActivityStatisticsPO.setTotalHelpMembersCount(Long.parseLong(String.valueOf(totalHelpCount)));
+            mktActivityStatisticsPO.setTotalRegisterMembersCount(Long.parseLong(String.valueOf(totalregisterCount)));
+            mktActivityStatisticsPO.setTotalTakeCouponCount(Long.parseLong(String.valueOf(totaltakeCount)));
+
             String json = Json.encode(map);
             mktActivityStatisticsPO.setHourJsonData(json);
             /*Calendar calendar = Calendar.getInstance(); todo 测试先为当天

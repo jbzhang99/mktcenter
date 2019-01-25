@@ -38,10 +38,32 @@ public class StatisticsConstants {
      */
     public static final String TAKE_COUPON = "take_coupon_";
 
+
     /**
-     * 活动id列表前缀
+     * 累计访问前缀
      */
-    //public static final String ACTIVITY_LIST_PREFIX = "activity_list_prefix";
+    public static final String TOTAL_VISITORS_PREFIX = "total_visitors_";
+
+    /**
+     * 累计发起会员前缀
+     */
+    public static final String TOTAL_LAUNCH_MEMBERS = "total_launch_members_";
+
+    /**
+     * 累计助力会员前缀
+     */
+    public static final String TOTAL_HELP_MEMBERS = "total_help_members_";
+
+    /**
+     * 累计注册会员前缀
+     */
+    public static final String TOTAL_REGISTER_MEMBERS = "total_register_members_";
+
+    /**
+     * 累计领劵数量前缀
+     */
+    public static final String TOTAL_TAKE_COUPON = "total_take_coupon_";
+
 
     /**
      * 活动类型  0红包膨胀了
@@ -109,5 +131,21 @@ public class StatisticsConstants {
         calendar.add(calendar.DATE,-15);
         Date before = calendar.getTime();
         return before;
+    }
+
+
+    public static long getTimeIntervalMilliseconds(Date startTime,Date endTime){
+        if (startTime == null && endTime != null) {
+            return endTime.getTime();
+        }
+        if (startTime != null && endTime == null) {
+            return startTime.getTime();
+        }
+        if (startTime == null && endTime == null) {
+            return 240 * 60 * 60 * 1000;
+        }
+        long start = startTime.getTime();
+        long end = endTime.getTime();
+        return Math.abs(end - start);
     }
 }

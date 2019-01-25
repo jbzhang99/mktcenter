@@ -1,6 +1,5 @@
 package com.bizvane.mktcenterserviceimpl.mappers;
 
-import com.bizvane.mktcenterservice.models.bo.ActivityStatisticsBO;
 import com.bizvane.mktcenterservice.models.po.MktActivityStatisticsPO;
 import com.bizvane.mktcenterservice.models.po.MktActivityStatisticsPOExample;
 import java.util.List;
@@ -115,7 +114,4 @@ public interface MktActivityStatisticsPOMapper {
      * @return
      */
     List<String> getAllDate(@Param("activityId") Long activityId);
-
-
-    ActivityStatisticsBO getBo(Map map);
 }

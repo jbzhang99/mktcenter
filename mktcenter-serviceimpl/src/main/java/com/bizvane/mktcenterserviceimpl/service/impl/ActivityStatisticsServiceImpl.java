@@ -2,8 +2,6 @@ package com.bizvane.mktcenterserviceimpl.service.impl;
 
 
 import com.bizvane.mktcenterservice.interfaces.ActivityStatisticsService;
-import com.bizvane.mktcenterservice.models.bo.ActivityStatisticsBO;
-import com.bizvane.mktcenterservice.models.po.MktActivityPOExample;
 import com.bizvane.mktcenterservice.models.po.MktActivityPOWithBLOBs;
 import com.bizvane.mktcenterservice.models.po.MktActivityStatisticsPO;
 import com.bizvane.mktcenterservice.models.po.MktActivityStatisticsPOExample;
@@ -21,10 +19,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
-import java.math.BigDecimal;
 import java.util.*;
 
 /**
@@ -48,6 +44,8 @@ public class ActivityStatisticsServiceImpl implements ActivityStatisticsService{
         log.info("enter ActivityStatisticsServiceImpl method:==>statisticsData,{},{},{}=====START====",activityId,code,memberCode);
         ResponseData responseData = new ResponseData();
         try {
+            //查询活动id
+            MktActivityPOWithBLOBs mktActivityPOWithBLOBs = mktActivityPOMapper.selectByPrimaryKey(activityId);
             String today = StatisticsConstants.getCurrentDate();
             String key = "";
             String visitorsKey = "";
@@ -55,23 +53,53 @@ public class ActivityStatisticsServiceImpl implements ActivityStatisticsService{
             if (StatisticsEnum.LAUNCH_MEMBERS_COUNT.getCode() == code) {
                 //发起会员数
                 key = StatisticsConstants.LAUNCH_MEMBERS + activityId + "_" + today;
-                //访问量
-                visitorsKey = StatisticsConstants.VISITORS_PREFIX + activityId + "_" + today;
                 //访问量要以小时存一份增量数据
+                visitorsKey = StatisticsConstants.VISITORS_PREFIX + activityId + "_" + today;
                 hourKey = visitorsKey + "_" + StatisticsConstants.getCurrentHour();
+                //累计发起会员数
+                String totalLaunch = StatisticsConstants.TOTAL_LAUNCH_MEMBERS + activityId;
+                Set totalLaunchSet = (Set) redisTemplateService.stringGetStringByKey(totalLaunch);
+                if (totalLaunchSet == null) {
+                    totalLaunchSet = new HashSet();
+                }
+                totalLaunchSet.add(memberCode);
+                redisTemplateService.stringSetValueAndExpireTime(totalLaunch,totalLaunchSet,StatisticsConstants.getTimeIntervalMilliseconds(mktActivityPOWithBLOBs.getStartTime(),mktActivityPOWithBLOBs.getEndTime()));
             }else if (StatisticsEnum.HELP_MEMBERS_COUNT.getCode() == code) {
                 //助力会员数
                 key = StatisticsConstants.HELP_MEMBERS + activityId + "_" + today;
                 //访问量
                 visitorsKey = StatisticsConstants.VISITORS_PREFIX + activityId + "_" + today;
-                //访问量要以小时存一份增量数据
                 hourKey = visitorsKey + "_" + StatisticsConstants.getCurrentHour();
+                //累计助力会员数
+                String totalHelp = StatisticsConstants.TOTAL_HELP_MEMBERS + activityId;
+                Set totalHelpSet = (Set) redisTemplateService.stringGetStringByKey(totalHelp);
+                if (totalHelpSet == null) {
+                    totalHelpSet = new HashSet();
+                }
+                totalHelpSet.add(memberCode);
+                redisTemplateService.stringSetValueAndExpireTime(totalHelp,totalHelpSet,StatisticsConstants.getTimeIntervalMilliseconds(mktActivityPOWithBLOBs.getStartTime(),mktActivityPOWithBLOBs.getEndTime()));
             }else if (StatisticsEnum.REGISTER_MEMBERS_COUNT.getCode() == code) {
                 //注册会员数
                 key = StatisticsConstants.REGISTER_MEMBERS + activityId + "_" + today;
+                //累计注册会员数
+                String totalregister = StatisticsConstants.TOTAL_REGISTER_MEMBERS + activityId;
+                Set totalregisterSet = (Set) redisTemplateService.stringGetStringByKey(totalregister);
+                if (totalregisterSet == null) {
+                    totalregisterSet = new HashSet();
+                }
+                totalregisterSet.add(memberCode);
+                redisTemplateService.stringSetValueAndExpireTime(totalregister,totalregisterSet,StatisticsConstants.getTimeIntervalMilliseconds(mktActivityPOWithBLOBs.getStartTime(),mktActivityPOWithBLOBs.getEndTime()));
             }else if (StatisticsEnum.TAKE_COUPON_COUNT.getCode() == code) {
                 //领劵数量
                 key = StatisticsConstants.TAKE_COUPON + activityId + "_" + today;
+                //累计领劵数量
+                String totaltake = StatisticsConstants.TOTAL_TAKE_COUPON + activityId;
+                Set totaltakeSet = (Set) redisTemplateService.stringGetStringByKey(totaltake);
+                if (totaltakeSet == null) {
+                    totaltakeSet = new HashSet();
+                }
+                totaltakeSet.add(memberCode);
+                redisTemplateService.stringSetValueAndExpireTime(totaltake,totaltakeSet,StatisticsConstants.getTimeIntervalMilliseconds(mktActivityPOWithBLOBs.getStartTime(),mktActivityPOWithBLOBs.getEndTime()));
             }
             Set memberCodeSet = (Set) redisTemplateService.stringGetStringByKey(key);
             if (memberCodeSet == null) {
@@ -120,16 +148,16 @@ public class ActivityStatisticsServiceImpl implements ActivityStatisticsService{
                 responseData.setCode(SysResponseEnum.OPERATE_FAILED_DATA_NOT_EXISTS.getCode());
                 responseData.setMessage(SysResponseEnum.OPERATE_FAILED_DATA_NOT_EXISTS.getMessage());
 
-                ActivityStatisticsBO todayBO = new ActivityStatisticsBO();
+                MktActivityStatisticsPO todayBO = new MktActivityStatisticsPO();
                 todayBO.setVisitorsCount(0);
                 todayBO.setLaunchMembersCount(0);
                 todayBO.setHelpMembersCount(0);
                 todayBO.setRegisterMembersCount(0);
                 todayBO.setTakeCouponCount(0L);
-                todayBO.setTotalVisitorsCount(0);
-                todayBO.setTotalLaunchMembersCount(0);
-                todayBO.setTotalHelpMembersCount(0);
-                todayBO.setTotalRegisterMembersCount(0);
+                todayBO.setTotalVisitorsCount(0L);
+                todayBO.setTotalLaunchMembersCount(0L);
+                todayBO.setTotalHelpMembersCount(0L);
+                todayBO.setTotalRegisterMembersCount(0L);
                 todayBO.setTotalTakeCouponCount(0L);
 
                 responseData.setData(todayBO);
@@ -238,74 +266,20 @@ public class ActivityStatisticsServiceImpl implements ActivityStatisticsService{
     @Override
     public ResponseData activityAnalysis(Long activityId, String time, SysAccountPO sysAccountPO) {
         ResponseData responseData = new ResponseData();
-        Map map = new HashMap();
-        //查询当天活动统计记录
-        map.put("activityId",activityId);
-        map.put("statisticsTime",time);
-        map.put("statisticsType",StatisticsConstants.STATISTICS_TYPE);
-        map.put("sysCompanyId",sysAccountPO.getSysCompanyId());
-        map.put("sysBrandId",sysAccountPO.getBrandId());
-        ActivityStatisticsBO todayBO = mktActivityStatisticsPOMapper.getBo(map);
-        //获取前一天数据
-        /*String beforeTimeStr = StatisticsConstants.getBeforeOneDate(time);
-        map.put("statisticsTime",beforeTimeStr);
-        ActivityStatisticsBO yesBO = mktActivityStatisticsPOMapper.getBo(map);*/
-        if (todayBO == null) {
-            responseData.setCode(SysResponseEnum.FAILED.getCode());
-            responseData.setMessage("此活动当天未激活");
-            return responseData;
-        }
-        /*Date yesDate = null;
-        if (yesBO != null) {
-            //昨天为null时就为缺省值
-            todayBO.setScaleVisitorsCount(BigDecimal.valueOf(Long.parseLong(String.valueOf(todayBO.getVisitorsCount()-yesBO.getVisitorsCount()))).divide(BigDecimal.valueOf(yesBO.getVisitorsCount()),4,BigDecimal.ROUND_HALF_UP).multiply(BigDecimal.valueOf(100L)).setScale(2,BigDecimal.ROUND_HALF_UP));
-            todayBO.setScaleLaunchMembersCount(BigDecimal.valueOf(Long.parseLong(String.valueOf(todayBO.getLaunchMembersCount()-yesBO.getLaunchMembersCount()))).divide(BigDecimal.valueOf(yesBO.getLaunchMembersCount()),4,BigDecimal.ROUND_HALF_UP).multiply(BigDecimal.valueOf(100L)).setScale(2,BigDecimal.ROUND_HALF_UP));
-            todayBO.setScaleHelpMembersCount(BigDecimal.valueOf(Long.parseLong(String.valueOf(todayBO.getHelpMembersCount()-yesBO.getHelpMembersCount()))).divide(BigDecimal.valueOf(yesBO.getHelpMembersCount()),4,BigDecimal.ROUND_HALF_UP).multiply(BigDecimal.valueOf(100L)).setScale(2,BigDecimal.ROUND_HALF_UP));
-            todayBO.setScaleRegisterMembersCount(BigDecimal.valueOf(Long.parseLong(String.valueOf(todayBO.getRegisterMembersCount()-yesBO.getRegisterMembersCount()))).divide(BigDecimal.valueOf(yesBO.getRegisterMembersCount()),4,BigDecimal.ROUND_HALF_UP).multiply(BigDecimal.valueOf(100L)).setScale(2,BigDecimal.ROUND_HALF_UP));
-            todayBO.setScaleTakeCouponCount(BigDecimal.valueOf(Long.parseLong(String.valueOf(todayBO.getTakeCouponCount()-yesBO.getTakeCouponCount()))).divide(BigDecimal.valueOf(yesBO.getTakeCouponCount()),4,BigDecimal.ROUND_HALF_UP).multiply(BigDecimal.valueOf(100L)).setScale(2,BigDecimal.ROUND_HALF_UP));
-            yesDate = yesBO.getStatisticsTime();
-        }*/
-        MktActivityPOWithBLOBs mktActivityPOWithBLOBs = mktActivityPOMapper.selectByPrimaryKey(activityId);
-        Date startTime = mktActivityPOWithBLOBs.getStartTime();
         Date todayDate = DateUtil.stringToDate(time,DateUtil.ymd);
         MktActivityStatisticsPOExample example = new MktActivityStatisticsPOExample();
         //获取从活动开始时间到当前时间的各项累计数据
         example.createCriteria().andMktActivityIdEqualTo(activityId).andStatisticsTypeEqualTo(StatisticsConstants.STATISTICS_TYPE)
-                .andStatisticsTimeBetween(startTime,todayDate).andSysBrandIdEqualTo(sysAccountPO.getBrandId()).andSysCompanyIdEqualTo(sysAccountPO.getSysCompanyId()).andValidEqualTo(true);
+                .andStatisticsTimeEqualTo(todayDate).andSysBrandIdEqualTo(sysAccountPO.getBrandId()).andSysCompanyIdEqualTo(sysAccountPO.getSysCompanyId()).andValidEqualTo(true);
         List<MktActivityStatisticsPO> todayList = mktActivityStatisticsPOMapper.selectByExample(example);
-        if (!todayList.isEmpty()) {
-            todayList.forEach(todayPo -> {
-                todayBO.setTotalVisitorsCount((todayBO.getTotalVisitorsCount() == null?0:todayBO.getTotalVisitorsCount()) + todayPo.getVisitorsCount());
-                todayBO.setTotalLaunchMembersCount((todayBO.getTotalLaunchMembersCount() == null?0:todayBO.getTotalLaunchMembersCount()) + todayPo.getLaunchMembersCount());
-                todayBO.setTotalHelpMembersCount((todayBO.getTotalHelpMembersCount() == null?0:todayBO.getTotalHelpMembersCount()) + todayPo.getHelpMembersCount());
-                todayBO.setTotalRegisterMembersCount((todayBO.getTotalRegisterMembersCount()==null?0:todayBO.getTotalRegisterMembersCount()) + todayPo.getRegisterMembersCount());
-                todayBO.setTotalTakeCouponCount((todayBO.getTotalTakeCouponCount()==null?0:todayBO.getTotalTakeCouponCount()) + todayPo.getTakeCouponCount());
-            });
+        if (CollectionUtils.isNotEmpty(todayList)) {
+            responseData.setCode(SysResponseEnum.SUCCESS.getCode());
+            responseData.setMessage(SysResponseEnum.SUCCESS.getMessage());
+            responseData.setData(todayList.get(0));
+        }else {
+            responseData.setCode(SysResponseEnum.FAILED.getCode());
+            responseData.setMessage(SysResponseEnum.FAILED.getMessage());
         }
-        //获取从活动开始时间到当前时间前一天的各项累计数据
-
-        /*MktActivityStatisticsPOExample yesExample = new MktActivityStatisticsPOExample();
-        yesExample.createCriteria().andMktActivityIdEqualTo(activityId).andStatisticsTypeEqualTo(StatisticsConstants.STATISTICS_TYPE)
-                .andStatisticsTimeBetween(startTime,yesDate);
-        List<MktActivityStatisticsPO> yesList = mktActivityStatisticsPOMapper.selectByExample(yesExample);*/
-        /*if (!yesList.isEmpty() && yesBO != null) {
-            yesList.forEach(yesPo -> {
-                yesBO.setTotalVisitorsCount((yesBO.getTotalVisitorsCount() == null?0:yesBO.getTotalVisitorsCount()) + yesPo.getVisitorsCount());
-                yesBO.setTotalLaunchMembersCount((yesBO.getTotalLaunchMembersCount() == null?0:yesBO.getTotalLaunchMembersCount()) + yesPo.getLaunchMembersCount());
-                yesBO.setTotalHelpMembersCount((yesBO.getTotalHelpMembersCount() == null?0:yesBO.getTotalHelpMembersCount()) + yesPo.getHelpMembersCount());
-                yesBO.setTotalRegisterMembersCount((yesBO.getTotalRegisterMembersCount()==null?0:yesBO.getTotalRegisterMembersCount()) + yesPo.getRegisterMembersCount());
-                yesBO.setTotalTakeCouponCount((yesBO.getTotalTakeCouponCount()==null?0:yesBO.getTotalTakeCouponCount()) + yesPo.getTakeCouponCount());
-            });
-            //算出累计数据的比例
-            todayBO.setScaleTotalVisitorsCount(BigDecimal.valueOf(Long.parseLong(String.valueOf(todayBO.getTotalVisitorsCount()-yesBO.getTotalVisitorsCount()))).divide(BigDecimal.valueOf(yesBO.getTotalVisitorsCount()),4,BigDecimal.ROUND_HALF_UP).multiply(BigDecimal.valueOf(100L)).setScale(2,BigDecimal.ROUND_HALF_UP));
-            todayBO.setScaleTotalLaunchMembersCount(BigDecimal.valueOf(Long.parseLong(String.valueOf(todayBO.getTotalLaunchMembersCount()-yesBO.getTotalLaunchMembersCount()))).divide(BigDecimal.valueOf(yesBO.getTotalLaunchMembersCount()),4,BigDecimal.ROUND_HALF_UP).multiply(BigDecimal.valueOf(100L)).setScale(2,BigDecimal.ROUND_HALF_UP));
-            todayBO.setScaleTotalHelpMembersCount(BigDecimal.valueOf(Long.parseLong(String.valueOf(todayBO.getTotalHelpMembersCount()-yesBO.getTotalHelpMembersCount()))).divide(BigDecimal.valueOf(yesBO.getTotalHelpMembersCount()),4,BigDecimal.ROUND_HALF_UP).multiply(BigDecimal.valueOf(100L)).setScale(2,BigDecimal.ROUND_HALF_UP));
-            todayBO.setScaleTotalRegisterMembersCount(BigDecimal.valueOf(Long.parseLong(String.valueOf(todayBO.getTotalRegisterMembersCount()-yesBO.getTotalRegisterMembersCount()))).divide(BigDecimal.valueOf(yesBO.getTotalRegisterMembersCount()),4,BigDecimal.ROUND_HALF_UP).multiply(BigDecimal.valueOf(100L)).setScale(2,BigDecimal.ROUND_HALF_UP));
-            todayBO.setScaleTotalTakeCouponCount(BigDecimal.valueOf(Long.parseLong(String.valueOf(todayBO.getTotalTakeCouponCount()-yesBO.getTotalTakeCouponCount()))).divide(BigDecimal.valueOf(yesBO.getTotalTakeCouponCount()),4,BigDecimal.ROUND_HALF_UP).multiply(BigDecimal.valueOf(100L)).setScale(2,BigDecimal.ROUND_HALF_UP));
-        }*/
-        responseData.setCode(SysResponseEnum.SUCCESS.getCode());
-        responseData.setMessage(SysResponseEnum.SUCCESS.getMessage());
-        responseData.setData(todayBO);
         return responseData;
     }
 
@@ -325,7 +299,7 @@ public class ActivityStatisticsServiceImpl implements ActivityStatisticsService{
             example.createCriteria().andMktActivityIdEqualTo(activityId).andStatisticsTypeEqualTo(StatisticsConstants.STATISTICS_TYPE)
                     .andStatisticsTimeEqualTo(current).andSysCompanyIdEqualTo(sysAccountPO.getSysCompanyId()).andSysBrandIdEqualTo(sysAccountPO.getBrandId()).andValidEqualTo(true);
             List<MktActivityStatisticsPO> statisticsPOList = mktActivityStatisticsPOMapper.selectByExampleWithBLOBs(example);
-            if (!statisticsPOList.isEmpty()) {
+            if (CollectionUtils.isNotEmpty(statisticsPOList)) {
                 MktActivityStatisticsPO statisticsPO = statisticsPOList.get(0);
                 Map map = Json.decode(statisticsPO.getHourJsonData(),Map.class);
                 responseData.setCode(SysResponseEnum.SUCCESS.getCode());
