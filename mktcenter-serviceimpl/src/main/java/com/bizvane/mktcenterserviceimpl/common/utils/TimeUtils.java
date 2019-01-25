@@ -1,5 +1,7 @@
 package com.bizvane.mktcenterserviceimpl.common.utils;
 
+import org.apache.commons.lang.time.DateUtils;
+
 import java.text.ParseException;
 import java.text.ParsePosition;
 import java.text.SimpleDateFormat;
@@ -96,6 +98,14 @@ public class TimeUtils {
     /**
      *时间天数
      */
+    public static int getDataNumRed(Date startDate,Date endDate) {
+        boolean sameDay = DateUtils.isSameDay(startDate, endDate);
+        int data = new Long((endDate.getTime() - System.currentTimeMillis()) / (1000 * 3600 * 24)).intValue();
+        if (sameDay && data>0){
+            data=data-1;
+        }
+        return data<0?0:data;
+    }
     public static int getDataNum(Date endDate) {
         int data = new Long((endDate.getTime() - System.currentTimeMillis()) / (1000 * 3600 * 24)).intValue();
         return data<0?0:data;
@@ -103,4 +113,5 @@ public class TimeUtils {
     public static int getDataNum(Date startDate,Date endDate) {
         return new Long((endDate.getTime() - startDate.getTime()) / (1000 * 3600 * 24)).intValue();
     }
+
 }

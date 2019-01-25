@@ -290,7 +290,7 @@ public class ActivityRedPacketServiceImpl implements ActivityRedPacketService {
             listparam = new ArrayList<ActivityRedPacketListBO>();
         } else {
             listparam.stream().forEach(param -> {
-                int dataNum = TimeUtils.getDataNum(param.getEndTime());
+                int dataNum = TimeUtils.getDataNumRed(param.getStartTime(),param.getEndTime());
                 param.setResidueDates(dataNum);
                 int days = param.getActivityTime() - dataNum;
                 param.setGoingDates(days < 0 ? 0 : days);
