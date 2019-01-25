@@ -46,7 +46,8 @@ public class ActivityStatisticsJobHandler extends IJobHandler {
             log.info("无活动id列表就此结束定时");
             return ReturnT.FAIL;
         }
-        String yesterday = StatisticsConstants.getYesterday();
+        //String yesterday = StatisticsConstants.getYesterday(); TODO 测试先为当天
+        String yesterday = StatisticsConstants.getCurrentDate();
         //获取昨天24小时内的访问量数据
         Map map = new TreeMap();
         for (MktActivityPOWithBLOBs activity:activityIds) {
@@ -94,11 +95,18 @@ public class ActivityStatisticsJobHandler extends IJobHandler {
             mktActivityStatisticsPO.setTakeCouponCount(Long.parseLong(String.valueOf(takeCouponCount)));
             String json = Json.encode(map);
             mktActivityStatisticsPO.setHourJsonData(json);
-            Calendar calendar = Calendar.getInstance();
+            /*Calendar calendar = Calendar.getInstance(); todo 测试先为当天
             calendar.setTime(new Date());
             calendar.add(Calendar.DATE, -1);
-            mktActivityStatisticsPO.setStatisticsTime(calendar.getTime());
+            mktActivityStatisticsPO.setStatisticsTime(calendar.getTime());*/
+            mktActivityStatisticsPO.setStatisticsTime(new Date());
+
             mktActivityStatisticsPO.setStatisticsType(StatisticsConstants.STATISTICS_TYPE);
+            mktActivityStatisticsPO.setCreateDate(new Date());
+            mktActivityStatisticsPO.setModifiedDate(new Date());
+            mktActivityStatisticsPO.setValid(true);
+            mktActivityStatisticsPO.setCreateUserName("系统自动执行定时");
+            mktActivityStatisticsPO.setModifiedUserName("系统自动执行定时");
             mktActivityStatisticsPOMapper.insertSelective(mktActivityStatisticsPO);
         }
         log.info("红包膨胀了   活动统计   任务执行结束。。。。");
