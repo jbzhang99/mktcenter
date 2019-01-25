@@ -271,7 +271,7 @@ public class ActivityStatisticsServiceImpl implements ActivityStatisticsService{
         MktActivityStatisticsPOExample example = new MktActivityStatisticsPOExample();
         //获取从活动开始时间到当前时间的各项累计数据
         example.createCriteria().andMktActivityIdEqualTo(activityId).andStatisticsTypeEqualTo(StatisticsConstants.STATISTICS_TYPE)
-                .andStatisticsTimeBetween(startTime,todayDate).andSysBrandIdEqualTo(sysAccountPO.getBrandId()).andSysCompanyIdEqualTo(sysAccountPO.getSysCompanyId());
+                .andStatisticsTimeBetween(startTime,todayDate).andSysBrandIdEqualTo(sysAccountPO.getBrandId()).andSysCompanyIdEqualTo(sysAccountPO.getSysCompanyId()).andValidEqualTo(true);
         List<MktActivityStatisticsPO> todayList = mktActivityStatisticsPOMapper.selectByExample(example);
         if (!todayList.isEmpty()) {
             todayList.forEach(todayPo -> {
