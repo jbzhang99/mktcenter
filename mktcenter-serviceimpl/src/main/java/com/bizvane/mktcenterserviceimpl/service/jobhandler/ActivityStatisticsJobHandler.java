@@ -87,15 +87,15 @@ public class ActivityStatisticsJobHandler extends IJobHandler {
             Set totalLaunchSet = (Set) redisTemplateService.stringGetStringByKey(totalLaunch);
             int totalLaunchCount = totalLaunchSet == null ? 0 : totalLaunchSet.size();
 
-            String totalHelp = StatisticsConstants.TOTAL_LAUNCH_MEMBERS + activityId;
+            String totalHelp = StatisticsConstants.TOTAL_HELP_MEMBERS + activityId;
             Set totalHelpSet = (Set) redisTemplateService.stringGetStringByKey(totalHelp);
             int totalHelpCount = totalHelpSet == null ? 0 : totalHelpSet.size();
 
-            String totalregister = StatisticsConstants.TOTAL_LAUNCH_MEMBERS + activityId;
+            String totalregister = StatisticsConstants.TOTAL_REGISTER_MEMBERS + activityId;
             Set totalregisterSet = (Set) redisTemplateService.stringGetStringByKey(totalregister);
             int totalregisterCount = totalregisterSet == null ? 0 : totalregisterSet.size();
 
-            String totaltake = StatisticsConstants.TOTAL_LAUNCH_MEMBERS + activityId;
+            String totaltake = StatisticsConstants.TOTAL_TAKE_COUPON + activityId;
             Set totaltakeSet = (Set) redisTemplateService.stringGetStringByKey(totaltake);
             int totaltakeCount = totaltakeSet == null ? 0 : totaltakeSet.size();
 
