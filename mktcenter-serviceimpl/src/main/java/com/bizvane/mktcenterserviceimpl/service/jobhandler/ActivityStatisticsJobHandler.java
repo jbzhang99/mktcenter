@@ -69,9 +69,9 @@ public class ActivityStatisticsJobHandler extends IJobHandler {
                 }
             }
             //查询昨天访问人数
-            /*String visitorsKey = StatisticsConstants.VISITORS_PREFIX + activityId + "_" + yesterday;
+            String visitorsKey = StatisticsConstants.VISITORS_PREFIX + activityId + "_" + yesterday;
             Set visitorsMemberCodeSet = (Set) redisTemplateService.stringGetStringByKey(visitorsKey);
-            int visitorsCount = visitorsMemberCodeSet == null ? 0 : visitorsMemberCodeSet.size();*/
+            int visitorsCount = visitorsMemberCodeSet == null ? 0 : visitorsMemberCodeSet.size();
             //查询昨天发起会员数
             String launchMembersKey = StatisticsConstants.LAUNCH_MEMBERS + activityId + "_" + yesterday;
             Set launchMemberCodeSet = (Set) redisTemplateService.stringGetStringByKey(launchMembersKey);
@@ -89,18 +89,23 @@ public class ActivityStatisticsJobHandler extends IJobHandler {
             Set takeCouponMemberCodeSet = (Set) redisTemplateService.stringGetStringByKey(takeCouponKey);
             int takeCouponCount = takeCouponMemberCodeSet == null ? 0 : takeCouponMemberCodeSet.size();
 
+            //累计访问量
+            String totalVisitors = StatisticsConstants.TOTAL_VISITORS_PREFIX + activityId;
+            Set totalVisitorsSet = (Set) redisTemplateService.stringGetStringByKey(totalVisitors);
+            int totalVisitorsCount = totalVisitorsSet == null ? 0 : totalVisitorsSet.size();
+            //累计发起会员量
             String totalLaunch = StatisticsConstants.TOTAL_LAUNCH_MEMBERS + activityId;
             Set totalLaunchSet = (Set) redisTemplateService.stringGetStringByKey(totalLaunch);
             int totalLaunchCount = totalLaunchSet == null ? 0 : totalLaunchSet.size();
-
+            //累计助力会员量
             String totalHelp = StatisticsConstants.TOTAL_HELP_MEMBERS + activityId;
             Set totalHelpSet = (Set) redisTemplateService.stringGetStringByKey(totalHelp);
             int totalHelpCount = totalHelpSet == null ? 0 : totalHelpSet.size();
-
+            //累计注册会员量
             String totalregister = StatisticsConstants.TOTAL_REGISTER_MEMBERS + activityId;
             Set totalregisterSet = (Set) redisTemplateService.stringGetStringByKey(totalregister);
             int totalregisterCount = totalregisterSet == null ? 0 : totalregisterSet.size();
-
+            //累计发劵数量
             String totaltake = StatisticsConstants.TOTAL_TAKE_COUPON + activityId;
             Set totaltakeSet = (Set) redisTemplateService.stringGetStringByKey(totaltake);
             int totaltakeCount = totaltakeSet == null ? 0 : totaltakeSet.size();
@@ -110,13 +115,14 @@ public class ActivityStatisticsJobHandler extends IJobHandler {
             mktActivityStatisticsPO.setSysCompanyId(activity.getSysCompanyId());
             mktActivityStatisticsPO.setSysBrandId(activity.getSysBrandId());
             mktActivityStatisticsPO.setMktActivityId(activityId);
-            mktActivityStatisticsPO.setVisitorsCount(launchMembersCount + helpMembersCount);
+
+            mktActivityStatisticsPO.setVisitorsCount(visitorsCount);
             mktActivityStatisticsPO.setLaunchMembersCount(launchMembersCount);
             mktActivityStatisticsPO.setHelpMembersCount(helpMembersCount);
             mktActivityStatisticsPO.setRegisterMembersCount(registerMembersCount);
             mktActivityStatisticsPO.setTakeCouponCount(Long.parseLong(String.valueOf(takeCouponCount)));
 
-            mktActivityStatisticsPO.setTotalVisitorsCount(Long.parseLong(String.valueOf(totalLaunchCount + totalHelpCount)));
+            mktActivityStatisticsPO.setTotalVisitorsCount(Long.parseLong(String.valueOf(totalVisitorsCount)));
             mktActivityStatisticsPO.setTotalLaunchMembersCount(Long.parseLong(String.valueOf(totalLaunchCount)));
             mktActivityStatisticsPO.setTotalHelpMembersCount(Long.parseLong(String.valueOf(totalHelpCount)));
             mktActivityStatisticsPO.setTotalRegisterMembersCount(Long.parseLong(String.valueOf(totalregisterCount)));

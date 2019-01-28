@@ -109,13 +109,24 @@ public class ActivityStatisticsServiceImpl implements ActivityStatisticsService{
             redisTemplateService.stringSetValueAndExpireTime(key,memberCodeSet,StatisticsConstants.REDIS_LIVE_TIME);
 
             if (StringUtils.isNotBlank(visitorsKey) && StringUtils.isNotBlank(hourKey)) {
-                /*Set visitorsMemberCodeSet = (Set) redisTemplateService.stringGetStringByKey(visitorsKey);
+                //日访问量
+                Set visitorsMemberCodeSet = (Set) redisTemplateService.stringGetStringByKey(visitorsKey);
                 if (CollectionUtils.isEmpty(visitorsMemberCodeSet)) {
                     visitorsMemberCodeSet = new HashSet();
                 }
                 visitorsMemberCodeSet.add(memberCode);
-                redisTemplateService.stringSetValueAndExpireTime(visitorsKey,visitorsMemberCodeSet,StatisticsConstants.REDIS_LIVE_TIME);*/
+                redisTemplateService.stringSetValueAndExpireTime(visitorsKey,visitorsMemberCodeSet,StatisticsConstants.REDIS_LIVE_TIME);
 
+                //累计访问量redis
+                String totalVisitorsKey = StatisticsConstants.TOTAL_VISITORS_PREFIX + activityId;
+                Set totalVisitorsMemberCodeSet = (Set) redisTemplateService.stringGetStringByKey(totalVisitorsKey);
+                if (CollectionUtils.isEmpty(totalVisitorsMemberCodeSet)) {
+                    totalVisitorsMemberCodeSet = new HashSet();
+                }
+                totalVisitorsMemberCodeSet.add(memberCode);
+                redisTemplateService.stringSetValueAndExpireTime(totalVisitorsKey,totalVisitorsMemberCodeSet,StatisticsConstants.getTimeIntervalMilliseconds(mktActivityPOWithBLOBs.getStartTime(),mktActivityPOWithBLOBs.getEndTime()));
+
+                //小时访问量
                 Set hourMemberCodeSet = (Set) redisTemplateService.stringGetStringByKey(hourKey);
                 if (CollectionUtils.isEmpty(hourMemberCodeSet)) {
                     hourMemberCodeSet = new HashSet();
