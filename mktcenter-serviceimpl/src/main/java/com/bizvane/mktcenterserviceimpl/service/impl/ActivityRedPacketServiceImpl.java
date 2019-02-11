@@ -523,13 +523,14 @@ public class ActivityRedPacketServiceImpl implements ActivityRedPacketService {
         }
         vo.setType(3);
         //查询助力人数
-        Integer zhuliredPacketCount = mktActivityRedPacketRecordPOMapper.getRedPacketCount(3, null, vo.getMemberCode(), vo.getMktActivityId());
+        Integer zhuliredPacketCount = mktActivityRedPacketRecordPOMapper.getRedPacketCount(2, null, vo.getMemberCode(), vo.getMktActivityId());
         vo.setGetCouponNum(1);
         String couponCode = this.sendCoupon(bo, vo);
         MktActivityRedPacketPO activityRedPacketPO = bo.getActivityRedPacketPO();
         Integer reward = activityRedPacketPO.getCouponDenomination() + zhuliredPacketCount * activityRedPacketPO.getAddCouponDenomination();
         this.doStatisticsRecored(vo, bo, couponCode, reward);
         responseData.setData(reward);
+        log.info("andActivityRedPacketSendCouponRecord 拆红包返回值 result:"+JSON.toJSONString(responseData));
         return responseData;
     }
 
