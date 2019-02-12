@@ -2,7 +2,9 @@ package com.bizvane.mktcenterserviceimpl.service.impl;
 
 import com.alibaba.fastjson.JSON;
 import com.bizvane.centerstageservice.models.po.SysCheckPo;
+import com.bizvane.centerstageservice.models.po.SysStorePo;
 import com.bizvane.centerstageservice.models.vo.SysCheckConfigVo;
+import com.bizvane.centerstageservice.rpc.StoreServiceRpc;
 import com.bizvane.centerstageservice.rpc.SysCheckConfigServiceRpc;
 import com.bizvane.centerstageservice.rpc.SysCheckServiceRpc;
 import com.bizvane.couponfacade.enums.SendTypeEnum;
@@ -46,8 +48,10 @@ import org.springframework.util.StringUtils;
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 @Service
@@ -82,6 +86,9 @@ public class ActivityManualServiceImpl implements ActivityManualService {
     
     @Autowired
     private MktActivityCountPOMapper mktActivityCountPOMapper;
+
+    @Autowired
+    private StoreServiceRpc storeServiceRpc;
     
     @Override
     public ResponseData<ActivityVO> getActivityManualList(ActivityVO vo, PageForm pageForm,SysAccountPO stageUser) {
@@ -487,6 +494,7 @@ public class ActivityManualServiceImpl implements ActivityManualService {
     @Override
     public ResponseData<ActivityBO> selectActivityManualByBusinessCode(String businessCode) {
         ResponseData responseData = new ResponseData();
+        ActivityBO bo = new ActivityBO();
         if(StringUtils.isEmpty(businessCode)){
             log.error("领券活动-查询活动详情-入参为空");
             responseData.setCode(SystemConstants.ERROR_CODE);
@@ -505,6 +513,20 @@ public class ActivityManualServiceImpl implements ActivityManualService {
                 return  responseData;
             }
             log.info("领券活动-查询活动详情-出参:"+ JSON.toJSONString(activityManualList));
+
+            if(!CollectionUtils.isEmpty(activityManualList)){
+                if (!StringUtils.isEmpty(activityManualList.get(0).getStoreLimitList())){
+                    String ids =activityManualList.get(0).getStoreLimitList();
+                    //查询适用门店
+                    List<Long> listIds = Arrays.asList(ids.split(",")).stream().map(s -> Long.parseLong(s.trim())).collect(Collectors.toList());
+                    ResponseData<List<SysStorePo>> sysStorePOs = storeServiceRpc.getIdStoreLists(listIds);
+
+                    if(!CollectionUtils.isEmpty(sysStorePOs.getData())){
+                        bo.getActivityVO().setSysStorePos(sysStorePOs.getData());
+                    }
+                }
+            }
+
             //查询活动券
             MktCouponPOExample example = new  MktCouponPOExample();
             example.createCriteria().andBizIdEqualTo(activityManualList.get(0).getMktActivityId()).andValidEqualTo(true).andBizTypeEqualTo(1);
@@ -521,7 +543,7 @@ public class ActivityManualServiceImpl implements ActivityManualService {
                 }
             }
 
-            ActivityBO bo = new ActivityBO();
+
             bo.setActivityVO(activityManualList.get(0));
             bo.setCouponEntityAndDefinitionVOList(lists);
             responseData.setData(bo);
