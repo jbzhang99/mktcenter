@@ -513,20 +513,6 @@ public class ActivityManualServiceImpl implements ActivityManualService {
                 return  responseData;
             }
             log.info("领券活动-查询活动详情-出参:"+ JSON.toJSONString(activityManualList));
-
-            if(!CollectionUtils.isEmpty(activityManualList)){
-                if (!StringUtils.isEmpty(activityManualList.get(0).getStoreLimitList())){
-                    String ids =activityManualList.get(0).getStoreLimitList();
-                    //查询适用门店
-                    List<Long> listIds = Arrays.asList(ids.split(",")).stream().map(s -> Long.parseLong(s.trim())).collect(Collectors.toList());
-                    ResponseData<List<SysStorePo>> sysStorePOs = storeServiceRpc.getIdStoreLists(listIds);
-
-                    if(!CollectionUtils.isEmpty(sysStorePOs.getData())){
-                        bo.getActivityVO().setSysStorePos(sysStorePOs.getData());
-                    }
-                }
-            }
-
             //查询活动券
             MktCouponPOExample example = new  MktCouponPOExample();
             example.createCriteria().andBizIdEqualTo(activityManualList.get(0).getMktActivityId()).andValidEqualTo(true).andBizTypeEqualTo(1);
@@ -542,9 +528,17 @@ public class ActivityManualServiceImpl implements ActivityManualService {
                     lists.add(entityAndDefinition.getData());
                 }
             }
-
-
             bo.setActivityVO(activityManualList.get(0));
+            if(!CollectionUtils.isEmpty(activityManualList)){
+                if (!StringUtils.isEmpty(activityManualList.get(0).getStoreLimitList())){
+                    String ids =activityManualList.get(0).getStoreLimitList();
+                    //查询适用门店
+                    List<Long> listIds = Arrays.asList(ids.split(",")).stream().map(s -> Long.parseLong(s.trim())).collect(Collectors.toList());
+                    ResponseData<List<SysStorePo>> sysStorePOs = storeServiceRpc.getIdStoreLists(listIds);
+                    List<SysStorePo> data = sysStorePOs.getData();
+                    bo.getActivityVO().setSysStorePos(data);
+                }
+            }
             bo.setCouponEntityAndDefinitionVOList(lists);
             responseData.setData(bo);
         }catch (Exception e){
