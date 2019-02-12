@@ -6,8 +6,6 @@ import com.bizvane.mktcenterservice.models.bo.ActivityBO;
 import com.bizvane.mktcenterservice.models.bo.OrderModelBo;
 import com.bizvane.mktcenterservice.models.vo.ActivityVO;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.StringUtils;
-import org.apache.poi.util.StringUtil;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
