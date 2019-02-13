@@ -500,8 +500,9 @@ public class ActivityRedPacketServiceImpl implements ActivityRedPacketService {
         po.setCouponDefinitionId(String.valueOf(bo.getActivityRedPacketPO().getCouponDefinitionId()));
         po.setMemberCode(vo.getSponsorCode());
         po.setMoneyAdd(new BigDecimal(bo.getActivityRedPacketPO().getAddCouponDenomination()));
+        po.setTaskId(String.valueOf(bo.getActivityRedPacketPO().getMktActivityId()));
         ResponseData<Object> objectResponseData = couponDefinitionServiceFeign.definitionMoneyRpc(po);
-        log.info("addCouponModelMoneyNum 入参:" + JSON.toJSONString(po) + " ---结果" + JSON.toJSONString(po));
+        log.info("addCouponModelMoneyNum 入参:" + JSON.toJSONString(po) + " ---结果" + JSON.toJSONString(objectResponseData));
     }
 
     /**
