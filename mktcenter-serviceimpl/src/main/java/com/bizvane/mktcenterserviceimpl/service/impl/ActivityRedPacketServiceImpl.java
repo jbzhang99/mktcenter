@@ -500,7 +500,7 @@ public class ActivityRedPacketServiceImpl implements ActivityRedPacketService {
         po.setCouponDefinitionId(String.valueOf(bo.getActivityRedPacketPO().getCouponDefinitionId()));
         po.setMemberCode(vo.getSponsorCode());
         po.setMoneyAdd(new BigDecimal(bo.getActivityRedPacketPO().getAddCouponDenomination()));
-        po.setTaskId(String.valueOf(bo.getActivityRedPacketPO().getMktActivityId()));
+        po.setTaskId(bo.getActivityPO().getActivityCode()+vo.getSponsorCode());
         ResponseData<Object> objectResponseData = couponDefinitionServiceFeign.definitionMoneyRpc(po);
         log.info("addCouponModelMoneyNum 入参:" + JSON.toJSONString(po) + " ---结果" + JSON.toJSONString(objectResponseData));
     }
@@ -587,7 +587,7 @@ public class ActivityRedPacketServiceImpl implements ActivityRedPacketService {
         onecouponVO.setSendBussienId(vo.getMktActivityId());
         onecouponVO.setBusinessName(bo.getActivityPO().getActivityName());
         onecouponVO.setSendType("104");
-        onecouponVO.setTaskId(String.valueOf(bo.getActivityPO().getMktActivityId()));
+        onecouponVO.setTaskId(bo.getActivityPO().getActivityCode()+vo.getMemberCode());
         onecouponVO.setCouponDefinitionId(bo.getActivityRedPacketPO().getCouponDefinitionId());
         onecouponVO.setBrandId(vo.getSysBrandId());
         log.info("红包 发送券的参数-----" + JSON.toJSONString(bo));
