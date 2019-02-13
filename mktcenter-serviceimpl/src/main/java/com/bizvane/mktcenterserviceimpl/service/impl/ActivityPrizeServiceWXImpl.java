@@ -83,7 +83,7 @@ public class ActivityPrizeServiceWXImpl implements ActivityPrizeServiceWX {
             //抽奖记录
             example.createCriteria().andMemberCodeEqualTo(po.getMemberCode()).andSysBrandIdEqualTo(po.getSysBrandId()).andMktActivityIdEqualTo(po.getMktActivityId());
         }
-        example.setOrderByClause("create_date DESC");
+        example.setOrderByClause("prize_time DESC");
 
         List<MktActivityPrizeRecordPO> lists = mktActivityPrizeRecordPOMapper.selectByExample(example);
         log.info("大转盘中奖纪录列表查询结束");
