@@ -133,7 +133,7 @@ public class ActivityEvaluationServiceImpl implements ActivityEvaluationService 
         if (!CollectionUtils.isEmpty(activityEvaluationList)) {
             for (ActivityVO activity:activityEvaluationList) {
                 //判断适用商品
-                if (false==activity.getStoreLimit() ||!ExecuteParamCheckUtil.addActivitCheck(bo,activity)){
+                if (false==activity.getIsStoreLimit() ||!ExecuteParamCheckUtil.addActivitCheck(bo,activity)){
                     responseData.setCode(SysResponseEnum.FAILED.getCode());
                     responseData.setMessage("已存在评价奖励活动!");
                     return responseData;
