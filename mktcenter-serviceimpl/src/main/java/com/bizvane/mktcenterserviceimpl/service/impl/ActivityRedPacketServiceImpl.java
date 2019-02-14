@@ -176,13 +176,12 @@ public class ActivityRedPacketServiceImpl implements ActivityRedPacketService {
         ResponseData<String> qrCodeResponseData = qrCodeServiceFeign.createMiniprgmQRCode(createMiniprgmQRCodeRequestVO);
         log.info("addActivityRedPacket wexin result:" + JSON.toJSONString(qrCodeResponseData));
         String weixinUrl = qrCodeResponseData.getData();
-
-        MktActivityPOWithBLOBs updateActivityPO=new MktActivityPOWithBLOBs();
-        updateActivityPO.setMktActivityId(activityPO.getMktActivityId());
-        updateActivityPO.setQrCodeUrl(weixinUrl);
-        mktActivityPOMapper.updateByPrimaryKeySelective(updateActivityPO);
-
-
+        if (StringUtils.isNotBlank(weixinUrl)){
+            MktActivityPOWithBLOBs updateActivityPO=new MktActivityPOWithBLOBs();
+            updateActivityPO.setMktActivityId(activityPO.getMktActivityId());
+            updateActivityPO.setQrCodeUrl(weixinUrl);
+            mktActivityPOMapper.updateByPrimaryKeySelective(updateActivityPO);
+        }
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("qrCodeUrl", weixinUrl);
         jsonObject.put("activityCode", activeRedPacketCode);
@@ -607,7 +606,7 @@ public class ActivityRedPacketServiceImpl implements ActivityRedPacketService {
         onecouponVO.setTaskId(bo.getActivityPO().getActivityCode()+vo.getMemberCode());
         onecouponVO.setCouponDefinitionId(bo.getActivityRedPacketPO().getCouponDefinitionId());
         onecouponVO.setBrandId(vo.getSysBrandId());
-        log.info("红包 发送券的参数-----" + JSON.toJSONString(bo));
+        log.info("红包 发送券的参数-----" + JSON.toJSONString(onecouponVO));
         // award.execute(bo);
         ResponseData<String> simple = sendCouponServiceFeign.simple(onecouponVO);
         log.info("红包 发送券的结果------" + JSON.toJSONString(simple));
