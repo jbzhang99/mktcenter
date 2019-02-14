@@ -129,17 +129,9 @@ public class ActivityRedPacketServiceImpl implements ActivityRedPacketService {
         // jobUtil.addEndStartRedPacketJob(sysAccountPo, activityPO, activeRedPacketCode);
         jobUtil.addEndPrizeJob(sysAccountPo, activityPO, activeRedPacketCode);
 
-        CreateMiniprgmQRCodeRequestVO createMiniprgmQRCodeRequestVO = new CreateMiniprgmQRCodeRequestVO();
-        createMiniprgmQRCodeRequestVO.setSysBrandId(sysAccountPo.getBrandId());
-        createMiniprgmQRCodeRequestVO.setMiniProgramType("10");
-        createMiniprgmQRCodeRequestVO.setPath("pages/template01/red-packet/main");
-        createMiniprgmQRCodeRequestVO.setScene(activeRedPacketCode);
-        log.info("addActivityRedPacket wexin param:" + JSON.toJSONString(createMiniprgmQRCodeRequestVO));
-        ResponseData<String> qrCodeResponseData = qrCodeServiceFeign.createMiniprgmQRCode(createMiniprgmQRCodeRequestVO);
-        log.info("addActivityRedPacket wexin result:" + JSON.toJSONString(qrCodeResponseData));
-        String weixinUrl = qrCodeResponseData.getData();
+
         activityPO.setCheckStatus(3);
-        activityPO.setQrCodeUrl(weixinUrl);
+        //activityPO.setQrCodeUrl(weixinUrl);
         activityPO.setActivityCode(activeRedPacketCode);
         activityPO.setActivityType(12);
         activityPO.setSysCompanyId(sysAccountPo.getSysCompanyId());
@@ -174,6 +166,22 @@ public class ActivityRedPacketServiceImpl implements ActivityRedPacketService {
         mktActivityRedPacketSumPOMapper.insertSelective(redPacketSumPO);
 
         // activityStatisticsService.addActivityIdsSet(activityPO.getMktActivityId());
+
+        CreateMiniprgmQRCodeRequestVO createMiniprgmQRCodeRequestVO = new CreateMiniprgmQRCodeRequestVO();
+        createMiniprgmQRCodeRequestVO.setSysBrandId(sysAccountPo.getBrandId());
+        createMiniprgmQRCodeRequestVO.setMiniProgramType("10");
+        createMiniprgmQRCodeRequestVO.setPath("pages/template01/red-packet/main");
+        createMiniprgmQRCodeRequestVO.setScene(activityPO.getMktActivityId()+"&"+activeRedPacketCode);
+        log.info("addActivityRedPacket wexin param:" + JSON.toJSONString(createMiniprgmQRCodeRequestVO));
+        ResponseData<String> qrCodeResponseData = qrCodeServiceFeign.createMiniprgmQRCode(createMiniprgmQRCodeRequestVO);
+        log.info("addActivityRedPacket wexin result:" + JSON.toJSONString(qrCodeResponseData));
+        String weixinUrl = qrCodeResponseData.getData();
+
+        MktActivityPOWithBLOBs updateActivityPO=new MktActivityPOWithBLOBs();
+        updateActivityPO.setMktActivityId(activityPO.getMktActivityId());
+        updateActivityPO.setQrCodeUrl(weixinUrl);
+        mktActivityPOMapper.updateByPrimaryKeySelective(updateActivityPO);
+
 
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("qrCodeUrl", weixinUrl);
@@ -326,13 +334,22 @@ public class ActivityRedPacketServiceImpl implements ActivityRedPacketService {
         ResponseData<PageInfo<MktActivityRedPacketRecordBO>> responseData = new ResponseData<>();
 //        SysAccountPO sysAccountPo = TokenUtils.getStageUser(request);
         Long mktActivityId = vo.getMktActivityId();
+
+        MktActivityRedPacketPOExample example=new MktActivityRedPacketPOExample();
+        example.createCriteria().andMktActivityIdEqualTo(mktActivityId).andValidEqualTo(Boolean.TRUE);
+        List<MktActivityRedPacketPO> mktActivityRedPacketPOS = mktActivityRedPacketPOMapper.selectByExample(example);
+
         PageHelper.startPage(vo.getPageNumber(), vo.getPageSize());
         List<MktActivityRedPacketRecordBO> listparam = mktActivityRedPacketRecordPOMapper.getRedPacketCoponRecord(vo);
         if (CollectionUtils.isEmpty(listparam)) {
             listparam = new ArrayList<MktActivityRedPacketRecordBO>();
         } else {
             listparam.stream().forEach(param -> {
-                param.setHelpNumber(mktActivityRedPacketRecordPOMapper.getRedPacketCount(2, null, param.getMemberCode(), mktActivityId));
+                MktActivityRedPacketPO activityRedPacketPO = mktActivityRedPacketPOS.get(0);
+                Integer zhuliredPacketCount = mktActivityRedPacketRecordPOMapper.getRedPacketCount(2, null, param.getMemberCode(), mktActivityId);
+                Integer reward = activityRedPacketPO.getCouponDenomination() + zhuliredPacketCount * activityRedPacketPO.getAddCouponDenomination();
+                param.setHelpNumber(zhuliredPacketCount);
+                param.setCouponName(reward+"元现金券");
             });
         }
         PageInfo<MktActivityRedPacketRecordBO> pageInfo = new PageInfo<>(listparam);
