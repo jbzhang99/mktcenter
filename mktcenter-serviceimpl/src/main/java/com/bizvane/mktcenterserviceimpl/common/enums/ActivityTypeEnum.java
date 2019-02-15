@@ -19,7 +19,8 @@ public enum ActivityTypeEnum {
     ACTIVITY_TYPE_SMART(8,"智能营销活动"),
     ACTIVITY_TYPE_EVALUATION(9,"评价奖励活动"),
     ACTIVITY_TYPE_ANNIVERSARY(10,"纪念日活动"),
-    ACTIVITY_TYPE_PRIZE(11,"抽奖活动");
+    ACTIVITY_TYPE_PRIZE(11,"抽奖活动"),
+    ACTIVITY_TYPE_REDBAGS(12,"红包膨胀活动");
 
     private int code;
     private String message;

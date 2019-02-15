@@ -4,6 +4,8 @@ import com.bizvane.mktcenterservice.models.po.MktActivityPOExample;
 import com.bizvane.mktcenterservice.models.po.MktActivityPOWithBLOBs;
 import com.bizvane.mktcenterservice.models.po.MktActivityStatisticsPO;
 import com.bizvane.mktcenterserviceimpl.common.constants.StatisticsConstants;
+import com.bizvane.mktcenterserviceimpl.common.enums.ActivityStatusEnum;
+import com.bizvane.mktcenterserviceimpl.common.enums.ActivityTypeEnum;
 import com.bizvane.mktcenterserviceimpl.common.tools.DateUtil;
 import com.bizvane.mktcenterserviceimpl.mappers.MktActivityPOMapper;
 import com.bizvane.mktcenterserviceimpl.mappers.MktActivityStatisticsPOMapper;
@@ -41,7 +43,7 @@ public class ActivityStatisticsJobHandler extends IJobHandler {
         log.info("红包膨胀了   活动统计   任务开始执行 。。。。");
         //获取活动id列表
         MktActivityPOExample example = new MktActivityPOExample();
-        example.createCriteria().andActivityTypeEqualTo(12).andActivityStatusEqualTo(2).andValidEqualTo(true);
+        example.createCriteria().andActivityTypeGreaterThanOrEqualTo(ActivityTypeEnum.ACTIVITY_TYPE_REDBAGS.getCode()).andActivityStatusEqualTo(ActivityStatusEnum.ACTIVITY_STATUS_EXECUTING.getCode()).andValidEqualTo(true);
         List<MktActivityPOWithBLOBs> activityIds = mktActivityPOMapper.selectByExampleWithBLOBs(example);
         if (CollectionUtils.isEmpty(activityIds)) {
             //证明昨天无活动触发 就此结束
@@ -139,8 +141,13 @@ public class ActivityStatisticsJobHandler extends IJobHandler {
                 Date date = DateUtil.stringToDate(s,"yyyyMMdd");
                 mktActivityStatisticsPO.setStatisticsTime(date);
             }
+            String statisticsType = "";
+            if (ActivityTypeEnum.ACTIVITY_TYPE_REDBAGS.getCode() == activity.getActivityType()) {
+                //红包膨胀活动
+                statisticsType = StatisticsConstants.STATISTICS_TYPE;
+            }
 
-            mktActivityStatisticsPO.setStatisticsType(StatisticsConstants.STATISTICS_TYPE);
+            mktActivityStatisticsPO.setStatisticsType(statisticsType);
             mktActivityStatisticsPO.setCreateDate(new Date());
             mktActivityStatisticsPO.setModifiedDate(new Date());
             mktActivityStatisticsPO.setValid(true);
