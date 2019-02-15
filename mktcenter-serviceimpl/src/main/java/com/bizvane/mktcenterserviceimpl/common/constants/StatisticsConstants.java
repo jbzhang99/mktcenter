@@ -135,13 +135,7 @@ public class StatisticsConstants {
 
 
     public static long getTimeIntervalMilliseconds(Date startTime,Date endTime){
-        if (startTime == null && endTime != null) {
-            return endTime.getTime();
-        }
-        if (startTime != null && endTime == null) {
-            return startTime.getTime();
-        }
-        if (startTime == null && endTime == null) {
+        if (startTime == null || endTime == null) {
             return 240 * 60 * 60 * 1000;
         }
         long start = startTime.getTime();
