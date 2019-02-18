@@ -702,18 +702,23 @@ public class ActivityServiceImpl implements ActivityService {
             responseData.setMessage("活动未开始!");
             return responseData;
         }
-        int size = mktActivityPOWithBLOBslist.stream().filter(obj -> {
-            Boolean isStoreLimit = obj.getIsStoreLimit();
-            isStoreLimit = (isStoreLimit == null ? Boolean.TRUE :isStoreLimit);
-            String storeLimitList = obj.getStoreLimitList();
-            String[] storeIds = storeLimitList == null ? new String[]{"0"} : storeLimitList.split(",");
-            return isStoreLimit && ArrayUtils.contains(storeIds, String.valueOf(vo.getStoreId()));
-        }).collect(Collectors.toList()).size();
-        if (size==0){
-            responseData.setData(102);
-            responseData.setMessage("会员超出活动范围!");
-            return responseData;
+
+        if(mktActivityPOWithBLOBslist.get(0).getIsStoreLimit()){
+
+            int size = mktActivityPOWithBLOBslist.stream().filter(obj -> {
+                Boolean isStoreLimit = obj.getIsStoreLimit();
+                isStoreLimit = (isStoreLimit == null ? Boolean.TRUE :isStoreLimit);
+                String storeLimitList = obj.getStoreLimitList();
+                String[] storeIds = storeLimitList == null ? new String[]{"0"} : storeLimitList.split(",");
+                return isStoreLimit && ArrayUtils.contains(storeIds, String.valueOf(vo.getStoreId()));
+            }).collect(Collectors.toList()).size();
+            if (size==0){
+                responseData.setData(102);
+                responseData.setMessage("会员超出活动范围!");
+                return responseData;
+            }
         }
+
         return responseData;
     }
 
