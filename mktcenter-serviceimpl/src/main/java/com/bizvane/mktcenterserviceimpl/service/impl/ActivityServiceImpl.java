@@ -704,10 +704,10 @@ public class ActivityServiceImpl implements ActivityService {
         }
         int size = mktActivityPOWithBLOBslist.stream().filter(obj -> {
             Boolean isStoreLimit = obj.getIsStoreLimit();
-            isStoreLimit = isStoreLimit == null ? Boolean.TRUE : !isStoreLimit;
+            isStoreLimit = isStoreLimit == null ? Boolean.TRUE :isStoreLimit;
             String storeLimitList = obj.getStoreLimitList();
             String[] storeIds = storeLimitList == null ? new String[]{"0"} : storeLimitList.split(",");
-            return isStoreLimit || ArrayUtils.contains(storeIds, vo.getStoreId());
+            return isStoreLimit && ArrayUtils.contains(storeIds, vo.getStoreId());
         }).collect(Collectors.toList()).size();
         if (size==0){
             responseData.setData(102);
@@ -717,4 +717,21 @@ public class ActivityServiceImpl implements ActivityService {
         return responseData;
     }
 
+//    public static void main(String[] args) {
+//        MktActivityPOWithBLOBs mktActivityPOWithBLOBs = new MktActivityPOWithBLOBs();
+//        mktActivityPOWithBLOBs.setIsStoreLimit(true);
+//        mktActivityPOWithBLOBs.setStoreLimitList("219");
+//        List<MktActivityPOWithBLOBs> mktActivityPOWithBLOBslist=new ArrayList<>();
+//        mktActivityPOWithBLOBslist.add(mktActivityPOWithBLOBs);
+//        int size = mktActivityPOWithBLOBslist.stream().filter(obj -> {
+//            Boolean isStoreLimit = obj.getIsStoreLimit();
+//            isStoreLimit = isStoreLimit == null ? Boolean.TRUE : !isStoreLimit;
+//            String storeLimitList = obj.getStoreLimitList();
+//            String[] storeIds = storeLimitList == null ? new String[]{"0"} : storeLimitList.split(",");
+//            System.out.println(isStoreLimit+"------------"+ArrayUtils.contains(storeIds, 219));
+//            return isStoreLimit && ArrayUtils.contains(storeIds, 220);
+//        }).collect(Collectors.toList()).size();
+//        System.out.println(size);
+//
+//    }
 }
