@@ -27,6 +27,7 @@ import com.bizvane.mktcenterservice.models.vo.ActivityPriceParamVO;
 import com.bizvane.mktcenterservice.models.vo.ActivityRedPacketVO;
 import com.bizvane.mktcenterservice.models.vo.RedPacketSocketVO;
 import com.bizvane.mktcenterserviceimpl.common.job.JobUtil;
+import com.bizvane.mktcenterserviceimpl.common.locktools.DistributedLocker;
 import com.bizvane.mktcenterserviceimpl.common.utils.CodeUtil;
 import com.bizvane.mktcenterserviceimpl.common.utils.TimeUtils;
 import com.bizvane.mktcenterserviceimpl.mappers.MktActivityPOMapper;
@@ -45,6 +46,7 @@ import com.github.pagehelper.PageInfo;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.redisson.api.RLock;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -58,6 +60,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 /**
@@ -97,6 +100,8 @@ public class ActivityRedPacketServiceImpl implements ActivityRedPacketService {
     private TemplateMessageServiceFeign templateMessageServiceFeign;
     @Autowired
     private MemberInfoApiService memberInfoApiService;
+    @Autowired
+    private DistributedLocker distributedLocker;
 
     /**
      * 新增
@@ -469,6 +474,8 @@ public class ActivityRedPacketServiceImpl implements ActivityRedPacketService {
     @Transactional
     @Override
     public synchronized ResponseData<Integer> andActivityRedPacketZhuliRecord(ActivityRedPacketVO vo) throws IOException {
+        RLock lock = distributedLocker.lock(vo.getSponsorCode(), TimeUnit.SECONDS, 2L);
+
         ResponseData<Integer> responseData = new ResponseData<>();
         ActivityRedPacketBO bo = mktActivityPOMapper.selectActivityRedPacketDetail(vo);
         log.info("andActivityRedPacketZhuliRecord 添加记录 param:" + JSON.toJSONString(vo) + "--活动详情-" + JSON.toJSONString(bo));
@@ -490,6 +497,8 @@ public class ActivityRedPacketServiceImpl implements ActivityRedPacketService {
 
         this.addCouponModelMoneyNum(vo, bo);
         responseData.setData(bo.getActivityRedPacketPO().getRewardIntegral());
+
+        distributedLocker.unlock(lock);
         return responseData;
     }
 
