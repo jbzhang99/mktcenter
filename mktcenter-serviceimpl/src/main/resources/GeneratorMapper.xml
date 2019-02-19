@@ -4,7 +4,7 @@
         "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
 
 <generatorConfiguration>
-    <classPathEntry location="E:\mysql-jar\mysql-connector-java-5.1.18-bin.jar"/>
+    <classPathEntry location="D:\mysql-jar\mysql-connector-java-5.1.18-bin.jar"/>
     <context id="testTables" targetRuntime="MyBatis3">
     
         <plugin type="com.bizvane.mktcenterserviceimpl.common.utils.SerializablePlugin" />
@@ -140,8 +140,12 @@
 <!--  <table tableName="t_mkt_activity_prize" domainObjectName="MktActivityPrizePO">
             <generatedKey column="mkt_activity_prize_id" sqlStatement="MySql" identity="true"/>
         </table> -->
-         <table tableName="t_mkt_activity_prize_record" domainObjectName="MktActivityPrizeRecordPO">
+       <!--   <table tableName="t_mkt_activity_prize_record" domainObjectName="MktActivityPrizeRecordPO">
             <generatedKey column="mkt_activity_prize_record_id" sqlStatement="MySql" identity="true"/>
+        </table> -->
+        
+        <table tableName="t_mkt_golden_statistics" domainObjectName="MktGoldenStatisticsPO">
+            <generatedKey column="mkt_golden_statistics_id" sqlStatement="MySql" identity="true"/>
         </table>
     </context>
 </generatorConfiguration>
