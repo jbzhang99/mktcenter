@@ -609,6 +609,8 @@ public class TaskServiceImpl implements TaskService {
         memberMessageVO.setActivityName(sendMessageVO.getTaskName());
         memberMessageVO.setActivityInterests(activityInterests);
         memberMessageVO.setMemberPhone(member.getPhone());
+        memberMessageVO.setActivityStartDate(sendMessageVO.getStartTime());
+        memberMessageVO.setActivityEndDate(sendMessageVO.getStartTime());
         memberMessageVO.setTemplateType("TASK_TEMPLATE_MESSAGE");
         memberMessageVO.setUnl(new StringBuilder(TaskConstants.WX_URL).append(sendMessageVO.getMktTaskId()).toString());
         return memberMessageVO;

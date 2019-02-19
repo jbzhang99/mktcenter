@@ -468,10 +468,15 @@ public class ActivityRedPacketServiceImpl implements ActivityRedPacketService {
      */
     @Transactional
     @Override
-    public ResponseData<Integer> andActivityRedPacketZhuliRecord(ActivityRedPacketVO vo) throws IOException {
+    public synchronized ResponseData<Integer> andActivityRedPacketZhuliRecord(ActivityRedPacketVO vo) throws IOException {
         ResponseData<Integer> responseData = new ResponseData<>();
         ActivityRedPacketBO bo = mktActivityPOMapper.selectActivityRedPacketDetail(vo);
         log.info("andActivityRedPacketZhuliRecord 添加记录 param:" + JSON.toJSONString(vo) + "--活动详情-" + JSON.toJSONString(bo));
+        //判断是否超过最大助力次数
+        Integer redPacketCount = mktActivityRedPacketRecordPOMapper.getRedPacketCount(2, null, vo.getSponsorCode(), vo.getMktActivityId());
+        if(redPacketCount.equals(bo.getActivityRedPacketPO().getLimitNum())){
+          return  responseData;
+       }
         vo.setType(2);
         vo.setHelpNum(1);
         this.addPonint(bo, vo);
