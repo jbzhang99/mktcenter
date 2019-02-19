@@ -176,6 +176,7 @@ public class ActivityRedPacketServiceImpl implements ActivityRedPacketService {
         ResponseData<String> qrCodeResponseData = qrCodeServiceFeign.createMiniprgmQRCode(createMiniprgmQRCodeRequestVO);
         log.info("addActivityRedPacket wexin result:" + JSON.toJSONString(qrCodeResponseData));
         String weixinUrl = qrCodeResponseData.getData();
+        log.info("addActivityRedPacket wexin result picture:" + weixinUrl);
         if (StringUtils.isNotBlank(weixinUrl)){
             MktActivityPOWithBLOBs updateActivityPO=new MktActivityPOWithBLOBs();
             updateActivityPO.setMktActivityId(activityPO.getMktActivityId());
