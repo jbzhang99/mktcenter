@@ -472,11 +472,7 @@ public class ActivityRedPacketServiceImpl implements ActivityRedPacketService {
         ResponseData<Integer> responseData = new ResponseData<>();
         ActivityRedPacketBO bo = mktActivityPOMapper.selectActivityRedPacketDetail(vo);
         log.info("andActivityRedPacketZhuliRecord 添加记录 param:" + JSON.toJSONString(vo) + "--活动详情-" + JSON.toJSONString(bo));
-        //判断是否超过最大助力次数
-        Integer redPacketCount = mktActivityRedPacketRecordPOMapper.getRedPacketCount(2, null, vo.getSponsorCode(), vo.getMktActivityId());
-        if(redPacketCount.equals(bo.getActivityRedPacketPO().getLimitNum())){
-          return  responseData;
-       }
+
         vo.setType(2);
         vo.setHelpNum(1);
         this.addPonint(bo, vo);
@@ -571,6 +567,14 @@ public class ActivityRedPacketServiceImpl implements ActivityRedPacketService {
         recordPO.setCouponQuota(reward);
         recordPO.setCreateDate(new Date());
         mktActivityRedPacketRecordPOMapper.insertSelective(recordPO);
+        if (2==vo.getType()){
+             //判断是否超过最大助力次数
+            Integer redPacketCount = mktActivityRedPacketRecordPOMapper.getRedPacketCount(2, null, vo.getSponsorCode(), vo.getMktActivityId());
+            if (redPacketCount>bo.getActivityRedPacketPO().getLimitNum()){
+                mktActivityRedPacketRecordPOMapper.deleteByPrimaryKey(recordPO.getMktActivityRedPacketRecordId());
+                vo.setHelpNum(0);
+            }
+        }
         mktActivityRedPacketSumPOMapper.updateUpdateCount(vo);
 
         Integer type = vo.getType();
