@@ -689,4 +689,21 @@
       valid = #{valid,jdbcType=BIT}
     where mkt_golden_statistics_id = #{mktGoldenStatisticsId,jdbcType=BIGINT}
   </update>
+
+  <select id="getTotalGoldenStatistics" resultType="com.bizvane.mktcenterservice.models.po.MktGoldenStatisticsPO">
+    SELECT
+        total_visitors_count,
+        total_participate_member_count,
+        total_page_forward_count,
+        total_effective_sharing_count,
+        total_register_members_count
+    FROM
+        t_mkt_golden_statistics
+    WHERE
+        mkt_activity_id = #{activityId}
+        AND valid = 1
+    ORDER BY
+        statistics_time DESC
+        LIMIT 1
+  </select>
 </mapper>

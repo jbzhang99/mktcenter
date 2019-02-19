@@ -103,4 +103,6 @@ public interface MktGoldenStatisticsPOMapper {
      * @mbg.generated 2019-02-19 16:54:15
      */
     int updateByPrimaryKey(MktGoldenStatisticsPO record);
+
+    MktGoldenStatisticsPO getTotalGoldenStatistics(Long activityId);
 }

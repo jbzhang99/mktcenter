@@ -67,40 +67,45 @@ public class ActivityGoldenStatisticsServiceImpl implements ActivityGoldenStatis
                 redisTemplateService.stringSetValueAndExpireTime(redisKey, visitorsCount, redisOutTime);
 
             } else if (GoldenStatisticsEnum.PARTICIPATE_MEMBER_COUNT.getCode() == code) {
+                Integer participateMemberCount = (Integer) redisTemplateService.stringGetStringByKey(redisKey);
+                if (participateMemberCount == null) {
+                    participateMemberCount = 0;
+                }
                 //参与会员数统计
-                redisKey = redisKey + memberCode;
-                Integer visitorsCount = (Integer) redisTemplateService.stringGetStringByKey(redisKey);
-                if (visitorsCount == null) {
-                    redisTemplateService.stringSetValueAndExpireTime(redisKey, 1, redisOutTime);
+                String redisKeys = redisKey + memberCode;
+                Integer participateMemberCounts = (Integer) redisTemplateService.stringGetStringByKey(redisKeys);
+                if (participateMemberCounts == null) {
+                    redisTemplateService.stringSetValueAndExpireTime(redisKeys, 1, redisOutTime);
+                    participateMemberCount = participateMemberCount + 1;
+                    redisTemplateService.stringSetValueAndExpireTime(redisKey, participateMemberCount, redisOutTime);
                 }
             } else if (GoldenStatisticsEnum.PAGE_FORWARD_COUNT.getCode() == code) {
                 //页面转发次数统计
-                Integer visitorsCount = (Integer) redisTemplateService.stringGetStringByKey(redisKey);
-                if (visitorsCount == null) {
-                    visitorsCount = 1;
+                Integer pageForwardCount = (Integer) redisTemplateService.stringGetStringByKey(redisKey);
+                if (pageForwardCount == null) {
+                    pageForwardCount = 1;
                 } else {
-                    visitorsCount = visitorsCount + 1;
+                    pageForwardCount = pageForwardCount + 1;
                 }
-                redisTemplateService.stringSetValueAndExpireTime(redisKey, visitorsCount, redisOutTime);
+                redisTemplateService.stringSetValueAndExpireTime(redisKey, pageForwardCount, redisOutTime);
             } else if (GoldenStatisticsEnum.EFFECTIVE_SHARING_COUNT.getCode() == code) {
                 //有效分享人数统计
-                Integer visitorsCount = (Integer) redisTemplateService.stringGetStringByKey(redisKey);
-                if (visitorsCount == null) {
-                    visitorsCount = 1;
+                Integer effectiveSharingCount = (Integer) redisTemplateService.stringGetStringByKey(redisKey);
+                if (effectiveSharingCount == null) {
+                    effectiveSharingCount = 1;
                 } else {
-                    visitorsCount = visitorsCount + 1;
+                    effectiveSharingCount = effectiveSharingCount + 1;
                 }
-                redisTemplateService.stringSetValueAndExpireTime(redisKey, visitorsCount, redisOutTime);
+                redisTemplateService.stringSetValueAndExpireTime(redisKey, effectiveSharingCount, redisOutTime);
             } else if (GoldenStatisticsEnum.REGISTER_MEMBERS_COUNT.getCode() == code) {
                 //注册会员数统计
-                redisKey = redisKey + memberCode;
-                Integer visitorsCount = (Integer) redisTemplateService.stringGetStringByKey(redisKey);
-                if (visitorsCount == null) {
-                    visitorsCount = 1;
+                Integer registerMembersCount = (Integer) redisTemplateService.stringGetStringByKey(redisKey);
+                if (registerMembersCount == null) {
+                    registerMembersCount = 1;
                 } else {
-                    visitorsCount = visitorsCount + 1;
+                    registerMembersCount = registerMembersCount + 1;
                 }
-                redisTemplateService.stringSetValueAndExpireTime(redisKey, visitorsCount, redisOutTime);
+                redisTemplateService.stringSetValueAndExpireTime(redisKey, registerMembersCount, redisOutTime);
             }
         } catch (Exception e) {
             log.error(e.getMessage());
