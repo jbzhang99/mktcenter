@@ -23,7 +23,7 @@ import java.util.*;
 /**
  * @author liufq
  */
-@JobHandler(value = "redPackStatisticalData")
+@JobHandler(value = "goldenStatisticsJobHandler")
 @Component
 @Slf4j
 public class ActivityGoldenStatisticsJobHandler extends IJobHandler {

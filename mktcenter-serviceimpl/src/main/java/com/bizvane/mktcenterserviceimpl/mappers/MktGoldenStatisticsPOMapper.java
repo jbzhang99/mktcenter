@@ -1,8 +1,11 @@
 package com.bizvane.mktcenterserviceimpl.mappers;
 
+import com.bizvane.mktcenterservice.models.bo.ActivityGoldenStatisticsBo;
 import com.bizvane.mktcenterservice.models.po.MktGoldenStatisticsPO;
 import com.bizvane.mktcenterservice.models.po.MktGoldenStatisticsPOExample;
 import java.util.List;
+
+import com.bizvane.mktcenterservice.models.vo.MktGoldenStatisticsVO;
 import org.apache.ibatis.annotations.Param;
 
 public interface MktGoldenStatisticsPOMapper {
@@ -105,4 +108,8 @@ public interface MktGoldenStatisticsPOMapper {
     int updateByPrimaryKey(MktGoldenStatisticsPO record);
 
     MktGoldenStatisticsPO getTotalGoldenStatistics(Long activityId);
+
+    MktGoldenStatisticsPO getTotalGoldenStatisticsDate(ActivityGoldenStatisticsBo bo);
+
+    List<MktGoldenStatisticsVO> getTotalGoldenStatisticsDates(ActivityGoldenStatisticsBo bo);
 }

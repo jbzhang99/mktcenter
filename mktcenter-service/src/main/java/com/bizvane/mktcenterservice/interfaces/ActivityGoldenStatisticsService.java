@@ -1,5 +1,6 @@
 package com.bizvane.mktcenterservice.interfaces;
 
+import com.bizvane.mktcenterservice.models.bo.ActivityGoldenStatisticsBo;
 import com.bizvane.utils.responseinfo.ResponseData;
 
 /**
@@ -11,13 +12,10 @@ public interface ActivityGoldenStatisticsService {
     /**
      * 砸金蛋活动统计
      *
-     * @param activityId 活动id
-     * @param code 枚举值： 1、访问人数 2、参与会员数 3、页面转发次数 4、有效分享人数 5、注册会员数
-     * @param memberCode 会员code
-     *
+     * @param bo
      * @return
      * */
-    ResponseData goldenStatisticsData(Long activityId, int code,String memberCode);
+    ResponseData goldenStatisticsData(ActivityGoldenStatisticsBo bo);
 
     /**
      * 砸金蛋活动概括
@@ -27,4 +25,12 @@ public interface ActivityGoldenStatisticsService {
      * @return
      * */
     ResponseData goldenActivityGeneralization(Long activityId);
+
+    /**
+     * 根据日期区间获取统计数据
+     *
+     * @param bo
+     * @return
+     * */
+    ResponseData goldenActivityGeneralizationDate(ActivityGoldenStatisticsBo bo);
 }

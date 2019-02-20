@@ -706,4 +706,38 @@
         statistics_time DESC
         LIMIT 1
   </select>
+  <select id="getTotalGoldenStatisticsDate" resultType="com.bizvane.mktcenterservice.models.po.MktGoldenStatisticsPO">
+    SELECT
+    visitors_count,
+    participate_member_count,
+    page_forward_count,
+    effective_sharing_count,
+    register_members_count,
+    hour_json_data
+    FROM
+    t_mkt_golden_statistics
+    WHERE
+    valid = 1
+    AND mkt_activity_id = #{activityId}
+    AND statistics_time &gt;= #{startDate}
+    AND statistics_time &lt;= #{endDate}
+  </select>
+
+  <select id="getTotalGoldenStatisticsDates" resultType="com.bizvane.mktcenterservice.models.vo.MktGoldenStatisticsVO">
+    SELECT
+    visitors_count,
+    participate_member_count,
+    page_forward_count,
+    effective_sharing_count,
+    register_members_count,
+    DATE_FORMAT( statistics_time, '%Y-%m-%d' ) statisticsTimes
+    FROM
+    t_mkt_golden_statistics
+    WHERE
+    valid = 1
+    AND mkt_activity_id = #{activityId}
+    AND statistics_time &gt;= #{startDate}
+    AND statistics_time &lt;= #{endDate}
+    ORDER BY statistics_time
+  </select>
 </mapper>
