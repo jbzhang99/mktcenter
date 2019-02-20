@@ -482,7 +482,7 @@ public class ActivityRedPacketServiceImpl implements ActivityRedPacketService {
 
         vo.setType(2);
         vo.setHelpNum(1);
-        this.addPonint(bo, vo);
+
         if (mktActivityRedPacketRecordPOMapper.getRedPacketCount(2, vo.getMemberCode(), null, vo.getMktActivityId()) > 0) {
             vo.setHelpNum(0);
         }
@@ -579,9 +579,10 @@ public class ActivityRedPacketServiceImpl implements ActivityRedPacketService {
         if (2==vo.getType()){
              //判断是否超过最大助力次数
             Integer redPacketCount = mktActivityRedPacketRecordPOMapper.getRedPacketCount(2, null, vo.getSponsorCode(), vo.getMktActivityId());
-            if (redPacketCount>bo.getActivityRedPacketPO().getLimitNum()){
-                mktActivityRedPacketRecordPOMapper.deleteByPrimaryKey(recordPO.getMktActivityRedPacketRecordId());
-                vo.setHelpNum(0);
+            if (redPacketCount<=bo.getActivityRedPacketPO().getLimitNum()){
+//                mktActivityRedPacketRecordPOMapper.deleteByPrimaryKey(recordPO.getMktActivityRedPacketRecordId());
+//                vo.setHelpNum(0);
+                this.addPonint(bo, vo);
             }
         }
         mktActivityRedPacketSumPOMapper.updateUpdateCount(vo);
