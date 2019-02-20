@@ -474,7 +474,7 @@ public class ActivityRedPacketServiceImpl implements ActivityRedPacketService {
     @Transactional
     @Override
     public synchronized ResponseData<Integer> andActivityRedPacketZhuliRecord(ActivityRedPacketVO vo) throws IOException {
-        RLock lock = distributedLocker.lock(vo.getSponsorCode(), TimeUnit.SECONDS, 2L);
+        RLock lock = distributedLocker.lock(vo.getSponsorCode()+vo.getMktActivityId(), TimeUnit.SECONDS, 20L);
 
         ResponseData<Integer> responseData = new ResponseData<>();
         ActivityRedPacketBO bo = mktActivityPOMapper.selectActivityRedPacketDetail(vo);
