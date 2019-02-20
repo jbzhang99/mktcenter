@@ -486,7 +486,7 @@ public class ActivityRedPacketServiceImpl implements ActivityRedPacketService {
         if (mktActivityRedPacketRecordPOMapper.getRedPacketCount(2, vo.getMemberCode(), null, vo.getMktActivityId()) > 0) {
             vo.setHelpNum(0);
         }
-        this.doStatisticsRecored(vo, bo, null, null);
+        Integer integerStaus = this.doStatisticsRecored(vo, bo, null, null);
         //通知app 新增了助力人
         RedPacketSocketVO appData = this.getRedPacketZhuLiRecordByAPP(vo).getData();
         appData.setMemberCode(vo.getSponsorCode());
@@ -496,7 +496,9 @@ public class ActivityRedPacketServiceImpl implements ActivityRedPacketService {
         this.sendMessage(vo, bo, appData);
 
         this.addCouponModelMoneyNum(vo, bo);
-        responseData.setData(bo.getActivityRedPacketPO().getRewardIntegral());
+        if (integerStaus==0){
+            responseData.setData(bo.getActivityRedPacketPO().getRewardIntegral());
+        }
 
         distributedLocker.unlock(lock);
         return responseData;
@@ -563,8 +565,11 @@ public class ActivityRedPacketServiceImpl implements ActivityRedPacketService {
     }
 
     //添加历史记录
-    public void doStatisticsRecored(ActivityRedPacketVO vo, ActivityRedPacketBO bo, String couponCode, Integer reward) {
+    public Integer doStatisticsRecored(ActivityRedPacketVO vo, ActivityRedPacketBO bo, String couponCode, Integer reward) {
         log.info("doStatisticsRecored 添加历史记录 param :" + JSON.toJSONString(vo) + "--" + JSON.toJSONString(bo) + "--" + reward);
+
+        Integer integerStatus=100;
+
         MktActivityRedPacketRecordPO recordPO = new MktActivityRedPacketRecordPO();
         BeanUtils.copyProperties(vo, recordPO);
         recordPO.setCouponDefinitionId(bo.getActivityRedPacketPO().getCouponDefinitionId());
@@ -576,13 +581,14 @@ public class ActivityRedPacketServiceImpl implements ActivityRedPacketService {
         recordPO.setCouponQuota(reward);
         recordPO.setCreateDate(new Date());
         mktActivityRedPacketRecordPOMapper.insertSelective(recordPO);
+
         if (2==vo.getType()){
              //判断是否超过最大助力次数
             Integer redPacketCount = mktActivityRedPacketRecordPOMapper.getRedPacketCount(2, null, vo.getSponsorCode(), vo.getMktActivityId());
             if (redPacketCount<=bo.getActivityRedPacketPO().getLimitNum()){
 //                mktActivityRedPacketRecordPOMapper.deleteByPrimaryKey(recordPO.getMktActivityRedPacketRecordId());
 //                vo.setHelpNum(0);
-                this.addPonint(bo, vo);
+                integerStatus = this.addPonint(bo, vo);
             }
         }
         mktActivityRedPacketSumPOMapper.updateUpdateCount(vo);
@@ -590,15 +596,16 @@ public class ActivityRedPacketServiceImpl implements ActivityRedPacketService {
         Integer type = vo.getType();
         //统计的4是领券
         activityStatisticsService.statisticsData(bo.getActivityPO().getMktActivityId(), type == 3 ? 4 : type, vo.getMemberCode());
+        return  integerStatus;
     }
 
     /**
      * 添加积分
      */
-    public void addPonint(ActivityRedPacketBO bo, ActivityRedPacketVO vo) {
+    public Integer addPonint(ActivityRedPacketBO bo, ActivityRedPacketVO vo) {
         if (!bo.getActivityRedPacketPO().getDoIfReward()) {
             log.info("助力不送积分!");
-            return;
+            return 100;
         }
         IntegralChangeRequestModel integralRecordModel = new IntegralChangeRequestModel();
         integralRecordModel.setSysCompanyId(vo.getSysCompanyId());
@@ -612,6 +619,7 @@ public class ActivityRedPacketServiceImpl implements ActivityRedPacketService {
         log.info("红包 发送积分的参数--" + JSON.toJSONString(integralRecordModel));
         IntegralChangeResponseModel integralChangeResponseModel = integralChangeApiService.integralChangeOperate(integralRecordModel);
         log.info("红包 发积分结果打印======" + JSON.toJSONString(integralChangeResponseModel));
+         return  integralChangeResponseModel.getCode();
     }
 
     /**
