@@ -580,16 +580,18 @@ public class ActivityRedPacketServiceImpl implements ActivityRedPacketService {
         recordPO.setAddCouponDenomination(bo.getActivityRedPacketPO().getAddCouponDenomination());
         recordPO.setCouponQuota(reward);
         recordPO.setCreateDate(new Date());
-        mktActivityRedPacketRecordPOMapper.insertSelective(recordPO);
 
         if (2==vo.getType()){
              //判断是否超过最大助力次数
             Integer redPacketCount = mktActivityRedPacketRecordPOMapper.getRedPacketCount(2, null, vo.getSponsorCode(), vo.getMktActivityId());
             if (redPacketCount<=bo.getActivityRedPacketPO().getLimitNum()){
+                mktActivityRedPacketRecordPOMapper.insertSelective(recordPO);
 //                mktActivityRedPacketRecordPOMapper.deleteByPrimaryKey(recordPO.getMktActivityRedPacketRecordId());
 //                vo.setHelpNum(0);
                 integerStatus = this.addPonint(bo, vo);
             }
+        }else{
+            mktActivityRedPacketRecordPOMapper.insertSelective(recordPO);
         }
         mktActivityRedPacketSumPOMapper.updateUpdateCount(vo);
 
