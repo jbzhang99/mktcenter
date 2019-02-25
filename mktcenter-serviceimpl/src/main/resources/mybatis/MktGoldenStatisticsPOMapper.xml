@@ -719,8 +719,8 @@
     WHERE
     valid = 1
     AND mkt_activity_id = #{activityId}
-    AND statistics_time &gt;= #{startDate}
-    AND statistics_time &lt;= #{endDate}
+    AND statistics_time &gt;= #{startDates}
+    AND statistics_time &lt;= #{endDates}
   </select>
 
   <select id="getTotalGoldenStatisticsDates" resultType="com.bizvane.mktcenterservice.models.vo.MktGoldenStatisticsVO">
@@ -736,8 +736,8 @@
     WHERE
     valid = 1
     AND mkt_activity_id = #{activityId}
-    AND statistics_time &gt;= #{startDate}
-    AND statistics_time &lt;= #{endDate}
+    AND statistics_time &gt;= #{startDates}
+    AND statistics_time &lt;= #{endDates}
     ORDER BY statistics_time
   </select>
 </mapper>

@@ -109,7 +109,7 @@ public interface MktGoldenStatisticsPOMapper {
 
     MktGoldenStatisticsPO getTotalGoldenStatistics(Long activityId);
 
-    MktGoldenStatisticsPO getTotalGoldenStatisticsDate(ActivityGoldenStatisticsBo bo);
+    MktGoldenStatisticsPO getTotalGoldenStatisticsDate(@Param("activityId") Long activityId, @Param("startDates") String startDates, @Param("endDates") String endDates);
 
-    List<MktGoldenStatisticsVO> getTotalGoldenStatisticsDates(ActivityGoldenStatisticsBo bo);
+    List<MktGoldenStatisticsVO> getTotalGoldenStatisticsDates(@Param("activityId") Long activityId, @Param("startDates") String startDates, @Param("endDates") String endDates);
 }

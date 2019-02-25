@@ -33,4 +33,10 @@ public interface ActivityGoldenStatisticsService {
      * @return
      * */
     ResponseData goldenActivityGeneralizationDate(ActivityGoldenStatisticsBo bo);
+
+    /**
+     * 定时任务测试接口
+     *
+     * */
+    ResponseData goldenExecute();
 }

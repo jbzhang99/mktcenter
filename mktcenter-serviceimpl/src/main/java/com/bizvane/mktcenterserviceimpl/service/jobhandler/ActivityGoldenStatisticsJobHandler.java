@@ -49,11 +49,15 @@ public class ActivityGoldenStatisticsJobHandler extends IJobHandler {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
         for (MktActivityPOWithBLOBs activity : activityIds) {
             MktGoldenStatisticsPO po = new MktGoldenStatisticsPO();
+
             //根据活动id查询所有时间段的统计数据
             Long activityId = activity.getMktActivityId();
-
             //得到从活动开始到先在的统计数量
             MktGoldenStatisticsPO totalPo = mktGoldenStatisticsPOMapper.getTotalGoldenStatistics(activityId);
+            po.setSysCompanyId(totalPo.getSysCompanyId());
+            po.setSysBrandId(totalPo.getSysBrandId());
+            po.setMktActivityId(activityId);
+
             int totalVisitorsCount = 0;
             int totalParticipateMemberCount = 0;
             int totalPageForwardCount = 0;
@@ -64,7 +68,7 @@ public class ActivityGoldenStatisticsJobHandler extends IJobHandler {
                     totalVisitorsCount = totalPo.getTotalVisitorsCount();
                 }
                 if (totalPo.getTotalParticipateMemberCount() != null) {
-                    totalParticipateMemberCount = totalPo.getParticipateMemberCount();
+                    totalParticipateMemberCount = totalPo.getTotalParticipateMemberCount();
                 }
                 if (totalPo.getTotalPageForwardCount() != null) {
                     totalPageForwardCount = totalPo.getTotalPageForwardCount();
@@ -77,24 +81,26 @@ public class ActivityGoldenStatisticsJobHandler extends IJobHandler {
                 }
             }
             //redisKey定义规则:GOLDEN+活动id+code
-            String redisKey = "GOLDEN" + activityId;
+            String redisKey = "GOLDEN" + activityId + sdf.format(new Date());
             Integer visitorsCount = 0;
             //统计访问人数和获取访问人数每个时间点
-            JSONObject visitorsJson = new JSONObject();
+            JSONObject visitorsJson = new JSONObject(new LinkedHashMap<>());
             for (int i = 7; i < 22; i++) {
                 String timeStr = "";
+                int time = i + 1;
                 if (i < 10) {
-                    timeStr = "0" + i;
+                    timeStr = "0" + time;
                 } else {
-                    timeStr = String.valueOf(i);
+                    timeStr = String.valueOf(time);
                 }
                 //访问人数统计
                 Integer visitorsCountH = (Integer) redisTemplateService.stringGetStringByKey(redisKey + 0 + sdf.format(new Date()) + i);
+                log.info("redisKey:" + redisKey + 0 + sdf.format(new Date()) + i + ",value" + visitorsCountH);
                 if (visitorsCountH != null) {
-                    visitorsJson.put(timeStr, visitorsCountH);
+                    visitorsJson.put(timeStr + ":00", visitorsCountH);
                     visitorsCount = visitorsCountH + visitorsCount;
                 } else {
-                    visitorsJson.put(timeStr, 0);
+                    visitorsJson.put(timeStr + ":00", 0);
                 }
             }
             po.setHourJsonData(visitorsJson.toJSONString());
@@ -103,7 +109,7 @@ public class ActivityGoldenStatisticsJobHandler extends IJobHandler {
 
             //统计参与会员数
             Integer participateMemberCount = (Integer) redisTemplateService.stringGetStringByKey(redisKey + 1);
-            if (participateMemberCount != null) {
+            if (participateMemberCount == null) {
                 participateMemberCount = 0;
             }
             po.setParticipateMemberCount(participateMemberCount);
@@ -134,6 +140,8 @@ public class ActivityGoldenStatisticsJobHandler extends IJobHandler {
             po.setRegisterMembersCount(registerMembersCount);
             po.setTotalRegisterMembersCount(registerMembersCount + totalRegisterMembersCount);
 
+            po.setStatisticsTime(new Date());
+            po.setStatisticsType("1");
             mktGoldenStatisticsPOMapper.insertSelective(po);
         }
 

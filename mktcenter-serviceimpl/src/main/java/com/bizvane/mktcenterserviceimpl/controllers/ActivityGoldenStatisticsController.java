@@ -47,4 +47,13 @@ public class ActivityGoldenStatisticsController {
     public ResponseData goldenActivityGeneralizationDate(ActivityGoldenStatisticsBo bo) {
         return activityGoldenStatisticsService.goldenActivityGeneralizationDate(bo);
     }
+
+    /**
+     * 定时任务测试接口
+     *
+     * */
+    @RequestMapping("/goldenExecute")
+    public ResponseData goldenExecute() {
+        return activityGoldenStatisticsService.goldenExecute();
+    }
 }
