@@ -37,6 +37,10 @@ public class CodeUtil {
     public synchronized static   String  getCouponRecordCode()  {
         return generateCode(COUPON_RECORD_PREFIX);
     }
+    //通用
+    public synchronized static   String  getActiveCode(String prefix)  {
+        return generateCode(prefix);
+    }
 
     public synchronized static   String  getActivePriceCode()  {
         return generateCode(ACTIVE_ZP_PREFIX);
