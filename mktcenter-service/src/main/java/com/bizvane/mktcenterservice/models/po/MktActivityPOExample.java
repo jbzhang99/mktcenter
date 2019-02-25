@@ -8,28 +8,28 @@ import java.util.List;
 public class MktActivityPOExample implements Serializable {
     /**
 	 * 只读. 
-	 * @mbg.generated  2018-12-18 15:22:31
+	 * @mbg.generated  2019-02-25 09:06:54
 	 */
 	protected String orderByClause;
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-12-18 15:22:31
+	 * @mbg.generated  2019-02-25 09:06:54
 	 */
 	protected boolean distinct;
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-12-18 15:22:31
+	 * @mbg.generated  2019-02-25 09:06:54
 	 */
 	protected List<Criteria> oredCriteria;
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-12-18 15:22:31
+	 * @mbg.generated  2019-02-25 09:06:54
 	 */
 	private static final long serialVersionUID = 1L;
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-12-18 15:22:31
+	 * @mbg.generated  2019-02-25 09:06:54
 	 */
 	public MktActivityPOExample() {
 		oredCriteria = new ArrayList<Criteria>();
@@ -37,7 +37,7 @@ public class MktActivityPOExample implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-12-18 15:22:31
+	 * @mbg.generated  2019-02-25 09:06:54
 	 */
 	public void setOrderByClause(String orderByClause) {
 		this.orderByClause = orderByClause;
@@ -45,7 +45,7 @@ public class MktActivityPOExample implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-12-18 15:22:31
+	 * @mbg.generated  2019-02-25 09:06:54
 	 */
 	public String getOrderByClause() {
 		return orderByClause;
@@ -53,7 +53,7 @@ public class MktActivityPOExample implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-12-18 15:22:31
+	 * @mbg.generated  2019-02-25 09:06:54
 	 */
 	public void setDistinct(boolean distinct) {
 		this.distinct = distinct;
@@ -61,7 +61,7 @@ public class MktActivityPOExample implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-12-18 15:22:31
+	 * @mbg.generated  2019-02-25 09:06:54
 	 */
 	public boolean isDistinct() {
 		return distinct;
@@ -69,7 +69,7 @@ public class MktActivityPOExample implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-12-18 15:22:31
+	 * @mbg.generated  2019-02-25 09:06:54
 	 */
 	public List<Criteria> getOredCriteria() {
 		return oredCriteria;
@@ -77,7 +77,7 @@ public class MktActivityPOExample implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-12-18 15:22:31
+	 * @mbg.generated  2019-02-25 09:06:54
 	 */
 	public void or(Criteria criteria) {
 		oredCriteria.add(criteria);
@@ -85,7 +85,7 @@ public class MktActivityPOExample implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-12-18 15:22:31
+	 * @mbg.generated  2019-02-25 09:06:54
 	 */
 	public Criteria or() {
 		Criteria criteria = createCriteriaInternal();
@@ -95,7 +95,7 @@ public class MktActivityPOExample implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-12-18 15:22:31
+	 * @mbg.generated  2019-02-25 09:06:54
 	 */
 	public Criteria createCriteria() {
 		Criteria criteria = createCriteriaInternal();
@@ -107,7 +107,7 @@ public class MktActivityPOExample implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-12-18 15:22:31
+	 * @mbg.generated  2019-02-25 09:06:54
 	 */
 	protected Criteria createCriteriaInternal() {
 		Criteria criteria = new Criteria();
@@ -116,7 +116,7 @@ public class MktActivityPOExample implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-12-18 15:22:31
+	 * @mbg.generated  2019-02-25 09:06:54
 	 */
 	public void clear() {
 		oredCriteria.clear();
@@ -126,7 +126,7 @@ public class MktActivityPOExample implements Serializable {
 
 	/**
 	 * 只读. t_mkt_activity
-	 * @mbg.generated  2018-12-18 15:22:31
+	 * @mbg.generated  2019-02-25 09:06:54
 	 */
 	protected abstract static class GeneratedCriteria implements Serializable {
 		protected List<Criterion> criteria;
@@ -1399,6 +1399,66 @@ public class MktActivityPOExample implements Serializable {
 			return (Criteria) this;
 		}
 
+		public Criteria andTriesLimitIsNull() {
+			addCriterion("tries_limit is null");
+			return (Criteria) this;
+		}
+
+		public Criteria andTriesLimitIsNotNull() {
+			addCriterion("tries_limit is not null");
+			return (Criteria) this;
+		}
+
+		public Criteria andTriesLimitEqualTo(Integer value) {
+			addCriterion("tries_limit =", value, "triesLimit");
+			return (Criteria) this;
+		}
+
+		public Criteria andTriesLimitNotEqualTo(Integer value) {
+			addCriterion("tries_limit <>", value, "triesLimit");
+			return (Criteria) this;
+		}
+
+		public Criteria andTriesLimitGreaterThan(Integer value) {
+			addCriterion("tries_limit >", value, "triesLimit");
+			return (Criteria) this;
+		}
+
+		public Criteria andTriesLimitGreaterThanOrEqualTo(Integer value) {
+			addCriterion("tries_limit >=", value, "triesLimit");
+			return (Criteria) this;
+		}
+
+		public Criteria andTriesLimitLessThan(Integer value) {
+			addCriterion("tries_limit <", value, "triesLimit");
+			return (Criteria) this;
+		}
+
+		public Criteria andTriesLimitLessThanOrEqualTo(Integer value) {
+			addCriterion("tries_limit <=", value, "triesLimit");
+			return (Criteria) this;
+		}
+
+		public Criteria andTriesLimitIn(List<Integer> values) {
+			addCriterion("tries_limit in", values, "triesLimit");
+			return (Criteria) this;
+		}
+
+		public Criteria andTriesLimitNotIn(List<Integer> values) {
+			addCriterion("tries_limit not in", values, "triesLimit");
+			return (Criteria) this;
+		}
+
+		public Criteria andTriesLimitBetween(Integer value1, Integer value2) {
+			addCriterion("tries_limit between", value1, value2, "triesLimit");
+			return (Criteria) this;
+		}
+
+		public Criteria andTriesLimitNotBetween(Integer value1, Integer value2) {
+			addCriterion("tries_limit not between", value1, value2, "triesLimit");
+			return (Criteria) this;
+		}
+
 		public Criteria andRemarkIsNull() {
 			addCriterion("remark is null");
 			return (Criteria) this;
@@ -1912,7 +1972,7 @@ public class MktActivityPOExample implements Serializable {
 
 	/**
 	 * 只读. t_mkt_activity
-	 * @mbg.generated  2018-12-18 15:22:31
+	 * @mbg.generated  2019-02-25 09:06:54
 	 */
 	public static class Criterion implements Serializable {
 		private String condition;
