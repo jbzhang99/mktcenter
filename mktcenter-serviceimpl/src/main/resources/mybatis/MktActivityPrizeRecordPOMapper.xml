@@ -594,4 +594,21 @@
     </if>
     ORDER BY prize_time DESC
   </select>
+  <select id="getParticipateNum" resultType="java.lang.Integer">
+    SELECT
+	count(mkt_activity_prize_record_id)
+    FROM
+        t_mkt_activity_prize_record
+    WHERE
+    <if test="mktActivityId!= null ">
+	mkt_activity_id = #{mktActivityId}
+    </if>
+    <if test="prizeType!= null ">
+	AND prize_type = #{prizeType}
+    </if>
+    <if test="memberCode!= null and memberCode!= '' ">
+	AND member_code=#{memberCode}
+    </if>
+	AND valid=1
+  </select>
 </mapper>

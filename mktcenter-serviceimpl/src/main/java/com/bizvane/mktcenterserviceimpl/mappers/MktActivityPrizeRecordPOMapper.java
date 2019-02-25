@@ -80,4 +80,6 @@ public interface MktActivityPrizeRecordPOMapper {
 	Integer selectPrizePeopleNum(@Param("mktActivityId")Long mktActivityId);
 	Integer selectTotalPeopleNum(@Param("mktActivityId")Long mktActivityId);
 	List<MktActivityPrizeRecordPO> selectPrizePeople(ActivityPriceParamVO vo);
+
+	Integer getParticipateNum(@Param("mktActivityId")Long mktActivityId,@Param("prizeType")Integer prizeType,@Param("memberCode")String memberCode);
 }

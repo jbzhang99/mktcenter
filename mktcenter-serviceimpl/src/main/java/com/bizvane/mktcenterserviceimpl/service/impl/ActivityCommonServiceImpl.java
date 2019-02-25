@@ -5,6 +5,12 @@ import com.bizvane.centerstageservice.rpc.FileTaskServiceRpc;
 import com.bizvane.couponfacade.interfaces.CouponDefinitionServiceFeign;
 import com.bizvane.couponfacade.interfaces.CouponQueryServiceFeign;
 import com.bizvane.couponfacade.interfaces.CouponServiceFeign;
+import com.bizvane.couponfacade.interfaces.SendCouponServiceFeign;
+import com.bizvane.couponfacade.models.vo.SendCouponSimpleRequestVO;
+import com.bizvane.members.facade.enums.IntegralChangeTypeEnum;
+import com.bizvane.members.facade.service.api.IntegralChangeApiService;
+import com.bizvane.members.facade.service.card.request.IntegralChangeRequestModel;
+import com.bizvane.members.facade.service.card.response.IntegralChangeResponseModel;
 import com.bizvane.mktcenterservice.interfaces.TaskService;
 import com.bizvane.mktcenterservice.models.po.MktActivityCountPO;
 import com.bizvane.mktcenterservice.models.po.MktActivityPOWithBLOBs;
@@ -70,6 +76,10 @@ public class ActivityCommonServiceImpl {
     private TaskService taskService;
     @Autowired
     private CouponDefinitionServiceFeign couponDefinitionServiceFeign;
+    @Autowired
+    private  IntegralChangeApiService integralChangeApiService;
+    @Autowired
+    private SendCouponServiceFeign sendCouponServiceFeign;
 
     //新增游戏主表
     public Long addActivityMianGame(MktActivityPOWithBLOBs activityPO, SysAccountPO sysAccountPo, String activePriceCode, String weixinUrl) throws ParseException {
@@ -187,5 +197,51 @@ public class ActivityCommonServiceImpl {
         XxlJobInfo xxlJobInfo = new XxlJobInfo();
         xxlJobInfo.setBizCode(po.getActivityCode());
         jobClient.removeByBiz(xxlJobInfo);
+    }
+
+    /**
+     *   成功   data有值    code为0     失败   data无值    code为100
+     * @param mktActivityPrizePO
+     * @param activityCode
+     * @param memberCode
+     * @return
+     */
+    public ResponseData<String>   operationPoint(MktActivityPrizePO mktActivityPrizePO,String activityCode,String memberCode){
+        ResponseData<String> responseData = new ResponseData<>();
+        Integer prizePoints = mktActivityPrizePO.getPrizePoints();
+        if (prizePoints==null){
+           return responseData;
+        }
+        IntegralChangeRequestModel integralRecordModel = new IntegralChangeRequestModel();
+        integralRecordModel.setSysCompanyId(mktActivityPrizePO.getSysCompanyId());
+        integralRecordModel.setBrandId(mktActivityPrizePO.getSysBrandId());
+        integralRecordModel.setMemberCode(memberCode);
+        //BusinessTypeEnum  会员定义的任务类型
+        integralRecordModel.setBusinessType("29");
+        //2=收入积分(新增积分)      1=支出积分(减少积分)
+        integralRecordModel.setChangeType(IntegralChangeTypeEnum.INCOME.getCode());
+        integralRecordModel.setChangeBills(activityCode);
+        integralRecordModel.setChangeIntegral(mktActivityPrizePO.getPrizePoints());
+        log.info("游戏 操作积分的参数--" + JSON.toJSONString(integralRecordModel));
+        IntegralChangeResponseModel integralChangeResponseModel = integralChangeApiService.integralChangeOperate(integralRecordModel);
+        log.info("游戏 操作积分结果打印======" + JSON.toJSONString(integralChangeResponseModel));
+        responseData.setMessage(String.valueOf(prizePoints));
+        return responseData;
+    }
+
+    //操作券
+    public ResponseData<String> operationCoupon(MktActivityPrizePO mktActivityPrizePO,Long mktActivityId,String activityCode,String activityName,String memberCode){
+        SendCouponSimpleRequestVO onecouponVO = new SendCouponSimpleRequestVO();
+        onecouponVO.setMemberCode(memberCode);
+        onecouponVO.setSendBussienId(mktActivityId);
+        onecouponVO.setBusinessName(activityName);
+        onecouponVO.setSendType("105");
+        onecouponVO.setCouponDefinitionId(mktActivityPrizePO.getCouponDefinitionId());
+        onecouponVO.setBrandId(mktActivityPrizePO.getSysBrandId());
+        log.info("游戏 发送券的参数-----" + JSON.toJSONString(onecouponVO));
+        ResponseData<String> responseData = sendCouponServiceFeign.simple(onecouponVO);
+        log.info("游戏 发送券的结果------" + JSON.toJSONString(responseData));
+        responseData.setData(mktActivityPrizePO.getImageUrl());
+        return responseData;
     }
 }

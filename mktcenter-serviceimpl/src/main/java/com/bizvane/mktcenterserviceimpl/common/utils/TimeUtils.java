@@ -113,5 +113,17 @@ public class TimeUtils {
     public static int getDataNum(Date startDate,Date endDate) {
         return new Long((endDate.getTime() - startDate.getTime()) / (1000 * 3600 * 24)).intValue();
     }
+    public static long getMSeconds() throws ParseException {
+        Date date = new Date();
+        String format = sdf.format(date);
+        StringBuilder builder = new StringBuilder();
+        builder.append(format);
+        builder.append(" 23:59:59");
+        String toTime = builder.toString();
+        Date toDate = formatter.parse(toTime);
+        long time1 = date.getTime();
+        long time2 = toDate.getTime();
+        return time2-time1;
 
+    } 
 }
