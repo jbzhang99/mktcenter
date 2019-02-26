@@ -60,4 +60,8 @@ public class ActivityGoldenEggsController {
     public ResponseData<String> doVerificationCoupon(ActivityPriceParamVO vo, HttpServletRequest request){
         return activityGoldenEggsService.doVerificationCoupon(vo,request);
     }
+    @RequestMapping("getMktActivityPOWithBLOBs")
+    public MktActivityPOWithBLOBs getMktActivityPOWithBLOBs(ProbabilityVO vo){
+        return activityGoldenEggsService.getMktActivityPOWithBLOBs(vo);
+    }
 }
