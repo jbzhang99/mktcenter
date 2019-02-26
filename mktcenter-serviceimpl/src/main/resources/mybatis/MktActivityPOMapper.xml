@@ -907,7 +907,7 @@
     </if>
     UNION ALL
     select t.activity_detail_img,t.activity_type activityType,t.activity_code as activityCode,t.activity_name as activityName,t.mkt_activity_id as mktActivityId ,t.is_store_limit,t.store_limit_type,t.store_limit_list ,IF(t.start_time IS NUll,t.create_date,t.start_time) AS startTime from t_mkt_activity t
-    where t.valid=1 and t.activity_status=2 and (t.activity_type=11 OR t.activity_type=12)
+    where t.valid=1 and t.activity_status=2 and t.activity_type  BETWEEN 11 AND 13
     <if test="sysBrandId != null and sysBrandId!= ''">
       AND t.sys_brand_id = #{sysBrandId}
     </if>
