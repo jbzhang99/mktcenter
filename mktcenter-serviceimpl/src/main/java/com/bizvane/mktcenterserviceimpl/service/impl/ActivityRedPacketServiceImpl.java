@@ -27,6 +27,7 @@ import com.bizvane.mktcenterservice.models.vo.ActivityPriceParamVO;
 import com.bizvane.mktcenterservice.models.vo.ActivityRedPacketVO;
 import com.bizvane.mktcenterservice.models.vo.RedPacketSocketVO;
 import com.bizvane.mktcenterserviceimpl.common.job.JobUtil;
+import com.bizvane.mktcenterserviceimpl.common.locktools.DistributedLocker;
 import com.bizvane.mktcenterserviceimpl.common.utils.CodeUtil;
 import com.bizvane.mktcenterserviceimpl.common.utils.TimeUtils;
 import com.bizvane.mktcenterserviceimpl.mappers.MktActivityPOMapper;
@@ -45,6 +46,7 @@ import com.github.pagehelper.PageInfo;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.redisson.api.RLock;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -58,6 +60,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 /**
@@ -97,6 +100,8 @@ public class ActivityRedPacketServiceImpl implements ActivityRedPacketService {
     private TemplateMessageServiceFeign templateMessageServiceFeign;
     @Autowired
     private MemberInfoApiService memberInfoApiService;
+    @Autowired
+    private DistributedLocker distributedLocker;
 
     /**
      * 新增
@@ -469,21 +474,16 @@ public class ActivityRedPacketServiceImpl implements ActivityRedPacketService {
     @Transactional
     @Override
     public synchronized ResponseData<Integer> andActivityRedPacketZhuliRecord(ActivityRedPacketVO vo) throws IOException {
+        RLock lock = distributedLocker.lock(vo.getSponsorCode()+vo.getMktActivityId(), TimeUnit.SECONDS, 30L);
         ResponseData<Integer> responseData = new ResponseData<>();
         ActivityRedPacketBO bo = mktActivityPOMapper.selectActivityRedPacketDetail(vo);
         log.info("andActivityRedPacketZhuliRecord 添加记录 param:" + JSON.toJSONString(vo) + "--活动详情-" + JSON.toJSONString(bo));
-        //判断是否超过最大助力次数
-        Integer redPacketCount = mktActivityRedPacketRecordPOMapper.getRedPacketCount(2, null, vo.getSponsorCode(), vo.getMktActivityId());
-        if(redPacketCount.equals(bo.getActivityRedPacketPO().getLimitNum())){
-          return  responseData;
-       }
         vo.setType(2);
         vo.setHelpNum(1);
-        this.addPonint(bo, vo);
         if (mktActivityRedPacketRecordPOMapper.getRedPacketCount(2, vo.getMemberCode(), null, vo.getMktActivityId()) > 0) {
             vo.setHelpNum(0);
         }
-        this.doStatisticsRecored(vo, bo, null, null);
+        Integer integerStaus = this.doStatisticsRecored(vo, bo, null, null);
         //通知app 新增了助力人
         RedPacketSocketVO appData = this.getRedPacketZhuLiRecordByAPP(vo).getData();
         appData.setMemberCode(vo.getSponsorCode());
@@ -493,7 +493,11 @@ public class ActivityRedPacketServiceImpl implements ActivityRedPacketService {
         this.sendMessage(vo, bo, appData);
 
         this.addCouponModelMoneyNum(vo, bo);
-        responseData.setData(bo.getActivityRedPacketPO().getRewardIntegral());
+        if (integerStaus==0){
+            responseData.setData(bo.getActivityRedPacketPO().getRewardIntegral());
+        }
+
+        distributedLocker.unlock(lock);
         return responseData;
     }
 
@@ -558,8 +562,11 @@ public class ActivityRedPacketServiceImpl implements ActivityRedPacketService {
     }
 
     //添加历史记录
-    public void doStatisticsRecored(ActivityRedPacketVO vo, ActivityRedPacketBO bo, String couponCode, Integer reward) {
+    public Integer doStatisticsRecored(ActivityRedPacketVO vo, ActivityRedPacketBO bo, String couponCode, Integer reward) {
         log.info("doStatisticsRecored 添加历史记录 param :" + JSON.toJSONString(vo) + "--" + JSON.toJSONString(bo) + "--" + reward);
+
+        Integer integerStatus=100;
+
         MktActivityRedPacketRecordPO recordPO = new MktActivityRedPacketRecordPO();
         BeanUtils.copyProperties(vo, recordPO);
         recordPO.setCouponDefinitionId(bo.getActivityRedPacketPO().getCouponDefinitionId());
@@ -570,21 +577,34 @@ public class ActivityRedPacketServiceImpl implements ActivityRedPacketService {
         recordPO.setAddCouponDenomination(bo.getActivityRedPacketPO().getAddCouponDenomination());
         recordPO.setCouponQuota(reward);
         recordPO.setCreateDate(new Date());
-        mktActivityRedPacketRecordPOMapper.insertSelective(recordPO);
+
+        if (2==vo.getType()){
+             //判断是否超过最大助力次数
+            Integer redPacketCount = mktActivityRedPacketRecordPOMapper.getRedPacketCount(2, null, vo.getSponsorCode(), vo.getMktActivityId());
+            if (redPacketCount < bo.getActivityRedPacketPO().getLimitNum()){
+                mktActivityRedPacketRecordPOMapper.insertSelective(recordPO);
+//                mktActivityRedPacketRecordPOMapper.deleteByPrimaryKey(recordPO.getMktActivityRedPacketRecordId());
+//                vo.setHelpNum(0);
+                integerStatus = this.addPonint(bo, vo);
+            }
+        }else{
+            mktActivityRedPacketRecordPOMapper.insertSelective(recordPO);
+        }
         mktActivityRedPacketSumPOMapper.updateUpdateCount(vo);
 
         Integer type = vo.getType();
         //统计的4是领券
         activityStatisticsService.statisticsData(bo.getActivityPO().getMktActivityId(), type == 3 ? 4 : type, vo.getMemberCode());
+        return  integerStatus;
     }
 
     /**
      * 添加积分
      */
-    public void addPonint(ActivityRedPacketBO bo, ActivityRedPacketVO vo) {
+    public Integer addPonint(ActivityRedPacketBO bo, ActivityRedPacketVO vo) {
         if (!bo.getActivityRedPacketPO().getDoIfReward()) {
             log.info("助力不送积分!");
-            return;
+            return 100;
         }
         IntegralChangeRequestModel integralRecordModel = new IntegralChangeRequestModel();
         integralRecordModel.setSysCompanyId(vo.getSysCompanyId());
@@ -598,6 +618,7 @@ public class ActivityRedPacketServiceImpl implements ActivityRedPacketService {
         log.info("红包 发送积分的参数--" + JSON.toJSONString(integralRecordModel));
         IntegralChangeResponseModel integralChangeResponseModel = integralChangeApiService.integralChangeOperate(integralRecordModel);
         log.info("红包 发积分结果打印======" + JSON.toJSONString(integralChangeResponseModel));
+         return  integralChangeResponseModel.getCode();
     }
 
     /**
