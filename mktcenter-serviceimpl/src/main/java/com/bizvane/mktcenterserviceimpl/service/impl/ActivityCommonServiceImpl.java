@@ -152,7 +152,7 @@ public class ActivityCommonServiceImpl {
         CreateMiniprgmQRCodeRequestVO createMiniprgmQRCodeRequestVO = new CreateMiniprgmQRCodeRequestVO();
         createMiniprgmQRCodeRequestVO.setSysBrandId(brandId);
         createMiniprgmQRCodeRequestVO.setMiniProgramType("10");
-        createMiniprgmQRCodeRequestVO.setPath("pages/template01/prize-draw/main");
+        createMiniprgmQRCodeRequestVO.setPath("pages/template01/gold-egg");
         createMiniprgmQRCodeRequestVO.setScene(activePriceCode);
         log.info("addActivityPrice wexin param:" + JSON.toJSONString(createMiniprgmQRCodeRequestVO));
         ResponseData<String> qrCodeResponseData = qrCodeServiceFeign.createMiniprgmQRCode(createMiniprgmQRCodeRequestVO);
@@ -279,7 +279,7 @@ public class ActivityCommonServiceImpl {
         log.info("游戏 发送券的结果------" + JSON.toJSONString(responseData));
         String couponCode = responseData.getData();
         this.addRecord(mktActivityPrizePO,memberInfoModel,couponCode);
-        responseData.setData("107");
+        responseData.setData("106");
         responseData.setMessage(mktActivityPrizePO.getImageUrl());
         return responseData;
     }
