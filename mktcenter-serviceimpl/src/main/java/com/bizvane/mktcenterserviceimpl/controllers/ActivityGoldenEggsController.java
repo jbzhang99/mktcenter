@@ -4,10 +4,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.bizvane.mktcenterservice.interfaces.ActivityGoldenEggsService;
 import com.bizvane.mktcenterservice.models.po.MktActivityPOWithBLOBs;
 import com.bizvane.mktcenterservice.models.po.MktActivityPrizeRecordPO;
-import com.bizvane.mktcenterservice.models.vo.ActivityPriceBO;
-import com.bizvane.mktcenterservice.models.vo.ActivityPriceParamVO;
-import com.bizvane.mktcenterservice.models.vo.ActivityPrizeBO;
-import com.bizvane.mktcenterservice.models.vo.AnalysisPriceResultVO;
+import com.bizvane.mktcenterservice.models.vo.*;
 import com.bizvane.utils.responseinfo.ResponseData;
 import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,8 +29,8 @@ public class ActivityGoldenEggsController {
         return activityGoldenEggsService.addActivityGE(bo,request);
     }
     @RequestMapping("selectActivityGEById")
-    public ResponseData<ActivityPriceBO> selectActivityGEById(Long mktActivityId, HttpServletRequest request){
-        return activityGoldenEggsService.selectActivityGEById(mktActivityId,request);
+    public ResponseData<ActivityPriceBO> selectActivityGEById(ProbabilityVO vo){
+        return activityGoldenEggsService.selectActivityGEById(vo);
     }
     @RequestMapping("selectActivityGEByCode")
     public ResponseData<ActivityPrizeBO> selectActivityGEByCode(String activePriceCode){

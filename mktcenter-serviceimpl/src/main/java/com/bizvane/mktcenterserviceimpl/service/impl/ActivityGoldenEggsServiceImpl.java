@@ -7,6 +7,8 @@ import com.bizvane.couponfacade.interfaces.CouponDefinitionServiceFeign;
 import com.bizvane.couponfacade.interfaces.CouponServiceFeign;
 import com.bizvane.couponfacade.models.po.CouponDefinitionPO;
 import com.bizvane.couponfacade.models.vo.CouponUseVO;
+import com.bizvane.members.facade.models.MemberInfoModel;
+import com.bizvane.members.facade.service.api.MemberInfoApiService;
 import com.bizvane.mktcenterservice.interfaces.ActivityGoldenEggsService;
 import com.bizvane.mktcenterservice.interfaces.TaskService;
 import com.bizvane.mktcenterservice.models.po.*;
@@ -16,6 +18,7 @@ import com.bizvane.mktcenterserviceimpl.common.utils.TimeUtils;
 import com.bizvane.mktcenterserviceimpl.mappers.MktActivityPOMapper;
 import com.bizvane.mktcenterserviceimpl.mappers.MktActivityPrizePOMapper;
 import com.bizvane.mktcenterserviceimpl.mappers.MktActivityPrizeRecordPOMapper;
+import com.bizvane.utils.enumutils.SysResponseEnum;
 import com.bizvane.utils.responseinfo.ResponseData;
 import com.bizvane.utils.tokens.SysAccountPO;
 import com.bizvane.utils.tokens.TokenUtils;
@@ -28,11 +31,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.math.BigDecimal;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.TimeUnit;
@@ -60,8 +65,10 @@ public class ActivityGoldenEggsServiceImpl implements ActivityGoldenEggsService 
     private MktActivityPrizeRecordPOMapper mktActivityPrizeRecordPOMapper;
     @Autowired
     private CouponServiceFeign couponServiceFeign;
-    @Autowired
+    @Resource
     private RedisTemplate<String,Integer> redisTemplate;
+    @Autowired
+    private   MemberInfoApiService memberInfoApiService;
 
     /**
      * 新增
@@ -97,15 +104,13 @@ public class ActivityGoldenEggsServiceImpl implements ActivityGoldenEggsService 
 
     /**
      * 查询详情 id
-     *
-     * @param mktActivityId
      * @return
      */
     @Override
-    public ResponseData<ActivityPriceBO> selectActivityGEById(Long mktActivityId, HttpServletRequest request) {
+    public ResponseData<ActivityPriceBO> selectActivityGEById(ProbabilityVO vo) {
         ResponseData<ActivityPriceBO> responseData = new ResponseData<>();
         ActivityPriceBO activityPriceBO = new ActivityPriceBO();
-        MktActivityPOWithBLOBs mktActivityPOWithBLOBs = mktActivityPOMapper.selectByPrimaryKey(mktActivityId);
+        MktActivityPOWithBLOBs mktActivityPOWithBLOBs = this.getMktActivityPOWithBLOBs(vo);
         String storeLimitListStr = mktActivityPOWithBLOBs.getStoreLimitList();
         List<SysStorePo> storeList = new ArrayList<SysStorePo>();
         if (StringUtils.isNotBlank(storeLimitListStr)) {
@@ -115,7 +120,7 @@ public class ActivityGoldenEggsServiceImpl implements ActivityGoldenEggsService 
             log.info("---------通过品牌Ids--" + JSON.toJSONString(storeList) + "-----获取店铺列表----------" + JSON.toJSONString(storeList));
             activityPriceBO.setStoreList(storeList);
         }
-        List<MktActivityPrizeVO> mktActivityPrizeVOS = mktActivityPrizePOMapper.selectMktActivityPrizeById(mktActivityId);
+        List<MktActivityPrizeVO> mktActivityPrizeVOS = mktActivityPrizePOMapper.selectMktActivityPrizeById(mktActivityPOWithBLOBs.getMktActivityId());
         mktActivityPrizeVOS.stream().forEach(obj -> {
             Long couponDefinitionId = obj.getCouponDefinitionId();
             if (couponDefinitionId != null) {
@@ -275,31 +280,65 @@ public class ActivityGoldenEggsServiceImpl implements ActivityGoldenEggsService 
         }
         return responseData;
     }
-
-
     //小程序 操作
     //砸金蛋
+    @Override
     public ResponseData<String> doEggFrenzy(ProbabilityVO vo) throws ParseException {
+        log.info("砸金蛋 参数:"+JSON.toJSONString(vo));
         ResponseData<String> responseData = new ResponseData<>();
-        MktActivityPOWithBLOBs po = this.getMktActivityPrizePO(vo);
-        String key = vo.getMemberCode() + po.getMktActivityId();
+        String memberCode = vo.getMemberCode();
+        MemberInfoModel member = new MemberInfoModel();
+        member.setMemberCode(memberCode);
+        MemberInfoModel memberInfoModel = memberInfoApiService.getSingleMemberModel(member).getData();
+        MktActivityPOWithBLOBs po = this.getMktActivityPOWithBLOBs(vo);
+
+        if (this.judgeMemberTotalPoint(po, memberInfoModel)){
+            responseData.setData("101");
+            responseData.setMessage("您的积分不足！");
+            return responseData;
+        }
+        if (activityCommonServiceImpl.operationPoint(po, memberCode)){
+            responseData.setData("102");
+            responseData.setMessage("扣减积分失败");
+            return responseData;
+        }
+
+        String key = memberCode + po.getMktActivityId();
         Integer triesLimit = po.getTriesLimit();
+        if (this.judgeTriesLimit(key, triesLimit)){
+            responseData.setData("103");
+            responseData.setMessage("今日次数用完了,快去邀请好友增加机会!");
+            return responseData;
+        }
+        return this.getPrizeProbability(po.getMktActivityId(),po.getActivityCode(), po.getActivityName(),memberInfoModel);
+    }
+    //判断  会员的积分
+    public boolean judgeMemberTotalPoint(MktActivityPOWithBLOBs po,MemberInfoModel memberInfoModel) {
+            if (po.getPrizePoints()>memberInfoModel.getCountIntegral()){
+                return true;
+            }
+        return false;
+    }
+
+    //判断 每人每天可参与次数
+    public Boolean judgeTriesLimit(String key, Integer triesLimit) throws ParseException {
+        Date date = new Date();
+        String format = TimeUtils.sdf.format(date);
         Boolean ifHas = redisTemplate.hasKey(key);
         if (ifHas){
             Integer value = redisTemplate.opsForValue().get(key);
-            if (value<=0){
-                responseData.setData("今日次数用完了,快去邀请好友增加机会!");
-                return responseData;
-            }
-            redisTemplate.opsForValue().set(key,value-1,TimeUtils.getMSeconds(), TimeUnit.MILLISECONDS);
+             if(value<1){
+                 return Boolean.TRUE;
+             }
+            redisTemplate.opsForValue().set(key+format,value-1, TimeUtils.getMSeconds(date,format), TimeUnit.MILLISECONDS);
         }else{
-            redisTemplate.opsForValue().set(key,triesLimit-1,TimeUtils.getMSeconds(), TimeUnit.MILLISECONDS);
+            redisTemplate.opsForValue().set(key+format,triesLimit-1,TimeUtils.getMSeconds(date,format), TimeUnit.MILLISECONDS);
         }
-        return this.getPrizeProbability(po.getMktActivityId(),po.getActivityCode(), po.getActivityName(),vo.getMemberCode());
+        return Boolean.FALSE;
     }
 
-   //获取主表详情
-    public MktActivityPOWithBLOBs getMktActivityPrizePO(ProbabilityVO vo) {
+    //获取主表详情
+    public MktActivityPOWithBLOBs getMktActivityPOWithBLOBs(ProbabilityVO vo) {
         MktActivityPOExample example0 = new MktActivityPOExample();
         MktActivityPOExample.Criteria criteria = example0.createCriteria();
         MktActivityPOExample.Criteria criteria1 = criteria.andValidEqualTo(Boolean.TRUE);
@@ -312,7 +351,7 @@ public class ActivityGoldenEggsServiceImpl implements ActivityGoldenEggsService 
     }
 
     //获取奖项列表
-    public List<MktActivityPrizePO> getEGPrizeLists(Long mktActivityId, String memberCode) {
+    public List<MktActivityPrizePO> getEGPrizeLists(Long mktActivityId) {
         MktActivityPrizePOExample example = new MktActivityPrizePOExample();
         example.createCriteria().andMktActivityIdEqualTo(mktActivityId).andValidEqualTo(Boolean.TRUE);
         example.setOrderByClause(" BY probability desc");
@@ -321,9 +360,9 @@ public class ActivityGoldenEggsServiceImpl implements ActivityGoldenEggsService 
     }
 
     //计算概率
-    public ResponseData<String> getPrizeProbability(Long mktActivityId, String activityCode, String activityName, String memberCode) {
-        ResponseData<String> responseData = new ResponseData<>();
-        List<MktActivityPrizePO> egPrizeLists = this.getEGPrizeLists(mktActivityId, memberCode);
+    public ResponseData<String> getPrizeProbability(Long mktActivityId, String activityCode, String activityName, MemberInfoModel memberInfoModel) {
+        String memberCode = memberInfoModel.getMemberCode();
+        List<MktActivityPrizePO> egPrizeLists = this.getEGPrizeLists(mktActivityId);
         MktActivityPrizePO mktActivityPrizePOThanks = egPrizeLists.get(egPrizeLists.size() - 1);
         List<Integer> collectTarget = egPrizeLists.stream().filter(obj -> obj.getProbability() != null).map(obj -> obj.getProbability().multiply(new BigDecimal(1000000)).intValue()).collect(toList());
         Integer[] arrayTarget = collectTarget.toArray(new Integer[0]);
@@ -350,30 +389,58 @@ public class ActivityGoldenEggsServiceImpl implements ActivityGoldenEggsService 
         Integer userLimitSum = mktActivityPrizePO.getUserLimitSum();
         //谢谢参与
         if (90 == prizeType) {
-            return activityCommonServiceImpl.operationPoint(mktActivityPrizePO, activityCode, memberCode);
+            return activityCommonServiceImpl.operationPoint(mktActivityPrizePO, activityCode, memberInfoModel);
         }
         //非谢谢参与奖
         //参与次数
         Integer participateNum = mktActivityPrizeRecordPOMapper.getParticipateNum(mktActivityId, null, memberCode);
         //前几次不中
         if (invalidCount != null && participateNum < invalidCount) {
-            return activityCommonServiceImpl.operationPoint(mktActivityPrizePOThanks, activityCode, memberCode);
+            return activityCommonServiceImpl.operationPoint(mktActivityPrizePOThanks, activityCode, memberInfoModel);
         }
         //超过 中此类型奖品次数的限制
-        Integer oneTypePrizeNum = mktActivityPrizeRecordPOMapper.getParticipateNum(mktActivityId, prizeType, memberCode);
+        Integer oneTypePrizeNum = mktActivityPrizeRecordPOMapper.getParticipateNum(mktActivityId, prizeType,memberCode);
         if (userLimitSum != null && oneTypePrizeNum >= userLimitSum) {
-            return activityCommonServiceImpl.operationPoint(mktActivityPrizePOThanks, activityCode, memberCode);
+            return activityCommonServiceImpl.operationPoint(mktActivityPrizePOThanks, activityCode, memberInfoModel);
         }
         //奖品数量的判断
         Integer getprizeNum = mktActivityPrizeRecordPOMapper.getParticipateNum(mktActivityId, prizeType, null);
         if (getprizeNum >= prizeTotalSum) {
-            return activityCommonServiceImpl.operationPoint(mktActivityPrizePOThanks, activityCode, memberCode);
+            return activityCommonServiceImpl.operationPoint(mktActivityPrizePOThanks, activityCode, memberInfoModel);
         }
         //中奖
         if (10 == awadType) {
-            return activityCommonServiceImpl.operationPoint(mktActivityPrizePO, activityCode, memberCode);
+            return activityCommonServiceImpl.operationPoint(mktActivityPrizePO, activityCode, memberInfoModel);
         }
         //发券
-        return activityCommonServiceImpl.operationCoupon(mktActivityPrizePO, mktActivityId, activityCode, activityName, memberCode);
+        return activityCommonServiceImpl.operationCoupon(mktActivityPrizePO,activityName, memberInfoModel);
+    }
+
+    /**
+     *小程序获取中奖纪录列表  轮播 或 会员中奖记录
+     * @param po
+     * @return
+     */
+    @Override
+    public ResponseData<List<MktActivityPrizeRecordPO>> getEGPrizeRecordList(MktActivityPrizeRecordPO po) {
+        log.info("砸金蛋中奖纪录列表开始参数为："+ JSON.toJSONString(po));
+        ResponseData responseData = new ResponseData();
+        MktActivityPrizeRecordPOExample example = new MktActivityPrizeRecordPOExample();
+        //判断是轮播还是抽奖记录
+        if(null!=po.getIsWinPrize()){
+            //轮播图
+            example.createCriteria().andMktActivityIdEqualTo(po.getMktActivityId()).andIsWinPrizeEqualTo(po.getIsWinPrize());
+        }else{
+            //抽奖记录
+            example.createCriteria().andMemberCodeEqualTo(po.getMemberCode()).andMktActivityIdEqualTo(po.getMktActivityId());
+        }
+        example.setOrderByClause("prize_time DESC");
+
+        List<MktActivityPrizeRecordPO> lists = mktActivityPrizeRecordPOMapper.selectByExample(example);
+        log.info("砸金蛋中奖纪录列表查询结束:"+JSON.toJSONString(lists));
+        responseData.setCode(SysResponseEnum.SUCCESS.getCode());
+        responseData.setMessage(SysResponseEnum.SUCCESS.getMessage());
+        responseData.setData(lists);
+        return responseData;
     }
 }

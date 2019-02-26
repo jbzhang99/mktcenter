@@ -8,14 +8,12 @@ import com.bizvane.couponfacade.interfaces.CouponServiceFeign;
 import com.bizvane.couponfacade.interfaces.SendCouponServiceFeign;
 import com.bizvane.couponfacade.models.vo.SendCouponSimpleRequestVO;
 import com.bizvane.members.facade.enums.IntegralChangeTypeEnum;
+import com.bizvane.members.facade.models.MemberInfoModel;
 import com.bizvane.members.facade.service.api.IntegralChangeApiService;
 import com.bizvane.members.facade.service.card.request.IntegralChangeRequestModel;
 import com.bizvane.members.facade.service.card.response.IntegralChangeResponseModel;
 import com.bizvane.mktcenterservice.interfaces.TaskService;
-import com.bizvane.mktcenterservice.models.po.MktActivityCountPO;
-import com.bizvane.mktcenterservice.models.po.MktActivityPOWithBLOBs;
-import com.bizvane.mktcenterservice.models.po.MktActivityPrizePO;
-import com.bizvane.mktcenterservice.models.po.MktActivityPrizePOExample;
+import com.bizvane.mktcenterservice.models.po.*;
 import com.bizvane.mktcenterservice.models.vo.MktActivityPrizeVO;
 import com.bizvane.mktcenterserviceimpl.common.job.JobUtil;
 import com.bizvane.mktcenterserviceimpl.common.tools.QiNiuConfigs;
@@ -37,6 +35,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
+import java.math.BigDecimal;
 import java.text.ParseException;
 import java.util.Date;
 import java.util.List;
@@ -80,6 +79,8 @@ public class ActivityCommonServiceImpl {
     private  IntegralChangeApiService integralChangeApiService;
     @Autowired
     private SendCouponServiceFeign sendCouponServiceFeign;
+    @Autowired
+    private MktActivityPrizeRecordPOMapper mktActivityPrizeRecordPOMapper;
 
     //新增游戏主表
     public Long addActivityMianGame(MktActivityPOWithBLOBs activityPO, SysAccountPO sysAccountPo, String activePriceCode, String weixinUrl) throws ParseException {
@@ -203,37 +204,72 @@ public class ActivityCommonServiceImpl {
      *   成功   data有值    code为0     失败   data无值    code为100
      * @param mktActivityPrizePO
      * @param activityCode
-     * @param memberCode
      * @return
      */
-    public ResponseData<String>   operationPoint(MktActivityPrizePO mktActivityPrizePO,String activityCode,String memberCode){
+   // 加
+    public ResponseData<String>   operationPoint(MktActivityPrizePO mktActivityPrizePO,String activityCode,MemberInfoModel memberInfoModel){
         ResponseData<String> responseData = new ResponseData<>();
         Integer prizePoints = mktActivityPrizePO.getPrizePoints();
+
+        this.addRecord(mktActivityPrizePO,memberInfoModel,null);
+
         if (prizePoints==null){
+            //谢谢参与,无积分奖励
+            responseData.setData("104");
            return responseData;
         }
         IntegralChangeRequestModel integralRecordModel = new IntegralChangeRequestModel();
         integralRecordModel.setSysCompanyId(mktActivityPrizePO.getSysCompanyId());
         integralRecordModel.setBrandId(mktActivityPrizePO.getSysBrandId());
-        integralRecordModel.setMemberCode(memberCode);
+        integralRecordModel.setMemberCode(memberInfoModel.getMemberCode());
         //BusinessTypeEnum  会员定义的任务类型
         integralRecordModel.setBusinessType("29");
         //2=收入积分(新增积分)      1=支出积分(减少积分)
         integralRecordModel.setChangeType(IntegralChangeTypeEnum.INCOME.getCode());
         integralRecordModel.setChangeBills(activityCode);
         integralRecordModel.setChangeIntegral(mktActivityPrizePO.getPrizePoints());
-        log.info("游戏 操作积分的参数--" + JSON.toJSONString(integralRecordModel));
+        log.info("游戏 增操作积分的参数--" + JSON.toJSONString(integralRecordModel));
         IntegralChangeResponseModel integralChangeResponseModel = integralChangeApiService.integralChangeOperate(integralRecordModel);
-        log.info("游戏 操作积分结果打印======" + JSON.toJSONString(integralChangeResponseModel));
-        responseData.setMessage(String.valueOf(prizePoints));
+        log.info("游戏 增操作积分结果打印======" + JSON.toJSONString(integralChangeResponseModel));
+        if(mktActivityPrizePO.getPrizeType()==90){
+            //谢谢参与奖励积分
+            responseData.setData("105");
+            responseData.setMessage(String.valueOf(prizePoints));
+        }else{
+            //非谢谢参与奖  展示图片
+            responseData.setData("106");
+            responseData.setMessage(mktActivityPrizePO.getImageUrl());
+        }
+
         return responseData;
+    }
+   //减
+    public Boolean operationPoint(MktActivityPOWithBLOBs po,String memberCode){
+        IntegralChangeRequestModel integralRecordModel = new IntegralChangeRequestModel();
+        integralRecordModel.setSysCompanyId(po.getSysCompanyId());
+        integralRecordModel.setBrandId(po.getSysBrandId());
+        integralRecordModel.setMemberCode(memberCode);
+        //BusinessTypeEnum  会员定义的任务类型
+        integralRecordModel.setBusinessType("29");
+        //2=收入积分(新增积分)      1=支出积分(减少积分)
+        integralRecordModel.setChangeType(IntegralChangeTypeEnum.Expend.getCode());
+        integralRecordModel.setChangeBills(po.getActivityCode());
+        integralRecordModel.setChangeIntegral(po.getPrizePoints());
+        log.info("游戏 减操作积分的参数--" + JSON.toJSONString(integralRecordModel));
+        IntegralChangeResponseModel integralChangeResponseModel = integralChangeApiService.integralChangeOperate(integralRecordModel);
+        log.info("游戏 减操作积分结果打印======" + JSON.toJSONString(integralChangeResponseModel));
+        Integer code = integralChangeResponseModel.getCode();
+        if (100==code){
+            return Boolean.TRUE;
+        }
+        return Boolean.FALSE;
     }
 
     //操作券
-    public ResponseData<String> operationCoupon(MktActivityPrizePO mktActivityPrizePO,Long mktActivityId,String activityCode,String activityName,String memberCode){
+    public ResponseData<String> operationCoupon(MktActivityPrizePO mktActivityPrizePO, String activityName, MemberInfoModel memberInfoModel){
         SendCouponSimpleRequestVO onecouponVO = new SendCouponSimpleRequestVO();
-        onecouponVO.setMemberCode(memberCode);
-        onecouponVO.setSendBussienId(mktActivityId);
+        onecouponVO.setMemberCode(memberInfoModel.getMemberCode());
+        onecouponVO.setSendBussienId(mktActivityPrizePO.getMktActivityId());
         onecouponVO.setBusinessName(activityName);
         onecouponVO.setSendType("105");
         onecouponVO.setCouponDefinitionId(mktActivityPrizePO.getCouponDefinitionId());
@@ -241,7 +277,35 @@ public class ActivityCommonServiceImpl {
         log.info("游戏 发送券的参数-----" + JSON.toJSONString(onecouponVO));
         ResponseData<String> responseData = sendCouponServiceFeign.simple(onecouponVO);
         log.info("游戏 发送券的结果------" + JSON.toJSONString(responseData));
-        responseData.setData(mktActivityPrizePO.getImageUrl());
+        String couponCode = responseData.getData();
+        this.addRecord(mktActivityPrizePO,memberInfoModel,couponCode);
+        responseData.setData("107");
+        responseData.setMessage(mktActivityPrizePO.getImageUrl());
         return responseData;
+    }
+    //添加记录
+    public  void addRecord(MktActivityPrizePO mktActivityPrizePO,MemberInfoModel memberInfoModel,String couponCode){
+        MktActivityPrizeRecordPO record = new MktActivityPrizeRecordPO();
+        record.setMktActivityId(mktActivityPrizePO.getMktActivityId());
+        record.setSysCompanyId(mktActivityPrizePO.getSysCompanyId());
+        record.setSysBrandId(mktActivityPrizePO.getSysBrandId());
+        record.setMemberCode(memberInfoModel.getMemberCode());
+        record.setMemberPhone(memberInfoModel.getPhone());
+        record.setMemberName(memberInfoModel.getName());
+        record.setCouponDefinitionId(mktActivityPrizePO.getCouponDefinitionId());
+        record.setCouponDefinitionCode(couponCode);
+        record.setPrizeTime(new Date());
+        record.setPrizeType(mktActivityPrizePO.getPrizeType());
+        record.setAwadType(mktActivityPrizePO.getAwadType());
+        record.setPrizeName(mktActivityPrizePO.getPrizeName());
+        if (mktActivityPrizePO.getPrizeType()!=90){
+            record.setIsWinPrize(Boolean.TRUE);
+        }else {
+            record.setIsWinPrize(Boolean.FALSE);
+        }
+        record.setValid(Boolean.TRUE);
+        mktActivityPrizeRecordPOMapper.insertSelective(record);
+
+        mktActivityCountPOMapper.updateSum(mktActivityPrizePO.getMktActivityId(), 1, BigDecimal.ZERO,0);
     }
 }
