@@ -39,4 +39,14 @@ public class ActivityEGRpcController {
     public ResponseData<List<MktActivityPrizeRecordPO>> getEGPrizeRecordList(@RequestBody MktActivityPrizeRecordPO po){
         return activityGoldenEggsService.getEGPrizeRecordList(po);
     }
+
+    @RequestMapping("residueMemberNumber")
+    public ResponseData<Integer>  residueMemberNumber(@RequestBody ProbabilityVO vo) throws ParseException{
+        return activityGoldenEggsService.residueMemberNumber(vo);
+    }
+
+    @RequestMapping("addMemberNumber")
+    public ResponseData<Integer> addMemberNumber(@RequestBody ProbabilityVO vo) throws ParseException{
+        return activityGoldenEggsService.addMemberNumber(vo);
+    }
 }

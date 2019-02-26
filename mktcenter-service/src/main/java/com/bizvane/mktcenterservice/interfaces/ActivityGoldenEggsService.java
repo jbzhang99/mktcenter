@@ -29,6 +29,6 @@ public interface ActivityGoldenEggsService {
 
     public ResponseData<String> doEggFrenzy(ProbabilityVO vo) throws ParseException;
     public ResponseData<List<MktActivityPrizeRecordPO>> getEGPrizeRecordList(MktActivityPrizeRecordPO po);
-
-
+    public ResponseData<Integer>  residueMemberNumber(ProbabilityVO vo) throws ParseException;
+    public ResponseData<Integer> addMemberNumber(ProbabilityVO vo) throws ParseException;
 }

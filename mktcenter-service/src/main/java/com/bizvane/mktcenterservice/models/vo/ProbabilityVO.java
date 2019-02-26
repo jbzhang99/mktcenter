@@ -9,6 +9,7 @@ public class ProbabilityVO {
     private String activityCode;
     private String memberCode;
 
+    private Integer triesLimit;
 
     public Long getMktActivityId() {
         return mktActivityId;
@@ -32,5 +33,13 @@ public class ProbabilityVO {
 
     public void setMemberCode(String memberCode) {
         this.memberCode = memberCode;
+    }
+
+    public Integer getTriesLimit() {
+        return triesLimit;
+    }
+
+    public void setTriesLimit(Integer triesLimit) {
+        this.triesLimit = triesLimit;
     }
 }

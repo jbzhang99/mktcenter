@@ -444,4 +444,43 @@ public class ActivityGoldenEggsServiceImpl implements ActivityGoldenEggsService 
         responseData.setData(lists);
         return responseData;
     }
+
+    /**
+     * 查询  每人每天限制次数
+     * @param vo
+     * @return
+     * @throws ParseException
+     */
+    @Override
+    public ResponseData<Integer>  residueMemberNumber(ProbabilityVO vo) throws ParseException {
+        ResponseData<Integer> responseData = new ResponseData<>();
+        String key = vo.getMemberCode() + vo.getMktActivityId();
+        Date date = new Date();
+        String format = TimeUtils.sdf.format(date);
+        Boolean ifHas = redisTemplate.hasKey(key);
+        Integer value=vo.getTriesLimit();
+        if (ifHas){
+            value = redisTemplate.opsForValue().get(key);
+        }else{
+            redisTemplate.opsForValue().set(key+format,vo.getTriesLimit(),TimeUtils.getMSeconds(date,format), TimeUnit.MILLISECONDS);
+        }
+        responseData.setData(value);
+        return responseData;
+    }
+    //添加 每人每天限制次数
+    @Override
+    public ResponseData<Integer> addMemberNumber(ProbabilityVO vo) throws ParseException {
+        ResponseData<Integer> responseData = new ResponseData<>();
+        String key = vo.getMemberCode() + vo.getMktActivityId();
+        Date date = new Date();
+        String format = TimeUtils.sdf.format(date);
+        Boolean ifHas = redisTemplate.hasKey(key);
+        Integer value=vo.getTriesLimit();
+        if (ifHas){
+            value = redisTemplate.opsForValue().get(key);
+        }
+        redisTemplate.opsForValue().set(key+format,value+1,TimeUtils.getMSeconds(date,format), TimeUnit.MILLISECONDS);
+        responseData.setData(value);
+        return responseData;
+    }
 }

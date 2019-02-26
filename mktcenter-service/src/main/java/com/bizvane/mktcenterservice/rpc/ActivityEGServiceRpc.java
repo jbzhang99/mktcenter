@@ -25,4 +25,10 @@ public interface ActivityEGServiceRpc {
 
     @RequestMapping("getEGPrizeRecordList")
     public ResponseData<List<MktActivityPrizeRecordPO>> getEGPrizeRecordList(@RequestBody MktActivityPrizeRecordPO po);
+
+    @RequestMapping("residueMemberNumber")
+    public ResponseData<Integer>  residueMemberNumber(@RequestBody ProbabilityVO vo) throws ParseException;
+
+    @RequestMapping("addMemberNumber")
+    public ResponseData<Integer> addMemberNumber(@RequestBody ProbabilityVO vo) throws ParseException;
 }
