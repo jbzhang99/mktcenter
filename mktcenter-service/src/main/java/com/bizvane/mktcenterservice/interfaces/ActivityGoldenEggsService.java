@@ -25,6 +25,7 @@ public interface ActivityGoldenEggsService {
     public ResponseData<PageInfo<AnalysisPriceResultVO>> selectAnalysisEG(ActivityPriceParamVO vo, HttpServletRequest request);
     public ResponseData<PageInfo<MktActivityPrizeRecordPO>> selectPrizePeople(ActivityPriceParamVO vo);
     public ResponseData<String> doVerificationCoupon(ActivityPriceParamVO vo, HttpServletRequest request);
+    public MktActivityPOWithBLOBs getMktActivityPOWithBLOBs(ProbabilityVO vo);
 
     public ResponseData<String> doEggFrenzy(ProbabilityVO vo) throws ParseException;
     public ResponseData<List<MktActivityPrizeRecordPO>> getEGPrizeRecordList(MktActivityPrizeRecordPO po);

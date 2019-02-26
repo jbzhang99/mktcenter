@@ -1,7 +1,7 @@
 package com.bizvane.mktcenterservice.rpc;
 
+import com.bizvane.mktcenterservice.models.po.MktActivityPOWithBLOBs;
 import com.bizvane.mktcenterservice.models.po.MktActivityPrizeRecordPO;
-import com.bizvane.mktcenterservice.models.vo.ActivityPriceBO;
 import com.bizvane.mktcenterservice.models.vo.ProbabilityVO;
 import com.bizvane.utils.responseinfo.ResponseData;
 import org.springframework.cloud.openfeign.FeignClient;
@@ -17,8 +17,8 @@ import java.util.List;
  */
 @FeignClient(value = "${feign.client.mktcenter.name}",path = "${feign.client.mktcenter.path}/activityEGRpc")
 public interface ActivityEGServiceRpc {
-    @RequestMapping("selectActivityGEById")
-    public ResponseData<ActivityPriceBO> selectActivityGEById(@RequestBody ProbabilityVO vo);
+    @RequestMapping("getMktActivityPOWithBLOBs")
+    public ResponseData<MktActivityPOWithBLOBs> getMktActivityPOWithBLOBs(@RequestBody ProbabilityVO vo);
 
     @RequestMapping("doEggFrenzy")
     public ResponseData<String> doEggFrenzy(@RequestBody ProbabilityVO vo) throws ParseException;

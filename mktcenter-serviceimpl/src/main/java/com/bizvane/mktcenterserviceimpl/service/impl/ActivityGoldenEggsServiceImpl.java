@@ -338,6 +338,7 @@ public class ActivityGoldenEggsServiceImpl implements ActivityGoldenEggsService 
     }
 
     //获取主表详情
+    @Override
     public MktActivityPOWithBLOBs getMktActivityPOWithBLOBs(ProbabilityVO vo) {
         MktActivityPOExample example0 = new MktActivityPOExample();
         MktActivityPOExample.Criteria criteria = example0.createCriteria();

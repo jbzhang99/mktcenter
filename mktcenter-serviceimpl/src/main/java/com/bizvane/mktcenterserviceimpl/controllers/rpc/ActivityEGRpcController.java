@@ -1,8 +1,8 @@
 package com.bizvane.mktcenterserviceimpl.controllers.rpc;
 
 import com.bizvane.mktcenterservice.interfaces.ActivityGoldenEggsService;
+import com.bizvane.mktcenterservice.models.po.MktActivityPOWithBLOBs;
 import com.bizvane.mktcenterservice.models.po.MktActivityPrizeRecordPO;
-import com.bizvane.mktcenterservice.models.vo.ActivityPriceBO;
 import com.bizvane.mktcenterservice.models.vo.ProbabilityVO;
 import com.bizvane.utils.responseinfo.ResponseData;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,9 +23,12 @@ public class ActivityEGRpcController {
    @Autowired
    private  ActivityGoldenEggsService activityGoldenEggsService;
 
-    @RequestMapping("selectActivityGEById")
-    public ResponseData<ActivityPriceBO> selectActivityGEById(@RequestBody ProbabilityVO vo){
-        return activityGoldenEggsService.selectActivityGEById(vo);
+    @RequestMapping("getMktActivityPOWithBLOBs")
+    public ResponseData<MktActivityPOWithBLOBs> getMktActivityPOWithBLOBs(@RequestBody ProbabilityVO vo){
+        ResponseData<MktActivityPOWithBLOBs> responseData = new ResponseData<>();
+        MktActivityPOWithBLOBs mktActivityPOWithBLOBs = activityGoldenEggsService.getMktActivityPOWithBLOBs(vo);
+        responseData.setData(mktActivityPOWithBLOBs);
+        return responseData;
     }
 
     @RequestMapping("doEggFrenzy")
