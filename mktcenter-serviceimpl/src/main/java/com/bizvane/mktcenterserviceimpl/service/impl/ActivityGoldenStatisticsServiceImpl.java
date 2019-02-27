@@ -60,10 +60,9 @@ public class ActivityGoldenStatisticsServiceImpl implements ActivityGoldenStatis
             }
             SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
             //查询活动id
-            //MktActivityPOWithBLOBs mktActivityPOWithBLOBs = mktActivityPOMapper.selectByPrimaryKey(bo.getActivityId());
+            MktActivityPOWithBLOBs mktActivityPOWithBLOBs = mktActivityPOMapper.selectByPrimaryKey(bo.getActivityId());
             //redis过期时间
-            //Long redisOutTime = StatisticsConstants.getTimeIntervalMilliseconds(mktActivityPOWithBLOBs.getStartTime(), mktActivityPOWithBLOBs.getEndTime());
-            Long redisOutTime = 1000000L;
+            Long redisOutTime = StatisticsConstants.getTimeIntervalMilliseconds(mktActivityPOWithBLOBs.getStartTime(), mktActivityPOWithBLOBs.getEndTime());
             //redisKey定义规则:GOLDEN+活动id+code
             String redisKey = "GOLDEN" + bo.getActivityId() + sdf.format(new Date()) + bo.getCode();
             if (GoldenStatisticsEnum.VISITORS_COUNT.getCode() == bo.getCode()) {
