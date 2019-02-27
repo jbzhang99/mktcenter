@@ -47,9 +47,16 @@ public class ActivityGoldenStatisticsServiceImpl implements ActivityGoldenStatis
 
     @Override
     public ResponseData goldenStatisticsData(ActivityGoldenStatisticsBo bo) {
-        log.info("砸金蛋活动统计入参：activityId:" + bo.getActivityId() + ",code:" + bo.getCode() + ",memberCode:" + bo.getMemberCode());
         ResponseData responseData = new ResponseData();
         responseData.setCode(SysResponseEnum.FAILED.getCode());
+        SimpleDateFormat hSdf = new SimpleDateFormat("HH");
+        Integer newDateH = Integer.parseInt(hSdf.format(new Date()));
+        if (newDateH <=7 || newDateH >= 22) {
+            responseData.setMessage("没有在活动统计时间内!");
+            return responseData;
+        }
+        log.info("砸金蛋活动统计入参：activityId:" + bo.getActivityId() + ",code:" + bo.getCode() + ",memberCode:" + bo.getMemberCode());
+
         try {
             if (bo.getActivityId() == null) {
                 responseData.setMessage("activityId不能为空!");
