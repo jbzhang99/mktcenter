@@ -8,7 +8,7 @@ public class ProbabilityVO {
     private Long mktActivityId;
     private String activityCode;
     private String memberCode;
-
+    private Integer activityType;
     private Integer triesLimit;
 
     public Long getMktActivityId() {
@@ -41,5 +41,13 @@ public class ProbabilityVO {
 
     public void setTriesLimit(Integer triesLimit) {
         this.triesLimit = triesLimit;
+    }
+
+    public Integer getActivityType() {
+        return activityType;
+    }
+
+    public void setActivityType(Integer activityType) {
+        this.activityType = activityType;
     }
 }
