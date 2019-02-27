@@ -428,7 +428,7 @@ public class ActivityGoldenEggsServiceImpl implements ActivityGoldenEggsService 
         ResponseData responseData = new ResponseData();
         MktActivityPrizeRecordPOExample example = new MktActivityPrizeRecordPOExample();
         //判断是轮播还是抽奖记录
-        if(null!=po.getIsWinPrize()){
+        if(po.getIsWinPrize()){
             //轮播图
             example.createCriteria().andMktActivityIdEqualTo(po.getMktActivityId()).andIsWinPrizeEqualTo(po.getIsWinPrize());
         }else{
