@@ -215,6 +215,7 @@ public class ActivityGoldenEggsServiceImpl implements ActivityGoldenEggsService 
         ResponseData<PageInfo<AnalysisPriceResultVO>> responseData = new ResponseData<>();
         SysAccountPO sysAccountPo = TokenUtils.getStageUser(request);
         vo.setBrandId(sysAccountPo.getBrandId());
+        vo.setActivityType(13);
         PageHelper.startPage(vo.getPageNumber(), vo.getPageSize());
         List<AnalysisPriceResultVO> lists = mktActivityPrizePOMapper.selectAnalysisPrice(vo);
         if (CollectionUtils.isEmpty(lists)) {

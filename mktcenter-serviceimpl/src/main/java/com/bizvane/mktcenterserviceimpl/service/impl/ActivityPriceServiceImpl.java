@@ -302,6 +302,7 @@ public class ActivityPriceServiceImpl implements ActivityPriceService {
 //        sysAccountPo.setAccountCode("15328634678");
 //        sysAccountPo.setName("不啊哟删除");
         vo.setBrandId(sysAccountPo.getBrandId());
+        vo.setActivityType(11);
         PageHelper.startPage(vo.getPageNumber(), vo.getPageSize());
         List<AnalysisPriceResultVO> lists = mktActivityPrizePOMapper.selectAnalysisPrice(vo);
         if (CollectionUtils.isEmpty(lists)) {
