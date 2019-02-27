@@ -466,16 +466,16 @@ public class ActivityGoldenEggsServiceImpl implements ActivityGoldenEggsService 
     @Override
     public ResponseData<Integer>  residueMemberNumber(ProbabilityVO vo) throws ParseException {
         ResponseData<Integer> responseData = new ResponseData<>();
-        String key = vo.getMemberCode() + vo.getMktActivityId();
         Date date = new Date();
         String format = TimeUtils.sdf.format(date);
+        String key = vo.getMemberCode() + vo.getMktActivityId()+format;
         Boolean ifHas = redisTemplate.hasKey(key);
         Integer value=vo.getTriesLimit();
         if (ifHas){
             value = redisTemplate.opsForValue().get(key);
             log.info("取出 redis 次数:"+value);
         }else{
-            redisTemplate.opsForValue().set(key+format,vo.getTriesLimit(),TimeUtils.getMSeconds(date,format), TimeUnit.MILLISECONDS);
+            redisTemplate.opsForValue().set(key,vo.getTriesLimit(),TimeUtils.getMSeconds(date,format), TimeUnit.MILLISECONDS);
         }
         log.info("取出 redis 次数 最终:"+value);
         responseData.setData(value);
@@ -485,16 +485,16 @@ public class ActivityGoldenEggsServiceImpl implements ActivityGoldenEggsService 
     @Override
     public ResponseData<Integer> addMemberNumber(ProbabilityVO vo) throws ParseException {
         ResponseData<Integer> responseData = new ResponseData<>();
-        String key = vo.getMemberCode() + vo.getMktActivityId();
         Date date = new Date();
         String format = TimeUtils.sdf.format(date);
+        String key = vo.getMemberCode() + vo.getMktActivityId()+format;
         Boolean ifHas = redisTemplate.hasKey(key);
         Integer value=vo.getTriesLimit();
         if (ifHas){
             value = redisTemplate.opsForValue().get(key);
             log.info("存入 redis 次数:"+value);
         }
-        redisTemplate.opsForValue().set(key+format,value+1,TimeUtils.getMSeconds(date,format), TimeUnit.MILLISECONDS);
+        redisTemplate.opsForValue().set(key,value+1,TimeUtils.getMSeconds(date,format), TimeUnit.MILLISECONDS);
         log.info("存入 redis 次数 最终:"+value+1);
         this.setgoldenStatistics(vo.getMktActivityId(),2, vo.getMemberCode());
 
