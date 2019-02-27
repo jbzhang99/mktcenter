@@ -152,6 +152,7 @@ public class ActivityGoldenStatisticsServiceImpl implements ActivityGoldenStatis
 
         MktGoldenStatisticsPO po = mktGoldenStatisticsPOMapper.getTotalGoldenStatistics(activityId);
         if (po == null) {
+            po = new MktGoldenStatisticsPO();
             po.setTotalVisitorsCount(0);
             po.setTotalParticipateMemberCount(0);
             po.setTotalPageForwardCount(0);
