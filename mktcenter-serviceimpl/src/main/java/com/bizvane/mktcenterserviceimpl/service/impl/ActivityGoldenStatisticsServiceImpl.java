@@ -1,5 +1,6 @@
 package com.bizvane.mktcenterserviceimpl.service.impl;
 
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.bizvane.mktcenterservice.interfaces.ActivityGoldenStatisticsService;
 import com.bizvane.mktcenterservice.models.bo.ActivityGoldenStatisticsBo;
@@ -239,16 +240,19 @@ public class ActivityGoldenStatisticsServiceImpl implements ActivityGoldenStatis
                 e.printStackTrace();
             }
             if (dateList != null && dateList.size() > 0) {
-                JSONObject resultDataJson = new JSONObject(new LinkedHashMap<>());
+                JSONArray dataArray = new JSONArray();
                 for (int i = 0; i < dateList.size(); i++) {
+                    JSONObject resultDataJson = new JSONObject();
                     Integer visitors = dataJson.getInteger(dateList.get(i));
+                    resultDataJson.put("time", dateList.get(i));
                     if (visitors != null) {
-                        resultDataJson.put(dateList.get(i), visitors);
+                        resultDataJson.put("value", visitors);
                     } else {
-                        resultDataJson.put(dateList.get(i), 0);
+                        resultDataJson.put("value", 0);
                     }
+                    dataArray.add(resultDataJson);
                 }
-                po.setHourJsonData(resultDataJson.toJSONString());
+                po.setHourJsonData(dataArray.toJSONString());
             }
         }
 
