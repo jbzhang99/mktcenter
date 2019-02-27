@@ -208,14 +208,13 @@ public class ActivityGoldenStatisticsServiceImpl implements ActivityGoldenStatis
         } else {
             po = new MktGoldenStatisticsPO();
             List<MktGoldenStatisticsVO> mktGoldenStatisticsVoList = mktGoldenStatisticsPOMapper.getTotalGoldenStatisticsDates(bo.getActivityId(), startDates, endDates);
-            JSONObject dataJson = null;
+            JSONObject dataJson = new JSONObject();
             int visitorsCount = 0;
             int participateMemberCount = 0;
             int pageForwardCount = 0;
             int effectiveSharingCount = 0;
             int registerMembersCount = 0;
             if (mktGoldenStatisticsVoList.size() > 0) {
-                dataJson = new JSONObject();
                 for (int i = 0; i < mktGoldenStatisticsVoList.size(); i++) {
                     MktGoldenStatisticsVO mktGoldenStatisticsVO = mktGoldenStatisticsVoList.get(i);
                     visitorsCount = visitorsCount + mktGoldenStatisticsVO.getVisitorsCount();
@@ -240,7 +239,7 @@ public class ActivityGoldenStatisticsServiceImpl implements ActivityGoldenStatis
                 e.printStackTrace();
             }
             if (dateList != null && dateList.size() > 0) {
-                JSONObject resultDataJson = new JSONObject();
+                JSONObject resultDataJson = new JSONObject(new LinkedHashMap<>());
                 for (int i = 0; i < dateList.size(); i++) {
                     Integer visitors = dataJson.getInteger(dateList.get(i));
                     if (visitors != null) {
