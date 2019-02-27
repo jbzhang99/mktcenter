@@ -51,7 +51,7 @@ public class ActivityGoldenStatisticsServiceImpl implements ActivityGoldenStatis
         responseData.setCode(SysResponseEnum.FAILED.getCode());
         SimpleDateFormat hSdf = new SimpleDateFormat("HH");
         Integer newDateH = Integer.parseInt(hSdf.format(new Date()));
-        if (newDateH <=7 || newDateH >= 22) {
+        if (newDateH <7 || newDateH >= 22) {
             responseData.setMessage("没有在活动统计时间内!");
             return responseData;
         }
