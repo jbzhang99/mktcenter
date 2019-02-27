@@ -10,7 +10,9 @@ import com.bizvane.couponfacade.models.vo.CouponUseVO;
 import com.bizvane.members.facade.models.MemberInfoModel;
 import com.bizvane.members.facade.service.api.MemberInfoApiService;
 import com.bizvane.mktcenterservice.interfaces.ActivityGoldenEggsService;
+import com.bizvane.mktcenterservice.interfaces.ActivityGoldenStatisticsService;
 import com.bizvane.mktcenterservice.interfaces.TaskService;
+import com.bizvane.mktcenterservice.models.bo.ActivityGoldenStatisticsBo;
 import com.bizvane.mktcenterservice.models.po.*;
 import com.bizvane.mktcenterservice.models.vo.*;
 import com.bizvane.mktcenterserviceimpl.common.utils.CodeUtil;
@@ -69,6 +71,8 @@ public class ActivityGoldenEggsServiceImpl implements ActivityGoldenEggsService 
     private RedisTemplate<String,Integer> redisTemplate;
     @Autowired
     private   MemberInfoApiService memberInfoApiService;
+    @Autowired
+    private  ActivityGoldenStatisticsService activityGoldenStatisticsService;
 
     /**
      * 新增
@@ -289,6 +293,9 @@ public class ActivityGoldenEggsServiceImpl implements ActivityGoldenEggsService 
         log.info("砸金蛋 参数:"+JSON.toJSONString(vo));
         ResponseData<String> responseData = new ResponseData<>();
         String memberCode = vo.getMemberCode();
+
+        this.setgoldenStatistics(vo.getMktActivityId(),1, vo.getMemberCode());
+
         MemberInfoModel member = new MemberInfoModel();
         member.setMemberCode(memberCode);
         MemberInfoModel memberInfoModel = memberInfoApiService.getSingleMemberModel(member).getData();
@@ -350,7 +357,10 @@ public class ActivityGoldenEggsServiceImpl implements ActivityGoldenEggsService 
         }else{
             criteria1.andMktActivityIdEqualTo(vo.getMktActivityId());
         }
-        return mktActivityPOMapper.selectByExampleWithBLOBs(example0).get(0);
+        MktActivityPOWithBLOBs poWithBLOBs = mktActivityPOMapper.selectByExampleWithBLOBs(example0).get(0);
+
+        this.setgoldenStatistics(poWithBLOBs.getMktActivityId(),0, vo.getMemberCode());
+        return poWithBLOBs;
     }
 
     //获取奖项列表
@@ -463,9 +473,11 @@ public class ActivityGoldenEggsServiceImpl implements ActivityGoldenEggsService 
         Integer value=vo.getTriesLimit();
         if (ifHas){
             value = redisTemplate.opsForValue().get(key);
+            log.info("取出 redis 次数:"+value);
         }else{
             redisTemplate.opsForValue().set(key+format,vo.getTriesLimit(),TimeUtils.getMSeconds(date,format), TimeUnit.MILLISECONDS);
         }
+        log.info("取出 redis 次数 最终:"+value);
         responseData.setData(value);
         return responseData;
     }
@@ -480,9 +492,22 @@ public class ActivityGoldenEggsServiceImpl implements ActivityGoldenEggsService 
         Integer value=vo.getTriesLimit();
         if (ifHas){
             value = redisTemplate.opsForValue().get(key);
+            log.info("存入 redis 次数:"+value);
         }
         redisTemplate.opsForValue().set(key+format,value+1,TimeUtils.getMSeconds(date,format), TimeUnit.MILLISECONDS);
+        log.info("存入 redis 次数 最终:"+value+1);
+        this.setgoldenStatistics(vo.getMktActivityId(),2, vo.getMemberCode());
+
         responseData.setData(value);
         return responseData;
+    }
+     //添加统计页面数据
+    public  void  setgoldenStatistics(Long activityId,int code, String memberCode){
+        ActivityGoldenStatisticsBo bo=new ActivityGoldenStatisticsBo();
+        bo.setActivityId(activityId);
+        bo.setCode(code);
+        bo.setMemberCode(memberCode);
+        ResponseData responseData = activityGoldenStatisticsService.goldenStatisticsData(bo);
+        log.info("添加统计页面数据:"+JSON.toJSONString(bo)+"--"+JSON.toJSONString(responseData));
     }
 }
