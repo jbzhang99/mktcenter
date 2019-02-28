@@ -334,15 +334,16 @@ public class ActivityGoldenEggsServiceImpl implements ActivityGoldenEggsService 
     public Boolean judgeTriesLimit(String key, Integer triesLimit) throws ParseException {
         Date date = new Date();
         String format = TimeUtils.sdf.format(date);
-        Boolean ifHas = redisTemplate.hasKey(key+format);
+        key=key+format;
+        Boolean ifHas = redisTemplate.hasKey(key);
         if (ifHas){
             Integer value = redisTemplate.opsForValue().get(key);
              if(value<1){
                  return Boolean.TRUE;
              }
-            redisTemplate.opsForValue().set(key+format,value-1, TimeUtils.getMSeconds(date,format), TimeUnit.MILLISECONDS);
+            redisTemplate.opsForValue().set(key,value-1, TimeUtils.getMSeconds(date,format), TimeUnit.MILLISECONDS);
         }else{
-            redisTemplate.opsForValue().set(key+format,triesLimit-1,TimeUtils.getMSeconds(date,format), TimeUnit.MILLISECONDS);
+            redisTemplate.opsForValue().set(key,triesLimit-1,TimeUtils.getMSeconds(date,format), TimeUnit.MILLISECONDS);
         }
         return Boolean.FALSE;
     }
