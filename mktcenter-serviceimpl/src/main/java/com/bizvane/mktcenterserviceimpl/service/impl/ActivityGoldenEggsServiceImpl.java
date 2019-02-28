@@ -367,7 +367,7 @@ public class ActivityGoldenEggsServiceImpl implements ActivityGoldenEggsService 
     public List<MktActivityPrizePO> getEGPrizeLists(Long mktActivityId) {
         MktActivityPrizePOExample example = new MktActivityPrizePOExample();
         example.createCriteria().andMktActivityIdEqualTo(mktActivityId).andValidEqualTo(Boolean.TRUE);
-        example.setOrderByClause(" probability desc");
+        example.setOrderByClause(" probability ASC");
         List<MktActivityPrizePO> mktActivityPrizePOS = mktActivityPrizePOMapper.selectByExample(example);
         return mktActivityPrizePOS;
     }

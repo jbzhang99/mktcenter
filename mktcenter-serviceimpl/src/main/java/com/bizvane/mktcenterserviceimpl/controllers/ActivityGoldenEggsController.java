@@ -64,4 +64,8 @@ public class ActivityGoldenEggsController {
     public MktActivityPOWithBLOBs getMktActivityPOWithBLOBs(ProbabilityVO vo){
         return activityGoldenEggsService.getMktActivityPOWithBLOBs(vo);
     }
+    @RequestMapping("doEggFrenzy")
+    public ResponseData<String> doEggFrenzy(ProbabilityVO vo) throws ParseException {
+        return activityGoldenEggsService.doEggFrenzy(vo);
+    }
 }
