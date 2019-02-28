@@ -378,7 +378,7 @@ public class ActivityGoldenEggsServiceImpl implements ActivityGoldenEggsService 
     public ResponseData<String> getPrizeProbability(Long mktActivityId, String activityCode, String activityName, MemberInfoModel memberInfoModel) {
         String memberCode = memberInfoModel.getMemberCode();
         List<MktActivityPrizePO> egPrizeLists = this.getEGPrizeLists(mktActivityId);
-        MktActivityPrizePO mktActivityPrizePOThanks = egPrizeLists.get(egPrizeLists.size() - 1);
+        MktActivityPrizePO mktActivityPrizePOThanks = egPrizeLists.get(0);
         List<Integer> collectTarget = egPrizeLists.stream().filter(obj -> obj.getProbability() != null).map(obj -> obj.getProbability().multiply(new BigDecimal(1000000)).intValue()).collect(toList());
         Integer[] arrayTarget = collectTarget.toArray(new Integer[0]);
         Integer arrayDesc[] = new Integer[arrayTarget.length + 1];
