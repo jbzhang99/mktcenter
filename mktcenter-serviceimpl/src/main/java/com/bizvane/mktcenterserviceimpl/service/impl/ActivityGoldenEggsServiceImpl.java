@@ -306,12 +306,6 @@ public class ActivityGoldenEggsServiceImpl implements ActivityGoldenEggsService 
             responseData.setMessage("您的积分不足！");
             return responseData;
         }
-        if (activityCommonServiceImpl.operationPoint(po, memberCode)){
-            responseData.setData("102");
-            responseData.setMessage("扣减积分失败");
-            return responseData;
-        }
-
         String key = memberCode + po.getMktActivityId();
         Integer triesLimit = po.getTriesLimit();
         if (this.judgeTriesLimit(key, triesLimit)){
@@ -319,6 +313,13 @@ public class ActivityGoldenEggsServiceImpl implements ActivityGoldenEggsService 
             responseData.setMessage("今日次数用完了,快去邀请好友增加机会!");
             return responseData;
         }
+        if (activityCommonServiceImpl.operationPoint(po, memberCode)){
+            responseData.setData("102");
+            responseData.setMessage("扣减积分失败");
+            return responseData;
+        }
+
+
         return this.getPrizeProbability(po.getMktActivityId(),po.getActivityCode(), po.getActivityName(),memberInfoModel);
     }
     //判断  会员的积分
@@ -333,7 +334,7 @@ public class ActivityGoldenEggsServiceImpl implements ActivityGoldenEggsService 
     public Boolean judgeTriesLimit(String key, Integer triesLimit) throws ParseException {
         Date date = new Date();
         String format = TimeUtils.sdf.format(date);
-        Boolean ifHas = redisTemplate.hasKey(key);
+        Boolean ifHas = redisTemplate.hasKey(key+format);
         if (ifHas){
             Integer value = redisTemplate.opsForValue().get(key);
              if(value<1){
