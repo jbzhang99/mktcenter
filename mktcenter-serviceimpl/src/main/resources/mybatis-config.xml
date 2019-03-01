@@ -23,9 +23,9 @@
             <!--<property name="reasonable" value="true"/>-->
         <!--</plugin>-->
     <!--</plugins>-->
-    <plugins>
-        <plugin interceptor="com.bizvane.utils.tenant.QuarantineIntercepts">
-            <property name="enableIntercepts" value="enable"></property>
-        </plugin>
-    </plugins>
+    <!--<plugins>-->
+        <!--<plugin interceptor="com.bizvane.utils.tenant.QuarantineIntercepts">-->
+            <!--<property name="enableIntercepts" value="enable"></property>-->
+        <!--</plugin>-->
+    <!--</plugins>-->
 </configuration>
