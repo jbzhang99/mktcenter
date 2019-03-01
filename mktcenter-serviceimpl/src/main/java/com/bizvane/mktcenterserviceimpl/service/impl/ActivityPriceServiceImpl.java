@@ -329,6 +329,7 @@ public class ActivityPriceServiceImpl implements ActivityPriceService {
     public ResponseData<PageInfo<MktActivityPrizeRecordPO>> selectPrizePeople(ActivityPriceParamVO vo) {
         log.info("selectPrizePeople  parram:"+JSON.toJSONString(vo));
         ResponseData<PageInfo<MktActivityPrizeRecordPO>> responseData = new ResponseData<>();
+        vo.setPrizeType(50);
         PageHelper.startPage(vo.getPageNumber(), vo.getPageSize());
         List<MktActivityPrizeRecordPO> lists = mktActivitPrizeRecordPOMapper.selectPrizePeople(vo);
         if (CollectionUtils.isEmpty(lists)) {

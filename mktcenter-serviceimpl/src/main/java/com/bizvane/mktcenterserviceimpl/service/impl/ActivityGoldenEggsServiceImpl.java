@@ -247,6 +247,7 @@ public class ActivityGoldenEggsServiceImpl implements ActivityGoldenEggsService 
     public ResponseData<PageInfo<MktActivityPrizeRecordPO>> selectPrizePeople(ActivityPriceParamVO vo) {
         log.info("selectPrizePeople  parram:" + JSON.toJSONString(vo));
         ResponseData<PageInfo<MktActivityPrizeRecordPO>> responseData = new ResponseData<>();
+        vo.setPrizeType(90);
         PageHelper.startPage(vo.getPageNumber(), vo.getPageSize());
         List<MktActivityPrizeRecordPO> lists = mktActivityPrizeRecordPOMapper.selectPrizePeople(vo);
         if (CollectionUtils.isEmpty(lists)) {

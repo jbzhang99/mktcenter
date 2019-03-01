@@ -24,4 +24,5 @@ public class ActivityPriceParamVO {
     private Long couponDefinitionId;
     private Long mktActivityPrizeRecordId;
     private String couponDefinitionCode;
+    private Integer prizeType;
 }
