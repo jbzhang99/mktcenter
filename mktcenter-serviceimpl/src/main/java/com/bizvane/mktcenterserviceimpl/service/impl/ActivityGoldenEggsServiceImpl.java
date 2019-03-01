@@ -86,6 +86,7 @@ public class ActivityGoldenEggsServiceImpl implements ActivityGoldenEggsService 
     public ResponseData<JSONObject> addActivityGE(ActivityPriceBO bo, HttpServletRequest request) throws ParseException {
         ResponseData<JSONObject> responseData = new ResponseData<>();
         MktActivityPOWithBLOBs activityPO = bo.getActivityPO();
+        activityPO.setActivityType(13);
         List<MktActivityPrizeVO> activityPrizePOList = bo.getActivityPrizePOList();
         if (activityPO == null || CollectionUtils.isEmpty(activityPrizePOList)) {
             responseData.setCode(100);
