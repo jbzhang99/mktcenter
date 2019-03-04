@@ -387,11 +387,11 @@ public class ActivityGoldenEggsServiceImpl implements ActivityGoldenEggsService 
         arrayDesc[0] = 0;
         System.arraycopy(arrayTarget, 0, arrayDesc, 1, arrayTarget.length);
         Integer radomNumber = Integer.valueOf(ThreadLocalRandom.current().nextInt(1000000 * 100));
-        int index = egPrizeLists.size() - 1;
+        int index = 0;
         for (int i = 1; i < arrayDesc.length; i++) {
             arrayDesc[i] = arrayDesc[i] + arrayDesc[i - 1];
             if (radomNumber < arrayDesc[i]) {
-                index = i - 1;
+                index = i;
             }
         }
         MktActivityPrizePO mktActivityPrizePO = egPrizeLists.get(index);
