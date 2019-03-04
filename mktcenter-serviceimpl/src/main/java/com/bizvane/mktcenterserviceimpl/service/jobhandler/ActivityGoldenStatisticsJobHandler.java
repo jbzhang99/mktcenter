@@ -54,8 +54,8 @@ public class ActivityGoldenStatisticsJobHandler extends IJobHandler {
             Long activityId = activity.getMktActivityId();
             //得到从活动开始到先在的统计数量
             MktGoldenStatisticsPO totalPo = mktGoldenStatisticsPOMapper.getTotalGoldenStatistics(activityId);
-            po.setSysCompanyId(totalPo.getSysCompanyId());
-            po.setSysBrandId(totalPo.getSysBrandId());
+            po.setSysCompanyId(activity.getSysCompanyId());
+            po.setSysBrandId(activity.getSysBrandId());
             po.setMktActivityId(activityId);
 
             int totalVisitorsCount = 0;
