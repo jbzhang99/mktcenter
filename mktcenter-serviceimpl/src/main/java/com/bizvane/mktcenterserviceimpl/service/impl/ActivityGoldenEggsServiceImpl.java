@@ -15,6 +15,7 @@ import com.bizvane.mktcenterservice.interfaces.TaskService;
 import com.bizvane.mktcenterservice.models.bo.ActivityGoldenStatisticsBo;
 import com.bizvane.mktcenterservice.models.po.*;
 import com.bizvane.mktcenterservice.models.vo.*;
+import com.bizvane.mktcenterserviceimpl.common.locktools.DistributedLocker;
 import com.bizvane.mktcenterserviceimpl.common.utils.CodeUtil;
 import com.bizvane.mktcenterserviceimpl.common.utils.TimeUtils;
 import com.bizvane.mktcenterserviceimpl.mappers.MktActivityPOMapper;
@@ -29,6 +30,7 @@ import com.github.pagehelper.PageInfo;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.redisson.api.RLock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
@@ -73,6 +75,8 @@ public class ActivityGoldenEggsServiceImpl implements ActivityGoldenEggsService 
     private   MemberInfoApiService memberInfoApiService;
     @Autowired
     private  ActivityGoldenStatisticsService activityGoldenStatisticsService;
+    @Autowired
+    private DistributedLocker distributedLocker;
 
     /**
      * 新增
@@ -293,6 +297,7 @@ public class ActivityGoldenEggsServiceImpl implements ActivityGoldenEggsService 
     @Override
     public ResponseData<String> doEggFrenzy(ProbabilityVO vo) throws ParseException {
         log.info("砸金蛋 参数:"+JSON.toJSONString(vo));
+        RLock lock = distributedLocker.lock(vo.getMktActivityId()+"EG", TimeUnit.SECONDS, 30L);
         ResponseData<String> responseData = new ResponseData<>();
         String memberCode = vo.getMemberCode();
 
@@ -306,6 +311,7 @@ public class ActivityGoldenEggsServiceImpl implements ActivityGoldenEggsService 
         if (this.judgeMemberTotalPoint(po, memberInfoModel)){
             responseData.setData("101");
             responseData.setMessage("您的积分不足！");
+            distributedLocker.unlock(lock);
             return responseData;
         }
         String key = memberCode + po.getMktActivityId();
@@ -313,16 +319,18 @@ public class ActivityGoldenEggsServiceImpl implements ActivityGoldenEggsService 
         if (this.judgeTriesLimit(key, triesLimit)){
             responseData.setData("103");
             responseData.setMessage("今日次数用完了,快去邀请好友增加机会!");
+            distributedLocker.unlock(lock);
             return responseData;
         }
         if (activityCommonServiceImpl.operationPoint(po, memberCode)){
             responseData.setData("102");
             responseData.setMessage("扣减积分失败");
+            distributedLocker.unlock(lock);
             return responseData;
         }
-
-
-        return this.getPrizeProbability(po.getMktActivityId(),po.getActivityCode(), po.getActivityName(),memberInfoModel);
+        ResponseData<String> prizeProbabilityResult = this.getPrizeProbability(po.getMktActivityId(), po.getActivityCode(), po.getActivityName(), memberInfoModel);
+        distributedLocker.unlock(lock);
+        return prizeProbabilityResult;
     }
     //判断  会员的积分
     public boolean judgeMemberTotalPoint(MktActivityPOWithBLOBs po,MemberInfoModel memberInfoModel) {
