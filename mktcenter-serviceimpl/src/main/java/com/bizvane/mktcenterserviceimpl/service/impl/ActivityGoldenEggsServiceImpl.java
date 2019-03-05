@@ -371,7 +371,7 @@ public class ActivityGoldenEggsServiceImpl implements ActivityGoldenEggsService 
         }
         MktActivityPOWithBLOBs poWithBLOBs = mktActivityPOMapper.selectByExampleWithBLOBs(example0).get(0);
 
-        this.setgoldenStatistics(poWithBLOBs.getMktActivityId(),0, vo.getMemberCode());
+        //this.setgoldenStatistics(poWithBLOBs.getMktActivityId(),0, vo.getMemberCode());
         return poWithBLOBs;
     }
 
