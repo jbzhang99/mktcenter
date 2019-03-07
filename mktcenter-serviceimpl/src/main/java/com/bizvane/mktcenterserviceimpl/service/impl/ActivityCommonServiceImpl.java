@@ -213,7 +213,7 @@ public class ActivityCommonServiceImpl {
 
         this.addRecord(mktActivityPrizePO,memberInfoModel,null);
 
-        if (prizePoints==null){
+        if (prizePoints==null || prizePoints==0){
             //谢谢参与,无积分奖励
             responseData.setData("104");
            return responseData;
