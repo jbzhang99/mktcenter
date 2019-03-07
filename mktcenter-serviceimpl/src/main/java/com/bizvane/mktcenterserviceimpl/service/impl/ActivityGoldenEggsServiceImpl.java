@@ -39,10 +39,7 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.math.BigDecimal;
 import java.text.ParseException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.TimeUnit;
 
@@ -398,11 +395,14 @@ public class ActivityGoldenEggsServiceImpl implements ActivityGoldenEggsService 
         int index = 0;
         for (int i = 1; i < arrayDesc.length; i++) {
             arrayDesc[i] = arrayDesc[i] + arrayDesc[i - 1];
+            log.info(radomNumber+"-----------------"+arrayDesc[i]+"--"+arrayDesc[i] +"--"+arrayDesc[i - 1]);
             if (radomNumber < arrayDesc[i]) {
                 index = i;
+                break;
             }
         }
         MktActivityPrizePO mktActivityPrizePO = egPrizeLists.get(index);
+        log.info("---------------------奖---------------"+JSON.toJSONString(mktActivityPrizePO));
         Integer awadType = mktActivityPrizePO.getAwadType();
         Integer prizeType = mktActivityPrizePO.getPrizeType();
         Integer prizePoints = mktActivityPrizePO.getPrizePoints();
