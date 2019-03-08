@@ -49,4 +49,8 @@ public class ActivityEGRpcController {
     public ResponseData<Integer> addMemberNumber(@RequestBody ProbabilityVO vo) throws ParseException{
         return activityGoldenEggsService.addMemberNumber(vo);
     }
+    @RequestMapping("getActivityId")
+    public ResponseData<MktActivityPOWithBLOBs>  getActivityId(@RequestBody ProbabilityVO vo){
+        return activityGoldenEggsService.getActivityId(vo);
+    }
 }

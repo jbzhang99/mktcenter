@@ -522,4 +522,14 @@ public class ActivityGoldenEggsServiceImpl implements ActivityGoldenEggsService 
         ResponseData responseData = activityGoldenStatisticsService.goldenStatisticsData(bo);
         log.info("添加统计页面数据:"+JSON.toJSONString(bo)+"--"+JSON.toJSONString(responseData));
     }
+    @Override
+    public ResponseData<MktActivityPOWithBLOBs>  getActivityId(ProbabilityVO vo){
+        ResponseData<MktActivityPOWithBLOBs> responseData = new ResponseData<>();
+        MktActivityPOExample example=new MktActivityPOExample();
+        example.createCriteria().andActivityCodeEqualTo(vo.getActivityCode());
+        List<MktActivityPOWithBLOBs> mktActivityPOWithBLOBs = mktActivityPOMapper.selectByExampleWithBLOBs(example);
+        MktActivityPOWithBLOBs poWithBLOBs = mktActivityPOWithBLOBs.get(0);
+        responseData.setData(poWithBLOBs);
+        return responseData;
+    }
 }

@@ -31,4 +31,7 @@ public interface ActivityEGServiceRpc {
 
     @RequestMapping("addMemberNumber")
     public ResponseData<Integer> addMemberNumber(@RequestBody ProbabilityVO vo) throws ParseException;
+
+    @RequestMapping("getActivityId")
+    public ResponseData<MktActivityPOWithBLOBs>  getActivityId(@RequestBody ProbabilityVO vo);
 }

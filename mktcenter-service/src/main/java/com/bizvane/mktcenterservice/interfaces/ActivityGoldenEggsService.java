@@ -31,4 +31,5 @@ public interface ActivityGoldenEggsService {
     public ResponseData<List<MktActivityPrizeRecordPO>> getEGPrizeRecordList(MktActivityPrizeRecordPO po);
     public ResponseData<Integer>  residueMemberNumber(ProbabilityVO vo) throws ParseException;
     public ResponseData<Integer> addMemberNumber(ProbabilityVO vo) throws ParseException;
+    public ResponseData<MktActivityPOWithBLOBs>  getActivityId(ProbabilityVO vo);
 }
