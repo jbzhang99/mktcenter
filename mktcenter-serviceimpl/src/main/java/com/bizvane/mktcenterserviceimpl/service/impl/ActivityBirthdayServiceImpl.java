@@ -696,7 +696,7 @@ public class ActivityBirthdayServiceImpl implements ActivityBirthdayService {
             integralChangeRequestModel.setChangeDate(new Date());
             log.info("执行升级活动开始开始增加积分增加积分++++++");
             IntegralChangeResponseModel integralChangeResponseModel =integralChangeApiService.integralChangeOperate(integralChangeRequestModel);
-            log.info("增加积分返回结果为------------："+ JSON.toJSONString(integralChangeResponseModel));
+            log.info("增加积分返回结果为------------："+JSON.toJSONString(integralChangeRequestModel)+"--"+ JSON.toJSONString(integralChangeResponseModel));
             // 增加卷奖励接口
             MktCouponPOExample example = new  MktCouponPOExample();
             example.createCriteria().andBizIdEqualTo(activityBirthday.getMktActivityId()).andValidEqualTo(true).andBizTypeEqualTo(1);
@@ -712,7 +712,7 @@ public class ActivityBirthdayServiceImpl implements ActivityBirthdayService {
                 va.setCompanyId(activityBirthday.getSysCompanyId());
                 log.info("执行升级活动开始开始增加券增加券~~~~~~~~~~");
                 ResponseData<String> responseData=sendCouponServiceFeign.simple(va);
-                log.info("增加券返回结果为------------："+ JSON.toJSONString(responseData));
+                log.info("增加券返回结果为------------："+JSON.toJSONString(va)+"--"+ JSON.toJSONString(responseData));
             }
             //新增积分到会员参与活动记录表中数据
             MktActivityRecordPO po = new MktActivityRecordPO();
