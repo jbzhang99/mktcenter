@@ -152,7 +152,7 @@ public class ActivityCommonServiceImpl {
         CreateMiniprgmQRCodeRequestVO createMiniprgmQRCodeRequestVO = new CreateMiniprgmQRCodeRequestVO();
         createMiniprgmQRCodeRequestVO.setSysBrandId(brandId);
         createMiniprgmQRCodeRequestVO.setMiniProgramType("10");
-        createMiniprgmQRCodeRequestVO.setPath("pages/template01/gold-egg");
+        createMiniprgmQRCodeRequestVO.setPath("pages/template01/gold-egg/main");
         createMiniprgmQRCodeRequestVO.setScene(activePriceCode);
         log.info("addActivityPrice wexin param:" + JSON.toJSONString(createMiniprgmQRCodeRequestVO));
         ResponseData<String> qrCodeResponseData = qrCodeServiceFeign.createMiniprgmQRCode(createMiniprgmQRCodeRequestVO);
