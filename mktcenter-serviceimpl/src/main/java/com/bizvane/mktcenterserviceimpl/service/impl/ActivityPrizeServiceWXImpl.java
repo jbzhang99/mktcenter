@@ -258,7 +258,7 @@ public class ActivityPrizeServiceWXImpl implements ActivityPrizeServiceWX {
                     sendCouponSimpleRequestVO.setMemberCode(memberCode);
                     sendCouponSimpleRequestVO.setCouponDefinitionId(mktActivityPrizePOS.get(0).getCouponDefinitionId());
                     sendCouponSimpleRequestVO.setSendBussienId(activityPriceBO.getActivityPO().getMktActivityId());
-                    sendCouponSimpleRequestVO.setSendType(SendTypeEnum.SEND_COUPON_SOCIAL_ACTIVITY.getCode());
+                    sendCouponSimpleRequestVO.setSendType(SendTypeEnum.SEND_COUPON_ROTARRY.getCode());
                     sendCouponSimpleRequestVO.setCompanyId(activityPriceBO.getActivityPO().getSysCompanyId());
                     sendCouponSimpleRequestVO.setBrandId(activityPriceBO.getActivityPO().getSysBrandId());
                     sendCouponSimpleRequestVO.setBusinessName(activityPriceBO.getActivityPO().getActivityName());
