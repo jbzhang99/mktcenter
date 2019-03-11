@@ -2,11 +2,14 @@ package com.bizvane.mktcenterservice.interfaces;
 
 import com.bizvane.members.facade.vo.ExtendPropertyVO;
 import com.bizvane.mktcenterservice.models.bo.TaskBO;
-import com.bizvane.mktcenterservice.models.po.MktMessagePO;
-import com.bizvane.mktcenterservice.models.po.MktTaskPOWithBLOBs;
-import com.bizvane.mktcenterservice.models.vo.*;
+import com.bizvane.mktcenterservice.models.bo.TaskDetailBO;
+import com.bizvane.mktcenterservice.models.vo.CheckTaskVO;
+import com.bizvane.mktcenterservice.models.vo.ProfileSuccessVO;
+import com.bizvane.mktcenterservice.models.vo.TaskAnalysisVo;
+import com.bizvane.mktcenterservice.models.vo.TaskRecordVO;
 import com.bizvane.utils.responseinfo.ResponseData;
 import com.bizvane.utils.tokens.SysAccountPO;
+
 import java.text.ParseException;
 import java.util.List;
 
@@ -56,5 +59,8 @@ public interface TaskProfileService {
      * @return
      */
     public  ResponseData<List<ExtendPropertyVO>> getMemberField(Long sysBrandId);
+
+
+    public ResponseData<List<TaskDetailBO>>  getTaskProfileListApp(ProfileSuccessVO vo);
 
 }

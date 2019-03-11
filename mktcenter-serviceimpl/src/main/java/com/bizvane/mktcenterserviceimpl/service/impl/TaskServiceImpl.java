@@ -44,6 +44,7 @@ import com.bizvane.mktcenterservice.interfaces.TaskService;
 import com.bizvane.mktcenterservice.models.bo.AwardBO;
 import com.bizvane.mktcenterservice.models.bo.TaskAwardBO;
 import com.bizvane.mktcenterservice.models.bo.TaskBO;
+import com.bizvane.mktcenterservice.models.bo.TaskDetailBO;
 import com.bizvane.mktcenterservice.models.po.*;
 import com.bizvane.mktcenterservice.models.vo.*;
 import com.bizvane.mktcenterserviceimpl.common.constants.ResponseConstants;
@@ -320,7 +321,10 @@ public class TaskServiceImpl implements TaskService {
     public List<TaskAwardBO> getTaskProfileAwardList(Long mktTaskIdParam, Long sysCompanyId, Long sysBrandId, Date profileDate) {
         return mktTaskPOMapper.getTaskProfileAwardList(mktTaskIdParam, sysCompanyId, sysBrandId, profileDate);
     }
-
+    @Override
+    public List<TaskDetailBO> getTaskProfileListApp(ProfileSuccessVO vo) {
+        return mktTaskPOMapper.getTaskProfileListApp(vo);
+    }
     /**
      * 分享任务的奖励与详情
      *

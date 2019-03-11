@@ -6,7 +6,6 @@ import com.bizvane.mktcenterservice.models.po.MktTaskInvitePO;
 import com.bizvane.mktcenterservice.models.po.MktTaskOrderPO;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
-import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
@@ -32,7 +31,7 @@ public class TaskDetailBO {
     private String taskInfo;
     private String taskListImg;
     private String taskDetailImg;
-
+    private String  propertyCode;
     /**
      * 会员订单与消费
      */
@@ -202,5 +201,13 @@ public class TaskDetailBO {
 
     public void setMktTaskInvitePO(MktTaskInvitePO mktTaskInvitePO) {
         this.mktTaskInvitePO = mktTaskInvitePO;
+    }
+
+    public String getPropertyCode() {
+        return propertyCode;
+    }
+
+    public void setPropertyCode(String propertyCode) {
+        this.propertyCode = propertyCode;
     }
 }

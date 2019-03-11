@@ -9,6 +9,7 @@ import com.bizvane.members.facade.vo.WxChannelInfoVo;
 import com.bizvane.messagefacade.models.vo.GenrealGetMessageVO;
 import com.bizvane.mktcenterservice.models.bo.TaskAwardBO;
 import com.bizvane.mktcenterservice.models.bo.TaskBO;
+import com.bizvane.mktcenterservice.models.bo.TaskDetailBO;
 import com.bizvane.mktcenterservice.models.po.MktMessagePO;
 import com.bizvane.mktcenterservice.models.po.MktTaskPOWithBLOBs;
 import com.bizvane.mktcenterservice.models.vo.*;
@@ -219,4 +220,6 @@ public interface TaskService {
      * 查询白名单店铺Id
      */
    public  List<Long>  getWhiteStoreIds(WhiteStoreVO vo);
+
+    public List<TaskDetailBO> getTaskProfileListApp(ProfileSuccessVO vo);
 }

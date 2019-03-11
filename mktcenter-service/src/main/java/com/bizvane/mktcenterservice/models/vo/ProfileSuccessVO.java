@@ -18,6 +18,8 @@ public class ProfileSuccessVO {
 
     private Long brandId;
 
+    private Long companyId;
+
     public String getMemberCode() {
         return memberCode;
     }
@@ -56,5 +58,13 @@ public class ProfileSuccessVO {
 
     public void setMktTaskId(Long mktTaskId) {
         this.mktTaskId = mktTaskId;
+    }
+
+    public Long getCompanyId() {
+        return companyId;
+    }
+
+    public void setCompanyId(Long companyId) {
+        this.companyId = companyId;
     }
 }

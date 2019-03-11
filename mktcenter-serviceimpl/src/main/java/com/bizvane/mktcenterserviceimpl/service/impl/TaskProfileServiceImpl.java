@@ -8,6 +8,7 @@ import com.bizvane.members.facade.vo.ExtendPropertyVO;
 import com.bizvane.mktcenterservice.interfaces.*;
 import com.bizvane.mktcenterservice.models.bo.TaskAwardBO;
 import com.bizvane.mktcenterservice.models.bo.TaskBO;
+import com.bizvane.mktcenterservice.models.bo.TaskDetailBO;
 import com.bizvane.mktcenterservice.models.po.*;
 import com.bizvane.mktcenterservice.models.vo.*;
 import com.bizvane.mktcenterserviceimpl.common.constants.SystemConstants;
@@ -280,10 +281,72 @@ public class TaskProfileServiceImpl implements TaskProfileService {
         }
         return result;
     }
+    /**
+     * 查询完善资料任务列表
+     */
+    @Override
+    public ResponseData<List<TaskDetailBO>>  getTaskProfileListApp(ProfileSuccessVO vo){
+        ResponseData<List<TaskDetailBO>> responseData = new ResponseData<>();
+        List<TaskDetailBO> taskProfileListApp = taskService.getTaskProfileListApp(vo);
+        responseData.setData(taskProfileListApp);
+        return responseData;
 
+    }
     /**
      * 执行完善任务的奖励
      */
+//    @Async
+//    @Transactional
+//    @Override
+//    public  void   doAwardProfile(ProfileSuccessVO vo){
+//        log.info("完善资料任务--参数---"+ JSON.toJSONString(vo));
+//        Long mktTaskIdParam = vo.getMktTaskId();
+//        //完善资料时间
+//        Date profileDate = vo.getProfileDate();
+//        //完善者的code
+//        String memberCode = vo.getMemberCode();
+//
+//        MemberInfoModel memeberDetail = taskService.getCompanyMemeberDetail(memberCode);
+//        log.info("完善资料任务--获取会员详情---"+ JSON.toJSONString(memeberDetail));
+//        Long companyId = memeberDetail.getSysCompanyId();
+//        Long brandId = memeberDetail.getBrandId();
+//        String cardNo = memeberDetail.getCardNo();
+//        Long serviceStoreId = memeberDetail.getServiceStoreId();
+//        //符合条件的任务列表
+//        List<TaskAwardBO> taskAwardList = taskService.getTaskProfileAwardList(mktTaskIdParam,companyId, brandId, null);
+//        log.info("完善资料任务--任务列表---"+ JSON.toJSONString(taskAwardList));
+//        if (CollectionUtils.isNotEmpty(taskAwardList)){
+//            taskAwardList.stream().
+//                    filter(obj->{
+//                        Boolean isStoreLimit = obj.getStoreLimit();
+//                        String  StoreLimitList=obj.getStoreLimitList();
+//                        return !isStoreLimit || (serviceStoreId!=null) || (StringUtils.isNotBlank(StoreLimitList) &&  obj.getStoreLimitList().contains(String.valueOf(serviceStoreId)));}).
+//                    forEach(obj->{
+//                        log.info("完善资料任务--每个---"+ JSON.toJSONString(obj));
+//                        MktTaskRecordVO recordVO = new MktTaskRecordVO();
+//                        recordVO.setSysBrandId(brandId);
+//                        recordVO.setTaskType(obj.getTaskType());
+//                        recordVO.setTaskId(obj.getMktTaskId());
+//                        recordVO.setMemberCode(memberCode);
+//                        // 获取会员是否已经成功参与过某一活动
+//                        Boolean isOrNoAward = taskRecordService.getIsOrNoAward(recordVO);
+//                        log.info("完善资料任务--员是否已经成功参与---"+ isOrNoAward+"---"+JSON.toJSONString(obj));
+//                        if (!isOrNoAward){
+//                            MktTaskRecordPO recordPO = new MktTaskRecordPO();
+//                            BeanUtils.copyProperties(recordVO,recordPO);
+//                            recordPO.setParticipateDate(profileDate);
+//                            recordPO.setRewarded(1);
+//                            recordPO.setSysCompanyId(companyId);
+//                            recordPO.setCreateDate(new Date());
+//                            recordPO.setPoints(obj.getPoints());
+//                            taskRecordService.addTaskRecord(recordPO);
+//                            taskService.sendCouponAndPoint(memberCode,obj);
+//                        }
+//
+//                    });
+//        }
+//
+//    }
     @Async
     @Transactional
     @Override
@@ -336,7 +399,6 @@ public class TaskProfileServiceImpl implements TaskProfileService {
         }
 
     }
-
     /**
      * 效果分析
      * @return

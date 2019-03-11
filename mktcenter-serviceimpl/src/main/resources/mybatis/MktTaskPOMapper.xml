@@ -929,6 +929,32 @@
     <!--</if>-->
   </select>
 
+  <select id="getTaskProfileListApp" resultType="com.bizvane.mktcenterservice.models.bo.TaskDetailBO">
+    SELECT
+    tta.mkt_task_id,
+    tta.task_code,
+    tta.task_type,
+    ttp.property_code
+    FROM
+    t_mkt_task tta
+    INNER JOIN t_mkt_task_profile ttp ON tta.mkt_task_id = ttp.mkt_task_id
+    WHERE
+    tta.valid = 1
+    AND ttp.valid = 1
+    AND  tta.check_status=3
+    AND  tta.task_status=2
+    AND tta.task_type =1
+    <if test="mktTaskId != null and mktTaskId!= '' ">
+      AND  tta.mkt_task_id=#{mktTaskId}
+    </if>
+    <if test="sysCompanyId != null and sysCompanyId!= '' ">
+      AND  tta.sys_company_id=#{sysCompanyId}
+    </if>
+    <if test="sysBrandId != null and sysBrandId!= '' ">
+      AND tta.sys_brand_id=#{sysBrandId}
+    </if>
+  </select>
+
   <select id="getTaskShareAwardList" resultMap="taskAwardMap">
     SELECT
     tta.mkt_task_id,

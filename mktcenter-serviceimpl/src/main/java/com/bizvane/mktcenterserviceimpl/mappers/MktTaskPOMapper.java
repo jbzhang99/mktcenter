@@ -1,6 +1,7 @@
 package com.bizvane.mktcenterserviceimpl.mappers;
 
 import com.bizvane.mktcenterservice.models.bo.TaskAwardBO;
+import com.bizvane.mktcenterservice.models.bo.TaskDetailBO;
 import com.bizvane.mktcenterservice.models.bo.TaskWXBO;
 import com.bizvane.mktcenterservice.models.bo.TaskWXDetailBO;
 import com.bizvane.mktcenterservice.models.po.MktTaskPO;
@@ -128,7 +129,7 @@ public interface MktTaskPOMapper {
 	 * @return
 	 */
 	public List<TaskAwardBO> getTaskProfileAwardList(@Param("mktTaskId") Long mktTaskId,@Param("sysCompanyId") Long sysCompanyId, @Param("sysBrandId") Long sysBrandId,@Param("placeOrderTime")Date placeOrderTime);
-
+	public List<TaskDetailBO> getTaskProfileListApp(ProfileSuccessVO vo);
 	/**
 	 * 分享任务的奖励
 	 * @param sysCompanyId
