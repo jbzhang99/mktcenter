@@ -30,8 +30,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.text.ParseException;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @author chen.li
@@ -228,11 +230,69 @@ public class TaskInviteServiceImpl implements TaskInviteService {
     /**
      * 执行邀请任务的奖励
      */
+//    @Async
+////    @Transactional
+////    @Override
+////    public  void   doAwardInvite(InviteSuccessVO vo){
+////        log.info("邀请注册任务 的奖励--参数--"+ JSON.toJSONString(vo));
+////        Long mktTaskIdParam = vo.getMktTaskId();
+////        //被邀请人信息
+////        Date openCardTime = vo.getOpenCardTime();
+////        //邀请人的信息
+////        String inviteMemberCode = vo.getInviteMemberCode();
+////        MemberInfoModel memeberDetail = taskService.getCompanyMemeberDetail(inviteMemberCode);
+////        log.info("邀请注册任务 中会员详情--"+ JSON.toJSONString(memeberDetail));
+////        Long companyId = memeberDetail.getSysCompanyId();
+////        Long brandId = memeberDetail.getBrandId();
+////        String memberCode = memeberDetail.getMemberCode();
+////        String cardNo = memeberDetail.getCardNo();
+////        Long serviceStoreId = memeberDetail.getServiceStoreId();
+////        //符合条件的任务列表
+////        List<TaskAwardBO> taskInviteAwardList = taskService.getTaskInviteAwardList(mktTaskIdParam,companyId, brandId,openCardTime);
+////        log.info("邀请注册任务 符合条件列表--"+ JSON.toJSONString(taskInviteAwardList));
+////        if (CollectionUtils.isNotEmpty(taskInviteAwardList)){
+////            taskInviteAwardList.stream().
+////                filter(obj->{
+////                    Boolean isStoreLimit = obj.getStoreLimit();
+////                    String  StoreLimitList=obj.getStoreLimitList();
+////                    return !isStoreLimit||(serviceStoreId!=null)||(StringUtils.isNotBlank(StoreLimitList) && obj.getStoreLimitList().contains(String.valueOf(serviceStoreId)));}).
+////                forEach(obj->{
+////                    //邀请开卡人数
+////                    Integer inviteNum = obj.getInviteNum();
+////                    MktTaskRecordVO recordVO = new MktTaskRecordVO();
+////                    recordVO.setSysBrandId(brandId);
+////                    recordVO.setTaskType(obj.getTaskType());
+////                    recordVO.setTaskId(obj.getMktTaskId());
+////                    recordVO.setMemberCode(inviteMemberCode);
+////                    // 获取会员是否已经成功参与过某一任务
+////                    Boolean isOrNoAward = taskRecordService.getIsOrNoAward(recordVO);
+////                    log.info("邀请注册任务  会员是否已经成功参与--"+isOrNoAward+"--"+JSON.toJSONString(recordVO));
+////                    if (!isOrNoAward){
+////                        MktTaskRecordPO recordPO = new MktTaskRecordPO();
+////                        BeanUtils.copyProperties(recordVO,recordPO);
+////                        recordPO.setParticipateDate(openCardTime);
+////                        recordPO.setSysCompanyId(companyId);
+////                        Long recordId = taskRecordService.addTaskRecord(recordPO);
+////                        //获取会员参与某一任务总次数
+////                        TotalStatisticsBO totalBO = taskRecordService.getTotalStatistics(recordVO);
+////                        if (totalBO!=null && totalBO.getTotalTimes()!=null &&  totalBO.getTotalTimes().equals(inviteNum)){
+////                            recordPO.setRewarded(1);
+////                            recordPO.setPoints(obj.getPoints());
+////                            recordPO.setMktTaskRecordId(recordId);
+////                            taskRecordService.updateTaskRecord(recordPO);
+////                            log.info("---邀请注册任务 发券--");
+////                            taskService.sendCouponAndPoint(memberCode,obj);
+////                        }
+////                    }
+////            });
+////        }
+////    }
     @Async
     @Transactional
     @Override
     public  void   doAwardInvite(InviteSuccessVO vo){
         log.info("邀请注册任务 的奖励--参数--"+ JSON.toJSONString(vo));
+        String propertyCode = vo.getPropertyCode();
         Long mktTaskIdParam = vo.getMktTaskId();
         //被邀请人信息
         Date openCardTime = vo.getOpenCardTime();
@@ -248,42 +308,55 @@ public class TaskInviteServiceImpl implements TaskInviteService {
         //符合条件的任务列表
         List<TaskAwardBO> taskInviteAwardList = taskService.getTaskInviteAwardList(mktTaskIdParam,companyId, brandId,openCardTime);
         log.info("邀请注册任务 符合条件列表--"+ JSON.toJSONString(taskInviteAwardList));
-        if (CollectionUtils.isNotEmpty(taskInviteAwardList)){
-            taskInviteAwardList.stream().
-                filter(obj->{
-                    Boolean isStoreLimit = obj.getStoreLimit();
-                    String  StoreLimitList=obj.getStoreLimitList();
-                    return !isStoreLimit||(serviceStoreId!=null)||(StringUtils.isNotBlank(StoreLimitList) && obj.getStoreLimitList().contains(String.valueOf(serviceStoreId)));}).
-                forEach(obj->{
-                    //邀请开卡人数
-                    Integer inviteNum = obj.getInviteNum();
-                    MktTaskRecordVO recordVO = new MktTaskRecordVO();
-                    recordVO.setSysBrandId(brandId);
-                    recordVO.setTaskType(obj.getTaskType());
-                    recordVO.setTaskId(obj.getMktTaskId());
-                    recordVO.setMemberCode(inviteMemberCode);
-                    // 获取会员是否已经成功参与过某一任务
-                    Boolean isOrNoAward = taskRecordService.getIsOrNoAward(recordVO);
-                    log.info("邀请注册任务  会员是否已经成功参与--"+isOrNoAward+"--"+JSON.toJSONString(recordVO));
-                    if (!isOrNoAward){
-                        MktTaskRecordPO recordPO = new MktTaskRecordPO();
-                        BeanUtils.copyProperties(recordVO,recordPO);
-                        recordPO.setParticipateDate(openCardTime);
-                        recordPO.setSysCompanyId(companyId);
-                        Long recordId = taskRecordService.addTaskRecord(recordPO);
-                        //获取会员参与某一任务总次数
-                        TotalStatisticsBO totalBO = taskRecordService.getTotalStatistics(recordVO);
-                        if (totalBO!=null && totalBO.getTotalTimes()!=null &&  totalBO.getTotalTimes().equals(inviteNum)){
-                            recordPO.setRewarded(1);
-                            recordPO.setPoints(obj.getPoints());
-                            recordPO.setMktTaskRecordId(recordId);
-                            taskRecordService.updateTaskRecord(recordPO);
-                            log.info("---邀请注册任务 发券--");
-                            taskService.sendCouponAndPoint(memberCode,obj);
-                        }
-                    }
-            });
+        if (CollectionUtils.isEmpty(taskInviteAwardList)){
+         log.info("邀请注册任务列表 为空");
+         return;
         }
+        List<TaskAwardBO> taskInviteAwardList01 = taskInviteAwardList.stream().
+                filter(obj -> {
+                    Boolean isStoreLimit = obj.getStoreLimit();
+                    String StoreLimitList = obj.getStoreLimitList();
+                    return !isStoreLimit || (serviceStoreId != null) || (StringUtils.isNotBlank(StoreLimitList) && obj.getStoreLimitList().contains(String.valueOf(serviceStoreId)));
+                }).collect(Collectors.toList());
+
+        List<TaskAwardBO> taskInviteAwardListok = taskInviteAwardList01.stream().filter(obj ->
+                {
+                    List<String> collect1 = Arrays.stream(obj.getPropertyCode().split(",")).collect(Collectors.toList());
+                    List<String> collect2 = Arrays.stream(propertyCode.split(",")).collect(Collectors.toList());
+                    return collect1.containsAll(collect2) || collect2.containsAll(collect1);
+                }
+        ).collect(Collectors.toList());
+
+        taskInviteAwardListok.forEach(obj->{
+                        //邀请开卡人数
+                        Integer inviteNum = obj.getInviteNum();
+                        MktTaskRecordVO recordVO = new MktTaskRecordVO();
+                        recordVO.setSysBrandId(brandId);
+                        recordVO.setTaskType(obj.getTaskType());
+                        recordVO.setTaskId(obj.getMktTaskId());
+                        recordVO.setMemberCode(inviteMemberCode);
+                        // 获取会员是否已经成功参与过某一任务
+                        Boolean isOrNoAward = taskRecordService.getIsOrNoAward(recordVO);
+                        log.info("邀请注册任务  会员是否已经成功参与--"+isOrNoAward+"--"+JSON.toJSONString(recordVO));
+                        if (!isOrNoAward){
+                            MktTaskRecordPO recordPO = new MktTaskRecordPO();
+                            BeanUtils.copyProperties(recordVO,recordPO);
+                            recordPO.setParticipateDate(openCardTime);
+                            recordPO.setSysCompanyId(companyId);
+                            Long recordId = taskRecordService.addTaskRecord(recordPO);
+                            //获取会员参与某一任务总次数
+                            TotalStatisticsBO totalBO = taskRecordService.getTotalStatistics(recordVO);
+                            if (totalBO!=null && totalBO.getTotalTimes()!=null &&  totalBO.getTotalTimes().equals(inviteNum)){
+                                recordPO.setRewarded(1);
+                                recordPO.setPoints(obj.getPoints());
+                                recordPO.setMktTaskRecordId(recordId);
+                                taskRecordService.updateTaskRecord(recordPO);
+                                log.info("---邀请注册任务 发券--");
+                                taskService.sendCouponAndPoint(memberCode,obj);
+                            }
+                        }
+                    });
+
     }
 }
 
