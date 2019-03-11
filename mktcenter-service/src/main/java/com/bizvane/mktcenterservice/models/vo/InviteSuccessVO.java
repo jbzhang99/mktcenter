@@ -16,8 +16,6 @@ public class InviteSuccessVO {
     //邀请人
     private String inviteMemberCode;
 
-    private String  propertyCode;
-
     public String getMemberCode() {
         return memberCode;
     }
@@ -48,13 +46,5 @@ public class InviteSuccessVO {
 
     public void setMktTaskId(Long mktTaskId) {
         this.mktTaskId = mktTaskId;
-    }
-
-    public String getPropertyCode() {
-        return propertyCode;
-    }
-
-    public void setPropertyCode(String propertyCode) {
-        this.propertyCode = propertyCode;
     }
 }
