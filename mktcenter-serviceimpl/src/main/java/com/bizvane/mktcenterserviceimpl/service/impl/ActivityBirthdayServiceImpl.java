@@ -595,8 +595,8 @@ public class ActivityBirthdayServiceImpl implements ActivityBirthdayService {
     @Override
     @Async("asyncServiceExecutor")
     public void birthdayReward(ActivityVO activityBirthday, MemberInfoModel memberInfo) {
-        log.info("执行生日活动开始开始了开始了开始了开始了开始了");
-            log.info("服务门店为NULL!==========="+memberInfo.getServiceStoreId());
+        log.info("start execute birthdayReward method");
+            log.info("生日活动执行会员服务门店为："+memberInfo.getServiceStoreId());
 //        for (MemberInfoModel memberInfo:memberInfoModelList) {
             //判断生日适用门店信息
             if (!ExecuteParamCheckUtil.implementActivitCheck(memberInfo,activityBirthday)){
@@ -628,12 +628,15 @@ public class ActivityBirthdayServiceImpl implements ActivityBirthdayService {
             //如果为true 说明是今年
             if (true==dateSize(activityBirthday)){
                 //判断今年有没有发券
+                log.info("提前发券的日期范围都是今年");
                 ResponseData<List<CouponEntityPO>> couponEntityPOs = couponEntityServiceFeign.findCouponHave(memberInfo.getMemberCode(),activityBirthday.getMktActivityId(),s2);
                 List<CouponEntityPO> couponEntityPO =couponEntityPOs.getData();
                 if (!CollectionUtils.isEmpty(couponEntityPO)){
+                    log.info("会员"+memberInfo.getMemberCode()+"已经发过券了");
                     return;
                 }
                 //判断今年有没有发积分
+                log.info("判断今年有没有发积分");
                 IntegralRecordVo vs = new IntegralRecordVo();
                 vs.setMemberCode(memberInfo.getMemberCode());
                 vs.setChangeBills(activityBirthday.getActivityCode());
@@ -641,9 +644,11 @@ public class ActivityBirthdayServiceImpl implements ActivityBirthdayService {
                 ResponseData<List<IntegralRecordModel>> integralRecordModels = integralRecordApiService.queryIntegralRecord(vs);
                 List<IntegralRecordModel> integralRecordModel = integralRecordModels.getData();
                 if (!CollectionUtils.isEmpty(integralRecordModel)){
+                    log.info("会员"+memberInfo.getMemberCode()+"已经发过积分了");
                     return;
                 }
             }else{
+                log.info("提前发券的日期范围都是今年")
                 //说明是明年 判断生日加上提前发送天数有没到明年
                 //true 说明是到了明年
                 if (true==dateMonth(activityBirthday,memberInfo)){
@@ -683,20 +688,24 @@ public class ActivityBirthdayServiceImpl implements ActivityBirthdayService {
                 }
 
             }
-            log.info("执行生日活动通过验证通过验证通过验证========");
-            //增加积分奖励新增接口
-            IntegralChangeRequestModel integralChangeRequestModel =new IntegralChangeRequestModel();
-            integralChangeRequestModel.setSysCompanyId(activityBirthday.getSysCompanyId());
-            integralChangeRequestModel.setBrandId(activityBirthday.getSysBrandId());
-            integralChangeRequestModel.setMemberCode(memberInfo.getMemberCode());
-            integralChangeRequestModel.setChangeBills(activityBirthday.getActivityCode());
-            integralChangeRequestModel.setChangeIntegral(activityBirthday.getPoints());
-            integralChangeRequestModel.setChangeType(IntegralChangeTypeEnum.INCOME.getCode());
-            integralChangeRequestModel.setBusinessType(com.bizvane.members.facade.enums.BusinessTypeEnum.ACTIVITY_TYPE_BIRTHDAY.getCode());
-            integralChangeRequestModel.setChangeDate(new Date());
-            log.info("执行升级活动开始开始增加积分增加积分++++++");
-            IntegralChangeResponseModel integralChangeResponseModel =integralChangeApiService.integralChangeOperate(integralChangeRequestModel);
-            log.info("增加积分返回结果为------------："+JSON.toJSONString(integralChangeRequestModel)+"--"+ JSON.toJSONString(integralChangeResponseModel));
+
+            if(null!=activityBirthday.getPoints()){
+                log.info("执行生日活动通过验证开始奖励积分");
+                //增加积分奖励新增接口
+                IntegralChangeRequestModel integralChangeRequestModel =new IntegralChangeRequestModel();
+                integralChangeRequestModel.setSysCompanyId(activityBirthday.getSysCompanyId());
+                integralChangeRequestModel.setBrandId(activityBirthday.getSysBrandId());
+                integralChangeRequestModel.setMemberCode(memberInfo.getMemberCode());
+                integralChangeRequestModel.setChangeBills(activityBirthday.getActivityCode());
+                integralChangeRequestModel.setChangeIntegral(activityBirthday.getPoints());
+                integralChangeRequestModel.setChangeType(IntegralChangeTypeEnum.INCOME.getCode());
+                integralChangeRequestModel.setBusinessType(com.bizvane.members.facade.enums.BusinessTypeEnum.ACTIVITY_TYPE_BIRTHDAY.getCode());
+                integralChangeRequestModel.setChangeDate(new Date());
+                log.info("执行升级活动开始开始增加积分增加积分++++++");
+                IntegralChangeResponseModel integralChangeResponseModel =integralChangeApiService.integralChangeOperate(integralChangeRequestModel);
+                log.info("增加积分返回结果为------------："+JSON.toJSONString(integralChangeRequestModel)+"--"+ JSON.toJSONString(integralChangeResponseModel));
+            }
+
             // 增加卷奖励接口
             MktCouponPOExample example = new  MktCouponPOExample();
             example.createCriteria().andBizIdEqualTo(activityBirthday.getMktActivityId()).andValidEqualTo(true).andBizTypeEqualTo(1);
