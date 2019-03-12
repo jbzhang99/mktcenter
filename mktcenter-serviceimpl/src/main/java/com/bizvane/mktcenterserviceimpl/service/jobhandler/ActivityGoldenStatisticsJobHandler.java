@@ -88,7 +88,7 @@ public class ActivityGoldenStatisticsJobHandler extends IJobHandler {
             for (int i = 7; i < 22; i++) {
                 String timeStr = "";
                 int time = i + 1;
-                if (i < 10) {
+                if (time < 10) {
                     timeStr = "0" + time;
                 } else {
                     timeStr = String.valueOf(time);
