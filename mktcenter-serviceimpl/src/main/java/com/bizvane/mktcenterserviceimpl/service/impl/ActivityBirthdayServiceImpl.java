@@ -648,7 +648,7 @@ public class ActivityBirthdayServiceImpl implements ActivityBirthdayService {
                     return;
                 }
             }else{
-                log.info("提前发券的日期范围都是今年")
+                log.info("提前发券的日期范围都是今年");
                 //说明是明年 判断生日加上提前发送天数有没到明年
                 //true 说明是到了明年
                 if (true==dateMonth(activityBirthday,memberInfo)){
