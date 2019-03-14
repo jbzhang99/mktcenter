@@ -1,0 +1,1035 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.bizvane.couponservice.mappers.CouponSendFailLogPOMapper" >
+    <cache type="com.bizvane.couponservice.common.system.RedisCache" eviction="LRU"
+           flushInterval="3600000"
+           size="1024"
+           readOnly="false">
+    </cache>
+  <resultMap id="BaseResultMap" type="com.bizvane.couponfacade.models.po.CouponSendFailLogPO" >
+    <!--
+      WARNING - 只读 - @mbg.generated
+      This element was generated on 2018-08-28 17:14:41.
+    -->
+    <id column="coupon_send_fail_log_id" property="couponSendFailLogId" jdbcType="BIGINT" />
+    <result column="sys_brand_id" property="sysBrandId" jdbcType="BIGINT" />
+    <result column="sys_company_id" property="sysCompanyId" jdbcType="BIGINT" />
+    <result column="brand_code" property="brandCode" jdbcType="VARCHAR" />
+    <result column="business_name" property="businessName" jdbcType="VARCHAR" />
+    <result column="coupon_definition_id" property="couponDefinitionId" jdbcType="BIGINT" />
+    <result column="batch_send_code" property="batchSendCode" jdbcType="VARCHAR" />
+    <result column="coupon_entity_id" property="couponEntityId" jdbcType="BIGINT" />
+    <result column="coupon_code" property="couponCode" jdbcType="VARCHAR" />
+    <result column="member_code" property="memberCode" jdbcType="VARCHAR" />
+    <result column="coupon_name" property="couponName" jdbcType="VARCHAR" />
+    <result column="money" property="money" jdbcType="DECIMAL" />
+    <result column="discount" property="discount" jdbcType="DECIMAL" />
+    <result column="img" property="img" jdbcType="VARCHAR" />
+    <result column="coupon_type" property="couponType" jdbcType="VARCHAR" />
+    <result column="biz_type" property="bizType" jdbcType="VARCHAR" />
+    <result column="biz_code" property="bizCode" jdbcType="VARCHAR" />
+    <result column="info" property="info" jdbcType="VARCHAR" />
+    <result column="fail_reason" property="failReason" jdbcType="VARCHAR" />
+    <result column="fail_times" property="failTimes" jdbcType="INTEGER" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+    <result column="create_user_id" property="createUserId" jdbcType="BIGINT" />
+    <result column="create_user_name" property="createUserName" jdbcType="VARCHAR" />
+    <result column="create_date" property="createDate" jdbcType="TIMESTAMP" />
+    <result column="modified_user_id" property="modifiedUserId" jdbcType="BIGINT" />
+    <result column="modified_user_name" property="modifiedUserName" jdbcType="VARCHAR" />
+    <result column="modified_date" property="modifiedDate" jdbcType="TIMESTAMP" />
+    <result column="valid" property="valid" jdbcType="BIT" />
+    <result column="send_status" property="sendStatus" jdbcType="TINYINT" />
+    <result column="send_date" property="sendDate" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <!--
+      WARNING - 只读 - @mbg.generated
+      This element was generated on 2018-08-28 17:14:41.
+    -->
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <!--
+      WARNING - 只读 - @mbg.generated
+      This element was generated on 2018-08-28 17:14:41.
+    -->
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    <!--
+      WARNING - 只读 - @mbg.generated
+      This element was generated on 2018-08-28 17:14:41.
+    -->
+    coupon_send_fail_log_id, sys_brand_id, sys_company_id, brand_code, coupon_definition_id, 
+    batch_send_code, coupon_entity_id, coupon_code, member_code, coupon_name, money, 
+    discount, img, coupon_type, biz_type, biz_code, info, fail_reason, fail_times, remark, 
+    create_user_id, create_user_name, create_date, modified_user_id, modified_user_name, 
+    modified_date, valid, send_status, send_date
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.bizvane.couponfacade.models.po.CouponSendFailLogPOExample" >
+    <!--
+      WARNING - 只读 - @mbg.generated
+      This element was generated on 2018-08-28 17:14:41.
+    -->
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from t_coupon_send_fail_log
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    <!--
+      WARNING - 只读 - @mbg.generated
+      This element was generated on 2018-08-28 17:14:41.
+    -->
+    select 
+    <include refid="Base_Column_List" />
+    from t_coupon_send_fail_log
+    where coupon_send_fail_log_id = #{couponSendFailLogId,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    <!--
+      WARNING - 只读 - @mbg.generated
+      This element was generated on 2018-08-28 17:14:41.
+    -->
+    delete from t_coupon_send_fail_log
+    where coupon_send_fail_log_id = #{couponSendFailLogId,jdbcType=BIGINT}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.bizvane.couponfacade.models.po.CouponSendFailLogPOExample" >
+    <!--
+      WARNING - 只读 - @mbg.generated
+      This element was generated on 2018-08-28 17:14:41.
+    -->
+    delete from t_coupon_send_fail_log
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.bizvane.couponfacade.models.po.CouponSendFailLogPO" >
+    <!--
+      WARNING - 只读 - @mbg.generated
+      This element was generated on 2018-08-28 17:14:41.
+    -->
+    <selectKey resultType="java.lang.Long" keyProperty="couponSendFailLogId" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into t_coupon_send_fail_log (sys_brand_id, sys_company_id, brand_code, 
+      coupon_definition_id, batch_send_code, coupon_entity_id, 
+      coupon_code, member_code, coupon_name, 
+      money, discount, img, 
+      coupon_type, biz_type, biz_code, 
+      info, fail_reason, fail_times, 
+      remark, create_user_id, create_user_name, 
+      create_date, modified_user_id, modified_user_name, 
+      modified_date, valid, send_status, 
+      send_date)
+    values (#{sysBrandId,jdbcType=BIGINT}, #{sysCompanyId,jdbcType=BIGINT}, #{brandCode,jdbcType=VARCHAR}, 
+      #{couponDefinitionId,jdbcType=BIGINT}, #{batchSendCode,jdbcType=VARCHAR}, #{couponEntityId,jdbcType=BIGINT}, 
+      #{couponCode,jdbcType=VARCHAR}, #{memberCode,jdbcType=VARCHAR}, #{couponName,jdbcType=VARCHAR}, 
+      #{money,jdbcType=DECIMAL}, #{discount,jdbcType=DECIMAL}, #{img,jdbcType=VARCHAR}, 
+      #{couponType,jdbcType=VARCHAR}, #{bizType,jdbcType=VARCHAR}, #{bizCode,jdbcType=VARCHAR}, 
+      #{info,jdbcType=VARCHAR}, #{failReason,jdbcType=VARCHAR}, #{failTimes,jdbcType=INTEGER}, 
+      #{remark,jdbcType=VARCHAR}, #{createUserId,jdbcType=BIGINT}, #{createUserName,jdbcType=VARCHAR}, 
+      #{createDate,jdbcType=TIMESTAMP}, #{modifiedUserId,jdbcType=BIGINT}, #{modifiedUserName,jdbcType=VARCHAR}, 
+      #{modifiedDate,jdbcType=TIMESTAMP}, #{valid,jdbcType=BIT}, #{sendStatus,jdbcType=TINYINT}, 
+      #{sendDate,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.bizvane.couponfacade.models.po.CouponSendFailLogPO" >
+    <!--
+      WARNING - 只读 - @mbg.generated
+      This element was generated on 2018-08-28 17:14:41.
+    -->
+    <selectKey resultType="java.lang.Long" keyProperty="couponSendFailLogId" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into t_coupon_send_fail_log
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="sysBrandId != null" >
+        sys_brand_id,
+      </if>
+      <if test="sysCompanyId != null" >
+        sys_company_id,
+      </if>
+      <if test="brandCode != null" >
+        brand_code,
+      </if>
+      <if test="businessName != null" >
+        business_name,
+      </if>
+      <if test="couponDefinitionId != null" >
+        coupon_definition_id,
+      </if>
+      <if test="batchSendCode != null" >
+        batch_send_code,
+      </if>
+      <if test="couponEntityId != null" >
+        coupon_entity_id,
+      </if>
+      <if test="couponCode != null" >
+        coupon_code,
+      </if>
+      <if test="memberCode != null" >
+        member_code,
+      </if>
+      <if test="couponName != null" >
+        coupon_name,
+      </if>
+      <if test="money != null" >
+        money,
+      </if>
+      <if test="discount != null" >
+        discount,
+      </if>
+      <if test="img != null" >
+        img,
+      </if>
+      <if test="couponType != null" >
+        coupon_type,
+      </if>
+      <if test="bizType != null" >
+        biz_type,
+      </if>
+      <if test="bizCode != null" >
+        biz_code,
+      </if>
+      <if test="info != null" >
+        info,
+      </if>
+      <if test="failReason != null" >
+        fail_reason,
+      </if>
+      <if test="failTimes != null" >
+        fail_times,
+      </if>
+      <if test="remark != null" >
+        remark,
+      </if>
+      <if test="createUserId != null" >
+        create_user_id,
+      </if>
+      <if test="createUserName != null" >
+        create_user_name,
+      </if>
+      <if test="createDate != null" >
+        create_date,
+      </if>
+      <if test="modifiedUserId != null" >
+        modified_user_id,
+      </if>
+      <if test="modifiedUserName != null" >
+        modified_user_name,
+      </if>
+      <if test="modifiedDate != null" >
+        modified_date,
+      </if>
+      <if test="valid != null" >
+        valid,
+      </if>
+      <if test="sendStatus != null" >
+        send_status,
+      </if>
+      <if test="sendDate != null" >
+        send_date,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="sysBrandId != null" >
+        #{sysBrandId,jdbcType=BIGINT},
+      </if>
+      <if test="sysCompanyId != null" >
+        #{sysCompanyId,jdbcType=BIGINT},
+      </if>
+      <if test="brandCode != null" >
+        #{brandCode,jdbcType=VARCHAR},
+      </if>
+      <if test="businessName != null" >
+        #{businessName,jdbcType=VARCHAR},
+      </if>
+      <if test="couponDefinitionId != null" >
+        #{couponDefinitionId,jdbcType=BIGINT},
+      </if>
+      <if test="batchSendCode != null" >
+        #{batchSendCode,jdbcType=VARCHAR},
+      </if>
+      <if test="couponEntityId != null" >
+        #{couponEntityId,jdbcType=BIGINT},
+      </if>
+      <if test="couponCode != null" >
+        #{couponCode,jdbcType=VARCHAR},
+      </if>
+      <if test="memberCode != null" >
+        #{memberCode,jdbcType=VARCHAR},
+      </if>
+      <if test="couponName != null" >
+        #{couponName,jdbcType=VARCHAR},
+      </if>
+      <if test="money != null" >
+        #{money,jdbcType=DECIMAL},
+      </if>
+      <if test="discount != null" >
+        #{discount,jdbcType=DECIMAL},
+      </if>
+      <if test="img != null" >
+        #{img,jdbcType=VARCHAR},
+      </if>
+      <if test="couponType != null" >
+        #{couponType,jdbcType=VARCHAR},
+      </if>
+      <if test="bizType != null" >
+        #{bizType,jdbcType=VARCHAR},
+      </if>
+      <if test="bizCode != null" >
+        #{bizCode,jdbcType=VARCHAR},
+      </if>
+      <if test="info != null" >
+        #{info,jdbcType=VARCHAR},
+      </if>
+      <if test="failReason != null" >
+        #{failReason,jdbcType=VARCHAR},
+      </if>
+      <if test="failTimes != null" >
+        #{failTimes,jdbcType=INTEGER},
+      </if>
+      <if test="remark != null" >
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="createUserId != null" >
+        #{createUserId,jdbcType=BIGINT},
+      </if>
+      <if test="createUserName != null" >
+        #{createUserName,jdbcType=VARCHAR},
+      </if>
+      <if test="createDate != null" >
+        #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifiedUserId != null" >
+        #{modifiedUserId,jdbcType=BIGINT},
+      </if>
+      <if test="modifiedUserName != null" >
+        #{modifiedUserName,jdbcType=VARCHAR},
+      </if>
+      <if test="modifiedDate != null" >
+        #{modifiedDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="valid != null" >
+        #{valid,jdbcType=BIT},
+      </if>
+      <if test="sendStatus != null" >
+        #{sendStatus,jdbcType=TINYINT},
+      </if>
+      <if test="sendDate != null" >
+        #{sendDate,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.bizvane.couponfacade.models.po.CouponSendFailLogPOExample" resultType="java.lang.Integer" >
+    <!--
+      WARNING - 只读 - @mbg.generated
+      This element was generated on 2018-08-28 17:14:41.
+    -->
+    select count(*) from t_coupon_send_fail_log
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    <!--
+      WARNING - 只读 - @mbg.generated
+      This element was generated on 2018-08-28 17:14:41.
+    -->
+    update t_coupon_send_fail_log
+    <set >
+      <if test="record.couponSendFailLogId != null" >
+        coupon_send_fail_log_id = #{record.couponSendFailLogId,jdbcType=BIGINT},
+      </if>
+      <if test="record.sysBrandId != null" >
+        sys_brand_id = #{record.sysBrandId,jdbcType=BIGINT},
+      </if>
+      <if test="record.sysCompanyId != null" >
+        sys_company_id = #{record.sysCompanyId,jdbcType=BIGINT},
+      </if>
+      <if test="record.brandCode != null" >
+        brand_code = #{record.brandCode,jdbcType=VARCHAR},
+      </if>
+      <if test="record.couponDefinitionId != null" >
+        coupon_definition_id = #{record.couponDefinitionId,jdbcType=BIGINT},
+      </if>
+      <if test="record.batchSendCode != null" >
+        batch_send_code = #{record.batchSendCode,jdbcType=VARCHAR},
+      </if>
+      <if test="record.couponEntityId != null" >
+        coupon_entity_id = #{record.couponEntityId,jdbcType=BIGINT},
+      </if>
+      <if test="record.couponCode != null" >
+        coupon_code = #{record.couponCode,jdbcType=VARCHAR},
+      </if>
+      <if test="record.memberCode != null" >
+        member_code = #{record.memberCode,jdbcType=VARCHAR},
+      </if>
+      <if test="record.couponName != null" >
+        coupon_name = #{record.couponName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.money != null" >
+        money = #{record.money,jdbcType=DECIMAL},
+      </if>
+      <if test="record.discount != null" >
+        discount = #{record.discount,jdbcType=DECIMAL},
+      </if>
+      <if test="record.img != null" >
+        img = #{record.img,jdbcType=VARCHAR},
+      </if>
+      <if test="record.couponType != null" >
+        coupon_type = #{record.couponType,jdbcType=VARCHAR},
+      </if>
+      <if test="record.bizType != null" >
+        biz_type = #{record.bizType,jdbcType=VARCHAR},
+      </if>
+      <if test="record.bizCode != null" >
+        biz_code = #{record.bizCode,jdbcType=VARCHAR},
+      </if>
+      <if test="record.info != null" >
+        info = #{record.info,jdbcType=VARCHAR},
+      </if>
+      <if test="record.failReason != null" >
+        fail_reason = #{record.failReason,jdbcType=VARCHAR},
+      </if>
+      <if test="record.failTimes != null" >
+        fail_times = #{record.failTimes,jdbcType=INTEGER},
+      </if>
+      <if test="record.remark != null" >
+        remark = #{record.remark,jdbcType=VARCHAR},
+      </if>
+      <if test="record.createUserId != null" >
+        create_user_id = #{record.createUserId,jdbcType=BIGINT},
+      </if>
+      <if test="record.createUserName != null" >
+        create_user_name = #{record.createUserName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.createDate != null" >
+        create_date = #{record.createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.modifiedUserId != null" >
+        modified_user_id = #{record.modifiedUserId,jdbcType=BIGINT},
+      </if>
+      <if test="record.modifiedUserName != null" >
+        modified_user_name = #{record.modifiedUserName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.modifiedDate != null" >
+        modified_date = #{record.modifiedDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.valid != null" >
+        valid = #{record.valid,jdbcType=BIT},
+      </if>
+      <if test="record.sendStatus != null" >
+        send_status = #{record.sendStatus,jdbcType=TINYINT},
+      </if>
+      <if test="record.sendDate != null" >
+        send_date = #{record.sendDate,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    <!--
+      WARNING - 只读 - @mbg.generated
+      This element was generated on 2018-08-28 17:14:41.
+    -->
+    update t_coupon_send_fail_log
+    set coupon_send_fail_log_id = #{record.couponSendFailLogId,jdbcType=BIGINT},
+      sys_brand_id = #{record.sysBrandId,jdbcType=BIGINT},
+      sys_company_id = #{record.sysCompanyId,jdbcType=BIGINT},
+      brand_code = #{record.brandCode,jdbcType=VARCHAR},
+      coupon_definition_id = #{record.couponDefinitionId,jdbcType=BIGINT},
+      batch_send_code = #{record.batchSendCode,jdbcType=VARCHAR},
+      coupon_entity_id = #{record.couponEntityId,jdbcType=BIGINT},
+      coupon_code = #{record.couponCode,jdbcType=VARCHAR},
+      member_code = #{record.memberCode,jdbcType=VARCHAR},
+      coupon_name = #{record.couponName,jdbcType=VARCHAR},
+      money = #{record.money,jdbcType=DECIMAL},
+      discount = #{record.discount,jdbcType=DECIMAL},
+      img = #{record.img,jdbcType=VARCHAR},
+      coupon_type = #{record.couponType,jdbcType=VARCHAR},
+      biz_type = #{record.bizType,jdbcType=VARCHAR},
+      biz_code = #{record.bizCode,jdbcType=VARCHAR},
+      info = #{record.info,jdbcType=VARCHAR},
+      fail_reason = #{record.failReason,jdbcType=VARCHAR},
+      fail_times = #{record.failTimes,jdbcType=INTEGER},
+      remark = #{record.remark,jdbcType=VARCHAR},
+      create_user_id = #{record.createUserId,jdbcType=BIGINT},
+      create_user_name = #{record.createUserName,jdbcType=VARCHAR},
+      create_date = #{record.createDate,jdbcType=TIMESTAMP},
+      modified_user_id = #{record.modifiedUserId,jdbcType=BIGINT},
+      modified_user_name = #{record.modifiedUserName,jdbcType=VARCHAR},
+      modified_date = #{record.modifiedDate,jdbcType=TIMESTAMP},
+      valid = #{record.valid,jdbcType=BIT},
+      send_status = #{record.sendStatus,jdbcType=TINYINT},
+      send_date = #{record.sendDate,jdbcType=TIMESTAMP}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.bizvane.couponfacade.models.po.CouponSendFailLogPO" >
+    <!--
+      WARNING - 只读 - @mbg.generated
+      This element was generated on 2018-08-28 17:14:41.
+    -->
+    update t_coupon_send_fail_log
+    <set >
+      <if test="sysBrandId != null" >
+        sys_brand_id = #{sysBrandId,jdbcType=BIGINT},
+      </if>
+      <if test="sysCompanyId != null" >
+        sys_company_id = #{sysCompanyId,jdbcType=BIGINT},
+      </if>
+      <if test="brandCode != null" >
+        brand_code = #{brandCode,jdbcType=VARCHAR},
+      </if>
+      <if test="couponDefinitionId != null" >
+        coupon_definition_id = #{couponDefinitionId,jdbcType=BIGINT},
+      </if>
+      <if test="batchSendCode != null" >
+        batch_send_code = #{batchSendCode,jdbcType=VARCHAR},
+      </if>
+      <if test="couponEntityId != null" >
+        coupon_entity_id = #{couponEntityId,jdbcType=BIGINT},
+      </if>
+      <if test="couponCode != null" >
+        coupon_code = #{couponCode,jdbcType=VARCHAR},
+      </if>
+      <if test="memberCode != null" >
+        member_code = #{memberCode,jdbcType=VARCHAR},
+      </if>
+      <if test="couponName != null" >
+        coupon_name = #{couponName,jdbcType=VARCHAR},
+      </if>
+      <if test="money != null" >
+        money = #{money,jdbcType=DECIMAL},
+      </if>
+      <if test="discount != null" >
+        discount = #{discount,jdbcType=DECIMAL},
+      </if>
+      <if test="img != null" >
+        img = #{img,jdbcType=VARCHAR},
+      </if>
+      <if test="couponType != null" >
+        coupon_type = #{couponType,jdbcType=VARCHAR},
+      </if>
+      <if test="bizType != null" >
+        biz_type = #{bizType,jdbcType=VARCHAR},
+      </if>
+      <if test="bizCode != null" >
+        biz_code = #{bizCode,jdbcType=VARCHAR},
+      </if>
+      <if test="info != null" >
+        info = #{info,jdbcType=VARCHAR},
+      </if>
+      <if test="failReason != null" >
+        fail_reason = #{failReason,jdbcType=VARCHAR},
+      </if>
+      <if test="failTimes != null" >
+        fail_times = #{failTimes,jdbcType=INTEGER},
+      </if>
+      <if test="remark != null" >
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="createUserId != null" >
+        create_user_id = #{createUserId,jdbcType=BIGINT},
+      </if>
+      <if test="createUserName != null" >
+        create_user_name = #{createUserName,jdbcType=VARCHAR},
+      </if>
+      <if test="createDate != null" >
+        create_date = #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifiedUserId != null" >
+        modified_user_id = #{modifiedUserId,jdbcType=BIGINT},
+      </if>
+      <if test="modifiedUserName != null" >
+        modified_user_name = #{modifiedUserName,jdbcType=VARCHAR},
+      </if>
+      <if test="modifiedDate != null" >
+        modified_date = #{modifiedDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="valid != null" >
+        valid = #{valid,jdbcType=BIT},
+      </if>
+      <if test="sendStatus != null" >
+        send_status = #{sendStatus,jdbcType=TINYINT},
+      </if>
+      <if test="sendDate != null" >
+        send_date = #{sendDate,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where coupon_send_fail_log_id = #{couponSendFailLogId,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.bizvane.couponfacade.models.po.CouponSendFailLogPO" >
+    <!--
+      WARNING - 只读 - @mbg.generated
+      This element was generated on 2018-08-28 17:14:41.
+    -->
+    update t_coupon_send_fail_log
+    set sys_brand_id = #{sysBrandId,jdbcType=BIGINT},
+      sys_company_id = #{sysCompanyId,jdbcType=BIGINT},
+      brand_code = #{brandCode,jdbcType=VARCHAR},
+      coupon_definition_id = #{couponDefinitionId,jdbcType=BIGINT},
+      batch_send_code = #{batchSendCode,jdbcType=VARCHAR},
+      coupon_entity_id = #{couponEntityId,jdbcType=BIGINT},
+      coupon_code = #{couponCode,jdbcType=VARCHAR},
+      member_code = #{memberCode,jdbcType=VARCHAR},
+      coupon_name = #{couponName,jdbcType=VARCHAR},
+      money = #{money,jdbcType=DECIMAL},
+      discount = #{discount,jdbcType=DECIMAL},
+      img = #{img,jdbcType=VARCHAR},
+      coupon_type = #{couponType,jdbcType=VARCHAR},
+      biz_type = #{bizType,jdbcType=VARCHAR},
+      biz_code = #{bizCode,jdbcType=VARCHAR},
+      info = #{info,jdbcType=VARCHAR},
+      fail_reason = #{failReason,jdbcType=VARCHAR},
+      fail_times = #{failTimes,jdbcType=INTEGER},
+      remark = #{remark,jdbcType=VARCHAR},
+      create_user_id = #{createUserId,jdbcType=BIGINT},
+      create_user_name = #{createUserName,jdbcType=VARCHAR},
+      create_date = #{createDate,jdbcType=TIMESTAMP},
+      modified_user_id = #{modifiedUserId,jdbcType=BIGINT},
+      modified_user_name = #{modifiedUserName,jdbcType=VARCHAR},
+      modified_date = #{modifiedDate,jdbcType=TIMESTAMP},
+      valid = #{valid,jdbcType=BIT},
+      send_status = #{sendStatus,jdbcType=TINYINT},
+      send_date = #{sendDate,jdbcType=TIMESTAMP}
+    where coupon_send_fail_log_id = #{couponSendFailLogId,jdbcType=BIGINT}
+  </update>
+  
+  
+  <!--非系统生成sql-->
+
+  <resultMap extends="BaseResultMap" id="VOResultMap" type="com.bizvane.couponfacade.models.vo.CouponSendFailLogVO">
+    <result column="name" property="name" />
+    <result column="card_no" property="cardNo" />
+    <result column="send_type" property="sendType" />
+  </resultMap>
+
+  <select id="findCouponSendFailLogByCondition" resultMap="VOResultMap">
+    SELECT
+      fl.coupon_name,
+      fl.create_date,
+      fl.batch_send_code,
+      fl.coupon_definition_id,
+      fl.member_code,
+      m. NAME,
+      m.name as memberName,
+      m.phone,
+      m.card_no,
+      fl.fail_reason,
+      fl.send_status,
+      e.send_type,
+      fl.coupon_send_fail_log_id,
+      fl.coupon_entity_id,
+      fl.send_date,
+      fl.fail_times,
+      fl.biz_code,
+      fl.business_name,
+      fl.biz_type
+    FROM
+      t_coupon_send_fail_log fl
+    JOIN t_coupon_definition d ON d.coupon_definition_id=fl.coupon_definition_id AND d.valid=1
+    JOIN t_coupon_entity e ON e.coupon_entity_id = fl.coupon_entity_id AND e.valid=1
+    LEFT JOIN t_mbr_members m ON m.member_code = fl.member_code AND m.valid = 1
+    WHERE 1=1 AND fl.valid = 1 AND fl.sys_brand_id = #{sysBrandId}
+      <if test="vo.createDtStart!=null and vo.createDtStart!=''">
+        <if test="vo.createDtEnd!=null and vo.createDtEnd!=''">
+              AND fl.create_date &gt;= #{vo.createDtStart} AND fl.create_date &lt;= #{vo.createDtEnd}
+        </if>
+      </if>
+    <if test="vo.couponDefinitionId!=null and vo.couponDefinitionId!=''">
+        AND fl.coupon_definition_id = #{vo.couponDefinitionId}
+    </if>
+    <if test="vo.useChannel!=null and vo.useChannel!=''">
+      AND d.use_channel = #{vo.useChannel}
+    </if>
+    <if test="vo.failReason!=null and vo.failReason!=''">
+        AND fl.fail_reason LIKE '%${vo.failReason}%'
+    </if>
+    <if test="vo.sendStatus!=null">
+      AND fl.send_status = #{vo.sendStatus}
+    </if>
+    <if test="vo.cardNo!=null and vo.cardNo!=''">
+      AND m.card_no = #{vo.cardNo}
+    </if>
+    
+     <if test="vo.phone!=null and vo.phone!=''">
+      AND m.phone = #{vo.phone}
+    </if>
+    
+    
+    <if test="vo.listType != null and vo.listType!=''">
+       AND fl.biz_type IN
+      <foreach collection="vo.listType.split(',')" item="tempVal" index="index" open="(" separator="," close=")">
+        #{tempVal}
+      </foreach>
+    </if>
+      
+    <if test="vo.businessName != null and vo.businessName!=''">
+      AND fl.business_name LIKE '%${vo.businessName}%'
+    </if>
+    
+   <if test="vo.baseSearchValue != null and vo.baseSearchValue!=''">
+      AND fl.coupon_definition_id LIKE '%${vo.baseSearchValue}%' 
+      OR  fl.coupon_name LIKE '%${vo.baseSearchValue}%' 
+      OR  fl.coupon_code LIKE '%${vo.baseSearchValue}%' 
+      OR  fl.business_name LIKE '%${vo.baseSearchValue}%' 
+    </if>
+    
+    <if test="vo.phone!=null and vo.phone!=''">
+      AND m.phone = #{vo.phone}
+    </if>
+    ORDER BY fl.create_date DESC
+  </select>
+
+  <select id="getListBySendNum" resultType="com.bizvane.couponfacade.models.vo.CouponSendAgainRequestVO">
+      SELECT
+        log.coupon_definition_id,
+        log.coupon_code,
+        log.coupon_entity_id,
+        log.coupon_send_fail_log_id,
+        log.batch_send_code,
+        e.member_code,
+        e.bind_status,
+        e.use_password,
+        e.send_type,
+        e.send_business_id,
+        e.use_type,
+        e.use_store_id,
+        e.use_business_code,
+        e.use_time,
+        e.is_use,
+        e.valid_date_start,
+        e.valid_date_end,
+        d.coupon_name,
+        d.use_channel,
+        d.sys_brand_id,
+        d.preferential_type,
+        d.money,
+        d.discount,
+        d.qr_code,
+        d.img,
+        d.per_max_num,
+        d.is_real_name,
+        d.is_transfer,
+        d.activity_superposition_white_list,
+        d.activity_superposition_black_list,
+        d.is_superposition,
+        d.is_tag_price_limit,
+        d.min_consume,
+        d.max_preferential,
+        d.min_commodity_num,
+        d.max_commodity_num,
+        d.min_discount,
+        d.appliance_commodity_type,
+        d.appliance_store_type,
+        d.commodity_blacklist,
+        d.commodity_whitelist,
+        d.store_blacklist,
+        d.store_whitelist,
+        d.coupon_definition_code
+      FROM
+          t_coupon_send_fail_log log
+      JOIN t_coupon_entity e ON e.coupon_entity_id = log.coupon_entity_id
+      AND e.valid = 1
+      JOIN t_coupon_definition d ON d.coupon_definition_id = log.coupon_definition_id
+      AND d.valid = 1
+      WHERE
+          log.valid = 1
+      AND log.fail_times = #{tryTimes}
+      limit ${sendNum}
+  </select>
+
+
+  <select id="selectBatchByIdList" resultType="com.bizvane.couponfacade.models.vo.CouponSendAgainRequestVO">
+    SELECT
+        log.sys_brand_id,
+        log.batch_send_code AS batchSendCode,
+        log.coupon_code,
+        log.coupon_entity_id,
+        log.coupon_send_fail_log_id,
+        d.coupon_name,
+        d.use_channel,
+        e.coupon_definition_id AS couponDefinitionId,
+        e.member_code,
+        e.bind_status,
+        e.use_password,
+        e.send_type,
+        e.send_business_id,
+        e.use_type,
+        e.use_store_id,
+        e.use_business_code,
+        e.use_time,
+        e.is_use,
+        d.valid_date_start,
+        d.valid_date_end,
+        d.coupon_definition_code,
+        d.preferential_type,
+        d.money,
+        d.discount,
+        d.qr_code,
+        d.img,
+        d.per_max_num,
+        d.is_real_name,
+        d.is_transfer,
+        d.activity_superposition_white_list,
+        d.activity_superposition_black_list,
+        d.is_superposition,
+        d.is_tag_price_limit,
+        d.min_consume,
+        d.max_preferential,
+        d.min_commodity_num,
+        d.max_commodity_num,
+        d.min_discount,
+        d.appliance_commodity_type,
+        d.appliance_store_type,
+        d.commodity_blacklist,
+        d.commodity_whitelist,
+        d.store_blacklist,
+        d.store_whitelist
+    FROM
+        t_coupon_send_fail_log log
+    JOIN t_coupon_entity e ON e.coupon_entity_id = log.coupon_entity_id
+    AND e.valid = 1
+    JOIN t_coupon_definition d ON d.coupon_definition_id = log.coupon_definition_id
+    AND d.valid = 1
+    WHERE
+        log.valid = 1 AND log.send_status = #{sendStatus}
+    AND log.coupon_send_fail_log_id IN
+    <foreach collection="list" item="id" open="(" close=")" separator=",">
+      #{id}
+    </foreach>
+  </select>
+
+  <!--<update id="updateTryTimesByIdList">
+
+    UPDATE t_coupon_send_fail_log SET fail_times =
+    <foreach collection="list" item="item" index="index" separator=" " open="case coupon_send_fail_log_id">
+      when #{item} then fail_times+1
+    </foreach>
+    ELSE fail_times END,
+    send_status =
+    <foreach collection="list" item="item" index="index" separator=" " open="case coupon_send_fail_log_id">
+      when #{item} then #{sendStatus}
+    </foreach>
+    ELSE send_status END,
+    send_date =
+    <foreach collection="list" item="item" index="index" separator=" " open="case coupon_send_fail_log_id">
+      when #{item} then #{sendDate}
+    </foreach>
+    ELSE send_date END
+
+  </update>-->
+
+
+
+  <update id="updateTryTimesByIdList">
+
+    UPDATE t_coupon_send_fail_log SET fail_times = fail_times+1,send_status = #{sendStatus},send_date = #{sendDate}
+    WHERE coupon_send_fail_log_id IN
+    <foreach collection="list" item="item" index="index" open="(" separator="," close=")">
+      #{item}
+    </foreach>
+
+  </update>
+
+
+
+  <!--<update id="updateSendStatusByCouponCodeList">
+    UPDATE t_coupon_send_fail_log SET send_status =
+    <foreach collection="list" item="item" index="index" separator=" " open="case coupon_code">
+      when #{item} then #{sendStatus}
+    </foreach>
+    ELSE send_status END
+  </update>-->
+
+
+  <update id="updateSendStatusByCouponCodeList">
+
+    UPDATE t_coupon_send_fail_log SET send_status = #{sendStatus}
+    WHERE coupon_code IN
+    <foreach collection="list" item="item" index="index" open="(" separator="," close=")">
+      #{item}
+    </foreach>
+
+  </update>
+
+
+
+  <select id="selectByCouponCodeList" resultType="com.bizvane.couponfacade.models.po.CouponSendFailLogPO">
+    SELECT
+      e.sys_brand_id AS sysBrandId,
+      e.sys_company_id AS sysCompanyId,
+      e.brand_code AS brandCode,
+      e.coupon_definition_id AS couponDefinitionId,
+      e.coupon_entity_id AS couponEntityId,
+      e.coupon_code AS couponCode,
+      e.member_code AS memberCode,
+      d.coupon_name AS couponName,
+      e.money AS money,
+      e.discount AS discount,
+      e.img AS img,
+      d.coupon_definition_type as couponType,
+      e.business_name AS businessName
+    FROM
+      t_coupon_entity e
+    JOIN t_coupon_definition d ON d.coupon_definition_id = e.coupon_definition_id
+    AND d.valid = 1
+    WHERE
+      e.valid = 1
+    AND e.coupon_code IN
+    <foreach collection="list" item="id" open="(" close=")" separator=",">
+      #{id}
+    </foreach>
+  </select>
+
+  <insert id="insertBatch">
+
+    insert into t_coupon_send_fail_log
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+        sys_brand_id,
+        sys_company_id,
+        brand_code,
+        business_name,
+        coupon_definition_id,
+        batch_send_code,
+        coupon_entity_id,
+        coupon_code,
+        member_code,
+        coupon_name,
+        money,
+        discount,
+        img,
+        coupon_type,
+        biz_type,
+        biz_code,
+        info,
+        fail_reason,
+        fail_times,
+        remark,
+        create_user_id,
+        create_user_name,
+        create_date,
+        modified_user_id,
+        modified_user_name,
+        modified_date,
+        valid,
+        send_status,
+    </trim>
+    VALUES
+    <foreach collection="list" item="po" index="index" separator=",">
+      <trim prefix="(" suffix=")" suffixOverrides="," >
+        #{po.sysBrandId,jdbcType=BIGINT},
+        #{po.sysCompanyId,jdbcType=BIGINT},
+        #{po.brandCode,jdbcType=VARCHAR},
+        #{po.businessName,jdbcType=VARCHAR},
+        #{po.couponDefinitionId,jdbcType=BIGINT},
+        #{po.batchSendCode,jdbcType=VARCHAR},
+        #{po.couponEntityId,jdbcType=BIGINT},
+        #{po.couponCode,jdbcType=VARCHAR},
+        #{po.memberCode,jdbcType=VARCHAR},
+        #{po.couponName,jdbcType=VARCHAR},
+        #{po.money,jdbcType=DECIMAL},
+        #{po.discount,jdbcType=DECIMAL},
+        #{po.img,jdbcType=VARCHAR},
+        #{po.couponType,jdbcType=VARCHAR},
+        #{po.bizType,jdbcType=VARCHAR},
+        #{po.bizCode,jdbcType=VARCHAR},
+        #{po.info,jdbcType=VARCHAR},
+        #{po.failReason,jdbcType=VARCHAR},
+        #{po.failTimes,jdbcType=INTEGER},
+        #{po.remark,jdbcType=VARCHAR},
+        #{po.createUserId,jdbcType=BIGINT},
+        #{po.createUserName,jdbcType=VARCHAR},
+        #{po.createDate,jdbcType=TIMESTAMP},
+        #{po.modifiedUserId,jdbcType=BIGINT},
+        #{po.modifiedUserName,jdbcType=VARCHAR},
+        #{po.modifiedDate,jdbcType=TIMESTAMP},
+        #{po.valid,jdbcType=BIT},
+        #{po.sendStatus,jdbcType=TINYINT},
+    </trim>
+  </foreach>
+  </insert>
+
+
+  <!--更新发券失败记录-->
+
+  <update id="updateSendStatusAndSendTimes">
+
+    UPDATE t_coupon_send_fail_log SET fail_times = fail_times + 1,
+    <if test="sendDate != null">
+      send_date = #{sendDate},
+    </if>
+    <if test="sendStatus != null">
+      send_status = #{sendStatus}
+    </if>
+    WHERE coupon_send_fail_log_id = #{id}
+
+  </update>
+  
+</mapper>

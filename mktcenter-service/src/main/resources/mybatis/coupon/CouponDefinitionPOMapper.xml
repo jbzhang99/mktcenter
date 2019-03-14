@@ -1,0 +1,1400 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bizvane.couponservice.mappers.CouponDefinitionPOMapper">
+    <cache type="com.bizvane.couponservice.common.system.RedisCache" eviction="LRU"
+           flushInterval="3600000"
+           size="1024"
+           readOnly="false">
+    </cache>
+  <resultMap id="BaseResultMap" type="com.bizvane.couponfacade.models.po.CouponDefinitionPO">
+    <!--
+      WARNING - 只读 - @mbg.generated
+      This element was generated on 2019-01-16 17:48:34.
+    -->
+    <id column="coupon_definition_id" jdbcType="BIGINT" property="couponDefinitionId" />
+    <result column="sys_company_id" jdbcType="BIGINT" property="sysCompanyId" />
+    <result column="sys_brand_id" jdbcType="BIGINT" property="sysBrandId" />
+    <result column="brand_code" jdbcType="VARCHAR" property="brandCode" />
+    <result column="coupon_definition_code" jdbcType="VARCHAR" property="couponDefinitionCode" />
+    <result column="coupon_definition_type" jdbcType="TINYINT" property="couponDefinitionType" />
+    <result column="erp_coupon_definition_code" jdbcType="VARCHAR" property="erpCouponDefinitionCode" />
+    <result column="coupon_name" jdbcType="VARCHAR" property="couponName" />
+    <result column="use_channel" jdbcType="TINYINT" property="useChannel" />
+    <result column="preferential_type" jdbcType="TINYINT" property="preferentialType" />
+    <result column="money" jdbcType="DECIMAL" property="money" />
+    <result column="discount" jdbcType="DECIMAL" property="discount" />
+    <result column="valid_type" jdbcType="TINYINT" property="validType" />
+    <result column="valid_date_start" jdbcType="TIMESTAMP" property="validDateStart" />
+    <result column="valid_date_end" jdbcType="TIMESTAMP" property="validDateEnd" />
+    <result column="valid_day" jdbcType="INTEGER" property="validDay" />
+    <result column="qr_code" jdbcType="VARCHAR" property="qrCode" />
+    <result column="img" jdbcType="VARCHAR" property="img" />
+    <result column="per_max_num" jdbcType="INTEGER" property="perMaxNum" />
+    <result column="is_real_name" jdbcType="BIT" property="isRealName" />
+    <result column="is_transfer" jdbcType="BIT" property="isTransfer" />
+    <result column="activity_superposition_type" jdbcType="TINYINT" property="activitySuperpositionType" />
+    <result column="activity_superposition_white_list" jdbcType="VARCHAR" property="activitySuperpositionWhiteList" />
+    <result column="activity_superposition_black_list" jdbcType="VARCHAR" property="activitySuperpositionBlackList" />
+    <result column="is_superposition" jdbcType="BIT" property="isSuperposition" />
+    <result column="is_tag_price_limit" jdbcType="BIT" property="isTagPriceLimit" />
+    <result column="tag_price_max_preferential_limit" jdbcType="DECIMAL" property="tagPriceMaxPreferentialLimit" />
+    <result column="min_consume" jdbcType="DECIMAL" property="minConsume" />
+    <result column="max_preferential" jdbcType="DECIMAL" property="maxPreferential" />
+    <result column="min_commodity_num" jdbcType="INTEGER" property="minCommodityNum" />
+    <result column="max_commodity_num" jdbcType="INTEGER" property="maxCommodityNum" />
+    <result column="min_discount" jdbcType="DECIMAL" property="minDiscount" />
+    <result column="appliance_commodity_type" jdbcType="TINYINT" property="applianceCommodityType" />
+    <result column="appliance_store_type" jdbcType="TINYINT" property="applianceStoreType" />
+    <result column="info" jdbcType="VARCHAR" property="info" />
+    <result column="remark" jdbcType="VARCHAR" property="remark" />
+    <result column="status" jdbcType="BIT" property="status" />
+    <result column="create_user_id" jdbcType="BIGINT" property="createUserId" />
+    <result column="create_user_name" jdbcType="VARCHAR" property="createUserName" />
+    <result column="create_date" jdbcType="TIMESTAMP" property="createDate" />
+    <result column="modified_user_id" jdbcType="BIGINT" property="modifiedUserId" />
+    <result column="modified_user_name" jdbcType="VARCHAR" property="modifiedUserName" />
+    <result column="modified_date" jdbcType="TIMESTAMP" property="modifiedDate" />
+    <result column="valid" jdbcType="BIT" property="valid" />
+    <result column="is_add_template" jdbcType="BIT" property="isAddTemplate" />
+    <result column="coupon_superposition_type" jdbcType="TINYINT" property="couponSuperpositionType" />
+    <result column="superposition_member_card" jdbcType="BIT" property="superpositionMemberCard" />
+    <result column="transfer_send" jdbcType="BIT" property="transferSend" />
+    <result column="transfer_coupon_definition_id" jdbcType="BIGINT" property="transferCouponDefinitionId" />
+    <result column="transfer_info" jdbcType="VARCHAR" property="transferInfo" />
+    <result column="transfer_fission" jdbcType="BIT" property="transferFission" />
+  </resultMap>
+  <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.bizvane.couponfacade.models.po.CouponDefinitionPOWithBLOBs">
+    <!--
+      WARNING - 只读 - @mbg.generated
+      This element was generated on 2019-01-16 17:48:34.
+    -->
+    <result column="commodity_whitelist" jdbcType="LONGVARCHAR" property="commodityWhitelist" />
+    <result column="commodity_blacklist" jdbcType="LONGVARCHAR" property="commodityBlacklist" />
+    <result column="store_whitelist" jdbcType="LONGVARCHAR" property="storeWhitelist" />
+    <result column="store_blacklist" jdbcType="LONGVARCHAR" property="storeBlacklist" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <!--
+      WARNING - 只读 - @mbg.generated
+      This element was generated on 2019-01-16 17:48:34.
+    -->
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <!--
+      WARNING - 只读 - @mbg.generated
+      This element was generated on 2019-01-16 17:48:34.
+    -->
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    <!--
+      WARNING - 只读 - @mbg.generated
+      This element was generated on 2019-01-16 17:48:34.
+    -->
+    coupon_definition_id, sys_company_id, sys_brand_id, brand_code, coupon_definition_code, 
+    coupon_definition_type, erp_coupon_definition_code, coupon_name, use_channel, preferential_type, 
+    money, discount, valid_type, valid_date_start, valid_date_end, valid_day, qr_code, 
+    img, per_max_num, is_real_name, is_transfer, activity_superposition_type, activity_superposition_white_list, 
+    activity_superposition_black_list, is_superposition, is_tag_price_limit, tag_price_max_preferential_limit, 
+    min_consume, max_preferential, min_commodity_num, max_commodity_num, min_discount, 
+    appliance_commodity_type, appliance_store_type, info, remark, status, create_user_id, 
+    create_user_name, create_date, modified_user_id, modified_user_name, modified_date, 
+    valid, is_add_template, coupon_superposition_type, superposition_member_card, transfer_send, 
+    transfer_coupon_definition_id, transfer_info, transfer_fission
+  </sql>
+  <sql id="Blob_Column_List">
+    <!--
+      WARNING - 只读 - @mbg.generated
+      This element was generated on 2019-01-16 17:48:34.
+    -->
+    commodity_whitelist, commodity_blacklist, store_whitelist, store_blacklist
+  </sql>
+  <select id="selectByExampleWithBLOBs" parameterType="com.bizvane.couponfacade.models.po.CouponDefinitionPOExample" resultMap="ResultMapWithBLOBs">
+    <!--
+      WARNING - 只读 - @mbg.generated
+      This element was generated on 2019-01-16 17:48:34.
+    -->
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from t_coupon_definition
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByExample" parameterType="com.bizvane.couponfacade.models.po.CouponDefinitionPOExample" resultMap="BaseResultMap">
+    <!--
+      WARNING - 只读 - @mbg.generated
+      This element was generated on 2019-01-16 17:48:34.
+    -->
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from t_coupon_definition
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="ResultMapWithBLOBs">
+    <!--
+      WARNING - 只读 - @mbg.generated
+      This element was generated on 2019-01-16 17:48:34.
+    -->
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from t_coupon_definition
+    where coupon_definition_id = #{couponDefinitionId,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    <!--
+      WARNING - 只读 - @mbg.generated
+      This element was generated on 2019-01-16 17:48:34.
+    -->
+    delete from t_coupon_definition
+    where coupon_definition_id = #{couponDefinitionId,jdbcType=BIGINT}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.bizvane.couponfacade.models.po.CouponDefinitionPOExample">
+    <!--
+      WARNING - 只读 - @mbg.generated
+      This element was generated on 2019-01-16 17:48:34.
+    -->
+    delete from t_coupon_definition
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.bizvane.couponfacade.models.po.CouponDefinitionPOWithBLOBs">
+    <!--
+      WARNING - 只读 - @mbg.generated
+      This element was generated on 2019-01-16 17:48:34.
+    -->
+    <selectKey keyProperty="couponDefinitionId" order="AFTER" resultType="java.lang.Long">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into t_coupon_definition (sys_company_id, sys_brand_id, brand_code, 
+      coupon_definition_code, coupon_definition_type, 
+      erp_coupon_definition_code, coupon_name, use_channel, 
+      preferential_type, money, discount, 
+      valid_type, valid_date_start, valid_date_end, 
+      valid_day, qr_code, img, 
+      per_max_num, is_real_name, is_transfer, 
+      activity_superposition_type, activity_superposition_white_list, 
+      activity_superposition_black_list, is_superposition, 
+      is_tag_price_limit, tag_price_max_preferential_limit, 
+      min_consume, max_preferential, min_commodity_num, 
+      max_commodity_num, min_discount, appliance_commodity_type, 
+      appliance_store_type, info, remark, 
+      status, create_user_id, create_user_name, 
+      create_date, modified_user_id, modified_user_name, 
+      modified_date, valid, is_add_template, 
+      coupon_superposition_type, superposition_member_card, 
+      transfer_send, transfer_coupon_definition_id, transfer_info, 
+      transfer_fission, commodity_whitelist, commodity_blacklist, 
+      store_whitelist, store_blacklist)
+    values (#{sysCompanyId,jdbcType=BIGINT}, #{sysBrandId,jdbcType=BIGINT}, #{brandCode,jdbcType=VARCHAR}, 
+      #{couponDefinitionCode,jdbcType=VARCHAR}, #{couponDefinitionType,jdbcType=TINYINT}, 
+      #{erpCouponDefinitionCode,jdbcType=VARCHAR}, #{couponName,jdbcType=VARCHAR}, #{useChannel,jdbcType=TINYINT}, 
+      #{preferentialType,jdbcType=TINYINT}, #{money,jdbcType=DECIMAL}, #{discount,jdbcType=DECIMAL}, 
+      #{validType,jdbcType=TINYINT}, #{validDateStart,jdbcType=TIMESTAMP}, #{validDateEnd,jdbcType=TIMESTAMP}, 
+      #{validDay,jdbcType=INTEGER}, #{qrCode,jdbcType=VARCHAR}, #{img,jdbcType=VARCHAR}, 
+      #{perMaxNum,jdbcType=INTEGER}, #{isRealName,jdbcType=BIT}, #{isTransfer,jdbcType=BIT}, 
+      #{activitySuperpositionType,jdbcType=TINYINT}, #{activitySuperpositionWhiteList,jdbcType=VARCHAR}, 
+      #{activitySuperpositionBlackList,jdbcType=VARCHAR}, #{isSuperposition,jdbcType=BIT}, 
+      #{isTagPriceLimit,jdbcType=BIT}, #{tagPriceMaxPreferentialLimit,jdbcType=DECIMAL}, 
+      #{minConsume,jdbcType=DECIMAL}, #{maxPreferential,jdbcType=DECIMAL}, #{minCommodityNum,jdbcType=INTEGER}, 
+      #{maxCommodityNum,jdbcType=INTEGER}, #{minDiscount,jdbcType=DECIMAL}, #{applianceCommodityType,jdbcType=TINYINT}, 
+      #{applianceStoreType,jdbcType=TINYINT}, #{info,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}, 
+      #{status,jdbcType=BIT}, #{createUserId,jdbcType=BIGINT}, #{createUserName,jdbcType=VARCHAR}, 
+      #{createDate,jdbcType=TIMESTAMP}, #{modifiedUserId,jdbcType=BIGINT}, #{modifiedUserName,jdbcType=VARCHAR}, 
+      #{modifiedDate,jdbcType=TIMESTAMP}, #{valid,jdbcType=BIT}, #{isAddTemplate,jdbcType=BIT}, 
+      #{couponSuperpositionType,jdbcType=TINYINT}, #{superpositionMemberCard,jdbcType=BIT}, 
+      #{transferSend,jdbcType=BIT}, #{transferCouponDefinitionId,jdbcType=BIGINT}, #{transferInfo,jdbcType=VARCHAR}, 
+      #{transferFission,jdbcType=BIT}, #{commodityWhitelist,jdbcType=LONGVARCHAR}, #{commodityBlacklist,jdbcType=LONGVARCHAR}, 
+      #{storeWhitelist,jdbcType=LONGVARCHAR}, #{storeBlacklist,jdbcType=LONGVARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.bizvane.couponfacade.models.po.CouponDefinitionPOWithBLOBs">
+    <!--
+      WARNING - 只读 - @mbg.generated
+      This element was generated on 2019-01-16 17:48:34.
+    -->
+    <selectKey keyProperty="couponDefinitionId" order="AFTER" resultType="java.lang.Long">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into t_coupon_definition
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="sysCompanyId != null">
+        sys_company_id,
+      </if>
+      <if test="sysBrandId != null">
+        sys_brand_id,
+      </if>
+      <if test="brandCode != null">
+        brand_code,
+      </if>
+      <if test="couponDefinitionCode != null">
+        coupon_definition_code,
+      </if>
+      <if test="couponDefinitionType != null">
+        coupon_definition_type,
+      </if>
+      <if test="erpCouponDefinitionCode != null">
+        erp_coupon_definition_code,
+      </if>
+      <if test="couponName != null">
+        coupon_name,
+      </if>
+      <if test="useChannel != null">
+        use_channel,
+      </if>
+      <if test="preferentialType != null">
+        preferential_type,
+      </if>
+      <if test="money != null">
+        money,
+      </if>
+      <if test="discount != null">
+        discount,
+      </if>
+      <if test="validType != null">
+        valid_type,
+      </if>
+      <if test="validDateStart != null">
+        valid_date_start,
+      </if>
+      <if test="validDateEnd != null">
+        valid_date_end,
+      </if>
+      <if test="validDay != null">
+        valid_day,
+      </if>
+      <if test="qrCode != null">
+        qr_code,
+      </if>
+      <if test="img != null">
+        img,
+      </if>
+      <if test="perMaxNum != null">
+        per_max_num,
+      </if>
+      <if test="isRealName != null">
+        is_real_name,
+      </if>
+      <if test="isTransfer != null">
+        is_transfer,
+      </if>
+      <if test="activitySuperpositionType != null">
+        activity_superposition_type,
+      </if>
+      <if test="activitySuperpositionWhiteList != null">
+        activity_superposition_white_list,
+      </if>
+      <if test="activitySuperpositionBlackList != null">
+        activity_superposition_black_list,
+      </if>
+      <if test="isSuperposition != null">
+        is_superposition,
+      </if>
+      <if test="isTagPriceLimit != null">
+        is_tag_price_limit,
+      </if>
+      <if test="tagPriceMaxPreferentialLimit != null">
+        tag_price_max_preferential_limit,
+      </if>
+      <if test="minConsume != null">
+        min_consume,
+      </if>
+      <if test="maxPreferential != null">
+        max_preferential,
+      </if>
+      <if test="minCommodityNum != null">
+        min_commodity_num,
+      </if>
+      <if test="maxCommodityNum != null">
+        max_commodity_num,
+      </if>
+      <if test="minDiscount != null">
+        min_discount,
+      </if>
+      <if test="applianceCommodityType != null">
+        appliance_commodity_type,
+      </if>
+      <if test="applianceStoreType != null">
+        appliance_store_type,
+      </if>
+      <if test="info != null">
+        info,
+      </if>
+      <if test="remark != null">
+        remark,
+      </if>
+      <if test="status != null">
+        status,
+      </if>
+      <if test="createUserId != null">
+        create_user_id,
+      </if>
+      <if test="createUserName != null">
+        create_user_name,
+      </if>
+      <if test="createDate != null">
+        create_date,
+      </if>
+      <if test="modifiedUserId != null">
+        modified_user_id,
+      </if>
+      <if test="modifiedUserName != null">
+        modified_user_name,
+      </if>
+      <if test="modifiedDate != null">
+        modified_date,
+      </if>
+      <if test="valid != null">
+        valid,
+      </if>
+      <if test="isAddTemplate != null">
+        is_add_template,
+      </if>
+      <if test="couponSuperpositionType != null">
+        coupon_superposition_type,
+      </if>
+      <if test="superpositionMemberCard != null">
+        superposition_member_card,
+      </if>
+      <if test="transferSend != null">
+        transfer_send,
+      </if>
+      <if test="transferCouponDefinitionId != null">
+        transfer_coupon_definition_id,
+      </if>
+      <if test="transferInfo != null">
+        transfer_info,
+      </if>
+      <if test="transferFission != null">
+        transfer_fission,
+      </if>
+      <if test="commodityWhitelist != null">
+        commodity_whitelist,
+      </if>
+      <if test="commodityBlacklist != null">
+        commodity_blacklist,
+      </if>
+      <if test="storeWhitelist != null">
+        store_whitelist,
+      </if>
+      <if test="storeBlacklist != null">
+        store_blacklist,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="sysCompanyId != null">
+        #{sysCompanyId,jdbcType=BIGINT},
+      </if>
+      <if test="sysBrandId != null">
+        #{sysBrandId,jdbcType=BIGINT},
+      </if>
+      <if test="brandCode != null">
+        #{brandCode,jdbcType=VARCHAR},
+      </if>
+      <if test="couponDefinitionCode != null">
+        #{couponDefinitionCode,jdbcType=VARCHAR},
+      </if>
+      <if test="couponDefinitionType != null">
+        #{couponDefinitionType,jdbcType=TINYINT},
+      </if>
+      <if test="erpCouponDefinitionCode != null">
+        #{erpCouponDefinitionCode,jdbcType=VARCHAR},
+      </if>
+      <if test="couponName != null">
+        #{couponName,jdbcType=VARCHAR},
+      </if>
+      <if test="useChannel != null">
+        #{useChannel,jdbcType=TINYINT},
+      </if>
+      <if test="preferentialType != null">
+        #{preferentialType,jdbcType=TINYINT},
+      </if>
+      <if test="money != null">
+        #{money,jdbcType=DECIMAL},
+      </if>
+      <if test="discount != null">
+        #{discount,jdbcType=DECIMAL},
+      </if>
+      <if test="validType != null">
+        #{validType,jdbcType=TINYINT},
+      </if>
+      <if test="validDateStart != null">
+        #{validDateStart,jdbcType=TIMESTAMP},
+      </if>
+      <if test="validDateEnd != null">
+        #{validDateEnd,jdbcType=TIMESTAMP},
+      </if>
+      <if test="validDay != null">
+        #{validDay,jdbcType=INTEGER},
+      </if>
+      <if test="qrCode != null">
+        #{qrCode,jdbcType=VARCHAR},
+      </if>
+      <if test="img != null">
+        #{img,jdbcType=VARCHAR},
+      </if>
+      <if test="perMaxNum != null">
+        #{perMaxNum,jdbcType=INTEGER},
+      </if>
+      <if test="isRealName != null">
+        #{isRealName,jdbcType=BIT},
+      </if>
+      <if test="isTransfer != null">
+        #{isTransfer,jdbcType=BIT},
+      </if>
+      <if test="activitySuperpositionType != null">
+        #{activitySuperpositionType,jdbcType=TINYINT},
+      </if>
+      <if test="activitySuperpositionWhiteList != null">
+        #{activitySuperpositionWhiteList,jdbcType=VARCHAR},
+      </if>
+      <if test="activitySuperpositionBlackList != null">
+        #{activitySuperpositionBlackList,jdbcType=VARCHAR},
+      </if>
+      <if test="isSuperposition != null">
+        #{isSuperposition,jdbcType=BIT},
+      </if>
+      <if test="isTagPriceLimit != null">
+        #{isTagPriceLimit,jdbcType=BIT},
+      </if>
+      <if test="tagPriceMaxPreferentialLimit != null">
+        #{tagPriceMaxPreferentialLimit,jdbcType=DECIMAL},
+      </if>
+      <if test="minConsume != null">
+        #{minConsume,jdbcType=DECIMAL},
+      </if>
+      <if test="maxPreferential != null">
+        #{maxPreferential,jdbcType=DECIMAL},
+      </if>
+      <if test="minCommodityNum != null">
+        #{minCommodityNum,jdbcType=INTEGER},
+      </if>
+      <if test="maxCommodityNum != null">
+        #{maxCommodityNum,jdbcType=INTEGER},
+      </if>
+      <if test="minDiscount != null">
+        #{minDiscount,jdbcType=DECIMAL},
+      </if>
+      <if test="applianceCommodityType != null">
+        #{applianceCommodityType,jdbcType=TINYINT},
+      </if>
+      <if test="applianceStoreType != null">
+        #{applianceStoreType,jdbcType=TINYINT},
+      </if>
+      <if test="info != null">
+        #{info,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null">
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=BIT},
+      </if>
+      <if test="createUserId != null">
+        #{createUserId,jdbcType=BIGINT},
+      </if>
+      <if test="createUserName != null">
+        #{createUserName,jdbcType=VARCHAR},
+      </if>
+      <if test="createDate != null">
+        #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifiedUserId != null">
+        #{modifiedUserId,jdbcType=BIGINT},
+      </if>
+      <if test="modifiedUserName != null">
+        #{modifiedUserName,jdbcType=VARCHAR},
+      </if>
+      <if test="modifiedDate != null">
+        #{modifiedDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="valid != null">
+        #{valid,jdbcType=BIT},
+      </if>
+      <if test="isAddTemplate != null">
+        #{isAddTemplate,jdbcType=BIT},
+      </if>
+      <if test="couponSuperpositionType != null">
+        #{couponSuperpositionType,jdbcType=TINYINT},
+      </if>
+      <if test="superpositionMemberCard != null">
+        #{superpositionMemberCard,jdbcType=BIT},
+      </if>
+      <if test="transferSend != null">
+        #{transferSend,jdbcType=BIT},
+      </if>
+      <if test="transferCouponDefinitionId != null">
+        #{transferCouponDefinitionId,jdbcType=BIGINT},
+      </if>
+      <if test="transferInfo != null">
+        #{transferInfo,jdbcType=VARCHAR},
+      </if>
+      <if test="transferFission != null">
+        #{transferFission,jdbcType=BIT},
+      </if>
+      <if test="commodityWhitelist != null">
+        #{commodityWhitelist,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="commodityBlacklist != null">
+        #{commodityBlacklist,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="storeWhitelist != null">
+        #{storeWhitelist,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="storeBlacklist != null">
+        #{storeBlacklist,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.bizvane.couponfacade.models.po.CouponDefinitionPOExample" resultType="java.lang.Long">
+    <!--
+      WARNING - 只读 - @mbg.generated
+      This element was generated on 2019-01-16 17:48:34.
+    -->
+    select count(*) from t_coupon_definition
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    <!--
+      WARNING - 只读 - @mbg.generated
+      This element was generated on 2019-01-16 17:48:34.
+    -->
+    update t_coupon_definition
+    <set>
+      <if test="record.couponDefinitionId != null">
+        coupon_definition_id = #{record.couponDefinitionId,jdbcType=BIGINT},
+      </if>
+      <if test="record.sysCompanyId != null">
+        sys_company_id = #{record.sysCompanyId,jdbcType=BIGINT},
+      </if>
+      <if test="record.sysBrandId != null">
+        sys_brand_id = #{record.sysBrandId,jdbcType=BIGINT},
+      </if>
+      <if test="record.brandCode != null">
+        brand_code = #{record.brandCode,jdbcType=VARCHAR},
+      </if>
+      <if test="record.couponDefinitionCode != null">
+        coupon_definition_code = #{record.couponDefinitionCode,jdbcType=VARCHAR},
+      </if>
+      <if test="record.couponDefinitionType != null">
+        coupon_definition_type = #{record.couponDefinitionType,jdbcType=TINYINT},
+      </if>
+      <if test="record.erpCouponDefinitionCode != null">
+        erp_coupon_definition_code = #{record.erpCouponDefinitionCode,jdbcType=VARCHAR},
+      </if>
+      <if test="record.couponName != null">
+        coupon_name = #{record.couponName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.useChannel != null">
+        use_channel = #{record.useChannel,jdbcType=TINYINT},
+      </if>
+      <if test="record.preferentialType != null">
+        preferential_type = #{record.preferentialType,jdbcType=TINYINT},
+      </if>
+      <if test="record.money != null">
+        money = #{record.money,jdbcType=DECIMAL},
+      </if>
+      <if test="record.discount != null">
+        discount = #{record.discount,jdbcType=DECIMAL},
+      </if>
+      <if test="record.validType != null">
+        valid_type = #{record.validType,jdbcType=TINYINT},
+      </if>
+      <if test="record.validDateStart != null">
+        valid_date_start = #{record.validDateStart,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.validDateEnd != null">
+        valid_date_end = #{record.validDateEnd,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.validDay != null">
+        valid_day = #{record.validDay,jdbcType=INTEGER},
+      </if>
+      <if test="record.qrCode != null">
+        qr_code = #{record.qrCode,jdbcType=VARCHAR},
+      </if>
+      <if test="record.img != null">
+        img = #{record.img,jdbcType=VARCHAR},
+      </if>
+      <if test="record.perMaxNum != null">
+        per_max_num = #{record.perMaxNum,jdbcType=INTEGER},
+      </if>
+      <if test="record.isRealName != null">
+        is_real_name = #{record.isRealName,jdbcType=BIT},
+      </if>
+      <if test="record.isTransfer != null">
+        is_transfer = #{record.isTransfer,jdbcType=BIT},
+      </if>
+      <if test="record.activitySuperpositionType != null">
+        activity_superposition_type = #{record.activitySuperpositionType,jdbcType=TINYINT},
+      </if>
+      <if test="record.activitySuperpositionWhiteList != null">
+        activity_superposition_white_list = #{record.activitySuperpositionWhiteList,jdbcType=VARCHAR},
+      </if>
+      <if test="record.activitySuperpositionBlackList != null">
+        activity_superposition_black_list = #{record.activitySuperpositionBlackList,jdbcType=VARCHAR},
+      </if>
+      <if test="record.isSuperposition != null">
+        is_superposition = #{record.isSuperposition,jdbcType=BIT},
+      </if>
+      <if test="record.isTagPriceLimit != null">
+        is_tag_price_limit = #{record.isTagPriceLimit,jdbcType=BIT},
+      </if>
+      <if test="record.tagPriceMaxPreferentialLimit != null">
+        tag_price_max_preferential_limit = #{record.tagPriceMaxPreferentialLimit,jdbcType=DECIMAL},
+      </if>
+      <if test="record.minConsume != null">
+        min_consume = #{record.minConsume,jdbcType=DECIMAL},
+      </if>
+      <if test="record.maxPreferential != null">
+        max_preferential = #{record.maxPreferential,jdbcType=DECIMAL},
+      </if>
+      <if test="record.minCommodityNum != null">
+        min_commodity_num = #{record.minCommodityNum,jdbcType=INTEGER},
+      </if>
+      <if test="record.maxCommodityNum != null">
+        max_commodity_num = #{record.maxCommodityNum,jdbcType=INTEGER},
+      </if>
+      <if test="record.minDiscount != null">
+        min_discount = #{record.minDiscount,jdbcType=DECIMAL},
+      </if>
+      <if test="record.applianceCommodityType != null">
+        appliance_commodity_type = #{record.applianceCommodityType,jdbcType=TINYINT},
+      </if>
+      <if test="record.applianceStoreType != null">
+        appliance_store_type = #{record.applianceStoreType,jdbcType=TINYINT},
+      </if>
+      <if test="record.info != null">
+        info = #{record.info,jdbcType=VARCHAR},
+      </if>
+      <if test="record.remark != null">
+        remark = #{record.remark,jdbcType=VARCHAR},
+      </if>
+      <if test="record.status != null">
+        status = #{record.status,jdbcType=BIT},
+      </if>
+      <if test="record.createUserId != null">
+        create_user_id = #{record.createUserId,jdbcType=BIGINT},
+      </if>
+      <if test="record.createUserName != null">
+        create_user_name = #{record.createUserName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.createDate != null">
+        create_date = #{record.createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.modifiedUserId != null">
+        modified_user_id = #{record.modifiedUserId,jdbcType=BIGINT},
+      </if>
+      <if test="record.modifiedUserName != null">
+        modified_user_name = #{record.modifiedUserName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.modifiedDate != null">
+        modified_date = #{record.modifiedDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.valid != null">
+        valid = #{record.valid,jdbcType=BIT},
+      </if>
+      <if test="record.isAddTemplate != null">
+        is_add_template = #{record.isAddTemplate,jdbcType=BIT},
+      </if>
+      <if test="record.couponSuperpositionType != null">
+        coupon_superposition_type = #{record.couponSuperpositionType,jdbcType=TINYINT},
+      </if>
+      <if test="record.superpositionMemberCard != null">
+        superposition_member_card = #{record.superpositionMemberCard,jdbcType=BIT},
+      </if>
+      <if test="record.transferSend != null">
+        transfer_send = #{record.transferSend,jdbcType=BIT},
+      </if>
+      <if test="record.transferCouponDefinitionId != null">
+        transfer_coupon_definition_id = #{record.transferCouponDefinitionId,jdbcType=BIGINT},
+      </if>
+      <if test="record.transferInfo != null">
+        transfer_info = #{record.transferInfo,jdbcType=VARCHAR},
+      </if>
+      <if test="record.transferFission != null">
+        transfer_fission = #{record.transferFission,jdbcType=BIT},
+      </if>
+      <if test="record.commodityWhitelist != null">
+        commodity_whitelist = #{record.commodityWhitelist,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="record.commodityBlacklist != null">
+        commodity_blacklist = #{record.commodityBlacklist,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="record.storeWhitelist != null">
+        store_whitelist = #{record.storeWhitelist,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="record.storeBlacklist != null">
+        store_blacklist = #{record.storeBlacklist,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExampleWithBLOBs" parameterType="map">
+    <!--
+      WARNING - 只读 - @mbg.generated
+      This element was generated on 2019-01-16 17:48:34.
+    -->
+    update t_coupon_definition
+    set coupon_definition_id = #{record.couponDefinitionId,jdbcType=BIGINT},
+      sys_company_id = #{record.sysCompanyId,jdbcType=BIGINT},
+      sys_brand_id = #{record.sysBrandId,jdbcType=BIGINT},
+      brand_code = #{record.brandCode,jdbcType=VARCHAR},
+      coupon_definition_code = #{record.couponDefinitionCode,jdbcType=VARCHAR},
+      coupon_definition_type = #{record.couponDefinitionType,jdbcType=TINYINT},
+      erp_coupon_definition_code = #{record.erpCouponDefinitionCode,jdbcType=VARCHAR},
+      coupon_name = #{record.couponName,jdbcType=VARCHAR},
+      use_channel = #{record.useChannel,jdbcType=TINYINT},
+      preferential_type = #{record.preferentialType,jdbcType=TINYINT},
+      money = #{record.money,jdbcType=DECIMAL},
+      discount = #{record.discount,jdbcType=DECIMAL},
+      valid_type = #{record.validType,jdbcType=TINYINT},
+      valid_date_start = #{record.validDateStart,jdbcType=TIMESTAMP},
+      valid_date_end = #{record.validDateEnd,jdbcType=TIMESTAMP},
+      valid_day = #{record.validDay,jdbcType=INTEGER},
+      qr_code = #{record.qrCode,jdbcType=VARCHAR},
+      img = #{record.img,jdbcType=VARCHAR},
+      per_max_num = #{record.perMaxNum,jdbcType=INTEGER},
+      is_real_name = #{record.isRealName,jdbcType=BIT},
+      is_transfer = #{record.isTransfer,jdbcType=BIT},
+      activity_superposition_type = #{record.activitySuperpositionType,jdbcType=TINYINT},
+      activity_superposition_white_list = #{record.activitySuperpositionWhiteList,jdbcType=VARCHAR},
+      activity_superposition_black_list = #{record.activitySuperpositionBlackList,jdbcType=VARCHAR},
+      is_superposition = #{record.isSuperposition,jdbcType=BIT},
+      is_tag_price_limit = #{record.isTagPriceLimit,jdbcType=BIT},
+      tag_price_max_preferential_limit = #{record.tagPriceMaxPreferentialLimit,jdbcType=DECIMAL},
+      min_consume = #{record.minConsume,jdbcType=DECIMAL},
+      max_preferential = #{record.maxPreferential,jdbcType=DECIMAL},
+      min_commodity_num = #{record.minCommodityNum,jdbcType=INTEGER},
+      max_commodity_num = #{record.maxCommodityNum,jdbcType=INTEGER},
+      min_discount = #{record.minDiscount,jdbcType=DECIMAL},
+      appliance_commodity_type = #{record.applianceCommodityType,jdbcType=TINYINT},
+      appliance_store_type = #{record.applianceStoreType,jdbcType=TINYINT},
+      info = #{record.info,jdbcType=VARCHAR},
+      remark = #{record.remark,jdbcType=VARCHAR},
+      status = #{record.status,jdbcType=BIT},
+      create_user_id = #{record.createUserId,jdbcType=BIGINT},
+      create_user_name = #{record.createUserName,jdbcType=VARCHAR},
+      create_date = #{record.createDate,jdbcType=TIMESTAMP},
+      modified_user_id = #{record.modifiedUserId,jdbcType=BIGINT},
+      modified_user_name = #{record.modifiedUserName,jdbcType=VARCHAR},
+      modified_date = #{record.modifiedDate,jdbcType=TIMESTAMP},
+      valid = #{record.valid,jdbcType=BIT},
+      is_add_template = #{record.isAddTemplate,jdbcType=BIT},
+      coupon_superposition_type = #{record.couponSuperpositionType,jdbcType=TINYINT},
+      superposition_member_card = #{record.superpositionMemberCard,jdbcType=BIT},
+      transfer_send = #{record.transferSend,jdbcType=BIT},
+      transfer_coupon_definition_id = #{record.transferCouponDefinitionId,jdbcType=BIGINT},
+      transfer_info = #{record.transferInfo,jdbcType=VARCHAR},
+      transfer_fission = #{record.transferFission,jdbcType=BIT},
+      commodity_whitelist = #{record.commodityWhitelist,jdbcType=LONGVARCHAR},
+      commodity_blacklist = #{record.commodityBlacklist,jdbcType=LONGVARCHAR},
+      store_whitelist = #{record.storeWhitelist,jdbcType=LONGVARCHAR},
+      store_blacklist = #{record.storeBlacklist,jdbcType=LONGVARCHAR}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    <!--
+      WARNING - 只读 - @mbg.generated
+      This element was generated on 2019-01-16 17:48:34.
+    -->
+    update t_coupon_definition
+    set coupon_definition_id = #{record.couponDefinitionId,jdbcType=BIGINT},
+      sys_company_id = #{record.sysCompanyId,jdbcType=BIGINT},
+      sys_brand_id = #{record.sysBrandId,jdbcType=BIGINT},
+      brand_code = #{record.brandCode,jdbcType=VARCHAR},
+      coupon_definition_code = #{record.couponDefinitionCode,jdbcType=VARCHAR},
+      coupon_definition_type = #{record.couponDefinitionType,jdbcType=TINYINT},
+      erp_coupon_definition_code = #{record.erpCouponDefinitionCode,jdbcType=VARCHAR},
+      coupon_name = #{record.couponName,jdbcType=VARCHAR},
+      use_channel = #{record.useChannel,jdbcType=TINYINT},
+      preferential_type = #{record.preferentialType,jdbcType=TINYINT},
+      money = #{record.money,jdbcType=DECIMAL},
+      discount = #{record.discount,jdbcType=DECIMAL},
+      valid_type = #{record.validType,jdbcType=TINYINT},
+      valid_date_start = #{record.validDateStart,jdbcType=TIMESTAMP},
+      valid_date_end = #{record.validDateEnd,jdbcType=TIMESTAMP},
+      valid_day = #{record.validDay,jdbcType=INTEGER},
+      qr_code = #{record.qrCode,jdbcType=VARCHAR},
+      img = #{record.img,jdbcType=VARCHAR},
+      per_max_num = #{record.perMaxNum,jdbcType=INTEGER},
+      is_real_name = #{record.isRealName,jdbcType=BIT},
+      is_transfer = #{record.isTransfer,jdbcType=BIT},
+      activity_superposition_type = #{record.activitySuperpositionType,jdbcType=TINYINT},
+      activity_superposition_white_list = #{record.activitySuperpositionWhiteList,jdbcType=VARCHAR},
+      activity_superposition_black_list = #{record.activitySuperpositionBlackList,jdbcType=VARCHAR},
+      is_superposition = #{record.isSuperposition,jdbcType=BIT},
+      is_tag_price_limit = #{record.isTagPriceLimit,jdbcType=BIT},
+      tag_price_max_preferential_limit = #{record.tagPriceMaxPreferentialLimit,jdbcType=DECIMAL},
+      min_consume = #{record.minConsume,jdbcType=DECIMAL},
+      max_preferential = #{record.maxPreferential,jdbcType=DECIMAL},
+      min_commodity_num = #{record.minCommodityNum,jdbcType=INTEGER},
+      max_commodity_num = #{record.maxCommodityNum,jdbcType=INTEGER},
+      min_discount = #{record.minDiscount,jdbcType=DECIMAL},
+      appliance_commodity_type = #{record.applianceCommodityType,jdbcType=TINYINT},
+      appliance_store_type = #{record.applianceStoreType,jdbcType=TINYINT},
+      info = #{record.info,jdbcType=VARCHAR},
+      remark = #{record.remark,jdbcType=VARCHAR},
+      status = #{record.status,jdbcType=BIT},
+      create_user_id = #{record.createUserId,jdbcType=BIGINT},
+      create_user_name = #{record.createUserName,jdbcType=VARCHAR},
+      create_date = #{record.createDate,jdbcType=TIMESTAMP},
+      modified_user_id = #{record.modifiedUserId,jdbcType=BIGINT},
+      modified_user_name = #{record.modifiedUserName,jdbcType=VARCHAR},
+      modified_date = #{record.modifiedDate,jdbcType=TIMESTAMP},
+      valid = #{record.valid,jdbcType=BIT},
+      is_add_template = #{record.isAddTemplate,jdbcType=BIT},
+      coupon_superposition_type = #{record.couponSuperpositionType,jdbcType=TINYINT},
+      superposition_member_card = #{record.superpositionMemberCard,jdbcType=BIT},
+      transfer_send = #{record.transferSend,jdbcType=BIT},
+      transfer_coupon_definition_id = #{record.transferCouponDefinitionId,jdbcType=BIGINT},
+      transfer_info = #{record.transferInfo,jdbcType=VARCHAR},
+      transfer_fission = #{record.transferFission,jdbcType=BIT}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.bizvane.couponfacade.models.po.CouponDefinitionPOWithBLOBs">
+    <!--
+      WARNING - 只读 - @mbg.generated
+      This element was generated on 2019-01-16 17:48:34.
+    -->
+    update t_coupon_definition
+    <set>
+      <if test="sysCompanyId != null">
+        sys_company_id = #{sysCompanyId,jdbcType=BIGINT},
+      </if>
+      <if test="sysBrandId != null">
+        sys_brand_id = #{sysBrandId,jdbcType=BIGINT},
+      </if>
+      <if test="brandCode != null">
+        brand_code = #{brandCode,jdbcType=VARCHAR},
+      </if>
+      <if test="couponDefinitionCode != null">
+        coupon_definition_code = #{couponDefinitionCode,jdbcType=VARCHAR},
+      </if>
+      <if test="couponDefinitionType != null">
+        coupon_definition_type = #{couponDefinitionType,jdbcType=TINYINT},
+      </if>
+      <if test="erpCouponDefinitionCode != null">
+        erp_coupon_definition_code = #{erpCouponDefinitionCode,jdbcType=VARCHAR},
+      </if>
+      <if test="couponName != null">
+        coupon_name = #{couponName,jdbcType=VARCHAR},
+      </if>
+      <if test="useChannel != null">
+        use_channel = #{useChannel,jdbcType=TINYINT},
+      </if>
+      <if test="preferentialType != null">
+        preferential_type = #{preferentialType,jdbcType=TINYINT},
+      </if>
+      <if test="money != null">
+        money = #{money,jdbcType=DECIMAL},
+      </if>
+      <if test="discount != null">
+        discount = #{discount,jdbcType=DECIMAL},
+      </if>
+      <if test="validType != null">
+        valid_type = #{validType,jdbcType=TINYINT},
+      </if>
+      <if test="validDateStart != null">
+        valid_date_start = #{validDateStart,jdbcType=TIMESTAMP},
+      </if>
+      <if test="validDateEnd != null">
+        valid_date_end = #{validDateEnd,jdbcType=TIMESTAMP},
+      </if>
+      <if test="validDay != null">
+        valid_day = #{validDay,jdbcType=INTEGER},
+      </if>
+      <if test="qrCode != null">
+        qr_code = #{qrCode,jdbcType=VARCHAR},
+      </if>
+      <if test="img != null">
+        img = #{img,jdbcType=VARCHAR},
+      </if>
+      <if test="perMaxNum != null">
+        per_max_num = #{perMaxNum,jdbcType=INTEGER},
+      </if>
+      <if test="isRealName != null">
+        is_real_name = #{isRealName,jdbcType=BIT},
+      </if>
+      <if test="isTransfer != null">
+        is_transfer = #{isTransfer,jdbcType=BIT},
+      </if>
+      <if test="activitySuperpositionType != null">
+        activity_superposition_type = #{activitySuperpositionType,jdbcType=TINYINT},
+      </if>
+      <if test="activitySuperpositionWhiteList != null">
+        activity_superposition_white_list = #{activitySuperpositionWhiteList,jdbcType=VARCHAR},
+      </if>
+      <if test="activitySuperpositionBlackList != null">
+        activity_superposition_black_list = #{activitySuperpositionBlackList,jdbcType=VARCHAR},
+      </if>
+      <if test="isSuperposition != null">
+        is_superposition = #{isSuperposition,jdbcType=BIT},
+      </if>
+      <if test="isTagPriceLimit != null">
+        is_tag_price_limit = #{isTagPriceLimit,jdbcType=BIT},
+      </if>
+      <if test="tagPriceMaxPreferentialLimit != null">
+        tag_price_max_preferential_limit = #{tagPriceMaxPreferentialLimit,jdbcType=DECIMAL},
+      </if>
+      <if test="minConsume != null">
+        min_consume = #{minConsume,jdbcType=DECIMAL},
+      </if>
+      <if test="maxPreferential != null">
+        max_preferential = #{maxPreferential,jdbcType=DECIMAL},
+      </if>
+      <if test="minCommodityNum != null">
+        min_commodity_num = #{minCommodityNum,jdbcType=INTEGER},
+      </if>
+      <if test="maxCommodityNum != null">
+        max_commodity_num = #{maxCommodityNum,jdbcType=INTEGER},
+      </if>
+      <if test="minDiscount != null">
+        min_discount = #{minDiscount,jdbcType=DECIMAL},
+      </if>
+      <if test="applianceCommodityType != null">
+        appliance_commodity_type = #{applianceCommodityType,jdbcType=TINYINT},
+      </if>
+      <if test="applianceStoreType != null">
+        appliance_store_type = #{applianceStoreType,jdbcType=TINYINT},
+      </if>
+      <if test="info != null">
+        info = #{info,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null">
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        status = #{status,jdbcType=BIT},
+      </if>
+      <if test="createUserId != null">
+        create_user_id = #{createUserId,jdbcType=BIGINT},
+      </if>
+      <if test="createUserName != null">
+        create_user_name = #{createUserName,jdbcType=VARCHAR},
+      </if>
+      <if test="createDate != null">
+        create_date = #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifiedUserId != null">
+        modified_user_id = #{modifiedUserId,jdbcType=BIGINT},
+      </if>
+      <if test="modifiedUserName != null">
+        modified_user_name = #{modifiedUserName,jdbcType=VARCHAR},
+      </if>
+      <if test="modifiedDate != null">
+        modified_date = #{modifiedDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="valid != null">
+        valid = #{valid,jdbcType=BIT},
+      </if>
+      <if test="isAddTemplate != null">
+        is_add_template = #{isAddTemplate,jdbcType=BIT},
+      </if>
+      <if test="couponSuperpositionType != null">
+        coupon_superposition_type = #{couponSuperpositionType,jdbcType=TINYINT},
+      </if>
+      <if test="superpositionMemberCard != null">
+        superposition_member_card = #{superpositionMemberCard,jdbcType=BIT},
+      </if>
+      <if test="transferSend != null">
+        transfer_send = #{transferSend,jdbcType=BIT},
+      </if>
+      <if test="transferCouponDefinitionId != null">
+        transfer_coupon_definition_id = #{transferCouponDefinitionId,jdbcType=BIGINT},
+      </if>
+      <if test="transferInfo != null">
+        transfer_info = #{transferInfo,jdbcType=VARCHAR},
+      </if>
+      <if test="transferFission != null">
+        transfer_fission = #{transferFission,jdbcType=BIT},
+      </if>
+      <if test="commodityWhitelist != null">
+        commodity_whitelist = #{commodityWhitelist,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="commodityBlacklist != null">
+        commodity_blacklist = #{commodityBlacklist,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="storeWhitelist != null">
+        store_whitelist = #{storeWhitelist,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="storeBlacklist != null">
+        store_blacklist = #{storeBlacklist,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where coupon_definition_id = #{couponDefinitionId,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.bizvane.couponfacade.models.po.CouponDefinitionPOWithBLOBs">
+    <!--
+      WARNING - 只读 - @mbg.generated
+      This element was generated on 2019-01-16 17:48:34.
+    -->
+    update t_coupon_definition
+    set sys_company_id = #{sysCompanyId,jdbcType=BIGINT},
+      sys_brand_id = #{sysBrandId,jdbcType=BIGINT},
+      brand_code = #{brandCode,jdbcType=VARCHAR},
+      coupon_definition_code = #{couponDefinitionCode,jdbcType=VARCHAR},
+      coupon_definition_type = #{couponDefinitionType,jdbcType=TINYINT},
+      erp_coupon_definition_code = #{erpCouponDefinitionCode,jdbcType=VARCHAR},
+      coupon_name = #{couponName,jdbcType=VARCHAR},
+      use_channel = #{useChannel,jdbcType=TINYINT},
+      preferential_type = #{preferentialType,jdbcType=TINYINT},
+      money = #{money,jdbcType=DECIMAL},
+      discount = #{discount,jdbcType=DECIMAL},
+      valid_type = #{validType,jdbcType=TINYINT},
+      valid_date_start = #{validDateStart,jdbcType=TIMESTAMP},
+      valid_date_end = #{validDateEnd,jdbcType=TIMESTAMP},
+      valid_day = #{validDay,jdbcType=INTEGER},
+      qr_code = #{qrCode,jdbcType=VARCHAR},
+      img = #{img,jdbcType=VARCHAR},
+      per_max_num = #{perMaxNum,jdbcType=INTEGER},
+      is_real_name = #{isRealName,jdbcType=BIT},
+      is_transfer = #{isTransfer,jdbcType=BIT},
+      activity_superposition_type = #{activitySuperpositionType,jdbcType=TINYINT},
+      activity_superposition_white_list = #{activitySuperpositionWhiteList,jdbcType=VARCHAR},
+      activity_superposition_black_list = #{activitySuperpositionBlackList,jdbcType=VARCHAR},
+      is_superposition = #{isSuperposition,jdbcType=BIT},
+      is_tag_price_limit = #{isTagPriceLimit,jdbcType=BIT},
+      tag_price_max_preferential_limit = #{tagPriceMaxPreferentialLimit,jdbcType=DECIMAL},
+      min_consume = #{minConsume,jdbcType=DECIMAL},
+      max_preferential = #{maxPreferential,jdbcType=DECIMAL},
+      min_commodity_num = #{minCommodityNum,jdbcType=INTEGER},
+      max_commodity_num = #{maxCommodityNum,jdbcType=INTEGER},
+      min_discount = #{minDiscount,jdbcType=DECIMAL},
+      appliance_commodity_type = #{applianceCommodityType,jdbcType=TINYINT},
+      appliance_store_type = #{applianceStoreType,jdbcType=TINYINT},
+      info = #{info,jdbcType=VARCHAR},
+      remark = #{remark,jdbcType=VARCHAR},
+      status = #{status,jdbcType=BIT},
+      create_user_id = #{createUserId,jdbcType=BIGINT},
+      create_user_name = #{createUserName,jdbcType=VARCHAR},
+      create_date = #{createDate,jdbcType=TIMESTAMP},
+      modified_user_id = #{modifiedUserId,jdbcType=BIGINT},
+      modified_user_name = #{modifiedUserName,jdbcType=VARCHAR},
+      modified_date = #{modifiedDate,jdbcType=TIMESTAMP},
+      valid = #{valid,jdbcType=BIT},
+      is_add_template = #{isAddTemplate,jdbcType=BIT},
+      coupon_superposition_type = #{couponSuperpositionType,jdbcType=TINYINT},
+      superposition_member_card = #{superpositionMemberCard,jdbcType=BIT},
+      transfer_send = #{transferSend,jdbcType=BIT},
+      transfer_coupon_definition_id = #{transferCouponDefinitionId,jdbcType=BIGINT},
+      transfer_info = #{transferInfo,jdbcType=VARCHAR},
+      transfer_fission = #{transferFission,jdbcType=BIT},
+      commodity_whitelist = #{commodityWhitelist,jdbcType=LONGVARCHAR},
+      commodity_blacklist = #{commodityBlacklist,jdbcType=LONGVARCHAR},
+      store_whitelist = #{storeWhitelist,jdbcType=LONGVARCHAR},
+      store_blacklist = #{storeBlacklist,jdbcType=LONGVARCHAR}
+    where coupon_definition_id = #{couponDefinitionId,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.bizvane.couponfacade.models.po.CouponDefinitionPO">
+    <!--
+      WARNING - 只读 - @mbg.generated
+      This element was generated on 2019-01-16 17:48:34.
+    -->
+    update t_coupon_definition
+    set sys_company_id = #{sysCompanyId,jdbcType=BIGINT},
+      sys_brand_id = #{sysBrandId,jdbcType=BIGINT},
+      brand_code = #{brandCode,jdbcType=VARCHAR},
+      coupon_definition_code = #{couponDefinitionCode,jdbcType=VARCHAR},
+      coupon_definition_type = #{couponDefinitionType,jdbcType=TINYINT},
+      erp_coupon_definition_code = #{erpCouponDefinitionCode,jdbcType=VARCHAR},
+      coupon_name = #{couponName,jdbcType=VARCHAR},
+      use_channel = #{useChannel,jdbcType=TINYINT},
+      preferential_type = #{preferentialType,jdbcType=TINYINT},
+      money = #{money,jdbcType=DECIMAL},
+      discount = #{discount,jdbcType=DECIMAL},
+      valid_type = #{validType,jdbcType=TINYINT},
+      valid_date_start = #{validDateStart,jdbcType=TIMESTAMP},
+      valid_date_end = #{validDateEnd,jdbcType=TIMESTAMP},
+      valid_day = #{validDay,jdbcType=INTEGER},
+      qr_code = #{qrCode,jdbcType=VARCHAR},
+      img = #{img,jdbcType=VARCHAR},
+      per_max_num = #{perMaxNum,jdbcType=INTEGER},
+      is_real_name = #{isRealName,jdbcType=BIT},
+      is_transfer = #{isTransfer,jdbcType=BIT},
+      activity_superposition_type = #{activitySuperpositionType,jdbcType=TINYINT},
+      activity_superposition_white_list = #{activitySuperpositionWhiteList,jdbcType=VARCHAR},
+      activity_superposition_black_list = #{activitySuperpositionBlackList,jdbcType=VARCHAR},
+      is_superposition = #{isSuperposition,jdbcType=BIT},
+      is_tag_price_limit = #{isTagPriceLimit,jdbcType=BIT},
+      tag_price_max_preferential_limit = #{tagPriceMaxPreferentialLimit,jdbcType=DECIMAL},
+      min_consume = #{minConsume,jdbcType=DECIMAL},
+      max_preferential = #{maxPreferential,jdbcType=DECIMAL},
+      min_commodity_num = #{minCommodityNum,jdbcType=INTEGER},
+      max_commodity_num = #{maxCommodityNum,jdbcType=INTEGER},
+      min_discount = #{minDiscount,jdbcType=DECIMAL},
+      appliance_commodity_type = #{applianceCommodityType,jdbcType=TINYINT},
+      appliance_store_type = #{applianceStoreType,jdbcType=TINYINT},
+      info = #{info,jdbcType=VARCHAR},
+      remark = #{remark,jdbcType=VARCHAR},
+      status = #{status,jdbcType=BIT},
+      create_user_id = #{createUserId,jdbcType=BIGINT},
+      create_user_name = #{createUserName,jdbcType=VARCHAR},
+      create_date = #{createDate,jdbcType=TIMESTAMP},
+      modified_user_id = #{modifiedUserId,jdbcType=BIGINT},
+      modified_user_name = #{modifiedUserName,jdbcType=VARCHAR},
+      modified_date = #{modifiedDate,jdbcType=TIMESTAMP},
+      valid = #{valid,jdbcType=BIT},
+      is_add_template = #{isAddTemplate,jdbcType=BIT},
+      coupon_superposition_type = #{couponSuperpositionType,jdbcType=TINYINT},
+      superposition_member_card = #{superpositionMemberCard,jdbcType=BIT},
+      transfer_send = #{transferSend,jdbcType=BIT},
+      transfer_coupon_definition_id = #{transferCouponDefinitionId,jdbcType=BIGINT},
+      transfer_info = #{transferInfo,jdbcType=VARCHAR},
+      transfer_fission = #{transferFission,jdbcType=BIT}
+    where coupon_definition_id = #{couponDefinitionId,jdbcType=BIGINT}
+  </update>
+  
+  
+  <!--非系统sql-->
+
+  
+  <select id="findCouponDefinitionListByConds" resultMap="BaseResultMap">
+      SELECT
+        coupon_definition_id,
+        sys_company_id,
+        sys_brand_id,
+        brand_code,
+        coupon_definition_code,
+        coupon_definition_type,
+        erp_coupon_definition_code,
+        coupon_name,
+        use_channel,
+        preferential_type,
+        money,
+        discount,
+        valid_type,
+        valid_date_start,
+        valid_date_end,
+        valid_day,
+        qr_code,
+        img,
+        per_max_num,
+        is_real_name,
+        is_transfer,
+        activity_superposition_type,
+        activity_superposition_white_list,
+        activity_superposition_black_list,
+        is_superposition,
+        is_tag_price_limit,
+        tag_price_max_preferential_limit,
+        min_consume,
+        max_preferential,
+        min_commodity_num,
+        max_commodity_num,
+        min_discount,
+        appliance_commodity_type,
+        appliance_store_type,
+        info,
+        remark,
+        STATUS,
+        create_user_id,
+        create_user_name,
+        create_date,
+        modified_user_id,
+        modified_user_name,
+        modified_date,
+        valid,
+        is_add_template,
+        coupon_superposition_type
+      FROM
+          t_coupon_definition
+      WHERE 1=1 AND valid = 1 AND sys_brand_id=#{sysBrandId} AND sys_company_id = #{sysCompanyId}
+    <if test="vo.couponDefinitionId !=null and vo.couponDefinitionId!=''">
+      AND coupon_definition_id = #{vo.couponDefinitionId}
+    </if>
+      <if test="vo.couponName !=null and vo.couponName!=''">
+          AND coupon_name LIKE '%${vo.couponName}%'
+      </if>
+      <if test="vo.preferentialType !=null">
+        AND preferential_type = #{vo.preferentialType}
+      </if>
+      <if test="vo.useChannel !=null">
+        AND use_channel = #{vo.useChannel}
+      </if>
+      <if test="vo.status !=null">
+        AND status = #{vo.status}
+      </if>
+      <if test="vo.createUserName !=null and vo.createUserName!=''">
+        AND create_user_name LIKE '%${vo.createUserName}%'
+      </if>
+      <if test="vo.createDateStart !=null and vo.createDateStart!=''">
+        AND date_format(create_date,'%Y-%m-%d %H:%i:%s') &gt;= DATE_FORMAT(#{vo.createDateStart},'%Y-%m-%d %H:%i:%s')
+        <if test="vo.createDateEnd !=null and vo.createDateEnd!=''">
+          AND date_format(create_date,'%Y-%m-%d %H:%i:%s') &lt;= DATE_FORMAT(#{vo.createDateEnd},'%Y-%m-%d %H:%i:%s')
+        </if>
+      </if>
+      ORDER BY CREATE_DATE DESC
+  </select>
+
+
+  <select id="getUseList" resultMap="BaseResultMap">
+
+    SELECT
+      *
+    FROM
+        (SELECT
+          <include refid="Base_Column_List" />
+          ,
+          <include refid="Blob_Column_List" />
+        FROM
+        t_coupon_definition
+        WHERE
+        valid_type = #{someday}
+      UNION ALL
+        SELECT
+          <include refid="Base_Column_List" />
+          ,
+          <include refid="Blob_Column_List" />
+        FROM
+        t_coupon_definition
+        WHERE
+        valid_type = #{interval}
+        AND
+        date_format(valid_date_end,'%Y-%m-%d') &gt;= DATE_FORMAT(#{date},'%Y-%m-%d')
+      ) t
+    WHERE
+      t.valid = #{valid}
+      AND t.sys_brand_id = #{brandId}
+      AND t. STATUS = #{status}
+
+    <if test="couponDefinitionId !=null and couponDefinitionId!=''">
+      AND t.coupon_definition_id = #{couponDefinitionId}
+    </if>
+    <if test="couponName !=null and couponName!=''">
+      AND t.coupon_name LIKE '%${couponName}%'
+    </if>
+     <if test="transferFission !=null and transferFission!=''">
+     AND t.transfer_fission = #{transferFission}
+    </if>
+    
+     <if test="preferentialType !=null and preferentialType!=''">
+     <choose>
+        <when test="preferentialType == 12 ">
+             AND (t.preferential_type =1 or t.preferential_type =2)
+        </when>
+        <otherwise>
+             AND t.preferential_type =#{preferentialType}
+        </otherwise>
+    </choose>
+    </if>
+
+    ORDER BY
+    t.create_date DESC
+
+  </select>
+
+<select id="selectByDefinitionAndCouponName" parameterType="com.bizvane.couponfacade.models.po.CouponDefinitionPO" resultType="com.bizvane.couponfacade.models.po.CouponDefinitionPO">
+  select
+  coupon_definition_id
+  from
+  t_coupon_definition
+  where
+    valid = 1
+    <if test="couponDefinitionId !=null and couponDefinitionId!=''">
+      AND coupon_definition_id = #{couponDefinitionId}
+    </if>
+    <if test="couponName !=null and couponName!=''">
+      AND coupon_name LIKE '%${couponName}%'
+    </if>
+</select>
+
+  <select id="selectByDefinitionId" parameterType="java.lang.Long" resultType="com.bizvane.couponfacade.models.po.CouponDefinitionPO">
+    select
+      coupon_definition_id,
+      create_date,
+      preferential_type,
+      money,
+      discount,
+      valid_type,
+      valid_date_start,
+      valid_date_end,
+      valid_day,
+      coupon_name
+    from
+     t_coupon_definition
+    where
+     valid = 1
+    and
+      coupon_definition_id = #{vouTypeId}
+  </select>
+
+</mapper>

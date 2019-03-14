@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE generatorConfiguration
+        PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN"
+        "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
+
+<generatorConfiguration>
+    <classPathEntry location="D:\mysql-jar\mysql-connector-java-5.1.18-bin.jar"/>
+    <context id="testTables" targetRuntime="MyBatis3">
+    
+        <plugin type="com.bizvane.mktcenterservice.common.utils.SerializablePlugin" />
+        
+        <commentGenerator type="com.bizvane.mktcenterservice.common.utils.DefaultCommentGenerator">
+            <!--抑制生成注释，由于生成的注释都是英文的，可以不让它生成-->
+            <!--<property name="suppressAllComments" value="true"/>-->
+            <!-- 设置文件编码，如果不设置中文会乱码 -->
+            <property name="javaFileEncoding" value="UTF-8"/>
+        </commentGenerator>
+
+        <!--数据库连接的信息：驱动类、连接地址、用户名、密码 -->
+        <jdbcConnection driverClass="com.mysql.jdbc.Driver"
+                        connectionURL="jdbc:mysql://bizvane-2018.mysql.polardb.rds.aliyuncs.com:3306/bizvane3" userId="bizvane_2018" password="SF_bizvane20180613">
+        </jdbcConnection>
+        <!-- 默认false，把JDBC DECIMAL 和 NUMERIC 类型解析为 Integer，为 true时把JDBC DECIMAL 和
+            NUMERIC 类型解析为java.math.BigDecimal -->
+        <javaTypeResolver>
+            <property name="forceBigDecimals" value="false" />
+        </javaTypeResolver>
+
+        <!-- targetProject:生成PO类的位置 -->
+        <javaModelGenerator targetPackage="com.bizvane.mktcenterservice.models.po" targetProject="mktcenter-service\src\main\java">
+            <!-- enableSubPackages:是否让schema作为包的后缀 -->
+            <property name="enableSubPackages" value="false" />
+            <!-- 从数据库返回的值被清理前后的空格 -->
+            <property name="trimStrings" value="true" />
+        </javaModelGenerator>
+        <!-- targetProject:mapper映射文件生成的位置 -->
+        <sqlMapGenerator targetPackage="mybatis" targetProject="mktcenter-serviceimpl\src\main\resources">
+            <!-- enableSubPackages:是否让schema作为包的后缀 -->
+            <property name="enableSubPackages" value="false" />
+        </sqlMapGenerator>
+        <!-- targetPackage：mapper接口生成的位置 -->
+        <javaClientGenerator type="XMLMAPPER" targetPackage="com.bizvane.mktcenterserviceimpl.mappers" targetProject="mktcenter-serviceimpl\src\main\java">
+            <!-- enableSubPackages:是否让schema作为包的后缀 -->
+            <property name="enableSubPackages" value="false" />
+        </javaClientGenerator>
+        <!-- 指定数据库表 -->
+
+        <!--<table tableName="%" domainObjectName="ScheduleJobPO">-->
+        <!--&lt;!&ndash;<generatedKey column="xxx_id" sqlStatement="MySql" identity="true"/>&ndash;&gt;-->
+        <!--</table>-->
+
+        <!--<table tableName="t_def_dictionary" domainObjectName="DefDictionaryPO">-->
+            <!--<generatedKey column="def_dictionary_id" sqlStatement="MySql" identity="true"/>-->
+        <!--</table>-->
+
+     <!--    <table tableName="t_mkt_activity" domainObjectName="MktActivityPO">
+            <generatedKey column="mkt_activity_id" sqlStatement="MySql" identity="true"/>
+        </table> -->
+        <!--<table tableName="t_mkt_activity_birthday" domainObjectName="MktActivityBirthdayPO">-->
+            <!--<generatedKey column="mkt_activity_birthday_id" sqlStatement="MySql" identity="true"/>-->
+        <!--</table>-->
+      <!--   <table tableName="t_mkt_activity_manual" domainObjectName="MktActivityManualPO">
+            <generatedKey column="mkt_activity_manual_id" sqlStatement="MySql" identity="true"/>
+        </table> -->
+        <!--<table tableName="t_mkt_activity_mq_log" domainObjectName="MktActivityMqLogPO">-->
+            <!--<generatedKey column="mkt_activity_mq_log_id" sqlStatement="MySql" identity="true"/>-->
+        <!--</table>-->
+        <!--<table tableName="t_mkt_activity_order" domainObjectName="MktActivityOrderPO">-->
+            <!--<generatedKey column="mkt_activity_order_id" sqlStatement="MySql" identity="true"/>-->
+        <!--</table>-->
+        <!--<table tableName="t_mkt_activity_record" domainObjectName="MktActivityRecordPO">-->
+            <!--<generatedKey column="mkt_activity_record_id" sqlStatement="MySql" identity="true"/>-->
+        <!--</table>-->
+        <!--<table tableName="t_mkt_activity_register" domainObjectName="MktActivityRegisterPO">-->
+            <!--<generatedKey column="mkt_activity_sign_in_reward_id" sqlStatement="MySql" identity="true"/>-->
+        <!--</table>-->
+       <!--  <table tableName="t_mkt_activity_signin" domainObjectName="MktActivitySignin">
+            <generatedKey column="mkt_activity_signin_id" sqlStatement="MySql" identity="true"/>
+        </table> -->
+        <!--<table tableName="t_mkt_activity_smart" domainObjectName="MktActivitySmartPO">-->
+            <!--<generatedKey column="mkt_activity_smart_id" sqlStatement="MySql" identity="true"/>-->
+        <!--</table>-->
+        <!--<table tableName="t_mkt_activity_smart_group" domainObjectName="MktActivitySmartGroupPO">-->
+            <!--<generatedKey column="mkt_activity_smart_group_id" sqlStatement="MySql" identity="true"/>-->
+        <!--</table>-->
+        <!--<table tableName="t_mkt_activity_upgrade" domainObjectName="MktActivityUpgradePO">-->
+            <!--<generatedKey column="mkt_activity_upgrade_id" sqlStatement="MySql" identity="true"/>-->
+        <!--</table>-->
+       <!--  <table tableName="t_mkt_coupon" domainObjectName="MktCouponPO">
+            <generatedKey column="mkt_coupon_id" sqlStatement="MySql" identity="true"/>
+        </table> -->
+   <!--      <table tableName="t_mkt_message" domainObjectName="MktMessagePO">
+        <generatedKey column="mkt_msg_id" sqlStatement="MySql" identity="true"/>
+    </table> -->
+        <!--<table tableName="t_mkt_task" domainObjectName="MktTaskPO">-->
+            <!--<generatedKey column="mkt_task_id" sqlStatement="MySql" identity="true"/>-->
+        <!--</table>-->
+<!--         <table tableName="t_mkt_task_invite" domainObjectName="MktTaskInvitePO"> -->
+<!--             <generatedKey column="mkt_task_invite_id" sqlStatement="MySql" identity="true"/> -->
+<!--         </table> -->
+<!--         <table tableName="t_mkt_task_order" domainObjectName="MktTaskOrderPO"> -->
+<!--             <generatedKey column="mkt_task_order_id" sqlStatement="MySql" identity="true"/> -->
+<!--         </table> -->
+<!--         <table tableName="t_mkt_task_profile" domainObjectName="MktTaskProfilePO"> -->
+<!--             <generatedKey column="mkt_task_profile_id" sqlStatement="MySql" identity="true"/> -->
+<!--         </table> -->
+<!--         <table tableName="t_mkt_task_record" domainObjectName="MktTaskRecordPO"> -->
+<!--             <generatedKey column="mkt_task_record_id" sqlStatement="MySql" identity="true"/> -->
+<!--         </table> -->
+<!--         <table tableName="t_mkt_task_share" domainObjectName="MktTaskSharePO"> -->
+<!--             <generatedKey column="mkt_task_share_id" sqlStatement="MySql" identity="true"/> -->
+<!--         </table> -->
+
+ <!--     <table tableName="t_file_report_temp" domainObjectName="FileReportTempPO">
+            <generatedKey column="file_report_temp_id" sqlStatement="MySql" identity="true"/>
+        </table> 
+ -->
+
+        <!--<table tableName="t_rocket_log" domainObjectName="RocketLogPO">-->
+            <!--<generatedKey column="rocket_log_id" sqlStatement="MySql" identity="true"/>-->
+        <!--</table>-->
+        <!--<table tableName="t_rocket_config" domainObjectName="RocketConfigPO">-->
+            <!--<generatedKey column="rocket_config_id" sqlStatement="MySql" identity="true"/>-->
+        <!--</table>-->
+        
+        <!--   <table tableName="t_mkt_activity_evaluation" domainObjectName="MktActivityEvaluationPO">
+            <generatedKey column="mkt_activity_evaluation_id" sqlStatement="MySql" identity="true"/>
+        </table>
+          <table tableName="t_mkt_activity_vip_aniversary" domainObjectName="MktActivityVipAniversaryPO">
+            <generatedKey column="mkt_activity_vip_aniversary_id" sqlStatement="MySql" identity="true"/>
+        </table> -->
+
+<!--   <table tableName="t_mkt_convert_coupon_record" domainObjectName="MktConvertCouponRecordPO">
+            <generatedKey column="convert_coupon_record_id" sqlStatement="MySql" identity="true"/>
+        </table>
+          <table tableName="t_mkt_coupon_integral_exchange" domainObjectName="MktCouponIntegralExchangePO">
+            <generatedKey column="exchange_id" sqlStatement="MySql" identity="true"/>
+        </table> -->
+
+<!--  <table tableName="t_mkt_activity_prize" domainObjectName="MktActivityPrizePO">
+            <generatedKey column="mkt_activity_prize_id" sqlStatement="MySql" identity="true"/>
+        </table> -->
+       <!--   <table tableName="t_mkt_activity_prize_record" domainObjectName="MktActivityPrizeRecordPO">
+            <generatedKey column="mkt_activity_prize_record_id" sqlStatement="MySql" identity="true"/>
+        </table> -->
+        
+        <table tableName="t_mkt_golden_statistics" domainObjectName="MktGoldenStatisticsPO">
+            <generatedKey column="mkt_golden_statistics_id" sqlStatement="MySql" identity="true"/>
+        </table>
+    </context>
+</generatorConfiguration>

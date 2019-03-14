@@ -43,7 +43,7 @@
         </repository>
     </repositories>
     <modules>
+        <module>mktcenter-facade</module>
         <module>mktcenter-service</module>
-        <module>mktcenter-serviceimpl</module>
     </modules>
 </project>

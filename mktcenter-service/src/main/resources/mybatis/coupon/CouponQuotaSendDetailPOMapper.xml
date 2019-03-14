@@ -1,0 +1,737 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.bizvane.couponservice.mappers.CouponQuotaSendDetailPOMapper" >
+     <cache type="com.bizvane.couponservice.common.system.RedisCache" eviction="LRU"
+           flushInterval="3600000"
+           size="1024"
+           readOnly="false">
+    </cache>
+  <resultMap id="BaseResultMap" type="com.bizvane.couponfacade.models.po.CouponQuotaSendDetailPO" >
+    <!--
+      WARNING - 只读 - @mbg.generated
+      This element was generated on 2018-12-12 10:15:42.
+    -->
+    <id column="coupon_quota_send_detail_id" property="couponQuotaSendDetailId" jdbcType="BIGINT" />
+    <result column="sys_company_id" property="sysCompanyId" jdbcType="BIGINT" />
+    <result column="sys_brand_id" property="sysBrandId" jdbcType="BIGINT" />
+    <result column="coupon_quota_detail_id" property="couponQuotaDetailId" jdbcType="BIGINT" />
+    <result column="staff_code" property="staffCode" jdbcType="VARCHAR" />
+    <result column="staff_name" property="staffName" jdbcType="VARCHAR" />
+    <result column="member_code_list" property="memberCodeList" jdbcType="VARCHAR" />
+    <result column="member_name_list" property="memberNameList" jdbcType="VARCHAR" />
+    <result column="member_num" property="memberNum" jdbcType="VARCHAR" />
+    <result column="coupon_definition_code" property="couponDefinitionCode" jdbcType="VARCHAR" />
+    <result column="coupon_definition_id" property="couponDefinitionId" jdbcType="BIGINT" />
+    <result column="preferential_type" property="preferentialType" jdbcType="TINYINT" />
+    <result column="valid_type" property="validType" jdbcType="TINYINT" />
+    <result column="valid_day" property="validDay" jdbcType="INTEGER" />
+    <result column="min_consume" property="minConsume" jdbcType="DECIMAL" />
+    <result column="coupon_name" property="couponName" jdbcType="VARCHAR" />
+    <result column="money" property="money" jdbcType="DECIMAL" />
+    <result column="discount" property="discount" jdbcType="DECIMAL" />
+    <result column="info" property="info" jdbcType="VARCHAR" />
+    <result column="valid_date_start" property="validDateStart" jdbcType="TIMESTAMP" />
+    <result column="valid_date_end" property="validDateEnd" jdbcType="TIMESTAMP" />
+    <result column="create_user_id" property="createUserId" jdbcType="BIGINT" />
+    <result column="create_user_name" property="createUserName" jdbcType="VARCHAR" />
+    <result column="create_date" property="createDate" jdbcType="TIMESTAMP" />
+    <result column="modified_user_id" property="modifiedUserId" jdbcType="BIGINT" />
+    <result column="modified_user_name" property="modifiedUserName" jdbcType="VARCHAR" />
+    <result column="modified_date" property="modifiedDate" jdbcType="TIMESTAMP" />
+    <result column="note" property="note" jdbcType="VARCHAR" />
+    <result column="state_code" property="stateCode" jdbcType="VARCHAR" />
+    <result column="state_name" property="stateName" jdbcType="VARCHAR" />
+    <result column="extend_code" property="extendCode" jdbcType="VARCHAR" />
+    <result column="extend_name" property="extendName" jdbcType="VARCHAR" />
+    <result column="extend_note" property="extendNote" jdbcType="VARCHAR" />
+    <result column="valid" property="valid" jdbcType="BIT" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <!--
+      WARNING - 只读 - @mbg.generated
+      This element was generated on 2018-12-12 10:15:42.
+    -->
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <!--
+      WARNING - 只读 - @mbg.generated
+      This element was generated on 2018-12-12 10:15:42.
+    -->
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    <!--
+      WARNING - 只读 - @mbg.generated
+      This element was generated on 2018-12-12 10:15:42.
+    -->
+    coupon_quota_send_detail_id, sys_company_id, sys_brand_id, coupon_quota_detail_id, 
+    staff_code, staff_name, member_code_list, member_name_list, member_num, coupon_definition_code, 
+    coupon_definition_id, preferential_type, valid_type, valid_day, min_consume, coupon_name, 
+    money, discount, info, valid_date_start, valid_date_end, create_user_id, create_user_name, 
+    create_date, modified_user_id, modified_user_name, modified_date, note, state_code, 
+    state_name, extend_code, extend_name, extend_note, valid
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.bizvane.couponfacade.models.po.CouponQuotaSendDetailPOExample" >
+    <!--
+      WARNING - 只读 - @mbg.generated
+      This element was generated on 2018-12-12 10:15:42.
+    -->
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from t_coupon_quota_send_detail
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+      ORDER BY create_date DESC
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    <!--
+      WARNING - 只读 - @mbg.generated
+      This element was generated on 2018-12-12 10:15:42.
+    -->
+    select 
+    <include refid="Base_Column_List" />
+    from t_coupon_quota_send_detail
+    where coupon_quota_send_detail_id = #{couponQuotaSendDetailId,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    <!--
+      WARNING - 只读 - @mbg.generated
+      This element was generated on 2018-12-12 10:15:42.
+    -->
+    delete from t_coupon_quota_send_detail
+    where coupon_quota_send_detail_id = #{couponQuotaSendDetailId,jdbcType=BIGINT}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.bizvane.couponfacade.models.po.CouponQuotaSendDetailPOExample" >
+    <!--
+      WARNING - 只读 - @mbg.generated
+      This element was generated on 2018-12-12 10:15:42.
+    -->
+    delete from t_coupon_quota_send_detail
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.bizvane.couponfacade.models.po.CouponQuotaSendDetailPO" >
+    <!--
+      WARNING - 只读 - @mbg.generated
+      This element was generated on 2018-12-12 10:15:42.
+    -->
+    <selectKey resultType="java.lang.Long" keyProperty="couponQuotaSendDetailId" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into t_coupon_quota_send_detail (sys_company_id, sys_brand_id, coupon_quota_detail_id, 
+      staff_code, staff_name, member_code_list, 
+      member_name_list, member_num, coupon_definition_code, 
+      coupon_definition_id, preferential_type, valid_type, 
+      valid_day, min_consume, coupon_name, 
+      money, discount, info, 
+      valid_date_start, valid_date_end, create_user_id, 
+      create_user_name, create_date, modified_user_id, 
+      modified_user_name, modified_date, note, 
+      state_code, state_name, extend_code, 
+      extend_name, extend_note, valid
+      )
+    values (#{sysCompanyId,jdbcType=BIGINT}, #{sysBrandId,jdbcType=BIGINT}, #{couponQuotaDetailId,jdbcType=BIGINT}, 
+      #{staffCode,jdbcType=VARCHAR}, #{staffName,jdbcType=VARCHAR}, #{memberCodeList,jdbcType=VARCHAR}, 
+      #{memberNameList,jdbcType=VARCHAR}, #{memberNum,jdbcType=VARCHAR}, #{couponDefinitionCode,jdbcType=VARCHAR}, 
+      #{couponDefinitionId,jdbcType=BIGINT}, #{preferentialType,jdbcType=TINYINT}, #{validType,jdbcType=TINYINT}, 
+      #{validDay,jdbcType=INTEGER}, #{minConsume,jdbcType=DECIMAL}, #{couponName,jdbcType=VARCHAR}, 
+      #{money,jdbcType=DECIMAL}, #{discount,jdbcType=DECIMAL}, #{info,jdbcType=VARCHAR}, 
+      #{validDateStart,jdbcType=TIMESTAMP}, #{validDateEnd,jdbcType=TIMESTAMP}, #{createUserId,jdbcType=BIGINT}, 
+      #{createUserName,jdbcType=VARCHAR}, #{createDate,jdbcType=TIMESTAMP}, #{modifiedUserId,jdbcType=BIGINT}, 
+      #{modifiedUserName,jdbcType=VARCHAR}, #{modifiedDate,jdbcType=TIMESTAMP}, #{note,jdbcType=VARCHAR}, 
+      #{stateCode,jdbcType=VARCHAR}, #{stateName,jdbcType=VARCHAR}, #{extendCode,jdbcType=VARCHAR}, 
+      #{extendName,jdbcType=VARCHAR}, #{extendNote,jdbcType=VARCHAR}, #{valid,jdbcType=BIT}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.bizvane.couponfacade.models.po.CouponQuotaSendDetailPO" >
+    <!--
+      WARNING - 只读 - @mbg.generated
+      This element was generated on 2018-12-12 10:15:42.
+    -->
+    <selectKey resultType="java.lang.Long" keyProperty="couponQuotaSendDetailId" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into t_coupon_quota_send_detail
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="sysCompanyId != null" >
+        sys_company_id,
+      </if>
+      <if test="sysBrandId != null" >
+        sys_brand_id,
+      </if>
+      <if test="couponQuotaDetailId != null" >
+        coupon_quota_detail_id,
+      </if>
+      <if test="staffCode != null" >
+        staff_code,
+      </if>
+      <if test="staffName != null" >
+        staff_name,
+      </if>
+      <if test="memberCodeList != null" >
+        member_code_list,
+      </if>
+      <if test="memberNameList != null" >
+        member_name_list,
+      </if>
+      <if test="memberNum != null" >
+        member_num,
+      </if>
+      <if test="couponDefinitionCode != null" >
+        coupon_definition_code,
+      </if>
+      <if test="couponDefinitionId != null" >
+        coupon_definition_id,
+      </if>
+      <if test="preferentialType != null" >
+        preferential_type,
+      </if>
+      <if test="validType != null" >
+        valid_type,
+      </if>
+      <if test="validDay != null" >
+        valid_day,
+      </if>
+      <if test="minConsume != null" >
+        min_consume,
+      </if>
+      <if test="couponName != null" >
+        coupon_name,
+      </if>
+      <if test="money != null" >
+        money,
+      </if>
+      <if test="discount != null" >
+        discount,
+      </if>
+      <if test="info != null" >
+        info,
+      </if>
+      <if test="validDateStart != null" >
+        valid_date_start,
+      </if>
+      <if test="validDateEnd != null" >
+        valid_date_end,
+      </if>
+      <if test="createUserId != null" >
+        create_user_id,
+      </if>
+      <if test="createUserName != null" >
+        create_user_name,
+      </if>
+      <if test="createDate != null" >
+        create_date,
+      </if>
+      <if test="modifiedUserId != null" >
+        modified_user_id,
+      </if>
+      <if test="modifiedUserName != null" >
+        modified_user_name,
+      </if>
+      <if test="modifiedDate != null" >
+        modified_date,
+      </if>
+      <if test="note != null" >
+        note,
+      </if>
+      <if test="stateCode != null" >
+        state_code,
+      </if>
+      <if test="stateName != null" >
+        state_name,
+      </if>
+      <if test="extendCode != null" >
+        extend_code,
+      </if>
+      <if test="extendName != null" >
+        extend_name,
+      </if>
+      <if test="extendNote != null" >
+        extend_note,
+      </if>
+      <if test="valid != null" >
+        valid,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="sysCompanyId != null" >
+        #{sysCompanyId,jdbcType=BIGINT},
+      </if>
+      <if test="sysBrandId != null" >
+        #{sysBrandId,jdbcType=BIGINT},
+      </if>
+      <if test="couponQuotaDetailId != null" >
+        #{couponQuotaDetailId,jdbcType=BIGINT},
+      </if>
+      <if test="staffCode != null" >
+        #{staffCode,jdbcType=VARCHAR},
+      </if>
+      <if test="staffName != null" >
+        #{staffName,jdbcType=VARCHAR},
+      </if>
+      <if test="memberCodeList != null" >
+        #{memberCodeList,jdbcType=VARCHAR},
+      </if>
+      <if test="memberNameList != null" >
+        #{memberNameList,jdbcType=VARCHAR},
+      </if>
+      <if test="memberNum != null" >
+        #{memberNum,jdbcType=VARCHAR},
+      </if>
+      <if test="couponDefinitionCode != null" >
+        #{couponDefinitionCode,jdbcType=VARCHAR},
+      </if>
+      <if test="couponDefinitionId != null" >
+        #{couponDefinitionId,jdbcType=BIGINT},
+      </if>
+      <if test="preferentialType != null" >
+        #{preferentialType,jdbcType=TINYINT},
+      </if>
+      <if test="validType != null" >
+        #{validType,jdbcType=TINYINT},
+      </if>
+      <if test="validDay != null" >
+        #{validDay,jdbcType=INTEGER},
+      </if>
+      <if test="minConsume != null" >
+        #{minConsume,jdbcType=DECIMAL},
+      </if>
+      <if test="couponName != null" >
+        #{couponName,jdbcType=VARCHAR},
+      </if>
+      <if test="money != null" >
+        #{money,jdbcType=DECIMAL},
+      </if>
+      <if test="discount != null" >
+        #{discount,jdbcType=DECIMAL},
+      </if>
+      <if test="info != null" >
+        #{info,jdbcType=VARCHAR},
+      </if>
+      <if test="validDateStart != null" >
+        #{validDateStart,jdbcType=TIMESTAMP},
+      </if>
+      <if test="validDateEnd != null" >
+        #{validDateEnd,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createUserId != null" >
+        #{createUserId,jdbcType=BIGINT},
+      </if>
+      <if test="createUserName != null" >
+        #{createUserName,jdbcType=VARCHAR},
+      </if>
+      <if test="createDate != null" >
+        #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifiedUserId != null" >
+        #{modifiedUserId,jdbcType=BIGINT},
+      </if>
+      <if test="modifiedUserName != null" >
+        #{modifiedUserName,jdbcType=VARCHAR},
+      </if>
+      <if test="modifiedDate != null" >
+        #{modifiedDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="note != null" >
+        #{note,jdbcType=VARCHAR},
+      </if>
+      <if test="stateCode != null" >
+        #{stateCode,jdbcType=VARCHAR},
+      </if>
+      <if test="stateName != null" >
+        #{stateName,jdbcType=VARCHAR},
+      </if>
+      <if test="extendCode != null" >
+        #{extendCode,jdbcType=VARCHAR},
+      </if>
+      <if test="extendName != null" >
+        #{extendName,jdbcType=VARCHAR},
+      </if>
+      <if test="extendNote != null" >
+        #{extendNote,jdbcType=VARCHAR},
+      </if>
+      <if test="valid != null" >
+        #{valid,jdbcType=BIT},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.bizvane.couponfacade.models.po.CouponQuotaSendDetailPOExample" resultType="java.lang.Integer" >
+    <!--
+      WARNING - 只读 - @mbg.generated
+      This element was generated on 2018-12-12 10:15:42.
+    -->
+    select count(*) from t_coupon_quota_send_detail
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    <!--
+      WARNING - 只读 - @mbg.generated
+      This element was generated on 2018-12-12 10:15:42.
+    -->
+    update t_coupon_quota_send_detail
+    <set >
+      <if test="record.couponQuotaSendDetailId != null" >
+        coupon_quota_send_detail_id = #{record.couponQuotaSendDetailId,jdbcType=BIGINT},
+      </if>
+      <if test="record.sysCompanyId != null" >
+        sys_company_id = #{record.sysCompanyId,jdbcType=BIGINT},
+      </if>
+      <if test="record.sysBrandId != null" >
+        sys_brand_id = #{record.sysBrandId,jdbcType=BIGINT},
+      </if>
+      <if test="record.couponQuotaDetailId != null" >
+        coupon_quota_detail_id = #{record.couponQuotaDetailId,jdbcType=BIGINT},
+      </if>
+      <if test="record.staffCode != null" >
+        staff_code = #{record.staffCode,jdbcType=VARCHAR},
+      </if>
+      <if test="record.staffName != null" >
+        staff_name = #{record.staffName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.memberCodeList != null" >
+        member_code_list = #{record.memberCodeList,jdbcType=VARCHAR},
+      </if>
+      <if test="record.memberNameList != null" >
+        member_name_list = #{record.memberNameList,jdbcType=VARCHAR},
+      </if>
+      <if test="record.memberNum != null" >
+        member_num = #{record.memberNum,jdbcType=VARCHAR},
+      </if>
+      <if test="record.couponDefinitionCode != null" >
+        coupon_definition_code = #{record.couponDefinitionCode,jdbcType=VARCHAR},
+      </if>
+      <if test="record.couponDefinitionId != null" >
+        coupon_definition_id = #{record.couponDefinitionId,jdbcType=BIGINT},
+      </if>
+      <if test="record.preferentialType != null" >
+        preferential_type = #{record.preferentialType,jdbcType=TINYINT},
+      </if>
+      <if test="record.validType != null" >
+        valid_type = #{record.validType,jdbcType=TINYINT},
+      </if>
+      <if test="record.validDay != null" >
+        valid_day = #{record.validDay,jdbcType=INTEGER},
+      </if>
+      <if test="record.minConsume != null" >
+        min_consume = #{record.minConsume,jdbcType=DECIMAL},
+      </if>
+      <if test="record.couponName != null" >
+        coupon_name = #{record.couponName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.money != null" >
+        money = #{record.money,jdbcType=DECIMAL},
+      </if>
+      <if test="record.discount != null" >
+        discount = #{record.discount,jdbcType=DECIMAL},
+      </if>
+      <if test="record.info != null" >
+        info = #{record.info,jdbcType=VARCHAR},
+      </if>
+      <if test="record.validDateStart != null" >
+        valid_date_start = #{record.validDateStart,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.validDateEnd != null" >
+        valid_date_end = #{record.validDateEnd,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.createUserId != null" >
+        create_user_id = #{record.createUserId,jdbcType=BIGINT},
+      </if>
+      <if test="record.createUserName != null" >
+        create_user_name = #{record.createUserName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.createDate != null" >
+        create_date = #{record.createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.modifiedUserId != null" >
+        modified_user_id = #{record.modifiedUserId,jdbcType=BIGINT},
+      </if>
+      <if test="record.modifiedUserName != null" >
+        modified_user_name = #{record.modifiedUserName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.modifiedDate != null" >
+        modified_date = #{record.modifiedDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.note != null" >
+        note = #{record.note,jdbcType=VARCHAR},
+      </if>
+      <if test="record.stateCode != null" >
+        state_code = #{record.stateCode,jdbcType=VARCHAR},
+      </if>
+      <if test="record.stateName != null" >
+        state_name = #{record.stateName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.extendCode != null" >
+        extend_code = #{record.extendCode,jdbcType=VARCHAR},
+      </if>
+      <if test="record.extendName != null" >
+        extend_name = #{record.extendName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.extendNote != null" >
+        extend_note = #{record.extendNote,jdbcType=VARCHAR},
+      </if>
+      <if test="record.valid != null" >
+        valid = #{record.valid,jdbcType=BIT},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    <!--
+      WARNING - 只读 - @mbg.generated
+      This element was generated on 2018-12-12 10:15:42.
+    -->
+    update t_coupon_quota_send_detail
+    set coupon_quota_send_detail_id = #{record.couponQuotaSendDetailId,jdbcType=BIGINT},
+      sys_company_id = #{record.sysCompanyId,jdbcType=BIGINT},
+      sys_brand_id = #{record.sysBrandId,jdbcType=BIGINT},
+      coupon_quota_detail_id = #{record.couponQuotaDetailId,jdbcType=BIGINT},
+      staff_code = #{record.staffCode,jdbcType=VARCHAR},
+      staff_name = #{record.staffName,jdbcType=VARCHAR},
+      member_code_list = #{record.memberCodeList,jdbcType=VARCHAR},
+      member_name_list = #{record.memberNameList,jdbcType=VARCHAR},
+      member_num = #{record.memberNum,jdbcType=VARCHAR},
+      coupon_definition_code = #{record.couponDefinitionCode,jdbcType=VARCHAR},
+      coupon_definition_id = #{record.couponDefinitionId,jdbcType=BIGINT},
+      preferential_type = #{record.preferentialType,jdbcType=TINYINT},
+      valid_type = #{record.validType,jdbcType=TINYINT},
+      valid_day = #{record.validDay,jdbcType=INTEGER},
+      min_consume = #{record.minConsume,jdbcType=DECIMAL},
+      coupon_name = #{record.couponName,jdbcType=VARCHAR},
+      money = #{record.money,jdbcType=DECIMAL},
+      discount = #{record.discount,jdbcType=DECIMAL},
+      info = #{record.info,jdbcType=VARCHAR},
+      valid_date_start = #{record.validDateStart,jdbcType=TIMESTAMP},
+      valid_date_end = #{record.validDateEnd,jdbcType=TIMESTAMP},
+      create_user_id = #{record.createUserId,jdbcType=BIGINT},
+      create_user_name = #{record.createUserName,jdbcType=VARCHAR},
+      create_date = #{record.createDate,jdbcType=TIMESTAMP},
+      modified_user_id = #{record.modifiedUserId,jdbcType=BIGINT},
+      modified_user_name = #{record.modifiedUserName,jdbcType=VARCHAR},
+      modified_date = #{record.modifiedDate,jdbcType=TIMESTAMP},
+      note = #{record.note,jdbcType=VARCHAR},
+      state_code = #{record.stateCode,jdbcType=VARCHAR},
+      state_name = #{record.stateName,jdbcType=VARCHAR},
+      extend_code = #{record.extendCode,jdbcType=VARCHAR},
+      extend_name = #{record.extendName,jdbcType=VARCHAR},
+      extend_note = #{record.extendNote,jdbcType=VARCHAR},
+      valid = #{record.valid,jdbcType=BIT}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.bizvane.couponfacade.models.po.CouponQuotaSendDetailPO" >
+    <!--
+      WARNING - 只读 - @mbg.generated
+      This element was generated on 2018-12-12 10:15:42.
+    -->
+    update t_coupon_quota_send_detail
+    <set >
+      <if test="sysCompanyId != null" >
+        sys_company_id = #{sysCompanyId,jdbcType=BIGINT},
+      </if>
+      <if test="sysBrandId != null" >
+        sys_brand_id = #{sysBrandId,jdbcType=BIGINT},
+      </if>
+      <if test="couponQuotaDetailId != null" >
+        coupon_quota_detail_id = #{couponQuotaDetailId,jdbcType=BIGINT},
+      </if>
+      <if test="staffCode != null" >
+        staff_code = #{staffCode,jdbcType=VARCHAR},
+      </if>
+      <if test="staffName != null" >
+        staff_name = #{staffName,jdbcType=VARCHAR},
+      </if>
+      <if test="memberCodeList != null" >
+        member_code_list = #{memberCodeList,jdbcType=VARCHAR},
+      </if>
+      <if test="memberNameList != null" >
+        member_name_list = #{memberNameList,jdbcType=VARCHAR},
+      </if>
+      <if test="memberNum != null" >
+        member_num = #{memberNum,jdbcType=VARCHAR},
+      </if>
+      <if test="couponDefinitionCode != null" >
+        coupon_definition_code = #{couponDefinitionCode,jdbcType=VARCHAR},
+      </if>
+      <if test="couponDefinitionId != null" >
+        coupon_definition_id = #{couponDefinitionId,jdbcType=BIGINT},
+      </if>
+      <if test="preferentialType != null" >
+        preferential_type = #{preferentialType,jdbcType=TINYINT},
+      </if>
+      <if test="validType != null" >
+        valid_type = #{validType,jdbcType=TINYINT},
+      </if>
+      <if test="validDay != null" >
+        valid_day = #{validDay,jdbcType=INTEGER},
+      </if>
+      <if test="minConsume != null" >
+        min_consume = #{minConsume,jdbcType=DECIMAL},
+      </if>
+      <if test="couponName != null" >
+        coupon_name = #{couponName,jdbcType=VARCHAR},
+      </if>
+      <if test="money != null" >
+        money = #{money,jdbcType=DECIMAL},
+      </if>
+      <if test="discount != null" >
+        discount = #{discount,jdbcType=DECIMAL},
+      </if>
+      <if test="info != null" >
+        info = #{info,jdbcType=VARCHAR},
+      </if>
+      <if test="validDateStart != null" >
+        valid_date_start = #{validDateStart,jdbcType=TIMESTAMP},
+      </if>
+      <if test="validDateEnd != null" >
+        valid_date_end = #{validDateEnd,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createUserId != null" >
+        create_user_id = #{createUserId,jdbcType=BIGINT},
+      </if>
+      <if test="createUserName != null" >
+        create_user_name = #{createUserName,jdbcType=VARCHAR},
+      </if>
+      <if test="createDate != null" >
+        create_date = #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifiedUserId != null" >
+        modified_user_id = #{modifiedUserId,jdbcType=BIGINT},
+      </if>
+      <if test="modifiedUserName != null" >
+        modified_user_name = #{modifiedUserName,jdbcType=VARCHAR},
+      </if>
+      <if test="modifiedDate != null" >
+        modified_date = #{modifiedDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="note != null" >
+        note = #{note,jdbcType=VARCHAR},
+      </if>
+      <if test="stateCode != null" >
+        state_code = #{stateCode,jdbcType=VARCHAR},
+      </if>
+      <if test="stateName != null" >
+        state_name = #{stateName,jdbcType=VARCHAR},
+      </if>
+      <if test="extendCode != null" >
+        extend_code = #{extendCode,jdbcType=VARCHAR},
+      </if>
+      <if test="extendName != null" >
+        extend_name = #{extendName,jdbcType=VARCHAR},
+      </if>
+      <if test="extendNote != null" >
+        extend_note = #{extendNote,jdbcType=VARCHAR},
+      </if>
+      <if test="valid != null" >
+        valid = #{valid,jdbcType=BIT},
+      </if>
+    </set>
+    where coupon_quota_send_detail_id = #{couponQuotaSendDetailId,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.bizvane.couponfacade.models.po.CouponQuotaSendDetailPO" >
+    <!--
+      WARNING - 只读 - @mbg.generated
+      This element was generated on 2018-12-12 10:15:42.
+    -->
+    update t_coupon_quota_send_detail
+    set sys_company_id = #{sysCompanyId,jdbcType=BIGINT},
+      sys_brand_id = #{sysBrandId,jdbcType=BIGINT},
+      coupon_quota_detail_id = #{couponQuotaDetailId,jdbcType=BIGINT},
+      staff_code = #{staffCode,jdbcType=VARCHAR},
+      staff_name = #{staffName,jdbcType=VARCHAR},
+      member_code_list = #{memberCodeList,jdbcType=VARCHAR},
+      member_name_list = #{memberNameList,jdbcType=VARCHAR},
+      member_num = #{memberNum,jdbcType=VARCHAR},
+      coupon_definition_code = #{couponDefinitionCode,jdbcType=VARCHAR},
+      coupon_definition_id = #{couponDefinitionId,jdbcType=BIGINT},
+      preferential_type = #{preferentialType,jdbcType=TINYINT},
+      valid_type = #{validType,jdbcType=TINYINT},
+      valid_day = #{validDay,jdbcType=INTEGER},
+      min_consume = #{minConsume,jdbcType=DECIMAL},
+      coupon_name = #{couponName,jdbcType=VARCHAR},
+      money = #{money,jdbcType=DECIMAL},
+      discount = #{discount,jdbcType=DECIMAL},
+      info = #{info,jdbcType=VARCHAR},
+      valid_date_start = #{validDateStart,jdbcType=TIMESTAMP},
+      valid_date_end = #{validDateEnd,jdbcType=TIMESTAMP},
+      create_user_id = #{createUserId,jdbcType=BIGINT},
+      create_user_name = #{createUserName,jdbcType=VARCHAR},
+      create_date = #{createDate,jdbcType=TIMESTAMP},
+      modified_user_id = #{modifiedUserId,jdbcType=BIGINT},
+      modified_user_name = #{modifiedUserName,jdbcType=VARCHAR},
+      modified_date = #{modifiedDate,jdbcType=TIMESTAMP},
+      note = #{note,jdbcType=VARCHAR},
+      state_code = #{stateCode,jdbcType=VARCHAR},
+      state_name = #{stateName,jdbcType=VARCHAR},
+      extend_code = #{extendCode,jdbcType=VARCHAR},
+      extend_name = #{extendName,jdbcType=VARCHAR},
+      extend_note = #{extendNote,jdbcType=VARCHAR},
+      valid = #{valid,jdbcType=BIT}
+    where coupon_quota_send_detail_id = #{couponQuotaSendDetailId,jdbcType=BIGINT}
+  </update>
+</mapper>

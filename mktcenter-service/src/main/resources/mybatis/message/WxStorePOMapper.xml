@@ -1,0 +1,826 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bizvane.messageservice.mappers.WxStorePOMapper">
+  <resultMap id="BaseResultMap" type="com.bizvane.messagefacade.models.po.WxStorePO">
+    <!--
+      WARNING - 只读 - @mbg.generated
+      This element was generated on 2018-07-07 17:52:51.
+    -->
+    <id column="ID" jdbcType="BIGINT" property="id" />
+    <result column="AD_CLIENT_ID" jdbcType="BIGINT" property="adClientId" />
+    <result column="CREATEID" jdbcType="BIGINT" property="createid" />
+    <result column="CREATEDATE" jdbcType="TIMESTAMP" property="createdate" />
+    <result column="MODIFYID" jdbcType="BIGINT" property="modifyid" />
+    <result column="MODIFYDATE" jdbcType="TIMESTAMP" property="modifydate" />
+    <result column="ISACTIVE" jdbcType="CHAR" property="isactive" />
+    <result column="CODE" jdbcType="VARCHAR" property="code" />
+    <result column="NAME" jdbcType="VARCHAR" property="name" />
+    <result column="PICTURE_URL" jdbcType="VARCHAR" property="pictureUrl" />
+    <result column="LBS" jdbcType="VARCHAR" property="lbs" />
+    <result column="PHONE" jdbcType="VARCHAR" property="phone" />
+    <result column="AD_PROVINCE_ID" jdbcType="BIGINT" property="adProvinceId" />
+    <result column="AD_CITY_ID" jdbcType="BIGINT" property="adCityId" />
+    <result column="AD_AREA_ID" jdbcType="BIGINT" property="adAreaId" />
+    <result column="ADDRESS" jdbcType="VARCHAR" property="address" />
+    <result column="WX_PUBLIC_ID" jdbcType="BIGINT" property="wxPublicId" />
+    <result column="IDCODE" jdbcType="VARCHAR" property="idcode" />
+    <result column="QRCODE_URL" jdbcType="VARCHAR" property="qrcodeUrl" />
+    <result column="LOGO" jdbcType="VARCHAR" property="logo" />
+    <result column="WX_VIPTYPE_ID" jdbcType="BIGINT" property="wxViptypeId" />
+    <result column="IS_CROWN" jdbcType="CHAR" property="isCrown" />
+    <result column="ISSENDQUAN" jdbcType="CHAR" property="issendquan" />
+    <result column="WX_COUPON_ID" jdbcType="BIGINT" property="wxCouponId" />
+    <result column="WX_DEALERS_ID" jdbcType="BIGINT" property="wxDealersId" />
+    <result column="POSTCODE" jdbcType="VARCHAR" property="postcode" />
+    <result column="ERP_STORE_ID" jdbcType="VARCHAR" property="erpStoreId" />
+    <result column="REGION" jdbcType="VARCHAR" property="region" />
+    <result column="ISCLOSE" jdbcType="CHAR" property="isclose" />
+    <result column="IS_DEFAULT_STORE" jdbcType="CHAR" property="isDefaultStore" />
+    <result column="STORE_ID" jdbcType="VARCHAR" property="storeId" />
+  </resultMap>
+  <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.bizvane.messagefacade.models.po.WxStorePOWithBLOBs">
+    <!--
+      WARNING - 只读 - @mbg.generated
+      This element was generated on 2018-07-07 17:52:51.
+    -->
+    <result column="REMARK" jdbcType="LONGVARCHAR" property="remark" />
+    <result column="STORE_ATTR" jdbcType="LONGVARCHAR" property="storeAttr" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <!--
+      WARNING - 只读 - @mbg.generated
+      This element was generated on 2018-07-07 17:52:51.
+    -->
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <!--
+      WARNING - 只读 - @mbg.generated
+      This element was generated on 2018-07-07 17:52:51.
+    -->
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    <!--
+      WARNING - 只读 - @mbg.generated
+      This element was generated on 2018-07-07 17:52:51.
+    -->
+    ID, AD_CLIENT_ID, CREATEID, CREATEDATE, MODIFYID, MODIFYDATE, ISACTIVE, CODE, NAME, 
+    PICTURE_URL, LBS, PHONE, AD_PROVINCE_ID, AD_CITY_ID, AD_AREA_ID, ADDRESS, WX_PUBLIC_ID, 
+    IDCODE, QRCODE_URL, LOGO, WX_VIPTYPE_ID, IS_CROWN, ISSENDQUAN, WX_COUPON_ID, WX_DEALERS_ID, 
+    POSTCODE, ERP_STORE_ID, REGION, ISCLOSE, IS_DEFAULT_STORE, STORE_ID
+  </sql>
+  <sql id="Blob_Column_List">
+    <!--
+      WARNING - 只读 - @mbg.generated
+      This element was generated on 2018-07-07 17:52:51.
+    -->
+    REMARK, STORE_ATTR
+  </sql>
+  <select id="selectByExampleWithBLOBs" parameterType="com.bizvane.messagefacade.models.po.WxStorePOExample" resultMap="ResultMapWithBLOBs">
+    <!--
+      WARNING - 只读 - @mbg.generated
+      This element was generated on 2018-07-07 17:52:51.
+    -->
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from wx_store
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByExample" parameterType="com.bizvane.messagefacade.models.po.WxStorePOExample" resultMap="BaseResultMap">
+    <!--
+      WARNING - 只读 - @mbg.generated
+      This element was generated on 2018-07-07 17:52:51.
+    -->
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from wx_store
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="ResultMapWithBLOBs">
+    <!--
+      WARNING - 只读 - @mbg.generated
+      This element was generated on 2018-07-07 17:52:51.
+    -->
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from wx_store
+    where ID = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    <!--
+      WARNING - 只读 - @mbg.generated
+      This element was generated on 2018-07-07 17:52:51.
+    -->
+    delete from wx_store
+    where ID = #{id,jdbcType=BIGINT}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.bizvane.messagefacade.models.po.WxStorePOExample">
+    <!--
+      WARNING - 只读 - @mbg.generated
+      This element was generated on 2018-07-07 17:52:51.
+    -->
+    delete from wx_store
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.bizvane.messagefacade.models.po.WxStorePOWithBLOBs">
+    <!--
+      WARNING - 只读 - @mbg.generated
+      This element was generated on 2018-07-07 17:52:51.
+    -->
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into wx_store (AD_CLIENT_ID, CREATEID, CREATEDATE, 
+      MODIFYID, MODIFYDATE, ISACTIVE, 
+      CODE, NAME, PICTURE_URL, 
+      LBS, PHONE, AD_PROVINCE_ID, 
+      AD_CITY_ID, AD_AREA_ID, ADDRESS, 
+      WX_PUBLIC_ID, IDCODE, QRCODE_URL, 
+      LOGO, WX_VIPTYPE_ID, IS_CROWN, 
+      ISSENDQUAN, WX_COUPON_ID, WX_DEALERS_ID, 
+      POSTCODE, ERP_STORE_ID, REGION, 
+      ISCLOSE, IS_DEFAULT_STORE, STORE_ID, 
+      REMARK, STORE_ATTR)
+    values (#{adClientId,jdbcType=BIGINT}, #{createid,jdbcType=BIGINT}, #{createdate,jdbcType=TIMESTAMP}, 
+      #{modifyid,jdbcType=BIGINT}, #{modifydate,jdbcType=TIMESTAMP}, #{isactive,jdbcType=CHAR}, 
+      #{code,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, #{pictureUrl,jdbcType=VARCHAR}, 
+      #{lbs,jdbcType=VARCHAR}, #{phone,jdbcType=VARCHAR}, #{adProvinceId,jdbcType=BIGINT}, 
+      #{adCityId,jdbcType=BIGINT}, #{adAreaId,jdbcType=BIGINT}, #{address,jdbcType=VARCHAR}, 
+      #{wxPublicId,jdbcType=BIGINT}, #{idcode,jdbcType=VARCHAR}, #{qrcodeUrl,jdbcType=VARCHAR}, 
+      #{logo,jdbcType=VARCHAR}, #{wxViptypeId,jdbcType=BIGINT}, #{isCrown,jdbcType=CHAR}, 
+      #{issendquan,jdbcType=CHAR}, #{wxCouponId,jdbcType=BIGINT}, #{wxDealersId,jdbcType=BIGINT}, 
+      #{postcode,jdbcType=VARCHAR}, #{erpStoreId,jdbcType=VARCHAR}, #{region,jdbcType=VARCHAR}, 
+      #{isclose,jdbcType=CHAR}, #{isDefaultStore,jdbcType=CHAR}, #{storeId,jdbcType=VARCHAR}, 
+      #{remark,jdbcType=LONGVARCHAR}, #{storeAttr,jdbcType=LONGVARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.bizvane.messagefacade.models.po.WxStorePOWithBLOBs">
+    <!--
+      WARNING - 只读 - @mbg.generated
+      This element was generated on 2018-07-07 17:52:51.
+    -->
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into wx_store
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="adClientId != null">
+        AD_CLIENT_ID,
+      </if>
+      <if test="createid != null">
+        CREATEID,
+      </if>
+      <if test="createdate != null">
+        CREATEDATE,
+      </if>
+      <if test="modifyid != null">
+        MODIFYID,
+      </if>
+      <if test="modifydate != null">
+        MODIFYDATE,
+      </if>
+      <if test="isactive != null">
+        ISACTIVE,
+      </if>
+      <if test="code != null">
+        CODE,
+      </if>
+      <if test="name != null">
+        NAME,
+      </if>
+      <if test="pictureUrl != null">
+        PICTURE_URL,
+      </if>
+      <if test="lbs != null">
+        LBS,
+      </if>
+      <if test="phone != null">
+        PHONE,
+      </if>
+      <if test="adProvinceId != null">
+        AD_PROVINCE_ID,
+      </if>
+      <if test="adCityId != null">
+        AD_CITY_ID,
+      </if>
+      <if test="adAreaId != null">
+        AD_AREA_ID,
+      </if>
+      <if test="address != null">
+        ADDRESS,
+      </if>
+      <if test="wxPublicId != null">
+        WX_PUBLIC_ID,
+      </if>
+      <if test="idcode != null">
+        IDCODE,
+      </if>
+      <if test="qrcodeUrl != null">
+        QRCODE_URL,
+      </if>
+      <if test="logo != null">
+        LOGO,
+      </if>
+      <if test="wxViptypeId != null">
+        WX_VIPTYPE_ID,
+      </if>
+      <if test="isCrown != null">
+        IS_CROWN,
+      </if>
+      <if test="issendquan != null">
+        ISSENDQUAN,
+      </if>
+      <if test="wxCouponId != null">
+        WX_COUPON_ID,
+      </if>
+      <if test="wxDealersId != null">
+        WX_DEALERS_ID,
+      </if>
+      <if test="postcode != null">
+        POSTCODE,
+      </if>
+      <if test="erpStoreId != null">
+        ERP_STORE_ID,
+      </if>
+      <if test="region != null">
+        REGION,
+      </if>
+      <if test="isclose != null">
+        ISCLOSE,
+      </if>
+      <if test="isDefaultStore != null">
+        IS_DEFAULT_STORE,
+      </if>
+      <if test="storeId != null">
+        STORE_ID,
+      </if>
+      <if test="remark != null">
+        REMARK,
+      </if>
+      <if test="storeAttr != null">
+        STORE_ATTR,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="adClientId != null">
+        #{adClientId,jdbcType=BIGINT},
+      </if>
+      <if test="createid != null">
+        #{createid,jdbcType=BIGINT},
+      </if>
+      <if test="createdate != null">
+        #{createdate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifyid != null">
+        #{modifyid,jdbcType=BIGINT},
+      </if>
+      <if test="modifydate != null">
+        #{modifydate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isactive != null">
+        #{isactive,jdbcType=CHAR},
+      </if>
+      <if test="code != null">
+        #{code,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null">
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="pictureUrl != null">
+        #{pictureUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="lbs != null">
+        #{lbs,jdbcType=VARCHAR},
+      </if>
+      <if test="phone != null">
+        #{phone,jdbcType=VARCHAR},
+      </if>
+      <if test="adProvinceId != null">
+        #{adProvinceId,jdbcType=BIGINT},
+      </if>
+      <if test="adCityId != null">
+        #{adCityId,jdbcType=BIGINT},
+      </if>
+      <if test="adAreaId != null">
+        #{adAreaId,jdbcType=BIGINT},
+      </if>
+      <if test="address != null">
+        #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="wxPublicId != null">
+        #{wxPublicId,jdbcType=BIGINT},
+      </if>
+      <if test="idcode != null">
+        #{idcode,jdbcType=VARCHAR},
+      </if>
+      <if test="qrcodeUrl != null">
+        #{qrcodeUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="logo != null">
+        #{logo,jdbcType=VARCHAR},
+      </if>
+      <if test="wxViptypeId != null">
+        #{wxViptypeId,jdbcType=BIGINT},
+      </if>
+      <if test="isCrown != null">
+        #{isCrown,jdbcType=CHAR},
+      </if>
+      <if test="issendquan != null">
+        #{issendquan,jdbcType=CHAR},
+      </if>
+      <if test="wxCouponId != null">
+        #{wxCouponId,jdbcType=BIGINT},
+      </if>
+      <if test="wxDealersId != null">
+        #{wxDealersId,jdbcType=BIGINT},
+      </if>
+      <if test="postcode != null">
+        #{postcode,jdbcType=VARCHAR},
+      </if>
+      <if test="erpStoreId != null">
+        #{erpStoreId,jdbcType=VARCHAR},
+      </if>
+      <if test="region != null">
+        #{region,jdbcType=VARCHAR},
+      </if>
+      <if test="isclose != null">
+        #{isclose,jdbcType=CHAR},
+      </if>
+      <if test="isDefaultStore != null">
+        #{isDefaultStore,jdbcType=CHAR},
+      </if>
+      <if test="storeId != null">
+        #{storeId,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null">
+        #{remark,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="storeAttr != null">
+        #{storeAttr,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.bizvane.messagefacade.models.po.WxStorePOExample" resultType="java.lang.Long">
+    <!--
+      WARNING - 只读 - @mbg.generated
+      This element was generated on 2018-07-07 17:52:51.
+    -->
+    select count(*) from wx_store
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    <!--
+      WARNING - 只读 - @mbg.generated
+      This element was generated on 2018-07-07 17:52:51.
+    -->
+    update wx_store
+    <set>
+      <if test="record.id != null">
+        ID = #{record.id,jdbcType=BIGINT},
+      </if>
+      <if test="record.adClientId != null">
+        AD_CLIENT_ID = #{record.adClientId,jdbcType=BIGINT},
+      </if>
+      <if test="record.createid != null">
+        CREATEID = #{record.createid,jdbcType=BIGINT},
+      </if>
+      <if test="record.createdate != null">
+        CREATEDATE = #{record.createdate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.modifyid != null">
+        MODIFYID = #{record.modifyid,jdbcType=BIGINT},
+      </if>
+      <if test="record.modifydate != null">
+        MODIFYDATE = #{record.modifydate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.isactive != null">
+        ISACTIVE = #{record.isactive,jdbcType=CHAR},
+      </if>
+      <if test="record.code != null">
+        CODE = #{record.code,jdbcType=VARCHAR},
+      </if>
+      <if test="record.name != null">
+        NAME = #{record.name,jdbcType=VARCHAR},
+      </if>
+      <if test="record.pictureUrl != null">
+        PICTURE_URL = #{record.pictureUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="record.lbs != null">
+        LBS = #{record.lbs,jdbcType=VARCHAR},
+      </if>
+      <if test="record.phone != null">
+        PHONE = #{record.phone,jdbcType=VARCHAR},
+      </if>
+      <if test="record.adProvinceId != null">
+        AD_PROVINCE_ID = #{record.adProvinceId,jdbcType=BIGINT},
+      </if>
+      <if test="record.adCityId != null">
+        AD_CITY_ID = #{record.adCityId,jdbcType=BIGINT},
+      </if>
+      <if test="record.adAreaId != null">
+        AD_AREA_ID = #{record.adAreaId,jdbcType=BIGINT},
+      </if>
+      <if test="record.address != null">
+        ADDRESS = #{record.address,jdbcType=VARCHAR},
+      </if>
+      <if test="record.wxPublicId != null">
+        WX_PUBLIC_ID = #{record.wxPublicId,jdbcType=BIGINT},
+      </if>
+      <if test="record.idcode != null">
+        IDCODE = #{record.idcode,jdbcType=VARCHAR},
+      </if>
+      <if test="record.qrcodeUrl != null">
+        QRCODE_URL = #{record.qrcodeUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="record.logo != null">
+        LOGO = #{record.logo,jdbcType=VARCHAR},
+      </if>
+      <if test="record.wxViptypeId != null">
+        WX_VIPTYPE_ID = #{record.wxViptypeId,jdbcType=BIGINT},
+      </if>
+      <if test="record.isCrown != null">
+        IS_CROWN = #{record.isCrown,jdbcType=CHAR},
+      </if>
+      <if test="record.issendquan != null">
+        ISSENDQUAN = #{record.issendquan,jdbcType=CHAR},
+      </if>
+      <if test="record.wxCouponId != null">
+        WX_COUPON_ID = #{record.wxCouponId,jdbcType=BIGINT},
+      </if>
+      <if test="record.wxDealersId != null">
+        WX_DEALERS_ID = #{record.wxDealersId,jdbcType=BIGINT},
+      </if>
+      <if test="record.postcode != null">
+        POSTCODE = #{record.postcode,jdbcType=VARCHAR},
+      </if>
+      <if test="record.erpStoreId != null">
+        ERP_STORE_ID = #{record.erpStoreId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.region != null">
+        REGION = #{record.region,jdbcType=VARCHAR},
+      </if>
+      <if test="record.isclose != null">
+        ISCLOSE = #{record.isclose,jdbcType=CHAR},
+      </if>
+      <if test="record.isDefaultStore != null">
+        IS_DEFAULT_STORE = #{record.isDefaultStore,jdbcType=CHAR},
+      </if>
+      <if test="record.storeId != null">
+        STORE_ID = #{record.storeId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.remark != null">
+        REMARK = #{record.remark,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="record.storeAttr != null">
+        STORE_ATTR = #{record.storeAttr,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExampleWithBLOBs" parameterType="map">
+    <!--
+      WARNING - 只读 - @mbg.generated
+      This element was generated on 2018-07-07 17:52:51.
+    -->
+    update wx_store
+    set ID = #{record.id,jdbcType=BIGINT},
+      AD_CLIENT_ID = #{record.adClientId,jdbcType=BIGINT},
+      CREATEID = #{record.createid,jdbcType=BIGINT},
+      CREATEDATE = #{record.createdate,jdbcType=TIMESTAMP},
+      MODIFYID = #{record.modifyid,jdbcType=BIGINT},
+      MODIFYDATE = #{record.modifydate,jdbcType=TIMESTAMP},
+      ISACTIVE = #{record.isactive,jdbcType=CHAR},
+      CODE = #{record.code,jdbcType=VARCHAR},
+      NAME = #{record.name,jdbcType=VARCHAR},
+      PICTURE_URL = #{record.pictureUrl,jdbcType=VARCHAR},
+      LBS = #{record.lbs,jdbcType=VARCHAR},
+      PHONE = #{record.phone,jdbcType=VARCHAR},
+      AD_PROVINCE_ID = #{record.adProvinceId,jdbcType=BIGINT},
+      AD_CITY_ID = #{record.adCityId,jdbcType=BIGINT},
+      AD_AREA_ID = #{record.adAreaId,jdbcType=BIGINT},
+      ADDRESS = #{record.address,jdbcType=VARCHAR},
+      WX_PUBLIC_ID = #{record.wxPublicId,jdbcType=BIGINT},
+      IDCODE = #{record.idcode,jdbcType=VARCHAR},
+      QRCODE_URL = #{record.qrcodeUrl,jdbcType=VARCHAR},
+      LOGO = #{record.logo,jdbcType=VARCHAR},
+      WX_VIPTYPE_ID = #{record.wxViptypeId,jdbcType=BIGINT},
+      IS_CROWN = #{record.isCrown,jdbcType=CHAR},
+      ISSENDQUAN = #{record.issendquan,jdbcType=CHAR},
+      WX_COUPON_ID = #{record.wxCouponId,jdbcType=BIGINT},
+      WX_DEALERS_ID = #{record.wxDealersId,jdbcType=BIGINT},
+      POSTCODE = #{record.postcode,jdbcType=VARCHAR},
+      ERP_STORE_ID = #{record.erpStoreId,jdbcType=VARCHAR},
+      REGION = #{record.region,jdbcType=VARCHAR},
+      ISCLOSE = #{record.isclose,jdbcType=CHAR},
+      IS_DEFAULT_STORE = #{record.isDefaultStore,jdbcType=CHAR},
+      STORE_ID = #{record.storeId,jdbcType=VARCHAR},
+      REMARK = #{record.remark,jdbcType=LONGVARCHAR},
+      STORE_ATTR = #{record.storeAttr,jdbcType=LONGVARCHAR}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    <!--
+      WARNING - 只读 - @mbg.generated
+      This element was generated on 2018-07-07 17:52:51.
+    -->
+    update wx_store
+    set ID = #{record.id,jdbcType=BIGINT},
+      AD_CLIENT_ID = #{record.adClientId,jdbcType=BIGINT},
+      CREATEID = #{record.createid,jdbcType=BIGINT},
+      CREATEDATE = #{record.createdate,jdbcType=TIMESTAMP},
+      MODIFYID = #{record.modifyid,jdbcType=BIGINT},
+      MODIFYDATE = #{record.modifydate,jdbcType=TIMESTAMP},
+      ISACTIVE = #{record.isactive,jdbcType=CHAR},
+      CODE = #{record.code,jdbcType=VARCHAR},
+      NAME = #{record.name,jdbcType=VARCHAR},
+      PICTURE_URL = #{record.pictureUrl,jdbcType=VARCHAR},
+      LBS = #{record.lbs,jdbcType=VARCHAR},
+      PHONE = #{record.phone,jdbcType=VARCHAR},
+      AD_PROVINCE_ID = #{record.adProvinceId,jdbcType=BIGINT},
+      AD_CITY_ID = #{record.adCityId,jdbcType=BIGINT},
+      AD_AREA_ID = #{record.adAreaId,jdbcType=BIGINT},
+      ADDRESS = #{record.address,jdbcType=VARCHAR},
+      WX_PUBLIC_ID = #{record.wxPublicId,jdbcType=BIGINT},
+      IDCODE = #{record.idcode,jdbcType=VARCHAR},
+      QRCODE_URL = #{record.qrcodeUrl,jdbcType=VARCHAR},
+      LOGO = #{record.logo,jdbcType=VARCHAR},
+      WX_VIPTYPE_ID = #{record.wxViptypeId,jdbcType=BIGINT},
+      IS_CROWN = #{record.isCrown,jdbcType=CHAR},
+      ISSENDQUAN = #{record.issendquan,jdbcType=CHAR},
+      WX_COUPON_ID = #{record.wxCouponId,jdbcType=BIGINT},
+      WX_DEALERS_ID = #{record.wxDealersId,jdbcType=BIGINT},
+      POSTCODE = #{record.postcode,jdbcType=VARCHAR},
+      ERP_STORE_ID = #{record.erpStoreId,jdbcType=VARCHAR},
+      REGION = #{record.region,jdbcType=VARCHAR},
+      ISCLOSE = #{record.isclose,jdbcType=CHAR},
+      IS_DEFAULT_STORE = #{record.isDefaultStore,jdbcType=CHAR},
+      STORE_ID = #{record.storeId,jdbcType=VARCHAR}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.bizvane.messagefacade.models.po.WxStorePOWithBLOBs">
+    <!--
+      WARNING - 只读 - @mbg.generated
+      This element was generated on 2018-07-07 17:52:51.
+    -->
+    update wx_store
+    <set>
+      <if test="adClientId != null">
+        AD_CLIENT_ID = #{adClientId,jdbcType=BIGINT},
+      </if>
+      <if test="createid != null">
+        CREATEID = #{createid,jdbcType=BIGINT},
+      </if>
+      <if test="createdate != null">
+        CREATEDATE = #{createdate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifyid != null">
+        MODIFYID = #{modifyid,jdbcType=BIGINT},
+      </if>
+      <if test="modifydate != null">
+        MODIFYDATE = #{modifydate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isactive != null">
+        ISACTIVE = #{isactive,jdbcType=CHAR},
+      </if>
+      <if test="code != null">
+        CODE = #{code,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null">
+        NAME = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="pictureUrl != null">
+        PICTURE_URL = #{pictureUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="lbs != null">
+        LBS = #{lbs,jdbcType=VARCHAR},
+      </if>
+      <if test="phone != null">
+        PHONE = #{phone,jdbcType=VARCHAR},
+      </if>
+      <if test="adProvinceId != null">
+        AD_PROVINCE_ID = #{adProvinceId,jdbcType=BIGINT},
+      </if>
+      <if test="adCityId != null">
+        AD_CITY_ID = #{adCityId,jdbcType=BIGINT},
+      </if>
+      <if test="adAreaId != null">
+        AD_AREA_ID = #{adAreaId,jdbcType=BIGINT},
+      </if>
+      <if test="address != null">
+        ADDRESS = #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="wxPublicId != null">
+        WX_PUBLIC_ID = #{wxPublicId,jdbcType=BIGINT},
+      </if>
+      <if test="idcode != null">
+        IDCODE = #{idcode,jdbcType=VARCHAR},
+      </if>
+      <if test="qrcodeUrl != null">
+        QRCODE_URL = #{qrcodeUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="logo != null">
+        LOGO = #{logo,jdbcType=VARCHAR},
+      </if>
+      <if test="wxViptypeId != null">
+        WX_VIPTYPE_ID = #{wxViptypeId,jdbcType=BIGINT},
+      </if>
+      <if test="isCrown != null">
+        IS_CROWN = #{isCrown,jdbcType=CHAR},
+      </if>
+      <if test="issendquan != null">
+        ISSENDQUAN = #{issendquan,jdbcType=CHAR},
+      </if>
+      <if test="wxCouponId != null">
+        WX_COUPON_ID = #{wxCouponId,jdbcType=BIGINT},
+      </if>
+      <if test="wxDealersId != null">
+        WX_DEALERS_ID = #{wxDealersId,jdbcType=BIGINT},
+      </if>
+      <if test="postcode != null">
+        POSTCODE = #{postcode,jdbcType=VARCHAR},
+      </if>
+      <if test="erpStoreId != null">
+        ERP_STORE_ID = #{erpStoreId,jdbcType=VARCHAR},
+      </if>
+      <if test="region != null">
+        REGION = #{region,jdbcType=VARCHAR},
+      </if>
+      <if test="isclose != null">
+        ISCLOSE = #{isclose,jdbcType=CHAR},
+      </if>
+      <if test="isDefaultStore != null">
+        IS_DEFAULT_STORE = #{isDefaultStore,jdbcType=CHAR},
+      </if>
+      <if test="storeId != null">
+        STORE_ID = #{storeId,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null">
+        REMARK = #{remark,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="storeAttr != null">
+        STORE_ATTR = #{storeAttr,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where ID = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.bizvane.messagefacade.models.po.WxStorePOWithBLOBs">
+    <!--
+      WARNING - 只读 - @mbg.generated
+      This element was generated on 2018-07-07 17:52:51.
+    -->
+    update wx_store
+    set AD_CLIENT_ID = #{adClientId,jdbcType=BIGINT},
+      CREATEID = #{createid,jdbcType=BIGINT},
+      CREATEDATE = #{createdate,jdbcType=TIMESTAMP},
+      MODIFYID = #{modifyid,jdbcType=BIGINT},
+      MODIFYDATE = #{modifydate,jdbcType=TIMESTAMP},
+      ISACTIVE = #{isactive,jdbcType=CHAR},
+      CODE = #{code,jdbcType=VARCHAR},
+      NAME = #{name,jdbcType=VARCHAR},
+      PICTURE_URL = #{pictureUrl,jdbcType=VARCHAR},
+      LBS = #{lbs,jdbcType=VARCHAR},
+      PHONE = #{phone,jdbcType=VARCHAR},
+      AD_PROVINCE_ID = #{adProvinceId,jdbcType=BIGINT},
+      AD_CITY_ID = #{adCityId,jdbcType=BIGINT},
+      AD_AREA_ID = #{adAreaId,jdbcType=BIGINT},
+      ADDRESS = #{address,jdbcType=VARCHAR},
+      WX_PUBLIC_ID = #{wxPublicId,jdbcType=BIGINT},
+      IDCODE = #{idcode,jdbcType=VARCHAR},
+      QRCODE_URL = #{qrcodeUrl,jdbcType=VARCHAR},
+      LOGO = #{logo,jdbcType=VARCHAR},
+      WX_VIPTYPE_ID = #{wxViptypeId,jdbcType=BIGINT},
+      IS_CROWN = #{isCrown,jdbcType=CHAR},
+      ISSENDQUAN = #{issendquan,jdbcType=CHAR},
+      WX_COUPON_ID = #{wxCouponId,jdbcType=BIGINT},
+      WX_DEALERS_ID = #{wxDealersId,jdbcType=BIGINT},
+      POSTCODE = #{postcode,jdbcType=VARCHAR},
+      ERP_STORE_ID = #{erpStoreId,jdbcType=VARCHAR},
+      REGION = #{region,jdbcType=VARCHAR},
+      ISCLOSE = #{isclose,jdbcType=CHAR},
+      IS_DEFAULT_STORE = #{isDefaultStore,jdbcType=CHAR},
+      STORE_ID = #{storeId,jdbcType=VARCHAR},
+      REMARK = #{remark,jdbcType=LONGVARCHAR},
+      STORE_ATTR = #{storeAttr,jdbcType=LONGVARCHAR}
+    where ID = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.bizvane.messagefacade.models.po.WxStorePO">
+    <!--
+      WARNING - 只读 - @mbg.generated
+      This element was generated on 2018-07-07 17:52:51.
+    -->
+    update wx_store
+    set AD_CLIENT_ID = #{adClientId,jdbcType=BIGINT},
+      CREATEID = #{createid,jdbcType=BIGINT},
+      CREATEDATE = #{createdate,jdbcType=TIMESTAMP},
+      MODIFYID = #{modifyid,jdbcType=BIGINT},
+      MODIFYDATE = #{modifydate,jdbcType=TIMESTAMP},
+      ISACTIVE = #{isactive,jdbcType=CHAR},
+      CODE = #{code,jdbcType=VARCHAR},
+      NAME = #{name,jdbcType=VARCHAR},
+      PICTURE_URL = #{pictureUrl,jdbcType=VARCHAR},
+      LBS = #{lbs,jdbcType=VARCHAR},
+      PHONE = #{phone,jdbcType=VARCHAR},
+      AD_PROVINCE_ID = #{adProvinceId,jdbcType=BIGINT},
+      AD_CITY_ID = #{adCityId,jdbcType=BIGINT},
+      AD_AREA_ID = #{adAreaId,jdbcType=BIGINT},
+      ADDRESS = #{address,jdbcType=VARCHAR},
+      WX_PUBLIC_ID = #{wxPublicId,jdbcType=BIGINT},
+      IDCODE = #{idcode,jdbcType=VARCHAR},
+      QRCODE_URL = #{qrcodeUrl,jdbcType=VARCHAR},
+      LOGO = #{logo,jdbcType=VARCHAR},
+      WX_VIPTYPE_ID = #{wxViptypeId,jdbcType=BIGINT},
+      IS_CROWN = #{isCrown,jdbcType=CHAR},
+      ISSENDQUAN = #{issendquan,jdbcType=CHAR},
+      WX_COUPON_ID = #{wxCouponId,jdbcType=BIGINT},
+      WX_DEALERS_ID = #{wxDealersId,jdbcType=BIGINT},
+      POSTCODE = #{postcode,jdbcType=VARCHAR},
+      ERP_STORE_ID = #{erpStoreId,jdbcType=VARCHAR},
+      REGION = #{region,jdbcType=VARCHAR},
+      ISCLOSE = #{isclose,jdbcType=CHAR},
+      IS_DEFAULT_STORE = #{isDefaultStore,jdbcType=CHAR},
+      STORE_ID = #{storeId,jdbcType=VARCHAR}
+    where ID = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>
