@@ -1,12 +1,10 @@
 package com.bizvane.couponfacade.models.vo;
 
-import com.bizvane.connectorservice.entity.common.CouponRequestVO;
-
 /**
  * 补发券
  * Created by yunjie.tian on 2018/8/21.
  */
-public class CouponSendAgainRequestVO extends CouponRequestVO{
+public class CouponSendAgainRequestVO {
 
     private String batchSendCode;
 
