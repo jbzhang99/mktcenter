@@ -31,15 +31,12 @@
         <repository>
             <id>julu</id>
             <name>julu</name>
-            <url>http://repo.bizvane.com/nexus/content/groups/julu</url>
-            <snapshots>
-                <enabled>true</enabled>
-                <updatePolicy>always</updatePolicy>
-            </snapshots>
+            <url>http://www.yshjh.com:8091/nexus/content/groups/julu</url>
         </repository>
         <repository>
-            <id>julu-release</id>
-            <url>http://repo.bizvane.com/nexus/content/repositories/julu-release</url>
+            <id>release</id>
+            <name>release</name>
+            <url>http://www.yshjh.com:8091/nexus/content/repositories/release</url>
         </repository>
     </repositories>
     <modules>
