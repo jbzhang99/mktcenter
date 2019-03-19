@@ -61,8 +61,8 @@ public class AsyncHttpUtil {
       IOReactorConfig config = IOReactorConfig.custom().setIoThreadCount(Runtime.getRuntime().availableProcessors())
           .setConnectTimeout(AsyncHttpUtil.MAX_TIMEOUT).setSoTimeout(AsyncHttpUtil.MAX_TIMEOUT).build();
       AsyncHttpUtil.ioReactor = new DefaultConnectingIOReactor(config);
-      AsyncHttpUtil.connMgr =
-          new PoolingNHttpClientConnectionManager(AsyncHttpUtil.ioReactor, null, sessionStrategyRegistry, null);
+      AsyncHttpUtil.connMgr = new PoolingNHttpClientConnectionManager(AsyncHttpUtil.ioReactor, null, sessionStrategyRegistry);
+          
       AsyncHttpUtil.connMgr.setMaxTotal(AsyncHttpUtil.MAX_POOL_COUNT);
       AsyncHttpUtil.connMgr.setDefaultMaxPerRoute(AsyncHttpUtil.connMgr.getMaxTotal());
       AsyncHttpUtil.httpClient = HttpAsyncClients.custom().setConnectionManager(AsyncHttpUtil.connMgr).build();
