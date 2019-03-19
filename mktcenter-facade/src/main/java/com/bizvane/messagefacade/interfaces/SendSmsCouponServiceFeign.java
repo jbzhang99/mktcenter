@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
  * 
  * @date  2018/08/09
  */
-@FeignClient(value="${feign.client.message.name}",path="${feign.client.message.path}/SendSmsCoupon")
+@FeignClient(value="${feign.client.mktcenter.name}",path="${feign.client.mktcenter.path}/SendSmsCoupon")
 @Api(value = "优惠券短信模板消息",tags = {"API"})
 public interface SendSmsCouponServiceFeign {
 

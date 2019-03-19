@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 /**
  * Created by yunjie.tian on 2019/1/11.
  */
-@FeignClient(value="${feign.client.message.name}",path="${feign.client.message.path}/wechatCompany")
+@FeignClient(value="${feign.client.mktcenter.name}",path="${feign.client.mktcenter.path}/wechatCompany")
 public interface WechatCompanyServiceFeign {
 
     /**

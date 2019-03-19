@@ -2,10 +2,6 @@ package com.bizvane.couponservice.service.impl;
 
 import com.alibaba.fastjson.JSONObject;
 import com.bizvane.centerstageservice.rpc.StoreServiceRpc;
-import com.bizvane.connectorservice.entity.Result;
-import com.bizvane.connectorservice.entity.common.CouponGiveRequestVO;
-import com.bizvane.connectorservice.entity.common.CouponUseRequestVO;
-import com.bizvane.connectorservice.interfaces.rpc.ConnectorServiceFeign;
 import com.bizvane.couponfacade.enums.SendTypeEnum;
 import com.bizvane.couponfacade.models.po.CouponDefinitionPO;
 import com.bizvane.couponfacade.models.po.CouponEntityPO;
@@ -61,9 +57,6 @@ public class CouponServiceImpl implements CouponService {
     private WechatCouponServiceFeign wechatCouponServiceFeign;
     @Autowired
     private CouponDefinitionPOMapper couponDefinitionPOMapper;
-
-    @Autowired
-    private ConnectorServiceFeign connectorServiceFeign;
 
     @Autowired
     private WxChannelInfoApiService wxChannelInfoApiService;
@@ -164,22 +157,6 @@ public class CouponServiceImpl implements CouponService {
 
         //如果是全渠道  也线下核销 
         CouponDefinitionPO definitionPO = couponDefinitionPOMapper.selectByPrimaryKey(Long.valueOf(couponEntityPO.getCouponDefinitionId()));
-        if (definitionPO.getUseChannel() == 2) {
-            CouponUseRequestVO useVO = new CouponUseRequestVO();
-            useVO.setCouponCode(couponEntityPO.getCouponCode());
-            useVO.setBrandId(couponEntityPO.getSysBrandId());
-            useVO.setMemberCode(couponEntityPO.getMemberCode());
-            useVO.setOrderNo(useBusinessCode);
-            useVO.setIsMember(1);
-
-            //兑换券增加字段
-            useVO.setMoney(couponEntityPO.getMoney());
-            useVO.setPreferentialType(couponEntityPO.getPreferentialType());
-
-            logger.info("enter connectorServiceFeign usecoupon ! param:requestVO:{}", JSONObject.toJSONString(useVO));
-            Result useResult = connectorServiceFeign.usecoupon(useVO);
-            logger.info("enter semd onlineUseTransferSenduseResult", JSONObject.toJSONString(useResult));
-        }
 
 
         logger.info("enter semd getTransferSend", couponEntityPO.getCouponCode() + JSONObject.toJSONString(couponEntityPO));
@@ -354,26 +331,6 @@ public class CouponServiceImpl implements CouponService {
 
         couponStatusLogPOMapper.insertSelective(couponStatusLogPO);
 
-
-        //线下核销
-        CouponUseRequestVO useVO = new CouponUseRequestVO();
-        useVO.setCouponCode(param.getCouponCode());
-        useVO.setBrandId(param.getSysBrandId());
-        useVO.setMemberCode(couponEntityPO.getMemberCode());
-        useVO.setOrderNo(param.getBusinessCode());
-        useVO.setIsMember(param.getIsMember());
-        //兑换券增加字段
-        useVO.setMoney(couponEntityPO.getMoney());
-        useVO.setPreferentialType(couponEntityPO.getPreferentialType());
-        logger.info("enter connectorServiceFeign usecoupon371param:requestVO:{}", JSONObject.toJSONString(useVO));
-        Result useResult = connectorServiceFeign.usecoupon(useVO);
-
-        if (SysResponseEnum.SUCCESS.getCode() != useResult.getCode()) {
-            responseData.setCode(SysResponseEnum.FAILED.getCode());
-            responseData.setMessage(useResult.getMessage());
-            return responseData;
-        }
-
         return responseData;
     }
 
@@ -483,28 +440,6 @@ public class CouponServiceImpl implements CouponService {
         couponStatusLogPO.setCreateDate(TimeUtils.getNowTime());
 
         couponStatusLogPOMapper.insertSelective(couponStatusLogPO);
-
-        //线下核销券
-        CouponUseRequestVO useVO = new CouponUseRequestVO();
-        useVO.setCouponCode(requestVO.getCouponCode());
-        useVO.setBrandId(requestVO.getBrandId());
-        useVO.setMemberCode(couponEntityPO.getMemberCode());
-        //useVO.setOrderNo(vo.getBusinessCode());
-        useVO.setIsMember(SystemConstants.IS_MEMBER);
-
-
-        //兑换券增加字段
-        useVO.setMoney(couponEntityPO.getMoney());
-        useVO.setPreferentialType(couponEntityPO.getPreferentialType());
-        logger.info("enter connectorServiceFeign usecoupon502param:requestVO:{}", JSONObject.toJSONString(useVO));
-        Result useResult = connectorServiceFeign.usecoupon(useVO);
-
-        if (SysResponseEnum.SUCCESS.getCode() != useResult.getCode()) {
-            responseData.setCode(SysResponseEnum.FAILED.getCode());
-            responseData.setMessage(useResult.getMessage());
-            return responseData;
-        }
-
 
         return responseData;
     }
@@ -922,12 +857,6 @@ public class CouponServiceImpl implements CouponService {
         //查询券定义信息
         CouponDefinitionPO definitionPOResult = couponDefinitionPOMapper.selectByPrimaryKey(Long.parseLong(couponEntityPO.getCouponDefinitionId()));
 
-
-//        if (SystemConstants.COUPON_DEFINITION_TYPE_ERP.equals(definitionPOResult.getCouponDefinitionType())) {
-        CouponGiveRequestVO giveVO = new CouponGiveRequestVO();
-        giveVO.setBrandId(couponEntityPO.getSysBrandId());
-        giveVO.setCouponCode(couponCode);
-//            转线下卡号
         //查询会员信息
         WxChannelInfoVo channelVO = new WxChannelInfoVo();
         channelVO.setMemberCode(oldMemberCode);
@@ -943,21 +872,6 @@ public class CouponServiceImpl implements CouponService {
         channelVOnew.setMiniProgram(1);
         ResponseData<WxChannelAndMemberVo> channelResultnew = wxChannelInfoApiService.getWxChannelInfoAndMemberInfo(channelVOnew);
         WxChannelInfoVo channelResultnewVO = channelResultnew.getData().getWxChannelInfoVo();
-
-        giveVO.setFromMemberCode(channelInfoVo.getOfflineCardNo());
-        giveVO.setToMemberCode(channelResultnewVO.getOfflineCardNo());
-        giveVO.setDescription(description);
-        //兑换券增加字段
-        giveVO.setMoney(couponEntityPO.getMoney());
-        giveVO.setPreferentialType(couponEntityPO.getPreferentialType());
-        logger.info("enter semd getTransferSendGivecoupon" + couponEntityPO.getCouponCode() + JSONObject.toJSONString(giveVO));
-        Result result = connectorServiceFeign.givecoupon(giveVO);
-        logger.info("out semd getTransferSendGivecoupon" + couponEntityPO.getCouponCode() + JSONObject.toJSONString(result));
-        if (SysResponseEnum.FAILED.getCode() != result.getCode()) {
-            responseData.setCode(SysResponseEnum.SUCCESS.getCode());
-            responseData.setMessage(result.getMessage());
-            return responseData;
-        }
 //        }
         return responseData;
     }

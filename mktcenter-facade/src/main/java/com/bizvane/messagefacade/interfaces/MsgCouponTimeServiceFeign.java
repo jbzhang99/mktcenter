@@ -16,7 +16,7 @@ import java.util.List;
  * @author liangzanwen
  *2018年8月14日下午8:22:40
  */
-@FeignClient(value="${feign.client.message.name}",path="${feign.client.message.path}/msgCouponTime")
+@FeignClient(value="${feign.client.mktcenter.name}",path="${feign.client.mktcenter.path}/msgCouponTime")
 @Api(value = "优惠券到期通知",tags = {"优惠券到期通知"})
 public interface MsgCouponTimeServiceFeign {
 

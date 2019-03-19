@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-@FeignClient(value="${feign.client.coupon.name}",path="${feign.client.coupon.path}/couponManualRpc")
+@FeignClient(value="${feign.client.mktcenter.name}",path="${feign.client.mktcenter.path}/couponManualRpc")
 @Api(value = "手工发券",tags = {"API"})
 public interface CouponManualServiceFeign {
 

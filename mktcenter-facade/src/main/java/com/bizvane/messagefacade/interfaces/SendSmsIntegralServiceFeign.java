@@ -18,8 +18,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
  * 
  * @date  2018/08/09
  */
-@FeignClient(value="${feign.client.message.name}",path="${feign.client.message.path}/SendSmsIntegral")
-@RequestMapping("${feign.client.message.path}/SendSmsIntegral")
+@FeignClient(value="${feign.client.mktcenter.name}",path="${feign.client.mktcenter.path}/SendSmsIntegral")
+@RequestMapping("${feign.client.mktcenter.path}/SendSmsIntegral")
 @Api(value = "积分短信模板消息",tags = {"API"})
 public interface SendSmsIntegralServiceFeign {
 

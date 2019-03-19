@@ -97,30 +97,15 @@ feign:
     centerstage:
       name: centerstage
       path: centerstage.api
-    coupon:
-      name: coupon
-      path: coupon.api
+    mktcenter:
+      name: mktcenter
+      path: mktcenter.api
     members:
       name: members
       path: members.api
-    message:
-      name: message
-      path: message.api
-    wechat:
-      name: wechat
-      path: wechat
-    applet:
-      name: applet
-      path: applet.api
     centercontrol:
       name: centercontrol
       path: centercontrol.api
-    fitment:
-      name: fitment
-      path: fitment.api
-    connector:
-      name: connector
-      path: connector.api
 
 threadPool:
   corePoolSize: 16

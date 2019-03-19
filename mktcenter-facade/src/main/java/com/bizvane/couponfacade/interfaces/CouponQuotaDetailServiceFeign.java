@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 /**
  * Created by yunjie.tian on 2018/8/7.
  */
-@FeignClient(value="${feign.client.coupon.name}",path="${feign.client.coupon.path}/couponQuotaDetailRpc")
+@FeignClient(value="${feign.client.mktcenter.name}",path="${feign.client.mktcenter.path}/couponQuotaDetailRpc")
 @Api(value = "企业微信配额接口",tags = {"配额接口"})
 public interface CouponQuotaDetailServiceFeign {
 	

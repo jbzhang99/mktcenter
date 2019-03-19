@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
  * @Time: 2018/8/20 10:20
  * 批量发送短信
  */
-@FeignClient(value="${feign.client.message.name}",path="${feign.client.message.path}/msg")
+@FeignClient(value="${feign.client.mktcenter.name}",path="${feign.client.mktcenter.path}/msg")
 public interface SendBatchMessageFeign {
     /**
      * 批量发送短信

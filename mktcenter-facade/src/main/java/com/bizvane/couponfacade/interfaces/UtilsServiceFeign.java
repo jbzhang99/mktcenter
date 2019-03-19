@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 /**
  * Created by yunjie.tian on 2018/9/6.
  */
-@FeignClient(value="${feign.client.coupon.name}",path="${feign.client.coupon.path}/barcode")
+@FeignClient(value="${feign.client.mktcenter.name}",path="${feign.client.mktcenter.path}/barcode")
 @Api(value = "条形码",tags = {"API"})
 public interface UtilsServiceFeign {
 

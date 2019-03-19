@@ -19,7 +19,7 @@ import java.util.List;
 /**
  * Created by yunjie.tian on 2018/8/7.
  */
-@FeignClient(value="${feign.client.coupon.name}",path="${feign.client.coupon.path}/couponEntityRpc")
+@FeignClient(value="${feign.client.mktcenter.name}",path="${feign.client.mktcenter.path}/couponEntityRpc")
 @Api(value = "券实例接口",tags = {"券实例接口"})
 public interface CouponEntityServiceFeign {
 

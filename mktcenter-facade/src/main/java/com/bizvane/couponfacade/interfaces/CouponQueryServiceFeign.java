@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@FeignClient(value="${feign.client.coupon.name}",path="${feign.client.coupon.path}/couponQueryRpc")
+@FeignClient(value="${feign.client.mktcenter.name}",path="${feign.client.mktcenter.path}/couponQueryRpc")
 @Api(value = "券查询",tags = {"API"})
 public interface CouponQueryServiceFeign {
 

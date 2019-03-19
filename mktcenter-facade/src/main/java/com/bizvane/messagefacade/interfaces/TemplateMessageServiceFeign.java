@@ -18,7 +18,7 @@ import java.util.List;
  * @author liangzanwen
  *2018年8月14日下午8:22:40
  */
-@FeignClient(value="${feign.client.message.name}",path="${feign.client.message.path}/templateMessage")
+@FeignClient(value="${feign.client.mktcenter.name}",path="${feign.client.mktcenter.path}/templateMessage")
 @Api(value = "短信通用消息",tags = {"短信通用消息"})
 public interface TemplateMessageServiceFeign {
 	

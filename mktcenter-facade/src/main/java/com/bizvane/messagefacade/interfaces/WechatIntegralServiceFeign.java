@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
  * @author 董争光
  * 2018年7月25日下午1:53:21
  */
-@FeignClient(value="${feign.client.message.name}",path="${feign.client.message.path}/wechatIntegral")
+@FeignClient(value="${feign.client.mktcenter.name}",path="${feign.client.mktcenter.path}/wechatIntegral")
 @Api(value = "积分相关模板消息",tags = {"积分相关模板消息"})
 public interface WechatIntegralServiceFeign {
 

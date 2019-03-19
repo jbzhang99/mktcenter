@@ -2,10 +2,6 @@ package com.bizvane.couponservice.service.impl;
 
 import com.alibaba.fastjson.JSONObject;
 import com.bizvane.centerstageservice.models.po.SysAccountPo;
-import com.bizvane.connectorservice.entity.Result;
-import com.bizvane.connectorservice.entity.common.CouponBatchRequestVO;
-import com.bizvane.connectorservice.entity.common.CouponRequestVO;
-import com.bizvane.connectorservice.interfaces.rpc.ConnectorServiceFeign;
 import com.bizvane.couponfacade.enums.CouponManualTaskStatusEnum;
 import com.bizvane.couponfacade.enums.SendTypeEnum;
 import com.bizvane.couponfacade.models.po.*;
@@ -80,9 +76,6 @@ public class SendCouponServiceImpl implements SendCouponService {
 
     @Autowired
     private CouponSysCodeValuePOMapper sysCodeValuePOMapper;
-
-    @Autowired
-    private ConnectorServiceFeign connectorServiceFeign;
 
     @Autowired
     private MembersAdvancedSearchApiService membersAdvancedSearchApiService;
@@ -367,26 +360,6 @@ public class SendCouponServiceImpl implements SendCouponService {
      */
     public ResponseData<String> sendCouponOffline(CouponDefinitionPOWithBLOBs definitionPO, CouponEntityPO entityPO,Integer ifSendAgain) {
         ResponseData<String> responseData = new ResponseData<>();
-
-        CouponRequestVO erp = new CouponRequestVO();
-        erp.setCouponDefinitionCode(definitionPO.getCouponDefinitionCode());
-        erp.setCouponName(definitionPO.getCouponName());
-        erp.setCouponCode(entityPO.getCouponCode());
-        //erp.setMemberCode(entityPO.getMemberCode());
-        erp.setBindStatus(entityPO.getBindStatus());
-        erp.setUsePassword(entityPO.getUsePassword());
-        erp.setSendType(entityPO.getSendType());
-        erp.setSendBusinessId(entityPO.getSendBusinessId());
-        erp.setUseType(entityPO.getUseType());
-        erp.setUseStoreId(entityPO.getUseStoreId());
-        erp.setUseBusinessCode(entityPO.getUseBusinessCode());
-        erp.setUseTime(entityPO.getUseTime());
-        erp.setUse(entityPO.getIsUse());
-        erp.setUseChannel(definitionPO.getUseChannel());
-        erp.setPreferentialType(definitionPO.getPreferentialType());
-        erp.setMoney(definitionPO.getMoney());
-        erp.setDiscount(definitionPO.getDiscount()==null? BigDecimal.ZERO:definitionPO.getDiscount());
-
         //线下券需要有效期开始到结束区间
         if (definitionPO.getValidType().equals(SystemConstants.VALID_TYPE__SOMEDAY)) {
             Calendar calendar = Calendar.getInstance();
@@ -395,43 +368,6 @@ public class SendCouponServiceImpl implements SendCouponService {
             definitionPO.setValidDateEnd(calendar.getTime());
         }
 
-        erp.setValidDateStart(definitionPO.getValidDateStart());
-        erp.setValidDateEnd(definitionPO.getValidDateEnd());
-        erp.setQrCode(definitionPO.getQrCode());
-        erp.setImg(definitionPO.getImg());
-        erp.setPerMaxNum(definitionPO.getPerMaxNum());
-        erp.setRealName(definitionPO.getIsRealName());
-        erp.setTransfer(definitionPO.getIsTransfer());
-        erp.setActivitySuperpositionBlackList(definitionPO.getActivitySuperpositionBlackList());
-        erp.setActivitySuperpositionWhiteList(definitionPO.getActivitySuperpositionWhiteList());
-        erp.setSuperposition(definitionPO.getIsSuperposition());
-        erp.setTagPriceLimit(definitionPO.getIsTagPriceLimit());
-        erp.setMinConsume(definitionPO.getMinConsume());
-        erp.setMaxPreferential(definitionPO.getMaxPreferential());
-        erp.setMinCommodityNum(definitionPO.getMinCommodityNum());
-        erp.setMaxCommodityNum(definitionPO.getMaxCommodityNum());
-        erp.setMinDiscount(definitionPO.getMinDiscount());
-        erp.setApplianceCommodityType(definitionPO.getApplianceCommodityType());
-        erp.setApplianceStoreType(definitionPO.getApplianceStoreType());
-        erp.setCommodityWhitelist(definitionPO.getCommodityWhitelist());
-        erp.setCommodityBlacklist(definitionPO.getCommodityBlacklist());
-        erp.setStoreWhitelist(definitionPO.getStoreWhitelist());
-        erp.setStoreBlacklist(definitionPO.getStoreBlacklist());
-        erp.setBrandId(definitionPO.getSysBrandId());
-
-        //查询会员信息
-//        WxChannelInfoVo channelVO = new WxChannelInfoVo();
-//        channelVO.setMemberCode(entityPO.getMemberCode());
-//        ResponseData<WxChannelInfoVo> channelResult = wxChannelInfoApiService.getWxChannelInfo(channelVO);
-//
-//        logger.info("enter hhhhhhhhh SendCouponServiceImpl sendCouponOffline:param:{}", JSONObject.toJSONString(channelResult));
-//
-//
-//        if (channelResult.getData() != null) {
-//            WxChannelInfoVo channelInfoVo = channelResult.getData();
-//            erp.setMemberCode(channelInfoVo.getOfflineCardNo());
-//        }
-        
         //查询会员信息 新接口
         WxChannelInfoVo channelVO = new WxChannelInfoVo();
         channelVO.setMemberCode(entityPO.getMemberCode());
@@ -440,32 +376,10 @@ public class SendCouponServiceImpl implements SendCouponService {
         ResponseData<WxChannelAndMemberVo> channelResult = wxChannelInfoApiService.getWxChannelInfoAndMemberInfo(channelVO);
         if (channelResult.getData() != null) {
             WxChannelInfoVo channelInfoVo = channelResult.getData().getWxChannelInfoVo();
-            erp.setMemberCode(channelInfoVo.getOfflineCardNo());
+            
         }
         
         logger.info("enter hhhhhhhhh SendCouponServiceImpl sendCouponOffline:param:{}", JSONObject.toJSONString(channelResult));
-
-        //是否补发
-        erp.setIdReissue(ifSendAgain);
-
-        Result result = connectorServiceFeign.singlecoupon(erp);
-
-        logger.info("enter uuuuuuuuuuuuuuuuuu SendCouponServiceImpl sendCouponOffline:param:{}", JSONObject.toJSONString(result));
-
-        //线下同步券失败(非补发)
-        if (SysResponseEnum.SUCCESS.getCode() != result.getCode() && erp.getIdReissue().equals(SystemConstants.COUPON_SEND_AGAIN_NO) ) {
-
-            //保存失败日志信息
-            couponSendFailLogService.saveCouponSendFailLog(definitionPO,entityPO);
-        }
-
-        //线下同步券失败（补发）
-        if (SysResponseEnum.SUCCESS.getCode() != result.getCode() && erp.getIdReissue().equals(SystemConstants.COUPON_SEND_AGAIN_YES) ) {
-
-            //保存失败日志信息
-            couponSendFailLogService.updateSendStatus(SystemConstants.COUPON_SEND_NO,entityPO.getCouponCode());
-        }
-
 
         return responseData;
     }
@@ -953,124 +867,7 @@ public class SendCouponServiceImpl implements SendCouponService {
     @Override
     public ResponseData<String> sendCouponBatchOffline(CouponDefinitionPOWithBLOBs definitionPO, List<CouponEntityPO> entityPOList,
                                                        CouponBatchSendRecordPO batchPO) {
-        logger.info("enter CouponManualServiceImpl sendCouponBatchOffline method:param:entityPOList:{}" + JSONObject.toJSONString(entityPOList));
-
-        ResponseData<String> responseData = new ResponseData<>();
-
-
-        //同步到线下的券集合
-        List<CouponRequestVO> erpList = new ArrayList<>();
-        //失败code集合
-        List<String> failCouponCodeList = new ArrayList<>();
-        //线下批量发券
-        for (int i = 0; i < entityPOList.size(); i++) {
-
-            failCouponCodeList.add(entityPOList.get(i).getCouponCode());
-
-            CouponRequestVO erp = new CouponRequestVO();
-            erp.setCouponDefinitionCode(definitionPO.getErpCouponDefinitionCode());
-            erp.setCouponName(definitionPO.getCouponName());
-            erp.setCouponCode(entityPOList.get(i).getCouponCode());
-            erp.setBindStatus(entityPOList.get(i).getBindStatus());
-            erp.setUsePassword(entityPOList.get(i).getUsePassword());
-            erp.setSendType(entityPOList.get(i).getSendType());
-            erp.setSendBusinessId(entityPOList.get(i).getSendBusinessId());
-            erp.setUseType(entityPOList.get(i).getUseType());
-            erp.setUseStoreId(entityPOList.get(i).getUseStoreId());
-            erp.setUseBusinessCode(entityPOList.get(i).getUseBusinessCode());
-            erp.setUseTime(entityPOList.get(i).getUseTime());
-            erp.setUse(entityPOList.get(i).getIsUse());
-            erp.setUseChannel(definitionPO.getUseChannel());
-            erp.setPreferentialType(definitionPO.getPreferentialType());
-            erp.setMoney(definitionPO.getMoney());
-            erp.setDiscount(definitionPO.getDiscount());
-
-            //线下券需要有效期开始到结束区间
-            if (definitionPO.getValidType().equals(SystemConstants.VALID_TYPE__SOMEDAY)) {
-                Calendar calendar = Calendar.getInstance();
-                calendar.add(Calendar.DATE, definitionPO.getValidDay());
-                definitionPO.setValidDateStart(TimeUtils.getNowTime());
-                definitionPO.setValidDateEnd(calendar.getTime());
-            }
-
-            erp.setValidDateStart(definitionPO.getValidDateStart());
-            erp.setValidDateEnd(definitionPO.getValidDateEnd());
-            erp.setQrCode(definitionPO.getQrCode());
-            erp.setImg(definitionPO.getImg());
-            erp.setPerMaxNum(definitionPO.getPerMaxNum());
-            erp.setRealName(definitionPO.getIsRealName());
-            erp.setTransfer(definitionPO.getIsTransfer());
-            erp.setActivitySuperpositionBlackList(definitionPO.getActivitySuperpositionBlackList());
-            erp.setActivitySuperpositionWhiteList(definitionPO.getActivitySuperpositionWhiteList());
-            erp.setSuperposition(definitionPO.getIsSuperposition());
-            erp.setTagPriceLimit(definitionPO.getIsTagPriceLimit());
-            erp.setMinConsume(definitionPO.getMinConsume());
-            erp.setMaxPreferential(definitionPO.getMaxPreferential());
-            erp.setMinCommodityNum(definitionPO.getMinCommodityNum());
-            erp.setMaxCommodityNum(definitionPO.getMaxCommodityNum());
-            erp.setMinDiscount(definitionPO.getMinDiscount());
-            erp.setApplianceCommodityType(definitionPO.getApplianceCommodityType());
-            erp.setApplianceStoreType(definitionPO.getApplianceStoreType());
-            erp.setCommodityWhitelist(definitionPO.getCommodityWhitelist());
-            erp.setCommodityBlacklist(definitionPO.getCommodityBlacklist());
-            erp.setStoreWhitelist(definitionPO.getStoreWhitelist());
-            erp.setStoreBlacklist(definitionPO.getStoreBlacklist());
-
-
-            //查询会员信息
-//            WxChannelInfoVo channelVO = new WxChannelInfoVo();
-//            channelVO.setMemberCode(entityPOList.get(i).getMemberCode());
-//            ResponseData<WxChannelInfoVo> channelResult = wxChannelInfoApiService.getWxChannelInfo(channelVO);
-//
-//            if (channelResult.getData() != null) {
-//                WxChannelInfoVo channelInfoVo = channelResult.getData();
-//                erp.setMemberCode(channelInfoVo.getOfflineCardNo());
-//            }
-            //查询会员信息 新接口
-            WxChannelInfoVo channelVO = new WxChannelInfoVo();
-            channelVO.setMemberCode(entityPOList.get(i).getMemberCode());
-            channelVO.setBrandId(entityPOList.get(i).getSysBrandId());
-            channelVO.setMiniProgram(1);
-            ResponseData<WxChannelAndMemberVo> channelResult = wxChannelInfoApiService.getWxChannelInfoAndMemberInfo(channelVO);
-            if (channelResult.getData() != null) {
-                WxChannelInfoVo channelInfoVo = channelResult.getData().getWxChannelInfoVo();
-                erp.setMemberCode(channelInfoVo.getOfflineCardNo());
-                logger.info("enter hhhhhhhhhhhh channelInfoVo找到卡号",entityPOList.get(i).getCouponCode());
-            }
-            logger.info("enter hhhhhhhhhhhh SendCouponServiceImpl sendCouponOffline:MemberCode：param:{}",entityPOList.get(i).getCouponCode()+JSONObject.toJSONString(channelVO)+ JSONObject.toJSONString(channelResult));
-
-            erpList.add(erp);
-        }
-
-        CouponBatchRequestVO batchVO = new CouponBatchRequestVO();
-        batchVO.setList(erpList);
-        batchVO.setBrandId(definitionPO.getSysBrandId());
-        batchVO.setBatchCode(batchPO.getBatchSendCode());
-        //线下，非补发
-        batchVO.setIsReissue(SystemConstants.COUPON_SEND_AGAIN_NO);
-        logger.info("enter wwwwwwwwwwwwwwwwwwwwwwww connectorServiceFeign sendCouponBatchOffline:param:{}", JSONObject.toJSONString(batchVO));
-        Result result = connectorServiceFeign.batchcoupon(batchVO);
-
-        logger.info("enter wwwwwwwwwwwwwwwwwwwwwwww SendCouponServiceImpl sendCouponBatchOffline:param:{}", JSONObject.toJSONString(result));
-
-        //线下同步券失败（非补发）
-        if (SysResponseEnum.SUCCESS.getCode() != result.getCode() && batchVO.getIsReissue().equals(SystemConstants.COUPON_SEND_AGAIN_NO)){
-
-            logger.info("enter failCouponCodeList:{},batchPO:{}",JSONObject.toJSONString(failCouponCodeList),JSONObject.toJSONString(batchPO));
-
-            sendCouponBatchOfflineFail(failCouponCodeList, batchPO);
-
-        }
-
-        //线下同步券失败（补发）
-       /* if (SysResponseEnum.SUCCESS.getCode() != result.getCode() && batchVO.getIsReissue().equals(SystemConstants.COUPON_SEND_AGAIN_YES) ) {
-
-            //保存失败日志信息
-            couponSendFailLogPOMapper.updateSendStatusByCouponCodeList(failCouponCodeList,SystemConstants.COUPON_SEND_NO);
-        }*/
-
-        return responseData;
-    }
+                                                        return null;}
 
 
     /**
@@ -1352,49 +1149,7 @@ public class SendCouponServiceImpl implements SendCouponService {
 
 
             //遍历批次集合，分批发送券
-            for (Map.Entry<String, List<CouponSendAgainRequestVO>> batchEntry : batchMap.entrySet()) {
-
-                List<CouponRequestVO> list = new ArrayList<>();
-
-                //子类转为父类
-                for (CouponSendAgainRequestVO vo : batchEntry.getValue()) {
-                    list.add(vo);
-                }
-
-
-                //发券
-                CouponBatchRequestVO batchVO = new CouponBatchRequestVO();
-                batchVO.setList(list);
-                batchVO.setBrandId(batchEntry.getValue().get(0).getSysBrandId());
-                batchVO.setBatchCode(batchEntry.getKey());
-                //是否补发
-                batchVO.setIsReissue(SystemConstants.COUPON_SEND_AGAIN_YES);
-                Result result = connectorServiceFeign.batchcoupon(batchVO);
-
-                //成功
-                if(SysResponseEnum.SUCCESS.getCode() == result.getCode()){
-                    //更新失败日志表发券次数和状态
-
-                    //更新为补发中状态,同时补发次数+1
-                    List<Long> failIdList = new ArrayList<>();
-                    for (int i = 0; i < list.size(); i++) {
-                        failIdList.add(batchEntry.getValue().get(i).getCouponSendFailLogId());
-                    }
-
-                    Byte sendStatus = SystemConstants.COUPON_SENDING;
-                    Date sendDate = TimeUtils.getNowTime();
-                    couponSendFailLogPOMapper.updateTryTimesByIdList(failIdList,sendStatus,sendDate);
-                }
-
-                //失败
-                if (SysResponseEnum.SUCCESS.getCode() != result.getCode()) {
-                    responseData.setCode(SysResponseEnum.FAILED.getCode());
-                    responseData.setMessage(result.getMessage());
-                    return responseData;
-                }
-
-
-            }
+            for (Map.Entry<String, List<CouponSendAgainRequestVO>> batchEntry : batchMap.entrySet()) {}
 
 
         }
@@ -1439,49 +1194,7 @@ public class SendCouponServiceImpl implements SendCouponService {
         }
 
         //遍历品牌id,发券
-        for (Map.Entry<Long, List<CouponSendAgainRequestVO>> brandEntry : brandMap.entrySet()) {
-
-            List<CouponRequestVO> list = new ArrayList<>();
-
-            //子类转为父类
-            for (CouponSendAgainRequestVO vo : brandEntry.getValue()) {
-                list.add(vo);
-            }
-
-
-            //发券
-            CouponBatchRequestVO batchVO = new CouponBatchRequestVO();
-            batchVO.setList(list);
-            batchVO.setBrandId(brandEntry.getValue().get(0).getSysBrandId());
-            //是否补发
-            batchVO.setIsReissue(SystemConstants.COUPON_SEND_AGAIN_YES);
-            Result result = connectorServiceFeign.batchcoupon(batchVO);
-
-            //成功
-            if(SysResponseEnum.SUCCESS.getCode() == result.getCode()){
-                //更新失败日志表发券次数和状态
-
-                //更新为补发中状态,同时补发次数+1
-                List<Long> failIdList = new ArrayList<>();
-                for (int i = 0; i < list.size(); i++) {
-                    failIdList.add(brandEntry.getValue().get(i).getCouponSendFailLogId());
-                }
-
-                Byte sendStatus = SystemConstants.COUPON_SENDING;
-                Date sendDate = TimeUtils.getNowTime();
-                couponSendFailLogPOMapper.updateTryTimesByIdList(failIdList,sendStatus,sendDate);
-            }
-
-            //失败
-            if (SysResponseEnum.SUCCESS.getCode() != result.getCode()) {
-                responseData.setCode(SysResponseEnum.FAILED.getCode());
-                responseData.setMessage(result.getMessage());
-                return responseData;
-            }
-
-
-
-        }
+        for (Map.Entry<Long, List<CouponSendAgainRequestVO>> brandEntry : brandMap.entrySet()) {}
 
         return responseData;
 

@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 /**
  * Created by yunjie.tian on 2018/7/31.
  */
-@FeignClient(value="${feign.client.message.name}",path="${feign.client.message.path}/messageLog")
+@FeignClient(value="${feign.client.mktcenter.name}",path="${feign.client.mktcenter.path}/messageLog")
 @Api(value = "微信消息记录",tags = {"微信消息记录"})
 public interface WechatMessageLogFeign {
 

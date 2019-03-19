@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
  * @Author: lijunwei
  * @Time: 2018/7/19 14:11
  */
-@FeignClient(value="${feign.client.message.name}",path="${feign.client.message.path}/msg")
+@FeignClient(value="${feign.client.mktcenter.name}",path="${feign.client.mktcenter.path}/msg")
 public interface SendCommonMessageFeign {
     /**
      * 发送短信
