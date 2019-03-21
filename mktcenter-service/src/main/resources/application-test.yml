@@ -4,10 +4,10 @@ server:
     context-path: /mktcenter.api
 spring:
   redis:
-    database: 7
-    host: 192.168.1.50
+    host: www.yshjh.com
     port: 6379
-    password: bizvane
+    password: e7KD4na37hPtRUUR
+    database: 7
     jedis:
       pool:
         max-active: 100
@@ -25,17 +25,12 @@ spring:
   data:
     mongodb:
       database: "7"
-      uri: "mongodb://192.168.1.51:27017/?AutoConnectRetry=true"
+      uri: "mongodb://192.168.2.100:27017/?AutoConnectRetry=true"
     jest:
-      uri: http://192.168.1.45:9200
+      uri: http://192.168.2.100:9200
       username:
       password:
       read-timeout: 30000 #读取超时
-  elasticsearch:
-    cluster-name: my-esLearn
-    cluster-nodes: 192.168.1.45:9300
-    repositories:
-      enabled: true
   jackson:
     date-format: yyyy-MM-dd HH:mm:ss
     time-zone: GMT+8
@@ -56,7 +51,7 @@ eureka:
       lease-renewal-interval-in-seconds: 10
   client:
     service-url:
-      defaultZone: http://192.168.1.46:8761/eureka/
+      defaultZone: http://localhost:8761/eureka/
 management:
   endpoints:
     web.exposure.include: "*"

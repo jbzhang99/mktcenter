@@ -15,7 +15,11 @@ import com.qiniu.storage.model.BatchStatus;
 import com.qiniu.storage.model.DefaultPutRet;
 import com.qiniu.storage.model.FileInfo;
 import com.qiniu.util.Auth;
+
+import lombok.Data;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
@@ -32,54 +36,18 @@ import java.util.UUID;
  * @Copyright (c) 2018 上商帆信息科技有限公司-版权所有
  */
 @Service
+@Data
 public class QiNiuUtils {
     @Autowired
     private QiNiuServiceRpc qiNiuServiceRpc;
-//    @Autowired
-//    private SysQiNiuConfigPoMapper sysQiNiuConfigPoMapper;
 
     //官网地址
     //https://developer.qiniu.com/kodo/sdk/1239/java
+    @Value("${qiniu.accessKey}")
     private static String accessKey;
+    
+    @Value("${qiniu.secretKey}")
     private static String secretKey;
-
-//    public static void main(String[] args) throws Exception {
-//        QiNiuUtils qiNiuUtil = new QiNiuUtils();
-//        File file = new File("C:\\Users\\Gavin\\Pictures\\store.png");
-//
-//        String bucketNm = "bizvane01";
-//        //通过文件来传递
-//        QiNiuVo qiNiuVo = qiNiuUtil.upload(bucketNm,file);
-//
-//        System.out.println(qiNiuVo.getUrl());
-//
-//        //通过文件流来上传文件
-//        //InputStream in = new FileInputStream(file);
-//        //upload(bucketNm,in,"fdafaf.gif");
-//
-//        //删除bucket
-////      delete(bucketNm, "fdafaf.gif");
-//
-//        //获取文件信息
-////        String [] files = {"FokmLPAgttG3NmhrugjXidY7Sk6v"};
-//        //deletes(bucketNm,files);
-//
-//        //获取文件信息
-//        //getBucketsInfo();
-//
-//        qiNiuUtil.getFileInfo(bucketNm);
-//    }
-
-    @PostConstruct
-    public void QiNiuUtil(){
-        ResponseData<List<SysQiNiuConfigPo>> qiNiu = qiNiuServiceRpc.getQiNiu();
-        List<SysQiNiuConfigPo> sysQiNiuConfigPos = qiNiu.getData();
-        if(!CollectionUtils.isEmpty(sysQiNiuConfigPos)){
-            SysQiNiuConfigPo sysQiNiuConfigPo = sysQiNiuConfigPos.get(0);
-            accessKey = sysQiNiuConfigPo.getAccessKey();
-            secretKey =sysQiNiuConfigPo.getSecretKey();
-        }
-    }
 
     /**
      * 获取bucket里面所有文件的信息
