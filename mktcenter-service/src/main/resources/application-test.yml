@@ -4,9 +4,9 @@ server:
     context-path: /mktcenter.api
 spring:
   redis:
-    host: www.yshjh.com
+    host: node1
     port: 6379
-    password: e7KD4na37hPtRUUR
+    password: tangguaner
     database: 7
     jedis:
       pool:
@@ -18,16 +18,16 @@ spring:
     show: true
 
   datasource:
-    url: jdbc:mysql://bizvane-2018.mysql.polardb.rds.aliyuncs.com:3306/bizvane3?useUnicode=true&characterEncoding=utf-8
-    username: bizvane_2018
-    password: SF_bizvane20180613
+    url: jdbc:mysql://node1:3306/crm?useUnicode=true&characterEncoding=utf-8
+    username: root
+    password: tangguaner
     driver-class-name: com.mysql.jdbc.Driver
   data:
     mongodb:
       database: "7"
-      uri: "mongodb://192.168.2.100:27017/?AutoConnectRetry=true"
+      uri: "mongodb://node1:27017/?AutoConnectRetry=true"
     jest:
-      uri: http://192.168.2.100:9200
+      uri: http://node2:9200
       username:
       password:
       read-timeout: 30000 #读取超时
@@ -51,7 +51,7 @@ eureka:
       lease-renewal-interval-in-seconds: 10
   client:
     service-url:
-      defaultZone: http://localhost:8761/eureka/
+      defaultZone: http://node1:8761/eureka/
 management:
   endpoints:
     web.exposure.include: "*"
@@ -74,7 +74,7 @@ xxl:
   job:
     admin:
       ### xxl-job admin address list, such as "http://address" or "http://address01,http://address02"
-      addresses: http://192.168.1.49:8080
+      addresses: http://node1:8080
     ### xxl-job executor address
     executor:
       appname: ${spring.application.name}
