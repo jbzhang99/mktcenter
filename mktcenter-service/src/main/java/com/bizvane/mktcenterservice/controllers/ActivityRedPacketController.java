@@ -1,0 +1,100 @@
+package com.bizvane.mktcenterservice.controllers;
+
+import com.alibaba.fastjson.JSONObject;
+import com.bizvane.mktcenterfacade.interfaces.ActivityPriceService;
+import com.bizvane.mktcenterfacade.interfaces.ActivityRedPacketService;
+import com.bizvane.mktcenterfacade.models.bo.ActivityRedPacketBO;
+import com.bizvane.mktcenterfacade.models.bo.ActivityRedPacketListBO;
+import com.bizvane.mktcenterfacade.models.bo.MktActivityRedPacketRecordBO;
+import com.bizvane.mktcenterfacade.models.po.MktActivityPOWithBLOBs;
+import com.bizvane.mktcenterfacade.models.po.MktActivityRedPacketRecordPO;
+import com.bizvane.mktcenterfacade.models.vo.ActivityPriceParamVO;
+import com.bizvane.mktcenterfacade.models.vo.ActivityRedPacketVO;
+import com.bizvane.mktcenterfacade.models.vo.RedPacketSocketVO;
+import com.bizvane.utils.responseinfo.ResponseData;
+import com.github.pagehelper.PageInfo;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import javax.servlet.http.HttpServletRequest;
+import java.io.IOException;
+import java.text.ParseException;
+import java.util.List;
+
+/**
+ * @Author: lijunwei
+ * @Time: 2019/1/14 14:41
+ */
+@RestController
+@RequestMapping("activityRedPacket")
+public class ActivityRedPacketController {
+    @Autowired
+    private ActivityRedPacketService activityRedPacketService;
+    @Autowired
+    private ActivityPriceService activityPriceService;
+
+    @RequestMapping("addActivityRedPacket")
+    public ResponseData<JSONObject> addActivityRedPacket(ActivityRedPacketBO bo, HttpServletRequest request) throws ParseException {
+        return activityRedPacketService.addActivityRedPacket(bo, request);
+    }
+
+    @RequestMapping("selectActivityRedPacket")
+    public ResponseData<ActivityRedPacketBO> selectActivityRedPacket(ActivityRedPacketVO vo) {
+        return activityRedPacketService.selectActivityRedPacket(vo);
+    }
+
+    @RequestMapping("selectActivityRedPacketList")
+    public ResponseData<PageInfo<MktActivityPOWithBLOBs>> selectActivityRedPacketList(ActivityPriceParamVO vo, HttpServletRequest request) {
+        return activityRedPacketService.selectActivityRedPacketList(vo, request);
+    }
+
+    @RequestMapping("stopActivityRebPacket")
+    public ResponseData<Integer> stopActivityPrice(MktActivityPOWithBLOBs po, HttpServletRequest request) {
+        return activityRedPacketService.stopActivityRedPacket(po, request);
+    }
+    @RequestMapping("selectActivityRedPacketDetail")
+    public ResponseData<ActivityRedPacketBO> selectActivityRedPacketDetail(ActivityRedPacketVO vo) {
+        return activityRedPacketService.selectActivityRedPacketDetail(vo);
+    }
+
+    @RequestMapping("doIfActivityRedPacket")
+    public ResponseData<Integer> doIfActivityRedPacket(ActivityRedPacketVO vo) {
+        return activityRedPacketService.doIfActivityRedPacket(vo);
+    }
+
+    @RequestMapping("selectActivityRedPacketAnalyzeLists")
+    public ResponseData<PageInfo<ActivityRedPacketListBO>> selectActivityRedPacketAnalyzeLists(ActivityRedPacketVO vo, HttpServletRequest request) {
+        return activityRedPacketService.selectActivityRedPacketAnalyzeLists(vo, request);
+    }
+
+    @RequestMapping("getRedPacketCoponRecord")
+    public ResponseData<PageInfo<MktActivityRedPacketRecordBO>> getRedPacketCoponRecord(ActivityRedPacketVO vo, HttpServletRequest request) {
+        return activityRedPacketService.getRedPacketCoponRecord(vo, request);
+    }
+    @RequestMapping("getRedPacketZhuLiRecord")
+    public ResponseData<List<MktActivityRedPacketRecordPO>> getRedPacketZhuLiRecord(ActivityRedPacketVO vo, HttpServletRequest request) {
+        return activityRedPacketService.getRedPacketZhuLiRecord(vo);
+    }
+    @RequestMapping("getRedPacketZhuLiRecordByAPP")
+    public ResponseData<RedPacketSocketVO> getRedPacketZhuLiRecordByAPP(ActivityRedPacketVO vo){
+        return activityRedPacketService.getRedPacketZhuLiRecordByAPP(vo);
+    }
+    @RequestMapping("andActivityRedPacketCreateRecord")
+    public void andActivityRedPacketCreateRecord(ActivityRedPacketVO vo) {
+        activityRedPacketService.andActivityRedPacketCreateRecord(vo);
+    }
+    @RequestMapping("andActivityRedPacketZhuliRecord")
+    public ResponseData<Integer> andActivityRedPacketZhuliRecord(ActivityRedPacketVO vo) throws IOException {
+       return activityRedPacketService.andActivityRedPacketZhuliRecord(vo);
+    }
+    @RequestMapping("andActivityRedPacketSendCouponRecord")
+    public ResponseData<Integer> andActivityRedPacketSendCouponRecord(ActivityRedPacketVO vo) {
+        return activityRedPacketService.andActivityRedPacketSendCouponRecord(vo);
+    }
+    @RequestMapping("getRedPacketCoponAppRecord")
+    public ResponseData<List<MktActivityRedPacketRecordBO>> getRedPacketCoponAppRecord(ActivityRedPacketVO vo){
+        return activityRedPacketService.getRedPacketCoponAppRecord(vo);
+    }
+
+}

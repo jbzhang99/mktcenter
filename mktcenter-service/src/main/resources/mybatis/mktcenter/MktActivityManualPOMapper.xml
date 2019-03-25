@@ -1,0 +1,741 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bizvane.mktcenterservice.mappers.MktActivityManualPOMapper">
+  <resultMap id="BaseResultMap" type="com.bizvane.mktcenterfacade.models.po.MktActivityManualPO">
+    <!--
+      WARNING - 只读 - @mbg.generated
+      This element was generated on 2018-10-31 10:42:20.
+    -->
+    <id column="mkt_activity_manual_id" jdbcType="BIGINT" property="mktActivityManualId" />
+    <result column="sys_company_id" jdbcType="BIGINT" property="sysCompanyId" />
+    <result column="mkt_activity_id" jdbcType="BIGINT" property="mktActivityId" />
+    <result column="per_person_per_day_max" jdbcType="INTEGER" property="perPersonPerDayMax" />
+    <result column="per_person_max" jdbcType="INTEGER" property="perPersonMax" />
+    <result column="qrcode" jdbcType="VARCHAR" property="qrcode" />
+    <result column="is_store_limit" jdbcType="BIT" property="isStoreLimit" />
+    <result column="store_limit_type" jdbcType="INTEGER" property="storeLimitType" />
+    <result column="remark" jdbcType="VARCHAR" property="remark" />
+    <result column="create_user_id" jdbcType="BIGINT" property="createUserId" />
+    <result column="create_user_name" jdbcType="VARCHAR" property="createUserName" />
+    <result column="create_date" jdbcType="TIMESTAMP" property="createDate" />
+    <result column="modified_user_id" jdbcType="BIGINT" property="modifiedUserId" />
+    <result column="modified_user_name" jdbcType="VARCHAR" property="modifiedUserName" />
+    <result column="modified_date" jdbcType="TIMESTAMP" property="modifiedDate" />
+    <result column="valid" jdbcType="BIT" property="valid" />
+  </resultMap>
+  <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.bizvane.mktcenterfacade.models.po.MktActivityManualPO">
+    <!--
+      WARNING - 只读 - @mbg.generated
+      This element was generated on 2018-10-31 10:42:20.
+    -->
+    <result column="store_limit_list" jdbcType="LONGVARCHAR" property="storeLimitList" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <!--
+      WARNING - 只读 - @mbg.generated
+      This element was generated on 2018-10-31 10:42:20.
+    -->
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <!--
+      WARNING - 只读 - @mbg.generated
+      This element was generated on 2018-10-31 10:42:20.
+    -->
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    <!--
+      WARNING - 只读 - @mbg.generated
+      This element was generated on 2018-10-31 10:42:20.
+    -->
+    mkt_activity_manual_id, sys_company_id, mkt_activity_id, per_person_per_day_max, 
+    per_person_max, qrcode, is_store_limit, store_limit_type, remark, create_user_id, 
+    create_user_name, create_date, modified_user_id, modified_user_name, modified_date, 
+    valid
+  </sql>
+  <sql id="Blob_Column_List">
+    <!--
+      WARNING - 只读 - @mbg.generated
+      This element was generated on 2018-10-31 10:42:20.
+    -->
+    store_limit_list
+  </sql>
+  <select id="selectByExampleWithBLOBs" parameterType="com.bizvane.mktcenterfacade.models.po.MktActivityManualPOExample" resultMap="ResultMapWithBLOBs">
+    <!--
+      WARNING - 只读 - @mbg.generated
+      This element was generated on 2018-10-31 10:42:20.
+    -->
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from t_mkt_activity_manual
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByExample" parameterType="com.bizvane.mktcenterfacade.models.po.MktActivityManualPOExample" resultMap="BaseResultMap">
+    <!--
+      WARNING - 只读 - @mbg.generated
+      This element was generated on 2018-10-31 10:42:20.
+    -->
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from t_mkt_activity_manual
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="ResultMapWithBLOBs">
+    <!--
+      WARNING - 只读 - @mbg.generated
+      This element was generated on 2018-10-31 10:42:20.
+    -->
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from t_mkt_activity_manual
+    where mkt_activity_manual_id = #{mktActivityManualId,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    <!--
+      WARNING - 只读 - @mbg.generated
+      This element was generated on 2018-10-31 10:42:20.
+    -->
+    delete from t_mkt_activity_manual
+    where mkt_activity_manual_id = #{mktActivityManualId,jdbcType=BIGINT}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.bizvane.mktcenterfacade.models.po.MktActivityManualPOExample">
+    <!--
+      WARNING - 只读 - @mbg.generated
+      This element was generated on 2018-10-31 10:42:20.
+    -->
+    delete from t_mkt_activity_manual
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.bizvane.mktcenterfacade.models.po.MktActivityManualPO">
+    <!--
+      WARNING - 只读 - @mbg.generated
+      This element was generated on 2018-10-31 10:42:20.
+    -->
+    <selectKey keyProperty="mktActivityManualId" order="AFTER" resultType="java.lang.Long">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into t_mkt_activity_manual (sys_company_id, mkt_activity_id, per_person_per_day_max, 
+      per_person_max, qrcode, is_store_limit, 
+      store_limit_type, remark, create_user_id, 
+      create_user_name, create_date, modified_user_id, 
+      modified_user_name, modified_date, valid, 
+      store_limit_list)
+    values (#{sysCompanyId,jdbcType=BIGINT}, #{mktActivityId,jdbcType=BIGINT}, #{perPersonPerDayMax,jdbcType=INTEGER}, 
+      #{perPersonMax,jdbcType=INTEGER}, #{qrcode,jdbcType=VARCHAR}, #{isStoreLimit,jdbcType=BIT}, 
+      #{storeLimitType,jdbcType=INTEGER}, #{remark,jdbcType=VARCHAR}, #{createUserId,jdbcType=BIGINT}, 
+      #{createUserName,jdbcType=VARCHAR}, #{createDate,jdbcType=TIMESTAMP}, #{modifiedUserId,jdbcType=BIGINT}, 
+      #{modifiedUserName,jdbcType=VARCHAR}, #{modifiedDate,jdbcType=TIMESTAMP}, #{valid,jdbcType=BIT}, 
+      #{storeLimitList,jdbcType=LONGVARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.bizvane.mktcenterfacade.models.po.MktActivityManualPO">
+    <!--
+      WARNING - 只读 - @mbg.generated
+      This element was generated on 2018-10-31 10:42:20.
+    -->
+    <selectKey keyProperty="mktActivityManualId" order="AFTER" resultType="java.lang.Long">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into t_mkt_activity_manual
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="sysCompanyId != null">
+        sys_company_id,
+      </if>
+      <if test="mktActivityId != null">
+        mkt_activity_id,
+      </if>
+      <if test="perPersonPerDayMax != null">
+        per_person_per_day_max,
+      </if>
+      <if test="perPersonMax != null">
+        per_person_max,
+      </if>
+      <if test="qrcode != null">
+        qrcode,
+      </if>
+      <if test="isStoreLimit != null">
+        is_store_limit,
+      </if>
+      <if test="storeLimitType != null">
+        store_limit_type,
+      </if>
+      <if test="remark != null">
+        remark,
+      </if>
+      <if test="createUserId != null">
+        create_user_id,
+      </if>
+      <if test="createUserName != null">
+        create_user_name,
+      </if>
+      <if test="createDate != null">
+        create_date,
+      </if>
+      <if test="modifiedUserId != null">
+        modified_user_id,
+      </if>
+      <if test="modifiedUserName != null">
+        modified_user_name,
+      </if>
+      <if test="modifiedDate != null">
+        modified_date,
+      </if>
+      <if test="valid != null">
+        valid,
+      </if>
+      <if test="storeLimitList != null">
+        store_limit_list,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="sysCompanyId != null">
+        #{sysCompanyId,jdbcType=BIGINT},
+      </if>
+      <if test="mktActivityId != null">
+        #{mktActivityId,jdbcType=BIGINT},
+      </if>
+      <if test="perPersonPerDayMax != null">
+        #{perPersonPerDayMax,jdbcType=INTEGER},
+      </if>
+      <if test="perPersonMax != null">
+        #{perPersonMax,jdbcType=INTEGER},
+      </if>
+      <if test="qrcode != null">
+        #{qrcode,jdbcType=VARCHAR},
+      </if>
+      <if test="isStoreLimit != null">
+        #{isStoreLimit,jdbcType=BIT},
+      </if>
+      <if test="storeLimitType != null">
+        #{storeLimitType,jdbcType=INTEGER},
+      </if>
+      <if test="remark != null">
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="createUserId != null">
+        #{createUserId,jdbcType=BIGINT},
+      </if>
+      <if test="createUserName != null">
+        #{createUserName,jdbcType=VARCHAR},
+      </if>
+      <if test="createDate != null">
+        #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifiedUserId != null">
+        #{modifiedUserId,jdbcType=BIGINT},
+      </if>
+      <if test="modifiedUserName != null">
+        #{modifiedUserName,jdbcType=VARCHAR},
+      </if>
+      <if test="modifiedDate != null">
+        #{modifiedDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="valid != null">
+        #{valid,jdbcType=BIT},
+      </if>
+      <if test="storeLimitList != null">
+        #{storeLimitList,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.bizvane.mktcenterfacade.models.po.MktActivityManualPOExample" resultType="java.lang.Long">
+    <!--
+      WARNING - 只读 - @mbg.generated
+      This element was generated on 2018-10-31 10:42:20.
+    -->
+    select count(*) from t_mkt_activity_manual
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    <!--
+      WARNING - 只读 - @mbg.generated
+      This element was generated on 2018-10-31 10:42:20.
+    -->
+    update t_mkt_activity_manual
+    <set>
+      <if test="record.mktActivityManualId != null">
+        mkt_activity_manual_id = #{record.mktActivityManualId,jdbcType=BIGINT},
+      </if>
+      <if test="record.sysCompanyId != null">
+        sys_company_id = #{record.sysCompanyId,jdbcType=BIGINT},
+      </if>
+      <if test="record.mktActivityId != null">
+        mkt_activity_id = #{record.mktActivityId,jdbcType=BIGINT},
+      </if>
+      <if test="record.perPersonPerDayMax != null">
+        per_person_per_day_max = #{record.perPersonPerDayMax,jdbcType=INTEGER},
+      </if>
+      <if test="record.perPersonMax != null">
+        per_person_max = #{record.perPersonMax,jdbcType=INTEGER},
+      </if>
+      <if test="record.qrcode != null">
+        qrcode = #{record.qrcode,jdbcType=VARCHAR},
+      </if>
+      <if test="record.isStoreLimit != null">
+        is_store_limit = #{record.isStoreLimit,jdbcType=BIT},
+      </if>
+      <if test="record.storeLimitType != null">
+        store_limit_type = #{record.storeLimitType,jdbcType=INTEGER},
+      </if>
+      <if test="record.remark != null">
+        remark = #{record.remark,jdbcType=VARCHAR},
+      </if>
+      <if test="record.createUserId != null">
+        create_user_id = #{record.createUserId,jdbcType=BIGINT},
+      </if>
+      <if test="record.createUserName != null">
+        create_user_name = #{record.createUserName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.createDate != null">
+        create_date = #{record.createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.modifiedUserId != null">
+        modified_user_id = #{record.modifiedUserId,jdbcType=BIGINT},
+      </if>
+      <if test="record.modifiedUserName != null">
+        modified_user_name = #{record.modifiedUserName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.modifiedDate != null">
+        modified_date = #{record.modifiedDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.valid != null">
+        valid = #{record.valid,jdbcType=BIT},
+      </if>
+      <if test="record.storeLimitList != null">
+        store_limit_list = #{record.storeLimitList,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExampleWithBLOBs" parameterType="map">
+    <!--
+      WARNING - 只读 - @mbg.generated
+      This element was generated on 2018-10-31 10:42:20.
+    -->
+    update t_mkt_activity_manual
+    set mkt_activity_manual_id = #{record.mktActivityManualId,jdbcType=BIGINT},
+      sys_company_id = #{record.sysCompanyId,jdbcType=BIGINT},
+      mkt_activity_id = #{record.mktActivityId,jdbcType=BIGINT},
+      per_person_per_day_max = #{record.perPersonPerDayMax,jdbcType=INTEGER},
+      per_person_max = #{record.perPersonMax,jdbcType=INTEGER},
+      qrcode = #{record.qrcode,jdbcType=VARCHAR},
+      is_store_limit = #{record.isStoreLimit,jdbcType=BIT},
+      store_limit_type = #{record.storeLimitType,jdbcType=INTEGER},
+      remark = #{record.remark,jdbcType=VARCHAR},
+      create_user_id = #{record.createUserId,jdbcType=BIGINT},
+      create_user_name = #{record.createUserName,jdbcType=VARCHAR},
+      create_date = #{record.createDate,jdbcType=TIMESTAMP},
+      modified_user_id = #{record.modifiedUserId,jdbcType=BIGINT},
+      modified_user_name = #{record.modifiedUserName,jdbcType=VARCHAR},
+      modified_date = #{record.modifiedDate,jdbcType=TIMESTAMP},
+      valid = #{record.valid,jdbcType=BIT},
+      store_limit_list = #{record.storeLimitList,jdbcType=LONGVARCHAR}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    <!--
+      WARNING - 只读 - @mbg.generated
+      This element was generated on 2018-10-31 10:42:20.
+    -->
+    update t_mkt_activity_manual
+    set mkt_activity_manual_id = #{record.mktActivityManualId,jdbcType=BIGINT},
+      sys_company_id = #{record.sysCompanyId,jdbcType=BIGINT},
+      mkt_activity_id = #{record.mktActivityId,jdbcType=BIGINT},
+      per_person_per_day_max = #{record.perPersonPerDayMax,jdbcType=INTEGER},
+      per_person_max = #{record.perPersonMax,jdbcType=INTEGER},
+      qrcode = #{record.qrcode,jdbcType=VARCHAR},
+      is_store_limit = #{record.isStoreLimit,jdbcType=BIT},
+      store_limit_type = #{record.storeLimitType,jdbcType=INTEGER},
+      remark = #{record.remark,jdbcType=VARCHAR},
+      create_user_id = #{record.createUserId,jdbcType=BIGINT},
+      create_user_name = #{record.createUserName,jdbcType=VARCHAR},
+      create_date = #{record.createDate,jdbcType=TIMESTAMP},
+      modified_user_id = #{record.modifiedUserId,jdbcType=BIGINT},
+      modified_user_name = #{record.modifiedUserName,jdbcType=VARCHAR},
+      modified_date = #{record.modifiedDate,jdbcType=TIMESTAMP},
+      valid = #{record.valid,jdbcType=BIT}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.bizvane.mktcenterfacade.models.po.MktActivityManualPO">
+    <!--
+      WARNING - 只读 - @mbg.generated
+      This element was generated on 2018-10-31 10:42:20.
+    -->
+    update t_mkt_activity_manual
+    <set>
+      <if test="sysCompanyId != null">
+        sys_company_id = #{sysCompanyId,jdbcType=BIGINT},
+      </if>
+      <if test="mktActivityId != null">
+        mkt_activity_id = #{mktActivityId,jdbcType=BIGINT},
+      </if>
+      <if test="perPersonPerDayMax != null">
+        per_person_per_day_max = #{perPersonPerDayMax,jdbcType=INTEGER},
+      </if>
+      <if test="perPersonMax != null">
+        per_person_max = #{perPersonMax,jdbcType=INTEGER},
+      </if>
+      <if test="qrcode != null">
+        qrcode = #{qrcode,jdbcType=VARCHAR},
+      </if>
+      <if test="isStoreLimit != null">
+        is_store_limit = #{isStoreLimit,jdbcType=BIT},
+      </if>
+      <if test="storeLimitType != null">
+        store_limit_type = #{storeLimitType,jdbcType=INTEGER},
+      </if>
+      <if test="remark != null">
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="createUserId != null">
+        create_user_id = #{createUserId,jdbcType=BIGINT},
+      </if>
+      <if test="createUserName != null">
+        create_user_name = #{createUserName,jdbcType=VARCHAR},
+      </if>
+      <if test="createDate != null">
+        create_date = #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifiedUserId != null">
+        modified_user_id = #{modifiedUserId,jdbcType=BIGINT},
+      </if>
+      <if test="modifiedUserName != null">
+        modified_user_name = #{modifiedUserName,jdbcType=VARCHAR},
+      </if>
+      <if test="modifiedDate != null">
+        modified_date = #{modifiedDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="valid != null">
+        valid = #{valid,jdbcType=BIT},
+      </if>
+      <if test="storeLimitList != null">
+        store_limit_list = #{storeLimitList,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where mkt_activity_manual_id = #{mktActivityManualId,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.bizvane.mktcenterfacade.models.po.MktActivityManualPO">
+    <!--
+      WARNING - 只读 - @mbg.generated
+      This element was generated on 2018-10-31 10:42:20.
+    -->
+    update t_mkt_activity_manual
+    set sys_company_id = #{sysCompanyId,jdbcType=BIGINT},
+      mkt_activity_id = #{mktActivityId,jdbcType=BIGINT},
+      per_person_per_day_max = #{perPersonPerDayMax,jdbcType=INTEGER},
+      per_person_max = #{perPersonMax,jdbcType=INTEGER},
+      qrcode = #{qrcode,jdbcType=VARCHAR},
+      is_store_limit = #{isStoreLimit,jdbcType=BIT},
+      store_limit_type = #{storeLimitType,jdbcType=INTEGER},
+      remark = #{remark,jdbcType=VARCHAR},
+      create_user_id = #{createUserId,jdbcType=BIGINT},
+      create_user_name = #{createUserName,jdbcType=VARCHAR},
+      create_date = #{createDate,jdbcType=TIMESTAMP},
+      modified_user_id = #{modifiedUserId,jdbcType=BIGINT},
+      modified_user_name = #{modifiedUserName,jdbcType=VARCHAR},
+      modified_date = #{modifiedDate,jdbcType=TIMESTAMP},
+      valid = #{valid,jdbcType=BIT},
+      store_limit_list = #{storeLimitList,jdbcType=LONGVARCHAR}
+    where mkt_activity_manual_id = #{mktActivityManualId,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.bizvane.mktcenterfacade.models.po.MktActivityManualPO">
+    <!--
+      WARNING - 只读 - @mbg.generated
+      This element was generated on 2018-10-31 10:42:20.
+    -->
+    update t_mkt_activity_manual
+    set sys_company_id = #{sysCompanyId,jdbcType=BIGINT},
+      mkt_activity_id = #{mktActivityId,jdbcType=BIGINT},
+      per_person_per_day_max = #{perPersonPerDayMax,jdbcType=INTEGER},
+      per_person_max = #{perPersonMax,jdbcType=INTEGER},
+      qrcode = #{qrcode,jdbcType=VARCHAR},
+      is_store_limit = #{isStoreLimit,jdbcType=BIT},
+      store_limit_type = #{storeLimitType,jdbcType=INTEGER},
+      remark = #{remark,jdbcType=VARCHAR},
+      create_user_id = #{createUserId,jdbcType=BIGINT},
+      create_user_name = #{createUserName,jdbcType=VARCHAR},
+      create_date = #{createDate,jdbcType=TIMESTAMP},
+      modified_user_id = #{modifiedUserId,jdbcType=BIGINT},
+      modified_user_name = #{modifiedUserName,jdbcType=VARCHAR},
+      modified_date = #{modifiedDate,jdbcType=TIMESTAMP},
+      valid = #{valid,jdbcType=BIT}
+    where mkt_activity_manual_id = #{mktActivityManualId,jdbcType=BIGINT}
+  </update>
+ <!--查询领券活动列表-->
+   <select id="getActivityManualList" parameterType="com.bizvane.mktcenterfacade.models.vo.ActivityVO" resultType="com.bizvane.mktcenterfacade.models.vo.ActivityVO">
+    select
+     tma.mkt_activity_id,
+     tma.sys_company_id,
+     tma.sys_brand_id,
+     tma.activity_code,
+     tma.activity_type,
+     tma.activity_name,
+     tma.start_time,
+     tma.end_time,
+     tma.long_term,
+     tma.points,
+     tma.check_status,
+     tma.activity_status,
+     tma.remark,
+     tma.create_user_id,
+     tma.create_user_name,
+     tma.create_date,
+     tma.modified_user_id,
+     tma.modified_user_name,
+     tma.modified_date,
+     tma.valid,
+
+     tmm.per_person_per_day_max,
+     tmm.per_person_max,
+     tmm.qrcode
+    from t_mkt_activity tma
+    left join t_mkt_activity_manual tmm
+    on tma.mkt_activity_id = tmm.mkt_activity_id
+    where tmm.valid=1 and tma.valid=1
+
+     <if test="activityStatus != null and activityStatus!= '' ">
+       AND tma.activity_status = #{activityStatus,jdbcType=INTEGER}
+     </if>
+
+     <if test="activityType != null and activityType!= '' ">
+       AND tma.activity_type = #{activityType,jdbcType=INTEGER}
+     </if>
+     <if test="createDateStart != null ">
+       AND <![CDATA[ tma.create_date >= #{createDateStart,jdbcType=TIMESTAMP}]]>
+     </if>
+     <if test="createDateEnd != null ">
+       AND  <![CDATA[ tma.create_date <= #{createDateEnd,jdbcType=TIMESTAMP}]]>
+     </if>
+
+     <if test="startTime != null ">
+      and <![CDATA[ tma.start_time >=#{startTime,jdbcType=TIMESTAMP}]]>
+     </if>
+
+     <if test="endTime != null ">
+       and <![CDATA[ tma.end_time <=#{endTime,jdbcType=TIMESTAMP}]]>
+     </if>
+     <if test="activityName != null and activityName!= ''">
+       AND tma.activity_name LIKE "%"#{activityName}"%"
+     </if>
+     <if test="sysBrandId != null and sysBrandId != '' ">
+       AND tma.sys_brand_id = #{sysBrandId,jdbcType=BIGINT}
+     </if>
+       <if test="mktActivityId != null and mktActivityId != '' ">
+           AND tma.mkt_activity_id = #{mktActivityId,jdbcType=BIGINT}
+       </if>
+     <if test="activityCode != null and activityCode!= ''">
+       AND tma.activity_code LIKE "%"#{activityCode}"%"
+     </if>
+
+     <if test="checkStatus != null and checkStatus!= '' ">
+       AND tma.check_status = #{checkStatus,jdbcType=INTEGER}
+     </if>
+     ORDER BY tma.create_date DESC
+   </select>
+
+  <select id="getActivityList" parameterType="com.bizvane.mktcenterfacade.models.vo.ActivityVO" resultType="com.bizvane.mktcenterfacade.models.vo.ActivityVO">
+    SELECT
+    tma.mkt_activity_id,
+    tma.sys_company_id,
+    tma.sys_brand_id,
+    tma.activity_code,
+    tma.activity_type,
+    tma.activity_name,
+    tma.start_time,
+    tma.end_time,
+    tma.long_term,
+    tma.points,
+    tma.check_status,
+    tma.activity_status,
+    tma.remark,
+    tma.create_user_id,
+    tma.create_user_name,
+    tma.create_date,
+    tma.modified_user_id,
+    tma.modified_user_name,
+    tma.modified_date,
+    tma.valid,
+
+    tmm.per_person_per_day_max,
+    tmm.per_person_max,
+    tmm.create_user_name,
+    tmm.create_date,
+    tmm.modified_user_name,
+    tmm.modified_date,
+    tmm.valid,
+    tmm.is_store_limit,
+    tmm.store_limit_type,
+    tmm.store_limit_list,
+    tmm.is_store_limit AS storeLimit,
+    tmm.qrcode
+    FROM
+    `t_mkt_activity` tma
+    INNER JOIN t_mkt_activity_manual tmm ON tma.mkt_activity_id = tmm.mkt_activity_id
+    and tma.valid=1
+    and tmm.valid=1
+    <!--活动主表ID -->
+    <if test="mktActivityId != null and mktActivityId!= '' ">
+      AND tma.mkt_activity_id = #{mktActivityId,jdbcType=BIGINT}
+    </if>
+    <!--活动编号-->
+    <if test="activityCode != null and activityCode!= ''">
+      AND tma.activity_code = #{activityCode,jdbcType=VARCHAR}
+    </if>
+  </select>
+
+  <select id="getActivityIdList" parameterType="com.bizvane.mktcenterfacade.models.vo.ActivityVO" resultType="com.bizvane.mktcenterfacade.models.vo.ActivityVO">
+    SELECT
+    tma.mkt_activity_id,
+    tma.activity_code,
+    tma.activity_name,
+    tma.start_time,
+    tma.end_time,
+    tma.activity_info,
+    tma.long_term,
+    tma.activity_list_img,
+    tma.activity_detail_img,
+    tma.check_status,
+    tma.activity_status,
+    tma.remark,
+    tma.create_user_id,
+    tma.create_user_name,
+    tma.create_date,
+    tmam.qrcode,
+    tmam.per_person_per_day_max,
+    tmam.per_person_max,
+    tmam.mkt_activity_manual_id,
+    tmam.is_store_limit,
+    tmam.store_limit_type,
+    tmam.store_limit_list,
+    tmc.coupon_name,
+    tmc.coupon_definition_id
+
+    FROM
+    t_mkt_activity tma
+    LEFT JOIN t_mkt_activity_manual tmam ON tma.mkt_activity_id = tmam.mkt_activity_id
+    left join  t_mkt_coupon tmc
+    on tmc.biz_id = tma.mkt_activity_id
+WHERE
+    tmam.valid = 1
+    AND tma.valid = 1
+    and tmc.valid=1
+    <if test="sysBrandId != null and sysBrandId!= '' ">
+      AND tma.sys_brand_id = #{sysBrandId,jdbcType=BIGINT}
+    </if>
+    <if test="sysCompanyId != null and sysCompanyId!= '' ">
+      AND tma.sys_company_id = #{sysCompanyId,jdbcType=BIGINT}
+    </if>
+    <if test="activityCode != null and activityCode!= '' ">
+    AND tma.activity_code = #{activityCode,jdbcType=VARCHAR}
+  </if>
+    <if test="activityType != null and activityType!= '' ">
+      AND tma.activity_type = #{activityType,jdbcType=INTEGER}
+    </if>
+    <if test="activityStatus != null and activityStatus!= '' ">
+      AND tma.activity_status = #{activityStatus,jdbcType=INTEGER}
+    </if>
+  </select>
+
+  <select id="getActivityManualEffect">
+    SELECT
+    tma.activity_name,
+    tma.start_time,
+    tma.end_time,
+    FROM
+    t_mkt_activity tma
+    LEFT JOIN t_mkt_activity_manual tmam ON tma.mkt_activity_id = tmam.mkt_activity_id
+    WHERE
+    tma.valid=1
+    and tmam.valid=1
+    <if test="sysCompanyId != null and sysCompanyId!= '' ">
+      AND tma.sys_company_id = #{sysCompanyId}
+    </if>
+    <if test="sysBrandId != null and sysBrandId!= '' ">
+      AND tma.sys_brand_id = #{sysBrandId}
+    </if>
+
+  </select>
+
+</mapper>

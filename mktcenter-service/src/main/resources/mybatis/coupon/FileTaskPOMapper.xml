@@ -1,0 +1,529 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.bizvane.couponservice.mappers.FileTaskPOMapper" >
+    <cache type="com.bizvane.couponservice.common.system.RedisCache" eviction="LRU"
+           flushInterval="3600000"
+           size="1024"
+           readOnly="false">
+    </cache>
+  <resultMap id="BaseResultMap" type="com.bizvane.couponfacade.models.po.FileTaskPO" >
+    <!--
+      WARNING - 只读 - @mbg.generated
+      This element was generated on 2018-09-01 17:31:17.
+    -->
+    <id column="file_task_id" property="fileTaskId" jdbcType="BIGINT" />
+    <result column="sys_company_id" property="sysCompanyId" jdbcType="BIGINT" />
+    <result column="sys_brand_id" property="sysBrandId" jdbcType="BIGINT" />
+    <result column="task_id" property="taskId" jdbcType="BIGINT" />
+    <result column="task_type_code" property="taskTypeCode" jdbcType="VARCHAR" />
+    <result column="task_name" property="taskName" jdbcType="VARCHAR" />
+    <result column="file_id" property="fileId" jdbcType="VARCHAR" />
+    <result column="file_name" property="fileName" jdbcType="VARCHAR" />
+    <result column="file_type" property="fileType" jdbcType="VARCHAR" />
+    <result column="file_directory" property="fileDirectory" jdbcType="VARCHAR" />
+    <result column="file_unl" property="fileUnl" jdbcType="VARCHAR" />
+    <result column="file_status" property="fileStatus" jdbcType="BIGINT" />
+    <result column="file_task_date" property="fileTaskDate" jdbcType="TIMESTAMP" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+    <result column="create_user_id" property="createUserId" jdbcType="BIGINT" />
+    <result column="create_user_name" property="createUserName" jdbcType="VARCHAR" />
+    <result column="create_date" property="createDate" jdbcType="TIMESTAMP" />
+    <result column="modified_user_id" property="modifiedUserId" jdbcType="BIGINT" />
+    <result column="modified_user_name" property="modifiedUserName" jdbcType="VARCHAR" />
+    <result column="modified_date" property="modifiedDate" jdbcType="TIMESTAMP" />
+    <result column="valid" property="valid" jdbcType="BIT" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <!--
+      WARNING - 只读 - @mbg.generated
+      This element was generated on 2018-09-01 17:31:17.
+    -->
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <!--
+      WARNING - 只读 - @mbg.generated
+      This element was generated on 2018-09-01 17:31:17.
+    -->
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    <!--
+      WARNING - 只读 - @mbg.generated
+      This element was generated on 2018-09-01 17:31:17.
+    -->
+    file_task_id, sys_company_id, sys_brand_id, task_id, task_type_code, task_name, file_id, 
+    file_name, file_type, file_directory, file_unl, file_status, file_task_date, remark, 
+    create_user_id, create_user_name, create_date, modified_user_id, modified_user_name, 
+    modified_date, valid
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.bizvane.couponfacade.models.po.FileTaskPOExample" >
+    <!--
+      WARNING - 只读 - @mbg.generated
+      This element was generated on 2018-09-01 17:31:17.
+    -->
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from t_file_task
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    <!--
+      WARNING - 只读 - @mbg.generated
+      This element was generated on 2018-09-01 17:31:17.
+    -->
+    select 
+    <include refid="Base_Column_List" />
+    from t_file_task
+    where file_task_id = #{fileTaskId,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    <!--
+      WARNING - 只读 - @mbg.generated
+      This element was generated on 2018-09-01 17:31:17.
+    -->
+    delete from t_file_task
+    where file_task_id = #{fileTaskId,jdbcType=BIGINT}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.bizvane.couponfacade.models.po.FileTaskPOExample" >
+    <!--
+      WARNING - 只读 - @mbg.generated
+      This element was generated on 2018-09-01 17:31:17.
+    -->
+    delete from t_file_task
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.bizvane.couponfacade.models.po.FileTaskPO" >
+    <!--
+      WARNING - 只读 - @mbg.generated
+      This element was generated on 2018-09-01 17:31:17.
+    -->
+    <selectKey resultType="java.lang.Long" keyProperty="fileTaskId" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into t_file_task (sys_company_id, sys_brand_id, task_id, 
+      task_type_code, task_name, file_id, 
+      file_name, file_type, file_directory, 
+      file_unl, file_status, file_task_date, 
+      remark, create_user_id, create_user_name, 
+      create_date, modified_user_id, modified_user_name, 
+      modified_date, valid)
+    values (#{sysCompanyId,jdbcType=BIGINT}, #{sysBrandId,jdbcType=BIGINT}, #{taskId,jdbcType=BIGINT}, 
+      #{taskTypeCode,jdbcType=VARCHAR}, #{taskName,jdbcType=VARCHAR}, #{fileId,jdbcType=VARCHAR}, 
+      #{fileName,jdbcType=VARCHAR}, #{fileType,jdbcType=VARCHAR}, #{fileDirectory,jdbcType=VARCHAR}, 
+      #{fileUnl,jdbcType=VARCHAR}, #{fileStatus,jdbcType=BIGINT}, #{fileTaskDate,jdbcType=TIMESTAMP}, 
+      #{remark,jdbcType=VARCHAR}, #{createUserId,jdbcType=BIGINT}, #{createUserName,jdbcType=VARCHAR}, 
+      #{createDate,jdbcType=TIMESTAMP}, #{modifiedUserId,jdbcType=BIGINT}, #{modifiedUserName,jdbcType=VARCHAR}, 
+      #{modifiedDate,jdbcType=TIMESTAMP}, #{valid,jdbcType=BIT})
+  </insert>
+  <insert id="insertSelective" parameterType="com.bizvane.couponfacade.models.po.FileTaskPO" >
+    <!--
+      WARNING - 只读 - @mbg.generated
+      This element was generated on 2018-09-01 17:31:17.
+    -->
+    <selectKey resultType="java.lang.Long" keyProperty="fileTaskId" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into t_file_task
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="sysCompanyId != null" >
+        sys_company_id,
+      </if>
+      <if test="sysBrandId != null" >
+        sys_brand_id,
+      </if>
+      <if test="taskId != null" >
+        task_id,
+      </if>
+      <if test="taskTypeCode != null" >
+        task_type_code,
+      </if>
+      <if test="taskName != null" >
+        task_name,
+      </if>
+      <if test="fileId != null" >
+        file_id,
+      </if>
+      <if test="fileName != null" >
+        file_name,
+      </if>
+      <if test="fileType != null" >
+        file_type,
+      </if>
+      <if test="fileDirectory != null" >
+        file_directory,
+      </if>
+      <if test="fileUnl != null" >
+        file_unl,
+      </if>
+      <if test="fileStatus != null" >
+        file_status,
+      </if>
+      <if test="fileTaskDate != null" >
+        file_task_date,
+      </if>
+      <if test="remark != null" >
+        remark,
+      </if>
+      <if test="createUserId != null" >
+        create_user_id,
+      </if>
+      <if test="createUserName != null" >
+        create_user_name,
+      </if>
+      <if test="createDate != null" >
+        create_date,
+      </if>
+      <if test="modifiedUserId != null" >
+        modified_user_id,
+      </if>
+      <if test="modifiedUserName != null" >
+        modified_user_name,
+      </if>
+      <if test="modifiedDate != null" >
+        modified_date,
+      </if>
+      <if test="valid != null" >
+        valid,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="sysCompanyId != null" >
+        #{sysCompanyId,jdbcType=BIGINT},
+      </if>
+      <if test="sysBrandId != null" >
+        #{sysBrandId,jdbcType=BIGINT},
+      </if>
+      <if test="taskId != null" >
+        #{taskId,jdbcType=BIGINT},
+      </if>
+      <if test="taskTypeCode != null" >
+        #{taskTypeCode,jdbcType=VARCHAR},
+      </if>
+      <if test="taskName != null" >
+        #{taskName,jdbcType=VARCHAR},
+      </if>
+      <if test="fileId != null" >
+        #{fileId,jdbcType=VARCHAR},
+      </if>
+      <if test="fileName != null" >
+        #{fileName,jdbcType=VARCHAR},
+      </if>
+      <if test="fileType != null" >
+        #{fileType,jdbcType=VARCHAR},
+      </if>
+      <if test="fileDirectory != null" >
+        #{fileDirectory,jdbcType=VARCHAR},
+      </if>
+      <if test="fileUnl != null" >
+        #{fileUnl,jdbcType=VARCHAR},
+      </if>
+      <if test="fileStatus != null" >
+        #{fileStatus,jdbcType=BIGINT},
+      </if>
+      <if test="fileTaskDate != null" >
+        #{fileTaskDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="remark != null" >
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="createUserId != null" >
+        #{createUserId,jdbcType=BIGINT},
+      </if>
+      <if test="createUserName != null" >
+        #{createUserName,jdbcType=VARCHAR},
+      </if>
+      <if test="createDate != null" >
+        #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifiedUserId != null" >
+        #{modifiedUserId,jdbcType=BIGINT},
+      </if>
+      <if test="modifiedUserName != null" >
+        #{modifiedUserName,jdbcType=VARCHAR},
+      </if>
+      <if test="modifiedDate != null" >
+        #{modifiedDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="valid != null" >
+        #{valid,jdbcType=BIT},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.bizvane.couponfacade.models.po.FileTaskPOExample" resultType="java.lang.Integer" >
+    <!--
+      WARNING - 只读 - @mbg.generated
+      This element was generated on 2018-09-01 17:31:17.
+    -->
+    select count(*) from t_file_task
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    <!--
+      WARNING - 只读 - @mbg.generated
+      This element was generated on 2018-09-01 17:31:17.
+    -->
+    update t_file_task
+    <set >
+      <if test="record.fileTaskId != null" >
+        file_task_id = #{record.fileTaskId,jdbcType=BIGINT},
+      </if>
+      <if test="record.sysCompanyId != null" >
+        sys_company_id = #{record.sysCompanyId,jdbcType=BIGINT},
+      </if>
+      <if test="record.sysBrandId != null" >
+        sys_brand_id = #{record.sysBrandId,jdbcType=BIGINT},
+      </if>
+      <if test="record.taskId != null" >
+        task_id = #{record.taskId,jdbcType=BIGINT},
+      </if>
+      <if test="record.taskTypeCode != null" >
+        task_type_code = #{record.taskTypeCode,jdbcType=VARCHAR},
+      </if>
+      <if test="record.taskName != null" >
+        task_name = #{record.taskName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.fileId != null" >
+        file_id = #{record.fileId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.fileName != null" >
+        file_name = #{record.fileName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.fileType != null" >
+        file_type = #{record.fileType,jdbcType=VARCHAR},
+      </if>
+      <if test="record.fileDirectory != null" >
+        file_directory = #{record.fileDirectory,jdbcType=VARCHAR},
+      </if>
+      <if test="record.fileUnl != null" >
+        file_unl = #{record.fileUnl,jdbcType=VARCHAR},
+      </if>
+      <if test="record.fileStatus != null" >
+        file_status = #{record.fileStatus,jdbcType=BIGINT},
+      </if>
+      <if test="record.fileTaskDate != null" >
+        file_task_date = #{record.fileTaskDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.remark != null" >
+        remark = #{record.remark,jdbcType=VARCHAR},
+      </if>
+      <if test="record.createUserId != null" >
+        create_user_id = #{record.createUserId,jdbcType=BIGINT},
+      </if>
+      <if test="record.createUserName != null" >
+        create_user_name = #{record.createUserName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.createDate != null" >
+        create_date = #{record.createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.modifiedUserId != null" >
+        modified_user_id = #{record.modifiedUserId,jdbcType=BIGINT},
+      </if>
+      <if test="record.modifiedUserName != null" >
+        modified_user_name = #{record.modifiedUserName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.modifiedDate != null" >
+        modified_date = #{record.modifiedDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.valid != null" >
+        valid = #{record.valid,jdbcType=BIT},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    <!--
+      WARNING - 只读 - @mbg.generated
+      This element was generated on 2018-09-01 17:31:17.
+    -->
+    update t_file_task
+    set file_task_id = #{record.fileTaskId,jdbcType=BIGINT},
+      sys_company_id = #{record.sysCompanyId,jdbcType=BIGINT},
+      sys_brand_id = #{record.sysBrandId,jdbcType=BIGINT},
+      task_id = #{record.taskId,jdbcType=BIGINT},
+      task_type_code = #{record.taskTypeCode,jdbcType=VARCHAR},
+      task_name = #{record.taskName,jdbcType=VARCHAR},
+      file_id = #{record.fileId,jdbcType=VARCHAR},
+      file_name = #{record.fileName,jdbcType=VARCHAR},
+      file_type = #{record.fileType,jdbcType=VARCHAR},
+      file_directory = #{record.fileDirectory,jdbcType=VARCHAR},
+      file_unl = #{record.fileUnl,jdbcType=VARCHAR},
+      file_status = #{record.fileStatus,jdbcType=BIGINT},
+      file_task_date = #{record.fileTaskDate,jdbcType=TIMESTAMP},
+      remark = #{record.remark,jdbcType=VARCHAR},
+      create_user_id = #{record.createUserId,jdbcType=BIGINT},
+      create_user_name = #{record.createUserName,jdbcType=VARCHAR},
+      create_date = #{record.createDate,jdbcType=TIMESTAMP},
+      modified_user_id = #{record.modifiedUserId,jdbcType=BIGINT},
+      modified_user_name = #{record.modifiedUserName,jdbcType=VARCHAR},
+      modified_date = #{record.modifiedDate,jdbcType=TIMESTAMP},
+      valid = #{record.valid,jdbcType=BIT}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.bizvane.couponfacade.models.po.FileTaskPO" >
+    <!--
+      WARNING - 只读 - @mbg.generated
+      This element was generated on 2018-09-01 17:31:17.
+    -->
+    update t_file_task
+    <set >
+      <if test="sysCompanyId != null" >
+        sys_company_id = #{sysCompanyId,jdbcType=BIGINT},
+      </if>
+      <if test="sysBrandId != null" >
+        sys_brand_id = #{sysBrandId,jdbcType=BIGINT},
+      </if>
+      <if test="taskId != null" >
+        task_id = #{taskId,jdbcType=BIGINT},
+      </if>
+      <if test="taskTypeCode != null" >
+        task_type_code = #{taskTypeCode,jdbcType=VARCHAR},
+      </if>
+      <if test="taskName != null" >
+        task_name = #{taskName,jdbcType=VARCHAR},
+      </if>
+      <if test="fileId != null" >
+        file_id = #{fileId,jdbcType=VARCHAR},
+      </if>
+      <if test="fileName != null" >
+        file_name = #{fileName,jdbcType=VARCHAR},
+      </if>
+      <if test="fileType != null" >
+        file_type = #{fileType,jdbcType=VARCHAR},
+      </if>
+      <if test="fileDirectory != null" >
+        file_directory = #{fileDirectory,jdbcType=VARCHAR},
+      </if>
+      <if test="fileUnl != null" >
+        file_unl = #{fileUnl,jdbcType=VARCHAR},
+      </if>
+      <if test="fileStatus != null" >
+        file_status = #{fileStatus,jdbcType=BIGINT},
+      </if>
+      <if test="fileTaskDate != null" >
+        file_task_date = #{fileTaskDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="remark != null" >
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="createUserId != null" >
+        create_user_id = #{createUserId,jdbcType=BIGINT},
+      </if>
+      <if test="createUserName != null" >
+        create_user_name = #{createUserName,jdbcType=VARCHAR},
+      </if>
+      <if test="createDate != null" >
+        create_date = #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifiedUserId != null" >
+        modified_user_id = #{modifiedUserId,jdbcType=BIGINT},
+      </if>
+      <if test="modifiedUserName != null" >
+        modified_user_name = #{modifiedUserName,jdbcType=VARCHAR},
+      </if>
+      <if test="modifiedDate != null" >
+        modified_date = #{modifiedDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="valid != null" >
+        valid = #{valid,jdbcType=BIT},
+      </if>
+    </set>
+    where file_task_id = #{fileTaskId,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.bizvane.couponfacade.models.po.FileTaskPO" >
+    <!--
+      WARNING - 只读 - @mbg.generated
+      This element was generated on 2018-09-01 17:31:17.
+    -->
+    update t_file_task
+    set sys_company_id = #{sysCompanyId,jdbcType=BIGINT},
+      sys_brand_id = #{sysBrandId,jdbcType=BIGINT},
+      task_id = #{taskId,jdbcType=BIGINT},
+      task_type_code = #{taskTypeCode,jdbcType=VARCHAR},
+      task_name = #{taskName,jdbcType=VARCHAR},
+      file_id = #{fileId,jdbcType=VARCHAR},
+      file_name = #{fileName,jdbcType=VARCHAR},
+      file_type = #{fileType,jdbcType=VARCHAR},
+      file_directory = #{fileDirectory,jdbcType=VARCHAR},
+      file_unl = #{fileUnl,jdbcType=VARCHAR},
+      file_status = #{fileStatus,jdbcType=BIGINT},
+      file_task_date = #{fileTaskDate,jdbcType=TIMESTAMP},
+      remark = #{remark,jdbcType=VARCHAR},
+      create_user_id = #{createUserId,jdbcType=BIGINT},
+      create_user_name = #{createUserName,jdbcType=VARCHAR},
+      create_date = #{createDate,jdbcType=TIMESTAMP},
+      modified_user_id = #{modifiedUserId,jdbcType=BIGINT},
+      modified_user_name = #{modifiedUserName,jdbcType=VARCHAR},
+      modified_date = #{modifiedDate,jdbcType=TIMESTAMP},
+      valid = #{valid,jdbcType=BIT}
+    where file_task_id = #{fileTaskId,jdbcType=BIGINT}
+  </update>
+</mapper>

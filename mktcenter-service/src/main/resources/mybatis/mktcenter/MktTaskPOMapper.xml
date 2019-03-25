@@ -1,0 +1,1373 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bizvane.mktcenterservice.mappers.MktTaskPOMapper">
+  <resultMap id="BaseResultMap" type="com.bizvane.mktcenterfacade.models.po.MktTaskPO">
+    <!--
+      WARNING - 只读 - @mbg.generated
+      This element was generated on 2018-08-31 12:40:26.
+    -->
+    <id column="mkt_task_id" jdbcType="BIGINT" property="mktTaskId" />
+    <result column="sys_company_id" jdbcType="BIGINT" property="sysCompanyId" />
+    <result column="sys_brand_id" jdbcType="BIGINT" property="sysBrandId" />
+    <result column="task_code" jdbcType="VARCHAR" property="taskCode" />
+    <result column="task_type" jdbcType="INTEGER" property="taskType" />
+    <result column="task_name" jdbcType="VARCHAR" property="taskName" />
+    <result column="start_time" jdbcType="TIMESTAMP" property="startTime" />
+    <result column="end_time" jdbcType="TIMESTAMP" property="endTime" />
+    <result column="points" jdbcType="INTEGER" property="points" />
+    <result column="check_status" jdbcType="INTEGER" property="checkStatus" />
+    <result column="task_status" jdbcType="INTEGER" property="taskStatus" />
+    <result column="remark" jdbcType="VARCHAR" property="remark" />
+    <result column="create_user_id" jdbcType="BIGINT" property="createUserId" />
+    <result column="create_user_name" jdbcType="VARCHAR" property="createUserName" />
+    <result column="create_date" jdbcType="TIMESTAMP" property="createDate" />
+    <result column="modified_user_id" jdbcType="BIGINT" property="modifiedUserId" />
+    <result column="modified_user_name" jdbcType="VARCHAR" property="modifiedUserName" />
+    <result column="modified_date" jdbcType="TIMESTAMP" property="modifiedDate" />
+    <result column="valid" jdbcType="BIT" property="valid" />
+  </resultMap>
+  <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.bizvane.mktcenterfacade.models.po.MktTaskPOWithBLOBs">
+    <!--
+      WARNING - 只读 - @mbg.generated
+      This element was generated on 2018-08-31 12:40:26.
+    -->
+    <result column="task_info" jdbcType="LONGVARCHAR" property="taskInfo" />
+    <result column="task_list_img" jdbcType="LONGVARCHAR" property="taskListImg" />
+    <result column="task_detail_img" jdbcType="LONGVARCHAR" property="taskDetailImg" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <!--
+      WARNING - 只读 - @mbg.generated
+      This element was generated on 2018-08-31 12:40:26.
+    -->
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <!--
+      WARNING - 只读 - @mbg.generated
+      This element was generated on 2018-08-31 12:40:26.
+    -->
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    <!--
+      WARNING - 只读 - @mbg.generated
+      This element was generated on 2018-08-31 12:40:26.
+    -->
+    mkt_task_id, sys_company_id, sys_brand_id, task_code, task_type, task_name, start_time, 
+    end_time, points, check_status, task_status, remark, create_user_id, create_user_name, 
+    create_date, modified_user_id, modified_user_name, modified_date, valid
+  </sql>
+  <sql id="Blob_Column_List">
+    <!--
+      WARNING - 只读 - @mbg.generated
+      This element was generated on 2018-08-31 12:40:26.
+    -->
+    task_info, task_list_img, task_detail_img
+  </sql>
+  <select id="selectByExampleWithBLOBs" parameterType="com.bizvane.mktcenterfacade.models.po.MktTaskPOExample" resultMap="ResultMapWithBLOBs">
+    <!--
+      WARNING - 只读 - @mbg.generated
+      This element was generated on 2018-08-31 12:40:26.
+    -->
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from t_mkt_task
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByExample" parameterType="com.bizvane.mktcenterfacade.models.po.MktTaskPOExample" resultMap="BaseResultMap">
+    <!--
+      WARNING - 只读 - @mbg.generated
+      This element was generated on 2018-08-31 12:40:26.
+    -->
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from t_mkt_task
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="ResultMapWithBLOBs">
+    <!--
+      WARNING - 只读 - @mbg.generated
+      This element was generated on 2018-08-31 12:40:26.
+    -->
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from t_mkt_task
+    where mkt_task_id = #{mktTaskId,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    <!--
+      WARNING - 只读 - @mbg.generated
+      This element was generated on 2018-08-31 12:40:26.
+    -->
+    delete from t_mkt_task
+    where mkt_task_id = #{mktTaskId,jdbcType=BIGINT}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.bizvane.mktcenterfacade.models.po.MktTaskPOExample">
+    <!--
+      WARNING - 只读 - @mbg.generated
+      This element was generated on 2018-08-31 12:40:26.
+    -->
+    delete from t_mkt_task
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.bizvane.mktcenterfacade.models.po.MktTaskPOWithBLOBs">
+    <!--
+      WARNING - 只读 - @mbg.generated
+      This element was generated on 2018-08-31 12:40:26.
+    -->
+    <selectKey keyProperty="mktTaskId" order="AFTER" resultType="java.lang.Long">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into t_mkt_task (sys_company_id, sys_brand_id, task_code, 
+      task_type, task_name, start_time, 
+      end_time, points, check_status, 
+      task_status, remark, create_user_id, 
+      create_user_name, create_date, modified_user_id, 
+      modified_user_name, modified_date, valid, 
+      task_info, task_list_img, task_detail_img
+      )
+    values (#{sysCompanyId,jdbcType=BIGINT}, #{sysBrandId,jdbcType=BIGINT}, #{taskCode,jdbcType=VARCHAR}, 
+      #{taskType,jdbcType=INTEGER}, #{taskName,jdbcType=VARCHAR}, #{startTime,jdbcType=TIMESTAMP}, 
+      #{endTime,jdbcType=TIMESTAMP}, #{points,jdbcType=INTEGER}, #{checkStatus,jdbcType=INTEGER}, 
+      #{taskStatus,jdbcType=INTEGER}, #{remark,jdbcType=VARCHAR}, #{createUserId,jdbcType=BIGINT}, 
+      #{createUserName,jdbcType=VARCHAR}, #{createDate,jdbcType=TIMESTAMP}, #{modifiedUserId,jdbcType=BIGINT}, 
+      #{modifiedUserName,jdbcType=VARCHAR}, #{modifiedDate,jdbcType=TIMESTAMP}, #{valid,jdbcType=BIT}, 
+      #{taskInfo,jdbcType=LONGVARCHAR}, #{taskListImg,jdbcType=LONGVARCHAR}, #{taskDetailImg,jdbcType=LONGVARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.bizvane.mktcenterfacade.models.po.MktTaskPOWithBLOBs">
+    <!--
+      WARNING - 只读 - @mbg.generated
+      This element was generated on 2018-08-31 12:40:26.
+    -->
+    <selectKey keyProperty="mktTaskId" order="AFTER" resultType="java.lang.Long">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into t_mkt_task
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="sysCompanyId != null">
+        sys_company_id,
+      </if>
+      <if test="sysBrandId != null">
+        sys_brand_id,
+      </if>
+      <if test="taskCode != null">
+        task_code,
+      </if>
+      <if test="taskType != null">
+        task_type,
+      </if>
+      <if test="taskName != null">
+        task_name,
+      </if>
+      <if test="startTime != null">
+        start_time,
+      </if>
+      <if test="endTime != null">
+        end_time,
+      </if>
+      <if test="points != null">
+        points,
+      </if>
+      <if test="checkStatus != null">
+        check_status,
+      </if>
+      <if test="taskStatus != null">
+        task_status,
+      </if>
+      <if test="remark != null">
+        remark,
+      </if>
+      <if test="createUserId != null">
+        create_user_id,
+      </if>
+      <if test="createUserName != null">
+        create_user_name,
+      </if>
+      <if test="createDate != null">
+        create_date,
+      </if>
+      <if test="modifiedUserId != null">
+        modified_user_id,
+      </if>
+      <if test="modifiedUserName != null">
+        modified_user_name,
+      </if>
+      <if test="modifiedDate != null">
+        modified_date,
+      </if>
+      <if test="valid != null">
+        valid,
+      </if>
+      <if test="taskInfo != null">
+        task_info,
+      </if>
+      <if test="taskListImg != null">
+        task_list_img,
+      </if>
+      <if test="taskDetailImg != null">
+        task_detail_img,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="sysCompanyId != null">
+        #{sysCompanyId,jdbcType=BIGINT},
+      </if>
+      <if test="sysBrandId != null">
+        #{sysBrandId,jdbcType=BIGINT},
+      </if>
+      <if test="taskCode != null">
+        #{taskCode,jdbcType=VARCHAR},
+      </if>
+      <if test="taskType != null">
+        #{taskType,jdbcType=INTEGER},
+      </if>
+      <if test="taskName != null">
+        #{taskName,jdbcType=VARCHAR},
+      </if>
+      <if test="startTime != null">
+        #{startTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="endTime != null">
+        #{endTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="points != null">
+        #{points,jdbcType=INTEGER},
+      </if>
+      <if test="checkStatus != null">
+        #{checkStatus,jdbcType=INTEGER},
+      </if>
+      <if test="taskStatus != null">
+        #{taskStatus,jdbcType=INTEGER},
+      </if>
+      <if test="remark != null">
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="createUserId != null">
+        #{createUserId,jdbcType=BIGINT},
+      </if>
+      <if test="createUserName != null">
+        #{createUserName,jdbcType=VARCHAR},
+      </if>
+      <if test="createDate != null">
+        #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifiedUserId != null">
+        #{modifiedUserId,jdbcType=BIGINT},
+      </if>
+      <if test="modifiedUserName != null">
+        #{modifiedUserName,jdbcType=VARCHAR},
+      </if>
+      <if test="modifiedDate != null">
+        #{modifiedDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="valid != null">
+        #{valid,jdbcType=BIT},
+      </if>
+      <if test="taskInfo != null">
+        #{taskInfo,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="taskListImg != null">
+        #{taskListImg,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="taskDetailImg != null">
+        #{taskDetailImg,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.bizvane.mktcenterfacade.models.po.MktTaskPOExample" resultType="java.lang.Long">
+    <!--
+      WARNING - 只读 - @mbg.generated
+      This element was generated on 2018-08-31 12:40:26.
+    -->
+    select count(*) from t_mkt_task
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    <!--
+      WARNING - 只读 - @mbg.generated
+      This element was generated on 2018-08-31 12:40:26.
+    -->
+    update t_mkt_task
+    <set>
+      <if test="record.mktTaskId != null">
+        mkt_task_id = #{record.mktTaskId,jdbcType=BIGINT},
+      </if>
+      <if test="record.sysCompanyId != null">
+        sys_company_id = #{record.sysCompanyId,jdbcType=BIGINT},
+      </if>
+      <if test="record.sysBrandId != null">
+        sys_brand_id = #{record.sysBrandId,jdbcType=BIGINT},
+      </if>
+      <if test="record.taskCode != null">
+        task_code = #{record.taskCode,jdbcType=VARCHAR},
+      </if>
+      <if test="record.taskType != null">
+        task_type = #{record.taskType,jdbcType=INTEGER},
+      </if>
+      <if test="record.taskName != null">
+        task_name = #{record.taskName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.startTime != null">
+        start_time = #{record.startTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.endTime != null">
+        end_time = #{record.endTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.points != null">
+        points = #{record.points,jdbcType=INTEGER},
+      </if>
+      <if test="record.checkStatus != null">
+        check_status = #{record.checkStatus,jdbcType=INTEGER},
+      </if>
+      <if test="record.taskStatus != null">
+        task_status = #{record.taskStatus,jdbcType=INTEGER},
+      </if>
+      <if test="record.remark != null">
+        remark = #{record.remark,jdbcType=VARCHAR},
+      </if>
+      <if test="record.createUserId != null">
+        create_user_id = #{record.createUserId,jdbcType=BIGINT},
+      </if>
+      <if test="record.createUserName != null">
+        create_user_name = #{record.createUserName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.createDate != null">
+        create_date = #{record.createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.modifiedUserId != null">
+        modified_user_id = #{record.modifiedUserId,jdbcType=BIGINT},
+      </if>
+      <if test="record.modifiedUserName != null">
+        modified_user_name = #{record.modifiedUserName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.modifiedDate != null">
+        modified_date = #{record.modifiedDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.valid != null">
+        valid = #{record.valid,jdbcType=BIT},
+      </if>
+      <if test="record.taskInfo != null">
+        task_info = #{record.taskInfo,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="record.taskListImg != null">
+        task_list_img = #{record.taskListImg,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="record.taskDetailImg != null">
+        task_detail_img = #{record.taskDetailImg,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExampleWithBLOBs" parameterType="map">
+    <!--
+      WARNING - 只读 - @mbg.generated
+      This element was generated on 2018-08-31 12:40:26.
+    -->
+    update t_mkt_task
+    set mkt_task_id = #{record.mktTaskId,jdbcType=BIGINT},
+      sys_company_id = #{record.sysCompanyId,jdbcType=BIGINT},
+      sys_brand_id = #{record.sysBrandId,jdbcType=BIGINT},
+      task_code = #{record.taskCode,jdbcType=VARCHAR},
+      task_type = #{record.taskType,jdbcType=INTEGER},
+      task_name = #{record.taskName,jdbcType=VARCHAR},
+      start_time = #{record.startTime,jdbcType=TIMESTAMP},
+      end_time = #{record.endTime,jdbcType=TIMESTAMP},
+      points = #{record.points,jdbcType=INTEGER},
+      check_status = #{record.checkStatus,jdbcType=INTEGER},
+      task_status = #{record.taskStatus,jdbcType=INTEGER},
+      remark = #{record.remark,jdbcType=VARCHAR},
+      create_user_id = #{record.createUserId,jdbcType=BIGINT},
+      create_user_name = #{record.createUserName,jdbcType=VARCHAR},
+      create_date = #{record.createDate,jdbcType=TIMESTAMP},
+      modified_user_id = #{record.modifiedUserId,jdbcType=BIGINT},
+      modified_user_name = #{record.modifiedUserName,jdbcType=VARCHAR},
+      modified_date = #{record.modifiedDate,jdbcType=TIMESTAMP},
+      valid = #{record.valid,jdbcType=BIT},
+      task_info = #{record.taskInfo,jdbcType=LONGVARCHAR},
+      task_list_img = #{record.taskListImg,jdbcType=LONGVARCHAR},
+      task_detail_img = #{record.taskDetailImg,jdbcType=LONGVARCHAR}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    <!--
+      WARNING - 只读 - @mbg.generated
+      This element was generated on 2018-08-31 12:40:26.
+    -->
+    update t_mkt_task
+    set mkt_task_id = #{record.mktTaskId,jdbcType=BIGINT},
+      sys_company_id = #{record.sysCompanyId,jdbcType=BIGINT},
+      sys_brand_id = #{record.sysBrandId,jdbcType=BIGINT},
+      task_code = #{record.taskCode,jdbcType=VARCHAR},
+      task_type = #{record.taskType,jdbcType=INTEGER},
+      task_name = #{record.taskName,jdbcType=VARCHAR},
+      start_time = #{record.startTime,jdbcType=TIMESTAMP},
+      end_time = #{record.endTime,jdbcType=TIMESTAMP},
+      points = #{record.points,jdbcType=INTEGER},
+      check_status = #{record.checkStatus,jdbcType=INTEGER},
+      task_status = #{record.taskStatus,jdbcType=INTEGER},
+      remark = #{record.remark,jdbcType=VARCHAR},
+      create_user_id = #{record.createUserId,jdbcType=BIGINT},
+      create_user_name = #{record.createUserName,jdbcType=VARCHAR},
+      create_date = #{record.createDate,jdbcType=TIMESTAMP},
+      modified_user_id = #{record.modifiedUserId,jdbcType=BIGINT},
+      modified_user_name = #{record.modifiedUserName,jdbcType=VARCHAR},
+      modified_date = #{record.modifiedDate,jdbcType=TIMESTAMP},
+      valid = #{record.valid,jdbcType=BIT}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.bizvane.mktcenterfacade.models.po.MktTaskPOWithBLOBs">
+    <!--
+      WARNING - 只读 - @mbg.generated
+      This element was generated on 2018-08-31 12:40:26.
+    -->
+    update t_mkt_task
+    <set>
+      <if test="sysCompanyId != null">
+        sys_company_id = #{sysCompanyId,jdbcType=BIGINT},
+      </if>
+      <if test="sysBrandId != null">
+        sys_brand_id = #{sysBrandId,jdbcType=BIGINT},
+      </if>
+      <if test="taskCode != null">
+        task_code = #{taskCode,jdbcType=VARCHAR},
+      </if>
+      <if test="taskType != null">
+        task_type = #{taskType,jdbcType=INTEGER},
+      </if>
+      <if test="taskName != null">
+        task_name = #{taskName,jdbcType=VARCHAR},
+      </if>
+      <if test="startTime != null">
+        start_time = #{startTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="endTime != null">
+        end_time = #{endTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="points != null">
+        points = #{points,jdbcType=INTEGER},
+      </if>
+      <if test="checkStatus != null">
+        check_status = #{checkStatus,jdbcType=INTEGER},
+      </if>
+      <if test="taskStatus != null">
+        task_status = #{taskStatus,jdbcType=INTEGER},
+      </if>
+      <if test="remark != null">
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="createUserId != null">
+        create_user_id = #{createUserId,jdbcType=BIGINT},
+      </if>
+      <if test="createUserName != null">
+        create_user_name = #{createUserName,jdbcType=VARCHAR},
+      </if>
+      <if test="createDate != null">
+        create_date = #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifiedUserId != null">
+        modified_user_id = #{modifiedUserId,jdbcType=BIGINT},
+      </if>
+      <if test="modifiedUserName != null">
+        modified_user_name = #{modifiedUserName,jdbcType=VARCHAR},
+      </if>
+      <if test="modifiedDate != null">
+        modified_date = #{modifiedDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="valid != null">
+        valid = #{valid,jdbcType=BIT},
+      </if>
+      <if test="taskInfo != null">
+        task_info = #{taskInfo,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="taskListImg != null">
+        task_list_img = #{taskListImg,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="taskDetailImg != null">
+        task_detail_img = #{taskDetailImg,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where mkt_task_id = #{mktTaskId,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.bizvane.mktcenterfacade.models.po.MktTaskPOWithBLOBs">
+    <!--
+      WARNING - 只读 - @mbg.generated
+      This element was generated on 2018-08-31 12:40:26.
+    -->
+    update t_mkt_task
+    set sys_company_id = #{sysCompanyId,jdbcType=BIGINT},
+      sys_brand_id = #{sysBrandId,jdbcType=BIGINT},
+      task_code = #{taskCode,jdbcType=VARCHAR},
+      task_type = #{taskType,jdbcType=INTEGER},
+      task_name = #{taskName,jdbcType=VARCHAR},
+      start_time = #{startTime,jdbcType=TIMESTAMP},
+      end_time = #{endTime,jdbcType=TIMESTAMP},
+      points = #{points,jdbcType=INTEGER},
+      check_status = #{checkStatus,jdbcType=INTEGER},
+      task_status = #{taskStatus,jdbcType=INTEGER},
+      remark = #{remark,jdbcType=VARCHAR},
+      create_user_id = #{createUserId,jdbcType=BIGINT},
+      create_user_name = #{createUserName,jdbcType=VARCHAR},
+      create_date = #{createDate,jdbcType=TIMESTAMP},
+      modified_user_id = #{modifiedUserId,jdbcType=BIGINT},
+      modified_user_name = #{modifiedUserName,jdbcType=VARCHAR},
+      modified_date = #{modifiedDate,jdbcType=TIMESTAMP},
+      valid = #{valid,jdbcType=BIT},
+      task_info = #{taskInfo,jdbcType=LONGVARCHAR},
+      task_list_img = #{taskListImg,jdbcType=LONGVARCHAR},
+      task_detail_img = #{taskDetailImg,jdbcType=LONGVARCHAR}
+    where mkt_task_id = #{mktTaskId,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.bizvane.mktcenterfacade.models.po.MktTaskPO">
+    <!--
+      WARNING - 只读 - @mbg.generated
+      This element was generated on 2018-08-31 12:40:26.
+    -->
+    update t_mkt_task
+    set sys_company_id = #{sysCompanyId,jdbcType=BIGINT},
+      sys_brand_id = #{sysBrandId,jdbcType=BIGINT},
+      task_code = #{taskCode,jdbcType=VARCHAR},
+      task_type = #{taskType,jdbcType=INTEGER},
+      task_name = #{taskName,jdbcType=VARCHAR},
+      start_time = #{startTime,jdbcType=TIMESTAMP},
+      end_time = #{endTime,jdbcType=TIMESTAMP},
+      points = #{points,jdbcType=INTEGER},
+      check_status = #{checkStatus,jdbcType=INTEGER},
+      task_status = #{taskStatus,jdbcType=INTEGER},
+      remark = #{remark,jdbcType=VARCHAR},
+      create_user_id = #{createUserId,jdbcType=BIGINT},
+      create_user_name = #{createUserName,jdbcType=VARCHAR},
+      create_date = #{createDate,jdbcType=TIMESTAMP},
+      modified_user_id = #{modifiedUserId,jdbcType=BIGINT},
+      modified_user_name = #{modifiedUserName,jdbcType=VARCHAR},
+      modified_date = #{modifiedDate,jdbcType=TIMESTAMP},
+      valid = #{valid,jdbcType=BIT}
+    where mkt_task_id = #{mktTaskId,jdbcType=BIGINT}
+  </update>
+
+  <resultMap autoMapping="true" id="taskDetailsMap" type="com.bizvane.mktcenterfacade.models.vo.TaskDetailVO">
+    <id column="mkt_task_id" property="mktTaskId" />
+    <result column="sys_company_id" property="sysCompanyId" />
+    <result column="sys_brand_id" property="sysBrandId" />
+    <result column="task_code" property="taskCode" />
+    <result column="task_type" property="taskType" />
+    <result column="task_name" property="taskName" />
+    <result column="start_time" property="startTime" />
+    <result column="end_time" property="endTime" />
+    <result column="points" property="points" />
+    <result column="check_status" property="checkStatus" />
+    <result column="task_status" property="taskStatus" />
+    <result column="remark" property="remark" />
+
+    <result column="mkt_task_order_id" property="mktTaskOrderId" />
+    <result column="mkt_task_id" property="mktTaskId" />
+    <result column="order_source" property="orderSource" />
+    <result column="consume_amount" property="consumeAmount" />
+    <result column="consume_times" property="consumeTimes" />
+
+    <result column="mkt_task_invite_id" property="mktTaskInviteId" />
+    <result column="invite_num" property="inviteNum" />
+
+    <collection autoMapping="true" javaType="java.util.List" ofType="com.bizvane.mktcenterfacade.models.po.MktCouponPO" property="mktCouponPOList">
+      <result column="mkt_coupon_id" property="mktCouponId" />
+    </collection>
+
+    <collection autoMapping="true" javaType="java.util.List" ofType="com.bizvane.mktcenterfacade.models.po.MktMessagePO" property="mktmessagePOList">
+      <result column="mkt_msg_id" property="mktMsgId" />
+    </collection>
+
+  </resultMap>
+  <!-- 用于查询奖励的条件-->
+  <resultMap autoMapping="true" id="taskAwardMap" type="com.bizvane.mktcenterfacade.models.bo.TaskAwardBO">
+    <id column="mkt_task_id" property="mktTaskId" />
+    <result column="sys_company_id" property="sysCompanyId" />
+    <result column="sys_brand_id" property="sysBrandId" />
+    <result column="task_code" property="taskCode" />
+    <result column="task_type" property="taskType" />
+    <result column="task_name" property="taskName" />
+    <result column="start_time" property="startTime" />
+    <result column="end_time" property="endTime" />
+    <result column="points" property="points" />
+    <result column="check_status" property="checkStatus" />
+    <result column="task_status" property="taskStatus" />
+    <result column="remark" property="remark" />
+
+    <result column="mkt_task_order_id" property="mktTaskOrderId" />
+    <result column="mkt_task_id" property="mktTaskId" />
+    <result column="order_source" property="orderSource" />
+    <result column="consume_amount" property="consumeAmount" />
+    <result column="consume_times" property="consumeTimes" />
+
+    <result column="mkt_task_invite_id" property="mktTaskInviteId" />
+    <result column="invite_num" property="inviteNum" />
+
+    <result column="mkt_task_profile_id" property="mktTaskProfileId" />
+    <result column="property_code" property="propertyCode" />
+
+    <result column="mkt_task_share_id" property="mktTaskShareId" />
+    <result column="share_times" property="shareTimes" />
+    <result column="share_url" property="shareUrl" />
+    <result column="share_url_type" property="shareUrlType" />
+
+    <collection autoMapping="true" javaType="java.util.List" ofType="com.bizvane.mktcenterfacade.models.po.MktCouponPO" property="mktCouponPOList">
+      <result column="mkt_coupon_id" property="mktCouponId" />
+    </collection>
+  </resultMap>
+
+  <resultMap autoMapping="true" id="taskWXDetailMap" type="com.bizvane.mktcenterfacade.models.bo.TaskWXDetailBO">
+    <id column="mkt_task_id" property="mktTaskId" />
+    <result column="task_name" property="taskName" />
+    <result column="start_time" property="startTime" />
+    <result column="end_time" property="endTime" />
+    <result column="points" property="points" />
+    <result column="task_info" property="taskInfo" />
+
+    <collection autoMapping="true" javaType="java.util.List" ofType="com.bizvane.mktcenterfacade.models.bo.TaskCouponWXBO" property="taskCouponWXBOs">
+      <result column="mkt_coupon_id" property="mktCouponId" />
+    </collection>
+  </resultMap>
+  <!--&amp;lt;!&amp;ndash; 用于查询邀请奖励的条件&amp;ndash;&amp;gt;-->
+  <!--&lt;resultMap id="taskInviteAwardMap" type="TaskDetailVO" autoMapping="true"&gt;-->
+    <!--&lt;id column="mkt_task_id" property="mktTaskId"/&gt;-->
+    <!--&lt;result column="sys_company_id"  property="sysCompanyId" /&gt;-->
+    <!--&lt;result column="sys_brand_id"  property="sysBrandId" /&gt;-->
+    <!--&lt;result column="task_code"  property="taskCode" /&gt;-->
+    <!--&lt;result column="task_type"  property="taskType" /&gt;-->
+    <!--&lt;result column="task_name"  property="taskName" /&gt;-->
+    <!--&lt;result column="start_time"  property="startTime" /&gt;-->
+    <!--&lt;result column="end_time"  property="endTime" /&gt;-->
+    <!--&lt;result column="points"  property="points" /&gt;-->
+    <!--&lt;result column="check_status"  property="checkStatus" /&gt;-->
+    <!--&lt;result column="task_status"  property="taskStatus" /&gt;-->
+    <!--&lt;result column="remark"  property="remark" /&gt;-->
+
+    <!--&lt;result column="mkt_task_invite_id"  property="mktTaskInviteId" /&gt;-->
+    <!--&lt;result column="invite_num"  property="inviteNum" /&gt;-->
+
+    <!--&lt;collection property="mktCouponPOList" javaType="java.util.List" ofType="MktCouponPO" autoMapping="true"&gt;-->
+      <!--&lt;result column="mkt_coupon_id" property="mktCouponId"/&gt;-->
+    <!--&lt;/collection&gt;-->
+  <!--&lt;/resultMap&gt;-->
+
+  <select id="getTaskDetailByTaskId" parameterType="java.lang.Long" resultMap="taskDetailsMap">
+    SELECT
+    tta.mkt_task_id,
+    tta.sys_company_id,
+    tta.sys_brand_id,
+    tta.task_code,
+    tta.task_type,
+    tta.task_name,
+    tta.start_time,
+    tta.end_time,
+    tta.task_info,
+    tta.points,
+    tta.task_list_img,
+    tta.task_detail_img,
+    tta.check_status,
+    tta.task_status,
+    tta.remark,
+    tto.mkt_task_order_id,
+    tto.order_source,
+    tto.consume_amount,
+    tto.consume_times,
+    tti.mkt_task_id,
+    tti.invite_num,
+    tmc.mkt_coupon_id,
+    tmc.coupon_definition_id,
+    tmc.coupon_name,
+    tmm.mkt_msg_id,
+    tmm.msg_type,
+    tmm.msg_code,
+    tmm.template_msg_id,
+    tmm.send_time,
+    tmm.msg_content
+    FROM
+    t_mkt_task tta
+    INNER JOIN t_mkt_task_order tto ON tta.mkt_task_id = tto.mkt_task_id
+    LEFT JOIN t_mkt_task_invite tti ON tta.mkt_task_id = tti.mkt_task_id
+    LEFT JOIN t_mkt_coupon tmc ON tti.mkt_task_id = tmc.biz_id
+    LEFT JOIN t_mkt_message tmm ON tmc.biz_id = tmm.biz_id
+    WHERE
+    1 = 1
+    <if test="mktTaskId != null and mktTaskId!= '' ">
+      AND tta.mkt_task_id = #{mktTaskId}
+    </if>
+  </select>
+<!-- 根据公司id和品牌id,查询任务的订单和消费次数-->
+  <select id="getTaskOrderAwardList" resultMap="taskAwardMap">
+      SELECT
+          tta.mkt_task_id,
+          tta.sys_company_id,
+          tta.sys_brand_id,
+          tta.task_code,
+          tta.task_type,
+          tta.task_name,
+          tta.start_time,
+          tta.end_time,
+          tta.task_info,
+          tta.points,
+          tta.task_list_img,
+          tta.task_detail_img,
+          tta.check_status,
+          tta.task_status,
+          tta.remark,
+          tto.mkt_task_order_id,
+          tto.order_source,
+          tto.consume_amount,
+          tto.consume_times,
+          tto.is_store_limit,
+          tto.store_limit_type,
+          tto.store_limit_list,
+          tmc.mkt_coupon_id,
+          tmc.coupon_definition_id,
+          tmc.coupon_name
+      FROM
+          t_mkt_task tta
+      INNER JOIN t_mkt_task_order tto ON tta.mkt_task_id = tto.mkt_task_id
+      LEFT JOIN t_mkt_coupon tmc ON tta.mkt_task_id = tmc.biz_id AND tmc.valid = 1 AND tmc.biz_type=2
+      WHERE
+          tta.valid = 1
+      AND tto.valid = 1
+      AND  tta.check_status=3
+      AND  tta.task_status=2
+      AND tta.task_type=#{taskType}
+    <if test="sysCompanyId != null and sysCompanyId!= '' ">
+      AND  tta.sys_company_id=#{sysCompanyId}
+    </if>
+    <if test="sysBrandId != null and sysBrandId!= '' ">
+      AND tta.sys_brand_id=#{sysBrandId}
+    </if>
+    <if test="placeOrderTime!=null and placeOrderTime!=''">
+    AND DATE_FORMAT(tta.start_time,'%Y-%m-%d') <![CDATA[<=]]>#{placeOrderTime}
+    AND DATE_FORMAT(tta.end_time,'%Y-%m-%d') <![CDATA[>=]]> #{placeOrderTime}
+  </if>
+    <if test="orderSource != null and orderSource!= '' ">
+      AND (tto.order_source=#{orderSource} or tto.order_source=0)
+    </if>
+  </select>
+
+  <select id="getTaskInviteAwardList" resultMap="taskAwardMap">
+    SELECT
+    tta.mkt_task_id,
+    tta.sys_company_id,
+    tta.sys_brand_id,
+    tta.task_code,
+    tta.task_type,
+    tta.task_name,
+    tta.start_time,
+    tta.end_time,
+    tta.task_info,
+    tta.points,
+    tta.task_list_img,
+    tta.task_detail_img,
+    tta.check_status,
+    tta.task_status,
+    tta.remark,
+    tti.mkt_task_id,
+    tti.invite_num,
+    tti.is_store_limit,
+    tti.store_limit_type,
+    tti.store_limit_list,
+    tmc.mkt_coupon_id,
+    tmc.coupon_definition_id,
+    tmc.coupon_name
+    FROM
+    t_mkt_task tta
+    INNER JOIN t_mkt_task_invite tti ON tta.mkt_task_id = tti.mkt_task_id
+    LEFT JOIN t_mkt_coupon tmc ON tta.mkt_task_id = tmc.biz_id  AND tmc.valid = 1 AND tmc.biz_type=2
+    WHERE
+    tta.valid = 1
+    AND tti.valid = 1
+    AND  tta.check_status=3
+    AND  tta.task_status=2
+    AND tta.task_type =3
+    <if test="mktTaskId != null and mktTaskId!= '' ">
+      AND  tta.mkt_task_id=#{mktTaskId}
+    </if>
+    <if test="sysCompanyId != null and sysCompanyId!= '' ">
+      AND  tta.sys_company_id=#{sysCompanyId}
+    </if>
+    <if test="sysBrandId != null and sysBrandId!= '' ">
+      AND tta.sys_brand_id=#{sysBrandId}
+    </if>
+    <!--<if test="placeOrderTime!=null and placeOrderTime!=''">-->
+      <!--AND tta.start_time <![CDATA[<=]]>#{placeOrderTime}-->
+      <!--AND tta.end_time <![CDATA[>=]]> #{placeOrderTime}-->
+    <!--</if>-->
+  </select>
+
+  <select id="getTaskProfileAwardList" resultMap="taskAwardMap">
+    SELECT
+    tta.mkt_task_id,
+    tta.sys_company_id,
+    tta.sys_brand_id,
+    tta.task_code,
+    tta.task_type,
+    tta.task_name,
+    tta.start_time,
+    tta.end_time,
+    tta.task_info,
+    tta.points,
+    tta.task_list_img,
+    tta.task_detail_img,
+    tta.check_status,
+    tta.task_status,
+    tta.remark,
+    ttp.mkt_task_profile_id,
+    ttp.property_code,
+    ttp.is_store_limit,
+    ttp.store_limit_type,
+    ttp.store_limit_list,
+    tmc.mkt_coupon_id,
+    tmc.coupon_definition_id,
+    tmc.coupon_name
+    FROM
+    t_mkt_task tta
+    INNER JOIN t_mkt_task_profile ttp ON tta.mkt_task_id = ttp.mkt_task_id
+    LEFT JOIN t_mkt_coupon tmc ON tta.mkt_task_id = tmc.biz_id  AND tmc.valid = 1 AND tmc.biz_type=2
+    WHERE
+    tta.valid = 1
+    AND ttp.valid = 1
+    AND  tta.check_status=3
+    AND  tta.task_status=2
+    AND tta.task_type =1
+    <if test="mktTaskId != null and mktTaskId!= '' ">
+      AND  tta.mkt_task_id=#{mktTaskId}
+    </if>
+    <if test="sysCompanyId != null and sysCompanyId!= '' ">
+      AND  tta.sys_company_id=#{sysCompanyId}
+    </if>
+    <if test="sysBrandId != null and sysBrandId!= '' ">
+      AND tta.sys_brand_id=#{sysBrandId}
+    </if>
+    <!--<if test="profileDate!=null and profileDate!=''">-->
+      <!--AND tta.start_time <![CDATA[<=]]>#{profileDate}-->
+      <!--AND tta.end_time <![CDATA[>=]]> #{profileDate}-->
+    <!--</if>-->
+  </select>
+
+  <select id="getTaskProfileListApp" resultType="com.bizvane.mktcenterfacade.models.bo.TaskDetailBO">
+    SELECT
+    tta.mkt_task_id,
+    tta.task_code,
+    tta.task_type,
+    ttp.property_code
+    FROM
+    t_mkt_task tta
+    INNER JOIN t_mkt_task_profile ttp ON tta.mkt_task_id = ttp.mkt_task_id
+    WHERE
+    tta.valid = 1
+    AND ttp.valid = 1
+    AND  tta.check_status=3
+    AND  tta.task_status=2
+    AND tta.task_type =1
+    <if test="mktTaskId != null and mktTaskId!= '' ">
+      AND  tta.mkt_task_id=#{mktTaskId}
+    </if>
+    <if test="sysCompanyId != null and sysCompanyId!= '' ">
+      AND  tta.sys_company_id=#{sysCompanyId}
+    </if>
+    <if test="sysBrandId != null and sysBrandId!= '' ">
+      AND tta.sys_brand_id=#{sysBrandId}
+    </if>
+  </select>
+
+  <select id="getTaskShareAwardList" resultMap="taskAwardMap">
+    SELECT
+    tta.mkt_task_id,
+    tta.sys_company_id,
+    tta.sys_brand_id,
+    tta.task_code,
+    tta.task_type,
+    tta.task_name,
+    tta.start_time,
+    tta.end_time,
+    tta.task_info,
+    tta.points,
+    tta.task_list_img,
+    tta.task_detail_img,
+    tta.check_status,
+    tta.task_status,
+    tta.remark,
+    share_url,
+    tts.mkt_task_share_id,
+    tts.share_times,
+    tts.share_url_type,
+    tts.is_store_limit,
+    tts.store_limit_type,
+    tts.store_limit_list,
+    tmc.mkt_coupon_id,
+    tmc.coupon_definition_id,
+    tmc.coupon_name
+    FROM
+    t_mkt_task tta
+    INNER JOIN t_mkt_task_share tts ON tta.mkt_task_id = tts.mkt_task_id
+    LEFT JOIN t_mkt_coupon tmc ON tta.mkt_task_id = tmc.biz_id  AND tmc.valid = 1 AND tmc.biz_type=2
+    WHERE
+    tta.valid = 1
+    AND tts.valid = 1
+    AND  tta.check_status=3
+    AND  tta.task_status=2
+    AND tta.task_type =2
+    <if test="mktTaskId != null and mktTaskId!= '' ">
+      AND  tta.mkt_task_id=#{mktTaskId}
+    </if>
+    <if test="sysCompanyId != null and sysCompanyId!= '' ">
+      AND  tta.sys_company_id=#{sysCompanyId}
+    </if>
+    <if test="sysBrandId != null and sysBrandId!= '' ">
+      AND tta.sys_brand_id=#{sysBrandId}
+    </if>
+    <!--<if test="shareDate!=null and shareDate!=''">-->
+      <!--AND tta.start_time <![CDATA[<=]]>#{shareDate}-->
+      <!--AND tta.end_time <![CDATA[>=]]> #{shareDate}-->
+    <!--</if>-->
+  </select>
+<!-- 查询 会员已完成任务列表和未完成列表-->
+  <select id="getCompleteTask" parameterType="com.bizvane.mktcenterfacade.models.vo.TaskForWXVO" resultType="com.bizvane.mktcenterfacade.models.bo.TaskWXBO">
+    SELECT
+    tmt.mkt_task_id AS taskId,
+    tmt.task_code,
+    tmt.task_name,
+    tmt.task_type,
+    tmt.start_time,
+    tmt.end_time,
+    IF(tmtr.rewarded=1,"1/1", "0/1") AS task_progress ,
+    IF(tmtr.rewarded IS NULL,0,1) AS rewarded,
+    2 as sourceType
+    FROM
+    t_mkt_task  tmt
+    INNER JOIN  t_mkt_task_profile tmto ON tmt.mkt_task_id=tmto.mkt_task_id
+    LEFT JOIN t_mkt_task_record tmtr ON  tmtr.task_id=tmto.mkt_task_id
+    AND  tmtr.valid = 1
+    AND tmtr.member_code=#{memberCode}
+    WHERE
+    tmt.valid=1
+    AND  tmt.task_type =1
+    AND tmto.valid=1
+    AND tmt.check_status=3
+    AND tmt.task_status=2
+    AND (tmto.is_store_limit = 0
+    OR tmto.store_limit_list LIKE #{storeIdStyleOne}
+    OR tmto.store_limit_list LIKE #{storeIdStyleTwo}
+    OR tmto.store_limit_list LIKE #{storeIdStyleThree}
+    OR tmto.store_limit_list =#{storeId})
+    AND tmt.sys_brand_id=#{brandId}
+    GROUP BY tmt.mkt_task_id,tmt.task_type,tmt.sys_brand_id,tmtr.member_code
+    <if test="rewarded!=null">
+      HAVING rewarded = #{rewarded}
+    </if>
+
+    UNION
+
+    SELECT
+    tmt.mkt_task_id AS taskId,
+    tmt.task_code,
+    tmt.task_name,
+    tmt.task_type,
+    tmt.start_time,
+    tmt.end_time,
+    CONCAT(count(tmtr.member_code),'/',tmto.share_times) AS task_progress,
+    IF(count(tmtr.member_code)&gt;=tmto.share_times,1,0) AS rewarded,
+    2 as sourceType
+    FROM
+    t_mkt_task  tmt
+    INNER JOIN  t_mkt_task_share tmto ON tmt.mkt_task_id=tmto.mkt_task_id
+    LEFT JOIN   t_mkt_task_record tmtr ON tmtr.task_id=tmto.mkt_task_id
+    AND  tmtr.valid = 1
+    AND tmtr.member_code=#{memberCode}
+    WHERE
+    tmt.valid=1
+    AND tmto.valid=1
+    AND tmt.task_type =2
+    AND tmt.check_status=3
+    AND tmt.task_status=2
+    AND (tmto.is_store_limit = 0
+    OR tmto.store_limit_list LIKE #{storeIdStyleOne}
+    OR tmto.store_limit_list LIKE #{storeIdStyleTwo}
+    OR tmto.store_limit_list LIKE #{storeIdStyleThree}
+    OR tmto.store_limit_list =#{storeId})
+    AND tmt.sys_brand_id=#{brandId}
+    GROUP BY tmt.mkt_task_id,tmt.task_type,tmt.sys_brand_id,tmtr.member_code
+    <if test="rewarded!=null">
+      HAVING rewarded = #{rewarded}
+    </if>
+
+    UNION
+
+    SELECT
+    tmt.mkt_task_id AS taskId,
+    tmt.task_code,
+    tmt.task_name,
+    tmt.task_type,
+    tmt.start_time,
+    tmt.end_time,
+    CONCAT(count(tmtr.member_code),'/',tmto.invite_num) AS task_progress ,
+    IF(count(tmtr.member_code)&gt;=tmto.invite_num,1,0) AS rewarded,
+    2 as sourceType
+    FROM
+    t_mkt_task  tmt
+    INNER JOIN  t_mkt_task_invite tmto ON tmt.mkt_task_id= tmto.mkt_task_id
+    LEFT JOIN  t_mkt_task_record tmtr  ON tmto.mkt_task_id=tmtr.task_id
+    AND  tmtr.valid = 1
+    AND tmtr.member_code=#{memberCode}
+    WHERE
+    tmt.valid=1
+    AND tmto.valid=1
+    AND tmt.task_type =3
+    AND tmt.check_status=3
+    AND tmt.task_status=2
+    AND (tmto.is_store_limit = 0
+    OR tmto.store_limit_list LIKE #{storeIdStyleOne}
+    OR tmto.store_limit_list LIKE #{storeIdStyleTwo}
+    OR tmto.store_limit_list LIKE #{storeIdStyleThree}
+    OR tmto.store_limit_list =#{storeId})
+    AND tmt.sys_brand_id=#{brandId}
+    GROUP BY tmt.mkt_task_id,tmt.task_type,tmt.sys_brand_id,tmtr.member_code
+    <if test="rewarded!=null">
+      HAVING rewarded = #{rewarded}
+    </if>
+
+    UNION
+
+    SELECT
+    tmt.mkt_task_id AS taskId,
+    tmt.task_code,
+    tmt.task_name,
+    tmt.task_type,
+    tmt.start_time,
+    tmt.end_time,
+    CONCAT(count(tmtr.member_code),'/',tmto.consume_times) AS task_progress ,
+    IF(count(tmtr.member_code)&gt;=tmto.consume_times,1,0) AS rewarded,
+    IF(tmto.order_source <![CDATA[ <> ]]>1, 2,1) as sourceType
+    FROM
+    t_mkt_task  tmt
+    INNER JOIN  t_mkt_task_order tmto ON  tmt.mkt_task_id= tmto.mkt_task_id
+    LEFT JOIN t_mkt_task_record tmtr ON tmto.mkt_task_id=tmtr.task_id
+    AND  tmtr.valid = 1
+    AND tmtr.member_code=#{memberCode}
+    WHERE
+    tmt.valid=1
+    AND  tmt.task_type =4
+    AND tmto.valid=1
+    AND tmt.check_status=3
+    AND tmt.task_status=2
+    AND (tmto.is_store_limit = 0
+    OR tmto.store_limit_list LIKE #{storeIdStyleOne}
+    OR tmto.store_limit_list LIKE #{storeIdStyleTwo}
+    OR tmto.store_limit_list LIKE #{storeIdStyleThree}
+    OR tmto.store_limit_list =#{storeId})
+    AND tmt.sys_brand_id=#{brandId}
+    GROUP BY tmt.mkt_task_id,tmt.task_type,tmt.sys_brand_id,tmtr.member_code
+    <if test="rewarded!=null">
+      HAVING rewarded = #{rewarded}
+    </if>
+
+    UNION
+
+    SELECT
+    tmt.mkt_task_id AS taskId,
+    tmt.task_code,
+    tmt.task_name,
+    tmt.task_type,
+    tmt.start_time,
+    tmt.end_time,
+    IF(sum(tmtr.consume_amount)&gt;=tmto.consume_amount,'1/1','0/1') AS task_progress,
+    IF(sum(tmtr.consume_amount)&gt;=tmto.consume_amount,1,0) AS rewarded,
+    IF(tmto.order_source <![CDATA[ <> ]]>1, 2,1) as sourceType
+    FROM
+    t_mkt_task  tmt
+    INNER JOIN  t_mkt_task_order tmto ON tmt.mkt_task_id = tmto.mkt_task_id
+    LEFT JOIN  t_mkt_task_record tmtr ON tmto.mkt_task_id = tmtr.task_id
+    AND tmtr.valid = 1
+    AND tmtr.member_code=#{memberCode}
+    WHERE
+    tmt.valid=1
+    AND  tmt.task_type =5
+    AND tmto.valid=1
+    AND tmt.check_status=3
+    AND tmt.task_status=2
+    AND (tmto.is_store_limit = 0
+    OR tmto.store_limit_list LIKE #{storeIdStyleOne}
+    OR tmto.store_limit_list LIKE #{storeIdStyleTwo}
+    OR tmto.store_limit_list LIKE #{storeIdStyleThree}
+    OR tmto.store_limit_list =#{storeId})
+    AND tmt.sys_brand_id=#{brandId}
+    GROUP BY tmt.mkt_task_id,tmt.task_type,tmt.sys_brand_id,tmtr.member_code
+    <if test="rewarded!=null">
+      HAVING rewarded = #{rewarded}
+    </if>
+   </select>
+  <select id="getTaskWXDetail" resultMap="taskWXDetailMap">
+      SELECT
+      tmt.mkt_task_id,
+      tmt.task_name,
+      tmt.start_time,
+      tmt.end_time,
+      tmt.points,
+      tmt.task_info,
+      tmc.mkt_coupon_id,
+      tmc.coupon_name
+      FROM
+      t_mkt_task  tmt
+      LEFT JOIN  t_mkt_coupon  tmc ON tmt.mkt_task_id = tmc.biz_id AND tmc.valid=1 AND tmc.biz_type=2
+      WHERE tmt.valid=1
+      <if test="taskId!=null">
+        AND tmt.mkt_task_id=#{taskId}
+      </if>
+  </select>
+
+  <!-- 查询消费次数和金额的任务详情-->
+  <select id="getOrderTaskList" parameterType="com.bizvane.mktcenterfacade.models.vo.TaskVO" resultType="com.bizvane.mktcenterfacade.models.vo.TaskVO">
+    SELECT
+    tta.mkt_task_id,
+    tta.sys_company_id,
+    tta.sys_brand_id,
+    tta.task_code,
+    tta.task_type,
+    tta.task_name,
+    tta.start_time,
+    tta.end_time,
+    tta.task_info,
+    tta.points,
+    tta.task_list_img,
+    tta.task_detail_img,
+    tta.check_status,
+    tta.task_status,
+    tta.remark,
+    tto.mkt_task_order_id,
+    tto.order_source,
+    tto.consume_amount,
+    tto.consume_times,
+    tto.is_store_limit,
+    tto.store_limit_type,
+    tto.store_limit_list
+    FROM
+    t_mkt_task tta
+    LEFT JOIN t_mkt_task_order tto ON tta.mkt_task_id = tto.mkt_task_id AND tto.valid=1
+    WHERE  tta.valid=1
+    <!--任务主表ID -->
+    <if test="mktTaskId != null and mktTaskId!= '' ">
+      AND tta.mkt_task_id = #{mktTaskId}
+    </if>
+  </select>
+  <!-- 查询邀请开卡任务详情-->
+  <select id="getInviteTaskList" parameterType="com.bizvane.mktcenterfacade.models.vo.TaskVO" resultType="com.bizvane.mktcenterfacade.models.vo.TaskVO">
+    SELECT
+    tta.mkt_task_id,
+    tta.sys_company_id,
+    tta.sys_brand_id,
+    tta.task_code,
+    tta.task_type,
+    tta.task_name,
+    tta.start_time,
+    tta.end_time,
+    tta.task_info,
+    tta.points,
+    tta.task_list_img,
+    tta.task_detail_img,
+    tta.check_status,
+    tta.task_status,
+    tta.remark,
+    tmi.invite_num,
+    tmi.is_store_limit,
+    tmi.store_limit_type,
+    tmi.store_limit_list
+    FROM
+    t_mkt_task tta
+    LEFT JOIN t_mkt_task_invite tmi ON tta.mkt_task_id = tmi.mkt_task_id AND tmi.valid=1
+    WHERE  tta.valid=1
+    <!--任务主表ID -->
+    <if test="mktTaskId != null and mktTaskId!= '' ">
+      AND tta.mkt_task_id = #{mktTaskId}
+    </if>
+  </select>
+
+  <select id="getShareTaskList" parameterType="com.bizvane.mktcenterfacade.models.vo.TaskVO" resultType="com.bizvane.mktcenterfacade.models.vo.TaskVO">
+    SELECT
+    tta.mkt_task_id,
+    tta.sys_company_id,
+    tta.sys_brand_id,
+    tta.task_code,
+    tta.task_type,
+    tta.task_name,
+    tta.start_time,
+    tta.end_time,
+    tta.task_info,
+    tta.points,
+    tta.task_list_img,
+    tta.task_detail_img,
+    tta.check_status,
+    tta.task_status,
+    tta.remark,
+    tmts.share_times,
+    tmts.share_url_type,
+    tmts.share_url,
+    tmts.is_store_limit,
+    tmts.store_limit_type,
+    tmts.store_limit_list
+    FROM
+    t_mkt_task tta
+    LEFT JOIN t_mkt_task_share  tmts ON tta.mkt_task_id=tmts.mkt_task_id AND tmts.valid=1
+    WHERE  tta.valid=1
+    <!--任务主表ID -->
+    <if test="mktTaskId != null and mktTaskId!= '' ">
+      AND tta.mkt_task_id = #{mktTaskId}
+    </if>
+  </select>
+
+  <!-- 查询消费次数和金额的任务详情-->
+  <select id="getProfileTaskList" parameterType="com.bizvane.mktcenterfacade.models.vo.TaskVO" resultType="com.bizvane.mktcenterfacade.models.vo.TaskVO">
+    SELECT
+    tta.mkt_task_id,
+    tta.sys_company_id,
+    tta.sys_brand_id,
+    tta.task_code,
+    tta.task_type,
+    tta.task_name,
+    tta.start_time,
+    tta.end_time,
+    tta.task_info,
+    tta.points,
+    tta.task_list_img,
+    tta.task_detail_img,
+    tta.check_status,
+    tta.task_status,
+    tta.remark,
+    tmp.property_code,
+    tmp.is_store_limit,
+    tmp.store_limit_type,
+    tmp.store_limit_list
+    FROM
+    t_mkt_task tta
+    LEFT JOIN  t_mkt_task_profile  tmp ON tta.mkt_task_id=tmp.mkt_task_id AND tmp.valid=1
+    WHERE  tta.valid=1
+    <!--任务主表ID -->
+    <if test="mktTaskId != null and mktTaskId!= '' ">
+      AND tta.mkt_task_id = #{mktTaskId}
+    </if>
+  </select>
+
+  <select  id="getWhiteStoreIds" resultType="com.bizvane.mktcenterfacade.models.vo.WhiteStoreResultVO">
+    SELECT
+    group_concat(tmcon.store_limit_list) AS storeLimitList,
+    group_concat(tmcon.is_store_limit) AS storeLimitType
+    FROM
+    t_mkt_task tmt
+    <if test="taskType=='1'.toString()">
+      INNER JOIN
+      t_mkt_task_profile tmcon
+    </if>
+    <if test="taskType=='2'.toString()">
+      INNER JOIN
+      t_mkt_task_share  tmcon
+    </if>
+    <if test="taskType=='3'.toString()">
+      INNER JOIN
+      t_mkt_task_invite tmcon
+    </if>
+    <if test="taskType=='4'.toString()">
+      INNER JOIN  t_mkt_task_order tmcon
+    </if>
+    <if test="taskType=='5'.toString()">
+      INNER JOIN  t_mkt_task_order tmcon
+    </if>
+    <if test="taskType!=null">
+      ON  tmt.mkt_task_id =tmcon.mkt_task_id
+      AND tmcon.valid=1
+    </if>
+    WHERE
+    tmt.valid=1
+    AND tmt.sys_brand_id=#{sysbrandId}
+    AND tmt.task_type=#{taskType}
+    <if test="date1!= null and date1!= '' ">
+    AND tmt.start_time &lt;=#{date1}
+    AND tmt.end_time &gt;= #{date1}
+    </if>
+    AND tmt.check_status &lt;&gt; 4
+    AND (tmt.task_status=1 OR tmt.task_status=2)
+  </select>
+</mapper>
