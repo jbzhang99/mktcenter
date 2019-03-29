@@ -12,7 +12,7 @@ import java.util.concurrent.ThreadPoolExecutor;
  * @author chen.li
  * @date on 2018/8/11 11:17
  * @description 线程池配置类
- * @Copyright (c) 2018 上海商帆信息科技有限公司-版权所有
+ *
  */
 @Configuration
 //@EnableApolloConfig({"TTTT"})

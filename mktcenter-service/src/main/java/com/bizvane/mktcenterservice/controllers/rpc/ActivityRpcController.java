@@ -25,7 +25,7 @@ import java.util.List;
  * @author chen.li
  * @date on 2018/7/28 9:56
  * @description  活动主体，对外提供
- * @Copyright (c) 2018 上海商帆信息科技有限公司-版权所有
+ *
  */
 @RestController
 @RequestMapping("activityRpc")

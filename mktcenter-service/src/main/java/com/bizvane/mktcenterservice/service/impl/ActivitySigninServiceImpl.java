@@ -55,7 +55,7 @@ import java.util.stream.Collectors;
  * @author chen.li
  * @date on 2018/7/13 18:52
  * @description
- * @Copyright (c) 2018 上海商帆信息科技有限公司-版权所有
+ *
  */
 @Service
 @Slf4j
@@ -145,7 +145,7 @@ public class ActivitySigninServiceImpl implements ActivitySigninService {
         ActivityVO vo= new ActivityVO();
         vo.setSysBrandId(stageUser.getBrandId());
         vo.setActivityType(ActivityTypeEnum.ACTIVITY_TYPE_SIGNIN.getCode());
-        vo.setStop("ture");
+        vo.setStop("true");
         List<ActivityVO> activitySigninList = mktActivitySigninMapper.getActivitySigninList(vo);
         if(!CollectionUtils.isEmpty(activitySigninList)){
             for (ActivityVO activity:activitySigninList) {

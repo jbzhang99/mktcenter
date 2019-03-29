@@ -56,7 +56,7 @@ import lombok.extern.slf4j.Slf4j;
  * @author liangzanwen
  * @date on 2018/09/18
  * @description 报表分析
- * @Copyright (c) 2018 上海商帆信息科技有限公司-版权所有
+ *
  */
 @Slf4j
 @RestController

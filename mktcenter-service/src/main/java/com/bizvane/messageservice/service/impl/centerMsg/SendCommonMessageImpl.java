@@ -65,7 +65,7 @@ public class SendCommonMessageImpl implements SendCommonMessageFeign {
             }else if ("chuangLan253".equals(channelName)){   //创蓝253短信
             	String  resultstr = netWorkCommon.sendChuangLan253(vo);
               
-              if (resultstr.equals("ture")){
+              if (resultstr.equals("true")){
             	  resultData=Boolean.TRUE;
                   result.setCode(SysResponseEnum.SUCCESS.getCode());
                   result.setMessage(SysResponseEnum.SUCCESS.getMessage());

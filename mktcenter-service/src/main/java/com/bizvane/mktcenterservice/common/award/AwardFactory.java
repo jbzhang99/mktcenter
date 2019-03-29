@@ -25,7 +25,7 @@ import org.springframework.stereotype.Component;
  * @author chen.li
  * @date on 2018/8/3 14:39
  * @description 营销奖励工具：1发券、2发积分、3短信、4模板消息
- * @Copyright (c) 2018 上海商帆信息科技有限公司-版权所有
+ *
  */
 @Component
 @Slf4j

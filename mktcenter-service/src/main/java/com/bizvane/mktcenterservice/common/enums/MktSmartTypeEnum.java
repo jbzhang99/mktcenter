@@ -4,7 +4,7 @@ package com.bizvane.mktcenterservice.common.enums;
  * @author chen.li
  * @date on 2018/7/30 17:17
  * @description 营销方式
- * @Copyright (c) 2018 上海商帆信息科技有限公司-版权所有
+ *
  */
 public enum MktSmartTypeEnum {
 

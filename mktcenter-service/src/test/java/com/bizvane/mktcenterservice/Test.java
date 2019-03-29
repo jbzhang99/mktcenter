@@ -24,7 +24,7 @@ import java.util.Optional;
  * @author chen.li
  * @date on 2018/7/4 18:34
  * @description
- * @Copyright (c) 2018 上海商帆信息科技有限公司-版权所有
+ *
  */
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes={MktcenterApplication.class})

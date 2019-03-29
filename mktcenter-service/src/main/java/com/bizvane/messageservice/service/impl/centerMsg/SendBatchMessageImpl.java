@@ -52,7 +52,7 @@ private  static  final Logger logger  = LogManager.getLogger(SendBatchMessageImp
             }else if ("chuangLan253".equals(channelName)){   //创蓝253短信
             	String resultstr = netWorkBatch.sendChuangLan253Batch(vo);
                 
-                if (resultstr.equals("ture")){
+                if (resultstr.equals("true")){
               	  resultData=Boolean.TRUE;
                     result.setCode(SysResponseEnum.SUCCESS.getCode());
                     result.setMessage(SysResponseEnum.SUCCESS.getMessage());

@@ -13,7 +13,7 @@ import org.springframework.test.context.junit4.SpringRunner;
  * @author chen.li
  * @date on 2018/8/24 20:57
  * @description
- * @Copyright (c) 2018 上海商帆信息科技有限公司-版权所有
+ *
  */
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes={MktcenterApplication.class})

@@ -20,7 +20,7 @@ import javax.annotation.Resource;
  * @author xiao.shu
  * @date on 2018/8/9 18:19
  * @description
- * @Copyright (c) 2018 上海商帆信息科技有限公司-版权所有
+ *
  */
 @Component
 public class SendSmsOrderOfflineListener implements MessageListener {

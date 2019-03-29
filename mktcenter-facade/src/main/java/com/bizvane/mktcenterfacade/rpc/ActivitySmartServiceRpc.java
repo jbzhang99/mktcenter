@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestParam;
  * @author chen.li
  * @date on 2018/7/27 15:16
  * @description 智能营销对外接口
- * @Copyright (c) 2018 上海商帆信息科技有限公司-版权所有
+ *
  */
 @FeignClient(value = "${feign.client.mktcenter.name}",path = "${feign.client.mktcenter.path}/activitySmartRpc")
 public interface ActivitySmartServiceRpc {

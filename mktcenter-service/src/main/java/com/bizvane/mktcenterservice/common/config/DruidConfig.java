@@ -18,7 +18,7 @@
 // * @author xiao.shu
 // * @date on 2018/8/30 21:39
 // * @description
-// * @Copyright (c) 2018 上海商帆信息科技有限公司-版权所有
+// *
 // */
 //@Configuration
 //@EnableApolloConfig

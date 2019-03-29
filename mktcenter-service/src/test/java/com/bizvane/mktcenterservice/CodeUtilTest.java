@@ -6,7 +6,7 @@ import com.bizvane.mktcenterservice.common.utils.CodeUtil;
  * @author chen.li
  * @date on 2018/8/2 15:25
  * @description  编号生成工具类测试
- * @Copyright (c) 2018 上海商帆信息科技有限公司-版权所有
+ *
  */
 public class CodeUtilTest {
 

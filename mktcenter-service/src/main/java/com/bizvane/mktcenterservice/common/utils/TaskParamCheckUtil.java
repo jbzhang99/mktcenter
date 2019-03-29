@@ -16,7 +16,7 @@ import java.util.List;
  * @author chen.li
  * @date on 2018/7/24 11:18
  * @description 任务参数校验工具类
- * @Copyright (c) 2018 上海商帆信息科技有限公司-版权所有
+ *
  */
 public class TaskParamCheckUtil {
     /**

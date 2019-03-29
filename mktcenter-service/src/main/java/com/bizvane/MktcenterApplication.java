@@ -21,8 +21,8 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 @EnableSwagger2
 @EnableScheduling
 @EnableFeignClients(basePackages={"com.bizvane.centerstageservice.rpc","com.bizvane.members.facade.service.api",
-"com.bizvane.connectorservice.interfaces.rpc", "com.bizvane.wechatfacade.interfaces","com.bizvane.appletservice.rpc",
-		"com.bizvane.centercontrolservice.rpc","com.bizvane.fitmentservice.models.Rpc","com.bizvane.messagefacade.interfaces","com.bizvane.couponfacade.interfaces"})
+		"com.bizvane.wechatfacade.interfaces","com.bizvane.appletservice.rpc", "com.bizvane.centercontrolservice.rpc",
+		"com.bizvane.fitmentservice.models.Rpc","com.bizvane.messagefacade.interfaces","com.bizvane.couponfacade.interfaces"})
 @EnableElasticsearchRepositories(basePackages = "com.bizvane.couponservice.es.repository")
 @MapperScan(basePackages={"com.bizvane.couponservice.mappers","com.bizvane.messageservice.mappers","com.bizvane.mktcenterservice.mappers"})
 @EnableAutoConfiguration(exclude = {ElasticsearchAutoConfiguration.class, ElasticsearchDataAutoConfiguration.class})

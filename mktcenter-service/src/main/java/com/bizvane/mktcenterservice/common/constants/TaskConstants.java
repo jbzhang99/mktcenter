@@ -9,7 +9,7 @@ import java.text.SimpleDateFormat;
  * @author chen.li
  * @date on 2018/7/13 10:13
  * @description
- * @Copyright (c) 2018 上海商帆信息科技有限公司-版权所有
+ *
  */
 public class TaskConstants {
     public final  static SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");

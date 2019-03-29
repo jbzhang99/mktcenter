@@ -110,7 +110,7 @@ public class MsgSmsTempController {
     @ApiImplicitParams({
         @ApiImplicitParam(name = "businessType", value = "业务类型(COUPON-券，INTEGRAL-积分，MEMBER-会员，ORDER-订单)", required = true, dataType = "String"),
         @ApiImplicitParam(name = "templateType", value = "模板类型(COUPON_RECEIVE-券到账提醒，COUPON_UNRECEIVED-券未领取提醒，COUPON_EXPIRE-券到期提醒，INTEGRAL_ADD-积分增加提醒，INTEGRAL_SUBTRACT-积分减少提醒，INTEGRAL_EXPIRE-积分到期提醒，INTEGRAL_USE-积分使用提醒，MEMEBER_REGISTER-会员注册提醒，MEMEBER_INVITE_REGISTER-会员绑定成功提醒，MEMEBER_UPGRADE-会员升级提醒，MEMEBER_DOWNGRADE-会员降级提醒，ORDER_OFFLINE_CONSUME-线下订单提醒，ORDER_ONLINE_CONSUME-线上订单提醒，ORDER_PAYMENT-订单支付提醒，ORDER_SHIP-订单发货提醒，ORDER_SIGN-订单签收提醒，ORDER_CANCEL-订单取消提醒，ORDER_APPRAISAL-订单评价提醒)", required = true, dataType = "String"),
-        @ApiImplicitParam(name = "status", value = "短信配置开关 ture，关fale ,", required = true, dataType = "boolean"),
+        @ApiImplicitParam(name = "status", value = "短信配置开关 true，关fale ,", required = true, dataType = "boolean"),
         @ApiImplicitParam(name = "content", value = "模板内容 ,", required = true, dataType = "String"),
         @ApiImplicitParam(name = "sendWxmember", value = "0.全部发送 1.向微信会员发送短信2.向非微信会员发送短信 ,", required = true, dataType = "Long"),
         

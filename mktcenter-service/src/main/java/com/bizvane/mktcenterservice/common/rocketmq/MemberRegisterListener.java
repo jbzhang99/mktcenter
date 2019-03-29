@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
  * @author chen.li
  * @date on 2018-7-17 16:26:14
  * @description
- * @Copyright (c) 2018 上海商帆信息科技有限公司-版权所有
+ *
  */
 @Component
 public class MemberRegisterListener implements MessageListener {

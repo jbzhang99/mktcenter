@@ -4,7 +4,7 @@ package com.bizvane.mktcenterservice.common.constants;
  * @author chen.li
  * @date on 2018/6/25 11:36
  * @description 响应结果常量类
- * @Copyright (c) 2018 上海商帆信息科技有限公司-版权所有
+ *
  */
 public class ResponseConstants {
 

@@ -21,8 +21,7 @@ import java.util.List;
 /**
  * @author chen.li
  * @date on 2018/7/13 13:36
- * @description
- * @Copyright (c) 2018 上海商帆信息科技有限公司-版权所有
+ * @description 生日活动
  */
 @RestController
 @RequestMapping("activityBirthday")
@@ -48,22 +47,10 @@ public class ActivityBirthdayController {
      */
     @RequestMapping("addActivityBirthday")
     public ResponseData<Integer> addActivityBirthday(ActivityBO bo, HttpServletRequest request){
-        /*ActivityBO bo = new ActivityBO();
-        bo.setActivityVO(activityVO);
-        bo.setCouponCodeList(couponCodeList);
-        bo.setMessageVOList(messageVOList);
-        //参数校验
-        ResponseData responseData = ActivityParamCheckUtil.checkParam(bo);
-        //参数校验不通过
-        if(SystemConstants.ERROR_CODE==responseData.getCode()){
-            return responseData;
-        }*/
         //参数校验通过，获取操作人信息
         SysAccountPO stageUser = TokenUtils.getStageUser(request);
-
         //新增活动
         ResponseData<Integer> integerResponseData = activityBirthdayService.addActivityBirthday(bo, stageUser);
-
         //返回
         return integerResponseData;
     }
@@ -97,9 +84,7 @@ public class ActivityBirthdayController {
         SysAccountPO stageUser = new SysAccountPO();
         //更新活动
         ResponseData<Integer> registerData = activityBirthdayService.updateActivityBirthday(bo,stageUser);
-
         //返回
-
         return registerData;
     }
 }

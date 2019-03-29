@@ -129,7 +129,7 @@ public class ActivityEvaluationServiceImpl implements ActivityEvaluationService 
         ActivityVO vo = new ActivityVO();
         vo.setSysBrandId(stageUser.getBrandId());
         vo.setActivityType(ActivityTypeEnum.ACTIVITY_TYPE_EVALUATION.getCode());
-        vo.setStop("ture");
+        vo.setStop("true");
         //根据品牌id和活动类型判断该品牌下是否存在该类型的活动，一个品牌下面只能有一个评价奖励的活动
         List<ActivityVO> activityEvaluationList = mktActivityEvaluationPOMapper.getActivityVOList(vo);
         //判断集合是否有值

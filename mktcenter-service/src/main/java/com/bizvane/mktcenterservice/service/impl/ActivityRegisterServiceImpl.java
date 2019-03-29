@@ -74,7 +74,7 @@ import lombok.extern.slf4j.Slf4j;
  * @author chen.li
  * @date on 2018/7/13 15:10
  * @description 开卡活动
- * @Copyright (c) 2018 上海商帆信息科技有限公司-版权所有
+ *
  */
 @Service
 @Slf4j
@@ -192,7 +192,7 @@ public class ActivityRegisterServiceImpl implements ActivityRegisterService {
             vo.setSysBrandId(activityVO.getSysBrandId());
             vo.setActivityType(ActivityTypeEnum.ACTIVITY_TYPE_REGISGER.getCode());
             //判断过滤禁用状态
-            vo.setStop("ture");
+            vo.setStop("true");
             List<ActivityVO> registerList = mktActivityRegisterPOMapper.getActivityList(vo);
             if(!CollectionUtils.isEmpty(registerList)){
                 for (ActivityVO activity:registerList) {

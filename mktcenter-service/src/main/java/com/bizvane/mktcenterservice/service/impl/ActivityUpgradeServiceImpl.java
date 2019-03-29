@@ -64,7 +64,7 @@ import java.util.stream.Collectors;
  * @author chen.li
  * @date on 2018/7/13 18:54
  * @description
- * @Copyright (c) 2018 上海商帆信息科技有限公司-版权所有
+ *
  */
 @Service
 @Slf4j
@@ -177,7 +177,7 @@ public class ActivityUpgradeServiceImpl implements ActivityUpgradeService {
             vo.setSysBrandId(activityVO.getSysBrandId());
             vo.setActivityType(ActivityTypeEnum.ACTIVITY_TYPE_UPGRADE.getCode());
            //判断过滤禁用状态
-           vo.setStop("ture");
+           vo.setStop("true");
             List<ActivityVO> activityUpgradeList = mktActivityUpgradePOMapper.getActivityUpgradeList(vo);
            if(!CollectionUtils.isEmpty(activityUpgradeList)){
                for (ActivityVO activity:activityUpgradeList) {

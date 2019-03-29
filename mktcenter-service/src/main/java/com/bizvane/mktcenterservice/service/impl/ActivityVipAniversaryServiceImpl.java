@@ -169,7 +169,7 @@ public class ActivityVipAniversaryServiceImpl implements ActivityVipAniversarySe
             vo.setLongTerm(bo.getActivityVO().getLongTerm());
             vo.setSysBrandId(activityVO.getSysBrandId());
             vo.setActivityType(ActivityTypeEnum.ACTIVITY_TYPE_BIRTHDAY.getCode());
-            vo.setStop("ture");
+            vo.setStop("true");
             List<ActivityVO> registerList = mktActivityVipAniversaryPOMapper.getActivityAniversaryList(vo);
             if(!CollectionUtils.isEmpty(registerList)){
                 for (ActivityVO activity:registerList) {

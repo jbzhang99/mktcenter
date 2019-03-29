@@ -22,7 +22,7 @@ import java.util.UUID;
  * @author chen.li
  * @date on 2018/7/24 15:14
  * @description 七牛工具类
- * @Copyright (c) 2018 上海商帆信息科技有限公司-版权所有
+ *
  */
 @Component
 public class QiNiuUtil {

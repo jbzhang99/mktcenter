@@ -20,7 +20,7 @@ import java.util.Map;
  * @author chen.li
  * @date on 2018/6/27 18:57
  * @description
- * @Copyright (c) 2018 上海商帆信息科技有限公司-版权所有
+ *
  */
 public class MD5Util {
 

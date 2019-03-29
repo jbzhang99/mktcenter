@@ -18,7 +18,7 @@ import org.springframework.stereotype.Component;
  * @author chen.li
  * @date on 2018/7/14 20:44
  * @description
- * @Copyright (c) 2018 上海商帆信息科技有限公司-版权所有
+ *
  * 主要用于定时发送短信和消息
  */
 @JobHandler(value="startTaskJob")

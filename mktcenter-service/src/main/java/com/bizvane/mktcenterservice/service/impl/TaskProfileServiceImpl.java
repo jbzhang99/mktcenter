@@ -45,7 +45,7 @@ import java.util.List;
  * @author gengxiaoyu
  * @date on 2018/7/16 14:13
  * @description 完善资料任务
- * @Copyright (c) 2018 上海商帆信息科技有限公司-版权所有
+ *
  */
 @Service
 @Slf4j

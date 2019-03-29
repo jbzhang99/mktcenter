@@ -6,7 +6,6 @@ import java.util.Date;
 import java.util.HashSet;
 
 /**
- * @Author: lijunwei
  * @Time: 2018/7/28 15:52
  */
 public class CodeUtil {
@@ -74,7 +73,6 @@ public class CodeUtil {
 
     public static void main(String[] args) {
         ArrayList<String> strings = new ArrayList<>();
-        HashSet<String> objects = new HashSet<>();
         try {
             for (int i=0;i<100;i++){
                 new Thread() {
@@ -92,10 +90,8 @@ public class CodeUtil {
 
         }finally {
             System.out.println("-------------------"+strings.size());
+            System.out.println(Math.round(Math.random() * 9));
         }
-
-
-
     }
 }
 

@@ -79,7 +79,7 @@ public class NetWorkCommon {
         SmsSendResponse smsSingleResponse = JSON.parseObject(response, SmsSendResponse.class);
 
         if (smsSingleResponse.getCode().equals("0")) {
-            return  "ture";
+            return  "true";
         }
         System.out.println("发送短信有误 :" + response);
         return smsSingleResponse.getErrorMsg();

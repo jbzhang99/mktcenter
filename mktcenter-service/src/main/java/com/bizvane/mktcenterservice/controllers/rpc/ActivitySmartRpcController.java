@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @author chen.li
  * @date on 2018/7/27 15:19
  * @description 智能营销对外提供
- * @Copyright (c) 2018 上海商帆信息科技有限公司-版权所有
+ *
  */
 @RestController
 @RequestMapping("activitySmartRpc")

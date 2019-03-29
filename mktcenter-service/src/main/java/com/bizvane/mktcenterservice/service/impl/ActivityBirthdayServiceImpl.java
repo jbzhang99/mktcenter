@@ -25,6 +25,7 @@ import com.bizvane.members.facade.vo.IntegralRecordVo;
 import com.bizvane.mktcenterfacade.interfaces.ActivityBirthdayService;
 import com.bizvane.mktcenterfacade.models.bo.ActivityBO;
 import com.bizvane.mktcenterfacade.models.po.*;
+import com.bizvane.mktcenterservice.common.constants.ActivityConstants;
 import com.bizvane.mktcenterservice.mappers.*;
 
 import com.bizvane.mktcenterfacade.models.vo.ActivityVO;
@@ -63,7 +64,7 @@ import java.util.stream.Collectors;
  * @author chen.li
  * @date on 2018/7/13 18:49
  * @description
- * @Copyright (c) 2018 上海商帆信息科技有限公司-版权所有
+ *
  */
 @Service
 @Slf4j
@@ -138,11 +139,11 @@ public class ActivityBirthdayServiceImpl implements ActivityBirthdayService {
         //得到大实体类
         ActivityVO activityVO = bo.getActivityVO();
         //判断是否是全部等级
-        if (activityVO.getMbrLevelCode().equals("0")){
+        if (ActivityConstants.COMMON_TYPE_ALL.equals(activityVO.getMbrLevelCode())){
             activityVO.setMbrLevelName("全部等级");
         }
-        //判断活动开始时间是否大于当前时间
-        if(1 != bo.getActivityVO().getLongTerm() && new Date().after(activityVO.getStartTime())){
+        //判断活动是否为长期活动，开始时间是否比当前时间早
+        if(1 != bo.getActivityVO().getLongTerm() && activityVO.getStartTime().before(new Date())){
             responseData.setCode(SysResponseEnum.MODEL_FAILED_VALIDATION.getCode());
             responseData.setMessage("活动开始时间不能比当前时间小!");
             return responseData;
@@ -155,7 +156,7 @@ public class ActivityBirthdayServiceImpl implements ActivityBirthdayService {
         //增加品牌id
         log.info("获取的品牌id是="+stageUser.getBrandId());
         if(null==stageUser.getBrandId()){
-            log.error("token没有获取到品牌id");
+            log.error("从token中没有获取到品牌id");
             responseData.setCode(SysResponseEnum.FAILED.getCode());
             responseData.setMessage("Token没有获取到品牌id!");
             return responseData;
@@ -172,12 +173,12 @@ public class ActivityBirthdayServiceImpl implements ActivityBirthdayService {
             vo.setLongTerm(bo.getActivityVO().getLongTerm());
             vo.setSysBrandId(activityVO.getSysBrandId());
             vo.setActivityType(ActivityTypeEnum.ACTIVITY_TYPE_BIRTHDAY.getCode());
-            vo.setStop("ture");
+            vo.setStop("true");
             List<ActivityVO> registerList = mktActivityBirthdayPOMapper.getActivityBirthdayList(vo);
             if(!CollectionUtils.isEmpty(registerList)){
                 for (ActivityVO activity:registerList) {
                     //判断适用商品
-                    if (false==activity.getIsStoreLimit() || !ExecuteParamCheckUtil.addActivitCheck(bo,activity)){
+                    if (Boolean.FALSE.equals(activity.getIsStoreLimit()) || !ExecuteParamCheckUtil.addActivitCheck(bo,activity)){
                         responseData.setCode(SysResponseEnum.FAILED.getCode());
                         responseData.setMessage("已存在同一类型的长期活动!");
                         return responseData;
@@ -188,8 +189,6 @@ public class ActivityBirthdayServiceImpl implements ActivityBirthdayService {
         }
 
         //查询审核配置，是否需要审核然后判断
-        /*SysCheckConfigVo so = new SysCheckConfigVo();
-        so.setSysBrandId(activityVO.getSysBrandId());*/
         ResponseData<List<SysCheckConfigVo>> sysCheckConfigVo =sysCheckConfigServiceRpc.getCheckConfigListAll(activityVO.getSysBrandId());
         List<SysCheckConfigVo> sysCheckConfigVoList = sysCheckConfigVo.getData();
         //判断是否有审核配置
@@ -298,19 +297,6 @@ public class ActivityBirthdayServiceImpl implements ActivityBirthdayService {
                 mktCouponPOMapper.insertSelective(mktCouponPO);
             }
         }
-
-        //新增活动消息
-       /* List<MktMessagePO> messageVOList = bo.getMessageVOList();
-        if(!CollectionUtils.isEmpty(messageVOList)){
-            for(MktMessagePO messageVO : messageVOList){
-                MktMessagePO mktMessagePO = new MktMessagePO();
-                BeanUtils.copyProperties(mktActivityPOWithBLOBs,mktMessagePO);
-                BeanUtils.copyProperties(messageVO,mktMessagePO);
-                mktMessagePO.setBizType(BusinessTypeEnum.ACTIVITY_TYPE_ACTIVITY.getCode());
-                mktMessagePO.setBizId(mktActivityId);
-                mktMessagePOMapper.insertSelective(mktMessagePO);
-            }
-        }*/
         responseData.setCode(SysResponseEnum.SUCCESS.getCode());
         responseData.setMessage(SysResponseEnum.SUCCESS.getMessage());
         return responseData;
@@ -798,45 +784,5 @@ public class ActivityBirthdayServiceImpl implements ActivityBirthdayService {
             falg=false;
         }
         return falg;
-    }
-    public static void main(String[] args){
-       /* boolean falg ;
-        String ids= "1,2,3,4,5,6";
-        //List<Long> listIds = Arrays.asList(ids.split(",")).stream().map(s -> Long.parseLong(s.trim())).collect(Collectors.toList());
-        List<String> listIds = Arrays.asList(ids.split(","));
-        String ss = "1";
-        falg=listIds.contains(ss);*/
-        //前端传过来的
-       /* String storeLimitList ="1,2,3";
-        List<String> result = Arrays.asList(storeLimitList.split(","));
-        List ss = new ArrayList(result);
-
-        //表里查出来的
-        String stroeList = "4,5,6";
-        List<String> productNoList = Arrays.asList(stroeList.split(","));
-        List dd = new ArrayList(productNoList);
-        dd.retainAll(ss);
-        boolean fa=dd.size()>0;*/
-      /* List<Long> ss = new ArrayList<>();
-       ss.add(1L);
-       ss.add(2L);
-    Long tt = 0L;
-        BigDecimal moneySu = new BigDecimal(0);
-       for (int i =0;i<2;i++){
-           tt= tt + ss.get(i);
-           moneySu = moneySu.add(new BigDecimal(String.valueOf(ss.get(i))));
-       }
-
-
-        System.out.println("======================="+tt);
-        System.out.println("======================="+moneySu);*/
-        Date date = new Date();
-        Calendar cal = Calendar.getInstance();
-        cal.setTime(date);//设置起时间
-        System.out.println("======================="+date.toString());
-        cal.add(Calendar.MONTH, 1);
-        cal.add(Calendar.DATE, -1);
-        System.out.println("======================="+cal.getTime().toString());
-
     }
 }

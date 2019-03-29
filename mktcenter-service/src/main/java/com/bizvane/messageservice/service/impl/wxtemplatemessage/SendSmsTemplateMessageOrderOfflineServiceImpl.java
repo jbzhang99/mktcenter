@@ -28,7 +28,7 @@ import java.util.List;
  * @author xiao.shu
  * @date on 2018/8/9 18:01
  * @description 消费者-发送线下订单提醒短信
- * @Copyright (c) 2018 上海商帆信息科技有限公司-版权所有
+ *
  */
 @Service("sendSmsTemplateMessageOrderOfflineServiceImpl")
 public class SendSmsTemplateMessageOrderOfflineServiceImpl implements SendSmsOrderOfflineConsumeService {
