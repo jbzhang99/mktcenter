@@ -31,7 +31,7 @@ import com.bizvane.couponservice.mappers.CouponEntityPOMapper;
 import com.bizvane.couponservice.service.CouponAnalysisService;
 import com.bizvane.couponservice.service.CouponReportTempService;
 import com.bizvane.mktcenterservice.common.report.BaseUrl;
-import com.bizvane.utils.responseinfo.PageInfo;
+import com.github.pagehelper.PageInfo;
 import com.bizvane.utils.responseinfo.ResponseData;
 import com.bizvane.utils.tokens.TokenUtils;
 import org.apache.commons.lang3.StringUtils;

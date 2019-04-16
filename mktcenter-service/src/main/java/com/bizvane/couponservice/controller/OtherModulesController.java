@@ -15,7 +15,7 @@ import com.bizvane.members.facade.es.pojo.MembersInfoSearchPojo;
 import com.bizvane.members.facade.es.vo.MembersInfoSearchVo;
 import com.bizvane.members.facade.service.api.MembersAdvancedSearchApiService;
 import com.bizvane.members.facade.vo.MemberInfoVo;
-import com.bizvane.utils.responseinfo.PageInfo;
+import com.github.pagehelper.PageInfo;
 import com.bizvane.utils.responseinfo.ResponseData;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;

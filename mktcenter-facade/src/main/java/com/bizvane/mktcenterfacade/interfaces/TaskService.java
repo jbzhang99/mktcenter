@@ -178,12 +178,12 @@ public interface TaskService {
      * 获取品牌下的所有会员
      * @return
      */
-    public  com.bizvane.utils.responseinfo.PageInfo<MemberInfoModel> getCompanyMemebers(SendMessageVO sendMessageVO,Integer pageNumber,Integer pageSize);
+    public  com.github.pagehelper.PageInfo<MemberInfoModel> getCompanyMemebers(SendMessageVO sendMessageVO,Integer pageNumber,Integer pageSize);
 
     /**
      * 获取品牌下的所有粉丝
      */
-    public  com.bizvane.utils.responseinfo.PageInfo<WxChannelInfoVo>  getCompanyFans(Long sysBrandId, Integer pageNumber, Integer pageSize);
+    public  com.github.pagehelper.PageInfo<WxChannelInfoVo>  getCompanyFans(Long sysBrandId, Integer pageNumber, Integer pageSize);
 
     /**
      * 根据会员Code的某一会员的详情

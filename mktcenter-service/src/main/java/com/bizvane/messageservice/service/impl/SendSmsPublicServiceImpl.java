@@ -8,7 +8,7 @@ import com.bizvane.members.facade.models.MemberInfoModel;
 import com.bizvane.members.facade.service.api.MemberInfoApiService;
 import com.bizvane.members.facade.vo.MemberInfoApiModel;
 import com.bizvane.messageservice.service.SendSmsPublicMessageService;
-import com.bizvane.utils.responseinfo.PageInfo;
+import com.github.pagehelper.PageInfo;
 import com.bizvane.utils.responseinfo.ResponseData;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.lang3.StringUtils;

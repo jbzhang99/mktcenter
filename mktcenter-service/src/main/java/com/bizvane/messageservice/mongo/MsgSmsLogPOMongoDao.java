@@ -4,7 +4,7 @@ import com.bizvane.messageservice.common.utils.PageForm;
 import com.bizvane.messagefacade.models.po.MsgSmsLogPO;
 import com.bizvane.messagefacade.models.vo.GenrealGetMessageVO;
 import com.bizvane.messagefacade.models.vo.SmsMessageLogVo;
-import com.bizvane.utils.responseinfo.PageInfo;
+import com.github.pagehelper.PageInfo;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.*;

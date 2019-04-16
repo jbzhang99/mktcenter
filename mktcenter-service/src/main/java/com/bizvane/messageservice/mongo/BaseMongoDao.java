@@ -3,7 +3,7 @@ package com.bizvane.messageservice.mongo;
 import com.aliyun.openservices.shade.com.alibaba.fastjson.JSON;
 import com.aliyun.openservices.shade.com.alibaba.fastjson.JSONObject;
 import com.bizvane.messageservice.common.utils.PageForm;
-import com.bizvane.utils.responseinfo.PageInfo;
+import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Query;

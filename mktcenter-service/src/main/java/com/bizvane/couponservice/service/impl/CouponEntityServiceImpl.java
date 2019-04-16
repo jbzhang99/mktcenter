@@ -281,8 +281,8 @@ public class CouponEntityServiceImpl implements CouponEntityService{
         	couponMemberPo.setPageSize(1);
         	couponMemberPo.setConditions(entityParam.getPhone());
         	couponMemberPo.setBrandId(accountPo.getBrandId());
-        	ResponseData<com.bizvane.utils.responseinfo.PageInfo<MembersInfoSearchPojo>> getMemberInfoByCodeList = memberInfoApiForCouponService.queryMemberInfoForCouponCondition(couponMemberPo);
-        	com.bizvane.utils.responseinfo.PageInfo<MembersInfoSearchPojo> friendPojos=getMemberInfoByCodeList.getData();
+        	ResponseData<com.github.pagehelper.PageInfo<MembersInfoSearchPojo>> getMemberInfoByCodeList = memberInfoApiForCouponService.queryMemberInfoForCouponCondition(couponMemberPo);
+        	com.github.pagehelper.PageInfo<MembersInfoSearchPojo> friendPojos=getMemberInfoByCodeList.getData();
             if (CollectionUtils.isNotEmpty(friendPojos.getList()) ) {
             		entityParam.setMemberCode(friendPojos.getList().get(0).getMemberCode());
             }else { 
@@ -295,8 +295,8 @@ public class CouponEntityServiceImpl implements CouponEntityService{
         	couponMemberPo.setPageSize(1);
         	couponMemberPo.setConditions(entityParam.getCardNo());
         	couponMemberPo.setBrandId(accountPo.getBrandId());
-        	ResponseData<com.bizvane.utils.responseinfo.PageInfo<MembersInfoSearchPojo>> getMemberInfoByCodeList = memberInfoApiForCouponService.queryMemberInfoForCouponCondition(couponMemberPo);
-        	com.bizvane.utils.responseinfo.PageInfo<MembersInfoSearchPojo> friendPojos=getMemberInfoByCodeList.getData();
+        	ResponseData<com.github.pagehelper.PageInfo<MembersInfoSearchPojo>> getMemberInfoByCodeList = memberInfoApiForCouponService.queryMemberInfoForCouponCondition(couponMemberPo);
+        	com.github.pagehelper.PageInfo<MembersInfoSearchPojo> friendPojos=getMemberInfoByCodeList.getData();
             if (CollectionUtils.isNotEmpty(friendPojos.getList()) ) {
             		entityParam.setMemberCode(friendPojos.getList().get(0).getMemberCode());
             }else { 
@@ -310,8 +310,8 @@ public class CouponEntityServiceImpl implements CouponEntityService{
          	couponMemberPo.setPageSize(1);
          	couponMemberPo.setConditions(entityParam.getBaseSearchValue());
          	couponMemberPo.setBrandId(accountPo.getBrandId());
-         	ResponseData<com.bizvane.utils.responseinfo.PageInfo<MembersInfoSearchPojo>> getMemberInfoByCodeList = memberInfoApiForCouponService.queryMemberInfoForCouponCondition(couponMemberPo);
-         	com.bizvane.utils.responseinfo.PageInfo<MembersInfoSearchPojo> friendPojos=getMemberInfoByCodeList.getData();
+         	ResponseData<com.github.pagehelper.PageInfo<MembersInfoSearchPojo>> getMemberInfoByCodeList = memberInfoApiForCouponService.queryMemberInfoForCouponCondition(couponMemberPo);
+         	com.github.pagehelper.PageInfo<MembersInfoSearchPojo> friendPojos=getMemberInfoByCodeList.getData();
              if (CollectionUtils.isNotEmpty(friendPojos.getList()) ) {
              		entityParam.setMemberCode(friendPojos.getList().get(0).getMemberCode());
             		entityParam.setBaseSearchValue("");

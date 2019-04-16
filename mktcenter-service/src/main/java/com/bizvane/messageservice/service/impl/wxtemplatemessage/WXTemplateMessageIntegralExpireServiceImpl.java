@@ -17,7 +17,7 @@ import com.bizvane.messageservice.template.UseTemplate;
 import com.bizvane.messagefacade.models.po.MsgWxLogPO;
 import com.bizvane.messagefacade.models.vo.IntegralMessageVO;
 import com.bizvane.messagefacade.models.vo.Result;
-import com.bizvane.utils.responseinfo.PageInfo;
+import com.github.pagehelper.PageInfo;
 import com.bizvane.utils.responseinfo.ResponseData;
 import com.bizvane.wechatfacade.models.po.WxPublicPO;
 import com.fasterxml.jackson.databind.ObjectMapper;

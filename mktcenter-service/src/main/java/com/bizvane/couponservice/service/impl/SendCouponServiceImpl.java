@@ -30,7 +30,7 @@ import com.bizvane.members.facade.vo.WxChannelInfoVo;
 import com.bizvane.messagefacade.interfaces.WechatCouponServiceFeign;
 import com.bizvane.messagefacade.models.vo.CouponMessageVO;
 import com.bizvane.messageservice.common.thread.ThreadPool;
-import com.bizvane.utils.responseinfo.PageInfo;
+import com.github.pagehelper.PageInfo;
 import com.bizvane.utils.responseinfo.ResponseData;
 import com.bizvane.wechatfacade.interfaces.WxPublicServiceFeign;
 import com.bizvane.wechatfacade.models.po.WxPublicPO;

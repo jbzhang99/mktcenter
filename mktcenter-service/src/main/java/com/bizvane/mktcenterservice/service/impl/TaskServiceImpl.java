@@ -579,7 +579,7 @@ public class TaskServiceImpl implements TaskService {
             stringBuffer.append(points).append("积分");
         }
         String activityInterests = stringBuffer.toString();
-        com.bizvane.utils.responseinfo.PageInfo<MemberInfoModel> memeberspage = this.getCompanyMemebers(sendMessageVO, 1, 10000);
+        com.github.pagehelper.PageInfo<MemberInfoModel> memeberspage = this.getCompanyMemebers(sendMessageVO, 1, 10000);
         if (memeberspage == null) {
             log.info("sendMemberMessage发送模板消息--无法查询到会员数据!");
             return;
@@ -588,7 +588,7 @@ public class TaskServiceImpl implements TaskService {
         int pages = memeberspage.getPages();
         if (CollectionUtils.isNotEmpty(maemberlist)) {
             for (int i = 1; i <= pages; i++) {
-                com.bizvane.utils.responseinfo.PageInfo<MemberInfoModel> pagesdata = this.getCompanyMemebers(sendMessageVO, i, 10000);
+                com.github.pagehelper.PageInfo<MemberInfoModel> pagesdata = this.getCompanyMemebers(sendMessageVO, i, 10000);
                 List<MemberInfoModel> list = pagesdata.getList();
                 log.info("sendMemberMessage发送消息获取的会员列表--" + JSON.toJSONString(list));
                 AwardBO memberBO = new AwardBO();
@@ -639,7 +639,7 @@ public class TaskServiceImpl implements TaskService {
             batchNum = smsConfigPo.getBatchNum();
         }
         log.info("sendBachMSM发送短信之获取短信通道的相关信息--出参" + JSON.toJSONString(smsConfigVo) + "--出参--" + JSON.toJSONString(smsConfigPo));
-        com.bizvane.utils.responseinfo.PageInfo<MemberInfoModel> memeberspage = this.getCompanyMemebers(sendMessageVO, 1, batchNum);
+        com.github.pagehelper.PageInfo<MemberInfoModel> memeberspage = this.getCompanyMemebers(sendMessageVO, 1, batchNum);
         if (memeberspage == null) {
             log.info("sendBachMSM发送短信--无法查询到会员数据!");
             return;
@@ -658,7 +658,7 @@ public class TaskServiceImpl implements TaskService {
 
         if (CollectionUtils.isNotEmpty(memberlist)) {
             for (int i = 1; i <= pages; i++) {
-                com.bizvane.utils.responseinfo.PageInfo<MemberInfoModel> onepagememebers = this.getCompanyMemebers(sendMessageVO, i, batchNum);
+                com.github.pagehelper.PageInfo<MemberInfoModel> onepagememebers = this.getCompanyMemebers(sendMessageVO, i, batchNum);
                 List<MemberInfoModel> onelist = onepagememebers.getList();
                 String pnones = onelist.stream().filter(fan -> StringUtils.isNotBlank(fan.getPhone())).map(fan -> fan.getPhone()).collect(Collectors.joining(","));
                 messageVO.setPhones(pnones);
@@ -1110,7 +1110,7 @@ public class TaskServiceImpl implements TaskService {
      * 查询品牌下的所有会员,分页-已经审核
      */
     @Override
-    public com.bizvane.utils.responseinfo.PageInfo<MemberInfoModel> getCompanyMemebers(SendMessageVO sendMessageVO, Integer pageNumber, Integer pageSize) {
+    public com.github.pagehelper.PageInfo<MemberInfoModel> getCompanyMemebers(SendMessageVO sendMessageVO, Integer pageNumber, Integer pageSize) {
         log.info("getCompanyMemebers查询相应的会员--参数--" + JSON.toJSONString(sendMessageVO) + "--" + pageNumber + "--" + pageSize);
         MemberInfoApiModel members = new MemberInfoApiModel();
         members.setSysCompanyId(sendMessageVO.getSysCompanyId());
@@ -1130,8 +1130,8 @@ public class TaskServiceImpl implements TaskService {
             members.setMemberScope(TaskConstants.ALL_MEMBER);
         }
 
-        ResponseData<com.bizvane.utils.responseinfo.PageInfo<MemberInfoModel>> memberInfo = memberInfoApiService.getMemberInfo(members);
-        com.bizvane.utils.responseinfo.PageInfo<MemberInfoModel> data = memberInfo.getData();
+        ResponseData<com.github.pagehelper.PageInfo<MemberInfoModel>> memberInfo = memberInfoApiService.getMemberInfo(members);
+        com.github.pagehelper.PageInfo<MemberInfoModel> data = memberInfo.getData();
         log.info("会员数据------出参---"+JSON.toJSONString(members)+"------------------"+ JSON.toJSONString(data));
         return data;
 
@@ -1141,11 +1141,11 @@ public class TaskServiceImpl implements TaskService {
      * 查询某品牌下的粉丝---已经审核(废弃)
      */
     @Override
-    public com.bizvane.utils.responseinfo.PageInfo<WxChannelInfoVo> getCompanyFans(Long sysBrandId, Integer pageNumber, Integer pageSize) {
+    public com.github.pagehelper.PageInfo<WxChannelInfoVo> getCompanyFans(Long sysBrandId, Integer pageNumber, Integer pageSize) {
         PageVo pageVo = new PageVo();
         pageVo.setPageNumber(pageNumber);
         pageVo.setPageSize(pageSize);
-        ResponseData<com.bizvane.utils.responseinfo.PageInfo<WxChannelInfoVo>> data = wxChannelInfoApiService.queryWeChatFansAndMemberByBrandId(pageVo, sysBrandId);
+        ResponseData<com.github.pagehelper.PageInfo<WxChannelInfoVo>> data = wxChannelInfoApiService.queryWeChatFansAndMemberByBrandId(pageVo, sysBrandId);
         return data.getData();
     }
 

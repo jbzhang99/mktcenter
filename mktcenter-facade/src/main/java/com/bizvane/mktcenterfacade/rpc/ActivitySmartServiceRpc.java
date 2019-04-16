@@ -1,7 +1,7 @@
 package com.bizvane.mktcenterfacade.rpc;
 
 import com.bizvane.mktcenterfacade.models.vo.ActivitySmartVO;
-import com.bizvane.utils.responseinfo.PageInfo;
+import com.github.pagehelper.PageInfo;
 import com.bizvane.utils.responseinfo.ResponseData;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.RequestBody;

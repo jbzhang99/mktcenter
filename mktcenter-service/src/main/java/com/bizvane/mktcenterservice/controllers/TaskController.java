@@ -129,7 +129,7 @@ public class TaskController {
         return taskService.findCouponSendResultTask(id,type,stageUser,pageForm,name,cardNo);
     }
     @RequestMapping("getCompanyMemebers")
-    public  com.bizvane.utils.responseinfo.PageInfo<MemberInfoModel>   test(SendMessageVO sendMessageVO){
+    public  com.github.pagehelper.PageInfo<MemberInfoModel>   test(SendMessageVO sendMessageVO){
         System.out.println(1111);
        return taskService.getCompanyMemebers(sendMessageVO, 1, 10000);
     }

@@ -7,7 +7,7 @@ import com.bizvane.couponfacade.models.vo.CouponEntityVO;
 import com.bizvane.couponfacade.models.vo.CouponQuotaDetailVO;
 import com.bizvane.couponfacade.models.vo.SendCouponQuotaBatchRequestVO;
 import com.bizvane.couponfacade.utils.PageFormUtil;
-import com.bizvane.utils.responseinfo.PageInfo;
+import com.github.pagehelper.PageInfo;
 import com.bizvane.utils.responseinfo.ResponseData;
 
 /**

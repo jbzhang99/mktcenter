@@ -17,7 +17,7 @@ import com.bizvane.couponservice.controller.BitDataAnalysisController;
 import com.bizvane.couponservice.service.SingleCoupleAnalysisService;
 import com.bizvane.mktcenterservice.common.report.BaseUrl;
 import com.bizvane.utils.enumutils.SysResponseEnum;
-import com.bizvane.utils.responseinfo.PageInfo;
+import com.github.pagehelper.PageInfo;
 import com.bizvane.utils.responseinfo.ResponseData;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

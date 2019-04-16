@@ -5,7 +5,7 @@ import com.bizvane.couponfacade.models.po.CouponManualPO;
 import com.bizvane.couponfacade.models.vo.CouponManualVO;
 import com.bizvane.couponfacade.utils.PageFormUtil;
 import com.bizvane.couponservice.service.CouponManualService;
-import com.bizvane.utils.responseinfo.PageInfo;
+import com.github.pagehelper.PageInfo;
 import com.bizvane.utils.responseinfo.ResponseData;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;

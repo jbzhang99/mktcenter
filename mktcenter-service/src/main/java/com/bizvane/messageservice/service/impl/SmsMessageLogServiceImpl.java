@@ -13,7 +13,7 @@ import com.bizvane.messagefacade.models.vo.GenrealGetMessageVO;
 import com.bizvane.messagefacade.models.vo.Result;
 import com.bizvane.messagefacade.models.vo.SmsMessageLogVo;
 import com.bizvane.messagefacade.models.vo.SmsStatisticsVO;
-import com.bizvane.utils.responseinfo.PageInfo;
+import com.github.pagehelper.PageInfo;
 import com.bizvane.utils.responseinfo.ResponseData;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

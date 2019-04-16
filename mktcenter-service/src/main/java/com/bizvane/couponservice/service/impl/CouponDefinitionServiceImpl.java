@@ -17,7 +17,7 @@ import com.bizvane.couponservice.mappers.CouponDefinitionCodePOMapper;
 import com.bizvane.couponservice.mappers.CouponDefinitionMoneyPOMapper;
 import com.bizvane.couponservice.mappers.CouponDefinitionPOMapper;
 import com.bizvane.couponservice.service.CouponDefinitionService;
-import com.bizvane.utils.responseinfo.PageInfo;
+import com.github.pagehelper.PageInfo;
 import com.bizvane.utils.responseinfo.ResponseData;
 import com.github.pagehelper.PageHelper;
 import org.apache.commons.collections.CollectionUtils;

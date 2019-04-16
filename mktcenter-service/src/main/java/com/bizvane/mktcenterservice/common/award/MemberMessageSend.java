@@ -35,7 +35,7 @@ import com.bizvane.mktcenterfacade.models.vo.ActivitySmartVO;
 import com.bizvane.mktcenterfacade.models.vo.ActivityVO;
 import com.bizvane.mktcenterservice.common.enums.BusinessTypeEnum;
 import com.bizvane.mktcenterservice.common.enums.MktSmartTypeEnum;
-import com.bizvane.utils.responseinfo.PageInfo;
+import com.github.pagehelper.PageInfo;
 import com.bizvane.utils.responseinfo.ResponseData;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -99,7 +99,7 @@ public class MemberMessageSend {
         //循环分页条件查询会员信息发送短信信息
         for (int a =1;a<=memberInfoVoPage.getData().getPages();a++){
             membersInfoSearchVo.setPageNumber(a);
-            ResponseData<com.bizvane.utils.responseinfo.PageInfo<MemberInfoVo>> memberInfoVoPages = membersAdvancedSearchApiService.search(membersInfoSearchVo);
+            ResponseData<com.github.pagehelper.PageInfo<MemberInfoVo>> memberInfoVoPages = membersAdvancedSearchApiService.search(membersInfoSearchVo);
             List<MemberInfoVo> memberInfoModelList = memberInfoVoPages.getData().getList();
             //循环发送
             log.info("开始循环发送++++++++++++++++++++++");
@@ -120,11 +120,11 @@ public class MemberMessageSend {
      */
     @Async("asyncServiceExecutor")
     public void sendMemberPoints(ActivitySmartVO vo, String activityCode, MembersInfoSearchVo membersInfoSearchVo) {
-        ResponseData<com.bizvane.utils.responseinfo.PageInfo<MemberInfoVo>> memberInfoVoPage = membersAdvancedSearchApiService.search(membersInfoSearchVo);
+        ResponseData<com.github.pagehelper.PageInfo<MemberInfoVo>> memberInfoVoPage = membersAdvancedSearchApiService.search(membersInfoSearchVo);
         log.info("已经查询到相应的会员一共多少页++++++++++="+memberInfoVoPage.getData().getPages());
         for (int a =1;a<=memberInfoVoPage.getData().getPages();a++) {
             membersInfoSearchVo.setPageNumber(a);
-            ResponseData<com.bizvane.utils.responseinfo.PageInfo<MemberInfoVo>> memberInfoVoPages = membersAdvancedSearchApiService.search(membersInfoSearchVo);
+            ResponseData<com.github.pagehelper.PageInfo<MemberInfoVo>> memberInfoVoPages = membersAdvancedSearchApiService.search(membersInfoSearchVo);
             List<MemberInfoVo> memberInfoModelList = memberInfoVoPages.getData().getList();
             for (MemberInfoModel memberInfo:memberInfoModelList) {
                 AwardBO awardBO = new AwardBO();
@@ -140,10 +140,10 @@ public class MemberMessageSend {
      */
     @Async("asyncServiceExecutor")
     public  void sendShortMessage(MktMessagePO mktMessagePO, MembersInfoSearchVo membersInfoSearchVo) {
-        ResponseData<com.bizvane.utils.responseinfo.PageInfo<MemberInfoVo>> memberInfoVoPage = membersAdvancedSearchApiService.search(membersInfoSearchVo);
+        ResponseData<com.github.pagehelper.PageInfo<MemberInfoVo>> memberInfoVoPage = membersAdvancedSearchApiService.search(membersInfoSearchVo);
         for (int a =1;a<=memberInfoVoPage.getData().getPages();a++) {
             membersInfoSearchVo.setPageNumber(a);
-            ResponseData<com.bizvane.utils.responseinfo.PageInfo<MemberInfoVo>> memberInfoVoPages = membersAdvancedSearchApiService.search(membersInfoSearchVo);
+            ResponseData<com.github.pagehelper.PageInfo<MemberInfoVo>> memberInfoVoPages = membersAdvancedSearchApiService.search(membersInfoSearchVo);
             List<MemberInfoVo> memberInfoModelList = memberInfoVoPages.getData().getList();
             for (MemberInfoModel memberInfo:memberInfoModelList) {
                 SysSmsConfigVO sysSmsConfigVO = new SysSmsConfigVO();
@@ -160,10 +160,10 @@ public class MemberMessageSend {
      */
     @Async("asyncServiceExecutor")
     public  void sendWxMessage(MktMessagePO mktMessagePO, MembersInfoSearchVo membersInfoSearchVo,ActivitySmartVO vo) {
-        ResponseData<com.bizvane.utils.responseinfo.PageInfo<MemberInfoVo>> memberInfoVoPage = membersAdvancedSearchApiService.search(membersInfoSearchVo);
+        ResponseData<com.github.pagehelper.PageInfo<MemberInfoVo>> memberInfoVoPage = membersAdvancedSearchApiService.search(membersInfoSearchVo);
         for (int a =1;a<=memberInfoVoPage.getData().getPages();a++) {
             membersInfoSearchVo.setPageNumber(a);
-            ResponseData<com.bizvane.utils.responseinfo.PageInfo<MemberInfoVo>> memberInfoVoPages = membersAdvancedSearchApiService.search(membersInfoSearchVo);
+            ResponseData<com.github.pagehelper.PageInfo<MemberInfoVo>> memberInfoVoPages = membersAdvancedSearchApiService.search(membersInfoSearchVo);
             List<MemberInfoVo> memberInfoModelList = memberInfoVoPages.getData().getList();
             for (MemberInfoModel memberInfo:memberInfoModelList) {
                 MemberMessageVO memberMessageVO = new MemberMessageVO();
@@ -189,13 +189,13 @@ public class MemberMessageSend {
         JSONObject titlejsonObject = news_item.getJSONObject(0);
         String title = titlejsonObject.getString("title");//标题
 
-        ResponseData<com.bizvane.utils.responseinfo.PageInfo<MemberInfoVo>> memberInfoVoPage = membersAdvancedSearchApiService.search(membersInfoSearchVo);
+        ResponseData<com.github.pagehelper.PageInfo<MemberInfoVo>> memberInfoVoPage = membersAdvancedSearchApiService.search(membersInfoSearchVo);
         PageInfo<MemberInfoVo> data = memberInfoVoPage.getData();
         long total = data.getTotal();
         for (int a =1;a<=data.getPages();a++) {
             membersInfoSearchVo.setPageNumber(a);
             log.info("sendPictureMessage member param:"+JSON.toJSONString(membersInfoSearchVo));
-            ResponseData<com.bizvane.utils.responseinfo.PageInfo<MemberInfoVo>> memberInfoVoPages = membersAdvancedSearchApiService.search(membersInfoSearchVo);
+            ResponseData<com.github.pagehelper.PageInfo<MemberInfoVo>> memberInfoVoPages = membersAdvancedSearchApiService.search(membersInfoSearchVo);
             log.info("sendPictureMessage member result:"+JSON.toJSONString(memberInfoVoPages));
             List<MemberInfoVo> memberInfoModelList = memberInfoVoPages.getData().getList();
             StringBuilder stringBuilder = new StringBuilder();
@@ -236,10 +236,10 @@ public class MemberMessageSend {
     @Async("asyncServiceExecutor")
     public void sendMemberCoupon(ActivitySmartVO vo, MembersInfoSearchVo membersInfoSearchVo) {
         log.info("马上开始发券了激动吗嘛嘛嘛嘛嘛嘛嘛嘛嘛啊啊啊啊啊啊啊");
-        ResponseData<com.bizvane.utils.responseinfo.PageInfo<MemberInfoVo>> memberInfoVoPage = membersAdvancedSearchApiService.search(membersInfoSearchVo);
+        ResponseData<com.github.pagehelper.PageInfo<MemberInfoVo>> memberInfoVoPage = membersAdvancedSearchApiService.search(membersInfoSearchVo);
         for (int a = 1; a <= memberInfoVoPage.getData().getPages(); a++) {
             membersInfoSearchVo.setPageNumber(a);
-            ResponseData<com.bizvane.utils.responseinfo.PageInfo<MemberInfoVo>> memberInfoVoPages = membersAdvancedSearchApiService.search(membersInfoSearchVo);
+            ResponseData<com.github.pagehelper.PageInfo<MemberInfoVo>> memberInfoVoPages = membersAdvancedSearchApiService.search(membersInfoSearchVo);
             List<MemberInfoVo> memberInfoModelList = memberInfoVoPages.getData().getList();
             for (MemberInfoModel memberInfo : memberInfoModelList) {
                 SendCouponSimpleRequestVO sendCouponSimpleRequestVO = new SendCouponSimpleRequestVO();
@@ -485,12 +485,12 @@ public class MemberMessageSend {
     @Async("asyncServiceExecutor")
     public void sendWXmessage(List<MktMessagePO> messageVOList, WxChannelInfoSearchVo wxChannelInfoSearchVo,ActivityVO activityVO) {
         log.info("开卡开始发送微信消息");
-        ResponseData<com.bizvane.utils.responseinfo.PageInfo<WxChannelInfoVo>> wxChannelInfoVos =  wxChannelInfoAdvancedSearchApiServic.queryAdvancedChannelInfoList(wxChannelInfoSearchVo);
+        ResponseData<com.github.pagehelper.PageInfo<WxChannelInfoVo>> wxChannelInfoVos =  wxChannelInfoAdvancedSearchApiServic.queryAdvancedChannelInfoList(wxChannelInfoSearchVo);
         log.info("开卡开始发送微信消息"+ JSON.toJSONString(wxChannelInfoVos));
         //查询到页数循环
         for (int a = 1;a<=wxChannelInfoVos.getData().getPages();a++){
             wxChannelInfoSearchVo.setPageNum(a);
-            ResponseData<com.bizvane.utils.responseinfo.PageInfo<WxChannelInfoVo>> wxChannelInfoVolist =  wxChannelInfoAdvancedSearchApiServic.queryAdvancedChannelInfoList(wxChannelInfoSearchVo);
+            ResponseData<com.github.pagehelper.PageInfo<WxChannelInfoVo>> wxChannelInfoVolist =  wxChannelInfoAdvancedSearchApiServic.queryAdvancedChannelInfoList(wxChannelInfoSearchVo);
             List<WxChannelInfoVo>  wxChannelInfoVoAll = wxChannelInfoVolist.getData().getList();
             //循环发送
             if (!CollectionUtils.isEmpty(wxChannelInfoVoAll)){
@@ -510,7 +510,7 @@ public class MemberMessageSend {
         //循环分页条件查询会员信息发送短信信息
         for (int a =1;a<=memberInfoVoPage.getData().getPages();a++){
             membersInfoSearchVo.setPageNumber(a);
-            ResponseData<com.bizvane.utils.responseinfo.PageInfo<MemberInfoVo>> memberInfoVoPages = membersAdvancedSearchApiService.search(membersInfoSearchVo);
+            ResponseData<com.github.pagehelper.PageInfo<MemberInfoVo>> memberInfoVoPages = membersAdvancedSearchApiService.search(membersInfoSearchVo);
             log.info("查询到需要发短信会员是···········"+ JSON.toJSONString(memberInfoVoPages));
             List<MemberInfoVo> memberInfoModelList = memberInfoVoPages.getData().getList();
             log.info("开始循环发送短信");

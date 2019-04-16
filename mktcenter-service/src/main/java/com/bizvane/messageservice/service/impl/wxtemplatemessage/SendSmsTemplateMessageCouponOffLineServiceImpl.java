@@ -21,7 +21,7 @@ import com.bizvane.messagefacade.models.vo.CouponMessageVO;
 import com.bizvane.messagefacade.models.vo.Result;
 import com.bizvane.messagefacade.models.vo.SysSmsConfigVO;
 import com.bizvane.utils.enumutils.SysResponseEnum;
-import com.bizvane.utils.responseinfo.PageInfo;
+import com.github.pagehelper.PageInfo;
 import com.bizvane.utils.responseinfo.ResponseData;
 import com.bizvane.wechatfacade.models.po.WxPublicPO;
 import com.fasterxml.jackson.databind.ObjectMapper;

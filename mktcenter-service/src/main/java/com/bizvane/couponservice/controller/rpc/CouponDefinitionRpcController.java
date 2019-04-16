@@ -7,7 +7,7 @@ import com.bizvane.couponfacade.models.po.CouponDefinitionPOWithBLOBs;
 import com.bizvane.couponfacade.models.vo.CouponDefinitionListQueryVO;
 import com.bizvane.couponfacade.utils.PageFormUtil;
 import com.bizvane.couponservice.service.CouponDefinitionService;
-import com.bizvane.utils.responseinfo.PageInfo;
+import com.github.pagehelper.PageInfo;
 import com.bizvane.utils.responseinfo.ResponseData;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;

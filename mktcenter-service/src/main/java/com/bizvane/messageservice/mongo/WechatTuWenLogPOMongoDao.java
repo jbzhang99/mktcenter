@@ -3,7 +3,7 @@ package com.bizvane.messageservice.mongo;
 import com.bizvane.messageservice.common.utils.PageForm;
 import com.bizvane.messagefacade.models.po.MsgWxTuWenPO;
 import com.bizvane.messagefacade.models.vo.WechatMessageLogVO;
-import com.bizvane.utils.responseinfo.PageInfo;
+import com.github.pagehelper.PageInfo;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.query.Criteria;

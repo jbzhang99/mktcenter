@@ -16,7 +16,7 @@ import com.bizvane.couponservice.mappers.CouponDefinitionPOMapper;
 import com.bizvane.couponservice.mappers.CouponQuotaDetailPOMapper;
 import com.bizvane.couponservice.mappers.CouponQuotaPOMapper;
 import com.bizvane.couponservice.service.CouponQuotaService;
-import com.bizvane.utils.responseinfo.PageInfo;
+import com.github.pagehelper.PageInfo;
 import com.bizvane.utils.responseinfo.ResponseData;
 import com.github.pagehelper.PageHelper;
 import org.slf4j.Logger;

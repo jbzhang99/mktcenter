@@ -18,7 +18,7 @@ import com.bizvane.couponservice.service.CouponQuotaDetailService;
 import com.bizvane.members.facade.models.MemberInfoModel;
 import com.bizvane.members.facade.models.query.CouponMemberPo;
 import com.bizvane.members.facade.service.api.MemberInfoApiService;
-import com.bizvane.utils.responseinfo.PageInfo;
+import com.github.pagehelper.PageInfo;
 import com.bizvane.utils.responseinfo.ResponseData;
 import com.github.pagehelper.PageHelper;
 import org.apache.commons.collections.CollectionUtils;
