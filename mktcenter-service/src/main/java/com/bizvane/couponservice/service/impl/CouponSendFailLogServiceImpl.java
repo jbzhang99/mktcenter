@@ -5,7 +5,7 @@ import com.bizvane.couponfacade.models.po.CouponEntityPO;
 import com.bizvane.couponfacade.models.po.CouponSendFailLogPO;
 import com.bizvane.couponfacade.models.po.CouponSendFailLogPOExample;
 import com.bizvane.couponfacade.utils.TimeUtils;
-import com.bizvane.couponservice.common.constants.SystemConstants;
+import com.bizvane.couponfacade.constants.CouponConstants;
 import com.bizvane.couponservice.mappers.CouponSendFailLogPOMapper;
 import com.bizvane.couponservice.service.CouponSendFailLogService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,10 +48,10 @@ public class CouponSendFailLogServiceImpl implements CouponSendFailLogService{
         failPO.setBizType(entityPO.getSendType());
         failPO.setBizCode(entityPO.getSendBusinessId()+"");
         //failPO.setInfo();
-        failPO.setFailReason(SystemConstants.SEND_COUPON_FAIL_REASON_ERP);
+        failPO.setFailReason(CouponConstants.SEND_COUPON_FAIL_REASON_ERP);
         failPO.setFailTimes(0);
-        failPO.setValid(SystemConstants.TABLE_VALID_EFFECTIVE);
-        failPO.setSendStatus(SystemConstants.COUPON_SEND_NO);
+        failPO.setValid(CouponConstants.TABLE_VALID_EFFECTIVE);
+        failPO.setSendStatus(CouponConstants.COUPON_SEND_NO);
         failPO.setCreateDate(TimeUtils.getNowTime());
         
         failPO.setBusinessName(entityPO.getBusinessName());
@@ -71,7 +71,7 @@ public class CouponSendFailLogServiceImpl implements CouponSendFailLogService{
         failLogPO.setSendStatus(sendStatus);
 
         CouponSendFailLogPOExample example = new CouponSendFailLogPOExample();
-        example.createCriteria().andValidEqualTo(SystemConstants.TABLE_VALID_EFFECTIVE).
+        example.createCriteria().andValidEqualTo(CouponConstants.TABLE_VALID_EFFECTIVE).
                 andCouponCodeEqualTo(couponCode);
 
         couponSendFailLogPOMapper.updateByExampleSelective(failLogPO,example);

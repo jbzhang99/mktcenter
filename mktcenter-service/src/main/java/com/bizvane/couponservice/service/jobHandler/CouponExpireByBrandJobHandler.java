@@ -1,7 +1,7 @@
 package com.bizvane.couponservice.service.jobHandler;
 
 import com.bizvane.couponfacade.models.vo.CouponEntityVO;
-import com.bizvane.couponservice.common.constants.SystemConstants;
+import com.bizvane.couponfacade.constants.CouponConstants;
 import com.bizvane.couponservice.mappers.CouponEntityPOMapper;
 import com.bizvane.members.facade.service.api.WxChannelInfoApiService;
 import com.bizvane.members.facade.vo.WxChannelAndMemberVo;
@@ -82,7 +82,7 @@ public class CouponExpireByBrandJobHandler extends IJobHandler {
                 calendar.add(Calendar.DATE, 1);
                 Date  dateEnd = format.parse(format.format(calendar.getTime()));
                 logger.info("enter CouponExpireByBrandJobHandler execute method calendar!"+date.getTime()+"dateEnd"+dateEnd.getTime());
-                List<CouponEntityVO> entityPOLIst = couponEntityPOMapper.findWxCouponList(date,dateEnd,coupon.getSysBrandId(),SystemConstants.COUPON_STATUS_UNUSED);
+                List<CouponEntityVO> entityPOLIst = couponEntityPOMapper.findWxCouponList(date,dateEnd,coupon.getSysBrandId(),CouponConstants.COUPON_STATUS_UNUSED);
 
                 //微信公众号信息
                 ResponseData<WxPublicPO> publicPO = wxPublicServiceFeign.getWxPublicBySysBrandId(coupon.getSysBrandId());
@@ -100,9 +100,9 @@ public class CouponExpireByBrandJobHandler extends IJobHandler {
                         messageVO.setCouponName(entityVO.getCouponName());
                         messageVO.setPreferentialType(entityVO.getPreferentialType() + "");
                         //填入折扣或金额
-                        if(entityVO.getPreferentialType().equals(SystemConstants.PREFERENTIAL_TYPE_MONEY)){
+                        if(entityVO.getPreferentialType().equals(CouponConstants.PREFERENTIAL_TYPE_MONEY)){
                             messageVO.setDenomination(entityVO.getMoney()+"");
-                        }else if(entityVO.getPreferentialType().equals(SystemConstants.PREFERENTIAL_TYPE_DISCOUNT)){
+                        }else if(entityVO.getPreferentialType().equals(CouponConstants.PREFERENTIAL_TYPE_DISCOUNT)){
                             messageVO.setDenomination(entityVO.getDiscount()+"");
                         }
                         messageVO.setUseTime(entityVO.getUseTime());

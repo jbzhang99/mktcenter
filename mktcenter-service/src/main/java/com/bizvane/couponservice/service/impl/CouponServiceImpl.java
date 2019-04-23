@@ -11,7 +11,7 @@ import com.bizvane.couponfacade.models.vo.*;
 import com.bizvane.couponfacade.utils.PageFormUtil;
 import com.bizvane.couponfacade.utils.TimeUtils;
 import com.bizvane.couponservice.common.constants.SysResponseEnum;
-import com.bizvane.couponservice.common.constants.SystemConstants;
+import com.bizvane.couponfacade.constants.CouponConstants;
 import com.bizvane.couponservice.common.utils.BaseData;
 import com.bizvane.couponservice.mappers.CouponDefinitionPOMapper;
 import com.bizvane.couponservice.mappers.CouponEntityPOMapper;
@@ -104,13 +104,13 @@ public class CouponServiceImpl implements CouponService {
             return responseData;
         }
 
-        if (couponEntityPO.getCouponStatus().equals(SystemConstants.COUPON_STATUS_USED)) {
+        if (couponEntityPO.getCouponStatus().equals(CouponConstants.COUPON_STATUS_USED)) {
             responseData.setCode(SysResponseEnum.FAILED.getCode());
             responseData.setMessage(SysResponseEnum.COUPON_USED.getMessage());
             return responseData;
         }
 
-        if (couponEntityPO.getCouponStatus().equals(SystemConstants.COUPON_STATUS_OVERDUE)) {
+        if (couponEntityPO.getCouponStatus().equals(CouponConstants.COUPON_STATUS_OVERDUE)) {
             responseData.setCode(SysResponseEnum.FAILED.getCode());
             responseData.setMessage(SysResponseEnum.COUPON_EXPIRED.getMessage());
             return responseData;
@@ -144,11 +144,11 @@ public class CouponServiceImpl implements CouponService {
 
         //更新券实例信息
         couponEntityPO.setUseBusinessCode(useBusinessCode);
-        couponEntityPO.setUseType(SystemConstants.COUPON_USE_TYPE_ONLINE);
-        couponEntityPO.setCouponStatus(SystemConstants.COUPON_STATUS_USED);
+        couponEntityPO.setUseType(CouponConstants.COUPON_USE_TYPE_ONLINE);
+        couponEntityPO.setCouponStatus(CouponConstants.COUPON_STATUS_USED);
         couponEntityPO.setUseTime(TimeUtils.getNowTime());
         couponEntityPO.setModifiedDate(TimeUtils.getNowTime());
-        couponEntityPO.setIsUse(SystemConstants.COUPON_DEFINITION_STATUS_USE);
+        couponEntityPO.setIsUse(CouponConstants.COUPON_DEFINITION_STATUS_USE);
         couponEntityPO.setUseFrom(param.getUseFrom());
         couponEntityPO.setStaffCode(param.getStaffCode());
         logger.info("enter semd getTransferSend" + couponEntityPO.getCouponCode() + JSONObject.toJSONString(couponEntityPO));
@@ -178,7 +178,7 @@ public class CouponServiceImpl implements CouponService {
         CouponStatusLogPO couponStatusLogPO = new CouponStatusLogPO();
         couponStatusLogPO.setCouponEntityId(couponEntityPO.getCouponEntityId());
         couponStatusLogPO.setCouponCode(couponCode);
-        couponStatusLogPO.setBusinessType(SystemConstants.COUPON_STATUS_CHANGE_BUSINESS_TYPE_USE);
+        couponStatusLogPO.setBusinessType(CouponConstants.COUPON_STATUS_CHANGE_BUSINESS_TYPE_USE);
         couponStatusLogPO.setBusinessCode(useBusinessCode);
         couponStatusLogPO.setBusinessTime(TimeUtils.getNowTime());
         couponStatusLogPO.setCreateDate(TimeUtils.getNowTime());
@@ -257,12 +257,12 @@ public class CouponServiceImpl implements CouponService {
             return responseData;
         }
 
-        if (couponEntityPO.getCouponStatus().equals(SystemConstants.COUPON_STATUS_USED)) {
+        if (couponEntityPO.getCouponStatus().equals(CouponConstants.COUPON_STATUS_USED)) {
             responseData.setCode(SysResponseEnum.FAILED.getCode());
             responseData.setMessage(SysResponseEnum.COUPON_USED.getMessage());
             return responseData;
         }
-        if (couponEntityPO.getCouponStatus().equals(SystemConstants.COUPON_STATUS_OVERDUE)) {
+        if (couponEntityPO.getCouponStatus().equals(CouponConstants.COUPON_STATUS_OVERDUE)) {
             responseData.setCode(SysResponseEnum.FAILED.getCode());
             responseData.setMessage(SysResponseEnum.COUPON_EXPIRED.getMessage());
             return responseData;
@@ -295,13 +295,13 @@ public class CouponServiceImpl implements CouponService {
         }
 
         //更新券实例信息
-        couponEntityPO.setUseType(SystemConstants.COUPON_USE_TYPE_OFFLINE);
-        couponEntityPO.setCouponStatus(SystemConstants.COUPON_STATUS_USED);
+        couponEntityPO.setUseType(CouponConstants.COUPON_USE_TYPE_OFFLINE);
+        couponEntityPO.setCouponStatus(CouponConstants.COUPON_STATUS_USED);
         couponEntityPO.setUseTime(TimeUtils.getNowTime());
         couponEntityPO.setUseBusinessCode(param.getBusinessCode());
         couponEntityPO.setUseStoreId(param.getUseStoreId());
         couponEntityPO.setModifiedDate(TimeUtils.getNowTime());
-        couponEntityPO.setIsUse(SystemConstants.COUPON_DEFINITION_STATUS_USE);
+        couponEntityPO.setIsUse(CouponConstants.COUPON_DEFINITION_STATUS_USE);
         couponEntityPO.setUseFrom(param.getUseFrom());
         couponEntityPO.setStaffCode(param.getStaffCode());
         logger.info("enter semd getTransferSend" + couponEntityPO.getCouponCode() + JSONObject.toJSONString(couponEntityPO));
@@ -324,7 +324,7 @@ public class CouponServiceImpl implements CouponService {
         CouponStatusLogPO couponStatusLogPO = new CouponStatusLogPO();
         couponStatusLogPO.setCouponEntityId(couponEntityPO.getCouponEntityId());
         couponStatusLogPO.setCouponCode(param.getCouponCode());
-        couponStatusLogPO.setBusinessType(SystemConstants.COUPON_STATUS_CHANGE_BUSINESS_TYPE_USE);
+        couponStatusLogPO.setBusinessType(CouponConstants.COUPON_STATUS_CHANGE_BUSINESS_TYPE_USE);
         couponStatusLogPO.setBusinessCode(param.getBusinessCode());
         couponStatusLogPO.setBusinessTime(TimeUtils.getNowTime());
         couponStatusLogPO.setCreateDate(TimeUtils.getNowTime());
@@ -368,13 +368,13 @@ public class CouponServiceImpl implements CouponService {
             return responseData;
         }
 
-        if (couponEntityPO.getCouponStatus().equals(SystemConstants.COUPON_STATUS_USED)) {
+        if (couponEntityPO.getCouponStatus().equals(CouponConstants.COUPON_STATUS_USED)) {
             responseData.setCode(SysResponseEnum.FAILED.getCode());
             responseData.setMessage(SysResponseEnum.COUPON_USED.getMessage());
             return responseData;
         }
 
-        if (couponEntityPO.getCouponStatus().equals(SystemConstants.COUPON_STATUS_OVERDUE)) {
+        if (couponEntityPO.getCouponStatus().equals(CouponConstants.COUPON_STATUS_OVERDUE)) {
             responseData.setCode(SysResponseEnum.FAILED.getCode());
             responseData.setMessage(SysResponseEnum.COUPON_EXPIRED.getMessage());
             return responseData;
@@ -407,11 +407,11 @@ public class CouponServiceImpl implements CouponService {
         }
 
         //更新券实例
-        couponEntityPO.setUseType(SystemConstants.COUPON_USE_TYPE_ALL);
-        couponEntityPO.setCouponStatus(SystemConstants.COUPON_STATUS_USED);
+        couponEntityPO.setUseType(CouponConstants.COUPON_USE_TYPE_ALL);
+        couponEntityPO.setCouponStatus(CouponConstants.COUPON_STATUS_USED);
         couponEntityPO.setUseTime(TimeUtils.getNowTime());
         couponEntityPO.setModifiedDate(TimeUtils.getNowTime());
-        couponEntityPO.setIsUse(SystemConstants.COUPON_DEFINITION_STATUS_USE);
+        couponEntityPO.setIsUse(CouponConstants.COUPON_DEFINITION_STATUS_USE);
         couponEntityPO.setUseFrom(requestVO.getUseFrom());
         couponEntityPO.setStaffCode(requestVO.getStaffCode());
 
@@ -435,7 +435,7 @@ public class CouponServiceImpl implements CouponService {
         CouponStatusLogPO couponStatusLogPO = new CouponStatusLogPO();
         couponStatusLogPO.setCouponEntityId(couponEntityPO.getCouponEntityId());
         couponStatusLogPO.setCouponCode(requestVO.getCouponCode());
-        couponStatusLogPO.setBusinessType(SystemConstants.COUPON_STATUS_CHANGE_BUSINESS_TYPE_USE);
+        couponStatusLogPO.setBusinessType(CouponConstants.COUPON_STATUS_CHANGE_BUSINESS_TYPE_USE);
         couponStatusLogPO.setBusinessTime(TimeUtils.getNowTime());
         couponStatusLogPO.setCreateDate(TimeUtils.getNowTime());
 
@@ -463,7 +463,7 @@ public class CouponServiceImpl implements CouponService {
         CouponEntityPO couponEntityPO = findCouponEntityResult.getData();
 
         couponEntityPO.setUseType(null);
-        couponEntityPO.setCouponStatus(SystemConstants.COUPON_STATUS_UNUSED);
+        couponEntityPO.setCouponStatus(CouponConstants.COUPON_STATUS_UNUSED);
         couponEntityPO.setUseTime(null);
         couponEntityPO.setUseBusinessCode(null);
         couponEntityPO.setUseStoreId(null);
@@ -474,7 +474,7 @@ public class CouponServiceImpl implements CouponService {
         CouponStatusLogPO couponStatusLogPO = new CouponStatusLogPO();
         couponStatusLogPO.setCouponEntityId(couponEntityPO.getCouponEntityId());
         couponStatusLogPO.setCouponCode(couponCode);
-        couponStatusLogPO.setBusinessType(SystemConstants.COUPON_STATUS_CHANGE_BUSINESS_TYPE_CANCEL_USE);
+        couponStatusLogPO.setBusinessType(CouponConstants.COUPON_STATUS_CHANGE_BUSINESS_TYPE_CANCEL_USE);
         couponStatusLogPO.setBusinessTime(new Date());
         couponStatusLogPO.setCreateDate(new Date());
 
@@ -519,7 +519,7 @@ public class CouponServiceImpl implements CouponService {
 
         CouponEntityPOExample couponEntityPOExample = new CouponEntityPOExample();
         CouponEntityPOExample.Criteria criteria = couponEntityPOExample.createCriteria();
-        criteria.andValidEqualTo(SystemConstants.TABLE_VALID_EFFECTIVE);
+        criteria.andValidEqualTo(CouponConstants.TABLE_VALID_EFFECTIVE);
         criteria.andCouponCodeEqualTo(couponCode);
 
 
@@ -557,7 +557,7 @@ public class CouponServiceImpl implements CouponService {
 
         CouponEntityPOExample couponEntityPOExample = new CouponEntityPOExample();
         CouponEntityPOExample.Criteria criteria = couponEntityPOExample.createCriteria();
-        criteria.andValidEqualTo(SystemConstants.TABLE_VALID_EFFECTIVE);
+        criteria.andValidEqualTo(CouponConstants.TABLE_VALID_EFFECTIVE);
         criteria.andMemberCodeEqualTo(memberCode);
         criteria.andCouponCodeEqualTo(couponCode);
 
@@ -596,7 +596,7 @@ public class CouponServiceImpl implements CouponService {
 
         CouponEntityPOExample couponEntityPOExample = new CouponEntityPOExample();
         CouponEntityPOExample.Criteria criteria = couponEntityPOExample.createCriteria();
-        criteria.andValidEqualTo(SystemConstants.TABLE_VALID_EFFECTIVE);
+        criteria.andValidEqualTo(CouponConstants.TABLE_VALID_EFFECTIVE);
         criteria.andMemberCodeEqualTo(memberCode);
 
         List<CouponEntityPO> list = couponEntityPOMapper.selectByExample(couponEntityPOExample);
@@ -611,11 +611,11 @@ public class CouponServiceImpl implements CouponService {
                 Byte couponStatus = couponEntityPO.getCouponStatus();
 
                 Boolean exist = Boolean.TRUE;
-                if (SystemConstants.COUPON_STATUS_USED.equals(couponStatus)) {
+                if (CouponConstants.COUPON_STATUS_USED.equals(couponStatus)) {
                     couponUsedSum++;
-                } else if (SystemConstants.COUPON_STATUS_UNUSED.equals(couponStatus)) {
+                } else if (CouponConstants.COUPON_STATUS_UNUSED.equals(couponStatus)) {
                     couponUnusedSum++;
-                } else if (SystemConstants.COUPON_STATUS_OVERDUE.equals(couponStatus)) {
+                } else if (CouponConstants.COUPON_STATUS_OVERDUE.equals(couponStatus)) {
                     couponOverdueSum++;
                 } else {
                     exist = Boolean.FALSE;
@@ -666,23 +666,23 @@ public class CouponServiceImpl implements CouponService {
         CouponFindCouponCountResponseVO vo = new CouponFindCouponCountResponseVO();
 
         Long couponSum = couponEntityPOMapper.findCouponAllCount(param.getSendBusinessId(), param.getSendType(), param.getSysBrandId(),
-                SystemConstants.COUPON_STATUS_UNUSED, SystemConstants.COUPON_STATUS_USED, SystemConstants.COUPON_STATUS_OVERDUE,
+                CouponConstants.COUPON_STATUS_UNUSED, CouponConstants.COUPON_STATUS_USED, CouponConstants.COUPON_STATUS_OVERDUE,
                 param.getDtStart(), param.getDtEnd(), null);
 
         Long couponUnusedSum = couponEntityPOMapper.findCouponCount(param.getSendBusinessId(), param.getSendType(), param.getSysBrandId(),
-                SystemConstants.COUPON_STATUS_UNUSED,
+                CouponConstants.COUPON_STATUS_UNUSED,
                 param.getDtStart(), param.getDtEnd(), null);
 
         Long couponUsedSum = couponEntityPOMapper.findCouponCount(param.getSendBusinessId(), param.getSendType(), param.getSysBrandId(),
-                SystemConstants.COUPON_STATUS_USED,
+                CouponConstants.COUPON_STATUS_USED,
                 param.getDtStart(), param.getDtEnd(), null);
 
         Long couponOverdueSum = couponEntityPOMapper.findCouponCount(param.getSendBusinessId(), param.getSendType(), param.getSysBrandId(),
-                SystemConstants.COUPON_STATUS_OVERDUE,
+                CouponConstants.COUPON_STATUS_OVERDUE,
                 param.getDtStart(), param.getDtEnd(), null);
 
         BigDecimal money = couponEntityPOMapper.findUseBusinessAmountSum(param.getSendBusinessId(), param.getSendType(), param.getSysBrandId(),
-                SystemConstants.COUPON_STATUS_USED,
+                CouponConstants.COUPON_STATUS_USED,
                 param.getDtStart(), param.getDtEnd(), null);
 
 
@@ -731,22 +731,22 @@ public class CouponServiceImpl implements CouponService {
 
 
         CouponStatusEntitySuccessVO successVO = new CouponStatusEntitySuccessVO();
-        successVO.setCouponStatusUsed(SystemConstants.COUPON_STATUS_USED);
-        successVO.setCouponStatusUnused(SystemConstants.COUPON_STATUS_UNUSED);
-        successVO.setCouponStatusOverdue(SystemConstants.COUPON_STATUS_OVERDUE);
+        successVO.setCouponStatusUsed(CouponConstants.COUPON_STATUS_USED);
+        successVO.setCouponStatusUnused(CouponConstants.COUPON_STATUS_UNUSED);
+        successVO.setCouponStatusOverdue(CouponConstants.COUPON_STATUS_OVERDUE);
 
 
         CouponFindCouponCountResponseVO vo = couponEntityPOMapper.findCouponCountByStatus(sendBusinessId, sendType, sysBrandId, successVO);
 
 
         /*Long couponSum = couponEntityPOMapper.findCouponAllCountByStatus(sendBusinessId, sendType, sysBrandId,
-                SystemConstants.COUPON_STATUS_UNUSED, SystemConstants.COUPON_STATUS_USED, SystemConstants.COUPON_STATUS_OVERDUE);*/
+                CouponConstants.COUPON_STATUS_UNUSED, CouponConstants.COUPON_STATUS_USED, CouponConstants.COUPON_STATUS_OVERDUE);*/
         //总数
         Long couponSum = vo.getCouponOverdueSum() + vo.getCouponUnusedSum() + vo.getCouponUsedSum();
 
 
         //收益
-        BigDecimal money = couponEntityPOMapper.findBusinessAmountSumUsed(sendBusinessId, sendType, sysBrandId, SystemConstants.COUPON_STATUS_USED);
+        BigDecimal money = couponEntityPOMapper.findBusinessAmountSumUsed(sendBusinessId, sendType, sysBrandId, CouponConstants.COUPON_STATUS_USED);
 
         vo.setCouponSum(couponSum);
 
@@ -771,9 +771,9 @@ public class CouponServiceImpl implements CouponService {
         logger.info("enter CouponServiceImpl findCouponCountBySendBusinessId method");
 
         CouponStatusEntitySuccessVO successVO = new CouponStatusEntitySuccessVO();
-        successVO.setCouponStatusUsed(SystemConstants.COUPON_STATUS_USED);
-        successVO.setCouponStatusUnused(SystemConstants.COUPON_STATUS_UNUSED);
-        successVO.setCouponStatusOverdue(SystemConstants.COUPON_STATUS_OVERDUE);
+        successVO.setCouponStatusUsed(CouponConstants.COUPON_STATUS_USED);
+        successVO.setCouponStatusUnused(CouponConstants.COUPON_STATUS_UNUSED);
+        successVO.setCouponStatusOverdue(CouponConstants.COUPON_STATUS_OVERDUE);
 
 
         CouponFindCouponCountResponseVO vo = couponEntityPOMapper.findCouponCountbatchSend(batchSendId, sendBusinessId, sendType, sysBrandId, successVO);
@@ -840,7 +840,7 @@ public class CouponServiceImpl implements CouponService {
         couponEntityPO.setTransferMemberCode(oldMemberCode);//原来会员
 
         couponEntityPO.setModifiedDate(TimeUtils.getNowTime());
-        couponEntityPO.setGive(SystemConstants.COUPON_UNGIVE);
+        couponEntityPO.setGive(CouponConstants.COUPON_UNGIVE);
         logger.info("enter semd getTransferSend" + couponEntityPO.getCouponCode() + JSONObject.toJSONString(couponEntityPO));
         couponEntityPOMapper.updateByPrimaryKeySelective(couponEntityPO);
 
@@ -900,7 +900,7 @@ public class CouponServiceImpl implements CouponService {
 
         CouponEntityPO couponEntityPO = findCouponEntityResult.getData();
 
-        couponEntityPO.setIsLock(SystemConstants.COUPON_STATUS_CHANGE_IS_LOCK);
+        couponEntityPO.setIsLock(CouponConstants.COUPON_STATUS_CHANGE_IS_LOCK);
         couponEntityPO.setUseTime(TimeUtils.getNowTime());
         couponEntityPO.setModifiedDate(TimeUtils.getNowTime());
         logger.info("enter semd getTransferSend" + couponEntityPO.getCouponCode() + JSONObject.toJSONString(couponEntityPO));
@@ -932,7 +932,7 @@ public class CouponServiceImpl implements CouponService {
 
         CouponEntityPO couponEntityPO = findCouponEntityResult.getData();
 
-        couponEntityPO.setIsLock(SystemConstants.COUPON_STATUS_CHANGE_IS_UNLOCK);
+        couponEntityPO.setIsLock(CouponConstants.COUPON_STATUS_CHANGE_IS_UNLOCK);
         couponEntityPO.setUseTime(TimeUtils.getNowTime());
         couponEntityPO.setModifiedDate(TimeUtils.getNowTime());
         logger.info("enter semd getTransferSend" + couponEntityPO.getCouponCode() + JSONObject.toJSONString(couponEntityPO));
@@ -992,7 +992,7 @@ public class CouponServiceImpl implements CouponService {
 
         CouponEntityPO couponEntityPO = findCouponEntityResult.getData();
 
-        couponEntityPO.setCouponStatus(SystemConstants.COUPON_STATUS_CHANGE_BUSINESS_TYPE_OVERDUE);
+        couponEntityPO.setCouponStatus(CouponConstants.COUPON_STATUS_CHANGE_BUSINESS_TYPE_OVERDUE);
         couponEntityPO.setUseTime(TimeUtils.getNowTime());
         couponEntityPO.setModifiedDate(TimeUtils.getNowTime());
         logger.info("enter semd getTransferSend" + couponEntityPO.getCouponCode() + JSONObject.toJSONString(couponEntityPO));
@@ -1002,7 +1002,7 @@ public class CouponServiceImpl implements CouponService {
         couponStatusLogPO.setCouponEntityId(couponEntityPO.getCouponEntityId());
         couponStatusLogPO.setCouponCode(couponCode);
         couponStatusLogPO.setBusinessCode(vo.getUseBusinessCode());
-        couponStatusLogPO.setBusinessType(SystemConstants.COUPON_STATUS_CHANGE_BUSINESS_TYPE_OVERDUE);
+        couponStatusLogPO.setBusinessType(CouponConstants.COUPON_STATUS_CHANGE_BUSINESS_TYPE_OVERDUE);
         couponStatusLogPO.setBusinessTime(TimeUtils.getNowTime());
         couponStatusLogPO.setCreateDate(TimeUtils.getNowTime());
 
@@ -1054,8 +1054,8 @@ public class CouponServiceImpl implements CouponService {
         }
         CouponEntityPOExample entityPOExample = new CouponEntityPOExample();
         entityPOExample.createCriteria().andMemberCodeEqualTo(memberCode)
-                .andCouponStatusEqualTo(SystemConstants.COUPON_STATUS_USED)
-                .andValidEqualTo(SystemConstants.TABLE_VALID_EFFECTIVE);
+                .andCouponStatusEqualTo(CouponConstants.COUPON_STATUS_USED)
+                .andValidEqualTo(CouponConstants.TABLE_VALID_EFFECTIVE);
         List<CouponEntityPO> entityPOList = couponEntityPOMapper.selectByExample(entityPOExample);
         responseData.setData(entityPOList);
         return responseData;
@@ -1111,9 +1111,9 @@ public class CouponServiceImpl implements CouponService {
 
 
         CouponStatusEntitySuccessVO successVO = new CouponStatusEntitySuccessVO();
-        successVO.setCouponStatusUsed(SystemConstants.COUPON_STATUS_USED);
-        successVO.setCouponStatusUnused(SystemConstants.COUPON_STATUS_UNUSED);
-        successVO.setCouponStatusOverdue(SystemConstants.COUPON_STATUS_OVERDUE);
+        successVO.setCouponStatusUsed(CouponConstants.COUPON_STATUS_USED);
+        successVO.setCouponStatusUnused(CouponConstants.COUPON_STATUS_UNUSED);
+        successVO.setCouponStatusOverdue(CouponConstants.COUPON_STATUS_OVERDUE);
 
         CouponFindCouponCountResponseVO vo = couponEntityPOMapper.findCouponCountBySendType(sendType, sysBrandId, successVO);
 
@@ -1121,7 +1121,7 @@ public class CouponServiceImpl implements CouponService {
         //总数
         Long couponSum = vo.getCouponOverdueSum() + vo.getCouponUsedSum() + vo.getCouponUnusedSum();
 
-        BigDecimal money = couponEntityPOMapper.findBusinessAmountSumUsedBySendType(sendType, sysBrandId, SystemConstants.COUPON_STATUS_USED);
+        BigDecimal money = couponEntityPOMapper.findBusinessAmountSumUsedBySendType(sendType, sysBrandId, CouponConstants.COUPON_STATUS_USED);
 
 
         vo.setCouponSum(couponSum);
@@ -1144,7 +1144,7 @@ public class CouponServiceImpl implements CouponService {
         logger.info("enter CouponServiceImpl findCouponEntityPO method");
 
         CouponEntityPOExample entityExample = new CouponEntityPOExample();
-        entityExample.createCriteria().andCouponCodeEqualTo(couponCode).andValidEqualTo(SystemConstants.TABLE_VALID_EFFECTIVE);
+        entityExample.createCriteria().andCouponCodeEqualTo(couponCode).andValidEqualTo(CouponConstants.TABLE_VALID_EFFECTIVE);
         List<CouponEntityPO> entityList = couponEntityPOMapper.selectByExample(entityExample);
 
         CouponEntityPO entityPO = null;
@@ -1168,7 +1168,7 @@ public class CouponServiceImpl implements CouponService {
         logger.info("enter CouponServiceImpl findCouponDetailByCouponCode method");
         ResponseData<CouponDetailResponseVO> responseData = new ResponseData<>();
         CouponEntityPOExample entityExample = new CouponEntityPOExample();
-        entityExample.createCriteria().andCouponCodeEqualTo(couponCode).andValidEqualTo(SystemConstants.TABLE_VALID_EFFECTIVE);
+        entityExample.createCriteria().andCouponCodeEqualTo(couponCode).andValidEqualTo(CouponConstants.TABLE_VALID_EFFECTIVE);
         List<CouponEntityPO> entityList = couponEntityPOMapper.selectByExample(entityExample);
 
         CouponDefinitionPO definitionPO = couponDefinitionPOMapper.selectByPrimaryKey(Long.parseLong(entityList.get(0).getCouponDefinitionId()));
@@ -1205,7 +1205,7 @@ public class CouponServiceImpl implements CouponService {
 
         CouponEntityPOExample entityExample = new CouponEntityPOExample();
         entityExample.createCriteria().andCouponCodeEqualTo(couponCode).andSysBrandIdEqualTo(brandId)
-                .andValidEqualTo(SystemConstants.TABLE_VALID_EFFECTIVE);
+                .andValidEqualTo(CouponConstants.TABLE_VALID_EFFECTIVE);
         List<CouponEntityPO> entityList = couponEntityPOMapper.selectByExample(entityExample);
 
         if (CollectionUtils.isEmpty(entityList)) {
@@ -1249,7 +1249,7 @@ public class CouponServiceImpl implements CouponService {
         //查询券状态日志表
 //        CouponStatusLogPOExample statusExample = new CouponStatusLogPOExample();
 //        statusExample.createCriteria().andCouponCodeEqualTo(couponCode).andTransferMemberCodeEqualTo(channelResult.getData().getWxChannelInfoVo().getMemberCode())
-//                .andSysBrandIdEqualTo(sysBrandId).andValidEqualTo(SystemConstants.TABLE_VALID_EFFECTIVE);
+//                .andSysBrandIdEqualTo(sysBrandId).andValidEqualTo(CouponConstants.TABLE_VALID_EFFECTIVE);
 //        List<CouponStatusLogPO> statusLogList = couponStatusLogPOMapper.selectByExample(statusExample);
 //        CouponStatusLogPO logPO = statusLogList.get(0);
 
@@ -1310,15 +1310,15 @@ public class CouponServiceImpl implements CouponService {
 
 
         Long couponSum = couponEntityPOMapper.findCouponAllCount(null, sendType, sysBrandId,
-                SystemConstants.COUPON_STATUS_UNUSED, SystemConstants.COUPON_STATUS_USED, SystemConstants.COUPON_STATUS_OVERDUE, null, null, createDate);
+                CouponConstants.COUPON_STATUS_UNUSED, CouponConstants.COUPON_STATUS_USED, CouponConstants.COUPON_STATUS_OVERDUE, null, null, createDate);
 
-        Long couponUnusedSum = couponEntityPOMapper.findCouponCount(null, sendType, sysBrandId, SystemConstants.COUPON_STATUS_UNUSED, null, null, createDate);
+        Long couponUnusedSum = couponEntityPOMapper.findCouponCount(null, sendType, sysBrandId, CouponConstants.COUPON_STATUS_UNUSED, null, null, createDate);
 
-        Long couponUsedSum = couponEntityPOMapper.findCouponCount(null, sendType, sysBrandId, SystemConstants.COUPON_STATUS_USED, null, null, createDate);
+        Long couponUsedSum = couponEntityPOMapper.findCouponCount(null, sendType, sysBrandId, CouponConstants.COUPON_STATUS_USED, null, null, createDate);
 
-        Long couponOverdueSum = couponEntityPOMapper.findCouponCount(null, sendType, sysBrandId, SystemConstants.COUPON_STATUS_OVERDUE, null, null, createDate);
+        Long couponOverdueSum = couponEntityPOMapper.findCouponCount(null, sendType, sysBrandId, CouponConstants.COUPON_STATUS_OVERDUE, null, null, createDate);
 
-        BigDecimal money = couponEntityPOMapper.findUseBusinessAmountSum(null, sendType, sysBrandId, SystemConstants.COUPON_STATUS_USED, null, null, createDate);
+        BigDecimal money = couponEntityPOMapper.findUseBusinessAmountSum(null, sendType, sysBrandId, CouponConstants.COUPON_STATUS_USED, null, null, createDate);
 
         vo.setCouponOverdueSum(couponOverdueSum);
         vo.setCouponSum(couponSum);
@@ -1402,7 +1402,7 @@ public class CouponServiceImpl implements CouponService {
         CouponDefinitionPO definitionPO = couponDefinitionPOMapper.selectByPrimaryKey(Long.parseLong(couponEntityPO.getCouponDefinitionId()));
 
         //微商城券-企业微信-不可核销
-        if (definitionPO.getUseChannel().equals(SystemConstants.USE_CHANNEL_ONLINE)) {
+        if (definitionPO.getUseChannel().equals(CouponConstants.USE_CHANNEL_ONLINE)) {
             responseData.setCode(SysResponseEnum.FAILED.getCode());
             responseData.setMessage(SysResponseEnum.WECHAT_ENTERPRISE_COUPON_ONLINE_NOT_USE.getMessage());
             return responseData;
@@ -1430,13 +1430,13 @@ public class CouponServiceImpl implements CouponService {
         Byte useFrom = requestVO.getUseFrom();
         String staffCode = requestVO.getStaffCode();
 
-        if (couponEntityPO.getCouponStatus().equals(SystemConstants.COUPON_STATUS_USED)) {
+        if (couponEntityPO.getCouponStatus().equals(CouponConstants.COUPON_STATUS_USED)) {
             responseData.setCode(SysResponseEnum.FAILED.getCode());
             responseData.setMessage(SysResponseEnum.COUPON_USED.getMessage());
             return responseData;
         }
 
-        if (couponEntityPO.getCouponStatus().equals(SystemConstants.COUPON_STATUS_OVERDUE)) {
+        if (couponEntityPO.getCouponStatus().equals(CouponConstants.COUPON_STATUS_OVERDUE)) {
             responseData.setCode(SysResponseEnum.FAILED.getCode());
             responseData.setMessage(SysResponseEnum.COUPON_EXPIRED.getMessage());
             return responseData;
@@ -1464,7 +1464,7 @@ public class CouponServiceImpl implements CouponService {
         //判断渠道核销
         Byte useChannel = couponDefinitionPO.getUseChannel();
 
-        if (useChannel.equals(SystemConstants.USE_CHANNEL_ONLINE)) {
+        if (useChannel.equals(CouponConstants.USE_CHANNEL_ONLINE)) {
 
             CouponOnlineUseRequestVO couponOnlineUseRequestVO = new CouponOnlineUseRequestVO();
             couponOnlineUseRequestVO.setCouponCode(couponCode);
@@ -1474,12 +1474,12 @@ public class CouponServiceImpl implements CouponService {
 
             onlineUse(couponOnlineUseRequestVO);
 
-        } else if (useChannel.equals(SystemConstants.USE_CHANNEL_OFFLINE)) {
+        } else if (useChannel.equals(CouponConstants.USE_CHANNEL_OFFLINE)) {
 
             CouponOfflineUseRequestVO couponOfflineUseRequestVO = new CouponOfflineUseRequestVO();
             couponOfflineUseRequestVO.setCouponCode(couponCode);
             couponOfflineUseRequestVO.setSysBrandId(brandId);
-            couponOfflineUseRequestVO.setIsMember(SystemConstants.IS_MEMBER);
+            couponOfflineUseRequestVO.setIsMember(CouponConstants.IS_MEMBER);
             couponOfflineUseRequestVO.setUseFrom(useFrom);
             couponOfflineUseRequestVO.setStaffCode(staffCode);
 
@@ -1515,7 +1515,7 @@ public class CouponServiceImpl implements CouponService {
 
         CouponEntityPOExample couponEntityPOExample = new CouponEntityPOExample();
         CouponEntityPOExample.Criteria criteria = couponEntityPOExample.createCriteria();
-        criteria.andValidEqualTo(SystemConstants.TABLE_VALID_EFFECTIVE);
+        criteria.andValidEqualTo(CouponConstants.TABLE_VALID_EFFECTIVE);
         criteria.andCouponCodeEqualTo(couponCode);
         criteria.andSysBrandIdEqualTo(brandId);
 
@@ -1604,20 +1604,20 @@ public class CouponServiceImpl implements CouponService {
         CouponFindCouponCountResponseVO vo = new CouponFindCouponCountResponseVO();
 
         CouponStatusEntitySuccessVO successVO = new CouponStatusEntitySuccessVO();
-        successVO.setCouponStatusUsed(SystemConstants.COUPON_STATUS_USED);
-        successVO.setCouponStatusUnused(SystemConstants.COUPON_STATUS_UNUSED);
-        successVO.setCouponStatusOverdue(SystemConstants.COUPON_STATUS_OVERDUE);
+        successVO.setCouponStatusUsed(CouponConstants.COUPON_STATUS_USED);
+        successVO.setCouponStatusUnused(CouponConstants.COUPON_STATUS_UNUSED);
+        successVO.setCouponStatusOverdue(CouponConstants.COUPON_STATUS_OVERDUE);
 
         Long couponSum = couponEntityPOMapper.findCouponAllCountBySendBusinessIdList(sendBusinessId, sendType, sysBrandId, successVO);
 
-        //Long couponUnusedSum = couponEntityPOMapper.findCouponCountBySendBusinessIdList(sendBusinessId,sendType,sysBrandId,SystemConstants.COUPON_STATUS_UNUSED);
+        //Long couponUnusedSum = couponEntityPOMapper.findCouponCountBySendBusinessIdList(sendBusinessId,sendType,sysBrandId,CouponConstants.COUPON_STATUS_UNUSED);
 
-        Long couponUsedSum = couponEntityPOMapper.findCouponCountBySendBusinessIdList(sendBusinessId, sendType, sysBrandId, SystemConstants.COUPON_STATUS_USED);
+        Long couponUsedSum = couponEntityPOMapper.findCouponCountBySendBusinessIdList(sendBusinessId, sendType, sysBrandId, CouponConstants.COUPON_STATUS_USED);
 
-        //Long couponOverdueSum = couponEntityPOMapper.findCouponCountBySendBusinessIdList(sendBusinessId,sendType,sysBrandId,SystemConstants.COUPON_STATUS_OVERDUE);
+        //Long couponOverdueSum = couponEntityPOMapper.findCouponCountBySendBusinessIdList(sendBusinessId,sendType,sysBrandId,CouponConstants.COUPON_STATUS_OVERDUE);
 
       /*BigDecimal money = couponEntityPOMapper.findUseBusinessAmountSum(param.getSendBusinessId(),param.getSendType(),param.getSysBrandId(),
-              SystemConstants.COUPON_STATUS_USED,
+              CouponConstants.COUPON_STATUS_USED,
               param.getDtStart(),param.getDtEnd(),null);*/
 
 
@@ -1649,8 +1649,8 @@ public class CouponServiceImpl implements CouponService {
 
         PageHelper.startPage(pageNumber, pageSize);
 
-        Byte useFrom = SystemConstants.COUPON_USE_FROM_QY;
-        Byte couponStatus = SystemConstants.COUPON_STATUS_USED;
+        Byte useFrom = CouponConstants.COUPON_USE_FROM_QY;
+        Byte couponStatus = CouponConstants.COUPON_STATUS_USED;
 
         List<CouponEntityVO> couponEntityVOS = couponEntityPOMapper.findQyCouponUseHistory(staffCode, searchValue, useFrom, couponStatus);
 
@@ -1681,7 +1681,7 @@ public class CouponServiceImpl implements CouponService {
         entityPOExample.createCriteria().andCouponCodeEqualTo(couponCode);
 
         CouponEntityPO couponEntityPO = new CouponEntityPO();
-        couponEntityPO.setGive(SystemConstants.COUPON_GIVING);
+        couponEntityPO.setGive(CouponConstants.COUPON_GIVING);
 
         couponEntityPOMapper.updateByExampleSelective(couponEntityPO, entityPOExample);
 

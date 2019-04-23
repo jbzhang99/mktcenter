@@ -1,12 +1,11 @@
-package com.bizvane.couponservice.common.constants;
+package com.bizvane.couponfacade.constants;
 
 
 /**
  * 
  * @author 董争光
- * 2018年7月12日下午6:12:51
  */
-public class SystemConstants {
+public class CouponConstants {
 
   /**
    * 券实例状态 - coupon_status

@@ -9,7 +9,7 @@ import com.bizvane.couponfacade.models.vo.CouponStatusEntitySuccessVO;
 import com.bizvane.couponfacade.models.vo.SendCouponQuotaBatchRequestVO;
 import com.bizvane.couponfacade.utils.PageFormUtil;
 import com.bizvane.couponfacade.utils.TimeUtils;
-import com.bizvane.couponservice.common.constants.SystemConstants;
+import com.bizvane.couponfacade.constants.CouponConstants;
 import com.bizvane.couponservice.mappers.CouponDefinitionPOMapper;
 import com.bizvane.couponservice.mappers.CouponEntityPOMapper;
 import com.bizvane.couponservice.mappers.CouponQuotaDetailPOMapper;
@@ -145,7 +145,7 @@ public class CouponQuotaDetailServiceImpl implements CouponQuotaDetailService{
        couponQuotaSendDetailPO.setValidDateStart(couponDefinitionPOWithBLOBs.getValidDateStart());
        couponQuotaSendDetailPO.setValidDateEnd(couponDefinitionPOWithBLOBs.getValidDateEnd());
        couponQuotaSendDetailPO.setCreateDate(TimeUtils.getNowTime());
-       couponQuotaSendDetailPO.setValid(SystemConstants.TABLE_VALID_EFFECTIVE);
+       couponQuotaSendDetailPO.setValid(CouponConstants.TABLE_VALID_EFFECTIVE);
        couponQuotaSendDetailPO.setValidDay(couponDefinitionPOWithBLOBs.getValidDay());
        couponQuotaSendDetailPO.setValidType(couponDefinitionPOWithBLOBs.getValidType());
        couponQuotaSendDetailPO.setMinConsume(couponDefinitionPOWithBLOBs.getMinConsume());
@@ -204,9 +204,9 @@ public class CouponQuotaDetailServiceImpl implements CouponQuotaDetailService{
         entityParam.setSysBrandId(accountPo.getBrandId());
 
         CouponStatusEntitySuccessVO successVO = new CouponStatusEntitySuccessVO();
-        successVO.setCouponStatusUnused(SystemConstants.COUPON_STATUS_UNUSED);
-        successVO.setCouponStatusOverdue(SystemConstants.COUPON_STATUS_OVERDUE);
-        successVO.setCouponStatusUsed(SystemConstants.COUPON_STATUS_USED);
+        successVO.setCouponStatusUnused(CouponConstants.COUPON_STATUS_UNUSED);
+        successVO.setCouponStatusOverdue(CouponConstants.COUPON_STATUS_OVERDUE);
+        successVO.setCouponStatusUsed(CouponConstants.COUPON_STATUS_USED);
 
 //      8.企业微信券-102
         entityParam.setListType("102");

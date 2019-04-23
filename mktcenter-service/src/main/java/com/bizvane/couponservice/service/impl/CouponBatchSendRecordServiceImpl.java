@@ -2,7 +2,7 @@ package com.bizvane.couponservice.service.impl;
 
 import com.bizvane.couponfacade.models.po.CouponBatchSendRecordPO;
 import com.bizvane.couponfacade.models.po.CouponBatchSendRecordPOExample;
-import com.bizvane.couponservice.common.constants.SystemConstants;
+import com.bizvane.couponfacade.constants.CouponConstants;
 import com.bizvane.couponservice.mappers.CouponBatchSendRecordPOMapper;
 import com.bizvane.couponservice.service.CouponBatchSendRecordService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,7 +28,7 @@ public class CouponBatchSendRecordServiceImpl implements CouponBatchSendRecordSe
     public CouponBatchSendRecordPO findBatchSendRecord(String batchSendCode) {
 
         CouponBatchSendRecordPOExample batchExample = new CouponBatchSendRecordPOExample();
-        batchExample.createCriteria().andBatchSendCodeEqualTo(batchSendCode).andValidEqualTo(SystemConstants.TABLE_VALID_EFFECTIVE);
+        batchExample.createCriteria().andBatchSendCodeEqualTo(batchSendCode).andValidEqualTo(CouponConstants.TABLE_VALID_EFFECTIVE);
         List<CouponBatchSendRecordPO> batchList = couponBatchSendRecordPOMapper.selectByExample(batchExample);
         CouponBatchSendRecordPO batchPO = batchList.get(0);
         return batchPO;

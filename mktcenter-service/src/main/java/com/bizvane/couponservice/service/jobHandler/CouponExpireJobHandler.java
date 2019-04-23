@@ -5,7 +5,7 @@ import com.bizvane.couponfacade.models.po.CouponEntityPOExample;
 import com.bizvane.couponfacade.models.po.SysCodeValuePO;
 import com.bizvane.couponfacade.models.po.SysCodeValuePOExample;
 import com.bizvane.couponservice.common.constants.SysResponseEnum;
-import com.bizvane.couponservice.common.constants.SystemConstants;
+import com.bizvane.couponfacade.constants.CouponConstants;
 import com.bizvane.couponservice.mappers.CouponEntityPOMapper;
 import com.bizvane.couponservice.mappers.CouponSysCodeValuePOMapper;
 import com.bizvane.members.facade.service.api.WxChannelInfoApiService;
@@ -64,7 +64,7 @@ public class CouponExpireJobHandler extends IJobHandler{
         ReturnT<String> returnT = new ReturnT<>();
 
         SysCodeValuePOExample codeExample = new SysCodeValuePOExample();
-        codeExample.createCriteria().andCodeTypeEqualTo(SystemConstants.COUPON_EXPIRE_CODE_TYPE);
+        codeExample.createCriteria().andCodeTypeEqualTo(CouponConstants.COUPON_EXPIRE_CODE_TYPE);
         List<SysCodeValuePO> sysCodeValuePOList = sysCodeValuePOMapper.selectByExample(codeExample);
 
         String expireDay = sysCodeValuePOList.get(0).getItemCode();
@@ -82,7 +82,7 @@ public class CouponExpireJobHandler extends IJobHandler{
 
         CouponEntityPOExample entityPOExample = new CouponEntityPOExample();
         entityPOExample.createCriteria().andValidDateEndEqualTo(date)
-                .andValidEqualTo(SystemConstants.TABLE_VALID_EFFECTIVE);
+                .andValidEqualTo(CouponConstants.TABLE_VALID_EFFECTIVE);
 
         List<CouponEntityPO> entityPOList = couponEntityPOMapper.selectByExample(entityPOExample);
 

@@ -12,7 +12,7 @@ import com.bizvane.couponfacade.models.vo.SendCouponSimpleRequestVO;
 import com.bizvane.couponfacade.utils.PageFormUtil;
 import com.bizvane.couponfacade.utils.TimeUtils;
 import com.bizvane.couponservice.common.constants.SysResponseEnum;
-import com.bizvane.couponservice.common.constants.SystemConstants;
+import com.bizvane.couponfacade.constants.CouponConstants;
 import com.bizvane.couponservice.common.utils.BarcodeUtil;
 import com.bizvane.couponservice.common.utils.BusinessCodeUtil;
 import com.bizvane.couponservice.common.utils.CouponJobUtil;
@@ -159,7 +159,7 @@ public class SendCouponServiceImpl implements SendCouponService {
         try {
 
             //判断是否过期,日期区间存在过期情况
-            if(SystemConstants.VALID_TYPE__INTERVAL.equals(definitionPO.getValidType())){
+            if(CouponConstants.VALID_TYPE__INTERVAL.equals(definitionPO.getValidType())){
 
                 SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
                 Date endDate = format.parse(format.format(definitionPO.getValidDateEnd()));
@@ -200,12 +200,12 @@ public class SendCouponServiceImpl implements SendCouponService {
         entityPO.setTransferInfo(definitionPO.getTransferInfo());
         
         
-        entityPO.setBindStatus(SystemConstants.COUPON_BIND_STATUS_UNBIND);
+        entityPO.setBindStatus(CouponConstants.COUPON_BIND_STATUS_UNBIND);
 
         //计算有效期开始到结束区间
         Calendar calendar = Calendar.getInstance();
 
-        if (definitionPO.getValidType().equals(SystemConstants.VALID_TYPE__SOMEDAY)) {
+        if (definitionPO.getValidType().equals(CouponConstants.VALID_TYPE__SOMEDAY)) {
             calendar.add(Calendar.DATE, definitionPO.getValidDay());
             calendar.set(Calendar.HOUR_OF_DAY,23);
             calendar.set(Calendar.SECOND, 59);
@@ -226,11 +226,11 @@ public class SendCouponServiceImpl implements SendCouponService {
             entityPO.setValidDateEnd(calendar.getTime());
         }
 
-        entityPO.setIsLock(SystemConstants.COUPON_STATUS_CHANGE_IS_UNLOCK);
+        entityPO.setIsLock(CouponConstants.COUPON_STATUS_CHANGE_IS_UNLOCK);
         entityPO.setSendType(param.getSendType());
         entityPO.setSendBusinessId(param.getSendBussienId());
         entityPO.setRemark(definitionPO.getRemark());
-        entityPO.setValid(SystemConstants.TABLE_VALID_EFFECTIVE);
+        entityPO.setValid(CouponConstants.TABLE_VALID_EFFECTIVE);
         entityPO.setPreferentialType(definitionPO.getPreferentialType());
         entityPO.setCreateDate(TimeUtils.getNowTime());
         entityPO.setModifiedDate(TimeUtils.getNowTime());
@@ -241,12 +241,12 @@ public class SendCouponServiceImpl implements SendCouponService {
 
         Byte couponStatus = null;
         //判断发券渠道
-        if (SystemConstants.USE_CHANNEL_ONLINE.equals(definitionPO.getUseChannel())) {
-            couponStatus = SystemConstants.COUPON_STATUS_UNUSED;
-        } else if (SystemConstants.USE_CHANNEL_OFFLINE.equals(definitionPO.getUseChannel())) {
-            couponStatus = SystemConstants.COUPON_STATUS_SYNCHROING;
-        } else if (SystemConstants.USE_CHANNEL_ANY.equals(definitionPO.getUseChannel())) {
-            couponStatus = SystemConstants.COUPON_STATUS_SYNCHROING;
+        if (CouponConstants.USE_CHANNEL_ONLINE.equals(definitionPO.getUseChannel())) {
+            couponStatus = CouponConstants.COUPON_STATUS_UNUSED;
+        } else if (CouponConstants.USE_CHANNEL_OFFLINE.equals(definitionPO.getUseChannel())) {
+            couponStatus = CouponConstants.COUPON_STATUS_SYNCHROING;
+        } else if (CouponConstants.USE_CHANNEL_ANY.equals(definitionPO.getUseChannel())) {
+            couponStatus = CouponConstants.COUPON_STATUS_SYNCHROING;
         } else {
             responseData.setCode(SysResponseEnum.FAILED.getCode());
             responseData.setMessage(SysResponseEnum.USE_CHANNEL_NOT_EXISTS.getMessage());
@@ -256,19 +256,19 @@ public class SendCouponServiceImpl implements SendCouponService {
         couponEntityPOMapper.insertSelective(entityPO);
 
         //判断渠道
-        if (SystemConstants.USE_CHANNEL_ONLINE.equals(definitionPO.getUseChannel())) {
+        if (CouponConstants.USE_CHANNEL_ONLINE.equals(definitionPO.getUseChannel())) {
 
             ResponseData<String> onlineResult = sendCouponOnline(definitionPO, entityPO);
 
 
-        } else if (SystemConstants.USE_CHANNEL_OFFLINE.equals(definitionPO.getUseChannel())) {
+        } else if (CouponConstants.USE_CHANNEL_OFFLINE.equals(definitionPO.getUseChannel())) {
 
-            ResponseData<String> offlineResult = sendCouponOffline(definitionPO, entityPO,SystemConstants.COUPON_SEND_AGAIN_NO);
+            ResponseData<String> offlineResult = sendCouponOffline(definitionPO, entityPO,CouponConstants.COUPON_SEND_AGAIN_NO);
 
 
-        } else if (SystemConstants.USE_CHANNEL_ANY.equals(definitionPO.getUseChannel())) {
+        } else if (CouponConstants.USE_CHANNEL_ANY.equals(definitionPO.getUseChannel())) {
 
-            ResponseData<String> offlineResult = sendCouponOffline(definitionPO, entityPO,SystemConstants.COUPON_SEND_AGAIN_NO);
+            ResponseData<String> offlineResult = sendCouponOffline(definitionPO, entityPO,CouponConstants.COUPON_SEND_AGAIN_NO);
 
 
         } else {
@@ -316,9 +316,9 @@ public class SendCouponServiceImpl implements SendCouponService {
         messageVO.setValidDateEnd(definitionPO.getValidDateEnd());
         messageVO.setSysBrandId(definitionPO.getSysBrandId());
         //填入折扣或金额
-        if(definitionPO.getPreferentialType().equals(SystemConstants.PREFERENTIAL_TYPE_MONEY)){
+        if(definitionPO.getPreferentialType().equals(CouponConstants.PREFERENTIAL_TYPE_MONEY)){
             messageVO.setDenomination(definitionPO.getMoney()+"");
-        }else if(definitionPO.getPreferentialType().equals(SystemConstants.PREFERENTIAL_TYPE_DISCOUNT)){
+        }else if(definitionPO.getPreferentialType().equals(CouponConstants.PREFERENTIAL_TYPE_DISCOUNT)){
             messageVO.setDenomination(definitionPO.getDiscount()+"");
         }
 
@@ -361,7 +361,7 @@ public class SendCouponServiceImpl implements SendCouponService {
     public ResponseData<String> sendCouponOffline(CouponDefinitionPOWithBLOBs definitionPO, CouponEntityPO entityPO,Integer ifSendAgain) {
         ResponseData<String> responseData = new ResponseData<>();
         //线下券需要有效期开始到结束区间
-        if (definitionPO.getValidType().equals(SystemConstants.VALID_TYPE__SOMEDAY)) {
+        if (definitionPO.getValidType().equals(CouponConstants.VALID_TYPE__SOMEDAY)) {
             Calendar calendar = Calendar.getInstance();
             calendar.add(Calendar.DATE, definitionPO.getValidDay());
             definitionPO.setValidDateStart(TimeUtils.getNowTime());
@@ -439,7 +439,7 @@ public class SendCouponServiceImpl implements SendCouponService {
         try {
 
             //判断是否过期,日期区间存在过期情况
-            if(SystemConstants.VALID_TYPE__INTERVAL.equals(definitionPO.getValidType())){
+            if(CouponConstants.VALID_TYPE__INTERVAL.equals(definitionPO.getValidType())){
 
                 SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
                 Date endDate = format.parse(format.format(definitionPO.getValidDateEnd()));
@@ -464,12 +464,12 @@ public class SendCouponServiceImpl implements SendCouponService {
 
         Byte couponStatus = null;
         //判断发券渠道
-        if (SystemConstants.USE_CHANNEL_ONLINE.equals(definitionPO.getUseChannel())) {
-            couponStatus = SystemConstants.COUPON_STATUS_UNUSED;
-        } else if (SystemConstants.USE_CHANNEL_OFFLINE.equals(definitionPO.getUseChannel())) {
-            couponStatus = SystemConstants.COUPON_STATUS_SYNCHROING;
-        } else if (SystemConstants.USE_CHANNEL_ANY.equals(definitionPO.getUseChannel())) {
-            couponStatus = SystemConstants.COUPON_STATUS_UNUSED;
+        if (CouponConstants.USE_CHANNEL_ONLINE.equals(definitionPO.getUseChannel())) {
+            couponStatus = CouponConstants.COUPON_STATUS_UNUSED;
+        } else if (CouponConstants.USE_CHANNEL_OFFLINE.equals(definitionPO.getUseChannel())) {
+            couponStatus = CouponConstants.COUPON_STATUS_SYNCHROING;
+        } else if (CouponConstants.USE_CHANNEL_ANY.equals(definitionPO.getUseChannel())) {
+            couponStatus = CouponConstants.COUPON_STATUS_UNUSED;
         } else {
             responseData.setCode(SysResponseEnum.FAILED.getCode());
             responseData.setMessage(SysResponseEnum.USE_CHANNEL_NOT_EXISTS.getMessage());
@@ -480,7 +480,7 @@ public class SendCouponServiceImpl implements SendCouponService {
         //立刻发券
 
         //判断发券渠道
-        if (SystemConstants.USE_CHANNEL_ONLINE.equals(definitionPO.getUseChannel())) {
+        if (CouponConstants.USE_CHANNEL_ONLINE.equals(definitionPO.getUseChannel())) {
 
             //线上发券
             ResponseData<String> onlineResult = sendCouponBatchOnline(definitionPO, entityPOList);
@@ -489,7 +489,7 @@ public class SendCouponServiceImpl implements SendCouponService {
                 return onlineResult;
             }
 
-        } else if (SystemConstants.USE_CHANNEL_OFFLINE.equals(definitionPO.getUseChannel())) {
+        } else if (CouponConstants.USE_CHANNEL_OFFLINE.equals(definitionPO.getUseChannel())) {
 
             //线下发券
             ResponseData<String> offlineResult = sendCouponBatchOffline(definitionPO, entityPOList, batchPO);
@@ -498,7 +498,7 @@ public class SendCouponServiceImpl implements SendCouponService {
                 return offlineResult;
             }
 
-        } else if (SystemConstants.USE_CHANNEL_ANY.equals(definitionPO.getUseChannel())) {
+        } else if (CouponConstants.USE_CHANNEL_ANY.equals(definitionPO.getUseChannel())) {
         	//
         	
             //全渠道收到线下结果在发短信
@@ -510,7 +510,7 @@ public class SendCouponServiceImpl implements SendCouponService {
             for (int i = 0; i < entityPOList.size(); i++) {
                 couponCodeList.add(entityPOList.get(i).getCouponCode());
             }
-            couponEntityPOMapper.updateCouponStatusBatch(couponCodeList, SystemConstants.COUPON_STATUS_SYNCHROING);
+            couponEntityPOMapper.updateCouponStatusBatch(couponCodeList, CouponConstants.COUPON_STATUS_SYNCHROING);
             //线下发券
             ResponseData<String> offlineResult = sendCouponBatchOffline(definitionPO, entityPOList, batchPO);
 
@@ -579,12 +579,12 @@ public class SendCouponServiceImpl implements SendCouponService {
             entityPO.setDiscount(definitionPO.getDiscount());
             entityPO.setImg(definitionPO.getImg());
             entityPO.setInfo(definitionPO.getInfo());
-            entityPO.setBindStatus(SystemConstants.COUPON_BIND_STATUS_UNBIND);
+            entityPO.setBindStatus(CouponConstants.COUPON_BIND_STATUS_UNBIND);
 
             Calendar calendar = Calendar.getInstance();
 
             //计算有效期开始到结束区间
-            if (definitionPO.getValidType().equals(SystemConstants.VALID_TYPE__SOMEDAY)) {
+            if (definitionPO.getValidType().equals(CouponConstants.VALID_TYPE__SOMEDAY)) {
                 calendar.add(Calendar.DATE, definitionPO.getValidDay());
                 calendar.set(Calendar.HOUR_OF_DAY,23);
                 calendar.set(Calendar.SECOND, 59);
@@ -605,13 +605,13 @@ public class SendCouponServiceImpl implements SendCouponService {
                 entityPO.setValidDateEnd(calendar.getTime());
             }
 
-            entityPO.setIsLock(SystemConstants.COUPON_STATUS_CHANGE_IS_UNLOCK);
+            entityPO.setIsLock(CouponConstants.COUPON_STATUS_CHANGE_IS_UNLOCK);
             entityPO.setSendType(requestVO.getBusinessType());
             entityPO.setSendBusinessId(requestVO.getBusinessId());
-            entityPO.setIsUse(SystemConstants.COUPON_USE_UNUSED);
+            entityPO.setIsUse(CouponConstants.COUPON_USE_UNUSED);
             entityPO.setCouponStatus(couponStatus);
             entityPO.setInfo(definitionPO.getInfo());
-            entityPO.setValid(SystemConstants.TABLE_VALID_EFFECTIVE);
+            entityPO.setValid(CouponConstants.TABLE_VALID_EFFECTIVE);
             entityPO.setPreferentialType(definitionPO.getPreferentialType());
             entityPO.setCreateDate(TimeUtils.getNowTime());
             entityPO.setModifiedDate(TimeUtils.getNowTime());
@@ -761,7 +761,7 @@ public class SendCouponServiceImpl implements SendCouponService {
         
         //计算有效期开始到结束区间
         Calendar calendar = Calendar.getInstance();
-        if (couponDefinitionPOWithBLOBs.getValidType().equals(SystemConstants.VALID_TYPE__SOMEDAY)) {
+        if (couponDefinitionPOWithBLOBs.getValidType().equals(CouponConstants.VALID_TYPE__SOMEDAY)) {
             calendar.add(Calendar.DATE, couponDefinitionPOWithBLOBs.getValidDay());
             calendar.set(Calendar.HOUR_OF_DAY,23);
             calendar.set(Calendar.SECOND, 59);
@@ -816,9 +816,9 @@ public class SendCouponServiceImpl implements SendCouponService {
 
             messageVO.setPreferentialType(definitionPO.getPreferentialType()+"");
 
-            if(definitionPO.getPreferentialType().equals(SystemConstants.PREFERENTIAL_TYPE_MONEY)){
+            if(definitionPO.getPreferentialType().equals(CouponConstants.PREFERENTIAL_TYPE_MONEY)){
                 messageVO.setDenomination(definitionPO.getMoney()+"");
-            }else if(definitionPO.getPreferentialType().equals(SystemConstants.PREFERENTIAL_TYPE_DISCOUNT)){
+            }else if(definitionPO.getPreferentialType().equals(CouponConstants.PREFERENTIAL_TYPE_DISCOUNT)){
                 messageVO.setDenomination(definitionPO.getDiscount()+"");
             }
 
@@ -876,19 +876,19 @@ public class SendCouponServiceImpl implements SendCouponService {
     public void sendCouponBatchOfflineFail(List<String> failCouponCodeList, CouponBatchSendRecordPO batchPO) {
 
         //修改发券实例表状态
-        couponEntityPOMapper.updateCouponStatusBatch(failCouponCodeList,SystemConstants.COUPON_STATUS_SYNC_FAIL);
+        couponEntityPOMapper.updateCouponStatusBatch(failCouponCodeList,CouponConstants.COUPON_STATUS_SYNC_FAIL);
 
         //发券失败表插入记录
         List<CouponSendFailLogPO> failPOList = couponSendFailLogPOMapper.selectByCouponCodeList(failCouponCodeList);
 
         for (int i = 0; i < failPOList.size(); i++) {
             failPOList.get(i).setBatchSendCode(batchPO.getBatchSendCode());
-            failPOList.get(i).setSendStatus(SystemConstants.COUPON_SEND_NO);
-            failPOList.get(i).setValid(SystemConstants.TABLE_VALID_EFFECTIVE);
+            failPOList.get(i).setSendStatus(CouponConstants.COUPON_SEND_NO);
+            failPOList.get(i).setValid(CouponConstants.TABLE_VALID_EFFECTIVE);
             failPOList.get(i).setCreateDate(TimeUtils.getNowTime());
             failPOList.get(i).setBizCode(batchPO.getBizCode());
             failPOList.get(i).setBizType(batchPO.getBizType());
-            failPOList.get(i).setFailReason(SystemConstants.SEND_COUPON_FAIL_REASON_ERP);
+            failPOList.get(i).setFailReason(CouponConstants.SEND_COUPON_FAIL_REASON_ERP);
             failPOList.get(i).setFailTimes(0);
         }
 
@@ -983,7 +983,7 @@ public class SendCouponServiceImpl implements SendCouponService {
         }
 
         SysCodeValuePOExample valuePOExample = new SysCodeValuePOExample();
-        valuePOExample.createCriteria().andCodeTypeEqualTo(SystemConstants.COUPON_EXPIRE_CODE_TYPE);
+        valuePOExample.createCriteria().andCodeTypeEqualTo(CouponConstants.COUPON_EXPIRE_CODE_TYPE);
         SysCodeValuePO valuePO = new SysCodeValuePO();
         valuePO.setItemCode(expireDay);
         sysCodeValuePOMapper.updateByExampleSelective(valuePO, valuePOExample);
@@ -1021,13 +1021,13 @@ public class SendCouponServiceImpl implements SendCouponService {
         CouponSendFailLogPO failLogPO = couponSendFailLogPOMapper.selectByPrimaryKey(couponSendFailLogId);
 
         //更新失败状态
-        couponSendFailLogService.updateSendStatusAndSendTimes(SystemConstants.COUPON_SENDING,TimeUtils.getNowTime(),couponSendFailLogId);
+        couponSendFailLogService.updateSendStatusAndSendTimes(CouponConstants.COUPON_SENDING,TimeUtils.getNowTime(),couponSendFailLogId);
 
         CouponEntityPO entityPO = couponEntityPOMapper.selectByPrimaryKey(failLogPO.getCouponEntityId());
         CouponDefinitionPOWithBLOBs definitionPO = couponDefinitionPOMapper.selectByPrimaryKey(Long.parseLong(entityPO.getCouponDefinitionId()));
 
         //线下发券
-        ResponseData<String> offlineResult = sendCouponOffline(definitionPO, entityPO,SystemConstants.COUPON_SEND_AGAIN_YES);
+        ResponseData<String> offlineResult = sendCouponOffline(definitionPO, entityPO,CouponConstants.COUPON_SEND_AGAIN_YES);
 
         if (SysResponseEnum.SUCCESS.getCode() != offlineResult.getCode()) {
             responseData.setCode(SysResponseEnum.FAILED.getCode());
@@ -1062,7 +1062,7 @@ public class SendCouponServiceImpl implements SendCouponService {
         List<String> idList = Arrays.asList(idArr);
 
         //根据id集合查询数据
-        List<CouponSendAgainRequestVO> againList = couponSendFailLogPOMapper.selectBatchByIdList(idList,SystemConstants.COUPON_SEND_NO);
+        List<CouponSendAgainRequestVO> againList = couponSendFailLogPOMapper.selectBatchByIdList(idList,CouponConstants.COUPON_SEND_NO);
 
         //单张发券批量补发
         List<CouponSendAgainRequestVO> singleBatchList = new ArrayList<>();
@@ -1223,10 +1223,10 @@ public class SendCouponServiceImpl implements SendCouponService {
         batchPO.setBatchSendCode(BusinessCodeUtil.getCouponBatchSendCode());
         batchPO.setBizType(requestVO.getBusinessType());
         batchPO.setBizCode(requestVO.getBusinessId() + "");
-        if (SystemConstants.COUPON_DEFINITION_TYPE_ONLINE.equals(definitionPO.getCouponDefinitionType())) {
-            batchPO.setIsOfflineSync(SystemConstants.TABLE_VALID_INVALID);
-        } else if (SystemConstants.COUPON_DEFINITION_TYPE_ERP.equals(definitionPO.getCouponDefinitionType())) {
-            batchPO.setIsOfflineSync(SystemConstants.TABLE_VALID_EFFECTIVE);
+        if (CouponConstants.COUPON_DEFINITION_TYPE_ONLINE.equals(definitionPO.getCouponDefinitionType())) {
+            batchPO.setIsOfflineSync(CouponConstants.TABLE_VALID_INVALID);
+        } else if (CouponConstants.COUPON_DEFINITION_TYPE_ERP.equals(definitionPO.getCouponDefinitionType())) {
+            batchPO.setIsOfflineSync(CouponConstants.TABLE_VALID_EFFECTIVE);
         } else {
             logger.error(SysResponseEnum.COUPON_DEFINITION_TYPE_NOT_EXISTS.getMessage());
         }
@@ -1260,8 +1260,8 @@ public class SendCouponServiceImpl implements SendCouponService {
 
         //查询会员记录，分批发券
         MembersInfoSearchVo searchVo = JSONObject.toJavaObject(JSONObject.parseObject(manualPO.getMemberCondition()), MembersInfoSearchVo.class);
-        searchVo.setPageNumber(SystemConstants.SEARCH_MEMBERS_PAGE_NUMBER);
-        searchVo.setPageSize(SystemConstants.SEARCH_MEMBERS_PAGE_SIZE);
+        searchVo.setPageNumber(CouponConstants.SEARCH_MEMBERS_PAGE_NUMBER);
+        searchVo.setPageSize(CouponConstants.SEARCH_MEMBERS_PAGE_SIZE);
 
         ResponseData<PageInfo<MembersInfoSearchPojo>> esFirstResult = membersAdvancedSearchApiService.advancedSearch(searchVo);
 
@@ -1306,7 +1306,7 @@ public class SendCouponServiceImpl implements SendCouponService {
 
                     //最后一页，控制查询的数量,可能不足pageSize条(因为会员数量会变动)
                     if (es == totalPages) {
-                        searchVo.setPageSize(totalNumber % SystemConstants.SEARCH_MEMBERS_PAGE_SIZE);
+                        searchVo.setPageSize(totalNumber % CouponConstants.SEARCH_MEMBERS_PAGE_SIZE);
                     }
 
                     try {
@@ -1323,7 +1323,7 @@ public class SendCouponServiceImpl implements SendCouponService {
                         requestVO.setMemberListManual(esResult.getData().getList());
 
                         //保存发券记录
-                        List<CouponEntityPO> entityPOList = saveEntityList(definitionPO, requestVO, batchPO.getCouponBatchSendRecordId(), SystemConstants.COUPON_STATUS_UNUSED);
+                        List<CouponEntityPO> entityPOList = saveEntityList(definitionPO, requestVO, batchPO.getCouponBatchSendRecordId(), CouponConstants.COUPON_STATUS_UNUSED);
 
                         //如果业务类型是手动发券
                         if (SendTypeEnum.SEND_COUPON_BATCH.getCode().equals(batchPO.getBizType())) {
@@ -1333,10 +1333,10 @@ public class SendCouponServiceImpl implements SendCouponService {
 
                             if (es == totalPages) {
                                 //最后一页
-                                successCount = totalNumber % SystemConstants.SEARCH_MEMBERS_PAGE_SIZE;
+                                successCount = totalNumber % CouponConstants.SEARCH_MEMBERS_PAGE_SIZE;
                             } else {
                                 //其余页数
-                                successCount = SystemConstants.SEARCH_MEMBERS_PAGE_SIZE;
+                                successCount = CouponConstants.SEARCH_MEMBERS_PAGE_SIZE;
                             }
 
                             couponManualPOMapper.updateCouponManualSuccessCount(successCount, manualPO.getCouponManualId());
@@ -1359,10 +1359,10 @@ public class SendCouponServiceImpl implements SendCouponService {
                         int failCount = 0;
                         if (es == totalPages) {
                             //最后一页
-                            failCount = totalNumber % SystemConstants.SEARCH_MEMBERS_PAGE_SIZE;
+                            failCount = totalNumber % CouponConstants.SEARCH_MEMBERS_PAGE_SIZE;
                         } else {
                             //其余页数
-                            failCount = SystemConstants.SEARCH_MEMBERS_PAGE_SIZE;
+                            failCount = CouponConstants.SEARCH_MEMBERS_PAGE_SIZE;
                         }
                         updateSendCouponBatchException(batchPO, failCount,definitionPO);
 
@@ -1400,8 +1400,8 @@ public class SendCouponServiceImpl implements SendCouponService {
 
         //查询会员记录，分批发券
         MembersInfoSearchVo searchVo = JSONObject.toJavaObject(JSONObject.parseObject(manualPO.getMemberCondition()), MembersInfoSearchVo.class);
-        searchVo.setPageNumber(SystemConstants.SEARCH_MEMBERS_PAGE_NUMBER);
-        searchVo.setPageSize(SystemConstants.SEARCH_MEMBERS_PAGE_SIZE);
+        searchVo.setPageNumber(CouponConstants.SEARCH_MEMBERS_PAGE_NUMBER);
+        searchVo.setPageSize(CouponConstants.SEARCH_MEMBERS_PAGE_SIZE);
 
             logger.info("sssssssssssssssssssss+"+JSONObject.toJSONString(searchVo));
 
@@ -1449,7 +1449,7 @@ public class SendCouponServiceImpl implements SendCouponService {
 
                     //最后一页，控制查询的数量,可能不足pageSize条
                     if (es == totalPages) {
-                        searchVo.setPageSize(totalNumber % SystemConstants.SEARCH_MEMBERS_PAGE_SIZE);
+                        searchVo.setPageSize(totalNumber % CouponConstants.SEARCH_MEMBERS_PAGE_SIZE);
                     }
 
                     List<CouponEntityPO> entityPOList = null;
@@ -1469,7 +1469,7 @@ public class SendCouponServiceImpl implements SendCouponService {
                         requestVO.setMemberListManual(esResult.getData().getList());
 
                         //保存发券记录
-                        entityPOList = saveEntityList(definitionPO, requestVO, batchPO.getCouponBatchSendRecordId(), SystemConstants.COUPON_STATUS_SYNCHROING);
+                        entityPOList = saveEntityList(definitionPO, requestVO, batchPO.getCouponBatchSendRecordId(), CouponConstants.COUPON_STATUS_SYNCHROING);
 
                         //线下发券
                         ResponseData<String> sendResult = sendCouponBatchOffline(definitionPO, entityPOList, batchPO);
@@ -1480,10 +1480,10 @@ public class SendCouponServiceImpl implements SendCouponService {
                         int failCount = 0;
                         if (es == totalPages) {
                             //最后一页
-                            failCount = totalNumber % SystemConstants.SEARCH_MEMBERS_PAGE_SIZE;
+                            failCount = totalNumber % CouponConstants.SEARCH_MEMBERS_PAGE_SIZE;
                         } else {
                             //其余页数
-                            failCount = SystemConstants.SEARCH_MEMBERS_PAGE_SIZE;
+                            failCount = CouponConstants.SEARCH_MEMBERS_PAGE_SIZE;
                         }
                         updateSendCouponBatchException(batchPO, failCount,definitionPO);
 
@@ -1524,12 +1524,12 @@ public class SendCouponServiceImpl implements SendCouponService {
 
         for (int i = 0; i < failPOList.size(); i++) {
             failPOList.get(i).setBatchSendCode(batchPO.getBatchSendCode());
-            failPOList.get(i).setSendStatus(SystemConstants.COUPON_SEND_NO);
-            failPOList.get(i).setValid(SystemConstants.TABLE_VALID_EFFECTIVE);
+            failPOList.get(i).setSendStatus(CouponConstants.COUPON_SEND_NO);
+            failPOList.get(i).setValid(CouponConstants.TABLE_VALID_EFFECTIVE);
             failPOList.get(i).setCreateDate(TimeUtils.getNowTime());
             failPOList.get(i).setBizCode(batchPO.getBizCode());
             failPOList.get(i).setBizType(batchPO.getBizType());
-            failPOList.get(i).setFailReason(SystemConstants.SEND_COUPON_FAIL_REASON_ERP_UNCONNECT);
+            failPOList.get(i).setFailReason(CouponConstants.SEND_COUPON_FAIL_REASON_ERP_UNCONNECT);
             failPOList.get(i).setFailTimes(0);
         }
 
@@ -1557,8 +1557,8 @@ public class SendCouponServiceImpl implements SendCouponService {
 
         //查询会员记录，分批发券
         MembersInfoSearchVo searchVo = JSONObject.toJavaObject(JSONObject.parseObject(manualPO.getMemberCondition()), MembersInfoSearchVo.class);
-        searchVo.setPageNumber(SystemConstants.SEARCH_MEMBERS_PAGE_NUMBER);
-        searchVo.setPageSize(SystemConstants.SEARCH_MEMBERS_PAGE_SIZE);
+        searchVo.setPageNumber(CouponConstants.SEARCH_MEMBERS_PAGE_NUMBER);
+        searchVo.setPageSize(CouponConstants.SEARCH_MEMBERS_PAGE_SIZE);
 
         ResponseData<PageInfo<MembersInfoSearchPojo>> esFirstResult = membersAdvancedSearchApiService.advancedSearch(searchVo);
 
@@ -1602,7 +1602,7 @@ public class SendCouponServiceImpl implements SendCouponService {
 
                     //最后一页，控制查询的数量,可能不足pageSize条
                     if (es == totalPages) {
-                        searchVo.setPageSize(totalNumber % SystemConstants.SEARCH_MEMBERS_PAGE_SIZE);
+                        searchVo.setPageSize(totalNumber % CouponConstants.SEARCH_MEMBERS_PAGE_SIZE);
                     }
 
                     List<CouponEntityPO> entityPOList = null;
@@ -1622,7 +1622,7 @@ public class SendCouponServiceImpl implements SendCouponService {
                         couponManualService.updateTaskStatus(requestVO.getBusinessId(), CouponManualTaskStatusEnum.TASK_STATUS_SENDING.getCode().byteValue());
 
                         //保存发券记录 - 首先线上发券，保存为未使用
-                        entityPOList = saveEntityList(definitionPO, requestVO, batchPO.getCouponBatchSendRecordId(), SystemConstants.COUPON_STATUS_UNUSED);
+                        entityPOList = saveEntityList(definitionPO, requestVO, batchPO.getCouponBatchSendRecordId(), CouponConstants.COUPON_STATUS_UNUSED);
 
                         //更新手动发券状态为-同步中
                         couponManualService.updateTaskStatus(requestVO.getBusinessId(), CouponManualTaskStatusEnum.TASK_STATUS_SYNCING.getCode().byteValue());
@@ -1633,7 +1633,7 @@ public class SendCouponServiceImpl implements SendCouponService {
                         for (int i = 0; i < entityPOList.size(); i++) {
                             couponCodeList.add(entityPOList.get(i).getCouponCode());
                         }
-                        couponEntityPOMapper.updateCouponStatusBatch(couponCodeList, SystemConstants.COUPON_STATUS_SYNCHROING);
+                        couponEntityPOMapper.updateCouponStatusBatch(couponCodeList, CouponConstants.COUPON_STATUS_SYNCHROING);
 
                         //线下发券
                         ResponseData<String> sendResult = sendCouponBatchOffline(definitionPO, entityPOList, batchPO);
@@ -1646,10 +1646,10 @@ public class SendCouponServiceImpl implements SendCouponService {
                         int failCount = 0;
                         if (es == totalPages) {
                             //最后一页
-                            failCount = totalNumber % SystemConstants.SEARCH_MEMBERS_PAGE_SIZE;
+                            failCount = totalNumber % CouponConstants.SEARCH_MEMBERS_PAGE_SIZE;
                         } else {
                             //其余页数
-                            failCount = SystemConstants.SEARCH_MEMBERS_PAGE_SIZE;
+                            failCount = CouponConstants.SEARCH_MEMBERS_PAGE_SIZE;
                         }
                         updateSendCouponBatchException(batchPO, failCount,definitionPO);
 
@@ -1695,8 +1695,8 @@ public class SendCouponServiceImpl implements SendCouponService {
             int syncFailCount = 0;
 
             //更新失败数量
-            if(definitionPO.getUseChannel().equals(SystemConstants.USE_CHANNEL_OFFLINE) ||
-                    definitionPO.getUseChannel().equals(SystemConstants.USE_CHANNEL_ANY)){
+            if(definitionPO.getUseChannel().equals(CouponConstants.USE_CHANNEL_OFFLINE) ||
+                    definitionPO.getUseChannel().equals(CouponConstants.USE_CHANNEL_ANY)){
                 syncFailCount = count;
             }
             couponManualPOMapper.updateCouponManualFailCount(count,syncFailCount,Long.parseLong(batchPO.getBizCode()));

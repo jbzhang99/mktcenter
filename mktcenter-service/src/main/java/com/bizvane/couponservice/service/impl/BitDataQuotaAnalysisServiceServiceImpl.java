@@ -6,7 +6,7 @@ import com.bizvane.couponfacade.models.po.CouponBatchSendDetailPO;
 import com.bizvane.couponfacade.models.po.CouponBatchSendDetailPOExample;
 import com.bizvane.couponfacade.models.po.CouponDefinitionPO;
 import com.bizvane.couponfacade.models.po.CouponManualPO;
-import com.bizvane.couponservice.common.constants.SystemConstants;
+import com.bizvane.couponfacade.constants.CouponConstants;
 import com.bizvane.couponservice.common.datavo.BitDataRequestVO;
 import com.bizvane.couponservice.common.datavo.BitDataVO;
 import com.bizvane.couponservice.common.datavo.BitDataXiaLaiVO;
@@ -83,7 +83,7 @@ public class BitDataQuotaAnalysisServiceServiceImpl implements BitDataAnalysisSe
 	        //计算有效期开始到结束区间
 	        Calendar calendar = Calendar.getInstance();
 
-	        if (couponDefinitionPO.getValidType().equals(SystemConstants.VALID_TYPE__SOMEDAY)) {
+	        if (couponDefinitionPO.getValidType().equals(CouponConstants.VALID_TYPE__SOMEDAY)) {
 	            calendar.add(Calendar.DATE, couponDefinitionPO.getValidDay());
 	            calendar.set(Calendar.HOUR_OF_DAY,23);
 	            calendar.set(Calendar.SECOND, 59);

@@ -10,7 +10,7 @@
 //import com.bizvane.couponfacade.models.po.CouponDefinitionPOExample;
 //import com.bizvane.couponfacade.models.vo.CouponOfflineCreateResponseVO;
 //import com.bizvane.couponservice.common.constants.SysResponseEnum;
-//import com.bizvane.couponservice.common.constants.SystemConstants;
+//import com.bizvane.couponfacade.constants.CouponConstants;
 //import com.bizvane.couponservice.mappers.CouponDefinitionCodePOMapper;
 //import com.bizvane.couponservice.mappers.CouponDefinitionPOMapper;
 //import com.bizvane.couponservice.mappers.CouponEntityPOMapper;

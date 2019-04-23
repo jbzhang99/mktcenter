@@ -9,7 +9,7 @@ import com.bizvane.centerstageservice.rpc.StoreServiceRpc;
 import com.bizvane.couponfacade.models.vo.CouponEntityVO;
 import com.bizvane.couponfacade.models.vo.CouponStatusEntitySuccessVO;
 import com.bizvane.couponservice.common.constants.SysResponseEnum;
-import com.bizvane.couponservice.common.constants.SystemConstants;
+import com.bizvane.couponfacade.constants.CouponConstants;
 import com.bizvane.couponservice.common.utils.DateUtil;
 import com.bizvane.couponservice.common.utils.QiNiuUtil;
 import com.bizvane.couponservice.common.utils.StreamingExportExcelUtil;
@@ -78,10 +78,10 @@ public class FileTaskServiceImpl implements FileTaskService {
         String fileName = "券发放记录导出"+ DateUtil.format(new Date(),DATE_YYYYMMDDHHMMSS_MIDDLE);
 
         CouponStatusEntitySuccessVO successVO = new CouponStatusEntitySuccessVO();
-        //successVO.setCouponStatusSyncSuccess(SystemConstants.COUPON_STATUS_SYNC_SUCCESS);
-        successVO.setCouponStatusUnused(SystemConstants.COUPON_STATUS_UNUSED);
-        successVO.setCouponStatusOverdue(SystemConstants.COUPON_STATUS_OVERDUE);
-        successVO.setCouponStatusUsed(SystemConstants.COUPON_STATUS_USED);
+        //successVO.setCouponStatusSyncSuccess(CouponConstants.COUPON_STATUS_SYNC_SUCCESS);
+        successVO.setCouponStatusUnused(CouponConstants.COUPON_STATUS_UNUSED);
+        successVO.setCouponStatusOverdue(CouponConstants.COUPON_STATUS_OVERDUE);
+        successVO.setCouponStatusUsed(CouponConstants.COUPON_STATUS_USED);
         
         if(entityParam.getListType().equals("1")) {
             entityParam.setListType("85");
@@ -256,12 +256,12 @@ public class FileTaskServiceImpl implements FileTaskService {
         taskPO.setCreateUserId(accountPo.getSysAccountId());
         taskPO.setCreateUserName(accountPo.getName());
        // taskPO.setCreateDate(TimeUtils.getNowTime());
-        taskPO.setValid(SystemConstants.TABLE_VALID_EFFECTIVE);
+        taskPO.setValid(CouponConstants.TABLE_VALID_EFFECTIVE);
         taskPO.setTaskName(SysResponseEnum.COUPON_EXPORT_LOG.getMessage());
         taskPO.setTaskTypeCode(count+"条");
         taskPO.setFileStatus(0L);
         //taskPO.setFileTaskDate(TimeUtils.getNowTime());
-        taskPO.setFileType(SystemConstants.FILE_TYPE_EXPORT);
+        taskPO.setFileType(CouponConstants.FILE_TYPE_EXPORT);
         ResponseData<String> responseData = fileTaskServiceRpc.addFileTask(taskPO);
 
         taskPO.setFileTaskId(Long.parseLong(responseData.getData()));

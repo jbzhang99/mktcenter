@@ -11,7 +11,7 @@ import com.bizvane.couponfacade.models.vo.CouponDefinitionListQueryVO;
 import com.bizvane.couponfacade.utils.PageFormUtil;
 import com.bizvane.couponfacade.utils.TimeUtils;
 import com.bizvane.couponservice.common.constants.SysResponseEnum;
-import com.bizvane.couponservice.common.constants.SystemConstants;
+import com.bizvane.couponfacade.constants.CouponConstants;
 import com.bizvane.couponservice.common.utils.BusinessCodeUtil;
 import com.bizvane.couponservice.mappers.CouponDefinitionCodePOMapper;
 import com.bizvane.couponservice.mappers.CouponDefinitionMoneyPOMapper;
@@ -132,8 +132,8 @@ public class CouponDefinitionServiceImpl implements CouponDefinitionService {
         ResponseData<Long> responseData = new ResponseData<>();
 
         //如果是线下券或全渠道券，线下券code不能为空
-        if (SystemConstants.USE_CHANNEL_OFFLINE.equals(po.getErpCouponDefinitionCode()) ||
-                SystemConstants.USE_CHANNEL_ANY.equals(po.getErpCouponDefinitionCode())) {
+        if (CouponConstants.USE_CHANNEL_OFFLINE.equals(po.getErpCouponDefinitionCode()) ||
+            CouponConstants.USE_CHANNEL_ANY.equals(po.getErpCouponDefinitionCode())) {
             if (StringUtils.isBlank(po.getErpCouponDefinitionCode())) {
                 responseData.setCode(SysResponseEnum.FAILED.getCode());
                 responseData.setMessage(SysResponseEnum.ERP_COUPON_DEFINITION_CODE_NOT_NULL.getMessage());
@@ -144,7 +144,7 @@ public class CouponDefinitionServiceImpl implements CouponDefinitionService {
         po.setCouponDefinitionCode(BusinessCodeUtil.getCouponDefinitionCode());
         po.setSysCompanyId(accountPo.getSysCompanyId());
         po.setSysBrandId(accountPo.getBrandId());
-        po.setCouponDefinitionType(SystemConstants.COUPON_DEFINITION_TYPE_ONLINE);
+        po.setCouponDefinitionType(CouponConstants.COUPON_DEFINITION_TYPE_ONLINE);
         po.setCreateUserId(accountPo.getSysAccountId());
         po.setCreateUserName(accountPo.getName());
         po.setCreateDate(TimeUtils.getNowTime());
@@ -266,11 +266,11 @@ public class CouponDefinitionServiceImpl implements CouponDefinitionService {
 
         CouponDefinitionPOExample example = new CouponDefinitionPOExample();
         CouponDefinitionPOExample.Criteria criteria = example.createCriteria();
-        criteria.andValidEqualTo(SystemConstants.TABLE_VALID_EFFECTIVE);
+        criteria.andValidEqualTo(CouponConstants.TABLE_VALID_EFFECTIVE);
         criteria.andCreateUserIdEqualTo(accountPo.getSysAccountId());
-        criteria.andIsAddTemplateEqualTo(SystemConstants.TABLE_VALID_EFFECTIVE);
+        criteria.andIsAddTemplateEqualTo(CouponConstants.TABLE_VALID_EFFECTIVE);
         criteria.andSysBrandIdEqualTo(accountPo.getBrandId());
-        criteria.andStatusEqualTo(SystemConstants.TABLE_VALID_EFFECTIVE);
+        criteria.andStatusEqualTo(CouponConstants.TABLE_VALID_EFFECTIVE);
 
         if (StringUtils.isNotBlank(couponDefinitionPO.getCouponName())) {
             criteria.andCouponNameLike("%" + couponDefinitionPO.getCouponName() + "%");
@@ -327,10 +327,10 @@ public class CouponDefinitionServiceImpl implements CouponDefinitionService {
 
         //List<CouponDefinitionPOWithBLOBs> definitionPOList = couponDefinitionPOMapper.selectByExampleWithBLOBs(definitionExample);
 
-        List<CouponDefinitionPOWithBLOBs> definitionPOList = couponDefinitionPOMapper.getUseList(vo.getTransferFission(),vo.getPreferentialType(), brandId, date, SystemConstants.TABLE_VALID_EFFECTIVE,
-                SystemConstants.COUPON_DEFINITION_STATUS_USE,
+        List<CouponDefinitionPOWithBLOBs> definitionPOList = couponDefinitionPOMapper.getUseList(vo.getTransferFission(),vo.getPreferentialType(), brandId, date, CouponConstants.TABLE_VALID_EFFECTIVE,
+            CouponConstants.COUPON_DEFINITION_STATUS_USE,
                 vo.getCouponDefinitionId(), vo.getCouponName(),
-                SystemConstants.VALID_TYPE__INTERVAL, SystemConstants.VALID_TYPE__SOMEDAY);
+                CouponConstants.VALID_TYPE__INTERVAL, CouponConstants.VALID_TYPE__SOMEDAY);
 
         PageInfo pageInfo = new PageInfo(definitionPOList);
         responseData.setData(pageInfo);
@@ -416,7 +416,7 @@ public class CouponDefinitionServiceImpl implements CouponDefinitionService {
 
         CouponDefinitionPO couponDefinitionPO = couponDefinitionPOMapper.selectByPrimaryKey(couponDefinitionId);
 
-        if(couponDefinitionPO.getValidType().equals(SystemConstants.VALID_TYPE__INTERVAL)){
+        if(couponDefinitionPO.getValidType().equals(CouponConstants.VALID_TYPE__INTERVAL)){
 
             SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
 

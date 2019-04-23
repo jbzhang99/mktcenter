@@ -5,7 +5,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.bizvane.couponfacade.enums.SendTypeEnum;
 import com.bizvane.couponfacade.models.vo.SendCouponBatchRequestVO;
 import com.bizvane.couponservice.common.constants.JobHandlerConstants;
-import com.bizvane.couponservice.common.constants.SystemConstants;
+import com.bizvane.couponfacade.constants.CouponConstants;
 import com.bizvane.mktcenterservice.common.job.XxlJobConfig;
 import com.bizvane.utils.enumutils.JobEnum;
 import com.bizvane.utils.jobutils.JobBusinessTypeEnum;
@@ -42,7 +42,7 @@ public class CouponJobUtil {
 
         //如果手动发券类型为指定时间，则调用定时任务
         String jobHandler = JobHandlerConstants.SEND_EXPIRE_JOBHANDLER;
-        String taskName = SystemConstants.COUPON_EXPIRE_DESC;
+        String taskName = CouponConstants.COUPON_EXPIRE_DESC;
         String execuRule = "0 0 12 * * ?";
 
         ResponseEntity<String> responseEntity = addRuleJob(execuRule,taskName,null,null,jobHandler,null,null);

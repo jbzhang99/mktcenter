@@ -11,7 +11,7 @@ import com.bizvane.couponfacade.models.vo.*;
 import com.bizvane.couponfacade.utils.PageFormUtil;
 import com.bizvane.couponfacade.utils.TimeUtils;
 import com.bizvane.couponservice.common.constants.SysResponseEnum;
-import com.bizvane.couponservice.common.constants.SystemConstants;
+import com.bizvane.couponfacade.constants.CouponConstants;
 import com.bizvane.couponservice.common.utils.DateUtil;
 import com.bizvane.couponservice.common.utils.CouponSpringContextUtil;
 import com.bizvane.couponservice.es.repository.CouponEntityserviceRepository;
@@ -121,9 +121,9 @@ public class CouponEntityServiceImpl implements CouponEntityService{
         entityParam.setSysBrandId(accountPo.getBrandId());
 
         CouponStatusEntitySuccessVO successVO = new CouponStatusEntitySuccessVO();
-        successVO.setCouponStatusUnused(SystemConstants.COUPON_STATUS_UNUSED);
-        successVO.setCouponStatusOverdue(SystemConstants.COUPON_STATUS_OVERDUE);
-        successVO.setCouponStatusUsed(SystemConstants.COUPON_STATUS_USED);
+        successVO.setCouponStatusUnused(CouponConstants.COUPON_STATUS_UNUSED);
+        successVO.setCouponStatusOverdue(CouponConstants.COUPON_STATUS_OVERDUE);
+        successVO.setCouponStatusUsed(CouponConstants.COUPON_STATUS_USED);
 
 //        转换
 //      1.手动发券任务 -- 85
@@ -266,9 +266,9 @@ public class CouponEntityServiceImpl implements CouponEntityService{
         entityParam.setSysBrandId(accountPo.getBrandId());
 
         CouponStatusEntitySuccessVO successVO = new CouponStatusEntitySuccessVO();
-        successVO.setCouponStatusUnused(SystemConstants.COUPON_STATUS_UNUSED);
-        successVO.setCouponStatusOverdue(SystemConstants.COUPON_STATUS_OVERDUE);
-        successVO.setCouponStatusUsed(SystemConstants.COUPON_STATUS_USED);
+        successVO.setCouponStatusUnused(CouponConstants.COUPON_STATUS_UNUSED);
+        successVO.setCouponStatusOverdue(CouponConstants.COUPON_STATUS_OVERDUE);
+        successVO.setCouponStatusUsed(CouponConstants.COUPON_STATUS_USED);
 
         if(entityParam.getListType()==null) {
             entityParam.setListType("1");
@@ -581,10 +581,10 @@ public class CouponEntityServiceImpl implements CouponEntityService{
         }
 
         CouponStatusEntitySuccessVO successVO = new CouponStatusEntitySuccessVO();
-        //successVO.setCouponStatusSyncSuccess(SystemConstants.COUPON_STATUS_SYNC_SUCCESS);
-        successVO.setCouponStatusUnused(SystemConstants.COUPON_STATUS_UNUSED);
-        successVO.setCouponStatusOverdue(SystemConstants.COUPON_STATUS_OVERDUE);
-        successVO.setCouponStatusUsed(SystemConstants.COUPON_STATUS_USED);
+        //successVO.setCouponStatusSyncSuccess(CouponConstants.COUPON_STATUS_SYNC_SUCCESS);
+        successVO.setCouponStatusUnused(CouponConstants.COUPON_STATUS_UNUSED);
+        successVO.setCouponStatusOverdue(CouponConstants.COUPON_STATUS_OVERDUE);
+        successVO.setCouponStatusUsed(CouponConstants.COUPON_STATUS_USED);
 
         PageHelper.startPage(pageForm.getPageNumber(),pageForm.getPageSize());
         List<CouponEntityVO> list = couponEntityPOMapper.findCouponEntityByConditions(vo,successVO);
@@ -671,7 +671,7 @@ public class CouponEntityServiceImpl implements CouponEntityService{
 
         //查询券状态变更流水
         CouponStatusLogPOExample statusLogPOExample = new CouponStatusLogPOExample();
-        statusLogPOExample.createCriteria().andCouponEntityIdEqualTo(couponEntityId).andValidEqualTo(SystemConstants.TABLE_VALID_EFFECTIVE);
+        statusLogPOExample.createCriteria().andCouponEntityIdEqualTo(couponEntityId).andValidEqualTo(CouponConstants.TABLE_VALID_EFFECTIVE);
         List<CouponStatusLogPO> logPOList = couponStatusLogPOMapper.selectByExample(statusLogPOExample);
         responseVO.setCouponStatusLogList(logPOList);
 
@@ -773,11 +773,11 @@ public class CouponEntityServiceImpl implements CouponEntityService{
 
         //兑换券全部成功
         CouponEntityPOExample entityPOExampleRequest = new CouponEntityPOExample();
-        entityPOExampleRequest.createCriteria().andCouponCodeEqualTo(couponCode).andValidEqualTo(SystemConstants.TABLE_VALID_EFFECTIVE);
+        entityPOExampleRequest.createCriteria().andCouponCodeEqualTo(couponCode).andValidEqualTo(CouponConstants.TABLE_VALID_EFFECTIVE);
         CouponEntityPO entityPOResult = couponEntityPOMapper.selectByExample(entityPOExampleRequest).get(0);
         CouponDefinitionPOWithBLOBs definitionPOResult = couponDefinitionPOMapper.selectByPrimaryKey(Long.parseLong(entityPOResult.getCouponDefinitionId()));
-        if(definitionPOResult.getPreferentialType().equals(SystemConstants.PREFERENTIAL_TYPE_EXCHANGE)){
-            couponStatus = SystemConstants.COUPON_ERP_SUCCESS;
+        if(definitionPOResult.getPreferentialType().equals(CouponConstants.PREFERENTIAL_TYPE_EXCHANGE)){
+            couponStatus = CouponConstants.COUPON_ERP_SUCCESS;
         }
 
 
@@ -800,40 +800,40 @@ public class CouponEntityServiceImpl implements CouponEntityService{
             return responseData;
         }
 
-        if(couponStatus.equals(SystemConstants.COUPON_ERP_FAIL)){
+        if(couponStatus.equals(CouponConstants.COUPON_ERP_FAIL)){
             //发券失败
-            couponStatus = SystemConstants.COUPON_STATUS_SYNC_FAIL;
+            couponStatus = CouponConstants.COUPON_STATUS_SYNC_FAIL;
         }
 
-        if(couponStatus.equals(SystemConstants.COUPON_ERP_SUCCESS)){
+        if(couponStatus.equals(CouponConstants.COUPON_ERP_SUCCESS)){
             //发券成功
-            couponStatus = SystemConstants.COUPON_STATUS_UNUSED;
+            couponStatus = CouponConstants.COUPON_STATUS_UNUSED;
         }
 
         //更新券状态-券实例表
         CouponEntityPO entityPO = new CouponEntityPO();
         entityPO.setCouponStatus(couponStatus);
         CouponEntityPOExample entityPOExample = new CouponEntityPOExample();
-        entityPOExample.createCriteria().andCouponCodeEqualTo(couponCode).andValidEqualTo(SystemConstants.TABLE_VALID_EFFECTIVE);
+        entityPOExample.createCriteria().andCouponCodeEqualTo(couponCode).andValidEqualTo(CouponConstants.TABLE_VALID_EFFECTIVE);
         couponEntityPOMapper.updateByExampleSelective(entityPO,entityPOExample);
 
-        if(SystemConstants.COUPON_SEND_AGAIN_YES.equals(ifSendAgain)){
+        if(CouponConstants.COUPON_SEND_AGAIN_YES.equals(ifSendAgain)){
             //补发
 
             CouponSendFailLogPOExample failLogPOExample = new CouponSendFailLogPOExample();
-            failLogPOExample.createCriteria().andCouponCodeEqualTo(couponCode).andValidEqualTo(SystemConstants.TABLE_VALID_EFFECTIVE);
+            failLogPOExample.createCriteria().andCouponCodeEqualTo(couponCode).andValidEqualTo(CouponConstants.TABLE_VALID_EFFECTIVE);
             CouponSendFailLogPO failLogPO = couponSendFailLogPOMapper.selectByExample(failLogPOExample).get(0);
 
             //如果是补发，且成功，更新失败表状态为已补发
-            if(SystemConstants.COUPON_STATUS_UNUSED.equals(couponStatus)){
+            if(CouponConstants.COUPON_STATUS_UNUSED.equals(couponStatus)){
 
-                couponSendFailLogService.updateSendStatus(SystemConstants.COUPON_SEND_YES,couponCode);
+                couponSendFailLogService.updateSendStatus(CouponConstants.COUPON_SEND_YES,couponCode);
 
             }
             //如果失败，更新失败表状态为待补发
-            if(SystemConstants.COUPON_STATUS_SYNC_FAIL.equals(couponStatus)){
+            if(CouponConstants.COUPON_STATUS_SYNC_FAIL.equals(couponStatus)){
 
-                couponSendFailLogService.updateSendStatus(SystemConstants.COUPON_SEND_NO,couponCode);
+                couponSendFailLogService.updateSendStatus(CouponConstants.COUPON_SEND_NO,couponCode);
             }
 
 
@@ -844,7 +844,7 @@ public class CouponEntityServiceImpl implements CouponEntityService{
                 CouponBatchSendRecordPO batchSendRecordResult = couponBatchSendRecordService.findBatchSendRecord(failLogPO.getBatchSendCode());
 
                 //发送成功
-                if(couponStatus.equals(SystemConstants.COUPON_STATUS_UNUSED)){
+                if(couponStatus.equals(CouponConstants.COUPON_STATUS_UNUSED)){
 
                     //更新批次失败数量
                     batchSendRecordResult.setFailNum(batchSendRecordResult.getFailNum()-1);
@@ -893,14 +893,14 @@ public class CouponEntityServiceImpl implements CouponEntityService{
 
 
 
-        }else if(SystemConstants.COUPON_SEND_AGAIN_NO.equals(ifSendAgain)){
+        }else if(CouponConstants.COUPON_SEND_AGAIN_NO.equals(ifSendAgain)){
             //非补发
 
             //如果是初次发，且失败，向失败表中插入一条记录
-            if(SystemConstants.COUPON_STATUS_SYNC_FAIL.equals(couponStatus)){
+            if(CouponConstants.COUPON_STATUS_SYNC_FAIL.equals(couponStatus)){
 
                 CouponEntityPOExample entityExample = new CouponEntityPOExample();
-                entityExample.createCriteria().andCouponCodeEqualTo(couponCode).andValidEqualTo(SystemConstants.TABLE_VALID_EFFECTIVE);
+                entityExample.createCriteria().andCouponCodeEqualTo(couponCode).andValidEqualTo(CouponConstants.TABLE_VALID_EFFECTIVE);
                 List<CouponEntityPO> entityResult = couponEntityPOMapper.selectByExample(entityExample);
                 CouponEntityPO couponEntityPO = entityResult.get(0);
 
@@ -913,7 +913,7 @@ public class CouponEntityServiceImpl implements CouponEntityService{
 
         
         //发送成功的券，发送微信和短信消息
-        if(SystemConstants.COUPON_STATUS_UNUSED.equals(couponStatus)){
+        if(CouponConstants.COUPON_STATUS_UNUSED.equals(couponStatus)){
 
             sendCouponService.sendCouponOnline(definitionPOResult,entityPOResult);
 
@@ -945,10 +945,10 @@ public class CouponEntityServiceImpl implements CouponEntityService{
         if(CollectionUtils.isNotEmpty(param.getCouponFailList())) {
             String couponCode = param.getCouponFailList().get(0);
             CouponEntityPOExample entityPOExample = new CouponEntityPOExample();
-            entityPOExample.createCriteria().andCouponCodeEqualTo(couponCode).andValidEqualTo(SystemConstants.TABLE_VALID_EFFECTIVE);
+            entityPOExample.createCriteria().andCouponCodeEqualTo(couponCode).andValidEqualTo(CouponConstants.TABLE_VALID_EFFECTIVE);
             CouponEntityPO entityPO = couponEntityPOMapper.selectByExample(entityPOExample).get(0);
             CouponDefinitionPO definitionPO = couponDefinitionPOMapper.selectByPrimaryKey(Long.parseLong(entityPO.getCouponDefinitionId()));
-            if (definitionPO.getPreferentialType().equals(SystemConstants.PREFERENTIAL_TYPE_EXCHANGE)) {
+            if (definitionPO.getPreferentialType().equals(CouponConstants.PREFERENTIAL_TYPE_EXCHANGE)) {
                 param.setCouponSuccessList(param.getCouponFailList());
                 param.setCouponFailList(new ArrayList<>());
             }
@@ -956,11 +956,11 @@ public class CouponEntityServiceImpl implements CouponEntityService{
 
         //更新券实例表-成功信息
         if (CollectionUtils.isNotEmpty(param.getCouponSuccessList())) {
-            couponEntityPOMapper.updateCouponStatusBatch(param.getCouponSuccessList(), SystemConstants.COUPON_STATUS_UNUSED);
+            couponEntityPOMapper.updateCouponStatusBatch(param.getCouponSuccessList(), CouponConstants.COUPON_STATUS_UNUSED);
         }
         //更新券实例表-失败信息
         if (CollectionUtils.isNotEmpty(param.getCouponFailList())) {
-            couponEntityPOMapper.updateCouponStatusBatch(param.getCouponFailList(), SystemConstants.COUPON_STATUS_SYNC_FAIL);
+            couponEntityPOMapper.updateCouponStatusBatch(param.getCouponFailList(), CouponConstants.COUPON_STATUS_SYNC_FAIL);
         }
 
         if(StringUtils.isNotBlank(param.getBatchSendCode())) {
@@ -969,17 +969,17 @@ public class CouponEntityServiceImpl implements CouponEntityService{
             //根据批次code查询批次信息
             CouponBatchSendRecordPO batchPOResult = couponBatchSendRecordService.findBatchSendRecord(param.getBatchSendCode());
 
-            if (param.getIfSendAgain().equals(SystemConstants.COUPON_SEND_AGAIN_YES)) {
+            if (param.getIfSendAgain().equals(CouponConstants.COUPON_SEND_AGAIN_YES)) {
                 //补发
 
                 //补发成功，失败日志表更新为已补发
                 if (CollectionUtils.isNotEmpty(param.getCouponSuccessList())) {
-                    couponSendFailLogPOMapper.updateSendStatusByCouponCodeList(param.getCouponSuccessList(), SystemConstants.COUPON_SEND_YES);
+                    couponSendFailLogPOMapper.updateSendStatusByCouponCodeList(param.getCouponSuccessList(), CouponConstants.COUPON_SEND_YES);
                 }
 
                 //补发失败，失败日志表更新为待补发
                 if (CollectionUtils.isNotEmpty(param.getCouponFailList())) {
-                    couponSendFailLogPOMapper.updateSendStatusByCouponCodeList(param.getCouponFailList(), SystemConstants.COUPON_SEND_NO);
+                    couponSendFailLogPOMapper.updateSendStatusByCouponCodeList(param.getCouponFailList(), CouponConstants.COUPON_SEND_NO);
                 }
 
                 //更新批次失败数量
@@ -1000,7 +1000,7 @@ public class CouponEntityServiceImpl implements CouponEntityService{
                 }
 
 
-            } else if (param.getIfSendAgain().equals(SystemConstants.COUPON_SEND_AGAIN_NO)) {
+            } else if (param.getIfSendAgain().equals(CouponConstants.COUPON_SEND_AGAIN_NO)) {
                 //初次发
 
                 //更新批次失败数量
@@ -1029,17 +1029,17 @@ public class CouponEntityServiceImpl implements CouponEntityService{
 
             //如果批次code为空，则为单张券的批量补发
 
-            if (param.getIfSendAgain().equals(SystemConstants.COUPON_SEND_AGAIN_YES)) {
+            if (param.getIfSendAgain().equals(CouponConstants.COUPON_SEND_AGAIN_YES)) {
                 //更新失败表状态
 
                 //补发成功，失败日志表更新为已补发
                 if (CollectionUtils.isNotEmpty(param.getCouponSuccessList())) {
-                    couponSendFailLogPOMapper.updateSendStatusByCouponCodeList(param.getCouponSuccessList(), SystemConstants.COUPON_SEND_YES);
+                    couponSendFailLogPOMapper.updateSendStatusByCouponCodeList(param.getCouponSuccessList(), CouponConstants.COUPON_SEND_YES);
                 }
 
                 //补发失败，失败日志表更新为待补发
                 if (CollectionUtils.isNotEmpty(param.getCouponFailList())) {
-                    couponSendFailLogPOMapper.updateSendStatusByCouponCodeList(param.getCouponFailList(), SystemConstants.COUPON_SEND_NO);
+                    couponSendFailLogPOMapper.updateSendStatusByCouponCodeList(param.getCouponFailList(), CouponConstants.COUPON_SEND_NO);
                 }
 
             }
@@ -1134,12 +1134,12 @@ public class CouponEntityServiceImpl implements CouponEntityService{
 
             for (int i = 0; i < failPOList.size(); i++) {
                 failPOList.get(i).setBatchSendCode(batchPOResult.getBatchSendCode());
-                failPOList.get(i).setSendStatus(SystemConstants.COUPON_SEND_NO);
-                failPOList.get(i).setValid(SystemConstants.TABLE_VALID_EFFECTIVE);
+                failPOList.get(i).setSendStatus(CouponConstants.COUPON_SEND_NO);
+                failPOList.get(i).setValid(CouponConstants.TABLE_VALID_EFFECTIVE);
                 failPOList.get(i).setCreateDate(TimeUtils.getNowTime());
                 failPOList.get(i).setBizCode(batchPOResult.getBizCode());
                 failPOList.get(i).setBizType(batchPOResult.getBizType());
-                failPOList.get(i).setFailReason(SystemConstants.SEND_COUPON_FAIL_REASON_ERP);
+                failPOList.get(i).setFailReason(CouponConstants.SEND_COUPON_FAIL_REASON_ERP);
                 failPOList.get(i).setFailTimes(0);
             }
 
@@ -1249,7 +1249,7 @@ public class CouponEntityServiceImpl implements CouponEntityService{
 
             //查询券状态变更流水
             CouponStatusLogPOExample statusLogPOExample = new CouponStatusLogPOExample();
-            statusLogPOExample.createCriteria().andCouponEntityIdEqualTo(couponEntityId).andValidEqualTo(SystemConstants.TABLE_VALID_EFFECTIVE);
+            statusLogPOExample.createCriteria().andCouponEntityIdEqualTo(couponEntityId).andValidEqualTo(CouponConstants.TABLE_VALID_EFFECTIVE);
             List<CouponStatusLogPO> logPOList = couponStatusLogPOMapper.selectByExample(statusLogPOExample);
 
             responseVO.setWxChannelInfoVo(channelResult.getData().getWxChannelInfoVo());
@@ -1323,9 +1323,9 @@ public class CouponEntityServiceImpl implements CouponEntityService{
         }
 
         List<Byte> couponStatusList = new ArrayList<>();
-        couponStatusList.add(SystemConstants.COUPON_STATUS_UNUSED);
-        couponStatusList.add(SystemConstants.COUPON_STATUS_OVERDUE);
-        couponStatusList.add(SystemConstants.COUPON_STATUS_USED);
+        couponStatusList.add(CouponConstants.COUPON_STATUS_UNUSED);
+        couponStatusList.add(CouponConstants.COUPON_STATUS_OVERDUE);
+        couponStatusList.add(CouponConstants.COUPON_STATUS_USED);
 
         CouponEntityPOExample entityPOExample = new CouponEntityPOExample();
         entityPOExample.createCriteria().andSendBusinessIdEqualTo(param.getSendBusinessId())

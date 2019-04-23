@@ -20,7 +20,7 @@ import com.bizvane.couponfacade.models.vo.SendCouponBatchRequestVO;
 import com.bizvane.couponfacade.utils.PageFormUtil;
 import com.bizvane.couponfacade.utils.TimeUtils;
 import com.bizvane.couponservice.common.constants.SysResponseEnum;
-import com.bizvane.couponservice.common.constants.SystemConstants;
+import com.bizvane.couponfacade.constants.CouponConstants;
 import com.bizvane.couponservice.common.utils.BusinessCodeUtil;
 import com.bizvane.couponservice.common.utils.CouponJobUtil;
 import com.bizvane.couponservice.mappers.CouponDefinitionPOMapper;
@@ -171,7 +171,7 @@ public class CouponManualServiceImpl implements CouponManualService {
         }
 
         //判断是否过期,日期区间存在过期情况
-        if(SystemConstants.VALID_TYPE__INTERVAL.equals(definitionPO.getValidType())){
+        if(CouponConstants.VALID_TYPE__INTERVAL.equals(definitionPO.getValidType())){
 
             SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
             Date endDate = format.parse(format.format(definitionPO.getValidDateEnd()));
@@ -213,7 +213,7 @@ public class CouponManualServiceImpl implements CouponManualService {
         couponManualPO.setCreateDate(TimeUtils.getNowTime());
         couponManualPO.setCreateUserId(accountPo.getSysAccountId());
         couponManualPO.setCreateUserName(accountPo.getName());
-        couponManualPO.setValid(SystemConstants.TABLE_VALID_EFFECTIVE);
+        couponManualPO.setValid(CouponConstants.TABLE_VALID_EFFECTIVE);
         //将条件转为String格式，存入数据库
         memberInfo.setBrandId(accountPo.getBrandId());
         couponManualPO.setMemberCondition(JSONObject.toJSONString(memberInfo));
@@ -227,7 +227,7 @@ public class CouponManualServiceImpl implements CouponManualService {
         //检查是否需要审核
         SysCheckConfigPo checkConfigPO = new SysCheckConfigPo();
         checkConfigPO.setSysBrandId(accountPo.getBrandId());
-        checkConfigPO.setFunctionCode(SystemConstants.COUPON_CHECK_FUNCTION_CODE);
+        checkConfigPO.setFunctionCode(CouponConstants.COUPON_CHECK_FUNCTION_CODE);
         ResponseData<Integer> checkConfigResult = sysCheckConfigServiceRpc.ifCheckConfig(checkConfigPO);
 
         if(SysResponseEnum.SUCCESS.getCode() != checkConfigResult.getCode()){
@@ -250,7 +250,7 @@ public class CouponManualServiceImpl implements CouponManualService {
         requestVO.setCreateUserName(accountPo.getCreateUserName());
 
 
-        if (SystemConstants.CHECK_UNNEED.equals(checkConfigResult.getData())) {
+        if (CouponConstants.CHECK_UNNEED.equals(checkConfigResult.getData())) {
             //不需要审核,直接发券
 
             //判断发券类型
@@ -262,15 +262,15 @@ public class CouponManualServiceImpl implements CouponManualService {
             //需要审核，新增审核记录
             SysCheckPo checkPo = new SysCheckPo();
             checkPo.setSysBrandId(couponManualPO.getSysBrandId());
-            checkPo.setFunctionCode(SystemConstants.COUPON_CHECK_FUNCTION_CODE);
+            checkPo.setFunctionCode(CouponConstants.COUPON_CHECK_FUNCTION_CODE);
             checkPo.setBusinessType(Integer.parseInt(SendTypeEnum.SEND_COUPON_BATCH.getCode()));
             checkPo.setBusinessId(couponManualPO.getCouponManualId());
             checkPo.setBusinessCode(couponManualPO.getCouponManualId() + "");
             checkPo.setBusinessName(couponManualPO.getTaskName());
             checkPo.setBizName(couponManualPO.getCouponDefinitionName());
-            checkPo.setCheckStatus(SystemConstants.CHECK_STATUS_WAIT);
+            checkPo.setCheckStatus(CouponConstants.CHECK_STATUS_WAIT);
             checkPo.setCreateDate(TimeUtils.getNowTime());
-            checkPo.setValid(SystemConstants.TABLE_VALID_EFFECTIVE);
+            checkPo.setValid(CouponConstants.TABLE_VALID_EFFECTIVE);
 
             sysCheckServiceRpc.addCheck(checkPo);
 
@@ -389,13 +389,13 @@ public class CouponManualServiceImpl implements CouponManualService {
         //更改审核状态
         SysCheckPo checkPo = new SysCheckPo();
         checkPo.setBusinessId(param.getCouponManualId());
-        checkPo.setFunctionCode(SystemConstants.COUPON_CHECK_FUNCTION_CODE);
+        checkPo.setFunctionCode(CouponConstants.COUPON_CHECK_FUNCTION_CODE);
 
         if (CouponManualTaskStatusEnum.TASK_STATUS_CHECK_PASS.getCode().byteValue() == param.getTaskStatus()) {
-            checkPo.setCheckStatus(SystemConstants.CHECK_STATUS_CHECKED);
+            checkPo.setCheckStatus(CouponConstants.CHECK_STATUS_CHECKED);
         }
         if (CouponManualTaskStatusEnum.TASK_STATUS_CHECK_UNPASS.getCode().byteValue() == param.getTaskStatus()) {
-            checkPo.setCheckStatus(SystemConstants.CHECK_STATUS_REJECTED);
+            checkPo.setCheckStatus(CouponConstants.CHECK_STATUS_REJECTED);
         }
         ResponseData<Integer> checkResult = sysCheckServiceRpc.updateCheck(checkPo);
 
@@ -589,7 +589,7 @@ public class CouponManualServiceImpl implements CouponManualService {
         manualUpdate.setCouponDefinitionName(definitionPO.getCouponName());
         manualUpdate.setSendType(param.getSendType());
         manualUpdate.setDiscountMoney(definitionPO.getMoney());
-        manualUpdate.setValid(SystemConstants.TABLE_VALID_EFFECTIVE);
+        manualUpdate.setValid(CouponConstants.TABLE_VALID_EFFECTIVE);
         //将条件转为String格式，存入数据库
         memberInfo.setBrandId(accountPo.getBrandId());
         manualUpdate.setMemberCondition(JSONObject.toJSONString(memberInfo));
@@ -610,17 +610,17 @@ public class CouponManualServiceImpl implements CouponManualService {
         checkPo.setSysCheckId(param.getSysCheckId());
 
         checkPo.setSysBrandId(couponManualPO.getSysBrandId());
-        checkPo.setFunctionCode(SystemConstants.COUPON_CHECK_FUNCTION_CODE);
+        checkPo.setFunctionCode(CouponConstants.COUPON_CHECK_FUNCTION_CODE);
         checkPo.setBusinessType(Integer.parseInt(SendTypeEnum.SEND_COUPON_BATCH.getCode()));
         checkPo.setBusinessId(couponManualPO.getCouponManualId());
         checkPo.setBusinessCode(couponManualPO.getCouponManualId() + "");
         checkPo.setBusinessName(couponManualPO.getTaskName());
         checkPo.setBizName(couponManualPO.getCouponDefinitionName());
-        checkPo.setCheckStatus(SystemConstants.CHECK_STATUS_WAIT);
+        checkPo.setCheckStatus(CouponConstants.CHECK_STATUS_WAIT);
         checkPo.setCreateDate(TimeUtils.getNowTime());
         checkPo.setCreateUserId(accountPo.getSysAccountId());
         checkPo.setCreateUserName(accountPo.getName());
-        checkPo.setValid(SystemConstants.TABLE_VALID_EFFECTIVE);
+        checkPo.setValid(CouponConstants.TABLE_VALID_EFFECTIVE);
 
         sysCheckServiceRpc.updateCheck(checkPo);
 
@@ -713,7 +713,7 @@ public class CouponManualServiceImpl implements CouponManualService {
 
 
         //判断发券渠道
-        if (SystemConstants.USE_CHANNEL_ONLINE.equals(definitionPO.getUseChannel())) {
+        if (CouponConstants.USE_CHANNEL_ONLINE.equals(definitionPO.getUseChannel())) {
 
             //更新手动发券状态为-发送中
             updateTaskStatus(requestVO.getBusinessId(),CouponManualTaskStatusEnum.TASK_STATUS_SENDING.getCode().byteValue());
@@ -727,7 +727,7 @@ public class CouponManualServiceImpl implements CouponManualService {
                 return sendNowResult;
             }
 
-        } else if (SystemConstants.USE_CHANNEL_OFFLINE.equals(definitionPO.getUseChannel())) {
+        } else if (CouponConstants.USE_CHANNEL_OFFLINE.equals(definitionPO.getUseChannel())) {
 
             //更新手动发券状态为-同步中
             updateTaskStatus(requestVO.getBusinessId(), CouponManualTaskStatusEnum.TASK_STATUS_SYNCING.getCode().byteValue());
@@ -741,7 +741,7 @@ public class CouponManualServiceImpl implements CouponManualService {
                 return offlineResult;
             }
 
-        } else if (SystemConstants.USE_CHANNEL_ANY.equals(definitionPO.getUseChannel())) {
+        } else if (CouponConstants.USE_CHANNEL_ANY.equals(definitionPO.getUseChannel())) {
 
 
             //全渠道
@@ -855,7 +855,7 @@ public class CouponManualServiceImpl implements CouponManualService {
                     continue;
                 }
                 //判断是否过期,日期区间存在过期情况
-                if(SystemConstants.VALID_TYPE__INTERVAL.equals(definitionPO.getValidType())){
+                if(CouponConstants.VALID_TYPE__INTERVAL.equals(definitionPO.getValidType())){
 
                     SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
                     Date endDate = format.parse(format.format(definitionPO.getValidDateEnd()));
@@ -882,7 +882,7 @@ public class CouponManualServiceImpl implements CouponManualService {
             CouponDefinitionPOWithBLOBs definitionPO = couponDefinitionPOMapper.selectByPrimaryKey(Long.parseLong(param.getCouponDefinitionIds()));
             if (definitionPO != null) {
                 //判断是否过期,日期区间存在过期情况
-                if(SystemConstants.VALID_TYPE__INTERVAL.equals(definitionPO.getValidType())){
+                if(CouponConstants.VALID_TYPE__INTERVAL.equals(definitionPO.getValidType())){
 
                     SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
                     Date endDate = format.parse(format.format(definitionPO.getValidDateEnd()));
@@ -935,7 +935,7 @@ public class CouponManualServiceImpl implements CouponManualService {
         couponManualPO.setCreateUserId(accountPo.getSysAccountId());
         couponManualPO.setCreateUserName(accountPo.getName());
 
-        couponManualPO.setValid(SystemConstants.TABLE_VALID_EFFECTIVE);
+        couponManualPO.setValid(CouponConstants.TABLE_VALID_EFFECTIVE);
         //将条件转为String格式，存入数据库
         memberInfo.setBrandId(accountPo.getBrandId());
 
@@ -948,7 +948,7 @@ public class CouponManualServiceImpl implements CouponManualService {
         ResponseData<List<SysCheckConfigVo>> checkConfigListAll=sysCheckConfigServiceRpc.getCheckConfigListAll(accountPo.getBrandId());
         if(CollectionUtils.isNotEmpty(checkConfigListAll.getData())){
         	for(SysCheckConfigVo sysCheckConfigVo:checkConfigListAll.getData()) {
-        		if(sysCheckConfigVo.getFunctionCode().equals(SystemConstants.COUPON_CHECK_FUNCTION_CODE)) {
+        		if(sysCheckConfigVo.getFunctionCode().equals(CouponConstants.COUPON_CHECK_FUNCTION_CODE)) {
         			couponManualPO.setReviewUserName(sysCheckConfigVo.getName());
         			couponManualPO.setReviewUserId(sysCheckConfigVo.getSysCheckConfigId());
         		}
@@ -960,7 +960,7 @@ public class CouponManualServiceImpl implements CouponManualService {
         //检查是否需要审核
         SysCheckConfigPo checkConfigPO = new SysCheckConfigPo();
         checkConfigPO.setSysBrandId(accountPo.getBrandId());
-        checkConfigPO.setFunctionCode(SystemConstants.COUPON_CHECK_FUNCTION_CODE);
+        checkConfigPO.setFunctionCode(CouponConstants.COUPON_CHECK_FUNCTION_CODE);
         ResponseData<Integer> checkConfigResult = sysCheckConfigServiceRpc.ifCheckConfig(checkConfigPO);
 
         if(SysResponseEnum.SUCCESS.getCode() != checkConfigResult.getCode()){
@@ -984,7 +984,7 @@ public class CouponManualServiceImpl implements CouponManualService {
         requestVO.setCreateUserName(accountPo.getCreateUserName());
 
 
-        if (SystemConstants.CHECK_UNNEED.equals(checkConfigResult.getData())) {
+        if (CouponConstants.CHECK_UNNEED.equals(checkConfigResult.getData())) {
             //不需要审核,直接发券
 
             //判断发券类型
@@ -996,15 +996,15 @@ public class CouponManualServiceImpl implements CouponManualService {
             //需要审核，新增审核记录
             SysCheckPo checkPo = new SysCheckPo();
             checkPo.setSysBrandId(couponManualPO.getSysBrandId());
-            checkPo.setFunctionCode(SystemConstants.COUPON_CHECK_FUNCTION_CODE);
+            checkPo.setFunctionCode(CouponConstants.COUPON_CHECK_FUNCTION_CODE);
             checkPo.setBusinessType(Integer.parseInt(SendTypeEnum.SEND_COUPON_BATCH.getCode()));
             checkPo.setBusinessId(couponManualPO.getCouponManualId());
             checkPo.setBusinessCode(couponManualPO.getCouponManualId() + "");
             checkPo.setBusinessName(couponManualPO.getTaskName());
             checkPo.setBizName(couponManualPO.getCouponDefinitionName());
-            checkPo.setCheckStatus(SystemConstants.CHECK_STATUS_WAIT);
+            checkPo.setCheckStatus(CouponConstants.CHECK_STATUS_WAIT);
             checkPo.setCreateDate(TimeUtils.getNowTime());
-            checkPo.setValid(SystemConstants.TABLE_VALID_EFFECTIVE);
+            checkPo.setValid(CouponConstants.TABLE_VALID_EFFECTIVE);
 
             sysCheckServiceRpc.addCheck(checkPo);
 
@@ -1085,7 +1085,7 @@ public class CouponManualServiceImpl implements CouponManualService {
         	
 
             //判断发券渠道
-            if (SystemConstants.USE_CHANNEL_ONLINE.equals(po.getUseChannel())) {
+            if (CouponConstants.USE_CHANNEL_ONLINE.equals(po.getUseChannel())) {
 
                 //更新手动发券状态为-发送中
                 updateTaskStatus(requestVO.getBusinessId(),CouponManualTaskStatusEnum.TASK_STATUS_SENDING.getCode().byteValue());
@@ -1093,7 +1093,7 @@ public class CouponManualServiceImpl implements CouponManualService {
                 //线上发券
                 sendCouponService.sendCouponBatchOnlineNow(po, requestVO, batchPO);
 
-            } else if (SystemConstants.USE_CHANNEL_OFFLINE.equals(po.getUseChannel())) {
+            } else if (CouponConstants.USE_CHANNEL_OFFLINE.equals(po.getUseChannel())) {
 
                 //更新手动发券状态为-同步中
                 updateTaskStatus(requestVO.getBusinessId(), CouponManualTaskStatusEnum.TASK_STATUS_SYNCING.getCode().byteValue());
@@ -1101,7 +1101,7 @@ public class CouponManualServiceImpl implements CouponManualService {
                 //线下发券
                 sendCouponService.sendCouponBatchOfflineNow(po, requestVO,batchPO);
 
-            } else if (SystemConstants.USE_CHANNEL_ANY.equals(po.getUseChannel())) {
+            } else if (CouponConstants.USE_CHANNEL_ANY.equals(po.getUseChannel())) {
 
 
                 //全渠道
@@ -1165,7 +1165,7 @@ public class CouponManualServiceImpl implements CouponManualService {
                     continue;
                 }
                 //判断是否过期,日期区间存在过期情况
-                if(SystemConstants.VALID_TYPE__INTERVAL.equals(definitionPO.getValidType())){
+                if(CouponConstants.VALID_TYPE__INTERVAL.equals(definitionPO.getValidType())){
 
                     SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
                     Date endDate = format.parse(format.format(definitionPO.getValidDateEnd()));
@@ -1192,7 +1192,7 @@ public class CouponManualServiceImpl implements CouponManualService {
             CouponDefinitionPOWithBLOBs definitionPO = couponDefinitionPOMapper.selectByPrimaryKey(Long.parseLong(param.getCouponDefinitionIds()));
             if (definitionPO != null) {
                 //判断是否过期,日期区间存在过期情况
-                if(SystemConstants.VALID_TYPE__INTERVAL.equals(definitionPO.getValidType())){
+                if(CouponConstants.VALID_TYPE__INTERVAL.equals(definitionPO.getValidType())){
 
                     SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
                     Date endDate = format.parse(format.format(definitionPO.getValidDateEnd()));
@@ -1250,7 +1250,7 @@ public class CouponManualServiceImpl implements CouponManualService {
         manualUpdate.setCouponDefinitionName(definitionNameStr);
         manualUpdate.setSendType(param.getSendType());
         //manualUpdate.setDiscountMoney(definitionPO.getMoney());
-        manualUpdate.setValid(SystemConstants.TABLE_VALID_EFFECTIVE);
+        manualUpdate.setValid(CouponConstants.TABLE_VALID_EFFECTIVE);
         //将条件转为String格式，存入数据库
         memberInfo.setBrandId(accountPo.getBrandId());
         manualUpdate.setMemberCondition(JSONObject.toJSONString(memberInfo));
@@ -1271,17 +1271,17 @@ public class CouponManualServiceImpl implements CouponManualService {
         checkPo.setSysCheckId(param.getSysCheckId());
 
         checkPo.setSysBrandId(couponManualPO.getSysBrandId());
-        checkPo.setFunctionCode(SystemConstants.COUPON_CHECK_FUNCTION_CODE);
+        checkPo.setFunctionCode(CouponConstants.COUPON_CHECK_FUNCTION_CODE);
         checkPo.setBusinessType(Integer.parseInt(SendTypeEnum.SEND_COUPON_BATCH.getCode()));
         checkPo.setBusinessId(couponManualPO.getCouponManualId());
         checkPo.setBusinessCode(couponManualPO.getCouponManualId() + "");
         checkPo.setBusinessName(couponManualPO.getTaskName());
         checkPo.setBizName(couponManualPO.getCouponDefinitionName());
-        checkPo.setCheckStatus(SystemConstants.CHECK_STATUS_WAIT);
+        checkPo.setCheckStatus(CouponConstants.CHECK_STATUS_WAIT);
         checkPo.setCreateDate(TimeUtils.getNowTime());
         checkPo.setCreateUserId(accountPo.getSysAccountId());
         checkPo.setCreateUserName(accountPo.getName());
-        checkPo.setValid(SystemConstants.TABLE_VALID_EFFECTIVE);
+        checkPo.setValid(CouponConstants.TABLE_VALID_EFFECTIVE);
 
         sysCheckServiceRpc.updateCheck(checkPo);
 

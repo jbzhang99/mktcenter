@@ -2,7 +2,7 @@ package com.bizvane.couponservice.service.jobHandler;
 
 import com.bizvane.couponfacade.models.vo.CouponSendAgainRequestVO;
 import com.bizvane.couponservice.common.constants.SysResponseEnum;
-import com.bizvane.couponservice.common.constants.SystemConstants;
+import com.bizvane.couponfacade.constants.CouponConstants;
 import com.bizvane.couponservice.mappers.CouponSendFailLogPOMapper;
 import com.bizvane.couponservice.service.SendCouponService;
 import com.bizvane.utils.responseinfo.ResponseData;
@@ -53,7 +53,7 @@ public class SendBatchAgainJobHandler extends IJobHandler{
             return returnT;
         }
 
-        Byte tryZero = SystemConstants.COUPON_SEND_FAIL_TIMES_ZERO;//重试0次
+        Byte tryZero = CouponConstants.COUPON_SEND_FAIL_TIMES_ZERO;//重试0次
 
         //根据数量查询要发的券
         List<CouponSendAgainRequestVO> againList = couponSendFailLogPOMapper.getListBySendNum(sendNum,tryZero);

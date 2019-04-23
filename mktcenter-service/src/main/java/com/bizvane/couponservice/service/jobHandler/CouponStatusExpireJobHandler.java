@@ -3,7 +3,7 @@ package com.bizvane.couponservice.service.jobHandler;
 import com.bizvane.couponfacade.models.po.CouponEntityPO;
 import com.bizvane.couponfacade.models.po.CouponEntityPOExample;
 import com.bizvane.couponservice.common.constants.SysResponseEnum;
-import com.bizvane.couponservice.common.constants.SystemConstants;
+import com.bizvane.couponfacade.constants.CouponConstants;
 import com.bizvane.couponservice.common.utils.DateUtil;
 import com.bizvane.couponservice.mappers.CouponEntityPOMapper;
 import com.xxl.job.core.biz.model.ReturnT;
@@ -57,11 +57,11 @@ public class CouponStatusExpireJobHandler extends IJobHandler{
         //每天0点将有效期在大前天0点至23:59分59秒置为过期（3日）
         entityPOExample.createCriteria().andValidDateEndGreaterThanOrEqualTo(yesterDayZeroHour)
                 .andValidDateEndLessThanOrEqualTo(yesterDay24Hour)
-                .andValidEqualTo(SystemConstants.TABLE_VALID_EFFECTIVE)
-                .andCouponStatusNotEqualTo(SystemConstants.COUPON_STATUS_USED);
+                .andValidEqualTo(CouponConstants.TABLE_VALID_EFFECTIVE)
+                .andCouponStatusNotEqualTo(CouponConstants.COUPON_STATUS_USED);
        // List<CouponEntityPO> entityPOList = couponEntityPOMapper.selectByExample(entityPOExample);
         CouponEntityPO entityPO = new CouponEntityPO();
-        entityPO.setCouponStatus(SystemConstants.COUPON_STATUS_OVERDUE);
+        entityPO.setCouponStatus(CouponConstants.COUPON_STATUS_OVERDUE);
         couponEntityPOMapper.updateByExampleSelective(entityPO,entityPOExample);
 
         returnT.setCode(SysResponseEnum.SUCCESS.getCode());
