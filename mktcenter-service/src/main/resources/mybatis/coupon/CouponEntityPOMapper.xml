@@ -1376,52 +1376,7 @@
 
     </update>
 
-
-    <resultMap extends="BaseResultMap" id="detailResultMap"
-               type="com.bizvane.couponfacade.models.vo.CouponEntityAndDefinitionVO">
-
-        <result column="coupon_definition_code" jdbcType="VARCHAR" property="couponDefinitionCode"/>
-        <result column="coupon_definition_type" jdbcType="TINYINT" property="couponDefinitionType"/>
-        <result column="erp_coupon_definition_code" jdbcType="VARCHAR" property="erpCouponDefinitionCode"/>
-        <result column="use_channel" jdbcType="TINYINT" property="useChannel"/>
-        <result column="valid_type" jdbcType="TINYINT" property="validType"/>
-        <result column="valid_day" jdbcType="INTEGER" property="validDay"/>
-        <result column="qr_code" jdbcType="VARCHAR" property="qrCode"/>
-        <result column="per_max_num" jdbcType="INTEGER" property="perMaxNum"/>
-        <result column="is_real_name" jdbcType="BIT" property="isRealName"/>
-        <result column="is_transfer" jdbcType="BIT" property="isTransfer"/>
-        <result column="activity_superposition_type" jdbcType="TINYINT" property="activitySuperpositionType"/>
-        <result column="activity_superposition_white_list" jdbcType="VARCHAR"
-                property="activitySuperpositionWhiteList"/>
-        <result column="activity_superposition_black_list" jdbcType="VARCHAR"
-                property="activitySuperpositionBlackList"/>
-        <result column="is_superposition" jdbcType="BIT" property="isSuperposition"/>
-        <result column="is_tag_price_limit" jdbcType="BIT" property="isTagPriceLimit"/>
-        <result column="tag_price_max_preferential_limit" jdbcType="DECIMAL" property="tagPriceMaxPreferentialLimit"/>
-        <result column="min_consume" jdbcType="DECIMAL" property="minConsume"/>
-        <result column="max_preferential" jdbcType="DECIMAL" property="maxPreferential"/>
-        <result column="min_commodity_num" jdbcType="INTEGER" property="minCommodityNum"/>
-        <result column="max_commodity_num" jdbcType="INTEGER" property="maxCommodityNum"/>
-        <result column="min_discount" jdbcType="DECIMAL" property="minDiscount"/>
-        <result column="appliance_commodity_type" jdbcType="TINYINT" property="applianceCommodityType"/>
-        <result column="appliance_store_type" jdbcType="TINYINT" property="applianceStoreType"/>
-        <result column="status" jdbcType="BIT" property="status"/>
-        <result column="is_add_template" jdbcType="BIT" property="isAddTemplate"/>
-        <result column="coupon_superposition_type" jdbcType="TINYINT" property="couponSuperpositionType"/>
-        <result column="superposition_member_card" jdbcType="BIT" property="superpositionMemberCard"/>
-        
-        <result column="transfer_send" jdbcType="BIT" property="transferSend"/>
-        <result column="transfer_coupon_definition_id" jdbcType="BIGINT" property="transferCouponDefinitionId"/>
-        <result column="transfer_member_code" jdbcType="VARCHAR" property="transferMemberCode"/>
-        <result column="transfer_info" jdbcType="VARCHAR" property="transferInfo"/>
-         <result column="use_from" jdbcType="VARCHAR" property="useFrom"/>
-        
-        
-        <result column="getDate" property="getDate"/>
-    </resultMap>
-
-
-    <select id="getCouponListByMemeberCode"  resultMap="detailResultMap">
+    <select id="getCouponListByMemeberCode"  resultType="com.bizvane.couponfacade.models.vo.CouponEntityAndDefinitionVO">
 
     SELECT
       e.coupon_entity_id,
@@ -1481,7 +1436,8 @@
       d.coupon_superposition_type,
       d.transfer_send,
       d.transfer_info,
-      d.superposition_member_card
+      d.superposition_member_card,
+      d.exchange_product_id
       
     FROM
       t_coupon_entity e

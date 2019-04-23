@@ -18,93 +18,92 @@ public interface CouponDefinitionPOMapper {
     //非系统sql
     
     /**
-	 * 只读. 
-	 * @mbg.generated  2019-01-16 17:48:34
-	 */
-	long countByExample(CouponDefinitionPOExample example);
+   * 只读. 
+   * @mbg.generated  2019-04-23 15:56:26
+   */
+  long countByExample(CouponDefinitionPOExample example);
 
-	/**
-	 * 只读. 
-	 * @mbg.generated  2019-01-16 17:48:34
-	 */
-	int deleteByExample(CouponDefinitionPOExample example);
+  /**
+   * 只读. 
+   * @mbg.generated  2019-04-23 15:56:26
+   */
+  int deleteByExample(CouponDefinitionPOExample example);
 
-	/**
-	 * 只读. 
-	 * @mbg.generated  2019-01-16 17:48:34
-	 */
-	int deleteByPrimaryKey(Long couponDefinitionId);
+  /**
+   * 只读. 
+   * @mbg.generated  2019-04-23 15:56:26
+   */
+  int deleteByPrimaryKey(Long couponDefinitionId);
 
-	/**
-	 * 只读. 
-	 * @mbg.generated  2019-01-16 17:48:34
-	 */
-	int insert(CouponDefinitionPOWithBLOBs record);
+  /**
+   * 只读. 
+   * @mbg.generated  2019-04-23 15:56:26
+   */
+  int insert(CouponDefinitionPOWithBLOBs record);
 
-	/**
-	 * 只读. 
-	 * @mbg.generated  2019-01-16 17:48:34
-	 */
-	int insertSelective(CouponDefinitionPOWithBLOBs record);
+  /**
+   * 只读. 
+   * @mbg.generated  2019-04-23 15:56:26
+   */
+  int insertSelective(CouponDefinitionPOWithBLOBs record);
 
-	/**
-	 * 只读. 
-	 * @mbg.generated  2019-01-16 17:48:34
-	 */
-	List<CouponDefinitionPOWithBLOBs> selectByExampleWithBLOBs(CouponDefinitionPOExample example);
+  /**
+   * 只读. 
+   * @mbg.generated  2019-04-23 15:56:26
+   */
+  List<CouponDefinitionPOWithBLOBs> selectByExampleWithBLOBs(CouponDefinitionPOExample example);
 
-	/**
-	 * 只读. 
-	 * @mbg.generated  2019-01-16 17:48:34
-	 */
-	List<CouponDefinitionPO> selectByExample(CouponDefinitionPOExample example);
+  /**
+   * 只读. 
+   * @mbg.generated  2019-04-23 15:56:26
+   */
+  List<CouponDefinitionPO> selectByExample(CouponDefinitionPOExample example);
 
-	/**
-	 * 只读. 
-	 * @mbg.generated  2019-01-16 17:48:34
-	 */
-	CouponDefinitionPOWithBLOBs selectByPrimaryKey(Long couponDefinitionId);
+  /**
+   * 只读. 
+   * @mbg.generated  2019-04-23 15:56:26
+   */
+  CouponDefinitionPOWithBLOBs selectByPrimaryKey(Long couponDefinitionId);
 
-	/**
-	 * 只读. 
-	 * @mbg.generated  2019-01-16 17:48:34
-	 */
-	int updateByExampleSelective(@Param("record") CouponDefinitionPOWithBLOBs record,
-                                 @Param("example") CouponDefinitionPOExample example);
+  /**
+   * 只读. 
+   * @mbg.generated  2019-04-23 15:56:26
+   */
+  int updateByExampleSelective(@Param("record") CouponDefinitionPOWithBLOBs record,
+      @Param("example") CouponDefinitionPOExample example);
 
-	/**
-	 * 只读.
-	 * @mbg.generated  2019-01-16 17:48:34
-	 */
-	int updateByExampleWithBLOBs(@Param("record") CouponDefinitionPOWithBLOBs record,
-                                 @Param("example") CouponDefinitionPOExample example);
+  /**
+   * 只读. 
+   * @mbg.generated  2019-04-23 15:56:26
+   */
+  int updateByExampleWithBLOBs(@Param("record") CouponDefinitionPOWithBLOBs record,
+      @Param("example") CouponDefinitionPOExample example);
 
-	/**
-	 * 只读.
-	 * @mbg.generated  2019-01-16 17:48:34
-	 */
-	int updateByExample(@Param("record") CouponDefinitionPO record,
-                        @Param("example") CouponDefinitionPOExample example);
+  /**
+   * 只读. 
+   * @mbg.generated  2019-04-23 15:56:26
+   */
+  int updateByExample(@Param("record") CouponDefinitionPO record, @Param("example") CouponDefinitionPOExample example);
 
-	/**
-	 * 只读.
-	 * @mbg.generated  2019-01-16 17:48:34
-	 */
-	int updateByPrimaryKeySelective(CouponDefinitionPOWithBLOBs record);
+  /**
+   * 只读. 
+   * @mbg.generated  2019-04-23 15:56:26
+   */
+  int updateByPrimaryKeySelective(CouponDefinitionPOWithBLOBs record);
 
-	/**
-	 * 只读.
-	 * @mbg.generated  2019-01-16 17:48:34
-	 */
-	int updateByPrimaryKeyWithBLOBs(CouponDefinitionPOWithBLOBs record);
+  /**
+   * 只读. 
+   * @mbg.generated  2019-04-23 15:56:26
+   */
+  int updateByPrimaryKeyWithBLOBs(CouponDefinitionPOWithBLOBs record);
 
-	/**
-	 * 只读.
-	 * @mbg.generated  2019-01-16 17:48:34
-	 */
-	int updateByPrimaryKey(CouponDefinitionPO record);
+  /**
+   * 只读. 
+   * @mbg.generated  2019-04-23 15:56:26
+   */
+  int updateByPrimaryKey(CouponDefinitionPO record);
 
-	/**
+    /**
      * 券定义列表
      * @param vo
      * @return

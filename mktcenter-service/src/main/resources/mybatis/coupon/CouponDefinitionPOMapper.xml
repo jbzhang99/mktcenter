@@ -1,15 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.bizvane.couponservice.mappers.CouponDefinitionPOMapper">
-    <cache type="com.bizvane.couponservice.common.system.RedisCache" eviction="LRU"
-           flushInterval="3600000"
-           size="1024"
-           readOnly="false">
-    </cache>
   <resultMap id="BaseResultMap" type="com.bizvane.couponfacade.models.po.CouponDefinitionPO">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2019-01-16 17:48:34.
+      This element was generated on 2019-04-23 15:56:26.
     -->
     <id column="coupon_definition_id" jdbcType="BIGINT" property="couponDefinitionId" />
     <result column="sys_company_id" jdbcType="BIGINT" property="sysCompanyId" />
@@ -23,6 +18,7 @@
     <result column="preferential_type" jdbcType="TINYINT" property="preferentialType" />
     <result column="money" jdbcType="DECIMAL" property="money" />
     <result column="discount" jdbcType="DECIMAL" property="discount" />
+    <result column="exchange_product_id" jdbcType="CHAR" property="exchangeProductId" />
     <result column="valid_type" jdbcType="TINYINT" property="validType" />
     <result column="valid_date_start" jdbcType="TIMESTAMP" property="validDateStart" />
     <result column="valid_date_end" jdbcType="TIMESTAMP" property="validDateEnd" />
@@ -66,7 +62,7 @@
   <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.bizvane.couponfacade.models.po.CouponDefinitionPOWithBLOBs">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2019-01-16 17:48:34.
+      This element was generated on 2019-04-23 15:56:26.
     -->
     <result column="commodity_whitelist" jdbcType="LONGVARCHAR" property="commodityWhitelist" />
     <result column="commodity_blacklist" jdbcType="LONGVARCHAR" property="commodityBlacklist" />
@@ -76,7 +72,7 @@
   <sql id="Example_Where_Clause">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2019-01-16 17:48:34.
+      This element was generated on 2019-04-23 15:56:26.
     -->
     <where>
       <foreach collection="oredCriteria" item="criteria" separator="or">
@@ -109,7 +105,7 @@
   <sql id="Update_By_Example_Where_Clause">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2019-01-16 17:48:34.
+      This element was generated on 2019-04-23 15:56:26.
     -->
     <where>
       <foreach collection="example.oredCriteria" item="criteria" separator="or">
@@ -142,30 +138,31 @@
   <sql id="Base_Column_List">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2019-01-16 17:48:34.
+      This element was generated on 2019-04-23 15:56:26.
     -->
     coupon_definition_id, sys_company_id, sys_brand_id, brand_code, coupon_definition_code, 
     coupon_definition_type, erp_coupon_definition_code, coupon_name, use_channel, preferential_type, 
-    money, discount, valid_type, valid_date_start, valid_date_end, valid_day, qr_code, 
-    img, per_max_num, is_real_name, is_transfer, activity_superposition_type, activity_superposition_white_list, 
-    activity_superposition_black_list, is_superposition, is_tag_price_limit, tag_price_max_preferential_limit, 
-    min_consume, max_preferential, min_commodity_num, max_commodity_num, min_discount, 
-    appliance_commodity_type, appliance_store_type, info, remark, status, create_user_id, 
-    create_user_name, create_date, modified_user_id, modified_user_name, modified_date, 
-    valid, is_add_template, coupon_superposition_type, superposition_member_card, transfer_send, 
-    transfer_coupon_definition_id, transfer_info, transfer_fission
+    money, discount, exchange_product_id, valid_type, valid_date_start, valid_date_end, 
+    valid_day, qr_code, img, per_max_num, is_real_name, is_transfer, activity_superposition_type, 
+    activity_superposition_white_list, activity_superposition_black_list, is_superposition, 
+    is_tag_price_limit, tag_price_max_preferential_limit, min_consume, max_preferential, 
+    min_commodity_num, max_commodity_num, min_discount, appliance_commodity_type, appliance_store_type, 
+    info, remark, status, create_user_id, create_user_name, create_date, modified_user_id, 
+    modified_user_name, modified_date, valid, is_add_template, coupon_superposition_type, 
+    superposition_member_card, transfer_send, transfer_coupon_definition_id, transfer_info, 
+    transfer_fission
   </sql>
   <sql id="Blob_Column_List">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2019-01-16 17:48:34.
+      This element was generated on 2019-04-23 15:56:26.
     -->
     commodity_whitelist, commodity_blacklist, store_whitelist, store_blacklist
   </sql>
   <select id="selectByExampleWithBLOBs" parameterType="com.bizvane.couponfacade.models.po.CouponDefinitionPOExample" resultMap="ResultMapWithBLOBs">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2019-01-16 17:48:34.
+      This element was generated on 2019-04-23 15:56:26.
     -->
     select
     <if test="distinct">
@@ -185,7 +182,7 @@
   <select id="selectByExample" parameterType="com.bizvane.couponfacade.models.po.CouponDefinitionPOExample" resultMap="BaseResultMap">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2019-01-16 17:48:34.
+      This element was generated on 2019-04-23 15:56:26.
     -->
     select
     <if test="distinct">
@@ -203,7 +200,7 @@
   <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="ResultMapWithBLOBs">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2019-01-16 17:48:34.
+      This element was generated on 2019-04-23 15:56:26.
     -->
     select 
     <include refid="Base_Column_List" />
@@ -215,7 +212,7 @@
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2019-01-16 17:48:34.
+      This element was generated on 2019-04-23 15:56:26.
     -->
     delete from t_coupon_definition
     where coupon_definition_id = #{couponDefinitionId,jdbcType=BIGINT}
@@ -223,7 +220,7 @@
   <delete id="deleteByExample" parameterType="com.bizvane.couponfacade.models.po.CouponDefinitionPOExample">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2019-01-16 17:48:34.
+      This element was generated on 2019-04-23 15:56:26.
     -->
     delete from t_coupon_definition
     <if test="_parameter != null">
@@ -233,7 +230,7 @@
   <insert id="insert" parameterType="com.bizvane.couponfacade.models.po.CouponDefinitionPOWithBLOBs">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2019-01-16 17:48:34.
+      This element was generated on 2019-04-23 15:56:26.
     -->
     <selectKey keyProperty="couponDefinitionId" order="AFTER" resultType="java.lang.Long">
       SELECT LAST_INSERT_ID()
@@ -242,10 +239,10 @@
       coupon_definition_code, coupon_definition_type, 
       erp_coupon_definition_code, coupon_name, use_channel, 
       preferential_type, money, discount, 
-      valid_type, valid_date_start, valid_date_end, 
-      valid_day, qr_code, img, 
-      per_max_num, is_real_name, is_transfer, 
-      activity_superposition_type, activity_superposition_white_list, 
+      exchange_product_id, valid_type, valid_date_start, 
+      valid_date_end, valid_day, qr_code, 
+      img, per_max_num, is_real_name, 
+      is_transfer, activity_superposition_type, activity_superposition_white_list, 
       activity_superposition_black_list, is_superposition, 
       is_tag_price_limit, tag_price_max_preferential_limit, 
       min_consume, max_preferential, min_commodity_num, 
@@ -262,10 +259,10 @@
       #{couponDefinitionCode,jdbcType=VARCHAR}, #{couponDefinitionType,jdbcType=TINYINT}, 
       #{erpCouponDefinitionCode,jdbcType=VARCHAR}, #{couponName,jdbcType=VARCHAR}, #{useChannel,jdbcType=TINYINT}, 
       #{preferentialType,jdbcType=TINYINT}, #{money,jdbcType=DECIMAL}, #{discount,jdbcType=DECIMAL}, 
-      #{validType,jdbcType=TINYINT}, #{validDateStart,jdbcType=TIMESTAMP}, #{validDateEnd,jdbcType=TIMESTAMP}, 
-      #{validDay,jdbcType=INTEGER}, #{qrCode,jdbcType=VARCHAR}, #{img,jdbcType=VARCHAR}, 
-      #{perMaxNum,jdbcType=INTEGER}, #{isRealName,jdbcType=BIT}, #{isTransfer,jdbcType=BIT}, 
-      #{activitySuperpositionType,jdbcType=TINYINT}, #{activitySuperpositionWhiteList,jdbcType=VARCHAR}, 
+      #{exchangeProductId,jdbcType=CHAR}, #{validType,jdbcType=TINYINT}, #{validDateStart,jdbcType=TIMESTAMP}, 
+      #{validDateEnd,jdbcType=TIMESTAMP}, #{validDay,jdbcType=INTEGER}, #{qrCode,jdbcType=VARCHAR}, 
+      #{img,jdbcType=VARCHAR}, #{perMaxNum,jdbcType=INTEGER}, #{isRealName,jdbcType=BIT}, 
+      #{isTransfer,jdbcType=BIT}, #{activitySuperpositionType,jdbcType=TINYINT}, #{activitySuperpositionWhiteList,jdbcType=VARCHAR}, 
       #{activitySuperpositionBlackList,jdbcType=VARCHAR}, #{isSuperposition,jdbcType=BIT}, 
       #{isTagPriceLimit,jdbcType=BIT}, #{tagPriceMaxPreferentialLimit,jdbcType=DECIMAL}, 
       #{minConsume,jdbcType=DECIMAL}, #{maxPreferential,jdbcType=DECIMAL}, #{minCommodityNum,jdbcType=INTEGER}, 
@@ -282,7 +279,7 @@
   <insert id="insertSelective" parameterType="com.bizvane.couponfacade.models.po.CouponDefinitionPOWithBLOBs">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2019-01-16 17:48:34.
+      This element was generated on 2019-04-23 15:56:26.
     -->
     <selectKey keyProperty="couponDefinitionId" order="AFTER" resultType="java.lang.Long">
       SELECT LAST_INSERT_ID()
@@ -321,6 +318,9 @@
       </if>
       <if test="discount != null">
         discount,
+      </if>
+      <if test="exchangeProductId != null">
+        exchange_product_id,
       </if>
       <if test="validType != null">
         valid_type,
@@ -486,6 +486,9 @@
       <if test="discount != null">
         #{discount,jdbcType=DECIMAL},
       </if>
+      <if test="exchangeProductId != null">
+        #{exchangeProductId,jdbcType=CHAR},
+      </if>
       <if test="validType != null">
         #{validType,jdbcType=TINYINT},
       </if>
@@ -620,7 +623,7 @@
   <select id="countByExample" parameterType="com.bizvane.couponfacade.models.po.CouponDefinitionPOExample" resultType="java.lang.Long">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2019-01-16 17:48:34.
+      This element was generated on 2019-04-23 15:56:26.
     -->
     select count(*) from t_coupon_definition
     <if test="_parameter != null">
@@ -630,7 +633,7 @@
   <update id="updateByExampleSelective" parameterType="map">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2019-01-16 17:48:34.
+      This element was generated on 2019-04-23 15:56:26.
     -->
     update t_coupon_definition
     <set>
@@ -669,6 +672,9 @@
       </if>
       <if test="record.discount != null">
         discount = #{record.discount,jdbcType=DECIMAL},
+      </if>
+      <if test="record.exchangeProductId != null">
+        exchange_product_id = #{record.exchangeProductId,jdbcType=CHAR},
       </if>
       <if test="record.validType != null">
         valid_type = #{record.validType,jdbcType=TINYINT},
@@ -807,7 +813,7 @@
   <update id="updateByExampleWithBLOBs" parameterType="map">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2019-01-16 17:48:34.
+      This element was generated on 2019-04-23 15:56:26.
     -->
     update t_coupon_definition
     set coupon_definition_id = #{record.couponDefinitionId,jdbcType=BIGINT},
@@ -822,6 +828,7 @@
       preferential_type = #{record.preferentialType,jdbcType=TINYINT},
       money = #{record.money,jdbcType=DECIMAL},
       discount = #{record.discount,jdbcType=DECIMAL},
+      exchange_product_id = #{record.exchangeProductId,jdbcType=CHAR},
       valid_type = #{record.validType,jdbcType=TINYINT},
       valid_date_start = #{record.validDateStart,jdbcType=TIMESTAMP},
       valid_date_end = #{record.validDateEnd,jdbcType=TIMESTAMP},
@@ -872,7 +879,7 @@
   <update id="updateByExample" parameterType="map">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2019-01-16 17:48:34.
+      This element was generated on 2019-04-23 15:56:26.
     -->
     update t_coupon_definition
     set coupon_definition_id = #{record.couponDefinitionId,jdbcType=BIGINT},
@@ -887,6 +894,7 @@
       preferential_type = #{record.preferentialType,jdbcType=TINYINT},
       money = #{record.money,jdbcType=DECIMAL},
       discount = #{record.discount,jdbcType=DECIMAL},
+      exchange_product_id = #{record.exchangeProductId,jdbcType=CHAR},
       valid_type = #{record.validType,jdbcType=TINYINT},
       valid_date_start = #{record.validDateStart,jdbcType=TIMESTAMP},
       valid_date_end = #{record.validDateEnd,jdbcType=TIMESTAMP},
@@ -933,7 +941,7 @@
   <update id="updateByPrimaryKeySelective" parameterType="com.bizvane.couponfacade.models.po.CouponDefinitionPOWithBLOBs">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2019-01-16 17:48:34.
+      This element was generated on 2019-04-23 15:56:26.
     -->
     update t_coupon_definition
     <set>
@@ -969,6 +977,9 @@
       </if>
       <if test="discount != null">
         discount = #{discount,jdbcType=DECIMAL},
+      </if>
+      <if test="exchangeProductId != null">
+        exchange_product_id = #{exchangeProductId,jdbcType=CHAR},
       </if>
       <if test="validType != null">
         valid_type = #{validType,jdbcType=TINYINT},
@@ -1105,7 +1116,7 @@
   <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.bizvane.couponfacade.models.po.CouponDefinitionPOWithBLOBs">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2019-01-16 17:48:34.
+      This element was generated on 2019-04-23 15:56:26.
     -->
     update t_coupon_definition
     set sys_company_id = #{sysCompanyId,jdbcType=BIGINT},
@@ -1119,6 +1130,7 @@
       preferential_type = #{preferentialType,jdbcType=TINYINT},
       money = #{money,jdbcType=DECIMAL},
       discount = #{discount,jdbcType=DECIMAL},
+      exchange_product_id = #{exchangeProductId,jdbcType=CHAR},
       valid_type = #{validType,jdbcType=TINYINT},
       valid_date_start = #{validDateStart,jdbcType=TIMESTAMP},
       valid_date_end = #{validDateEnd,jdbcType=TIMESTAMP},
@@ -1167,7 +1179,7 @@
   <update id="updateByPrimaryKey" parameterType="com.bizvane.couponfacade.models.po.CouponDefinitionPO">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2019-01-16 17:48:34.
+      This element was generated on 2019-04-23 15:56:26.
     -->
     update t_coupon_definition
     set sys_company_id = #{sysCompanyId,jdbcType=BIGINT},
@@ -1181,6 +1193,7 @@
       preferential_type = #{preferentialType,jdbcType=TINYINT},
       money = #{money,jdbcType=DECIMAL},
       discount = #{discount,jdbcType=DECIMAL},
+      exchange_product_id = #{exchangeProductId,jdbcType=CHAR},
       valid_type = #{validType,jdbcType=TINYINT},
       valid_date_start = #{validDateStart,jdbcType=TIMESTAMP},
       valid_date_end = #{validDateEnd,jdbcType=TIMESTAMP},
@@ -1222,6 +1235,8 @@
       transfer_fission = #{transferFission,jdbcType=BIT}
     where coupon_definition_id = #{couponDefinitionId,jdbcType=BIGINT}
   </update>
+    <cache eviction="LRU" flushInterval="3600000" readOnly="false" size="1024" type="com.bizvane.couponservice.common.system.RedisCache">
+    </cache>
   
   
   <!--非系统sql-->
