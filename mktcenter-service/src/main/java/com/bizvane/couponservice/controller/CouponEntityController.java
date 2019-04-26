@@ -70,7 +70,7 @@ public class CouponEntityController {
             @ApiImplicitParam(name = "validDateEnd", value = "有效期结束", required = true, dataType = "Date")
     })
     @ResponseBody
-    @RequestMapping(value = "/getListOld.do", method = RequestMethod.POST)
+    @RequestMapping(value = "/getListOld", method = RequestMethod.POST)
     ResponseData<PageInfo<CouponEntityVO>> getListOld(CouponEntityVO vo, HttpServletRequest request, PageFormUtil pageForm) {
         logger.info("enter getList method param: CouponEntityVO:{},PageFormUtil:{}", vo, pageForm);
         SysAccountPo accountPo = HttpUtils.getLoginUser(request);
@@ -79,7 +79,7 @@ public class CouponEntityController {
     }
     
     @ResponseBody
-    @RequestMapping(value = "/getList.do", method = RequestMethod.POST)
+    @RequestMapping(value = "/getList", method = RequestMethod.POST)
     ResponseData<PageInfo<CouponEntityInfoSearchPojo>> getList(CouponEntityVO vo, HttpServletRequest request, PageFormUtil pageForm) {
         logger.info("enter getList method param: CouponEntityVO:{},PageFormUtil:{}", vo, pageForm);
         SysAccountPo accountPo = HttpUtils.getLoginUser(request);
@@ -116,7 +116,7 @@ public class CouponEntityController {
             @ApiImplicitParam(name = "couponDefinitionId", value = "券定义id", required = true, dataType = "Long")
     })
     @ResponseBody
-    @RequestMapping(value = "/getAll.do", method = RequestMethod.POST)
+    @RequestMapping(value = "/getAll", method = RequestMethod.POST)
     ResponseData<CouponDetailResponseVO> getAll(@RequestParam(value = "couponEntityId", required = false) Long couponEntityId,
                                                 @RequestParam(value = "couponDefinitionId", required = false) Long couponDefinitionId) {
         logger.info("enter getAll method param: couponEntityId:{},couponDefinitionId:{}", couponEntityId, couponDefinitionId);
@@ -129,7 +129,7 @@ public class CouponEntityController {
      *
      * @return
      */
-    @RequestMapping(value = "/exportExcel1.do", method = RequestMethod.POST)
+    @RequestMapping(value = "/exportExcel1", method = RequestMethod.POST)
     @ApiOperation(value = "券的发放记录导出", notes = "券的发放记录导出", tags = {"券的发放记录"})
     public ResponseData<String> exportExcel1(CouponEntityVO vo, HttpServletRequest request) {
         logger.info("enter exportExcel method param: CouponEntityVO:{}", JSONObject.toJSONString(vo));
@@ -198,7 +198,7 @@ public class CouponEntityController {
      * 券的发放记录导出
      * @return
      */
-    @RequestMapping(value = "/exportExcel.do", method = RequestMethod.POST)
+    @RequestMapping(value = "/exportExcel", method = RequestMethod.POST)
     @ApiOperation(value = "券的发放记录导出", notes = "券的发放记录导出", tags = {"券的发放记录"})
     public ResponseData<String> exportExcel(CouponEntityVO vo, HttpServletRequest request) {
         logger.info("enter exportExcel method param: CouponEntityVO:{}", JSONObject.toJSONString(vo));

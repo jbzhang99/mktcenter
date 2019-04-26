@@ -74,7 +74,7 @@ public class ActivityRegisterController {
      * @param
      * @return
      */
-    @RequestMapping("updateActivityRegister.do")
+    @RequestMapping("updateActivityRegister")
     public ResponseData<Integer> updateActivityRegister(ActivityVO activityVO, List<MktCouponPO> couponCodeList, List<MktMessagePO> messageVOList, HttpServletRequest request){
         ActivityBO bo = new ActivityBO();
         bo.setActivityVO(activityVO);

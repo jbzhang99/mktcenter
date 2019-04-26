@@ -59,7 +59,7 @@ public class CouponDefinitionController{
             @ApiImplicitParam(name = "createUserName", value = "创建人", required = true, dataType = "String"),
             @ApiImplicitParam(name = "couponDefinitionId", value = "券定义id", required = true, dataType = "Long")
     })
-    @RequestMapping("/getList.do")
+    @RequestMapping("/getList")
     public ResponseData<PageInfo<CouponDefinitionPO>> getList(HttpServletRequest request, CouponDefinitionListQueryVO vo) {
         logger.info("enter getList method param:CouponDefinitionListQueryVO:{}", JSONObject.toJSONString(vo));
         
@@ -102,7 +102,7 @@ public class CouponDefinitionController{
      * @return
      */
     @ApiOperation(value = "券保存", notes = "券保存", tags = {"定义券"},httpMethod = "POST")
-    @RequestMapping(value="/add.do", method = RequestMethod.POST)
+    @RequestMapping(value="/add", method = RequestMethod.POST)
     public ResponseData<Long> add(CouponDefinitionPOWithBLOBs po,HttpServletRequest request){
         logger.info("enter add method param:CouponDefinitionPOWithBLOBs:{}", JSONObject.toJSONString(po));
        SysAccountPo accountPo = HttpUtils.getLoginUser(request);
@@ -120,7 +120,7 @@ public class CouponDefinitionController{
             @ApiImplicitParam(name = "couponDefinitionId", value = "券定义id", required = true, dataType = "Long"),
             @ApiImplicitParam(name = "status", value = "券状态（1已启用，0已停用）", required = true, dataType = "Boolean"),
     })
-    @RequestMapping(value="/update.do", method = RequestMethod.POST)
+    @RequestMapping(value="/update", method = RequestMethod.POST)
     public ResponseData<Object> update(CouponDefinitionPOWithBLOBs po){
         logger.info("enter update method param:CouponDefinitionPOWithBLOBs:{}", JSONObject.toJSONString(po));
       return couponDefinitionService.update(po);
@@ -137,7 +137,7 @@ public class CouponDefinitionController{
     @ApiImplicitParams({
             @ApiImplicitParam(name = "couponDefinitionId", value = "券定义id", required = true, dataType = "Long")
     })
-    @RequestMapping(value="/find.do", method = RequestMethod.POST)
+    @RequestMapping(value="/find", method = RequestMethod.POST)
     public ResponseData<CouponDefinitionPOWithBLOBs> getCouponDefinition(@RequestParam(value = "couponDefinitionId",required = false)Long couponDefinitionId){
         logger.info("enter getCouponDefinition method param:couponDefinitionId:{}",couponDefinitionId);
         return couponDefinitionService.getCouponDefinition(couponDefinitionId);
@@ -155,7 +155,7 @@ public class CouponDefinitionController{
             @ApiImplicitParam(name = "couponName", value = "券名称", required = true, dataType = "String"),
             @ApiImplicitParam(name = "preferentialType", value = "券类型", required = true, dataType = "Byte")
     })
-    @RequestMapping(value="/getTemplate.do", method = RequestMethod.POST)
+    @RequestMapping(value="/getTemplate", method = RequestMethod.POST)
     public ResponseData<PageInfo> getTemplate(CouponDefinitionPO couponDefinitionPO, PageFormUtil pageFormUtil,
                                               HttpServletRequest request){
         logger.info("enter getTemplate method param:couponDefinitionPO:{},PageFormUtil:{}",JSONObject.toJSONString(couponDefinitionPO),JSONObject.toJSONString(pageFormUtil));
@@ -172,7 +172,7 @@ public class CouponDefinitionController{
     @ApiImplicitParams({
             @ApiImplicitParam(name = "isConfigure", value = "券定义类型：1-线上定义，2-erp生成", required = true, dataType = "Long"),
     })
-    @RequestMapping("/getDefinitionType.do")
+    @RequestMapping("/getDefinitionType")
     public ResponseData<Object> getDefinitionType(HttpServletRequest request) {
         logger.info("enter getDefinitionType method param:{}");
         ResponseData<Object> responseData = new ResponseData<>();
@@ -213,7 +213,7 @@ public class CouponDefinitionController{
             @ApiImplicitParam(name = "couponName", value = "券名称", required = true, dataType = "String"),
             @ApiImplicitParam(name = "couponDefinitionId", value = "券定义id", required = true, dataType = "Long")
     })
-    @RequestMapping("/getUseList.do")
+    @RequestMapping("/getUseList")
     public ResponseData<PageInfo<CouponDefinitionPO>> getUseList(HttpServletRequest request,CouponDefinitionListQueryVO vo,
                                                                  PageFormUtil pageForm) {
         logger.info("enter getList method param:CouponDefinitionListQueryVO:{}", JSONObject.toJSONString(vo));
@@ -234,7 +234,7 @@ public class CouponDefinitionController{
             @ApiImplicitParam(name = "productCode", value = "商品code", required = true, dataType = "String"),
             @ApiImplicitParam(name = "productName", value = "商品名称", required = true, dataType = "String")
     })
-    @RequestMapping("/getIdSysDimSkuList.do")
+    @RequestMapping("/getIdSysDimSkuList")
     public ResponseData<PageInfo<SysDimSkuPo>> getIdSysDimSkuList(@RequestParam(value = "order",required = false) String order,
                                                    @RequestParam(value = "productCode",required = false) String productCode,
                                                    @RequestParam(value = "productName",required = false) String productName,
@@ -256,7 +256,7 @@ public class CouponDefinitionController{
             @ApiImplicitParam(name = "sysStoreOfflineCode", value = "门店code", required = true, dataType = "String"),
             @ApiImplicitParam(name = "storeName", value = "门店名称", required = true, dataType = "String")
     })
-    @RequestMapping("/getIdStoreList.do")
+    @RequestMapping("/getIdStoreList")
     public ResponseData<PageInfo<SysStorePo>> getIdStoreList(@RequestParam(value = "store",required = false)String store,
                                                              @RequestParam(value = "sysStoreOfflineCode",required = false) String sysStoreOfflineCode,
                                                              @RequestParam(value = "storeName",required = false) String storeName,

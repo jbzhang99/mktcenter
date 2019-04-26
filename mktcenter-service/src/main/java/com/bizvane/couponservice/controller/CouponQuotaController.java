@@ -52,7 +52,7 @@ public class CouponQuotaController {
 
     })
     @ResponseBody
-    @RequestMapping(value = "/updateBycouponQuotaId.do", method = RequestMethod.POST)
+    @RequestMapping(value = "/updateBycouponQuotaId", method = RequestMethod.POST)
     ResponseData<String> updateBycouponQuotaId(CouponQuotaVO vo, HttpServletRequest request) {
         logger.info("enter getList method param: updateBycouponQuotaId:{},PageFormUtil:{}", vo);
         SysAccountPo accountPo = HttpUtils.getLoginUser(request);
@@ -77,7 +77,7 @@ public class CouponQuotaController {
 
     })
     @ResponseBody
-    @RequestMapping(value = "/getCouponQuotaListDetail.do", method = RequestMethod.POST)
+    @RequestMapping(value = "/getCouponQuotaListDetail", method = RequestMethod.POST)
     ResponseData<PageInfo<CouponQuotaDetailPO>> getCouponQuotaListDetail(CouponQuotaDetailVO vo, HttpServletRequest request, PageFormUtil pageForm) {
         logger.info("enter getList method param: getCouponQuotaListDetail:{},PageFormUtil:{}", vo, pageForm);
         SysAccountPo accountPo = HttpUtils.getLoginUser(request);
@@ -97,7 +97,7 @@ public class CouponQuotaController {
             @ApiImplicitParam(name = "couponQuotaId", value = "券配额表主键id", required = true, dataType = "Long"),
     })
     @ResponseBody
-    @RequestMapping(value = "/getCouponQuotaListDetailforupdate.do", method = RequestMethod.POST)
+    @RequestMapping(value = "/getCouponQuotaListDetailforupdate", method = RequestMethod.POST)
     ResponseData<List<CouponQuotaDetailPO>> getCouponQuotaListDetailforupdate(CouponQuotaDetailVO vo, HttpServletRequest request) {
         logger.info("enter getList method param: getCouponQuotaListDetailforupdate:{},PageFormUtil:{}", vo);
         SysAccountPo accountPo = HttpUtils.getLoginUser(request);
@@ -133,7 +133,7 @@ public class CouponQuotaController {
 
     })
     @ResponseBody
-    @RequestMapping(value = "/getCouponQuotaList.do", method = RequestMethod.POST)
+    @RequestMapping(value = "/getCouponQuotaList", method = RequestMethod.POST)
     ResponseData<PageInfo<CouponQuotaPO>> getCouponQuotaList(CouponQuotaVO vo, HttpServletRequest request, PageFormUtil pageForm) {
         logger.info("enter getList method param: getCouponQuotaList:{},PageFormUtil:{}", vo, pageForm);
         SysAccountPo accountPo = HttpUtils.getLoginUser(request);
@@ -160,7 +160,7 @@ public class CouponQuotaController {
             
     })
     @ResponseBody
-    @RequestMapping(value = "/createCouponQuota.do", method = RequestMethod.POST)
+    @RequestMapping(value = "/createCouponQuota", method = RequestMethod.POST)
     ResponseData<Long> createCouponQuota(CouponQuotaVO vo, HttpServletRequest request) {
         logger.info("enter createCouponQuota method param: CouponQuotaVO:{},PageFormUtil:{}", vo);
         SysAccountPo accountPo = HttpUtils.getLoginUser(request);

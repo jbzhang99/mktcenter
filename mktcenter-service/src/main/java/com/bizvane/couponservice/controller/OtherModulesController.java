@@ -63,7 +63,7 @@ public class OtherModulesController {
             @ApiImplicitParam(name = "sysStoreOfflineCode", value = "店铺线下编号", required = true, dataType = "String"),
             @ApiImplicitParam(name = "storeName", value = "店铺名称", required = true, dataType = "String")
     })
-    @RequestMapping("/staffPage.do")
+    @RequestMapping("/staffPage")
     public ResponseData<PageInfo<SysStorePo>> getScreenStaff(@RequestParam(value = "sysStoreOfflineCode",required = false)String sysStoreOfflineCode,
                                                           @RequestParam(value = "storeName",required = false)String storeName,
                                                     PageFormUtil page, HttpServletRequest request){
@@ -84,7 +84,7 @@ public class OtherModulesController {
     @ApiImplicitParams({
             @ApiImplicitParam(name = "", value = "", required = true, dataType = "String")
     })
-    @RequestMapping("/getMemberList.do")
+    @RequestMapping("/getMemberList")
     public ResponseData<List<MemberInfoVo>> getMemberList(MembersInfoSearchVo memberVO){
 
         ResponseData<List<MemberInfoVo>> responseData = null;
@@ -110,7 +110,7 @@ public class OtherModulesController {
             @ApiImplicitParam(name = "productCode", value = "商品编码", required = true, dataType = "String"),
             @ApiImplicitParam(name = "productName", value = "商品名称", required = true, dataType = "String")
     })
-    @RequestMapping("/getDimSkuList.do")
+    @RequestMapping("/getDimSkuList")
     public ResponseData<PageInfo<SysDimSkuPo>> getSysDimSkuList(@RequestParam(value = "productCode",required = false)String productCode,
                                                                 @RequestParam(value = "productName",required = false)String productName,
                                                                 PageFormUtil page, HttpServletRequest request){
@@ -129,7 +129,7 @@ public class OtherModulesController {
      *
      * @return
      */
-    @PostMapping("/memberEs.do")
+    @PostMapping("/memberEs")
     public ResponseData<PageInfo<MembersInfoSearchPojo>> findMemberEsSearch(HttpServletRequest request) {
 
         MembersInfoSearchVo searchVo = JacksonUtil.json2Objs(HttpParamUtil.getJSONParam(request),

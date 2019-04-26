@@ -64,7 +64,7 @@ public class CouponManualController {
           @ApiImplicitParam(name = "createUserName", value = "创建人", required = true, dataType = "String"),
           @ApiImplicitParam(name = "reviewUserName", value = "审核人", required = true, dataType = "String")
   })
-  @RequestMapping(value="/getList.do", method = RequestMethod.POST)
+  @RequestMapping(value="/getList", method = RequestMethod.POST)
   ResponseData<PageInfo<CouponManualVO>> getList(CouponManualVO vo,
                                                  PageFormUtil pageForm,HttpServletRequest request){
     logger.info("enter getList method param: CouponManualVO:{},PageFormUtil:{}",vo,pageForm);
@@ -84,7 +84,7 @@ public class CouponManualController {
           @ApiImplicitParam(name = "couponManualId", value = "手动发券id", required = true, dataType = "Long"),
           @ApiImplicitParam(name = "taskStatus", value = "任务状态：10-新建，15-取消发送，20-审核通过，25-审核拒绝，30-待发券，40-发券中，50-系统生成券完成，65-生成券同步到erp，70-线上绑券成功，75-绑定关系同步中，80-发券完成", required = true, dataType = "byte"),
   })
-  @RequestMapping(value="/changeTask.do", method = RequestMethod.POST)
+  @RequestMapping(value="/changeTask", method = RequestMethod.POST)
   ResponseData<Integer> changeTask(CouponManualPO po){
     logger.info("enter changeTask method param: CouponManualPO:{}", JSONObject.toJSONString(po));
     return couponManualService.changeTask(po);
@@ -100,7 +100,7 @@ public class CouponManualController {
   @ApiImplicitParams({
           @ApiImplicitParam(name = "couponManualId", value = "手动发券id", required = true, dataType = "Long")
   })
-  @RequestMapping(value="/suspendTask.do", method = RequestMethod.POST)
+  @RequestMapping(value="/suspendTask", method = RequestMethod.POST)
   ResponseData<Integer> suspendTask(@RequestParam(value = "couponManualId",required = false)Long couponManualId){
     logger.info("enter changeTask method param: couponManualId:{}", couponManualId);
     return couponManualService.suspendTask(couponManualId);
@@ -118,7 +118,7 @@ public class CouponManualController {
           @ApiImplicitParam(name = "sendTimeStart", value = "发券开始时间", required = true, dataType = "String"),
           @ApiImplicitParam(name = "sendTimeEnd", value = "发券结束时间", required = true, dataType = "String"),
   })
-  @RequestMapping(value="/findResult.do", method = RequestMethod.POST)
+  @RequestMapping(value="/findResult", method = RequestMethod.POST)
   ResponseData<PageInfo> findResult(CouponManualVO vo, PageFormUtil pageForm, HttpServletRequest request){
     logger.info("enter findResult method param: CouponManualVO:{},PageFormUtil:{}", JSONObject.toJSONString(vo),JSONObject.toJSONString(pageForm));
     SysAccountPo accountPo = HttpUtils.getLoginUser(request);
@@ -136,7 +136,7 @@ public class CouponManualController {
           @ApiImplicitParam(name = "sendTimeStart", value = "发券开始时间", required = true, dataType = "String"),
           @ApiImplicitParam(name = "sendTimeEnd", value = "发券结束时间", required = true, dataType = "String"),
   })
-  @RequestMapping(value="/findTotal.do", method = RequestMethod.POST)
+  @RequestMapping(value="/findTotal", method = RequestMethod.POST)
   ResponseData<CouponManualVO> findTotal(CouponManualVO vo,HttpServletRequest request){
     logger.info("enter findTotal method param: CouponManualVO:{}", JSONObject.toJSONString(vo));
     SysAccountPo accountPo = HttpUtils.getLoginUser(request);
@@ -153,7 +153,7 @@ public class CouponManualController {
   @ApiImplicitParams({
           @ApiImplicitParam(name = "name", value = "会员姓名", required = true, dataType = "String"),
   })
-  @RequestMapping(value="/getMemberList.do", method = RequestMethod.POST)
+  @RequestMapping(value="/getMemberList", method = RequestMethod.POST)
   ResponseData<PageInfo<MemberInfoModel>> getMemberList(MemberInfoApiModel model){
     logger.info("enter getMemberList method param: MemberInfoApiModel:{}", JSONObject.toJSONString(model));
     return memberInfoApiService.getMemberInfo(model);
@@ -169,7 +169,7 @@ public class CouponManualController {
    * @return
    */
   @ApiOperation(value = "根据手动发券id查询发券信息", notes = "根据手动发券id查询发券信息", tags = {"手动发券"},httpMethod = "POST")
-  @RequestMapping(value="/find.do", method = RequestMethod.POST)
+  @RequestMapping(value="/find", method = RequestMethod.POST)
   public ResponseData<CouponDetailResponseVO> findById(@RequestParam(value = "couponManualId",required = false) Long couponManualId){
     logger.info("enter findById method param: couponManualId:{}", couponManualId);
     return couponManualService.findById(couponManualId);
@@ -184,7 +184,7 @@ public class CouponManualController {
    * @return
    */
   @ApiOperation(value = "查询创建手动发券任务选中的会员", notes = "查询创建手动发券任务选中的会员", tags = {"手动发券"},httpMethod = "POST")
-  @RequestMapping(value="/findManualMembers.do", method = RequestMethod.POST)
+  @RequestMapping(value="/findManualMembers", method = RequestMethod.POST)
   public ResponseData<PageInfo<MemberInfoModel>> findManualMembers(@RequestParam(value = "couponManualId",required = false) Long couponManualId,
                                                                    @RequestParam(value = "name",required = false) String name,
                                                                    @RequestParam(value = "phone",required = false)String phone,
@@ -209,7 +209,7 @@ public class CouponManualController {
           @ApiImplicitParam(name = "couponDefinitionId", value = "券定义id", required = true, dataType = "Long"),
           @ApiImplicitParam(name = "memberInfo", value = "会员查询条件", required = true, dataType = "MembersInfoSearchVo")
   })
-  @RequestMapping(value="/addTask.do", method = RequestMethod.POST)
+  @RequestMapping(value="/addTask", method = RequestMethod.POST)
   ResponseData<String> addTask(HttpServletRequest request){
 
     ResponseData<String> responseData = new ResponseData<>();
@@ -264,7 +264,7 @@ public class CouponManualController {
           @ApiImplicitParam(name = "couponManualId", value = "手动发券id", required = true, dataType = "Long"),
           @ApiImplicitParam(name = "memberInfo", value = "会员条件", required = true, dataType = "MembersInfoSearchVo")
   })
-  @RequestMapping(value="/changeManualTask.do", method = RequestMethod.POST)
+  @RequestMapping(value="/changeManualTask", method = RequestMethod.POST)
   ResponseData<String> changeManualTask(CouponManualVO couponManualVO,MembersInfoSearchVo memberInfo,HttpServletRequest request){
     logger.info("enter changeManualTask method param: couponManualVO:{}",JSONObject.toJSONString(couponManualVO));
     ResponseData<String> responseData = new ResponseData<>();
@@ -294,7 +294,7 @@ public class CouponManualController {
           @ApiImplicitParam(name = "remark", value = "备注", required = true, dataType = "String"),
 
   })
-  @RequestMapping(value="/changeCheckStatus.do", method = RequestMethod.POST)
+  @RequestMapping(value="/changeCheckStatus", method = RequestMethod.POST)
   public ResponseData<String> changeCheckStatus(CouponSendCheckRequestVO param){
     logger.info("enter changeCheckStatus method param: CouponSendCheckRequestVO:{}", JSONObject.toJSONString(param));
     return couponManualService.changeCheckStatus(param);

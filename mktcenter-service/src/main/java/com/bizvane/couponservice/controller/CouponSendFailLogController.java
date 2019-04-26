@@ -36,7 +36,7 @@ public class CouponSendFailLogController {
      * @return
      */
     @ApiOperation(value = "发券失败查询", notes = "发券失败查询", tags = {"发券失败查询"},httpMethod = "POST")
-    @RequestMapping("/couponSendFail.do")
+    @RequestMapping("/couponSendFail")
     public ResponseData<PageInfo> couponSendFail(CouponSendFailLogVO vo, PageFormUtil pageForm, HttpServletRequest request){
         logger.info("enter couponSendFail method param: CouponSendFailLogVO:{},PageFormUtil:{}", JSONObject.toJSONString(vo),JSONObject.toJSONString(pageForm));
         SysAccountPo accountPo = HttpUtils.getLoginUser(request);
@@ -52,7 +52,7 @@ public class CouponSendFailLogController {
             @ApiImplicitParam(name = "couponSendFailLogId", value = "主键id", required = true, dataType = "Long"),
             @ApiImplicitParam(name = "sendStatus", value = "补发状态（1待补发，2已补发）", required = true, dataType = "Byte"),
     })
-    @RequestMapping("/update.do")
+    @RequestMapping("/update")
     public ResponseData<Object> update(CouponSendFailLogPO couponSendFailLogPO){
         logger.info("enter update method param: CouponSendFailLogPO:{}",JSONObject.toJSONString(couponSendFailLogPO));
         return sendCouponService.update(couponSendFailLogPO);

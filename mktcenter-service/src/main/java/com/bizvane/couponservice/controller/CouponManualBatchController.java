@@ -43,7 +43,7 @@ public class CouponManualBatchController {
             @ApiImplicitParam(name = "couponDefinitionIds", value = "券定义id列表", required = true, dataType = "List"),
             @ApiImplicitParam(name = "memberInfo", value = "会员查询条件", required = true, dataType = "MembersInfoSearchVo")
     })
-    @RequestMapping(value="/addNewTask.do", method = RequestMethod.POST)
+    @RequestMapping(value="/addNewTask", method = RequestMethod.POST)
     ResponseData<String> addNewTask(@RequestBody CouponManualRequestVO requestVO, HttpServletRequest request){
 
         ResponseData<String> responseData = new ResponseData<>();
@@ -90,7 +90,7 @@ public class CouponManualBatchController {
      * @return
      */
     @ApiOperation(value = "根据手动发券id查询发券信息", notes = "根据手动发券id查询发券信息", tags = {"手动发券"},httpMethod = "POST")
-    @RequestMapping(value="/findNew.do", method = RequestMethod.POST)
+    @RequestMapping(value="/findNew", method = RequestMethod.POST)
     public ResponseData<CouponDetailResponseVO> findNewById(@RequestParam(value = "couponManualId",required = false) Long couponManualId){
         logger.info("enter findById method param: couponManualId:{}", couponManualId);
         return couponManualService.findNewById(couponManualId);
@@ -112,7 +112,7 @@ public class CouponManualBatchController {
             @ApiImplicitParam(name = "couponManualId", value = "手动发券id", required = true, dataType = "Long"),
             @ApiImplicitParam(name = "memberInfo", value = "会员条件", required = true, dataType = "MembersInfoSearchVo")
     })
-    @RequestMapping(value="/changeNewManualTask.do", method = RequestMethod.POST)
+    @RequestMapping(value="/changeNewManualTask", method = RequestMethod.POST)
     ResponseData<String> changeNewManualTask(CouponManualVO couponManualVO,MembersInfoSearchVo memberInfo,HttpServletRequest request){
         logger.info("enter changeManualTask method param: couponManualVO:{}",JSONObject.toJSONString(couponManualVO));
         ResponseData<String> responseData = new ResponseData<>();

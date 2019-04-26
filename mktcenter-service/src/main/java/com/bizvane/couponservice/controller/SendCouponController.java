@@ -145,7 +145,7 @@ public class SendCouponController{
     @ApiImplicitParams({
             @ApiImplicitParam(name = "couponSendFailLogId", value = "券失败日志表id", required = true, dataType = "Long")
     })
-    @RequestMapping("/sendSingleAgain.do")
+    @RequestMapping("/sendSingleAgain")
     public ResponseData<Integer> sendSingleAgain(@RequestParam(value = "couponSendFailLogId",required = false)Long couponSendFailLogId){
 
         return sendCouponService.sendSingleAgain(couponSendFailLogId);
@@ -160,7 +160,7 @@ public class SendCouponController{
     @ApiImplicitParams({
             @ApiImplicitParam(name = "ids", value = "券失败日志id", required = true, dataType = "String")
     })
-    @RequestMapping(value = "/sendBatchAgain.do",method = RequestMethod.POST)
+    @RequestMapping(value = "/sendBatchAgain",method = RequestMethod.POST)
     public ResponseData<Integer> sendBatchAgain(@RequestParam("ids")String ids){
         logger.info("enter sendBatchAgain method param:ids:{}",ids);
         return sendCouponService.sendBatchAgain(ids);

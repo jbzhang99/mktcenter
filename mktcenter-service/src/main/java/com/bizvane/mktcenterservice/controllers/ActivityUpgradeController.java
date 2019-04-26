@@ -69,7 +69,7 @@ public class ActivityUpgradeController {
      * 修改活动
      * @return
      */
-    @RequestMapping("updateActivityUpgrade.do")
+    @RequestMapping("updateActivityUpgrade")
     public ResponseData<Integer> updateActivityUpgrade(ActivityVO activityVO, List<MktCouponPO> couponCodeList, List<MktMessagePO> messageVOList, HttpServletRequest request){
         ActivityBO bo = new ActivityBO();
         bo.setActivityVO(activityVO);

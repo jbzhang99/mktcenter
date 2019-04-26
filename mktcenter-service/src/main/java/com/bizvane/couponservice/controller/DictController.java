@@ -37,7 +37,7 @@ public class DictController {
     @ApiImplicitParams({
             @ApiImplicitParam(name = "dictType", value = "参数类型", required = true, dataType = "String"),
     })
-    @RequestMapping("/get.do")
+    @RequestMapping("/get")
     public ResponseData<Object> getDict(@RequestParam(value = "dictType",required = false)String dictType){
         logger.info("enter getDict method param: dictType:{}",dictType);
         ResponseData<Object> responseData = new ResponseData<>();
@@ -64,7 +64,7 @@ public class DictController {
     @ApiImplicitParams({
             @ApiImplicitParam(name = "dictType", value = "参数类型", required = true, dataType = "String",example = "A,B,C"),
     })
-    @RequestMapping("/getBatch.do")
+    @RequestMapping("/getBatch")
     public ResponseData<Map<String,List<SysCodeValuePO>>> getDictBatch(@RequestParam(value = "dictType",required = false)String dictType){
         logger.info("enter getDictBatch method param: dictType:{}",dictType);
         ResponseData<Map<String,List<SysCodeValuePO>>> responseData = new ResponseData<>();
