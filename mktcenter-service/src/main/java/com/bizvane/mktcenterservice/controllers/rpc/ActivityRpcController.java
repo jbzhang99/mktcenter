@@ -36,8 +36,6 @@ public class ActivityRpcController {
     @Autowired
     private ActivityOrderService activityOrderService;
     @Autowired
-    private ActivitySigninService activitySigninService;
-    @Autowired
     private ActivityBirthdayService activityBirthdayService;
     @Autowired
     private ActivityRegisterService activityRegisterService;
@@ -89,11 +87,6 @@ public class ActivityRpcController {
         //会员消费活动审核
         if(po.getBusinessType()==ActivityTypeEnum.ACTIVITY_TYPE_ORDER.getCode()){
             responseData =activityOrderService.checkActivityOrder(po,stageUser);
-        }
-        //会员签到活动审核
-        if(po.getBusinessType()==ActivityTypeEnum.ACTIVITY_TYPE_SIGNIN.getCode()){
-            responseData = activitySigninService.checkActivitySignin(po,stageUser);
-
         }
         //扫码领券&手动领券审核
         if(po.getBusinessType()==ActivityTypeEnum.ACTIVITY_TYPE_QRCODE.getCode()||po.getBusinessType()==ActivityTypeEnum.ACTIVITY_TYPE_MANUAL.getCode()){
@@ -147,15 +140,6 @@ public class ActivityRpcController {
     @RequestMapping("getActivityRecordPOList")
     public ResponseData<List<MktActivityRecordPO>> getActivityRecordPOList(@RequestBody MktActivityRecordVO vo){
         return activityRecordService.getActivityRecordPOList(vo);
-    }
-    /**
-     * 执行活动签到
-     * @param
-     * @return
-     */
-    @RequestMapping("executeActivitySignin")
-    public ResponseData<Integer> executeActivitySignin(@RequestBody MemberInfoModel vo){
-        return activitySigninService.executeActivitySignin(vo);
     }
 
     /**

@@ -36,8 +36,6 @@ public class ActivityController {
     @Autowired
     private ActivityOrderService activityOrderService;
     @Autowired
-    private ActivitySigninService activitySigninService;
-    @Autowired
     private ActivityBirthdayService activityBirthdayService;
 
     @Autowired
@@ -89,11 +87,6 @@ public class ActivityController {
         //会员消费活动审核
         if(po.getBusinessType()==ActivityTypeEnum.ACTIVITY_TYPE_ORDER.getCode()){
             responseData =activityOrderService.checkActivityOrder(po,stageUser);
-        }
-        //会员签到活动审核
-        if(po.getBusinessType()==ActivityTypeEnum.ACTIVITY_TYPE_SIGNIN.getCode()){
-            responseData = activitySigninService.checkActivitySignin(po,stageUser);
-
         }
         //评价奖励活动审核
         if(po.getBusinessType()==ActivityTypeEnum.ACTIVITY_TYPE_EVALUATION.getCode()){
