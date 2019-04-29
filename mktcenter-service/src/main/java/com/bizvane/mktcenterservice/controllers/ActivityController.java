@@ -34,8 +34,6 @@ public class ActivityController {
     @Autowired
     private ActivityService activityService;
     @Autowired
-    private ActivityUpgradeService activityUpgradeService;
-    @Autowired
     private ActivityOrderService activityOrderService;
     @Autowired
     private ActivitySigninService activitySigninService;
@@ -79,10 +77,6 @@ public class ActivityController {
         //开卡活动审核
         if(po.getBusinessType()==ActivityTypeEnum.ACTIVITY_TYPE_REGISGER.getCode()){
             responseData = activityService.checkActivityById(po, stageUser);
-        }
-        //会员升级活动审核
-        if(po.getBusinessType()==ActivityTypeEnum.ACTIVITY_TYPE_UPGRADE.getCode()){
-            responseData = activityUpgradeService.checkActivityUpgrades(po,stageUser);
         }
         //会员生日活动
         if(po.getBusinessType()==ActivityTypeEnum.ACTIVITY_TYPE_BIRTHDAY.getCode()){

@@ -34,8 +34,6 @@ public class ActivityRpcController {
     @Autowired
     private ActivityService activityService;
     @Autowired
-    private ActivityUpgradeService activityUpgradeService;
-    @Autowired
     private ActivityOrderService activityOrderService;
     @Autowired
     private ActivitySigninService activitySigninService;
@@ -83,10 +81,6 @@ public class ActivityRpcController {
         //开卡活动审核
         if(po.getBusinessType()==ActivityTypeEnum.ACTIVITY_TYPE_REGISGER.getCode()){
             responseData = activityService.checkActivityById(po, stageUser);
-        }
-        //会员升级活动审核
-        if(po.getBusinessType()==ActivityTypeEnum.ACTIVITY_TYPE_UPGRADE.getCode()){
-            responseData = activityUpgradeService.checkActivityUpgrades(po,stageUser);
         }
         //会员生日活动
         if(po.getBusinessType()==ActivityTypeEnum.ACTIVITY_TYPE_BIRTHDAY.getCode()){
@@ -136,15 +130,6 @@ public class ActivityRpcController {
         return activityOrderService.selectActivityOrderById(activityCode);
     }
     /**
-     * 查询活动详情
-     * @param activityCode
-     * @return
-     */
-    @RequestMapping("selectActivityUpgradesById")
-    public ResponseData<ActivityBO> selectActivityUpgradesById(@RequestParam("activityCode") String activityCode){
-        return activityUpgradeService.selectActivityUpgradesById(activityCode);
-    }
-    /**
      * 小程序端活动列表
      * @param vo
      * @return
@@ -192,16 +177,6 @@ public class ActivityRpcController {
     @RequestMapping("executeActivity")
     public ResponseData<Integer> executeActivity(@RequestBody MemberInfoModelVOActivity vo){
         return activityRegisterService.executeActivity(vo);
-    }
-
-    /**
-     * 执行活动
-     * @param vo
-     * @return
-     */
-    @RequestMapping("executeUpgrades")
-    public ResponseData<Integer> executeUpgrades(@RequestBody MemberInfoModel vo){
-        return activityUpgradeService.executeUpgrades(vo);
     }
 
     @RequestMapping("judgeMember")
