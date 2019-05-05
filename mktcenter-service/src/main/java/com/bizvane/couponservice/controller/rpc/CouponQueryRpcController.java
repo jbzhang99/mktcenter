@@ -44,7 +44,7 @@ public class CouponQueryRpcController {
     ResponseData<PageInfo<CouponEntityAndDefinitionVO>> getCouponListByMemeberCode(@RequestBody CouponListByMemberCodeRequestVO vo){
         logger.info("enter getCouponListByMemeberCode method param:CouponListByMemberCodeRequestVO:{}", JSONObject.toJSONString(vo));
         PageFormUtil pageFormUtil = new PageFormUtil();
-        pageFormUtil.setPageNumber(vo.getPageNumber());
+        pageFormUtil.setPageNumber(vo.getPageNum());
         pageFormUtil.setPageSize(vo.getPageSize());
         return couponService.getCouponListByMemeberCode(vo,pageFormUtil);
 
