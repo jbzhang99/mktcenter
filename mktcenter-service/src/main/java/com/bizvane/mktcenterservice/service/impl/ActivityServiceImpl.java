@@ -24,11 +24,10 @@ import com.bizvane.mktcenterfacade.interfaces.ActivityService;
 import com.bizvane.mktcenterfacade.models.bo.ActivityAnalysisCountBO;
 import com.bizvane.mktcenterfacade.models.bo.AwardBO;
 import com.bizvane.mktcenterfacade.models.bo.CtivityAnalysisBO;
-import com.bizvane.mktcenterfacade.models.po.MktActivityPOExample;
-import com.bizvane.mktcenterfacade.models.po.MktActivityPOWithBLOBs;
-import com.bizvane.mktcenterfacade.models.po.MktCouponPO;
-import com.bizvane.mktcenterfacade.models.po.MktMessagePO;
+import com.bizvane.mktcenterfacade.models.po.*;
+import com.bizvane.mktcenterfacade.models.responsevo.StoreActivityResponseVO;
 import com.bizvane.mktcenterfacade.models.vo.*;
+import com.bizvane.mktcenterservice.common.constants.ActivityConstants;
 import com.bizvane.mktcenterservice.common.enums.*;
 
 import com.bizvane.mktcenterservice.common.award.Award;
@@ -36,6 +35,7 @@ import com.bizvane.mktcenterservice.common.award.Award;
 import com.bizvane.mktcenterservice.common.utils.DateUtil;
 import com.bizvane.mktcenterservice.common.utils.ExecuteParamCheckUtil;
 import com.bizvane.mktcenterservice.mappers.MktActivityPOMapper;
+import com.bizvane.mktcenterservice.mappers.MktActivityRecordPOMapper;
 import com.bizvane.mktcenterservice.mappers.MktActivityRegisterPOMapper;
 import com.bizvane.mktcenterservice.mappers.MktMessagePOMapper;
 import com.bizvane.utils.enumutils.SysResponseEnum;
@@ -48,6 +48,7 @@ import com.github.pagehelper.PageInfo;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.ArrayUtils;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
@@ -88,6 +89,9 @@ public class ActivityServiceImpl implements ActivityService {
     private CouponEntityServiceFeign couponEntityServiceFeign;
     @Autowired
     private BrandServiceRpc brandServiceRpc;
+
+    @Autowired
+    private MktActivityRecordPOMapper mktActivityRecordPOMapper;
 
     /**
      * 禁用/启用活动
@@ -170,35 +174,68 @@ public class ActivityServiceImpl implements ActivityService {
         return responseData;
     }
 
+//    /**
+//     * 小程序端查询活动列表
+//     * @param vo
+//     * @return
+//     */
+//    @Override
+//    public ResponseData<List<ActivityVO>> getActivityList(ActivityVO vo) {
+//        ResponseData responseData = new ResponseData();
+//        List<ActivityVO> lists = new ArrayList<>();
+//        MemberInfoModel memberInfoModel = new MemberInfoModel();
+//        memberInfoModel.setServiceStoreId(vo.getServiceStoreId());
+//        log.info("服务id是=============="+vo.getServiceStoreId());
+//        List<ActivityVO> activityList =mktActivityPOMapper.getActivityList(vo);
+//        log.info("查询到的活动集合是=============="+JSON.toJSONString(activityList));
+//        if (!CollectionUtils.isEmpty(activityList)){
+//            for (ActivityVO activity:activityList) {
+//                //过滤门店
+//                if (!ExecuteParamCheckUtil.implementActivitCheck(memberInfoModel,activity)){
+//                    continue;
+//                }
+//                lists.add(activity);
+//
+//            }
+//            lists = lists.stream().sorted(Comparator.comparing(ActivityVO::getStartTime).reversed()).collect(Collectors.toList());
+//        }
+//        responseData.setData(lists);
+//        responseData.setCode(SysResponseEnum.SUCCESS.getCode());
+//        responseData.setMessage(SysResponseEnum.SUCCESS.getMessage());
+//        return responseData;
+//    }
+
     /**
-     * 小程序端查询活动列表
-     * @param vo
+     * 店铺活动列表
+     * @param storeActivityVO
      * @return
+     * @description 只有邀请开卡有进度
      */
     @Override
-    public ResponseData<List<ActivityVO>> getActivityList(ActivityVO vo) {
-        ResponseData responseData = new ResponseData();
-        List<ActivityVO> lists = new ArrayList<>();
-        MemberInfoModel memberInfoModel = new MemberInfoModel();
-        memberInfoModel.setServiceStoreId(vo.getServiceStoreId());
-        log.info("服务id是=============="+vo.getServiceStoreId());
-        List<ActivityVO> activityList =mktActivityPOMapper.getActivityList(vo);
-        log.info("查询到的活动集合是=============="+JSON.toJSONString(activityList));
-        if (!CollectionUtils.isEmpty(activityList)){
-            for (ActivityVO activity:activityList) {
-                //过滤门店
-                if (!ExecuteParamCheckUtil.implementActivitCheck(memberInfoModel,activity)){
-                    continue;
-                }
-                lists.add(activity);
-
+    public ResponseData<PageInfo<StoreActivityResponseVO>> getActivityList(StoreActivityVO storeActivityVO) {
+        log.info("enter ActivityServiceImpl#getActivityList params:{}",JSON.toJSONString(storeActivityVO));
+        ResponseData<PageInfo<StoreActivityResponseVO>> pageInfoResponseData = new ResponseData<>();
+        MktActivityPOExample mktActivityPOExample = new MktActivityPOExample();
+        PageHelper.startPage(storeActivityVO.getPageNum(),storeActivityVO.getPageSize());
+        List<StoreActivityResponseVO> storeActivityResponseVOS = new ArrayList<>();
+        //进行中
+        if(ActivityConstants.EXECUTED.equals(storeActivityVO.getMyActivityStatus())){
+            //查出所有执行中的活动
+            mktActivityPOExample.createCriteria().andValidEqualTo(Boolean.TRUE).andActivityStatusEqualTo(ActivityStatusEnum.ACTIVITY_STATUS_EXECUTING.getCode());
+            List<MktActivityPO> mktActivityPOS = mktActivityPOMapper.selectByExample(mktActivityPOExample);
+            for(MktActivityPO mktActivityPO:mktActivityPOS){
+                StoreActivityResponseVO storeActivityResponseVO = new StoreActivityResponseVO();
+                BeanUtils.copyProperties(mktActivityPO,storeActivityResponseVO);
+                storeActivityResponseVOS.add(storeActivityResponseVO);
             }
-            lists = lists.stream().sorted(Comparator.comparing(ActivityVO::getStartTime).reversed()).collect(Collectors.toList());
         }
-        responseData.setData(lists);
-        responseData.setCode(SysResponseEnum.SUCCESS.getCode());
-        responseData.setMessage(SysResponseEnum.SUCCESS.getMessage());
-        return responseData;
+        //已完成
+        if(ActivityConstants.FINISHED.equals(storeActivityVO.getMyActivityStatus())){
+            storeActivityResponseVOS = mktActivityPOMapper.getMyFinishedStoreActivity(storeActivityVO);
+        }
+        PageInfo<StoreActivityResponseVO> mktActivityPOPageInfo = new PageInfo<>(storeActivityResponseVOS);
+        pageInfoResponseData.setData(mktActivityPOPageInfo);
+        return pageInfoResponseData;
     }
 
     /**

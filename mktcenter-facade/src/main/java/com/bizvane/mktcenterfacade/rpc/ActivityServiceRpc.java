@@ -2,13 +2,12 @@ package com.bizvane.mktcenterfacade.rpc;
 
 import com.bizvane.centerstageservice.models.po.SysCheckPo;
 import com.bizvane.members.facade.models.MemberInfoModel;
-import com.bizvane.mktcenterfacade.models.vo.JudgeMemberVO;
+import com.bizvane.mktcenterfacade.models.responsevo.StoreActivityResponseVO;
+import com.bizvane.mktcenterfacade.models.vo.*;
 import com.bizvane.mktcenterfacade.models.bo.ActivityBO;
 import com.bizvane.mktcenterfacade.models.po.MktActivityRecordPO;
-import com.bizvane.mktcenterfacade.models.vo.ActivityVO;
-import com.bizvane.mktcenterfacade.models.vo.MemberInfoModelVOActivity;
-import com.bizvane.mktcenterfacade.models.vo.MktActivityRecordVO;
 import com.bizvane.utils.responseinfo.ResponseData;
+import com.github.pagehelper.PageInfo;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -72,8 +71,11 @@ public interface ActivityServiceRpc {
   * @param vo
   * @return
   */
+// @RequestMapping("getActivityList")
+// ResponseData<List<ActivityVO>> getActivityList(@RequestBody ActivityVO vo);
+
  @RequestMapping("getActivityList")
- ResponseData<List<ActivityVO>> getActivityList(@RequestBody ActivityVO vo);
+ public ResponseData<PageInfo<StoreActivityResponseVO>> getActivityList(StoreActivityVO storeActivityVO);
 
  /**
   * 签到列表

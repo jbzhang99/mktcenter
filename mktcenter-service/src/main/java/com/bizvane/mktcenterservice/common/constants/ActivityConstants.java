@@ -54,4 +54,8 @@ public class ActivityConstants {
     public static final String ERROR_RECEIVE_TYPE_EMPTY="领取方式有误";
 
     public static final String COMMON_TYPE_ALL="0";
+
+    public static final Integer EXECUTED=1;
+    public static final Integer FINISHED=2;
+
 }

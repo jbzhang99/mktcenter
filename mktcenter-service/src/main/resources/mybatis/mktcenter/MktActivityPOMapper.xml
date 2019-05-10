@@ -1169,4 +1169,27 @@
     </if>
   </where>
   </select>
+
+  <!--后面再建个邀请开卡的表，然后关联上总的次数-->
+  <select id="getMyFinishedStoreActivity" parameterType="com.bizvane.mktcenterfacade.models.vo.StoreActivityVO" resultType="com.bizvane.mktcenterfacade.models.responsevo.StoreActivityResponseVO">
+        SELECT
+            member_code,
+            mkt_activity_id AS mktActivityId,
+            activity_name AS activityName,
+            start_time AS startTime,
+            end_time AS endTime,
+            activity_info AS activityInfo,
+            count(rewarded) AS participateTimes
+             -- allTimes=1
+        FROM
+            t_mkt_activity tma
+        INNER JOIN t_mkt_activity_record tmar ON tma.mkt_activity_id = tmar.acitivity_id
+        WHERE
+            member_code = #{memberCode}
+        AND tma.valid = 1
+        AND tmar.valid = 1
+        GROUP BY
+            mkt_activity_id,
+            member_code
+  </select>
 </mapper>

@@ -5,13 +5,12 @@ import com.bizvane.members.facade.models.MemberInfoModel;
 import com.bizvane.mktcenterfacade.interfaces.*;
 import com.bizvane.mktcenterfacade.models.bo.ActivityBO;
 import com.bizvane.mktcenterfacade.models.po.MktActivityRecordPO;
-import com.bizvane.mktcenterfacade.models.vo.ActivityVO;
-import com.bizvane.mktcenterfacade.models.vo.JudgeMemberVO;
-import com.bizvane.mktcenterfacade.models.vo.MemberInfoModelVOActivity;
-import com.bizvane.mktcenterfacade.models.vo.MktActivityRecordVO;
+import com.bizvane.mktcenterfacade.models.responsevo.StoreActivityResponseVO;
+import com.bizvane.mktcenterfacade.models.vo.*;
 import com.bizvane.mktcenterservice.common.enums.ActivityTypeEnum;
 import com.bizvane.utils.responseinfo.ResponseData;
 import com.bizvane.utils.tokens.SysAccountPO;
+import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -124,12 +123,12 @@ public class ActivityRpcController {
     }
     /**
      * 小程序端活动列表
-     * @param vo
+     * @param storeActivityVO
      * @return
      */
     @RequestMapping("getActivityList")
-    public ResponseData<List<ActivityVO>>  getActivityList(@RequestBody ActivityVO vo){
-        return activityService.getActivityList(vo);
+    public ResponseData<PageInfo<StoreActivityResponseVO>> getActivityList(@RequestBody StoreActivityVO storeActivityVO){
+        return activityService.getActivityList(storeActivityVO);
     }
 
     /**

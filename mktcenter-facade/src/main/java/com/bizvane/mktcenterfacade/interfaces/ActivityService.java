@@ -7,7 +7,9 @@ import com.bizvane.members.facade.models.MemberInfoModel;
 import com.bizvane.members.facade.vo.WxChannelInfoVo;
 import com.bizvane.messagefacade.models.vo.MemberMessageVO;
 import com.bizvane.messagefacade.models.vo.SysSmsConfigVO;
+import com.bizvane.mktcenterfacade.models.po.MktActivityPO;
 import com.bizvane.mktcenterfacade.models.po.MktMessagePO;
+import com.bizvane.mktcenterfacade.models.responsevo.StoreActivityResponseVO;
 import com.bizvane.mktcenterfacade.models.vo.*;
 import com.bizvane.mktcenterfacade.models.bo.ActivityAnalysisCountBO;
 import com.bizvane.mktcenterfacade.models.bo.AwardBO;
@@ -45,7 +47,7 @@ public interface ActivityService {
      * @param vo
      * @return
      */
-    public ResponseData<List<ActivityVO>>  getActivityList(ActivityVO vo);
+//    public ResponseData<List<ActivityVO>>  getActivityList(ActivityVO vo);
 
     /**
      * 查询效果分析统计
@@ -85,4 +87,6 @@ public interface ActivityService {
      * @return
      */
     public  ResponseData<Integer> judgeMember(JudgeMemberVO vo);
+
+    public ResponseData<PageInfo<StoreActivityResponseVO>> getActivityList(StoreActivityVO storeActivityVO);
 }

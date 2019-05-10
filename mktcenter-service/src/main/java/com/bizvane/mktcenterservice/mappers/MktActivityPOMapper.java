@@ -6,6 +6,7 @@ import com.bizvane.mktcenterfacade.models.bo.CtivityAnalysisBO;
 import com.bizvane.mktcenterfacade.models.po.MktActivityPO;
 import com.bizvane.mktcenterfacade.models.po.MktActivityPOExample;
 import com.bizvane.mktcenterfacade.models.po.MktActivityPOWithBLOBs;
+import com.bizvane.mktcenterfacade.models.responsevo.StoreActivityResponseVO;
 import com.bizvane.mktcenterfacade.models.vo.*;
 
 import org.apache.ibatis.annotations.Param;
@@ -122,4 +123,6 @@ public interface MktActivityPOMapper {
 	List<MktActivityPOWithBLOBs> selectActivityPriceLists(ActivityPriceParamVO vo);
 
 	ActivityRedPacketBO selectActivityRedPacketDetail(ActivityRedPacketVO vo);
+
+	List<StoreActivityResponseVO> getMyFinishedStoreActivity(StoreActivityVO storeActivityVO);
 }
