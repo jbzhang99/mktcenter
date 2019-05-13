@@ -14,6 +14,7 @@ public class CouponRecordVO {
     //pc端
     private Integer pageSize=20;
     private Integer pageNumber=1;
+    private Integer pageNum =1;
     private String exchangeCode;
     private String convertCouponRecordCode;
     private String memberName;
