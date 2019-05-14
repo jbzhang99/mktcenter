@@ -1,0 +1,155 @@
+server:
+  port: 2007
+  servlet:
+    context-path: /mktcenter.api
+spring:
+  application:
+    name: mktcenter
+  redis:
+    host: node1
+    port: 6379
+    password: tangguaner
+    database: 7
+    jedis:
+      pool:
+        max-active: 100
+        max-idle: 8
+        max-wait: 2000ms
+        min-idle: 0
+  swagger:
+    show: true
+
+  datasource:
+    url: jdbc:mysql://node1:3306/crm?useUnicode=true&characterEncoding=utf-8
+    username: root
+    password: tangguaner
+    driver-class-name: com.mysql.jdbc.Driver
+  data:
+    mongodb:
+      database: "7"
+      uri: "mongodb://node1:27017/?AutoConnectRetry=true"
+    jest:
+      uri: http://node2:9200
+      username:
+      password:
+      read-timeout: 30000 #读取超时
+  jackson:
+    date-format: yyyy-MM-dd HH:mm:ss
+    time-zone: GMT+8
+  zipkin:
+    baseUrl: http://192.168.2.15:9411
+    sleuth:
+      sampler:
+        probability: 1.0
+      scheduled:
+        enabled: false
+eureka:
+  instance:
+    prefer-ip-address: true
+    metadata-map:
+      #      user.name: ${spring.security.user.name}
+      #      user.password: ${spring.security.user.password}
+      lease-expiration-duration-in-seconds: 30
+      lease-renewal-interval-in-seconds: 10
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka/
+management:
+  endpoints:
+    web.exposure.include: "*"
+  endpoint:
+    health:
+      show-details: ALWAYS
+mybatis:
+  config-location: classpath:mybatis-config.xml
+  mapper-locations: classpath:mybatis/**/*Mapper.xml
+
+
+# pagehelper
+pagehelper:
+  helperDialect: mysql
+  reasonable: true
+  supportMethodsArguments: true
+  params: count=countSql
+
+xxl:
+  job:
+    admin:
+      ### xxl-job admin address list, such as "http://address" or "http://address01,http://address02"
+      addresses: http://node1:8080
+    ### xxl-job executor address
+    executor:
+      appname: ${spring.application.name}
+      ip:
+      port: 9007
+      ### xxl-job log path
+      logpath: log/job
+      ### xxl-job log retention days
+      logretentiondays: -1
+    ### xxl-job, access token
+    accessToken:
+
+feign:
+  client:
+    centerstage:
+      name: centerstage
+      path: centerstage.api
+    mktcenter:
+      name: mktcenter
+      path: mktcenter.api
+    members:
+      name: members
+      path: members.api
+    centercontrol:
+      name: centercontrol
+      path: centercontrol.api
+
+threadPool:
+  corePoolSize: 16
+  maximumPoolSize: 48
+  keepAliveTime: 60
+  queueCapacity: 99999
+
+qiniu:
+  accessKey: 8X4b8V5i79YC-F-nB-m5m7Z-1uihXSEWypWRwEhK
+  secretKey: xipIk3YSW_Rd-ZJ4Nk6jTN0W2Y70YVvo6Nx6QT7L
+  bucketNm: kgly-sit
+  domain: sit.static.keguanlaoye.com
+
+activity:
+  qrcodeurl: /qrcode?activityCode=
+
+bitdata:
+  businessNum: testbz
+  apiKey: 4199454b3cac0c02b48fd5a9c67c00c0
+  url: http://192.168.1.63:8765/api/open-data-analysis/
+
+tenant:
+  isEnabledTenantInterceptor: false
+ribbon:
+  ConnectTimeout: 60000
+  ReadTimeout: 60000
+
+#审计日志#
+rmq:
+  ONSAddr: NAMESRV_ADDR
+  namesrvAddr: 192.168.1.50:9876
+  accessKey: LTAIpoqUHsXq6q7r
+  secretKey: 0ZJ7bfxXJLT8TpOKvZU3i4YWuhvJzs
+  product.id: PID_PUBLIC_BIZVANE_MEMBER_MESSAGE
+  consume.id: CID_PUBLIC_BIZVANE_MEMBER_MESSAGE
+  send.time.out: 30000
+
+rocketmq:
+  onsaddr:
+  accessKey: LTAIpoqUHsXq6q7r
+  secretKey: 0ZJ7bfxXJLT8TpOKvZU3i4YWuhvJzs
+  topic: public_bizvane_message
+  producerId: PID_PUBLIC_BIZVANE_MESSAGE
+  consumerId: CID_PUBLIC_BIZVANE_MESSAGE_CONSUMER_ALL
+  consumerStatus: true
+  environment: uat
+  addr: 192.168.1.50:9876
+smssend:
+  phonewhite: true
+  phoneblack: true

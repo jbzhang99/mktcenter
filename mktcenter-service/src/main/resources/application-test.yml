@@ -3,6 +3,8 @@ server:
   servlet:
     context-path: /mktcenter.api
 spring:
+  application:
+    name: mktcenter
   redis:
     host: node1
     port: 6379
