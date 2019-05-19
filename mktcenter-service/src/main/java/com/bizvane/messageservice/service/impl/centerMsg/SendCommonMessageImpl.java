@@ -10,9 +10,12 @@ import com.bizvane.messagefacade.models.po.MsgSmsPhonePOExample;
 import com.bizvane.messagefacade.models.vo.SysSmsConfigVO;
 import com.bizvane.utils.enumutils.SysResponseEnum;
 import com.bizvane.utils.responseinfo.ResponseData;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Date;
 import java.util.List;
@@ -23,7 +26,7 @@ import java.util.List;
  * @Time: 2018/7/10 19:05
  * 以  平台类型  来区分
  */
-@Service
+@RestController
 public class SendCommonMessageImpl implements SendCommonMessageFeign {
     @Autowired
     private NetWorkCommon netWorkCommon;
@@ -42,10 +45,17 @@ public class SendCommonMessageImpl implements SendCommonMessageFeign {
 
 @SuppressWarnings({ "unchecked", "finally" })
 @Override
-    public ResponseData<Integer> sendSmg(SysSmsConfigVO vo) {
+    public ResponseData<Integer> sendSmg(@RequestBody SysSmsConfigVO vo) {
         ResponseData<Integer> result = new ResponseData<Integer>(SysResponseEnum.FAILED.getCode(),SysResponseEnum.FAILED.getMessage(),null);
-        String channelName = vo.getChannelName();//通道名称
-        Boolean  resultData=Boolean.FALSE;
+    if(StringUtils.isBlank(vo.getChannelName())){
+        vo.setChannelType(20);
+        vo.setChannelName("chuangLan253");
+        vo.setChannelService("http://smssh1.253.com/msg/send/json");
+        vo.setChannelAccount("N4646531");
+        vo.setChannelPassword("ka2fUAZox");
+    }
+    String channelName = vo.getChannelName();//通道名称
+    Boolean  resultData=Boolean.FALSE;
         try {
         	
         	//黑白名单过滤
@@ -53,8 +63,7 @@ public class SendCommonMessageImpl implements SendCommonMessageFeign {
         	if(SysResponseEnum.FAILED.getCode() == result.getCode()) {
         		 return  result;
         	}
-        	
-        	
+
             if ("moments3.4".equals(channelName)){   //梦网3.4  moments  梦网3.4  MOMENTS   梦网3.4  rec   梦网3.4 newest  梦网3.4   MOMENTS    梦网3.4
                 resultData = netWorkCommon.sendMsgMoments(vo);
                 if (resultData){

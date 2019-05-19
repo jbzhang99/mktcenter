@@ -11,13 +11,13 @@ import org.springframework.web.bind.annotation.RequestMethod;
  * @Author: lijunwei
  * @Time: 2018/7/19 14:11
  */
-@FeignClient(value="${feign.client.mktcenter.name}",path="${feign.client.mktcenter.path}/msg")
+@FeignClient(value="${feign.client.mktcenter.name}",path="${feign.client.mktcenter.path}")
 public interface SendCommonMessageFeign {
     /**
      * 发送短信
      * @param vo
      * @return
      */
-    @RequestMapping(value ="/sendsmg",method = RequestMethod.POST)
+    @RequestMapping(value ="msg/sendsmg",method = RequestMethod.POST)
     public ResponseData<Integer> sendSmg(@RequestBody SysSmsConfigVO vo);
 }

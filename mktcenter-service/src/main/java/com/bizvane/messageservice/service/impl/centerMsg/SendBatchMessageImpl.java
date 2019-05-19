@@ -12,6 +12,8 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Date;
 
@@ -20,7 +22,7 @@ import java.util.Date;
  * @Author: lijunwei
  * @Time: 2018/8/20 10:19
  */
-@Service
+@RestController
 public class SendBatchMessageImpl implements SendBatchMessageFeign {
 private  static  final Logger logger  = LogManager.getLogger(SendBatchMessageImpl.class);
     @Autowired
@@ -31,7 +33,7 @@ private  static  final Logger logger  = LogManager.getLogger(SendBatchMessageImp
 
     @SuppressWarnings("finally")
 	@Override
-    public ResponseData<Integer> sendSmgBatch(SysSmsConfigVO vo) {
+    public ResponseData<Integer> sendSmgBatch(@RequestBody SysSmsConfigVO vo) {
         ResponseData<Integer> result = new ResponseData<Integer>(SysResponseEnum.FAILED.getCode(),SysResponseEnum.FAILED.getMessage(),null);
         String channelName = vo.getChannelName();//通道名称
         Boolean  resultData=Boolean.FALSE;

@@ -86,7 +86,7 @@ public class NetWorkCommon {
     }
 	public static void main(String[] args) throws Exception {
         String msg = "您的随机密码为：9067401。";
-        SmsSendRequest smsSingleRequest2 = new SmsSendRequest("N4646531", "ka2fUAZox", msg, "13348394145","true");
+        SmsSendRequest smsSingleRequest2 = new SmsSendRequest("N4646531", "ka2fUAZox", msg, "13338195131","true");
         String requestJson2 = JSON.toJSONString(smsSingleRequest2);
         String response2 = ChuangLanSmsUtil.sendSmsByPost("http://smssh1.253.com/msg/send/json", requestJson2);
         SmsSendResponse smsSingleResponse2 = JSON.parseObject(response2, SmsSendResponse.class);
