@@ -24,10 +24,10 @@ public interface ActivityManualServiceRpc {
 
     @RequestMapping("/getActivityByMemberInfo")
     @io.swagger.annotations.ApiModelProperty(value = "memberInfoModel,activityType",name = "领券中心列表", required = false,example = "")
-    public ResponseData<List<ActivityVO>> getActivityByMemberInfo(@RequestBody ActivityManualVO vo);
+    public ResponseData<List<ActivityManualVO>> getActivityByMemberInfo(@RequestBody ActivityManualVO vo);
 
     @RequestMapping("/executeActivity")
     @io.swagger.annotations.ApiModelProperty(value = "model,couponCode,activityType",name = "执行领券活动", required = false,example = "")
-    public  ResponseData<ActivityManualVO> executeActivity(@RequestBody ActivityManualVO vo);
+    public  ResponseData<ActivityVO> executeActivity(@RequestBody ActivityManualVO vo);
 
 }
