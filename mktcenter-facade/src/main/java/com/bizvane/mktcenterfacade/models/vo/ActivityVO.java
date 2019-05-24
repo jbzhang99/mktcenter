@@ -1,5 +1,8 @@
 package com.bizvane.mktcenterfacade.models.vo;
 
+import java.util.Date;
+import java.util.List;
+
 import com.bizvane.centerstageservice.models.po.SysDimSkuPo;
 import com.bizvane.centerstageservice.models.po.SysStorePo;
 import com.bizvane.couponfacade.models.po.CouponDefinitionPO;
@@ -9,15 +12,13 @@ import com.bizvane.couponfacade.models.vo.CouponFindCouponCountResponseVO;
 import com.bizvane.mktcenterfacade.models.po.MktActivityPO;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
-import java.util.Date;
-import java.util.List;
-
 /**
  * @author chen.li
  * @date on 2018/7/6 20:07
  * @description
  *
  */
+@Deprecated
 public class ActivityVO extends MktActivityPO {
     private Boolean storeLimit;
     /**

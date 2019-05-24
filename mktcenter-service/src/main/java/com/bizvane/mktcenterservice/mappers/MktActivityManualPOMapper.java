@@ -2,6 +2,7 @@ package com.bizvane.mktcenterservice.mappers;
 
 import com.bizvane.mktcenterfacade.models.po.MktActivityManualPO;
 import com.bizvane.mktcenterfacade.models.po.MktActivityManualPOExample;
+import com.bizvane.mktcenterfacade.models.vo.ActivityCouponVO;
 import com.bizvane.mktcenterfacade.models.vo.ActivityVO;
 import org.apache.ibatis.annotations.Param;
 
@@ -101,5 +102,5 @@ public interface MktActivityManualPOMapper {
 
     List<ActivityVO> getActivityList(ActivityVO vo);
 
-    List<ActivityVO> getActivityIdList(ActivityVO vo);
+    List<ActivityCouponVO> getActivityIdList(ActivityVO vo);
 }

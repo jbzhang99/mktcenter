@@ -1,0 +1,103 @@
+package com.bizvane.mktcenterfacade.models.vo;
+
+import java.io.Serializable;
+import java.util.Date;
+
+import com.bizvane.couponfacade.models.po.CouponEntityPO;
+import com.bizvane.couponfacade.models.vo.CouponDetailResponseVO;
+import com.fasterxml.jackson.annotation.JsonFormat;
+
+import io.swagger.annotations.ApiModelProperty;
+import lombok.Data;
+
+@Data
+public class ActivityCouponVO implements Serializable {
+  
+  /**
+   * 
+   */
+  private static final long serialVersionUID = 1L;
+
+  @ApiModelProperty(value = "pkid", name = "mktActivityId", required = false, example = "")
+  private Long mktActivityId;
+  
+  @ApiModelProperty(value = "活动编号", name = "activityCode", required = false, example = "")
+  private String activityCode;
+
+  @ApiModelProperty(value = "活动名称", name = "activityName", required = false, example = "")
+  private String activityName;
+
+  @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", locale = "zh", timezone = "GMT+8")
+  @ApiModelProperty(value = "活动开始时间", name = "startTime", required = false, example = "")
+  private Date startTime;
+
+  @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", locale = "zh", timezone = "GMT+8")
+  @ApiModelProperty(value = "活动结束时间", name = "endTime", required = false, example = "")
+  private Date endTime;
+
+  @ApiModelProperty(value = "活动描述、简介", name = "activityInfo", required = false, example = "")
+  private String activityInfo;
+  
+  @ApiModelProperty(value = "是否长期：1是，0否", name = "longTerm", required = false, example = "")
+  private Integer longTerm;
+  
+  @ApiModelProperty(value = "活动列表图片，多张逗号分隔", name = "activityListImg", required = false, example = "")
+  private String activityListImg;
+
+  @ApiModelProperty(value = "活动详情图片", name = "activityDetailImg", required = false, example = "")
+  private String activityDetailImg;
+  
+  @ApiModelProperty(value = "审核状态：0全部，1待审核，2审核中，3已审核，4已驳回", name = "checkStatus", required = false, example = "")
+  private Integer checkStatus;
+  
+  @ApiModelProperty(value = "活动状态：0全部，1待执行，2执行中，3已结束，4已禁用", name = "activityStatus", required = false, example = "")
+  private Integer activityStatus;
+  
+  @io.swagger.annotations.ApiModelProperty(value = "备注", name = "remark", required = false, example = "")
+  private String remark;
+
+  @io.swagger.annotations.ApiModelProperty(value = "创建人id", name = "createUserId", required = false, example = "")
+  private Long createUserId;
+
+  @io.swagger.annotations.ApiModelProperty(value = "创建人", name = "createUserName", required = false, example = "")
+  private String createUserName;
+
+  @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", locale = "zh", timezone = "GMT+8")
+  @io.swagger.annotations.ApiModelProperty(value = "创建日期", name = "createDate", required = false, example = "")
+  private Date createDate;
+
+  
+  @ApiModelProperty(value = "二维码", name = "qrcode", required = false, example = "")
+  private String qrcode;//二维码
+
+  private Integer perPersonPerDayMax;
+
+  private Integer perPersonMax;
+  
+  @ApiModelProperty(value = "活动明细id", name = "mktActivityManualId", required = false, example = "")
+  private Long mktActivityManualId;
+  
+  @ApiModelProperty(value = "门店限制状态：0不限制，1限制", name = "isStoreLimit", required = false, example = "")
+  private Boolean isStoreLimit;
+  
+  @ApiModelProperty(value = "门店限制名单", name = "storeLimitList", required = false, example = "")
+  private String storeLimitList;
+  
+  @ApiModelProperty(value = "门店限制类型：1黑名单，2白名单", name = "storeLimitType", required = false, example = "")
+  private Integer storeLimitType;
+ 
+  @ApiModelProperty(value = "券定义id", name = "couponDefinitionId", required = false, example = "")
+  private Long couponDefinitionId;
+
+  @ApiModelProperty(value = "券名称", name = "couponName", required = false, example = "")
+  private String couponName;
+  
+  @ApiModelProperty(value = "券实例对象", name = "couponEntityPO", required = false, example = "")
+  private CouponEntityPO couponEntityPO;
+  
+  @ApiModelProperty(value = "是否可以领取", name = "canReceive", required = false, example = "")
+  private Boolean canReceive;
+  
+  @ApiModelProperty(value = "券详情", name = "couponDetailResponseVO", required = false, example = "")
+  private CouponDetailResponseVO couponDetailResponseVO;
+}

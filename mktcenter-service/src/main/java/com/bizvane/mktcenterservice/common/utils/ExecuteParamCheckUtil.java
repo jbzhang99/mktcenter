@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.bizvane.members.facade.models.MemberInfoModel;
 import com.bizvane.mktcenterfacade.models.bo.ActivityBO;
 import com.bizvane.mktcenterfacade.models.bo.OrderModelBo;
+import com.bizvane.mktcenterfacade.models.vo.ActivityCouponVO;
 import com.bizvane.mktcenterfacade.models.vo.ActivityVO;
 import lombok.extern.slf4j.Slf4j;
 
@@ -207,20 +208,20 @@ public class ExecuteParamCheckUtil {
      * 执行活动时的验证
      * @return
      */
-    public  static Boolean implementActivitCheck(MemberInfoModel vo, ActivityVO activityVO) {
+    public  static Boolean implementActivitCheck(MemberInfoModel vo, ActivityCouponVO activityCouponVO) {
         Boolean falg = Boolean.FALSE;
         Boolean storeLimit =Boolean.FALSE;
-        if(activityVO.getStoreLimit()==null){
-            storeLimit=activityVO.getIsStoreLimit();
+        if(activityCouponVO.getIsStoreLimit()==null){
+            storeLimit = activityCouponVO.getIsStoreLimit();
         }
         if (Boolean.FALSE.equals(storeLimit)) {
             falg = true;
         } else {
             //判断是白名单
-            if (activityVO.getStoreLimitType()==2) {
+            if (activityCouponVO.getStoreLimitType()==2) {
                 if (null!=vo.getServiceStoreId()){
                     //表里查出来的
-                    String stroeList = activityVO.getStoreLimitList();
+                    String stroeList = activityCouponVO.getStoreLimitList();
                     log.info("表里查出来数据为=============="+stroeList);
                     List<String> productNoList = Arrays.asList(stroeList.split(","));
                     log.info("服务门店的id为=============="+vo.getServiceStoreId().toString());
@@ -236,4 +237,34 @@ public class ExecuteParamCheckUtil {
         }
         return falg;
     }
+    
+    public  static Boolean implementActivitCheck(MemberInfoModel vo, ActivityVO activityVO) {
+      Boolean falg = Boolean.FALSE;
+      Boolean storeLimit =Boolean.FALSE;
+      if(activityVO.getStoreLimit()==null){
+          storeLimit=activityVO.getIsStoreLimit();
+      }
+      if (Boolean.FALSE.equals(storeLimit)) {
+          falg = true;
+      } else {
+          //判断是白名单
+          if (activityVO.getStoreLimitType()==2) {
+              if (null!=vo.getServiceStoreId()){
+                  //表里查出来的
+                  String stroeList = activityVO.getStoreLimitList();
+                  log.info("表里查出来数据为=============="+stroeList);
+                  List<String> productNoList = Arrays.asList(stroeList.split(","));
+                  log.info("服务门店的id为=============="+vo.getServiceStoreId().toString());
+                  falg=productNoList.contains(vo.getServiceStoreId().toString());
+              }else{
+                  falg = false;
+              }
+
+
+          }
+          //判断是否是白名单
+
+      }
+      return falg;
+  }
 }

@@ -1,17 +1,17 @@
 package com.bizvane.mktcenterfacade.interfaces;
 
 
+import java.util.List;
+
 import com.bizvane.centerstageservice.models.po.SysCheckPo;
 import com.bizvane.members.facade.models.MemberInfoModel;
 import com.bizvane.mktcenterfacade.models.bo.ActivityBO;
-import com.bizvane.mktcenterfacade.models.vo.PageForm;
+import com.bizvane.mktcenterfacade.models.vo.ActivityCouponVO;
 import com.bizvane.mktcenterfacade.models.vo.ActivityManualVO;
 import com.bizvane.mktcenterfacade.models.vo.ActivityVO;
+import com.bizvane.mktcenterfacade.models.vo.PageForm;
 import com.bizvane.utils.responseinfo.ResponseData;
 import com.bizvane.utils.tokens.SysAccountPO;
-
-import java.util.List;
-
 
 public interface ActivityManualService {
 
@@ -25,7 +25,15 @@ public interface ActivityManualService {
 
   ResponseData<ActivityBO> selectActivityManualByBusinessCode(String businessCode);
 
-  ResponseData<List<ActivityVO>>  getActivityByMemberInfo(MemberInfoModel memberInfoModel,Integer activityType);
+  /**
+   * 堂倌
+   * 通过会员查询活动领券中心list
+   * @param memberInfoModel
+   * @param activityType
+   * @return
+   */
+  ResponseData<List<ActivityCouponVO>>  getActivityByMemberInfo(MemberInfoModel memberInfoModel,Integer activityType);
+  
   ResponseData<ActivityVO>  getActivityByQrcode(MemberInfoModel memberInfoModel,String activityCode,Integer activityType);
 
   ResponseData<Integer>  checkActivity(SysCheckPo po, SysAccountPO sysAccountPO);

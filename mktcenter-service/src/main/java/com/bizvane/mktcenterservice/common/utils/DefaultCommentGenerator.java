@@ -87,16 +87,6 @@ public class DefaultCommentGenerator implements CommentGenerator {
     sb.append("  WARNING - 只读 - "); //$NON-NLS-1$
     sb.append(MergeConstants.NEW_ELEMENT_TAG);
     xmlElement.addElement(new TextElement(sb.toString()));
-
-    String s = this.getDateString();
-    if (s != null) {
-      sb.setLength(0);
-      sb.append("  This element was generated on "); //$NON-NLS-1$
-      sb.append(s);
-      sb.append('.');
-      xmlElement.addElement(new TextElement(sb.toString()));
-    }
-
     xmlElement.addElement(new TextElement("-->")); //$NON-NLS-1$
   }
 
@@ -151,11 +141,6 @@ public class DefaultCommentGenerator implements CommentGenerator {
     sb.append(MergeConstants.NEW_ELEMENT_TAG);
     if (markAsDoNotDelete) {
       sb.append(" do_not_delete_during_merge"); //$NON-NLS-1$
-    }
-    String s = this.getDateString();
-    if (s != null) {
-      sb.append(' ');
-      sb.append(s);
     }
     javaElement.addJavaDocLine(sb.toString());
   }

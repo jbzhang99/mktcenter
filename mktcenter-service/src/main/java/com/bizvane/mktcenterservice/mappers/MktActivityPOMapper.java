@@ -16,92 +16,92 @@ import java.util.List;
 public interface MktActivityPOMapper {
 
 	/**
-	 * 只读. 
-	 * @mbg.generated  2019-02-25 09:06:54
-	 */
-	long countByExample(MktActivityPOExample example);
+   * 只读. 
+   * @mbg.generated  2019-05-24 15:35:50
+   */
+  long countByExample(MktActivityPOExample example);
 
-	/**
-	 * 只读. 
-	 * @mbg.generated  2019-02-25 09:06:54
-	 */
-	int deleteByExample(MktActivityPOExample example);
+  /**
+   * 只读. 
+   * @mbg.generated  2019-05-24 15:35:50
+   */
+  int deleteByExample(MktActivityPOExample example);
 
-	/**
-	 * 只读. 
-	 * @mbg.generated  2019-02-25 09:06:54
-	 */
-	int deleteByPrimaryKey(Long mktActivityId);
+  /**
+   * 只读. 
+   * @mbg.generated  2019-05-24 15:35:50
+   */
+  int deleteByPrimaryKey(Long mktActivityId);
 
-	/**
-	 * 只读. 
-	 * @mbg.generated  2019-02-25 09:06:54
-	 */
-	int insert(MktActivityPOWithBLOBs record);
+  /**
+   * 只读. 
+   * @mbg.generated  2019-05-24 15:35:50
+   */
+  int insert(MktActivityPOWithBLOBs record);
 
-	/**
-	 * 只读. 
-	 * @mbg.generated  2019-02-25 09:06:54
-	 */
-	int insertSelective(MktActivityPOWithBLOBs record);
+  /**
+   * 只读. 
+   * @mbg.generated  2019-05-24 15:35:50
+   */
+  int insertSelective(MktActivityPOWithBLOBs record);
 
-	/**
-	 * 只读. 
-	 * @mbg.generated  2019-02-25 09:06:54
-	 */
-	List<MktActivityPOWithBLOBs> selectByExampleWithBLOBs(MktActivityPOExample example);
+  /**
+   * 只读. 
+   * @mbg.generated  2019-05-24 15:35:50
+   */
+  List<MktActivityPOWithBLOBs> selectByExampleWithBLOBs(MktActivityPOExample example);
 
-	/**
-	 * 只读. 
-	 * @mbg.generated  2019-02-25 09:06:54
-	 */
-	List<MktActivityPO> selectByExample(MktActivityPOExample example);
+  /**
+   * 只读. 
+   * @mbg.generated  2019-05-24 15:35:50
+   */
+  List<MktActivityPO> selectByExample(MktActivityPOExample example);
 
-	/**
-	 * 只读. 
-	 * @mbg.generated  2019-02-25 09:06:54
-	 */
-	MktActivityPOWithBLOBs selectByPrimaryKey(Long mktActivityId);
+  /**
+   * 只读. 
+   * @mbg.generated  2019-05-24 15:35:50
+   */
+  MktActivityPOWithBLOBs selectByPrimaryKey(Long mktActivityId);
 
-	/**
-	 * 只读. 
-	 * @mbg.generated  2019-02-25 09:06:54
-	 */
-	int updateByExampleSelective(@Param("record") MktActivityPOWithBLOBs record,
-			@Param("example") MktActivityPOExample example);
+  /**
+   * 只读. 
+   * @mbg.generated  2019-05-24 15:35:50
+   */
+  int updateByExampleSelective(@Param("record") MktActivityPOWithBLOBs record,
+      @Param("example") MktActivityPOExample example);
 
-	/**
-	 * 只读. 
-	 * @mbg.generated  2019-02-25 09:06:54
-	 */
-	int updateByExampleWithBLOBs(@Param("record") MktActivityPOWithBLOBs record,
-			@Param("example") MktActivityPOExample example);
+  /**
+   * 只读. 
+   * @mbg.generated  2019-05-24 15:35:50
+   */
+  int updateByExampleWithBLOBs(@Param("record") MktActivityPOWithBLOBs record,
+      @Param("example") MktActivityPOExample example);
 
-	/**
-	 * 只读. 
-	 * @mbg.generated  2019-02-25 09:06:54
-	 */
-	int updateByExample(@Param("record") MktActivityPO record, @Param("example") MktActivityPOExample example);
+  /**
+   * 只读. 
+   * @mbg.generated  2019-05-24 15:35:50
+   */
+  int updateByExample(@Param("record") MktActivityPO record, @Param("example") MktActivityPOExample example);
 
-	/**
-	 * 只读. 
-	 * @mbg.generated  2019-02-25 09:06:54
-	 */
-	int updateByPrimaryKeySelective(MktActivityPOWithBLOBs record);
+  /**
+   * 只读. 
+   * @mbg.generated  2019-05-24 15:35:50
+   */
+  int updateByPrimaryKeySelective(MktActivityPOWithBLOBs record);
 
-	/**
-	 * 只读. 
-	 * @mbg.generated  2019-02-25 09:06:54
-	 */
-	int updateByPrimaryKeyWithBLOBs(MktActivityPOWithBLOBs record);
+  /**
+   * 只读. 
+   * @mbg.generated  2019-05-24 15:35:50
+   */
+  int updateByPrimaryKeyWithBLOBs(MktActivityPOWithBLOBs record);
 
-	/**
-	 * 只读. 
-	 * @mbg.generated  2019-02-25 09:06:54
-	 */
-	int updateByPrimaryKey(MktActivityPO record);
+  /**
+   * 只读. 
+   * @mbg.generated  2019-05-24 15:35:50
+   */
+  int updateByPrimaryKey(MktActivityPO record);
 
-	/**
+  /**
 	 * 更新活动执行状态
 	 * @param po
 	 * @return

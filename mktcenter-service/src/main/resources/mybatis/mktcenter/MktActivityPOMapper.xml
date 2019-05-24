@@ -4,7 +4,7 @@
   <resultMap id="BaseResultMap" type="com.bizvane.mktcenterfacade.models.po.MktActivityPO">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2019-02-25 09:06:54.
+      This element was generated on 2019-05-24 15:35:50.
     -->
     <id column="mkt_activity_id" jdbcType="BIGINT" property="mktActivityId" />
     <result column="sys_company_id" jdbcType="BIGINT" property="sysCompanyId" />
@@ -20,6 +20,8 @@
     <result column="send_immediately" jdbcType="BIT" property="sendImmediately" />
     <result column="send_time" jdbcType="TIMESTAMP" property="sendTime" />
     <result column="points" jdbcType="INTEGER" property="points" />
+    <result column="activity_list_img" jdbcType="VARCHAR" property="activityListImg" />
+    <result column="activity_detail_img" jdbcType="VARCHAR" property="activityDetailImg" />
     <result column="qr_code_url" jdbcType="VARCHAR" property="qrCodeUrl" />
     <result column="check_status" jdbcType="INTEGER" property="checkStatus" />
     <result column="activity_status" jdbcType="INTEGER" property="activityStatus" />
@@ -39,18 +41,16 @@
   <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.bizvane.mktcenterfacade.models.po.MktActivityPOWithBLOBs">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2019-02-25 09:06:54.
+      This element was generated on 2019-05-24 15:35:50.
     -->
     <result column="activity_info" jdbcType="LONGVARCHAR" property="activityInfo" />
     <result column="activity_rule" jdbcType="LONGVARCHAR" property="activityRule" />
-    <result column="activity_list_img" jdbcType="LONGVARCHAR" property="activityListImg" />
-    <result column="activity_detail_img" jdbcType="LONGVARCHAR" property="activityDetailImg" />
     <result column="store_limit_list" jdbcType="LONGVARCHAR" property="storeLimitList" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2019-02-25 09:06:54.
+      This element was generated on 2019-05-24 15:35:50.
     -->
     <where>
       <foreach collection="oredCriteria" item="criteria" separator="or">
@@ -83,7 +83,7 @@
   <sql id="Update_By_Example_Where_Clause">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2019-02-25 09:06:54.
+      This element was generated on 2019-05-24 15:35:50.
     -->
     <where>
       <foreach collection="example.oredCriteria" item="criteria" separator="or">
@@ -116,25 +116,26 @@
   <sql id="Base_Column_List">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2019-02-25 09:06:54.
+      This element was generated on 2019-05-24 15:35:50.
     -->
     mkt_activity_id, sys_company_id, sys_brand_id, mbr_group_def_id, mkt_activity_smart_group_id, 
     activity_code, activity_type, activity_name, start_time, end_time, long_term, send_immediately, 
-    send_time, points, qr_code_url, check_status, activity_status, is_store_limit, store_limit_type, 
-    prize_points, tries_limit, remark, create_user_id, create_user_name, create_date, 
-    modified_user_id, modified_user_name, modified_date, valid
+    send_time, points, activity_list_img, activity_detail_img, qr_code_url, check_status, 
+    activity_status, is_store_limit, store_limit_type, prize_points, tries_limit, remark, 
+    create_user_id, create_user_name, create_date, modified_user_id, modified_user_name, 
+    modified_date, valid
   </sql>
   <sql id="Blob_Column_List">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2019-02-25 09:06:54.
+      This element was generated on 2019-05-24 15:35:50.
     -->
-    activity_info, activity_rule, activity_list_img, activity_detail_img, store_limit_list
+    activity_info, activity_rule, store_limit_list
   </sql>
   <select id="selectByExampleWithBLOBs" parameterType="com.bizvane.mktcenterfacade.models.po.MktActivityPOExample" resultMap="ResultMapWithBLOBs">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2019-02-25 09:06:54.
+      This element was generated on 2019-05-24 15:35:50.
     -->
     select
     <if test="distinct">
@@ -154,7 +155,7 @@
   <select id="selectByExample" parameterType="com.bizvane.mktcenterfacade.models.po.MktActivityPOExample" resultMap="BaseResultMap">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2019-02-25 09:06:54.
+      This element was generated on 2019-05-24 15:35:50.
     -->
     select
     <if test="distinct">
@@ -172,7 +173,7 @@
   <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="ResultMapWithBLOBs">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2019-02-25 09:06:54.
+      This element was generated on 2019-05-24 15:35:50.
     -->
     select 
     <include refid="Base_Column_List" />
@@ -184,7 +185,7 @@
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2019-02-25 09:06:54.
+      This element was generated on 2019-05-24 15:35:50.
     -->
     delete from t_mkt_activity
     where mkt_activity_id = #{mktActivityId,jdbcType=BIGINT}
@@ -192,7 +193,7 @@
   <delete id="deleteByExample" parameterType="com.bizvane.mktcenterfacade.models.po.MktActivityPOExample">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2019-02-25 09:06:54.
+      This element was generated on 2019-05-24 15:35:50.
     -->
     delete from t_mkt_activity
     <if test="_parameter != null">
@@ -202,7 +203,7 @@
   <insert id="insert" parameterType="com.bizvane.mktcenterfacade.models.po.MktActivityPOWithBLOBs">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2019-02-25 09:06:54.
+      This element was generated on 2019-05-24 15:35:50.
     -->
     <selectKey keyProperty="mktActivityId" order="AFTER" resultType="java.lang.Long">
       SELECT LAST_INSERT_ID()
@@ -211,31 +212,31 @@
       mkt_activity_smart_group_id, activity_code, activity_type, 
       activity_name, start_time, end_time, 
       long_term, send_immediately, send_time, 
-      points, qr_code_url, check_status, 
-      activity_status, is_store_limit, store_limit_type, 
-      prize_points, tries_limit, remark, 
-      create_user_id, create_user_name, create_date, 
-      modified_user_id, modified_user_name, modified_date, 
-      valid, activity_info, activity_rule, 
-      activity_list_img, activity_detail_img, 
-      store_limit_list)
+      points, activity_list_img, activity_detail_img, 
+      qr_code_url, check_status, activity_status, 
+      is_store_limit, store_limit_type, prize_points, 
+      tries_limit, remark, create_user_id, 
+      create_user_name, create_date, modified_user_id, 
+      modified_user_name, modified_date, valid, 
+      activity_info, activity_rule, store_limit_list
+      )
     values (#{sysCompanyId,jdbcType=BIGINT}, #{sysBrandId,jdbcType=BIGINT}, #{mbrGroupDefId,jdbcType=BIGINT}, 
       #{mktActivitySmartGroupId,jdbcType=BIGINT}, #{activityCode,jdbcType=VARCHAR}, #{activityType,jdbcType=INTEGER}, 
       #{activityName,jdbcType=VARCHAR}, #{startTime,jdbcType=TIMESTAMP}, #{endTime,jdbcType=TIMESTAMP}, 
       #{longTerm,jdbcType=INTEGER}, #{sendImmediately,jdbcType=BIT}, #{sendTime,jdbcType=TIMESTAMP}, 
-      #{points,jdbcType=INTEGER}, #{qrCodeUrl,jdbcType=VARCHAR}, #{checkStatus,jdbcType=INTEGER}, 
-      #{activityStatus,jdbcType=INTEGER}, #{isStoreLimit,jdbcType=BIT}, #{storeLimitType,jdbcType=INTEGER}, 
-      #{prizePoints,jdbcType=INTEGER}, #{triesLimit,jdbcType=INTEGER}, #{remark,jdbcType=VARCHAR}, 
-      #{createUserId,jdbcType=BIGINT}, #{createUserName,jdbcType=VARCHAR}, #{createDate,jdbcType=TIMESTAMP}, 
-      #{modifiedUserId,jdbcType=BIGINT}, #{modifiedUserName,jdbcType=VARCHAR}, #{modifiedDate,jdbcType=TIMESTAMP}, 
-      #{valid,jdbcType=BIT}, #{activityInfo,jdbcType=LONGVARCHAR}, #{activityRule,jdbcType=LONGVARCHAR}, 
-      #{activityListImg,jdbcType=LONGVARCHAR}, #{activityDetailImg,jdbcType=LONGVARCHAR}, 
-      #{storeLimitList,jdbcType=LONGVARCHAR})
+      #{points,jdbcType=INTEGER}, #{activityListImg,jdbcType=VARCHAR}, #{activityDetailImg,jdbcType=VARCHAR}, 
+      #{qrCodeUrl,jdbcType=VARCHAR}, #{checkStatus,jdbcType=INTEGER}, #{activityStatus,jdbcType=INTEGER}, 
+      #{isStoreLimit,jdbcType=BIT}, #{storeLimitType,jdbcType=INTEGER}, #{prizePoints,jdbcType=INTEGER}, 
+      #{triesLimit,jdbcType=INTEGER}, #{remark,jdbcType=VARCHAR}, #{createUserId,jdbcType=BIGINT}, 
+      #{createUserName,jdbcType=VARCHAR}, #{createDate,jdbcType=TIMESTAMP}, #{modifiedUserId,jdbcType=BIGINT}, 
+      #{modifiedUserName,jdbcType=VARCHAR}, #{modifiedDate,jdbcType=TIMESTAMP}, #{valid,jdbcType=BIT}, 
+      #{activityInfo,jdbcType=LONGVARCHAR}, #{activityRule,jdbcType=LONGVARCHAR}, #{storeLimitList,jdbcType=LONGVARCHAR}
+      )
   </insert>
   <insert id="insertSelective" parameterType="com.bizvane.mktcenterfacade.models.po.MktActivityPOWithBLOBs">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2019-02-25 09:06:54.
+      This element was generated on 2019-05-24 15:35:50.
     -->
     <selectKey keyProperty="mktActivityId" order="AFTER" resultType="java.lang.Long">
       SELECT LAST_INSERT_ID()
@@ -280,6 +281,12 @@
       </if>
       <if test="points != null">
         points,
+      </if>
+      <if test="activityListImg != null">
+        activity_list_img,
+      </if>
+      <if test="activityDetailImg != null">
+        activity_detail_img,
       </if>
       <if test="qrCodeUrl != null">
         qr_code_url,
@@ -332,12 +339,6 @@
       <if test="activityRule != null">
         activity_rule,
       </if>
-      <if test="activityListImg != null">
-        activity_list_img,
-      </if>
-      <if test="activityDetailImg != null">
-        activity_detail_img,
-      </if>
       <if test="storeLimitList != null">
         store_limit_list,
       </if>
@@ -381,6 +382,12 @@
       </if>
       <if test="points != null">
         #{points,jdbcType=INTEGER},
+      </if>
+      <if test="activityListImg != null">
+        #{activityListImg,jdbcType=VARCHAR},
+      </if>
+      <if test="activityDetailImg != null">
+        #{activityDetailImg,jdbcType=VARCHAR},
       </if>
       <if test="qrCodeUrl != null">
         #{qrCodeUrl,jdbcType=VARCHAR},
@@ -433,12 +440,6 @@
       <if test="activityRule != null">
         #{activityRule,jdbcType=LONGVARCHAR},
       </if>
-      <if test="activityListImg != null">
-        #{activityListImg,jdbcType=LONGVARCHAR},
-      </if>
-      <if test="activityDetailImg != null">
-        #{activityDetailImg,jdbcType=LONGVARCHAR},
-      </if>
       <if test="storeLimitList != null">
         #{storeLimitList,jdbcType=LONGVARCHAR},
       </if>
@@ -447,7 +448,7 @@
   <select id="countByExample" parameterType="com.bizvane.mktcenterfacade.models.po.MktActivityPOExample" resultType="java.lang.Long">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2019-02-25 09:06:54.
+      This element was generated on 2019-05-24 15:35:50.
     -->
     select count(*) from t_mkt_activity
     <if test="_parameter != null">
@@ -457,7 +458,7 @@
   <update id="updateByExampleSelective" parameterType="map">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2019-02-25 09:06:54.
+      This element was generated on 2019-05-24 15:35:50.
     -->
     update t_mkt_activity
     <set>
@@ -502,6 +503,12 @@
       </if>
       <if test="record.points != null">
         points = #{record.points,jdbcType=INTEGER},
+      </if>
+      <if test="record.activityListImg != null">
+        activity_list_img = #{record.activityListImg,jdbcType=VARCHAR},
+      </if>
+      <if test="record.activityDetailImg != null">
+        activity_detail_img = #{record.activityDetailImg,jdbcType=VARCHAR},
       </if>
       <if test="record.qrCodeUrl != null">
         qr_code_url = #{record.qrCodeUrl,jdbcType=VARCHAR},
@@ -554,12 +561,6 @@
       <if test="record.activityRule != null">
         activity_rule = #{record.activityRule,jdbcType=LONGVARCHAR},
       </if>
-      <if test="record.activityListImg != null">
-        activity_list_img = #{record.activityListImg,jdbcType=LONGVARCHAR},
-      </if>
-      <if test="record.activityDetailImg != null">
-        activity_detail_img = #{record.activityDetailImg,jdbcType=LONGVARCHAR},
-      </if>
       <if test="record.storeLimitList != null">
         store_limit_list = #{record.storeLimitList,jdbcType=LONGVARCHAR},
       </if>
@@ -571,7 +572,7 @@
   <update id="updateByExampleWithBLOBs" parameterType="map">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2019-02-25 09:06:54.
+      This element was generated on 2019-05-24 15:35:50.
     -->
     update t_mkt_activity
     set mkt_activity_id = #{record.mktActivityId,jdbcType=BIGINT},
@@ -588,6 +589,8 @@
       send_immediately = #{record.sendImmediately,jdbcType=BIT},
       send_time = #{record.sendTime,jdbcType=TIMESTAMP},
       points = #{record.points,jdbcType=INTEGER},
+      activity_list_img = #{record.activityListImg,jdbcType=VARCHAR},
+      activity_detail_img = #{record.activityDetailImg,jdbcType=VARCHAR},
       qr_code_url = #{record.qrCodeUrl,jdbcType=VARCHAR},
       check_status = #{record.checkStatus,jdbcType=INTEGER},
       activity_status = #{record.activityStatus,jdbcType=INTEGER},
@@ -605,8 +608,6 @@
       valid = #{record.valid,jdbcType=BIT},
       activity_info = #{record.activityInfo,jdbcType=LONGVARCHAR},
       activity_rule = #{record.activityRule,jdbcType=LONGVARCHAR},
-      activity_list_img = #{record.activityListImg,jdbcType=LONGVARCHAR},
-      activity_detail_img = #{record.activityDetailImg,jdbcType=LONGVARCHAR},
       store_limit_list = #{record.storeLimitList,jdbcType=LONGVARCHAR}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
@@ -615,7 +616,7 @@
   <update id="updateByExample" parameterType="map">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2019-02-25 09:06:54.
+      This element was generated on 2019-05-24 15:35:50.
     -->
     update t_mkt_activity
     set mkt_activity_id = #{record.mktActivityId,jdbcType=BIGINT},
@@ -632,6 +633,8 @@
       send_immediately = #{record.sendImmediately,jdbcType=BIT},
       send_time = #{record.sendTime,jdbcType=TIMESTAMP},
       points = #{record.points,jdbcType=INTEGER},
+      activity_list_img = #{record.activityListImg,jdbcType=VARCHAR},
+      activity_detail_img = #{record.activityDetailImg,jdbcType=VARCHAR},
       qr_code_url = #{record.qrCodeUrl,jdbcType=VARCHAR},
       check_status = #{record.checkStatus,jdbcType=INTEGER},
       activity_status = #{record.activityStatus,jdbcType=INTEGER},
@@ -654,7 +657,7 @@
   <update id="updateByPrimaryKeySelective" parameterType="com.bizvane.mktcenterfacade.models.po.MktActivityPOWithBLOBs">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2019-02-25 09:06:54.
+      This element was generated on 2019-05-24 15:35:50.
     -->
     update t_mkt_activity
     <set>
@@ -696,6 +699,12 @@
       </if>
       <if test="points != null">
         points = #{points,jdbcType=INTEGER},
+      </if>
+      <if test="activityListImg != null">
+        activity_list_img = #{activityListImg,jdbcType=VARCHAR},
+      </if>
+      <if test="activityDetailImg != null">
+        activity_detail_img = #{activityDetailImg,jdbcType=VARCHAR},
       </if>
       <if test="qrCodeUrl != null">
         qr_code_url = #{qrCodeUrl,jdbcType=VARCHAR},
@@ -748,12 +757,6 @@
       <if test="activityRule != null">
         activity_rule = #{activityRule,jdbcType=LONGVARCHAR},
       </if>
-      <if test="activityListImg != null">
-        activity_list_img = #{activityListImg,jdbcType=LONGVARCHAR},
-      </if>
-      <if test="activityDetailImg != null">
-        activity_detail_img = #{activityDetailImg,jdbcType=LONGVARCHAR},
-      </if>
       <if test="storeLimitList != null">
         store_limit_list = #{storeLimitList,jdbcType=LONGVARCHAR},
       </if>
@@ -763,7 +766,7 @@
   <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.bizvane.mktcenterfacade.models.po.MktActivityPOWithBLOBs">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2019-02-25 09:06:54.
+      This element was generated on 2019-05-24 15:35:50.
     -->
     update t_mkt_activity
     set sys_company_id = #{sysCompanyId,jdbcType=BIGINT},
@@ -779,6 +782,8 @@
       send_immediately = #{sendImmediately,jdbcType=BIT},
       send_time = #{sendTime,jdbcType=TIMESTAMP},
       points = #{points,jdbcType=INTEGER},
+      activity_list_img = #{activityListImg,jdbcType=VARCHAR},
+      activity_detail_img = #{activityDetailImg,jdbcType=VARCHAR},
       qr_code_url = #{qrCodeUrl,jdbcType=VARCHAR},
       check_status = #{checkStatus,jdbcType=INTEGER},
       activity_status = #{activityStatus,jdbcType=INTEGER},
@@ -796,15 +801,13 @@
       valid = #{valid,jdbcType=BIT},
       activity_info = #{activityInfo,jdbcType=LONGVARCHAR},
       activity_rule = #{activityRule,jdbcType=LONGVARCHAR},
-      activity_list_img = #{activityListImg,jdbcType=LONGVARCHAR},
-      activity_detail_img = #{activityDetailImg,jdbcType=LONGVARCHAR},
       store_limit_list = #{storeLimitList,jdbcType=LONGVARCHAR}
     where mkt_activity_id = #{mktActivityId,jdbcType=BIGINT}
   </update>
   <update id="updateByPrimaryKey" parameterType="com.bizvane.mktcenterfacade.models.po.MktActivityPO">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2019-02-25 09:06:54.
+      This element was generated on 2019-05-24 15:35:50.
     -->
     update t_mkt_activity
     set sys_company_id = #{sysCompanyId,jdbcType=BIGINT},
@@ -820,6 +823,8 @@
       send_immediately = #{sendImmediately,jdbcType=BIT},
       send_time = #{sendTime,jdbcType=TIMESTAMP},
       points = #{points,jdbcType=INTEGER},
+      activity_list_img = #{activityListImg,jdbcType=VARCHAR},
+      activity_detail_img = #{activityDetailImg,jdbcType=VARCHAR},
       qr_code_url = #{qrCodeUrl,jdbcType=VARCHAR},
       check_status = #{checkStatus,jdbcType=INTEGER},
       activity_status = #{activityStatus,jdbcType=INTEGER},
