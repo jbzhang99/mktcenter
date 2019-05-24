@@ -6,6 +6,7 @@ import java.util.List;
 import com.bizvane.centerstageservice.models.po.SysCheckPo;
 import com.bizvane.members.facade.models.MemberInfoModel;
 import com.bizvane.mktcenterfacade.models.bo.ActivityBO;
+import com.bizvane.mktcenterfacade.models.po.MktActivityPO;
 import com.bizvane.mktcenterfacade.models.vo.ActivityCouponVO;
 import com.bizvane.mktcenterfacade.models.vo.ActivityManualVO;
 import com.bizvane.mktcenterfacade.models.vo.ActivityVO;
@@ -34,7 +35,7 @@ public interface ActivityManualService {
    */
   ResponseData<List<ActivityCouponVO>>  getActivityByMemberInfo(MemberInfoModel memberInfoModel,Integer activityType);
   
-  ResponseData<ActivityVO>  getActivityByQrcode(MemberInfoModel memberInfoModel,String activityCode,Integer activityType);
+  ResponseData<ActivityCouponVO>  getActivityByQrcode(MemberInfoModel memberInfoModel,String activityCode,Integer activityType);
 
   ResponseData<Integer>  checkActivity(SysCheckPo po, SysAccountPO sysAccountPO);
 
