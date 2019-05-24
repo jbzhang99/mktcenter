@@ -1,5 +1,6 @@
 package com.bizvane.mktcenterfacade.rpc;
 
+import com.bizvane.mktcenterfacade.models.vo.ActivityCouponVO;
 import com.bizvane.mktcenterfacade.models.vo.ActivityManualVO;
 import com.bizvane.mktcenterfacade.models.vo.ActivityVO;
 import com.bizvane.utils.responseinfo.ResponseData;
@@ -24,10 +25,10 @@ public interface ActivityManualServiceRpc {
 
     @RequestMapping("/getActivityByMemberInfo")
     @io.swagger.annotations.ApiModelProperty(value = "memberInfoModel,activityType",name = "领券中心列表", required = false,example = "")
-    public ResponseData<List<ActivityManualVO>> getActivityByMemberInfo(@RequestBody ActivityManualVO vo);
+    public ResponseData<List<ActivityCouponVO>> getActivityByMemberInfo(@RequestBody ActivityManualVO vo);
 
     @RequestMapping("/executeActivity")
     @io.swagger.annotations.ApiModelProperty(value = "model,couponCode,activityType",name = "执行领券活动", required = false,example = "")
-    public  ResponseData<ActivityVO> executeActivity(@RequestBody ActivityManualVO vo);
+    public  ResponseData<ActivityManualVO> executeActivity(@RequestBody ActivityManualVO vo);
 
 }
