@@ -632,7 +632,7 @@ public class ActivityManualServiceImpl implements ActivityManualService {
     }
 
     @Override
-    public ResponseData<ActivityVO> getActivityByQrcode(MemberInfoModel memberInfoModel, String activityCode,Integer activityType) {
+    public ResponseData<ActivityCouponVO> getActivityByQrcode(MemberInfoModel memberInfoModel, String activityCode,Integer activityType) {
         ResponseData responseData = new ResponseData();
         log.info("领券活动-扫码领券-入参:"+JSON.toJSONString(memberInfoModel)+",activityCode:"+JSON.toJSONString(activityCode));
         if(null==memberInfoModel){
@@ -655,23 +655,23 @@ public class ActivityManualServiceImpl implements ActivityManualService {
         activityVO.setActivityStatus(ActivityStatusEnum.ACTIVITY_STATUS_EXECUTING.getCode());
         try {
             log.info("领券活动-扫码领券-入参activityVO:"+JSON.toJSONString(activityVO));
-            List<ActivityVO> activityVOList1 = mktActivityManualPOMapper.getActivityIdList(activityVO);
+            List<ActivityCouponVO> activityVOList1 = mktActivityManualPOMapper.getActivityIdList(activityVO);
             if (CollectionUtils.isEmpty(activityVOList1)) {
                 log.warn("领券活动-查询扫码领券活动为空");
                 responseData.setCode(SystemConstants.SUCCESS_CODE);
                 responseData.setMessage(ActivityConstants.RETURN_EMPTY);
                 return responseData;
             }
-            activityVO = activityVOList1.get(0);//只有一个对象
+            ActivityCouponVO activityCouponVO = activityVOList1.get(0);//只有一个对象
             //2.查询活动对应的所有券
-            log.info("couponQueryServiceFeign.findCouponByCouponCode---入参:"+activityVO.getCouponDefinitionId());
-            //ResponseData<CouponDefinitionPO> couponDefinitionPOResponseData = couponDefinitionServiceFeign.findByIdRpc(activityVO.getCouponDefinitionId());
-            ResponseData<CouponDetailResponseVO>  couponDefinitionPOResponseData = couponQueryServiceFeign.getCouponDefinition(activityVO.getCouponDefinitionId());
+            log.info("couponQueryServiceFeign.findCouponByCouponCode---入参:"+activityCouponVO.getCouponDefinitionId());
+            //ResponseData<CouponDefinitionPO> couponDefinitionPOResponseData = couponDefinitionServiceFeign.findByIdRpc(activityCouponVO.getCouponDefinitionId());
+            ResponseData<CouponDetailResponseVO>  couponDefinitionPOResponseData = couponQueryServiceFeign.getCouponDefinition(activityCouponVO.getCouponDefinitionId());
             log.info("couponQueryServiceFeign.findCouponByCouponCode---出参:"+JSON.toJSONString(couponDefinitionPOResponseData));
             //3.校验是否满足规则
             MktActivityRecordPOExample mktActivityRecordPOExample = new MktActivityRecordPOExample();
             MktActivityRecordPOExample.Criteria criteria = mktActivityRecordPOExample.createCriteria();
-            criteria.andValidEqualTo(Boolean.TRUE).andActivityTypeEqualTo(activityType).andAcitivityIdEqualTo(activityVO.getMktActivityId()).andMemberCodeEqualTo(memberInfoModel.getMemberCode());
+            criteria.andValidEqualTo(Boolean.TRUE).andActivityTypeEqualTo(activityType).andAcitivityIdEqualTo(activityCouponVO.getMktActivityId()).andMemberCodeEqualTo(memberInfoModel.getMemberCode());
             //获取所有记录数
             long countAll = mktActivityRecordPOMapper.countByExample(mktActivityRecordPOExample);
             log.info("记录中查到的已领取数量:"+countAll);
@@ -680,19 +680,19 @@ public class ActivityManualServiceImpl implements ActivityManualService {
             long countToday = mktActivityRecordPOMapper.countByExample(mktActivityRecordPOExample);
 
             //默认设置可领取
-            activityVO.setCanReceive(Boolean.TRUE);
-            activityVO.setCouponDetailResponseVO(couponDefinitionPOResponseData.getData());
+            activityCouponVO.setCanReceive(Boolean.TRUE);
+            activityCouponVO.setCouponDetailResponseVO(couponDefinitionPOResponseData.getData());
 
             //今日领取已达上限
-            if (countToday >= activityVO.getPerPersonPerDayMax()) {
-                activityVO.setCanReceive(Boolean.FALSE);
+            if (countToday >= activityCouponVO.getPerPersonPerDayMax()) {
+                activityCouponVO.setCanReceive(Boolean.FALSE);
             }
             //总领取数量已达上限
-            if (countAll >= activityVO.getPerPersonMax()) {
-                activityVO.setCanReceive(Boolean.FALSE);
+            if (countAll >= activityCouponVO.getPerPersonMax()) {
+                activityCouponVO.setCanReceive(Boolean.FALSE);
             }
-            log.info("校验规则结束,activityVO:"+JSON.toJSONString(activityVO));
-            responseData.setData(activityVO);
+            log.info("校验规则结束,activityCouponVO:"+JSON.toJSONString(activityCouponVO));
+            responseData.setData(activityCouponVO);
         } catch (Exception e) {
             log.error("扫码领券出错"+e.getMessage());
             responseData.setCode(SystemConstants.ERROR_CODE);

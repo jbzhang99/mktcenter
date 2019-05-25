@@ -1,6 +1,7 @@
 package com.bizvane.mktcenterservice.controllers.rpc;
 
 import com.bizvane.mktcenterfacade.interfaces.ActivityManualService;
+import com.bizvane.mktcenterfacade.models.vo.ActivityCouponVO;
 import com.bizvane.mktcenterfacade.models.vo.ActivityManualVO;
 import com.bizvane.mktcenterfacade.models.vo.ActivityVO;
 import com.bizvane.utils.responseinfo.ResponseData;
@@ -24,14 +25,13 @@ public class ActivityManualRpcController {
 
     @RequestMapping("/getActivityByQrcode")
     @io.swagger.annotations.ApiModelProperty(value = "memberInfoModel,activityCode,activityType",name = "扫码领券列表", required = false,example = "")
-    public ResponseData<ActivityVO> getActivityByQrcode(@RequestBody ActivityManualVO vo){
-        ResponseData<ActivityVO> activityVo=activityManualService.getActivityByQrcode(vo.getMemberInfoModel(),vo.getActivityCode(),vo.getActivityType());
-        return activityVo;
+    public ResponseData<ActivityCouponVO> getActivityByQrcode(@RequestBody ActivityManualVO vo){
+        return activityManualService.getActivityByQrcode(vo.getMemberInfoModel(),vo.getActivityCode(),vo.getActivityType());
     }
 
     @RequestMapping("/getActivityByMemberInfo")
     @io.swagger.annotations.ApiModelProperty(value = "memberInfoModel,activityType",name = "领券中心列表", required = false,example = "")
-    public ResponseData<List<ActivityVO>> getActivityByMemberInfo(@RequestBody ActivityManualVO vo){
+    public ResponseData<List<ActivityCouponVO>> getActivityByMemberInfo(@RequestBody ActivityManualVO vo){
         return activityManualService.getActivityByMemberInfo(vo.getMemberInfoModel(),vo.getActivityType());
 
     }
