@@ -27,7 +27,7 @@ import java.util.UUID;
 @Component
 public class QiNiuUtil {
 
-  private static Configuration cfg = new Configuration(Zone.zone0());
+  private static Configuration cfg = new Configuration(Zone.zone2());
   private static UploadManager uploadManager = new UploadManager(cfg);
   /**
    * 上传输入流
