@@ -9,6 +9,7 @@ import com.bizvane.centerstageservice.rpc.SysCheckConfigServiceRpc;
 import com.bizvane.centerstageservice.rpc.SysCheckServiceRpc;
 import com.bizvane.couponfacade.enums.SendTypeEnum;
 import com.bizvane.couponfacade.interfaces.CouponQueryServiceFeign;
+import com.bizvane.couponfacade.models.po.CouponDefinitionPO;
 import com.bizvane.couponfacade.models.vo.CouponDetailResponseVO;
 import com.bizvane.couponfacade.models.vo.CouponFindCouponCountResponseVO;
 import com.bizvane.couponfacade.models.vo.SendCouponSimpleRequestVO;
@@ -607,13 +608,23 @@ public class ActivityManualServiceImpl implements ActivityManualService {
             long countAll = mktActivityRecordPOMapper.countByExample(mktActivityRecordPOExample);
             log.info("记录中查到的已领取数量:"+countAll);
 
+            CouponDefinitionPO couponDefinitionPO = couponDefinitionPOResponseData.getData().getCouponDefinitionPO();
+            
+            vo.setPreferentialType(couponDefinitionPO.getPreferentialType());
+            vo.setMoney(couponDefinitionPO.getMoney());
+            vo.setDiscount(couponDefinitionPO.getDiscount());
+            vo.setExchangeProductId(couponDefinitionPO.getExchangeProductId());
+            vo.setValidType(couponDefinitionPO.getValidType());
+            vo.setValidDateStart(couponDefinitionPO.getValidDateStart());
+            vo.setValidDateEnd(couponDefinitionPO.getValidDateEnd());
+            vo.setValidDay(couponDefinitionPO.getValidDay());
+            vo.setMinConsume(couponDefinitionPO.getMinConsume());
+            
             criteria.andParticipateDateGreaterThanOrEqualTo(DateUtil.getZeroTime()).andParticipateDateLessThanOrEqualTo(new Date());
             long countToday = mktActivityRecordPOMapper.countByExample(mktActivityRecordPOExample);
 
             //默认设置可领取
             vo.setCanReceive(Boolean.TRUE);
-            vo.setCouponDetailResponseVO(couponDefinitionPOResponseData.getData());
-
             //今日领取已达上限
             if (countToday >= vo.getPerPersonPerDayMax()) {
                 vo.setCanReceive(Boolean.FALSE);

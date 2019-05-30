@@ -19,8 +19,15 @@ public class StoreActivityResponseVO {
     @ApiModelProperty(value = "活动id", name = "mktActivityId", example = "活动id")
     private Long mktActivityId;
 
+    @ApiModelProperty(value = "活动类型：5消费活动，9评价奖励",
+        name = "activityType", required = false, example = "")
+    private Integer activityType;
+    
     @ApiModelProperty(value = "活动名称", name = "activityName", example = "开卡活动")
     private String activityName;
+    
+    @ApiModelProperty(value = "是否长期：1是，0否", name = "longTerm", required = false, example = "")
+    private Integer longTerm;
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", locale = "zh", timezone = "GMT+8")
     @ApiModelProperty(value = "活动开始时间", name = "startTime", example = "2019-05-10")
