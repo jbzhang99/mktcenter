@@ -665,6 +665,58 @@
     </if>
   </select>
 
+ <select id="getActivityIdListOld" parameterType="com.bizvane.mktcenterfacade.models.vo.ActivityCouponVO" resultType="com.bizvane.mktcenterfacade.models.vo.ActivityVO">
+    SELECT
+    tma.mkt_activity_id,
+    tma.activity_code,
+    tma.activity_name,
+    tma.start_time,
+    tma.end_time,
+    tma.activity_info,
+    tma.long_term,
+    tma.activity_list_img,
+    tma.activity_detail_img,
+    tma.check_status,
+    tma.activity_status,
+    tma.remark,
+    tma.create_user_id,
+    tma.create_user_name,
+    tma.create_date,
+    tmam.qrcode,
+    tmam.per_person_per_day_max,
+    tmam.per_person_max,
+    tmam.mkt_activity_manual_id,
+    tmam.is_store_limit,
+    tmam.store_limit_type,
+    tmam.store_limit_list,
+    tmc.coupon_name,
+    tmc.coupon_definition_id
+
+    FROM
+    t_mkt_activity tma
+    LEFT JOIN t_mkt_activity_manual tmam ON tma.mkt_activity_id = tmam.mkt_activity_id
+    left join  t_mkt_coupon tmc
+    on tmc.biz_id = tma.mkt_activity_id
+WHERE
+    tmam.valid = 1
+    AND tma.valid = 1
+    and tmc.valid=1
+    <if test="sysBrandId != null and sysBrandId!= '' ">
+      AND tma.sys_brand_id = #{sysBrandId,jdbcType=BIGINT}
+    </if>
+    <if test="sysCompanyId != null and sysCompanyId!= '' ">
+      AND tma.sys_company_id = #{sysCompanyId,jdbcType=BIGINT}
+    </if>
+    <if test="activityCode != null and activityCode!= '' ">
+    AND tma.activity_code = #{activityCode,jdbcType=VARCHAR}
+  </if>
+    <if test="activityType != null and activityType!= '' ">
+      AND tma.activity_type = #{activityType,jdbcType=INTEGER}
+    </if>
+    <if test="activityStatus != null and activityStatus!= '' ">
+      AND tma.activity_status = #{activityStatus,jdbcType=INTEGER}
+    </if>
+  </select>
   <select id="getActivityIdList" parameterType="com.bizvane.mktcenterfacade.models.vo.ActivityCouponVO" resultType="com.bizvane.mktcenterfacade.models.vo.ActivityVO">
     SELECT
     tma.mkt_activity_id,

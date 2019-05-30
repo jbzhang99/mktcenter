@@ -103,4 +103,7 @@ public interface MktActivityManualPOMapper {
     List<ActivityVO> getActivityList(ActivityVO vo);
 
     List<ActivityCouponVO> getActivityIdList(ActivityVO vo);
+    
+    @Deprecated
+    List<ActivityVO> getActivityIdListOld(ActivityVO vo);
 }

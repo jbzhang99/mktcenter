@@ -643,7 +643,7 @@ public class ActivityManualServiceImpl implements ActivityManualService {
     }
 
     @Override
-    public ResponseData<ActivityCouponVO> getActivityByQrcode(MemberInfoModel memberInfoModel, String activityCode,Integer activityType) {
+    public ResponseData<ActivityVO> getActivityByQrcode(MemberInfoModel memberInfoModel, String activityCode,Integer activityType) {
         ResponseData responseData = new ResponseData();
         log.info("领券活动-扫码领券-入参:"+JSON.toJSONString(memberInfoModel)+",activityCode:"+JSON.toJSONString(activityCode));
         if(null==memberInfoModel){
@@ -666,14 +666,14 @@ public class ActivityManualServiceImpl implements ActivityManualService {
         activityVO.setActivityStatus(ActivityStatusEnum.ACTIVITY_STATUS_EXECUTING.getCode());
         try {
             log.info("领券活动-扫码领券-入参activityVO:"+JSON.toJSONString(activityVO));
-            List<ActivityCouponVO> activityVOList1 = mktActivityManualPOMapper.getActivityIdList(activityVO);
+            List<ActivityVO> activityVOList1 = mktActivityManualPOMapper.getActivityIdListOld(activityVO);
             if (CollectionUtils.isEmpty(activityVOList1)) {
                 log.warn("领券活动-查询扫码领券活动为空");
                 responseData.setCode(SystemConstants.SUCCESS_CODE);
                 responseData.setMessage(ActivityConstants.RETURN_EMPTY);
                 return responseData;
             }
-            ActivityCouponVO activityCouponVO = activityVOList1.get(0);//只有一个对象
+            ActivityVO activityCouponVO = activityVOList1.get(0);//只有一个对象
             //2.查询活动对应的所有券
             log.info("couponQueryServiceFeign.findCouponByCouponCode---入参:"+activityCouponVO.getCouponDefinitionId());
             //ResponseData<CouponDefinitionPO> couponDefinitionPOResponseData = couponDefinitionServiceFeign.findByIdRpc(activityCouponVO.getCouponDefinitionId());
