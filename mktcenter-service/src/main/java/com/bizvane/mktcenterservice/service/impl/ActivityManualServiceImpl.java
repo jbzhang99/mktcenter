@@ -643,7 +643,7 @@ public class ActivityManualServiceImpl implements ActivityManualService {
     }
 
     @Override
-    public ResponseData<ActivityVO> getActivityByQrcode(MemberInfoModel memberInfoModel, String activityCode,Integer activityType) {
+    public ResponseData<ActivityCouponVO> getActivityByQrcode(MemberInfoModel memberInfoModel, String activityCode,Integer activityType) {
         ResponseData responseData = new ResponseData();
         log.info("领券活动-扫码领券-入参:"+JSON.toJSONString(memberInfoModel)+",activityCode:"+JSON.toJSONString(activityCode));
         if(null==memberInfoModel){

@@ -1,0 +1,580 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bizvane.mktcenterservice.mappers.MktActivitySmartPOMapper">
+  <resultMap id="BaseResultMap" type="com.bizvane.mktcenterfacade.models.po.MktActivitySmartPO">
+    <!--
+      WARNING - 只读 - @mbg.generated
+      This element was generated on 2018-08-31 12:40:26.
+    -->
+    <id column="mkt_activity_smart_id" jdbcType="BIGINT" property="mktActivitySmartId" />
+    <result column="sys_company_id" jdbcType="BIGINT" property="sysCompanyId" />
+    <result column="mkt_activity_id" jdbcType="BIGINT" property="mktActivityId" />
+    <result column="mkt_smart_type" jdbcType="INTEGER" property="mktSmartType" />
+    <result column="target_mbr_count" jdbcType="INTEGER" property="targetMbrCount" />
+    <result column="target_mbr_count_time" jdbcType="TIMESTAMP" property="targetMbrCountTime" />
+    <result column="remark" jdbcType="VARCHAR" property="remark" />
+    <result column="create_user_id" jdbcType="BIGINT" property="createUserId" />
+    <result column="create_user_name" jdbcType="VARCHAR" property="createUserName" />
+    <result column="create_date" jdbcType="TIMESTAMP" property="createDate" />
+    <result column="modified_user_id" jdbcType="BIGINT" property="modifiedUserId" />
+    <result column="modified_user_name" jdbcType="VARCHAR" property="modifiedUserName" />
+    <result column="modified_date" jdbcType="TIMESTAMP" property="modifiedDate" />
+    <result column="valid" jdbcType="BIT" property="valid" />
+  </resultMap>
+  <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.bizvane.mktcenterfacade.models.po.MktActivitySmartPO">
+    <!--
+      WARNING - 只读 - @mbg.generated
+      This element was generated on 2018-08-31 12:40:26.
+    -->
+    <result column="target_mbr" jdbcType="LONGVARCHAR" property="targetMbr" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <!--
+      WARNING - 只读 - @mbg.generated
+      This element was generated on 2018-08-31 12:40:26.
+    -->
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <!--
+      WARNING - 只读 - @mbg.generated
+      This element was generated on 2018-08-31 12:40:26.
+    -->
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    <!--
+      WARNING - 只读 - @mbg.generated
+      This element was generated on 2018-08-31 12:40:26.
+    -->
+    mkt_activity_smart_id, sys_company_id, mkt_activity_id, mkt_smart_type, target_mbr_count, 
+    target_mbr_count_time, remark, create_user_id, create_user_name, create_date, modified_user_id, 
+    modified_user_name, modified_date, valid
+  </sql>
+  <sql id="Blob_Column_List">
+    <!--
+      WARNING - 只读 - @mbg.generated
+      This element was generated on 2018-08-31 12:40:26.
+    -->
+    target_mbr
+  </sql>
+  <select id="selectByExampleWithBLOBs" parameterType="com.bizvane.mktcenterfacade.models.po.MktActivitySmartPOExample" resultMap="ResultMapWithBLOBs">
+    <!--
+      WARNING - 只读 - @mbg.generated
+      This element was generated on 2018-08-31 12:40:26.
+    -->
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from t_mkt_activity_smart
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByExample" parameterType="com.bizvane.mktcenterfacade.models.po.MktActivitySmartPOExample" resultMap="BaseResultMap">
+    <!--
+      WARNING - 只读 - @mbg.generated
+      This element was generated on 2018-08-31 12:40:26.
+    -->
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from t_mkt_activity_smart
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="ResultMapWithBLOBs">
+    <!--
+      WARNING - 只读 - @mbg.generated
+      This element was generated on 2018-08-31 12:40:26.
+    -->
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from t_mkt_activity_smart
+    where mkt_activity_smart_id = #{mktActivitySmartId,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    <!--
+      WARNING - 只读 - @mbg.generated
+      This element was generated on 2018-08-31 12:40:26.
+    -->
+    delete from t_mkt_activity_smart
+    where mkt_activity_smart_id = #{mktActivitySmartId,jdbcType=BIGINT}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.bizvane.mktcenterfacade.models.po.MktActivitySmartPOExample">
+    <!--
+      WARNING - 只读 - @mbg.generated
+      This element was generated on 2018-08-31 12:40:26.
+    -->
+    delete from t_mkt_activity_smart
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.bizvane.mktcenterfacade.models.po.MktActivitySmartPO">
+    <!--
+      WARNING - 只读 - @mbg.generated
+      This element was generated on 2018-08-31 12:40:26.
+    -->
+    <selectKey keyProperty="mktActivitySmartId" order="AFTER" resultType="java.lang.Long">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into t_mkt_activity_smart (sys_company_id, mkt_activity_id, mkt_smart_type, 
+      target_mbr_count, target_mbr_count_time, remark, 
+      create_user_id, create_user_name, create_date, 
+      modified_user_id, modified_user_name, modified_date, 
+      valid, target_mbr)
+    values (#{sysCompanyId,jdbcType=BIGINT}, #{mktActivityId,jdbcType=BIGINT}, #{mktSmartType,jdbcType=INTEGER}, 
+      #{targetMbrCount,jdbcType=INTEGER}, #{targetMbrCountTime,jdbcType=TIMESTAMP}, #{remark,jdbcType=VARCHAR}, 
+      #{createUserId,jdbcType=BIGINT}, #{createUserName,jdbcType=VARCHAR}, #{createDate,jdbcType=TIMESTAMP}, 
+      #{modifiedUserId,jdbcType=BIGINT}, #{modifiedUserName,jdbcType=VARCHAR}, #{modifiedDate,jdbcType=TIMESTAMP}, 
+      #{valid,jdbcType=BIT}, #{targetMbr,jdbcType=LONGVARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.bizvane.mktcenterfacade.models.po.MktActivitySmartPO">
+    <!--
+      WARNING - 只读 - @mbg.generated
+      This element was generated on 2018-08-31 12:40:26.
+    -->
+    <selectKey keyProperty="mktActivitySmartId" order="AFTER" resultType="java.lang.Long">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into t_mkt_activity_smart
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="sysCompanyId != null">
+        sys_company_id,
+      </if>
+      <if test="mktActivityId != null">
+        mkt_activity_id,
+      </if>
+      <if test="mktSmartType != null">
+        mkt_smart_type,
+      </if>
+      <if test="targetMbrCount != null">
+        target_mbr_count,
+      </if>
+      <if test="targetMbrCountTime != null">
+        target_mbr_count_time,
+      </if>
+      <if test="remark != null">
+        remark,
+      </if>
+      <if test="createUserId != null">
+        create_user_id,
+      </if>
+      <if test="createUserName != null">
+        create_user_name,
+      </if>
+      <if test="createDate != null">
+        create_date,
+      </if>
+      <if test="modifiedUserId != null">
+        modified_user_id,
+      </if>
+      <if test="modifiedUserName != null">
+        modified_user_name,
+      </if>
+      <if test="modifiedDate != null">
+        modified_date,
+      </if>
+      <if test="valid != null">
+        valid,
+      </if>
+      <if test="targetMbr != null">
+        target_mbr,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="sysCompanyId != null">
+        #{sysCompanyId,jdbcType=BIGINT},
+      </if>
+      <if test="mktActivityId != null">
+        #{mktActivityId,jdbcType=BIGINT},
+      </if>
+      <if test="mktSmartType != null">
+        #{mktSmartType,jdbcType=INTEGER},
+      </if>
+      <if test="targetMbrCount != null">
+        #{targetMbrCount,jdbcType=INTEGER},
+      </if>
+      <if test="targetMbrCountTime != null">
+        #{targetMbrCountTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="remark != null">
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="createUserId != null">
+        #{createUserId,jdbcType=BIGINT},
+      </if>
+      <if test="createUserName != null">
+        #{createUserName,jdbcType=VARCHAR},
+      </if>
+      <if test="createDate != null">
+        #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifiedUserId != null">
+        #{modifiedUserId,jdbcType=BIGINT},
+      </if>
+      <if test="modifiedUserName != null">
+        #{modifiedUserName,jdbcType=VARCHAR},
+      </if>
+      <if test="modifiedDate != null">
+        #{modifiedDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="valid != null">
+        #{valid,jdbcType=BIT},
+      </if>
+      <if test="targetMbr != null">
+        #{targetMbr,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.bizvane.mktcenterfacade.models.po.MktActivitySmartPOExample" resultType="java.lang.Long">
+    <!--
+      WARNING - 只读 - @mbg.generated
+      This element was generated on 2018-08-31 12:40:26.
+    -->
+    select count(*) from t_mkt_activity_smart
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    <!--
+      WARNING - 只读 - @mbg.generated
+      This element was generated on 2018-08-31 12:40:26.
+    -->
+    update t_mkt_activity_smart
+    <set>
+      <if test="record.mktActivitySmartId != null">
+        mkt_activity_smart_id = #{record.mktActivitySmartId,jdbcType=BIGINT},
+      </if>
+      <if test="record.sysCompanyId != null">
+        sys_company_id = #{record.sysCompanyId,jdbcType=BIGINT},
+      </if>
+      <if test="record.mktActivityId != null">
+        mkt_activity_id = #{record.mktActivityId,jdbcType=BIGINT},
+      </if>
+      <if test="record.mktSmartType != null">
+        mkt_smart_type = #{record.mktSmartType,jdbcType=INTEGER},
+      </if>
+      <if test="record.targetMbrCount != null">
+        target_mbr_count = #{record.targetMbrCount,jdbcType=INTEGER},
+      </if>
+      <if test="record.targetMbrCountTime != null">
+        target_mbr_count_time = #{record.targetMbrCountTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.remark != null">
+        remark = #{record.remark,jdbcType=VARCHAR},
+      </if>
+      <if test="record.createUserId != null">
+        create_user_id = #{record.createUserId,jdbcType=BIGINT},
+      </if>
+      <if test="record.createUserName != null">
+        create_user_name = #{record.createUserName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.createDate != null">
+        create_date = #{record.createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.modifiedUserId != null">
+        modified_user_id = #{record.modifiedUserId,jdbcType=BIGINT},
+      </if>
+      <if test="record.modifiedUserName != null">
+        modified_user_name = #{record.modifiedUserName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.modifiedDate != null">
+        modified_date = #{record.modifiedDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.valid != null">
+        valid = #{record.valid,jdbcType=BIT},
+      </if>
+      <if test="record.targetMbr != null">
+        target_mbr = #{record.targetMbr,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExampleWithBLOBs" parameterType="map">
+    <!--
+      WARNING - 只读 - @mbg.generated
+      This element was generated on 2018-08-31 12:40:26.
+    -->
+    update t_mkt_activity_smart
+    set mkt_activity_smart_id = #{record.mktActivitySmartId,jdbcType=BIGINT},
+      sys_company_id = #{record.sysCompanyId,jdbcType=BIGINT},
+      mkt_activity_id = #{record.mktActivityId,jdbcType=BIGINT},
+      mkt_smart_type = #{record.mktSmartType,jdbcType=INTEGER},
+      target_mbr_count = #{record.targetMbrCount,jdbcType=INTEGER},
+      target_mbr_count_time = #{record.targetMbrCountTime,jdbcType=TIMESTAMP},
+      remark = #{record.remark,jdbcType=VARCHAR},
+      create_user_id = #{record.createUserId,jdbcType=BIGINT},
+      create_user_name = #{record.createUserName,jdbcType=VARCHAR},
+      create_date = #{record.createDate,jdbcType=TIMESTAMP},
+      modified_user_id = #{record.modifiedUserId,jdbcType=BIGINT},
+      modified_user_name = #{record.modifiedUserName,jdbcType=VARCHAR},
+      modified_date = #{record.modifiedDate,jdbcType=TIMESTAMP},
+      valid = #{record.valid,jdbcType=BIT},
+      target_mbr = #{record.targetMbr,jdbcType=LONGVARCHAR}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    <!--
+      WARNING - 只读 - @mbg.generated
+      This element was generated on 2018-08-31 12:40:26.
+    -->
+    update t_mkt_activity_smart
+    set mkt_activity_smart_id = #{record.mktActivitySmartId,jdbcType=BIGINT},
+      sys_company_id = #{record.sysCompanyId,jdbcType=BIGINT},
+      mkt_activity_id = #{record.mktActivityId,jdbcType=BIGINT},
+      mkt_smart_type = #{record.mktSmartType,jdbcType=INTEGER},
+      target_mbr_count = #{record.targetMbrCount,jdbcType=INTEGER},
+      target_mbr_count_time = #{record.targetMbrCountTime,jdbcType=TIMESTAMP},
+      remark = #{record.remark,jdbcType=VARCHAR},
+      create_user_id = #{record.createUserId,jdbcType=BIGINT},
+      create_user_name = #{record.createUserName,jdbcType=VARCHAR},
+      create_date = #{record.createDate,jdbcType=TIMESTAMP},
+      modified_user_id = #{record.modifiedUserId,jdbcType=BIGINT},
+      modified_user_name = #{record.modifiedUserName,jdbcType=VARCHAR},
+      modified_date = #{record.modifiedDate,jdbcType=TIMESTAMP},
+      valid = #{record.valid,jdbcType=BIT}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.bizvane.mktcenterfacade.models.po.MktActivitySmartPO">
+    <!--
+      WARNING - 只读 - @mbg.generated
+      This element was generated on 2018-08-31 12:40:26.
+    -->
+    update t_mkt_activity_smart
+    <set>
+      <if test="sysCompanyId != null">
+        sys_company_id = #{sysCompanyId,jdbcType=BIGINT},
+      </if>
+      <if test="mktActivityId != null">
+        mkt_activity_id = #{mktActivityId,jdbcType=BIGINT},
+      </if>
+      <if test="mktSmartType != null">
+        mkt_smart_type = #{mktSmartType,jdbcType=INTEGER},
+      </if>
+      <if test="targetMbrCount != null">
+        target_mbr_count = #{targetMbrCount,jdbcType=INTEGER},
+      </if>
+      <if test="targetMbrCountTime != null">
+        target_mbr_count_time = #{targetMbrCountTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="remark != null">
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="createUserId != null">
+        create_user_id = #{createUserId,jdbcType=BIGINT},
+      </if>
+      <if test="createUserName != null">
+        create_user_name = #{createUserName,jdbcType=VARCHAR},
+      </if>
+      <if test="createDate != null">
+        create_date = #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifiedUserId != null">
+        modified_user_id = #{modifiedUserId,jdbcType=BIGINT},
+      </if>
+      <if test="modifiedUserName != null">
+        modified_user_name = #{modifiedUserName,jdbcType=VARCHAR},
+      </if>
+      <if test="modifiedDate != null">
+        modified_date = #{modifiedDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="valid != null">
+        valid = #{valid,jdbcType=BIT},
+      </if>
+      <if test="targetMbr != null">
+        target_mbr = #{targetMbr,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where mkt_activity_smart_id = #{mktActivitySmartId,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.bizvane.mktcenterfacade.models.po.MktActivitySmartPO">
+    <!--
+      WARNING - 只读 - @mbg.generated
+      This element was generated on 2018-08-31 12:40:26.
+    -->
+    update t_mkt_activity_smart
+    set sys_company_id = #{sysCompanyId,jdbcType=BIGINT},
+      mkt_activity_id = #{mktActivityId,jdbcType=BIGINT},
+      mkt_smart_type = #{mktSmartType,jdbcType=INTEGER},
+      target_mbr_count = #{targetMbrCount,jdbcType=INTEGER},
+      target_mbr_count_time = #{targetMbrCountTime,jdbcType=TIMESTAMP},
+      remark = #{remark,jdbcType=VARCHAR},
+      create_user_id = #{createUserId,jdbcType=BIGINT},
+      create_user_name = #{createUserName,jdbcType=VARCHAR},
+      create_date = #{createDate,jdbcType=TIMESTAMP},
+      modified_user_id = #{modifiedUserId,jdbcType=BIGINT},
+      modified_user_name = #{modifiedUserName,jdbcType=VARCHAR},
+      modified_date = #{modifiedDate,jdbcType=TIMESTAMP},
+      valid = #{valid,jdbcType=BIT},
+      target_mbr = #{targetMbr,jdbcType=LONGVARCHAR}
+    where mkt_activity_smart_id = #{mktActivitySmartId,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.bizvane.mktcenterfacade.models.po.MktActivitySmartPO">
+    <!--
+      WARNING - 只读 - @mbg.generated
+      This element was generated on 2018-08-31 12:40:26.
+    -->
+    update t_mkt_activity_smart
+    set sys_company_id = #{sysCompanyId,jdbcType=BIGINT},
+      mkt_activity_id = #{mktActivityId,jdbcType=BIGINT},
+      mkt_smart_type = #{mktSmartType,jdbcType=INTEGER},
+      target_mbr_count = #{targetMbrCount,jdbcType=INTEGER},
+      target_mbr_count_time = #{targetMbrCountTime,jdbcType=TIMESTAMP},
+      remark = #{remark,jdbcType=VARCHAR},
+      create_user_id = #{createUserId,jdbcType=BIGINT},
+      create_user_name = #{createUserName,jdbcType=VARCHAR},
+      create_date = #{createDate,jdbcType=TIMESTAMP},
+      modified_user_id = #{modifiedUserId,jdbcType=BIGINT},
+      modified_user_name = #{modifiedUserName,jdbcType=VARCHAR},
+      modified_date = #{modifiedDate,jdbcType=TIMESTAMP},
+      valid = #{valid,jdbcType=BIT}
+    where mkt_activity_smart_id = #{mktActivitySmartId,jdbcType=BIGINT}
+  </update>
+
+  <select id="getActivityList" parameterType="com.bizvane.mktcenterfacade.models.vo.ActivitySmartVO" resultType="com.bizvane.mktcenterfacade.models.vo.ActivitySmartVO">
+    SELECT
+    tma.mkt_activity_id,
+    tma.sys_company_id,
+    tma.sys_brand_id,
+    tma.mkt_activity_smart_group_id,
+    tma.activity_code,
+    tma.activity_type,
+    tma.activity_name,
+    tma.start_time,
+    tma.end_time,
+    tma.long_term,
+    tma.points,
+    tma.check_status,
+    tma.activity_status,
+    tma.remark,
+    tma.activity_info,
+    tma.create_user_id,
+    tma.create_user_name,
+    tma.create_date,
+    tma.modified_user_id,
+    tma.modified_user_name,
+    tma.modified_date,
+    tma.valid,
+
+    tmas.mkt_activity_smart_id,
+    tmas.mkt_smart_type,
+    tmas.target_mbr_count,
+    tmas.target_mbr_count_time,
+    tmas.create_user_id,
+    tmas.create_user_name,
+    tmas.create_date,
+    tmas.modified_user_id,
+    tmas.modified_user_name,
+    tmas.modified_date,
+    tmas.valid
+    FROM
+    `t_mkt_activity` tma
+    INNER JOIN t_mkt_activity_smart tmas ON tma.mkt_activity_id = tmas.mkt_activity_id
+    AND tma.valid = 1
+    AND tmas.valid = 1
+    <if test="sysCompanyId != null">
+      AND tma.sys_company_id=#{sysCompanyId}
+    </if>
+    <if test="sysBrandId != null">
+      AND tma.sys_brand_id=#{sysBrandId}
+    </if>
+    <if test="mktActivitySmartGroupId != null">
+      AND tma.mkt_activity_smart_group_id = #{mktActivitySmartGroupId}
+    </if>
+    <if test="createDateStart != null">
+      AND <![CDATA[ tma.create_date >=#{createDateStart}]]>
+    </if>
+    <if test="createDateEnd != null">
+      AND <![CDATA[ tma.create_date <=#{createDateEnd}]]>
+    </if>
+    <if test="mktSmartType != null and mktSmartType!=0">
+      AND tmas.mkt_smart_type = #{mktSmartType}
+    </if>
+    <if test="mbrGroupDefId != null">
+      AND tma.mbr_group_def_id = #{mbrGroupDefId}
+    </if>
+    <if test="activityName != null and activityName!= ''">
+      AND tma.activity_name LIKE concat('%',#{activityName},'%')
+    </if>
+    <if test="activityCode != null and activityCode!= ''">
+      AND tma.activity_code LIKE concat('%',#{activityCode},'%')
+    </if>
+    ORDER BY tma.create_date DESC
+  </select>
+</mapper>
