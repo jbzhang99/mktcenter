@@ -29,7 +29,7 @@ spring:
       database: "7"
       uri: "mongodb://node1:27017/?AutoConnectRetry=true"
     jest:
-      uri: http://node2:9200
+      uri: http://node1:9200
       username:
       password:
       read-timeout: 30000 #读取超时

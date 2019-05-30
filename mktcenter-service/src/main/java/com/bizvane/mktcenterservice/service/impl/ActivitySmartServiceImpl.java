@@ -6,12 +6,15 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.bizvane.couponfacade.interfaces.CouponQueryServiceFeign;
 import com.bizvane.couponfacade.models.vo.CouponDetailResponseVO;
+import com.bizvane.couponservice.common.utils.QiNiuUtil;
 import com.bizvane.members.facade.es.pojo.MembersInfoSearchPojo;
 import com.bizvane.members.facade.es.vo.MembersInfoSearchVo;
 import com.bizvane.members.facade.models.MbrGroupModel;
 import com.bizvane.members.facade.service.api.MemberGroupApiService;
 import com.bizvane.members.facade.service.api.MembersAdvancedSearchApiService;
+import com.bizvane.messageservice.common.network.HttpUtil;
 import com.bizvane.mktcenterfacade.interfaces.ActivitySmartService;
+import com.bizvane.mktcenterfacade.models.bo.ObtainGraphicBo;
 import com.bizvane.mktcenterfacade.models.po.*;
 import com.bizvane.mktcenterfacade.models.vo.ActivitySmartVO;
 import com.bizvane.mktcenterfacade.models.vo.MessageVO;
@@ -29,6 +32,8 @@ import com.bizvane.mktcenterservice.mappers.*;
 import com.bizvane.utils.enumutils.SysResponseEnum;
 import com.bizvane.utils.responseinfo.ResponseData;
 import com.bizvane.utils.tokens.SysAccountPO;
+import com.bizvane.wechatfacade.interfaces.WxPublicServiceFeign;
+import com.bizvane.wechatfacade.models.po.WxPublicPO;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import lombok.extern.slf4j.Slf4j;
@@ -38,9 +43,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.io.IOException;
+import java.util.*;
 
 /**
  * @author chen.li
@@ -76,14 +80,25 @@ public class ActivitySmartServiceImpl implements ActivitySmartService {
     private MemberMessageSend memberMessageSend;
     @Autowired
     private CouponQueryServiceFeign couponQueryServiceFeign;
-//    @Autowired
-//    private GraphicTemplateServiceRpc graphicTemplateServiceRpc;
-    
+
     @Autowired
     private MktActivityCountPOMapper mktActivityCountPOMapper;
 
     @Autowired
     private MemberGroupApiService memberGroupApiService;
+
+    @Autowired
+    private WxPublicServiceFeign wxPublicServiceFeign;
+
+    //模板查询
+    private static final String WXOBTAIN_FRAPHIC = "https://api.weixin.qq.com/cgi-bin/material/batchget_material?access_token=";
+    //模板总数
+    private static final String WXOBTAIN_FRAPHIC_CONT = "https://api.weixin.qq.com/cgi-bin/material/get_materialcount?access_token=";
+    //群发
+    private static final String GROUP_SENDING = "https://api.weixin.qq.com/cgi-bin/message/mass/send?access_token=";
+    //群发回执
+    private static final String GROUP_SENDING_DOING = "https://api.weixin.qq.com/cgi-bin/message/mass/get?access_token=";
+
     /**
      * 查询智能营销分组列表(方块)
      * @param vo
@@ -1264,46 +1279,148 @@ public class ActivitySmartServiceImpl implements ActivitySmartService {
     @Override
     public ResponseData<JSONArray> getPictureLists(PictureMessageVO vo){
         ResponseData responseData = new ResponseData<JSONObject>();
-//        JSONArray objects = new JSONArray();
-//        ObtainGraphicBo obtainGraphic=new  ObtainGraphicBo();
-//        BeanUtils.copyProperties(vo,obtainGraphic);
-//        int pageNumber = vo.getPageNumber();//从1开始
-//        int pageSize = vo.getPageSize();//4条
-//        obtainGraphic.setOffset(String.valueOf((pageNumber-1)*pageSize));
-//        obtainGraphic.setCount(String.valueOf(pageSize));
-//        log.info("getPictureLists  param:"+JSON.toJSONString(obtainGraphic));
-//        JSONObject jsonPictureLists = this.getJsonPictureLists(obtainGraphic);
-//        if (jsonPictureLists==null){
-//            responseData.setCode(100);
-//            responseData.setMessage("无数据!");
-//            return responseData;
-//        }
-//        int pages = 1;
-//        Integer total_count = jsonPictureLists.getInteger("total_count");
-//        if (total_count>pageSize){
-//            pages = (int)Math.ceil((double) total_count / pageSize);
-//        }
-//        String item = JSON.toJSONString(jsonPictureLists.get("item"));
-//        System.out.println("item:"+item);
-//        JSONArray objectsItem = JSONArray.parseArray(item);
-//        JSONObject resltData = new JSONObject();
-//        resltData.put("pictureMsg",objectsItem);
-//        resltData.put("pages",pages);
-//        resltData.put("pageSize",pageSize);
-//        resltData.put("pageNumber",pageNumber);
-//        resltData.put("total",total_count);
-//        responseData.setData(resltData);
+        JSONArray objects = new JSONArray();
+        ObtainGraphicBo obtainGraphic=new  ObtainGraphicBo();
+        BeanUtils.copyProperties(vo,obtainGraphic);
+        int pageNumber = vo.getPageNumber();//从1开始
+        int pageSize = vo.getPageSize();//4条
+        obtainGraphic.setOffset(String.valueOf((pageNumber-1)*pageSize));
+        obtainGraphic.setCount(String.valueOf(pageSize));
+        log.info("getPictureLists  param:"+JSON.toJSONString(obtainGraphic));
+        JSONObject jsonPictureLists = this.getJsonPictureLists(obtainGraphic);
+        if (jsonPictureLists==null){
+            responseData.setCode(100);
+            responseData.setMessage("无数据!");
+            return responseData;
+        }
+        int pages = 1;
+        Integer total_count = jsonPictureLists.getInteger("total_count");
+        if (total_count>pageSize){
+            pages = (int)Math.ceil((double) total_count / pageSize);
+        }
+        String item = JSON.toJSONString(jsonPictureLists.get("item"));
+        System.out.println("item:"+item);
+        JSONArray objectsItem = JSONArray.parseArray(item);
+        JSONObject resltData = new JSONObject();
+        resltData.put("pictureMsg",objectsItem);
+        resltData.put("pages",pages);
+        resltData.put("pageSize",pageSize);
+        resltData.put("pageNumber",pageNumber);
+        resltData.put("total",total_count);
+        responseData.setData(resltData);
         return responseData;
     }
 
-//    public JSONObject getJsonPictureLists(ObtainGraphicBo obtainGraphicBo) {
-//        ResponseData<ObtainGraphicBo> obtainGraphicBoResponseData = graphicTemplateServiceRpc.obtainGraphicTemplate(obtainGraphicBo);
-//        ObtainGraphicBo data = obtainGraphicBoResponseData.getData();
-//        if (data==null){
-//         log.info("图文素材缺乏!");
-//          return null;
-//        }
-//        String obtainGraphic = data.getObtainGraphic();
-//        return JSON.parseObject(obtainGraphic);
-//    }
+    public JSONObject getJsonPictureLists(ObtainGraphicBo obtainGraphicBo) {
+        ResponseData<ObtainGraphicBo> obtainGraphicBoResponseData = obtainGraphicTemplate(obtainGraphicBo);
+        ObtainGraphicBo data = obtainGraphicBoResponseData.getData();
+        if (data==null){
+         log.info("图文素材缺乏!");
+          return null;
+        }
+        String obtainGraphic = data.getObtainGraphic();
+        return JSON.parseObject(obtainGraphic);
+    }
+
+    /**
+     * 查询图文消息模板素材
+     * @param obtainGraphicBo
+     * @return
+     */
+    public ResponseData<ObtainGraphicBo> obtainGraphicTemplate(ObtainGraphicBo obtainGraphicBo) {
+        ResponseData responseData = new ResponseData();
+        ResponseData<WxPublicPO> wxPublicBySysBrandId = wxPublicServiceFeign.getWxPublicBySysBrandId(obtainGraphicBo.getBrandId());
+        WxPublicPO bySysBrandIdData = wxPublicBySysBrandId.getData();
+        if (bySysBrandIdData != null) {
+
+            String appid = bySysBrandIdData.getAppid();
+            ResponseData<String> accessTokenByAppId = wxPublicServiceFeign.getAccessTokenByAppId(appid);
+            String token = accessTokenByAppId.getData();
+            try {
+
+                String couns = HttpUtil.get(WXOBTAIN_FRAPHIC_CONT + token);
+
+                log.info("获取图文模板总数={}", JSON.toJSONString(couns));
+
+                Map<String, String> stringMap = new HashMap<>();
+                stringMap.put("type", obtainGraphicBo.getType());
+                stringMap.put("offset", obtainGraphicBo.getOffset());
+                stringMap.put("count", obtainGraphicBo.getCount());
+                log.info("获取图文模板列表入参={}", JSON.toJSONString(stringMap));
+                String obtainGraphicString = HttpUtil.post(WXOBTAIN_FRAPHIC + token, JSON.toJSONString(stringMap));
+                log.info("获取图文模板列表={}", JSON.toJSONString(obtainGraphicString));
+                JSONObject jsonObject = JSONObject.parseObject(obtainGraphicString);
+                JSONObject obtainGraphicJson = new JSONObject();
+                String item = jsonObject.getString("item");
+                String total_count = jsonObject.getString("total_count");
+                String item_count = jsonObject.getString("item_count");
+                JSONArray jsonArray = JSONArray.parseArray(item);
+                JSONArray arrayToo = new JSONArray();
+                for (int i = 0; i < jsonArray.size(); i++) {
+                    JSONObject object = jsonArray.getJSONObject(i);
+                    JSONObject jobck = new JSONObject();
+                    String content = object.getString("content");
+                    String stringTime = object.getString("update_time");
+                    String media_id = object.getString("media_id");
+                    JSONObject jsonContent = JSONObject.parseObject(content);
+                    JSONObject jsoncontents = new JSONObject();
+                    String news_item = jsonContent.getString("news_item");
+                    String create_time = jsonContent.getString("create_time");
+                    String update_time = jsonContent.getString("update_time");
+                    JSONArray jsonNewsItem = JSONArray.parseArray(news_item);
+                    JSONArray jsonArray1 = new JSONArray();
+                    for (int n = 0; n < jsonNewsItem.size(); n++) {
+                        JSONObject jsonNewsItemJSONObject = jsonNewsItem.getJSONObject(n);
+                        JSONObject jsonObject1 = new JSONObject();
+                        String thumbUrl = jsonNewsItemJSONObject.getString("thumb_url");
+                        String title = jsonNewsItemJSONObject.getString("title");
+                        String author = jsonNewsItemJSONObject.getString("author");
+                        String digest = jsonNewsItemJSONObject.getString("digest");
+                        String content1 = jsonNewsItemJSONObject.getString("content");
+                        String content_source_url = jsonNewsItemJSONObject.getString("content_source_url");
+                        String url = jsonNewsItemJSONObject.getString("url");
+                        String need_open_comment = jsonNewsItemJSONObject.getString("need_open_comment");
+                        String only_fans_can_comment = jsonNewsItemJSONObject.getString("only_fans_can_comment");
+                        String uploadUrl = QiNiuUtil.uploadUrl(thumbUrl, null);
+                        log.info("uploadUrl={}", uploadUrl);
+                        jsonObject1.put("title", title);
+                        jsonObject1.put("content", content1);
+                        jsonObject1.put("author", author);
+                        jsonObject1.put("digest", digest);
+                        jsonObject1.put("content_source_url", content_source_url);
+                        jsonObject1.put("url", url);
+                        jsonObject1.put("thumb_url", uploadUrl);
+                        jsonObject1.put("need_open_comment", need_open_comment);
+                        jsonObject1.put("only_fans_can_comment", only_fans_can_comment);
+                        jsonArray1.set(n, jsonObject1);
+                    }
+                    jsoncontents.put("news_item", jsonArray1);
+                    jsoncontents.put("update_time", update_time);
+                    jsoncontents.put("create_time", create_time);
+                    jobck.put("content", jsoncontents);
+                    jobck.put("update_time", stringTime);
+                    jobck.put("media_id", media_id);
+                    arrayToo.set(i, jobck);
+                }
+                obtainGraphicJson.put("item", arrayToo);
+                obtainGraphicJson.put("total_count", total_count);
+                obtainGraphicJson.put("item_count", item_count);
+                String obtainGraphic = obtainGraphicJson.toJSONString();
+                ObtainGraphicBo graphicBo = new ObtainGraphicBo();
+                graphicBo.setCounts(couns);
+                graphicBo.setObtainGraphic(obtainGraphic);
+                log.info("模板出参={}", JSON.toJSONString(graphicBo));
+                responseData.setCode(SysResponseEnum.SUCCESS.getCode());
+                responseData.setMessage(SysResponseEnum.SUCCESS.getMessage());
+                responseData.setData(graphicBo);
+                return responseData;
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+        }
+        responseData.setCode(SysResponseEnum.FAILED.getCode());
+        responseData.setMessage("bySysBrandIdData为空");
+        return responseData;
+    }
 }
