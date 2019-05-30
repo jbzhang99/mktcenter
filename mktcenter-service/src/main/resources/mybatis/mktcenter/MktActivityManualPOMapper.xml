@@ -665,7 +665,7 @@
     </if>
   </select>
 
- <select id="getActivityIdListOld" parameterType="com.bizvane.mktcenterfacade.models.vo.ActivityCouponVO" resultType="com.bizvane.mktcenterfacade.models.vo.ActivityVO">
+ <select id="getActivityIdListOld" parameterType="com.bizvane.mktcenterfacade.models.vo.ActivityVO" resultType="com.bizvane.mktcenterfacade.models.vo.ActivityVO">
     SELECT
     tma.mkt_activity_id,
     tma.activity_code,
@@ -717,7 +717,7 @@ WHERE
       AND tma.activity_status = #{activityStatus,jdbcType=INTEGER}
     </if>
   </select>
-  <select id="getActivityIdList" parameterType="com.bizvane.mktcenterfacade.models.vo.ActivityCouponVO" resultType="com.bizvane.mktcenterfacade.models.vo.ActivityVO">
+  <select id="getActivityIdList" parameterType="com.bizvane.mktcenterfacade.models.vo.ActivityVO" resultType="com.bizvane.mktcenterfacade.models.vo.ActivityCouponVO">
     SELECT
     tma.mkt_activity_id,
     tma.activity_code,
