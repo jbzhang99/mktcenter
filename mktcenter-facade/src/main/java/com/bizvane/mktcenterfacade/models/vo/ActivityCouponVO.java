@@ -46,6 +46,18 @@ public class ActivityCouponVO implements Serializable {
   @ApiModelProperty(value = "活动详情图片", name = "activityDetailImg", required = false, example = "")
   private String activityDetailImg;
   
+  @ApiModelProperty(value = "审核状态：0全部，1待审核，2审核中，3已审核，4已驳回", name = "checkStatus", required = false, example = "")
+  private Integer checkStatus;
+  
+  @ApiModelProperty(value = "门店限制状态：0不限制，1限制", name = "isStoreLimit", required = false, example = "")
+  private Boolean isStoreLimit;
+  
+  @ApiModelProperty(value = "门店限制名单", name = "storeLimitList", required = false, example = "")
+  private String storeLimitList;
+  
+  @ApiModelProperty(value = "门店限制类型：1黑名单，2白名单", name = "storeLimitType", required = false, example = "")
+  private Integer storeLimitType;
+  
   @ApiModelProperty(value = "活动状态：0全部，1待执行，2执行中，3已结束，4已禁用", name = "activityStatus", required = false, example = "")
   private Integer activityStatus;
   
