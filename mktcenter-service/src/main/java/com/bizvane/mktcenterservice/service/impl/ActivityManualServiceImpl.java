@@ -37,7 +37,8 @@ import com.bizvane.utils.enumutils.SysResponseEnum;
 import com.bizvane.utils.responseinfo.ResponseData;
 import com.bizvane.utils.tokens.SysAccountPO;
 import com.bizvane.wechatfacade.interfaces.QRCodeServiceFeign;
-import com.bizvane.wechatfacade.models.vo.CreateMiniprgmQRCodeRequestVO;
+import com.bizvane.wechatfacade.models.vo.CreateMiniprgmCodeBO;
+import com.bizvane.wechatfacade.models.vo.CreateMiniprgmQRCodeBO;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import lombok.extern.slf4j.Slf4j;
@@ -240,7 +241,7 @@ public class ActivityManualServiceImpl implements ActivityManualService {
       if(ActivityTypeEnum.ACTIVITY_TYPE_QRCODE.getCode()==activityVO.getActivityType()){
          QRCodeConfig qrCodeConfig = (QRCodeConfig) SpringContextUtil.getBean("QRCodeConfig");
          String url= qrCodeConfig.getQrcodeurl()+activityVO.getActivityCode();
-          CreateMiniprgmQRCodeRequestVO createMiniprgmQRCodeRequestVO = new CreateMiniprgmQRCodeRequestVO();
+          CreateMiniprgmCodeBO createMiniprgmQRCodeRequestVO = new CreateMiniprgmCodeBO();
           createMiniprgmQRCodeRequestVO.setSysBrandId(activityVO.getSysBrandId());
           createMiniprgmQRCodeRequestVO.setMiniProgramType("10");
 
@@ -256,7 +257,7 @@ public class ActivityManualServiceImpl implements ActivityManualService {
          log.info("领券活动-创建活动-扫码领券查询二维码入参:"+JSON.toJSONString(createMiniprgmQRCodeRequestVO));
           ResponseData<String> qrCodeResponseData= null;
           try {
-              qrCodeResponseData = qrCodeServiceFeign.createMiniprgmQRCode(createMiniprgmQRCodeRequestVO);
+              qrCodeResponseData = qrCodeServiceFeign.createMiniprgmCode(createMiniprgmQRCodeRequestVO);
               log.info("二维码返回结果ssssssssssssssssssss:"+JSON.toJSONString(qrCodeResponseData));
               if(null==qrCodeResponseData||null==qrCodeResponseData.getData()){
                   log.info("领券活动-创建活动-扫码领券生成二维码为空");
