@@ -38,12 +38,7 @@ public interface ActivityOrderService {
      * @return
      */
     public ResponseData<Integer> updateActivityOrder(ActivityBO bo,SysAccountPO stageUser);
-    /**
-     * 活动审核
-     * @param
-     * @return
-     */
-    public ResponseData<Integer> checkActivityOrder(SysCheckPo po, SysAccountPO sysAccountPO);
+
     /**
      * 执行活动
      * @param

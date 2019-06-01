@@ -34,12 +34,7 @@ public interface ActivityBirthdayService {
      * @return
      */
     public ResponseData<ActivityBO> selectActivityBirthdayById(String businessCode);
-    /**
-     * 活动审核
-     * @param
-     * @return
-     */
-    public ResponseData<Integer> checkActivityBirthday(SysCheckPo po, SysAccountPO sysAccountPO);
+
     /**
      * 修改活动
      * @return

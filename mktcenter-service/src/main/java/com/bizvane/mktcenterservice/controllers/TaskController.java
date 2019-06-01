@@ -69,20 +69,6 @@ public class TaskController {
         ResponseData<Integer> integerResponseData = taskService.stopTaskById(mktTaskId, stageUser);
         return integerResponseData;
     }
-    /**
-     * 任务审核--已经核对(除了完善资料任务)
-     * @param request
-     * @return
-     * Long businessId , Integer checkStatus,String remark, Date startTime,Date endTime,
-     */
-    @RequestMapping("checkTaskById")
-    public ResponseData<Integer> checkTaskById(CheckTaskVO vo, HttpServletRequest request) throws ParseException {
-        //获取操作人信息
-        SysAccountPO stageUser = TokenUtils.getStageUser(request);
-        //审核任务
-        ResponseData<Integer> integerResponseData = taskService.checkTaskById(vo,stageUser);
-        return integerResponseData;
-    }
 
     /**
      * 任务效果分析
@@ -92,13 +78,6 @@ public class TaskController {
     @RequestMapping("doAnalysis")
     public ResponseData<TaskRecordVO> doAnalysis(TaskAnalysisVo vo, HttpServletRequest request) throws ExecutionException, InterruptedException {
        SysAccountPO sysAccountPo = TokenUtils.getStageUser(request);
-//       SysAccountPO sysAccountPo = new SysAccountPO();
-//        sysAccountPo.setSysAccountId(26L);
-//        sysAccountPo.setSysCompanyId(2L);
-//        sysAccountPo.setBrandId(1L);
-//        sysAccountPo.setAccountCode("15328634678");
-//        sysAccountPo.setName("不啊哟删除");
-//        vo.setTaskType(1);
         return taskService.doAnalysis(vo,sysAccountPo);
     }
     /**

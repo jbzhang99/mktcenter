@@ -36,20 +36,6 @@ public interface ActivityService {
     public ResponseData<Integer> updateActivityById(ActivityVO vo, SysAccountPO sysAccountPO);
 
     /**
-     * 活动审核
-     * @param
-     * @return
-     */
-    public ResponseData<Integer> checkActivityById(SysCheckPo po, SysAccountPO sysAccountPO);
-
-    /**
-     * 小程序端活动列表
-     * @param vo
-     * @return
-     */
-//    public ResponseData<List<ActivityVO>>  getActivityList(ActivityVO vo);
-
-    /**
      * 查询效果分析统计
      * @param bo
      * @return

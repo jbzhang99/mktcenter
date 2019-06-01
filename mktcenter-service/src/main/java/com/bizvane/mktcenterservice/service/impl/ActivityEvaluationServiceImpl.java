@@ -63,12 +63,6 @@ public class ActivityEvaluationServiceImpl implements ActivityEvaluationService 
     private MktActivityEvaluationPOMapper mktActivityEvaluationPOMapper;
 
     @Autowired
-    private SysCheckConfigServiceRpc sysCheckConfigServiceRpc;
-
-    @Autowired
-    private SysCheckServiceRpc sysCheckServiceRpc;
-
-    @Autowired
     private MktActivityPOMapper mktActivityPOMapper;
 
     @Autowired
@@ -143,37 +137,13 @@ public class ActivityEvaluationServiceImpl implements ActivityEvaluationService 
                 }
             }
         }
-        //根据该企业id查询该企业下是否存在审核配置，是否需要审核然后判断
-       /* SysCheckConfigVo so = new SysCheckConfigVo();
-        so.setSysBrandId(activityVO.getSysBrandId());*/
-        ResponseData<List<SysCheckConfigVo>> sysCheckConfigVo = sysCheckConfigServiceRpc.getCheckConfigListAll(activityVO.getSysBrandId());
-        List<SysCheckConfigVo> sysCheckConfigVoList = sysCheckConfigVo.getData();
 
-        //判断是否有审核配置
-        int i = 0;
-        if (!CollectionUtils.isEmpty(sysCheckConfigVoList)) {
-            for (SysCheckConfigVo sysCheckConfig : sysCheckConfigVoList) {
-                //判断是否需要审核  暂时先写这三个审核类型 后期确定下来写成枚举类
-                if (sysCheckConfig.getFunctionCode().equals("C0002")) {
-                    i += 1;
-                }
-            }
-        }
+        //查询结果如果不需要审核审核状态为已审核
+        mktActivityPOWithBLOBs.setCheckStatus(CheckStatusEnum.CHECK_STATUS_APPROVED.getCode());
+        //活动状态设置为执行中
+        mktActivityPOWithBLOBs.setActivityStatus(ActivityStatusEnum.ACTIVITY_STATUS_EXECUTING.getCode());
+        //发送模板消息和短信消息TODO
 
-        if (i > 0) {
-            //查询结果如果需要审核审核状态为待审核
-            mktActivityPOWithBLOBs.setCheckStatus(CheckStatusEnum.CHECK_STATUS_PENDING.getCode());
-            //活动状态设置为待执行
-            mktActivityPOWithBLOBs.setActivityStatus(ActivityStatusEnum.ACTIVITY_STATUS_PENDING.getCode());
-            //如果是待审核数据则需要增加一条审核数据
-
-        } else {
-            //查询结果如果不需要审核审核状态为已审核
-            mktActivityPOWithBLOBs.setCheckStatus(CheckStatusEnum.CHECK_STATUS_APPROVED.getCode());
-            //活动状态设置为执行中
-            mktActivityPOWithBLOBs.setActivityStatus(ActivityStatusEnum.ACTIVITY_STATUS_EXECUTING.getCode());
-            //发送模板消息和短信消息TODO
-        }
         //新增活动主表
         mktActivityPOWithBLOBs.setCreateDate(new Date());
         mktActivityPOWithBLOBs.setCreateUserId(stageUser.getSysAccountId());
@@ -194,29 +164,6 @@ public class ActivityEvaluationServiceImpl implements ActivityEvaluationService 
         mktActivityCountPO.setCreateUserId(stageUser.getSysAccountId());
         mktActivityCountPO.setCreateUserName(stageUser.getName());
         mktActivityCountPOMapper.insertSelective(mktActivityCountPO);
-        
-        //调用rpc返回的结果
-        ResponseData<Long> rpcResponse = new ResponseData<>();
-        if (i > 0) {
-
-            //如果是待审核数据则需要增加一条审核数据
-            log.info("增加审核中心一条数据");
-            SysCheckPo po = new SysCheckPo();
-            po.setSysBrandId(mktActivityPOWithBLOBs.getSysBrandId());
-            po.setBusinessCode(mktActivityPOWithBLOBs.getActivityCode());
-            po.setBusinessName(mktActivityPOWithBLOBs.getActivityName());
-            po.setBusinessId(mktActivityId);
-            po.setBusinessType(ActivityTypeEnum.ACTIVITY_TYPE_EVALUATION.getCode());
-            po.setFunctionCode("C0002");
-            po.setCheckStatus(CheckStatusEnum.CHECK_STATUS_PENDING.getCode());
-            po.setCreateDate(new Date());
-            po.setCreateUserId(stageUser.getCreateUserId());
-            po.setCreateUserName(stageUser.getCreateUserName());
-            po.setBizName(mktActivityPOWithBLOBs.getActivityName());
-            log.info("请求sysCheckServiceRpc时的参数" + JSON.toJSONString(po));
-            sysCheckServiceRpc.addCheck(po);
-        }
-
 
         //新增评价奖励活动表
         MktActivityEvaluationPO mktActivityEvaluationPO = new MktActivityEvaluationPO();
@@ -320,40 +267,6 @@ public class ActivityEvaluationServiceImpl implements ActivityEvaluationService 
             
             mktActivityCountPOMapper.updateSum(activityVO.getMktActivityId(), 1, BigDecimal.ZERO, activityVO.getPoints());
         }
-        responseData.setCode(SysResponseEnum.SUCCESS.getCode());
-        responseData.setMessage(SysResponseEnum.SUCCESS.getMessage());
-        return responseData;
-    }
-
-
-    @Override
-    public ResponseData<Integer> checkActivityEvaluation(SysCheckPo po, SysAccountPO sysAccountPO) {
-        log.info("审核活动开始");
-        ResponseData responseData = new ResponseData();
-        MktActivityPOWithBLOBs bs = new MktActivityPOWithBLOBs();
-        bs.setModifiedUserId(sysAccountPO.getSysAccountId());
-        bs.setModifiedDate(new Date());
-        bs.setModifiedUserName(sysAccountPO.getName());
-        bs.setCheckStatus(po.getCheckStatus());
-        bs.setActivityCode(po.getBusinessCode());
-        bs.setMktActivityId(po.getBusinessId());
-        //判断是审核通过还是审核驳回
-        if (bs.getCheckStatus() == CheckStatusEnum.CHECK_STATUS_APPROVED.getCode()) {
-            //将活动状态变更为执行中
-            log.info("更新活动状态");
-            bs.setActivityStatus(ActivityStatusEnum.ACTIVITY_STATUS_EXECUTING.getCode());
-            int i = mktActivityPOMapper.updateByPrimaryKeySelective(bs);
-        } else {
-            log.info("更新活动状态");
-            bs.setActivityStatus(ActivityStatusEnum.ACTIVITY_STATUS_FINISHED.getCode());
-            int i = mktActivityPOMapper.updateByPrimaryKeySelective(bs);
-
-        }
-        ResponseData<Integer> rpcResponse = new ResponseData<>();
-        //更新审核中心状态
-        rpcResponse = sysCheckServiceRpc.updateCheck(po);
-        //审核中心返回的结果，1是成功
-        log.info("sysCheckServiceRpc返回的结果是:" + rpcResponse.getData());
         responseData.setCode(SysResponseEnum.SUCCESS.getCode());
         responseData.setMessage(SysResponseEnum.SUCCESS.getMessage());
         return responseData;

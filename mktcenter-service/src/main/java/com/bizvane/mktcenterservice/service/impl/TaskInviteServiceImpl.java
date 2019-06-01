@@ -97,15 +97,8 @@ public class TaskInviteServiceImpl implements TaskInviteService {
 
         MktTaskPOWithBLOBs mktTaskPOWithBLOBs = new MktTaskPOWithBLOBs();
         BeanUtils.copyProperties(taskVO, mktTaskPOWithBLOBs);
-        //1.判断是否需要审核  1=需要审核   0=不需要
-        Integer stagecheckStatus = taskService.getCenterStageCheckStage(mktTaskPOWithBLOBs);
 
-        mktTaskPOWithBLOBs = taskService.isOrNoCheckState(mktTaskPOWithBLOBs,stagecheckStatus);
         Long mktTaskId = taskService.addTask(mktTaskPOWithBLOBs, stageUser);
-        //将需要审核的任务添加到审核中心
-       if(TaskConstants.FIRST.equals(stagecheckStatus)){
-           taskService.addCheckData(mktTaskPOWithBLOBs);
-       }
 
         //3.任务消费表新增
         MktTaskInvitePO mktTaskInvitePO = new MktTaskInvitePO();
@@ -161,10 +154,6 @@ public class TaskInviteServiceImpl implements TaskInviteService {
         //1.任务主表修改
         MktTaskPOWithBLOBs mktTaskPOWithBLOBs = new MktTaskPOWithBLOBs();
         BeanUtils.copyProperties(taskVO, mktTaskPOWithBLOBs);
-        //1.判断是否需要审核  1=需要审核   0=不需要
-        Integer StagecheckStatus = taskService.getCenterStageCheckStage(mktTaskPOWithBLOBs);
-        //状态的设置
-        mktTaskPOWithBLOBs = taskService.isOrNoCheckState(mktTaskPOWithBLOBs,StagecheckStatus);
         taskService.updateTask(mktTaskPOWithBLOBs, stageUser);
 
         //3.任务邀请表修改

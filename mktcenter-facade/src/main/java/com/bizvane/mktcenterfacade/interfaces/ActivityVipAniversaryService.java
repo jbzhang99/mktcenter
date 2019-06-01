@@ -36,14 +36,6 @@ public interface ActivityVipAniversaryService {
     public ResponseData<ActivityBO> selectActivityVipAniversaryById(String businessCode);
 
     /**
-     * 活动审核
-     * @param
-     * @return
-     */
-    public ResponseData<Integer> checkActivityVipAniversary(SysCheckPo po, SysAccountPO sysAccountPO);
-
-
-    /**
      * 修改活动
      * @return
      */

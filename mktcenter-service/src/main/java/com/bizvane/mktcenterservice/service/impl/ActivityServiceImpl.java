@@ -73,8 +73,7 @@ public class ActivityServiceImpl implements ActivityService {
     private MktActivityPOMapper mktActivityPOMapper;
     @Autowired
     private MktMessagePOMapper mktMessagePOMapper;
-    @Autowired
-    private SysCheckServiceRpc sysCheckServiceRpc;
+
     @Autowired
     private CouponQueryServiceFeign couponQueryServiceFeign;
     @Autowired
@@ -117,93 +116,10 @@ public class ActivityServiceImpl implements ActivityService {
         //删除审核中心数据
         SysCheckPo po = new SysCheckPo();
         po.setBusinessId(vo.getMktActivityId());
-        sysCheckServiceRpc.deleteByBusinessId(po);
         responseData.setCode(SysResponseEnum.SUCCESS.getCode());
         responseData.setMessage(SysResponseEnum.SUCCESS.getMessage());
         return responseData;
     }
-
-    /**
-     * 活动审核
-     * @param
-     * @param sysAccountPO
-     * @return
-     */
-    @Override
-    public ResponseData<Integer> checkActivityById(SysCheckPo po, SysAccountPO sysAccountPO) {
-        ResponseData responseData = new ResponseData();
-        MktActivityPOWithBLOBs bs = new MktActivityPOWithBLOBs();
-        bs.setModifiedUserId(sysAccountPO.getSysAccountId());
-        bs.setModifiedDate(new Date());
-        bs.setModifiedUserName(sysAccountPO.getName());
-        bs.setCheckStatus(po.getCheckStatus());
-        bs.setActivityCode(po.getBusinessCode());
-        bs.setMktActivityId(po.getBusinessId());
-        //根据code查询出审核活动的详细信息
-        ActivityVO vo = new ActivityVO();
-        vo.setActivityCode(po.getBusinessCode());
-        List<ActivityVO> activityRegisterList = mktActivityRegisterPOMapper.getActivityList(vo);
-        if (CollectionUtils.isEmpty(activityRegisterList)){
-            responseData.setCode(SysResponseEnum.FAILED.getCode());
-            responseData.setMessage(SysResponseEnum.OPERATE_FAILED_DATA_NOT_EXISTS.getMessage());
-            return responseData;
-        }
-        ActivityVO activityPO = activityRegisterList.get(0);
-        //判断是审核通过还是审核驳回
-        if(bs.getCheckStatus()==CheckStatusEnum.CHECK_STATUS_APPROVED.getCode()){
-            //活动开始时间<当前时间<活动结束时间  或者长期活动 也就是StartTime=null
-            if(1== activityPO.getLongTerm() ||(new Date().after(activityPO.getStartTime()) && new Date().before(activityPO.getEndTime()))){
-                //将活动状态变更为执行中 并且发送消息
-                bs.setActivityStatus(ActivityStatusEnum.ACTIVITY_STATUS_EXECUTING.getCode());
-
-            }
-            //判断审核时间 >活动结束时间  将活动状态变为已结束
-            if(null!=activityPO.getEndTime() && new Date().after(activityPO.getEndTime())){
-                bs.setActivityStatus(ActivityStatusEnum.ACTIVITY_STATUS_FINISHED.getCode());
-            }
-
-        }else{
-            bs.setActivityStatus(ActivityStatusEnum.ACTIVITY_STATUS_FINISHED.getCode());
-        }
-        log.info("更新审核状态的参数是+======="+ JSON.toJSONString(bs));
-        int i = mktActivityPOMapper.updateByPrimaryKeySelective(bs);
-        //更新审核中心状态
-        sysCheckServiceRpc.updateCheck(po);
-        responseData.setCode(SysResponseEnum.SUCCESS.getCode());
-        responseData.setMessage(SysResponseEnum.SUCCESS.getMessage());
-        return responseData;
-    }
-
-//    /**
-//     * 小程序端查询活动列表
-//     * @param vo
-//     * @return
-//     */
-//    @Override
-//    public ResponseData<List<ActivityVO>> getActivityList(ActivityVO vo) {
-//        ResponseData responseData = new ResponseData();
-//        List<ActivityVO> lists = new ArrayList<>();
-//        MemberInfoModel memberInfoModel = new MemberInfoModel();
-//        memberInfoModel.setServiceStoreId(vo.getServiceStoreId());
-//        log.info("服务id是=============="+vo.getServiceStoreId());
-//        List<ActivityVO> activityList =mktActivityPOMapper.getActivityList(vo);
-//        log.info("查询到的活动集合是=============="+JSON.toJSONString(activityList));
-//        if (!CollectionUtils.isEmpty(activityList)){
-//            for (ActivityVO activity:activityList) {
-//                //过滤门店
-//                if (!ExecuteParamCheckUtil.implementActivitCheck(memberInfoModel,activity)){
-//                    continue;
-//                }
-//                lists.add(activity);
-//
-//            }
-//            lists = lists.stream().sorted(Comparator.comparing(ActivityVO::getStartTime).reversed()).collect(Collectors.toList());
-//        }
-//        responseData.setData(lists);
-//        responseData.setCode(SysResponseEnum.SUCCESS.getCode());
-//        responseData.setMessage(SysResponseEnum.SUCCESS.getMessage());
-//        return responseData;
-//    }
 
     /**
      * 店铺活动列表

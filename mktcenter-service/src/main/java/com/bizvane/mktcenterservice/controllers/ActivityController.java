@@ -61,47 +61,6 @@ public class ActivityController {
     }
 
     /**
-     * 活动审核
-     * @param
-     * @param request
-     * @return
-     */
-    @RequestMapping("checkActivityById")
-    public ResponseData<Integer> checkActivityById(SysCheckPo po, HttpServletRequest request){
-        ResponseData responseData = new ResponseData();
-        //获取操作人信息
-        SysAccountPO stageUser =new SysAccountPO();
-//        SysAccountPO stageUser = TokenUtils.getStageUser(request);
-        //开卡活动审核
-        if(po.getBusinessType()==ActivityTypeEnum.ACTIVITY_TYPE_REGISGER.getCode()){
-            responseData = activityService.checkActivityById(po, stageUser);
-        }
-        //会员生日活动
-        if(po.getBusinessType()==ActivityTypeEnum.ACTIVITY_TYPE_BIRTHDAY.getCode()){
-            responseData = activityBirthdayService.checkActivityBirthday(po,stageUser);
-        }
-        //入会纪念日活动
-        if(po.getBusinessType()==ActivityTypeEnum.ACTIVITY_TYPE_ANNIVERSARY.getCode()){
-            responseData = activityVipAniversaryService.checkActivityVipAniversary(po,stageUser);
-        }
-        //会员消费活动审核
-        if(po.getBusinessType()==ActivityTypeEnum.ACTIVITY_TYPE_ORDER.getCode()){
-            responseData =activityOrderService.checkActivityOrder(po,stageUser);
-        }
-        //评价奖励活动审核
-        if(po.getBusinessType()==ActivityTypeEnum.ACTIVITY_TYPE_EVALUATION.getCode()){
-            responseData = activityEvaluationService.checkActivityEvaluation(po,stageUser);
-
-        }
-        //扫码领券&手动领券审核
-        if(po.getBusinessType()==ActivityTypeEnum.ACTIVITY_TYPE_QRCODE.getCode()||po.getBusinessType()==ActivityTypeEnum.ACTIVITY_TYPE_MANUAL.getCode()){
-            responseData = activityManualService.checkActivity(po,stageUser);
-
-        }
-        return responseData;
-    }
-
-    /**
      * 查询效果分析统计
      * @param bo
      * @param pageForm

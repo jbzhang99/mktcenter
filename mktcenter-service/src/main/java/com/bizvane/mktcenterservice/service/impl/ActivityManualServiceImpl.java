@@ -1,12 +1,8 @@
 package com.bizvane.mktcenterservice.service.impl;
 
 import com.alibaba.fastjson.JSON;
-import com.bizvane.centerstageservice.models.po.SysCheckPo;
 import com.bizvane.centerstageservice.models.po.SysStorePo;
-import com.bizvane.centerstageservice.models.vo.SysCheckConfigVo;
 import com.bizvane.centerstageservice.rpc.StoreServiceRpc;
-import com.bizvane.centerstageservice.rpc.SysCheckConfigServiceRpc;
-import com.bizvane.centerstageservice.rpc.SysCheckServiceRpc;
 import com.bizvane.couponfacade.enums.SendTypeEnum;
 import com.bizvane.couponfacade.interfaces.CouponQueryServiceFeign;
 import com.bizvane.couponfacade.models.po.CouponDefinitionPO;
@@ -38,7 +34,6 @@ import com.bizvane.utils.responseinfo.ResponseData;
 import com.bizvane.utils.tokens.SysAccountPO;
 import com.bizvane.wechatfacade.interfaces.QRCodeServiceFeign;
 import com.bizvane.wechatfacade.models.vo.CreateMiniprgmCodeBO;
-import com.bizvane.wechatfacade.models.vo.CreateMiniprgmQRCodeBO;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import lombok.extern.slf4j.Slf4j;
@@ -63,8 +58,6 @@ import java.util.stream.Collectors;
 public class ActivityManualServiceImpl implements ActivityManualService {
     @Autowired
     private MktActivityManualPOMapper mktActivityManualPOMapper;
-    @Autowired
-    private SysCheckConfigServiceRpc sysCheckConfigServiceRpc;
 
     @Autowired
     private JobUtil jobUtil;
@@ -85,9 +78,7 @@ public class ActivityManualServiceImpl implements ActivityManualService {
 
     @Autowired
     private QRCodeServiceFeign qrCodeServiceFeign;
-    @Autowired
-    private SysCheckServiceRpc sysCheckServiceRpc;
-    
+
     @Autowired
     private MktActivityCountPOMapper mktActivityCountPOMapper;
 
@@ -152,51 +143,20 @@ public class ActivityManualServiceImpl implements ActivityManualService {
          mktActivityPOWithBLOBs.setSysBrandId(stageUser.getBrandId());
          mktActivityPOWithBLOBs.setSysCompanyId(stageUser.getSysCompanyId());
 
-
-        //查询审核配置，是否需要审核然后判断
-       /* SysCheckConfigVo so = new SysCheckConfigVo();
-        so.setSysBrandId(activityVO.getSysBrandId());*/
-        ResponseData<List<SysCheckConfigVo>> sysCheckConfigVo = sysCheckConfigServiceRpc.getCheckConfigListAll(activityVO.getSysBrandId());
-        List<SysCheckConfigVo> sysCheckConfigVoList = sysCheckConfigVo.getData();
-        //判断是否有审核配置
-        int i = 0;
-        if (!CollectionUtils.isEmpty(sysCheckConfigVoList)) {
-            for (SysCheckConfigVo sysCheckConfig : sysCheckConfigVoList) {
-                //判断是否需要审核  暂时先写这三个审核类型 后期确定下来写成枚举类
-                if (sysCheckConfig.getFunctionCode().equals("C0002")) {
-                    i += 1;
-                }
-            }
-        }
-        if (i > 0) {
-            //1.待审核，增加审核单，活动开始时间>今天，待执行
-            //查询结果如果需要审核审核状态为待审核
-            mktActivityPOWithBLOBs.setCheckStatus(CheckStatusEnum.CHECK_STATUS_PENDING.getCode());
-            //活动状态设置为待执行
-            mktActivityPOWithBLOBs.setActivityStatus(ActivityStatusEnum.ACTIVITY_STATUS_PENDING.getCode());
-            //getStartTime 开始时间>当前时间增加job
-            if (new Date().before(activityVO.getStartTime())) {
-                //创建任务调度任务开始时间
-                jobUtil.addJob(stageUser, activityVO, activityCode);
-                //创建任务调度任务结束时间
-                jobUtil.addJobEndTime(stageUser, activityVO, activityCode);
-            }
-        } else {
-            //查询结果如果不需要审核审核状态为已审核
-            mktActivityPOWithBLOBs.setCheckStatus(CheckStatusEnum.CHECK_STATUS_APPROVED.getCode());
-            //getStartTime 开始时间>当前时间增加job，待执行
-            if (new Date().before(activityVO.getStartTime())) {
-                //活动状态设置为待执行
-                mktActivityPOWithBLOBs.setActivityStatus(ActivityStatusEnum.ACTIVITY_STATUS_PENDING.getCode());
-                //创建任务调度任务开始时间
-                jobUtil.addJob(stageUser, activityVO, activityCode);
-                //创建任务调度任务结束时间
-                jobUtil.addJobEndTime(stageUser, activityVO, activityCode);
-            } else {
-                //活动状态设置为执行中
-                mktActivityPOWithBLOBs.setActivityStatus(ActivityStatusEnum.ACTIVITY_STATUS_EXECUTING.getCode());
-            }
-        }
+         //审核状态为已审核
+         mktActivityPOWithBLOBs.setCheckStatus(CheckStatusEnum.CHECK_STATUS_APPROVED.getCode());
+         //getStartTime 开始时间>当前时间增加job，待执行
+         if (new Date().before(activityVO.getStartTime())) {
+             //活动状态设置为待执行
+             mktActivityPOWithBLOBs.setActivityStatus(ActivityStatusEnum.ACTIVITY_STATUS_PENDING.getCode());
+             //创建任务调度任务开始时间
+             jobUtil.addJob(stageUser, activityVO, activityCode);
+             //创建任务调度任务结束时间
+             jobUtil.addJobEndTime(stageUser, activityVO, activityCode);
+         } else {
+             //活动状态设置为执行中
+             mktActivityPOWithBLOBs.setActivityStatus(ActivityStatusEnum.ACTIVITY_STATUS_EXECUTING.getCode());
+         }
         //新增活动主表
          log.info("领券活动-创建活动-新增活动主表入参:"+JSON.toJSONString(mktActivityPOWithBLOBs));
          mktActivityPOWithBLOBs.setIsStoreLimit(activityVO.getStoreLimit());
@@ -215,63 +175,13 @@ public class ActivityManualServiceImpl implements ActivityManualService {
         mktActivityCountPOMapper.insertSelective(mktActivityCountPO);
         
         log.info("领券活动-创建活动-新增活动-活动主表id"+mktActivityId);
-        if (i>0){
-            //如果是待审核数据则需要增加一条审核数据l
-            SysCheckPo po = new SysCheckPo();
-            po.setSysBrandId(mktActivityPOWithBLOBs.getSysBrandId());
-            po.setBusinessCode(mktActivityPOWithBLOBs.getActivityCode());
-            po.setBusinessName(mktActivityPOWithBLOBs.getActivityName());
-            po.setBusinessType(activityVO.getActivityType());
-            po.setFunctionCode("C0002");
-            po.setCheckStatus(CheckStatusEnum.CHECK_STATUS_PENDING.getCode());
-            po.setBizName(mktActivityPOWithBLOBs.getActivityName());
-            po.setBusinessId(mktActivityId);
-            po.setCreateDate(new Date());
-            po.setCreateUserId(stageUser.getSysAccountId());
-            po.setCreateUserName(stageUser.getName());
-            log.info("增加一条数据到审核中心");
-            sysCheckServiceRpc.addCheck(po);
-        }
+
         //新增明细表
         MktActivityManualPO mktActivityManualPO = new MktActivityManualPO();
         BeanUtils.copyProperties(activityVO, mktActivityManualPO);
         mktActivityManualPO.setMktActivityId(mktActivityId);
         mktActivityManualPO.setIsStoreLimit(activityVO.getStoreLimit());
-        // 扫码领券的二维码
-      if(ActivityTypeEnum.ACTIVITY_TYPE_QRCODE.getCode()==activityVO.getActivityType()){
-         QRCodeConfig qrCodeConfig = (QRCodeConfig) SpringContextUtil.getBean("QRCodeConfig");
-         String url= qrCodeConfig.getQrcodeurl()+activityVO.getActivityCode();
-          CreateMiniprgmCodeBO createMiniprgmQRCodeRequestVO = new CreateMiniprgmCodeBO();
-          createMiniprgmQRCodeRequestVO.setSysBrandId(activityVO.getSysBrandId());
-          createMiniprgmQRCodeRequestVO.setMiniProgramType("10");
 
-          //根据brandId查询brandCode
-         // ResponseData<SysBrandPo> brandPoResult = brandServiceRpc.getBrandByID(activityVO.getSysBrandId());
-          //createMiniprgmQRCodeRequestVO.setBrandCode(brandPoResult.getData().getBrandCode());//TODO-
-
-          //ResponseData<SysCompanyPo> companyResult = companyServiceRpc.getCompanyById(stageUser.getSysCompanyId());
-          //urlQRCodeCreateRequestVO.setCompanyCode(companyResult.getData().getCompanyCode());
-          //urlQRCodeCreateRequestVO.setUrl(url);
-          createMiniprgmQRCodeRequestVO.setPath("pages/template01/coupon-scancode/main");
-          createMiniprgmQRCodeRequestVO.setScene(activityVO.getActivityCode());
-         log.info("领券活动-创建活动-扫码领券查询二维码入参:"+JSON.toJSONString(createMiniprgmQRCodeRequestVO));
-          ResponseData<String> qrCodeResponseData= null;
-          try {
-              qrCodeResponseData = qrCodeServiceFeign.createMiniprgmCode(createMiniprgmQRCodeRequestVO);
-              log.info("二维码返回结果ssssssssssssssssssss:"+JSON.toJSONString(qrCodeResponseData));
-              if(null==qrCodeResponseData||null==qrCodeResponseData.getData()){
-                  log.info("领券活动-创建活动-扫码领券生成二维码为空");
-                  responseData.setCode(SysResponseEnum.FAILED.getCode());
-                  responseData.setMessage(SystemConstants.ERROR_QR_CODE_EMPTY);
-                  responseData.setData(SystemConstants.ERROR_CODE);
-                  return responseData;
-              }
-              mktActivityManualPO.setQrcode(qrCodeResponseData.getData());
-          } catch (Exception e) {
-              log.info("二维码返回结果ssssssssssssssssssss:"+JSON.toJSONString(e));
-              e.printStackTrace();
-          }
-       }
        log.info("领券活动-创建活动-新增领券规则表，入参:"+JSON.toJSONString(mktActivityManualPO));
         mktActivityManualPOMapper.insertSelective(mktActivityManualPO);
         //新增券表,和活动绑定
@@ -288,13 +198,12 @@ public class ActivityManualServiceImpl implements ActivityManualService {
             responseData.setCode(SystemConstants.SUCCESS_CODE);
             responseData.setMessage(SystemConstants.SUCCESS_MESSAGE);
         log.info("领券活动-创建活动-成功");
-         return responseData;
      }catch (Exception e){
          log.error("领券活动-创建活动-出错"+e.getMessage());
          responseData.setCode(SystemConstants.ERROR_CODE);
          responseData.setMessage(ActivityConstants.ERROR_SQL);
-         return responseData;
       }
+        return responseData;
     }
 
 
@@ -712,51 +621,6 @@ public class ActivityManualServiceImpl implements ActivityManualService {
             return responseData;
         }
         //4.返回所有券列表及是否可领取
-        responseData.setCode(SystemConstants.SUCCESS_CODE);
-        responseData.setMessage(SystemConstants.SUCCESS_MESSAGE);
-        return responseData;
-    }
-
-    /**
-     * 审核
-     * @param
-     * @param sysAccountPO
-     * @return
-     */
-    @Override
-    public ResponseData<Integer> checkActivity(SysCheckPo po, SysAccountPO sysAccountPO) {
-        ResponseData responseData = new ResponseData();
-        MktActivityPOWithBLOBs bs = new MktActivityPOWithBLOBs();
-        bs.setModifiedUserId(sysAccountPO.getSysAccountId());
-        bs.setModifiedDate(new Date());
-        bs.setModifiedUserName(sysAccountPO.getName());
-        bs.setCheckStatus(po.getCheckStatus());
-        bs.setActivityCode(po.getBusinessCode());
-        bs.setMktActivityId(po.getBusinessId());
-        //查询扫码领卷的的详细信息
-        ActivityVO vo = new ActivityVO();
-        vo.setActivityCode(bs.getActivityCode());
-        List<ActivityVO> activityManualList = mktActivityManualPOMapper.getActivityManualList(vo);
-        ActivityVO activityVO = activityManualList.get(0);
-        if(bs.getCheckStatus()==CheckStatusEnum.CHECK_STATUS_APPROVED.getCode()){
-           // 活动开始时间<当前时间<活动结束时间  变为执行中
-            if(new Date().after(activityVO.getStartTime()) && new Date().before(activityVO.getEndTime())){
-                bs.setActivityStatus(ActivityStatusEnum.ACTIVITY_STATUS_EXECUTING.getCode());
-            }
-            //判断审核时间 >活动结束时间  将活动状态变为已结束
-            if(new Date().after(activityVO.getEndTime())){
-                bs.setActivityStatus(ActivityStatusEnum.ACTIVITY_STATUS_FINISHED.getCode());
-            }
-        }else{
-            bs.setActivityStatus(ActivityStatusEnum.ACTIVITY_STATUS_FINISHED.getCode());
-
-        }
-        log.info("更新审核状态的参数是+======="+ JSON.toJSONString(bs));
-        int i = mktActivityPOMapper.updateByPrimaryKeySelective(bs);
-        log.info("更新审核状态完成");
-        //更新审核中心状态
-        log.info("更新审核中心check的参数是+======="+ JSON.toJSONString(po));
-        sysCheckServiceRpc.updateCheck(po);
         responseData.setCode(SystemConstants.SUCCESS_CODE);
         responseData.setMessage(SystemConstants.SUCCESS_MESSAGE);
         return responseData;

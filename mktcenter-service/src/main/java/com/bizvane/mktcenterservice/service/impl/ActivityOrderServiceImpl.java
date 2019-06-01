@@ -89,12 +89,10 @@ public class ActivityOrderServiceImpl implements ActivityOrderService {
     private MktCouponPOMapper mktCouponPOMapper;
     @Autowired
     private MktMessagePOMapper mktMessagePOMapper;
-    @Autowired
-    private SysCheckConfigServiceRpc sysCheckConfigServiceRpc;
+
     @Autowired
     private JobUtil jobUtil;
-    @Autowired
-    private SysCheckServiceRpc sysCheckServiceRpc;
+
     @Autowired
     private CouponQueryServiceFeign couponQueryServiceFeign;
     @Autowired
@@ -172,52 +170,22 @@ public class ActivityOrderServiceImpl implements ActivityOrderService {
         MktActivityPOWithBLOBs mktActivityPOWithBLOBs = new MktActivityPOWithBLOBs();
         BeanUtils.copyProperties(activityVO,mktActivityPOWithBLOBs);
 
-        //查询审核配置，是否需要审核然后判断
-        /*SysCheckConfigVo so = new SysCheckConfigVo();
-        so.setSysBrandId(activityVO.getSysBrandId());*/
-        ResponseData<List<SysCheckConfigVo>> sysCheckConfigVo =sysCheckConfigServiceRpc.getCheckConfigListAll(activityVO.getSysBrandId());
-        List<SysCheckConfigVo> sysCheckConfigVoList = sysCheckConfigVo.getData();
-        //判断是否有审核配置
-        int i = 0;
-        if(!CollectionUtils.isEmpty(sysCheckConfigVoList)){
-            for (SysCheckConfigVo sysCheckConfig:sysCheckConfigVoList) {
-                //判断是否需要审核  暂时先写这三个审核类型 后期确定下来写成枚举类
-                if(sysCheckConfig.getFunctionCode().equals("C0002")){
-                    i+=1;
-                }
-            }
-        }
-        if(i>0){
-            //查询结果如果需要审核审核状态为待审核
-            mktActivityPOWithBLOBs.setCheckStatus(CheckStatusEnum.CHECK_STATUS_PENDING.getCode());
+        //查询结果如果不需要审核审核状态为已审核
+        mktActivityPOWithBLOBs.setCheckStatus(CheckStatusEnum.CHECK_STATUS_APPROVED.getCode());
+        //getStartTime 开始时间>当前时间增加job
+        if( new Date().before(activityVO.getStartTime())){
             //活动状态设置为待执行
             mktActivityPOWithBLOBs.setActivityStatus(ActivityStatusEnum.ACTIVITY_STATUS_PENDING.getCode());
-            //getStartTime 开始时间>当前时间增加job
-            if(new Date().before(activityVO.getStartTime())){
-                //创建任务调度任务开始时间
-                jobUtil.addJob(stageUser,activityVO,activityCode);
-                //创建任务调度任务结束时间
-                jobUtil.addJobEndTime(stageUser,activityVO,activityCode);
-            }
+            //创建任务调度任务开始时间
+            jobUtil.addJob(stageUser,activityVO,activityCode);
+            //创建任务调度任务结束时间
+            jobUtil.addJobEndTime(stageUser,activityVO,activityCode);
         }else{
-            //查询结果如果不需要审核审核状态为已审核
-            mktActivityPOWithBLOBs.setCheckStatus(CheckStatusEnum.CHECK_STATUS_APPROVED.getCode());
-            //getStartTime 开始时间>当前时间增加job
-            if( new Date().before(activityVO.getStartTime())){
-                //活动状态设置为待执行
-                mktActivityPOWithBLOBs.setActivityStatus(ActivityStatusEnum.ACTIVITY_STATUS_PENDING.getCode());
-                //创建任务调度任务开始时间
-                jobUtil.addJob(stageUser,activityVO,activityCode);
-                //创建任务调度任务结束时间
-                jobUtil.addJobEndTime(stageUser,activityVO,activityCode);
-            }else{
-                //活动状态设置为执行中
-                mktActivityPOWithBLOBs.setActivityStatus(ActivityStatusEnum.ACTIVITY_STATUS_EXECUTING.getCode());
+            //活动状态设置为执行中
+            mktActivityPOWithBLOBs.setActivityStatus(ActivityStatusEnum.ACTIVITY_STATUS_EXECUTING.getCode());
 
 
-            }
         }
-
 
         //新增活动主表
         mktActivityPOWithBLOBs.setCreateDate(new Date());
@@ -239,24 +207,6 @@ public class ActivityOrderServiceImpl implements ActivityOrderService {
         mktActivityCountPO.setCreateUserName(stageUser.getName());
         mktActivityCountPOMapper.insertSelective(mktActivityCountPO);
         
-        if (i>0){
-            //新增审核
-            SysCheckPo po = new SysCheckPo();
-            po.setSysBrandId(mktActivityPOWithBLOBs.getSysBrandId());
-            po.setSysCompanyId(mktActivityPOWithBLOBs.getSysCompanyId());
-            po.setBusinessName(mktActivityPOWithBLOBs.getActivityName());
-            po.setBusinessCode(mktActivityPOWithBLOBs.getActivityCode());
-            po.setBusinessType(ActivityTypeEnum.ACTIVITY_TYPE_ORDER.getCode());
-            po.setFunctionCode("C0002");
-            po.setCheckStatus(CheckStatusEnum.CHECK_STATUS_PENDING.getCode());
-            po.setBizName(mktActivityPOWithBLOBs.getActivityName());
-            po.setBusinessId(mktActivityId);
-            po.setCreateDate(new Date());
-            po.setCreateUserId(stageUser.getSysAccountId());
-            po.setCreateUserName(stageUser.getName());
-            sysCheckServiceRpc.addCheck(po);
-        }
-
         //新增会员消费活动表
         MktActivityOrderPOWithBLOBs mktActivityOrderPOWithBLOBs = new MktActivityOrderPOWithBLOBs();
         BeanUtils.copyProperties(mktActivityPOWithBLOBs,mktActivityOrderPOWithBLOBs);
@@ -432,70 +382,23 @@ public class ActivityOrderServiceImpl implements ActivityOrderService {
         XxlJobInfo xxlJobInfo = new XxlJobInfo();
         xxlJobInfo.setExecutorParam(activityVO.getActivityCode());
         xxlJobInfo.setBizType(BusinessTypeEnum.ACTIVITY_TYPE_ACTIVITY.getCode());
-        //查询审核配置，是否需要审核然后判断
-        /*SysCheckConfigVo so = new SysCheckConfigVo();
-        so.setSysBrandId(activityVO.getSysBrandId());*/
-        ResponseData<List<SysCheckConfigVo>> sysCheckConfigVo =sysCheckConfigServiceRpc.getCheckConfigListAll(activityVO.getSysBrandId());
-        List<SysCheckConfigVo> sysCheckConfigVoList = sysCheckConfigVo.getData();
-        //判断是否有审核配置
-        int i = 0;
-        if(!CollectionUtils.isEmpty(sysCheckConfigVoList)){
-            for (SysCheckConfigVo sysCheckConfig:sysCheckConfigVoList) {
-                //判断是否需要审核  暂时先写这三个审核类型 后期确定下来写成枚举类
-                if(sysCheckConfig.getFunctionCode().equals("C0001") || sysCheckConfig.getFunctionCode().equals("C0002") || sysCheckConfig.getFunctionCode().equals("C0003")){
-                    i+=1;
-                }
-            }
-        }
-        if(i>0){
-            //查询结果如果需要审核审核状态为待审核
-            mktActivityPOWithBLOBs.setCheckStatus(CheckStatusEnum.CHECK_STATUS_PENDING.getCode());
+
+        //查询结果如果不需要审核审核状态为已审核
+        mktActivityPOWithBLOBs.setCheckStatus(CheckStatusEnum.CHECK_STATUS_APPROVED.getCode());
+        //getStartTime 开始时间>当前时间增加job
+        if( new Date().before(activityVO.getStartTime())){
             //活动状态设置为待执行
             mktActivityPOWithBLOBs.setActivityStatus(ActivityStatusEnum.ACTIVITY_STATUS_PENDING.getCode());
-
-            //如果是待审核数据则需要增加一条审核数据
-            //已驳回的可以新建审核
-            if(activityVO.getCheckStatus() == CheckStatusEnum.CHECK_STATUS_REJECTED.getCode()){
-                SysCheckPo po = new SysCheckPo();
-                po.setSysBrandId(mktActivityPOWithBLOBs.getSysBrandId());
-                po.setBusinessCode(mktActivityPOWithBLOBs.getActivityCode());
-                po.setBusinessName(mktActivityPOWithBLOBs.getActivityName());
-                po.setBusinessType(ActivityTypeEnum.ACTIVITY_TYPE_ORDER.getCode());
-                po.setFunctionCode("C0002");
-                po.setCheckStatus(CheckStatusEnum.CHECK_STATUS_PENDING.getCode());
-                po.setCreateDate(new Date());
-                po.setCreateUserId(stageUser.getSysAccountId());
-                po.setCreateUserName(stageUser.getName());
-                sysCheckServiceRpc.addCheck(po);
-            }
-
-            //getStartTime 开始时间>当前时间增加job
-            if( new Date().before(activityVO.getStartTime())){
-                //先删除原来创建的job任务
-                jobClient.removeByBiz(xxlJobInfo);
-                //创建任务调度任务开始时间
-                jobUtil.addJob(stageUser,activityVO,mktActivityPOWithBLOBs.getActivityCode());
-                //创建任务调度任务结束时间
-                jobUtil.addJobEndTime(stageUser,activityVO,mktActivityPOWithBLOBs.getActivityCode());
-            }
+            //先删除原来创建的job任务
+            jobClient.removeByBiz(xxlJobInfo);
+            //创建任务调度任务开始时间
+            jobUtil.addJob(stageUser,activityVO,mktActivityPOWithBLOBs.getActivityCode());
+            //创建任务调度任务结束时间
+            jobUtil.addJobEndTime(stageUser,activityVO,mktActivityPOWithBLOBs.getActivityCode());
         }else{
-            //查询结果如果不需要审核审核状态为已审核
-            mktActivityPOWithBLOBs.setCheckStatus(CheckStatusEnum.CHECK_STATUS_APPROVED.getCode());
-            //getStartTime 开始时间>当前时间增加job
-            if( new Date().before(activityVO.getStartTime())){
-                //活动状态设置为待执行
-                mktActivityPOWithBLOBs.setActivityStatus(ActivityStatusEnum.ACTIVITY_STATUS_PENDING.getCode());
-                //先删除原来创建的job任务
-                jobClient.removeByBiz(xxlJobInfo);
-                //创建任务调度任务开始时间
-                jobUtil.addJob(stageUser,activityVO,mktActivityPOWithBLOBs.getActivityCode());
-                //创建任务调度任务结束时间
-                jobUtil.addJobEndTime(stageUser,activityVO,mktActivityPOWithBLOBs.getActivityCode());
-            }else{
-                //活动状态设置为执行中
-                mktActivityPOWithBLOBs.setActivityStatus(ActivityStatusEnum.ACTIVITY_STATUS_EXECUTING.getCode());
+            //活动状态设置为执行中
+            mktActivityPOWithBLOBs.setActivityStatus(ActivityStatusEnum.ACTIVITY_STATUS_EXECUTING.getCode());
 
-            }
         }
         //修改活动主表
         mktActivityPOWithBLOBs.setModifiedDate(new Date());
@@ -567,62 +470,6 @@ public class ActivityOrderServiceImpl implements ActivityOrderService {
             memberMessage.getMemberList(messageVOList, membersInfoSearchVo,activityVO);
 
         }
-        responseData.setCode(SysResponseEnum.SUCCESS.getCode());
-        responseData.setMessage(SysResponseEnum.SUCCESS.getMessage());
-        return responseData;
-    }
-
-    /**
-     * 审核消费活动
-     * @param
-     * @param sysAccountPO
-     * @return
-     */
-    @Override
-    public ResponseData<Integer> checkActivityOrder(SysCheckPo po, SysAccountPO sysAccountPO) {
-        log.info("审核消费活动开始");
-        ResponseData responseData = new ResponseData();
-        MktActivityPOWithBLOBs bs = new MktActivityPOWithBLOBs();
-        bs.setModifiedUserId(sysAccountPO.getSysAccountId());
-        bs.setModifiedDate(new Date());
-        bs.setModifiedUserName(sysAccountPO.getName());
-        bs.setCheckStatus(po.getCheckStatus());
-        bs.setActivityCode(po.getBusinessCode());
-        bs.setMktActivityId(po.getBusinessId());
-        //根据code查询出审核活动的详细信息
-        ActivityVO vo = new ActivityVO();
-        vo.setActivityCode(bs.getActivityCode());
-        List<ActivityVO> activityOrderList = mktActivityOrderPOMapper.getActivityOrderList(vo);
-        if (CollectionUtils.isEmpty(activityOrderList)){
-            log.warn("查询不到数据！");
-            responseData.setCode(SysResponseEnum.FAILED.getCode());
-            responseData.setMessage(SysResponseEnum.OPERATE_FAILED_DATA_NOT_EXISTS.getMessage());
-            return responseData;
-        }
-        ActivityVO activityPO = activityOrderList.get(0);
-        //判断是审核通过还是审核驳回
-        if(bs.getCheckStatus()==CheckStatusEnum.CHECK_STATUS_APPROVED.getCode()){
-            //活动开始时间<当前时间<活动结束时间  或者长期活动 也就是StartTime=null
-            if(new Date().after(activityPO.getStartTime()) && new Date().before(activityPO.getEndTime())){
-                //将活动状态变更为执行中 并且发送消息（当前活动适用会员）
-                bs.setActivityStatus(ActivityStatusEnum.ACTIVITY_STATUS_EXECUTING.getCode());
-
-            }
-            //判断审核时间 >活动结束时间  将活动状态变为已结束
-            if(null!=activityPO.getEndTime() && new Date().after(activityPO.getEndTime())){
-                bs.setActivityStatus(ActivityStatusEnum.ACTIVITY_STATUS_FINISHED.getCode());
-            }
-
-        }else{
-            bs.setActivityStatus(ActivityStatusEnum.ACTIVITY_STATUS_FINISHED.getCode());
-        }
-        //更新审核状态
-        log.info("更新审核状态的参数是+======="+ JSON.toJSONString(bs));
-        int i = mktActivityPOMapper.updateByPrimaryKeySelective(bs);
-        log.info("更新审核状态");
-        //更新审核中心状态
-        sysCheckServiceRpc.updateCheck(po);
-        log.info("审核消费活动结束");
         responseData.setCode(SysResponseEnum.SUCCESS.getCode());
         responseData.setMessage(SysResponseEnum.SUCCESS.getMessage());
         return responseData;

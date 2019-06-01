@@ -37,7 +37,4 @@ public interface ActivityManualService {
   
   ResponseData<ActivityCouponVO>  getActivityByQrcode(MemberInfoModel memberInfoModel,String activityCode,Integer activityType);
 
-  ResponseData<Integer>  checkActivity(SysCheckPo po, SysAccountPO sysAccountPO);
-
-
 }

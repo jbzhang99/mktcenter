@@ -92,8 +92,7 @@ public class TaskServiceImpl implements TaskService {
 
     @Autowired
     private MktTaskPOMapper mktTaskPOMapper;
-    @Autowired
-    private SysCheckConfigServiceRpc sysCheckConfigServiceRpc;
+
     @Autowired
     private MemberInfoApiService memberInfoApiService;
 
@@ -104,8 +103,6 @@ public class TaskServiceImpl implements TaskService {
     private CouponQueryServiceFeign couponQueryService;
     @Autowired
     private MktTaskRecordPOMapper mktTaskRecordPOMapper;
-    @Autowired
-    private SysCheckServiceRpc sysCheckServiceRpc;
     @Autowired
     private MktCouponPOMapper mktCouponPOMapper;
     @Autowired
@@ -354,50 +351,6 @@ public class TaskServiceImpl implements TaskService {
     @Override
     public List<TaskDetailVO> getTaskDetailByTaskId(Long mktTaskId) {
         return mktTaskPOMapper.getTaskDetailByTaskId(mktTaskId);
-    }
-
-    /**
-     * 设置审核和执行状态
-     */
-    @Override
-    public MktTaskPOWithBLOBs isOrNoCheckState(MktTaskPOWithBLOBs po, Integer centeStagecheckStatus) throws ParseException {
-        //1.判断是否需要审核  1=需要审核   0=不需要
-        // Integer checkStatus = this.getCenterStageCheckStage(po);
-        //判断时间是否滞后   2=滞后执行    1=立即执行
-        Integer ImmediatelyRunStatus = TimeUtils.IsImmediatelyRun(po.getStartTime());
-        // checkStatus=1=需要审核
-        if (TaskConstants.FIRST.equals(centeStagecheckStatus)) {
-            //待审核=1
-            po.setCheckStatus(CheckStatusEnum.CHECK_STATUS_PENDING.getCode());
-            //待执行=1
-            po.setTaskStatus(TaskStatusEnum.TASK_STATUS_PENDING.getCode());
-        } else {
-            // checkStatus=0=不需要审核
-            //已审核=3
-            po.setCheckStatus(CheckStatusEnum.CHECK_STATUS_APPROVED.getCode());
-            if (TaskConstants.SECOND.equals(ImmediatelyRunStatus)) {
-                //1=待执行
-                po.setTaskStatus(TaskStatusEnum.TASK_STATUS_PENDING.getCode());
-            } else {
-                //2.执行中
-                po.setTaskStatus(TaskStatusEnum.TASK_STATUS_EXECUTING.getCode());
-            }
-        }
-        return po;
-    }
-
-    /**
-     * 在中台通过品牌Id查询任务是否需要审核
-     *
-     * @param po
-     * @return
-     */
-    @Override
-    public Integer getCenterStageCheckStage(MktTaskPOWithBLOBs po) {
-        SysCheckConfigPo sysCheckConfigPo = new SysCheckConfigPo();
-        sysCheckConfigPo.setSysBrandId(po.getSysBrandId());
-        sysCheckConfigPo.setFunctionCode("C0003");
-        return this.getCheckStatus(sysCheckConfigPo);
     }
 
     /**
@@ -762,17 +715,6 @@ public class TaskServiceImpl implements TaskService {
     }
 
     /**
-     * 根据品牌Id 查询审核配置，是否需要审核然后判断
-     * 1:需要审核 0:不需要
-     */
-    @Override
-    public Integer getCheckStatus(SysCheckConfigPo sysCheckConfigPo) {
-        ResponseData<Integer> responseData = sysCheckConfigServiceRpc.ifCheckConfig(sysCheckConfigPo);
-        return responseData.getData();
-
-    }
-
-    /**
      * 禁用/停用任务
      *
      * @param mktTaskId
@@ -803,72 +745,6 @@ public class TaskServiceImpl implements TaskService {
         jobClient.removeByBiz(xxlJobInfo);
 
         responseData.setData(ResponseConstants.SUCCESS_MSG);
-        return responseData;
-    }
-
-    /**
-     * 任务审核:通过/驳回
-     * 需要传递任务开始时间,修改执行状态
-     *
-     * @param sysAccountPO
-     * @return `checkStatus` '审核状态：1未审核，2审核中，3已审核，4已驳回'
-     * `taskStatus` '任务状态：1待执行，2执行中，3已禁用，4已结束'
-     */
-    @Override
-    public ResponseData<Integer> checkTaskById(CheckTaskVO vo, SysAccountPO sysAccountPO) throws ParseException {
-        log.info("checkTaskById修改中台审核配置-----" + JSON.toJSONString(vo));
-        ResponseData<Integer> responseData = new ResponseData<Integer>();
-        Long mktTaskId = vo.getBusinessId();
-        Integer businessType = vo.getBusinessType();
-        Integer checkStatus = vo.getCheckStatus();
-        String remark = vo.getRemark();
-        Date startTime = vo.getStartTime();
-        Date endTime = vo.getEndTime();
-        Long sysCheckId = vo.getSysCheckId();
-        String functionCode = vo.getFunctionCode();
-        //审核时间超过任务结束时间
-        if (endTime != null && endTime.before(new Date())) {
-            responseData.setMessage("审核时间超过了任务的结束时间,已经无法审核!");
-            return responseData;
-        }
-        MktTaskPOWithBLOBs mktTaskPOWithBLOBs = new MktTaskPOWithBLOBs();
-        //判断时间是否滞后   2=滞后执行    1=立即执行
-        Integer ImmediatelyRunStatus = TimeUtils.IsImmediatelyRun(startTime);
-        if (TaskConstants.THREE.equals(checkStatus)) {
-            //判断时间是否滞后   2=滞后执行    1=立即执行
-            if (TaskConstants.SECOND.equals(ImmediatelyRunStatus)) {
-                //1=待执行
-                mktTaskPOWithBLOBs.setTaskStatus(TaskStatusEnum.TASK_STATUS_PENDING.getCode());
-            } else {
-                //2.执行中
-                mktTaskPOWithBLOBs.setTaskStatus(TaskStatusEnum.TASK_STATUS_EXECUTING.getCode());
-            }
-        } else {
-            // 已驳回   待执行
-            mktTaskPOWithBLOBs.setTaskStatus(TaskStatusEnum.TASK_STATUS_PENDING.getCode());
-        }
-        mktTaskPOWithBLOBs.setMktTaskId(mktTaskId);
-        mktTaskPOWithBLOBs.setCheckStatus(checkStatus);
-        mktTaskPOWithBLOBs.setRemark(remark);
-        mktTaskPOWithBLOBs.setModifiedDate(new Date());
-        mktTaskPOWithBLOBs.setModifiedUserId(sysAccountPO.getSysAccountId());
-        mktTaskPOWithBLOBs.setModifiedUserName(sysAccountPO.getName());
-        int i = mktTaskPOMapper.updateByPrimaryKeySelective(mktTaskPOWithBLOBs);
-        //修改中台审核表的数据
-        this.updateCheckData(mktTaskId, checkStatus, functionCode, sysAccountPO);
-        log.info("checkTaskById审核通过后的任务状态---checkStatus--" + checkStatus + "--TaskStatus--" + mktTaskPOWithBLOBs.getTaskStatus());
-        if (i > 0) {
-            //3=已审核
-            if (TaskConstants.THREE.equals(checkStatus)) {
-                MktMessagePOExample exampleMSG = new MktMessagePOExample();
-                exampleMSG.createCriteria().andBizIdEqualTo(mktTaskId).andValidEqualTo(Boolean.TRUE).andBizTypeEqualTo(2);
-                List<MktMessagePO> mktMessagePOS = mktMessagePOMapper.selectByExample(exampleMSG);
-                //List<TaskDetailVO> taskDetails = this.getTaskDetailByTaskId(mktTaskId);
-                MktTaskPOWithBLOBs mktTaskPOWithBLOBsData = mktTaskPOMapper.selectByPrimaryKey(mktTaskId);
-                this.doOrderTask(mktTaskPOWithBLOBsData, mktMessagePOS, sysAccountPO);
-            }
-
-        }
         return responseData;
     }
 
@@ -1059,51 +935,6 @@ public class TaskServiceImpl implements TaskService {
         task.setModifiedUserId(stageUser.getSysAccountId());
         task.setModifiedUserName(stageUser.getName());
         return mktTaskPOMapper.updateByPrimaryKeySelective(task);
-    }
-
-    /**
-     * 将需要审核的任务添加到中台 --已经审核
-     *
-     * @param po
-     */
-    @Override
-    public void addCheckData(MktTaskPOWithBLOBs po) {
-        Integer checkStatus = po.getCheckStatus();
-        log.info("-------addCheckData-----参数--" + checkStatus + "-----" + JSON.toJSONString(po));
-        //待审核=1
-        if (TaskConstants.FIRST.equals(checkStatus)) {
-            SysCheckPo checkPo = new SysCheckPo();
-            checkPo.setSysCompanyId(po.getSysCompanyId());
-            checkPo.setSysBrandId(po.getSysBrandId());
-            checkPo.setBusinessType(po.getTaskType());
-            checkPo.setBusinessId(po.getMktTaskId());
-            checkPo.setBusinessCode(po.getTaskCode());
-            checkPo.setBusinessName(po.getTaskName());
-            checkPo.setBizName(po.getTaskName());
-            checkPo.setCheckStatus(CheckStatusEnum.CHECK_STATUS_PENDING.getCode());
-            checkPo.setFunctionCode("C0003");
-            checkPo.setCreateDate(po.getCreateDate());
-            log.info("---addCheck--参数--" + JSON.toJSONString(checkPo));
-            sysCheckServiceRpc.addCheck(checkPo);
-        }
-
-    }
-
-    /**
-     * 修改添加到中台任务的状态--已经审核
-     */
-    @Override
-    public ResponseData<Integer> updateCheckData(Long mktTaskId, Integer checkStatus, String functionCode, SysAccountPO sysAccountPO) {
-        log.info("修改中台审核配置---updateCheckData--" + mktTaskId + "----" + checkStatus);
-        //已审核=3
-        SysCheckPo checkPo = new SysCheckPo();
-        checkPo.setBusinessId(mktTaskId);
-        checkPo.setCheckStatus(checkStatus);
-        checkPo.setFunctionCode(functionCode);
-        checkPo.setModifiedDate(new Date());
-        checkPo.setModifiedUserId(sysAccountPO.getCtrlAccountId());
-        checkPo.setModifiedUserName(sysAccountPO.getName());
-        return sysCheckServiceRpc.updateCheck(checkPo);
     }
 
     /**

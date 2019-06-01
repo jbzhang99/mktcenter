@@ -45,14 +45,6 @@ public interface ActivityEvaluationService {
      */
     public ResponseData<Integer> executeActivityEvaluation(MemberInfoModel vo);
 
-
-    /**
-     * 活动审核
-     * @param
-     * @return
-     */
-    public ResponseData<Integer> checkActivityEvaluation(SysCheckPo po, SysAccountPO sysAccountPO);
-
     /**
      * 查询效果分析统计
      * @param bo

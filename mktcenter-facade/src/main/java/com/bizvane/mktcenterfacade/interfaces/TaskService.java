@@ -103,13 +103,6 @@ public interface TaskService {
     public  List<TaskDetailVO> getTaskDetailByTaskId(Long mktTaskId);
 
     /**
-     * 设定任务状态
-     * @param po
-     * @return
-     * @throws ParseException
-     */
-    public MktTaskPOWithBLOBs isOrNoCheckState(MktTaskPOWithBLOBs po,Integer centeStagecheckStatus)throws ParseException;
-    /**
      * 完善资料任务,没有开始时间和结束时间.根据任务状态和执行状态来发送消息和短信
      */
     public void doProfileTask(MktTaskPOWithBLOBs mktTaskPOWithBLOBs, List<MktMessagePO> mktmessagePOList, SysAccountPO stageUser);
@@ -136,11 +129,7 @@ public interface TaskService {
      * @return
      */
     public ChangeTaskTypeVO changeTaskType(Integer taskType);
-    /**
-     * 根据品牌id查询任务是否需要审核
-     */
 
-    public  Integer  getCheckStatus(SysCheckConfigPo sysCheckConfigPo);
     /**
      * 根据任务类型查询任务列表
      * @param vo
@@ -169,12 +158,6 @@ public interface TaskService {
     public ResponseData<Integer> stopTaskById(Long mktTaskId, SysAccountPO sysAccountPO);
 
     /**
-     * 任务审核
-     * @return
-     */
-    public ResponseData<Integer> checkTaskById(CheckTaskVO vo,SysAccountPO sysAccountPO) throws ParseException;
-
-    /**
      * 获取品牌下的所有会员
      * @return
      */
@@ -194,22 +177,6 @@ public interface TaskService {
      * 效果分析的明细
      */
     public ResponseData<TaskRecordVO> doAnalysis(TaskAnalysisVo vo, SysAccountPO sysAccountPo) throws ExecutionException, InterruptedException;
-    /**
-     * 将需要审核的任务添加到中台
-     * @param po
-     */
-    public  void addCheckData(MktTaskPOWithBLOBs po);
-    /**
-     *修改添加到中台任务的状态
-     */
-    public  ResponseData<Integer>  updateCheckData(Long mktTaskId ,Integer checkStatus,String functionCode,SysAccountPO sysAccountPO);
-
-    /**
-     * 中台通过品牌Id查询任务是否需要审核
-     * @param po
-     * @return
-     */
-    public Integer getCenterStageCheckStage(MktTaskPOWithBLOBs po);
 
     /**
      * 活动、任务效果分析“发行优惠券”添加会员明细弹框；

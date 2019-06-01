@@ -15,7 +15,7 @@ public class SystemConstants {
     public static String ERROR_TASK_TYPE_ERRO="任务类型不匹配";
     public static final String CHARSET = "UTF-8";
     public static final String LIKE_SYMBOL = "%";
-    public static final String ERROR_QR_CODE_EMPTY="二维码为空";
+    public static final String ERROR_QR_CODE_EMPTY="生成小程序二维码失败，请检查小程序是否已发布";
 
     public static final String PRECISION="0.00";
     public static final String PRECISION_PERCENTAGE="0.00%";

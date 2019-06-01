@@ -20,7 +20,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
  */
 @Deprecated
 public class ActivityVO extends MktActivityPO {
-    private Boolean storeLimit;
+    private Boolean storeLimit=Boolean.FALSE;
     /**
      * 只读. 活动描述、简介. activity_info
      * @mbg.generated  2018-07-13 10:42:22
@@ -213,10 +213,11 @@ public class ActivityVO extends MktActivityPO {
     private Long serviceStoreId;//服务门店
     private String activityDetailImg;//活动详情图片
 
+    @Override
     public String getActivityDetailImg() {
         return activityDetailImg;
     }
-
+    @Override
     public void setActivityDetailImg(String activityDetailImg) {
         this.activityDetailImg = activityDetailImg;
     }
@@ -261,19 +262,19 @@ public class ActivityVO extends MktActivityPO {
         this.sysStorePos = sysStorePos;
     }
 
-
+    @Override
     public Boolean getSendImmediately() {
         return sendImmediately;
     }
-
+    @Override
     public void setSendImmediately(Boolean sendImmediately) {
         this.sendImmediately = sendImmediately;
     }
-
+    @Override
     public Date getSendTime() {
         return sendTime;
     }
-
+    @Override
     public void setSendTime(Date sendTime) {
         this.sendTime = sendTime;
     }
@@ -325,11 +326,11 @@ public class ActivityVO extends MktActivityPO {
 //    public void setStoreLimit(Boolean storeLimit) {
 //        isStoreLimit = storeLimit;
 //    }
-
+    @Override
     public Integer getStoreLimitType() {
         return storeLimitType;
     }
-
+    @Override
     public void setStoreLimitType(Integer storeLimitType) {
         this.storeLimitType = storeLimitType;
     }
