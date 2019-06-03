@@ -11,12 +11,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
-/**
- * @author xiao.shu
- * @date on 2018/8/3 16:18
- * @description
- *
- */
 @RestController
 @RequestMapping("activityManualRpc")
 public class ActivityManualRpcController {

@@ -2,7 +2,6 @@ package com.bizvane.mktcenterservice.common.enums;
 
 /**
  * 业务类型枚举类
- * Created by yunjie.tian on 2018/8/9.
  */
 public enum CouponSendTypeEnum {
 

@@ -34,12 +34,6 @@ import com.bizvane.utils.tokens.TokenUtils;
 
 import lombok.extern.slf4j.Slf4j;
 
-/**
- * @author liangzanwen
- * @date on 2018/09/18
- * @description 报表分析
- *
- */
 @Slf4j
 @RestController
 @RequestMapping("reportGroup")

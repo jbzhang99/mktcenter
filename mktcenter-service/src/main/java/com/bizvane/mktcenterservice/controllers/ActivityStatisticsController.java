@@ -12,10 +12,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
 
-/**
- * @author yy
- * @create 2019-01-11 11:15
- */
 @RestController
 @RequestMapping("statistics")
 @Slf4j

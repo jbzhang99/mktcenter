@@ -5,7 +5,6 @@ import com.bizvane.utils.responseinfo.ResponseData;
 
 
 /**
- * @Author: lijunwei
  * @Time: 2018/7/28 13:35
  */
 public class ResponseUtils<T> {

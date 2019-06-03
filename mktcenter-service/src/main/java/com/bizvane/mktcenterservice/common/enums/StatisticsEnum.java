@@ -2,7 +2,6 @@ package com.bizvane.mktcenterservice.common.enums;
 
 /**
  * 红包统计枚举类
- * @author yy
  * @create 2019-01-08 19:45
  */
 public enum StatisticsEnum {

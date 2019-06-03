@@ -14,7 +14,6 @@ import com.bizvane.mktcenterfacade.models.bo.TaskAwardBO;
 import com.bizvane.mktcenterfacade.models.bo.TotalStatisticsBO;
 import com.bizvane.mktcenterfacade.models.po.MktTaskRecordPO;
 import com.bizvane.mktcenterfacade.models.vo.MktTaskRecordVO;
-import com.bizvane.mktcenterservice.common.lockUtils.JedisLock;
 import com.bizvane.mktcenterservice.common.enums.TaskTypeEnum;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections.CollectionUtils;
@@ -40,8 +39,6 @@ public class OrderTaskListener implements MessageListener {
     private TaskService taskService;
     @Autowired
     private TaskRecordService taskRecordService;
-    @Autowired
-    private JedisLock jedisLock;
 
     @Transactional
     @Override

@@ -2,10 +2,6 @@ package com.bizvane.mktcenterservice.common.utils;
 
 import java.util.*;
 
-/**
- * @Author: lijunwei
- * @Time: 2019/1/15 14:54
- */
 public class ExpiryMap<K, V>   extends HashMap<K, V> {
 
     private static final long serialVersionUID = 1L;

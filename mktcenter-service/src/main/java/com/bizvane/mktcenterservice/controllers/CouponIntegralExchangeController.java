@@ -12,9 +12,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
 
-/**
- * Created by agan on 2018/11/22.
- */
 @RestController
 @RequestMapping("couponIntegralExchange")
 public class CouponIntegralExchangeController {

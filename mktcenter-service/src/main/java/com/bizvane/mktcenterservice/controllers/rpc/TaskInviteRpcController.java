@@ -7,11 +7,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-/**
- * @Author: lijunwei
- * @Time: 2018/8/27 15:42
- * 邀请开卡任务
- */
 @RestController
 @RequestMapping("/taskInviteRpc")
 public class TaskInviteRpcController {

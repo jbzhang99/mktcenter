@@ -15,12 +15,6 @@ import com.bizvane.utils.responseinfo.ResponseData;
 
 import lombok.extern.slf4j.Slf4j;
 
-/**
- * @author liangzanwen
- * @date on 2018/09/18
- * @description 报表分析
- * @Copyright (c) 2018 每日 日报
- */
 @Slf4j
 @RestController
 @RequestMapping("quotaRpc")

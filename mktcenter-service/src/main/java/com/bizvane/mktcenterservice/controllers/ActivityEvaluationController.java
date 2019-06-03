@@ -16,9 +16,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
 
-/**
- * Created by pc on 2018/9/8.
- */
 @RestController
 @RequestMapping("activityEvaluation")
 public class ActivityEvaluationController {

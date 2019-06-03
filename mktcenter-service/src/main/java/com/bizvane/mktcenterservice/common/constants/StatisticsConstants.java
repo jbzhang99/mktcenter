@@ -7,7 +7,6 @@ import java.util.Date;
 
 /**
  * 红包活动统计静态类
- * @author yy
  * @create 2019-01-08 17:40
  */
 public class StatisticsConstants {

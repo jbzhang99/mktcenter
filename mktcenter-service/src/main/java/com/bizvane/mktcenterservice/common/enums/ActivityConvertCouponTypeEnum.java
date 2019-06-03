@@ -1,8 +1,5 @@
 package com.bizvane.mktcenterservice.common.enums;
 
-/**
- * Created by agan on 2018/8/23.
- */
 public enum ActivityConvertCouponTypeEnum {
     ACTIVITY_TYPE_ALL(0,"0","全部"),
     ACTIVITY_TYPE_REGISGER(1,"10","开卡活动"),

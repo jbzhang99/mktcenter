@@ -23,9 +23,6 @@ import org.springframework.stereotype.Component;
 
 import java.util.Date;
 
-/**
- * Created by agan on 2018/7/19.
- */
 @Component
 @Slf4j
 public class JobUtil {

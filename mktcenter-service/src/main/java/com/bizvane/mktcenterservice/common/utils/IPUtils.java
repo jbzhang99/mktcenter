@@ -4,10 +4,6 @@ import javax.servlet.http.HttpServletRequest;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 
-/**
- * @Author: lijunwei
- * @Time: 2018/7/2 13:13
- */
 public class IPUtils {
 
     /**

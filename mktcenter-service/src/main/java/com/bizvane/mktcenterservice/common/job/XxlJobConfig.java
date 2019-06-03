@@ -10,7 +10,6 @@ import org.springframework.context.annotation.Configuration;
 
 /**
  * xxl-job config
- *
  * @author chen.li 2018-7-12 11:53:18
  */
 @Configuration

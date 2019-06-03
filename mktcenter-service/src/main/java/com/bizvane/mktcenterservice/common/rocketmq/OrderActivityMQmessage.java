@@ -19,7 +19,6 @@ import org.springframework.stereotype.Component;
 
 /**
  * 消费活动
- * Created by agan on 2018/8/27.
  */
 @Component
 @Slf4j

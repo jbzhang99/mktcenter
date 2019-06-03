@@ -2,10 +2,6 @@ package com.bizvane.mktcenterservice.common.tools;
 
 import java.util.Date;
 
-/**
- * @Author: Hou Hong Bin
- * @CreateTime: 2018/8/29.
- */
 public class FileNameUtil {
     public static final String EXPORT_STORE_ORCODE = "EXPORT_STORE_ORCODE_";
     

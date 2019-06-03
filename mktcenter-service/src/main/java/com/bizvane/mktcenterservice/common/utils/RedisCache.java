@@ -14,13 +14,6 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
-/**
- * @author Micro
- * @Title: ${file_name}
- * @Package ${package_name}
- * @Description: ${todo}
- * @date 2018/6/15 18:16
- */
 public class RedisCache implements Cache {
 	@Autowired
 	private ApplicationContext applicationContext;

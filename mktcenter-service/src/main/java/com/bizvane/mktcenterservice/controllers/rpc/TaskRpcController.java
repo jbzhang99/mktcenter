@@ -12,10 +12,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
-/**
- * @Author: lijunwei
- * @Time: 2018/11/5 13:46
- */
 @RestController
 @RequestMapping("taskRpc")
 @Slf4j

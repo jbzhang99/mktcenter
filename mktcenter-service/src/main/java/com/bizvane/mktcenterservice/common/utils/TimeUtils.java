@@ -9,10 +9,6 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 
-/**
- * @Author: lijunwei
- * @Time: 2018/7/30 11:00
- */
 public class TimeUtils {
    public static  final  SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
    public static  final  SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");

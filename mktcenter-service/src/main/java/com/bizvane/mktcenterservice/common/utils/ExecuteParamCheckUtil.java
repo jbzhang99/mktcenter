@@ -13,9 +13,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-/**
- * Created by agan on 2018/7/30.
- */
 @Slf4j
 public class ExecuteParamCheckUtil {
     /**

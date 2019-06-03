@@ -3,9 +3,6 @@ package com.bizvane.mktcenterservice.common.tools;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
-/**
- * Created by Gavin on 2018/9/22.
- */
 @Component
 public class QiNiuConfigs {
 

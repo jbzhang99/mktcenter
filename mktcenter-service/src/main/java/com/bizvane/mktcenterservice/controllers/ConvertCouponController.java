@@ -14,10 +14,6 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 
-/**
- * @Author: lijunwei
- * @Time: 2018/11/23 11:29
- */
 @RestController
 @RequestMapping("convertRecord")
 public class ConvertCouponController {

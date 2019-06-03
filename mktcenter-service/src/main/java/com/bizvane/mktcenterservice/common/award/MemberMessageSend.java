@@ -50,7 +50,6 @@ import java.util.stream.Collectors;
 
 /**
  * 查询会员发送消息
- * Created by agan on 2018/8/24.
  */
 @Component
 @Slf4j
