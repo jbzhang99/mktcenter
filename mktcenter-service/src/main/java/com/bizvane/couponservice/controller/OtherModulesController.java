@@ -31,9 +31,7 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
-/**
- * Created by yunjie.tian on 2018/9/6.
- */
+
 @RestController
 @RequestMapping("/otherModules")
 public class OtherModulesController {

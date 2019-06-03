@@ -42,9 +42,6 @@ import javax.servlet.http.HttpServletRequest;
 import java.math.BigDecimal;
 import java.util.*;
 
-/**
- * Created by yunjie.tian on 2018/7/20.
- */
 @RestController
 @RequestMapping("/bitDataStoreAnalysis")
 public class BitDataStoreAnalysisController {

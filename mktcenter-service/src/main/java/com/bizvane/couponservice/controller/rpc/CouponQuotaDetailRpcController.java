@@ -20,9 +20,7 @@ import org.springframework.web.bind.annotation.*;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-/**
- * Created by yunjie.tian on 2018/7/20.
- */
+
 @RestController
 @RequestMapping("/couponQuotaDetailRpc")
 public class CouponQuotaDetailRpcController {

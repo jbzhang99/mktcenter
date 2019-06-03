@@ -17,9 +17,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-/**
- * Created by yunjie.tian on 2018/7/20.
- */
+
 @RestController
 @RequestMapping("/couponQuotaRpc")
 public class CouponQuotaRpcController {

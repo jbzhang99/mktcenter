@@ -3,9 +3,7 @@ package com.bizvane.couponfacade.models.vo;
 import java.io.Serializable;
 import java.util.Date;
 
-/**
- * Created by yunjie.tian on 2018/7/20.
- */
+
 public class FindMembersVO  implements Serializable {
 	private static final long serialVersionUID = 1L;
 	

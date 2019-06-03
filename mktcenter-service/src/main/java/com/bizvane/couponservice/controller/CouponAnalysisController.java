@@ -15,9 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
 
-/**
- * @author liufq
- */
+
 @RestController
 @RequestMapping("/couponAnalysis")
 public class CouponAnalysisController {

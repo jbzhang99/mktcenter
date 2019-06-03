@@ -13,9 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
 
-/**
- * Created by 26095 on 2019/1/21.
- */
+
 @RestController
 @RequestMapping("/singleCouponAnalysis")
 public class SingleCoupleAnalysisController {

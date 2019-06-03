@@ -2,9 +2,7 @@ package com.bizvane.couponservice.common.datavo;
 
 import java.io.Serializable;
 
-/**
- * Created by yunjie.tian on 2018/7/20.
- */
+
 public class SalesNumVO  implements Serializable {
 	private static final long serialVersionUID = 1L;
 	

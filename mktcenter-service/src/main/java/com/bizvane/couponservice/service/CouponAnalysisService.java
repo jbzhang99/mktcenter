@@ -8,9 +8,7 @@ import com.bizvane.utils.responseinfo.ResponseData;
 
 import javax.servlet.http.HttpServletRequest;
 
-/**
- * @author liufq
- */
+
 public interface CouponAnalysisService {
     /**
      * 券效果分析发券概况

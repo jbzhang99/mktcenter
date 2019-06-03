@@ -6,9 +6,7 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
 
-/**
- * Created by yunjie.tian on 2018/7/30.
- */
+
 public class OrderMessageVO implements Serializable{
 
     private static final long serialVersionUID = 1L;

@@ -3,9 +3,7 @@ package com.bizvane.couponservice.common.datavo;
 import java.io.Serializable;
 import java.util.Date;
 
-/**
- * Created by yunjie.tian on 2018/7/20.
- */
+
 public class BitDataXiaLaiVO  implements Serializable {
 	private static final long serialVersionUID = 1L;
 	

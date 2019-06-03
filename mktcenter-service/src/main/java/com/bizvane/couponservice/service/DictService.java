@@ -8,7 +8,6 @@ import java.util.Map;
 
 /**
  * 字典表service
- * 
  * @author 董争光 2018年5月28日下午2:52:04
  */
 public interface DictService {

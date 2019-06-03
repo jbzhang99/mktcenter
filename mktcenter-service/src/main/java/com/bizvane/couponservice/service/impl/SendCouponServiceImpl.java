@@ -48,7 +48,6 @@ import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
-
 @Service
 public class SendCouponServiceImpl implements SendCouponService {
     private static final Logger logger = LoggerFactory.getLogger(SendCouponServiceImpl.class);

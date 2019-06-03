@@ -22,9 +22,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
-/**
- * Created by yunjie.tian on 2018/7/20.
- */
+
 @Service
 public class BitDataQuotaAnalysisServiceServiceImpl implements BitDataAnalysisService{
 	

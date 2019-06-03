@@ -8,9 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
-/**
- * Created by yunjie.tian on 2018/9/6.
- */
+
 @FeignClient(value="${feign.client.mktcenter.name}",path="${feign.client.mktcenter.path}/barcode")
 @Api(value = "条形码",tags = {"API"})
 public interface UtilsServiceFeign {

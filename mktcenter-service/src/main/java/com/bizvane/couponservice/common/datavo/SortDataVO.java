@@ -3,9 +3,7 @@ package com.bizvane.couponservice.common.datavo;
 import java.io.Serializable;
 import java.math.BigDecimal;
 
-/**
- * Created by yunjie.tian on 2018/7/20.
- */
+
 public class SortDataVO  implements Serializable {
 	private static final long serialVersionUID = 1L;
 	

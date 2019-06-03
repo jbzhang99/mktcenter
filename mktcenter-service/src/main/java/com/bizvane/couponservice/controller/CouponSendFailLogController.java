@@ -20,9 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
 
-/**
- * Created by yunjie.tian on 2018/7/30.
- */
+
 @RestController
 @RequestMapping("/sendCoupon")
 public class CouponSendFailLogController {

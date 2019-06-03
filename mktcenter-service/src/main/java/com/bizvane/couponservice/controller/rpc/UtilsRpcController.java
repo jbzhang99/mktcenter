@@ -13,9 +13,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-/**
- * Created by yunjie.tian on 2018/9/6.
- */
+
 @RestController
 @RequestMapping("/barcode")
 public class UtilsRpcController {

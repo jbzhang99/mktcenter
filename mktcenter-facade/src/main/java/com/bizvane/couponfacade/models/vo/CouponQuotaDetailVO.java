@@ -2,9 +2,7 @@ package com.bizvane.couponfacade.models.vo;
 
 import com.bizvane.couponfacade.models.po.CouponQuotaDetailPO;
 
-/**
- * Created by yunjie.tian on 2018/7/20.
- */
+
 public class CouponQuotaDetailVO extends CouponQuotaDetailPO{
 	private static final long serialVersionUID = 1L;
 	

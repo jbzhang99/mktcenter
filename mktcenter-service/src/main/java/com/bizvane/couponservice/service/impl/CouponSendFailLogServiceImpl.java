@@ -13,9 +13,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.Date;
 
-/**
- * Created by yunjie.tian on 2018/9/30.
- */
 @Service
 public class CouponSendFailLogServiceImpl implements CouponSendFailLogService{
 

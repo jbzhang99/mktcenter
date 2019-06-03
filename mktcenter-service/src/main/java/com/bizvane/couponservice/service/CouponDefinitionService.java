@@ -15,9 +15,8 @@ import com.bizvane.utils.responseinfo.ResponseData;
 
 /**
  * 券定义相关
- *
  * @author 董争光
- *         2018年7月6日下午2:18:22
+ * 2018年7月6日下午2:18:22
  */
 public interface CouponDefinitionService {
 

@@ -18,9 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 import java.util.Map;
 
-/**
- * Created by yunjie.tian on 2018/7/30.
- */
+
 @RestController
 @RequestMapping("/dict")
 public class DictController {

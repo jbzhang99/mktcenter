@@ -32,9 +32,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
-/**
- * Created by yunjie.tian on 2018/7/20.
- */
+
 @RestController
 @RequestMapping("/couponEntity")
 public class CouponEntityController {

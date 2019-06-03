@@ -5,9 +5,6 @@ import com.bizvane.couponfacade.models.po.CouponEntityPO;
 
 import java.util.Date;
 
-/**
- * Created by yunjie.tian on 2018/9/30.
- */
 public interface CouponSendFailLogService {
 
     /**

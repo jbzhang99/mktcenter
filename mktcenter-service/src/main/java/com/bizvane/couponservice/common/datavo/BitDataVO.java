@@ -4,9 +4,7 @@ import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
 
-/**
- * Created by yunjie.tian on 2018/7/20.
- */
+
 public class BitDataVO  implements Serializable {
 	private static final long serialVersionUID = 1L;
 	

@@ -1,8 +1,6 @@
 package com.bizvane.couponfacade.models.bo;
 
-/**
- * Created by 26095 on 2019/1/21.
- */
+
 public class SingleCouponSurveyBo {
     //发券量
     private String totalTickets;

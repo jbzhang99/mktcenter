@@ -30,9 +30,7 @@ import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by 26095 on 2019/1/21.
- */
+
 @Service
 public class SingleCoupleAnalysisServiceImpl implements SingleCoupleAnalysisService {
     private static final Logger logger = LoggerFactory.getLogger(BitDataAnalysisController.class);

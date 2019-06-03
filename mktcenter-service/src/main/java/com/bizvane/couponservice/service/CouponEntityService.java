@@ -12,9 +12,8 @@ import java.util.List;
 
 /**
  * 券service
- *
  * @author 董争光
- *         2018年7月6日下午2:16:36
+ * 2018年7月6日下午2:16:36
  */
 public interface CouponEntityService {
 

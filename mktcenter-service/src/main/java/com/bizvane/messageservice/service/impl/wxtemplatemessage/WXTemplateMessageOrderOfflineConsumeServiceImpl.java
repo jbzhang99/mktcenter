@@ -29,9 +29,7 @@ import org.springframework.stereotype.Service;
 import java.text.SimpleDateFormat;
 import java.util.Iterator;
 
-/**
- * Created by yunjie.tian on 2018/7/30.
- */
+
 @Service("wXTemplateMessageOrderOfflineConsumeServiceImpl")
 public class WXTemplateMessageOrderOfflineConsumeServiceImpl implements WXTemplateMessageService {
 

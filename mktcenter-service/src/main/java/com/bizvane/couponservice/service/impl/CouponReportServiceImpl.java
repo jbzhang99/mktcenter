@@ -25,7 +25,6 @@ import java.util.zip.ZipOutputStream;
  * @author chen.li
  * @date on 2018/8/11 11:41
  * @description
- *
  */
 @Service
 public class CouponReportServiceImpl implements CouponReportTempService {

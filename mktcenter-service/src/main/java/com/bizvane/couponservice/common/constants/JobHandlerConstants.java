@@ -2,7 +2,6 @@ package com.bizvane.couponservice.common.constants;
 
 /**
  * 定时任务jobHandler
- * Created by yunjie.tian on 2018/8/9.
  */
 public class JobHandlerConstants {
 

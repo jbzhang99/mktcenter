@@ -52,9 +52,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
 
-/**
- * Created by yunjie.tian on 2018/7/20.
- */
+
 @Service
 public class CouponEntityServiceImpl implements CouponEntityService{
 

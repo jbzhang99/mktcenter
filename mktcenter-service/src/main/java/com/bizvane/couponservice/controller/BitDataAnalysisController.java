@@ -37,9 +37,6 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
-/**
- * Created by yunjie.tian on 2018/7/20.
- */
 @RestController
 @RequestMapping("/bitDataAnalysis")
 public class BitDataAnalysisController {
@@ -119,12 +116,7 @@ public class BitDataAnalysisController {
     public ResponseData<JSONArray> vouSalesVolume(BitDataVO sendVO, HttpServletRequest request){
 		ResponseData<JSONArray> ResponseData = new ResponseData<JSONArray>();
 		JSONArray jSONArray = new JSONArray();
-		
-//		JSONObject backJSONObject = new JSONObject();
-//		backJSONObject.put("time", sendVO.getStartDate());
-//		backJSONObject.put("value", "0");
-//		jSONArray.add(backJSONObject);
-//		jSONArray.add(backJSONObject);
+
 		ResponseData = backJSONArray(JSONObject.parseObject(JSONObject.toJSONString(sendVO)), jSONArray, BaseUrl.getLoadUrl("vouSalesVolume"), request);
 		ResponseData.setData(jSONArray);
 		return ResponseData;

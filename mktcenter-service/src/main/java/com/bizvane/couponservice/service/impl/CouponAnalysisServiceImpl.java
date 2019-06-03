@@ -47,9 +47,7 @@ import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
-/**
- * @author liufq
- */
+
 @Service
 public class CouponAnalysisServiceImpl implements CouponAnalysisService {
 

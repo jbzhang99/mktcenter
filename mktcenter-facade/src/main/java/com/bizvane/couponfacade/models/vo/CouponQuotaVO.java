@@ -5,9 +5,7 @@ import com.bizvane.couponfacade.models.po.CouponQuotaPO;
 
 import java.util.List;
 
-/**
- * Created by yunjie.tian on 2018/7/20.
- */
+
 public class CouponQuotaVO extends CouponQuotaPO{
 	private static final long serialVersionUID = 1L;
 	

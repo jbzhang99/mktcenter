@@ -5,9 +5,7 @@ import com.bizvane.couponfacade.models.po.CouponEntityPO;
 import java.util.Date;
 import java.util.List;
 
-/**
- * Created by yunjie.tian on 2018/7/20.
- */
+
 public class CouponEntityVO extends CouponEntityPO{
 
     @io.swagger.annotations.ApiModelProperty(value = "优惠类型（1现金，2折扣，3礼品）", name = "preferentialType", required = false,example = "")

@@ -6,9 +6,7 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
-/**
- * Created by yunjie.tian on 2018/7/20.
- */
+
 public class BitDataRequestVO  implements Serializable {
 	private static final long serialVersionUID = 1L;
 	

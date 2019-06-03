@@ -31,9 +31,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
-/**
- * Created by yunjie.tian on 2018/7/20.
- */
+
 @Service
 public class CouponQuotaDetailServiceImpl implements CouponQuotaDetailService{
 

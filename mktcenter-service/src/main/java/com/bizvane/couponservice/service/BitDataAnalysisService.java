@@ -5,10 +5,6 @@ import com.bizvane.couponservice.common.datavo.BitDataRequestVO;
 import com.bizvane.couponservice.common.datavo.BitDataVO;
 import com.bizvane.utils.responseinfo.ResponseData;
 
-/**
- * 
- *
- */
 public interface BitDataAnalysisService {
 
 	ResponseData<BitDataRequestVO> getCouponQuotaAnalysisDetail(BitDataVO vo, SysAccountPo accountPo);

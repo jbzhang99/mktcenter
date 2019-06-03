@@ -3,9 +3,7 @@ package com.bizvane.couponservice.service;
 import com.bizvane.couponfacade.models.bo.CouponPartBo;
 import com.bizvane.utils.responseinfo.ResponseData;
 
-/**
- * Created by 26095 on 2019/1/21.
- */
+
 public interface SingleCoupleAnalysisService {
     //单券分析发券概况
     ResponseData getCouponSurvey(CouponPartBo bo);

@@ -30,9 +30,7 @@ import org.springframework.stereotype.Service;
 import java.util.Iterator;
 import java.util.List;
 
-/**
- * Created by yunjie.tian on 2018/7/30.
- */
+
 @Service("wXTemplateMessageOrderCancelServiceImpl")
 public class WXTemplateMessageOrderCancelServiceImpl implements WXTemplateMessageService {
 

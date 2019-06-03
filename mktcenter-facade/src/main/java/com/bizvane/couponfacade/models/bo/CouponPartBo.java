@@ -1,8 +1,6 @@
 package com.bizvane.couponfacade.models.bo;
 
-/**
- * @author liufq
- */
+
 public class CouponPartBo {
     //用于接收前端参数的实体类
     /**

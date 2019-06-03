@@ -14,9 +14,6 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by yunjie.tian on 2018/9/7.
- */
 @Service
 public class OtherModulesServiceImpl implements OtherModulesService{
 

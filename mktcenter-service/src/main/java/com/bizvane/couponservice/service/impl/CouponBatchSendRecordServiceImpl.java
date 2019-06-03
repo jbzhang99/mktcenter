@@ -10,9 +10,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-/**
- * Created by yunjie.tian on 2018/9/28.
- */
 @Service
 public class CouponBatchSendRecordServiceImpl implements CouponBatchSendRecordService{
 

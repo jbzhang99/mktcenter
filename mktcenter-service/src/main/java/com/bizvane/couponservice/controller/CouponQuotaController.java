@@ -24,9 +24,7 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
-/**
- * Created by yunjie.tian on 2018/7/20.
- */
+
 @RestController
 @RequestMapping("/couponQuota")
 public class CouponQuotaController {
