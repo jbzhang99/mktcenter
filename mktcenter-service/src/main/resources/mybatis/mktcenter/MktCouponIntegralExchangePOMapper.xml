@@ -750,6 +750,7 @@
     tmcie.exchange_status,
     tmcie.exchange_count,
     tmcie.sales_status,
+    sum(tmccr.convert_num) as convertedNum,
     (tmcie.store_count - (case when sum(tmccr.convert_num) is null then 0 else sum(tmccr.convert_num) end) ) AS residueCouponNumber
     FROM
     t_mkt_coupon_integral_exchange tmcie
@@ -785,7 +786,7 @@
     INNER  JOIN t_mkt_coupon_integral_exchange tmcie
     ON tmccr.exchange_id = tmcie.exchange_id
     AND tmcie.valid=1 AND tmcie.sales_status=1 AND tmcie.exchange_status=1
-    AND tmccr.coupon_num >= tmcie.exchange_count
+    AND tmccr.coupon_num &gt;= tmcie.exchange_count
     WHERE
     tmccr.valid=1
     AND tmccr.sys_brand_id=#{brandId}

@@ -267,6 +267,10 @@ public class ConvertCouponServiceImpl implements ConvertCouponService {
             List<MktCouponIntegralExchangeVO> list = page.getList();
             for (MktCouponIntegralExchangeVO exchangeVO : list) {
                 Long couponEntityId = exchangeVO.getCouponEntityId();
+                //判断是否还能兑
+                if(exchangeVO.getConvertedNum()>exchangeVO.getExchangeCount()){
+                    exchangeVO.setCanConvert(Boolean.FALSE);
+                }
                 ResponseData<CouponDefinitionPO> coupon = couponDefinitionServiceFeign.findByIdRpc(couponEntityId);
                 exchangeVO.setCouponDefinitionPO(coupon.getData());
             }

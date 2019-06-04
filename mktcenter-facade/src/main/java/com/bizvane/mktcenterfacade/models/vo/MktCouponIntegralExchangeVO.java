@@ -32,6 +32,28 @@ public class MktCouponIntegralExchangeVO extends MktCouponIntegralExchangePO {
     @ApiModelProperty(name = "couponDetailResponseVO", value = "券详情实体")
     private CouponDetailResponseVO couponDetailResponseVO;
 
+    @ApiModelProperty(name = "canConvertCoupon", value = "能否兑换，true/false")
+    private Boolean canConvert;
+
+    @ApiModelProperty(name = "convertedNum", value = "已经兑换的数量")
+    private Integer convertedNum;
+
+    public Integer getConvertedNum() {
+        return convertedNum;
+    }
+
+    public void setConvertedNum(Integer convertedNum) {
+        this.convertedNum = convertedNum;
+    }
+
+    public Boolean getCanConvert() {
+        return canConvert;
+    }
+
+    public void setCanConvert(Boolean canConvert) {
+        this.canConvert = canConvert;
+    }
+
     public List<Long> getExchangeIds() {
         return exchangeIds;
     }
