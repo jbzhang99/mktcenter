@@ -1,6 +1,7 @@
 package com.bizvane.mktcenterservice.controllers.rpc;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -15,7 +16,9 @@ public class ActivityExecuteFeignController implements ActivityExecuteServiceFei
 
   @Autowired
   private ActivityOrderService activityOrderService;
+  
   @Override
+  @Async
   public ResponseData<Integer> order(@RequestBody OrderModelBo vo) {
     // TODO Auto-generated method stub
     return activityOrderService.executeOrder(vo);

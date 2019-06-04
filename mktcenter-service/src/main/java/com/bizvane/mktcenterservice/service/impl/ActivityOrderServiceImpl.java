@@ -489,7 +489,7 @@ public class ActivityOrderServiceImpl implements ActivityOrderService {
         //查询品牌下所有执行中的活动
         ActivityVO activity = new ActivityVO();
         activity.setActivityStatus(ActivityStatusEnum.ACTIVITY_STATUS_EXECUTING.getCode());
-        activity.setSysBrandId(vo.getBrandId().longValue());
+        activity.setSysBrandId(vo.getBrandId());
         activity.setActivityType(ActivityTypeEnum.ACTIVITY_TYPE_REGISGER.getCode());
         List<ActivityVO> orderList = mktActivityOrderPOMapper.getActivityOrderList(activity);
         if (CollectionUtils.isEmpty(orderList)){
@@ -542,7 +542,7 @@ public class ActivityOrderServiceImpl implements ActivityOrderService {
                 IntegralChangeRequestModel integralChangeRequestModel =new IntegralChangeRequestModel();
                 integralChangeRequestModel.setSysCompanyId(activityVO.getSysCompanyId());
                 integralChangeRequestModel.setBrandId(activityVO.getSysBrandId());
-                integralChangeRequestModel.setMemberCode(vo.getMemberCode().toString());
+                integralChangeRequestModel.setMemberCode(vo.getMemberCode());
                 integralChangeRequestModel.setChangeBills(activityVO.getActivityCode());
                 integralChangeRequestModel.setChangeIntegral(activityVO.getPoints());
                 integralChangeRequestModel.setChangeType(IntegralChangeTypeEnum.INCOME.getCode());
