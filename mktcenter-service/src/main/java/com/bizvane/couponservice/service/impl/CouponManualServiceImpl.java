@@ -630,7 +630,7 @@ public class CouponManualServiceImpl implements CouponManualService {
 
     }
 
-    @Transactional
+//    @Transactional
     @Override
     public ResponseData<String> addNewTask(CouponManualVO param, MembersInfoSearchVo memberInfo, SysAccountPo accountPo) throws Exception {
         logger.info("enter CouponManualServiceImpl addTask method:CouponManualVO:{},MembersInfoSearchVo:{}",JSONObject.toJSONString(param),JSONObject.toJSONString(memberInfo));
