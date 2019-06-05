@@ -275,6 +275,9 @@ public class ConvertCouponServiceImpl implements ConvertCouponService {
                 }else{
                     exchangeVO.setCanConvert(Boolean.TRUE);
                 }
+                if(exchangeVO.getResidueCouponNumber()==null){
+                    exchangeVO.setResidueCouponNumber(0);
+                }
                 ResponseData<CouponDefinitionPO> coupon = couponDefinitionServiceFeign.findByIdRpc(couponEntityId);
                 exchangeVO.setCouponDefinitionPO(coupon.getData());
             }

@@ -32,14 +32,6 @@ public interface CouponManualService {
   ResponseData<PageInfo<CouponManualVO>> getListRpc(CouponManualVO vo, PageFormUtil pageForm);
 
   /**
-   * 创建发券任务
-   * @param
-   * @return
-   */
-  ResponseData<String> addTask(CouponManualVO couponManualVO, MembersInfoSearchVo memberInfo, SysAccountPo accountPo)throws Exception;
-
-
-  /**
    * 更改任务状态
    * @param po
    * @return

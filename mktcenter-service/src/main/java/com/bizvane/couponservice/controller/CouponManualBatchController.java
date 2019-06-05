@@ -47,10 +47,6 @@ public class CouponManualBatchController {
     ResponseData<String> addNewTask(@RequestBody CouponManualRequestVO requestVO, HttpServletRequest request){
 
         ResponseData<String> responseData = new ResponseData<>();
-
-        /*CouponManualRequestVO requestVO = JacksonUtil.json2Objs(HttpParamUtil.getJSONParam(request),
-                CouponManualRequestVO.class);*/
-
         if(null == requestVO){
             requestVO = new CouponManualRequestVO();
         }
@@ -66,11 +62,6 @@ public class CouponManualBatchController {
         couponManualVO.setTotalNumber(requestVO.getTotalNumber());
 
         MembersInfoSearchVo membersInfoSearchVo = requestVO.getSearchVo();
-
-        logger.info("enter CouponManualBatchController addNewTask method param: SearchVo:{}", JSONObject.toJSONString(membersInfoSearchVo));
-        logger.info("enter CouponManualBatchController addNewTask method param: CouponManualVO:{}",JSONObject.toJSONString(couponManualVO));
-        logger.info("enter CouponManualBatchController addNewTask method param: SysAccountPo:{}",JSONObject.toJSONString(accountPo));
-
         try {
             responseData = couponManualService.addNewTask(couponManualVO,membersInfoSearchVo,accountPo);
         }catch (Exception e){

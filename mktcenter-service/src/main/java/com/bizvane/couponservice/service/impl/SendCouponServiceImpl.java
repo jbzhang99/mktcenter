@@ -254,27 +254,7 @@ public class SendCouponServiceImpl implements SendCouponService {
         entityPO.setCouponStatus(couponStatus);
         couponEntityPOMapper.insertSelective(entityPO);
 
-        //判断渠道
-        if (CouponConstants.USE_CHANNEL_ONLINE.equals(definitionPO.getUseChannel())) {
-
-            ResponseData<String> onlineResult = sendCouponOnline(definitionPO, entityPO);
-
-
-        } else if (CouponConstants.USE_CHANNEL_OFFLINE.equals(definitionPO.getUseChannel())) {
-
-            ResponseData<String> offlineResult = sendCouponOffline(definitionPO, entityPO,CouponConstants.COUPON_SEND_AGAIN_NO);
-
-
-        } else if (CouponConstants.USE_CHANNEL_ANY.equals(definitionPO.getUseChannel())) {
-
-            ResponseData<String> offlineResult = sendCouponOffline(definitionPO, entityPO,CouponConstants.COUPON_SEND_AGAIN_NO);
-
-
-        } else {
-            responseData.setCode(SysResponseEnum.FAILED.getCode());
-            responseData.setMessage(SysResponseEnum.USE_CHANNEL_NOT_EXISTS.getMessage());
-            return responseData;
-        }
+        sendCouponOnline(definitionPO, entityPO);
         //券code
         responseData.setData(couponCode);
         return responseData;
@@ -1248,6 +1228,7 @@ public class SendCouponServiceImpl implements SendCouponService {
      * @param requestVO
      */
     @Override
+    @Async
     public ResponseData<String> sendCouponBatchOnlineNow(CouponDefinitionPOWithBLOBs definitionPO, SendCouponBatchRequestVO requestVO,
                                                          CouponBatchSendRecordPO batchPO) {
 
@@ -1292,89 +1273,77 @@ public class SendCouponServiceImpl implements SendCouponService {
         //couponBatchSendRecordPOMapper.updateByPrimaryKeySelective(batchSendRequest);
         couponBatchSendRecordPOMapper.updateSendNum(totalNumber,batchPO.getCouponBatchSendRecordId());
 
-        /*new Thread(*/
-        Runnable runnable = new Runnable() {
-            @Override
-            public void run() {
+        //成功总数
+        int allSuccessCount = 0;
 
-                //成功总数
-                int allSuccessCount = 0;
+        //根据总页数，分批次发券
+        for (int es = 1; es <= totalPages; es++) {
 
-                //根据总页数，分批次发券
-                for (int es = 1; es <= totalPages; es++) {
+            //最后一页，控制查询的数量,可能不足pageSize条(因为会员数量会变动)
+            if (es == totalPages) {
+                searchVo.setPageSize(totalNumber % CouponConstants.SEARCH_MEMBERS_PAGE_SIZE);
+            }
 
-                    //最后一页，控制查询的数量,可能不足pageSize条(因为会员数量会变动)
+            try {
+
+                searchVo.setPageNumber(es);
+                ResponseData<PageInfo<MembersInfoSearchPojo>> esResult = membersAdvancedSearchApiService.advancedSearch(searchVo);
+
+                if (SysResponseEnum.SUCCESS.getCode() != esResult.getCode()) {
+
+                    throw new RuntimeException();
+                }
+
+
+                requestVO.setMemberListManual(esResult.getData().getList());
+
+                //保存发券记录
+                List<CouponEntityPO> entityPOList = saveEntityList(definitionPO, requestVO, batchPO.getCouponBatchSendRecordId(), CouponConstants.COUPON_STATUS_UNUSED);
+
+                //如果业务类型是手动发券
+                if (SendTypeEnum.SEND_COUPON_BATCH.getCode().equals(batchPO.getBizType())) {
+
+                    //更新手动发券成功数量
+                    int successCount = 0;
+
                     if (es == totalPages) {
-                        searchVo.setPageSize(totalNumber % CouponConstants.SEARCH_MEMBERS_PAGE_SIZE);
+                        //最后一页
+                        successCount = totalNumber % CouponConstants.SEARCH_MEMBERS_PAGE_SIZE;
+                    } else {
+                        //其余页数
+                        successCount = CouponConstants.SEARCH_MEMBERS_PAGE_SIZE;
                     }
 
-                    try {
+                    couponManualPOMapper.updateCouponManualSuccessCount(successCount, manualPO.getCouponManualId());
 
-                        searchVo.setPageNumber(es);
-                        ResponseData<PageInfo<MembersInfoSearchPojo>> esResult = membersAdvancedSearchApiService.advancedSearch(searchVo);
-
-                        if (SysResponseEnum.SUCCESS.getCode() != esResult.getCode()) {
-
-                            throw new RuntimeException();
-                        }
-
-
-                        requestVO.setMemberListManual(esResult.getData().getList());
-
-                        //保存发券记录
-                        List<CouponEntityPO> entityPOList = saveEntityList(definitionPO, requestVO, batchPO.getCouponBatchSendRecordId(), CouponConstants.COUPON_STATUS_UNUSED);
-
-                        //如果业务类型是手动发券
-                        if (SendTypeEnum.SEND_COUPON_BATCH.getCode().equals(batchPO.getBizType())) {
-
-                            //更新手动发券成功数量
-                            int successCount = 0;
-
-                            if (es == totalPages) {
-                                //最后一页
-                                successCount = totalNumber % CouponConstants.SEARCH_MEMBERS_PAGE_SIZE;
-                            } else {
-                                //其余页数
-                                successCount = CouponConstants.SEARCH_MEMBERS_PAGE_SIZE;
-                            }
-
-                            couponManualPOMapper.updateCouponManualSuccessCount(successCount, manualPO.getCouponManualId());
-
-                            allSuccessCount += successCount;
-                            if (allSuccessCount == totalNumber) {
-                                //更新状态为发券成功
-                                couponManualService.updateTaskStatus(manualPO.getCouponManualId(), CouponManualTaskStatusEnum.TASK_STATUS_SEND_SUCCESS.getCode().byteValue());
-                            }
-
-                        }
-
-                        //批量发券
-                        ResponseData<String> onlineResult = sendCouponBatchOnline(definitionPO, entityPOList);
-
-                    } catch (Exception e) {
-
-                        logger.info("enter SendCouponServiceImpl sendCouponBatchOnlineNow error param:exception:{}",JSONObject.toJSONString(e));
-
-                        int failCount = 0;
-                        if (es == totalPages) {
-                            //最后一页
-                            failCount = totalNumber % CouponConstants.SEARCH_MEMBERS_PAGE_SIZE;
-                        } else {
-                            //其余页数
-                            failCount = CouponConstants.SEARCH_MEMBERS_PAGE_SIZE;
-                        }
-                        updateSendCouponBatchException(batchPO, failCount,definitionPO);
-
+                    allSuccessCount += successCount;
+                    if (allSuccessCount == totalNumber) {
+                        //更新状态为发券成功
+                        couponManualService.updateTaskStatus(manualPO.getCouponManualId(), CouponManualTaskStatusEnum.TASK_STATUS_SEND_SUCCESS.getCode().byteValue());
                     }
 
                 }
 
-            }
-        };
-        //).start();
-        //ThreadPool.init();
-        ThreadPool.run(runnable);
+                //批量发券
+                ResponseData<String> onlineResult = sendCouponBatchOnline(definitionPO, entityPOList);
 
+            } catch (Exception e) {
+
+                logger.info("enter SendCouponServiceImpl sendCouponBatchOnlineNow error param:exception:{}",JSONObject.toJSONString(e));
+
+                int failCount = 0;
+                if (es == totalPages) {
+                    //最后一页
+                    failCount = totalNumber % CouponConstants.SEARCH_MEMBERS_PAGE_SIZE;
+                } else {
+                    //其余页数
+                    failCount = CouponConstants.SEARCH_MEMBERS_PAGE_SIZE;
+                }
+                updateSendCouponBatchException(batchPO, failCount,definitionPO);
+
+            }
+
+        }
         return responseData;
 
     }

@@ -2,10 +2,7 @@ package com.bizvane.couponservice.service.impl;
 
 import com.alibaba.fastjson.JSONObject;
 import com.bizvane.centerstageservice.models.po.SysAccountPo;
-import com.bizvane.centerstageservice.models.po.SysCheckConfigPo;
 import com.bizvane.centerstageservice.models.po.SysCheckPo;
-import com.bizvane.centerstageservice.models.vo.SysCheckConfigVo;
-import com.bizvane.centerstageservice.rpc.SysCheckConfigServiceRpc;
 import com.bizvane.centerstageservice.rpc.SysCheckServiceRpc;
 import com.bizvane.couponfacade.enums.CouponEnum;
 import com.bizvane.couponfacade.enums.CouponManualTaskStatusEnum;
@@ -30,11 +27,9 @@ import com.bizvane.couponservice.service.SendCouponService;
 import com.bizvane.members.facade.es.vo.MembersInfoSearchVo;
 import com.bizvane.members.facade.models.MemberInfoModel;
 import com.bizvane.members.facade.service.api.MemberInfoApiService;
-import com.bizvane.members.facade.service.api.MembersAdvancedSearchApiService;
 import com.github.pagehelper.PageInfo;
 import com.bizvane.utils.responseinfo.ResponseData;
 import com.github.pagehelper.PageHelper;
-import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -60,15 +55,11 @@ public class CouponManualServiceImpl implements CouponManualService {
     @Autowired
     private CouponDefinitionPOMapper couponDefinitionPOMapper;
     @Autowired
-    private SysCheckConfigServiceRpc sysCheckConfigServiceRpc;
-    @Autowired
     private CouponJobUtil jobUtil;
     @Autowired
     private MemberInfoApiService memberInfoApiService;
     @Autowired
     private SendCouponService sendCouponService;
-    @Autowired
-    private MembersAdvancedSearchApiService membersAdvancedSearchApiService;
 
     /**
      * 手动发券（列表）
@@ -119,170 +110,6 @@ public class CouponManualServiceImpl implements CouponManualService {
         responseData.setData(pageInfo);
         return responseData;
     }
-
-
-    /**
-     * 创建发券任务
-     *
-     * @param param
-     * @return
-     */
-    @Override
-    public ResponseData<String> addTask(CouponManualVO param, MembersInfoSearchVo memberInfo, SysAccountPo accountPo) throws Exception {
-
-        logger.info("enter CouponManualServiceImpl addTask method:CouponManualVO:{},MembersInfoSearchVo:{}",JSONObject.toJSONString(param),JSONObject.toJSONString(memberInfo));
-        ResponseData<String> responseData = new ResponseData<>();
-
-        if (StringUtils.isBlank(param.getTaskName())) {
-            responseData.setCode(SysResponseEnum.FAILED.getCode());
-            responseData.setMessage(SysResponseEnum.TASK_NAME_NOT_NULL.getMessage());
-            return responseData;
-        }
-        if (null == param.getCouponDefinitionId()) {
-            responseData.setCode(SysResponseEnum.FAILED.getCode());
-            responseData.setMessage(SysResponseEnum.COUPON_DEFINITION_ID_NOT_NULL.getMessage());
-            return responseData;
-        }
-        if (null == param.getSendType()) {
-            responseData.setCode(SysResponseEnum.FAILED.getCode());
-            responseData.setMessage(SysResponseEnum.COUPON_SEND_TYPE_NOT_NULL.getMessage());
-            return responseData;
-        } else {
-            if (CouponEnum.COUPON_MANUAL_SEND_TYPE_SOMEDAY.getCode().equals(param.getSendType() + "") &&
-                    StringUtils.isBlank(param.getSendTimeStr())) {
-                responseData.setCode(SysResponseEnum.FAILED.getCode());
-                responseData.setMessage(SysResponseEnum.SEND_TIME_NOT_NULL.getMessage());
-                return responseData;
-            }
-        }
-
-        if(param.getTotalNumber() == 0){
-            responseData.setCode(SysResponseEnum.FAILED.getCode());
-            responseData.setMessage(SysResponseEnum.MEMBER_IS_NULL.getMessage());
-            return responseData;
-        }
-
-        CouponDefinitionPOWithBLOBs definitionPO = couponDefinitionPOMapper.selectByPrimaryKey(Long.valueOf(param.getCouponDefinitionId()));
-
-        if (null == definitionPO) {
-            responseData.setCode(SysResponseEnum.FAILED.getCode());
-            responseData.setMessage(SysResponseEnum.COUPON_NOT_EXIST.getMessage());
-            return responseData;
-        }
-
-        //判断是否过期,日期区间存在过期情况
-        if(CouponConstants.VALID_TYPE__INTERVAL.equals(definitionPO.getValidType())){
-
-            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-            Date endDate = format.parse(format.format(definitionPO.getValidDateEnd()));
-            Date today = format.parse(format.format(new Date()));
-
-            logger.info("bbbbbbbbbbbbbbbbbbbbbbbbbbbb endDate:{},today:{}",JSONObject.toJSONString(endDate),JSONObject.toJSONString(today));
-
-            //判断券是否过期
-            if(endDate.getTime()<today.getTime()){
-                responseData.setCode(SysResponseEnum.FAILED.getCode());
-                responseData.setMessage(SysResponseEnum.COUPON_EXPIRED.getMessage());
-                return responseData;
-            }
-
-        }
-
-
-        //新增手动发券
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-
-        CouponManualPO couponManualPO = new CouponManualPO();
-
-        if (CouponEnum.COUPON_MANUAL_SEND_TYPE_NOW.getCode().equals(param.getSendType() + "")) {
-            //如果是立即发送
-            couponManualPO.setSendTime(TimeUtils.getNowTime());
-
-        } else {
-            //如果是指定时间发送
-            couponManualPO.setSendTime(dateFormat.parse(param.getSendTimeStr()));
-        }
-        couponManualPO.setSysCompanyId(definitionPO.getSysCompanyId());
-        couponManualPO.setSysBrandId(definitionPO.getSysBrandId());
-        couponManualPO.setBrandCode(definitionPO.getBrandCode());
-        couponManualPO.setTaskName(param.getTaskName());
-        couponManualPO.setCouponDefinitionId(param.getCouponDefinitionId());
-        couponManualPO.setCouponDefinitionName(definitionPO.getCouponName());
-        couponManualPO.setSendType(param.getSendType());
-        //couponManualPO.setDiscountMoney(definitionPO.getMoney());
-        couponManualPO.setCreateDate(TimeUtils.getNowTime());
-        couponManualPO.setCreateUserId(accountPo.getSysAccountId());
-        couponManualPO.setCreateUserName(accountPo.getName());
-        couponManualPO.setValid(CouponConstants.TABLE_VALID_EFFECTIVE);
-        //将条件转为String格式，存入数据库
-        memberInfo.setBrandId(accountPo.getBrandId());
-        couponManualPO.setMemberCondition(JSONObject.toJSONString(memberInfo));
-
-        couponManualPO.setTaskStatus(CouponManualTaskStatusEnum.TASK_STATUS_NEW.getCode().byteValue());
-
-        couponManualPO.setMemberCount(param.getTotalNumber());
-
-        couponManualPOMapper.insertSelective(couponManualPO);
-
-        //检查是否需要审核
-        SysCheckConfigPo checkConfigPO = new SysCheckConfigPo();
-        checkConfigPO.setSysBrandId(accountPo.getBrandId());
-        checkConfigPO.setFunctionCode(CouponConstants.COUPON_CHECK_FUNCTION_CODE);
-        ResponseData<Integer> checkConfigResult = sysCheckConfigServiceRpc.ifCheckConfig(checkConfigPO);
-
-        if(SysResponseEnum.SUCCESS.getCode() != checkConfigResult.getCode()){
-            responseData.setCode(SysResponseEnum.FAILED.getCode());
-            responseData.setMessage(checkConfigResult.getMessage());
-            return responseData;
-        }
-
-
-        //发券参数
-        SendCouponBatchRequestVO requestVO = new SendCouponBatchRequestVO();
-
-        requestVO.setCouponDefinitionId(Long.valueOf(couponManualPO.getCouponDefinitionId()));
-        requestVO.setSendType(couponManualPO.getSendType());
-        requestVO.setSendTime(couponManualPO.getSendTime());
-        requestVO.setBusinessName(couponManualPO.getTaskName());
-        requestVO.setBusinessId(couponManualPO.getCouponManualId());
-        requestVO.setBusinessType(SendTypeEnum.SEND_COUPON_BATCH.getCode());
-        requestVO.setCreateUserId(accountPo.getSysAccountId());
-        requestVO.setCreateUserName(accountPo.getCreateUserName());
-
-
-        if (CouponConstants.CHECK_UNNEED.equals(checkConfigResult.getData())) {
-            //不需要审核,直接发券
-
-            //判断发券类型
-            sendCouponBySendType(definitionPO, requestVO);
-
-
-        } else {
-
-            //需要审核，新增审核记录
-            SysCheckPo checkPo = new SysCheckPo();
-            checkPo.setSysBrandId(couponManualPO.getSysBrandId());
-            checkPo.setFunctionCode(CouponConstants.COUPON_CHECK_FUNCTION_CODE);
-            checkPo.setBusinessType(Integer.parseInt(SendTypeEnum.SEND_COUPON_BATCH.getCode()));
-            checkPo.setBusinessId(couponManualPO.getCouponManualId());
-            checkPo.setBusinessCode(couponManualPO.getCouponManualId() + "");
-            checkPo.setBusinessName(couponManualPO.getTaskName());
-            checkPo.setBizName(couponManualPO.getCouponDefinitionName());
-            checkPo.setCheckStatus(CouponConstants.CHECK_STATUS_WAIT);
-            checkPo.setCreateDate(TimeUtils.getNowTime());
-            checkPo.setValid(CouponConstants.TABLE_VALID_EFFECTIVE);
-
-            sysCheckServiceRpc.addCheck(checkPo);
-
-            //更新手动发券状态为-待审核
-            this.updateTaskStatus(couponManualPO.getCouponManualId(), CouponManualTaskStatusEnum.TASK_STATUS_CHECK_WAIT.getCode().byteValue());
-
-        }
-
-        return responseData;
-    }
-
-
 
     /**
      * 指定时间发券
@@ -825,17 +652,16 @@ public class CouponManualServiceImpl implements CouponManualService {
                 return responseData;
             }
         }
+
         if (null == param.getSendType()) {
             responseData.setCode(SysResponseEnum.FAILED.getCode());
             responseData.setMessage(SysResponseEnum.COUPON_SEND_TYPE_NOT_NULL.getMessage());
             return responseData;
-        } else {
-            if (CouponEnum.COUPON_MANUAL_SEND_TYPE_SOMEDAY.getCode().equals(param.getSendType() + "") &&
-                    StringUtils.isBlank(param.getSendTimeStr())) {
-                responseData.setCode(SysResponseEnum.FAILED.getCode());
-                responseData.setMessage(SysResponseEnum.SEND_TIME_NOT_NULL.getMessage());
-                return responseData;
-            }
+        } else if (CouponEnum.COUPON_MANUAL_SEND_TYPE_SOMEDAY.getCode().equals(param.getSendType() + "") &&
+                StringUtils.isBlank(param.getSendTimeStr())) {
+            responseData.setCode(SysResponseEnum.FAILED.getCode());
+            responseData.setMessage(SysResponseEnum.SEND_TIME_NOT_NULL.getMessage());
+            return responseData;
         }
 
         if(param.getTotalNumber() == 0){
@@ -861,7 +687,7 @@ public class CouponManualServiceImpl implements CouponManualService {
                     Date endDate = format.parse(format.format(definitionPO.getValidDateEnd()));
                     Date today = format.parse(format.format(new Date()));
 
-                    logger.info("bbbbbbbbbbbbbbbbbbbbbbbbbbbb endDate:{},today:{}",JSONObject.toJSONString(endDate),JSONObject.toJSONString(today));
+                    logger.info("manual send coupon endDate:{},today:{}",JSONObject.toJSONString(endDate),JSONObject.toJSONString(today));
 
                     //判断券是否过期
                     if(endDate.getTime()<today.getTime()){
@@ -907,12 +733,9 @@ public class CouponManualServiceImpl implements CouponManualService {
             definitionPOList.add(definitionPO);
         }
 
-
         //新增手动发券
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-
         CouponManualPO couponManualPO = new CouponManualPO();
-
         if (CouponEnum.COUPON_MANUAL_SEND_TYPE_NOW.getCode().equals(param.getSendType() + "")) {
             //如果是立即发送
             couponManualPO.setSendTime(TimeUtils.getNowTime());
@@ -928,52 +751,23 @@ public class CouponManualServiceImpl implements CouponManualService {
         // 将劵定义id集合转为String，用逗号隔开
         couponManualPO.setCouponDefinitionId(definitionIdStr);
         couponManualPO.setCouponDefinitionName(definitionNameStr);
-
         couponManualPO.setSendType(param.getSendType());
         //couponManualPO.setDiscountMoney(definitionPO.getMoney());
         couponManualPO.setCreateDate(TimeUtils.getNowTime());
         couponManualPO.setCreateUserId(accountPo.getSysAccountId());
         couponManualPO.setCreateUserName(accountPo.getName());
-
         couponManualPO.setValid(CouponConstants.TABLE_VALID_EFFECTIVE);
         //将条件转为String格式，存入数据库
         memberInfo.setBrandId(accountPo.getBrandId());
 
         couponManualPO.setMemberCondition(JSONObject.toJSONString(memberInfo));
-
         couponManualPO.setTaskStatus(CouponManualTaskStatusEnum.TASK_STATUS_NEW.getCode().byteValue());
-
         couponManualPO.setMemberNum(param.getTotalNumber());
-        //审核人
-        ResponseData<List<SysCheckConfigVo>> checkConfigListAll=sysCheckConfigServiceRpc.getCheckConfigListAll(accountPo.getBrandId());
-        if(CollectionUtils.isNotEmpty(checkConfigListAll.getData())){
-        	for(SysCheckConfigVo sysCheckConfigVo:checkConfigListAll.getData()) {
-        		if(sysCheckConfigVo.getFunctionCode().equals(CouponConstants.COUPON_CHECK_FUNCTION_CODE)) {
-        			couponManualPO.setReviewUserName(sysCheckConfigVo.getName());
-        			couponManualPO.setReviewUserId(sysCheckConfigVo.getSysCheckConfigId());
-        		}
-        	}
-        }
-
         couponManualPOMapper.insertSelective(couponManualPO);
-
-        //检查是否需要审核
-        SysCheckConfigPo checkConfigPO = new SysCheckConfigPo();
-        checkConfigPO.setSysBrandId(accountPo.getBrandId());
-        checkConfigPO.setFunctionCode(CouponConstants.COUPON_CHECK_FUNCTION_CODE);
-        ResponseData<Integer> checkConfigResult = sysCheckConfigServiceRpc.ifCheckConfig(checkConfigPO);
-
-        if(SysResponseEnum.SUCCESS.getCode() != checkConfigResult.getCode()){
-            responseData.setCode(SysResponseEnum.FAILED.getCode());
-            responseData.setMessage(checkConfigResult.getMessage());
-            return responseData;
-        }
-
 
         //发券参数
         SendCouponBatchRequestVO requestVO = new SendCouponBatchRequestVO();
 
-        //requestVO.setCouponDefinitionId(couponManualPO.getCouponDefinitionId());
         requestVO.setCouponDefinitionIds(couponManualPO.getCouponDefinitionId());
         requestVO.setSendType(couponManualPO.getSendType());
         requestVO.setSendTime(couponManualPO.getSendTime());
@@ -983,35 +777,8 @@ public class CouponManualServiceImpl implements CouponManualService {
         requestVO.setCreateUserId(accountPo.getSysAccountId());
         requestVO.setCreateUserName(accountPo.getCreateUserName());
 
-
-        if (CouponConstants.CHECK_UNNEED.equals(checkConfigResult.getData())) {
-            //不需要审核,直接发券
-
-            //判断发券类型
-            sendNewCouponBySendType(definitionPOList, requestVO);
-
-
-        } else {
-
-            //需要审核，新增审核记录
-            SysCheckPo checkPo = new SysCheckPo();
-            checkPo.setSysBrandId(couponManualPO.getSysBrandId());
-            checkPo.setFunctionCode(CouponConstants.COUPON_CHECK_FUNCTION_CODE);
-            checkPo.setBusinessType(Integer.parseInt(SendTypeEnum.SEND_COUPON_BATCH.getCode()));
-            checkPo.setBusinessId(couponManualPO.getCouponManualId());
-            checkPo.setBusinessCode(couponManualPO.getCouponManualId() + "");
-            checkPo.setBusinessName(couponManualPO.getTaskName());
-            checkPo.setBizName(couponManualPO.getCouponDefinitionName());
-            checkPo.setCheckStatus(CouponConstants.CHECK_STATUS_WAIT);
-            checkPo.setCreateDate(TimeUtils.getNowTime());
-            checkPo.setValid(CouponConstants.TABLE_VALID_EFFECTIVE);
-
-            sysCheckServiceRpc.addCheck(checkPo);
-
-            //更新手动发券状态为-待审核
-            this.updateTaskStatus(couponManualPO.getCouponManualId(), CouponManualTaskStatusEnum.TASK_STATUS_CHECK_WAIT.getCode().byteValue());
-
-        }
+        //立即发送
+        sendNewCouponBySendType(definitionPOList, requestVO);
 
         return responseData;
     }
@@ -1027,25 +794,17 @@ public class CouponManualServiceImpl implements CouponManualService {
     private ResponseData<String> sendNewCouponBySendType(List<CouponDefinitionPOWithBLOBs> definitionPOList, SendCouponBatchRequestVO requestVO) {
 
         ResponseData<String> responseData = new ResponseData<>();
-
         if (CouponEnum.COUPON_MANUAL_SEND_TYPE_NOW.getCode().equals(requestVO.getSendType() + "")) {
             //立刻发券
-
-            //判断发券渠道
             sendNewCouponByUseChannel(definitionPOList,requestVO);
-
         } else if (CouponEnum.COUPON_MANUAL_SEND_TYPE_SOMEDAY.getCode().equals(requestVO.getSendType() + "")) {
-            //指定时间发券
-
-            //创建定时发券任务
+            //指定时间发券，创建定时发券任务
             addSendCouponBatchJob(requestVO);
-
         } else {
             responseData.setCode(SysResponseEnum.FAILED.getCode());
             responseData.setMessage(SysResponseEnum.SEND_TYPE_NOT_EXISTS.getMessage());
             return responseData;
         }
-
         return responseData;
     }
 
@@ -1081,33 +840,12 @@ public class CouponManualServiceImpl implements CouponManualService {
                         definitionPOList.get(0).getSysBrandId(),definitionPOList.get(0).getBrandCode(),po,requestVO);
         	}
 
-        	
-        	
+            //更新手动发券状态为-发送中
+            updateTaskStatus(requestVO.getBusinessId(),CouponManualTaskStatusEnum.TASK_STATUS_SENDING.getCode().byteValue());
 
-            //判断发券渠道
-            if (CouponConstants.USE_CHANNEL_ONLINE.equals(po.getUseChannel())) {
+            //线上发券
+            sendCouponService.sendCouponBatchOnlineNow(po, requestVO, batchPO);
 
-                //更新手动发券状态为-发送中
-                updateTaskStatus(requestVO.getBusinessId(),CouponManualTaskStatusEnum.TASK_STATUS_SENDING.getCode().byteValue());
-
-                //线上发券
-                sendCouponService.sendCouponBatchOnlineNow(po, requestVO, batchPO);
-
-            } else if (CouponConstants.USE_CHANNEL_OFFLINE.equals(po.getUseChannel())) {
-
-                //更新手动发券状态为-同步中
-                updateTaskStatus(requestVO.getBusinessId(), CouponManualTaskStatusEnum.TASK_STATUS_SYNCING.getCode().byteValue());
-
-                //线下发券
-                sendCouponService.sendCouponBatchOfflineNow(po, requestVO,batchPO);
-
-            } else if (CouponConstants.USE_CHANNEL_ANY.equals(po.getUseChannel())) {
-
-
-                //全渠道
-                sendCouponService.sendCouponBatchAnyNow(po, requestVO,batchPO);
-
-            }
         });
         responseData.setCode(SysResponseEnum.SUCCESS.getCode());
         responseData.setMessage(SysResponseEnum.SUCCESS.getMessage());

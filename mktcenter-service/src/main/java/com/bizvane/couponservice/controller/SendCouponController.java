@@ -20,7 +20,6 @@ import org.springframework.web.bind.annotation.*;
 import java.util.ArrayList;
 import java.util.List;
 
-
 /**
  * 发送券模板消息
  */
@@ -36,8 +35,6 @@ public class SendCouponController{
 
     private static final Logger logger = LoggerFactory.getLogger(SendCouponController.class);
 
-
-    
     /**
      * 单张发券(优惠券入账)
      * @return

@@ -194,62 +194,6 @@ public class CouponManualController {
 
   }
 
-
-
-
-  /**
-   * 创建发券任务 手动发券接口
-   * @return
-   */
-  @ApiOperation(value = "创建发券任务", notes = "创建发券任务", tags = {"手动发券"},httpMethod = "POST")
-  @ApiImplicitParams({
-          @ApiImplicitParam(name = "taskName", value = "任务名称", required = true, dataType = "String"),
-          @ApiImplicitParam(name = "sendTimeStr", value = "发券时间", required = true, dataType = "String"),
-          @ApiImplicitParam(name = "sendType", value = "发送类型：1-立即发送，2-指定时间", required = true, dataType = "Byte"),
-          @ApiImplicitParam(name = "couponDefinitionId", value = "券定义id", required = true, dataType = "Long"),
-          @ApiImplicitParam(name = "memberInfo", value = "会员查询条件", required = true, dataType = "MembersInfoSearchVo")
-  })
-  @RequestMapping(value="/addTask", method = RequestMethod.POST)
-  ResponseData<String> addTask(HttpServletRequest request){
-
-    ResponseData<String> responseData = new ResponseData<>();
-
-    CouponManualRequestVO requestVO = JacksonUtil.json2Objs(HttpParamUtil.getJSONParam(request),
-            CouponManualRequestVO.class);
-
-    if(null == requestVO){
-      requestVO = new CouponManualRequestVO();
-    }
-
-    SysAccountPo accountPo = HttpUtils.getLoginUser(request);
-
-    CouponManualVO couponManualVO = new CouponManualVO();
-    couponManualVO.setCouponDefinitionId(requestVO.getCouponDefinitionId().toString());
-    couponManualVO.setTaskName(requestVO.getTaskName());
-    couponManualVO.setSendTimeStr(requestVO.getSendTimeStr());
-    couponManualVO.setSendType(requestVO.getSendType());
-    couponManualVO.setTotalNumber(requestVO.getTotalNumber());
-
-    MembersInfoSearchVo membersInfoSearchVo = requestVO.getSearchVo();
-
-    logger.info("enter CouponManualController addTask method param: SearchVo:{}",JSONObject.toJSONString(membersInfoSearchVo));
-    logger.info("enter CouponManualController addTask method param: CouponManualVO:{}",JSONObject.toJSONString(couponManualVO));
-    logger.info("enter CouponManualController addTask method " +
-            "param: SysAccountPo:{}",JSONObject.toJSONString(accountPo));
-
-    try {
-      responseData = couponManualService.addTask(couponManualVO,membersInfoSearchVo,accountPo);
-    }catch (Exception e){
-      logger.info(SysResponseEnum.DATE_TRANSFER_EXCEPTION.getMessage());
-      responseData.setCode(SysResponseEnum.FAILED.getCode());
-      responseData.setMessage(SysResponseEnum.FAILED.getMessage());
-      return responseData;
-    }
-    return responseData;
-
-  }
-
-
   /**
    * 修改手动发券任务
    * @param couponManualVO

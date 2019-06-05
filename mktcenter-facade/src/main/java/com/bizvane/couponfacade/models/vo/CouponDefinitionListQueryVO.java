@@ -15,7 +15,7 @@ public class CouponDefinitionListQueryVO implements Serializable {
   @io.swagger.annotations.ApiModelProperty(value = "券名称", name = "couponName", required = false, example = "")
   private String couponName;
   
-  @io.swagger.annotations.ApiModelProperty(value = "优惠类型（1现金，2折扣，3礼品） 12购物券就是现金券加折扣券", name = "preferentialType", required = false,
+  @io.swagger.annotations.ApiModelProperty(value = "优惠类型（1现金，2折扣，兑换） 12购物券就是现金券加折扣券", name = "preferentialType", required = false,
       example = "")
   private Byte preferentialType;
   
