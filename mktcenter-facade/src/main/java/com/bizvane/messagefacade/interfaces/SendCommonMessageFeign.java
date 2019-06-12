@@ -18,6 +18,6 @@ public interface SendCommonMessageFeign {
      * @param vo
      * @return
      */
-    @RequestMapping(value ="msg/sendsmg",method = RequestMethod.POST)
+    @RequestMapping(value ="msgFeign/sendsmg",method = RequestMethod.POST)
     public ResponseData<Integer> sendSmg(@RequestBody SysSmsConfigVO vo);
 }
