@@ -19,7 +19,7 @@ public interface SendBatchMessageFeign {
      * @param vo
      * @return
      */
-    @RequestMapping(value ="msg/sendBatchsmg",method = RequestMethod.POST)
+    @RequestMapping(value ="msgFeign/sendBatchsmg",method = RequestMethod.POST)
     public ResponseData<Integer> sendSmgBatch(@RequestBody SysSmsConfigVO vo);
 
 }

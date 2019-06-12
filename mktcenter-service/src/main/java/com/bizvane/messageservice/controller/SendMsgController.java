@@ -40,9 +40,6 @@ public class SendMsgController {
     private SendCommonMessageFeign sendCommonMessage;
 
     @Autowired
-    private SendBatchMessageFeign sendBatchMessage;
-
-    @Autowired
     private RocketMQWechatService rocketMQWechatService;
 
     @Autowired
