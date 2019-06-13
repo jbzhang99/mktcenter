@@ -141,7 +141,7 @@ rmq:
   send.time.out: 30000
 
 rocketmq:
-  onsaddr:
+  onsaddr: http://onsaddr-internet.aliyun.com/rocketmq/nsaddr4client-internet
   accessKey: LTAIpoqUHsXq6q7r
   secretKey: 0ZJ7bfxXJLT8TpOKvZU3i4YWuhvJzs
   topic: public_bizvane_message
@@ -149,7 +149,7 @@ rocketmq:
   consumerId: CID_PUBLIC_BIZVANE_MESSAGE_CONSUMER_ALL
   consumerStatus: true
   environment: uat
-  addr: 192.168.1.50:9876
+  addr: 47.110.235.228:9876
 smssend:
   phonewhite: true
   phoneblack: true

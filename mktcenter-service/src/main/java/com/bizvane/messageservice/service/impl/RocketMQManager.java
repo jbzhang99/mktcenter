@@ -90,7 +90,7 @@ public class RocketMQManager {
 		          if (consumerStatus.equals("true")) {
 						Properties properties = getProperties();
 						properties.setProperty(PropertyKeyConst.ConsumerId, consumerId);
-					    if(environment.equals("uat")) {
+					    if(environment.equals("dev")) {
 					    	properties.setProperty("NAMESRV_ADDR", addr);
 					    }
 				        /** * 设置消费端线程数20*/

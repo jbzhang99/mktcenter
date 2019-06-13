@@ -49,6 +49,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StopWatch;
 
 import java.util.*;
 
@@ -154,15 +155,11 @@ public class CouponEntityServiceImpl implements CouponEntityService{
         }else if(entityParam.getListType().equals("8")) {
             entityParam.setListType("102");
         }
-//       couponStatus 20-未使用，25-已过期，30-已核销',
-        logger.info("查询时间吧1--" + new Date().getTime());
+        StopWatch stopWatch = new StopWatch();
+        stopWatch.start("查会员");
 
         PageHelper.startPage(pageForm.getPageNumber(),pageForm.getPageSize());
-        logger.info("查询时间吧2--" + new Date().getTime());
-        //ResponseData<Long> totalResult = getCouponTotal(entityParam,accountPo);
 
-        //ResponseData<Long> totalResult = getCouponTotal(entityParam,successVO);
-        //logger.info("查询时间吧3--" + new Date().getTime());
         //查询会员信息
         CouponMemberPo couponMember = new CouponMemberPo();
         if(entityParam.getPhone()!=null) {
@@ -201,10 +198,11 @@ public class CouponEntityServiceImpl implements CouponEntityService{
         //查询会员信息	
 
         //查询券
-        logger.info("查询时间吧333--" + new Date().getTime());
+        stopWatch.stop();
+        stopWatch.start("查mysql库");
         List<CouponEntityVO> entityVOList = couponEntityPOMapper.findCouponEntityByConditions(entityParam,successVO);
-        logger.info("查询时间吧444--" + new Date().getTime());
-
+        stopWatch.stop();
+        stopWatch.start("统计会员");
 
         //统计会员code
         List<String> memberCodeList = new ArrayList<>();
@@ -238,9 +236,9 @@ public class CouponEntityServiceImpl implements CouponEntityService{
 
             }
             //查询会员接口
-        logger.info("查询时间吧4" + new Date().getTime());
+        stopWatch.stop();
+        logger.info(stopWatch.prettyPrint());
         PageInfo<CouponEntityVO> pageInfo = new PageInfo<>(entityVOList);
-        //pageInfo.setTotal(totalResult.getData());
 
         responseData.setData(pageInfo);
         return responseData;

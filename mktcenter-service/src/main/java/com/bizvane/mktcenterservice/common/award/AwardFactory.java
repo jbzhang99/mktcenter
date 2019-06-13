@@ -64,10 +64,9 @@ public class AwardFactory {
         ResponseData responseData = new ResponseData();
         try {
             SendCouponSimpleRequestVO va = bo.getSendCouponSimpleRequestVO();
-            log.info("开始执行发券操作参数="+ JSON.toJSONString(va));
+            log.info("开始执行发券操作参数："+ JSON.toJSONString(va));
             ResponseData<String> simple = sendCouponServiceFeign.simple(va);
-            log.info("发券返回参数======"+JSON.toJSONString(simple));
-            log.info("发券操作完成完成了完成了完成了完成了--"+JSON.toJSONString(simple));
+            log.info("营销发券操作完成"+JSON.toJSONString(simple));
         } catch (Exception e) {
             log.error("AwardFactory.awardCouponSimple error--"+ e.getMessage());
             responseData.setCode(ResponseConstants.ERROR);

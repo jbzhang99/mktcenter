@@ -18,7 +18,6 @@ spring:
         min-idle: 0
   swagger:
     show: true
-
   datasource:
     url: jdbc:mysql://node1:3306/crm?useUnicode=true&characterEncoding=utf-8
     username: root
@@ -130,26 +129,16 @@ ribbon:
   ConnectTimeout: 60000
   ReadTimeout: 60000
 
-#审计日志#
-rmq:
-  ONSAddr: NAMESRV_ADDR
-  namesrvAddr: 192.168.1.50:9876
-  accessKey: LTAIpoqUHsXq6q7r
-  secretKey: 0ZJ7bfxXJLT8TpOKvZU3i4YWuhvJzs
-  product.id: PID_PUBLIC_BIZVANE_MEMBER_MESSAGE
-  consume.id: CID_PUBLIC_BIZVANE_MEMBER_MESSAGE
-  send.time.out: 30000
-
 rocketmq:
-  onsaddr:
+  onsaddr: http://onsaddr-internet.aliyun.com/rocketmq/nsaddr4client-internet
   accessKey: LTAIpoqUHsXq6q7r
   secretKey: 0ZJ7bfxXJLT8TpOKvZU3i4YWuhvJzs
   topic: public_bizvane_message
   producerId: PID_PUBLIC_BIZVANE_MESSAGE
   consumerId: CID_PUBLIC_BIZVANE_MESSAGE_CONSUMER_ALL
   consumerStatus: true
-  environment: uat
-  addr: 192.168.1.50:9876
+  environment: dev
+  addr: 47.110.235.228:9876
 smssend:
   phonewhite: true
   phoneblack: true

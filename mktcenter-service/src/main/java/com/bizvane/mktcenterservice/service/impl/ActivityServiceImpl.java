@@ -492,8 +492,9 @@ public class ActivityServiceImpl implements ActivityService {
                 awardBO.setSendCouponSimpleRequestVO(sendCouponSimpleRequestVO);
                 awardBO.setMktType(MktSmartTypeEnum.SMART_TYPE_COUPON.getCode());
                 log.info("调用高级搜索的参数列表=================="+ JSON.toJSONString(sendCouponSimpleRequestVO));
-                log.info("智能营销开始发券发券发券发券了+++++++++++++++++++++=========================");
+                log.info("智能营销开始发券");
                 award.execute(awardBO);
+                log.info("智能营销发券结束");
             }
         }
     }

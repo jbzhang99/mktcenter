@@ -153,8 +153,6 @@ public class SendCouponServiceImpl implements SendCouponService {
 			}
 		}
         
-        
-
         try {
 
             //判断是否过期,日期区间存在过期情况
@@ -180,9 +178,7 @@ public class SendCouponServiceImpl implements SendCouponService {
 
         //新建券实例
         CouponEntityPO entityPO = new CouponEntityPO();
-
         String couponCode = BusinessCodeUtil.getCouponCode();
-
         entityPO.setCouponCode(couponCode);
         entityPO.setCouponDefinitionId(definitionPO.getCouponDefinitionId()+"");
         entityPO.setCouponBatchSendRecordId(definitionPO.getCouponDefinitionId());// 批次号大数据取数要求不能是空
@@ -239,19 +235,7 @@ public class SendCouponServiceImpl implements SendCouponService {
         entityPO.setBusinessName(param.getBusinessName());
 
         Byte couponStatus = null;
-        //判断发券渠道
-        if (CouponConstants.USE_CHANNEL_ONLINE.equals(definitionPO.getUseChannel())) {
-            couponStatus = CouponConstants.COUPON_STATUS_UNUSED;
-        } else if (CouponConstants.USE_CHANNEL_OFFLINE.equals(definitionPO.getUseChannel())) {
-            couponStatus = CouponConstants.COUPON_STATUS_SYNCHROING;
-        } else if (CouponConstants.USE_CHANNEL_ANY.equals(definitionPO.getUseChannel())) {
-            couponStatus = CouponConstants.COUPON_STATUS_SYNCHROING;
-        } else {
-            responseData.setCode(SysResponseEnum.FAILED.getCode());
-            responseData.setMessage(SysResponseEnum.USE_CHANNEL_NOT_EXISTS.getMessage());
-            return responseData;
-        }
-        entityPO.setCouponStatus(couponStatus);
+        entityPO.setCouponStatus(CouponConstants.COUPON_STATUS_UNUSED);
         couponEntityPOMapper.insertSelective(entityPO);
 
         sendCouponOnline(definitionPO, entityPO);
