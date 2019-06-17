@@ -30,39 +30,34 @@ import java.util.List;
 public class SendCommonMessageImpl implements SendCommonMessageFeign {
     @Autowired
     private NetWorkCommon netWorkCommon;
-    
-    @SuppressWarnings("rawtypes")
-  	@Autowired
-  	private MsgMongoRepository mongoTemplateService;
-    
-  	@Autowired
-  	private  MsgSmsPhonePOMapper msgSmsPhonePOMapper;
-  	
-    @Value("${smssend.phonewhite}")
-    private String phonewhite;
-    @Value("${smssend.phoneblack}")
-    private String phoneblack;
 
-@SuppressWarnings({ "unchecked", "finally" })
-@Override
+    @SuppressWarnings("rawtypes")
+    @Autowired
+    private MsgMongoRepository mongoTemplateService;
+
+    @Autowired
+    private  MsgSmsPhonePOMapper msgSmsPhonePOMapper;
+
+    @SuppressWarnings({ "unchecked", "finally" })
+    @Override
     public ResponseData<Integer> sendSmg(@RequestBody SysSmsConfigVO vo) {
         ResponseData<Integer> result = new ResponseData<Integer>(SysResponseEnum.FAILED.getCode(),SysResponseEnum.FAILED.getMessage(),null);
-    if(StringUtils.isBlank(vo.getChannelName())){
-        vo.setChannelType(20);
-        vo.setChannelName("chuangLan253");
-        vo.setChannelService("http://smssh1.253.com/msg/send/json");
-        vo.setChannelAccount("N4646531");
-        vo.setChannelPassword("ka2fUAZox");
-    }
-    String channelName = vo.getChannelName();//通道名称
-    Boolean  resultData=Boolean.FALSE;
+        if(StringUtils.isBlank(vo.getChannelName())){
+            vo.setChannelType(20);
+            vo.setChannelName("chuangLan253");
+            vo.setChannelService("http://smssh1.253.com/msg/send/json");
+            vo.setChannelAccount("N4646531");
+            vo.setChannelPassword("ka2fUAZox");
+        }
+        String channelName = vo.getChannelName();//通道名称
+        Boolean  resultData=Boolean.FALSE;
         try {
-        	
-        	//黑白名单过滤
-         result=sendSmgPhone( vo);
-        	if(SysResponseEnum.FAILED.getCode() == result.getCode()) {
-        		 return  result;
-        	}
+
+            //黑白名单过滤
+            result=sendSmgPhone( vo);
+            if(SysResponseEnum.FAILED.getCode() == result.getCode()) {
+                return  result;
+            }
 
             if ("moments3.4".equals(channelName)){   //梦网3.4  moments  梦网3.4  MOMENTS   梦网3.4  rec   梦网3.4 newest  梦网3.4   MOMENTS    梦网3.4
                 resultData = netWorkCommon.sendMsgMoments(vo);
@@ -70,26 +65,26 @@ public class SendCommonMessageImpl implements SendCommonMessageFeign {
                     result.setCode(SysResponseEnum.SUCCESS.getCode());
                     result.setMessage(SysResponseEnum.SUCCESS.getMessage());
                 }
-                
+
             }else if ("chuangLan253".equals(channelName)){   //创蓝253短信
-            	String  resultstr = netWorkCommon.sendChuangLan253(vo);
-              
-              if (resultstr.equals("true")){
-            	  resultData=Boolean.TRUE;
-                  result.setCode(SysResponseEnum.SUCCESS.getCode());
-                  result.setMessage(SysResponseEnum.SUCCESS.getMessage());
-              }else {
-                  result.setCode(SysResponseEnum.FAILED.getCode());
-                  result.setMessage(resultstr);
-              }
-              
+                String  resultstr = netWorkCommon.sendChuangLan253(vo);
+
+                if (resultstr.equals("true")){
+                    resultData=Boolean.TRUE;
+                    result.setCode(SysResponseEnum.SUCCESS.getCode());
+                    result.setMessage(SysResponseEnum.SUCCESS.getMessage());
+                }else {
+                    result.setCode(SysResponseEnum.FAILED.getCode());
+                    result.setMessage(resultstr);
+                }
+
             }
 
         }catch (Exception e){
-        System.out.println("------短信发送异常-----"+ JSON.toJSONString(channelName));
-        e.printStackTrace();
+            System.out.println("------短信发送异常-----"+ JSON.toJSONString(channelName));
+            e.printStackTrace();
         }finally {
-           //mogo的插入
+            //mogo的插入
             vo.setStatus(resultData);
             vo.setCreateDate(new Date());
             vo.setCountryCode(result.getMessage());
@@ -100,53 +95,21 @@ public class SendCommonMessageImpl implements SendCommonMessageFeign {
 
     }
 
-public ResponseData<Integer> sendSmgPhone(SysSmsConfigVO vo) {
-	ResponseData<Integer> result = new ResponseData<Integer>(SysResponseEnum.SUCCESS.getCode(),SysResponseEnum.SUCCESS.getMessage(),null);
-	//1黑0白名单过滤
-	try {
-	MsgSmsPhonePOExample sysSmsConfigPOExample = new MsgSmsPhonePOExample();
-    sysSmsConfigPOExample.createCriteria().andPhoneEqualTo(vo.getPhone()).andValidEqualTo(Boolean.TRUE);
-    List<MsgSmsPhonePO>  sysSmsConfigList= msgSmsPhonePOMapper.selectByExample(sysSmsConfigPOExample);
+    public ResponseData<Integer> sendSmgPhone(SysSmsConfigVO vo) {
+        ResponseData<Integer> result = new ResponseData<Integer>(SysResponseEnum.SUCCESS.getCode(),SysResponseEnum.SUCCESS.getMessage(),null);
+        MsgSmsPhonePOExample sysSmsConfigPOExample = new MsgSmsPhonePOExample();
+        sysSmsConfigPOExample.createCriteria().andPhoneEqualTo(vo.getPhone()).andValidEqualTo(Boolean.TRUE);
+        List<MsgSmsPhonePO>  sysSmsConfigList= msgSmsPhonePOMapper.selectByExample(sysSmsConfigPOExample);
 
-    
-    
-    //检查是否黑名单
-	if(phoneblack.equals("true")) {
-        for(MsgSmsPhonePO smsTempPO: sysSmsConfigList) {
-            if(smsTempPO.getTemplateType()==true){
-                result.setCode(SysResponseEnum.FAILED.getCode());
-                result.setMessage(":该手机号是黑名单，不发送短信！");
-                return result;
-            }
-        } 
-	}
-	
-    //检查没有在白名单
-	if(phonewhite.equals("true")) {
+        //检查没有在白名单
         for(MsgSmsPhonePO smsTempPO: sysSmsConfigList) {
             if(smsTempPO.getTemplateType()==false){
                 return result;
             }
-        } 
+        }
         result.setCode(SysResponseEnum.FAILED.getCode());
         result.setMessage(":该手机号不是白名单，不发送短信！");
-	}
-    
 
-	} catch (Exception e) {
-        result.setCode(SysResponseEnum.FAILED.getCode());
-        result.setMessage(":查询黑白名单系统报错！");
-	}
-	 return  result;
-}
-
-	public static void main(String[] args) {
-		 ResponseData<Integer> result = new ResponseData<Integer>(SysResponseEnum.FAILED.getCode(),SysResponseEnum.FAILED.getMessage(),null);
-		System.out.println(result);
-	}
-
-
-
-
-
+        return  result;
+    }
 }

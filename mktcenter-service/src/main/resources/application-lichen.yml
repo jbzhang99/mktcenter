@@ -139,6 +139,3 @@ rocketmq:
   consumerStatus: true
   environment: dev
   addr: 47.110.235.228:9876
-smssend:
-  phonewhite: true
-  phoneblack: true

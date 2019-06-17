@@ -3,9 +3,9 @@ package com.bizvane.messageservice.service.impl.wxtemplatemessage;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.bizvane.couponservice.common.system.DictHelper;
 import com.bizvane.messageservice.common.constants.SysRespConstants;
 import com.bizvane.messageservice.common.constants.SystemConstants;
-import com.bizvane.messageservice.common.utils.DictHelper;
 import com.bizvane.messageservice.mappers.MsgSmsTempPOMapper;
 import com.bizvane.messageservice.mappers.SysSmsConfigPOMapper;
 import com.bizvane.messageservice.service.SendSmsOrderOfflineConsumeService;

@@ -2,16 +2,15 @@ package com.bizvane.messageservice.service.impl.wxtemplatemessage;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.bizvane.couponservice.common.system.DictHelper;
+import com.bizvane.messagefacade.interfaces.SendCommonMessageFeign;
+import com.bizvane.messagefacade.models.po.*;
 import com.bizvane.messageservice.common.constants.SysRespConstants;
 import com.bizvane.messageservice.common.constants.SystemConstants;
-import com.bizvane.messageservice.common.utils.DictHelper;
 import com.bizvane.messageservice.mappers.MsgSmsTempPOMapper;
 import com.bizvane.messageservice.mappers.SysSmsConfigPOMapper;
 import com.bizvane.messageservice.service.SmsMessageLogService;
 import com.bizvane.messageservice.service.SmsTemplateMessageService;
-import com.bizvane.messagefacade.models.po.MsgSmsLogPO;
-import com.bizvane.messagefacade.models.po.SysSmsConfigPO;
-import com.bizvane.messagefacade.models.po.SysSmsConfigPOExample;
 import com.bizvane.messagefacade.models.vo.Result;
 import com.bizvane.messagefacade.models.vo.SysSmsConfigVO;
 import com.bizvane.utils.enumutils.SysResponseEnum;
@@ -36,7 +35,7 @@ public class SmsTemplateMessageServiceImpl implements SmsTemplateMessageService 
     private SmsMessageLogService smsMessageLogService;
     
     @Autowired
-    private com.bizvane.messageservice.service.impl.centerMsg.SendCommonMessageImpl SendCommonMessageImpl;
+    private SendCommonMessageFeign SendCommonMessageImpl;
     @Autowired
     private MsgSmsTempPOMapper msgSmsTempPOMapper;
     
@@ -157,50 +156,50 @@ public class SmsTemplateMessageServiceImpl implements SmsTemplateMessageService 
 	    }
         
       //找到短信模板信息
-//        MsgSmsTempPOExample msgSmsTempPOExample = new MsgSmsTempPOExample();
-//        msgSmsTempPOExample.createCriteria().andSysBrandIdEqualTo(sysBrandId).andTemplateTypeEqualTo(jsonObject.getString("bussinessModuleCode").replace("SMS_","")).andValidEqualTo(Boolean.TRUE);
-//        List<MsgSmsTempPO> smsTempPOList= msgSmsTempPOMapper.selectByExample(msgSmsTempPOExample);
-//        if(null == smsTempPOList || smsTempPOList.size()==0){
-//            result.setStatus(SysRespConstants.SMS_MESSAGETEMP_NOT_EXISTS.getStatus());
-//            result.setMsg(SysRespConstants.SMS_MESSAGETEMP_NOT_EXISTS.getMsg());
-//            return result;
-//        }
+        MsgSmsTempPOExample msgSmsTempPOExample = new MsgSmsTempPOExample();
+        msgSmsTempPOExample.createCriteria().andSysBrandIdEqualTo(sysBrandId).andTemplateTypeEqualTo(jsonObject.getString("bussinessModuleCode").replace("SMS_","")).andValidEqualTo(Boolean.TRUE);
+        List<MsgSmsTempPO> smsTempPOList= msgSmsTempPOMapper.selectByExample(msgSmsTempPOExample);
+        if(null == smsTempPOList || smsTempPOList.size()==0){
+            result.setStatus(SysRespConstants.SMS_MESSAGETEMP_NOT_EXISTS.getStatus());
+            result.setMsg(SysRespConstants.SMS_MESSAGETEMP_NOT_EXISTS.getMsg());
+            return result;
+        }
         
-        //  校验是否发送短信  是否开启 短信配置开关 0.关闭1.开启
-//        MsgSmsTempPO smsTempPO= smsTempPOList.get(0);
-//        if(smsTempPO.getStatus()==false){
-//            logger.error("该会员发送短信未开启！");
-//            result.setStatus(SysRespConstants.SMS_MESSAGETEMP_OFF.getStatus());
-//            result.setMsg(SysRespConstants.SMS_MESSAGETEMP_OFF.getMsg());
-//            return result;
-//        }
+//          校验是否发送短信  是否开启 短信配置开关 0.关闭1.开启
+        MsgSmsTempPO smsTempPO= smsTempPOList.get(0);
+        if(smsTempPO.getStatus()==false){
+            logger.error("该会员发送短信未开启！");
+            result.setStatus(SysRespConstants.SMS_MESSAGETEMP_OFF.getStatus());
+            result.setMsg(SysRespConstants.SMS_MESSAGETEMP_OFF.getMsg());
+            return result;
+        }
         
         
-        //判断短信是否发送微信会员  0.全部发送 1.向微信会员发送短信2.向非微信会员发送短信
-         //如果模板只向微信会员发送
-        
-//        	是微信会员
-//        	if("2".equals(jsonObject.getString("sendWxmember"))) {
-////        		设置不是微信会员发送就放回
-//        		if(smsTempPO.getSendWxmember()==1) {
-//           		 logger.error("该模板设置不向微信会员发短信");
-//                 result.setStatus(SysRespConstants.SMS_CONFIG_MESSAGETEMP_WX_OFF.getStatus());
-//                 result.setMsg(SysRespConstants.SMS_CONFIG_MESSAGETEMP_WX_OFF.getMsg());
-//                 return result;
-//        		}
+//        判断短信是否发送微信会员  0.全部发送 1.向微信会员发送短信2.向非微信会员发送短信
+//         如果模板只向微信会员发送
 //
-//        	}
-//        	
+//        	是微信会员
+        	if("2".equals(jsonObject.getString("sendWxmember"))) {
+//        		设置不是微信会员发送就放回
+        		if(smsTempPO.getSendWxmember()==1) {
+           		 logger.error("该模板设置不向微信会员发短信");
+                 result.setStatus(SysRespConstants.SMS_CONFIG_MESSAGETEMP_WX_OFF.getStatus());
+                 result.setMsg(SysRespConstants.SMS_CONFIG_MESSAGETEMP_WX_OFF.getMsg());
+                 return result;
+        		}
+
+        	}
+
         
-        //如果模板只向非微信会员发送
-//        if(smsTempPO.getSendWxmember()==2) {  
-//        	if("2".equals(jsonObject.getString("memberPhone"))) {
-//        		 logger.error("该模板设置只向非微信会员发短信，微信会员不能发送！");
-//                result.setStatus(SysRespConstants.SMS_CONFIG_MESSAGETEMP_NOT_WX_OFF.getStatus());
-//                result.setMsg(SysRespConstants.SMS_CONFIG_MESSAGETEMP_NOT_WX_OFF.getMsg());
-//                return result;
-//        	}
-//        }	
+//        如果模板只向非微信会员发送
+        if(smsTempPO.getSendWxmember()==2) {
+        	if("2".equals(jsonObject.getString("memberPhone"))) {
+        		 logger.error("该模板设置只向非微信会员发短信，微信会员不能发送！");
+                result.setStatus(SysRespConstants.SMS_CONFIG_MESSAGETEMP_NOT_WX_OFF.getStatus());
+                result.setMsg(SysRespConstants.SMS_CONFIG_MESSAGETEMP_NOT_WX_OFF.getMsg());
+                return result;
+        	}
+        }
     	
         //获取短信通道 sysBrandId
         SysSmsConfigPOExample sysSmsConfigPOExample = new SysSmsConfigPOExample();
@@ -215,7 +214,8 @@ public class SmsTemplateMessageServiceImpl implements SmsTemplateMessageService 
         	//处理短信内容
         	syssmsconfigvo.setMsgContent(sendWxmember);
         	//手机号码
-        	syssmsconfigvo.setPhone(jsonObject.getString("memberPhone"));     result.setData(syssmsconfigvo.getMsgContent());
+        	syssmsconfigvo.setPhone(jsonObject.getString("memberPhone"));
+        	result.setData(syssmsconfigvo.getMsgContent());
         	//发送短信
         	sendResults =  SendCommonMessageImpl.sendSmg(syssmsconfigvo);
              

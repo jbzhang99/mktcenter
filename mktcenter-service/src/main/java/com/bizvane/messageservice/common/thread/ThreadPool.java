@@ -1,6 +1,6 @@
 package com.bizvane.messageservice.common.thread;
 
-import com.bizvane.messageservice.common.utils.DictHelper;
+import com.bizvane.couponservice.common.system.DictHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;

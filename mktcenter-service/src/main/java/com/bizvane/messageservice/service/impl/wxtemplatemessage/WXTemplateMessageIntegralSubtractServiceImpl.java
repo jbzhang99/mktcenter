@@ -2,13 +2,13 @@ package com.bizvane.messageservice.service.impl.wxtemplatemessage;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.bizvane.couponservice.common.system.DictHelper;
 import com.bizvane.members.facade.models.WxChannelInfoModel;
 import com.bizvane.members.facade.service.api.WxChannelInfoApiService;
 import com.bizvane.members.facade.vo.WxChannelInfoVo;
 import com.bizvane.messageservice.common.constants.SysRespConstants;
 import com.bizvane.messageservice.common.constants.SystemConstants;
 import com.bizvane.messageservice.common.constants.TemplateMessageTypeConstant;
-import com.bizvane.messageservice.common.utils.DictHelper;
 import com.bizvane.messageservice.service.WXTemplateMessageService;
 import com.bizvane.messageservice.service.WechatMessageLogService;
 import com.bizvane.messageservice.template.UseTemplate;

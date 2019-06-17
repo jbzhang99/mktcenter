@@ -75,7 +75,7 @@ public class RocketMQManager {
 //	  正常情况下，一个实例足够高效完成本模块的发送任务，无需创建多个实例
 		Properties propertiesproducer = getProperties();
 		propertiesproducer.setProperty(PropertyKeyConst.ProducerId,producerId);
-	    if(environment.equals("uat")) {
+	    if(environment.equals("dev")) {
 	    	propertiesproducer.setProperty("NAMESRV_ADDR", addr);
 	    }
 		//设置发送超时时间，单位毫秒 
@@ -87,22 +87,22 @@ public class RocketMQManager {
 //		  正常情况下，一个实例足够高效完成本模块的发送任务，无需创建多个实例	  
 	    
 		//消息者初始化
-		          if (consumerStatus.equals("true")) {
-						Properties properties = getProperties();
-						properties.setProperty(PropertyKeyConst.ConsumerId, consumerId);
-					    if(environment.equals("dev")) {
-					    	properties.setProperty("NAMESRV_ADDR", addr);
-					    }
-				        /** * 设置消费端线程数20*/
-				        properties.put(PropertyKeyConst.ConsumeThreadNums,"25");
-						Consumer consumer = ONSFactory.createConsumer(properties);
-						MessageListener messageListener = (MessageListener) MessageSpringContextUtil
-								.getBean("allMessageListener");
-						consumer.subscribe(topic, "*",
-								messageListener);
-						consumer.start();
-						logger.info( "ALL消费者初始化成功。");
-					}
+	  if (consumerStatus.equals("true")) {
+		  Properties properties = getProperties();
+		  properties.setProperty(PropertyKeyConst.ConsumerId, consumerId);
+		  if(environment.equals("dev")) {
+			  properties.setProperty("NAMESRV_ADDR", addr);
+		  }
+		  /** * 设置消费端线程数20*/
+		  properties.put(PropertyKeyConst.ConsumeThreadNums,"25");
+		  Consumer consumer = ONSFactory.createConsumer(properties);
+		  MessageListener messageListener = (MessageListener) MessageSpringContextUtil
+				  .getBean("allMessageListener");
+		  consumer.subscribe(topic, "*",
+				  messageListener);
+		  consumer.start();
+		  logger.info( "ALL消费者初始化成功。");
+	  }
 
 	  }
   /**
