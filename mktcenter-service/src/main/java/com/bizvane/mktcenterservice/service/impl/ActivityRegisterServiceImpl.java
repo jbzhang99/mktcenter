@@ -357,10 +357,6 @@ public class ActivityRegisterServiceImpl implements ActivityRegisterService {
                 if (0!=activityVO.getOfflineCardStatus() && !vo.getOfflineCardStatus().toString().equals(activityVO.getOfflineCardStatus().toString())){
                     continue;
                 }
-                log.info("开始验证门店");
-                    if (!ExecuteParamCheckUtil.implementActivitCheck(vo,activityVO)){
-                        continue;
-                    }
 
                 log.info("开卡活动-限制条件通过");
                 //增加积分奖励新增接口

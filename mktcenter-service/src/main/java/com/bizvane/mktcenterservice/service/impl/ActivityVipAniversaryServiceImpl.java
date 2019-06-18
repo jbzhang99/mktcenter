@@ -419,10 +419,7 @@ public class ActivityVipAniversaryServiceImpl implements ActivityVipAniversarySe
             return;
         }
         log.info("服务门店为!==========="+memberInfo.getServiceStoreId());
-            //判断生日适用门店信息
-            if (!ExecuteParamCheckUtil.implementActivitCheck(memberInfo,activityAniversary)){
-                return;
-            }
+
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy");
         Date date = new Date();// 取时间
         Calendar calendar = new GregorianCalendar();

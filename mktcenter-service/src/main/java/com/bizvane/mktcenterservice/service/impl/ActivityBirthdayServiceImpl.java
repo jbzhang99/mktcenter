@@ -436,11 +436,7 @@ public class ActivityBirthdayServiceImpl implements ActivityBirthdayService {
     public void birthdayReward(ActivityVO activityBirthday, MemberInfoModel memberInfo) {
         log.info("start execute birthdayReward method");
             log.info("生日活动执行会员服务门店为："+memberInfo.getServiceStoreId());
-//        for (MemberInfoModel memberInfo:memberInfoModelList) {
-            //判断生日适用门店信息
-            if (!ExecuteParamCheckUtil.implementActivitCheck(memberInfo,activityBirthday)){
-                return;
-            }
+
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy");
             Date date = new Date();// 取时间
             Calendar calendar = new GregorianCalendar();

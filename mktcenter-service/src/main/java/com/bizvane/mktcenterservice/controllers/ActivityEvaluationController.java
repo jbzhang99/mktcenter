@@ -4,6 +4,7 @@ import com.bizvane.members.facade.models.MemberInfoModel;
 import com.bizvane.mktcenterfacade.interfaces.ActivityEvaluationService;
 import com.bizvane.mktcenterfacade.models.bo.ActivityAnalysisCountBO;
 import com.bizvane.mktcenterfacade.models.bo.ActivityBO;
+import com.bizvane.mktcenterfacade.models.bo.ActivityEvaluationBO;
 import com.bizvane.mktcenterfacade.models.bo.CtivityAnalysisBO;
 import com.bizvane.mktcenterfacade.models.vo.ActivityVO;
 import com.bizvane.mktcenterfacade.models.vo.PageForm;
@@ -73,8 +74,8 @@ public class ActivityEvaluationController {
      * @return
      */
     @RequestMapping("executeActivityEvaluation")
-    public ResponseData<Integer> executeActivityEvaluation(MemberInfoModel vo){
-        return activityEvaluationService.executeActivityEvaluation(vo);
+    public ResponseData<Integer> executeActivityEvaluation(ActivityEvaluationBO activityEvaluationBO){
+        return activityEvaluationService.executeActivityEvaluation(activityEvaluationBO);
     }
 
     /**
