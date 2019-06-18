@@ -1,12 +1,11 @@
 package com.bizvane.mktcenterfacade.interfaces;
 
-import com.bizvane.centerstageservice.models.po.SysCheckPo;
-import com.bizvane.members.facade.models.MemberInfoModel;
-import com.bizvane.mktcenterfacade.models.vo.PageForm;
 import com.bizvane.mktcenterfacade.models.bo.ActivityAnalysisCountBO;
 import com.bizvane.mktcenterfacade.models.bo.ActivityBO;
+import com.bizvane.mktcenterfacade.models.bo.ActivityEvaluationBO;
 import com.bizvane.mktcenterfacade.models.bo.CtivityAnalysisBO;
 import com.bizvane.mktcenterfacade.models.vo.ActivityVO;
+import com.bizvane.mktcenterfacade.models.vo.PageForm;
 import com.bizvane.utils.responseinfo.ResponseData;
 import com.bizvane.utils.tokens.SysAccountPO;
 
@@ -39,11 +38,11 @@ public interface ActivityEvaluationService {
 
 
     /**
-     * 执行活动
+     * 执行评价活动
      * @param
      * @return
      */
-    public ResponseData<Integer> executeActivityEvaluation(MemberInfoModel vo);
+    public ResponseData<Integer> executeActivityEvaluation(ActivityEvaluationBO bo);
 
     /**
      * 查询效果分析统计

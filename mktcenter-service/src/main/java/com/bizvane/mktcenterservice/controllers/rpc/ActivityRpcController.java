@@ -1,24 +1,36 @@
 package com.bizvane.mktcenterservice.controllers.rpc;
 
-import com.bizvane.centerstageservice.models.po.SysCheckPo;
-import com.bizvane.members.facade.models.MemberInfoModel;
-import com.bizvane.mktcenterfacade.interfaces.*;
-import com.bizvane.mktcenterfacade.models.bo.ActivityBO;
-import com.bizvane.mktcenterfacade.models.po.MktActivityRecordPO;
-import com.bizvane.mktcenterfacade.models.responsevo.StoreActivityResponseVO;
-import com.bizvane.mktcenterfacade.models.vo.*;
-import com.bizvane.mktcenterservice.common.enums.ActivityTypeEnum;
-import com.bizvane.utils.responseinfo.ResponseData;
-import com.bizvane.utils.tokens.SysAccountPO;
-import com.github.pagehelper.PageInfo;
+import java.util.List;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.servlet.http.HttpServletRequest;
-import java.util.List;
+import com.bizvane.mktcenterfacade.interfaces.ActivityBirthdayService;
+import com.bizvane.mktcenterfacade.interfaces.ActivityEvaluationService;
+import com.bizvane.mktcenterfacade.interfaces.ActivityManualService;
+import com.bizvane.mktcenterfacade.interfaces.ActivityOrderService;
+import com.bizvane.mktcenterfacade.interfaces.ActivityRecordService;
+import com.bizvane.mktcenterfacade.interfaces.ActivityRegisterService;
+import com.bizvane.mktcenterfacade.interfaces.ActivityService;
+import com.bizvane.mktcenterfacade.interfaces.ActivityVipAniversaryService;
+import com.bizvane.mktcenterfacade.models.bo.ActivityBO;
+import com.bizvane.mktcenterfacade.models.bo.ActivityEvaluationBO;
+import com.bizvane.mktcenterfacade.models.po.MktActivityRecordPO;
+import com.bizvane.mktcenterfacade.models.responsevo.StoreActivityResponseVO;
+import com.bizvane.mktcenterfacade.models.vo.ActivityVO;
+import com.bizvane.mktcenterfacade.models.vo.JudgeMemberVO;
+import com.bizvane.mktcenterfacade.models.vo.MemberInfoModelVOActivity;
+import com.bizvane.mktcenterfacade.models.vo.MktActivityRecordVO;
+import com.bizvane.mktcenterfacade.models.vo.StoreActivityVO;
+import com.bizvane.utils.responseinfo.ResponseData;
+import com.bizvane.utils.tokens.SysAccountPO;
+import com.github.pagehelper.PageInfo;
 
 /**
  * @author chen.li
@@ -108,8 +120,8 @@ public class ActivityRpcController {
      */
     @RequestMapping("/executeEvaluationActivity")
     @io.swagger.annotations.ApiModelProperty(value = "",name = "执行评价送积分活动", required = false,example = "")
-    public ResponseData<Integer> executeEvaluationActivity(@RequestBody MemberInfoModel vo){
-        return activityEvaluationService.executeActivityEvaluation(vo);
+    public ResponseData<Integer> executeEvaluationActivity(@Valid @RequestBody ActivityEvaluationBO bo){
+        return activityEvaluationService.executeActivityEvaluation(bo);
     }
 
     /**

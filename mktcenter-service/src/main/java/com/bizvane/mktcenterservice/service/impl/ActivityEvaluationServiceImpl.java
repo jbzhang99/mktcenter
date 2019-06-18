@@ -15,6 +15,7 @@ import com.bizvane.members.facade.service.card.request.IntegralChangeRequestMode
 import com.bizvane.mktcenterfacade.interfaces.ActivityEvaluationService;
 import com.bizvane.mktcenterfacade.models.bo.ActivityAnalysisCountBO;
 import com.bizvane.mktcenterfacade.models.bo.ActivityBO;
+import com.bizvane.mktcenterfacade.models.bo.ActivityEvaluationBO;
 import com.bizvane.mktcenterfacade.models.bo.AwardBO;
 import com.bizvane.mktcenterfacade.models.bo.CtivityAnalysisBO;
 import com.bizvane.mktcenterfacade.models.po.MktActivityCountPO;
@@ -216,35 +217,29 @@ public class ActivityEvaluationServiceImpl implements ActivityEvaluationService 
     }
 
     @Override
-    public ResponseData<Integer> executeActivityEvaluation(MemberInfoModel vo) {
+    public ResponseData<Integer> executeActivityEvaluation(ActivityEvaluationBO activityEvaluationBO) {
         log.info("执行评价送积分活动=++++++++++++++______________-----------------------333333");
-        log.info("执行评价送积分活动=" + vo.getBrandId() + "=" + vo.getMemberCode());
-        //返回对象
-        ResponseData responseData = new ResponseData();
-        log.info("服务门店为!======================="+vo.getServiceStoreId());
+        
+        String memberCode = activityEvaluationBO.getMemberCode();
+        Long brandId = activityEvaluationBO.getBrandId();
         //查询品牌下所有执行中的活动
         ActivityVO activity = new ActivityVO();
         activity.setActivityStatus(ActivityStatusEnum.ACTIVITY_STATUS_EXECUTING.getCode());
         activity.setActivityType(ActivityTypeEnum.ACTIVITY_TYPE_EVALUATION.getCode());
-        activity.setSysBrandId(vo.getBrandId());
+        activity.setSysBrandId(brandId);
         List<ActivityVO> evaluationList = mktActivityEvaluationPOMapper.getActivityVOList(activity);
         if (CollectionUtils.isEmpty(evaluationList)) {
-            responseData.setCode(SysResponseEnum.OPERATE_FAILED_DATA_NOT_EXISTS.getCode());
-            responseData.setMessage(SysResponseEnum.OPERATE_FAILED_DATA_NOT_EXISTS.getMessage());
-            return responseData;
+        
+          return new ResponseData<Integer>(SysResponseEnum.OPERATE_FAILED_DATA_NOT_EXISTS.getCode(), SysResponseEnum.OPERATE_FAILED_DATA_NOT_EXISTS.getMessage());
         }
         for (ActivityVO activityVO : evaluationList) {
-            //过滤门店
-            if (!ExecuteParamCheckUtil.implementActivitCheck(vo,activityVO)){
-                continue;
-            }
             //增加积分奖励新增接口
             log.info("执行评价送积分777777777777777777");
             AwardBO bo = new AwardBO();
             IntegralChangeRequestModel integralChangeRequestModel = new IntegralChangeRequestModel();
             integralChangeRequestModel.setSysCompanyId(activityVO.getSysCompanyId());
             integralChangeRequestModel.setBrandId(activityVO.getSysBrandId());
-            integralChangeRequestModel.setMemberCode(vo.getMemberCode());
+            integralChangeRequestModel.setMemberCode(memberCode);
             integralChangeRequestModel.setChangeBills(activityVO.getActivityCode());
             integralChangeRequestModel.setChangeIntegral(activityVO.getPoints());
             integralChangeRequestModel.setChangeType(IntegralChangeTypeEnum.INCOME.getCode());
@@ -257,7 +252,7 @@ public class ActivityEvaluationServiceImpl implements ActivityEvaluationService 
             //新增积分到会员参与活动记录表中数据
             MktActivityRecordPO po = new MktActivityRecordPO();
             po.setActivityType(ActivityTypeEnum.ACTIVITY_TYPE_EVALUATION.getCode());
-            po.setMemberCode(vo.getMemberCode());
+            po.setMemberCode(memberCode);
             po.setParticipateDate(new Date());
             po.setPoints(activityVO.getPoints());
             po.setAcitivityId(activityVO.getMktActivityId());
@@ -267,9 +262,7 @@ public class ActivityEvaluationServiceImpl implements ActivityEvaluationService 
             
             mktActivityCountPOMapper.updateSum(activityVO.getMktActivityId(), 1, BigDecimal.ZERO, activityVO.getPoints());
         }
-        responseData.setCode(SysResponseEnum.SUCCESS.getCode());
-        responseData.setMessage(SysResponseEnum.SUCCESS.getMessage());
-        return responseData;
+        return new ResponseData<>();
     }
 
     @Override

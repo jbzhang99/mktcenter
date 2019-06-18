@@ -5,6 +5,7 @@ import com.bizvane.members.facade.models.MemberInfoModel;
 import com.bizvane.mktcenterfacade.models.responsevo.StoreActivityResponseVO;
 import com.bizvane.mktcenterfacade.models.vo.*;
 import com.bizvane.mktcenterfacade.models.bo.ActivityBO;
+import com.bizvane.mktcenterfacade.models.bo.ActivityEvaluationBO;
 import com.bizvane.mktcenterfacade.models.po.MktActivityRecordPO;
 import com.bizvane.utils.responseinfo.ResponseData;
 import com.github.pagehelper.PageInfo;
@@ -98,7 +99,7 @@ public interface ActivityServiceRpc {
   * @return
   */
  @RequestMapping("executeEvaluationActivity")
- public ResponseData<Integer> executeActivityEvaluation(@RequestBody MemberInfoModel vo);
+ public ResponseData<Integer> executeActivityEvaluation(@RequestBody ActivityEvaluationBO bo);
 
  /**
   * 执行开卡活动
