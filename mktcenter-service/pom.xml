@@ -246,6 +246,12 @@
 		</dependency>
 		<dependency>
 			<groupId>org.barcode</groupId>
+			<artifactId>Spire.Common-1.0.0.jar</artifactId>
+			<version>1.0.0</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.barcode</groupId>
 			<artifactId>Spire.Barcode-1.0.0.jar</artifactId>
 			<version>1.0.0</version>
 		</dependency>
