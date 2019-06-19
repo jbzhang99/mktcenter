@@ -7,8 +7,6 @@
         <setting name="cacheEnabled" value="false"/>
         <setting name="multipleResultSetsEnabled" value="true"/>
         <setting name="aggressiveLazyLoading" value="true"/>
-        <!--开启驼峰-->
-        <setting name="mapUnderscoreToCamelCase" value="true" />
     </settings>
     <typeAliases>
         <package name="com.bizvane.mktcenterservice.models"/>

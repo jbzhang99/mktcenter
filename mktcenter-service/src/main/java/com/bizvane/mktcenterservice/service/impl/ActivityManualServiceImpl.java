@@ -469,7 +469,6 @@ public class ActivityManualServiceImpl implements ActivityManualService {
     @Override
     public ResponseData<List<ActivityCouponVO>> getActivityByMemberInfo(MemberInfoModel memberInfoModel,Integer activityType) {
         ResponseData<List<ActivityCouponVO>> responseData = new ResponseData<>();
-        log.info("服务门店为!======================="+memberInfoModel.getServiceStoreId());
         log.info("领券中心查询入参:"+JSON.toJSONString(memberInfoModel));
 
         List<ActivityCouponVO> activityVOList = new ArrayList<>();
@@ -488,11 +487,6 @@ public class ActivityManualServiceImpl implements ActivityManualService {
         
         for (ActivityCouponVO vo : activityList) {
           
-            //过滤门店
-            if (!ExecuteParamCheckUtil.implementActivitCheck(memberInfoModel, vo)){
-                continue;
-            }
-            
             //2.查询活动对应的所有券
             log.info("couponQueryServiceFeign.findCouponByCouponCode--->入参为:"+vo.getCouponDefinitionId());
             //ResponseData<CouponDefinitionPO> couponDefinitionPOResponseData  = couponDefinitionServiceFeign.findByIdRpc(activityVO1.getCouponDefinitionId());
