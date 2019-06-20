@@ -637,6 +637,7 @@
     tma.modified_user_name,
     tma.modified_date,
     tma.valid,
+    tma.activity_info,
 
     tmm.per_person_per_day_max,
     tmm.per_person_max,

@@ -1407,6 +1407,7 @@
       e.coupon_status,
       e.use_from,
       e.create_date AS getDate,
+      e.info,
       d.preferential_type,
       d.coupon_definition_code,
       d.coupon_definition_type,

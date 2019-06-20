@@ -38,7 +38,7 @@ public class StoreActivityResponseVO {
     private Date endTime;
 
     @ApiModelProperty(value = "活动描述", name = "activityInfo", example = "活动描述")
-    private Integer activityInfo;
+    private String activityInfo;
 
     @ApiModelProperty(value = "参与次数", name = "participateTimes", example = "1")
     private Integer participateTimes;

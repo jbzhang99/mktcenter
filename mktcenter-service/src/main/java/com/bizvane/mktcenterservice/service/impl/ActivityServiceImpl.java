@@ -139,8 +139,8 @@ public class ActivityServiceImpl implements ActivityService {
         if(ActivityConstants.EXECUTED.equals(storeActivityVO.getMyActivityStatus())){
             //查出所有执行中的活动
             mktActivityPOExample.createCriteria().andValidEqualTo(Boolean.TRUE).andActivityStatusEqualTo(ActivityStatusEnum.ACTIVITY_STATUS_EXECUTING.getCode());
-            List<MktActivityPO> mktActivityPOS = mktActivityPOMapper.selectByExample(mktActivityPOExample);
-            for(MktActivityPO mktActivityPO:mktActivityPOS){
+            List<MktActivityPOWithBLOBs> mktActivityPOS = mktActivityPOMapper.selectByExampleWithBLOBs(mktActivityPOExample);
+            for(MktActivityPOWithBLOBs mktActivityPO:mktActivityPOS){
                 StoreActivityResponseVO storeActivityResponseVO = new StoreActivityResponseVO();
                 BeanUtils.copyProperties(mktActivityPO,storeActivityResponseVO);
                 storeActivityResponseVOS.add(storeActivityResponseVO);

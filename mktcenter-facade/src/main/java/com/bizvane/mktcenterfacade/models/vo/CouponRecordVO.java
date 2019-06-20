@@ -27,7 +27,7 @@ public class CouponRecordVO {
     private String endTimestr;
     private Long brandId;
     //小程序
-    private Boolean canConvertCoupon=Boolean.TRUE;
+    private Boolean canConvertCoupon=Boolean.FALSE;
     //可用积分
     private Integer countIntegral;
     private String memberCode;

@@ -523,6 +523,7 @@ public class ActivityManualServiceImpl implements ActivityManualService {
             vo.setValidDateEnd(couponDefinitionPO.getValidDateEnd());
             vo.setValidDay(couponDefinitionPO.getValidDay());
             vo.setMinConsume(couponDefinitionPO.getMinConsume());
+            vo.setActivityInfo(couponDefinitionPO.getInfo());
             
             criteria.andParticipateDateGreaterThanOrEqualTo(DateUtil.getZeroTime()).andParticipateDateLessThanOrEqualTo(new Date());
             long countToday = mktActivityRecordPOMapper.countByExample(mktActivityRecordPOExample);
