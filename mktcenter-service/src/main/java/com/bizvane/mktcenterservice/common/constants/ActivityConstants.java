@@ -58,4 +58,6 @@ public class ActivityConstants {
     public static final Integer EXECUTED=1;
     public static final Integer FINISHED=2;
 
+    public static final Integer awarded = 1;
+
 }

@@ -213,6 +213,9 @@ public class ActivityVO extends MktActivityPO {
     private Long serviceStoreId;//服务门店
     private String activityDetailImg;//活动详情图片
 
+    // 邀请开卡人数条件
+    private Integer inviteNum;
+
     @Override
     public String getActivityDetailImg() {
         return activityDetailImg;
@@ -319,13 +322,6 @@ public class ActivityVO extends MktActivityPO {
         this.commodityLimitType = commodityLimitType;
     }
 
-//    public Boolean getStoreLimit() {
-//        return isStoreLimit;
-//    }
-//
-//    public void setStoreLimit(Boolean storeLimit) {
-//        isStoreLimit = storeLimit;
-//    }
     @Override
     public Integer getStoreLimitType() {
         return storeLimitType;
@@ -567,5 +563,13 @@ public class ActivityVO extends MktActivityPO {
 
     public void setStoreLimit(Boolean storeLimit) {
         this.storeLimit = storeLimit;
+    }
+
+    public Integer getInviteNum() {
+        return inviteNum;
+    }
+
+    public void setInviteNum(Integer inviteNum) {
+        this.inviteNum = inviteNum;
     }
 }

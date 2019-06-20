@@ -1,53 +1,32 @@
 package com.bizvane.mktcenterfacade.models.po;
 
-import java.io.Serializable;
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class MktTaskCountPOExample implements Serializable {
-    /**
-     * 只读. 
-     *
-     * @mbg.generated 2018-12-06 15:41:41
-     */
+public class MktActivityInvitePOExample {
+    /**@mbg.generated*/
     protected String orderByClause;
 
-    /**
-     * 只读. 
-     *
-     * @mbg.generated 2018-12-06 15:41:41
-     */
+    /**@mbg.generated*/
     protected boolean distinct;
 
-    /**
-     * 只读. 
-     *
-     * @mbg.generated 2018-12-06 15:41:41
-     */
+    /**@mbg.generated*/
     protected List<Criteria> oredCriteria;
 
     /**
      * 只读. 
      *
-     * @mbg.generated 2018-12-06 15:41:41
+     * @mbg.generated
      */
-    private static final long serialVersionUID = 1L;
-
-    /**
-     * 只读. 
-     *
-     * @mbg.generated 2018-12-06 15:41:41
-     */
-    public MktTaskCountPOExample() {
+    public MktActivityInvitePOExample() {
         oredCriteria = new ArrayList<Criteria>();
     }
 
     /**
      * 只读. 
      *
-     * @mbg.generated 2018-12-06 15:41:41
+     * @mbg.generated
      */
     public void setOrderByClause(String orderByClause) {
         this.orderByClause = orderByClause;
@@ -56,7 +35,7 @@ public class MktTaskCountPOExample implements Serializable {
     /**
      * 只读. 
      *
-     * @mbg.generated 2018-12-06 15:41:41
+     * @mbg.generated
      */
     public String getOrderByClause() {
         return orderByClause;
@@ -65,7 +44,7 @@ public class MktTaskCountPOExample implements Serializable {
     /**
      * 只读. 
      *
-     * @mbg.generated 2018-12-06 15:41:41
+     * @mbg.generated
      */
     public void setDistinct(boolean distinct) {
         this.distinct = distinct;
@@ -74,7 +53,7 @@ public class MktTaskCountPOExample implements Serializable {
     /**
      * 只读. 
      *
-     * @mbg.generated 2018-12-06 15:41:41
+     * @mbg.generated
      */
     public boolean isDistinct() {
         return distinct;
@@ -83,7 +62,7 @@ public class MktTaskCountPOExample implements Serializable {
     /**
      * 只读. 
      *
-     * @mbg.generated 2018-12-06 15:41:41
+     * @mbg.generated
      */
     public List<Criteria> getOredCriteria() {
         return oredCriteria;
@@ -92,7 +71,7 @@ public class MktTaskCountPOExample implements Serializable {
     /**
      * 只读. 
      *
-     * @mbg.generated 2018-12-06 15:41:41
+     * @mbg.generated
      */
     public void or(Criteria criteria) {
         oredCriteria.add(criteria);
@@ -101,7 +80,7 @@ public class MktTaskCountPOExample implements Serializable {
     /**
      * 只读. 
      *
-     * @mbg.generated 2018-12-06 15:41:41
+     * @mbg.generated
      */
     public Criteria or() {
         Criteria criteria = createCriteriaInternal();
@@ -112,7 +91,7 @@ public class MktTaskCountPOExample implements Serializable {
     /**
      * 只读. 
      *
-     * @mbg.generated 2018-12-06 15:41:41
+     * @mbg.generated
      */
     public Criteria createCriteria() {
         Criteria criteria = createCriteriaInternal();
@@ -125,7 +104,7 @@ public class MktTaskCountPOExample implements Serializable {
     /**
      * 只读. 
      *
-     * @mbg.generated 2018-12-06 15:41:41
+     * @mbg.generated
      */
     protected Criteria createCriteriaInternal() {
         Criteria criteria = new Criteria();
@@ -135,7 +114,7 @@ public class MktTaskCountPOExample implements Serializable {
     /**
      * 只读. 
      *
-     * @mbg.generated 2018-12-06 15:41:41
+     * @mbg.generated
      */
     public void clear() {
         oredCriteria.clear();
@@ -144,11 +123,11 @@ public class MktTaskCountPOExample implements Serializable {
     }
 
     /**
-     * 只读. t_mkt_task_count
+     * 只读. t_mkt_activity_invite
      *
-     * @mbg.generated 2018-12-06 15:41:41
+     * @mbg.generated
      */
-    protected abstract static class GeneratedCriteria implements Serializable {
+    protected abstract static class GeneratedCriteria {
         protected List<Criterion> criteria;
 
         protected GeneratedCriteria() {
@@ -189,123 +168,63 @@ public class MktTaskCountPOExample implements Serializable {
             criteria.add(new Criterion(condition, value1, value2));
         }
 
-        public Criteria andMktTaskCountIdIsNull() {
-            addCriterion("mkt_task_count_id is null");
+        public Criteria andMktActivityInviteIdIsNull() {
+            addCriterion("mkt_activity_invite_id is null");
             return (Criteria) this;
         }
 
-        public Criteria andMktTaskCountIdIsNotNull() {
-            addCriterion("mkt_task_count_id is not null");
+        public Criteria andMktActivityInviteIdIsNotNull() {
+            addCriterion("mkt_activity_invite_id is not null");
             return (Criteria) this;
         }
 
-        public Criteria andMktTaskCountIdEqualTo(Long value) {
-            addCriterion("mkt_task_count_id =", value, "mktTaskCountId");
+        public Criteria andMktActivityInviteIdEqualTo(Long value) {
+            addCriterion("mkt_activity_invite_id =", value, "mktActivityInviteId");
             return (Criteria) this;
         }
 
-        public Criteria andMktTaskCountIdNotEqualTo(Long value) {
-            addCriterion("mkt_task_count_id <>", value, "mktTaskCountId");
+        public Criteria andMktActivityInviteIdNotEqualTo(Long value) {
+            addCriterion("mkt_activity_invite_id <>", value, "mktActivityInviteId");
             return (Criteria) this;
         }
 
-        public Criteria andMktTaskCountIdGreaterThan(Long value) {
-            addCriterion("mkt_task_count_id >", value, "mktTaskCountId");
+        public Criteria andMktActivityInviteIdGreaterThan(Long value) {
+            addCriterion("mkt_activity_invite_id >", value, "mktActivityInviteId");
             return (Criteria) this;
         }
 
-        public Criteria andMktTaskCountIdGreaterThanOrEqualTo(Long value) {
-            addCriterion("mkt_task_count_id >=", value, "mktTaskCountId");
+        public Criteria andMktActivityInviteIdGreaterThanOrEqualTo(Long value) {
+            addCriterion("mkt_activity_invite_id >=", value, "mktActivityInviteId");
             return (Criteria) this;
         }
 
-        public Criteria andMktTaskCountIdLessThan(Long value) {
-            addCriterion("mkt_task_count_id <", value, "mktTaskCountId");
+        public Criteria andMktActivityInviteIdLessThan(Long value) {
+            addCriterion("mkt_activity_invite_id <", value, "mktActivityInviteId");
             return (Criteria) this;
         }
 
-        public Criteria andMktTaskCountIdLessThanOrEqualTo(Long value) {
-            addCriterion("mkt_task_count_id <=", value, "mktTaskCountId");
+        public Criteria andMktActivityInviteIdLessThanOrEqualTo(Long value) {
+            addCriterion("mkt_activity_invite_id <=", value, "mktActivityInviteId");
             return (Criteria) this;
         }
 
-        public Criteria andMktTaskCountIdIn(List<Long> values) {
-            addCriterion("mkt_task_count_id in", values, "mktTaskCountId");
+        public Criteria andMktActivityInviteIdIn(List<Long> values) {
+            addCriterion("mkt_activity_invite_id in", values, "mktActivityInviteId");
             return (Criteria) this;
         }
 
-        public Criteria andMktTaskCountIdNotIn(List<Long> values) {
-            addCriterion("mkt_task_count_id not in", values, "mktTaskCountId");
+        public Criteria andMktActivityInviteIdNotIn(List<Long> values) {
+            addCriterion("mkt_activity_invite_id not in", values, "mktActivityInviteId");
             return (Criteria) this;
         }
 
-        public Criteria andMktTaskCountIdBetween(Long value1, Long value2) {
-            addCriterion("mkt_task_count_id between", value1, value2, "mktTaskCountId");
+        public Criteria andMktActivityInviteIdBetween(Long value1, Long value2) {
+            addCriterion("mkt_activity_invite_id between", value1, value2, "mktActivityInviteId");
             return (Criteria) this;
         }
 
-        public Criteria andMktTaskCountIdNotBetween(Long value1, Long value2) {
-            addCriterion("mkt_task_count_id not between", value1, value2, "mktTaskCountId");
-            return (Criteria) this;
-        }
-
-        public Criteria andMktTaskIdIsNull() {
-            addCriterion("mkt_task_id is null");
-            return (Criteria) this;
-        }
-
-        public Criteria andMktTaskIdIsNotNull() {
-            addCriterion("mkt_task_id is not null");
-            return (Criteria) this;
-        }
-
-        public Criteria andMktTaskIdEqualTo(Long value) {
-            addCriterion("mkt_task_id =", value, "mktTaskId");
-            return (Criteria) this;
-        }
-
-        public Criteria andMktTaskIdNotEqualTo(Long value) {
-            addCriterion("mkt_task_id <>", value, "mktTaskId");
-            return (Criteria) this;
-        }
-
-        public Criteria andMktTaskIdGreaterThan(Long value) {
-            addCriterion("mkt_task_id >", value, "mktTaskId");
-            return (Criteria) this;
-        }
-
-        public Criteria andMktTaskIdGreaterThanOrEqualTo(Long value) {
-            addCriterion("mkt_task_id >=", value, "mktTaskId");
-            return (Criteria) this;
-        }
-
-        public Criteria andMktTaskIdLessThan(Long value) {
-            addCriterion("mkt_task_id <", value, "mktTaskId");
-            return (Criteria) this;
-        }
-
-        public Criteria andMktTaskIdLessThanOrEqualTo(Long value) {
-            addCriterion("mkt_task_id <=", value, "mktTaskId");
-            return (Criteria) this;
-        }
-
-        public Criteria andMktTaskIdIn(List<Long> values) {
-            addCriterion("mkt_task_id in", values, "mktTaskId");
-            return (Criteria) this;
-        }
-
-        public Criteria andMktTaskIdNotIn(List<Long> values) {
-            addCriterion("mkt_task_id not in", values, "mktTaskId");
-            return (Criteria) this;
-        }
-
-        public Criteria andMktTaskIdBetween(Long value1, Long value2) {
-            addCriterion("mkt_task_id between", value1, value2, "mktTaskId");
-            return (Criteria) this;
-        }
-
-        public Criteria andMktTaskIdNotBetween(Long value1, Long value2) {
-            addCriterion("mkt_task_id not between", value1, value2, "mktTaskId");
+        public Criteria andMktActivityInviteIdNotBetween(Long value1, Long value2) {
+            addCriterion("mkt_activity_invite_id not between", value1, value2, "mktActivityInviteId");
             return (Criteria) this;
         }
 
@@ -369,363 +288,123 @@ public class MktTaskCountPOExample implements Serializable {
             return (Criteria) this;
         }
 
-        public Criteria andSysBrandIdIsNull() {
-            addCriterion("sys_brand_id is null");
+        public Criteria andMktActivityIdIsNull() {
+            addCriterion("mkt_activity_id is null");
             return (Criteria) this;
         }
 
-        public Criteria andSysBrandIdIsNotNull() {
-            addCriterion("sys_brand_id is not null");
+        public Criteria andMktActivityIdIsNotNull() {
+            addCriterion("mkt_activity_id is not null");
             return (Criteria) this;
         }
 
-        public Criteria andSysBrandIdEqualTo(Long value) {
-            addCriterion("sys_brand_id =", value, "sysBrandId");
+        public Criteria andMktActivityIdEqualTo(Long value) {
+            addCriterion("mkt_activity_id =", value, "mktActivityId");
             return (Criteria) this;
         }
 
-        public Criteria andSysBrandIdNotEqualTo(Long value) {
-            addCriterion("sys_brand_id <>", value, "sysBrandId");
+        public Criteria andMktActivityIdNotEqualTo(Long value) {
+            addCriterion("mkt_activity_id <>", value, "mktActivityId");
             return (Criteria) this;
         }
 
-        public Criteria andSysBrandIdGreaterThan(Long value) {
-            addCriterion("sys_brand_id >", value, "sysBrandId");
+        public Criteria andMktActivityIdGreaterThan(Long value) {
+            addCriterion("mkt_activity_id >", value, "mktActivityId");
             return (Criteria) this;
         }
 
-        public Criteria andSysBrandIdGreaterThanOrEqualTo(Long value) {
-            addCriterion("sys_brand_id >=", value, "sysBrandId");
+        public Criteria andMktActivityIdGreaterThanOrEqualTo(Long value) {
+            addCriterion("mkt_activity_id >=", value, "mktActivityId");
             return (Criteria) this;
         }
 
-        public Criteria andSysBrandIdLessThan(Long value) {
-            addCriterion("sys_brand_id <", value, "sysBrandId");
+        public Criteria andMktActivityIdLessThan(Long value) {
+            addCriterion("mkt_activity_id <", value, "mktActivityId");
             return (Criteria) this;
         }
 
-        public Criteria andSysBrandIdLessThanOrEqualTo(Long value) {
-            addCriterion("sys_brand_id <=", value, "sysBrandId");
+        public Criteria andMktActivityIdLessThanOrEqualTo(Long value) {
+            addCriterion("mkt_activity_id <=", value, "mktActivityId");
             return (Criteria) this;
         }
 
-        public Criteria andSysBrandIdIn(List<Long> values) {
-            addCriterion("sys_brand_id in", values, "sysBrandId");
+        public Criteria andMktActivityIdIn(List<Long> values) {
+            addCriterion("mkt_activity_id in", values, "mktActivityId");
             return (Criteria) this;
         }
 
-        public Criteria andSysBrandIdNotIn(List<Long> values) {
-            addCriterion("sys_brand_id not in", values, "sysBrandId");
+        public Criteria andMktActivityIdNotIn(List<Long> values) {
+            addCriterion("mkt_activity_id not in", values, "mktActivityId");
             return (Criteria) this;
         }
 
-        public Criteria andSysBrandIdBetween(Long value1, Long value2) {
-            addCriterion("sys_brand_id between", value1, value2, "sysBrandId");
+        public Criteria andMktActivityIdBetween(Long value1, Long value2) {
+            addCriterion("mkt_activity_id between", value1, value2, "mktActivityId");
             return (Criteria) this;
         }
 
-        public Criteria andSysBrandIdNotBetween(Long value1, Long value2) {
-            addCriterion("sys_brand_id not between", value1, value2, "sysBrandId");
+        public Criteria andMktActivityIdNotBetween(Long value1, Long value2) {
+            addCriterion("mkt_activity_id not between", value1, value2, "mktActivityId");
             return (Criteria) this;
         }
 
-        public Criteria andMemberCountIsNull() {
-            addCriterion("member_count is null");
+        public Criteria andInviteNumIsNull() {
+            addCriterion("invite_num is null");
             return (Criteria) this;
         }
 
-        public Criteria andMemberCountIsNotNull() {
-            addCriterion("member_count is not null");
+        public Criteria andInviteNumIsNotNull() {
+            addCriterion("invite_num is not null");
             return (Criteria) this;
         }
 
-        public Criteria andMemberCountEqualTo(Integer value) {
-            addCriterion("member_count =", value, "memberCount");
+        public Criteria andInviteNumEqualTo(Integer value) {
+            addCriterion("invite_num =", value, "inviteNum");
             return (Criteria) this;
         }
 
-        public Criteria andMemberCountNotEqualTo(Integer value) {
-            addCriterion("member_count <>", value, "memberCount");
+        public Criteria andInviteNumNotEqualTo(Integer value) {
+            addCriterion("invite_num <>", value, "inviteNum");
             return (Criteria) this;
         }
 
-        public Criteria andMemberCountGreaterThan(Integer value) {
-            addCriterion("member_count >", value, "memberCount");
+        public Criteria andInviteNumGreaterThan(Integer value) {
+            addCriterion("invite_num >", value, "inviteNum");
             return (Criteria) this;
         }
 
-        public Criteria andMemberCountGreaterThanOrEqualTo(Integer value) {
-            addCriterion("member_count >=", value, "memberCount");
+        public Criteria andInviteNumGreaterThanOrEqualTo(Integer value) {
+            addCriterion("invite_num >=", value, "inviteNum");
             return (Criteria) this;
         }
 
-        public Criteria andMemberCountLessThan(Integer value) {
-            addCriterion("member_count <", value, "memberCount");
+        public Criteria andInviteNumLessThan(Integer value) {
+            addCriterion("invite_num <", value, "inviteNum");
             return (Criteria) this;
         }
 
-        public Criteria andMemberCountLessThanOrEqualTo(Integer value) {
-            addCriterion("member_count <=", value, "memberCount");
+        public Criteria andInviteNumLessThanOrEqualTo(Integer value) {
+            addCriterion("invite_num <=", value, "inviteNum");
             return (Criteria) this;
         }
 
-        public Criteria andMemberCountIn(List<Integer> values) {
-            addCriterion("member_count in", values, "memberCount");
+        public Criteria andInviteNumIn(List<Integer> values) {
+            addCriterion("invite_num in", values, "inviteNum");
             return (Criteria) this;
         }
 
-        public Criteria andMemberCountNotIn(List<Integer> values) {
-            addCriterion("member_count not in", values, "memberCount");
+        public Criteria andInviteNumNotIn(List<Integer> values) {
+            addCriterion("invite_num not in", values, "inviteNum");
             return (Criteria) this;
         }
 
-        public Criteria andMemberCountBetween(Integer value1, Integer value2) {
-            addCriterion("member_count between", value1, value2, "memberCount");
+        public Criteria andInviteNumBetween(Integer value1, Integer value2) {
+            addCriterion("invite_num between", value1, value2, "inviteNum");
             return (Criteria) this;
         }
 
-        public Criteria andMemberCountNotBetween(Integer value1, Integer value2) {
-            addCriterion("member_count not between", value1, value2, "memberCount");
-            return (Criteria) this;
-        }
-
-        public Criteria andConsumeAmountSumIsNull() {
-            addCriterion("consume_amount_sum is null");
-            return (Criteria) this;
-        }
-
-        public Criteria andConsumeAmountSumIsNotNull() {
-            addCriterion("consume_amount_sum is not null");
-            return (Criteria) this;
-        }
-
-        public Criteria andConsumeAmountSumEqualTo(BigDecimal value) {
-            addCriterion("consume_amount_sum =", value, "consumeAmountSum");
-            return (Criteria) this;
-        }
-
-        public Criteria andConsumeAmountSumNotEqualTo(BigDecimal value) {
-            addCriterion("consume_amount_sum <>", value, "consumeAmountSum");
-            return (Criteria) this;
-        }
-
-        public Criteria andConsumeAmountSumGreaterThan(BigDecimal value) {
-            addCriterion("consume_amount_sum >", value, "consumeAmountSum");
-            return (Criteria) this;
-        }
-
-        public Criteria andConsumeAmountSumGreaterThanOrEqualTo(BigDecimal value) {
-            addCriterion("consume_amount_sum >=", value, "consumeAmountSum");
-            return (Criteria) this;
-        }
-
-        public Criteria andConsumeAmountSumLessThan(BigDecimal value) {
-            addCriterion("consume_amount_sum <", value, "consumeAmountSum");
-            return (Criteria) this;
-        }
-
-        public Criteria andConsumeAmountSumLessThanOrEqualTo(BigDecimal value) {
-            addCriterion("consume_amount_sum <=", value, "consumeAmountSum");
-            return (Criteria) this;
-        }
-
-        public Criteria andConsumeAmountSumIn(List<BigDecimal> values) {
-            addCriterion("consume_amount_sum in", values, "consumeAmountSum");
-            return (Criteria) this;
-        }
-
-        public Criteria andConsumeAmountSumNotIn(List<BigDecimal> values) {
-            addCriterion("consume_amount_sum not in", values, "consumeAmountSum");
-            return (Criteria) this;
-        }
-
-        public Criteria andConsumeAmountSumBetween(BigDecimal value1, BigDecimal value2) {
-            addCriterion("consume_amount_sum between", value1, value2, "consumeAmountSum");
-            return (Criteria) this;
-        }
-
-        public Criteria andConsumeAmountSumNotBetween(BigDecimal value1, BigDecimal value2) {
-            addCriterion("consume_amount_sum not between", value1, value2, "consumeAmountSum");
-            return (Criteria) this;
-        }
-
-        public Criteria andCouponNumSumIsNull() {
-            addCriterion("coupon_num_sum is null");
-            return (Criteria) this;
-        }
-
-        public Criteria andCouponNumSumIsNotNull() {
-            addCriterion("coupon_num_sum is not null");
-            return (Criteria) this;
-        }
-
-        public Criteria andCouponNumSumEqualTo(Integer value) {
-            addCriterion("coupon_num_sum =", value, "couponNumSum");
-            return (Criteria) this;
-        }
-
-        public Criteria andCouponNumSumNotEqualTo(Integer value) {
-            addCriterion("coupon_num_sum <>", value, "couponNumSum");
-            return (Criteria) this;
-        }
-
-        public Criteria andCouponNumSumGreaterThan(Integer value) {
-            addCriterion("coupon_num_sum >", value, "couponNumSum");
-            return (Criteria) this;
-        }
-
-        public Criteria andCouponNumSumGreaterThanOrEqualTo(Integer value) {
-            addCriterion("coupon_num_sum >=", value, "couponNumSum");
-            return (Criteria) this;
-        }
-
-        public Criteria andCouponNumSumLessThan(Integer value) {
-            addCriterion("coupon_num_sum <", value, "couponNumSum");
-            return (Criteria) this;
-        }
-
-        public Criteria andCouponNumSumLessThanOrEqualTo(Integer value) {
-            addCriterion("coupon_num_sum <=", value, "couponNumSum");
-            return (Criteria) this;
-        }
-
-        public Criteria andCouponNumSumIn(List<Integer> values) {
-            addCriterion("coupon_num_sum in", values, "couponNumSum");
-            return (Criteria) this;
-        }
-
-        public Criteria andCouponNumSumNotIn(List<Integer> values) {
-            addCriterion("coupon_num_sum not in", values, "couponNumSum");
-            return (Criteria) this;
-        }
-
-        public Criteria andCouponNumSumBetween(Integer value1, Integer value2) {
-            addCriterion("coupon_num_sum between", value1, value2, "couponNumSum");
-            return (Criteria) this;
-        }
-
-        public Criteria andCouponNumSumNotBetween(Integer value1, Integer value2) {
-            addCriterion("coupon_num_sum not between", value1, value2, "couponNumSum");
-            return (Criteria) this;
-        }
-
-        public Criteria andPointsSumIsNull() {
-            addCriterion("points_sum is null");
-            return (Criteria) this;
-        }
-
-        public Criteria andPointsSumIsNotNull() {
-            addCriterion("points_sum is not null");
-            return (Criteria) this;
-        }
-
-        public Criteria andPointsSumEqualTo(Integer value) {
-            addCriterion("points_sum =", value, "pointsSum");
-            return (Criteria) this;
-        }
-
-        public Criteria andPointsSumNotEqualTo(Integer value) {
-            addCriterion("points_sum <>", value, "pointsSum");
-            return (Criteria) this;
-        }
-
-        public Criteria andPointsSumGreaterThan(Integer value) {
-            addCriterion("points_sum >", value, "pointsSum");
-            return (Criteria) this;
-        }
-
-        public Criteria andPointsSumGreaterThanOrEqualTo(Integer value) {
-            addCriterion("points_sum >=", value, "pointsSum");
-            return (Criteria) this;
-        }
-
-        public Criteria andPointsSumLessThan(Integer value) {
-            addCriterion("points_sum <", value, "pointsSum");
-            return (Criteria) this;
-        }
-
-        public Criteria andPointsSumLessThanOrEqualTo(Integer value) {
-            addCriterion("points_sum <=", value, "pointsSum");
-            return (Criteria) this;
-        }
-
-        public Criteria andPointsSumIn(List<Integer> values) {
-            addCriterion("points_sum in", values, "pointsSum");
-            return (Criteria) this;
-        }
-
-        public Criteria andPointsSumNotIn(List<Integer> values) {
-            addCriterion("points_sum not in", values, "pointsSum");
-            return (Criteria) this;
-        }
-
-        public Criteria andPointsSumBetween(Integer value1, Integer value2) {
-            addCriterion("points_sum between", value1, value2, "pointsSum");
-            return (Criteria) this;
-        }
-
-        public Criteria andPointsSumNotBetween(Integer value1, Integer value2) {
-            addCriterion("points_sum not between", value1, value2, "pointsSum");
-            return (Criteria) this;
-        }
-
-        public Criteria andShareNumSumIsNull() {
-            addCriterion("share_num_sum is null");
-            return (Criteria) this;
-        }
-
-        public Criteria andShareNumSumIsNotNull() {
-            addCriterion("share_num_sum is not null");
-            return (Criteria) this;
-        }
-
-        public Criteria andShareNumSumEqualTo(Integer value) {
-            addCriterion("share_num_sum =", value, "shareNumSum");
-            return (Criteria) this;
-        }
-
-        public Criteria andShareNumSumNotEqualTo(Integer value) {
-            addCriterion("share_num_sum <>", value, "shareNumSum");
-            return (Criteria) this;
-        }
-
-        public Criteria andShareNumSumGreaterThan(Integer value) {
-            addCriterion("share_num_sum >", value, "shareNumSum");
-            return (Criteria) this;
-        }
-
-        public Criteria andShareNumSumGreaterThanOrEqualTo(Integer value) {
-            addCriterion("share_num_sum >=", value, "shareNumSum");
-            return (Criteria) this;
-        }
-
-        public Criteria andShareNumSumLessThan(Integer value) {
-            addCriterion("share_num_sum <", value, "shareNumSum");
-            return (Criteria) this;
-        }
-
-        public Criteria andShareNumSumLessThanOrEqualTo(Integer value) {
-            addCriterion("share_num_sum <=", value, "shareNumSum");
-            return (Criteria) this;
-        }
-
-        public Criteria andShareNumSumIn(List<Integer> values) {
-            addCriterion("share_num_sum in", values, "shareNumSum");
-            return (Criteria) this;
-        }
-
-        public Criteria andShareNumSumNotIn(List<Integer> values) {
-            addCriterion("share_num_sum not in", values, "shareNumSum");
-            return (Criteria) this;
-        }
-
-        public Criteria andShareNumSumBetween(Integer value1, Integer value2) {
-            addCriterion("share_num_sum between", value1, value2, "shareNumSum");
-            return (Criteria) this;
-        }
-
-        public Criteria andShareNumSumNotBetween(Integer value1, Integer value2) {
-            addCriterion("share_num_sum not between", value1, value2, "shareNumSum");
+        public Criteria andInviteNumNotBetween(Integer value1, Integer value2) {
+            addCriterion("invite_num not between", value1, value2, "inviteNum");
             return (Criteria) this;
         }
 
@@ -1240,13 +919,13 @@ public class MktTaskCountPOExample implements Serializable {
         }
     }
 
-    /**9
+    /**
      * This class was generated by MyBatis Generator.
-     * This class corresponds to the database table t_mkt_task_count
+     * This class corresponds to the database table t_mkt_activity_invite
      *
-     * @mbg.generated do_not_delete_during_merge 2018-12-06 15:41:41
+     * @mbg.generated do_not_delete_during_merge
      */
-    public static class Criteria extends GeneratedCriteria implements Serializable {
+    public static class Criteria extends GeneratedCriteria {
 
         protected Criteria() {
             super();
@@ -1254,11 +933,11 @@ public class MktTaskCountPOExample implements Serializable {
     }
 
     /**
-     * 只读. t_mkt_task_count
+     * 只读. t_mkt_activity_invite
      *
-     * @mbg.generated 2018-12-06 15:41:41
+     * @mbg.generated
      */
-    public static class Criterion implements Serializable {
+    public static class Criterion {
         private String condition;
 
         private Object value;

@@ -5,8 +5,5 @@ import com.bizvane.utils.tokens.SysAccountPO;
 
 public interface ReportTempService {
 
-
-
 	void Export(SysAccountPO sysAccountPO, String nameEnd, String jsonStr, FileReportTempPO fileReportTempPOlist);
-
 }

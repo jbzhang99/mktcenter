@@ -28,6 +28,7 @@ import com.bizvane.mktcenterfacade.models.po.*;
 import com.bizvane.mktcenterfacade.models.responsevo.StoreActivityResponseVO;
 import com.bizvane.mktcenterfacade.models.vo.*;
 import com.bizvane.mktcenterservice.common.constants.ActivityConstants;
+import com.bizvane.mktcenterservice.common.constants.TaskConstants;
 import com.bizvane.mktcenterservice.common.enums.*;
 
 import com.bizvane.mktcenterservice.common.award.Award;
@@ -678,27 +679,5 @@ public class ActivityServiceImpl implements ActivityService {
         return responseData;
     }
 
-//    public static void main(String[] args) {
-//        MktActivityPOWithBLOBs mktActivityPOWithBLOBs = new MktActivityPOWithBLOBs();
-//        mktActivityPOWithBLOBs.setIsStoreLimit(true);
-//        mktActivityPOWithBLOBs.setStoreLimitList("220");
-//        List<MktActivityPOWithBLOBs> mktActivityPOWithBLOBslist=new ArrayList<>();
-//        mktActivityPOWithBLOBslist.add(mktActivityPOWithBLOBs);
-//        int size = mktActivityPOWithBLOBslist.stream().filter(obj -> {
-//            Boolean isStoreLimit = obj.getIsStoreLimit();
-//            isStoreLimit = isStoreLimit == null ? Boolean.TRUE : isStoreLimit;
-//            String storeLimitList = obj.getStoreLimitList();
-//            String[] storeIds = storeLimitList == null ? new String[]{"0"} : storeLimitList.split(",");
-//            System.out.println(JSON.toJSONString(storeIds));
-//            System.out.println(isStoreLimit+"------------"+ArrayUtils.contains(storeIds,  String.valueOf(210)));
-//            System.out.println(isStoreLimit+"------------"+ArrayUtils.contains(storeIds, 210));
-//            return isStoreLimit && ArrayUtils.contains(storeIds, String.valueOf(210));
-//        }).collect(Collectors.toList()).size();
-//        System.out.println(size);
-//        if (size==0){
-//            System.out.println("会员超出活动范围!");
-//
-//        }
-//
-//    }
+
 }

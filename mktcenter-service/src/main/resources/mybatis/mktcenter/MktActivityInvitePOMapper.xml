@@ -1,20 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.bizvane.mktcenterservice.mappers.MktTaskCountPOMapper">
-  <resultMap id="BaseResultMap" type="com.bizvane.mktcenterfacade.models.po.MktTaskCountPO">
+<mapper namespace="com.bizvane.mktcenterservice.mappers.MktActivityInvitePOMapper">
+  <resultMap id="BaseResultMap" type="com.bizvane.mktcenterfacade.models.po.MktActivityInvitePO">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-12-06 15:41:41.
     -->
-    <id column="mkt_task_count_id" jdbcType="BIGINT" property="mktTaskCountId" />
-    <result column="mkt_task_id" jdbcType="BIGINT" property="mktTaskId" />
+    <id column="mkt_activity_invite_id" jdbcType="BIGINT" property="mktActivityInviteId" />
     <result column="sys_company_id" jdbcType="BIGINT" property="sysCompanyId" />
-    <result column="sys_brand_id" jdbcType="BIGINT" property="sysBrandId" />
-    <result column="member_count" jdbcType="INTEGER" property="memberCount" />
-    <result column="consume_amount_sum" jdbcType="DECIMAL" property="consumeAmountSum" />
-    <result column="coupon_num_sum" jdbcType="INTEGER" property="couponNumSum" />
-    <result column="points_sum" jdbcType="INTEGER" property="pointsSum" />
-    <result column="share_num_sum" jdbcType="INTEGER" property="shareNumSum" />
+    <result column="mkt_activity_id" jdbcType="BIGINT" property="mktActivityId" />
+    <result column="invite_num" jdbcType="INTEGER" property="inviteNum" />
     <result column="remark" jdbcType="VARCHAR" property="remark" />
     <result column="create_user_id" jdbcType="BIGINT" property="createUserId" />
     <result column="create_user_name" jdbcType="VARCHAR" property="createUserName" />
@@ -27,7 +21,6 @@
   <sql id="Example_Where_Clause">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-12-06 15:41:41.
     -->
     <where>
       <foreach collection="oredCriteria" item="criteria" separator="or">
@@ -60,7 +53,6 @@
   <sql id="Update_By_Example_Where_Clause">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-12-06 15:41:41.
     -->
     <where>
       <foreach collection="example.oredCriteria" item="criteria" separator="or">
@@ -93,23 +85,21 @@
   <sql id="Base_Column_List">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-12-06 15:41:41.
     -->
-    mkt_task_count_id, mkt_task_id, sys_company_id, sys_brand_id, member_count, consume_amount_sum, 
-    coupon_num_sum, points_sum, share_num_sum, remark, create_user_id, create_user_name, 
-    create_date, modified_user_id, modified_user_name, modified_date, valid
+    mkt_activity_invite_id, sys_company_id, mkt_activity_id, invite_num, remark, create_user_id, 
+    create_user_name, create_date, modified_user_id, modified_user_name, modified_date, 
+    valid
   </sql>
-  <select id="selectByExample" parameterType="com.bizvane.mktcenterfacade.models.po.MktTaskCountPOExample" resultMap="BaseResultMap">
+  <select id="selectByExample" parameterType="com.bizvane.mktcenterfacade.models.po.MktActivityInvitePOExample" resultMap="BaseResultMap">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-12-06 15:41:41.
     -->
     select
     <if test="distinct">
       distinct
     </if>
     <include refid="Base_Column_List" />
-    from t_mkt_task_count
+    from t_mkt_activity_invite
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
@@ -120,85 +110,61 @@
   <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-12-06 15:41:41.
     -->
     select 
     <include refid="Base_Column_List" />
-    from t_mkt_task_count
-    where mkt_task_count_id = #{mktTaskCountId,jdbcType=BIGINT}
+    from t_mkt_activity_invite
+    where mkt_activity_invite_id = #{mktActivityInviteId,jdbcType=BIGINT}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-12-06 15:41:41.
     -->
-    delete from t_mkt_task_count
-    where mkt_task_count_id = #{mktTaskCountId,jdbcType=BIGINT}
+    delete from t_mkt_activity_invite
+    where mkt_activity_invite_id = #{mktActivityInviteId,jdbcType=BIGINT}
   </delete>
-  <delete id="deleteByExample" parameterType="com.bizvane.mktcenterfacade.models.po.MktTaskCountPOExample">
+  <delete id="deleteByExample" parameterType="com.bizvane.mktcenterfacade.models.po.MktActivityInvitePOExample">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-12-06 15:41:41.
     -->
-    delete from t_mkt_task_count
+    delete from t_mkt_activity_invite
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insert" parameterType="com.bizvane.mktcenterfacade.models.po.MktTaskCountPO">
+  <insert id="insert" parameterType="com.bizvane.mktcenterfacade.models.po.MktActivityInvitePO">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-12-06 15:41:41.
     -->
-    <selectKey keyProperty="mktTaskCountId" order="AFTER" resultType="java.lang.Long">
+    <selectKey keyProperty="mktActivityInviteId" order="AFTER" resultType="java.lang.Long">
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into t_mkt_task_count (mkt_task_id, sys_company_id, sys_brand_id, 
-      member_count, consume_amount_sum, coupon_num_sum, 
-      points_sum, share_num_sum, remark, 
-      create_user_id, create_user_name, create_date, 
-      modified_user_id, modified_user_name, modified_date, 
-      valid)
-    values (#{mktTaskId,jdbcType=BIGINT}, #{sysCompanyId,jdbcType=BIGINT}, #{sysBrandId,jdbcType=BIGINT}, 
-      #{memberCount,jdbcType=INTEGER}, #{consumeAmountSum,jdbcType=DECIMAL}, #{couponNumSum,jdbcType=INTEGER}, 
-      #{pointsSum,jdbcType=INTEGER}, #{shareNumSum,jdbcType=INTEGER}, #{remark,jdbcType=VARCHAR}, 
-      #{createUserId,jdbcType=BIGINT}, #{createUserName,jdbcType=VARCHAR}, #{createDate,jdbcType=TIMESTAMP}, 
-      #{modifiedUserId,jdbcType=BIGINT}, #{modifiedUserName,jdbcType=VARCHAR}, #{modifiedDate,jdbcType=TIMESTAMP}, 
-      #{valid,jdbcType=BIT})
+    insert into t_mkt_activity_invite (sys_company_id, mkt_activity_id, invite_num, 
+      remark, create_user_id, create_user_name, 
+      create_date, modified_user_id, modified_user_name, 
+      modified_date, valid)
+    values (#{sysCompanyId,jdbcType=BIGINT}, #{mktActivityId,jdbcType=BIGINT}, #{inviteNum,jdbcType=INTEGER}, 
+      #{remark,jdbcType=VARCHAR}, #{createUserId,jdbcType=BIGINT}, #{createUserName,jdbcType=VARCHAR}, 
+      #{createDate,jdbcType=TIMESTAMP}, #{modifiedUserId,jdbcType=BIGINT}, #{modifiedUserName,jdbcType=VARCHAR}, 
+      #{modifiedDate,jdbcType=TIMESTAMP}, #{valid,jdbcType=BIT})
   </insert>
-  <insert id="insertSelective" parameterType="com.bizvane.mktcenterfacade.models.po.MktTaskCountPO">
+  <insert id="insertSelective" parameterType="com.bizvane.mktcenterfacade.models.po.MktActivityInvitePO">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-12-06 15:41:41.
     -->
-    <selectKey keyProperty="mktTaskCountId" order="AFTER" resultType="java.lang.Long">
+    <selectKey keyProperty="mktActivityInviteId" order="AFTER" resultType="java.lang.Long">
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into t_mkt_task_count
+    insert into t_mkt_activity_invite
     <trim prefix="(" suffix=")" suffixOverrides=",">
-      <if test="mktTaskId != null">
-        mkt_task_id,
-      </if>
       <if test="sysCompanyId != null">
         sys_company_id,
       </if>
-      <if test="sysBrandId != null">
-        sys_brand_id,
+      <if test="mktActivityId != null">
+        mkt_activity_id,
       </if>
-      <if test="memberCount != null">
-        member_count,
-      </if>
-      <if test="consumeAmountSum != null">
-        consume_amount_sum,
-      </if>
-      <if test="couponNumSum != null">
-        coupon_num_sum,
-      </if>
-      <if test="pointsSum != null">
-        points_sum,
-      </if>
-      <if test="shareNumSum != null">
-        share_num_sum,
+      <if test="inviteNum != null">
+        invite_num,
       </if>
       <if test="remark != null">
         remark,
@@ -226,29 +192,14 @@
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
-      <if test="mktTaskId != null">
-        #{mktTaskId,jdbcType=BIGINT},
-      </if>
       <if test="sysCompanyId != null">
         #{sysCompanyId,jdbcType=BIGINT},
       </if>
-      <if test="sysBrandId != null">
-        #{sysBrandId,jdbcType=BIGINT},
+      <if test="mktActivityId != null">
+        #{mktActivityId,jdbcType=BIGINT},
       </if>
-      <if test="memberCount != null">
-        #{memberCount,jdbcType=INTEGER},
-      </if>
-      <if test="consumeAmountSum != null">
-        #{consumeAmountSum,jdbcType=DECIMAL},
-      </if>
-      <if test="couponNumSum != null">
-        #{couponNumSum,jdbcType=INTEGER},
-      </if>
-      <if test="pointsSum != null">
-        #{pointsSum,jdbcType=INTEGER},
-      </if>
-      <if test="shareNumSum != null">
-        #{shareNumSum,jdbcType=INTEGER},
+      <if test="inviteNum != null">
+        #{inviteNum,jdbcType=INTEGER},
       </if>
       <if test="remark != null">
         #{remark,jdbcType=VARCHAR},
@@ -276,12 +227,11 @@
       </if>
     </trim>
   </insert>
-  <select id="countByExample" parameterType="com.bizvane.mktcenterfacade.models.po.MktTaskCountPOExample" resultType="java.lang.Long">
+  <select id="countByExample" parameterType="com.bizvane.mktcenterfacade.models.po.MktActivityInvitePOExample" resultType="java.lang.Long">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-12-06 15:41:41.
     -->
-    select count(*) from t_mkt_task_count
+    select count(*) from t_mkt_activity_invite
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
@@ -289,36 +239,20 @@
   <update id="updateByExampleSelective" parameterType="map">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-12-06 15:41:41.
     -->
-    update t_mkt_task_count
+    update t_mkt_activity_invite
     <set>
-      <if test="record.mktTaskCountId != null">
-        mkt_task_count_id = #{record.mktTaskCountId,jdbcType=BIGINT},
-      </if>
-      <if test="record.mktTaskId != null">
-        mkt_task_id = #{record.mktTaskId,jdbcType=BIGINT},
+      <if test="record.mktActivityInviteId != null">
+        mkt_activity_invite_id = #{record.mktActivityInviteId,jdbcType=BIGINT},
       </if>
       <if test="record.sysCompanyId != null">
         sys_company_id = #{record.sysCompanyId,jdbcType=BIGINT},
       </if>
-      <if test="record.sysBrandId != null">
-        sys_brand_id = #{record.sysBrandId,jdbcType=BIGINT},
+      <if test="record.mktActivityId != null">
+        mkt_activity_id = #{record.mktActivityId,jdbcType=BIGINT},
       </if>
-      <if test="record.memberCount != null">
-        member_count = #{record.memberCount,jdbcType=INTEGER},
-      </if>
-      <if test="record.consumeAmountSum != null">
-        consume_amount_sum = #{record.consumeAmountSum,jdbcType=DECIMAL},
-      </if>
-      <if test="record.couponNumSum != null">
-        coupon_num_sum = #{record.couponNumSum,jdbcType=INTEGER},
-      </if>
-      <if test="record.pointsSum != null">
-        points_sum = #{record.pointsSum,jdbcType=INTEGER},
-      </if>
-      <if test="record.shareNumSum != null">
-        share_num_sum = #{record.shareNumSum,jdbcType=INTEGER},
+      <if test="record.inviteNum != null">
+        invite_num = #{record.inviteNum,jdbcType=INTEGER},
       </if>
       <if test="record.remark != null">
         remark = #{record.remark,jdbcType=VARCHAR},
@@ -352,18 +286,12 @@
   <update id="updateByExample" parameterType="map">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-12-06 15:41:41.
     -->
-    update t_mkt_task_count
-    set mkt_task_count_id = #{record.mktTaskCountId,jdbcType=BIGINT},
-      mkt_task_id = #{record.mktTaskId,jdbcType=BIGINT},
+    update t_mkt_activity_invite
+    set mkt_activity_invite_id = #{record.mktActivityInviteId,jdbcType=BIGINT},
       sys_company_id = #{record.sysCompanyId,jdbcType=BIGINT},
-      sys_brand_id = #{record.sysBrandId,jdbcType=BIGINT},
-      member_count = #{record.memberCount,jdbcType=INTEGER},
-      consume_amount_sum = #{record.consumeAmountSum,jdbcType=DECIMAL},
-      coupon_num_sum = #{record.couponNumSum,jdbcType=INTEGER},
-      points_sum = #{record.pointsSum,jdbcType=INTEGER},
-      share_num_sum = #{record.shareNumSum,jdbcType=INTEGER},
+      mkt_activity_id = #{record.mktActivityId,jdbcType=BIGINT},
+      invite_num = #{record.inviteNum,jdbcType=INTEGER},
       remark = #{record.remark,jdbcType=VARCHAR},
       create_user_id = #{record.createUserId,jdbcType=BIGINT},
       create_user_name = #{record.createUserName,jdbcType=VARCHAR},
@@ -376,36 +304,20 @@
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
-  <update id="updateByPrimaryKeySelective" parameterType="com.bizvane.mktcenterfacade.models.po.MktTaskCountPO">
+  <update id="updateByPrimaryKeySelective" parameterType="com.bizvane.mktcenterfacade.models.po.MktActivityInvitePO">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-12-06 15:41:41.
     -->
-    update t_mkt_task_count
+    update t_mkt_activity_invite
     <set>
-      <if test="mktTaskId != null">
-        mkt_task_id = #{mktTaskId,jdbcType=BIGINT},
-      </if>
       <if test="sysCompanyId != null">
         sys_company_id = #{sysCompanyId,jdbcType=BIGINT},
       </if>
-      <if test="sysBrandId != null">
-        sys_brand_id = #{sysBrandId,jdbcType=BIGINT},
+      <if test="mktActivityId != null">
+        mkt_activity_id = #{mktActivityId,jdbcType=BIGINT},
       </if>
-      <if test="memberCount != null">
-        member_count = #{memberCount,jdbcType=INTEGER},
-      </if>
-      <if test="consumeAmountSum != null">
-        consume_amount_sum = #{consumeAmountSum,jdbcType=DECIMAL},
-      </if>
-      <if test="couponNumSum != null">
-        coupon_num_sum = #{couponNumSum,jdbcType=INTEGER},
-      </if>
-      <if test="pointsSum != null">
-        points_sum = #{pointsSum,jdbcType=INTEGER},
-      </if>
-      <if test="shareNumSum != null">
-        share_num_sum = #{shareNumSum,jdbcType=INTEGER},
+      <if test="inviteNum != null">
+        invite_num = #{inviteNum,jdbcType=INTEGER},
       </if>
       <if test="remark != null">
         remark = #{remark,jdbcType=VARCHAR},
@@ -432,22 +344,16 @@
         valid = #{valid,jdbcType=BIT},
       </if>
     </set>
-    where mkt_task_count_id = #{mktTaskCountId,jdbcType=BIGINT}
+    where mkt_activity_invite_id = #{mktActivityInviteId,jdbcType=BIGINT}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.bizvane.mktcenterfacade.models.po.MktTaskCountPO">
+  <update id="updateByPrimaryKey" parameterType="com.bizvane.mktcenterfacade.models.po.MktActivityInvitePO">
     <!--
       WARNING - 只读 - @mbg.generated
-      This element was generated on 2018-12-06 15:41:41.
     -->
-    update t_mkt_task_count
-    set mkt_task_id = #{mktTaskId,jdbcType=BIGINT},
-      sys_company_id = #{sysCompanyId,jdbcType=BIGINT},
-      sys_brand_id = #{sysBrandId,jdbcType=BIGINT},
-      member_count = #{memberCount,jdbcType=INTEGER},
-      consume_amount_sum = #{consumeAmountSum,jdbcType=DECIMAL},
-      coupon_num_sum = #{couponNumSum,jdbcType=INTEGER},
-      points_sum = #{pointsSum,jdbcType=INTEGER},
-      share_num_sum = #{shareNumSum,jdbcType=INTEGER},
+    update t_mkt_activity_invite
+    set sys_company_id = #{sysCompanyId,jdbcType=BIGINT},
+      mkt_activity_id = #{mktActivityId,jdbcType=BIGINT},
+      invite_num = #{inviteNum,jdbcType=INTEGER},
       remark = #{remark,jdbcType=VARCHAR},
       create_user_id = #{createUserId,jdbcType=BIGINT},
       create_user_name = #{createUserName,jdbcType=VARCHAR},
@@ -456,6 +362,106 @@
       modified_user_name = #{modifiedUserName,jdbcType=VARCHAR},
       modified_date = #{modifiedDate,jdbcType=TIMESTAMP},
       valid = #{valid,jdbcType=BIT}
-    where mkt_task_count_id = #{mktTaskCountId,jdbcType=BIGINT}
+    where mkt_activity_invite_id = #{mktActivityInviteId,jdbcType=BIGINT}
   </update>
+
+  <select id="getActivityList" parameterType="com.bizvane.mktcenterfacade.models.vo.ActivityVO" resultType="com.bizvane.mktcenterfacade.models.vo.ActivityVO">
+    SELECT
+    tma.mkt_activity_id,
+    tma.sys_company_id,
+    tma.sys_brand_id,
+    tma.activity_code,
+    tma.activity_type,
+    tma.activity_name,
+    tma.start_time,
+    tma.end_time,
+    tma.long_term,
+    tma.points,
+    tma.check_status,
+    tma.activity_status,
+    tma.remark,
+    tma.create_user_id,
+    tma.create_user_name,
+    tma.create_date,
+    tma.modified_user_id,
+    tma.modified_user_name,
+    tma.modified_date,
+    tma.valid,
+    tma.activity_info,
+    tmai.invite_num
+    FROM
+    `t_mkt_activity` tma
+    INNER JOIN t_mkt_activity_invite tmai ON tma.mkt_activity_id = tmai.mkt_activity_id
+    and tma.valid=1
+    and tmai.valid=1
+    <!--活动主表ID -->
+    <if test="mktActivityId != null and mktActivityId!= '' ">
+      AND tma.mkt_activity_id = #{mktActivityId}
+    </if>
+    <if test="activityStatus != null and activityStatus!=0">
+      AND tma.activity_status = #{activityStatus}
+    </if>
+    <!--是否是长期活动 -->
+    <if test="longTerm != null and longTerm!= '' ">
+      AND tma.long_term = #{longTerm}
+    </if>
+    <!--开卡时等级编号 -->
+    <if test="mbrLevelCode != null and mbrLevelCode!= ''">
+      AND tmai.mbr_level_code = #{mbrLevelCode}
+    </if>
+    <!--所属品牌id -->
+    <if test="sysBrandId != null and sysBrandId!= ''">
+      AND tma.sys_brand_id = #{sysBrandId}
+    </if>
+    <!--活动类型-->
+    <if test="activityType != null and activityType!= ''">
+      AND tma.activity_type = #{activityType}
+    </if>
+    <!--活动编号-->
+    <if test="activityCode != null and activityCode!= ''">
+      AND tma.activity_code LIKE "%"#{activityCode}"%"
+    </if>
+    <if test="activityName != null and activityName!= ''">
+      AND tma.activity_name LIKE "%"#{activityName}"%"
+    </if>
+    <if test="stop != null and stop!= ''">
+      AND tma.activity_status !=4
+    </if>
+    <if test="checkStatus != null and checkStatus!= '' ">
+      AND tma.check_status = #{checkStatus,jdbcType=INTEGER}
+    </if>
+    ORDER BY tma.create_date DESC
+  </select>
+
+  <select id="getExecutingActivityList" parameterType="java.lang.Integer" resultType="com.bizvane.mktcenterfacade.models.vo.ActivityInviteVO">
+    select
+     tma.mkt_activity_id,
+    tma.sys_company_id,
+    tma.sys_brand_id,
+    tma.activity_code,
+    tma.activity_type,
+    tma.activity_name,
+    tma.start_time,
+    tma.end_time,
+    tma.long_term,
+    tma.points,
+    tma.check_status,
+    tma.activity_status,
+    tma.remark,
+    tma.create_user_id,
+    tma.create_user_name,
+    tma.create_date,
+    tma.modified_user_id,
+    tma.modified_user_name,
+    tma.modified_date,
+    tma.valid,
+    tma.activity_info,
+    tmai.invite_num
+      FROM
+    `t_mkt_activity` tma
+    INNER JOIN t_mkt_activity_invite tmai ON tma.mkt_activity_id = tmai.mkt_activity_id
+    and tma.valid=1
+    and tmai.valid=1
+    and sys_company_id = #{sysCompanyId}
+  </select>
 </mapper>

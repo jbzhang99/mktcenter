@@ -15,8 +15,8 @@ import com.bizvane.members.facade.service.api.IntegralChangeApiService;
 import com.bizvane.members.facade.service.api.MemberInfoApiService;
 import com.bizvane.members.facade.service.card.request.IntegralChangeRequestModel;
 import com.bizvane.members.facade.service.card.response.IntegralChangeResponseModel;
+import com.bizvane.members.facade.vo.MemberInfoApiModel;
 import com.bizvane.mktcenterfacade.interfaces.ConvertCouponService;
-import com.bizvane.mktcenterfacade.interfaces.TaskService;
 import com.bizvane.mktcenterfacade.models.bo.CouponIntegralExchangeBO;
 import com.bizvane.mktcenterfacade.models.po.MktConvertCouponRecordPO;
 import com.bizvane.mktcenterfacade.models.po.MktConvertCouponRecordPOExample;
@@ -72,8 +72,6 @@ public class ConvertCouponServiceImpl implements ConvertCouponService {
     private CouponDefinitionServiceFeign couponDefinitionServiceFeign;
     @Autowired
     private SendCouponServiceFeign sendCouponServiceFeign;
-    @Autowired
-    private TaskService taskService;
     @Autowired
     private IntegralChangeApiService integralChangeApiService;
     @Autowired
@@ -373,7 +371,9 @@ public class ConvertCouponServiceImpl implements ConvertCouponService {
         Integer exchangePrice = mktCouponIntegralExchangePO.getExchangePrice();//兑换的单价
         String couponRecordCode = CodeUtil.getCouponRecordCode();//兑换记录code
 
-        MemberInfoModel memeberDetail = taskService.getCompanyMemeberDetail(memberCode);
+        MemberInfoApiModel members = new MemberInfoApiModel();
+        members.setMemberCode(memberCode);
+        MemberInfoModel memeberDetail = memberInfoApiService.getMemberModel(members).getData();
         if (memeberDetail == null) {
             responseData.setCode(100);
             responseData.setMessage("会员不存在!");

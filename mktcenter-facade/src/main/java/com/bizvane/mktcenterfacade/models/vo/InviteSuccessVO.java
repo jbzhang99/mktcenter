@@ -1,5 +1,8 @@
 package com.bizvane.mktcenterfacade.models.vo;
 
+import lombok.Data;
+
+import javax.validation.constraints.NotNull;
 import java.util.Date;
 
 /**
@@ -7,44 +10,20 @@ import java.util.Date;
  * @Time: 2018/8/8 20:37
  * 邀请会员注册
  */
+@Data
 public class InviteSuccessVO {
-    private Long mktTaskId;
+
+    //活动id
+    @NotNull
+    private Long mktActivityId;
+
     //注册人code
+    @NotNull
     private String memberCode;
     //开卡时间
+    @NotNull
     private Date openCardTime;
     //邀请人
+    @NotNull
     private String inviteMemberCode;
-
-    public String getMemberCode() {
-        return memberCode;
-    }
-
-    public void setMemberCode(String memberCode) {
-        this.memberCode = memberCode;
-    }
-
-    public Date getOpenCardTime() {
-        return openCardTime;
-    }
-
-    public void setOpenCardTime(Date openCardTime) {
-        this.openCardTime = openCardTime;
-    }
-
-    public String getInviteMemberCode() {
-        return inviteMemberCode;
-    }
-
-    public void setInviteMemberCode(String inviteMemberCode) {
-        this.inviteMemberCode = inviteMemberCode;
-    }
-
-    public Long getMktTaskId() {
-        return mktTaskId;
-    }
-
-    public void setMktTaskId(Long mktTaskId) {
-        this.mktTaskId = mktTaskId;
-    }
 }

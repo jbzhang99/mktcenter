@@ -21,7 +21,7 @@ import java.util.List;
  * @description
  */
 @RestController
-@RequestMapping("taskForWXRpc")
+@RequestMapping("integralMallServiceRpc")
 public class IntegralMallRpcController {
 
     @Autowired
