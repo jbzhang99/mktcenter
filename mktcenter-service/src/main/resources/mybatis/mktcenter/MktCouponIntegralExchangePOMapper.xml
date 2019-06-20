@@ -761,9 +761,6 @@
     tmcie.valid=1
     AND tmcie.sys_brand_id=#{brandId}
     AND tmcie.sales_status=1
-    <if test="countIntegral != null">
-    AND tmcie.exchange_price<![CDATA[<=]]>#{countIntegral}
-    </if>
     <if test="openCardStoreId != null">
     AND (store_scope=0 OR store_list LIKE CONCAT('%',#{openCardStoreId},'%'))
     </if>
