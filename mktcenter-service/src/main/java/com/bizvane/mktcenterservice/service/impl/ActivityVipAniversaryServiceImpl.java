@@ -112,6 +112,7 @@ public class ActivityVipAniversaryServiceImpl implements ActivityVipAniversarySe
         ResponseData responseData = new ResponseData();
         PageHelper.startPage(pageForm.getPageNumber(),pageForm.getPageSize());
         vo.setSysBrandId(stageUser.getBrandId());
+        vo.setActivityType(ActivityTypeEnum.ACTIVITY_TYPE_ANNIVERSARY.getCode());
         List<ActivityVO> activityAniversaryList = mktActivityVipAniversaryPOMapper.getActivityAniversaryList(vo);
         PageInfo<ActivityVO> pageInfo = new PageInfo<>(activityAniversaryList);
         responseData.setData(pageInfo);

@@ -595,6 +595,7 @@
     FROM
     `t_mkt_activity` tma
     INNER JOIN t_mkt_activity_birthday tmab ON tma.mkt_activity_id = tmab.mkt_activity_id
+    where  tma.activity_type = #{activityType}
     and tma.valid=1
     and tmab.valid=1
     <!--活动主表ID -->

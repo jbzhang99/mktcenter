@@ -25,6 +25,12 @@ public interface ActivityInviteService {
     public ResponseData<List<ActivityVO>> list(ActivityVO vo, PageForm pageForm, SysAccountPO stageUser);
 
     /**
+     * 查详情
+     * @param businessCode
+     * @return
+     */
+    ResponseData<ActivityBO> selectActivityInviteById(String businessCode);
+    /**
      * 新增任务
      * @return
      */

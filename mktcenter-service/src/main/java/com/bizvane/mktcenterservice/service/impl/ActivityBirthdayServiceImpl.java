@@ -113,6 +113,7 @@ public class ActivityBirthdayServiceImpl implements ActivityBirthdayService {
         ResponseData responseData = new ResponseData();
         PageHelper.startPage(pageForm.getPageNumber(),pageForm.getPageSize());
         vo.setSysBrandId(stageUser.getBrandId());
+        vo.setActivityType(ActivityTypeEnum.ACTIVITY_TYPE_BIRTHDAY.getCode());
         List<ActivityVO> activityBirthdayList = mktActivityBirthdayPOMapper.getActivityBirthdayList(vo);
         PageInfo<ActivityVO> pageInfo = new PageInfo<>(activityBirthdayList);
         responseData.setData(pageInfo);

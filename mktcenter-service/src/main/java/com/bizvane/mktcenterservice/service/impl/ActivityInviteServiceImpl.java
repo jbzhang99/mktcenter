@@ -1,6 +1,9 @@
 package com.bizvane.mktcenterservice.service.impl;
 
 import com.alibaba.fastjson.JSON;
+import com.bizvane.centerstageservice.models.po.SysStorePo;
+import com.bizvane.couponfacade.interfaces.CouponQueryServiceFeign;
+import com.bizvane.couponfacade.models.vo.CouponDetailResponseVO;
 import com.bizvane.members.facade.es.vo.MembersInfoSearchVo;
 import com.bizvane.members.facade.es.vo.WxChannelInfoSearchVo;
 import com.bizvane.mktcenterfacade.interfaces.*;
@@ -36,10 +39,14 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 
 import java.text.ParseException;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @author chen.li
@@ -75,6 +82,9 @@ public class ActivityInviteServiceImpl implements ActivityInviteService {
     private ActivityRecordService activityRecordService;
 
     @Autowired
+    private CouponQueryServiceFeign couponQueryServiceFeign;
+
+    @Autowired
     private JobUtil  jobUtil;
 
     @Autowired
@@ -89,9 +99,60 @@ public class ActivityInviteServiceImpl implements ActivityInviteService {
         ResponseData responseData = new ResponseData();
         PageHelper.startPage(pageForm.getPageNumber(),pageForm.getPageSize());
         vo.setSysBrandId(stageUser.getBrandId());
+        vo.setActivityType(ActivityTypeEnum.ACTIVITY_TYPE_INVITE.getCode());
         List<ActivityVO> activityInviteList =mktActivityInvitePOMapper.getActivityList(vo);
         PageInfo<ActivityVO> pageInfo = new PageInfo<>(activityInviteList);
         responseData.setData(pageInfo);
+        return responseData;
+    }
+
+    /**
+     * 查询活动详情
+     * @param businessCode
+     * @return
+     */
+    @Override
+    public ResponseData<ActivityBO> selectActivityInviteById(String businessCode) {
+        ActivityBO bo = new ActivityBO();
+        log.info("查询开卡活动详情="+businessCode);
+        ResponseData responseData = new ResponseData();
+        ActivityVO vo= new ActivityVO();
+        vo.setActivityCode(businessCode);
+        vo.setActivityType(ActivityTypeEnum.ACTIVITY_TYPE_INVITE.getCode());
+        List<ActivityVO> activityInviteList = mktActivityInvitePOMapper.getActivityList(vo);
+        if(CollectionUtils.isEmpty(activityInviteList)){
+            responseData.setCode(SysResponseEnum.OPERATE_FAILED_DATA_NOT_EXISTS.getCode());
+            responseData.setMessage(SysResponseEnum.OPERATE_FAILED_DATA_NOT_EXISTS.getMessage());
+            return responseData;
+        }
+
+        bo.setActivityVO(activityInviteList.get(0));
+
+        //查询活动卷
+        MktCouponPOExample example = new  MktCouponPOExample();
+        example.createCriteria().andBizIdEqualTo(activityInviteList.get(0).getMktActivityId()).andValidEqualTo(true).andBizTypeEqualTo(1);
+        List<MktCouponPO> mktCouponPOs= mktCouponPOMapper.selectByExample(example);
+        List<CouponDetailResponseVO> lists = new ArrayList<>();
+        //查询券接口
+        if(!org.springframework.util.CollectionUtils.isEmpty(mktCouponPOs)){
+            for (MktCouponPO po:mktCouponPOs) {
+                ResponseData<CouponDetailResponseVO>  entityAndDefinition = couponQueryServiceFeign.getCouponDefinition(po.getCouponDefinitionId());
+                lists.add(entityAndDefinition.getData());
+            }
+        }
+
+        //查询消息模板
+        MktMessagePOExample exampl = new MktMessagePOExample();
+        exampl.createCriteria().andBizIdEqualTo(activityInviteList.get(0).getMktActivityId()).andValidEqualTo(true);
+        List<MktMessagePO> listMktMessage = mktMessagePOMapper.selectByExampleWithBLOBs(exampl);
+
+        if(!org.springframework.util.CollectionUtils.isEmpty(listMktMessage)){
+            bo.setMessageVOList(listMktMessage);
+        }
+        bo.setCouponEntityAndDefinitionVOList(lists);
+        responseData.setData(bo);
+        responseData.setCode(SysResponseEnum.SUCCESS.getCode());
+        responseData.setMessage(SysResponseEnum.SUCCESS.getMessage());
         return responseData;
     }
 
@@ -109,7 +170,7 @@ public class ActivityInviteServiceImpl implements ActivityInviteService {
         //得到大实体类
         ActivityVO activityVO = bo.getActivityVO();
         //判断活动开始时间是否大于当前时间
-        if(1 != bo.getActivityVO().getLongTerm() && new Date().after(activityVO.getStartTime())){
+        if(new Date().after(activityVO.getStartTime())){
             responseData.setCode(SysResponseEnum.MODEL_FAILED_VALIDATION.getCode());
             responseData.setMessage("活动开始时间不能比当前时间小!");
             return responseData;
@@ -135,7 +196,7 @@ public class ActivityInviteServiceImpl implements ActivityInviteService {
         //查询结果如果不需要审核审核状态为已审核
         mktActivityPOWithBLOBs.setCheckStatus(CheckStatusEnum.CHECK_STATUS_APPROVED.getCode());
         //getStartTime 开始时间>当前时间增加job
-        if(1!= bo.getActivityVO().getLongTerm() && new Date().before(activityVO.getStartTime())){
+        if( new Date().before(activityVO.getStartTime())){
             //活动状态设置为待执行
             mktActivityPOWithBLOBs.setActivityStatus(ActivityStatusEnum.ACTIVITY_STATUS_PENDING.getCode());
             //创建任务调度任务开始时间

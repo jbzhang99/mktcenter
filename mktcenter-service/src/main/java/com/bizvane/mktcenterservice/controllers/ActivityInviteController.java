@@ -41,6 +41,15 @@ public class ActivityInviteController {
     }
 
     /**
+     * 查询活动详情
+     * @param businessCode
+     * @return
+     */
+    @RequestMapping("selectActivityInviteById")
+    public ResponseData<ActivityBO> selectActivityInviteById(String businessCode){
+        return activityInviteService.selectActivityInviteById(businessCode);
+    }
+    /**
      * 创建任务
      * @return
      */

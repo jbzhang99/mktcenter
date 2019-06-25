@@ -126,6 +126,7 @@ public class ActivityRegisterServiceImpl implements ActivityRegisterService {
         PageHelper.startPage(pageForm.getPageNumber(),pageForm.getPageSize());
         List<ActivityVO> activityRegisterList = new ArrayList<>();
         vo.setSysBrandId(stageUser.getBrandId());
+        vo.setActivityType(ActivityTypeEnum.ACTIVITY_TYPE_REGISGER.getCode());
         try{
             log.info("开卡活动列表开始，参数="+vo);
             activityRegisterList = mktActivityRegisterPOMapper.getActivityList(vo);
@@ -554,6 +555,7 @@ public class ActivityRegisterServiceImpl implements ActivityRegisterService {
         ResponseData responseData = new ResponseData();
         ActivityVO vo= new ActivityVO();
         vo.setActivityCode(businessCode);
+        vo.setActivityType(ActivityTypeEnum.ACTIVITY_TYPE_REGISGER.getCode());
         List<ActivityVO> registerList = mktActivityRegisterPOMapper.getActivityList(vo);
         if(CollectionUtils.isEmpty(registerList)){
             responseData.setCode(SysResponseEnum.OPERATE_FAILED_DATA_NOT_EXISTS.getCode());

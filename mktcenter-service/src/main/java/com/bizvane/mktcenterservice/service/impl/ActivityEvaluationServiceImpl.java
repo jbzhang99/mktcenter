@@ -86,6 +86,7 @@ public class ActivityEvaluationServiceImpl implements ActivityEvaluationService 
         ResponseData responseData = new ResponseData();
         PageHelper.startPage(pageForm.getPageNumber(), pageForm.getPageSize());
         vo.setSysBrandId(stageUser.getBrandId());
+        vo.setActivityType(ActivityTypeEnum.ACTIVITY_TYPE_EVALUATION.getCode());
         List<ActivityVO> activityEvaluation = mktActivityEvaluationPOMapper.getActivityVOList(vo);
         PageInfo<ActivityVO> pageInfo = new PageInfo<>(activityEvaluation);
         responseData.setData(pageInfo);

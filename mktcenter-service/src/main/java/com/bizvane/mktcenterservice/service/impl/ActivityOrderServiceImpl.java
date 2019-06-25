@@ -121,6 +121,7 @@ public class ActivityOrderServiceImpl implements ActivityOrderService {
         ResponseData responseData = new ResponseData();
         PageHelper.startPage(pageForm.getPageNumber(),pageForm.getPageSize());
         vo.setSysBrandId(stageUser.getBrandId());
+        vo.setActivityType(ActivityTypeEnum.ACTIVITY_TYPE_ORDER.getCode());
         List<ActivityVO> activityOrderList = mktActivityOrderPOMapper.getActivityOrderList(vo);
         PageInfo<ActivityVO> pageInfo = new PageInfo<>(activityOrderList);
         responseData.setData(pageInfo);
@@ -301,6 +302,7 @@ public class ActivityOrderServiceImpl implements ActivityOrderService {
         ResponseData responseData = new ResponseData();
         ActivityVO vo= new ActivityVO();
         vo.setActivityCode(businessCode);
+        vo.setActivityType(ActivityTypeEnum.ACTIVITY_TYPE_ORDER.getCode());
         List<ActivityVO> orderList = mktActivityOrderPOMapper.getActivityOrderList(vo);
         if (CollectionUtils.isEmpty(orderList)){
             log.warn("没有查询到数据");

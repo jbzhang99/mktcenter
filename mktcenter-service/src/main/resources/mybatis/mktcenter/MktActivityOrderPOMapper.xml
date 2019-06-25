@@ -669,6 +669,7 @@
     FROM
     `t_mkt_activity` tma
     INNER JOIN t_mkt_activity_order tmao ON tma.mkt_activity_id = tmao.mkt_activity_id
+    where  tma.activity_type = #{activityType}
     and tma.valid=1
     and tmao.valid=1
     <!--活动主表ID -->
