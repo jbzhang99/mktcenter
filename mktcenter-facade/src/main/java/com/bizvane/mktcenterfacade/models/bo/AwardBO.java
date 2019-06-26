@@ -24,7 +24,7 @@ public class AwardBO {
     private Long businessCode;
 
     /**
-     * 营销方式 1优惠券营销，2积分营销，3短信营销，4微信模板消息营销
+     * 营销方式 1优惠券营销，2积分营销，3短信营销，4微信模板消息营销，5图文消息
      */
     private Integer mktType;
     /**

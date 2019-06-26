@@ -8,6 +8,9 @@ package com.bizvane.mktcenterservice.common.enums;
  */
 public enum BusinessTypeEnum {
 
+    /**
+     * 全部
+     */
     ACTIVITY_TYPE_ALL(0,"全部"),
     ACTIVITY_TYPE_ACTIVITY(1,"营销活动"),
     ACTIVITY_TYPE_TASK(2,"营销任务");

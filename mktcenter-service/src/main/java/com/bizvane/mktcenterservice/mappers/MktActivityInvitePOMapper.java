@@ -88,5 +88,5 @@ public interface MktActivityInvitePOMapper {
 
     List<ActivityVO> getActivityList(ActivityVO vo);
 
-    List<ActivityInviteVO> getExecutingActivityList(Long sysCompanyId);
+    List<ActivityVO> getExecutingActivityList(Long sysCompanyId);
 }

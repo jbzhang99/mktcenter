@@ -13,8 +13,9 @@ import java.util.Date;
 @Data
 public class InviteSuccessVO {
 
-    //活动id
     @NotNull
+    private Long sysBrandId;
+    //活动id
     private Long mktActivityId;
 
     //注册人code
@@ -25,5 +26,5 @@ public class InviteSuccessVO {
     private Date openCardTime;
     //邀请人
     @NotNull
-    private String inviteMemberCode;
+    private String inviteOpenId;
 }

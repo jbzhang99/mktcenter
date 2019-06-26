@@ -106,8 +106,8 @@ public interface ActivityServiceRpc {
   * @param vo
   * @return
   */
- @RequestMapping("executeActivity")
- ResponseData<Integer> executeActivity(@RequestBody MemberInfoModelVOActivity vo);
+ @RequestMapping("executeRegisterActivity")
+ ResponseData<Integer> executeRegisterActivity(@RequestBody MemberInfoModelVOActivity vo);
 
  /**
   * 升级活动

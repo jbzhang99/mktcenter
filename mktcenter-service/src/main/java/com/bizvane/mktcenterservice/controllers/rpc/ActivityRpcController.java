@@ -129,9 +129,9 @@ public class ActivityRpcController {
      * @param
      * @return
      */
-    @RequestMapping("executeActivity")
-    public ResponseData<Integer> executeActivity(@RequestBody MemberInfoModelVOActivity vo){
-        return activityRegisterService.executeActivity(vo);
+    @RequestMapping("executeRegisterActivity")
+    public ResponseData<Integer> executeRegisterActivity(@RequestBody MemberInfoModelVOActivity vo){
+        return activityRegisterService.executeRegisterActivity(vo);
     }
 
     @RequestMapping("judgeMember")
