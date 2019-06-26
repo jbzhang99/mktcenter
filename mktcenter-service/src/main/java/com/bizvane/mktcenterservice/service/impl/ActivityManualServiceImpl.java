@@ -186,6 +186,7 @@ public class ActivityManualServiceImpl implements ActivityManualService {
         mktActivityManualPOMapper.insertSelective(mktActivityManualPO);
         //新增券表,和活动绑定
         MktCouponPO mktCouponPO = new MktCouponPO();
+         mktCouponPO.setSysCompanyId(stageUser.getSysCompanyId());
         mktCouponPO.setCouponDefinitionId(bo.getCouponCodeList().get(0).getCouponDefinitionId());
         mktCouponPO.setBizId(mktActivityId);//活动id
         mktCouponPO.setBizType(BusinessTypeEnum.ACTIVITY_TYPE_ACTIVITY.getCode());
