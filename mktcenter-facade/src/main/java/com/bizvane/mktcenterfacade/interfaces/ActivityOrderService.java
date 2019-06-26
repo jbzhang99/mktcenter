@@ -7,6 +7,9 @@ import com.bizvane.mktcenterfacade.models.bo.OrderModelBo;
 import com.bizvane.mktcenterfacade.models.vo.ActivityVO;
 import com.bizvane.utils.responseinfo.ResponseData;
 import com.bizvane.utils.tokens.SysAccountPO;
+import org.springframework.web.bind.annotation.RequestBody;
+
+import javax.validation.Valid;
 
 /**
  * @author chen.li
@@ -39,10 +42,5 @@ public interface ActivityOrderService {
      */
     public ResponseData<Integer> updateActivityOrder(ActivityBO bo,SysAccountPO stageUser);
 
-    /**
-     * 执行活动
-     * @param
-     * @return
-     */
-    public ResponseData<Integer> executeOrder(OrderModelBo vo);
+    public ResponseData<Integer> award(@RequestBody @Valid OrderModelBo orderModelBo);
 }

@@ -4,15 +4,14 @@ import com.alibaba.fastjson.JSON;
 import com.bizvane.messageservice.common.network.NetWorkCommon;
 import com.bizvane.messageservice.mappers.MsgSmsPhonePOMapper;
 import com.bizvane.messageservice.mongo.MsgMongoRepository;
-import com.bizvane.messagefacade.interfaces.SendCommonMessageFeign;
 import com.bizvane.messagefacade.models.po.MsgSmsPhonePO;
 import com.bizvane.messagefacade.models.po.MsgSmsPhonePOExample;
 import com.bizvane.messagefacade.models.vo.SysSmsConfigVO;
+import com.bizvane.messageservice.service.SendCommonMessageService;
 import com.bizvane.utils.enumutils.SysResponseEnum;
 import com.bizvane.utils.responseinfo.ResponseData;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -26,8 +25,8 @@ import java.util.List;
  * @Time: 2018/7/10 19:05
  * 以  平台类型  来区分
  */
-@RestController
-public class SendCommonMessageImpl implements SendCommonMessageFeign {
+@Service
+public class SendCommonMessageImpl implements SendCommonMessageService {
     @Autowired
     private NetWorkCommon netWorkCommon;
 

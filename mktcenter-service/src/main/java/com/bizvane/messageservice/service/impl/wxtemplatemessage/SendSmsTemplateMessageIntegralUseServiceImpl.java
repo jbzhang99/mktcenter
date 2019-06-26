@@ -7,6 +7,7 @@ import com.bizvane.messageservice.common.constants.SysRespConstants;
 import com.bizvane.messageservice.common.constants.SystemConstants;
 import com.bizvane.messageservice.mappers.MsgSmsTempPOMapper;
 import com.bizvane.messageservice.mappers.SysSmsConfigPOMapper;
+import com.bizvane.messageservice.service.SendCommonMessageService;
 import com.bizvane.messageservice.service.SendSmsTemplateMessageService;
 import com.bizvane.messageservice.service.SmsMessageLogService;
 import com.bizvane.messagefacade.models.po.*;
@@ -36,7 +37,7 @@ public class SendSmsTemplateMessageIntegralUseServiceImpl implements SendSmsTemp
     private SmsMessageLogService smsMessageLogService;
     
     @Autowired
-    private com.bizvane.messageservice.service.impl.centerMsg.SendCommonMessageImpl SendCommonMessageImpl;
+    private SendCommonMessageService SendCommonMessageImpl;
     @Autowired
     private MsgSmsTempPOMapper msgSmsTempPOMapper;
     

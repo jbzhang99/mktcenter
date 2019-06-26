@@ -54,10 +54,10 @@ public class SendSmsTemplateMessageCouponOffLineServiceImpl implements SendSmsTe
     @Autowired
     private MemberInfoApiService memberInfoApiService;
 
-    
+
     @Autowired
     private SysSmsConfigServiceRpc sysSmsConfigServiceRpc;
-    
+
     @Autowired
     private SendCommonMessageFeign sendCommonMessage;
 
@@ -161,92 +161,4 @@ public class SendSmsTemplateMessageCouponOffLineServiceImpl implements SendSmsTe
     	return result;
     }
 
-    public Result<String> sendMessage(String wechatMessageLogId, JSONObject jsonObject){
-        Result<String> result = new Result<>();
-        String memberCode = jsonObject.getString("memberCode");
-
-        if(StringUtils.isBlank(memberCode)){
-            result.setStatus(SysRespConstants.WX_MESSAGETEMP_USER_INFO_NOT_EMPTY.getStatus());
-            result.setMsg(SysRespConstants.WX_MESSAGETEMP_USER_INFO_NOT_EMPTY.getMsg());
-            return result;
-        }
-
-        //根据会员号查询会员信息
-        MemberInfoApiModel infoModel = new MemberInfoApiModel();
-        infoModel.setMemberCode(memberCode);
-        ResponseData<PageInfo<MemberInfoModel>> memberResult= memberInfoApiService.getMemberInfo(infoModel);
-        ArrayList memberList = (ArrayList) memberResult.getData().getList();
-        
-        if(null == memberList || memberList.size()==0){
-            result.setStatus(SysRespConstants.WX_VIP_NOT_FOCUS.getStatus());
-            result.setMsg(SysRespConstants.WX_VIP_NOT_FOCUS.getMsg());
-            return result;
-        }
-        ObjectMapper mapper = new ObjectMapper();
-        MemberInfoModel wxVip = mapper.convertValue(memberList.get(0), MemberInfoModel.class);
-
-        //根据会员号查询渠道信息
-        WxChannelInfoVo wxChannelInfoModel = new WxChannelInfoVo();
-        wxChannelInfoModel.setMemberCode(memberCode);
-        ResponseData<WxChannelInfoVo> channelResult = wxChannelInfoApiService.getWxChannelInfo(wxChannelInfoModel);
-        WxChannelInfoVo channelInfoModel =channelResult.getData();
-        WxChannelInfoVo channelVal = null;
-        if(StringUtils.isNotBlank(channelInfoModel.toString())){
-            channelVal = mapper.convertValue(channelInfoModel, WxChannelInfoVo.class);
-        }
-        //根据品牌id查询短信通道
-        
-
-        if (wxVip == null) {
-            result.setStatus(SysRespConstants.WX_VIP_NOT_FOCUS.getStatus());
-            result.setMsg(SysRespConstants.WX_VIP_NOT_FOCUS.getMsg());
-            return result;
-        }
-
-        JSONObject messagejo = new JSONObject();
-        CouponMessageVO couponMessageVO = jsonObject.toJavaObject(CouponMessageVO.class);
-        messagejo.put("first","尊敬的会员，您有一张优惠券刚刚被使用。");
-        messagejo.put("keyword1",couponMessageVO.getCouponName());
-        messagejo.put("keyword2",couponMessageVO.getPreferentialType());
-        messagejo.put("keyword3",couponMessageVO.getDenomination());
-        messagejo.put("keyword4",couponMessageVO.getUseTime());
-        messagejo.put("remark","感谢您的支持");
-
-        Iterator iterator = messagejo.keySet().iterator();
-        while (iterator.hasNext()){
-            String key = (String) iterator.next();
-            String value = messagejo.getString(key);
-            if(StringUtils.isBlank(value)){
-                value = " ";
-            }
-            messagejo.put(key,value);
-        }
-
-        logger.info("tempate message :" + messagejo.toString());
-
-        String openId = wxVip.getWxOpenId();
-        String templateType = TemplateMessageTypeConstant.COUPON_ONLINE_USE;
-
-        // 记录发送内容和接收人openid，为了在发送失败时能够方便重新发送
-        MsgWxLogPO wechatMessageLogPO = new MsgWxLogPO();
-        wechatMessageLogPO.set_id(wechatMessageLogId);
-        wechatMessageLogPO.setWxPublicId(wxVip.getWxPublicId());
-        wechatMessageLogPO.setOpenId(openId);
-        
-        wechatMessageLogPO.setMessageBody(messagejo.toString());
-        wechatMessageLogPO.setMemberName(wxVip.getName());
-        wechatMessageLogPO.setMemberPhone(wxVip.getPhone());
-//        if(channelVal != null) {
-//            wechatMessageLogPO.setWxNick(channelVal.getWxNick());
-//        }
-
-        this.wechatMessageLogService.update(wechatMessageLogPO);
-
-        WxPublicPO wxPublicPO = new WxPublicPO();
-        wxPublicPO.setWxPublicId(wxVip.getWxPublicId());
-        // 发送模板消息
-        return UseTemplate.sendMessage(wxPublicPO, TemplateMessageTypeConstant.COUPON_ONLINE_USE, openId,
-                messagejo);
-
-    }
 }

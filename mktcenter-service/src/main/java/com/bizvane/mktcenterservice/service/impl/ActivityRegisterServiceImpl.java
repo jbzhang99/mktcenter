@@ -9,6 +9,7 @@ import java.util.stream.Collectors;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
@@ -329,9 +330,10 @@ public class ActivityRegisterServiceImpl implements ActivityRegisterService {
      * @param vo
      * @return
      */
+    @Async
     @Override
     @Transactional
-    public ResponseData<Integer> executeRegisterActivity(MemberInfoModelVOActivity vo) {
+    public void executeRegisterActivity(MemberInfoModelVOActivity vo) {
         log.info("开卡活动-开卡活动入参："+JSON.toJSONString(vo));
         //返回对象
         ResponseData responseData = new ResponseData();
@@ -391,6 +393,7 @@ public class ActivityRegisterServiceImpl implements ActivityRegisterService {
                 po.setPoints(points);
             }
             po.setAcitivityId(activityVO.getMktActivityId());
+            po.setSysCompanyId(activityVO.getSysCompanyId());
             po.setSysBrandId(activityVO.getSysBrandId());
             log.info("新增积分记录表");
             mktActivityRecordPOMapper.insertSelective(po);
@@ -398,9 +401,6 @@ public class ActivityRegisterServiceImpl implements ActivityRegisterService {
             mktActivityCountPOMapper.updateSum(po.getAcitivityId(), 1, BigDecimal.ZERO, points);
         }
         log.info("执行活动成功！");
-        responseData.setCode(SysResponseEnum.SUCCESS.getCode());
-        responseData.setMessage(SysResponseEnum.SUCCESS.getMessage());
-        return responseData;
     }
 
     /**

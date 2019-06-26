@@ -123,17 +123,6 @@ public class ActivityRpcController {
     public ResponseData<Integer> executeEvaluationActivity(@Valid @RequestBody ActivityEvaluationBO bo){
         return activityEvaluationService.executeActivityEvaluation(bo);
     }
-
-    /**
-     * 执行活动开卡
-     * @param
-     * @return
-     */
-    @RequestMapping("executeRegisterActivity")
-    public ResponseData<Integer> executeRegisterActivity(@RequestBody MemberInfoModelVOActivity vo){
-        return activityRegisterService.executeRegisterActivity(vo);
-    }
-
     @RequestMapping("judgeMember")
     public  ResponseData<Integer> judgeMember(@RequestBody JudgeMemberVO vo){
        return  activityService.judgeMember(vo);

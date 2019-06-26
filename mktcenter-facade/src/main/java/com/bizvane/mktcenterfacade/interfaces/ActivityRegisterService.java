@@ -34,7 +34,7 @@ public interface ActivityRegisterService {
      * @param
      * @return
      */
-    public ResponseData<Integer> executeRegisterActivity(MemberInfoModelVOActivity vo);
+    public void executeRegisterActivity(MemberInfoModelVOActivity vo);
 
     /**
      * 修改活动

@@ -96,13 +96,4 @@ public class ActivityOrderController {
         ResponseData<Integer> order = activityOrderService.updateActivityOrder(bo,stageUser);
         return order;
     }
-    /**
-     * 执行活动
-     * @param
-     * @return
-     */
-    @RequestMapping("executeOrder")
-    public ResponseData<Integer> executeOrder(OrderModelBo vo){
-        return activityOrderService.executeOrder(vo);
-    }
 }

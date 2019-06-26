@@ -257,6 +257,7 @@ public class ActivityVipAniversaryServiceImpl implements ActivityVipAniversarySe
         ResponseData responseData = new ResponseData();
         ActivityVO vo= new ActivityVO();
         vo.setActivityCode(businessCode);
+        vo.setActivityType(ActivityTypeEnum.ACTIVITY_TYPE_ANNIVERSARY.getCode());
         //查询主表和字表数据
         List<ActivityVO> registerList = mktActivityVipAniversaryPOMapper.getActivityAniversaryList(vo);
         if (CollectionUtils.isEmpty(registerList)){

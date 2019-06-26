@@ -43,6 +43,7 @@ import com.github.pagehelper.PageInfo;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
@@ -192,6 +193,7 @@ public class ActivityEvaluationServiceImpl implements ActivityEvaluationService 
         ActivityBO bo = new ActivityBO();
         ActivityVO vo = new ActivityVO();
         vo.setActivityCode(businessCode);
+        vo.setActivityType(ActivityTypeEnum.ACTIVITY_TYPE_EVALUATION.getCode());
         List<ActivityVO> evaluationList = mktActivityEvaluationPOMapper.getActivityVOList(vo);
         if (CollectionUtils.isEmpty(evaluationList)) {
             responseData.setCode(SysResponseEnum.OPERATE_FAILED_DATA_NOT_EXISTS.getCode());
@@ -217,6 +219,7 @@ public class ActivityEvaluationServiceImpl implements ActivityEvaluationService 
         return responseData;
     }
 
+    @Async
     @Override
     public ResponseData<Integer> executeActivityEvaluation(ActivityEvaluationBO activityEvaluationBO) {
         log.info("执行评价送积分活动=++++++++++++++______________-----------------------333333");

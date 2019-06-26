@@ -7,7 +7,9 @@ import com.bizvane.mktcenterfacade.models.vo.InviteSuccessVO;
 import com.bizvane.mktcenterfacade.models.vo.PageForm;
 import com.bizvane.utils.responseinfo.ResponseData;
 import com.bizvane.utils.tokens.SysAccountPO;
+import org.springframework.web.bind.annotation.RequestBody;
 
+import javax.validation.Valid;
 import java.text.ParseException;
 import java.util.List;
 
@@ -42,5 +44,7 @@ public interface ActivityInviteService {
      * @return
      */
     public ResponseData update(ActivityBO bo, SysAccountPO stageUser) throws ParseException;
+
+    public void award(@RequestBody @Valid InviteSuccessVO vo);
 }
 

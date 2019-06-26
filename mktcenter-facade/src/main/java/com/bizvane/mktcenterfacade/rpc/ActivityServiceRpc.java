@@ -86,7 +86,7 @@ public interface ActivityServiceRpc {
  @RequestMapping("getActivityRecordPOList")
  public ResponseData<List<MktActivityRecordPO>> getActivityRecordPOList(@RequestBody MktActivityRecordVO vo);
  /**
-  * 执行活动
+  * 执行签到活动
   * @param
   * @return
   */

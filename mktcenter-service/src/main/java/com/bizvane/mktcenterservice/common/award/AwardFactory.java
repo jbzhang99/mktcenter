@@ -88,7 +88,7 @@ public class AwardFactory {
             sendCouponBatchRequestVO.setSendType((byte) 1);
             log.info("开始执行批量发券操作参数="+ JSON.toJSONString(sendCouponBatchRequestVO));
             responseData = sendCouponServiceFeign.batchCoupon(sendCouponBatchRequestVO);
-            log.info("发券操作完成完成了完成了完成了完成了");
+            log.info("发券操作完成");
         } catch (Exception e) {
             log.error("AwardFactory.awardCouponBatch error:"+e.getMessage());
             responseData.setCode(ResponseConstants.ERROR);
@@ -111,7 +111,6 @@ public class AwardFactory {
             log.info("开始执行新增积分操作参数="+ JSON.toJSONString(var1));
             IntegralChangeResponseModel integralChangeResponseModel =integralChangeApiService.integralChangeOperate(var1);
             log.info("发积分结果打印======"+JSON.toJSONString(integralChangeResponseModel));
-            log.info("积分增加操作完成完成了完成了完成了完成了");
         } catch (MemberException e) {
             log.error("AwardFactory.awardIntegral error:"+e.getMessage());
             responseData.setCode(ResponseConstants.ERROR);
@@ -152,7 +151,7 @@ public class AwardFactory {
         log.info("开始执行发送模板消息操作参数="+ JSON.toJSONString(bo.getActivityMessageVO()));
         ResponseData<String>  response = templateMessageServiceFeign.sendTemplateMessage(bo.getActivityMessageVO());
         log.info("发送微信返回参数="+ JSON.toJSONString(response));
-        log.info("发送模板消息操作完成完成了完成了完成了完成了");
+        log.info("发送模板消息操作完成");
         return responseData;
     }
 

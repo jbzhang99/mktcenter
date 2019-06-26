@@ -58,8 +58,6 @@ public class ActivityJobHandler extends IJobHandler {
                 //把活动状态改成执行中
                 int sum = mktActivityPOMapper.updateActivityStatus(po);
             }
-
-
         returnT.setCode(0);
         returnT.setContent("活动执行完毕");
         returnT.setMsg("success");

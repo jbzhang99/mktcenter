@@ -6,6 +6,7 @@ import com.bizvane.messageservice.common.constants.SysRespConstants;
 import com.bizvane.messageservice.common.constants.SystemConstants;
 import com.bizvane.messageservice.mappers.MsgSmsTempPOMapper;
 import com.bizvane.messageservice.mappers.SysSmsConfigPOMapper;
+import com.bizvane.messageservice.service.SendCommonMessageService;
 import com.bizvane.messageservice.service.SmsMessageLogService;
 import com.bizvane.messageservice.service.SmsTemplateMessageService;
 import com.bizvane.messagefacade.interfaces.SendBatchMessageFeign;
@@ -37,7 +38,7 @@ public class SmsGenYeTemplateMessageServiceImpl implements SmsTemplateMessageSer
     private SmsMessageLogService smsMessageLogService;
     
     @Autowired
-    private com.bizvane.messageservice.service.impl.centerMsg.SendCommonMessageImpl SendCommonMessageImpl;
+    private SendCommonMessageService SendCommonMessageImpl;
     
     @Autowired
     private SendBatchMessageFeign sendBatchMessage;

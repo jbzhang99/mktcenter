@@ -267,6 +267,7 @@ public class ActivityBirthdayServiceImpl implements ActivityBirthdayService {
         ResponseData responseData = new ResponseData();
         ActivityVO vo= new ActivityVO();
         vo.setActivityCode(businessCode);
+        vo.setActivityType(ActivityTypeEnum.ACTIVITY_TYPE_BIRTHDAY.getCode());
         //查询主表和字表数据
         List<ActivityVO> registerList = mktActivityBirthdayPOMapper.getActivityBirthdayList(vo);
         if (CollectionUtils.isEmpty(registerList)){

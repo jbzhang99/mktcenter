@@ -96,15 +96,6 @@ public class ActivityRegisterController {
         return registerData;
     }
     /**
-     * 执行活动
-     * @param
-     * @return
-     */
-    @RequestMapping("executeActivity")
-    public ResponseData<Integer> executeActivity(MemberInfoModelVOActivity vo){
-        return activityRegisterService.executeActivity(vo);
-    }
-    /**
      * 查询活动详情
      * @param businessCode
      * @return
