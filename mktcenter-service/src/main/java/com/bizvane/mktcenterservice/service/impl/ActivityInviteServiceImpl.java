@@ -424,7 +424,7 @@ public class ActivityInviteServiceImpl implements ActivityInviteService {
         //查邀请人会员信息
         MemberInfoApiModel members = new MemberInfoApiModel();
         members.setBrandId(vo.getSysBrandId());
-        members.setMemberCode(vo.getInviteOpenId());
+        members.setMemberCode(vo.getMemberCode());
         MemberInfoModel invitemMmeberInfo = memberInfoApiService.getMemberModel(members).getData();
         log.info("邀请注册活动的会员信息:{}", JSON.toJSONString(invitemMmeberInfo));
 

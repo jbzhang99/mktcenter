@@ -26,5 +26,5 @@ public class InviteSuccessVO {
     private Date openCardTime;
     //邀请人
     @NotNull
-    private String inviteOpenId;
+    private String inviteMemberCode;
 }
