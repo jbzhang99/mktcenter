@@ -495,7 +495,7 @@ public class ActivityOrderServiceImpl implements ActivityOrderService {
         ActivityVO activity = new ActivityVO();
         activity.setActivityStatus(ActivityStatusEnum.ACTIVITY_STATUS_EXECUTING.getCode());
         activity.setSysBrandId(orderModelBo.getBrandId());
-        activity.setActivityType(ActivityTypeEnum.ACTIVITY_TYPE_REGISGER.getCode());
+        activity.setActivityType(ActivityTypeEnum.ACTIVITY_TYPE_ORDER.getCode());
         List<ActivityVO> orderList = mktActivityOrderPOMapper.getActivityOrderList(activity);
         log.info("执行消费活动查询到的进行中活动"+ JSON.toJSONString(orderList));
         for (ActivityVO activityVO:orderList) {
