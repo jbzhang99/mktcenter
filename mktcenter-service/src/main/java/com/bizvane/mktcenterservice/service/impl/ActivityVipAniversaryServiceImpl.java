@@ -543,6 +543,7 @@ public class ActivityVipAniversaryServiceImpl implements ActivityVipAniversarySe
             po.setPoints(activityAniversary.getPoints());
             po.setAcitivityId(activityAniversary.getMktActivityId());
             po.setSysBrandId(activityAniversary.getSysBrandId());
+            po.setSysCompanyId(activityAniversary.getSysCompanyId());
             mktActivityRecordPOMapper.insertSelective(po);
             
             mktActivityCountPOMapper.updateSum(po.getAcitivityId(), 1, BigDecimal.ZERO, po.getPoints());

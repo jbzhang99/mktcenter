@@ -567,6 +567,7 @@ public class ActivityBirthdayServiceImpl implements ActivityBirthdayService {
             po.setParticipateDate(new Date());
             po.setPoints(activityBirthday.getPoints());
             po.setAcitivityId(activityBirthday.getMktActivityId());
+            po.setSysCompanyId(activityBirthday.getSysCompanyId());
             po.setSysBrandId(activityBirthday.getSysBrandId());
             mktActivityRecordPOMapper.insertSelective(po);
             
