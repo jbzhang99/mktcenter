@@ -220,6 +220,7 @@ public class ActivityEvaluationServiceImpl implements ActivityEvaluationService 
     }
 
     @Async
+    @Transactional
     @Override
     public ResponseData<Integer> executeActivityEvaluation(ActivityEvaluationBO activityEvaluationBO) {
         log.info("执行评价送积分活动");

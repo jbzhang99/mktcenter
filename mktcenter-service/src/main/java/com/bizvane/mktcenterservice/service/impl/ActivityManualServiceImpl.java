@@ -215,10 +215,11 @@ public class ActivityManualServiceImpl implements ActivityManualService {
      * @return
      */
     @Override
+    @Transactional
     public ResponseData<ActivityManualVO> executeActivity(ActivityManualVO vo) {
         log.info("领券活动-执行活动，入参:memberInfoModel-"+ JSON.toJSONString(vo));
         ResponseData responseData = new ResponseData();
-        if(vo==null || vo.getMktActivityId()==null){
+        if(vo==null || vo.getMktActivityId()==null || vo.getSysCompanyId()==null || vo.getSysBrandId()==null){
             log.warn("参数为空");
             responseData.setCode(SystemConstants.ERROR_CODE);
             responseData.setMessage(SystemConstants.ERROR_MSG_PARAM_EMPTY);
@@ -250,6 +251,9 @@ public class ActivityManualServiceImpl implements ActivityManualService {
         }
 
         MktActivityRecordPO mktActivityRecordPO = new MktActivityRecordPO();
+        mktActivityRecordPO.setSysCompanyId(vo.getSysCompanyId());
+        mktActivityRecordPO.setSysBrandId(vo.getSysBrandId());
+        mktActivityRecordPO.setActivityType(ActivityTypeEnum.ACTIVITY_TYPE_MANUAL.getCode());
         mktActivityRecordPO.setMemberCode(memberInfoModel.getMemberCode());
         try {
             //查规则
@@ -327,7 +331,7 @@ public class ActivityManualServiceImpl implements ActivityManualService {
             //新增记录表
             mktActivityRecordPO.setMemberCode(memberInfoModel.getMemberCode());
             mktActivityRecordPO.setAcitivityId(vo.getMktActivityId());
-            mktActivityRecordPO.setActivityType(vo.getActivityType());
+            mktActivityRecordPO.setActivityType(ActivityTypeEnum.ACTIVITY_TYPE_MANUAL.getCode());
             mktActivityRecordPO.setParticipateDate(new Date());
             mktActivityRecordPO.setCreateUserId(memberInfoModel.getCreateUserId());
             mktActivityManualPO.setCreateDate(new Date());

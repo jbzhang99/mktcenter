@@ -4,7 +4,9 @@ import com.bizvane.members.facade.models.MemberInfoModel;
 import com.bizvane.mktcenterfacade.models.po.MktActivityManualPO;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import lombok.Data;
 
+@Data
 @ApiModel("会员活动对象")
 public class ActivityManualVO extends MktActivityManualPO {
 
@@ -23,60 +25,6 @@ public class ActivityManualVO extends MktActivityManualPO {
     @ApiModelProperty(value = "已领取的总数量", name = "propertyList", example = "7")
     private Long countAllSum;//领取的总数量
 
-    public Long getCountTodaySum() {
-        return countTodaySum;
-    }
+    private Long sysBrandId;
 
-    public void setCountTodaySum(Long countTodaySum) {
-        this.countTodaySum = countTodaySum;
-    }
-
-    public Long getCountAllSum() {
-        return countAllSum;
-    }
-
-    public void setCountAllSum(Long countAllSum) {
-        this.countAllSum = countAllSum;
-    }
-
-    public MemberInfoModel getMemberInfoModel() {
-        return memberInfoModel;
-    }
-
-    public void setMemberInfoModel(MemberInfoModel memberInfoModel) {
-        this.memberInfoModel = memberInfoModel;
-    }
-
-    public String getActivityCode() {
-        return activityCode;
-    }
-
-    public void setActivityCode(String activityCode) {
-        this.activityCode = activityCode;
-    }
-
-    public Integer getActivityType() {
-        return activityType;
-    }
-
-    public void setActivityType(Integer activityType) {
-        this.activityType = activityType;
-    }
-
-    public String getCouponCode() {
-        return couponCode;
-    }
-
-    public void setCouponCode(String couponCode) {
-
-        this.couponCode = couponCode;
-    }
-
-    public Long getCouponDefinitionId() {
-        return couponDefinitionId;
-    }
-
-    public void setCouponDefinitionId(Long couponDefinitionId) {
-        this.couponDefinitionId = couponDefinitionId;
-    }
 }

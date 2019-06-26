@@ -11,6 +11,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
@@ -486,6 +487,7 @@ public class ActivityOrderServiceImpl implements ActivityOrderService {
      * @param orderModelBo
      */
     @Async
+    @Transactional
     @Override
     public ResponseData<Integer> award(@RequestBody @Valid OrderModelBo orderModelBo) {
         //返回对象

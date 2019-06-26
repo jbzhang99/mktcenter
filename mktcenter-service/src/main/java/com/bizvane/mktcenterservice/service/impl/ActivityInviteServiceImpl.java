@@ -418,6 +418,7 @@ public class ActivityInviteServiceImpl implements ActivityInviteService {
      * @param vo
      */
     @Async
+    @Transactional
     @Override
     public void award(InviteSuccessVO vo) {
         log.info("邀请注册活动的参数:{}", JSON.toJSONString(vo));
