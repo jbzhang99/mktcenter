@@ -35,10 +35,7 @@ import com.bizvane.mktcenterservice.common.award.Award;
 
 import com.bizvane.mktcenterservice.common.utils.DateUtil;
 import com.bizvane.mktcenterservice.common.utils.ExecuteParamCheckUtil;
-import com.bizvane.mktcenterservice.mappers.MktActivityPOMapper;
-import com.bizvane.mktcenterservice.mappers.MktActivityRecordPOMapper;
-import com.bizvane.mktcenterservice.mappers.MktActivityRegisterPOMapper;
-import com.bizvane.mktcenterservice.mappers.MktMessagePOMapper;
+import com.bizvane.mktcenterservice.mappers.*;
 import com.bizvane.utils.enumutils.SysResponseEnum;
 import com.bizvane.utils.jobutils.JobClient;
 import com.bizvane.utils.jobutils.XxlJobInfo;
@@ -77,10 +74,7 @@ public class ActivityServiceImpl implements ActivityService {
 
     @Autowired
     private CouponQueryServiceFeign couponQueryServiceFeign;
-    @Autowired
-    private MemberInfoApiService memberInfoApiService;
-    @Autowired
-    private MktActivityRegisterPOMapper mktActivityRegisterPOMapper;
+
     @Autowired
     private JobClient jobClient;
     @Autowired
@@ -92,6 +86,9 @@ public class ActivityServiceImpl implements ActivityService {
 
     @Autowired
     private MktActivityRecordPOMapper mktActivityRecordPOMapper;
+
+    @Autowired
+    private MktActivityInvitePOMapper mktActivityInvitePOMapper;
 
     /**
      * 禁用/启用活动
@@ -143,6 +140,21 @@ public class ActivityServiceImpl implements ActivityService {
             for(MktActivityPOWithBLOBs mktActivityPO:mktActivityPOS){
                 StoreActivityResponseVO storeActivityResponseVO = new StoreActivityResponseVO();
                 BeanUtils.copyProperties(mktActivityPO,storeActivityResponseVO);
+                //邀请开卡活动进度
+                if(((Integer)ActivityTypeEnum.ACTIVITY_TYPE_INVITE.getCode()).equals(mktActivityPO.getActivityType())){
+                    log.info("邀请开卡活动进度转换,活动id：{}",mktActivityPO.getMktActivityId());
+                    MktActivityInvitePOExample mktActivityInvitePOExample = new MktActivityInvitePOExample();
+                    mktActivityInvitePOExample.createCriteria().andValidEqualTo(Boolean.TRUE).andSysCompanyIdEqualTo(mktActivityPO.getSysCompanyId())
+                            .andMktActivityIdEqualTo(mktActivityPO.getMktActivityId());
+                    MktActivityInvitePO mktActivityInvitePO = mktActivityInvitePOMapper.selectByExample(mktActivityInvitePOExample).get(0);
+                    log.info("查参与记录次数");
+                    MktActivityRecordPOExample mktActivityRecordPOExample = new MktActivityRecordPOExample();
+                    mktActivityRecordPOExample.createCriteria().andValidEqualTo(Boolean.TRUE).andSysCompanyIdEqualTo(mktActivityPO.getSysCompanyId())
+                            .andAcitivityIdEqualTo(mktActivityPO.getMktActivityId());
+                    List<MktActivityRecordPO> mktActivityRecordPOS = mktActivityRecordPOMapper.selectByExample(mktActivityRecordPOExample);
+                    storeActivityResponseVO.setParticipateTimes(mktActivityRecordPOS.size());
+                    storeActivityResponseVO.setTargetTimes(mktActivityInvitePO.getInviteNum());
+                }
                 storeActivityResponseVOS.add(storeActivityResponseVO);
             }
         }

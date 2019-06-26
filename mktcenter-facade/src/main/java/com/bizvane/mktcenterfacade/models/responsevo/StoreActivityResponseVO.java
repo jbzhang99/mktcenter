@@ -43,6 +43,6 @@ public class StoreActivityResponseVO {
     @ApiModelProperty(value = "参与次数", name = "participateTimes", example = "1")
     private Integer participateTimes;
 
-    @ApiModelProperty(value = "总次数", name = "allTimes", example = "2")
-    private Integer allTimes;
+    @ApiModelProperty(value = "目标次数", name = "allTimes", example = "2")
+    private Integer targetTimes;
 }
