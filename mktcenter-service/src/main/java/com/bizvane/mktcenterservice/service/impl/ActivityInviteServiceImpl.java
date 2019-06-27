@@ -246,6 +246,7 @@ public class ActivityInviteServiceImpl implements ActivityInviteService {
         MktActivityInvitePO mktActivityInvitePO = new MktActivityInvitePO();
         BeanUtils.copyProperties(mktActivityPOWithBLOBs,mktActivityInvitePO);
         mktActivityInvitePO.setMktActivityId(mktActivityId);
+        mktActivityInvitePO.setInviteNum(activityVO.getInviteNum());
 
         log.info("邀请开卡活动-新增入参:"+ JSON.toJSONString(mktActivityInvitePO));
         mktActivityInvitePOMapper.insertSelective(mktActivityInvitePO);
