@@ -7,6 +7,8 @@ import com.bizvane.messageservice.service.WXTemplateMessageService;
 import com.bizvane.messageservice.service.WechatTuWenMessageLogService;
 import com.bizvane.messagefacade.models.po.MsgWxTuWenPO;
 import com.bizvane.messagefacade.models.vo.Result;
+import com.bizvane.messageservice.service.WxTuWenMessageService;
+import com.bizvane.mktcenterfacade.models.bo.ObtainGraphicBo;
 import com.bizvane.utils.responseinfo.ResponseData;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -27,8 +29,8 @@ public class WXTuWenTemplateMessageServiceImpl implements WXTemplateMessageServi
     @Autowired
     private WechatTuWenMessageLogService wechatTuWenMessageLogService;
 	
-//	@Autowired
-//	private  GraphicTemplateServiceRpc graphicTemplateServiceRpc;
+	@Autowired
+	private WxTuWenMessageService wxTuWenMessageService;
 
 
     /**
@@ -116,18 +118,17 @@ public class WXTuWenTemplateMessageServiceImpl implements WXTemplateMessageServi
                 }
          
            
-//        ObtainGraphicBo obtainGraphicBo = new ObtainGraphicBo();
-//
-//        obtainGraphicBo.setBrandId(msgWxTuWenPO.getBrandId());
-//        obtainGraphicBo.setOpenId(openIdlsit);
-//        obtainGraphicBo.setMediaId(msgWxTuWenPO.getMediaId());
-//        obtainGraphicBo.setMsgType(msgWxTuWenPO.getMsgType());
-//        obtainGraphicBo.setSendIgnoreReprint(msgWxTuWenPO.getSendIgnoreReprint());
-//
-//        logger.info(this.getClass().getName() + ".sendMessage发送图文消息入参：" + JSONObject.toJSONString(obtainGraphicBo));
-//
-//        ResponseData responseData=    graphicTemplateServiceRpc.groupSending(obtainGraphicBo);
-           ResponseData responseData = new ResponseData();
+        ObtainGraphicBo obtainGraphicBo = new ObtainGraphicBo();
+
+        obtainGraphicBo.setBrandId(msgWxTuWenPO.getBrandId());
+        obtainGraphicBo.setOpenId(openIdlsit);
+        obtainGraphicBo.setMediaId(msgWxTuWenPO.getMediaId());
+        obtainGraphicBo.setMsgType(msgWxTuWenPO.getMsgType());
+        obtainGraphicBo.setSendIgnoreReprint(msgWxTuWenPO.getSendIgnoreReprint());
+
+        logger.info(this.getClass().getName() + ".sendMessage发送图文消息入参：" + JSONObject.toJSONString(obtainGraphicBo));
+
+        ResponseData responseData = wxTuWenMessageService.groupSending(obtainGraphicBo);
            logger.info(this.getClass().getName() + ".sendMessage发送图文消息出参：" + JSONObject.toJSONString(responseData));
         
         if(responseData.getData()!=null) {

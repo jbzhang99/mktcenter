@@ -178,7 +178,7 @@ public class MktReportServiceImpl implements ReportTempService {
 		             fileTaskServiceRpc.update(fileTaskPo);
 
 	     			  
-	     			    qiniuUrl = "https://"+ QiNiuUtil.upload(into, filename+ ".zip");
+	     			    qiniuUrl =  QiNiuUtil.upload(into, filename+ ".zip");
 	     			  System.out.println("报表上传到七牛ReportIncomeController："+qiniuUrl);
 	     			  in.close();
 	     			  out.close();
