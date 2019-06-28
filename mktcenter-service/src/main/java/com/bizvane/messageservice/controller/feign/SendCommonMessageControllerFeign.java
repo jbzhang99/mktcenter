@@ -5,6 +5,7 @@ import com.bizvane.messagefacade.models.vo.SysSmsConfigVO;
 import com.bizvane.messageservice.service.SendCommonMessageService;
 import com.bizvane.utils.responseinfo.ResponseData;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
@@ -19,7 +20,7 @@ public class SendCommonMessageControllerFeign implements SendCommonMessageFeign 
     private SendCommonMessageService sendCommonMessageService;
 
     @Override
-    public ResponseData<Integer> sendSmg(SysSmsConfigVO vo) {
+    public ResponseData<Integer> sendSmg(@RequestBody SysSmsConfigVO vo) {
         return sendCommonMessageService.sendSmg(vo);
     }
 }

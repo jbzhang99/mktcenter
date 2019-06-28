@@ -10,6 +10,7 @@ import com.bizvane.messagefacade.models.vo.SysSmsConfigVO;
 import com.bizvane.messageservice.service.SendCommonMessageService;
 import com.bizvane.utils.enumutils.SysResponseEnum;
 import com.bizvane.utils.responseinfo.ResponseData;
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -98,17 +99,14 @@ public class SendCommonMessageImpl implements SendCommonMessageService {
         ResponseData<Integer> result = new ResponseData<Integer>(SysResponseEnum.SUCCESS.getCode(),SysResponseEnum.SUCCESS.getMessage(),null);
         MsgSmsPhonePOExample sysSmsConfigPOExample = new MsgSmsPhonePOExample();
         sysSmsConfigPOExample.createCriteria().andPhoneEqualTo(vo.getPhone()).andValidEqualTo(Boolean.TRUE);
-        List<MsgSmsPhonePO>  sysSmsConfigList= msgSmsPhonePOMapper.selectByExample(sysSmsConfigPOExample);
+        List<MsgSmsPhonePO>  msgSmsPhonePOS= msgSmsPhonePOMapper.selectByExample(sysSmsConfigPOExample);
 
         //检查没有在白名单
-        for(MsgSmsPhonePO smsTempPO: sysSmsConfigList) {
-            if(smsTempPO.getTemplateType()==false){
-                return result;
-            }
+        if(CollectionUtils.isNotEmpty(msgSmsPhonePOS)&& !msgSmsPhonePOS.get(0).getTemplateType()){
+            return result;
         }
         result.setCode(SysResponseEnum.FAILED.getCode());
         result.setMessage(":该手机号不是白名单，不发送短信！");
-
         return  result;
     }
 }

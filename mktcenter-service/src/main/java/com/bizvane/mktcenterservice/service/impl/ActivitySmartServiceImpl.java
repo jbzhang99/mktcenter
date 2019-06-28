@@ -906,23 +906,19 @@ public class ActivitySmartServiceImpl implements ActivitySmartService {
             responseData.setMessage(SysResponseEnum.MODEL_FAILED_VALIDATION.getMessage());
             return responseData;
         }*/
-        if (false==vo.getSendImmediately()){
-            //如果活动时间滞后
-            if(new Date().before(vo.getSendTime())){
-                log.info("new Date().before(vo.getSendTime()) is true");
-                //活动状态设置为待执行
-                mktActivityPOWithBLOBs.setActivityStatus(ActivityStatusEnum.ACTIVITY_STATUS_PENDING.getCode());
-                vo.setMktSmartType(MktSmartTypeEnum.SMART_TYPE_SMS.getCode());
-                //创建任务调度
-                jobUtil.addSmartActivityJob(stageUser,vo);
-            }else{
-                //活动状态设置为执行中
-                mktActivityPOWithBLOBs.setActivityStatus(ActivityStatusEnum.ACTIVITY_STATUS_EXECUTING.getCode());
-                //需要立即执行
-                execute = Boolean.TRUE;
-            }
-        }else {
+        if (vo.getSendImmediately()){
+            //活动状态设置为执行中
+            mktActivityPOWithBLOBs.setActivityStatus(ActivityStatusEnum.ACTIVITY_STATUS_EXECUTING.getCode());
+            //需要立即执行
             execute = Boolean.TRUE;
+            //如果活动时间滞后
+        }else if(new Date().before(vo.getSendTime())){
+            log.info("new Date().before(vo.getSendTime()) is true");
+            //活动状态设置为待执行
+            mktActivityPOWithBLOBs.setActivityStatus(ActivityStatusEnum.ACTIVITY_STATUS_PENDING.getCode());
+            vo.setMktSmartType(MktSmartTypeEnum.SMART_TYPE_SMS.getCode());
+            //创建任务调度
+            jobUtil.addSmartActivityJob(stageUser,vo);
         }
 
         //新增活动主表
