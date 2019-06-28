@@ -1346,6 +1346,11 @@ public class ActivitySmartServiceImpl implements ActivitySmartService {
                 String obtainGraphicString = HttpUtil.post(WXOBTAIN_FRAPHIC + token, JSON.toJSONString(stringMap));
                 log.info("获取图文模板列表={}", JSON.toJSONString(obtainGraphicString));
                 JSONObject jsonObject = JSONObject.parseObject(obtainGraphicString);
+                if(org.apache.commons.lang3.StringUtils.isNotBlank(jsonObject.getString("errcode"))){
+                    responseData.setCode(SysResponseEnum.FAILED.getCode());
+                    responseData.setMessage(jsonObject.getString("errmsg"));
+                    return responseData;
+                };
                 JSONObject obtainGraphicJson = new JSONObject();
                 String item = jsonObject.getString("item");
                 String total_count = jsonObject.getString("total_count");
@@ -1411,7 +1416,7 @@ public class ActivitySmartServiceImpl implements ActivitySmartService {
                 responseData.setData(graphicBo);
                 return responseData;
             } catch (IOException e) {
-                e.printStackTrace();
+               log.error("查询公众号图文消息列表错误：{}",e.getMessage());
             }
 
         }

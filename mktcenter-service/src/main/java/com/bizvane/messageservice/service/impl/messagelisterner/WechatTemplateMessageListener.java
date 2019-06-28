@@ -36,27 +36,11 @@ public class WechatTemplateMessageListener implements MessageListener {
     public Action consume(Message message, ConsumeContext consumeContext) {
 
         logger.info("wXTemplateMessageServiceImpl消费消息 topic:" + message.getTopic() + " messageId:" + message.getMsgID());
-
-//        Runnable runnable = new ThreadExtend("wechatTemplateMessageListener", "sendMemberCustomer", message);
-//        ThreadPool.run(runnable);
-//        //如果想测试消息重投的功能,可以将Action.CommitMessage 替换成Action.ReconsumeLater
-//        return Action.CommitMessage;
-//    }
-//
-//
-//    /**
-//     * 消息处理
-//     * @param objectParam
-//     */
-//    public void sendMemberCustomer(Object objectParam){
-//
-//        Message message = (Message) objectParam;
         String messageBody = null;
         try {
             messageBody = new String(message.getBody(), SystemConstants.CHARSET);
         } catch (UnsupportedEncodingException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            logger.error("wXTemplateMessageServiceImpl消费消息失败，error:{}",e.getMessage());
         }
 
         String msgId = message.getMsgID();

@@ -111,10 +111,10 @@ threadPool:
   queueCapacity: 99999
 
 qiniu:
-  accessKey: Jv79lFtLNDBj1XJ6vkXkemnRN5LIOSXMeDOvW35n
-  secretKey: HIKXNXr12qRhpIAsdI8xTaX87LeTqqLGjXB_RgDf
-  bucketNm: bizvane01
-  domain: qi.test.bizvane.cn
+  accessKey: 8X4b8V5i79YC-F-nB-m5m7Z-1uihXSEWypWRwEhK
+  secretKey: xipIk3YSW_Rd-ZJ4Nk6jTN0W2Y70YVvo6Nx6QT7L
+  bucketNm: kgly-sit
+  domain: https://sit.static.keguanlaoye.com
 
 activity:
   qrcodeurl: /qrcode?activityCode=

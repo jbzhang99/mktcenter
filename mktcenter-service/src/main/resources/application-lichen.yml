@@ -113,7 +113,7 @@ qiniu:
   accessKey: 8X4b8V5i79YC-F-nB-m5m7Z-1uihXSEWypWRwEhK
   secretKey: xipIk3YSW_Rd-ZJ4Nk6jTN0W2Y70YVvo6Nx6QT7L
   bucketNm: kgly-sit
-  domain: sit.static.keguanlaoye.com
+  domain: https://sit.static.keguanlaoye.com
 
 activity:
   qrcodeurl: /qrcode?activityCode=

@@ -424,7 +424,8 @@ public class WXTemplateMessageServiceImpl implements WXTemplateMessageService {
         WxChannelRelationVo wxChannelRelationVo = new WxChannelRelationVo();
         wxChannelRelationVo.setMemberCode(memberCode);
         wxChannelRelationVo.setSysCompanyId(sysCompanyId);
-        wxChannelRelationVo.setBrandId(brandId);wxChannelRelationVo.setMiniProgram(1);
+        wxChannelRelationVo.setBrandId(brandId);
+        wxChannelRelationVo.setMiniProgram(1);
         ResponseData<WxChannelInfoModel> wxChannelInfoVonew= wxChannelInfoApiService.getWxChannelInfoRelation(wxChannelRelationVo);
         
         

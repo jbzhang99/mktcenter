@@ -57,16 +57,6 @@ public class RocketMQWechatServiceImpl implements RocketMQWechatService {
       result.setMsg(SysRespConstants.SYSTEM_DATA_NOT_EMPTY.getMsg());
       return result;
     }
-    
-//    int hashCode = messageBody.hashCode();
-//    RedisClient redisClient = RedisManager.getInstince();
-//    boolean exists = redisClient.exists("message_rocketmq_" + hashCode);
-//    if (exists) {
-//      RocketMQWechatServiceImpl.logger.error("RocketMQWechatServiceImpl.sendMessage:" + SysRespConstants.SYSTEM_DATA_NOT_REPEAT.getMsg());
-//      result.setStatus(SysRespConstants.SYSTEM_DATA_NOT_REPEAT.getStatus());
-//      result.setMsg(SysRespConstants.SYSTEM_DATA_NOT_REPEAT.getMsg());
-//      return result;
-//    }
 
     JSONObject jsonObject = JSON.parseObject(messageBody);
     
@@ -114,7 +104,7 @@ public class RocketMQWechatServiceImpl implements RocketMQWechatService {
     try {
       messageBodyByte = messageBody.getBytes(SystemConstants.CHARSET);
     } catch (UnsupportedEncodingException e1) {
-      // TODO Auto-generated catch block
+      logger.error("模板消息发送失败,error:{}",e1.getMessage());
       e1.printStackTrace();
     }
     //SystemConstants.ROCKET_CONFIG_BUSINESS_TYPE_WECHAT_SIMPLE_MESSAGE
