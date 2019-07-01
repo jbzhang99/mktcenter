@@ -434,7 +434,7 @@
     ORDER BY tma.create_date DESC
   </select>
 
-  <select id="getExecutingActivityList" parameterType="java.lang.Integer" resultType="com.bizvane.mktcenterfacade.models.vo.ActivityVO">
+  <select id="getExecutingActivityList" parameterType="java.lang.Long" resultType="com.bizvane.mktcenterfacade.models.vo.ActivityVO">
     select
      tma.mkt_activity_id,
     tma.sys_company_id,
