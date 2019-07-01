@@ -21,4 +21,5 @@ public class OrderModelBo {
     private Long levelId;//会员等级id
     private Integer memberType;//会员范围
     private Long companyId;//企业id
+    private String payOrderNo;//订单号
 }
