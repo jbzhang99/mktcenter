@@ -263,7 +263,7 @@ public class DateUtil {
     public static String longToString(long date, String format) {
         SimpleDateFormat sdf = new SimpleDateFormat(format);
         // 前面的lSysTime是秒数，先乘1000得到毫秒数，再转为java.util.Date类型    
-        Date dt2 = new Date(date * 1000L);
+        Date dt2 = new Date(date);
         String sDateTime = sdf.format(dt2); // 得到精确到秒的表示：08/31/2006 21:08:00
         return sDateTime;
     }

@@ -13,6 +13,7 @@ import com.bizvane.messageservice.service.SmsTemplateMessageService;
 import com.bizvane.messagefacade.models.po.*;
 import com.bizvane.messagefacade.models.vo.Result;
 import com.bizvane.messagefacade.models.vo.SysSmsConfigVO;
+import com.bizvane.mktcenterservice.common.tools.DateUtil;
 import com.bizvane.utils.enumutils.SysResponseEnum;
 import com.bizvane.utils.responseinfo.ResponseData;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -22,6 +23,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -71,7 +74,10 @@ public class SmsTemplateMessageMemberRegisterServiceImpl implements SmsTemplateM
 	        {
 	        	jsonObject.put("nowLevelMember", "");
 	        }
-	        
+
+			//发送
+			Result<String> sendResult = this.sendMessageDoing( jsonObject);
+
 	        // 记录发送消息日志
 	        MsgSmsLogPO insertPO = new MsgSmsLogPO();
 	        insertPO.setBussinessId(jsonObject.getString("rocketMQBussinessId"));
@@ -80,9 +86,7 @@ public class SmsTemplateMessageMemberRegisterServiceImpl implements SmsTemplateM
 	        if(!(StringUtils.isBlank(jsonObject.getString("memberPhone")))){insertPO.setMemberPhone(jsonObject.getString("memberPhone"));}
 	        insertPO.setMessageBody(messageBody);if(!(StringUtils.isBlank(jsonObject.getString("sysBrandId")))){insertPO.setSysBrandId(jsonObject.getLong("sysBrandId"));}
 	        Result<String> insertResult = this.smsMessageLogService.insert(insertPO);
-	         //发送
-	        Result<String> sendResult = this.sendMessageDoing( jsonObject);
-	        
+
 	         //更新日志发送状态
 	       	 Integer sendState = SystemConstants.SMS_MESSAGE_LOG_SEND_STATE_FAIL;
 	       	 String resultInfo = null;
@@ -220,7 +224,11 @@ public class SmsTemplateMessageMemberRegisterServiceImpl implements SmsTemplateM
         	 ObjectMapper mapper = new ObjectMapper();
         	SysSmsConfigVO syssmsconfigvo = mapper.convertValue(sysSmsConfigList.get(0), SysSmsConfigVO.class);
         	//处理短信内容
-        	syssmsconfigvo.setMsgContent(smsTempPO.getContent().replace("@[会员姓名]",jsonObject.getString("memberName")).replace("@[当前会员等级]", jsonObject.getString("nowLevelMember")).replace("@[公众号]", jsonObject.getString("pubNum")));
+        	syssmsconfigvo.setMsgContent(smsTempPO.getContent().replace("@[会员姓名]",jsonObject.getString("memberName"))
+					.replace("@[手机号]", jsonObject.getString("memberPhone"))
+					.replace("@[开卡门店]", jsonObject.getString("storesName"))
+					.replace("@[注册时间]", DateUtil.longToString(jsonObject.getLong("date"),DateUtil.ymdhms))
+			);
         	//手机号码
         	syssmsconfigvo.setPhone(jsonObject.getString("memberPhone"));     result.setData(syssmsconfigvo.getMsgContent());
         	//发送短信
@@ -246,8 +254,6 @@ public class SmsTemplateMessageMemberRegisterServiceImpl implements SmsTemplateM
         return result;
 
     }
-
-
 }
 
 
