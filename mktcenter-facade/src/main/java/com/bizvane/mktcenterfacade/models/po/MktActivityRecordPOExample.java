@@ -8,29 +8,21 @@ import java.util.List;
 
 public class MktActivityRecordPOExample implements Serializable {
     /**
-	 * 只读. 
-	 * @mbg.generated  2018-08-31 12:40:26
+	 * @mbg.generated
 	 */
 	protected String orderByClause;
 	/**
-	 * 只读. 
-	 * @mbg.generated  2018-08-31 12:40:26
+	 * @mbg.generated
 	 */
 	protected boolean distinct;
 	/**
-	 * 只读. 
-	 * @mbg.generated  2018-08-31 12:40:26
+	 * @mbg.generated
 	 */
 	protected List<Criteria> oredCriteria;
-	/**
-	 * 只读. 
-	 * @mbg.generated  2018-08-31 12:40:26
-	 */
-	private static final long serialVersionUID = 1L;
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-08-31 12:40:26
+	 * @mbg.generated
 	 */
 	public MktActivityRecordPOExample() {
 		oredCriteria = new ArrayList<Criteria>();
@@ -38,7 +30,7 @@ public class MktActivityRecordPOExample implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-08-31 12:40:26
+	 * @mbg.generated
 	 */
 	public void setOrderByClause(String orderByClause) {
 		this.orderByClause = orderByClause;
@@ -46,7 +38,7 @@ public class MktActivityRecordPOExample implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-08-31 12:40:26
+	 * @mbg.generated
 	 */
 	public String getOrderByClause() {
 		return orderByClause;
@@ -54,7 +46,7 @@ public class MktActivityRecordPOExample implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-08-31 12:40:26
+	 * @mbg.generated
 	 */
 	public void setDistinct(boolean distinct) {
 		this.distinct = distinct;
@@ -62,7 +54,7 @@ public class MktActivityRecordPOExample implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-08-31 12:40:26
+	 * @mbg.generated
 	 */
 	public boolean isDistinct() {
 		return distinct;
@@ -70,7 +62,7 @@ public class MktActivityRecordPOExample implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-08-31 12:40:26
+	 * @mbg.generated
 	 */
 	public List<Criteria> getOredCriteria() {
 		return oredCriteria;
@@ -78,7 +70,7 @@ public class MktActivityRecordPOExample implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-08-31 12:40:26
+	 * @mbg.generated
 	 */
 	public void or(Criteria criteria) {
 		oredCriteria.add(criteria);
@@ -86,7 +78,7 @@ public class MktActivityRecordPOExample implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-08-31 12:40:26
+	 * @mbg.generated
 	 */
 	public Criteria or() {
 		Criteria criteria = createCriteriaInternal();
@@ -96,7 +88,7 @@ public class MktActivityRecordPOExample implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-08-31 12:40:26
+	 * @mbg.generated
 	 */
 	public Criteria createCriteria() {
 		Criteria criteria = createCriteriaInternal();
@@ -108,7 +100,7 @@ public class MktActivityRecordPOExample implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-08-31 12:40:26
+	 * @mbg.generated
 	 */
 	protected Criteria createCriteriaInternal() {
 		Criteria criteria = new Criteria();
@@ -117,7 +109,7 @@ public class MktActivityRecordPOExample implements Serializable {
 
 	/**
 	 * 只读. 
-	 * @mbg.generated  2018-08-31 12:40:26
+	 * @mbg.generated
 	 */
 	public void clear() {
 		oredCriteria.clear();
@@ -127,9 +119,9 @@ public class MktActivityRecordPOExample implements Serializable {
 
 	/**
 	 * 只读. t_mkt_activity_record
-	 * @mbg.generated  2018-08-31 12:40:26
+	 * @mbg.generated
 	 */
-	protected abstract static class GeneratedCriteria implements Serializable {
+	protected abstract static class GeneratedCriteria {
 		protected List<Criterion> criteria;
 
 		protected GeneratedCriteria() {
@@ -537,6 +529,76 @@ public class MktActivityRecordPOExample implements Serializable {
 
 		public Criteria andMemberCodeNotBetween(String value1, String value2) {
 			addCriterion("member_code not between", value1, value2, "memberCode");
+			return (Criteria) this;
+		}
+
+		public Criteria andInvitedMemberCodeIsNull() {
+			addCriterion("invited_member_code is null");
+			return (Criteria) this;
+		}
+
+		public Criteria andInvitedMemberCodeIsNotNull() {
+			addCriterion("invited_member_code is not null");
+			return (Criteria) this;
+		}
+
+		public Criteria andInvitedMemberCodeEqualTo(String value) {
+			addCriterion("invited_member_code =", value, "invitedMemberCode");
+			return (Criteria) this;
+		}
+
+		public Criteria andInvitedMemberCodeNotEqualTo(String value) {
+			addCriterion("invited_member_code <>", value, "invitedMemberCode");
+			return (Criteria) this;
+		}
+
+		public Criteria andInvitedMemberCodeGreaterThan(String value) {
+			addCriterion("invited_member_code >", value, "invitedMemberCode");
+			return (Criteria) this;
+		}
+
+		public Criteria andInvitedMemberCodeGreaterThanOrEqualTo(String value) {
+			addCriterion("invited_member_code >=", value, "invitedMemberCode");
+			return (Criteria) this;
+		}
+
+		public Criteria andInvitedMemberCodeLessThan(String value) {
+			addCriterion("invited_member_code <", value, "invitedMemberCode");
+			return (Criteria) this;
+		}
+
+		public Criteria andInvitedMemberCodeLessThanOrEqualTo(String value) {
+			addCriterion("invited_member_code <=", value, "invitedMemberCode");
+			return (Criteria) this;
+		}
+
+		public Criteria andInvitedMemberCodeLike(String value) {
+			addCriterion("invited_member_code like", value, "invitedMemberCode");
+			return (Criteria) this;
+		}
+
+		public Criteria andInvitedMemberCodeNotLike(String value) {
+			addCriterion("invited_member_code not like", value, "invitedMemberCode");
+			return (Criteria) this;
+		}
+
+		public Criteria andInvitedMemberCodeIn(List<String> values) {
+			addCriterion("invited_member_code in", values, "invitedMemberCode");
+			return (Criteria) this;
+		}
+
+		public Criteria andInvitedMemberCodeNotIn(List<String> values) {
+			addCriterion("invited_member_code not in", values, "invitedMemberCode");
+			return (Criteria) this;
+		}
+
+		public Criteria andInvitedMemberCodeBetween(String value1, String value2) {
+			addCriterion("invited_member_code between", value1, value2, "invitedMemberCode");
+			return (Criteria) this;
+		}
+
+		public Criteria andInvitedMemberCodeNotBetween(String value1, String value2) {
+			addCriterion("invited_member_code not between", value1, value2, "invitedMemberCode");
 			return (Criteria) this;
 		}
 
@@ -1293,9 +1355,9 @@ public class MktActivityRecordPOExample implements Serializable {
 
 	/**
 	 * 只读. t_mkt_activity_record
-	 * @mbg.generated  2018-08-31 12:40:26
+	 * @mbg.generated
 	 */
-	public static class Criterion implements Serializable {
+	public static class Criterion {
 		private String condition;
 		private Object value;
 		private Object secondValue;

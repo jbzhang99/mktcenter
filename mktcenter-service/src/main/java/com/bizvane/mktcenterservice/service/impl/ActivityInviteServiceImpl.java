@@ -52,6 +52,7 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import javax.validation.Valid;
+import java.math.BigDecimal;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -424,24 +425,25 @@ public class ActivityInviteServiceImpl implements ActivityInviteService {
     public void award(InviteSuccessVO vo) {
         log.info("邀请注册活动的参数:{}", JSON.toJSONString(vo));
         //查邀请人会员信息
-        MemberInfoApiModel members = new MemberInfoApiModel();
-        members.setBrandId(vo.getSysBrandId());
-        members.setMemberCode(vo.getMemberCode());
-        MemberInfoModel invitemMmeberInfo = memberInfoApiService.getMemberModel(members).getData();
+        MemberInfoApiModel inviteMember = new MemberInfoApiModel();
+        inviteMember.setBrandId(vo.getSysBrandId());
+        inviteMember.setMemberCode(vo.getInviteMemberCode());
+        MemberInfoModel invitemMmeberInfo = memberInfoApiService.getMemberModel(inviteMember).getData();
         log.info("邀请注册活动的会员信息:{}", JSON.toJSONString(invitemMmeberInfo));
 
         //符合条件的活动列表
-        List<ActivityVO> executingActivityList = mktActivityInvitePOMapper.getExecutingActivityList(invitemMmeberInfo.getSysCompanyId());
+        List<ActivityVO> executingActivityList = mktActivityInvitePOMapper.getExecutingActivityList(vo.getSysBrandId());
         log.info("邀请注册活动符合条件的列表--" + JSON.toJSONString(executingActivityList));
         if (CollectionUtils.isNotEmpty(executingActivityList)) {
             executingActivityList.forEach(obj -> {
-                //邀请开卡人数
+                //邀请开卡记录
                 MktActivityRecordPO mktActivityRecordPO = new MktActivityRecordPO();
                 mktActivityRecordPO.setSysCompanyId(invitemMmeberInfo.getSysCompanyId());
                 mktActivityRecordPO.setSysBrandId(invitemMmeberInfo.getBrandId());
                 mktActivityRecordPO.setActivityType(ActivityTypeEnum.ACTIVITY_TYPE_INVITE.getCode());
                 mktActivityRecordPO.setAcitivityId(obj.getMktActivityId());
                 mktActivityRecordPO.setMemberCode(invitemMmeberInfo.getMemberCode());
+                mktActivityRecordPO.setInvitedMemberCode(vo.getMemberCode());
                 mktActivityRecordPO.setParticipateDate(vo.getOpenCardTime());
                 if (null == mktActivityRecordPO.getPoints()) {
                     mktActivityRecordPO.setPoints(0);
@@ -450,11 +452,9 @@ public class ActivityInviteServiceImpl implements ActivityInviteService {
                 }
                 // 获取会员是否已经成功参与过某一活动
                 ActivityInviteBO activityInviteBO = judgeIfAwarded(mktActivityRecordPO);
-                log.info("the member is awarded:{}", activityInviteBO.getAwarded());
-                if (!activityInviteBO.getAwarded() && obj.getInviteNum().equals(activityInviteBO.getParcitpateTimes())) {
+                log.info("the member is awarded:{},obj.getInviteNum():{},activityInviteBO.getParcitpateTimes():{}", activityInviteBO.getAwarded(),obj.getInviteNum(),activityInviteBO.getParcitpateTimes());
+                if (!activityInviteBO.getAwarded() && obj.getInviteNum().equals(activityInviteBO.getParcitpateTimes()+1)) {
                     mktActivityRecordPO.setRewarded(1);
-                    log.info("新增参与记录");
-                    mktActivityRecordPOMapper.insertSelective(mktActivityRecordPO);
                     log.info("邀请注册活动完成，进行奖励");
                     //判断奖励
                     if (obj.getPoints() != null) {
@@ -478,12 +478,13 @@ public class ActivityInviteServiceImpl implements ActivityInviteService {
                     mktCouponPOExample.createCriteria().andValidEqualTo(Boolean.TRUE).andSysCompanyIdEqualTo(obj.getSysCompanyId())
                             .andBizTypeEqualTo(BusinessTypeEnum.ACTIVITY_TYPE_ACTIVITY.getCode()).andBizIdEqualTo(obj.getMktActivityId());
                     List<MktCouponPO> mktCouponPOS = mktCouponPOMapper.selectByExample(mktCouponPOExample);
-                    if (CollectionUtils.isNotEmpty(mktCouponPOS)) {
+                    log.info("mktCouponPOMapper.selectByExample(mktCouponPOExample):{}", JSON.toJSONString(mktCouponPOS));
+                    for (MktCouponPO mktCouponPO:mktCouponPOS) {
                         log.info("邀请注册活动给membercode:{}赠送券:{}", invitemMmeberInfo.getMemberCode(), JSON.toJSONString(mktCouponPOS));
                         AwardBO awardBO = new AwardBO();
                         SendCouponSimpleRequestVO sendCouponSimpleRequestVO = new SendCouponSimpleRequestVO();
                         sendCouponSimpleRequestVO.setMemberCode(invitemMmeberInfo.getMemberCode());
-                        sendCouponSimpleRequestVO.setCouponDefinitionId(obj.getCouponDefinitionId());
+                        sendCouponSimpleRequestVO.setCouponDefinitionId(mktCouponPO.getCouponDefinitionId());
                         sendCouponSimpleRequestVO.setSendBussienId(obj.getMktActivityId());
                         sendCouponSimpleRequestVO.setSendType(SendTypeEnum.SEND_COUPON_INVITE_OPENCARD_TASK.getCode());
                         sendCouponSimpleRequestVO.setCompanyId(invitemMmeberInfo.getSysCompanyId());
@@ -494,6 +495,10 @@ public class ActivityInviteServiceImpl implements ActivityInviteService {
                         log.info("邀请注册活动送券,params:{}", JSON.toJSONString(sendCouponSimpleRequestVO));
                         award.execute(awardBO);
                     }
+                    log.info("enter mktActivityRecordPOMapper.insertSelective");
+                    mktActivityRecordPOMapper.insertSelective(mktActivityRecordPO);
+
+                    mktActivityCountPOMapper.updateSum(obj.getMktActivityId(), 1, BigDecimal.ZERO, obj.getPoints());
                 }
             });
         }

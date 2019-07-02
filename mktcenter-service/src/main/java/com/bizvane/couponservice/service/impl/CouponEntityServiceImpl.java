@@ -141,19 +141,11 @@ public class CouponEntityServiceImpl implements CouponEntityService{
         if(entityParam.getListType().equals("1")) {
             entityParam.setListType("85");
         }else if(entityParam.getListType().equals("2")) {
-            entityParam.setListType("10,15,30,35,45,50,55,56,90,100,103,104,105");
-        }else if(entityParam.getListType().equals("3")) {
-            entityParam.setListType("60,65,70,75,80");
-        }else if(entityParam.getListType().equals("4")) {
-            entityParam.setListType("95");
+            entityParam.setListType("10,15,30,35,45,50,55,56,80,90,100,103,104,105");
         }else if(entityParam.getListType().equals("5")) {
             entityParam.setListType("94");
-        }else if(entityParam.getListType().equals("6")) {
-            entityParam.setListType("20");
         }else if(entityParam.getListType().equals("7")) {
             entityParam.setListType("101");
-        }else if(entityParam.getListType().equals("8")) {
-            entityParam.setListType("102");
         }
         StopWatch stopWatch = new StopWatch();
         stopWatch.start("查会员");

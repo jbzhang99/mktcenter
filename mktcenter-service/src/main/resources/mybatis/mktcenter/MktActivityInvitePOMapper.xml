@@ -463,6 +463,7 @@
     INNER JOIN t_mkt_activity_invite tmai ON tma.mkt_activity_id = tmai.mkt_activity_id
     and tma.valid=1
     and tmai.valid=1
-    and sys_company_id = #{sysCompanyId}
+    and tma.activity_status=2
+    and tma.sys_brand_id = #{sysBrandId}
   </select>
 </mapper>
