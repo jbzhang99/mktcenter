@@ -53,8 +53,8 @@ public enum SysRespConstants {
    COUPON_MONEY_MODEL_CODE_NOT_EMPTY(528, "优惠券名称不能是空！"),
    COUPONCODE_MONEY_MODEL_CODE_NOT_EMPTY(529, "优惠券名称不能是空！"),
    ORDERNO_MONEY_MODEL_CODE_NOT_EMPTY(530, "订单号不能是空！"),
-   
-   
+
+  DATA_NOT_TOTAY(2100, "数据推送延迟1天以上！"),
    
    
   

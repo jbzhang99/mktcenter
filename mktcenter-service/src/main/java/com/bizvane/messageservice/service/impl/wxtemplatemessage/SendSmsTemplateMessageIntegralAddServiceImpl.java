@@ -13,6 +13,7 @@ import com.bizvane.messageservice.service.SmsMessageLogService;
 import com.bizvane.messagefacade.models.po.*;
 import com.bizvane.messagefacade.models.vo.Result;
 import com.bizvane.messagefacade.models.vo.SysSmsConfigVO;
+import com.bizvane.mktcenterservice.common.tools.DateUtil;
 import com.bizvane.utils.enumutils.SysResponseEnum;
 import com.bizvane.utils.responseinfo.ResponseData;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -22,11 +23,13 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 /**
  * @author 张迪
- * 
+ *
  * @优惠券短信发送接口消费rocketmq消息进行短信的发送
  */
 @Service("sendSmsTemplateMessageIntegralAddServiceImpl")
@@ -35,15 +38,15 @@ public class SendSmsTemplateMessageIntegralAddServiceImpl implements SendSmsTemp
     private static final Logger logger = LoggerFactory.getLogger(SendSmsTemplateMessageIntegralAddServiceImpl.class);
     @Autowired
     private SmsMessageLogService smsMessageLogService;
-    
+
     @Autowired
     private SendCommonMessageService SendCommonMessageImpl;
     @Autowired
     private MsgSmsTempPOMapper msgSmsTempPOMapper;
-    
+
     @Autowired
     private SysSmsConfigPOMapper sysSmsConfigPOMapper;
-    
+
 
     /**
      * 发短信模板消息
@@ -55,7 +58,7 @@ public class SendSmsTemplateMessageIntegralAddServiceImpl implements SendSmsTemp
     @Override
     public Result<String> sendMessage(String rocketMsgId, String messageBody) {
     	Result<String> result = new Result<>();
-    	
+
     	try {
     		logger.info(this.getClass().getName() + ".sendMessage入参：" + messageBody);
 
@@ -63,9 +66,9 @@ public class SendSmsTemplateMessageIntegralAddServiceImpl implements SendSmsTemp
 	            logger.error(this.getClass().getName() + ".sendMessage入参为空");
 	            return result;
 	        }
-	        
+
 	        JSONObject jsonObject = JSON.parseObject(messageBody);
-	        
+
 	        // 记录发送消息日志
 	        MsgSmsLogPO insertPO = new MsgSmsLogPO();
 	        insertPO.setBussinessId(jsonObject.getString("rocketMQBussinessId"));
@@ -74,10 +77,10 @@ public class SendSmsTemplateMessageIntegralAddServiceImpl implements SendSmsTemp
 	        if(!(StringUtils.isBlank(jsonObject.getString("memberPhone")))){insertPO.setMemberPhone(jsonObject.getString("memberPhone"));}
 	        insertPO.setMessageBody(messageBody);if(!(StringUtils.isBlank(jsonObject.getString("sysBrandId")))){insertPO.setSysBrandId(jsonObject.getLong("sysBrandId"));}
 	        Result<String> insertResult = this.smsMessageLogService.insert(insertPO);
-	        
+
 	         //发送
 	        Result<String> sendResult = this.sendMessageDoing( jsonObject);
-	        
+
 	         //更新日志发送状态
 	       	 Integer sendState = SystemConstants.SMS_MESSAGE_LOG_SEND_STATE_FAIL;
 	       	 String resultInfo = null;
@@ -87,7 +90,6 @@ public class SendSmsTemplateMessageIntegralAddServiceImpl implements SendSmsTemp
 	        } else {
 	            resultInfo = sendResult.getMsg();
 	        }
-	        
 
             //更新发送状态
             insertPO.setMemberName(jsonObject.getString("memberName"));
@@ -98,20 +100,19 @@ public class SendSmsTemplateMessageIntegralAddServiceImpl implements SendSmsTemp
             insertPO.setMessageBody(messageBody+sendResult.getData());
 	        this.smsMessageLogService.update(insertPO);
             logger.info("results====短信发送："+resultInfo);
-	        
-	        
+
+
     	} catch (Exception e) {
     		e.printStackTrace();
     		logger.info("短信发送异常====="+e.getMessage().toString());
     	}
     	return result;
     }
-    
-    
+
+
     public Result<String> sendMessageDoing( JSONObject jsonObject){
         Result<String> result = new Result<>();
-        
-        
+
         String memberName = jsonObject.getString("memberName");
         if (StringUtils.isBlank(memberName)) {
 //        	logger.error(this.getClass().getName()+".sendMessage.memberName:会员姓名不能为空");
@@ -120,9 +121,7 @@ public class SendSmsTemplateMessageIntegralAddServiceImpl implements SendSmsTemp
 //          return result;
         	 jsonObject.fluentPut("memberName","");
         }
-        
-        
-        
+
         String nickName = jsonObject.getString("nickName");
         if (StringUtils.isBlank(nickName)) {
 //        	logger.error(this.getClass().getName()+".sendMessage.nickName:公众号不能为空");
@@ -131,8 +130,7 @@ public class SendSmsTemplateMessageIntegralAddServiceImpl implements SendSmsTemp
 //          return result;
         	 jsonObject.fluentPut("nickName","");
         }
-        
-        
+
         //积分入账
     	   String changeIntegral = jsonObject.getString("changeIntegral");
     	   if (StringUtils.isBlank(changeIntegral)) {
@@ -142,8 +140,7 @@ public class SendSmsTemplateMessageIntegralAddServiceImpl implements SendSmsTemp
 //    	     return result;
     		   jsonObject.fluentPut("changeIntegral","");
     	    }
-    	   
-    	   
+
         String memberPhone = jsonObject.getString("memberPhone");
         if (StringUtils.isBlank(memberPhone)) {
         	logger.error(this.getClass().getName()+".sendMessage.memberPhone:手机号不能为空");
@@ -152,7 +149,6 @@ public class SendSmsTemplateMessageIntegralAddServiceImpl implements SendSmsTemp
           return result;
         }
 
-        
         Long sysBrandId = jsonObject.getLong("sysBrandId");
         if (sysBrandId==null) {
         	logger.error(this.getClass().getName()+".sendMessage.sysBrandId:品牌id内容不能为空");
@@ -160,11 +156,7 @@ public class SendSmsTemplateMessageIntegralAddServiceImpl implements SendSmsTemp
           result.setMsg(SysRespConstants.SYSBRANDID_MODEL_CODE_NOT_EMPTY.getMsg());
           return result;
         }
-        
 
-
-       
-        
       //找到短信模板信息
         MsgSmsTempPOExample msgSmsTempPOExample = new MsgSmsTempPOExample();
         msgSmsTempPOExample.createCriteria().andSysBrandIdEqualTo(sysBrandId).andTemplateTypeEqualTo(jsonObject.getString("bussinessModuleCode").replace("SMS_","")).andValidEqualTo(Boolean.TRUE);
@@ -174,7 +166,7 @@ public class SendSmsTemplateMessageIntegralAddServiceImpl implements SendSmsTemp
             result.setMsg(SysRespConstants.SMS_MESSAGETEMP_NOT_EXISTS.getMsg());
             return result;
         }
-        
+
         //  校验是否发送短信  是否开启 短信配置开关 0.关闭1.开启
         MsgSmsTempPO smsTempPO= smsTempPOList.get(0);
         if(smsTempPO.getStatus()==false){
@@ -183,12 +175,11 @@ public class SendSmsTemplateMessageIntegralAddServiceImpl implements SendSmsTemp
             result.setMsg(SysRespConstants.SMS_MESSAGETEMP_OFF.getMsg());
             return result;
         }
-        
-        
+
         jsonObject.getString("memberPhone");
         //判断短信是否发送微信会员  0.全部发送 1.向微信会员发送短信2.向非微信会员发送短信
          //如果模板只向微信会员发送
-        
+
 //        	是微信会员
         	if("2".equals(jsonObject.getString("sendWxmember"))) {
 //        		设置不是微信会员发送就放回
@@ -198,39 +189,53 @@ public class SendSmsTemplateMessageIntegralAddServiceImpl implements SendSmsTemp
                  result.setMsg(SysRespConstants.SMS_CONFIG_MESSAGETEMP_WX_OFF.getMsg());
                  return result;
         		}
-
         	}
-        	
-        
+
         //如果模板只向非微信会员发送
-//        if(smsTempPO.getSendWxmember()==2) {  
+//        if(smsTempPO.getSendWxmember()==2) {
 //        	if("2".equals(jsonObject.getString("memberPhone"))) {
 //        		 logger.error("该模板设置只向非微信会员发短信，微信会员不能发送！");
 //                result.setStatus(SysRespConstants.SMS_CONFIG_MESSAGETEMP_NOT_WX_OFF.getStatus());
 //                result.setMsg(SysRespConstants.SMS_CONFIG_MESSAGETEMP_NOT_WX_OFF.getMsg());
 //                return result;
 //        	}
-//        }	
-    	
+//        }
+
         //获取短信通道 sysBrandId
         SysSmsConfigPOExample sysSmsConfigPOExample = new SysSmsConfigPOExample();
         sysSmsConfigPOExample.createCriteria().andSysBrandIdEqualTo(sysBrandId).andChannelTypeEqualTo(10).andValidEqualTo(Boolean.TRUE);
         List<SysSmsConfigPO> sysSmsConfigList= sysSmsConfigPOMapper.selectByExample(sysSmsConfigPOExample);
-       
+
+        Date tasktime = jsonObject.getDate("changeDate");
+        SimpleDateFormat formatterA = new SimpleDateFormat("yyyy-MM-dd");
+        if (tasktime == null) {
+            result.setStatus(SysRespConstants.DATA_NOT_TOTAY.getStatus());
+            result.setMsg(SysRespConstants.DATA_NOT_TOTAY.getMsg());
+            return result;
+        }
+        String data = formatterA.format(new Date());
+        if (!data.equals(formatterA.format(tasktime))) {
+            result.setStatus(SysRespConstants.DATA_NOT_TOTAY.getStatus());
+            result.setMsg(SysRespConstants.DATA_NOT_TOTAY.getMsg());
+            return result;
+        }
+
         //获取短信通道信息
         ResponseData<Integer> sendResults = new ResponseData<Integer>(SysResponseEnum.FAILED.getCode(),SysResponseEnum.FAILED.getMessage(),null);
         if(null == sysSmsConfigList || sysSmsConfigList.size()>0){
         	 ObjectMapper mapper = new ObjectMapper();
         	SysSmsConfigVO syssmsconfigvo = mapper.convertValue(sysSmsConfigList.get(0), SysSmsConfigVO.class);
         	//处理短信内容
-        	syssmsconfigvo.setMsgContent(smsTempPO.getContent().replace("@[会员姓名]",jsonObject.getString("memberName"))
-        			.replace("@[入账积分数额]", jsonObject.getString("changeIntegral")).replace("@[公众号]", jsonObject.getString("nickName")));
-        			
+            syssmsconfigvo.setMsgContent(smsTempPO.getContent().replace("@[会员姓名]",jsonObject.getString("memberName"))
+                    .replace("@[入账积分数额]", jsonObject.getString("changeIntegral"))
+                    .replace("@[积分余额]", jsonObject.getString("nowIntegral"))
+                    .replace("@[积分入账时间]", formatterA.format(tasktime))
+                    .replace("@[公众号]", jsonObject.getString("nickName")));
         	//手机号码
         	syssmsconfigvo.setPhone(jsonObject.getString("memberPhone"));     result.setData(syssmsconfigvo.getMsgContent());
         	//发送短信
         	sendResults =  SendCommonMessageImpl.sendSmg(syssmsconfigvo);
-             
+
              if (SysResponseEnum.SUCCESS.getCode() == sendResults.getCode()) {
                  result.setStatus(SysRespConstants.SUCCESS.getStatus());
                  result.setMsg(sendResults.getMessage());
@@ -240,13 +245,13 @@ public class SendSmsTemplateMessageIntegralAddServiceImpl implements SendSmsTemp
              }
 
         }else {
-        	
+
             result.setStatus(SysRespConstants.SMS_CONFIG_MESSAGETEMP_NOT_EXISTS.getStatus());
             result.setMsg(SysRespConstants.SMS_CONFIG_MESSAGETEMP_NOT_EXISTS.getMsg());
             return result;
-        	  
+
         }
-        
+
         // 发送模板消息
         return result;
 
