@@ -544,7 +544,7 @@ public class ConvertCouponServiceImpl implements ConvertCouponService {
         //判断券是否过期
         Boolean couponExpire = couponDefinitionServiceFeign.couponDefinitionExpire(exchangeVO.getCouponEntityId()).getData();
         log.info("ConvertCouponServiceImpl#canConvert the couponDefinitionId:{}, couponExpire:{}",exchangeVO.getCouponEntityId(),couponExpire);
-        if (couponExpire==null || Boolean.FALSE.equals(couponExpire)){
+        if (couponExpire==null || Boolean.TRUE.equals(couponExpire)){
             exchangeVO.setCanConvert(Boolean.FALSE);
             exchangeVO.setMessage("券已过期");
         }
