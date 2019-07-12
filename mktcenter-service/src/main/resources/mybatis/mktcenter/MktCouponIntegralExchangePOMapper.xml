@@ -675,6 +675,7 @@
     tma.modified_date,
     tma.valid,
     tma.already_exchange_count
+    from t_mkt_coupon_integral_exchange tma
     WHERE
     tma.valid=1
     <!--活动主表ID -->

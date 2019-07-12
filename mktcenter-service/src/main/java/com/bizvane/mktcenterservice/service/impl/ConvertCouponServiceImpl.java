@@ -387,7 +387,7 @@ public class ConvertCouponServiceImpl implements ConvertCouponService {
         log.info("兑换券  验证券是否过期"+data+"--"+JSON.toJSONString(booleanResponseData)+"---"+mktCouponIntegralExchangePO.getCouponEntityId());
         if (data){
             responseData.setCode(SysResponseEnum.FAILED.getCode());
-            responseData.setMessage("优惠券已过期!");
+            responseData.setMessage("券已过期");
             return responseData;
         }
 
@@ -537,8 +537,16 @@ public class ConvertCouponServiceImpl implements ConvertCouponService {
 
         //判断积分资格
         if(exchangeVO.getCanConvert() && exchangeVO.getExchangePrice()>countIntegral){
-            exchangeVO.setMessage("积分不足");
             exchangeVO.setCanConvert(Boolean.FALSE);
+            exchangeVO.setMessage("积分不足");
+        }
+
+        //判断券是否过期
+        Boolean couponExpire = couponDefinitionServiceFeign.couponDefinitionExpire(exchangeVO.getCouponEntityId()).getData();
+        log.info("ConvertCouponServiceImpl#canConvert the couponDefinitionId:{}, couponExpire:{}",exchangeVO.getCouponEntityId(),couponExpire);
+        if (couponExpire==null || Boolean.FALSE.equals(couponExpire)){
+            exchangeVO.setCanConvert(Boolean.FALSE);
+            exchangeVO.setMessage("券已过期");
         }
         return exchangeVO;
     }
