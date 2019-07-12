@@ -46,4 +46,9 @@ public class MktCouponIntegralExchangeVO extends MktCouponIntegralExchangePO {
      * 会员code
      */
     private String memberCode;
+
+    /**
+     * 零库存
+     */
+    private Boolean zeroStore;
 }

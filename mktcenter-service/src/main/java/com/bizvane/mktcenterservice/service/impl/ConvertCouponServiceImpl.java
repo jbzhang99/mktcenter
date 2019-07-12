@@ -481,7 +481,7 @@ public class ConvertCouponServiceImpl implements ConvertCouponService {
     private MktCouponIntegralExchangeVO canConvert(Integer countIntegral,MktCouponIntegralExchangeVO exchangeVO,Long convertedNum,Long remainingStock){
         //每人限兑数量
         Long exchangeCount = exchangeVO.getExchangeCount()==null?0:exchangeVO.getExchangeCount();
-
+        exchangeVO.setZeroStore(Boolean.FALSE);
         convertedNum = convertedNum==null?0:convertedNum;
         log.info("当前用户之于商品id:{},已兑换数量:{}，此商品每人限兑：{}，剩余库存：{}",exchangeVO.getExchangeId(),convertedNum,exchangeCount,remainingStock);
         /**
@@ -510,6 +510,7 @@ public class ConvertCouponServiceImpl implements ConvertCouponService {
             if(remainingStock<=0){
                 exchangeVO.setCanConvert(Boolean.FALSE);
                 exchangeVO.setMessage("库存不足");
+                exchangeVO.setZeroStore(Boolean.TRUE);
             } else{
                 exchangeVO.setCanConvert(Boolean.TRUE);
                 exchangeVO.setResidueCouponNumber(remainingStock);
@@ -526,6 +527,7 @@ public class ConvertCouponServiceImpl implements ConvertCouponService {
             if(remainingStock<=0){
                 exchangeVO.setCanConvert(Boolean.FALSE);
                 exchangeVO.setMessage("库存不足");
+                exchangeVO.setZeroStore(Boolean.TRUE);
             }else if(convertedNum>=exchangeCount){
                 exchangeVO.setCanConvert(Boolean.FALSE);
                 exchangeVO.setMessage("兑换达限");
@@ -578,11 +580,12 @@ public class ConvertCouponServiceImpl implements ConvertCouponService {
             ResponseData<CouponDefinitionPO> coupon = couponDefinitionServiceFeign.findByIdRpc(mktCouponIntegralExchangeVO1.getCouponEntityId());
             mktCouponIntegralExchangeVO1.setCouponDefinitionPO(coupon.getData());
             //如果能兑换，并且筛选结果资格也是可以兑换的，就加入结果集
-            if(canConvert && mktCouponIntegralExchangeVO1.getCanConvert() && remainingStock!=0){
+            //库存为0的不展示
+            if(canConvert && mktCouponIntegralExchangeVO1.getCanConvert() && !mktCouponIntegralExchangeVO1.getZeroStore()){
                 result.add(mktCouponIntegralExchangeVO1);
             }
             //查所有直接丢结果集
-            if(!canConvert && remainingStock!=0){
+            if(!canConvert && !mktCouponIntegralExchangeVO1.getZeroStore()){
                 result.add(mktCouponIntegralExchangeVO1);
             }
         }
