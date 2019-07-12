@@ -429,7 +429,7 @@ public class CouponDefinitionServiceImpl implements CouponDefinitionService {
             Date now = format.parse(format.format(new Date()));
 
 
-            if(endDate.getTime()<now.getTime()){
+            if(endDate.getTime()<=now.getTime()){
                 ifExpire = Boolean.TRUE;
             }
         }
