@@ -51,4 +51,6 @@ public class MktCouponIntegralExchangeVO extends MktCouponIntegralExchangePO {
      * 零库存
      */
     private Boolean zeroStore;
+
+    private Boolean couponExpire;
 }
