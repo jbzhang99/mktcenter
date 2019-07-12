@@ -1,5 +1,6 @@
 package com.bizvane.mktcenterservice.common.utils;
 
+import com.github.pagehelper.PageInfo;
 import org.apache.poi.ss.formula.functions.T;
 
 import java.util.List;
@@ -18,7 +19,8 @@ public class ListPageUtil {
      * @param pageSize 每页多少条数据
      * @return
      */
-    public static List startPage(List list, Integer pageNum, Integer pageSize) {
+    public static PageInfo startPage(List list, Integer pageNum, Integer pageSize) {
+        PageInfo pageInfo = new PageInfo();
         if(list == null){
             return null;
         }
@@ -46,8 +48,9 @@ public class ListPageUtil {
         }
 
         List pageList = list.subList(fromIndex, toIndex);
-
-        return pageList;
+        pageInfo.setList(pageList);
+        pageInfo.setPages(pageCount);
+        return pageInfo;
     }
 
 }

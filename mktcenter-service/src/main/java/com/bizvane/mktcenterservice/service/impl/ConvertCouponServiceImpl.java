@@ -280,10 +280,7 @@ public class ConvertCouponServiceImpl implements ConvertCouponService {
         List<MktCouponIntegralExchangeVO> myConvertedProductList = mktCouponIntegralExchangePOMapper.getMyConvertedProductList(vo.getMemberCode());
         List<MktCouponIntegralExchangeVO> resultList = getCanvertProductList(countIntegral,vo.getCanConvertCoupon(),myConvertedProductList, mktCouponIntegralExchangePOS);
         //手动分页
-        PageInfo<MktCouponIntegralExchangeVO> mktCouponIntegralExchangeVOPageInfo = new PageInfo<>();
-        mktCouponIntegralExchangeVOPageInfo.setPages(resultList.size());
-        resultList = ListPageUtil.startPage(resultList, vo.getPageNum(), vo.getPageSize());
-        mktCouponIntegralExchangeVOPageInfo.setList(resultList);
+        PageInfo<MktCouponIntegralExchangeVO> mktCouponIntegralExchangeVOPageInfo = ListPageUtil.startPage(resultList, vo.getPageNum(), vo.getPageSize());
         CouponIntegralExchangeBO exchangeBO = new CouponIntegralExchangeBO();
         exchangeBO.setCountIntegral(countIntegral);
         exchangeBO.setPageInfo(mktCouponIntegralExchangeVOPageInfo);
