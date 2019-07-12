@@ -674,17 +674,7 @@
     tma.modify_user_name,
     tma.modified_date,
     tma.valid,
-
-
-    tmar.cou AS alreadyExchangeCount
-    FROM
-    `t_mkt_coupon_integral_exchange` tma
-    LEFT JOIN
-    (SELECT exchange_id,sum(convert_num)cou FROM t_mkt_convert_coupon_record
-    GROUP BY exchange_id
-    ) tmar
-
-    ON tma.exchange_id = tmar.exchange_id
+    tma.already_exchange_count
     WHERE
     tma.valid=1
     <!--活动主表ID -->

@@ -277,7 +277,7 @@ public class ConvertCouponServiceImpl implements ConvertCouponService {
 
         //查出我已经兑换的数据列表
         List<MktCouponIntegralExchangeVO> myConvertedProductList = mktCouponIntegralExchangePOMapper.getMyConvertedProductList(vo.getMemberCode());
-        List<MktCouponIntegralExchangeVO> resultList = getCanvertProductList(vo.getCanConvertCoupon(),myConvertedProductList, mktCouponIntegralExchangePOS);
+        List<MktCouponIntegralExchangeVO> resultList = getCanvertProductList(countIntegral,vo.getCanConvertCoupon(),myConvertedProductList, mktCouponIntegralExchangePOS);
 
         PageHelper.startPage(vo.getPageNumber(), vo.getPageSize());
         PageInfo<MktCouponIntegralExchangeVO> mktCouponIntegralExchangeVOPageInfo = new PageInfo<>(resultList);
@@ -341,26 +341,17 @@ public class ConvertCouponServiceImpl implements ConvertCouponService {
 
         //获取此会员兑换此券的数量
         Long memberConvertNumber = mktConvertCouponRecordPOMapper.getConvertNumber(vo);
-        //查所有人兑换此券数量
-        vo.setMemberCode(null);
-        Long allConverted = mktConvertCouponRecordPOMapper.getConvertNumber(vo);
+        //所有人兑换此券数量
+        Long allConverted = mktCouponIntegralExchangePO.getAlreadyExchangeCount();
         //剩余库存
         Long remainingStock = (mktCouponIntegralExchangePO.getStoreCount()==null?0:mktCouponIntegralExchangePO.getStoreCount()) - allConverted;
 
-        //兑换资格判断
-        MktCouponIntegralExchangeVO mktCouponIntegralExchangeVO = new MktCouponIntegralExchangeVO();
-        BeanUtils.copyProperties(mktCouponIntegralExchangePO,mktCouponIntegralExchangeVO);
-        MktCouponIntegralExchangeVO mktCouponIntegralExchangeVO1 = canConvert(mktCouponIntegralExchangeVO, memberConvertNumber, remainingStock);
-
-        if(!mktCouponIntegralExchangeVO1.getCanConvert()){
-            responseData.setCode(SysResponseEnum.FAILED.getCode());
-            responseData.setMessage(mktCouponIntegralExchangeVO1.getMessage());
-            return responseData;
-        }
-
-        Integer exchangeNum = vo.getExchangeNum();//要要兑换的数量
-        Integer exchangePrice = mktCouponIntegralExchangePO.getExchangePrice();//兑换的单价
-        String couponRecordCode = CodeUtil.getCouponRecordCode();//兑换记录code
+        //要要兑换的数量
+        Integer exchangeNum = vo.getExchangeNum();
+        //兑换的单价
+        Integer exchangePrice = mktCouponIntegralExchangePO.getExchangePrice();
+        //兑换记录code
+        String couponRecordCode = CodeUtil.getCouponRecordCode();
 
         MemberInfoApiModel members = new MemberInfoApiModel();
         members.setMemberCode(memberCode);
@@ -377,13 +368,25 @@ public class ConvertCouponServiceImpl implements ConvertCouponService {
             responseData.setMessage("可用积分不足!");
             return responseData;
         }
+
+        //兑换资格判断
+        MktCouponIntegralExchangeVO mktCouponIntegralExchangeVO = new MktCouponIntegralExchangeVO();
+        BeanUtils.copyProperties(mktCouponIntegralExchangePO,mktCouponIntegralExchangeVO);
+        MktCouponIntegralExchangeVO mktCouponIntegralExchangeVO1 = canConvert(memeberDetail.getCountIntegral(),mktCouponIntegralExchangeVO, memberConvertNumber, remainingStock);
+
+        if(!mktCouponIntegralExchangeVO1.getCanConvert()){
+            responseData.setCode(SysResponseEnum.FAILED.getCode());
+            responseData.setMessage(mktCouponIntegralExchangeVO1.getMessage());
+            return responseData;
+        }
+
         ResponseData<Boolean> booleanResponseData = couponDefinitionServiceFeign.couponDefinitionExpire(mktCouponIntegralExchangePO.getCouponEntityId());
         Boolean data = booleanResponseData.getData();
         data= (data==null?Boolean.FALSE:data);
         //true是过期   false未过期
         log.info("兑换券  验证券是否过期"+data+"--"+JSON.toJSONString(booleanResponseData)+"---"+mktCouponIntegralExchangePO.getCouponEntityId());
         if (data){
-            responseData.setCode(100);
+            responseData.setCode(SysResponseEnum.FAILED.getCode());
             responseData.setMessage("优惠券已过期!");
             return responseData;
         }
@@ -407,13 +410,13 @@ public class ConvertCouponServiceImpl implements ConvertCouponService {
                 ResponseData<String> simple = sendCouponServiceFeign.simple(onecouponVO);
                 log.info("doConvernCoupon----发券----参数--" + JSON.toJSONString(onecouponVO) + "----出参--" + JSON.toJSONString(simple));
             }
-            //修改兑换次数
+            //修改会员券兑换次数
             ResponseData memberResponse = memberInfoApiService.addIntegralExchangeTicketCount(memberCode, 1);
             log.info("会员修改 兑换次数的返回值:"+JSON.toJSONString(memberResponse));
         } else {
             log.info("积分扣减失败,删除对应的积分订单记录!");
             mktConvertCouponRecordPOMapper.deleteByPrimaryKey(record.getConvertCouponRecordId());
-            responseData.setCode(100);
+            responseData.setCode(SysResponseEnum.FAILED.getCode());
             responseData.setMessage("兑换失败!");
             return responseData;
         }
@@ -475,7 +478,7 @@ public class ConvertCouponServiceImpl implements ConvertCouponService {
      * 判断当前用户对某积分商品是否能兑换
      * @return
      */
-    private MktCouponIntegralExchangeVO canConvert(MktCouponIntegralExchangeVO exchangeVO,Long convertedNum,Long remainingStock){
+    private MktCouponIntegralExchangeVO canConvert(Integer countIntegral,MktCouponIntegralExchangeVO exchangeVO,Long convertedNum,Long remainingStock){
         //每人限兑数量
         Long exchangeCount = exchangeVO.getExchangeCount()==null?0:exchangeVO.getExchangeCount();
 
@@ -497,7 +500,7 @@ public class ConvertCouponServiceImpl implements ConvertCouponService {
         if(exchangeVO.getStoreStatus()==0 && exchangeVO.getExchangeStatus()!=0){
             if(convertedNum>=exchangeCount){
                 exchangeVO.setCanConvert(Boolean.FALSE);
-                exchangeVO.setMessage("兑换数量超过每人最大限制！");
+                exchangeVO.setMessage("兑换达限");
             }else{
                 exchangeVO.setCanConvert(Boolean.TRUE);
                 exchangeVO.setResidueCouponNumber(exchangeCount-convertedNum);
@@ -506,7 +509,7 @@ public class ConvertCouponServiceImpl implements ConvertCouponService {
         if(exchangeVO.getStoreStatus()!=0 && exchangeVO.getExchangeStatus()==0){
             if(remainingStock<=0){
                 exchangeVO.setCanConvert(Boolean.FALSE);
-                exchangeVO.setMessage("库存不足，兑换失败！");
+                exchangeVO.setMessage("库存不足");
             } else{
                 exchangeVO.setCanConvert(Boolean.TRUE);
                 exchangeVO.setResidueCouponNumber(remainingStock);
@@ -516,16 +519,26 @@ public class ConvertCouponServiceImpl implements ConvertCouponService {
         if(exchangeVO.getStoreStatus()!=0 && exchangeVO.getExchangeStatus()!=0){
             Long residue = remainingStock;
             log.info("remainingStock:{},exchangeCount:{}",remainingStock,exchangeCount);
+
             if(remainingStock>exchangeCount){
                 residue = exchangeCount - convertedNum;
             }
-            if(remainingStock<=0 || convertedNum>=exchangeCount){
+            if(remainingStock<=0){
                 exchangeVO.setCanConvert(Boolean.FALSE);
-                exchangeVO.setMessage("兑换数量超过每人最大限制！");
+                exchangeVO.setMessage("库存不足");
+            }else if(convertedNum>=exchangeCount){
+                exchangeVO.setCanConvert(Boolean.FALSE);
+                exchangeVO.setMessage("兑换达限");
             } else{
                 exchangeVO.setCanConvert(Boolean.TRUE);
                 exchangeVO.setResidueCouponNumber(residue);
             }
+        }
+
+        //判断积分资格
+        if(exchangeVO.getCanConvert() && exchangeVO.getExchangePrice()>countIntegral){
+            exchangeVO.setMessage("积分不足");
+            exchangeVO.setCanConvert(Boolean.FALSE);
         }
         return exchangeVO;
     }
@@ -537,7 +550,7 @@ public class ConvertCouponServiceImpl implements ConvertCouponService {
      * @param mktCouponIntegralExchangePOS
      * @return
      */
-    private List<MktCouponIntegralExchangeVO> getCanvertProductList(Boolean canConvert,List<MktCouponIntegralExchangeVO> mktCouponIntegralExchangeVOS,List<MktCouponIntegralExchangePO> mktCouponIntegralExchangePOS){
+    private List<MktCouponIntegralExchangeVO> getCanvertProductList(Integer countIntegral,Boolean canConvert,List<MktCouponIntegralExchangeVO> mktCouponIntegralExchangeVOS,List<MktCouponIntegralExchangePO> mktCouponIntegralExchangePOS){
         List<MktCouponIntegralExchangeVO> result = new ArrayList<>();
         //先把所有po转到新的list中
         for(MktCouponIntegralExchangePO mktCouponIntegralExchangePO : mktCouponIntegralExchangePOS){
@@ -553,7 +566,7 @@ public class ConvertCouponServiceImpl implements ConvertCouponService {
             //剩余库存
             Long remainingStock = mktCouponIntegralExchangeVO1.getStoreCount()-mktCouponIntegralExchangeVO1.getAlreadyExchangeCount();
             mktCouponIntegralExchangeVO1.setResidueCouponNumber(remainingStock);
-            mktCouponIntegralExchangeVO1 = canConvert(mktCouponIntegralExchangeVO1, mktCouponIntegralExchangeVO1.getConvertedNum(),remainingStock);
+            mktCouponIntegralExchangeVO1 = canConvert(countIntegral,mktCouponIntegralExchangeVO1, mktCouponIntegralExchangeVO1.getConvertedNum(),remainingStock);
             ResponseData<CouponDefinitionPO> coupon = couponDefinitionServiceFeign.findByIdRpc(mktCouponIntegralExchangeVO1.getCouponEntityId());
             mktCouponIntegralExchangeVO1.setCouponDefinitionPO(coupon.getData());
             //如果能兑换，并且筛选结果资格也是可以兑换的，就加入结果集
