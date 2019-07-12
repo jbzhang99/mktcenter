@@ -810,7 +810,7 @@
     limit #{a},#{b}
   </select>
 
-  <select id="getConvertNumber" resultType="java.lang.Integer">
+  <select id="getConvertNumber" parameterType="com.bizvane.mktcenterfacade.models.vo.CouponRecordVO" resultType="java.lang.Long">
   SELECT
   IFNULL(SUM(convert_num),0)
   FROM

@@ -121,6 +121,12 @@ public interface MktCouponIntegralExchangePOMapper {
      */
     int batchUpdateCouponIntegralExchange(MktCouponIntegralExchangeVO vo);
 
+    @Deprecated
     List<MktCouponIntegralExchangeVO> getExchangeLists(CouponRecordVO vo);
+
     List<Long> getExchangeIds(CouponRecordVO vo);
+
+    int updateAllConvertedNum(Long exchangeId);
+
+    List<MktCouponIntegralExchangeVO> getMyConvertedProductList(String memberCode);
 }

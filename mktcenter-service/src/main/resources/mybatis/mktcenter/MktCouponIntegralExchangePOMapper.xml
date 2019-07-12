@@ -711,7 +711,7 @@
     <if test="endTime != null and endTime!= ''">
       AND  tma.create_date &lt;=#{endTime,jdbcType=TIMESTAMP}
     </if>
-    ORDER BY tma.create_date DESC
+    ORDER BY tma.exchange_id DESC
   </select>
   <!--批量上架下架 -->
   <update id="batchUpdateCouponIntegralExchange" parameterType="com.bizvane.mktcenterfacade.models.vo.MktCouponIntegralExchangeVO">
@@ -740,43 +740,57 @@
     </foreach>
   </update>
 
-  <select id="getExchangeLists" resultType="com.bizvane.mktcenterfacade.models.vo.MktCouponIntegralExchangeVO">
+  <select id="getExchangeLists" parameterType="com.bizvane.mktcenterfacade.models.vo.CouponRecordVO" resultType="com.bizvane.mktcenterfacade.models.vo.MktCouponIntegralExchangeVO">
     SELECT
-    tmcie.exchange_id,
-    tmcie.coupon_entity_id,
-    tmcie.coupon_name,
-    tmcie.exchange_price,
-    tmcie.store_status,
-    tmcie.exchange_status,
-    tmcie.exchange_count,
-    tmcie.sales_status,
-    tmcie.store_count,
-    sum(tmccr.convert_num) as convertedNum,
-    (tmcie.store_count - (case when sum(tmccr.convert_num) is null then 0 else sum(tmccr.convert_num) end) ) AS residueCouponNumber
+    tmcie.`exchange_id`,
+    tmcie.`exchange_code`,
+    tmcie.`sys_brand_id`,
+    tmcie.`sys_company_id`,
+    tmcie.`coupon_entity_id`,
+    tmcie.`coupon_name`,
+    tmcie.`exchange_price`,
+    tmcie.`store_status`,
+    tmcie.`store_count`,
+    tmcie.`exchange_status`,
+    tmcie.`exchange_count`,
+    tmcie.`already_exchange_count`,
+    tmcie.`store_scope`,
+    tmcie.`store_list`,
+    tmcie.`sales_status`,
+    tmcie.`exchange_info`,
+    tmcie.`create_user_id`,
+    tmcie.`create_user_name`,
+    tmcie.`create_date`,
+    tmcie.`modify_user_id`,
+    tmcie.`modify_user_name`,
+    tmcie.`modified_date`,
+    tmcie.`valid`,
+    temp.convertedNum
     FROM
     t_mkt_coupon_integral_exchange tmcie
-    LEFT JOIN t_mkt_convert_coupon_record  tmccr
-    ON tmcie.exchange_id = tmccr.exchange_id
-    AND tmccr.valid=1
+    LEFT JOIN (
+    select tmciein.exchange_id,
+    sum(tmccr.convert_num) as convertedNum
+    from t_mkt_coupon_integral_exchange tmciein LEFT JOIN t_mkt_convert_coupon_record tmccr
+    on tmciein.exchange_id=tmccr.exchange_id
+    group by tmciein.exchange_id
+    ) temp  on tmcie.exchange_id=temp.exchange_id
     WHERE
-    tmcie.valid=1
-    AND tmcie.sys_brand_id=#{brandId}
-    AND tmcie.sales_status=1
+    tmcie.sys_brand_id = #{brandId}
     <if test="countIntegral != null and canConvertCoupon">
-    	AND tmcie.exchange_price<![CDATA[<=]]>#{countIntegral}
+      and (
+      -- 不限库存，不限每人兑换
+      (store_status = 0 AND exchange_status = 0)
+      -- 不限库存，限每人兑换
+      OR (store_status = 0 AND exchange_status != 0 AND exchange_count &gt; temp.convertedNum)
+      -- 限库存a（剩余库存），不限每人兑换
+      OR (store_status != 0 AND exchange_status = 0 AND (store_count - already_exchange_count) &gt; 0)
+      -- 限库存a，限每人兑换b
+      OR (store_status != 0 AND exchange_status != 0 AND exchange_count &gt; temp.convertedNum AND (store_count -already_exchange_count) &gt; 0)
+      )
+      AND exchange_price &lt;= #{countIntegral}
     </if>
-    <if test="openCardStoreId != null">
-    AND (store_scope=0 OR store_list LIKE CONCAT('%',#{openCardStoreId},'%'))
-    </if>
-    <if test="exchangeIds!=null and exchangeIds.size() > 0">
-      AND tmcie.exchange_id NOT IN
-        <foreach item="item" index="index" collection="exchangeIds" open="(" separator="," close=")">
-          #{item}
-        </foreach>
-    </if>
-    GROUP BY tmcie.exchange_id
-    HAVING (residueCouponNumber>0 OR store_status=0)
-    ORDER BY tmcie.create_date  DESC
+    order by tmcie.exchange_id desc
   </select>
 
   <select id="getExchangeIds"  resultType="java.lang.Integer">
@@ -795,5 +809,23 @@
     AND tmccr.member_code=#{memberCode}
   </select>
 
+  <update id="updateAllConvertedNum" parameterType="java.lang.Long">
+     UPDATE t_mkt_coupon_integral_exchange
+  SET already_exchange_count = already_exchange_count + 1
+  WHERE
+      exchange_id =#{exchangeId}
+  </update>
 
+  <select id="getMyConvertedProductList" parameterType="java.lang.String" resultType="com.bizvane.mktcenterfacade.models.vo.MktCouponIntegralExchangeVO">
+      SELECT
+      tmciein.exchange_id,
+      sum(tmccr.convert_num) AS convertedNum
+  FROM
+      t_mkt_coupon_integral_exchange tmciein
+  LEFT JOIN t_mkt_convert_coupon_record tmccr ON tmciein.exchange_id = tmccr.exchange_id
+  WHERE
+      member_code = #{memberCode}
+  GROUP BY
+      tmciein.exchange_id
+  </select>
 </mapper>

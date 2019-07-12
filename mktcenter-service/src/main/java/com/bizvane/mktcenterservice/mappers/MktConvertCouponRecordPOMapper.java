@@ -98,5 +98,5 @@ public interface MktConvertCouponRecordPOMapper {
 
 	List<MktConvertCouponRecordPO> getCouponRecordLists(@Param("vo")CouponRecordVO vo);
 	List<MktConvertCouponRecordPO> getCouponRecordLists002(@Param("vo") CouponRecordVO vo,@Param("a")Long a,@Param("b")Long b);
-	Integer getConvertNumber(CouponRecordVO vo);
+	Long getConvertNumber(CouponRecordVO vo);
 }

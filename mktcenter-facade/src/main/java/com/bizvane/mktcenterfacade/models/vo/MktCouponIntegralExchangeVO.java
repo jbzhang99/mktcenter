@@ -5,12 +5,14 @@ import com.bizvane.couponfacade.models.po.CouponDefinitionPO;
 import com.bizvane.couponfacade.models.vo.CouponDetailResponseVO;
 import com.bizvane.mktcenterfacade.models.po.MktCouponIntegralExchangePO;
 import io.swagger.annotations.ApiModelProperty;
+import lombok.Data;
 
 import java.util.List;
 
 /**
  * Created by agan on 2018/11/22.
  */
+@Data
 public class MktCouponIntegralExchangeVO extends MktCouponIntegralExchangePO {
     @ApiModelProperty(name = "startTime", value = "券有效期的开始时间")
     private String startTime;
@@ -25,7 +27,7 @@ public class MktCouponIntegralExchangeVO extends MktCouponIntegralExchangePO {
     private List<SysStorePo> sysStorePos;
     //券剩余数量
     @ApiModelProperty(name = "residueCouponNumber", value = "券剩余数量")
-    private Integer residueCouponNumber;
+    private Long residueCouponNumber;
     @ApiModelProperty(name = "couponDefinitionPO", value = "券定义实体")
     private CouponDefinitionPO couponDefinitionPO;
     //券
@@ -36,85 +38,12 @@ public class MktCouponIntegralExchangeVO extends MktCouponIntegralExchangePO {
     private Boolean canConvert;
 
     @ApiModelProperty(name = "convertedNum", value = "已经兑换的数量")
-    private Integer convertedNum;
+    private Long convertedNum;
 
-    public Integer getConvertedNum() {
-        return convertedNum;
-    }
+    private String message;
 
-    public void setConvertedNum(Integer convertedNum) {
-        this.convertedNum = convertedNum;
-    }
-
-    public Boolean getCanConvert() {
-        return canConvert;
-    }
-
-    public void setCanConvert(Boolean canConvert) {
-        this.canConvert = canConvert;
-    }
-
-    public List<Long> getExchangeIds() {
-        return exchangeIds;
-    }
-
-    public void setExchangeIds(List<Long> exchangeIds) {
-        this.exchangeIds = exchangeIds;
-    }
-
-    public Integer getRestCount() {
-        return restCount;
-    }
-
-    public void setRestCount(Integer restCount) {
-        this.restCount = restCount;
-    }
-
-    public CouponDetailResponseVO getCouponDetailResponseVO() {
-        return couponDetailResponseVO;
-    }
-
-    public void setCouponDetailResponseVO(CouponDetailResponseVO couponDetailResponseVO) {
-        this.couponDetailResponseVO = couponDetailResponseVO;
-    }
-
-    public List<SysStorePo> getSysStorePos() {
-        return sysStorePos;
-    }
-
-    public void setSysStorePos(List<SysStorePo> sysStorePos) {
-        this.sysStorePos = sysStorePos;
-    }
-
-    public String getStartTime() {
-        return startTime;
-    }
-
-    public void setStartTime(String startTime) {
-        this.startTime = startTime;
-    }
-
-    public String getEndTime() {
-        return endTime;
-    }
-
-    public void setEndTime(String endTime) {
-        this.endTime = endTime;
-    }
-
-    public Integer getResidueCouponNumber() {
-        return residueCouponNumber;
-    }
-
-    public void setResidueCouponNumber(Integer residueCouponNumber) {
-        this.residueCouponNumber = residueCouponNumber;
-    }
-
-    public CouponDefinitionPO getCouponDefinitionPO() {
-        return couponDefinitionPO;
-    }
-
-    public void setCouponDefinitionPO(CouponDefinitionPO couponDefinitionPO) {
-        this.couponDefinitionPO = couponDefinitionPO;
-    }
+    /**
+     * 会员code
+     */
+    private String memberCode;
 }

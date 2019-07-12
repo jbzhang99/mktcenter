@@ -25,6 +25,7 @@ import com.bizvane.mktcenterfacade.models.po.MktCouponIntegralExchangePOExample;
 import com.bizvane.mktcenterfacade.models.vo.CouponIntegralExchangeVO;
 import com.bizvane.mktcenterfacade.models.vo.CouponRecordVO;
 import com.bizvane.mktcenterfacade.models.vo.MktCouponIntegralExchangeVO;
+import com.bizvane.mktcenterservice.common.constants.IntegralMallConstants;
 import com.bizvane.mktcenterservice.common.tools.ExportExcelUtil;
 import com.bizvane.mktcenterservice.common.tools.StreamingExportExcelUtil;
 import com.bizvane.mktcenterservice.common.utils.CodeUtil;
@@ -44,8 +45,10 @@ import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Cell;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -243,95 +246,44 @@ public class ConvertCouponServiceImpl implements ConvertCouponService {
 
     /**
      * 查询兑换的券 全部或可兑换 列表
+     * 剩余库存storeCount - alreadyExchangeCount
+     * 每人限兑exchangeCount
+     * 关键点在 我已经兑换的券数量，查出一个list，没有的补0，然后此list作为临时表比对条件与商品表进行筛选
+     * 筛选结果分页处理
+     *
      */
     @Override
     public ResponseData<CouponIntegralExchangeBO> getConvernCouponLists(CouponRecordVO vo) {
+        log.info("enter ConvertCouponServiceImpl#getConvernCouponLists params:{}", JSON.toJSONString(vo));
         Integer countIntegral = vo.getCountIntegral();
-        if (vo.getCanConvertCoupon()) {
-            //可兑换券的列表
-            List<Long> exchangeIds = mktCouponIntegralExchangePOMapper.getExchangeIds(vo);
-            vo.setExchangeIds(exchangeIds);
-        } else {
-            //品牌下的券列表
-            vo.setExchangeIds(null);
-            vo.setCountIntegral(null);
-        }
         ResponseData<CouponIntegralExchangeBO> responseData = new ResponseData<>();
-        PageInfo<MktCouponIntegralExchangeVO> page = null;
-        PageHelper.startPage(vo.getPageNumber(), vo.getPageSize());
-        List<MktCouponIntegralExchangeVO> exchangeLists = mktCouponIntegralExchangePOMapper.getExchangeLists(vo);
-        if (CollectionUtils.isNotEmpty(exchangeLists)) {
-            page = new PageInfo<>(exchangeLists);
-            List<MktCouponIntegralExchangeVO> list = page.getList();
-            for (MktCouponIntegralExchangeVO exchangeVO : list) {
-                Long couponEntityId = exchangeVO.getCouponEntityId();
-                //判断是否还能兑
+        //先查出此品牌所有上架有效积分商品
+        MktCouponIntegralExchangePOExample mktCouponIntegralExchangePOExample = new MktCouponIntegralExchangePOExample();
+        mktCouponIntegralExchangePOExample.setOrderByClause("exchange_id desc");
+        MktCouponIntegralExchangePOExample.Criteria criteria = mktCouponIntegralExchangePOExample.createCriteria();
+        criteria.andValidEqualTo(Boolean.TRUE).andSysBrandIdEqualTo(vo.getBrandId())
+                .andSalesStatusEqualTo(IntegralMallConstants.SALES_STATUS_ON);
 
-                MktConvertCouponRecordPOExample mktConvertCouponRecordPOExample = new MktConvertCouponRecordPOExample();
-                mktConvertCouponRecordPOExample.createCriteria().andValidEqualTo(Boolean.TRUE).andExchangeIdEqualTo(exchangeVO.getExchangeId())
-                .andMemberCodeEqualTo(vo.getMemberCode());
-                List<MktConvertCouponRecordPO> mktConvertCouponRecordPOS = mktConvertCouponRecordPOMapper.selectByExample(mktConvertCouponRecordPOExample);
+        List<MktCouponIntegralExchangePO> mktCouponIntegralExchangePOS = new ArrayList<>();
+        //查所有
+        if(!vo.getCanConvertCoupon()){
+            mktCouponIntegralExchangePOS= mktCouponIntegralExchangePOMapper.selectByExampleWithBLOBs(mktCouponIntegralExchangePOExample);
 
-                //此处逻辑是因为现在一次只能兑换一张
-                Integer convertedNum = mktConvertCouponRecordPOS.size();//当前用户已兑数量
-                //每人限兑数量
-                Integer exchangeCount = exchangeVO.getExchangeCount()==null?0:exchangeVO.getExchangeCount().intValue();
-                //剩余库存
-                Integer remainingStock = exchangeVO.getResidueCouponNumber()==null?0:exchangeVO.getResidueCouponNumber();
-
-                log.info("当前用户之于商品id:{},已兑换数量:{}，此商品每人限兑：{}，剩余库存：{}",exchangeVO.getExchangeId(),convertedNum,exchangeCount,remainingStock);
-                /**
-                 * 可兑换场景值
-                 *  1. 不限库存，不限每人兑换：true
-                 *  2. 不限库存，限每人兑换b：判断已兑换convertedNum是否超过限制b
-                 *  3. 限库存a（剩余库存），不限每人兑换：判断已兑换是否超过限制a
-                 *  4. 限库存a，限每人兑换b：判断a和b大小，判断已兑换是否超过a，b之中最小值
-                 */
-                if(exchangeVO.getStoreStatus()==0 && exchangeVO.getExchangeStatus()==0){
-                    exchangeVO.setCanConvert(Boolean.TRUE);
-                    exchangeVO.setResidueCouponNumber(0);
-                }
-
-                if(exchangeVO.getStoreStatus()==0 && exchangeVO.getExchangeStatus()!=0){
-                    if(convertedNum>exchangeCount){
-                        exchangeVO.setCanConvert(Boolean.FALSE);
-                    }else{
-                        exchangeVO.setCanConvert(Boolean.TRUE);
-                        exchangeVO.setResidueCouponNumber(exchangeCount-convertedNum);
-                    }
-                }
-                if(exchangeVO.getStoreStatus()!=0 && exchangeVO.getExchangeStatus()==0){
-                    if(convertedNum>remainingStock){
-                        exchangeVO.setCanConvert(Boolean.FALSE);
-                    } else{
-                        exchangeVO.setCanConvert(Boolean.TRUE);
-                        exchangeVO.setResidueCouponNumber(remainingStock-convertedNum);
-                    }
-                }
-
-                if(exchangeVO.getStoreStatus()!=0 && exchangeVO.getExchangeStatus()!=0){
-                    Integer residue = Math.abs(remainingStock-exchangeCount);
-                    if(convertedNum>residue){
-                        exchangeVO.setCanConvert(Boolean.FALSE);
-                    } else{
-                        exchangeVO.setCanConvert(Boolean.TRUE);
-                        exchangeVO.setResidueCouponNumber(residue-convertedNum);
-                    }
-                }
-
-                //剩余数量处理下，限兑和库存数量哪个小给前端返回哪个
-
-                exchangeVO.setResidueCouponNumber(exchangeVO.getResidueCouponNumber()-convertedNum);
-
-                ResponseData<CouponDefinitionPO> coupon = couponDefinitionServiceFeign.findByIdRpc(couponEntityId);
-                exchangeVO.setCouponDefinitionPO(coupon.getData());
-            }
-        } else {
-            page = new PageInfo<>(new ArrayList<MktCouponIntegralExchangeVO>());
+        }else{
+            //兑换价格小于等于我的积分
+            criteria.andExchangePriceLessThanOrEqualTo(countIntegral);
+            mktCouponIntegralExchangePOS = mktCouponIntegralExchangePOMapper.selectByExampleWithBLOBs(mktCouponIntegralExchangePOExample);
         }
+
+        //查出我已经兑换的数据列表
+        List<MktCouponIntegralExchangeVO> myConvertedProductList = mktCouponIntegralExchangePOMapper.getMyConvertedProductList(vo.getMemberCode());
+        List<MktCouponIntegralExchangeVO> resultList = getCanvertProductList(vo.getCanConvertCoupon(),myConvertedProductList, mktCouponIntegralExchangePOS);
+
+        PageHelper.startPage(vo.getPageNumber(), vo.getPageSize());
+        PageInfo<MktCouponIntegralExchangeVO> mktCouponIntegralExchangeVOPageInfo = new PageInfo<>(resultList);
         CouponIntegralExchangeBO exchangeBO = new CouponIntegralExchangeBO();
         exchangeBO.setCountIntegral(countIntegral);
-        exchangeBO.setPageInfo(page);
+        exchangeBO.setPageInfo(mktCouponIntegralExchangeVOPageInfo);
         responseData.setData(exchangeBO);
         return responseData;
     }
@@ -365,64 +317,45 @@ public class ConvertCouponServiceImpl implements ConvertCouponService {
         return responseData;
     }
 
-    //兑换券
+    /**
+     *兑换券
+     * 新增兑换后往商品表上写总兑换数量，原字段存在但没有写
+     */
+    @Transactional
     @Override
     public ResponseData<Integer> doConvernCoupon(CouponRecordVO vo) {
         log.info("doConvernCoupon----参数--" + JSON.toJSONString(vo));
         ResponseData<Integer> responseData = new ResponseData<>();
         responseData.setMessage("兑换成功!");
-        MktCouponIntegralExchangePOExample example = new MktCouponIntegralExchangePOExample();
-        example.createCriteria().andExchangeIdEqualTo(vo.getExchangeId());
         //查询兑换规则详情
-        List<MktCouponIntegralExchangePO> mktCouponIntegralExchangePOS = mktCouponIntegralExchangePOMapper.selectByExampleWithBLOBs(example);
+        MktCouponIntegralExchangePO mktCouponIntegralExchangePO = mktCouponIntegralExchangePOMapper.selectByPrimaryKey(vo.getExchangeId());
 
-        if (CollectionUtils.isEmpty(mktCouponIntegralExchangePOS)) {
+        if (null == mktCouponIntegralExchangePO) {
             responseData.setCode(100);
             responseData.setMessage("兑换规则不存在!");
             return responseData;
         }
         String memberCode = vo.getMemberCode();//会员code
-        MktCouponIntegralExchangePO mktCouponIntegralExchangePO = mktCouponIntegralExchangePOS.get(0);
 
         log.info("兑换规则详情-------"+JSON.toJSONString(mktCouponIntegralExchangePO));
 
-        Integer exchangeStatus = mktCouponIntegralExchangePO.getExchangeStatus();
-        if (Integer.valueOf(1).equals(exchangeStatus)) {
-            //获取此会员兑换此券的数量
-            Integer memberConvertNumber = mktConvertCouponRecordPOMapper.getConvertNumber(vo);
-            //查所有人兑换此券数量
-            vo.setMemberCode(null);
-            Integer allConverted = mktConvertCouponRecordPOMapper.getConvertNumber(vo);
-            //剩余库存
-            Long residueCouponNumber = mktCouponIntegralExchangePO.getStoreCount() - allConverted;
-            Long exchangeCount = mktCouponIntegralExchangePO.getExchangeCount();
-            exchangeCount = exchangeCount == null ? 0L : exchangeCount;
+        //获取此会员兑换此券的数量
+        Long memberConvertNumber = mktConvertCouponRecordPOMapper.getConvertNumber(vo);
+        //查所有人兑换此券数量
+        vo.setMemberCode(null);
+        Long allConverted = mktConvertCouponRecordPOMapper.getConvertNumber(vo);
+        //剩余库存
+        Long remainingStock = (mktCouponIntegralExchangePO.getStoreCount()==null?0:mktCouponIntegralExchangePO.getStoreCount()) - allConverted;
 
-            if ( Long.valueOf(memberConvertNumber)>= exchangeCount) {
-                responseData.setCode(100);
-                responseData.setMessage("超过券兑换数量限制!");
-                return responseData;
-            }
-            if ( Long.valueOf(memberConvertNumber)>= residueCouponNumber) {
-                responseData.setCode(100);
-                responseData.setMessage("库存不足!");
-                return responseData;
-            }
-        }
+        //兑换资格判断
+        MktCouponIntegralExchangeVO mktCouponIntegralExchangeVO = new MktCouponIntegralExchangeVO();
+        BeanUtils.copyProperties(mktCouponIntegralExchangePO,mktCouponIntegralExchangeVO);
+        MktCouponIntegralExchangeVO mktCouponIntegralExchangeVO1 = canConvert(mktCouponIntegralExchangeVO, memberConvertNumber, remainingStock);
 
-        Integer storeStatus = mktCouponIntegralExchangePO.getStoreStatus();
-        Long storeCount = mktCouponIntegralExchangePO.getStoreCount();
-        if (Integer.valueOf(1).equals(storeStatus)) {
-            //此规则下券已被兑换的总数
-            vo.setMemberCode(null);
-            Integer convertNumber = mktConvertCouponRecordPOMapper.getConvertNumber(vo);
-            convertNumber = convertNumber == null ? 0 : convertNumber;
-            long num = storeCount - convertNumber;
-            if (num < vo.getExchangeNum()) {
-                responseData.setCode(100);
-                responseData.setMessage("剩余优惠券不足!");
-                return responseData;
-            }
+        if(!mktCouponIntegralExchangeVO1.getCanConvert()){
+            responseData.setCode(SysResponseEnum.FAILED.getCode());
+            responseData.setMessage(mktCouponIntegralExchangeVO1.getMessage());
+            return responseData;
         }
 
         Integer exchangeNum = vo.getExchangeNum();//要要兑换的数量
@@ -455,6 +388,8 @@ public class ConvertCouponServiceImpl implements ConvertCouponService {
             return responseData;
         }
 
+        //更新商品表上总兑换数量
+        mktCouponIntegralExchangePOMapper.updateAllConvertedNum(mktCouponIntegralExchangePO.getExchangeId());
         //插入记录表数据
         MktConvertCouponRecordPO record = this.InsertMktConvertCouponRecordPO(vo, mktCouponIntegralExchangePO, exchangeNum, exchangePrice, couponRecordCode, memeberDetail);
 
@@ -536,5 +471,101 @@ public class ConvertCouponServiceImpl implements ConvertCouponService {
         return responseData;
     }
 
+    /**
+     * 判断当前用户对某积分商品是否能兑换
+     * @return
+     */
+    private MktCouponIntegralExchangeVO canConvert(MktCouponIntegralExchangeVO exchangeVO,Long convertedNum,Long remainingStock){
+        //每人限兑数量
+        Long exchangeCount = exchangeVO.getExchangeCount()==null?0:exchangeVO.getExchangeCount();
+
+        convertedNum = convertedNum==null?0:convertedNum;
+        log.info("当前用户之于商品id:{},已兑换数量:{}，此商品每人限兑：{}，剩余库存：{}",exchangeVO.getExchangeId(),convertedNum,exchangeCount,remainingStock);
+        /**
+         * 可兑换场景值
+         *  1. 不限库存，不限每人兑换：true
+         *  2. 不限库存，限每人兑换b：判断已兑换convertedNum是否超过限制b
+         *  3. 限库存a（剩余库存），不限每人兑换：判断已兑换是否超过限制a
+         *  4. 限库存a，限每人兑换b：判断a和b大小，判断已兑换是否超过a，b之中最小值
+         */
+        log.info("exchangeVO.getStoreStatus():{},exchangeVO.getExchangeStatus():{}",exchangeVO.getStoreStatus(),exchangeVO.getExchangeStatus());
+        if(exchangeVO.getStoreStatus()==0 && exchangeVO.getExchangeStatus()==0){
+            exchangeVO.setCanConvert(Boolean.TRUE);
+            exchangeVO.setResidueCouponNumber(-1L);
+        }
+
+        if(exchangeVO.getStoreStatus()==0 && exchangeVO.getExchangeStatus()!=0){
+            if(convertedNum>=exchangeCount){
+                exchangeVO.setCanConvert(Boolean.FALSE);
+                exchangeVO.setMessage("兑换数量超过每人最大限制！");
+            }else{
+                exchangeVO.setCanConvert(Boolean.TRUE);
+                exchangeVO.setResidueCouponNumber(exchangeCount-convertedNum);
+            }
+        }
+        if(exchangeVO.getStoreStatus()!=0 && exchangeVO.getExchangeStatus()==0){
+            if(remainingStock<=0){
+                exchangeVO.setCanConvert(Boolean.FALSE);
+                exchangeVO.setMessage("库存不足，兑换失败！");
+            } else{
+                exchangeVO.setCanConvert(Boolean.TRUE);
+                exchangeVO.setResidueCouponNumber(remainingStock);
+            }
+        }
+
+        if(exchangeVO.getStoreStatus()!=0 && exchangeVO.getExchangeStatus()!=0){
+            Long residue = remainingStock;
+            log.info("remainingStock:{},exchangeCount:{}",remainingStock,exchangeCount);
+            if(remainingStock>exchangeCount){
+                residue = exchangeCount - convertedNum;
+            }
+            if(remainingStock<=0 || convertedNum>=exchangeCount){
+                exchangeVO.setCanConvert(Boolean.FALSE);
+                exchangeVO.setMessage("兑换数量超过每人最大限制！");
+            } else{
+                exchangeVO.setCanConvert(Boolean.TRUE);
+                exchangeVO.setResidueCouponNumber(residue);
+            }
+        }
+        return exchangeVO;
+    }
+
+    /**
+     * 合并polist至volist，以exchangeid整合
+     * 处理结果
+     * @param mktCouponIntegralExchangeVOS
+     * @param mktCouponIntegralExchangePOS
+     * @return
+     */
+    private List<MktCouponIntegralExchangeVO> getCanvertProductList(Boolean canConvert,List<MktCouponIntegralExchangeVO> mktCouponIntegralExchangeVOS,List<MktCouponIntegralExchangePO> mktCouponIntegralExchangePOS){
+        List<MktCouponIntegralExchangeVO> result = new ArrayList<>();
+        //先把所有po转到新的list中
+        for(MktCouponIntegralExchangePO mktCouponIntegralExchangePO : mktCouponIntegralExchangePOS){
+            MktCouponIntegralExchangeVO mktCouponIntegralExchangeVO1 = new MktCouponIntegralExchangeVO();
+            BeanUtils.copyProperties(mktCouponIntegralExchangePO,mktCouponIntegralExchangeVO1);
+            //如果vo有值，将vo中的convertedNum拷贝过去
+            for(MktCouponIntegralExchangeVO mktCouponIntegralExchangeVO : mktCouponIntegralExchangeVOS){
+                if (mktCouponIntegralExchangePO.getExchangeId().equals(mktCouponIntegralExchangeVO.getExchangeId())) {
+                    mktCouponIntegralExchangeVO1.setConvertedNum(mktCouponIntegralExchangeVO.getConvertedNum());
+                }
+            }
+
+            //剩余库存
+            Long remainingStock = mktCouponIntegralExchangeVO1.getStoreCount()-mktCouponIntegralExchangeVO1.getAlreadyExchangeCount();
+            mktCouponIntegralExchangeVO1.setResidueCouponNumber(remainingStock);
+            mktCouponIntegralExchangeVO1 = canConvert(mktCouponIntegralExchangeVO1, mktCouponIntegralExchangeVO1.getConvertedNum(),remainingStock);
+            ResponseData<CouponDefinitionPO> coupon = couponDefinitionServiceFeign.findByIdRpc(mktCouponIntegralExchangeVO1.getCouponEntityId());
+            mktCouponIntegralExchangeVO1.setCouponDefinitionPO(coupon.getData());
+            //如果能兑换，并且筛选结果资格也是可以兑换的，就加入结果集
+            if(canConvert && mktCouponIntegralExchangeVO1.getCanConvert() && remainingStock!=0){
+                result.add(mktCouponIntegralExchangeVO1);
+            }
+            //查所有直接丢结果集
+            if(!canConvert && remainingStock!=0){
+                result.add(mktCouponIntegralExchangeVO1);
+            }
+        }
+        return result;
+    };
 
 }
